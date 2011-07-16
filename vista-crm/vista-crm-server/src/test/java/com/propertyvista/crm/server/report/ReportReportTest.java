@@ -37,7 +37,7 @@ import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class DashboardReportTest extends ReportsTestBase {
+public class ReportReportTest extends ReportsTestBase {
 
     public void init() throws Exception {
         boolean realTimeDevelopmentWithMysSQL = ServerSideConfiguration.isStartedUnderEclipse();
@@ -52,7 +52,7 @@ public class DashboardReportTest extends ReportsTestBase {
         TestLifecycle.testSession(null, VistaBehavior.PROPERTY_MANAGER);
         TestLifecycle.beginRequest();
 
-        createReport(DashboardReport.createModel(retreiveData()));
+        createReport(ReportReport.createModel(retreiveData()));
     }
 
     @After
@@ -65,7 +65,7 @@ public class DashboardReportTest extends ReportsTestBase {
         anyUser.setPrimaryKey(Key.DORMANT_KEY);
         EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), anyUser));
-        criteria.add(new PropertyCriterion(criteria.proto().layoutType(), Restriction.NOT_EQUAL, DashboardMetadata.LayoutType.Report));
+        criteria.add(new PropertyCriterion(criteria.proto().layoutType(), Restriction.EQUAL, DashboardMetadata.LayoutType.Report));
         Vector<DashboardMetadata> dms = EntityServicesImpl.secureQuery(criteria);
 
         for (DashboardMetadata dm : dms) {
@@ -85,6 +85,6 @@ public class DashboardReportTest extends ReportsTestBase {
 
         init();
 
-        Assert.assertTrue("Report title '" + DashboardReport.title + "' not found, ", containsText(DashboardReport.title));
+        Assert.assertTrue("Report title '" + ReportReport.title + "' not found, ", containsText(ReportReport.title));
     }
 }

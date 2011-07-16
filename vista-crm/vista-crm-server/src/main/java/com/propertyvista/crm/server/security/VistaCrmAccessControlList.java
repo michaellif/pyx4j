@@ -19,6 +19,8 @@ import com.pyx4j.entity.security.InstanceAccess;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
+import com.pyx4j.security.shared.AllPermissions;
+import com.pyx4j.security.shared.CoreBehavior;
 
 import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.common.domain.company.Company;
@@ -86,6 +88,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
             grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission("*", EntityPermission.ALL));
             grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission("*", EntityPermission.READ));
         }
+
+        grant(CoreBehavior.DEVELOPER, new AllPermissions());
 
         grant(new IServiceExecutePermission(AuthenticationService.class));
 
