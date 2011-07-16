@@ -24,19 +24,26 @@ import com.pyx4j.entity.report.test.ReportsTestBase;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.essentials.server.dev.DataDump;
-import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
+import com.propertyvista.common.domain.VistaBehavior;
+import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class DashboardReportTest extends ReportsTestBase {
 
     public void init() throws Exception {
-        ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(true));
+        boolean realTimeDevelopmentWithMysSQL = ServerSideConfiguration.isStartedUnderEclipse();
+        if (realTimeDevelopmentWithMysSQL) {
+            ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(true));
+        } else {
+            VistaTestDBSetup.init();
+            //new VistaDataPreloaders().preloadAll();
+        }
 
         // Ignore all security constrains
-        TestLifecycle.testSession(null, CoreBehavior.DEVELOPER);
+        TestLifecycle.testSession(null, VistaBehavior.PROPERTY_MANAGER);
         TestLifecycle.beginRequest();
 
         createReport(DashboardReport.createModel(retreiveDashboard()));

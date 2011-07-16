@@ -166,5 +166,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 // - Old servies:
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Country.class.getPackage().getName() + ".*", EntityPermission.READ));
         grant(VistaBehavior.PROPERTY_MANAGER, new ServiceExecutePermission(EntityServices.class, "*"));
+
+        freeze();
     }
 }
