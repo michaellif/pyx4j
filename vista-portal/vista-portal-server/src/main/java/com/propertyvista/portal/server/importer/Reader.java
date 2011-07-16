@@ -34,7 +34,7 @@ public class Reader {
 
     private static final Logger log = LoggerFactory.getLogger(Reader.class);
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yy-MM-dd");
+    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yy-MM-dd");
 
     private Residential residential;
 
