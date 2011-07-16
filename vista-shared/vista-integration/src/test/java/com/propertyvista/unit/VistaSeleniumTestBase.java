@@ -27,6 +27,5 @@ public abstract class VistaSeleniumTestBase extends SeleniumTestBase {
         selenium.setGlassPanelAware();
         selenium.waitWhileWorking();
         selenium.setPropagateLogToClient(true);
-
     }
 }

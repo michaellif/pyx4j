@@ -39,6 +39,12 @@ abstract class WizardSeleniumTestBase extends VistaSeleniumTestBase {
         return new VistaSeleniumTestConfiguration(ApplicationId.ptapp);
     }
 
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        assertNoMessages();
+    }
+
     protected void saveAndContinue() {
         saveAndContinue(true);
     }

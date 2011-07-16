@@ -134,12 +134,12 @@ public class VistaSeleniumTestConfiguration extends DefaultSeleniumTestConfigura
         } else {
             return null;
             // e.g. Run Firefox Application in another VM
-            // Just download http://code.google.com/p/selenium/downloads/detail?name=selenium-server-standalone-2.0b3.jar
-            // And run java -jar selenium-server-standalone-2.0b3.jar
+            // Just download http://code.google.com/p/selenium/downloads/detail?name=selenium-server-standalone-2.0.0.jar
+            // And run java -jar selenium-server-standalone-2.0.0.jar
 
             // VladS Settings
             // XP-IE7, FF 3.6
-            //return "10.1.1.153";
+            //return "10.1.1.155";
 
             // XP-IE8, FF 4
             //return "10.1.1.152";

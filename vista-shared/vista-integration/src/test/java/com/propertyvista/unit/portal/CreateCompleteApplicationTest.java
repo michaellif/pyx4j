@@ -91,6 +91,8 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
     }
 
     public void exectuteFlow(long seed) {
+        assertNoMessages();
+
         log.info("execute flow with seed {}", seed);
         PTGenerator generator = new PTGenerator(seed);
         User user = createTestUser();
@@ -115,6 +117,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         selenium.type(D.id(proto(AuthenticationRequest.class).email()), user.email().getValue());
         selenium.type(D.id(proto(AuthenticationRequest.class).password()), user.email().getValue());
         selenium.click(CrudDebugId.Criteria_Submit);
+        assertNoMessages();
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Apartment.class)));
 
         verifyTenantsPage(summary, false);
