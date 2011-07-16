@@ -81,7 +81,7 @@
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
-            <version>2.0.0-debug</version>
+            <version>2.2.5.p4377-debug</version>
             <scope>test</scope>
         </dependency>
 
@@ -101,7 +101,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <forkMode>once</forkMode>
-                    <!-- parallel>off</parallel -->
                     <!--argLine>-Djava.awt.headless=true -XX:MaxPermSize=64m -Xms64m -Xmx128m -agentpath:D:\prog\dev\YourKit\bin\win64\yjpagent.dll=disablestacktelemetry,disableexceptiontelemetry,builtinprobes=none,delay=10000</argLine-->
                 </configuration>
             </plugin>
