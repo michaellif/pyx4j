@@ -161,7 +161,7 @@
         <jettyVersion>7.2.2.v20101205</jettyVersion>
 
         <jasperreportsVersion>4.0.1</jasperreportsVersion>
-        <quartzVersion>2.0.1</quartzVersion>
+        <quartzVersion>2.0.2</quartzVersion>
         <batikVersion>1.7</batikVersion>
 
         <!-- Used for speed up the GWT compiler for developers -->
