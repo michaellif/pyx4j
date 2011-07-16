@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.security.shared.AclRevalidator;
@@ -58,25 +59,28 @@ public class Lifecycle {
             Visit visit = (Visit) session.getAttribute(Context.SESSION_VISIT);
             Context.setVisit(visit);
             String clientAclTimeStamp = httprequest.getHeader(RemoteService.SESSION_ACL_TIMESTAMP_HEADER);
-            if ((visit != null) && visit.isUserLoggedIn() && visit.isAclRevalidationRequired(clientAclTimeStamp)) {
-                AclRevalidator acv = ServerSideConfiguration.instance().getAclRevalidator();
-                if (acv != null) {
-                    Set<Behavior> behaviours = acv.getCurrentBehaviours(visit.getUserVisit().getPrincipalPrimaryKey(), visit.getAcl().getBehaviours(),
-                            visit.getAclTimeStamp());
-                    if (behaviours == null) {
-                        endSession(session);
-                        Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(true));
-                    } else if (behaviours != visit.getAcl().getBehaviours()) {
-                        log.info("AuthorizationChanged {} -> {}", visit.getAcl().getBehaviours(), behaviours);
-                        visit.beginSession(visit.getUserVisit(), SecurityController.instance().authenticate(behaviours));
-                        visit.setAclChanged(true);
-                        Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
-                    } else {
-                        if ((clientAclTimeStamp != null) && (visit.getAclTimeStamp() != Long.parseLong(clientAclTimeStamp))) {
-                            log.info("AuthorizationChanged client needs sync {}", visit.getAcl().getBehaviours());
+            if ((visit != null) && visit.isUserLoggedIn()) {
+                LoggerConfig.mdcPut(LoggerConfig.MDC_userID, visit.getUserVisit());
+                if (visit.isAclRevalidationRequired(clientAclTimeStamp)) {
+                    AclRevalidator acv = ServerSideConfiguration.instance().getAclRevalidator();
+                    if (acv != null) {
+                        Set<Behavior> behaviours = acv.getCurrentBehaviours(visit.getUserVisit().getPrincipalPrimaryKey(), visit.getAcl().getBehaviours(),
+                                visit.getAclTimeStamp());
+                        if (behaviours == null) {
+                            endSession(session);
+                            Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(true));
+                        } else if (behaviours != visit.getAcl().getBehaviours()) {
+                            log.info("AuthorizationChanged {} -> {}", visit.getAcl().getBehaviours(), behaviours);
+                            visit.beginSession(visit.getUserVisit(), SecurityController.instance().authenticate(behaviours));
+                            visit.setAclChanged(true);
                             Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
+                        } else {
+                            if ((clientAclTimeStamp != null) && (visit.getAclTimeStamp() != Long.parseLong(clientAclTimeStamp))) {
+                                log.info("AuthorizationChanged client needs sync {}", visit.getAcl().getBehaviours());
+                                Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
+                            }
+                            visit.aclRevalidated();
                         }
-                        visit.aclRevalidated();
                     }
                 }
             }
@@ -159,6 +163,7 @@ public class Lifecycle {
 
     public static String beginSession(HttpSession session) {
         Context.setSession(session);
+        LoggerConfig.mdcPut(LoggerConfig.MDC_sessionNum, session.getId());
 
         String sessionToken;
         SecureRandom random = new SecureRandom();

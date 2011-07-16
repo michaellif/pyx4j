@@ -29,6 +29,15 @@ public class NamespaceManager {
         }
     };
 
+    private static class NamespaceMDC {
+
+        @Override
+        public String toString() {
+            return getNamespace();
+        }
+
+    }
+
     public static String getNamespace() {
         return requestLocal.get();
     }
@@ -39,5 +48,9 @@ public class NamespaceManager {
 
     public static void remove() {
         requestLocal.remove();
+    }
+
+    public static Object getNamespaceMDC() {
+        return new NamespaceMDC();
     }
 }

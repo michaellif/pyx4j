@@ -30,6 +30,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.server.RequestDebug;
+import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.server.contexts.AntiDoS.AccessCounter;
 
 /**
@@ -79,7 +81,15 @@ public class LifecycleFilter implements Filter {
                 }
                 NamespaceManager.setNamespace(ServerSideConfiguration.instance().getNamespaceResolver().getNamespace(httprequest));
                 // TODO MDC
+                LoggerConfig.mdcPut(LoggerConfig.MDC_namespace, NamespaceManager.getNamespaceMDC());
+
                 Lifecycle.beginRequest(httprequest, httpresponse);
+
+                HttpSession session = httprequest.getSession(false);
+                if (session != null) {
+                    LoggerConfig.mdcPut(LoggerConfig.MDC_sessionNum, session.getId());
+                }
+
                 try {
                     chain.doFilter(request, response);
                 } catch (Throwable t) {
@@ -92,6 +102,9 @@ public class LifecycleFilter implements Filter {
                     }
                 } finally {
                     Lifecycle.endRequest();
+                    LoggerConfig.mdcRemove(LoggerConfig.MDC_namespace);
+                    LoggerConfig.mdcRemove(LoggerConfig.MDC_userID);
+                    LoggerConfig.mdcRemove(LoggerConfig.MDC_sessionNum);
                 }
             }
         } finally {

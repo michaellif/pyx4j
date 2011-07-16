@@ -45,6 +45,12 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-log-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+ 
+        <dependency>
+            <groupId>com.pyx4j</groupId>
             <artifactId>pyx-gwt-server</artifactId>
             <version>${project.version}</version>
         </dependency>
