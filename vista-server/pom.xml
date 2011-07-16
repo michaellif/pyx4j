@@ -141,6 +141,8 @@
     <properties>
         <deployableName>vista</deployableName>
         <deployContext>vista</deployContext>
+        <warSourceExcludes>**/*.symbolMap</warSourceExcludes>
+
         <vista-tomcat-url>http://dev.birchwoodsoftwaregroup.com</vista-tomcat-url>
         <vista-tomcat-username>vista</vista-tomcat-username>
         <vista-tomcat-pwd>Vista1102</vista-tomcat-pwd>
@@ -187,6 +189,7 @@
                     </archive>
                     <archiveClasses>true</archiveClasses>
                     <warSourceDirectory>src/main/webapp</warSourceDirectory>
+                    <warSourceExcludes>${warSourceExcludes}</warSourceExcludes>
                      <!-- Processed by maven -->
                     <webXml>${project.build.directory}/classes/WEB-INF/web.xml</webXml>
                     <webResources>
@@ -257,6 +260,9 @@
 
         <profile>
             <id>full</id>
+            <properties>
+                <warSourceExcludes></warSourceExcludes>
+            </properties>
             <build>
                 <plugins>
 
