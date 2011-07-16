@@ -22,6 +22,8 @@ import com.propertyvista.portal.ptapp.client.ui.CreateAccountView;
 import com.propertyvista.portal.ptapp.client.ui.CreateAccountViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.FooterView;
 import com.propertyvista.portal.ptapp.client.ui.FooterViewImpl;
+import com.propertyvista.portal.ptapp.client.ui.GenericMessageView;
+import com.propertyvista.portal.ptapp.client.ui.GenericMessageViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.LoginView;
 import com.propertyvista.portal.ptapp.client.ui.LoginViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.LogoView;
@@ -49,9 +51,10 @@ public class PtAppViewFactory extends ViewFactoryBase {
                 map.put(type, new CaptionViewImpl());
             } else if (TopRightActionsView.class.equals(type)) {
                 map.put(type, new TopRightActionsViewImpl());
-
             } else if (LogoView.class.equals(type)) {
                 map.put(type, new LogoViewImpl());
+            } else if (GenericMessageView.class.equals(type)) {
+                map.put(type, new GenericMessageViewImpl());
             } else if (FooterView.class.equals(type)) {
                 map.put(type, new FooterViewImpl());
             } else if (StaticContentView.class.equals(type)) {
