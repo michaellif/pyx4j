@@ -29,7 +29,7 @@
 				method %m message %n platform dependent line separator %x NDC %X MDC
 			-->
 			<param name="ConversionPattern"
-				value="%-5p %d %6r\t [%c{1}.%M:%L]\t %l [%t]\n\t%m\n" />
+				value="%-5p %d %6r\t [%c{1}.%M:%L] [%X{namespace}.%X{sessionNum}.%X{userID}.%x]\t %l [%t]\n\t%m\n" />
 		</layout>
 	</appender>
 
@@ -43,7 +43,7 @@
 
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
-				value="%-5p %d %6r\t [%c{1}.%M:%L]\t %l [%t]\n\t%m\n" />
+				value="%-5p %d %6r\t [%c{1}.%M:%L] [%X{namespace}.%X{sessionNum}.%X{userID}.%x]\t %l [%t]\n\t%m\n" />
 		</layout>
 	</appender>
 
@@ -65,7 +65,7 @@
 				method %m message %n platform dependent line separator %x NDC %X MDC
 			-->
 			<param name="ConversionPattern"
-				value="%-5p %d %6r\t [%c{1}.%M:%L]\t %l [%t]\n\t%m\n" />
+				value="%-5p %d %6r\t [%c{1}.%M:%L] [%X{namespace}.%X{sessionNum}.%X{userID}.%x]\t %l [%t]\n\t%m\n" />
 		</layout>
 	</appender>
 	

@@ -38,6 +38,9 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         String host = httprequest.getHeader("x-forwarded-host");
         if (host == null) {
             host = httprequest.getServerName();
+            if (httprequest.getLocalAddr().equals(host)) {
+                return demoNamespace;
+            }
         }
         String[] parts = host.split("\\.");
         if (ApplicationMode.isDevelopment()) {
