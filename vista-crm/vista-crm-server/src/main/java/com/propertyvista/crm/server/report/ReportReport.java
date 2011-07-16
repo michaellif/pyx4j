@@ -7,18 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-28
+ * Created on Jul 16, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.dashboard;
+package com.propertyvista.crm.server.report;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pyx4j.entity.report.JasperReportModel;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public interface ReportMetadataService extends AbstractMetadataService {
+public class ReportReport {
 
-    void downloadReport(final AsyncCallback<String> callback, VoidSerializable none, Key entityId);
+    public static JasperReportModel createModel(DashboardMetadata dashboardMetadata) {
+        //VladL TODO
+        return null;
+    }
+
 }

@@ -13,12 +13,27 @@
  */
 package com.propertyvista.crm.server.services.dashboard;
 
+import java.io.ByteArrayOutputStream;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.report.JasperFileFormat;
+import com.pyx4j.entity.report.JasperReportProcessor;
+import com.pyx4j.entity.rpc.EntityCriteriaByPK;
+import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.essentials.server.download.Downloadable;
+import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
+import com.propertyvista.crm.server.report.ReportReport;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.portal.rpc.ptapp.ServletMapping;
 
 public class ReportMetadataServiceImpl extends AbstractMetadataServiceImpl implements ReportMetadataService {
 
@@ -29,5 +44,20 @@ public class ReportMetadataServiceImpl extends AbstractMetadataServiceImpl imple
     @Override
     void addTypeCriteria(EntityQueryCriteria<DashboardMetadata> criteria) {
         criteria.add(new PropertyCriterion(criteria.proto().layoutType(), Restriction.EQUAL, DashboardMetadata.LayoutType.Report));
+    }
+
+    @Override
+    public void downloadReport(final AsyncCallback<String> callback, VoidSerializable none, Key entityId) {
+        DashboardMetadata result = EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(DashboardMetadata.class, entityId));
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            JasperReportProcessor.createReport(ReportReport.createModel(result), JasperFileFormat.PDF, bos);
+            Downloadable d = new Downloadable(bos.toByteArray(), Downloadable.getContentType(DownloadFormat.PDF));
+            String fileName = "Report.pdf";
+            d.save(fileName);
+            callback.onSuccess(ServletMapping.REPORTS_DOWNLOAD + "/" + System.currentTimeMillis() + "/" + fileName);
+        } finally {
+            IOUtils.closeQuietly(bos);
+        }
     }
 }
