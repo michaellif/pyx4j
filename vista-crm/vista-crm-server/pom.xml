@@ -124,6 +124,13 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-unit-server</artifactId>
+            <version>${pyxVersion}</version>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
 
     </dependencies>
 
