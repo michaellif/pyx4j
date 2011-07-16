@@ -145,6 +145,13 @@ public abstract class AbstractDataPreloader implements DataPreloader {
         return new HashSet<String>();
     }
 
+    public void setParameterValue(String key, Serializable value) {
+        if (parameters == null) {
+            parameters = new HashMap<String, Serializable>();
+        }
+        parameters.put(key, value);
+    }
+
     @Override
     public void setParametersValues(Map<String, Serializable> parameters) {
         this.parameters = parameters;
