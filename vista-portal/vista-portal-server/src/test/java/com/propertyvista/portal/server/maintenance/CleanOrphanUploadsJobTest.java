@@ -43,8 +43,9 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 
-public class CleanOrphanApplicationDocumentDataRecordsJobTest extends VistaDBTestBase {
-    private final static Logger log = LoggerFactory.getLogger(CleanOrphanApplicationDocumentDataRecordsJobTest.class);
+public class CleanOrphanUploadsJobTest extends VistaDBTestBase {
+
+    private final static Logger log = LoggerFactory.getLogger(CleanOrphanUploadsJobTest.class);
 
     private final static boolean RUN_TESTS = true;
 
@@ -52,7 +53,7 @@ public class CleanOrphanApplicationDocumentDataRecordsJobTest extends VistaDBTes
 
     private CleanOrphanApplicationDocumentDataRecordsJob instance;
 
-    public CleanOrphanApplicationDocumentDataRecordsJobTest() {
+    public CleanOrphanUploadsJobTest() {
     }
 
     @Override
@@ -209,8 +210,7 @@ public class CleanOrphanApplicationDocumentDataRecordsJobTest extends VistaDBTes
             simpleTrigger = TriggerBuilder.newTrigger().withIdentity("dailyRun", "Maintenance").startAt(DateBuilder.tomorrowAt(4, 0, 0)) //start at 4am
                     .withSchedule(SimpleScheduleBuilder.simpleSchedule().repeatForever().withIntervalInHours(24)).build();
         }
-        JobDetail job = JobBuilder.newJob(CleanOrphanApplicationDocumentDataRecordsJob.class)
-                .withIdentity("CleanOrphanApplicationDocumentDataRecordsJob", "Maintenance").build();
+        JobDetail job = JobBuilder.newJob(CleanOrphanApplicationDocumentDataRecordsJob.class).withIdentity("12", "Maintenance").build();
         scheduler.scheduleJob(job, simpleTrigger);
         //scheduler.start();
     }
