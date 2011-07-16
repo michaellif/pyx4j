@@ -110,7 +110,10 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 // Floorplans:
             List<FloorplanDTO> floorplans = generator.createFloorplans(building, DemoData.NUM_FLOORPLANS);
             for (FloorplanDTO floorplanDTO : floorplans) {
-                MeidaGenerator.attachGeneratedFloorplanMedia(floorplanDTO);
+
+                if (this.getParameter(MediaGenerator.ATTACH_MEDIA_PARAMETER) != Boolean.FALSE) {
+                    MediaGenerator.attachGeneratedFloorplanMedia(floorplanDTO);
+                }
 
                 // persist plain internal lists:
                 for (Feature feature : floorplanDTO.features()) {
@@ -167,6 +170,8 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
     public String importData() {
         try {
             Importer importer = new Importer();
+            importer.setAttachMedia(this.getParameter(MediaGenerator.ATTACH_MEDIA_PARAMETER) != Boolean.FALSE);
+
             importer.start();
 
             StringBuilder sb = new StringBuilder();

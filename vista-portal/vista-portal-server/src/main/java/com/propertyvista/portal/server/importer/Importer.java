@@ -42,7 +42,7 @@ import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.server.geo.GeoLocator;
 import com.propertyvista.portal.server.geo.GeoLocator.Mode;
 import com.propertyvista.portal.server.portal.PublicDataUpdater;
-import com.propertyvista.portal.server.preloader.MeidaGenerator;
+import com.propertyvista.portal.server.preloader.MediaGenerator;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
 import com.propertyvista.server.common.generator.Model;
@@ -60,7 +60,17 @@ public class Importer {
 
     private final Model model = new Model();
 
+    private boolean attachMedia = true;
+
     public Importer() {
+    }
+
+    public boolean isAttachMedia() {
+        return attachMedia;
+    }
+
+    public void setAttachMedia(boolean attachMedia) {
+        this.attachMedia = attachMedia;
     }
 
     public void read() throws IOException, JAXBException, ParseException {
@@ -92,7 +102,9 @@ public class Importer {
         // save
 
         for (Building building : model.getBuildings()) {
-            loadBuildingMedia(building);
+            if (isAttachMedia()) {
+                loadBuildingMedia(building);
+            }
             persist(building);
             PublicDataUpdater.updateIndexData(building);
         }
@@ -102,7 +114,10 @@ public class Importer {
         }
 
         for (FloorplanDTO floorplanDTO : model.getFloorplans()) {
-            loadFloorplanMedia(floorplanDTO);
+
+            if (isAttachMedia()) {
+                MediaGenerator.attachGeneratedFloorplanMedia(floorplanDTO);
+            }
 
             // persist plain internal lists:
             for (Feature feature : floorplanDTO.features()) {
@@ -158,10 +173,6 @@ public class Importer {
             persist(m);
             building.media().add(m);
         }
-    }
-
-    private void loadFloorplanMedia(Floorplan floorplan) {
-        MeidaGenerator.attachGeneratedFloorplanMedia(floorplan);
     }
 
     public void start() throws Exception {
