@@ -23,6 +23,8 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.Anchor;
@@ -39,6 +41,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.site.client.NavigationIDs;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.GlassPanel;
+import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
@@ -67,10 +71,17 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
         setStyleName(DEFAULT_STYLE_PREFIX);
         setHeight("100%");
 
+        addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
+            @Override
+            public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
+                GlassPanel.show(GlassStyle.Transparent);
+            }
+        });
         addSelectionHandler(new SelectionHandler<Integer>() {
             @Override
             public void onSelection(SelectionEvent<Integer> event) {
                 onSelected(event.getSelectedItem());
+                GlassPanel.hide();
             }
         });
     }
