@@ -241,7 +241,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     }
 
     public void clearTableData() {
-        setSelectedRow(-1);
+        selectedRow = -1;
         selectionCheckBoxes.clear();
         for (int row = getRowCount() - 1; row > 0; row--) {
             removeRow(row);
