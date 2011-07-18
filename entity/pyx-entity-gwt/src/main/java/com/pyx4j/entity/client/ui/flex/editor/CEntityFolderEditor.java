@@ -209,7 +209,7 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
 
     }
 
-    protected void removeItem(CEntityFolderItemEditor<E> item, IFolderItemEditorDecorator folderItemDecorator) {
+    protected void removeItem(CEntityFolderItemEditor<E> item, IFolderItemEditorDecorator<E> folderItemDecorator) {
         getValue().remove(item.getValue());
         abandonFolderItem(item);
         item.removeAllHandlers();
@@ -280,7 +280,7 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
 
     private void adoptFolderItem(final CEntityFolderItemEditor<E> component) {
 
-        final IFolderItemEditorDecorator folderItemDecorator = component.createFolderItemDecorator();
+        final IFolderItemEditorDecorator<E> folderItemDecorator = component.createFolderItemDecorator();
 
         component.setFolderItemDecorator(folderItemDecorator);
         component.addAccessAdapter(this);
