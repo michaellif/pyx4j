@@ -14,10 +14,14 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.portal.domain.ptapp.UnitSelection;
 
 @Transient
-public interface ApplicationDTO extends Application {
+public interface ApplicationDTO extends IEntity {
+
+    @Transient
+    UnitSelection unitSelection();
 
 }

@@ -15,11 +15,10 @@ package com.propertyvista.crm.server.services;
 
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
 import com.propertyvista.dto.ApplicationDTO;
-import com.propertyvista.portal.domain.ptapp.Application;
 
-public class ApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<Application, ApplicationDTO> implements ApplicationCrudService {
+public class ApplicationCrudServiceImpl extends GenericCrudServiceImpl<ApplicationDTO> implements ApplicationCrudService {
 
     public ApplicationCrudServiceImpl() {
-        super(Application.class, ApplicationDTO.class);
+        super(ApplicationDTO.class);
     }
 }
