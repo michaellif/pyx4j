@@ -22,15 +22,14 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.client.ui.crud.tenant.ApplicationListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
-import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.dto.ApplicationDTO;
 
-public class ApplicationListerActivity extends ListerActivityBase<Application> {
+public class ApplicationListerActivity extends ListerActivityBase<ApplicationDTO> {
 
     @SuppressWarnings("unchecked")
     public ApplicationListerActivity(Place place) {
-        super((ApplicationListerView) TenantViewFactory.instance(ApplicationListerView.class), (AbstractCrudService<Application>) GWT
-                .create(ApplicationCrudService.class), Application.class);
+        super((ApplicationListerView) TenantViewFactory.instance(ApplicationListerView.class), (AbstractCrudService<ApplicationDTO>) GWT
+                .create(ApplicationCrudService.class), ApplicationDTO.class);
         withPlace(place);
     }
-
 }
