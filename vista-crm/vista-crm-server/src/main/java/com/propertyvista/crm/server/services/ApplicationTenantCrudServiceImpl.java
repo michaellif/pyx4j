@@ -7,19 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-21
+ * Created on Jul 18, 2011
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.crm.server.services;
 
-import com.propertyvista.crm.rpc.services.ApplicationCrudService;
-import com.propertyvista.domain.tenant.TenantApplication;
-import com.propertyvista.dto.ApplicationDTO;
+import com.propertyvista.crm.rpc.services.ApplicationTenantCrudService;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 
-public class ApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<TenantApplication, ApplicationDTO> implements ApplicationCrudService {
+public class ApplicationTenantCrudServiceImpl extends GenericCrudServiceImpl<PotentialTenantInfo> implements ApplicationTenantCrudService {
 
-    public ApplicationCrudServiceImpl() {
-        super(TenantApplication.class, ApplicationDTO.class);
+    protected ApplicationTenantCrudServiceImpl() {
+        super(PotentialTenantInfo.class);
     }
+
 }
