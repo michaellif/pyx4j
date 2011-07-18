@@ -13,15 +13,32 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.common.domain.tenant.Tenant;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.TenantApplication;
+import com.propertyvista.portal.domain.ptapp.Pets;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 
 @Transient
-public interface ApplicationDTO extends IEntity {
+public interface ApplicationDTO extends TenantApplication {
 
-    @Transient
+    // ListerData only!..
+    Tenant primaryTenant();
+
+    // ListerData only!..
+    AptUnit selectedUnit();
+
+//  While show ApplicationDTO - make tab with unit selection lister for:
+    @EmbeddedEntity
     UnitSelection unitSelection();
 
+//  While show ApplicationDTO - make tab with :
+//  IList<PotentialTenantInfo> tenants();
+
+    @Owned
+    Pets pets();
 }
