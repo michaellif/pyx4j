@@ -86,7 +86,7 @@ public class OpenIdFilter implements Filter {
 
                         OpenIdServlet.createResponsePage((HttpServletResponse) response, true, "Login via Google Apps",
                                 OpenId.getDestinationUrl(OpenIdServlet.DOMAIN));
-                        if ((devSession.getAttribute(REQUESTED_URL_ATTRIBUTE) == null) && (receivingURL != null)) {
+                        if (devSession.getAttribute(REQUESTED_URL_ATTRIBUTE) == null) {
                             devSession.setAttribute(REQUESTED_URL_ATTRIBUTE, receivingURL);
                         }
                     }
