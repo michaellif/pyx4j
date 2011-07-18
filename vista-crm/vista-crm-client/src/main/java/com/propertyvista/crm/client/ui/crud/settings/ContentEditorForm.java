@@ -31,6 +31,7 @@ import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -90,14 +91,19 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
                         if (column.getObject().equals(proto().caption())) {
-                            CComponent<?> comp = inject(column.getObject(), new CHyperlink(new Command() {
-                                @Override
-                                public void execute() {
-                                    CrudAppPlace place = AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Content.class);
-                                    place.formViewerPlace(getValue().getPrimaryKey());
-                                    AppSite.getPlaceController().goTo(place);
-                                }
-                            }));
+                            CComponent<?> comp = null;
+                            if (ContentEditorForm.this.isEditable()) {
+                                comp = inject(column.getObject(), new CLabel());
+                            } else {
+                                comp = inject(column.getObject(), new CHyperlink(new Command() {
+                                    @Override
+                                    public void execute() {
+                                        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Content.class);
+                                        place.formViewerPlace(getValue().getPrimaryKey());
+                                        AppSite.getPlaceController().goTo(place);
+                                    }
+                                }));
+                            }
                             return comp;
                         }
                         return super.createCell(column);
