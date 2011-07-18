@@ -43,7 +43,7 @@ public class ContentActivity extends AbstractActivity {
             @Override
             public void onSuccess(Key result) {
                 CrudAppPlace place = new CrmSiteMap.Settings.Content();
-                place.formEditorPlace(result);
+                place.formViewerPlace(result);
                 AppSite.getPlaceController().goTo(place);
             }
 

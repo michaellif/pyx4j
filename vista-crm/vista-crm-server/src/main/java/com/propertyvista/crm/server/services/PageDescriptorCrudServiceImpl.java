@@ -87,4 +87,10 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
         PersistenceServicesFactory.getPersistenceService().merge(entity);
         callback.onSuccess(entity);
     }
+
+    @Override
+    public void deleteChildPage(AsyncCallback<Boolean> callback, PageDescriptor page) {
+        PersistenceServicesFactory.getPersistenceService().delete(page);
+        callback.onSuccess(true);
+    }
 }

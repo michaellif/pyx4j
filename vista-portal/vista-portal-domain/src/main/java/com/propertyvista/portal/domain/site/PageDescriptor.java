@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -42,6 +43,7 @@ public interface PageDescriptor extends IEntity {
     @MemberColumn(name = "pageType")
     IPrimitive<Type> type();
 
+    @NotNull
     @ToString(index = 1)
     IPrimitive<String> caption();
 

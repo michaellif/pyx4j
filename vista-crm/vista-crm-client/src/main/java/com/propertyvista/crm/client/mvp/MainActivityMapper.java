@@ -53,6 +53,7 @@ import com.propertyvista.crm.client.activity.crud.marketing.FeatureEditorActivit
 import com.propertyvista.crm.client.activity.crud.marketing.FeatureViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ContentActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ContentEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.ContentViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.ApplicationEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.ApplicationListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.ApplicationViewerActivity;
@@ -336,7 +337,14 @@ public class MainActivityMapper implements AppActivityMapper {
                     if (((AppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID) == null) {
                         activity = new ContentActivity(place);
                     } else {
-                        activity = new ContentEditorActivity(place);
+                        switch (((CrudAppPlace) place).getType()) {
+                        case editor:
+                            activity = new ContentEditorActivity(place);
+                            break;
+                        case viewer:
+                            activity = new ContentViewerActivity(place);
+                            break;
+                        }
                     }
                 }
 

@@ -7,22 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-06
- * @author Vlad
+ * Created on May 9, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.crm.client.ui.crud.settings;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
-import com.pyx4j.site.rpc.services.AbstractCrudService;
-
+import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.portal.domain.site.PageDescriptor;
 
-public interface PageDescriptorCrudService extends AbstractCrudService<PageDescriptor> {
-
-    void retrieveLandingPage(AsyncCallback<Key> callback);
-
-    void deleteChildPage(AsyncCallback<Boolean> callback, PageDescriptor page);
+public class ContentViewerImpl extends CrmViewerViewImplBase<PageDescriptor> implements ContentViewer {
+    public ContentViewerImpl() {
+        super(CrmSiteMap.Settings.Content.class, new ContentEditorForm(new CrmViewersComponentFactory()));
+    }
 }

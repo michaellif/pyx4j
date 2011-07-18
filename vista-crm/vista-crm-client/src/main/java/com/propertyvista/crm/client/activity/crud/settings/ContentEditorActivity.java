@@ -27,7 +27,7 @@ import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.portal.domain.site.PageDescriptor;
 import com.propertyvista.portal.domain.site.PageDescriptor.Type;
 
-public class ContentEditorActivity extends EditorActivityBase<PageDescriptor> {
+public class ContentEditorActivity extends EditorActivityBase<PageDescriptor> implements ContentEditor.Presenter {
 
     @SuppressWarnings("unchecked")
     public ContentEditorActivity(Place place) {
@@ -41,5 +41,18 @@ public class ContentEditorActivity extends EditorActivityBase<PageDescriptor> {
         PageDescriptor descriptor = EntityFactory.create(PageDescriptor.class);
         descriptor.type().setValue(Type.staticContent);
         callback.onSuccess(descriptor);
+    }
+
+    @Override
+    public void deleteChildPage(PageDescriptor page) {
+        ((PageDescriptorCrudService) service).deleteChildPage(new AsyncCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+        }, page);
     }
 }

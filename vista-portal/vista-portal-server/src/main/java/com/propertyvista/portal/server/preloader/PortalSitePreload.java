@@ -31,6 +31,7 @@ public class PortalSitePreload extends AbstractDataPreloader {
         PageDescriptor landingPage = EntityFactory.create(PageDescriptor.class);
         try {
             landingPage.type().setValue(PageDescriptor.Type.landing);
+            landingPage.caption().setValue("Landing Page");
             landingPage.content().content().setValue(IOUtils.getUTF8TextResource("site-landing.html", this.getClass()));
             landingPage.content().path().setValue(PageContent.PATH_SEPARATOR);
 //TODO looks like this is obsolete
@@ -48,12 +49,14 @@ public class PortalSitePreload extends AbstractDataPreloader {
             {
                 PageDescriptor page = EntityFactory.create(PageDescriptor.class);
                 page.type().setValue(PageDescriptor.Type.findApartment);
+                page.caption().setValue("Child #1");
                 page.content().content().setValue(CommonsGenerator.lipsum());
                 landingPage.childPages().add(page);
             }
             {
                 PageDescriptor page = EntityFactory.create(PageDescriptor.class);
                 page.type().setValue(PageDescriptor.Type.potentialTenants);
+                page.caption().setValue("Child #2");
                 page.content().content().setValue(CommonsGenerator.lipsum());
                 landingPage.childPages().add(page);
             }
@@ -61,6 +64,7 @@ public class PortalSitePreload extends AbstractDataPreloader {
             {
                 PageDescriptor page = EntityFactory.create(PageDescriptor.class);
                 page.type().setValue(PageDescriptor.Type.residence);
+                page.caption().setValue("Child #3");
                 landingPage.childPages().add(page);
             }
 

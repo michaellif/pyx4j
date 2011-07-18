@@ -66,6 +66,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         initButtonStylesEx();
         initHeadersStyle();
         initVistaTabStyles();
+        initVistaDecoratorsPanelStyles();
         initDashboardView();
         initDashboardReport();
         initListerStyles();
@@ -433,6 +434,25 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("color", ThemeColor.OBJECT_TONE55);
         style.addProperty("cursor", "default");
         addStyle(style);
+    }
+
+    protected void initVistaDecoratorsPanelStyles() {
+        String prefix = VistaDecoratorsFlowPanel.DEFAULT_STYLE_NAME;
+
+        Style style = new Style(prefix);
+
+        /*
+         * anchors within the class:
+         */
+        style = new Style(Selector.valueOf(prefix + " a:link, a:visited, a:active"));
+        style.addProperty("text-decoration", "none");
+        style.addProperty("color", ThemeColor.OBJECT_TONE85);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix + " a:hover"));
+        style.addProperty("text-decoration", "underline");
+        addStyle(style);
+
     }
 
     protected void initDashboardView() {

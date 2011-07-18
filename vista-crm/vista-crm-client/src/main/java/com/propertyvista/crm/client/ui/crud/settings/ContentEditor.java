@@ -19,4 +19,7 @@ import com.propertyvista.portal.domain.site.PageDescriptor;
 
 public interface ContentEditor extends IEditorView<PageDescriptor> {
 
+    interface Presenter extends IEditorView.Presenter {
+        void deleteChildPage(PageDescriptor page);
+    }
 }

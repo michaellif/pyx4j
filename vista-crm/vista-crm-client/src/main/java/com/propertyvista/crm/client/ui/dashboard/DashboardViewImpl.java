@@ -134,11 +134,12 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
                 case removeGadget:
                     break;
                 case repositionGadget:
+                    save = isGadgetRepositioned();
+                    break;
+                case updateGadget:
                     break;
                 case newLayout:
                     save = (DashboardViewImpl.this.dashboardMetadata.layoutType().getValue() != translateLayout(dashboard.getLayout()));
-                    break;
-                case updateGadget:
                     break;
                 }
 
@@ -181,6 +182,7 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
                 gmd.column().setValue(it.getColumn()); // update current gadget column...
                 dashboardMetadata.gadgets().add(gmd);
             }
+
         }
 
         return dashboardMetadata;
@@ -200,6 +202,22 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
     //
     // Internals:
     //
+    protected boolean isGadgetRepositioned() {
+//        IGadgetIterator it = dashboard.getGadgetIterator();
+//        while (it.hasNext()) {
+//            IGadget gadget = it.next();
+//            for (GadgetMetadata gmd : this.dashboardMetadata.gadgets()) {
+//                if (gadget.getName().compareTo(gmd.name().getValue()) == 0) {
+//                    if (it.getColumn() != gmd.column().getValue()) {
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
+//
+//        return false;
+        return true;
+    }
 
     protected void addActionButton(Button action) {
         actionsPanel.insert(action, 1);
