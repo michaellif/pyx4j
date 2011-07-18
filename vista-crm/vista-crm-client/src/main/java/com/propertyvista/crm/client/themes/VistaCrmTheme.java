@@ -33,6 +33,7 @@ import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader0Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
@@ -201,20 +202,20 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("padding-left", "0.5em");
         style.addProperty("cursor", "pointer");
         style.addProperty("color", "DimGray");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE35);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE40);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelHeader", null, NavigViewImpl.StyleDependent.selected));
         style.addProperty("font-weight", "bold");
         style.addProperty("color", ThemeColor.OBJECT_TONE10);
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE75);
         addStyle(style);
 
         // stack content
         style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelContent"));
         style.addProperty("font-size", "1.1em");
         style.addProperty("padding-left", "1em");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE25);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE30);
         addStyle(style);
 
         // Item style defines anchor specific styling
@@ -258,7 +259,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("padding-left", "1em");
 //        style.addProperty("cursor", "pointer");
         style.addProperty("color", ThemeColor.OBJECT_TONE90);
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE20);
         // NOTE: must correspond with the header size defined by stackpanel
         style.addProperty("line-height", "2.2em");
         addStyle(style);
@@ -266,7 +267,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         // stack content
         style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelContent"));
         style.addProperty("font-size", "1.1em");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE20);
         addStyle(style);
 
         // Item style defines anchor specific styling
@@ -379,6 +380,19 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style = new Style(Selector.valueOf(prefix, CrmHeaderDecorator.StyleSuffix.Caption));
         style.addProperty("padding", "0.3em 1em 0.4em 1em");
         style.addProperty("font-size", "1.3em");
+        addStyle(style);
+
+        prefix = CrmHeader0Decorator.DEFAULT_STYLE_PREFIX;
+        style = new Style(Selector.valueOf(prefix));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE20);
+        style.addProperty("color", ThemeColor.OBJECT_TONE85);
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CrmHeader2Decorator.StyleSuffix.Caption));
+        style.addProperty("padding", "0.5em 1em 0.6em 1.5em");
+        style.addProperty("font-size", "1.2em");
+//        style.addProperty("font-weight", "bold");
         addStyle(style);
 
         prefix = CrmHeader1Decorator.DEFAULT_STYLE_PREFIX;

@@ -44,8 +44,10 @@ import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
+import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader0Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.client.ui.gadgets.AddGadgetBox;
 import com.propertyvista.crm.client.ui.gadgets.GadgetsFactory;
@@ -64,7 +66,7 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
 
     private static I18n i18n = I18nFactory.getI18n(DashboardViewImpl.class);
 
-    private final CrmHeaderDecorator header;
+    private final VistaHeaderBar header;
 
     private final LayoutsSet layouts = new LayoutsSet();
 
@@ -85,9 +87,13 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
     }
 
     public DashboardViewImpl(String caption) {
+        this(caption, false);
+    }
+
+    public DashboardViewImpl(String caption, boolean internal) {
         super(Unit.EM);
 
-        addNorth(header = new CrmHeaderDecorator(caption, layouts), VistaCrmTheme.defaultHeaderHeight);
+        addNorth(header = (internal ? new CrmHeader0Decorator(caption, layouts) : new CrmHeaderDecorator(caption, layouts)), VistaCrmTheme.defaultHeaderHeight);
 
         actionsPanel = new HorizontalPanel();
         actionsPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.actionsPanel);

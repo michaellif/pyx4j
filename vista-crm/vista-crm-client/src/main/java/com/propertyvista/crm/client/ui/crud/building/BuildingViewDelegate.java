@@ -47,7 +47,7 @@ public class BuildingViewDelegate implements BuildingView {
     private final IListerView<LockerAreaDTO> lockerAreaLister;
 
     public BuildingViewDelegate(boolean readOnly) {
-        dashboardView = new DashboardViewImpl("");
+        dashboardView = new DashboardViewImpl("", true);
         floorplanLister = new ListerInternalViewImplBase<FloorplanDTO>(new FloorplanLister(/* readOnly */));
         unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new UnitLister(/* readOnly */));
         elevatorLister = new ListerInternalViewImplBase<ElevatorDTO>(new ElevatorLister(/* readOnly */));
