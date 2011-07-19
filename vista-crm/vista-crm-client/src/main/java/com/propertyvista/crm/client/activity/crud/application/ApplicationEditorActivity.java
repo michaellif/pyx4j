@@ -65,13 +65,13 @@ public class ApplicationEditorActivity extends EditorActivityBase<ApplicationDTO
     public void setSelectedBuilding(Building selected) {
         ApplicationDTO current = view.getValue();
         current.selectedBuilding().set(selected);
-        delegate.populate(current);
+        onPopulateSuccess(current);
     }
 
     @Override
     public void setSelectedUnit(AptUnit selected) {
         ApplicationDTO current = view.getValue();
         current.selectedUnit().set(selected);
-        delegate.populate(current);
+        onPopulateSuccess(current);
     }
 }
