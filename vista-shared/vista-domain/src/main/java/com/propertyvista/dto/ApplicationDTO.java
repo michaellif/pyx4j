@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.common.domain.tenant.Tenant;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantApplication;
 import com.propertyvista.portal.domain.ptapp.Pets;
@@ -26,17 +27,17 @@ import com.propertyvista.portal.domain.ptapp.UnitSelection;
 @Transient
 public interface ApplicationDTO extends TenantApplication {
 
-    // ListerData only!..
-    Tenant primaryTenant();
+    Building selectedBuilding();
 
-    // ListerData only!..
     AptUnit selectedUnit();
 
-//  While show ApplicationDTO - make tab with unit selection lister for:
+    Tenant primaryTenant();
+
+//  Note: While show ApplicationDTO - make 2 tabs (Building and Unit selection listers) for:
     @EmbeddedEntity
     UnitSelection unitSelection();
 
-//  While show ApplicationDTO - make tab with :
+//  Note : While show ApplicationDTO - make tab with :
 //  IList<PotentialTenantInfo> tenants();
 
     @Owned
