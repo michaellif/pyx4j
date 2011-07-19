@@ -17,7 +17,7 @@ import javax.servlet.ServletContextEvent;
 
 import com.pyx4j.quartz.SchedulerHelper;
 
-public class InitializationServletContextListener extends com.pyx4j.entity.server.servlet.InitializationServletContextListener {
+public class VistaInitializationServletContextListener extends com.pyx4j.entity.server.servlet.InitializationServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
