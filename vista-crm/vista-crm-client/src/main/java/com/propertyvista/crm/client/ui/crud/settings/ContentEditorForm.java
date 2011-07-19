@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.settings;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -79,15 +78,14 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
     private CEntityFolderEditor<PageDescriptor> createChildPagesList() {
         return new CEntityFolderEditor<PageDescriptor>(PageDescriptor.class) {
 
-            protected List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            private final ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            {
                 columns.add(new EntityFolderColumnDescriptor(proto().caption(), "25em"));
-                return columns;
             }
 
             @Override
             protected CEntityFolderItemEditor<PageDescriptor> createItem() {
-                return new CEntityFolderRowEditor<PageDescriptor>(PageDescriptor.class, columns()) {
+                return new CEntityFolderRowEditor<PageDescriptor>(PageDescriptor.class, columns) {
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
                         if (column.getObject().equals(proto().caption())) {
@@ -127,7 +125,7 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
 
             @Override
             protected IFolderEditorDecorator<PageDescriptor> createFolderDecorator() {
-                CrmTableFolderDecorator<PageDescriptor> decor = new CrmTableFolderDecorator<PageDescriptor>(columns(), i18n.tr("Add new Page"),
+                CrmTableFolderDecorator<PageDescriptor> decor = new CrmTableFolderDecorator<PageDescriptor>(columns, i18n.tr("Add new Page"),
                         !ContentEditorForm.this.isEditable());
                 decor.addNewItemClickHandler(new ClickHandler() {
                     @Override
@@ -139,6 +137,7 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
                         }
                     }
                 });
+                decor.setShowHeader(false);
                 return decor;
             }
         };
