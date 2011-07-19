@@ -33,7 +33,6 @@
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-j2se</artifactId>
-            <version>${pyxVersion}</version>
         </dependency>
 
 		<dependency>
