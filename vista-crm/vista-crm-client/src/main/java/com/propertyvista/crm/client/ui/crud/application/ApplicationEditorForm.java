@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -34,6 +35,7 @@ import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.IView;
 
@@ -67,8 +69,8 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
     @Override
     public IsWidget createContent() {
 
-        tabPanel.addDisable(((ApplicationView) getParentView()).getBuildingListerView().asWidget(), i18n.tr("Selected Building"));
-        tabPanel.addDisable(((ApplicationView) getParentView()).getUnitListerView().asWidget(), i18n.tr("Selected Unit"));
+        tabPanel.addDisable(createBuildingTab(), i18n.tr("Selected Building"));
+        tabPanel.addDisable(createUnitTab(), i18n.tr("Selected Unit"));
         tabPanel.addDisable(((ApplicationView) getParentView()).getTenantListerView().asWidget(), i18n.tr("Tenants"));
         tabPanel.add(new ScrollPanel(createPetsTab()), i18n.tr("Pets"));
 
@@ -77,8 +79,31 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
         return tabPanel;
     }
 
+    private Widget createBuildingTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+
+        main.add(new HTML("&nbsp"));
+        main.add(inject(proto().selectedBuilding(), new CLabel()), 50);
+        main.add(((ApplicationView) getParentView()).getBuildingListerView().asWidget());
+
+        main.setWidth("100%");
+        return main;
+    }
+
+    private Widget createUnitTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+
+        main.add(new HTML("&nbsp"));
+        main.add(inject(proto().selectedUnit(), new CLabel()), 50);
+        main.add(((ApplicationView) getParentView()).getUnitListerView().asWidget());
+
+        main.setWidth("100%");
+        return main;
+    }
+
     private Widget createPetsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+
         main.add(inject(proto().pets().pets(), createPetsListEditor()));
 
         main.setWidth("100%");
