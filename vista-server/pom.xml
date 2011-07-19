@@ -159,13 +159,6 @@
                 <directory>src/main/resources-generated</directory>
                 <filtering>true</filtering>
             </resource>
-            <resource>
-                <directory>${basedir}/src/main/webapp</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>WEB-INF/web.xml</include>
-                </includes>
-            </resource>
         </resources>
 
         <plugins>
@@ -184,23 +177,11 @@
                         </manifestEntries>
                     </archive>
                     <archiveClasses>true</archiveClasses>
-                    <warSourceDirectory>src/main/webapp</warSourceDirectory>
+                    <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
                     <warSourceExcludes>${warSourceExcludes}</warSourceExcludes>
-                     <!-- Processed by maven -->
-                    <webXml>${project.build.directory}/classes/WEB-INF/web.xml</webXml>
-                    <webResources>
-                        <resource>
-                            <directory>${basedir}/src/main/webapp/</directory>
-                            <includes>
-                                <include>*.html</include>
-                                <include>favicon.ico</include>
-                                <include>admin/**</include>
-                                <include>portal/**</include>
-                                <include>tester/**</include>
-                                <include>images/**</include>
-                            </includes>
-                        </resource>
-                    </webResources>
+                    <!-- web.xml processed by maven filters -->
+                    <packagingExcludes>WEB-INF/web.xml</packagingExcludes>
+                    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
                 </configuration>
             </plugin>
 
