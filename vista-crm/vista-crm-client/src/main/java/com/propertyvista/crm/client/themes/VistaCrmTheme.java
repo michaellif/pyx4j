@@ -401,7 +401,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         prefix = CrmHeader1Decorator.DEFAULT_STYLE_PREFIX;
         style = new Style(Selector.valueOf(prefix));
         style.addProperty("color", "#5E5E5E");
-        style.addProperty("margin", "0.2em 0 1em 0");
+        style.addProperty("margin", "0.2em 0 0.5em 0");
         style.addProperty("width", "100%");
         style.addProperty("border-top", "1px dotted #727171");
         style.addProperty("clear", "both");
@@ -416,7 +416,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         prefix = CrmHeader2Decorator.DEFAULT_STYLE_PREFIX;
         style = new Style(Selector.valueOf(prefix));
         style.addProperty("color", "#5E5E5E");
-        style.addProperty("margin", "0.2em 0 1em 0");
+        style.addProperty("margin", "0.2em 0 0.5em 0");
         style.addProperty("width", "100%");
         style.addProperty("border-top", "1px dotted #D8D8D8");
         addStyle(style);
