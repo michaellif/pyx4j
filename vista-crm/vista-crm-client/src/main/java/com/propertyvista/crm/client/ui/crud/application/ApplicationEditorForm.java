@@ -35,7 +35,6 @@ import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.IView;
 
@@ -83,7 +82,7 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
         main.add(new HTML("&nbsp"));
-        main.add(inject(proto().selectedBuilding(), new CLabel()), 50);
+        main.add(inject(proto().selectedBuilding(), new CEntityLabel()), 50);
         if (isEditable()) {
             main.add(((ApplicationView) getParentView()).getBuildingListerView().asWidget());
         }
@@ -96,7 +95,7 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
         main.add(new HTML("&nbsp"));
-        main.add(inject(proto().selectedUnit(), new CLabel()), 50);
+        main.add(inject(proto().selectedUnit(), new CEntityLabel()), 50);
         if (isEditable()) {
             main.add(((ApplicationView) getParentView()).getUnitListerView().asWidget());
         }
@@ -118,9 +117,8 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
 
         return new CEntityFolderEditor<Pet>(Pet.class) {
 
-            private List<EntityFolderColumnDescriptor> columns;
+            private final List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
             {
-                columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().type(), "5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().name(), "14em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().color(), "6em"));
