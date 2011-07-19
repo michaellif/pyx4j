@@ -24,6 +24,8 @@ import com.propertyvista.crm.client.ui.crud.application.ApplicationEditorView;
 import com.propertyvista.crm.client.ui.crud.application.ApplicationView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.dto.ApplicationDTO;
 
 public class ApplicationEditorActivity extends EditorActivityBase<ApplicationDTO> implements ApplicationEditorView.Presenter {
@@ -56,6 +58,20 @@ public class ApplicationEditorActivity extends EditorActivityBase<ApplicationDTO
     @Override
     public void onPopulateSuccess(ApplicationDTO result) {
         super.onPopulateSuccess(result);
-        delegate.populate();
+        delegate.populate(result);
+    }
+
+    @Override
+    public void setSelectedBuilding(Building selected) {
+        ApplicationDTO current = view.getValue();
+        current.selectedBuilding().set(selected);
+        delegate.populate(current);
+    }
+
+    @Override
+    public void setSelectedUnit(AptUnit selected) {
+        ApplicationDTO current = view.getValue();
+        current.selectedUnit().set(selected);
+        delegate.populate(current);
     }
 }

@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.application;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.ListerBase.ItemSelectionHandler;
 
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
@@ -31,6 +32,19 @@ public class ApplicationEditorViewImpl extends CrmEditorViewImplBase<Application
         super(CrmSiteMap.Tenants.Application.class);
 
         delegate = new ApplicationViewDelegate(false);
+
+        delegate.getBuildingListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<BuildingDTO>() {
+            @Override
+            public void onSelect(BuildingDTO selectedItem) {
+                ((ApplicationEditorView.Presenter) presenter).setSelectedBuilding(selectedItem);
+            }
+        });
+        delegate.getUnitListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<AptUnitDTO>() {
+            @Override
+            public void onSelect(AptUnitDTO selectedItem) {
+                ((ApplicationEditorView.Presenter) presenter).setSelectedUnit(selectedItem);
+            }
+        });
 
         // create/init/set main form here: 
         CrmEntityForm<ApplicationDTO> form = new ApplicationEditorForm(this);

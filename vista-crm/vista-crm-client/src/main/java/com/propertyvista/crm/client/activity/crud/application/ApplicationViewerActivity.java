@@ -56,6 +56,6 @@ public class ApplicationViewerActivity extends ViewerActivityBase<ApplicationDTO
     @Override
     public void onPopulateSuccess(ApplicationDTO result) {
         super.onPopulateSuccess(result);
-        delegate.populate();
+        delegate.populate(result);
     }
 }

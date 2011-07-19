@@ -15,10 +15,16 @@ package com.propertyvista.crm.client.ui.crud.application;
 
 import com.pyx4j.site.client.ui.crud.IEditorView;
 
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.dto.ApplicationDTO;
 
 public interface ApplicationEditorView extends IEditorView<ApplicationDTO>, ApplicationView {
 
     interface Presenter extends IEditorView.Presenter, ApplicationView.Presenter {
+
+        void setSelectedBuilding(Building selected);
+
+        void setSelectedUnit(AptUnit selected);
     }
 }

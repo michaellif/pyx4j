@@ -69,8 +69,8 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
     @Override
     public IsWidget createContent() {
 
-        tabPanel.addDisable(createBuildingTab(), i18n.tr("Selected Building"));
-        tabPanel.addDisable(createUnitTab(), i18n.tr("Selected Unit"));
+        tabPanel.add(createBuildingTab(), i18n.tr("Selected Building"));
+        tabPanel.add(createUnitTab(), i18n.tr("Selected Unit"));
         tabPanel.addDisable(((ApplicationView) getParentView()).getTenantListerView().asWidget(), i18n.tr("Tenants"));
         tabPanel.add(new ScrollPanel(createPetsTab()), i18n.tr("Pets"));
 
@@ -84,7 +84,9 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
 
         main.add(new HTML("&nbsp"));
         main.add(inject(proto().selectedBuilding(), new CLabel()), 50);
-        main.add(((ApplicationView) getParentView()).getBuildingListerView().asWidget());
+        if (isEditable()) {
+            main.add(((ApplicationView) getParentView()).getBuildingListerView().asWidget());
+        }
 
         main.setWidth("100%");
         return main;
@@ -95,7 +97,9 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
 
         main.add(new HTML("&nbsp"));
         main.add(inject(proto().selectedUnit(), new CLabel()), 50);
-        main.add(((ApplicationView) getParentView()).getUnitListerView().asWidget());
+        if (isEditable()) {
+            main.add(((ApplicationView) getParentView()).getUnitListerView().asWidget());
+        }
 
         main.setWidth("100%");
         return main;

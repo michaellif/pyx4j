@@ -24,6 +24,7 @@ import com.propertyvista.crm.client.ui.crud.application.ApplicationView;
 import com.propertyvista.crm.rpc.services.ApplicationTenantCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
+import com.propertyvista.dto.ApplicationDTO;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
@@ -49,7 +50,7 @@ public class ApplicationActivityDelegate implements ApplicationView.Presenter {
                 (AbstractCrudService<PotentialTenantInfo>) GWT.create(ApplicationTenantCrudService.class), PotentialTenantInfo.class);
     }
 
-    public void populate() {
+    public void populate(ApplicationDTO current) {
 
         buildingsLister.populateData(0);
 
