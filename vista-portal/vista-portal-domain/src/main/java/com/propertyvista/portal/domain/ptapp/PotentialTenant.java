@@ -26,6 +26,7 @@ import com.pyx4j.i18n.shared.Translation;
 
 import com.propertyvista.common.domain.tenant.Tenant;
 
+//TODO This goes away and TenantInLease would be used
 @AbstractEntity
 public interface PotentialTenant extends Tenant, IBoundToApplication {
 

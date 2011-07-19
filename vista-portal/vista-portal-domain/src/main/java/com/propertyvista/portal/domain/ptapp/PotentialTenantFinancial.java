@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
+// TODO  Move to DTO and use data from TenantScreening
 @Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = PotentialTenantInfo.class)
 public interface PotentialTenantFinancial extends IEntity, IBoundToApplication {
 
