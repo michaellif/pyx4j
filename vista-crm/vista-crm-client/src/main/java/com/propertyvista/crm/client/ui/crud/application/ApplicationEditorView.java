@@ -17,6 +17,6 @@ import com.pyx4j.site.client.ui.crud.IEditorView;
 
 import com.propertyvista.dto.ApplicationDTO;
 
-public interface ApplicationEditorView extends IEditorView<ApplicationDTO> {
+public interface ApplicationEditorView extends IEditorView<ApplicationDTO>, ApplicationView {
 
 }

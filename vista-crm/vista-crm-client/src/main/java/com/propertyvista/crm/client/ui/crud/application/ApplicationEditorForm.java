@@ -34,6 +34,8 @@ import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.site.client.ui.crud.IView;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -47,17 +49,19 @@ import com.propertyvista.dto.ApplicationDTO;
 import com.propertyvista.portal.domain.ptapp.ChargeLine;
 import com.propertyvista.portal.domain.ptapp.Pet;
 import com.propertyvista.portal.domain.ptapp.Pet.WeightUnit;
+import com.propertyvista.portal.domain.util.DomainUtil;
 
 public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
-    public ApplicationEditorForm() {
-        super(ApplicationDTO.class, new CrmEditorsComponentFactory());
+    public ApplicationEditorForm(IView<ApplicationDTO> parentView) {
+        this(new CrmEditorsComponentFactory(), parentView);
     }
 
-    public ApplicationEditorForm(IEditableComponentFactory factory) {
+    public ApplicationEditorForm(IEditableComponentFactory factory, IView<ApplicationDTO> parentView) {
         super(ApplicationDTO.class, factory);
+        setParentView(parentView);
     }
 
     @Override
@@ -74,7 +78,7 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
 
     private Widget createPetsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        main.add(inject(proto().pets(), createPetsListEditor()));
+        main.add(inject(proto().pets().pets(), createPetsListEditor()));
 
         main.setWidth("100%");
         return main;
@@ -122,25 +126,23 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
 
                     @Override
                     public void addValidations() {
-//                      
-//TODO: find out where to get that petWeightMaximum() for validation...
-//                      
-//                        EditableValueValidator<Integer> weightValidator = new EditableValueValidator<Integer>() {
-//                            @Override
-//                            public boolean isValid(CEditableComponent<Integer, ?> component, Integer value) {
-//                                return (value == null)
-//                                        || DomainUtil.getWeightKg(value, getValue().weightUnit().getValue()) <= PetsViewForm.this.getValue().petWeightMaximum()
-//                                                .getValue();
-//                            }
-//
-//                            @Override
-//                            public String getValidationMessage(CEditableComponent<Integer, ?> component, Integer value) {
-//                                return i18n.tr("Max allowed weight {0} {1} ", DomainUtil.getWeightKgToUnit(PetsViewForm.this.getValue().petWeightMaximum(),
-//                                        getValue().weightUnit()), getValue().weightUnit().getStringView());
-//                            }
-//                        };
-//
-//                        get(proto().weight()).addValueValidator(weightValidator);
+                        EditableValueValidator<Integer> weightValidator = new EditableValueValidator<Integer>() {
+                            @Override
+                            public boolean isValid(CEditableComponent<Integer, ?> component, Integer value) {
+                                return (value == null)
+                                        || DomainUtil.getWeightKg(value, getValue().weightUnit().getValue()) <= ApplicationEditorForm.this.getValue().pets()
+                                                .petWeightMaximum().getValue();
+                            }
+
+                            @Override
+                            public String getValidationMessage(CEditableComponent<Integer, ?> component, Integer value) {
+                                return i18n.tr("Max allowed weight {0} {1} ",
+                                        DomainUtil.getWeightKgToUnit(ApplicationEditorForm.this.getValue().pets().petWeightMaximum(), getValue().weightUnit()),
+                                        getValue().weightUnit().getStringView());
+                            }
+                        };
+
+                        get(proto().weight()).addValueValidator(weightValidator);
                         get(proto().weightUnit()).addValueChangeHandler(new RevalidationTrigger<WeightUnit>(get(proto().weight())));
 
                         get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
@@ -153,7 +155,7 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
             protected void createNewEntity(Pet newEntity, AsyncCallback<Pet> callback) {
                 newEntity.weightUnit().setValue(WeightUnit.lb);
 //              
-//TODO: find out where to get that petChargeRule()...
+//TODO: find out where to get that ChargesSharedCalculation()...
 //              
 //                ChargesSharedCalculation.calculatePetCharges(PetsViewForm.this.getValue().petChargeRule(), newEntity);
                 super.createNewEntity(newEntity, callback);

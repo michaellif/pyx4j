@@ -17,6 +17,6 @@ import com.pyx4j.site.client.ui.crud.IViewerView;
 
 import com.propertyvista.dto.ApplicationDTO;
 
-public interface ApplicationViewerView extends IViewerView<ApplicationDTO> {
+public interface ApplicationViewerView extends IViewerView<ApplicationDTO>, ApplicationView {
 
 }
