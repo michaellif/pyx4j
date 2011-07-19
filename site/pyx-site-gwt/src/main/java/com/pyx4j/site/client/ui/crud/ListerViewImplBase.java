@@ -68,7 +68,8 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
         ((ScrollPanel) getCenter()).setWidget(this.lister = lister);
     }
 
-    protected ListerBase<E> getLister() {
+    @Override
+    public ListerBase<E> getLister() {
         return lister;
     }
 

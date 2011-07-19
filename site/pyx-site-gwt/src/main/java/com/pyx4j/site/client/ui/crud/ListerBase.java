@@ -291,6 +291,11 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 // IListerView implementation:
 
     @Override
+    public ListerBase<E> getLister() {
+        return this;
+    }
+
+    @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
     }

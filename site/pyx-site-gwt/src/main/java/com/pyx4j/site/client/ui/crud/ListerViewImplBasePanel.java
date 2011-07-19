@@ -66,7 +66,8 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
         add(this.lister = lister, DockPanel.CENTER);
     }
 
-    protected ListerBase<E> getLister() {
+    @Override
+    public ListerBase<E> getLister() {
         return lister;
     }
 

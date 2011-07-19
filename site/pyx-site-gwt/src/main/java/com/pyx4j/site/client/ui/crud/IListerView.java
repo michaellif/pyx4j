@@ -50,9 +50,11 @@ public interface IListerView<E extends IEntity> extends IView<E> {
         public void editNew(Class<? extends CrudAppPlace> openPlaceClass, Key parentID);
     }
 
+    ListerBase<E> getLister();
+
     void setPresenter(Presenter presenter);
 
     int getPageSize();
 
-    public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData);
+    void populateData(List<E> entityes, int pageNumber, boolean hasMoreData);
 }

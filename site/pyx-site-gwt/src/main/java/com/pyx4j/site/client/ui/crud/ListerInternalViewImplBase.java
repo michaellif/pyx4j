@@ -54,7 +54,8 @@ public class ListerInternalViewImplBase<E extends IEntity> extends ScrollPanel i
         setWidget(this.lister = lister);
     }
 
-    protected ListerBase<E> getLister() {
+    @Override
+    public ListerBase<E> getLister() {
         return lister;
     }
 
