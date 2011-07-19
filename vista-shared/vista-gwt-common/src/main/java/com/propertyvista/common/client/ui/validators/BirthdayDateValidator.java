@@ -17,22 +17,21 @@ import java.util.Date;
 
 import org.xnap.commons.i18n.I18n;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18nFactory;
 
-public class BirthdayDateValidator implements EditableValueValidator<LogicalDate> {
+public class BirthdayDateValidator implements EditableValueValidator<Date> {
 
     private static I18n i18n = I18nFactory.getI18n(BirthdayDateValidator.class);
 
     @Override
-    public boolean isValid(CEditableComponent<LogicalDate, ?> component, LogicalDate value) {
+    public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
         return value.before(new Date());
     }
 
     @Override
-    public String getValidationMessage(CEditableComponent<LogicalDate, ?> component, LogicalDate value) {
+    public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
         return i18n.tr("Future bithday date.");
     }
 
