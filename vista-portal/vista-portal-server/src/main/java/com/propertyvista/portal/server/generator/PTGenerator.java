@@ -33,6 +33,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.common.domain.contact.IAddress;
@@ -87,8 +88,12 @@ public class PTGenerator {
 
     private final long seed;
 
-    public PTGenerator(long seed) {
+    private PreloadConfig config;
+
+    // TODO this seed might be an optional thing (come from config)
+    public PTGenerator(long seed, PreloadConfig config) {
         DataGenerator.setRandomSeed(seed);
+        this.config = config;
         this.seed = seed;
     }
 
@@ -416,7 +421,7 @@ public class PTGenerator {
         PotentialTenantList tenants = EntityFactory.create(PotentialTenantList.class);
         tenants.application().set(application);
 
-        int maxTenants = DemoData.NUM_POTENTIAL_TENANTS;
+        int maxTenants = config.getNumPotentialTenants();
         if (Math.abs(this.seed) > 1000) {
             maxTenants = 1 + RandomUtil.randomInt(5);
         }

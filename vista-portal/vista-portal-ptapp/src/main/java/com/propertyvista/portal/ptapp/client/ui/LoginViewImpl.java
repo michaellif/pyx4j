@@ -39,6 +39,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
 import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.PreloadConfig;
 
 public class LoginViewImpl extends FlowPanel implements LoginView {
 
@@ -53,6 +54,8 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
     private int devKey = 0;
 
     private HandlerRegistration handlerRegistration;
+
+    private PreloadConfig config = PreloadConfig.createDefault();
 
     public LoginViewImpl() {
 
@@ -134,7 +137,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
     private void setDevLoginValues(NativeEvent event, int nativeKeyCode) {
         String devLoginUserPrefix = null;
-        int max = DemoData.MAX_CUSTOMERS;
+        int max = config.getMaxCustomers();
         switch (nativeKeyCode) {
         case 'A':
             devLoginUserPrefix = DemoData.CRM_ADMIN_USER_PREFIX;

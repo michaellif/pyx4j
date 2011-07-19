@@ -16,11 +16,16 @@ package com.propertyvista.portal.server.preloader;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.server.domain.CampaignHistory;
 import com.propertyvista.server.domain.CampaignTriger;
 import com.propertyvista.server.domain.PhoneCallCampaign;
 
 public class CampaignPreload extends BaseVistaDataPreloader {
+
+    public CampaignPreload(PreloadConfig config) {
+        super(config);
+    }
 
     @Override
     public String create() {

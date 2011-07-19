@@ -27,6 +27,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.datepicker.DatePickerIDs;
 
 import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Application;
@@ -56,7 +57,7 @@ public class DatePickerTestBase extends WizardSeleniumTestBase {
     }
 
     protected void login() {
-        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED);
+        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, PreloadConfig.createTest());
         User user = generator.createUser(1);
         Application application = generator.createApplication(user);
         unitSelection = generator.createUnitSelection(application, null);

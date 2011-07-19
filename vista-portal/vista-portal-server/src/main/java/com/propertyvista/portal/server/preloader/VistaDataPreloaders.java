@@ -15,18 +15,30 @@ package com.propertyvista.portal.server.preloader;
 
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 
+import com.propertyvista.common.domain.PreloadConfig;
+
 public class VistaDataPreloaders extends DataPreloaderCollection {
 
-    public VistaDataPreloaders() {
+//    private Map<String, Serializable> parameters = Collections.emptyMap();
+
+    public VistaDataPreloaders(PreloadConfig config) {
+//        parameters.put(PreloadConfig.KEY, config);
+
         add(new LocationsPreload());
-        add(new PreloadUsers());
-        add(new CampaignPreload());
-        add(new PreloadBuildings());
-        add(new PreloadTenants());
-        add(new PreloadPT());
+        add(new PreloadUsers(config));
+        add(new CampaignPreload(config));
+        add(new PreloadBuildings(config));
+        add(new PreloadTenants(config));
+        add(new PreloadPT(config));
         add(new PortalSitePreload());
         add(new DevelopmentSecurityPreload());
         add(new DashboardPreload());
         add(new ReportPreload());
     }
+
+//    @Override
+//    protected void add(DataPreloader preloader) {
+//        preloader.setParametersValues(parameters);
+//        super.add(preloader);
+//    }
 }

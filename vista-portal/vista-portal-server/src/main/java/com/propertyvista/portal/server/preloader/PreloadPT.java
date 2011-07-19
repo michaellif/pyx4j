@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.contact.IAddress;
 import com.propertyvista.domain.tenant.TenantApplication;
@@ -54,6 +55,10 @@ public class PreloadPT extends BaseVistaDataPreloader {
     private final static Logger log = LoggerFactory.getLogger(PreloadPT.class);
 
     private User user;
+
+    public PreloadPT(PreloadConfig config) {
+        super(config);
+    }
 
     //    private Application application;
 
@@ -140,7 +145,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
     public String create() {
         user = loadUser(DemoData.PRELOADED_USERNAME);
 
-        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED);
+        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, PreloadConfig.createTest());
         Application application = generator.createApplication(user);
         TenantApplication tenantApplication = EntityFactory.create(TenantApplication.class);
         tenantApplication.application().set(application);

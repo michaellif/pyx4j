@@ -27,6 +27,7 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.selenium.D;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.contact.IAddress;
 import com.propertyvista.common.domain.contact.IAddressFull;
@@ -94,7 +95,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         assertNoMessages();
 
         log.info("execute flow with seed {}", seed);
-        PTGenerator generator = new PTGenerator(seed);
+        PTGenerator generator = new PTGenerator(seed, PreloadConfig.createTest());
         User user = createTestUser();
         Application application = generator.createApplication(user);
         Summary summary = generator.createSummary(application, null);

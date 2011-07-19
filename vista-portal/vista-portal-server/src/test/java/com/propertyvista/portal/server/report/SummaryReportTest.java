@@ -31,6 +31,7 @@ import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
@@ -53,7 +54,7 @@ public class SummaryReportTest extends ReportsTestBase {
             ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(true));
         } else {
             VistaTestDBSetup.init();
-            new VistaDataPreloaders().preloadAll();
+            new VistaDataPreloaders(PreloadConfig.createTest()).preloadAll();
         }
         // Ignore all security constrains
         TestLifecycle.testSession(null, CoreBehavior.DEVELOPER);
@@ -93,7 +94,7 @@ public class SummaryReportTest extends ReportsTestBase {
     }
 
     private static Summary retreiveSummaryTodo() throws IOException {
-        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED);
+        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, PreloadConfig.createTest());
         Application application = generator.createApplication(PTGenerator.createUser());
         Summary summary = generator.createSummary(application, null);
         return summary;

@@ -17,51 +17,25 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenant.Relationship;
 
 public class DemoData {
 
-    public static int PT_GENERATION_SEED = 100;
+    public final static int PT_GENERATION_SEED = 100;
 
-    public static int BUILDINGS_GENERATION_SEED = 100;
+    public final static int BUILDINGS_GENERATION_SEED = 100;
 
-    public static int TENANTS_GENERATION_SEED = 100;
+    public final static int TENANTS_GENERATION_SEED = 100;
 
-    public static int MAX_CUSTOMERS = 20;
+    public final static String CRM_ADMIN_USER_PREFIX = "a";
 
-    public static int MAX_PROPERTY_MANAGER = 10;
+    public final static String CRM_CUSTOMER_USER_PREFIX = "cust";
 
-    public static int MAX_ADMIN = 2;
+    public final static String CRM_PROPERTY_MANAGER_USER_PREFIX = "pm";
 
-    public static String CRM_ADMIN_USER_PREFIX = "a";
+    public final static String USERS_DOMAIN = "@pyx4j.com";
 
-    public static String CRM_CUSTOMER_USER_PREFIX = "cust";
+    public final static String PRELOADED_USERNAME = "cust001";
 
-    public static String CRM_PROPERTY_MANAGER_USER_PREFIX = "pm";
+    public final static String REGISTRATION_DEFAULT_PROPERTY_CODE = "740";
 
-    public static String USERS_DOMAIN = "@pyx4j.com";
-
-    public static int NUM_RESIDENTIAL_BUILDINGS = 10;
-
-    public static int NUM_TENANTS = 10;
-
-    public static int NUM_POTENTIAL_TENANTS = 4;
-
-    public static int NUM_FLOORS = 4;
-
-    public static int NUM_FLOORPLANS = 2;
-
-    public static int NUM_PARKINGS = 1;
-
-    public static int NUM_PARKINGSPOTS = 128;
-
-    public static int NUM_LOCKERAREAS = 2;
-
-    public static int NUM_LOCKERS = 35;
-
-    public static int NUM_UNITS_PER_FLOOR = 4;
-
-    public static final String PRELOADED_USERNAME = "cust001";
-
-    public static final String REGISTRATION_DEFAULT_PROPERTY_CODE = "740";
-
-    public static final String REGISTRATION_DEFAULT_FLOORPLAN = "Luxury 2-bedroom";
+    public final static String REGISTRATION_DEFAULT_FLOORPLAN = "Luxury 2-bedroom";
 
     public final static Relationship[] RELATIONSHIPS = { Relationship.Spouse, Relationship.Daughter, Relationship.Son, Relationship.Mother,
             Relationship.Father, Relationship.Aunt, Relationship.Uncle, Relationship.GrandFather, Relationship.GrandMother, Relationship.Other };

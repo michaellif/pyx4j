@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.common.domain.contact.Email;
 import com.propertyvista.common.domain.contact.Phone;
 import com.propertyvista.common.domain.media.Media;
@@ -61,6 +62,10 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
 
     private final static Logger log = LoggerFactory.getLogger(PreloadBuildings.class);
 
+    public PreloadBuildings(PreloadConfig config) {
+        super(config);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public String delete() {
@@ -79,36 +84,36 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
         LeaseTerms leaseTerms = generator.createLeaseTerms();
         PersistenceServicesFactory.getPersistenceService().persist(leaseTerms);
 
-        List<Building> buildings = generator.createBuildings(DemoData.NUM_RESIDENTIAL_BUILDINGS);
+        List<Building> buildings = generator.createBuildings(config.getNumResidentialBuildings());
         int unitCount = 0;
         for (Building building : buildings) {
             // TODO Need to be saving PropertyProfile, PetCharge
             persist(building);
 
-// Parking:
-            List<Parking> parkings = generator.createParkings(building, DemoData.NUM_PARKINGS);
+            // Parking:
+            List<Parking> parkings = generator.createParkings(building, config.getNumParkings());
             for (Parking parking : parkings) {
                 persist(parking);
 
-                List<ParkingSpot> spots = generator.createParkingSpots(parking, DemoData.NUM_PARKINGSPOTS);
+                List<ParkingSpot> spots = generator.createParkingSpots(parking, config.getNumParkingSpots());
                 for (ParkingSpot spot : spots) {
                     persist(spot);
                 }
             }
 
-// Lockers:
-            List<LockerArea> lockerAreas = generator.createLockerAreas(building, DemoData.NUM_LOCKERAREAS);
+            // Lockers:
+            List<LockerArea> lockerAreas = generator.createLockerAreas(building, config.getNumLockerAreas());
             for (LockerArea lockerArea : lockerAreas) {
                 persist(lockerArea);
 
-                List<Locker> lockers = generator.createLockers(lockerArea, DemoData.NUM_LOCKERS);
+                List<Locker> lockers = generator.createLockers(lockerArea, config.getNumLockers());
                 for (Locker locker : lockers) {
                     persist(locker);
                 }
             }
 
-// Floorplans:
-            List<FloorplanDTO> floorplans = generator.createFloorplans(building, DemoData.NUM_FLOORPLANS);
+            // Floorplans:
+            List<FloorplanDTO> floorplans = generator.createFloorplans(building, config.getNumFloorplans());
             for (FloorplanDTO floorplanDTO : floorplans) {
 
                 if (this.getParameter(MediaGenerator.ATTACH_MEDIA_PARAMETER) != Boolean.FALSE) {
@@ -132,8 +137,8 @@ public class PreloadBuildings extends BaseVistaDataPreloader {
                 }
             }
 
-// Units:
-            List<UnitRelatedData> units = generator.createUnits(building, floorplans, DemoData.NUM_FLOORS, DemoData.NUM_UNITS_PER_FLOOR);
+            // Units:
+            List<UnitRelatedData> units = generator.createUnits(building, floorplans, config.getNumFloors(), config.getNumUnitsPerFloor());
             unitCount += units.size();
             for (UnitRelatedData unitData : units) {
                 // persist plain internal lists:

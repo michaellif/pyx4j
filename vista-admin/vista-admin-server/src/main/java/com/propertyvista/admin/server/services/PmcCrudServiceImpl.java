@@ -34,6 +34,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
 import com.propertyvista.portal.server.preloader.PortalSitePreload;
@@ -89,7 +90,8 @@ public class PmcCrudServiceImpl implements PmcCrudService {
         }
 
         if (ApplicationMode.isDevelopment()) {
-            for (int i = 1; i <= DemoData.MAX_PROPERTY_MANAGER; i++) {
+            PreloadConfig config = PreloadConfig.createDefault();
+            for (int i = 1; i <= config.getMaxPropertyManagers(); i++) {
                 String email = DemoData.CRM_PROPERTY_MANAGER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN;
                 PreloadUsers.createUser(email, email, VistaBehavior.PROPERTY_MANAGER);
             }

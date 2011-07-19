@@ -21,24 +21,28 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.UserCredential;
 
-public class PreloadUsers extends AbstractDataPreloader {
+public class PreloadUsers extends BaseVistaDataPreloader {
 
     private final static Logger log = LoggerFactory.getLogger(PreloadUsers.class);
 
     private int userCount;
 
     private int custCount;
+
+    public PreloadUsers(PreloadConfig config) {
+        super(config);
+    }
 
     private User createUser(String email, VistaBehavior behavior) {
         userCount++;
@@ -83,15 +87,15 @@ public class PreloadUsers extends AbstractDataPreloader {
 
         if (ApplicationMode.isDevelopment()) {
 
-            for (int i = 1; i <= DemoData.MAX_ADMIN; i++) {
+            for (int i = 1; i <= config.getMaxAdmin(); i++) {
                 createUser(DemoData.CRM_ADMIN_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.ADMIN);
             }
 
-            for (int i = 1; i <= DemoData.MAX_PROPERTY_MANAGER; i++) {
+            for (int i = 1; i <= config.getMaxPropertyManagers(); i++) {
                 createUser(DemoData.CRM_PROPERTY_MANAGER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.PROPERTY_MANAGER);
             }
 
-            for (int i = 1; i <= DemoData.MAX_CUSTOMERS; i++) {
+            for (int i = 1; i <= config.getMaxCustomers(); i++) {
                 switch (custCount % 3) {
                 case 0:
                     createUser(DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.POTENTIAL_TENANT);

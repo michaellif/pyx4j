@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 
-import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.portal.server.preloader.MediaGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
@@ -29,16 +29,8 @@ public class VistaDBPreloadTest extends VistaDBTestBase {
     private final static Logger log = LoggerFactory.getLogger(VistaDBPreloadTest.class);
 
     public void testDefaultPreload() {
-
-        // make things faster
-        DemoData.NUM_RESIDENTIAL_BUILDINGS = 1;
-        DemoData.NUM_FLOORPLANS = 2;
-        DemoData.NUM_UNITS_PER_FLOOR = 2;
-        DemoData.NUM_FLOORS = 2;
-        DemoData.NUM_POTENTIAL_TENANTS = 2;
-
         long start = System.currentTimeMillis();
-        DataPreloaderCollection dp = new VistaDataPreloaders();
+        DataPreloaderCollection dp = new VistaDataPreloaders(PreloadConfig.createTest());
         dp.setParameterValue(MediaGenerator.ATTACH_MEDIA_PARAMETER, Boolean.FALSE);
         dp.preloadAll();
         log.info("Preload time {}", TimeUtils.secSince(start));

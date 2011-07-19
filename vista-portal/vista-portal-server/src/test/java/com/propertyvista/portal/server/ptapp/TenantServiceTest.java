@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant;
@@ -39,8 +39,7 @@ public class TenantServiceTest extends VistaDBTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        DemoData.MAX_CUSTOMERS = 5;
-        new VistaDataPreloaders().preloadAll(false);
+        new VistaDataPreloaders(PreloadConfig.createTest()).preloadAll(false);
     }
 
     @Override
@@ -74,7 +73,7 @@ public class TenantServiceTest extends VistaDBTestBase {
     public void testLoadAndSave() {
         happyPath();
 
-        PTGenerator generator = new PTGenerator(10l);
+        PTGenerator generator = new PTGenerator(10l, PreloadConfig.createTest());
 
         PotentialTenantList tenantList = HappyPath.step4createTenants();
         PotentialTenantList tenantList2 = generator.createPotentialTenantList(application);

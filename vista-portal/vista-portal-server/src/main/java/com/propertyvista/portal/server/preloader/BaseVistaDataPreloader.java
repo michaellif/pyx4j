@@ -18,9 +18,14 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
+import com.propertyvista.common.domain.PreloadConfig;
+
 abstract class BaseVistaDataPreloader extends AbstractDataPreloader {
 
-    protected BaseVistaDataPreloader() {
+    protected PreloadConfig config;
+
+    protected BaseVistaDataPreloader(PreloadConfig config) {
+        this.config = config;
         DataGenerator.setRandomSeed(100);
     }
 

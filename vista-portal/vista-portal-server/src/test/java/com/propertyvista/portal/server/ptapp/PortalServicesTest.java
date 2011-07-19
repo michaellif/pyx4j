@@ -21,7 +21,7 @@ import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
@@ -52,15 +52,14 @@ public class PortalServicesTest extends VistaDBTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        DemoData.MAX_CUSTOMERS = 5;
-        new VistaDataPreloaders().preloadAll(false);
+        new VistaDataPreloaders(PreloadConfig.createTest()).preloadAll(false);
     }
 
     /**
      * Create application. Do full life cycle test from the beginning.
      */
     public void testFullLifecycle() {
-        PTGenerator generator = new PTGenerator(500l);
+        PTGenerator generator = new PTGenerator(500l, PreloadConfig.createTest());
 
         final String email = BusinessDataGenerator.createEmail();
         HappyPath.step1createAccount(email);

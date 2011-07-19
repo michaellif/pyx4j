@@ -27,6 +27,7 @@ import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.security.shared.AclCreator;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.config.VistaSMTPMailServiceConfig;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.common.security.VistaAntiBot;
@@ -89,7 +90,7 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
 
     @Override
     public DataPreloaderCollection getDataPreloaders() {
-        return new VistaDataPreloaders();
+        return new VistaDataPreloaders(PreloadConfig.createDefault());
     }
 
     @Override

@@ -21,7 +21,7 @@ import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
@@ -40,8 +40,7 @@ public class ApartmentServiceTest extends VistaDBTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        DemoData.MAX_CUSTOMERS = 5;
-        new VistaDataPreloaders().preloadAll(false);
+        new VistaDataPreloaders(PreloadConfig.createTest()).preloadAll(false);
     }
 
     @Override
@@ -114,7 +113,7 @@ public class ApartmentServiceTest extends VistaDBTestBase {
         Assert.assertNotNull("PrimaryKey", unitSelection.id().getValue());
 
         // select the first unit
-        PTGenerator generator = new PTGenerator(1l);
+        PTGenerator generator = new PTGenerator(1l, PreloadConfig.createTest());
         UnitSelection generatedUnitSelection = generator.createUnitSelection(application, null);
         Assert.assertNull("Id not set yet", generatedUnitSelection.id().getValue());
         generatedUnitSelection.id().setValue(unitSelection.id().getValue()); // copy ids

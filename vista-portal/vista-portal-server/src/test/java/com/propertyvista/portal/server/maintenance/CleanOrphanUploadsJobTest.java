@@ -37,7 +37,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
@@ -59,8 +59,7 @@ public class CleanOrphanUploadsJobTest extends VistaDBTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        DemoData.MAX_CUSTOMERS = 5;
-        new VistaDataPreloaders().preloadAll(false);
+        new VistaDataPreloaders(PreloadConfig.createTest()).preloadAll(false);
         instance = new CleanOrphanApplicationDocumentDataRecordsJob();
     }
 

@@ -15,6 +15,7 @@ package com.propertyvista.portal.server.generator;
 
 import junit.framework.TestCase;
 
+import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.Summary;
@@ -32,20 +33,20 @@ public class VistaDataGeneratorTest extends TestCase {
         final long seed1 = 250;
 
         SharedData.init();
-        PTGenerator generator1 = new PTGenerator(seed1);
+        PTGenerator generator1 = new PTGenerator(seed1, PreloadConfig.createTest());
         User user1 = generator1.createUser(1);
         Application application1 = generator1.createApplication(user1);
         Summary summary1 = generator1.createSummary(application1, null);
 
         // To some other data generation
-        PTGenerator generatorX = new PTGenerator(System.currentTimeMillis());
+        PTGenerator generatorX = new PTGenerator(System.currentTimeMillis(), PreloadConfig.createTest());
         User userX = generatorX.createUser(1);
         Application applicationX = generatorX.createApplication(userX);
         generatorX.createSummary(applicationX, null);
 
         SharedData.init();
 
-        PTGenerator generator2 = new PTGenerator(seed1);
+        PTGenerator generator2 = new PTGenerator(seed1, PreloadConfig.createTest());
         User user2 = generator2.createUser(1);
         Application application2 = generator2.createApplication(user2);
         Summary summary2 = generator2.createSummary(application2, null);
