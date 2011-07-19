@@ -54,6 +54,9 @@ public class ApplicationActivityDelegate implements ApplicationView.Presenter {
 
         buildingsLister.populateData(0);
 
+        if (!current.selectedBuilding().isEmpty()) {
+            unitsLister.setParentFiltering(current.selectedBuilding().getPrimaryKey());
+        }
         unitsLister.populateData(0);
 
         tenantsLister.populateData(0);
