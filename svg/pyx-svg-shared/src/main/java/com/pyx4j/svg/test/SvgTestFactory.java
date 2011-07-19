@@ -35,12 +35,14 @@ import com.pyx4j.svg.basic.Rect;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
 import com.pyx4j.svg.basic.Text;
+import com.pyx4j.svg.chart.ArcBasedChartConfigurator;
 import com.pyx4j.svg.chart.BarChart;
 import com.pyx4j.svg.chart.BarChart2D;
 import com.pyx4j.svg.chart.BarChartModel;
 import com.pyx4j.svg.chart.BarChartModel.BarChartItem;
 import com.pyx4j.svg.chart.ChartTheme;
 import com.pyx4j.svg.chart.DataSource;
+import com.pyx4j.svg.chart.Gauge;
 import com.pyx4j.svg.chart.GridBasedChart;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
@@ -49,7 +51,6 @@ import com.pyx4j.svg.chart.LegendItem;
 import com.pyx4j.svg.chart.LineChart;
 import com.pyx4j.svg.chart.PieChart;
 import com.pyx4j.svg.chart.PieChart2D;
-import com.pyx4j.svg.chart.PieChartConfigurator;
 import com.pyx4j.svg.chart.PieChartModel;
 import com.pyx4j.svg.chart.PieChartModel.PieChartSegment;
 
@@ -113,7 +114,7 @@ public class SvgTestFactory {
         SvgRoot svgroot = factory.getSvgRoot();
         Group g = factory.createGroup();
 
-        PieChartConfigurator config = new PieChartConfigurator(factory, Data_Source);
+        ArcBasedChartConfigurator config = new ArcBasedChartConfigurator(factory, Data_Source);
         config.setLegend(true);
         config.setTheme(ChartTheme.Bright);
         config.setRadius(100);
@@ -122,6 +123,24 @@ public class SvgTestFactory {
         g.setAttribute("width", String.valueOf(pchart.getComputedWidth()) + "px");
         g.setAttribute("height", String.valueOf(pchart.getComputedHeight()) + "px");
         g.add(pchart);
+        g.setTransform("translate(" + x + "," + y + ")");
+        svgroot.add(g);
+        return svgroot;
+    }
+
+    public static SvgRoot createGaugeTest(SvgFactory factory, int x, int y) {
+        SvgRoot svgroot = factory.getSvgRoot();
+        Group g = factory.createGroup();
+
+        ArcBasedChartConfigurator config = new ArcBasedChartConfigurator(factory, Data_Source);
+        config.setLegend(true);
+        config.setTheme(ChartTheme.Bright);
+        config.setRadius(100);
+
+        Gauge gauge = new Gauge(config);
+        g.setAttribute("width", String.valueOf(gauge.getComputedWidth()) + "px");
+        g.setAttribute("height", String.valueOf(gauge.getComputedHeight()) + "px");
+        g.add(gauge);
         g.setTransform("translate(" + x + "," + y + ")");
         svgroot.add(g);
         return svgroot;

@@ -20,40 +20,24 @@
  */
 package com.pyx4j.svg.chart;
 
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import com.pyx4j.svg.basic.Circle;
 import com.pyx4j.svg.basic.Group;
-import com.pyx4j.svg.basic.IsSvgElement;
 import com.pyx4j.svg.basic.Path;
 import com.pyx4j.svg.basic.Rect;
-import com.pyx4j.svg.basic.SvgElement;
-import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.Text;
 import com.pyx4j.svg.chart.DataSource.Metric;
 import com.pyx4j.svg.util.Utils;
 
-public class PieChart2D implements IsSvgElement {
-    private final DataSource datasource;
-
-    private final SvgFactory factory;
-
-    private final int radius;
-
-    private int computedWidth;
-
-    private int computedHeight;
+public class PieChart2D extends ArcBasedChart {
 
     private final static int X_SHIFT = 40;
 
     private final static int Y_SHIFT = 10;
-
-    private final static int PADDING = 15;
 
     private final static int LEGEND_FRAME_PADDING = 5;
 
@@ -61,72 +45,12 @@ public class PieChart2D implements IsSvgElement {
 
     private final static int TITLE_PADDING = 10;
 
-    private final Group container;
-
-    private final PieChartConfigurator configurator;
-
-    public PieChart2D(PieChartConfigurator configurator) {
-        this.configurator = configurator;
-        this.datasource = configurator.getDatasourse();
-        this.radius = configurator.getRadius();
-        this.factory = configurator.getFactory();
-        container = this.factory.createGroup();
-        computedWidth = 0;
-        computedHeight = 0;
-        drawChart();
+    public PieChart2D(ArcBasedChartConfigurator configurator) {
+        super(configurator);
     }
 
-    private void drawChart() {
-
-        List<String> sdesc = datasource.getSeriesDescription();
-        int x = radius + PADDING;
-        int y = radius + PADDING;
-
-        Set<Entry<Metric, List<Double>>> dataset = datasource.getDataSet().entrySet();
-        //find out number of series
-        int numOfSeries = 0;
-        for (Entry<Metric, List<Double>> entry : dataset) {
-            int size = entry.getValue().size();
-            if (numOfSeries < size)
-                numOfSeries = size;
-        }
-
-        for (int idx = 0; idx < numOfSeries; idx++) {
-            Map<Metric, Double> series = new LinkedHashMap<Metric, Double>(10);
-            for (Entry<Metric, List<Double>> entry : dataset) {
-                List<Double> values = entry.getValue();
-                Double value;
-                if (values == null || values.size() == 0)
-                    value = 0.0;
-                else {
-                    try {
-                        value = values.get(idx);
-                    } catch (Exception ex) {
-                        value = 0.0;
-                    }
-                }
-                series.put(entry.getKey(), value);
-            }
-
-            String SeriesTitle = null;
-            if (sdesc != null) {
-                try {
-                    SeriesTitle = sdesc.get(idx);
-                } catch (Exception e) {
-                    ;
-                }
-            }
-
-            computedWidth = drawSeries(series, x, y, SeriesTitle);
-            y += radius * 2 + PADDING;
-            if (SeriesTitle != null && SeriesTitle.length() > 0)
-                y += 2 * PADDING;
-        }
-        computedHeight = y + radius + PADDING;
-
-    }
-
-    private int drawSeries(Map<Metric, Double> series, final int x, final int y, String seriestitle) {
+    @Override
+    protected int drawSeries(Map<Metric, Double> series, final int x, final int y, String seriestitle) {
         List<Text> labels = new LinkedList<Text>();
         double total = 0;
         int computedwidth = 0;
@@ -234,19 +158,6 @@ public class PieChart2D implements IsSvgElement {
         LegendItem li = new LegendItem(factory, label, LegendIconType.Circle, x, y);
         li.setColor(color);
         return li;
-    }
-
-    @Override
-    public SvgElement asSvgElement() {
-        return container;
-    }
-
-    public int getComputedWidth() {
-        return computedWidth;
-    }
-
-    public int getComputedHeight() {
-        return computedHeight;
     }
 
 }

@@ -22,13 +22,16 @@ package com.pyx4j.svg.chart;
 
 import com.pyx4j.svg.basic.SvgFactory;
 
-public class PieChartConfigurator extends BasicChartConfigurator {
+public class ArcBasedChartConfigurator extends BasicChartConfigurator {
 
     int radius;
 
-    public PieChartConfigurator(SvgFactory factory, DataSource datasource) {
+    double scaleMaximum;
+
+    public ArcBasedChartConfigurator(SvgFactory factory, DataSource datasource) {
         super(factory, datasource);
         radius = 60;
+        scaleMaximum = 0;
     }
 
     public int getRadius() {
