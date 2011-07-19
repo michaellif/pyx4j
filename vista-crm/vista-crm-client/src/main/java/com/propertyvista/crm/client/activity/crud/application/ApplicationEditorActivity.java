@@ -39,6 +39,11 @@ public class ApplicationEditorActivity extends EditorActivityBase<ApplicationDTO
     }
 
     @Override
+    public Presenter getBuildingPresenter() {
+        return delegate.getBuildingPresenter();
+    }
+
+    @Override
     public Presenter getUnitPresenter() {
         return delegate.getUnitPresenter();
     }
@@ -51,6 +56,6 @@ public class ApplicationEditorActivity extends EditorActivityBase<ApplicationDTO
     @Override
     public void onPopulateSuccess(ApplicationDTO result) {
         super.onPopulateSuccess(result);
-        delegate.populate(result.getPrimaryKey());
+        delegate.populate();
     }
 }

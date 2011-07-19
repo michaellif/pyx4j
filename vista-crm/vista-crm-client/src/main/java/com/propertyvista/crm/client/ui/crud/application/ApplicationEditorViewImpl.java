@@ -20,6 +20,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.ApplicationDTO;
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 
 public class ApplicationEditorViewImpl extends CrmEditorViewImplBase<ApplicationDTO> implements ApplicationEditorView {
@@ -35,6 +36,11 @@ public class ApplicationEditorViewImpl extends CrmEditorViewImplBase<Application
         CrmEntityForm<ApplicationDTO> form = new ApplicationEditorForm(this);
         form.initialize();
         setForm(form);
+    }
+
+    @Override
+    public IListerView<BuildingDTO> getBuildingListerView() {
+        return delegate.getBuildingListerView();
     }
 
     @Override

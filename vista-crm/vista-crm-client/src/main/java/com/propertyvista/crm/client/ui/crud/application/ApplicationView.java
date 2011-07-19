@@ -16,16 +16,21 @@ package com.propertyvista.crm.client.ui.crud.application;
 import com.pyx4j.site.client.ui.crud.IListerView;
 
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 
 public interface ApplicationView {
 
     interface Presenter {
 
+        IListerView.Presenter getBuildingPresenter();
+
         IListerView.Presenter getUnitPresenter();
 
         IListerView.Presenter getTenantPresenter();
     }
+
+    IListerView<BuildingDTO> getBuildingListerView();
 
     IListerView<AptUnitDTO> getUnitListerView();
 

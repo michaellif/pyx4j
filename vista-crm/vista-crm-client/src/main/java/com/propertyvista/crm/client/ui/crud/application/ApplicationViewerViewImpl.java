@@ -21,6 +21,7 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.ApplicationDTO;
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 
 public class ApplicationViewerViewImpl extends CrmViewerViewImplBase<ApplicationDTO> implements ApplicationViewerView {
@@ -36,6 +37,11 @@ public class ApplicationViewerViewImpl extends CrmViewerViewImplBase<Application
         CrmEntityForm<ApplicationDTO> form = new ApplicationEditorForm(new CrmViewersComponentFactory(), this);
         form.initialize();
         setForm(form);
+    }
+
+    @Override
+    public IListerView<BuildingDTO> getBuildingListerView() {
+        return delegate.getBuildingListerView();
     }
 
     @Override

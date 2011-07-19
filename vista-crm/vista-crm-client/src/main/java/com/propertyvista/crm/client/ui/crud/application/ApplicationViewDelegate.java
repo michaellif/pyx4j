@@ -17,17 +17,26 @@ import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 
 public class ApplicationViewDelegate implements ApplicationView {
+
+    private final IListerView<BuildingDTO> buildingLister;
 
     private final IListerView<AptUnitDTO> unitLister;
 
     private final IListerView<PotentialTenantInfo> tenantLister;
 
     public ApplicationViewDelegate(boolean readOnly) {
+        buildingLister = new ListerInternalViewImplBase<BuildingDTO>(new SelectedBuildingLister(/* readOnly */));
         unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new SelectedUnitLister(/* readOnly */));
         tenantLister = new ListerInternalViewImplBase<PotentialTenantInfo>(new PotentialTenantLister(/* readOnly */));
+    }
+
+    @Override
+    public IListerView<BuildingDTO> getBuildingListerView() {
+        return buildingLister;
     }
 
     @Override
