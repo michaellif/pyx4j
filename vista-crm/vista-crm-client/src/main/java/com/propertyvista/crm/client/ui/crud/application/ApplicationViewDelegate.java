@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.application;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
-import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 
@@ -27,7 +26,7 @@ public class ApplicationViewDelegate implements ApplicationView {
     private final IListerView<PotentialTenantInfo> tenantLister;
 
     public ApplicationViewDelegate(boolean readOnly) {
-        unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new UnitLister(/* readOnly */));
+        unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new SelectedUnitLister(/* readOnly */));
         tenantLister = new ListerInternalViewImplBase<PotentialTenantInfo>(new PotentialTenantLister(/* readOnly */));
     }
 

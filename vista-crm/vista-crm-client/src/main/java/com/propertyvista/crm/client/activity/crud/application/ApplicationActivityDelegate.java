@@ -45,10 +45,10 @@ public class ApplicationActivityDelegate implements ApplicationView.Presenter {
 
     public void populate(Key parentID) {
 
-        unitsLister.setParentFiltering(parentID);
+//        unitsLister.setParentFiltering(parentID);
         unitsLister.populateData(0);
 
-        tenantsLister.setParentFiltering(parentID);
+//        tenantsLister.setParentFiltering(parentID);
         tenantsLister.populateData(0);
     }
 

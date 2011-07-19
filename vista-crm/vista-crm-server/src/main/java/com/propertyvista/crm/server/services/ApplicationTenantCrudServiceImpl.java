@@ -18,7 +18,7 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 
 public class ApplicationTenantCrudServiceImpl extends GenericCrudServiceImpl<PotentialTenantInfo> implements ApplicationTenantCrudService {
 
-    protected ApplicationTenantCrudServiceImpl() {
+    public ApplicationTenantCrudServiceImpl() {
         super(PotentialTenantInfo.class);
     }
 

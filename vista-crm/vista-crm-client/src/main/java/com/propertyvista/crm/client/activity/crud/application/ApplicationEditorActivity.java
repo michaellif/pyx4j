@@ -17,19 +17,40 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.application.ApplicationEditorView;
+import com.propertyvista.crm.client.ui.crud.application.ApplicationView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
 import com.propertyvista.dto.ApplicationDTO;
 
-public class ApplicationEditorActivity extends EditorActivityBase<ApplicationDTO> {
+public class ApplicationEditorActivity extends EditorActivityBase<ApplicationDTO> implements ApplicationEditorView.Presenter {
+
+    private final ApplicationActivityDelegate delegate;
 
     @SuppressWarnings("unchecked")
     public ApplicationEditorActivity(Place place) {
         super((ApplicationEditorView) TenantViewFactory.instance(ApplicationEditorView.class), (AbstractCrudService<ApplicationDTO>) GWT
                 .create(ApplicationCrudService.class), ApplicationDTO.class);
+        delegate = new ApplicationActivityDelegate((ApplicationView) view);
         withPlace(place);
+    }
+
+    @Override
+    public Presenter getUnitPresenter() {
+        return delegate.getUnitPresenter();
+    }
+
+    @Override
+    public Presenter getTenantPresenter() {
+        return delegate.getTenantPresenter();
+    }
+
+    @Override
+    public void onPopulateSuccess(ApplicationDTO result) {
+        super.onPopulateSuccess(result);
+        delegate.populate(result.getPrimaryKey());
     }
 }

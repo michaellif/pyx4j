@@ -19,4 +19,6 @@ import com.propertyvista.dto.ApplicationDTO;
 
 public interface ApplicationViewerView extends IViewerView<ApplicationDTO>, ApplicationView {
 
+    interface Presenter extends IViewerView.Presenter, ApplicationView.Presenter {
+    }
 }
