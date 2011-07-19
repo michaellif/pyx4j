@@ -37,12 +37,14 @@ public class ApplicationEditorViewImpl extends CrmEditorViewImplBase<Application
             @Override
             public void onSelect(BuildingDTO selectedItem) {
                 ((ApplicationEditorView.Presenter) presenter).setSelectedBuilding(selectedItem);
+                enableButtons(true);
             }
         });
         delegate.getUnitListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<AptUnitDTO>() {
             @Override
             public void onSelect(AptUnitDTO selectedItem) {
                 ((ApplicationEditorView.Presenter) presenter).setSelectedUnit(selectedItem);
+                enableButtons(true);
             }
         });
 

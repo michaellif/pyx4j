@@ -25,6 +25,7 @@ public class SelectedUnitLister extends ListerBase<AptUnitDTO> {
 
     public SelectedUnitLister() {
         super(AptUnitDTO.class, null, true);
+        getListPanel().getDataTable().setCheckboxColumnShown(false);
     }
 
     @Override
