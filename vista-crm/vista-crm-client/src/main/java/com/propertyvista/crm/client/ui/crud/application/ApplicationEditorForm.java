@@ -69,8 +69,8 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
     @Override
     public IsWidget createContent() {
 
-        tabPanel.add(createBuildingTab(), i18n.tr("Selected Building"));
-        tabPanel.add(createUnitTab(), i18n.tr("Selected Unit"));
+        tabPanel.add(createBuildingTab(), i18n.tr("Building"));
+        tabPanel.add(createUnitTab(), i18n.tr("Unit"));
         tabPanel.addDisable(((ApplicationView) getParentView()).getTenantListerView().asWidget(), i18n.tr("Tenants"));
         tabPanel.add(new ScrollPanel(createPetsTab()), i18n.tr("Pets"));
 
