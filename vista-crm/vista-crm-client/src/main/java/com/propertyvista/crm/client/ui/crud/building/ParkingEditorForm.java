@@ -25,11 +25,14 @@ import com.pyx4j.site.client.ui.crud.IView;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.dto.ParkingDTO;
 
 public class ParkingEditorForm extends CrmEntityForm<ParkingDTO> {
+
+    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
     public ParkingEditorForm(IView<ParkingDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
@@ -43,7 +46,6 @@ public class ParkingEditorForm extends CrmEntityForm<ParkingDTO> {
     @Override
     public IsWidget createContent() {
 
-        VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(2.7, Unit.EM);
         tabPanel.addDisable(((ParkingView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
         tabPanel.add(new ScrollPanel(createDetailsTab()), i18n.tr("Details"));
         tabPanel.addDisable(new ScrollPanel(((ParkingView) getParentView()).getSpotView().asWidget()), i18n.tr("Spots"));

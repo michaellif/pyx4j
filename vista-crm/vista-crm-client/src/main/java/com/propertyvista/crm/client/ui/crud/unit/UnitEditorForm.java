@@ -33,6 +33,7 @@ import com.pyx4j.site.client.ui.crud.IView;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
@@ -42,6 +43,8 @@ import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
+
+    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
     public UnitEditorForm(IView<AptUnitDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
@@ -54,7 +57,6 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
     @Override
     public IsWidget createContent() {
-        VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(2.7, Unit.EM);
 
         tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
         tabPanel.addDisable(((UnitView) getParentView()).getUnitItemsListerView().asWidget(), i18n.tr("Details"));
@@ -85,6 +87,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
             CEntityComboBox<Floorplan> floorplanCompbo = (CEntityComboBox<Floorplan>) comp;
             floorplanCompbo.setOptionsFilter(new OptionsFilter<Floorplan>() {
 
+                @Override
                 public boolean acceptOption(Floorplan entity) {
                     if ((getValue() == null) || getValue().isNull()) {
                         return false;

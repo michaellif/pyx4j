@@ -7,30 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.tenant;
+package com.propertyvista.crm.client.activity.crud.application;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.tenant.ApplicationViewerView;
+import com.propertyvista.crm.client.ui.crud.application.ApplicationListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
 import com.propertyvista.dto.ApplicationDTO;
 
-public class ApplicationViewerActivity extends ViewerActivityBase<ApplicationDTO> {
+public class ApplicationListerActivity extends ListerActivityBase<ApplicationDTO> {
 
     @SuppressWarnings("unchecked")
-    public ApplicationViewerActivity(Place place) {
-        super((ApplicationViewerView) TenantViewFactory.instance(ApplicationViewerView.class), (AbstractCrudService<ApplicationDTO>) GWT
-                .create(ApplicationCrudService.class));
+    public ApplicationListerActivity(Place place) {
+        super((ApplicationListerView) TenantViewFactory.instance(ApplicationListerView.class), (AbstractCrudService<ApplicationDTO>) GWT
+                .create(ApplicationCrudService.class), ApplicationDTO.class);
         withPlace(place);
     }
-
 }

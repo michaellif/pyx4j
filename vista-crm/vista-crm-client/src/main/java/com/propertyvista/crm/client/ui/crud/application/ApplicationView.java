@@ -7,20 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-04
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant;
+package com.propertyvista.crm.client.ui.crud.application;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.dto.ApplicationDTO;
+import com.pyx4j.site.client.ui.crud.IListerView;
 
-public class ApplicationListerViewImpl extends CrmListerViewImplBase<ApplicationDTO> implements ApplicationListerView {
+import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 
-    public ApplicationListerViewImpl() {
-        super(CrmSiteMap.Tenants.Application.class);
-        setLister(new ApplicationLister());
+public interface ApplicationView {
+
+    interface Presenter {
+
+        IListerView.Presenter getUnitPresenter();
+
+        IListerView.Presenter getTenantPresenter();
     }
+
+    IListerView<AptUnitDTO> getUnitListerView();
+
+    IListerView<PotentialTenantInfo> getTenantListerView();
 }

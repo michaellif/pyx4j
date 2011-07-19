@@ -11,25 +11,26 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.tenant;
+package com.propertyvista.crm.client.activity.crud.application;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.tenant.ApplicationEditorView;
+import com.propertyvista.crm.client.ui.crud.application.ApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
 import com.propertyvista.dto.ApplicationDTO;
 
-public class ApplicationEditorActivity extends EditorActivityBase<ApplicationDTO> {
+public class ApplicationViewerActivity extends ViewerActivityBase<ApplicationDTO> {
 
     @SuppressWarnings("unchecked")
-    public ApplicationEditorActivity(Place place) {
-        super((ApplicationEditorView) TenantViewFactory.instance(ApplicationEditorView.class), (AbstractCrudService<ApplicationDTO>) GWT
-                .create(ApplicationCrudService.class), ApplicationDTO.class);
+    public ApplicationViewerActivity(Place place) {
+        super((ApplicationViewerView) TenantViewFactory.instance(ApplicationViewerView.class), (AbstractCrudService<ApplicationDTO>) GWT
+                .create(ApplicationCrudService.class));
         withPlace(place);
     }
+
 }

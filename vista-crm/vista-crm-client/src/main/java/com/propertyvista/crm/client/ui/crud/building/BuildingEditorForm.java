@@ -33,6 +33,7 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.domain.contact.Address;
+import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
@@ -43,7 +44,7 @@ import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(2.7, Unit.EM);
+    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
     public BuildingEditorForm(IView<BuildingDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);

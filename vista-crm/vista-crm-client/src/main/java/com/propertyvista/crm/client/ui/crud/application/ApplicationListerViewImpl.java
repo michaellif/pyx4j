@@ -7,20 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant;
+package com.propertyvista.crm.client.ui.crud.application;
 
-import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
-import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.ApplicationDTO;
 
-public class ApplicationViewerViewImpl extends CrmViewerViewImplBase<ApplicationDTO> implements ApplicationViewerView {
+public class ApplicationListerViewImpl extends CrmListerViewImplBase<ApplicationDTO> implements ApplicationListerView {
 
-    public ApplicationViewerViewImpl() {
-        super(CrmSiteMap.Tenants.Application.class, new ApplicationEditorForm(new CrmViewersComponentFactory()));
+    public ApplicationListerViewImpl() {
+        super(CrmSiteMap.Tenants.Application.class);
+        setLister(new ApplicationLister());
     }
 }

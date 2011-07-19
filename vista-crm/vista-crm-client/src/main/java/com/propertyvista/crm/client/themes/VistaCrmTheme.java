@@ -44,6 +44,8 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
     public static double defaultFooterHeight = 4;
 
+    public static double defaultTabHeight = 2.7;
+
     public static enum StyleSuffixEx implements IStyleSuffix {
         SaveButton, CancelButton, EditButton;
     }

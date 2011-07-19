@@ -16,12 +16,12 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
-import com.propertyvista.crm.client.ui.crud.tenant.ApplicationEditorView;
-import com.propertyvista.crm.client.ui.crud.tenant.ApplicationEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.ApplicationListerView;
-import com.propertyvista.crm.client.ui.crud.tenant.ApplicationListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.ApplicationViewerView;
-import com.propertyvista.crm.client.ui.crud.tenant.ApplicationViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.application.ApplicationEditorView;
+import com.propertyvista.crm.client.ui.crud.application.ApplicationEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.application.ApplicationListerView;
+import com.propertyvista.crm.client.ui.crud.application.ApplicationListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.application.ApplicationViewerView;
+import com.propertyvista.crm.client.ui.crud.application.ApplicationViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.InquiryEditorView;
 import com.propertyvista.crm.client.ui.crud.tenant.InquiryEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.InquiryListerView;

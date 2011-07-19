@@ -26,6 +26,9 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.activity.AccountActivity;
 import com.propertyvista.crm.client.activity.AlertActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
+import com.propertyvista.crm.client.activity.crud.application.ApplicationEditorActivity;
+import com.propertyvista.crm.client.activity.crud.application.ApplicationListerActivity;
+import com.propertyvista.crm.client.activity.crud.application.ApplicationViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.BoilerEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.BoilerViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.BuildingEditorActivity;
@@ -54,9 +57,6 @@ import com.propertyvista.crm.client.activity.crud.marketing.FeatureViewerActivit
 import com.propertyvista.crm.client.activity.crud.settings.ContentActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ContentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ContentViewerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.ApplicationEditorActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.ApplicationListerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.ApplicationViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.InquiryEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.InquiryListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.InquiryViewerActivity;
@@ -279,6 +279,19 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
+                } else if (place instanceof CrmSiteMap.Tenants.Inquiry) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new InquiryEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new InquiryViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new InquiryListerActivity(place);
+                        break;
+                    }
+// Tenant-Application:
                 } else if (place instanceof CrmSiteMap.Tenants.Application) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
@@ -292,18 +305,19 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-                } else if (place instanceof CrmSiteMap.Tenants.Inquiry) {
-                    switch (((CrudAppPlace) place).getType()) {
-                    case editor:
-                        activity = new InquiryEditorActivity(place);
-                        break;
-                    case viewer:
-                        activity = new InquiryViewerActivity(place);
-                        break;
-                    case lister:
-                        activity = new InquiryListerActivity(place);
-                        break;
-                    }
+//                } else if (place instanceof CrmSiteMap.Tenants.PotentialTenant) {
+//                    switch (((CrudAppPlace) place).getType()) {
+//                    case editor:
+//                        activity = new PotentialTenantEditorActivity(place);
+//                        break;
+//                    case viewer:
+//                        activity = new PotentialTenantViewerActivity(place);
+//                        break;
+//                    case lister:
+//                        activity = new PotentialTenantListerActivity(place);
+//                        break;
+//                    }
+
 // Reports:
                 } else if (place instanceof CrmSiteMap.Report) {
                     activity = new ReportViewActivity(place);

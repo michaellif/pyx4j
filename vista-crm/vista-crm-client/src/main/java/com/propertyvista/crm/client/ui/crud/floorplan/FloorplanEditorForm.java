@@ -29,6 +29,7 @@ import com.pyx4j.site.client.ui.crud.IView;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
@@ -38,7 +39,7 @@ import com.propertyvista.dto.FloorplanDTO;
 
 public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
 
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(2.7, Unit.EM);
+    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
     public FloorplanEditorForm(IView<FloorplanDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);

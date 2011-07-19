@@ -25,11 +25,14 @@ import com.pyx4j.site.client.ui.crud.IView;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.dto.LockerAreaDTO;
 
 public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
+
+    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
     public LockerAreaEditorForm(IView<LockerAreaDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
@@ -43,7 +46,6 @@ public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
     @Override
     public IsWidget createContent() {
 
-        VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(2.7, Unit.EM);
         tabPanel.addDisable(((LockerAreaView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
         tabPanel.add(new ScrollPanel(createDetailsTab()), i18n.tr("Details"));
         tabPanel.addDisable(new ScrollPanel(((LockerAreaView) getParentView()).getLockerView().asWidget()), i18n.tr("Lockers"));
