@@ -24,7 +24,7 @@ import com.pyx4j.svg.basic.SvgRoot;
 import com.pyx4j.svg.chart.ChartTheme;
 import com.pyx4j.svg.chart.DataSource;
 import com.pyx4j.svg.chart.PieChart2D;
-import com.pyx4j.svg.chart.PieChartConfigurator;
+import com.pyx4j.svg.chart.ArcBasedChartConfigurator;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 import com.pyx4j.widgets.client.svg.SvgPanel;
 
@@ -62,7 +62,7 @@ public class PieChart2DGadget extends GadgetBase {
 
         SvgFactory factory = new SvgFactoryForGwt();
 
-        PieChartConfigurator config = new PieChartConfigurator(factory, ds);
+        ArcBasedChartConfigurator config = new ArcBasedChartConfigurator(factory, ds);
         config.setLegend(true);
         config.setTheme(ChartTheme.Bright);
         config.setRadius(65);
