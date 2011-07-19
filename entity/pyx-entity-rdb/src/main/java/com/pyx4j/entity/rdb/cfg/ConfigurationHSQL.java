@@ -85,6 +85,11 @@ public abstract class ConfigurationHSQL implements Configuration {
     }
 
     @Override
+    public int maxPoolPreparedStatements() {
+        return 1000;
+    }
+
+    @Override
     public NamingConvention namingConvention() {
         return null;
     }

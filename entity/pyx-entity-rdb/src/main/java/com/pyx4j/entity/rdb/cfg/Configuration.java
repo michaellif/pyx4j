@@ -59,6 +59,8 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public int maxPoolSize();
 
+    public int maxPoolPreparedStatements();
+
     /**
      * 
      * @return return null to use framework default

@@ -75,6 +75,11 @@ public abstract class ConfigurationOracle implements Configuration {
     }
 
     @Override
+    public int maxPoolPreparedStatements() {
+        return 1000;
+    }
+
+    @Override
     public NamingConvention namingConvention() {
         return new NamingConventionOracle(32, null);
     }

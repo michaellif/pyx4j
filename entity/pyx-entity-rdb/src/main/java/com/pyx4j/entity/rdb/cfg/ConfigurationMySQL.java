@@ -77,4 +77,9 @@ public abstract class ConfigurationMySQL implements Configuration {
     public NamingConvention namingConvention() {
         return null;
     }
+
+    @Override
+    public int maxPoolPreparedStatements() {
+        return 1000;
+    }
 }

@@ -40,6 +40,8 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
 
     protected int maxPoolSize = 15;
 
+    protected int maxPoolPreparedStatement = 1000;
+
     @Override
     public String dbHost() {
         return host;
@@ -75,6 +77,11 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
         return maxPoolSize;
     }
 
+    @Override
+    public int maxPoolPreparedStatements() {
+        return maxPoolPreparedStatement;
+    }
+
     public void readProperties(String prefix, Map<String, String> properties) {
         PropertiesConfiguration c = new PropertiesConfiguration(prefix, properties);
         this.host = c.getValue("host", this.host);
@@ -86,6 +93,7 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
 
         this.minPoolSize = c.getIntegerValue("minPoolSize", this.minPoolSize);
         this.maxPoolSize = c.getIntegerValue("maxPoolSize", this.maxPoolSize);
+        this.maxPoolPreparedStatement = c.getIntegerValue("maxPoolPreparedStatement", this.maxPoolPreparedStatement);
     }
 
 }
