@@ -30,6 +30,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.domain.User;
+import com.propertyvista.domain.tenant.TenantApplication;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
@@ -74,6 +75,11 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
             application.user().set(PtAppContext.getCurrentUser());
             PersistenceServicesFactory.getPersistenceService().persist(application);
             PtAppContext.setCurrentUserApplication(application);
+
+            TenantApplication tenantApplication = EntityFactory.create(TenantApplication.class);
+            tenantApplication.application().set(application);
+            tenantApplication.status().setValue(TenantApplication.Status.created);
+            PersistenceServicesFactory.getPersistenceService().persist(tenantApplication);
 
             // create and save progress
             ApplicationProgress progress = createApplicationProgress();

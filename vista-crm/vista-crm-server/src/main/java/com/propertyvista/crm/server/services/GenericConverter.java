@@ -29,6 +29,12 @@ import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 //TODO move to more generic place?
 public class GenericConverter {
 
+    public interface EnhanceDTO<DBO extends IEntity, DTO extends DBO> {
+
+        void enhanceDTO(DBO in, DTO dto);
+
+    }
+
     public static <DBO extends IEntity, DTO extends DBO> DBO convertDTO2DBO(DTO src, Class<DBO> dstClass) {
         DBO dst = EntityFactory.create(dstClass);
         dst.set(src);
@@ -48,13 +54,16 @@ public class GenericConverter {
         return dst;
     }
 
-    public static <DBO extends IEntity, DTO extends DBO> EntitySearchResult<DTO> convertDBO2DTO(EntitySearchResult<DBO> resultE, Class<DTO> dstClass) {
+    public static <DBO extends IEntity, DTO extends DBO> EntitySearchResult<DTO> convertDBO2DTO(EntitySearchResult<DBO> resultE, Class<DTO> dstClass,
+            EnhanceDTO<DBO, DTO> enhanceDTO) {
         EntitySearchResult<DTO> result = new EntitySearchResult<DTO>();
         result.setEncodedCursorReference(resultE.getEncodedCursorReference());
         result.hasMoreData(resultE.hasMoreData());
         Vector<DTO> data = new Vector<DTO>();
         for (DBO entity : resultE.getData()) {
-            data.add(convertDBO2DTO(entity, dstClass));
+            DTO dto = convertDBO2DTO(entity, dstClass);
+            enhanceDTO.enhanceDTO(entity, dto);
+            data.add(dto);
         }
         result.setData(data);
         return result;

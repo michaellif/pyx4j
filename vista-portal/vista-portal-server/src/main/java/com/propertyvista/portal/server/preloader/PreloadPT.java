@@ -18,12 +18,14 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.contact.IAddress;
+import com.propertyvista.domain.tenant.TenantApplication;
 import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.ApplicationDocument;
@@ -82,7 +84,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(PotentialTenantList.class, PotentialTenantFinancial.class, PotentialTenantInfo.class, Charges.class, ChargeLineList.class,
                     ChargeLine.class, TenantChargeList.class, TenantCharge.class, Application.class, UnitSelection.class, ApplicationProgress.class,
-                    Pets.class, EmergencyContact.class, Summary.class, Address.class, ApplicationDocumentData.class);
+                    TenantApplication.class, Pets.class, EmergencyContact.class, Summary.class, Address.class, ApplicationDocumentData.class);
         } else {
             return "This is production";
         }
@@ -140,10 +142,15 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
         PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED);
         Application application = generator.createApplication(user);
+        TenantApplication tenantApplication = EntityFactory.create(TenantApplication.class);
+        tenantApplication.application().set(application);
+        tenantApplication.status().setValue(TenantApplication.Status.created);
+
         ApplicationProgress progress = generator.createApplicationProgress(application);
+
         // TODO retrieve some unit
         Summary summary = generator.createSummary(application, null);
-        persistFullApplication(summary, progress, generator);
+        persistFullApplication(summary, tenantApplication, progress, generator);
         //List<ApplicationDocument> adocs = PersistenceServicesFactory.getPersistenceService().query(EntityQueryCriteria.create(ApplicationDocument.class));
         //for(ApplicationDocument adoc : adocs) {
         //    persist(generator.createApplicationDocumentData(adoc.filename().getValue(), adoc.id().getValue()));
@@ -153,8 +160,10 @@ public class PreloadPT extends BaseVistaDataPreloader {
         return b.toString();
     }
 
-    private void persistFullApplication(Summary summary, ApplicationProgress progress, PTGenerator generator) {
+    private void persistFullApplication(Summary summary, TenantApplication tenantApplication, ApplicationProgress progress, PTGenerator generator) {
+
         persist(summary.application());
+        persist(tenantApplication);
         persist(progress);
         persist(summary.unitSelection());
         persist(summary.tenantList());

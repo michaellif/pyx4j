@@ -56,14 +56,14 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
         callback.onSuccess(dto);
     }
 
-    protected void enhanceRetrieveDTO(DBO in, DTO dto) {
+    protected void enhanceRetrieveDTO(DBO in, DTO dto, boolean fromList) {
     }
 
     @Override
     public void retrieve(AsyncCallback<DTO> callback, Key entityId) {
         DBO entity = PersistenceServicesFactory.getPersistenceService().retrieve(dboClass, entityId);
         DTO dto = GenericConverter.convertDBO2DTO(entity, dtoClass);
-        enhanceRetrieveDTO(entity, dto);
+        enhanceRetrieveDTO(entity, dto, false);
         callback.onSuccess(dto);
     }
 
@@ -101,6 +101,13 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
         c.setPageNumber(criteria.getPageNumber());
         c.setPageSize(criteria.getPageSize());
         enhanceListCriteria(c, criteria);
-        callback.onSuccess(GenericConverter.convertDBO2DTO(EntityLister.secureQuery(c), dtoClass));
+        EntitySearchResult<DTO> r = GenericConverter.convertDBO2DTO(EntityLister.secureQuery(c), dtoClass, new GenericConverter.EnhanceDTO<DBO, DTO>() {
+
+            @Override
+            public void enhanceDTO(DBO in, DTO dto) {
+                enhanceRetrieveDTO(in, dto, true);
+            }
+        });
+        callback.onSuccess(r);
     }
 }

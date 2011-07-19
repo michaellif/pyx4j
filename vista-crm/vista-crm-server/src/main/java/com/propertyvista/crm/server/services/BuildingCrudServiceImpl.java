@@ -29,7 +29,7 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
     }
 
     @Override
-    protected void enhanceRetrieveDTO(Building in, BuildingDTO dto) {
+    protected void enhanceRetrieveDTO(Building in, BuildingDTO dto, boolean fromList) {
 
         EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
         amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), in));

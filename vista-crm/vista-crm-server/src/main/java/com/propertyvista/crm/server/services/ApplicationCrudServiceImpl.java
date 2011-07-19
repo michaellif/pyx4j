@@ -13,13 +13,48 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantApplication;
 import com.propertyvista.dto.ApplicationDTO;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.UnitSelection;
 
 public class ApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<TenantApplication, ApplicationDTO> implements ApplicationCrudService {
 
     public ApplicationCrudServiceImpl() {
         super(TenantApplication.class, ApplicationDTO.class);
+    }
+
+    @Override
+    protected void enhanceRetrieveDTO(TenantApplication tenantApplication, ApplicationDTO dto, boolean fromList) {
+        if (fromList) {
+            {
+                EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().application(), tenantApplication.application()));
+                UnitSelection unitSelection = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+
+                if (!unitSelection.selectedUnitId().isNull()) {
+                    dto.selectedUnit().set(
+                            PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, unitSelection.selectedUnitId().getValue()));
+                }
+            }
+
+            {
+                EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().application(), tenantApplication.application()));
+                PotentialTenantList potentialTenantList = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+
+                if (potentialTenantList.tenants().size() > 0) {
+                    PotentialTenantInfo potentialTenantInfo = potentialTenantList.tenants().get(0);
+                    dto.primaryTenant().person().set(potentialTenantInfo.person());
+                }
+            }
+        }
     }
 }
