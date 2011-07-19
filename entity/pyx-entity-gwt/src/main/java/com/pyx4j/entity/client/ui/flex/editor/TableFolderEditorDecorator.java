@@ -42,6 +42,8 @@ public class TableFolderEditorDecorator<E extends IEntity> extends BaseFolderEdi
 
     private final HorizontalPanel header;
 
+    private boolean showHeader = true;
+
     public TableFolderEditorDecorator(final List<EntityFolderColumnDescriptor> columns) {
         this(columns, null, null, null, false);
     }
@@ -121,13 +123,21 @@ public class TableFolderEditorDecorator<E extends IEntity> extends BaseFolderEdi
         return header;
     }
 
+    public boolean isShowHeader() {
+        return showHeader;
+    }
+
+    public void setShowHeader(boolean showHeader) {
+        this.showHeader = showHeader;
+    }
+
     @Override
     public void onValueChange(ValueChangeEvent<IList<E>> event) {
         setHeaderVisible(!event.getValue().isNull() && event.getValue().size() > 0);
     }
 
     protected void setHeaderVisible(boolean visible) {
-        if (visible) {
+        if (visible && isShowHeader()) {
             header.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         } else {
             header.getElement().getStyle().setDisplay(Display.NONE);
