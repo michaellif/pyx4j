@@ -53,6 +53,7 @@ import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.entity.shared.IEntity;
@@ -83,6 +84,11 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         actionsPanel, filtersPanel, listPanel
     }
 
+// Events:
+    public interface ItemSelectionHandler<E> {
+        void onSelect(E selectedItem);
+    }
+
     private static I18n i18n = I18nFactory.getI18n(ListerBase.class);
 
     protected Button btnNewItem;
@@ -98,6 +104,8 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     protected final EntityListPanel<E> listPanel;
 
     protected Presenter presenter;
+
+    private List<ItemSelectionHandler<E>> itemSelectionHandlers;
 
     public ListerBase(Class<E> clazz) {
         setStyleName(DEFAULT_STYLE_PREFIX);
@@ -152,6 +160,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         actionsPanel.setWidth("100%");
         actionsPanel.add(new HTML()); // just for %-tage cells alignment...
+        actionsPanel.setVisible(false);
 
         filtersPanel = new HorizontalPanel();
         filtersPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.filtersPanel);
@@ -181,10 +190,10 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     public ListerBase(Class<E> clazz, final Class<? extends CrudAppPlace> itemOpenPlaceClass, final boolean openEditor, boolean allowAddNew) {
         this(clazz);
 
-        getListPanel().getDataTable().addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (getListPanel().getDataTable().getSelectedRow() >= 0) {
+        if (itemOpenPlaceClass != null) {
+            listPanel.getDataTable().addItemSelectionHandler(new DataTable.ItemSelectionHandler() {
+                @Override
+                public void onSelect(int selectedRow) {
                     E item = getListPanel().getDataTable().getSelectedItem();
                     if (item != null) {
                         if (openEditor) {
@@ -194,11 +203,12 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                         }
                     }
                 }
-            }
-        });
+            });
+        }
 
 // new item button stuff:
         if (allowAddNew) {
+            actionsPanel.setVisible(true);
             actionsPanel.add(btnNewItem = new Button(i18n.tr("Add&nbspnew&nbspitem...")));
             actionsPanel.setCellWidth(btnNewItem, "1%");
             btnNewItem.getElement().getStyle().setMarginRight(1, Unit.EM);
@@ -213,6 +223,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     }
 
     protected void addActionButton(Button action) {
+        actionsPanel.setVisible(true);
         actionsPanel.insert(action, 1);
         actionsPanel.setCellWidth(action, "1%");
         action.getElement().getStyle().setMarginRight(1, Unit.EM);
@@ -232,42 +243,30 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         }
     }
 
-    private Widget createAddApplyPanel() {
+    public E getSelectedItem() {
+        return listPanel.getDataTable().getSelectedItem();
+    }
 
-        ImageButton btnAdd = new ImageButton(SiteImages.INSTANCE.add(), SiteImages.INSTANCE.addHover());
-        btnAdd.addClickHandler(new ClickHandler() {
+    public void setSelectedItem(E item) {
+        // TODO - implementation here...
+    }
+
+    public void addItemSelectionHandler(ItemSelectionHandler<E> handler) {
+        if (itemSelectionHandlers == null) {
+            itemSelectionHandlers = new ArrayList<ItemSelectionHandler<E>>(2);
+        }
+
+        itemSelectionHandlers.add(handler);
+        listPanel.getDataTable().addItemSelectionHandler(new DataTable.ItemSelectionHandler() {
             @Override
-            public void onClick(ClickEvent event) {
-                filters.addFilter();
-                btnApply.setEnabled(filters.getFilterCount() > 0);
+            public void onSelect(int selectedRow) {
+                if (itemSelectionHandlers != null) {
+                    for (ItemSelectionHandler<E> handler : itemSelectionHandlers) {
+                        handler.onSelect(listPanel.getDataTable().getSelectedItem());
+                    }
+                }
             }
         });
-
-        btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.applyFiltering(filters.getFiltersData());
-            }
-        });
-        btnApply.setEnabled(false);
-
-        HorizontalPanel addWrap = new HorizontalPanel();
-        addWrap.add(btnAdd);
-        btnAdd.getElement().getStyle().setMarginTop(0.3, Unit.EM);
-        addWrap.setCellVerticalAlignment(btnAdd, HasVerticalAlignment.ALIGN_MIDDLE);
-        HTML lblAdd = new HTML(i18n.tr("Add filter..."));
-        lblAdd.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        addWrap.add(lblAdd);
-        addWrap.setCellVerticalAlignment(lblAdd, HasVerticalAlignment.ALIGN_MIDDLE);
-
-        HorizontalPanel panel = new HorizontalPanel();
-        panel.add(addWrap);
-        panel.add(btnApply);
-        panel.setCellHorizontalAlignment(btnApply, HasHorizontalAlignment.ALIGN_RIGHT);
-        btnApply.getElement().getStyle().setMarginRight(1, Unit.EM);
-        btnApply.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
-        panel.setWidth("100%");
-        return panel;
     }
 
     // EntityListPanel access:
@@ -289,7 +288,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         columnDescriptors.addAll(listPanel.getDataTable().getDataTableModel().getColumnDescriptors());
     }
 
-    // IListerView implementation:
+// IListerView implementation:
 
     @Override
     public void setPresenter(Presenter presenter) {
@@ -332,9 +331,49 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         }
     }
 
+// Internals:    
+
+    private Widget createAddApplyPanel() {
+
+        ImageButton btnAdd = new ImageButton(SiteImages.INSTANCE.add(), SiteImages.INSTANCE.addHover());
+        btnAdd.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                filters.addFilter();
+                btnApply.setEnabled(filters.getFilterCount() > 0);
+            }
+        });
+
+        btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.applyFiltering(filters.getFiltersData());
+            }
+        });
+        btnApply.setEnabled(false);
+
+        HorizontalPanel addWrap = new HorizontalPanel();
+        addWrap.add(btnAdd);
+        btnAdd.getElement().getStyle().setMarginTop(0.3, Unit.EM);
+        addWrap.setCellVerticalAlignment(btnAdd, HasVerticalAlignment.ALIGN_MIDDLE);
+        HTML lblAdd = new HTML(i18n.tr("Add filter..."));
+        lblAdd.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+        addWrap.add(lblAdd);
+        addWrap.setCellVerticalAlignment(lblAdd, HasVerticalAlignment.ALIGN_MIDDLE);
+
+        HorizontalPanel panel = new HorizontalPanel();
+        panel.add(addWrap);
+        panel.add(btnApply);
+        panel.setCellHorizontalAlignment(btnApply, HasHorizontalAlignment.ALIGN_RIGHT);
+        btnApply.getElement().getStyle().setMarginRight(1, Unit.EM);
+        btnApply.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
+        panel.setWidth("100%");
+        return panel;
+    }
+
     // ------------------------------------------------
 
-    class Filters extends FlowPanel {
+    protected class Filters extends FlowPanel {
 
         public Filters() {
             setWidth("100%");

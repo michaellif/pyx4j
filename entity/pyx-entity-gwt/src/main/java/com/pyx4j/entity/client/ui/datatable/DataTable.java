@@ -63,12 +63,16 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     }
 
     // Events:
-    public interface SortChangeHandler<E> {
-        void onChange(ColumnDescriptor<E> column);
+    public interface ItemSelectionHandler {
+        void onSelect(int selectedRow);
     }
 
     public interface CheckSelectionHandler {
         void onCheck(boolean isAnyChecked);
+    }
+
+    public interface SortChangeHandler<E> {
+        void onChange(ColumnDescriptor<E> column);
     }
 
     // Data:
@@ -98,9 +102,11 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private static final String COLUMNS_SELECTOR_COLUMN_SIZE = "12px";
 
-    private List<SortChangeHandler<E>> sortChangeHandlers;
+    private List<ItemSelectionHandler> itemSelectionHandlers;
 
     private List<CheckSelectionHandler> checkSelectionHandlers;
+
+    private List<SortChangeHandler<E>> sortChangeHandlers;
 
     public DataTable() {
         setStyleName(BASE_NAME);
@@ -272,12 +278,41 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         return selectedRow;
     }
 
+    protected void setSelectedRow(int selectedRow) {
+
+        if (getSelectedRow() >= 0) {
+            Element previous = getRowFormatter().getElement(this.selectedRow + 1); // raw table row index - including the header!...
+            UIObject.setStyleName(previous, BASE_NAME + StyleSuffix.Row + "-" + DataTable.StyleDependent.selected.name(), false);
+        }
+
+        this.selectedRow = selectedRow; // actual table row index
+
+        if (getSelectedRow() >= 0) {
+            Element current = getRowFormatter().getElement(this.selectedRow + 1); // raw table row index - including the header!...
+            UIObject.setStyleName(current, BASE_NAME + StyleSuffix.Row + "-" + DataTable.StyleDependent.selected.name(), true);
+        }
+
+        // notify listeners:
+        if (itemSelectionHandlers != null) {
+            for (ItemSelectionHandler handler : itemSelectionHandlers) {
+                handler.onSelect(getSelectedRow());
+            }
+        }
+    }
+
     public E getSelectedItem() {
         int selectedRow = getSelectedRow();
         if (selectedRow >= 0 && selectedRow < getDataTableModel().getData().size()) {
             return getDataTableModel().getData().get(selectedRow).getEntity();
         }
         return null;
+    }
+
+    public void addItemSelectionHandler(ItemSelectionHandler handler) {
+        if (itemSelectionHandlers == null) {
+            itemSelectionHandlers = new ArrayList<ItemSelectionHandler>(2);
+        }
+        itemSelectionHandlers.add(handler);
     }
 
     public List<E> getCheckedItems() {
@@ -294,7 +329,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     public void addSortChangeHandler(SortChangeHandler<E> handler) {
         if (sortChangeHandlers == null) {
-            sortChangeHandlers = new ArrayList<SortChangeHandler<E>>(1);
+            sortChangeHandlers = new ArrayList<SortChangeHandler<E>>(2);
         }
 
         sortChangeHandlers.add(handler);
@@ -317,21 +352,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                     handler.onChange(columnDescriptor);
                 }
             }
-        }
-    }
-
-    protected void setSelectedRow(int selectedRow) {
-
-        if (this.selectedRow >= 0) {
-            Element previous = getRowFormatter().getElement(this.selectedRow + 1); // raw table row index - including the header!...
-            UIObject.setStyleName(previous, BASE_NAME + StyleSuffix.Row + "-" + DataTable.StyleDependent.selected.name(), false);
-        }
-
-        this.selectedRow = selectedRow; // actual table row index
-
-        if (this.selectedRow >= 0) {
-            Element current = getRowFormatter().getElement(this.selectedRow + 1); // raw table row index - including the header!...
-            UIObject.setStyleName(current, BASE_NAME + StyleSuffix.Row + "-" + DataTable.StyleDependent.selected.name(), true);
         }
     }
 
@@ -448,7 +468,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     // Check box selection class: 
     public void addCheckSelectionHandler(CheckSelectionHandler handler) {
         if (checkSelectionHandlers == null) {
-            checkSelectionHandlers = new ArrayList<CheckSelectionHandler>(1);
+            checkSelectionHandlers = new ArrayList<CheckSelectionHandler>(2);
         }
         checkSelectionHandlers.add(handler);
     }

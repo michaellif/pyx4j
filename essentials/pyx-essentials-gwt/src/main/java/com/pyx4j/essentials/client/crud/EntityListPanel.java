@@ -23,16 +23,15 @@ package com.pyx4j.essentials.client.crud;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataItem;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
+import com.pyx4j.entity.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTableActionsBar;
 import com.pyx4j.entity.client.ui.datatable.DataTableModel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -68,14 +67,12 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
         dataTable.setWidth("100%");
         setCellWidth(dataTable, "100%");
 
-        dataTable.addClickHandler(new ClickHandler() {
-
+        dataTable.addItemSelectionHandler(new ItemSelectionHandler() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void onSelect(int selectedRow) {
                 if (editorPage != null) {
-                    Cell cell = dataTable.getCellForEvent(event);
-                    if (cell != null && cell.getRowIndex() > 0) {
-                        E entity = dataTableModel.getData().get(cell.getRowIndex() - 1).getEntity();
+                    E entity = dataTable.getSelectedItem();
+                    if (entity != null) {
                         AbstractSiteDispatcher.show(new NavigationUri(editorPage, NavigUtils.ENTITY_ID, entity.getPrimaryKey().toString()));
                     }
                 }
