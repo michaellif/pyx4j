@@ -103,7 +103,8 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
 
             @Override
             protected IFolderEditorDecorator<Pet> createFolderDecorator() {
-                return new TableFolderEditorDecorator<Pet>(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add a pet"));
+                return new TableFolderEditorDecorator<Pet>(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add a pet"),
+                        ApplicationEditorForm.this.isEditable());
             }
 
             @Override
