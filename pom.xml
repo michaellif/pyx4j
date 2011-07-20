@@ -23,7 +23,7 @@
 
     <organization>
         <name>Property Vista Software Inc.</name>
-        <url>http://propertyvista.jira.com/</url>
+        <url>http://birchwoodsoftwaregroup.com/</url>
     </organization>
     <inceptionYear>2010</inceptionYear>
 
@@ -453,6 +453,14 @@
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-site-plugin</artifactId>
                             <version>3.0-beta-3</version>
+                            <executions>
+                                <execution>
+                                    <id>attach-descriptor</id>
+                                    <goals>
+                                        <goal>attach-descriptor</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
                             <configuration>
                                 <reportPlugins>
                                     <plugin>
@@ -478,6 +486,33 @@
                                             <quiet>true</quiet>
                                             <nohelp>true</nohelp>
                                         </configuration>
+                                    </plugin>
+                                    <plugin>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-changelog-plugin</artifactId>
+                                        <version>2.2</version>
+                                        <configuration>
+                                            <basedir>${basedir}</basedir>
+                                        </configuration>
+                                        <reportSets>
+                                            <reportSet>
+                                                <id>dual-report</id>
+                                                <configuration>
+                                                    <type>range</type>
+                                                    <range>30</range>
+                                                </configuration>
+                                                <reports>
+                                                    <report>changelog</report>
+                                                    <report>file-activity</report>
+                                                    <report>dev-activity</report>
+                                                </reports>
+                                          </reportSet>
+                                        </reportSets>
+                                    </plugin>
+                                    <plugin>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>findbugs-maven-plugin</artifactId>
+                                        <version>2.3.2</version>
                                     </plugin>
                                 </reportPlugins>
                             </configuration>

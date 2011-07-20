@@ -10,29 +10,29 @@ Property Vista
 
 * Links
 
-    {{{http://cruisecontrol.birchwoodsoftwaregroup.com/}cruisecontrol.birchwoodsoftwaregroup.com}} Continuous integration Website (Under PYX LDAP)
+    * {{{http://jira.birchwoodsoftwaregroup.com/builds/browse/VISTA}Continuous integration (Bamboo)}};  {{{http://jira.birchwoodsoftwaregroup.com/builds-workplace/}Access to Build Working Diercories}}
 
-    {{{http://www22.birchwoodsoftwaregroup.com/}www22}} Nightly build Application
+    * {{{http://www22.birchwoodsoftwaregroup.com/}www22}} Nightly build Application; {{{http://www22.birchwoodsoftwaregroup.com/logs}logs}}
 
-    {{{http://www33.birchwoodsoftwaregroup.com/}www33}} QA Test Application
+    * {{{http://www33.birchwoodsoftwaregroup.com/}www33}} QA Test Application;  {{{http://www33.birchwoodsoftwaregroup.com/logs}logs}}
 
-    {{{http://www44.birchwoodsoftwaregroup.com/}www44}} Customer Delivery Application (staging env)
+    * {{{http://www44.birchwoodsoftwaregroup.com/}www44}} Customer Delivery Application (staging env)
 
-    {{{http://dev.birchwoodsoftwaregroup.com/managedb/}dev.birchwoodsoftwaregroup.com/managedb/}} Testing Environment DB Browsing
+    * {{{http://dev.birchwoodsoftwaregroup.com/managedb/}dev.birchwoodsoftwaregroup.com/managedb/}} Testing Environment DB Browsing
 
-    {{{http://dev.birchwoodsoftwaregroup.com/} Admin site}}
+    * {{{http://dev.birchwoodsoftwaregroup.com/} TestEnv Tomcat Admin site}}
 
-    {{{http://code.pyx4j.com/}Framework site}}
+    * {{{http://code.pyx4j.com/}Framework site}}
 
 * Project reports and statistics
 
-~~    {{{./changelog.html}Change Log}} - Generated change log report from SVN for Vista.
+    * {{{./changelog.html}Change Log}} - Generated change log report from SVN for Vista.
 
-    {{{http://code.pyx4j.com/changelog.html}Change Log}} - Generated change log report from SVN for Framework.
+    * {{{http://code.pyx4j.com/changelog.html}Change Log}} - Generated change log report from SVN for Framework.
 
 ~~ {{{./statscm/index.html}StatSCM}} -  Source Code Management Metrics and Statistic for Vista.
 
-    {{{http://code.pyx4j.com/statscm/index.html}StatSCM}} -  Source Code Management Metrics and Statistic for Framework.
+    * {{{http://code.pyx4j.com/statscm/index.html}StatSCM}} -  Source Code Management Metrics and Statistic for Framework.
 
 ~~    {{{./mef-gwt-public-site/javancss.html}Code metric analysis(JavaNCSS) Report for Client site Module}}.
 
@@ -45,10 +45,10 @@ Property Vista
 
     * {{{./vista-server/rpc/portal/@version@}RPC files}} - Portal Client Site RPC policy files.
 
-    * {{{http://cruisecontrol.birchwoodsoftwaregroup.com/reports/rpc/portal/@version@}RPC files}} - Portal Client Site RPC policy files with history.
+    * {{{./reports/rpc/portal/@version@}RPC files}} - Portal Client Site RPC policy files with history.
 
     * {{{./vista-crm/vista-crm-client/soycReport/}GWT Compile Report 'CRM'}}
 
     * {{{./vista-server/rpc/crm/@version@}RPC files}} - CRM RPC policy files.
 
-    * {{{http://cruisecontrol.birchwoodsoftwaregroup.com/reports/rpc/crm/@version@}RPC files}} - CRM RPC policy files with history.
+    * {{{./reports/rpc/crm/@version@}RPC files}} - CRM RPC policy files with history.
