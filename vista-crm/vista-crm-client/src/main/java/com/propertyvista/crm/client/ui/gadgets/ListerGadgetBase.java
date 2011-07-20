@@ -119,7 +119,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
                 onNextPage();
             }
         });
-        listPanel.getDataTable().setColumnClickSorting(true);
+        listPanel.getDataTable().setHasColumnClickSorting(true);
         listPanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
             public void onChange(ColumnDescriptor<E> column) {
