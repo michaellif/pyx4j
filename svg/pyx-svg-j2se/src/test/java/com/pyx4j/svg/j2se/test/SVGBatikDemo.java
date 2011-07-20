@@ -66,7 +66,7 @@ public class SVGBatikDemo {
  * SvgTestFactory.createBarChart2DTest(factory, 10, 1350);
  * SvgTestFactory.createPieChart2DTest(factory, 10, 1800);
  */
-        SvgTestFactory.createGaugeTest(factory, 10, 500);
+        SvgTestFactory.createGaugeTest(factory, 20, 10);
 
         SVGGraphics2D g = new SVGGraphics2D(doc);
         g.setSVGCanvasSize(new Dimension(800, HEIGHT));

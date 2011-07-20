@@ -60,14 +60,14 @@ public class SvgTestFactory {
     static {
 
         List<Double> values = new ArrayList<Double>(5);
-        values.add(180.0);
-        values.add(160.0);
-        values.add(100.0);
+        values.add(250.0);
+        values.add(500.0);
+        values.add(750.0);
         Data_Source.addDataSet(Data_Source.new Metric("Building 1"), values);
 
         values = new ArrayList<Double>(5);
+        values.add(500.0);
         values.add(880.0);
-        values.add(580.0);
         values.add(350.0);
         Data_Source.addDataSet(Data_Source.new Metric("Building 2"), values);
 
@@ -133,9 +133,10 @@ public class SvgTestFactory {
         Group g = factory.createGroup();
 
         ArcBasedChartConfigurator config = new ArcBasedChartConfigurator(factory, Data_Source);
-        config.setLegend(true);
         config.setTheme(ChartTheme.Bright);
         config.setRadius(100);
+        config.setScaleMaximum(1000d);
+        config.setShowValueLabels(true);
 
         Gauge gauge = new Gauge(config);
         g.setAttribute("width", String.valueOf(gauge.getComputedWidth()) + "px");

@@ -24,9 +24,9 @@ import com.pyx4j.svg.basic.SvgFactory;
 
 public class ArcBasedChartConfigurator extends BasicChartConfigurator {
 
-    int radius;
+    private int radius;
 
-    double scaleMaximum;
+    private double scaleMaximum;
 
     public ArcBasedChartConfigurator(SvgFactory factory, DataSource datasource) {
         super(factory, datasource);
@@ -40,6 +40,14 @@ public class ArcBasedChartConfigurator extends BasicChartConfigurator {
 
     public void setRadius(int radius) {
         this.radius = radius;
+    }
+
+    public double getScaleMaximum() {
+        return scaleMaximum;
+    }
+
+    public void setScaleMaximum(double scaleMaximum) {
+        this.scaleMaximum = scaleMaximum;
     }
 
 }
