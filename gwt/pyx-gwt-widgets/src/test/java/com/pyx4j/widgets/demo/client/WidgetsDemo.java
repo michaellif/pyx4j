@@ -56,7 +56,7 @@ import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 import com.pyx4j.widgets.client.combobox.ListBox;
 import com.pyx4j.widgets.client.dashboard.Dashboard;
-import com.pyx4j.widgets.client.dashboard.Report;
+import com.pyx4j.widgets.client.dashboard.Reportboard;
 import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
@@ -98,7 +98,7 @@ public class WidgetsDemo implements EntryPoint {
 
         //========== Report ==========//
         contentPanel.add(new HTML("<b>Report Test:</b>"));
-        Report report = new Report();
+        Reportboard report = new Reportboard();
         fillReport(report);
         contentPanel.add(report);
 
@@ -524,13 +524,13 @@ public class WidgetsDemo implements EntryPoint {
         return panel;
     }
 
-    private void fillReport(Report report) {
+    private void fillReport(Reportboard report) {
 
         int count = 0;
         for (int row = 0; row < 7; ++row) {
             DemoGadget widget = new DemoGadget("&nbsp;Gadget&nbsp;#" + ++count);
             widget.setHeight(Random.nextInt(10) + 1 + "em");
-            report.addGadget(widget, (row % 2 > 0 ? Report.Location.Full : Report.Location.Left));
+            report.addGadget(widget, (row % 2 > 0 ? Reportboard.Location.Full : Reportboard.Location.Left));
         }
     }
 

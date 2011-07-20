@@ -33,23 +33,23 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
+public class ReportboardLayoutPanel extends FlowPanel implements BoardEvent {
 
-    protected static final Logger log = LoggerFactory.getLogger(ReportLayoutPanel.class);
+    protected static final Logger log = LoggerFactory.getLogger(ReportboardLayoutPanel.class);
 
-    private final DashboardEvent handler;
+    private final BoardEvent handler;
 
-    public ReportLayoutPanel(DashboardEvent handler) {
+    public ReportboardLayoutPanel(BoardEvent handler) {
         this.handler = handler;
         getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         setWidth("100%");
     }
 
-    public void addGadget(Widget widget, Report.Location location) {
+    public void addGadget(Widget widget, Reportboard.Location location) {
         insertGadget(widget, location, getWidgetCount());
     }
 
-    public void insertGadget(Widget widget, Report.Location location, int beforeIndex) {
+    public void insertGadget(Widget widget, Reportboard.Location location, int beforeIndex) {
         if (!checkIndex(beforeIndex, true)) {
             return;
         }
@@ -57,7 +57,7 @@ public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
         // check for empty cell in the index vicinity :
 
         CellPanel beforeCell = null;
-        Report.Location beforeCellLocation = null;
+        Reportboard.Location beforeCellLocation = null;
         boolean isBeforeCellSpaceHolder = false;
         if (beforeIndex < getWidgetCount()) {
             beforeCell = (CellPanel) getWidget(beforeIndex);
@@ -71,7 +71,7 @@ public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
         }
 
         CellPanel afterCell = null;
-        Report.Location afterCellLocation = null;
+        Reportboard.Location afterCellLocation = null;
         boolean isAfterCellSpaceHolder = false;
         if (beforeIndex > 0) {
             afterCell = (CellPanel) getWidget(beforeIndex - 1);
@@ -89,18 +89,18 @@ public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
         CellPanel cell = new CellPanel(location);
         cell.setWidget(widget);
 
-        if (Report.Location.Right.equals(beforeCellLocation)) {
+        if (Reportboard.Location.Right.equals(beforeCellLocation)) {
             beforeIndex = beforeIndex - 1;
         }
 
         switch (location) {
         case Left:
-            insert(new CellPanel(Report.Location.Right), beforeIndex);
+            insert(new CellPanel(Reportboard.Location.Right), beforeIndex);
             insert(cell, beforeIndex);
             break;
         case Right:
             insert(cell, beforeIndex);
-            insert(new CellPanel(Report.Location.Left), beforeIndex);
+            insert(new CellPanel(Reportboard.Location.Left), beforeIndex);
             break;
         case Full:
             insert(cell, beforeIndex);
@@ -125,9 +125,9 @@ public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
         }
 
         CellPanel cell = (CellPanel) getWidget(index);
-        if (Report.Location.Full.equals(cell.getLocation())) {
+        if (Reportboard.Location.Full.equals(cell.getLocation())) {
             remove(cell);
-        } else if (Report.Location.Left.equals(cell.getLocation())) {
+        } else if (Reportboard.Location.Left.equals(cell.getLocation())) {
             if (index + 1 < getWidgetCount()) {
                 CellPanel nextCell = (CellPanel) getWidget(index + 1);
                 if (nextCell.isSpaceHolder()) {
@@ -137,7 +137,7 @@ public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
                     cell.setSpaceHolder();
                 }
             }
-        } else if (Report.Location.Right.equals(cell.getLocation())) {
+        } else if (Reportboard.Location.Right.equals(cell.getLocation())) {
             if (index > 0) {
                 CellPanel previousCell = (CellPanel) getWidget(index - 1);
                 if (previousCell.isSpaceHolder()) {
@@ -166,7 +166,7 @@ public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
         return ((CellPanel) getWidget(index)).getWidget();
     }
 
-    public Report.Location getGadgetLocation(Widget widget) {
+    public Reportboard.Location getGadgetLocation(Widget widget) {
         for (int i = 0; i < getWidgetCount(); i++) {
             CellPanel cellPanel = (CellPanel) getWidget(i);
             if (widget.equals(cellPanel.getWidget())) {
@@ -214,9 +214,9 @@ public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
 
     protected class CellPanel extends SimplePanel {
 
-        private Report.Location location;
+        private Reportboard.Location location;
 
-        public CellPanel(Report.Location location) {
+        public CellPanel(Reportboard.Location location) {
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
             setLocation(location);
@@ -228,14 +228,14 @@ public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
         }
 
         public boolean isPositioner() {
-            return getWidget() == null || getWidget() instanceof ReportGadgetPositioner;
+            return getWidget() == null || getWidget() instanceof ReportboardGadgetPositioner;
         }
 
         public void setSpaceHolder() {
             setWidget(new SpaceHolder());
         }
 
-        public void setLocation(Report.Location location) {
+        public void setLocation(Reportboard.Location location) {
             this.location = location;
             switch (location) {
             case Left:
@@ -250,7 +250,7 @@ public class ReportLayoutPanel extends FlowPanel implements DashboardEvent {
             }
         }
 
-        public Report.Location getLocation() {
+        public Reportboard.Location getLocation() {
             return location;
         }
 

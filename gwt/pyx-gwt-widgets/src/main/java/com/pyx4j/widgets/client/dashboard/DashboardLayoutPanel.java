@@ -29,19 +29,18 @@ import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.widgets.client.dashboard.Dashboard.Layout;
 
-class DashboardLayoutPanel extends FlowPanel implements DashboardEvent {
+class DashboardLayoutPanel extends FlowPanel implements BoardEvent {
 
-    protected Layout layoutType = Layout.Three;
+    protected BoardLayout layoutType = BoardLayout.Three;
 
     private final PickupDragController gadgetDragController;
 
     private final boolean isRefreshAllowed = true;
 
-    private final DashboardEvent handler;
+    private final BoardEvent handler;
 
-    public DashboardLayoutPanel(PickupDragController gadgetDragController, DashboardEvent handler) {
+    public DashboardLayoutPanel(PickupDragController gadgetDragController, BoardEvent handler) {
         this.gadgetDragController = gadgetDragController;
         this.handler = handler;
 
@@ -51,11 +50,11 @@ class DashboardLayoutPanel extends FlowPanel implements DashboardEvent {
     }
 
     // Layout manipulation:
-    public Layout getLayout() {
+    public BoardLayout getLayout() {
         return this.layoutType;
     }
 
-    public boolean setLayout(Layout layout) {
+    public boolean setLayout(BoardLayout layout) {
         if (!isRefreshAllowed()) {
             return false;
         }

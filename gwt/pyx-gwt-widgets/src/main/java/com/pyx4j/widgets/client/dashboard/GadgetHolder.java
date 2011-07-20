@@ -53,7 +53,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.dashboard.CSSNames.StyleSuffix;
-import com.pyx4j.widgets.client.dashboard.DashboardEvent.Reason;
+import com.pyx4j.widgets.client.dashboard.BoardEvent.Reason;
 import com.pyx4j.widgets.client.dashboard.IGadget.ISetup;
 import com.pyx4j.widgets.client.dashboard.images.DashboardImages;
 

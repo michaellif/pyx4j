@@ -1,5 +1,5 @@
 /*
-SS * Pyx4j framework
+ * Pyx4j framework
  * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -14,24 +14,17 @@ SS * Pyx4j framework
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-04-29
+ * Created on 2011-06-23
  * @author Vlad
  * @version $Id$
  */
 package com.pyx4j.widgets.client.dashboard;
 
-import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+public interface BoardEvent {
 
-public class CSSNames {
-    // CSS style names: 
-    public static String BASE_NAME = "pyx4j_Board";
-
-    public static enum StyleSuffix implements IStyleSuffix {
-        Column, ColumnSpacer, Holder, HolderSetup, HolderCaption, HolderHeading, HolderMenu, DndPositioner, DndReportPositioner
+    enum Reason {
+        addGadget, removeGadget, repositionGadget, updateGadget, newLayout
     }
 
-    public static enum StyleDependent implements IStyleDependent {
-        disabled, selected, hover, maximized
-    }
+    void onEvent(Reason reason);
 }

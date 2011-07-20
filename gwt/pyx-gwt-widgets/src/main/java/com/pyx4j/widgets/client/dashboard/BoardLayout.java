@@ -14,24 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 19, 2011
- * @author Misha
+ * Created on 2011-07-20
+ * @author Vlad
  * @version $Id$
  */
 package com.pyx4j.widgets.client.dashboard;
 
-import com.google.gwt.user.client.ui.SimplePanel;
+public enum BoardLayout {
+    One(1), Two11(2), Two12(2), Two21(2), Three(3), Report(0);
 
-class ReportGadgetPositioner extends SimplePanel {
+    private final int columns;
 
-    public ReportGadgetPositioner(int height) {
-        addStyleName(CSSNames.BASE_NAME + CSSNames.StyleSuffix.DndReportPositioner);
+    BoardLayout(int columns) {
+        this.columns = columns;
+    }
 
-        getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
-        getElement().getStyle().setProperty("MozBoxSizing", "border-box");
-        getElement().getStyle().setProperty("boxSizing", "border-box");
-        getElement().getStyle().setZIndex(100);
-
-        setHeight(height + "px");
+    public int columns() {
+        return columns;
     }
 }

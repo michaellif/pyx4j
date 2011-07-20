@@ -29,13 +29,13 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Report extends SimplePanel implements IBoardRoot {
+public class Reportboard extends SimplePanel implements IBoard, IBoardRoot {
 
     public static enum Location {
         Full, Left, Right
     }
 
-    private final ReportLayoutPanel reportLayoutPanel;
+    private final ReportboardLayoutPanel reportLayoutPanel;
 
     private final PickupDragController gadgetDragController;
 
@@ -43,33 +43,92 @@ public class Report extends SimplePanel implements IBoardRoot {
 
     private final HTML placeholder = new HTML("report_placeholder");
 
-    private final List<DashboardEvent> handlers = new ArrayList<DashboardEvent>();
+    private final List<BoardEvent> handlers = new ArrayList<BoardEvent>();
 
-    public Report() {
+    public Reportboard() {
         addStyleName(CSSNames.BASE_NAME);
 
         boundaryPanel.setSize("100%", "100%");
         setWidget(boundaryPanel);
 
-        reportLayoutPanel = new ReportLayoutPanel(this);
+        reportLayoutPanel = new ReportboardLayoutPanel(this);
         boundaryPanel.add(reportLayoutPanel);
 
         gadgetDragController = new PickupDragController(boundaryPanel, false);
         gadgetDragController.setBehaviorMultipleSelection(false);
-        gadgetDragController.registerDropController(new ReportDropController(reportLayoutPanel));
+        gadgetDragController.registerDropController(new ReportboardDropController(reportLayoutPanel));
     }
 
-    public void addGadget(IGadget gadget, Report.Location location) {
+    public void addGadget(IGadget gadget, Reportboard.Location location) {
         reportLayoutPanel.addGadget(new GadgetHolder(gadget, gadgetDragController, this), location);
         onEvent(Reason.addGadget);
     }
 
-    public void insertGadget(IGadget gadget, Report.Location location, int beforeRow) {
+    public void insertGadget(IGadget gadget, Reportboard.Location location, int beforeRow) {
         reportLayoutPanel.insertGadget(new GadgetHolder(gadget, gadgetDragController, this), location, beforeRow);
         onEvent(Reason.addGadget);
     }
 
-    // Maximize Gadget mechanics:
+//
+// Mimic IBoard implementation for report:
+//
+    @Override
+    public BoardLayout getLayout() {
+        return BoardLayout.Report; // always!..
+    }
+
+    @Override
+    public boolean setLayout(BoardLayout layoutType) {
+        return true; // has no meaning!..
+    }
+
+    @Override
+    public void addGadget(IGadget gadget) {
+        addGadget(gadget, Location.Full);
+    }
+
+    @Override
+    public void addGadget(IGadget gadget, int column) {
+        switch (column) {
+        case 0:
+            addGadget(gadget, Location.Left);
+            break;
+        case 1:
+            addGadget(gadget, Location.Right);
+            break;
+        case -1:
+            addGadget(gadget, Location.Full);
+            break;
+        }
+    }
+
+    @Override
+    public void insertGadget(IGadget gadget, int column, int row) {
+        switch (column) {
+        case 0:
+            insertGadget(gadget, Location.Left, row);
+            break;
+        case 1:
+            insertGadget(gadget, Location.Right, row);
+            break;
+        case -1:
+            insertGadget(gadget, Location.Full, row);
+            break;
+        }
+    }
+
+    @Override
+    public void addEventHandler(BoardEvent handler) {
+        handlers.add(handler);
+    }
+
+    @Override
+    public IGadgetIterator getGadgetIterator() {
+        return reportLayoutPanel.getGadgetIterator();
+    }
+
+// IBoardRoot:
+
     @Override
     public boolean showMaximized(Widget widget) {
         if (getWidget().equals(boundaryPanel)) {
@@ -98,17 +157,9 @@ public class Report extends SimplePanel implements IBoardRoot {
     @Override
     public void onEvent(Reason reason) {
         if (!handlers.isEmpty()) {
-            for (DashboardEvent handler : handlers) {
+            for (BoardEvent handler : handlers) {
                 handler.onEvent(reason);
             }
         }
-    }
-
-    public void addEventHandler(DashboardEvent handler) {
-        handlers.add(handler);
-    }
-
-    public IGadgetIterator getGadgetIterator() {
-        return reportLayoutPanel.getGadgetIterator();
     }
 }

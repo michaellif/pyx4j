@@ -29,21 +29,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Dashboard extends SimplePanel implements IBoardRoot {
-
-    public enum Layout {
-        One(1), Two11(2), Two12(2), Two21(2), Three(3);
-
-        private final int columns;
-
-        Layout(int columns) {
-            this.columns = columns;
-        }
-
-        public int columns() {
-            return columns;
-        }
-    }
+public class Dashboard extends SimplePanel implements IBoard, IBoardRoot {
 
     private final DashboardLayoutPanel dashboardLayoutPanel;
 
@@ -53,7 +39,7 @@ public class Dashboard extends SimplePanel implements IBoardRoot {
 
     private final HTML placeholder = new HTML("dashboard_placeholder");
 
-    private final List<DashboardEvent> handlers = new ArrayList<DashboardEvent>();
+    private final List<BoardEvent> handlers = new ArrayList<BoardEvent>();
 
     private boolean inhibitEvents = false;
 
@@ -70,27 +56,45 @@ public class Dashboard extends SimplePanel implements IBoardRoot {
         boundaryPanel.add(dashboardLayoutPanel);
     }
 
-    public Layout getLayout() {
+// IBoard:
+
+    @Override
+    public BoardLayout getLayout() {
         return dashboardLayoutPanel.getLayout();
     }
 
-    public boolean setLayout(Layout layoutType) {
+    @Override
+    public boolean setLayout(BoardLayout layoutType) {
         return dashboardLayoutPanel.setLayout(layoutType);
     }
 
+    @Override
     public void addGadget(IGadget gadget) {
         dashboardLayoutPanel.addGadget(new GadgetHolder(gadget, gadgetDragController, this));
     }
 
+    @Override
     public void addGadget(IGadget gadget, int column) {
         dashboardLayoutPanel.addGadget(new GadgetHolder(gadget, gadgetDragController, this), column);
     }
 
+    @Override
     public void insertGadget(IGadget gadget, int column, int row) {
         dashboardLayoutPanel.addGadget(new GadgetHolder(gadget, gadgetDragController, this), column, row);
     }
 
-    // Maximize Gadget mechanics:
+    @Override
+    public void addEventHandler(BoardEvent handler) {
+        handlers.add(handler);
+    }
+
+    @Override
+    public IGadgetIterator getGadgetIterator() {
+        return dashboardLayoutPanel.getGadgetIterator();
+    }
+
+// IBoardRoot:
+
     @Override
     public boolean showMaximized(Widget widget) {
         if (getWidget().equals(boundaryPanel)) {
@@ -130,17 +134,9 @@ public class Dashboard extends SimplePanel implements IBoardRoot {
     @Override
     public void onEvent(Reason reason) {
         if (!inhibitEvents && !handlers.isEmpty()) {
-            for (DashboardEvent handler : handlers) {
+            for (BoardEvent handler : handlers) {
                 handler.onEvent(reason);
             }
         }
-    }
-
-    public void addEventHandler(DashboardEvent handler) {
-        handlers.add(handler);
-    }
-
-    public IGadgetIterator getGadgetIterator() {
-        return dashboardLayoutPanel.getGadgetIterator();
     }
 }

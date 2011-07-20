@@ -22,7 +22,7 @@ package com.pyx4j.widgets.client.dashboard;
 
 import com.google.gwt.user.client.ui.Widget;
 
-interface IBoardRoot extends DashboardEvent {
+interface IBoardRoot extends BoardEvent {
 
     boolean isMaximized(Widget widget);
 
