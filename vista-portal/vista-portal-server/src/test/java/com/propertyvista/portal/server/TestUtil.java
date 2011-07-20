@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.essentials.server.dev.DataDump;
@@ -32,14 +33,17 @@ public class TestUtil {
         return new Pair<String, String>("n/a", "x");
     }
 
-    public static void assertEqual(String name, IEntity clientSide, IEntity received) {
-        Path changePath = EntityGraph.getChangedDataPath(clientSide, received);
+    public static void assertEqual(String name, IEntity expected, IEntity actual) {
+        Path changePath = EntityGraph.getChangedDataPath(expected, actual);
         if (changePath != null) {
-            DataDump.dump("client", clientSide);
-            DataDump.dump("server", received);
-            log.debug("client {}", clientSide);
-            log.debug("server {}", received);
-            Assert.fail(name + " are not the same: " + changePath);
+            DataDump.dump("client", expected);
+            DataDump.dump("server", actual);
+            log.debug("expected {}", expected);
+            log.debug("actual {}", actual);
+            IObject<?> expectedValue = expected.getMember(changePath);
+            IObject<?> actualValue = actual.getMember(changePath);
+            log.info("Expected {}, Actual {}", expectedValue, actualValue);
+            Assert.fail(name + " are not the same: " + changePath + " expected " + expectedValue + ", actual " + actualValue);
         }
     }
 }
