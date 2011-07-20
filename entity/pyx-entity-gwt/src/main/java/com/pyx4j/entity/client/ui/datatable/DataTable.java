@@ -86,11 +86,11 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private boolean hasDetailsNavigation = false;
 
-    private boolean columnClickSorting = false;
+    private boolean hasColumnClickSorting = false;
 
     private boolean autoColumnsWidth = false;
 
-    private boolean checkboxColumnShown = false;
+    private boolean hasCheckboxColumn = false;
 
     private boolean markSelectedRow = true;
 
@@ -121,10 +121,10 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 if (cell == null) {
                     return; // do not process empty clicks!...
                 } else if (cell.getRowIndex() == 0) {
-                    if (cell.getCellIndex() >= (isCheckboxColumnShown() ? 1 : 0) && cell.getCellIndex() < getCellCount(0) - (isUseColumnSelector() ? 1 : 0)) {
-                        processHeaderClick(isCheckboxColumnShown() ? cell.getCellIndex() - 1 : cell.getCellIndex()); // actual table column index - without the first check one!...
+                    if (cell.getCellIndex() >= (hasCheckboxColumn() ? 1 : 0) && cell.getCellIndex() < getCellCount(0) - (hasColumnSelector() ? 1 : 0)) {
+                        processHeaderClick(hasCheckboxColumn() ? cell.getCellIndex() - 1 : cell.getCellIndex()); // actual table column index - without the first check one!...
                     }
-                } else if (cell.getCellIndex() >= (isCheckboxColumnShown() ? 1 : 0)) {
+                } else if (cell.getCellIndex() >= (hasCheckboxColumn() ? 1 : 0)) {
                     setSelectedRow(cell.getRowIndex() - 1); // actual table row index - without the header!...
                 }
             }
@@ -136,6 +136,126 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         setDataTableModel(model);
     }
 
+// Data manipulation:
+
+    public DataTableModel<E> getDataTableModel() {
+        return model;
+    }
+
+    public void setDataTableModel(DataTableModel<E> model) {
+        if (this.model != null) {
+            this.model.removeDataTableModelListener(this);
+        }
+        this.model = model;
+        model.addDataTableModelListener(this);
+        renderTable();
+    }
+
+    public int getSelectedRow() {
+        return selectedRow;
+    }
+
+    public E getSelectedItem() {
+        int selectedRow = getSelectedRow();
+        if (selectedRow >= 0 && selectedRow < getDataTableModel().getData().size()) {
+            return getDataTableModel().getData().get(selectedRow).getEntity();
+        }
+        return null;
+    }
+
+    public List<E> getCheckedItems() {
+        ArrayList<E> checked = new ArrayList<E>();
+
+        for (DataItem<E> dataItem : model.getData()) {
+            if (dataItem.isChecked()) {
+                checked.add(dataItem.getEntity());
+            }
+        }
+
+        return checked;
+    }
+
+// Events connection:
+
+    public void addItemSelectionHandler(ItemSelectionHandler handler) {
+        if (itemSelectionHandlers == null) {
+            itemSelectionHandlers = new ArrayList<ItemSelectionHandler>(2);
+        }
+        itemSelectionHandlers.add(handler);
+    }
+
+    public void addCheckSelectionHandler(CheckSelectionHandler handler) {
+        if (checkSelectionHandlers == null) {
+            checkSelectionHandlers = new ArrayList<CheckSelectionHandler>(2);
+        }
+        checkSelectionHandlers.add(handler);
+    }
+
+    public void addSortChangeHandler(SortChangeHandler<E> handler) {
+        if (sortChangeHandlers == null) {
+            sortChangeHandlers = new ArrayList<SortChangeHandler<E>>(2);
+        }
+
+        sortChangeHandlers.add(handler);
+    }
+
+// UI & behaviour setup:
+
+    public boolean isMarkSelectedRow() {
+        return markSelectedRow;
+    }
+
+    public void setMarkSelectedRow(boolean markSelectedRow) {
+        this.markSelectedRow = markSelectedRow;
+    }
+
+    public boolean isAutoColumnsWidth() {
+        return autoColumnsWidth;
+    }
+
+    public void setAutoColumnsWidth(boolean autoColumnsWidth) {
+        if (this.autoColumnsWidth = autoColumnsWidth) {
+            DOM.setStyleAttribute(getElement(), "tableLayout", "auto");
+        } else {
+            DOM.setStyleAttribute(getElement(), "tableLayout", "fixed");
+        }
+    }
+
+    public boolean hasColumnClickSorting() {
+        return hasColumnClickSorting;
+    }
+
+    public void setHasColumnClickSorting(boolean hasColumnClickSorting) {
+        this.hasColumnClickSorting = hasColumnClickSorting;
+    }
+
+    public boolean hasCheckboxColumn() {
+        return hasCheckboxColumn;
+    }
+
+    public void setHasCheckboxColumn(boolean hasCheckboxColumn) {
+        this.hasCheckboxColumn = hasCheckboxColumn;
+    }
+
+    public boolean hasColumnSelector() {
+        return (availableColumns != null);
+    }
+
+    public void setColumnSelector(List<ColumnDescriptor<E>> availableColumns) {
+        this.availableColumns = availableColumns;
+    }
+
+    public boolean hasDetailsNavigation() {
+        return hasDetailsNavigation;
+    }
+
+    public void setHasDetailsNavigation(boolean hasDetailsNavigation) {
+        this.hasDetailsNavigation = hasDetailsNavigation;
+    }
+
+//
+// Internals:
+//    
     public void renderTable() {
         removeAllRows();
 
@@ -151,13 +271,28 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         renderBody();
     }
 
+    public void clearTableData() {
+        selectedRow = -1;
+        selectionCheckBoxes.clear();
+        for (int row = getRowCount() - 1; row > 0; row--) {
+            removeRow(row);
+        }
+    }
+
+    @Override
+    public void onTableModelChanged(DataTableModelEvent e) {
+        if (e.getType().equals(DataTableModelEvent.Type.REBUILD)) {
+            renderTable();
+        }
+    }
+
     private void renderHeader() {
         if (getRowCount() > 0) {
             removeCells(0, 0, getCellCount(0));
         }
 
         int colIndex = 0;
-        if (isCheckboxColumnShown()) {
+        if (hasCheckboxColumn()) {
             selectionCheckBoxAll = new SelectionCheckBox(HEADER_RAW_INDEX, model.isAllChecked());
             setWidget(0, 0, selectionCheckBoxAll);
             getColumnFormatter().setWidth(colIndex, CHECK_MARK_COLUMN_SIZE);
@@ -184,7 +319,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             ++colIndex;
         }
 
-        if (isUseColumnSelector()) {
+        if (hasColumnSelector()) {
             setWidget(0, colIndex, createHeaderColumnSelector());
             getColumnFormatter().setWidth(colIndex, COLUMNS_SELECTOR_COLUMN_SIZE);
             getCellFormatter().setStyleName(0, colIndex, BASE_NAME + StyleSuffix.ColumnSelector);
@@ -205,7 +340,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         int rowIndex = 1;
         for (DataItem<E> dataItem : data) {
             int colIndex = 0;
-            if (isCheckboxColumnShown()) {
+            if (hasCheckboxColumn()) {
                 SelectionCheckBox selectionCheckBox = new SelectionCheckBox(rowIndex, dataItem.isChecked());
                 selectionCheckBoxes.add(selectionCheckBox);
 
@@ -248,38 +383,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         this.ensureDebugId(model.getDebugId());
     }
 
-    public void clearTableData() {
-        selectedRow = -1;
-        selectionCheckBoxes.clear();
-        for (int row = getRowCount() - 1; row > 0; row--) {
-            removeRow(row);
-        }
-    }
-
-    @Override
-    public void onTableModelChanged(DataTableModelEvent e) {
-        if (e.getType().equals(DataTableModelEvent.Type.REBUILD)) {
-            renderTable();
-        }
-    }
-
-    public DataTableModel<E> getDataTableModel() {
-        return model;
-    }
-
-    public void setDataTableModel(DataTableModel<E> model) {
-        if (this.model != null) {
-            this.model.removeDataTableModelListener(this);
-        }
-        this.model = model;
-        model.addDataTableModelListener(this);
-        renderTable();
-    }
-
-    public int getSelectedRow() {
-        return selectedRow;
-    }
-
     protected void setSelectedRow(int selectedRow) {
 
         if (isMarkSelectedRow() && getSelectedRow() >= 0) {
@@ -302,43 +405,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         }
     }
 
-    public E getSelectedItem() {
-        int selectedRow = getSelectedRow();
-        if (selectedRow >= 0 && selectedRow < getDataTableModel().getData().size()) {
-            return getDataTableModel().getData().get(selectedRow).getEntity();
-        }
-        return null;
-    }
-
-    public void addItemSelectionHandler(ItemSelectionHandler handler) {
-        if (itemSelectionHandlers == null) {
-            itemSelectionHandlers = new ArrayList<ItemSelectionHandler>(2);
-        }
-        itemSelectionHandlers.add(handler);
-    }
-
-    public List<E> getCheckedItems() {
-        ArrayList<E> checked = new ArrayList<E>();
-
-        for (DataItem<E> dataItem : model.getData()) {
-            if (dataItem.isChecked()) {
-                checked.add(dataItem.getEntity());
-            }
-        }
-
-        return checked;
-    }
-
-    public void addSortChangeHandler(SortChangeHandler<E> handler) {
-        if (sortChangeHandlers == null) {
-            sortChangeHandlers = new ArrayList<SortChangeHandler<E>>(2);
-        }
-
-        sortChangeHandlers.add(handler);
-    }
-
     protected void processHeaderClick(int column) {
-        if (isColumnClickSorting()) {
+
+        if (hasColumnClickSorting()) {
             ColumnDescriptor<E> columnDescriptor = model.getColumnDescriptors().get(column);
             if (columnDescriptor.equals(model.getSortColumn())) {
                 columnDescriptor.setSortAscending(!columnDescriptor.isSortAscending());
@@ -355,58 +424,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 }
             }
         }
-    }
-
-    public boolean isMarkSelectedRow() {
-        return markSelectedRow;
-    }
-
-    public void setMarkSelectedRow(boolean markSelectedRow) {
-        this.markSelectedRow = markSelectedRow;
-    }
-
-    public boolean isColumnClickSorting() {
-        return columnClickSorting;
-    }
-
-    public void setColumnClickSorting(boolean columnClickSorting) {
-        this.columnClickSorting = columnClickSorting;
-    }
-
-    public boolean isCheckboxColumnShown() {
-        return checkboxColumnShown;
-    }
-
-    public void setCheckboxColumnShown(boolean checkboxColumnShown) {
-        this.checkboxColumnShown = checkboxColumnShown;
-    }
-
-    public boolean isUseColumnSelector() {
-        return (availableColumns != null);
-    }
-
-    public void setUseColumnSelector(List<ColumnDescriptor<E>> availableColumns) {
-        this.availableColumns = availableColumns;
-    }
-
-    public boolean isAutoColumnsWidth() {
-        return autoColumnsWidth;
-    }
-
-    public void setAutoColumnsWidth(boolean autoColumnsWidth) {
-        if (this.autoColumnsWidth = autoColumnsWidth) {
-            DOM.setStyleAttribute(getElement(), "tableLayout", "auto");
-        } else {
-            DOM.setStyleAttribute(getElement(), "tableLayout", "fixed");
-        }
-    }
-
-    public boolean hasDetailsNavigation() {
-        return hasDetailsNavigation;
-    }
-
-    public void setHasDetailsNavigation(boolean hasDetailsNavigation) {
-        this.hasDetailsNavigation = hasDetailsNavigation;
     }
 
     private Widget createHeaderColumnSelector() {
@@ -475,16 +492,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         return selector;
     }
 
-    // Check box selection class: 
-    public void addCheckSelectionHandler(CheckSelectionHandler handler) {
-        if (checkSelectionHandlers == null) {
-            checkSelectionHandlers = new ArrayList<CheckSelectionHandler>(2);
-        }
-        checkSelectionHandlers.add(handler);
-    }
-
     // Check box column item class: 
-    class SelectionCheckBox extends CheckBox {
+    protected class SelectionCheckBox extends CheckBox {
 
         public SelectionCheckBox(final int rowIndex, boolean checked) {
             setValue(checked);

@@ -130,14 +130,14 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 onNextPage();
             }
         });
-        listPanel.getDataTable().setCheckboxColumnShown(true);
+        listPanel.getDataTable().setHasCheckboxColumn(true);
         listPanel.getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
             @Override
             public void onCheck(boolean isAnyChecked) {
                 setActionsActive(isAnyChecked);
             }
         });
-        listPanel.getDataTable().setColumnClickSorting(true);
+        listPanel.getDataTable().setHasColumnClickSorting(true);
         listPanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
             public void onChange(ColumnDescriptor<E> column) {
@@ -238,9 +238,9 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         if (show) {
             ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
             fillAvailableColumnDescriptors(columnDescriptors, listPanel.proto());
-            listPanel.getDataTable().setUseColumnSelector(columnDescriptors);
+            listPanel.getDataTable().setHasColumnSelector(columnDescriptors);
         } else {
-            listPanel.getDataTable().setUseColumnSelector(null);
+            listPanel.getDataTable().setHasColumnSelector(null);
         }
     }
 
