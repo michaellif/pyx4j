@@ -520,6 +520,10 @@ public class SeleniumExtended extends WebDriverWrapper {
         fireEvent(driver.findElement(elementLocator(locator)), eventName);
     }
 
+    public void fireEvent(IDebugId debugId, String eventName) {
+        fireEvent(driver.findElement(by(debugId)), eventName);
+    }
+
     public void fireEvent(WebElement we, String eventName) {
         new JavascriptLibrary().callEmbeddedSelenium(driver, "doFireEvent", we, eventName);
     }
