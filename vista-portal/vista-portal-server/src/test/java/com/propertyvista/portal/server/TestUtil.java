@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.essentials.server.dev.DataDump;
@@ -38,12 +37,14 @@ public class TestUtil {
         if (changePath != null) {
             DataDump.dump("client", expected);
             DataDump.dump("server", actual);
-            log.debug("expected {}", expected);
-            log.debug("actual {}", actual);
-            IObject<?> expectedValue = expected.getMember(changePath);
-            IObject<?> actualValue = actual.getMember(changePath);
-            log.info("Expected {}, Actual {}", expectedValue, actualValue);
-            Assert.fail(name + " are not the same: " + changePath + " expected " + expectedValue + ", actual " + actualValue);
+
+            // we need to log this on the info level, since this information is quite important
+            log.info("expected {}", expected);
+            log.info("actual {}", actual);
+//            Object expectedValue = expected.getMember(changePath).getValue();
+//            Object actualValue = actual.getMember(changePath).getValue();
+//            log.info("Expected {}, Actual {}", expectedValue, actualValue);
+            Assert.fail(name + " are not the same: " + changePath);// + " expected " + expectedValue + ", actual " + actualValue);
         }
     }
 }

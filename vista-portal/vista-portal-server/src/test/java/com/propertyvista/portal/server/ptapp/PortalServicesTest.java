@@ -99,6 +99,7 @@ public class PortalServicesTest extends VistaDBTestBase {
             @Override
             public void onSuccess(PotentialTenantList result) {
                 Assert.assertNotNull("Result", result);
+//                log.info(tenantList.)
                 TestUtil.assertEqual("TenantList", tenantList, result);
                 tenantList = result;
             }
