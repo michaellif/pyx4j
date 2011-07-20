@@ -27,6 +27,7 @@ import java.util.Set;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.IdentityHashSet;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -231,6 +232,12 @@ public class EntityGraph {
             String memberFieldName = member.getFieldName();
             Object v = src.getMember(memberFieldName).getValue();
             dst.setMemberValue(memberFieldName, v);
+        }
+    }
+
+    public static <F extends IEntity, S extends F, D extends F> void copyFragment(Class<F> fragmentClass, S src, D dst) {
+        for (String memberName : EntityFactory.getEntityMeta(fragmentClass).getMemberNames()) {
+            dst.setMemberValue(memberName, src.getMemberValue(memberName));
         }
     }
 }
