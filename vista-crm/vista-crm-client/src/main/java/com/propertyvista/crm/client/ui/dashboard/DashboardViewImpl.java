@@ -13,11 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -27,60 +23,26 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.widgets.client.dashboard.BoardLayout;
 import com.pyx4j.widgets.client.dashboard.Dashboard;
-import com.pyx4j.widgets.client.dashboard.Dashboard.Layout;
-import com.pyx4j.widgets.client.dashboard.DashboardEvent;
+import com.pyx4j.widgets.client.dashboard.IBoard;
 import com.pyx4j.widgets.client.dashboard.IGadget;
-import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.crm.client.resources.CrmImages;
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader0Decorator;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.crm.client.ui.board.BoardViewImpl;
 import com.propertyvista.crm.client.ui.gadgets.AddGadgetBox;
-import com.propertyvista.crm.client.ui.gadgets.GadgetsFactory;
-import com.propertyvista.crm.client.ui.gadgets.IGadgetBase;
-import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
-import com.propertyvista.domain.dashboard.GadgetMetadata;
 
-public class DashboardViewImpl extends DockLayoutPanel implements DashboardView {
+public class DashboardViewImpl extends BoardViewImpl implements DashboardView {
 
-    public static String DEFAULT_STYLE_PREFIX = "vista_DashboardView";
-
-    public static enum StyleSuffix implements IStyleSuffix {
-        actionsPanel
-    }
-
-    private static I18n i18n = I18nFactory.getI18n(DashboardViewImpl.class);
-
-    private final VistaHeaderBar header;
-
-    private final LayoutsSet layouts = new LayoutsSet();
-
-    private final ScrollPanel scroll = new ScrollPanel();
-
-    protected final HorizontalPanel actionsPanel;
-
-    private Dashboard dashboard;
-
-    private Presenter presenter;
-
-    private DashboardMetadata dashboardMetadata;
-
-    private Button btnSave;
+    private LayoutsSet layouts;
 
     public DashboardViewImpl() {
         this(i18n.tr("Dashboard"));
@@ -91,141 +53,29 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
     }
 
     public DashboardViewImpl(String caption, boolean internal) {
-        super(Unit.EM);
-
-        addNorth(header = (internal ? new CrmHeader0Decorator(caption, layouts) : new CrmHeaderDecorator(caption, layouts)), VistaCrmTheme.defaultHeaderHeight);
-
-        actionsPanel = new HorizontalPanel();
-        actionsPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.actionsPanel);
-        actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-        actionsPanel.setWidth("100%");
-        actionsPanel.add(new HTML()); // just for %-tage cells alignment...
-        addNorth(actionsPanel, VistaCrmTheme.defaultHeaderHeight);
-
-        addActionButton(btnSave = new Button(i18n.tr("Save")));
-        btnSave.addStyleName(btnSave.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.SaveButton);
-        btnSave.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.save();
-            }
-        });
-
-        add(scroll);
-        setSize("100%", "100%");
+        super(caption, internal);
     }
 
-    @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void fill(DashboardMetadata dashboardMetadata) {
-        this.dashboardMetadata = dashboardMetadata;
-
-        dashboard = new Dashboard();
-        dashboard.addEventHandler(new DashboardEvent() {
-            @Override
-            public void onEvent(Reason reason) {
-                boolean save = true;
-                switch (reason) {
-                case addGadget:
-                case removeGadget:
-                    break;
-                case repositionGadget:
-                    save = isGadgetRepositioned();
-                    break;
-                case updateGadget:
-                    break;
-                case newLayout:
-                    save = (DashboardViewImpl.this.dashboardMetadata.layoutType().getValue() != translateLayout(dashboard.getLayout()));
-                    break;
-                }
-
-                if (save) {
-                    // TODO just save immediately:
-                    //presenter.save();
-                    btnSave.setEnabled(true);
-                }
-            }
-        });
-
-        if (this.dashboardMetadata != null && !this.dashboardMetadata.isEmpty()) {
-            header.setCaption(this.dashboardMetadata.name().getStringView());
-            layouts.setLayout(this.dashboardMetadata.layoutType().getValue());
-            // fill the dashboard with gadgets:
-            for (final GadgetMetadata gmd : this.dashboardMetadata.gadgets()) {
-                IGadgetBase gadget = GadgetsFactory.createGadget(gmd.type().getValue(), gmd);
-                if (gadget != null) {
-                    gadget.setPresenter(presenter);
-                    dashboard.addGadget(gadget, gmd.column().getValue());
-                    gadget.start(); // allow gadget execution... 
-                }
-            }
-        }
-
-        scroll.setWidget(dashboard);
-        btnSave.setEnabled(false);
-    }
-
-    @Override
-    public DashboardMetadata getData() {
-        dashboardMetadata.layoutType().setValue(translateLayout(dashboard.getLayout()));
-        dashboardMetadata.gadgets().clear();
-
-        IGadgetIterator it = dashboard.getGadgetIterator();
-        while (it.hasNext()) {
-            IGadget gadget = it.next();
-            if (gadget instanceof IGadgetBase) {
-                GadgetMetadata gmd = ((IGadgetBase) gadget).getGadgetMetadata(); // gadget meta should be up to date!.. 
-                gmd.column().setValue(it.getColumn()); // update current gadget column...
-                dashboardMetadata.gadgets().add(gmd);
-            }
-
-        }
-
-        return dashboardMetadata;
-    }
-
-    @Override
-    public void onSaveSuccess() {
-        btnSave.setEnabled(false);
-    }
-
-    @Override
-    public boolean onSaveFail(Throwable caught) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    //
-    // Internals:
-    //
-    protected boolean isGadgetRepositioned() {
-//        IGadgetIterator it = dashboard.getGadgetIterator();
-//        while (it.hasNext()) {
-//            IGadget gadget = it.next();
-//            for (GadgetMetadata gmd : this.dashboardMetadata.gadgets()) {
-//                if (gadget.getName().compareTo(gmd.name().getValue()) == 0) {
-//                    if (it.getColumn() != gmd.column().getValue()) {
-//                        return true;
-//                    }
-//                }
-//            }
-//        }
 //
-//        return false;
-        return true;
+// Internals:
+//
+    @Override
+    protected IBoard createBoard() {
+        return new Dashboard();
     }
 
-    protected void addActionButton(Button action) {
-        actionsPanel.insert(action, 1);
-        actionsPanel.setCellWidth(action, "1%");
-        action.getElement().getStyle().setMarginRight(1, Unit.EM);
+    @Override
+    protected Widget createHeaderWidget() {
+        return (layouts = new LayoutsSet());
     }
 
-    protected LayoutType translateLayout(Layout layout) {
+    @Override
+    protected void setLayout(LayoutType layoutType) {
+        layouts.setLayout(layoutType);
+    }
+
+    @Override
+    protected LayoutType translateLayout(BoardLayout layout) {
         LayoutType layoutType = null;
         switch (layout) {
         case One:
@@ -338,7 +188,7 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
                         public void onClose(CloseEvent<PopupPanel> event) {
                             IGadget gadget = agb.getSelectedGadget();
                             if (gadget != null) {
-                                dashboard.addGadget(gadget);
+                                board.addGadget(gadget);
                                 gadget.start();
                             }
                         }
@@ -361,27 +211,27 @@ public class DashboardViewImpl extends DockLayoutPanel implements DashboardView 
         public void setLayout(LayoutType layoutType) {
             switch (layoutType) {
             case One:
-                dashboard.setLayout(Layout.One);
+                board.setLayout(BoardLayout.One);
                 setDefaultImages();
                 layout1.setResource(CrmImages.INSTANCE.dashboardLayout1_1());
                 break;
             case Two11:
-                dashboard.setLayout(Layout.Two11);
+                board.setLayout(BoardLayout.Two11);
                 setDefaultImages();
                 layout22.setResource(CrmImages.INSTANCE.dashboardLayout22_1());
                 break;
             case Two12:
-                dashboard.setLayout(Layout.Two12);
+                board.setLayout(BoardLayout.Two12);
                 setDefaultImages();
                 layout12.setResource(CrmImages.INSTANCE.dashboardLayout12_1());
                 break;
             case Two21:
-                dashboard.setLayout(Layout.Two21);
+                board.setLayout(BoardLayout.Two21);
                 setDefaultImages();
                 layout21.setResource(CrmImages.INSTANCE.dashboardLayout21_1());
                 break;
             case Three:
-                dashboard.setLayout(Layout.Three);
+                board.setLayout(BoardLayout.Three);
                 setDefaultImages();
                 layout3.setResource(CrmImages.INSTANCE.dashboardLayout3_1());
                 break;

@@ -13,12 +13,6 @@
  */
 package com.propertyvista.crm.rpc.services.dashboard;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.rpc.shared.VoidSerializable;
-
-public interface DashboardMetadataService extends AbstractMetadataService {
-
-    void downloadDashboard(final AsyncCallback<String> callback, VoidSerializable none, Key entityId);
+public interface DashboardMetadataService extends BoardMetadataServiceBase {
 }

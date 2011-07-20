@@ -13,7 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.report;
 
-import com.propertyvista.crm.client.ui.dashboard.DashboardView;
+import com.propertyvista.crm.client.ui.board.BoardView;
 
-public interface ReportView extends DashboardView {
+public interface ReportView extends BoardView {
+
+    public interface Presenter extends BoardView.Presenter {
+    }
 }

@@ -36,8 +36,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.widgets.client.dashboard.IGadget;
-import com.pyx4j.widgets.client.dashboard.Report;
-import com.pyx4j.widgets.client.dashboard.Report.Location;
+import com.pyx4j.widgets.client.dashboard.Reportboard;
+import com.pyx4j.widgets.client.dashboard.Reportboard.Location;
 
 import com.propertyvista.admin.client.resources.AdminImages;
 import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;
@@ -52,7 +52,7 @@ public class ReportViewImpl extends SimplePanel implements ReportView {
 
     private final ScrollPanel scroll;
 
-    private Report report;
+    private Reportboard report;
 
     public ReportViewImpl() {
         VerticalPanel main = new VerticalPanel();
@@ -76,13 +76,13 @@ public class ReportViewImpl extends SimplePanel implements ReportView {
             return;
         }
 
-        report = new Report();
+        report = new Reportboard();
 
         // fill the dashboard with gadgets:
         for (GadgetMetadata gmd : dashboardMetadata.gadgets()) {
             IGadget gadget = GadgetsFactory.createGadget(gmd.type().getValue(), gmd);
             if (gadget != null) {
-                Report.Location location;
+                Reportboard.Location location;
                 // decode columns:
                 switch (gmd.column().getValue()) {
                 case 0:
@@ -138,7 +138,7 @@ public class ReportViewImpl extends SimplePanel implements ReportView {
                         public void onClose(CloseEvent<PopupPanel> event) {
                             IGadget gadget = agb.getSelectedGadget();
                             if (gadget != null) {
-                                report.insertGadget(gadget, (gadget.isFullWidth() ? Report.Location.Full : Report.Location.Left), 0);
+                                report.insertGadget(gadget, (gadget.isFullWidth() ? Reportboard.Location.Full : Reportboard.Location.Left), 0);
                                 gadget.start();
                             }
                         }

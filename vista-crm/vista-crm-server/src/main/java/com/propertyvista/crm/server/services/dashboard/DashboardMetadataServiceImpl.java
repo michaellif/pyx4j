@@ -47,7 +47,7 @@ public class DashboardMetadataServiceImpl extends AbstractMetadataServiceImpl im
     }
 
     @Override
-    public void downloadDashboard(final AsyncCallback<String> callback, VoidSerializable none, Key entityId) {
+    public void downloadBoard(final AsyncCallback<String> callback, VoidSerializable none, Key entityId) {
         DashboardMetadata result = EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(DashboardMetadata.class, entityId));
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {

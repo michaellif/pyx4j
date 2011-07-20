@@ -38,8 +38,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.widgets.client.dashboard.Dashboard;
-import com.pyx4j.widgets.client.dashboard.Dashboard.Layout;
 import com.pyx4j.widgets.client.dashboard.IGadget;
+import com.pyx4j.widgets.client.dashboard.BoardLayout;
 
 import com.propertyvista.admin.client.resources.AdminImages;
 import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;
@@ -222,35 +222,35 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
         }
 
         public void setLayout1() {
-            if (dashboard.setLayout(Layout.One)) {
+            if (dashboard.setLayout(BoardLayout.One)) {
                 setDefaultImages();
                 layout1.setResource(AdminImages.INSTANCE.dashboardLayout1_1());
             }
         }
 
         public void setLayout12() {
-            if (dashboard.setLayout(Layout.Two12)) {
+            if (dashboard.setLayout(BoardLayout.Two12)) {
                 setDefaultImages();
                 layout12.setResource(AdminImages.INSTANCE.dashboardLayout12_1());
             }
         }
 
         public void setLayout21() {
-            if (dashboard.setLayout(Layout.Two21)) {
+            if (dashboard.setLayout(BoardLayout.Two21)) {
                 setDefaultImages();
                 layout21.setResource(AdminImages.INSTANCE.dashboardLayout21_1());
             }
         }
 
         public void setLayout22() {
-            if (dashboard.setLayout(Layout.Two11)) {
+            if (dashboard.setLayout(BoardLayout.Two11)) {
                 setDefaultImages();
                 layout22.setResource(AdminImages.INSTANCE.dashboardLayout22_1());
             }
         }
 
         public void setLayout3() {
-            if (dashboard.setLayout(Layout.Three)) {
+            if (dashboard.setLayout(BoardLayout.Three)) {
                 setDefaultImages();
                 layout3.setResource(AdminImages.INSTANCE.dashboardLayout3_1());
             }

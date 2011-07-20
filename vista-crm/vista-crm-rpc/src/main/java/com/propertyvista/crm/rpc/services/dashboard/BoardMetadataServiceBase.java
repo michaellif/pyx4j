@@ -7,12 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-28
- * @author vlads
+ * Created on 2011-04-22
+ * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.dashboard;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface ReportMetadataService extends BoardMetadataServiceBase {
+import com.pyx4j.commons.Key;
+import com.pyx4j.rpc.shared.VoidSerializable;
+
+public interface BoardMetadataServiceBase extends AbstractMetadataService {
+
+    void downloadBoard(final AsyncCallback<String> callback, VoidSerializable none, Key entityId);
 }
