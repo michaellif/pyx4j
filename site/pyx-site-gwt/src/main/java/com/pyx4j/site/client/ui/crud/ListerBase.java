@@ -238,9 +238,9 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         if (show) {
             ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
             fillAvailableColumnDescriptors(columnDescriptors, listPanel.proto());
-            listPanel.getDataTable().setHasColumnSelector(columnDescriptors);
+            listPanel.getDataTable().setColumnSelector(columnDescriptors);
         } else {
-            listPanel.getDataTable().setHasColumnSelector(null);
+            listPanel.getDataTable().setColumnSelector(null);
         }
     }
 
