@@ -92,6 +92,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private boolean checkboxColumnShown = false;
 
+    private boolean markSelectedRow = true;
+
     private final List<SelectionCheckBox> selectionCheckBoxes = new ArrayList<SelectionCheckBox>();
 
     private SelectionCheckBox selectionCheckBoxAll;
@@ -280,14 +282,14 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     protected void setSelectedRow(int selectedRow) {
 
-        if (getSelectedRow() >= 0) {
+        if (isMarkSelectedRow() && getSelectedRow() >= 0) {
             Element previous = getRowFormatter().getElement(this.selectedRow + 1); // raw table row index - including the header!...
             UIObject.setStyleName(previous, BASE_NAME + StyleSuffix.Row + "-" + DataTable.StyleDependent.selected.name(), false);
         }
 
         this.selectedRow = selectedRow; // actual table row index
 
-        if (getSelectedRow() >= 0) {
+        if (isMarkSelectedRow() && getSelectedRow() >= 0) {
             Element current = getRowFormatter().getElement(this.selectedRow + 1); // raw table row index - including the header!...
             UIObject.setStyleName(current, BASE_NAME + StyleSuffix.Row + "-" + DataTable.StyleDependent.selected.name(), true);
         }
@@ -353,6 +355,14 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 }
             }
         }
+    }
+
+    public boolean isMarkSelectedRow() {
+        return markSelectedRow;
+    }
+
+    public void setMarkSelectedRow(boolean markSelectedRow) {
+        this.markSelectedRow = markSelectedRow;
     }
 
     public boolean isColumnClickSorting() {
