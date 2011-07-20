@@ -67,8 +67,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
             num++;
         }
 
-        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantList.class).tenants(), num, proto(PotentialTenantInfo.class).person().name()
-                .firstName())));
+        assertNotPresent(D.id(proto(PotentialTenantList.class).tenants(), num, proto(PotentialTenantInfo.class).person().name().firstName()));
 
         if (doSave) {
             saveAndContinue();
@@ -159,8 +158,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
             assertEmContactsForm(D.id(tenant.emergencyContacts(), row), detach(contact));
             row++;
         }
-        assertFalse(selenium
-                .isElementPresent(D.id(proto(PotentialTenantInfo.class).emergencyContacts(), row, proto(EmergencyContact.class).name().firstName())));
+        assertNotPresent(D.id(proto(PotentialTenantInfo.class).emergencyContacts(), row, proto(EmergencyContact.class).name().firstName()));
     }
 
     protected void assertIAddressForm(IDebugId formDebugId, IAddress address) {
@@ -277,7 +275,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
             verifyGuarantor(debugID, detach(guarantor));
             row++;
         }
-        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantFinancial.class).guarantors(), row, proto(TenantGuarantor.class).name().firstName())));
+        assertNotPresent(D.id(proto(PotentialTenantFinancial.class).guarantors(), row, proto(TenantGuarantor.class).name().firstName()));
     }
 
     private void verifyIncome(IDebugId formDebugId, TenantIncome income) {
@@ -370,7 +368,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
             verifyPetRow(D.id(proto(Pets.class).pets(), num), detach(pet));
             num++;
         }
-        assertFalse(selenium.isElementPresent(D.id(proto(Pets.class).pets(), num, proto(Pet.class).type())));
+        assertNotPresent(D.id(proto(Pets.class).pets(), num, proto(Pet.class).type()));
         if (doSave) {
             saveAndContinue();
         }
