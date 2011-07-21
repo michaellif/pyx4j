@@ -38,7 +38,8 @@ public class SelectedBuildingLister extends ListerBase<BuildingDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().streetNumber()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketing().name()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().name(), i18n.tr("Marketing Name")));
     }
 
     @Override
@@ -50,7 +51,8 @@ public class SelectedBuildingLister extends ListerBase<BuildingDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().streetNumber()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketing().name()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().name(), i18n.tr("Marketing Name")));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().propertyCode()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().shape()));
@@ -69,8 +71,8 @@ public class SelectedBuildingLister extends ListerBase<BuildingDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.contacts().website()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.contacts().email()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.contacts().email().address(), i18n.tr("Email")));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.complex().name()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.complex()));
     }
 }

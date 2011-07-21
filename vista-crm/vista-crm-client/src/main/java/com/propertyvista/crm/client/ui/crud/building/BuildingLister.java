@@ -54,13 +54,16 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().province()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().country()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.contacts().email().address()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.contacts().email().address(), i18n.tr("Email")));
+
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().dateAquired()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().purchasePrice()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().lastAppraisalDate()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().lastAppraisalValue()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().currency()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketing().name()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().name(), i18n.tr("Marketing Name")));
     }
 
     @Override
@@ -85,7 +88,7 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().country()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.contacts().website()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.contacts().email().address()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.contacts().email().address(), i18n.tr("Email")));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().dateAquired()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().purchasePrice()));
@@ -94,9 +97,9 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().lastAppraisalValue()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().currency()));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketing().name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketing().description()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().name(), i18n.tr("Marketing Name")));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().description(), i18n.tr("Marketing Description")));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.complex().name()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.complex()));
     }
 }
