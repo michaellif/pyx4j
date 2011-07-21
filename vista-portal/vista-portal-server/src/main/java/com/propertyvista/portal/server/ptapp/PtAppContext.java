@@ -25,6 +25,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
+import com.propertyvista.common.domain.tenant.LeaseConcern;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
 import com.propertyvista.server.common.security.VistaContext;
@@ -48,6 +49,7 @@ public class PtAppContext extends VistaContext {
         return ((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey();
     }
 
+    @Deprecated
     public static Application getCurrentUserApplication() {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn())) {
@@ -63,7 +65,32 @@ public class PtAppContext extends VistaContext {
         return application;
     }
 
+    @Deprecated
     public static void setCurrentUserApplication(Application application) {
+        Visit v = Context.getVisit();
+        if ((v == null) || (!v.isUserLoggedIn())) {
+            log.trace("no session");
+            throw new UnRecoverableRuntimeException(i18n.tr("no session"));
+        }
+        ((PtUserVisit) v.getUserVisit()).setApplicationPrimaryKey(application.getPrimaryKey());
+    }
+
+    public static LeaseConcern getCurrentLeaseConcern() {
+        Visit v = Context.getVisit();
+        if ((v == null) || (!v.isUserLoggedIn())) {
+            log.trace("no session");
+            throw new UnRecoverableRuntimeException(i18n.tr("no session"));
+        }
+        if (((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey() == null) {
+            log.trace("no application selected");
+            throw new UserRuntimeException(i18n.tr("no application selected"));
+        }
+        LeaseConcern application = EntityFactory.create(LeaseConcern.class);
+        application.setPrimaryKey(((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey());
+        return application;
+    }
+
+    public static void setCurrentLeaseConcern(LeaseConcern application) {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn())) {
             log.trace("no session");

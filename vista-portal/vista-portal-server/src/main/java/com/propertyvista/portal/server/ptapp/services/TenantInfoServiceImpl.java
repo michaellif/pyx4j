@@ -19,39 +19,71 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.security.shared.SecurityViolationException;
 
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.common.domain.tenant.TenantInLease;
+import com.propertyvista.common.domain.tenant.TenantScreening;
+import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.ptapp.util.TenantConverter;
+import com.propertyvista.server.domain.generator.TenantSummaryDTO;
 
 public class TenantInfoServiceImpl extends ApplicationEntityServiceImpl implements TenantInfoService {
 
     private final static Logger log = LoggerFactory.getLogger(TenantInfoServiceImpl.class);
 
-    @Override
-    public void retrieve(AsyncCallback<PotentialTenantInfo> callback, Key tenantId) {
-        log.info("Retrieving summary for tenant {}", tenantId);
-        EntityQueryCriteria<PotentialTenantInfo> criteria = EntityQueryCriteria.create(PotentialTenantInfo.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().id(), tenantId));
-        PotentialTenantInfo tenant = secureRetrieve(criteria);
-        if (tenant == null) {
-            log.info("Creating new tenant");
-            tenant = EntityFactory.create(PotentialTenantInfo.class);
+    static TenantSummaryDTO getTenantSummaryDTO(Key tenantId) {
+        TenantSummaryDTO summary = EntityFactory.create(TenantSummaryDTO.class);
+
+        TenantInLease tenantInLease = PersistenceServicesFactory.getPersistenceService().retrieve(TenantInLease.class, tenantId);
+        if ((tenantInLease == null) || (!tenantInLease.lease().id().equals(PtAppContext.getCurrentLeaseConcern().id()))) {
+            throw new SecurityViolationException("Invalid data access");
+        }
+        summary.setPrimaryKey(tenantId);
+        summary.tenantInLease().set(tenantInLease);
+
+        summary.tenant().set(tenantInLease.tenant());
+        PersistenceServicesFactory.getPersistenceService().retrieve(summary.tenant());
+
+        TenantScreening tenantScreening;
+        {
+            EntityQueryCriteria<TenantScreening> criteria = EntityQueryCriteria.create(TenantScreening.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenantInLease.tenant()));
+            tenantScreening = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+            if (tenantScreening != null) {
+                summary.tenantScreening().set(tenantScreening);
+            } else {
+                summary.tenantScreening().tenant().set(summary.tenant());
+            }
         }
 
-        callback.onSuccess(tenant);
+        return summary;
     }
 
     @Override
-    public void save(AsyncCallback<PotentialTenantInfo> callback, PotentialTenantInfo tenant) {
-        //        log.info("Saving charges\n{}", PrintUtil.print(summary));
+    public void retrieve(AsyncCallback<TenantInfoEditorDTO> callback, Key tenantId) {
+        log.debug("Retrieving Info for tenant {}", tenantId);
+        TenantSummaryDTO summary = getTenantSummaryDTO(tenantId);
 
-        saveApplicationEntity(tenant);
+        TenantInfoEditorDTO dto = new TenantConverter.TenantInfoEditorConverter().dto(summary);
+        callback.onSuccess(dto);
+    }
 
-        callback.onSuccess(tenant);
+    @Override
+    public void save(AsyncCallback<TenantInfoEditorDTO> callback, TenantInfoEditorDTO dto) {
+        TenantSummaryDTO summary = getTenantSummaryDTO(dto.getPrimaryKey());
+
+        new TenantConverter.TenantInfoEditorConverter().toDbo(dto, summary);
+
+        PersistenceServicesFactory.getPersistenceService().merge(summary.tenant());
+        PersistenceServicesFactory.getPersistenceService().merge(summary.tenantScreening());
+
+        dto = new TenantConverter.TenantInfoEditorConverter().dto(summary);
+        callback.onSuccess(dto);
     }
 }

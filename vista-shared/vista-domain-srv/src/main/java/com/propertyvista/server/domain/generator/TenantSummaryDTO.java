@@ -7,17 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 19, 2011
+ * Created on Jul 20, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.ptapp.dto;
+package com.propertyvista.server.domain.generator;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.portal.domain.ptapp.Summary;
+import com.propertyvista.common.domain.tenant.Tenant;
+import com.propertyvista.common.domain.tenant.TenantInLease;
+import com.propertyvista.common.domain.tenant.TenantScreening;
 
 @Transient
-public interface ApplicationSummaryDTO extends Summary {
+public interface TenantSummaryDTO extends IEntity {
 
+    Tenant tenant();
+
+    TenantInLease tenantInLease();
+
+    TenantScreening tenantScreening();
 }

@@ -7,53 +7,51 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-07-06
- * @author Vlad
+ * Created on Jul 20, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.common.domain.tenant;
+package com.propertyvista.portal.domain.ptapp.dto;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.common.domain.person.Person;
+import com.propertyvista.common.domain.tenant.TenantScreeningSecureInfoFragment;
 import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.ApplicationDocument;
+import com.propertyvista.portal.domain.ptapp.EmergencyContact;
 import com.propertyvista.portal.domain.ptapp.LegalQuestions;
-import com.propertyvista.portal.domain.ptapp.TenantAsset;
-import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
-import com.propertyvista.portal.domain.ptapp.TenantIncome;
+import com.propertyvista.portal.domain.ptapp.Vehicle;
 
-public interface TenantScreening extends IEntity, TenantScreeningSecureInfoFragment {
+@Transient
+public interface TenantInfoEditorDTO extends IEntity, TenantScreeningSecureInfoFragment {
 
-    @Detached
-    Tenant tenant();
+    @EmbeddedEntity
+    Person person();
 
-    @Owned
+    IList<ApplicationDocument> documents();
+
+    @EmbeddedEntity
     Address currentAddress();
 
-    @Owned
+    @EmbeddedEntity
     Address previousAddress();
+
+    @Owned
+    @Length(3)
+    IList<Vehicle> vehicles();
 
     @Owned
     @Caption(name = "General Questions")
     LegalQuestions legalQuestions();
 
     @Owned
-    IList<ApplicationDocument> documents();
-
-    @Owned
     @Length(3)
-    IList<TenantIncome> incomes();
-
-    @Owned
-    @Length(3)
-    IList<TenantAsset> assets();
-
-    @Owned
-    @Length(2)
-    IList<TenantGuarantor> guarantors();
+    IList<EmergencyContact> emergencyContacts();
 }

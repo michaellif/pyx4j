@@ -19,22 +19,27 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.common.domain.tenant.TenantScreening;
 
+@Deprecated
 public interface PotentialTenantInfo extends PotentialTenant, TenantScreening {
 
     /**
      * TODO I think that it is better to have a list here since some forms may ask for
      * more than one previous address
      */
+    @Override
     @Owned
     Address currentAddress();
 
+    @Override
     @Owned
     Address previousAddress();
 
+    @Override
     @Owned
     @Length(3)
     IList<Vehicle> vehicles();
 
+    @Override
     @Owned
     @Length(3)
     IList<EmergencyContact> emergencyContacts();

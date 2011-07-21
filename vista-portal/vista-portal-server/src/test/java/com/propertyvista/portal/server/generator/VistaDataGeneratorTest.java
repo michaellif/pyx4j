@@ -17,10 +17,9 @@ import junit.framework.TestCase;
 
 import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.common.domain.User;
-import com.propertyvista.portal.domain.ptapp.Application;
-import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.server.TestUtil;
 import com.propertyvista.server.common.reference.SharedData;
+import com.propertyvista.server.domain.generator.ApplicationSummaryDTO;
 
 public class VistaDataGeneratorTest extends TestCase {
 
@@ -35,21 +34,19 @@ public class VistaDataGeneratorTest extends TestCase {
         SharedData.init();
         PTGenerator generator1 = new PTGenerator(seed1, PreloadConfig.createTest());
         User user1 = generator1.createUser(1);
-        Application application1 = generator1.createApplication(user1);
-        Summary summary1 = generator1.createSummary(application1, null);
 
-        // To some other data generation
+        ApplicationSummaryDTO summary1 = generator1.createSummary(user1, null);
+
+        // Do some other data generation
         PTGenerator generatorX = new PTGenerator(System.currentTimeMillis(), PreloadConfig.createTest());
         User userX = generatorX.createUser(1);
-        Application applicationX = generatorX.createApplication(userX);
-        generatorX.createSummary(applicationX, null);
+        generatorX.createSummary(userX, null);
 
         SharedData.init();
 
         PTGenerator generator2 = new PTGenerator(seed1, PreloadConfig.createTest());
         User user2 = generator2.createUser(1);
-        Application application2 = generator2.createApplication(user2);
-        Summary summary2 = generator2.createSummary(application2, null);
+        ApplicationSummaryDTO summary2 = generator2.createSummary(user2, null);
 
         TestUtil.assertEqual("Same data expected", summary1, summary2);
     }

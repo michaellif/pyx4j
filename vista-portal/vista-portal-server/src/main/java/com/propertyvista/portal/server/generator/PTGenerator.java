@@ -17,6 +17,7 @@ import gwtupload.server.exceptions.UploadActionException;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.GregorianCalendar;
 
 import org.slf4j.Logger;
@@ -40,14 +41,16 @@ import com.propertyvista.common.domain.contact.IAddress;
 import com.propertyvista.common.domain.contact.IAddressFull;
 import com.propertyvista.common.domain.contact.IAddressFull.StreetDirection;
 import com.propertyvista.common.domain.contact.IAddressFull.StreetType;
+import com.propertyvista.common.domain.person.Person;
 import com.propertyvista.common.domain.ref.PetType;
 import com.propertyvista.common.domain.ref.Province;
 import com.propertyvista.common.domain.tenant.Tenant.Type;
+import com.propertyvista.common.domain.tenant.TenantInLease;
+import com.propertyvista.common.domain.tenant.TenantScreening;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.ptapp.Address;
-import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.ApplicationDocument;
-import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.EmergencyContact;
@@ -56,14 +59,8 @@ import com.propertyvista.portal.domain.ptapp.IncomeSource;
 import com.propertyvista.portal.domain.ptapp.LegalQuestions;
 import com.propertyvista.portal.domain.ptapp.Pet;
 import com.propertyvista.portal.domain.ptapp.Pet.WeightUnit;
-import com.propertyvista.portal.domain.ptapp.Pets;
-import com.propertyvista.portal.domain.ptapp.PotentialTenant.Relationship;
-import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.domain.ptapp.Summary;
-import com.propertyvista.portal.domain.ptapp.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.TenantAsset;
 import com.propertyvista.portal.domain.ptapp.TenantAsset.AssetType;
 import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
@@ -75,12 +72,12 @@ import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.ptapp.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.server.preloader.PreloadPT;
 import com.propertyvista.portal.server.preloader.RandomUtil;
-import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
-import com.propertyvista.portal.server.ptapp.services.ApplicationServiceImpl;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 import com.propertyvista.server.domain.UserCredential;
+import com.propertyvista.server.domain.generator.ApplicationSummaryDTO;
+import com.propertyvista.server.domain.generator.TenantSummaryDTO;
 
 public class PTGenerator {
 
@@ -88,7 +85,7 @@ public class PTGenerator {
 
     private final long seed;
 
-    private PreloadConfig config;
+    private final PreloadConfig config;
 
     // TODO this seed might be an optional thing (come from config)
     public PTGenerator(long seed, PreloadConfig config) {
@@ -105,14 +102,15 @@ public class PTGenerator {
         return user;
     }
 
-    public Summary createSummary(Application application, AptUnit selectedUnit) {
-        Summary summary = EntityFactory.create(Summary.class);
-        summary.application().set(application);
-        summary.unitSelection().set(createUnitSelection(application, selectedUnit));
-        summary.tenantList().set(createPotentialTenantList(application));
-        createTenantFinancials(summary.tenantFinancials(), summary.tenantList());
-        summary.pets().set(createPets(application));
-        summary.charges().set(createCharges(summary, selectedUnit));
+    public ApplicationSummaryDTO createSummary(User user, AptUnit selectedUnit) {
+        ApplicationSummaryDTO summary = EntityFactory.create(ApplicationSummaryDTO.class);
+        summary.lease().status().setValue(Lease.Status.ApplicationCreated);
+
+        createUnitSelection(summary.unitSelection(), selectedUnit);
+        createTenantList(user, summary.tenants());
+
+        createPets(summary.lease().pets());
+        //summary.charges().set(createCharges(summary, selectedUnit));
 
         return summary;
     }
@@ -122,7 +120,7 @@ public class PTGenerator {
 
         Charges charges = EntityFactory.create(Charges.class);
         charges.application().set(summary.application());
-        ChargesServerCalculation.updateChargesFromObjects(charges, summary.unitSelection(), selectedUnit, summary.tenantList(), summary.pets());
+        ///ChargesServerCalculation.updateChargesFromObjects(charges, summary.unitSelection(), selectedUnit, summary.tenantList(), summary.pets());
         return charges;
     }
 
@@ -254,9 +252,7 @@ public class PTGenerator {
         }
     }
 
-    private Pets createPets(Application application) {
-        Pets pets = EntityFactory.create(Pets.class);
-        pets.application().set(application);
+    private void createPets(IList<Pet> pets) {
 
         int maxPets;
         if (Math.abs(this.seed) < 1000) {
@@ -286,9 +282,9 @@ public class PTGenerator {
             // charge line
             pet.chargeLine().set(DomainUtil.createChargeLine(ChargeType.petCharge, 20d + RandomUtil.randomInt(100)));
 
-            pets.pets().add(pet);
+            pets.add(pet);
         }
-        return pets;
+
     }
 
     public void populateAddress(IAddress address) {
@@ -354,149 +350,96 @@ public class PTGenerator {
         return address;
     }
 
-    private void createTenantFinancials(IList<SummaryPotentialTenantFinancial> tenantFinancials, PotentialTenantList tenants) {
-        for (PotentialTenantInfo tenantInfo : tenants.tenants()) {
-            SummaryPotentialTenantFinancial summaryTenantFinancial = EntityFactory.create(SummaryPotentialTenantFinancial.class);
-            summaryTenantFinancial.tenantFinancial().set(createFinancialInfo(tenantInfo));
-            tenantFinancials.add(summaryTenantFinancial);
-        }
-    }
-
-    public PotentialTenantFinancial createFinancialInfo(PotentialTenantInfo tenant) {
-        assert (tenant.application() != null);
-        PotentialTenantFinancial tenantFinancial = EntityFactory.create(PotentialTenantFinancial.class);
-
-        tenantFinancial.application().set(tenant.application());
-        tenantFinancial.id().set(tenant.id());
-        tenantFinancial.setPrimaryKey(tenant.getPrimaryKey());
-
-        for (int i = 0; i < RandomUtil.randomInt(2); i++) {
-            TenantIncome income = EntityFactory.create(TenantIncome.class);
-
-            income.incomeSource().setValue(IncomeSource.fulltime);
-            income.employer().set(createEmployer());
-            //            income. monthlyAmount().setValue(DomainUtil.createMoney(300d + RandomUtil.randomInt(4000)).getValue());
-
-            //income.active().setValue(RandomUtil.randomBoolean());
-
-            if (IncomeSource.fulltime.equals(income.incomeSource().getValue())) {
-                ApplicationDocument applicationDocument = createApplicationDocument(tenant, "doc-income" + RandomUtil.randomInt(3) + ".jpg",
-                        ApplicationDocument.DocumentType.income);
-                income.documents().add(applicationDocument);
-            }
-
-            tenantFinancial.incomes().add(income);
-        }
-
-        int minAssets = 0;
-        if (tenantFinancial.incomes().size() == 0) {
-            minAssets = 1;
-        }
-        for (int i = 0; i < minAssets + RandomUtil.randomInt(3); i++) {
-            TenantAsset asset = EntityFactory.create(TenantAsset.class);
-
-            asset.assetType().setValue(RandomUtil.random(AssetType.values()));
-            asset.percent().setValue((double) RandomUtil.randomInt(100));
-            asset.assetValue().setValue(DomainUtil.createMoney(100d + RandomUtil.randomInt(10000)).getValue());
-
-            tenantFinancial.assets().add(asset);
-        }
-
-        if (tenant.relationship().getValue() == Relationship.Son || tenant.relationship().getValue() == Relationship.Daughter) {
-            for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-                TenantGuarantor guarantor = EntityFactory.create(TenantGuarantor.class);
-                guarantor.name().firstName().setValue(DataGenerator.randomFirstName());
-                guarantor.name().lastName().setValue(DataGenerator.randomLastName());
-                guarantor.relationship().setValue(RandomUtil.random(TenantGuarantor.Relationship.values()));
-                guarantor.birthDate().setValue(RandomUtil.randomLogicalDate(1960, 2011 - 18));
-                guarantor.email().setValue(RandomUtil.randomPersonEmail(guarantor));
-                tenantFinancial.guarantors().add(guarantor);
-            }
-        }
-
-        return tenantFinancial;
-    }
-
-    public PotentialTenantList createPotentialTenantList(Application application) {
-        PotentialTenantList tenants = EntityFactory.create(PotentialTenantList.class);
-        tenants.application().set(application);
-
+    private void createTenantList(User user, IList<TenantSummaryDTO> list) {
         int maxTenants = config.getNumPotentialTenants();
         if (Math.abs(this.seed) > 1000) {
             maxTenants = 1 + RandomUtil.randomInt(5);
         }
 
         for (int i = 0; i < maxTenants; i++) {
-            PotentialTenantInfo tenantInfo = createPotentialTenantInfo(application, i);
-            tenants.tenants().add(tenantInfo);
+            TenantSummaryDTO tenantInfo = createTenantSummary(user, i);
+            list.add(tenantInfo);
         }
-        return tenants;
     }
 
-    private void populatePotentialTenant(PotentialTenantInfo pt, Relationship relationship, Status status) {
+    private TenantSummaryDTO createTenantSummary(User user, int index) {
+        TenantSummaryDTO tenantSummary = EntityFactory.create(TenantSummaryDTO.class);
 
-        pt.type().setValue(Type.person);
-        pt.person().name().firstName().setValue(DataGenerator.randomFirstName());
-        pt.person().name().lastName().setValue(DataGenerator.randomLastName());
-        if (status == Status.Applicant) {
-            pt.person().name().middleName().setValue("");
-        } else {
-            pt.person().name().middleName().setValue(RandomUtil.randomInt(100) % 7 == 0 ? "M" : "");
-        }
-
-        pt.person().birthDate().setValue(RandomUtil.randomLogicalDate(1930, 1980));
-        pt.person().homePhone().setValue(RandomUtil.randomPhone());
-        pt.person().mobilePhone().setValue(RandomUtil.randomPhone());
-        pt.person().workPhone().setValue(RandomUtil.randomPhone());
-
-        pt.person().email().setValue(RandomUtil.randomPersonEmail(pt.person()));
-
-        pt.payment().setValue(1.0d + RandomUtil.randomInt(3000));
-
-        if (relationship == Relationship.Daughter || relationship == Relationship.Son) {
-            pt.status().setValue(Status.Dependant);
-        }
-        pt.takeOwnership().setValue(RandomUtil.randomBoolean());
-    }
-
-    private PotentialTenantInfo createPotentialTenantInfo(Application application, int index) {
-        PotentialTenantInfo pti = EntityFactory.create(PotentialTenantInfo.class);
-        pti.application().set(application);
+        // Join the objects
+        tenantSummary.tenantInLease().tenant().set(tenantSummary.tenant());
+        tenantSummary.tenantScreening().tenant().set(tenantSummary.tenant());
 
         // first tenant must always be an applicant
         if (index == 0) {
-            pti.status().setValue(Status.Applicant);
+            tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.Applicant);
+            tenantSummary.tenant().user().set(user);
         } else if (index == 1) {
-            pti.status().setValue(Status.CoApplicant);
+            tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.CoApplicant);
         } else if (index == 2) {
-            pti.status().setValue(Status.CoApplicant);
+            tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.CoApplicant);
         } else {
-            pti.status().setValue(Status.Dependant);
+            tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.Dependant);
+        }
+        tenantSummary.tenantInLease().relationship().setValue(RandomUtil.randomEnum(TenantInLease.Relationship.class));
+        tenantSummary.tenantInLease().payment().setValue(1.0d + RandomUtil.randomInt(3000));
+
+        if (EnumSet.of(TenantInLease.Relationship.Daughter, TenantInLease.Relationship.Son).contains(tenantSummary.tenantInLease().relationship().getValue())) {
+            tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.Dependant);
+        }
+        tenantSummary.tenantInLease().takeOwnership().setValue(RandomUtil.randomBoolean());
+
+        // Tenant as person
+        tenantSummary.tenant().type().setValue(Type.person);
+        Person person = tenantSummary.tenant().person();
+        person.name().firstName().setValue(DataGenerator.randomFirstName());
+        person.name().lastName().setValue(DataGenerator.randomLastName());
+        if (index == 0) {
+            person.name().middleName().setValue("");
+        } else {
+            person.name().middleName().setValue(RandomUtil.randomInt(100) % 7 == 0 ? "M" : "");
         }
 
-        pti.relationship().setValue(RandomUtil.random(DemoData.RELATIONSHIPS));
+        person.birthDate().setValue(RandomUtil.randomLogicalDate(1930, 1980));
+        person.homePhone().setValue(RandomUtil.randomPhone());
+        person.mobilePhone().setValue(RandomUtil.randomPhone());
+        person.workPhone().setValue(RandomUtil.randomPhone());
 
-        populatePotentialTenant(pti, pti.relationship().getValue(), pti.status().getValue());
+        person.email().setValue(RandomUtil.randomPersonEmail(person));
 
         if (index == 0) {
-            pti.person().email().setValue(application.user().email().getValue());
+            person.email().setValue(user.email().getValue());
         }
 
-        String driversLicense = "JTVMX" + RandomUtil.randomInt(10) + "VMIEK";
-        pti.driversLicense().setValue(driversLicense);
-        pti.driversLicenseState().set(RandomUtil.random(SharedData.getProvinces()));
+        EmergencyContact ec1 = createEmergencyContact();
+        tenantSummary.tenant().emergencyContacts().add(ec1);
 
-        pti.notCanadianCitizen().setValue(RandomUtil.randomBoolean());
-        if (pti.notCanadianCitizen().isBooleanTrue()) {
+        EmergencyContact ec2 = createEmergencyContact();
+        tenantSummary.tenant().emergencyContacts().add(ec2);
+
+        for (int i = 0; i < RandomUtil.randomInt(3); i++) {
+            Vehicle vehicle = createVehicle();
+            tenantSummary.tenant().vehicles().add(vehicle);
+        }
+
+        // Screening
+
+        String driversLicense = "JTVMX" + RandomUtil.randomInt(10) + "VMIEK";
+
+        tenantSummary.tenantScreening().driversLicense().setValue(driversLicense);
+        tenantSummary.tenantScreening().driversLicenseState().set(RandomUtil.random(SharedData.getProvinces()));
+
+        tenantSummary.tenantScreening().notCanadianCitizen().setValue(RandomUtil.randomBoolean());
+        if (tenantSummary.tenantScreening().notCanadianCitizen().isBooleanTrue()) {
             ApplicationDocument.DocumentType documentType = ApplicationDocument.DocumentType.securityInfo;
-            pti.documents().add(createApplicationDocument(pti, "doc-security" + RandomUtil.randomInt(3) + ".jpg", documentType));
+            //TODO
+            //tenantSummary.tenantScreening().documents().add(createApplicationDocument(pti, "doc-security" + RandomUtil.randomInt(3) + ".jpg", documentType));
         } else {
-            pti.secureIdentifier().setValue("649 951 282");
+            tenantSummary.tenantScreening().secureIdentifier().setValue("649 951 282");
         }
 
         Address currentAddress = createAddress();
         currentAddress.moveOutDate().setValue(RandomUtil.randomLogicalDate(2012, 2013)); // this has to be in the future
-        pti.currentAddress().set(currentAddress);
+        tenantSummary.tenantScreening().currentAddress().set(currentAddress);
 
         Address previousAddress = createAddress();
         // moveOut date for previous address is the same as the moveIn date for current address
@@ -509,23 +452,61 @@ public class PTGenerator {
         log.debug("Moving from {} to {}", moveOut, moveIn);
         previousAddress.moveOutDate().setValue(new LogicalDate(moveOut.getTime()));
         previousAddress.moveInDate().setValue(new LogicalDate(moveIn.getTime()));
-        pti.previousAddress().set(previousAddress);
-
-        for (int i = 0; i < RandomUtil.randomInt(3); i++) {
-            Vehicle vehicle = createVehicle();
-            pti.vehicles().add(vehicle);
-        }
+        tenantSummary.tenantScreening().previousAddress().set(previousAddress);
 
         LegalQuestions legalQuestions = createLegalQuestions();
-        pti.legalQuestions().set(legalQuestions);
+        tenantSummary.tenantScreening().legalQuestions().set(legalQuestions);
 
-        EmergencyContact ec1 = createEmergencyContact();
-        pti.emergencyContacts().add(ec1);
+        createFinancialInfo(tenantSummary.tenantScreening());
 
-        EmergencyContact ec2 = createEmergencyContact();
-        pti.emergencyContacts().add(ec2);
+        return tenantSummary;
+    }
 
-        return pti;
+    private void createFinancialInfo(TenantScreening tenantScreening) {
+
+        for (int i = 0; i < RandomUtil.randomInt(2); i++) {
+            TenantIncome income = EntityFactory.create(TenantIncome.class);
+
+            income.incomeSource().setValue(IncomeSource.fulltime);
+            income.employer().set(createEmployer());
+            //            income. monthlyAmount().setValue(DomainUtil.createMoney(300d + RandomUtil.randomInt(4000)).getValue());
+
+            //income.active().setValue(RandomUtil.randomBoolean());
+
+            //TODO
+//            if (IncomeSource.fulltime.equals(income.incomeSource().getValue())) {
+//                ApplicationDocument applicationDocument = createApplicationDocument(tenant, "doc-income" + RandomUtil.randomInt(3) + ".jpg",
+//                        ApplicationDocument.DocumentType.income);
+//                income.documents().add(applicationDocument);
+//            }
+
+            tenantScreening.incomes().add(income);
+        }
+
+        int minAssets = 0;
+        if (tenantScreening.incomes().size() == 0) {
+            minAssets = 1;
+        }
+        for (int i = 0; i < minAssets + RandomUtil.randomInt(3); i++) {
+            TenantAsset asset = EntityFactory.create(TenantAsset.class);
+
+            asset.assetType().setValue(RandomUtil.random(AssetType.values()));
+            asset.percent().setValue((double) RandomUtil.randomInt(100));
+            asset.assetValue().setValue(DomainUtil.createMoney(100d + RandomUtil.randomInt(10000)).getValue());
+
+            tenantScreening.assets().add(asset);
+        }
+
+        for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
+            TenantGuarantor guarantor = EntityFactory.create(TenantGuarantor.class);
+            guarantor.name().firstName().setValue(DataGenerator.randomFirstName());
+            guarantor.name().lastName().setValue(DataGenerator.randomLastName());
+            guarantor.relationship().setValue(RandomUtil.random(TenantGuarantor.Relationship.values()));
+            guarantor.birthDate().setValue(RandomUtil.randomLogicalDate(1960, 2011 - 18));
+            guarantor.email().setValue(RandomUtil.randomPersonEmail(guarantor));
+            tenantScreening.guarantors().add(guarantor);
+        }
+
     }
 
     public static User createUser() {
@@ -544,22 +525,7 @@ public class PTGenerator {
         return user;
     }
 
-    public Application createApplication(User user) {
-        Application application = EntityFactory.create(Application.class);
-        application.user().set(user);
-        return application;
-    }
-
-    public ApplicationProgress createApplicationProgress(Application application) {
-        ApplicationProgress progress = ApplicationServiceImpl.createApplicationProgress();
-        progress.application().set(application);
-        return progress;
-    }
-
-    public UnitSelection createUnitSelection(Application application, AptUnit selectedUnit) {
-        UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
-        unitSelection.application().set(application);
-
+    private void createUnitSelection(UnitSelection unitSelection, AptUnit selectedUnit) {
         // unit selection criteria
         UnitSelectionCriteria criteria = EntityFactory.create(UnitSelectionCriteria.class);
         criteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
@@ -584,7 +550,5 @@ public class PTGenerator {
 // TODO: there is no list of MarketRent in Unit now!?.             
 //            unitSelection.selectedLeaseTerm().set(RandomUtil.random(selectedUnit.marketRent()).leaseTerm());
         }
-
-        return unitSelection;
     }
 }

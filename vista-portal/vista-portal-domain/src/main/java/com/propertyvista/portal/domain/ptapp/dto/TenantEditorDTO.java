@@ -7,24 +7,34 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-03-17
- * @author Vlad
+ * Created on Jul 20, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.ptapp;
+package com.propertyvista.portal.domain.ptapp.dto;
 
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
+import com.propertyvista.common.domain.person.Person;
+import com.propertyvista.common.domain.tenant.TenantInLeaseFragment;
 
 @Transient
-public interface SummaryPotentialTenantFinancial extends IEntity {
+public interface TenantEditorDTO extends IEntity, TenantInLeaseFragment {
 
-    IPrimitive<String> tenantFullName();
+    @EmbeddedEntity
+    Person person();
 
-    @Owned
-    TenantFinancialEditorDTO tenantFinancial();
+    public static enum ChangeStatus {
+
+        New,
+
+        Updated;
+
+    }
+
+    IPrimitive<ChangeStatus> changeStatus();
+
 }

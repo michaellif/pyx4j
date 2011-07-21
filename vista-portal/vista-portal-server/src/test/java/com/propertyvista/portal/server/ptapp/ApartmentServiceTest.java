@@ -114,7 +114,7 @@ public class ApartmentServiceTest extends VistaDBTestBase {
 
         // select the first unit
         PTGenerator generator = new PTGenerator(1l, PreloadConfig.createTest());
-        UnitSelection generatedUnitSelection = generator.createUnitSelection(application, null);
+        UnitSelection generatedUnitSelection = null;//TODO generator.createUnitSelection(application, null);
         Assert.assertNull("Id not set yet", generatedUnitSelection.id().getValue());
         generatedUnitSelection.id().setValue(unitSelection.id().getValue()); // copy ids
         Assert.assertEquals("Ids", generatedUnitSelection.id().getValue(), unitSelection.id().getValue());

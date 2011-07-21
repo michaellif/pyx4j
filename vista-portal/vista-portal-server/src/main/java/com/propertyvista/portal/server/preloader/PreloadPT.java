@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -29,26 +28,25 @@ import com.propertyvista.common.domain.contact.IAddress;
 import com.propertyvista.domain.tenant.TenantApplication;
 import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.Application;
-import com.propertyvista.portal.domain.ptapp.ApplicationDocument;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.ChargeLine;
 import com.propertyvista.portal.domain.ptapp.ChargeLineList;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.EmergencyContact;
 import com.propertyvista.portal.domain.ptapp.Pets;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.domain.ptapp.Summary;
-import com.propertyvista.portal.domain.ptapp.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.TenantChargeList;
-import com.propertyvista.portal.domain.ptapp.TenantIncome;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
 import com.propertyvista.portal.server.generator.PTGenerator;
 import com.propertyvista.portal.server.ptapp.services.ApplicationDebug;
+import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
 import com.propertyvista.server.domain.ApplicationDocumentData;
+import com.propertyvista.server.domain.generator.ApplicationSummaryDTO;
+import com.propertyvista.server.domain.generator.TenantSummaryDTO;
 
 public class PreloadPT extends BaseVistaDataPreloader {
 
@@ -87,9 +85,9 @@ public class PreloadPT extends BaseVistaDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(PotentialTenantList.class, PotentialTenantFinancial.class, PotentialTenantInfo.class, Charges.class, ChargeLineList.class,
-                    ChargeLine.class, TenantChargeList.class, TenantCharge.class, Application.class, UnitSelection.class, ApplicationProgress.class,
-                    TenantApplication.class, Pets.class, EmergencyContact.class, Summary.class, Address.class, ApplicationDocumentData.class);
+            return deleteAll(PotentialTenantList.class, PotentialTenantInfo.class, Charges.class, ChargeLineList.class, ChargeLine.class,
+                    TenantChargeList.class, TenantCharge.class, Application.class, UnitSelection.class, ApplicationProgress.class, TenantApplication.class,
+                    Pets.class, EmergencyContact.class, Summary.class, Address.class, ApplicationDocumentData.class);
         } else {
             return "This is production";
         }
@@ -146,16 +144,11 @@ public class PreloadPT extends BaseVistaDataPreloader {
         user = loadUser(DemoData.PRELOADED_USERNAME);
 
         PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, PreloadConfig.createTest());
-        Application application = generator.createApplication(user);
-        TenantApplication tenantApplication = EntityFactory.create(TenantApplication.class);
-        tenantApplication.application().set(application);
-        tenantApplication.status().setValue(TenantApplication.Status.created);
-
-        ApplicationProgress progress = generator.createApplicationProgress(application);
 
         // TODO retrieve some unit
-        Summary summary = generator.createSummary(application, null);
-        persistFullApplication(summary, tenantApplication, progress, generator);
+        ApplicationSummaryDTO summary = generator.createSummary(user, null);
+
+        persistFullApplication(summary, generator);
         //List<ApplicationDocument> adocs = PersistenceServicesFactory.getPersistenceService().query(EntityQueryCriteria.create(ApplicationDocument.class));
         //for(ApplicationDocument adoc : adocs) {
         //    persist(generator.createApplicationDocumentData(adoc.filename().getValue(), adoc.id().getValue()));
@@ -165,46 +158,61 @@ public class PreloadPT extends BaseVistaDataPreloader {
         return b.toString();
     }
 
-    private void persistFullApplication(Summary summary, TenantApplication tenantApplication, ApplicationProgress progress, PTGenerator generator) {
+    private void persistFullApplication(ApplicationSummaryDTO summary, PTGenerator generator) {
 
-        persist(summary.application());
-        persist(tenantApplication);
-        persist(progress);
-        persist(summary.unitSelection());
-        persist(summary.tenantList());
-        persist(summary.pets());
+        PersistenceServicesFactory.getPersistenceService().persist(summary.lease().pets());
+        persist(summary.lease());
 
-        log.debug("Charges: " + VistaDataPrinter.print(summary.charges()));
-        persist(summary.charges());
+        for (TenantSummaryDTO tenantSummary : summary.tenants()) {
+            persist(tenantSummary.tenant());
 
-        for (int i = 0; i < summary.tenantFinancials().size(); i++) {
-            SummaryPotentialTenantFinancial financial = summary.tenantFinancials().get(i);
-            PotentialTenantInfo tenant = summary.tenantList().tenants().get(i);
+            tenantSummary.tenantInLease().lease().set(summary.lease());
+            persist(tenantSummary.tenantInLease());
+            persist(tenantSummary.tenantScreening());
 
-            financial.tenantFinancial().id().set(tenant.id());
-
-            for (TenantIncome income : financial.tenantFinancial().incomes()) {
-                for (ApplicationDocument applicationDocument : income.documents()) {
-                    ApplicationDocumentData applicationDocumentData = generator
-                            .createApplicationDocumentData(tenant, applicationDocument.filename().getValue());
-                    persist(applicationDocumentData);
-                    applicationDocument.dataId().set(applicationDocumentData.id());
-                    persist(applicationDocument);
-                }
-            }
-
-            persist(financial.tenantFinancial());
-
-            if (tenant.notCanadianCitizen().isBooleanTrue()) {
-                for (ApplicationDocument applicationDocument : tenant.documents()) {
-                    ApplicationDocumentData applicationDocumentData = generator
-                            .createApplicationDocumentData(tenant, applicationDocument.filename().getValue());
-                    persist(applicationDocumentData);
-                    applicationDocument.dataId().set(applicationDocumentData.id());
-                    persist(applicationDocument);
-                }
-            }
+            summary.lease().tenants().add(tenantSummary.tenantInLease());
         }
+        persist(summary.lease());
+
+        ApplicationProgress progress = ApplicationProgressMgr.createApplicationProgress();
+        progress.lease().set(summary.lease());
+        persist(progress);
+
+        summary.unitSelection().lease().set(summary.lease());
+        persist(summary.unitSelection());
+
+        //TODO
+//        log.debug("Charges: " + VistaDataPrinter.print(summary.charges()));
+//        persist(summary.charges());
+
+//        for (int i = 0; i < summary.tenantFinancials().size(); i++) {
+//            SummaryPotentialTenantFinancial financial = summary.tenantFinancials().get(i);
+//            PotentialTenantInfo tenant = summary.tenantList().tenants().get(i);
+//
+//            financial.tenantFinancial().id().set(tenant.id());
+//
+//            for (TenantIncome income : financial.tenantFinancial().incomes()) {
+//                for (ApplicationDocument applicationDocument : income.documents()) {
+//                    ApplicationDocumentData applicationDocumentData = generator
+//                            .createApplicationDocumentData(tenant, applicationDocument.filename().getValue());
+//                    persist(applicationDocumentData);
+//                    applicationDocument.dataId().set(applicationDocumentData.id());
+//                    persist(applicationDocument);
+//                }
+//            }
+//
+//            persist(financial.tenantFinancial());
+//
+//            if (tenant.notCanadianCitizen().isBooleanTrue()) {
+//                for (ApplicationDocument applicationDocument : tenant.documents()) {
+//                    ApplicationDocumentData applicationDocumentData = generator
+//                            .createApplicationDocumentData(tenant, applicationDocument.filename().getValue());
+//                    persist(applicationDocumentData);
+//                    applicationDocument.dataId().set(applicationDocumentData.id());
+//                    persist(applicationDocument);
+//                }
+//            }
+//        }
     }
 
     @Override

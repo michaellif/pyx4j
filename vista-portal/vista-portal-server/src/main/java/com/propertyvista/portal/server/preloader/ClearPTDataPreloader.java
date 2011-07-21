@@ -17,10 +17,10 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
 import com.propertyvista.portal.domain.ptapp.Application;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 
 public class ClearPTDataPreloader extends AbstractDataPreloader {
 
@@ -33,7 +33,7 @@ public class ClearPTDataPreloader extends AbstractDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(Application.class, UnitSelection.class, PotentialTenantList.class, PotentialTenantFinancial.class, PotentialTenantInfo.class);
+            return deleteAll(Application.class, UnitSelection.class, PotentialTenantList.class, TenantFinancialEditorDTO.class, PotentialTenantInfo.class);
         } else {
             return "This is production";
         }

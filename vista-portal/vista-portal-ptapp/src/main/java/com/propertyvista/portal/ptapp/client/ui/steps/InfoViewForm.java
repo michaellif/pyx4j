@@ -71,23 +71,23 @@ import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.Address.OwnedRented;
 import com.propertyvista.portal.domain.ptapp.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.domain.ptapp.EmergencyContact;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Vehicle;
+import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.portal.ptapp.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.portal.rpc.ptapp.BusinessRules;
 
-public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
+public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
 
-    private static I18n i18n = I18nFactory.getI18n(SummaryViewForm.class);
+    private static I18n i18n = I18nFactory.getI18n(InfoViewForm.class);
 
     private Widget previousAddressHeader;
 
     private ApplicationDocumentsFolderUploader fileUpload;
 
     public InfoViewForm() {
-        super(PotentialTenantInfo.class, new VistaEditorsComponentFactory());
+        super(TenantInfoEditorDTO.class, new VistaEditorsComponentFactory());
     }
 
     @Override
@@ -325,7 +325,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
     }
 
     @Override
-    public void populate(PotentialTenantInfo value) {
+    public void populate(TenantInfoEditorDTO value) {
         super.populate(value);
 
         enablePreviousAddress();

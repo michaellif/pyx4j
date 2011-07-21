@@ -24,7 +24,6 @@ import com.propertyvista.portal.domain.ptapp.ChargeLineSelectable;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.Pet;
 import com.propertyvista.portal.domain.ptapp.Pets;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.domain.ptapp.Summary;
@@ -35,6 +34,7 @@ import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
 import com.propertyvista.portal.domain.ptapp.TenantIncome;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.Vehicle;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 
 public class VistaDataPrinter {
 
@@ -144,7 +144,7 @@ public class VistaDataPrinter {
         return sb.toString();
     }
 
-    public static String print(PotentialTenantFinancial financial) {
+    public static String print(TenantFinancialEditorDTO financial) {
         StringBuilder sb = new StringBuilder();
 
         if (financial == null) {

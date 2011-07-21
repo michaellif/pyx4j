@@ -18,6 +18,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.propertyvista.common.domain.IUserEntity;
 import com.propertyvista.common.domain.financial.Money;
 
+@Deprecated
 public interface Application extends IEntity, IUserEntity {
 
     Money rent();

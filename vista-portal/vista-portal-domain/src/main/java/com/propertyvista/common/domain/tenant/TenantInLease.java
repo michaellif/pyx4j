@@ -13,11 +13,74 @@
  */
 package com.propertyvista.common.domain.tenant;
 
+import java.io.Serializable;
+
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
+import com.pyx4j.i18n.shared.Translation;
 
-public interface TenantInLease extends IEntity {
+public interface TenantInLease extends IEntity, TenantInLeaseFragment /* TODO IBoundToApplication ? */{
 
+    @Translatable
+    public static enum Relationship implements Serializable {
+
+        Spouse,
+
+        Son,
+
+        Daughter,
+
+        Mother,
+
+        Father,
+
+        GrandMother,
+
+        GrandFather,
+
+        Uncle,
+
+        Aunt,
+
+        Other;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    public static enum Status implements Serializable {
+
+        Applicant,
+
+        @Translation("Co-applicant")
+        CoApplicant,
+
+        Dependant;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    @ReadOnly
+    @Detached
+    @NotNull
+    @Indexed
+    LeaseConcern lease();
+
+    IPrimitive<Double> payment();
+
+    @Detached
+    @ReadOnly
     Tenant tenant();
 
-    //TODO move fields from PotentialTenant
 }

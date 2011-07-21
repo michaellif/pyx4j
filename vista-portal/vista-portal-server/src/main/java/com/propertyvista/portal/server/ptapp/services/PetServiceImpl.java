@@ -66,7 +66,7 @@ public class PetServiceImpl extends ApplicationEntityServiceImpl implements PetS
         saveApplicationEntity(pets);
 
         if (ChargesServerCalculation.needToUpdateChargesForPets(pets, existingPets)) {
-            ApplicationServiceImpl.invalidateChargesStep(pets.application());
+            ApplicationProgressMgr.invalidateChargesStep(pets.application());
         }
 
         loadTransientData(pets);

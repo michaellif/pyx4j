@@ -20,6 +20,8 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.common.domain.tenant.LeaseConcern;
+
 /**
  * Mark that IEntity is only bound to one PotentialTenant Application.
  * 
@@ -39,9 +41,15 @@ import com.pyx4j.entity.shared.IEntity;
 @AbstractEntity
 public interface IBoundToApplication extends IEntity {
 
+    @Detached
+    @NotNull
+    @Indexed
+    @Deprecated
+    Application application();
+
     @ReadOnly
     @Detached
     @NotNull
     @Indexed
-    Application application();
+    LeaseConcern lease();
 }

@@ -95,8 +95,8 @@ public class SummaryReportTest extends ReportsTestBase {
 
     private static Summary retreiveSummaryTodo() throws IOException {
         PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, PreloadConfig.createTest());
-        Application application = generator.createApplication(PTGenerator.createUser());
-        Summary summary = generator.createSummary(application, null);
+        // Application application = generator.createApplication(PTGenerator.createUser());
+        Summary summary = null;//TODOgenerator.createSummary(application, null);
         return summary;
     }
 

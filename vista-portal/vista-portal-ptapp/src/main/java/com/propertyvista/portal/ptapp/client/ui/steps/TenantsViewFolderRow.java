@@ -36,16 +36,16 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
-import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.common.domain.tenant.TenantInLease;
+import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
 import com.propertyvista.portal.domain.util.ValidationUtils;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.validators.OldAgeValidator;
 
-final class TenantsViewFolderRow extends CEntityFolderRowEditor<PotentialTenantInfo> {
+final class TenantsViewFolderRow extends CEntityFolderRowEditor<TenantEditorDTO> {
 
     TenantsViewFolderRow(List<EntityFolderColumnDescriptor> columns) {
-        super(PotentialTenantInfo.class, columns);
+        super(TenantEditorDTO.class, columns);
     }
 
     @SuppressWarnings("rawtypes")
@@ -81,8 +81,8 @@ final class TenantsViewFolderRow extends CEntityFolderRowEditor<PotentialTenantI
 
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                Status status = getValue().status().getValue();
-                if ((status == Status.Applicant) || (status == Status.CoApplicant)) {
+                TenantInLease.Status status = getValue().status().getValue();
+                if ((status == TenantInLease.Status.Applicant) || (status == TenantInLease.Status.CoApplicant)) {
                     // TODO I Believe that this is not correct, this logic has to be applied to Dependents as well, as per VISTA-273
                     return ValidationUtils.isOlderThen18(value);
                 } else {
@@ -101,8 +101,8 @@ final class TenantsViewFolderRow extends CEntityFolderRowEditor<PotentialTenantI
 
                 @Override
                 public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                    Status status = getValue().status().getValue();
-                    if ((status == null) || (status == Status.Dependant)) {
+                    TenantInLease.Status status = getValue().status().getValue();
+                    if ((status == null) || (status == TenantInLease.Status.Dependant)) {
                         if (ValidationUtils.isOlderThen18(event.getValue())) {
                             boolean currentEditableState = get(proto().status()).isEditable();
                             enableStatusAndOwnership();
@@ -116,12 +116,12 @@ final class TenantsViewFolderRow extends CEntityFolderRowEditor<PotentialTenantI
                 }
             });
 
-            get(proto().status()).addValueChangeHandler(new RevalidationTrigger<Status>(get(proto().person().birthDate())));
+            get(proto().status()).addValueChangeHandler(new RevalidationTrigger<TenantInLease.Status>(get(proto().person().birthDate())));
         }
     }
 
     @Override
-    public void populate(PotentialTenantInfo value) {
+    public void populate(TenantEditorDTO value) {
         super.populate(value);
 
         if (!isFirst() && !value.person().birthDate().isNull()) {
@@ -141,14 +141,14 @@ final class TenantsViewFolderRow extends CEntityFolderRowEditor<PotentialTenantI
         if (isFirst() && proto().status() == column.getObject()) {
             CTextField textComp = new CTextField();
             textComp.setEditable(false);
-            textComp.setValue(Status.Applicant.name());
+            textComp.setValue(TenantInLease.Status.Applicant.name());
             comp = textComp;
         } else {
             comp = super.createCell(column);
 
             if (proto().status() == column.getObject()) {
-                Collection<Status> status = EnumSet.allOf(Status.class);
-                status.remove(Status.Applicant);
+                Collection<TenantInLease.Status> status = EnumSet.allOf(TenantInLease.Status.class);
+                status.remove(TenantInLease.Status.Applicant);
                 ((CComboBox) comp).setOptions(status);
             }
         }
@@ -156,13 +156,13 @@ final class TenantsViewFolderRow extends CEntityFolderRowEditor<PotentialTenantI
     }
 
     @Override
-    public IFolderItemEditorDecorator<PotentialTenantInfo> createFolderItemDecorator() {
-        return new TableFolderItemEditorDecorator<PotentialTenantInfo>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+    public IFolderItemEditorDecorator<TenantEditorDTO> createFolderItemDecorator() {
+        return new TableFolderItemEditorDecorator<TenantEditorDTO>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
                 TenantsViewForm.i18n.tr("Remove person"), !isFirst());
     }
 
     private void setMandatoryDependant() {
-        get(proto().status()).setValue(Status.Dependant);
+        get(proto().status()).setValue(TenantInLease.Status.Dependant);
         get(proto().status()).setEditable(false);
 
         get(proto().takeOwnership()).setValue(true);

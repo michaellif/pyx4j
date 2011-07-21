@@ -23,15 +23,15 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.common.domain.media.Document;
+import com.propertyvista.common.domain.tenant.LeaseConcern;
 import com.propertyvista.common.domain.tenant.TenantInLease;
 import com.propertyvista.domain.financial.LeaseFinancialTerms;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.ChargeLine;
-import com.propertyvista.portal.domain.ptapp.Pets;
+import com.propertyvista.portal.domain.ptapp.Pet;
 
-public interface Lease extends IEntity {
+public interface Lease extends IEntity, LeaseConcern {
 
     @Translatable
     public enum Status {
@@ -56,10 +56,11 @@ public interface Lease extends IEntity {
 
     IPrimitive<Status> status();
 
-    Application application();
-
+    // double reference
     @Detached
     IList<TenantInLease> tenants();
+
+    IList<Pet> pets();
 
     // --------- OTHER Old Suff below needs verification, DO NOT USE it ---
 
@@ -93,8 +94,6 @@ public interface Lease extends IEntity {
     IList<ChargeLine> charges();
 
     IPrimitive<String> specialStatus();
-
-    IList<Pets> pets();
 
     // TODO : there are utilities in the Unit already... is it the same? 
     IList<Utility> utilities();

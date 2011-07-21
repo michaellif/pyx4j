@@ -11,17 +11,20 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.domain.ptapp;
+package com.propertyvista.portal.domain.ptapp.dto;
 
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-// TODO  Move to DTO and use data from TenantScreening
-@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = PotentialTenantInfo.class)
-public interface PotentialTenantFinancial extends IEntity, IBoundToApplication {
+import com.propertyvista.portal.domain.ptapp.TenantAsset;
+import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
+import com.propertyvista.portal.domain.ptapp.TenantIncome;
+
+@Transient
+public interface TenantFinancialEditorDTO extends IEntity {
 
     @Owned
     @Length(3)

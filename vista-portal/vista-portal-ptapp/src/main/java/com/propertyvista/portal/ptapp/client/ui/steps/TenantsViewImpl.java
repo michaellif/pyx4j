@@ -13,9 +13,9 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
 
-public class TenantsViewImpl extends WizardStepViewImpl<PotentialTenantList, TenantsViewPresenter> implements TenantsView {
+public class TenantsViewImpl extends WizardStepViewImpl<TenantListEditorDTO, TenantsViewPresenter> implements TenantsView {
 
     public TenantsViewImpl() {
         super(new TenantsViewForm());

@@ -19,9 +19,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.portal.domain.ptapp.IBoundToApplication;
-
-public interface AbstractWizardService<EditableEntity extends IEntity & IBoundToApplication> extends IService {
+public interface AbstractWizardService<EditableEntity extends IEntity> extends IService {
 
     public void retrieve(AsyncCallback<EditableEntity> callback, Key tenantId);
 

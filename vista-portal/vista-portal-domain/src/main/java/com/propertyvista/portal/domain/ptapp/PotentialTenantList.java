@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 //TODO  Move to DTO and use data from Lease
+@Deprecated
 public interface PotentialTenantList extends IEntity, IBoundToApplication {
 
     //TODO This would be TenantInLease

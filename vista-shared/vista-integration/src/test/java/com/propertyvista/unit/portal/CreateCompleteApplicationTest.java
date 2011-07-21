@@ -34,6 +34,7 @@ import com.propertyvista.common.domain.contact.IAddressFull;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.Address.OwnedRented;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.EmergencyContact;
 import com.propertyvista.portal.domain.ptapp.IEmploymentInfo;
@@ -43,7 +44,6 @@ import com.propertyvista.portal.domain.ptapp.IncomeInfoSelfEmployed;
 import com.propertyvista.portal.domain.ptapp.IncomeInfoStudentIncome;
 import com.propertyvista.portal.domain.ptapp.Pet;
 import com.propertyvista.portal.domain.ptapp.Pets;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.domain.ptapp.Summary;
@@ -314,7 +314,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         }
     }
 
-    private void enterFinancialForm(PotentialTenantFinancial tenantFin) {
+    private void enterFinancialForm(TenantFinancialEditorDTO tenantFin) {
         //incomes
         int num = 0;
         for (TenantIncome income : tenantFin.incomes()) {

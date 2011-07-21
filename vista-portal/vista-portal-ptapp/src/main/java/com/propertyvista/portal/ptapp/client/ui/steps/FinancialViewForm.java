@@ -52,9 +52,9 @@ import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.domain.financial.Money;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.TenantAsset;
 import com.propertyvista.portal.domain.ptapp.TenantAsset.AssetType;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
 import com.propertyvista.portal.domain.ptapp.TenantIncome;
 import com.propertyvista.portal.domain.util.ValidationUtils;
@@ -62,18 +62,18 @@ import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
-public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
+public class FinancialViewForm extends CEntityForm<TenantFinancialEditorDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(FinancialViewForm.class);
 
     private boolean summaryViewMode = false;
 
     public FinancialViewForm() {
-        super(PotentialTenantFinancial.class, new VistaEditorsComponentFactory());
+        super(TenantFinancialEditorDTO.class, new VistaEditorsComponentFactory());
     }
 
     public FinancialViewForm(IEditableComponentFactory factory) {
-        super(PotentialTenantFinancial.class, factory);
+        super(TenantFinancialEditorDTO.class, factory);
         summaryViewMode = true;
     }
 
@@ -126,15 +126,15 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
 
     @Override
     public void addValidations() {
-        this.addValueValidator(new EditableValueValidator<PotentialTenantFinancial>() {
+        this.addValueValidator(new EditableValueValidator<TenantFinancialEditorDTO>() {
 
             @Override
-            public boolean isValid(CEditableComponent<PotentialTenantFinancial, ?> component, PotentialTenantFinancial value) {
+            public boolean isValid(CEditableComponent<TenantFinancialEditorDTO, ?> component, TenantFinancialEditorDTO value) {
                 return (value.assets().size() > 0) || (value.incomes().size() > 0);
             }
 
             @Override
-            public String getValidationMessage(CEditableComponent<PotentialTenantFinancial, ?> component, PotentialTenantFinancial value) {
+            public String getValidationMessage(CEditableComponent<TenantFinancialEditorDTO, ?> component, TenantFinancialEditorDTO value) {
                 return i18n.tr("At least one source of income or one asset is required");
             }
         });

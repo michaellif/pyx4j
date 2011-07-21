@@ -49,7 +49,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         main.add(inject(proto().leaseID()), 15);
         main.add(inject(proto().unit()), 15);
-        main.add(inject(proto().application()), 7);
+        //main.add(inject(proto().application()), 7);
         main.add(inject(proto().leaseFrom()), 10);
         main.add(inject(proto().leaseTo()), 10);
         main.add(inject(proto().expectedMoveIn()), 10);

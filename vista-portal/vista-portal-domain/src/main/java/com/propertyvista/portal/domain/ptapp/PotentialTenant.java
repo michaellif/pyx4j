@@ -28,9 +28,11 @@ import com.propertyvista.common.domain.tenant.Tenant;
 
 //TODO This goes away and TenantInLease would be used
 @AbstractEntity
+@Deprecated
 public interface PotentialTenant extends Tenant, IBoundToApplication {
 
     @Translatable
+    @Deprecated
     public enum Relationship implements Serializable {
 
         Spouse,
@@ -59,6 +61,7 @@ public interface PotentialTenant extends Tenant, IBoundToApplication {
         }
     }
 
+    @Deprecated
     public enum Status implements Serializable {
 
         Applicant,

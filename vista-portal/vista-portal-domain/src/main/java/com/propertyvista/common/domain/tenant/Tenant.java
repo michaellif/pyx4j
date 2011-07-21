@@ -13,16 +13,24 @@
  */
 package com.propertyvista.common.domain.tenant;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
+import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.company.Company;
 import com.propertyvista.common.domain.person.Person;
+import com.propertyvista.portal.domain.ptapp.EmergencyContact;
+import com.propertyvista.portal.domain.ptapp.Vehicle;
 
 public interface Tenant extends IEntity {
 
@@ -39,6 +47,11 @@ public interface Tenant extends IEntity {
         }
     }
 
+    @ReadOnly
+    @Detached
+    @MemberColumn(name = "user_id")
+    User user();
+
     @ToString(index = 1)
     @MemberColumn(name = "tenantType")
     IPrimitive<Type> type();
@@ -49,4 +62,12 @@ public interface Tenant extends IEntity {
 
     @EmbeddedEntity
     Company company();
+
+    @Owned
+    @Length(3)
+    IList<Vehicle> vehicles();
+
+    @Owned
+    @Length(3)
+    IList<EmergencyContact> emergencyContacts();
 }

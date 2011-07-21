@@ -20,60 +20,36 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.portal.domain.ptapp.Application;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
-import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.ptapp.util.TenantConverter;
+import com.propertyvista.server.domain.generator.TenantSummaryDTO;
 
 public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl implements TenantFinancialService {
 
     private final static Logger log = LoggerFactory.getLogger(TenantFinancialServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<PotentialTenantFinancial> callback, Key tenantId) {
-        log.debug("Retrieving summary for tenant {}", tenantId);
-        EntityQueryCriteria<PotentialTenantFinancial> criteria = EntityQueryCriteria.create(PotentialTenantFinancial.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().id(), tenantId));
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
-        PotentialTenantFinancial financial = secureRetrieve(criteria);
-        if (financial == null) {
-            log.debug("Creating new tenant financial for {}", tenantId);
-            financial = createFinancial(tenantId);
-        }
+    public void retrieve(AsyncCallback<TenantFinancialEditorDTO> callback, Key tenantId) {
+        log.debug("Retrieving financials for tenant {}", tenantId);
+        TenantSummaryDTO summary = TenantInfoServiceImpl.getTenantSummaryDTO(tenantId);
 
-        callback.onSuccess(financial);
+        TenantFinancialEditorDTO dto = new TenantConverter.TenantFinancialEditorConverter().dto(summary);
+        callback.onSuccess(dto);
     }
 
     @Override
-    public void save(AsyncCallback<PotentialTenantFinancial> callback, PotentialTenantFinancial tenantFinancial) {
-        log.debug("Saving tenantFinancial {}", tenantFinancial);
+    public void save(AsyncCallback<TenantFinancialEditorDTO> callback, TenantFinancialEditorDTO dto) {
+        log.debug("Saving tenantFinancial {}", dto);
+        TenantSummaryDTO summary = TenantInfoServiceImpl.getTenantSummaryDTO(dto.getPrimaryKey());
 
-        saveApplicationEntity(tenantFinancial);
-        callback.onSuccess(tenantFinancial);
+        new TenantConverter.TenantFinancialEditorConverter().toDbo(dto, summary);
+
+        PersistenceServicesFactory.getPersistenceService().merge(summary.tenantScreening());
+
+        dto = new TenantConverter.TenantFinancialEditorConverter().dto(summary);
+        callback.onSuccess(dto);
     }
 
-    private PotentialTenantFinancial createFinancial(Key tenantId) {
-        Application application = PtAppContext.getCurrentUserApplication();
-
-        EntityQueryCriteria<PotentialTenantInfo> criteria = EntityQueryCriteria.create(PotentialTenantInfo.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().id(), tenantId));
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-        PotentialTenantInfo tenant = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-        if ((tenant == null) || (tenant.isEmpty())) {
-            throw new Error("Tenenat not found");
-        }
-
-        PotentialTenantFinancial financial = EntityFactory.create(PotentialTenantFinancial.class);
-        financial.id().setValue(tenantId);
-        financial.application().set(application);
-
-        PersistenceServicesFactory.getPersistenceService().persist(financial);
-
-        return financial;
-    }
 }

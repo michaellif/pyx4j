@@ -17,16 +17,16 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
 import com.propertyvista.portal.ptapp.client.ui.steps.TenantsView;
 import com.propertyvista.portal.ptapp.client.ui.steps.TenantsViewPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 
-public class TenantsActivity extends WizardStepActivity<PotentialTenantList, TenantsViewPresenter> implements TenantsViewPresenter {
+public class TenantsActivity extends WizardStepActivity<TenantListEditorDTO, TenantsViewPresenter> implements TenantsViewPresenter {
 
     public TenantsActivity(AppPlace place) {
-        super((TenantsView) WizardStepsViewFactory.instance(TenantsView.class), PotentialTenantList.class, (TenantService) GWT.create(TenantService.class));
+        super((TenantsView) WizardStepsViewFactory.instance(TenantsView.class), TenantListEditorDTO.class, (TenantService) GWT.create(TenantService.class));
         withPlace(place);
     }
 

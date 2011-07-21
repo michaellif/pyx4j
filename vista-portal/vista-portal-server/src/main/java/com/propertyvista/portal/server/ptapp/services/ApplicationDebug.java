@@ -21,9 +21,7 @@ import com.pyx4j.essentials.server.dev.DataDump;
 
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.IBoundToApplication;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.Summary;
-import com.propertyvista.portal.domain.ptapp.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
 
 public class ApplicationDebug {
@@ -46,13 +44,13 @@ public class ApplicationDebug {
         retrieveApplicationEntity(summary.pets(), application);
         retrieveApplicationEntity(summary.charges(), application);
 
-        EntityQueryCriteria<PotentialTenantFinancial> financialCriteria = EntityQueryCriteria.create(PotentialTenantFinancial.class);
-        financialCriteria.add(PropertyCriterion.eq(financialCriteria.proto().application(), application));
-        for (PotentialTenantFinancial fin : PersistenceServicesFactory.getPersistenceService().query(financialCriteria)) {
-            SummaryPotentialTenantFinancial sf = summary.tenantFinancials().$();
-            sf.tenantFinancial().set(fin);
-            summary.tenantFinancials().add(sf);
-        }
+//        EntityQueryCriteria<TenantFinancialEditorDTO> financialCriteria = EntityQueryCriteria.create(TenantFinancialEditorDTO.class);
+//        financialCriteria.add(PropertyCriterion.eq(financialCriteria.proto().application(), application));
+//        for (TenantFinancialEditorDTO fin : PersistenceServicesFactory.getPersistenceService().query(financialCriteria)) {
+//            SummaryPotentialTenantFinancial sf = summary.tenantFinancials().$();
+//            sf.tenantFinancial().set(fin);
+//            summary.tenantFinancials().add(sf);
+//        }
 
         return summary;
     }

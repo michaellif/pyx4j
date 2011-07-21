@@ -7,18 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on Jul 20, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps;
+package com.propertyvista.common.domain.tenant;
 
-import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.shared.IEntity;
 
-public class InfoViewImpl extends WizardStepViewImpl<TenantInfoEditorDTO, InfoViewPresenter> implements InfoView {
-
-    public InfoViewImpl() {
-        super(new InfoViewForm());
-    }
+@AbstractEntity
+public interface LeaseConcern extends IEntity {
 
 }

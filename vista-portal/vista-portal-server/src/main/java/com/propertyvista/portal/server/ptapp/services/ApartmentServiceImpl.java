@@ -44,7 +44,7 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
     @Override
     public void retrieve(AsyncCallback<UnitSelection> callback, Key tenantId) {
         EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), PtAppContext.getCurrentLeaseConcern()));
         UnitSelection unitSelection = secureRetrieve(criteria);
         if (unitSelection == null) {
             log.debug("Creating new unit selection");

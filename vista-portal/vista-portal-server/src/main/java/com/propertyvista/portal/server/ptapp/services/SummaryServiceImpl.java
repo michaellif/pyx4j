@@ -36,11 +36,11 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.domain.ptapp.ChargeLineSelectable;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.ServletMapping;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
@@ -96,19 +96,19 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         // We do not remove the info from DB if Tenant status changes
         summary.tenantsWithInfo().tenants().clear();
         for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
-            if (ApplicationServiceImpl.shouldEnterInformation(tenant)) {
+            if (ApplicationProgressMgr.shouldEnterInformation(tenant)) {
                 summary.tenantsWithInfo().tenants().add(tenant);
             }
         }
 
-        EntityQueryCriteria<PotentialTenantFinancial> financialCriteria = EntityQueryCriteria.create(PotentialTenantFinancial.class);
-        financialCriteria.add(PropertyCriterion.eq(financialCriteria.proto().application(), summary.application()));
+        EntityQueryCriteria<TenantFinancialEditorDTO> financialCriteria = EntityQueryCriteria.create(TenantFinancialEditorDTO.class);
+        //TODO financialCriteria.add(PropertyCriterion.eq(financialCriteria.proto().application(), summary.application()));
         summary.tenantFinancials().clear();
-        for (PotentialTenantFinancial fin : PersistenceServicesFactory.getPersistenceService().query(financialCriteria)) {
+        for (TenantFinancialEditorDTO fin : PersistenceServicesFactory.getPersistenceService().query(financialCriteria)) {
             // Update Transient values and see if we need to show this Tenant
             findTenenat: for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
                 if (fin.id().equals(tenant.id())) {
-                    if (ApplicationServiceImpl.shouldEnterInformation(tenant)) {
+                    if (ApplicationProgressMgr.shouldEnterInformation(tenant)) {
                         SummaryPotentialTenantFinancial sf = summary.tenantFinancials().$();
                         sf.tenantFullName().setValue(
                                 EntityFromatUtils.nvl_concat(" ", tenant.person().name().firstName(), tenant.person().name().middleName(), tenant.person()

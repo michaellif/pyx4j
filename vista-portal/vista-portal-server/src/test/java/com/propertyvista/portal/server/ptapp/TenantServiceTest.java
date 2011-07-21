@@ -76,7 +76,7 @@ public class TenantServiceTest extends VistaDBTestBase {
         PTGenerator generator = new PTGenerator(10l, PreloadConfig.createTest());
 
         PotentialTenantList tenantList = HappyPath.step4createTenants();
-        PotentialTenantList tenantList2 = generator.createPotentialTenantList(application);
+        // PotentialTenantList tenantList2 = generator.createPotentialTenantList(application);
 
         //        tenantService.save(new UnitTestsAsyncCallback<PotentialTenantList>() {
         //            @Override
