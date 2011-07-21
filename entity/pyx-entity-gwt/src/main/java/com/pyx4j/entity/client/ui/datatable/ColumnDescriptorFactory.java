@@ -55,4 +55,22 @@ public class ColumnDescriptorFactory {
         cd.setWordWrap(wordWrap);
         return cd;
     }
+
+// custom titled column creation:
+
+    public static <E extends IEntity> ColumnDescriptor<E> createColumnDescriptorEx(E meta, IObject<?> member, String title) {
+        return createTitledColumnDescriptor(meta, member, title, ColumnDescriptor.DFAULT_WIDTH, false);
+    }
+
+    public static <E extends IEntity> ColumnDescriptor<E> createTitledColumnDescriptor(E meta, IObject<?> member, String title, String width) {
+        return createTitledColumnDescriptor(meta, member, title, width, false);
+    }
+
+    public static <E extends IEntity> ColumnDescriptor<E> createTitledColumnDescriptor(E meta, IObject<?> member, String title, String width, boolean wordWrap) {
+        ColumnDescriptor<E> cd = ColumnDescriptorFactory.createColumnDescriptor(meta, member);
+        cd.setColumnTitle(title);
+        cd.setWidth(width);
+        cd.setWordWrap(wordWrap);
+        return cd;
+    }
 }

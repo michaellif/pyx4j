@@ -33,5 +33,4 @@ public class MemberEntityColumnDescriptor<E extends IEntity> extends MemberColum
     public String convert(E entity) {
         return ((IEntity) entity.getMember(getColumnPath())).getStringView();
     }
-
 }
