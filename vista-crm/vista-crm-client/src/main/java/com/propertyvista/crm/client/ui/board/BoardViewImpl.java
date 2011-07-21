@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.dashboard.BoardEvent;
@@ -63,7 +64,7 @@ public abstract class BoardViewImpl extends DockLayoutPanel implements BoardView
 
     protected final Button btnSave = new Button(i18n.tr("Save"));
 
-    protected final boolean showSaveButton = false; // Save button used in test purpose only!..
+    protected final boolean showSaveButton = false; // true; // Save button used in test purpose only!..
 
     protected final ScrollPanel scroll = new ScrollPanel();
 
@@ -91,9 +92,11 @@ public abstract class BoardViewImpl extends DockLayoutPanel implements BoardView
         actionsPanel.setWidth("100%");
         actionsPanel.add(new HTML()); // just for %-tage cells alignment...
         addNorth(actionsPanel, VistaCrmTheme.defaultHeaderHeight);
+        actionsPanel.setVisible(false);
 
         if (showSaveButton) {
             addActionButton(btnSave);
+            btnSave.setEnabled(false);
             btnSave.addStyleName(btnSave.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.SaveButton);
             btnSave.addClickHandler(new ClickHandler() {
                 @Override
@@ -103,7 +106,13 @@ public abstract class BoardViewImpl extends DockLayoutPanel implements BoardView
             });
         }
 
-        add(scroll);
+        VerticalPanel main = new VerticalPanel();
+        main.add(actionsPanel);
+        main.add(scroll);
+
+        add(main);
+
+        main.setWidth("100%");
         setSize("100%", "100%");
     }
 
@@ -113,8 +122,8 @@ public abstract class BoardViewImpl extends DockLayoutPanel implements BoardView
     }
 
     @Override
-    public void fill(DashboardMetadata dashboardMetadata) {
-        this.dashboardMetadata = dashboardMetadata;
+    public void fill(DashboardMetadata metadata) {
+        dashboardMetadata = metadata;
 
         filling = true; // inhibit event processing while filling the dashboard
 
@@ -126,17 +135,20 @@ public abstract class BoardViewImpl extends DockLayoutPanel implements BoardView
                 Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                     @Override
                     public void execute() {
-                        procesDashboardEvent(reason);
+                        if (!filling) {
+                            procesDashboardEvent(reason);
+                        }
                     }
                 });
             }
         });
 
-        if (this.dashboardMetadata != null && !this.dashboardMetadata.isEmpty()) {
-            header.setCaption(this.dashboardMetadata.name().getStringView());
-            setLayout(this.dashboardMetadata.layoutType().getValue());
+        // actual board filling: 
+        if (dashboardMetadata != null && !dashboardMetadata.isEmpty()) {
+            header.setCaption(dashboardMetadata.name().getStringView());
+            setLayout(dashboardMetadata.layoutType().getValue());
             // fill the dashboard with gadgets:
-            for (final GadgetMetadata gmd : this.dashboardMetadata.gadgets()) {
+            for (GadgetMetadata gmd : dashboardMetadata.gadgets()) {
                 IGadgetBase gadget = GadgetsFactory.createGadget(gmd.type().getValue(), gmd);
                 if (gadget != null) {
                     gadget.setPresenter(presenter);
@@ -146,10 +158,16 @@ public abstract class BoardViewImpl extends DockLayoutPanel implements BoardView
             }
         }
 
-        filling = false; // ok, filled already..
-
         scroll.setWidget(board);
-        btnSave.setEnabled(false);
+
+        // use a deferred command so that browser actually build board DOM and we do not process unnecessary board events!
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                filling = false; // ok, filled already..
+                btnSave.setEnabled(false);
+            }
+        });
     }
 
     @Override
@@ -181,6 +199,13 @@ public abstract class BoardViewImpl extends DockLayoutPanel implements BoardView
         return false;
     }
 
+    protected void addActionButton(Button action) {
+        actionsPanel.setVisible(true);
+        actionsPanel.insert(action, 1);
+        actionsPanel.setCellWidth(action, "1%");
+        action.getElement().getStyle().setMarginRight(1, Unit.EM);
+    }
+
 //
 // Internals:
 //
@@ -201,11 +226,11 @@ public abstract class BoardViewImpl extends DockLayoutPanel implements BoardView
             break;
         }
 
-        if (save && !filling) {
+        if (save) {
             if (showSaveButton) {
-                btnSave.setEnabled(true);
+                btnSave.setEnabled(true); // user should manually save the state... 
             } else {
-                presenter.save();
+                presenter.save(); // automatic state saving...
             }
         }
     }
@@ -223,12 +248,6 @@ public abstract class BoardViewImpl extends DockLayoutPanel implements BoardView
             }
         }
         return false; // all clear - nothing has changed...
-    }
-
-    protected void addActionButton(Button action) {
-        actionsPanel.insert(action, 1);
-        actionsPanel.setCellWidth(action, "1%");
-        action.getElement().getStyle().setMarginRight(1, Unit.EM);
     }
 
     /*
