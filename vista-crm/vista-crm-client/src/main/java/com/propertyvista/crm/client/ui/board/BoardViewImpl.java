@@ -29,9 +29,9 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.widgets.client.dashboard.BoardLayout;
 import com.pyx4j.widgets.client.dashboard.BoardEvent;
 import com.pyx4j.widgets.client.dashboard.BoardEvent.Reason;
+import com.pyx4j.widgets.client.dashboard.BoardLayout;
 import com.pyx4j.widgets.client.dashboard.IBoard;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
@@ -57,21 +57,21 @@ public abstract class BoardViewImpl extends DockLayoutPanel implements BoardView
 
     protected static I18n i18n = I18nFactory.getI18n(BoardViewImpl.class);
 
-    private final VistaHeaderBar header;
-
-    private final ScrollPanel scroll = new ScrollPanel();
+    protected final VistaHeaderBar header;
 
     protected final HorizontalPanel actionsPanel;
+
+    protected final Button btnSave = new Button(i18n.tr("Save"));
+
+    protected final boolean showSaveButton = false; // Save button used in test purpose only!..
+
+    protected final ScrollPanel scroll = new ScrollPanel();
 
     protected IBoard board;
 
     protected Presenter presenter;
 
     protected DashboardMetadata dashboardMetadata;
-
-    protected final Button btnSave = new Button(i18n.tr("Save"));
-
-    protected final boolean showSaveButton = false; // Save button used in test purpose only!..
 
     protected boolean filling;
 
@@ -181,10 +181,10 @@ public abstract class BoardViewImpl extends DockLayoutPanel implements BoardView
         return false;
     }
 
-    //
-    // Internals:
-    //
-    private void procesDashboardEvent(Reason reason) {
+//
+// Internals:
+//
+    protected void procesDashboardEvent(Reason reason) {
         boolean save = true;
 
         switch (reason) {

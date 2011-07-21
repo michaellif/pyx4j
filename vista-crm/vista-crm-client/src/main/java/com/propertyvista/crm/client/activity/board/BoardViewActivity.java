@@ -45,6 +45,9 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
         withPlace(place);
     }
 
+    /*
+     * Implement those meaningful in derived classes:
+     */
     public abstract BoardViewActivity<V> withPlace(Place place);
 
     protected abstract BoardMetadataServiceBase getService();
