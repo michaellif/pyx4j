@@ -9,13 +9,13 @@
     <parent>
         <groupId>com.pyx4j</groupId>
         <artifactId>pyx-parent</artifactId>
-        <version>2.0.3-SNAPSHOT</version><!--pyx-version-->
+        <version>2.1.0-SNAPSHOT</version><!--pyx-version-->
         <relativePath>essentials/pyx-parent/pom.xml</relativePath>
     </parent>
 
     <groupId>com.pyx4j</groupId>
     <artifactId>pyx</artifactId>
-    <version>2.0.3-SNAPSHOT</version><!--pyx-version-->
+    <version>2.1.0-SNAPSHOT</version><!--pyx-version-->
 
     <packaging>pom</packaging>
     <name>pyx</name>
@@ -42,8 +42,8 @@
     <url>http://code.pyx4j.com</url>
 
     <ciManagement>
-        <system>Cruisecontrol</system>
-        <url>http://pyx4j.com/cruisecontrol-public/</url>
+        <system>Bamboo</system>
+        <url>http://jira.birchwoodsoftwaregroup.com/builds/browse/PYX</url>
     </ciManagement>
 
     <issueManagement>
@@ -67,9 +67,9 @@
     </distributionManagement>
 
     <scm>
-        <url>https://pyx4j.com/viewvc/trunk/</url>
-        <connection>scm:svn:https://pyx4j.com/svn/trunk</connection>
-        <developerConnection>scm:svn:https://pyx4j.com/svn/trunk</developerConnection>
+        <url>https://svn.pyx4j.com/svn/trunk/</url>
+        <connection>scm:svn:https://svn.pyx4j.com/svn/trunk</connection>
+        <developerConnection>scm:svn:https://svn.pyx4j.com/svn/trunk</developerConnection>
     </scm>
 
     <modules>
