@@ -24,8 +24,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.pyx4j.svg.basic.Circle;
-import com.pyx4j.svg.basic.Line;
+import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.Path;
+import com.pyx4j.svg.basic.Rect;
 import com.pyx4j.svg.basic.Text;
 import com.pyx4j.svg.chart.DataSource.Metric;
 import com.pyx4j.svg.util.Utils;
@@ -44,11 +45,16 @@ public class Gauge extends ArcBasedChart {
 
     private final static int TOTAL_SECTORS = 4;
 
+    private final static int GAUGE_BAUTTON_RADIUS = 15;
+
+    private final static int GAUGE_ARROW_WIDHT = 6;
+
+    private final static String GAUGE_HAND_ASSEMBLY_COLOR = "#E0E0E0";
+
     private final static double SECTOR_SIZE = GAUGE_SECTOR / TOTAL_SECTORS;
 
     public Gauge(ArcBasedChartConfigurator configurator) {
         super(configurator);
-
     }
 
     //assumes only one entry per metric
@@ -159,9 +165,15 @@ public class Gauge extends ArcBasedChart {
         /**
          * Draw the arrow
          */
-        Circle c = factory.createCircle(xStart, yStart, 10);
+        Group castShadow = factory.createGroup();
+
+        Group gougeHand = factory.createGroup();
+        gougeHand.setTransform("translate(" + xStart + "," + yStart + ")");
+
+        Circle button = factory.createCircle(xStart, yStart, GAUGE_BAUTTON_RADIUS);
+        button.setFill(GAUGE_HAND_ASSEMBLY_COLOR);
         if (metricText != null && !metricText.isEmpty()) {
-            lbl = factory.createText(metricText, xStart, yStart - 10 - SCALE_LABEL_SPACING);
+            lbl = factory.createText(metricText, xStart, yStart - GAUGE_BAUTTON_RADIUS - SCALE_LABEL_SPACING);
             lbl.setAttribute("text-anchor", "middle");
             container.add(lbl);
 
@@ -170,10 +182,14 @@ public class Gauge extends ArcBasedChart {
         valueToDepict = valueToDepict * GAUGE_SECTOR / scaleMax;
         xInner = Utils.round(xStart - innerRadius * Math.cos(STARTING_ANGLE + valueToDepict), 2);
         yInner = Utils.round(yStart - innerRadius * Math.sin(STARTING_ANGLE + valueToDepict), 2);
-        Line arrow = factory.createLine(xStart, yStart, (int) xInner, (int) yInner);
+        Rect arrow = factory.createRect(-GAUGE_ARROW_WIDHT / 2, 0, GAUGE_ARROW_WIDHT, innerRadius + RIM_WIDTH / 2, 0, 0);
+        arrow.setTransform("rotate(" + (Utils.radian2degree(STARTING_ANGLE + valueToDepict + Math.PI / 2)) + ")");
+        arrow.setFill(GAUGE_HAND_ASSEMBLY_COLOR);
+        gougeHand.add(arrow);
 
-        container.add(c);
-        container.add(arrow);
+        castShadow.add(gougeHand);
+        castShadow.add(button);
+        container.add(castShadow);
         return computedwidth;
 
     }
@@ -200,4 +216,5 @@ public class Gauge extends ArcBasedChart {
         return lbl;
 
     }
+
 }

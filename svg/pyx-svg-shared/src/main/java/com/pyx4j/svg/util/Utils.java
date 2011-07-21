@@ -29,8 +29,12 @@ public class Utils {
         return tmp / p;
     }
 
-    public static double degree2radian(double degree) {
-        return degree * Math.PI / 180;
+    public static double degree2radian(double degrees) {
+        return degrees * Math.PI / 180;
+    }
+
+    public static double radian2degree(double radians) {
+        return radians * 180 / Math.PI;
     }
 
 }

@@ -40,7 +40,7 @@ import com.pyx4j.svg.j2se.SvgRootImpl;
 import com.pyx4j.svg.test.SvgTestFactory;
 
 public class SVGBatikDemo {
-    private static final int HEIGHT = 1000;// 4000;
+    private static final int HEIGHT = 3500;
 
     public static void main(String[] args) throws IOException {
         // Create an SVG document.
@@ -52,21 +52,19 @@ public class SVGBatikDemo {
         ((SvgRootImpl) svgroot).setAttributeNS(null, "width", "800");
         ((SvgRootImpl) svgroot).setAttributeNS(null, "height", String.valueOf(HEIGHT));
 
-/*
- * SvgTestFactory.createTestRect(factory, 10, 10);
- * SvgTestFactory.createTestLine(factory, 10, 110);
- * SvgTestFactory.createTestPath(factory, 10, 210);
- * SvgTestFactory.createTestCircle(factory, 10, 310);
- * SvgTestFactory.createTestEllipse(factory, 10, 410);
- * SvgTestFactory.createTestPolyline(factory, 10, 510);
- * SvgTestFactory.createTestPolygon(factory, 10, 610);
- * SvgTestFactory.createTestText(factory, 10, 710);
- * SvgTestFactory.createTestLegendItem(factory, 10, 810);
- * SvgTestFactory.createLineChart2DTest(factory, 10, 910);
- * SvgTestFactory.createBarChart2DTest(factory, 10, 1350);
- * SvgTestFactory.createPieChart2DTest(factory, 10, 1800);
- */
-        SvgTestFactory.createGaugeTest(factory, 20, 10);
+        SvgTestFactory.createTestRect(factory, 10, 10);
+        SvgTestFactory.createTestLine(factory, 10, 110);
+        SvgTestFactory.createTestPath(factory, 10, 210);
+        SvgTestFactory.createTestCircle(factory, 10, 310);
+        SvgTestFactory.createTestEllipse(factory, 10, 410);
+        SvgTestFactory.createTestPolyline(factory, 10, 510);
+        SvgTestFactory.createTestPolygon(factory, 10, 610);
+        SvgTestFactory.createTestText(factory, 10, 710);
+        SvgTestFactory.createTestLegendItem(factory, 10, 810);
+        SvgTestFactory.createLineChart2DTest(factory, 10, 910);
+        SvgTestFactory.createBarChart2DTest(factory, 10, 1350);
+        SvgTestFactory.createPieChart2DTest(factory, 10, 1800);
+        SvgTestFactory.createGaugeTest(factory, 20, 2600);
 
         SVGGraphics2D g = new SVGGraphics2D(doc);
         g.setSVGCanvasSize(new Dimension(800, HEIGHT));

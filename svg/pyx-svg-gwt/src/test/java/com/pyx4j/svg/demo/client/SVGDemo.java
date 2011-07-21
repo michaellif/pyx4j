@@ -125,9 +125,14 @@ public class SVGDemo implements EntryPoint {
 
         content.add(new HTML("Multi-Series Pie Chart"));
         svgPanel = SvgTestFactory.createPieChart2DTest(svgFactory, 0, 0);
-        //svgPanel = SvgTestFactory.createBarChart2DTest(svgFactory, 0, 0);
-        //SvgTestFactory.createTestPieChart(svgFactory, 0, 0);
-        ((Widget) svgPanel).setSize("352px", "965px");
+        ((Widget) svgPanel).setSize("352px", "800px");
+        content.add((Widget) svgPanel);
+
+        //=========================================//
+
+        content.add(new HTML("Gauge"));
+        svgPanel = SvgTestFactory.createGaugeTest(svgFactory, 0, 0);
+        ((Widget) svgPanel).setSize("352px", "800px");
         content.add((Widget) svgPanel);
 
     }
