@@ -60,14 +60,22 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
         }
     }
 
+    private void init() {
+        if (binding.isEmpty()) {
+            synchronized (binding) {
+                if (binding.isEmpty()) {
+                    bind();
+                }
+            }
+        }
+    }
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public DTO dto(DBO dbo) {
         DTO dto = EntityFactory.create(dtoClass);
         dto.setPrimaryKey(dbo.getPrimaryKey());
 
-        if (binding.isEmpty()) {
-            bind();
-        }
+        init();
         for (Map.Entry<Path, Path> me : binding.entrySet()) {
             IObject dtoM = dto.getMember(me.getKey());
             IObject dboM = dbo.getMember(me.getValue());
@@ -86,9 +94,7 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void toDbo(DTO dto, DBO dbo) {
-        if (binding.isEmpty()) {
-            bind();
-        }
+        init();
         for (Map.Entry<Path, Path> me : binding.entrySet()) {
             IObject dtoM = dto.getMember(me.getKey());
             IObject dboM = dbo.getMember(me.getValue());
