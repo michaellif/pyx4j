@@ -13,12 +13,15 @@
  */
 package com.propertyvista.common.domain.tenant;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.ApplicationDocument;
@@ -31,6 +34,9 @@ public interface TenantScreening extends IEntity, TenantScreeningSecureInfoFragm
 
     @Detached
     Tenant tenant();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> screeningData();
 
     @Owned
     Address currentAddress();
