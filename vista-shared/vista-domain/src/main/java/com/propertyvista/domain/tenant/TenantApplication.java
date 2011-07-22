@@ -24,6 +24,7 @@ import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.portal.domain.ptapp.Application;
 
+@Deprecated
 public interface TenantApplication extends IEntity {
 
     @Translatable
