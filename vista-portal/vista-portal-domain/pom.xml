@@ -40,6 +40,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
     </dependencies>
 
     <properties>

@@ -31,8 +31,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-portal-domain</artifactId>
+        	<groupId>com.propertyvista</groupId>
+        	<artifactId>vista-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
