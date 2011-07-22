@@ -459,30 +459,14 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 fieldsList.setOptions(fds);
                 if (!fds.isEmpty()) {
                     fieldsList.setValue(fds.iterator().next());
+                    setValueHolder(fieldsList.getValue().getPath());
+                } else {
+                    valueHolder.setWidget(new CTextField());
                 }
                 fieldsList.addValueChangeHandler(new ValueChangeHandler<FieldData>() {
-                    @SuppressWarnings({ "unchecked", "rawtypes" })
                     @Override
                     public void onValueChange(ValueChangeEvent<FieldData> event) {
-                        String path = event.getValue().getPath();
-                        Class<?> valueClass = getListPanel().proto().getMember(new Path(path)).getValueClass();
-                        if (valueClass.isEnum()) {
-                            CComboBox valuesList = new CComboBox(true);
-                            valuesList.setOptions(EnumSet.allOf((Class<Enum>) valueClass));
-                            valueHolder.setWidget(valuesList);
-                        } else if (valueClass.equals(LogicalDate.class)) {
-                            valueHolder.setWidget(new CDatePicker());
-                        } else if (valueClass.equals(Boolean.class)) {
-                            valueHolder.setWidget(new CRadioGroupBoolean(CRadioGroup.Layout.HORISONTAL));
-                        } else if (valueClass.equals(Double.class)) {
-                            valueHolder.setWidget(new CDoubleField());
-                        } else if (valueClass.equals(Integer.class)) {
-                            valueHolder.setWidget(new CLongField());
-                        } else if (valueClass.equals(Integer.class)) {
-                            valueHolder.setWidget(new CIntegerField());
-                        } else {
-                            valueHolder.setWidget(new CTextField());
-                        }
+                        setValueHolder(event.getValue().getPath());
                     }
                 });
                 fieldsList.setWidth("100%");
@@ -499,7 +483,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 setCellWidth(operandsList, "20%");
                 formatCell(operandsList.asWidget());
 
-                valueHolder.setWidget(new CTextField());
                 valueHolder.setWidth("100%");
 
                 add(valueHolder);
@@ -528,6 +511,28 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             private void formatCell(Widget w) {
                 Element cell = DOM.getParent(w.getElement());
                 cell.getStyle().setPaddingRight(1.5, Unit.EM);
+            }
+
+            @SuppressWarnings({ "unchecked", "rawtypes" })
+            private void setValueHolder(String valuePath) {
+                Class<?> valueClass = getListPanel().proto().getMember(new Path(valuePath)).getValueClass();
+                if (valueClass.isEnum()) {
+                    CComboBox valuesList = new CComboBox(true);
+                    valuesList.setOptions(EnumSet.allOf((Class<Enum>) valueClass));
+                    valueHolder.setWidget(valuesList);
+                } else if (valueClass.equals(LogicalDate.class)) {
+                    valueHolder.setWidget(new CDatePicker());
+                } else if (valueClass.equals(Boolean.class)) {
+                    valueHolder.setWidget(new CRadioGroupBoolean(CRadioGroup.Layout.HORISONTAL));
+                } else if (valueClass.equals(Double.class)) {
+                    valueHolder.setWidget(new CDoubleField());
+                } else if (valueClass.equals(Integer.class)) {
+                    valueHolder.setWidget(new CLongField());
+                } else if (valueClass.equals(Integer.class)) {
+                    valueHolder.setWidget(new CIntegerField());
+                } else {
+                    valueHolder.setWidget(new CTextField());
+                }
             }
         }
     }
