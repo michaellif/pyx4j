@@ -24,7 +24,8 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 import com.pyx4j.i18n.shared.Translation;
 
-import com.propertyvista.common.domain.tenant.Tenant;
+import com.propertyvista.domain.IBoundToApplication;
+import com.propertyvista.domain.tenant.Tenant;
 
 //TODO This goes away and TenantInLease would be used
 @AbstractEntity

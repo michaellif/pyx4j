@@ -22,7 +22,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 import com.pyx4j.i18n.shared.Translation;
 
-import com.propertyvista.common.domain.ISharedUserEntity;
+import com.propertyvista.domain.ISharedUserEntity;
 
 public interface DashboardMetadata extends ISharedUserEntity {
 

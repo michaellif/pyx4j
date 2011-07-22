@@ -32,7 +32,7 @@ import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.Selector;
 
-import com.propertyvista.common.domain.financial.Money;
+import com.propertyvista.domain.financial.Money;
 
 public class NativeMoney extends HorizontalPanel implements INativeEditableComponent<Money> {
 

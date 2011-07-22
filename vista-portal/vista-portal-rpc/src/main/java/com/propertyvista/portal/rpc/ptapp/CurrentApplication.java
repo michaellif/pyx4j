@@ -15,7 +15,7 @@ package com.propertyvista.portal.rpc.ptapp;
 
 import java.io.Serializable;
 
-import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.domain.Application;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 
 @SuppressWarnings("serial")

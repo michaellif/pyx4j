@@ -17,7 +17,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.RangeGroup;
+import com.propertyvista.domain.RangeGroup;
 
 @Transient
 public interface FloorplanPropertyDTO extends IEntity {

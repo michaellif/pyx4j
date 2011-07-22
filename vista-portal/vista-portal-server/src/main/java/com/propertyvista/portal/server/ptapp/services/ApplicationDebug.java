@@ -19,8 +19,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.dev.DataDump;
 
-import com.propertyvista.portal.domain.ptapp.Application;
-import com.propertyvista.portal.domain.ptapp.IBoundToApplication;
+import com.propertyvista.domain.Application;
+import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
 

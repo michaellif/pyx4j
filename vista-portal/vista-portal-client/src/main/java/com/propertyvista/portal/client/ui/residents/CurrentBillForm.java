@@ -44,13 +44,13 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CHyperlink;
 
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.domain.financial.Money;
+import com.propertyvista.domain.charges.ChargeLine;
+import com.propertyvista.domain.charges.ChargeLine.ChargeType;
+import com.propertyvista.domain.financial.Money;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.util.Utils;
 import com.propertyvista.portal.domain.dto.BillDTO;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
-import com.propertyvista.portal.domain.ptapp.ChargeLine;
-import com.propertyvista.portal.domain.ptapp.ChargeLine.ChargeType;
 
 public class CurrentBillForm extends CEntityForm<BillDTO> implements CurrentBillView {
 

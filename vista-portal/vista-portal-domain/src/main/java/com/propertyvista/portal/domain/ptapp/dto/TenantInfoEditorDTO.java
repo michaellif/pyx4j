@@ -21,13 +21,13 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.common.domain.person.Person;
-import com.propertyvista.common.domain.tenant.TenantScreeningSecureInfoFragment;
-import com.propertyvista.portal.domain.ptapp.Address;
-import com.propertyvista.portal.domain.ptapp.ApplicationDocument;
-import com.propertyvista.portal.domain.ptapp.EmergencyContact;
-import com.propertyvista.portal.domain.ptapp.LegalQuestions;
-import com.propertyvista.portal.domain.ptapp.Vehicle;
+import com.propertyvista.domain.ApplicationDocument;
+import com.propertyvista.domain.EmergencyContact;
+import com.propertyvista.domain.LegalQuestions;
+import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.Vehicle;
+import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.tenant.TenantScreeningSecureInfoFragment;
 
 @Transient
 public interface TenantInfoEditorDTO extends IEntity, TenantScreeningSecureInfoFragment {
@@ -38,10 +38,10 @@ public interface TenantInfoEditorDTO extends IEntity, TenantScreeningSecureInfoF
     IList<ApplicationDocument> documents();
 
     @EmbeddedEntity
-    Address currentAddress();
+    PriorAddress currentAddress();
 
     @EmbeddedEntity
-    Address previousAddress();
+    PriorAddress previousAddress();
 
     @Owned
     @Length(3)

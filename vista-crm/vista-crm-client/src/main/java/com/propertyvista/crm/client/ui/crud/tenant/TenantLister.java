@@ -19,8 +19,8 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.site.client.ui.crud.ListerBase;
 
-import com.propertyvista.common.domain.tenant.Tenant;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.tenant.Tenant;
 
 public class TenantLister extends ListerBase<Tenant> {
 

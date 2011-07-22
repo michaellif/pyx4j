@@ -19,6 +19,10 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.IBoundToApplication;
+import com.propertyvista.domain.charges.ChargeLineList;
+import com.propertyvista.domain.charges.ChargeLineListWithUpgrades;
+
 public interface Charges extends IEntity, IBoundToApplication {
 
     /*

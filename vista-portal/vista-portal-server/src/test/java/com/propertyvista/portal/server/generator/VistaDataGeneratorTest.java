@@ -15,11 +15,10 @@ package com.propertyvista.portal.server.generator;
 
 import junit.framework.TestCase;
 
-import com.propertyvista.common.domain.PreloadConfig;
-import com.propertyvista.common.domain.User;
+import com.propertyvista.domain.PreloadConfig;
+import com.propertyvista.domain.User;
 import com.propertyvista.portal.server.TestUtil;
 import com.propertyvista.server.common.reference.SharedData;
-import com.propertyvista.server.domain.generator.ApplicationSummaryDTO;
 
 public class VistaDataGeneratorTest extends TestCase {
 

@@ -27,7 +27,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 import com.pyx4j.i18n.shared.Translation;
 
-import com.propertyvista.common.domain.contact.Address;
+import com.propertyvista.domain.contact.Address;
 
 @ToStringFormat("{0} {1}")
 public interface BuildingInfo extends IEntity {

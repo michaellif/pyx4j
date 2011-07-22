@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 
-import com.propertyvista.common.domain.person.Person;
+import com.propertyvista.domain.person.Person;
 
 public class DecorationUtils {
 

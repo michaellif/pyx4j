@@ -26,17 +26,17 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 
-import com.propertyvista.common.domain.media.Media;
-import com.propertyvista.common.domain.ref.City;
+import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.domain.ref.City;
+import com.propertyvista.domain.site.PageContent;
+import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
-import com.propertyvista.portal.domain.site.PageContent;
-import com.propertyvista.portal.domain.site.PageDescriptor;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.server.ptapp.util.Converter;
 

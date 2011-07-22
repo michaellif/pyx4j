@@ -26,11 +26,11 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.portal.domain.payment.PaymentType;
-import com.propertyvista.portal.domain.ptapp.ChargeLine;
-import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
+import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;

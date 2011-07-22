@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.portal.domain.ptapp.ChargeLineSelectable;
+import com.propertyvista.domain.charges.ChargeLineSelectable;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 

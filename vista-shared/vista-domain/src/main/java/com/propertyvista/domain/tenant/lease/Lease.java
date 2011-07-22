@@ -22,16 +22,15 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.common.domain.media.Document;
-import com.propertyvista.common.domain.tenant.LeaseConcern;
-import com.propertyvista.common.domain.tenant.TenantInLease;
+import com.propertyvista.domain.Pet;
+import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.financial.LeaseFinancialTerms;
+import com.propertyvista.domain.media.Document;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.portal.domain.ptapp.ChargeLine;
-import com.propertyvista.portal.domain.ptapp.Pet;
+import com.propertyvista.domain.tenant.TenantInLease;
 
-public interface Lease extends IEntity, LeaseConcern {
+public interface Lease extends IEntity {
 
     @Translatable
     public enum Status {

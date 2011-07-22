@@ -23,8 +23,8 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
+import com.propertyvista.portal.server.generator.TenantSummaryDTO;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
-import com.propertyvista.server.domain.generator.TenantSummaryDTO;
 
 public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl implements TenantFinancialService {
 

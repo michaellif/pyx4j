@@ -20,14 +20,14 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.domain.tenant.Tenant;
 
 public interface CampaignHistory extends IEntity {
 
     @MemberColumn(name = "trg")
     IPrimitive<CampaignTriger> trigger();
 
-    PotentialTenantInfo tenant();
+    Tenant tenant();
 
     PhoneCallCampaign campaign();
 

@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.domain.Application;
 
 @Deprecated
 public interface TenantApplication extends IEntity {

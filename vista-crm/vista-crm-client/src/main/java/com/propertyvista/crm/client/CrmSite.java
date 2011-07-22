@@ -29,10 +29,10 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
-import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.crm.client.ui.CrmView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.AuthenticationService;
+import com.propertyvista.domain.VistaBehavior;
 
 public class CrmSite extends VistaSite {
 

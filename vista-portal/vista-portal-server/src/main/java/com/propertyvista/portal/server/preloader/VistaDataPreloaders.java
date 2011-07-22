@@ -15,7 +15,7 @@ package com.propertyvista.portal.server.preloader;
 
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 
-import com.propertyvista.common.domain.PreloadConfig;
+import com.propertyvista.domain.PreloadConfig;
 
 public class VistaDataPreloaders extends DataPreloaderCollection {
 

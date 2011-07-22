@@ -25,13 +25,13 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.SecurityViolationException;
 
-import com.propertyvista.common.domain.tenant.TenantInLease;
-import com.propertyvista.common.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
+import com.propertyvista.portal.server.generator.TenantSummaryDTO;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
-import com.propertyvista.server.domain.generator.TenantSummaryDTO;
 
 public class TenantInfoServiceImpl extends ApplicationEntityServiceImpl implements TenantInfoService {
 
@@ -41,7 +41,7 @@ public class TenantInfoServiceImpl extends ApplicationEntityServiceImpl implemen
         TenantSummaryDTO summary = EntityFactory.create(TenantSummaryDTO.class);
 
         TenantInLease tenantInLease = PersistenceServicesFactory.getPersistenceService().retrieve(TenantInLease.class, tenantId);
-        if ((tenantInLease == null) || (!tenantInLease.lease().id().equals(PtAppContext.getCurrentLeaseConcern().id()))) {
+        if ((tenantInLease == null) || (!tenantInLease.lease().id().equals(PtAppContext.getCurrentLease().id()))) {
             throw new SecurityViolationException("Invalid data access");
         }
         summary.setPrimaryKey(tenantId);

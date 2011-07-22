@@ -19,9 +19,9 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.common.domain.media.Media;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.marketing.Marketing;
+import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Complex;
 
 //TODO rename to Property?!

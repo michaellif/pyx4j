@@ -18,8 +18,8 @@ import org.junit.Assert;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.domain.Application;
+import com.propertyvista.domain.DemoData;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;

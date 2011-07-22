@@ -18,7 +18,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.security.InstanceAccess;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.common.domain.ISharedUserEntity;
+import com.propertyvista.domain.ISharedUserEntity;
 
 public class SharedUserEntityInstanceAccess implements InstanceAccess {
 

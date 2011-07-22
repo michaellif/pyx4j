@@ -28,9 +28,9 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 import com.pyx4j.security.shared.CoreBehavior;
 
 import com.propertyvista.admin.server.security.VistaAdminAccessControlList;
-import com.propertyvista.common.domain.User;
-import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.crm.server.security.VistaCrmAccessControlList;
+import com.propertyvista.domain.User;
+import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.portal.server.security.VistaPortalAccessControlList;
 import com.propertyvista.server.domain.UserCredential;
 

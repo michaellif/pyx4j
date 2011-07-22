@@ -43,7 +43,7 @@ import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-import com.propertyvista.common.domain.ref.City;
+import com.propertyvista.domain.ref.City;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;

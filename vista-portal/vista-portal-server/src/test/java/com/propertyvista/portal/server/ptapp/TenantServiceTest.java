@@ -20,9 +20,9 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.domain.Application;
+import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;

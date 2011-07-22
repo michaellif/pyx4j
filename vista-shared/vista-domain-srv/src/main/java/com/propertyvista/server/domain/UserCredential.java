@@ -24,8 +24,8 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.User;
-import com.propertyvista.common.domain.VistaBehavior;
+import com.propertyvista.domain.User;
+import com.propertyvista.domain.VistaBehavior;
 
 @RpcBlacklist
 @Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = User.class)

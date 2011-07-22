@@ -22,6 +22,10 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.IBoundToApplication;
+import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.charges.ChargeLine;
+import com.propertyvista.domain.charges.ChargeLineList;
 import com.propertyvista.portal.domain.payment.BillingAddress;
 import com.propertyvista.portal.domain.payment.CreditCardInfo;
 import com.propertyvista.portal.domain.payment.EcheckInfo;
@@ -55,7 +59,7 @@ public interface PaymentInfo extends IEntity, IBoundToApplication {
 
     IPrimitive<Boolean> sameAsCurrent();
 
-    Address currentAddress();
+    PriorAddress currentAddress();
 
     IPrimitive<String> currentPhone();
 

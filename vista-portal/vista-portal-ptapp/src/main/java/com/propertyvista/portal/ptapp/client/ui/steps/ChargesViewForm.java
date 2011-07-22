@@ -31,8 +31,8 @@ import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactor
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.common.domain.financial.Money;
-import com.propertyvista.portal.domain.ptapp.ChargeLine;
+import com.propertyvista.domain.charges.ChargeLine;
+import com.propertyvista.domain.financial.Money;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;

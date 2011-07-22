@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
-import com.propertyvista.portal.domain.ptapp.ApplicationDocument;
+import com.propertyvista.domain.ApplicationDocument;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 
 public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {

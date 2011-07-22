@@ -18,7 +18,7 @@ import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.ISharedUserEntity;
+import com.propertyvista.domain.ISharedUserEntity;
 
 public interface GadgetMetadata extends ISharedUserEntity {
 

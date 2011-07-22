@@ -22,14 +22,14 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.portal.domain.ptapp.IBoundToApplication;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.domain.IBoundToApplication;
+import com.propertyvista.domain.tenant.Tenant;
 
 @RpcTransient
 public interface ApplicationDocumentData extends IEntity, IBoundToApplication {
 
     @Detached
-    PotentialTenantInfo tenant();
+    Tenant tenant();
 
     IPrimitive<String> contentType();
 

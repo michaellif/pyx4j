@@ -28,9 +28,9 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 
-import com.propertyvista.common.domain.financial.Money;
-import com.propertyvista.common.domain.ref.Country;
-import com.propertyvista.common.domain.ref.Province;
+import com.propertyvista.domain.financial.Money;
+import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.Province;
 
 public class VistaViewersComponentFactory extends EntityFormComponentFactory {
 

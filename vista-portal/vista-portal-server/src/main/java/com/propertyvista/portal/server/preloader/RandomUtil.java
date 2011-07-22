@@ -20,8 +20,8 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.person.Person;
+import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.person.Person;
 
 public class RandomUtil extends DataGenerator {
 

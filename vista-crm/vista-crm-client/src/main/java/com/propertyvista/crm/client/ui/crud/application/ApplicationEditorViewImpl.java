@@ -19,10 +19,10 @@ import com.pyx4j.site.client.ui.crud.ListerBase.ItemSelectionHandler;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.dto.ApplicationDTO;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BuildingDTO;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 
 public class ApplicationEditorViewImpl extends CrmEditorViewImplBase<ApplicationDTO> implements ApplicationEditorView {
 
@@ -65,7 +65,7 @@ public class ApplicationEditorViewImpl extends CrmEditorViewImplBase<Application
     }
 
     @Override
-    public IListerView<PotentialTenantInfo> getTenantListerView() {
+    public IListerView<TenantInLease> getTenantListerView() {
         return delegate.getTenantListerView();
     }
 }

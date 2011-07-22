@@ -37,9 +37,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.domain.PreloadConfig;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 
@@ -214,10 +214,13 @@ public class CleanOrphanUploadsJobTest extends VistaDBTestBase {
         //scheduler.start();
     }
 
-    private static ApplicationDocumentData createDataRecord(PotentialTenantInfo tenantInfo) {
+    private static ApplicationDocumentData createDataRecord(Tenant tenantInfo) {
         ApplicationDocumentData applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
         applicationDocumentData.tenant().set(tenantInfo);
-        applicationDocumentData.application().set(tenantInfo.application());
+
+// TODO: There is no application in Tenant now!..
+//        applicationDocumentData.application().set(tenantInfo.application());
+
         applicationDocumentData.data().setValue(new byte[0]);
         applicationDocumentData.contentType().setValue("image/jpeg");
         PersistenceServicesFactory.getPersistenceService().persist(applicationDocumentData);

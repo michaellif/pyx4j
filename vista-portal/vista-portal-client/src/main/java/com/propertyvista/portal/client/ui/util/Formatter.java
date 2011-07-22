@@ -18,8 +18,8 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.common.domain.RangeGroup;
-import com.propertyvista.common.domain.contact.IAddress;
+import com.propertyvista.domain.RangeGroup;
+import com.propertyvista.domain.contact.IAddress;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 
 public class Formatter {

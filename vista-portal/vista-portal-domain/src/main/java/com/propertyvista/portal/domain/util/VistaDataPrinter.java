@@ -15,25 +15,25 @@ package com.propertyvista.portal.domain.util;
 
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.common.domain.User;
+import com.propertyvista.domain.Application;
+import com.propertyvista.domain.Pet;
+import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.User;
+import com.propertyvista.domain.Vehicle;
+import com.propertyvista.domain.charges.ChargeLine;
+import com.propertyvista.domain.charges.ChargeLineSelectable;
+import com.propertyvista.domain.tenant.income.TenantAsset;
+import com.propertyvista.domain.tenant.income.TenantGuarantor;
+import com.propertyvista.domain.tenant.income.TenantIncome;
+import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
-import com.propertyvista.portal.domain.ptapp.Address;
-import com.propertyvista.portal.domain.ptapp.Application;
-import com.propertyvista.portal.domain.ptapp.ChargeLine;
-import com.propertyvista.portal.domain.ptapp.ChargeLineSelectable;
 import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.domain.ptapp.Pet;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.SummaryPotentialTenantFinancial;
-import com.propertyvista.portal.domain.ptapp.TenantAsset;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
-import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
-import com.propertyvista.portal.domain.ptapp.TenantIncome;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
-import com.propertyvista.portal.domain.ptapp.Vehicle;
-import com.propertyvista.portal.domain.ptapp.dto.PetsDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 
 public class VistaDataPrinter {
@@ -237,7 +237,7 @@ public class VistaDataPrinter {
         return sb.toString();
     }
 
-    public static String print(Address address) {
+    public static String print(PriorAddress address) {
         StringBuilder sb = new StringBuilder();
         sb.append("\n");
         sb.append(address.unitNumber().getValue());
@@ -345,8 +345,8 @@ public class VistaDataPrinter {
         sb.append("\nTenants Payment Split ").append(charges.paymentSplitCharges().total().amount().getStringView()).append("\n");
         for (TenantCharge line : charges.paymentSplitCharges().charges()) {
             sb.append("\t").append(line.tenant().relationship().getStringView());
-            sb.append(" ").append(line.tenant().person().name().firstName().getStringView()).append(" ")
-                    .append(line.tenant().person().name().lastName().getStringView());
+            sb.append(" ").append(line.tenant().tenant().person().name().firstName().getStringView()).append(" ")
+                    .append(line.tenant().tenant().person().name().lastName().getStringView());
             sb.append(" \t").append(line.percentage().getValue()).append("% $");
             sb.append(line.charge().amount().getValue());
             sb.append("\n");

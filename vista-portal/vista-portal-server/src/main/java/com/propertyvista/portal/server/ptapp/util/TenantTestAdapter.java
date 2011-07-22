@@ -18,7 +18,7 @@ import java.util.List;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
-import com.propertyvista.server.domain.generator.TenantSummaryDTO;
+import com.propertyvista.portal.server.generator.TenantSummaryDTO;
 
 public class TenantTestAdapter {
 

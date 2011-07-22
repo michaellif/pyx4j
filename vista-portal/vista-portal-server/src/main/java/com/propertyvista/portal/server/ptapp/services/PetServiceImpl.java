@@ -25,11 +25,11 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.common.domain.financial.ChargeType;
+import com.propertyvista.domain.Pet;
+import com.propertyvista.domain.PetChargeRule;
+import com.propertyvista.domain.charges.ChargeType;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.domain.ptapp.Pet;
-import com.propertyvista.portal.domain.ptapp.PetChargeRule;
-import com.propertyvista.portal.domain.ptapp.dto.PetsDTO;
+import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.ptapp.services.PetService;
 import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;

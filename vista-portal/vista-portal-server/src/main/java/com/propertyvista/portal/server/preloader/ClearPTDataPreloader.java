@@ -16,7 +16,7 @@ package com.propertyvista.portal.server.preloader;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
-import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.domain.Application;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;

@@ -24,17 +24,17 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.domain.Pet;
+import com.propertyvista.domain.charges.ChargeLine.ChargeType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.portal.domain.ptapp.ChargeLine.ChargeType;
+import com.propertyvista.domain.util.DomainUtil;
+import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.domain.ptapp.Pet;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
-import com.propertyvista.portal.domain.ptapp.dto.PetsDTO;
-import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
 public class ChargesServerCalculation extends ChargesSharedCalculation {
@@ -254,7 +254,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             if (status == Status.Applicant) {
                 percentage = 100;
             }
-            TenantCharge tenantCharge = DomainUtil.createTenantCharge(percentage, 0);
+            TenantCharge tenantCharge = com.propertyvista.portal.domain.util.DomainUtil.createTenantCharge(percentage, 0);
             tenantCharge.tenant().set(tenant);
             //            PersistenceServicesFactory.getPersistenceService().persist(tenant);
             charges.paymentSplitCharges().charges().add(tenantCharge);

@@ -20,9 +20,9 @@ import java.util.Map;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
-import com.propertyvista.common.domain.ref.City;
-import com.propertyvista.common.domain.ref.Country;
-import com.propertyvista.common.domain.ref.Province;
+import com.propertyvista.domain.ref.City;
+import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.Province;
 import com.propertyvista.server.common.generator.LocationsGenerator;
 import com.propertyvista.server.common.reference.SharedData;
 

@@ -40,7 +40,7 @@ import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.domain.DemoData;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 

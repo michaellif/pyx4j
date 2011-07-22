@@ -17,8 +17,8 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.common.domain.ref.City;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.ref.City;
 
 public class PublicDataUpdater {
 

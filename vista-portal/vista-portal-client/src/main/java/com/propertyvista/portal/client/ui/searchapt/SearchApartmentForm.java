@@ -36,7 +36,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
-import com.propertyvista.common.domain.ref.City;
+import com.propertyvista.domain.ref.City;
 import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;

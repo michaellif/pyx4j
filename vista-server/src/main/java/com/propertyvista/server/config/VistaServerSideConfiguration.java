@@ -27,8 +27,8 @@ import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.security.shared.AclCreator;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.config.VistaSMTPMailServiceConfig;
+import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.common.security.VistaAntiBot;
 import com.propertyvista.server.security.VistaAccessControlList;

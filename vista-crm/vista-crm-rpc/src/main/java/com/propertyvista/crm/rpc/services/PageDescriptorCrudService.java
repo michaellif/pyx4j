@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.portal.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageDescriptor;
 
 public interface PageDescriptorCrudService extends AbstractCrudService<PageDescriptor> {
 

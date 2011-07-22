@@ -18,7 +18,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.portal.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageDescriptor;
 
 @Transient
 public interface MainNavigDTO extends IEntity {

@@ -20,6 +20,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.IBoundToApplication;
+
 //TODO  Move to DTO and use data from Lease
 @Deprecated
 public interface PotentialTenantList extends IEntity, IBoundToApplication {

@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.crud.application;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
 
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BuildingDTO;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 
 public interface ApplicationView {
 
@@ -34,5 +34,5 @@ public interface ApplicationView {
 
     IListerView<AptUnitDTO> getUnitListerView();
 
-    IListerView<PotentialTenantInfo> getTenantListerView();
+    IListerView<TenantInLease> getTenantListerView();
 }

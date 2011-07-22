@@ -32,10 +32,10 @@ import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.MainNavigView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.domain.site.PageDescriptor;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 

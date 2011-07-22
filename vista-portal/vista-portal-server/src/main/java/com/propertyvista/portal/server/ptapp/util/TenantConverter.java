@@ -15,13 +15,13 @@ package com.propertyvista.portal.server.ptapp.util;
 
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
-import com.propertyvista.common.domain.tenant.TenantInLease;
-import com.propertyvista.common.domain.tenant.TenantInLeaseFragment;
-import com.propertyvista.common.domain.tenant.TenantScreeningSecureInfoFragment;
+import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.TenantInLeaseFragment;
+import com.propertyvista.domain.tenant.TenantScreeningSecureInfoFragment;
 import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
-import com.propertyvista.server.domain.generator.TenantSummaryDTO;
+import com.propertyvista.portal.server.generator.TenantSummaryDTO;
 
 public class TenantConverter {
 

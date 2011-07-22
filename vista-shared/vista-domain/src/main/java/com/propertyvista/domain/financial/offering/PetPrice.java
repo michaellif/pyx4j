@@ -17,7 +17,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.ref.PetType;
+import com.propertyvista.domain.PetType;
 
 public interface PetPrice extends IEntity {
 

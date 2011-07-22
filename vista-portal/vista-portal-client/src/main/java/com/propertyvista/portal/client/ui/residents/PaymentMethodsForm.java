@@ -38,7 +38,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.widgets.client.ImageButton;
 
-import com.propertyvista.common.domain.contact.IAddressFull;
+import com.propertyvista.domain.contact.IAddressFull;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.decorations.PortalHeaderBar;
 import com.propertyvista.portal.client.ui.decorations.TableFolderDecorator;

@@ -18,7 +18,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.financial.Currency;
+import com.propertyvista.domain.financial.Currency;
 
 public interface BuildingFinancial extends IEntity {
 

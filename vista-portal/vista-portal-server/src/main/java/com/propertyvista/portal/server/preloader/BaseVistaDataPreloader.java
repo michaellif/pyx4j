@@ -18,7 +18,7 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
-import com.propertyvista.common.domain.PreloadConfig;
+import com.propertyvista.domain.PreloadConfig;
 
 abstract class BaseVistaDataPreloader extends AbstractDataPreloader {
 

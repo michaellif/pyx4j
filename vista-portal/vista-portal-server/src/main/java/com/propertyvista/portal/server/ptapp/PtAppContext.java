@@ -25,8 +25,8 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
-import com.propertyvista.common.domain.tenant.LeaseConcern;
-import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.domain.Application;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
 import com.propertyvista.server.common.security.VistaContext;
 
@@ -75,7 +75,7 @@ public class PtAppContext extends VistaContext {
         ((PtUserVisit) v.getUserVisit()).setApplicationPrimaryKey(application.getPrimaryKey());
     }
 
-    public static LeaseConcern getCurrentLeaseConcern() {
+    public static Lease getCurrentLease() {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn())) {
             log.trace("no session");
@@ -85,12 +85,12 @@ public class PtAppContext extends VistaContext {
             log.trace("no application selected");
             throw new UserRuntimeException(i18n.tr("no application selected"));
         }
-        LeaseConcern application = EntityFactory.create(LeaseConcern.class);
+        Lease application = EntityFactory.create(Lease.class);
         application.setPrimaryKey(((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey());
         return application;
     }
 
-    public static void setCurrentLeaseConcern(LeaseConcern application) {
+    public static void setCurrentLease(Lease application) {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn())) {
             log.trace("no session");

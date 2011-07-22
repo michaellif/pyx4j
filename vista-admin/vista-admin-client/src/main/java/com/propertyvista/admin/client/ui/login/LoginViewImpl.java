@@ -36,8 +36,8 @@ import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.PreloadConfig;
+import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.PreloadConfig;
 
 public class LoginViewImpl extends FlowPanel implements LoginView {
 

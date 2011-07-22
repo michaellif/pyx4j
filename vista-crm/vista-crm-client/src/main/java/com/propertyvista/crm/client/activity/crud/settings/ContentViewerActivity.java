@@ -22,7 +22,7 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.client.ui.crud.settings.ContentViewer;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
-import com.propertyvista.portal.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageDescriptor;
 
 public class ContentViewerActivity extends ViewerActivityBase<PageDescriptor> {
 

@@ -17,7 +17,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.security.InstanceAccess;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.portal.domain.ptapp.IBoundToApplication;
+import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class ApplicationEntityInstanceAccess implements InstanceAccess {

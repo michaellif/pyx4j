@@ -48,12 +48,12 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
-import com.propertyvista.common.domain.ref.Country;
-import com.propertyvista.common.domain.ref.Province;
+import com.propertyvista.domain.EmergencyContact;
+import com.propertyvista.domain.Vehicle;
+import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.Province;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
-import com.propertyvista.portal.domain.ptapp.EmergencyContact;
-import com.propertyvista.portal.domain.ptapp.Vehicle;
 
 public class PersonalInfoForm extends CEntityForm<ResidentDTO> implements PersonalInfoView {
 

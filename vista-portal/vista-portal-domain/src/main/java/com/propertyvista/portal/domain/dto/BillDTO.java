@@ -22,8 +22,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.common.domain.financial.Money;
-import com.propertyvista.portal.domain.ptapp.ChargeLine;
+import com.propertyvista.domain.charges.ChargeLine;
+import com.propertyvista.domain.financial.Money;
 
 @Transient
 public interface BillDTO extends IEntity {

@@ -39,10 +39,10 @@ import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.portal.domain.ptapp.Address;
-import com.propertyvista.portal.domain.ptapp.EmergencyContact;
+import com.propertyvista.domain.EmergencyContact;
+import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.Vehicle;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.Vehicle;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.VistaReadOnlyDecorator;
@@ -175,7 +175,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTe
         return fullViewPanel;
     }
 
-    private FlowPanel bindAddress(Address currentAddress, DecorationData dd2ColumnsTable) {
+    private FlowPanel bindAddress(PriorAddress currentAddress, DecorationData dd2ColumnsTable) {
         FlowPanel addressPanel = new FlowPanel();
 
         addressPanel.add(new HTML(h3(currentAddress.getMeta().getCaption())));

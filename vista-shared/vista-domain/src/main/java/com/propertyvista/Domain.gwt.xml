@@ -4,8 +4,6 @@
 <module>
     <inherits name='com.pyx4j.entity.EntityShared'/>
    
-    <inherits name='com.propertyvista.portal.Domain' />
-
     <source path="domain"/>
     <source path="dto"/>
 </module>

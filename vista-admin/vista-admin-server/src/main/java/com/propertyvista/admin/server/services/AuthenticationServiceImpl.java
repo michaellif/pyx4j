@@ -24,7 +24,7 @@ import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.UserVisit;
 
 import com.propertyvista.admin.rpc.services.AuthenticationService;
-import com.propertyvista.common.domain.VistaBehavior;
+import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.server.common.security.VistaLifecycle;
 
 public class AuthenticationServiceImpl extends com.pyx4j.security.server.AuthenticationServiceImpl implements AuthenticationService {

@@ -21,8 +21,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.IBoundToApplication;
+import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
-import com.propertyvista.portal.domain.ptapp.dto.PetsDTO;
 
 public interface Summary extends IEntity, IBoundToApplication {
 

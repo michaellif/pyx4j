@@ -21,29 +21,29 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.PreloadConfig;
-import com.propertyvista.common.domain.User;
-import com.propertyvista.common.domain.contact.IAddress;
-import com.propertyvista.portal.domain.ptapp.Address;
-import com.propertyvista.portal.domain.ptapp.Application;
+import com.propertyvista.domain.Application;
+import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.EmergencyContact;
+import com.propertyvista.domain.Pet;
+import com.propertyvista.domain.PreloadConfig;
+import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.User;
+import com.propertyvista.domain.charges.ChargeLine;
+import com.propertyvista.domain.charges.ChargeLineList;
+import com.propertyvista.domain.contact.IAddress;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
-import com.propertyvista.portal.domain.ptapp.ChargeLine;
-import com.propertyvista.portal.domain.ptapp.ChargeLineList;
 import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.domain.ptapp.EmergencyContact;
-import com.propertyvista.portal.domain.ptapp.Pet;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.TenantChargeList;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
+import com.propertyvista.portal.server.generator.ApplicationSummaryDTO;
 import com.propertyvista.portal.server.generator.PTGenerator;
+import com.propertyvista.portal.server.generator.TenantSummaryDTO;
 import com.propertyvista.portal.server.ptapp.services.ApplicationDebug;
 import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
 import com.propertyvista.server.domain.ApplicationDocumentData;
-import com.propertyvista.server.domain.generator.ApplicationSummaryDTO;
-import com.propertyvista.server.domain.generator.TenantSummaryDTO;
 
 public class PreloadPT extends BaseVistaDataPreloader {
 
@@ -83,7 +83,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Charges.class, ChargeLineList.class, ChargeLine.class, TenantChargeList.class, TenantCharge.class, Application.class,
-                    UnitSelection.class, ApplicationProgress.class, Pet.class, EmergencyContact.class, Summary.class, Address.class,
+                    UnitSelection.class, ApplicationProgress.class, Pet.class, EmergencyContact.class, Summary.class, PriorAddress.class,
                     ApplicationDocumentData.class);
         } else {
             return "This is production";

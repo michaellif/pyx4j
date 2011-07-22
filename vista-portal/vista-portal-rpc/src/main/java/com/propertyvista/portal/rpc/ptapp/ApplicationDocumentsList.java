@@ -17,7 +17,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.portal.domain.ptapp.ApplicationDocument;
+import com.propertyvista.domain.ApplicationDocument;
 
 /**
  * This class in created because we don't have instance of IList by itself

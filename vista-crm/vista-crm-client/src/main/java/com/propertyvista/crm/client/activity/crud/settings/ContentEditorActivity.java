@@ -24,8 +24,8 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.client.ui.crud.settings.ContentEditor;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
-import com.propertyvista.portal.domain.site.PageDescriptor;
-import com.propertyvista.portal.domain.site.PageDescriptor.Type;
+import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageDescriptor.Type;
 
 public class ContentEditorActivity extends EditorActivityBase<PageDescriptor> implements ContentEditor.Presenter {
 

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import com.propertyvista.portal.domain.ptapp.dto.PetsDTO;
+import com.propertyvista.dto.PetsDTO;
 
 public interface PetsView extends WizardStepView<PetsDTO, PetsViewPresenter> {
 

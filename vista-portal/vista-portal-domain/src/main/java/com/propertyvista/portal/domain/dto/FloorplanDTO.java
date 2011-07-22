@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.RangeGroup;
+import com.propertyvista.domain.RangeGroup;
 
 @Transient
 public interface FloorplanDTO extends IEntity {

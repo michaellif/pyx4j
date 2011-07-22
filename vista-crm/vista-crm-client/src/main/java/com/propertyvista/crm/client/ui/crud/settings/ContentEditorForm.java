@@ -42,7 +42,7 @@ import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
 import com.propertyvista.crm.client.ui.crud.settings.ContentEditor.Presenter;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.portal.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageDescriptor;
 
 public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
 

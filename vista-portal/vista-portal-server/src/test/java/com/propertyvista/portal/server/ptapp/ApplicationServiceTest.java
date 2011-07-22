@@ -21,8 +21,8 @@ import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.config.tests.VistaDBTestBase;
+import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;

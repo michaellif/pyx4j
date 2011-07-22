@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18nFactory;
 
-import com.propertyvista.portal.domain.util.ValidationUtils;
+import com.propertyvista.domain.util.ValidationUtils;
 
 public class CanadianSinValidator implements EditableValueValidator<String> {
 

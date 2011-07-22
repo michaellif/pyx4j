@@ -19,7 +19,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
-import com.propertyvista.common.domain.financial.Money;
+import com.propertyvista.domain.financial.Money;
 
 public class DefaultMoneyValidator implements EditableValueValidator<Money> {
 

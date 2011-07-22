@@ -19,9 +19,9 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.portal.domain.ptapp.TenantAsset;
-import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
-import com.propertyvista.portal.domain.ptapp.TenantIncome;
+import com.propertyvista.domain.tenant.income.TenantAsset;
+import com.propertyvista.domain.tenant.income.TenantGuarantor;
+import com.propertyvista.domain.tenant.income.TenantIncome;
 
 @Transient
 public interface TenantFinancialEditorDTO extends IEntity {

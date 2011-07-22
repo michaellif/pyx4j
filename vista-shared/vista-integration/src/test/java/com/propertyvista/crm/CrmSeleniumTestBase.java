@@ -19,9 +19,9 @@ import com.pyx4j.selenium.D;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
 import com.pyx4j.selenium.SeleniumTestBase;
 
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.PreloadConfig;
-import com.propertyvista.common.domain.User;
+import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.PreloadConfig;
+import com.propertyvista.domain.User;
 import com.propertyvista.portal.server.generator.PTGenerator;
 import com.propertyvista.unit.VistaDevLogin;
 import com.propertyvista.unit.config.ApplicationId;

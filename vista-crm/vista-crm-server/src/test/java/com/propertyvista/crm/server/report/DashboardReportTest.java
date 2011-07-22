@@ -31,10 +31,10 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-import com.propertyvista.common.domain.User;
-import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
+import com.propertyvista.domain.User;
+import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class DashboardReportTest extends ReportsTestBase {

@@ -22,6 +22,8 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.IBoundToApplication;
+
 public interface UnitSelection extends IEntity, IBoundToApplication {
 
     @EmbeddedEntity

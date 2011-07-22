@@ -36,9 +36,9 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
-import com.propertyvista.common.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
-import com.propertyvista.portal.domain.util.ValidationUtils;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.validators.OldAgeValidator;
 

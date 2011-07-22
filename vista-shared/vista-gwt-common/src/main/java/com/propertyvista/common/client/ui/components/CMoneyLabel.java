@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.components;
 import com.pyx4j.forms.client.ui.CAbstractLabel;
 
 import com.propertyvista.common.client.ui.components.DefaultMoneyFormatter.ShowCurrency;
-import com.propertyvista.common.domain.financial.Money;
+import com.propertyvista.domain.financial.Money;
 
 public class CMoneyLabel extends CAbstractLabel<Money> {
 

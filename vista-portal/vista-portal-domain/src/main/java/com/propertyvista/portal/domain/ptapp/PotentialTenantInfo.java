@@ -17,7 +17,10 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.common.domain.tenant.TenantScreening;
+import com.propertyvista.domain.EmergencyContact;
+import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.Vehicle;
+import com.propertyvista.domain.tenant.TenantScreening;
 
 @Deprecated
 public interface PotentialTenantInfo extends PotentialTenant, TenantScreening {
@@ -28,11 +31,11 @@ public interface PotentialTenantInfo extends PotentialTenant, TenantScreening {
      */
     @Override
     @Owned
-    Address currentAddress();
+    PriorAddress currentAddress();
 
     @Override
     @Owned
-    Address previousAddress();
+    PriorAddress previousAddress();
 
     @Override
     @Owned

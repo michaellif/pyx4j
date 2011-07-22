@@ -18,7 +18,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.contact.IAddressFull;
+import com.propertyvista.domain.contact.IAddressFull;
 
 public interface BillingAddress extends IEntity, IAddressFull {
 

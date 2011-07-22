@@ -20,12 +20,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.common.domain.ref.City;
+import com.propertyvista.domain.ref.City;
+import com.propertyvista.domain.site.PageContent;
+import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
-import com.propertyvista.portal.domain.site.PageContent;
-import com.propertyvista.portal.domain.site.PageDescriptor;
 
 public interface PortalSiteServices extends IService {
 

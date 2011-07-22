@@ -17,7 +17,7 @@ import com.pyx4j.site.client.ui.crud.IEditorView;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.portal.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageDescriptor;
 
 public class ContentEditorImpl extends CrmEditorViewImplBase<PageDescriptor> implements ContentEditor {
     public ContentEditorImpl() {

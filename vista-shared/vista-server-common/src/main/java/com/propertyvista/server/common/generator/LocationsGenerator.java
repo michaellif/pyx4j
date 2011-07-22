@@ -21,9 +21,9 @@ import java.util.Vector;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.common.domain.ref.City;
-import com.propertyvista.common.domain.ref.Country;
-import com.propertyvista.common.domain.ref.Province;
+import com.propertyvista.domain.ref.City;
+import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.Province;
 
 public class LocationsGenerator {
 

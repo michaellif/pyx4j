@@ -14,12 +14,11 @@
 package com.propertyvista.crm.server.services;
 
 import com.propertyvista.crm.rpc.services.ApplicationTenantCrudService;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.domain.tenant.TenantInLease;
 
-public class ApplicationTenantCrudServiceImpl extends GenericCrudServiceImpl<PotentialTenantInfo> implements ApplicationTenantCrudService {
+public class ApplicationTenantCrudServiceImpl extends GenericCrudServiceImpl<TenantInLease> implements ApplicationTenantCrudService {
 
     public ApplicationTenantCrudServiceImpl() {
-        super(PotentialTenantInfo.class);
+        super(TenantInLease.class);
     }
-
 }

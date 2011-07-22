@@ -27,11 +27,11 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
+import com.propertyvista.domain.Pet;
+import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.tenant.lease.LeaseEvent;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.portal.domain.ptapp.ChargeLine;
-import com.propertyvista.portal.domain.ptapp.Pet;
 
 public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 

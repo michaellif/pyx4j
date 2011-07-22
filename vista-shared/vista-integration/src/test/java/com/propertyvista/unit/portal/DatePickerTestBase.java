@@ -26,9 +26,9 @@ import com.pyx4j.selenium.D;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.datepicker.DatePickerIDs;
 
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.PreloadConfig;
-import com.propertyvista.common.domain.User;
+import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.PreloadConfig;
+import com.propertyvista.domain.User;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;

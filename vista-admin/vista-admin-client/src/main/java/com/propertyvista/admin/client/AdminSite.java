@@ -32,7 +32,7 @@ import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.services.AuthenticationService;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
-import com.propertyvista.common.domain.VistaBehavior;
+import com.propertyvista.domain.VistaBehavior;
 
 public class AdminSite extends VistaSite {
 

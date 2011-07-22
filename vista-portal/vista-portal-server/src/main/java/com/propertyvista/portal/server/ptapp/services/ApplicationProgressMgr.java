@@ -26,8 +26,8 @@ import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.common.domain.tenant.TenantInLease;
-import com.propertyvista.common.domain.tenant.TenantInLeaseFragment;
+import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.TenantInLeaseFragment;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
@@ -35,8 +35,8 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.server.generator.TenantSummaryDTO;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
-import com.propertyvista.server.domain.generator.TenantSummaryDTO;
 
 public class ApplicationProgressMgr {
 
@@ -98,7 +98,7 @@ public class ApplicationProgressMgr {
 
     public static void invalidateChargesStep() {
         EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
-        applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().lease(), PtAppContext.getCurrentLeaseConcern()));
+        applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().lease(), PtAppContext.getCurrentLease()));
         ApplicationProgress progress = EntityServicesImpl.secureRetrieve(applicationProgressCriteria);
         ApplicationWizardStep chargesStep = findWizardStep(progress, PtSiteMap.Charges.class);
         switch (chargesStep.status().getValue()) {
@@ -111,7 +111,7 @@ public class ApplicationProgressMgr {
 
     public static void syncroizeApplicationProgress(List<TenantEditorDTO> tenants) {
         EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
-        applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().lease(), PtAppContext.getCurrentLeaseConcern()));
+        applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().lease(), PtAppContext.getCurrentLease()));
 
         ApplicationProgress progress = EntityServicesImpl.secureRetrieve(applicationProgressCriteria);
 

@@ -59,8 +59,8 @@ import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 
-import com.propertyvista.portal.domain.ptapp.ApplicationDocument;
-import com.propertyvista.portal.domain.ptapp.ApplicationDocument.DocumentType;
+import com.propertyvista.domain.ApplicationDocument;
+import com.propertyvista.domain.ApplicationDocument.DocumentType;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.rpc.ptapp.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.rpc.ptapp.ServletMapping;

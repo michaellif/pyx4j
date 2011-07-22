@@ -16,6 +16,8 @@ package com.propertyvista.portal.domain.ptapp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.PetChargeRule;
+
 /**
  * Contains rules to be used for a given property. The data will come from PM configs
  * during building setup.

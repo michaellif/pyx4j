@@ -31,7 +31,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.common.domain.media.Media;
+import com.propertyvista.domain.media.Media;
 
 /**
  * This is just a placeholder, this can be moved to another util method

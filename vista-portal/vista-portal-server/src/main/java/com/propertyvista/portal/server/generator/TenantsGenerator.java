@@ -19,11 +19,11 @@ import java.util.List;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.company.Company;
-import com.propertyvista.common.domain.company.OrganizationContact;
-import com.propertyvista.common.domain.company.OrganizationContacts;
-import com.propertyvista.common.domain.tenant.Tenant;
+import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.company.Company;
+import com.propertyvista.domain.company.OrganizationContact;
+import com.propertyvista.domain.company.OrganizationContacts;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.server.preloader.RandomUtil;
 
 public class TenantsGenerator {

@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.geo.GeoPoint;
 
-import com.propertyvista.common.domain.contact.Address;
+import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class GeoLocator {

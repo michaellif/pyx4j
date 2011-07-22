@@ -30,7 +30,7 @@ import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.common.domain.contact.IAddress;
+import com.propertyvista.domain.contact.IAddress;
 import com.propertyvista.portal.client.MediaUtils;
 import com.propertyvista.portal.client.ui.decorations.ApartmentCardDecorator;
 import com.propertyvista.portal.client.ui.util.Formatter;

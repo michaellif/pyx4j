@@ -20,7 +20,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.ref.City;
+import com.propertyvista.domain.ref.City;
 
 @Transient
 public interface PropertySearchCriteria extends IEntity {

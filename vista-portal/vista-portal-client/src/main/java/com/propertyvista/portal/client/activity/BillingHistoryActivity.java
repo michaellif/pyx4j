@@ -22,13 +22,13 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.portal.client.ui.residents.BillingHistoryView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.BillDTO;
 import com.propertyvista.portal.domain.dto.BillDTO.BillType;
 import com.propertyvista.portal.domain.dto.BillListDTO;
 import com.propertyvista.portal.domain.dto.BillListDTO.SearchType;
-import com.propertyvista.portal.domain.util.DomainUtil;
 
 public class BillingHistoryActivity extends SecurityAwareActivity implements BillingHistoryView.Presenter {
     private final BillingHistoryView view;

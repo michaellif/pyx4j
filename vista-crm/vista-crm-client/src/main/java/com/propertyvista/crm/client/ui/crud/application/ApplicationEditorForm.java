@@ -46,11 +46,11 @@ import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.domain.Pet;
+import com.propertyvista.domain.Pet.WeightUnit;
+import com.propertyvista.domain.charges.ChargeLine;
+import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.dto.ApplicationDTO;
-import com.propertyvista.portal.domain.ptapp.ChargeLine;
-import com.propertyvista.portal.domain.ptapp.Pet;
-import com.propertyvista.portal.domain.ptapp.Pet.WeightUnit;
-import com.propertyvista.portal.domain.util.DomainUtil;
 
 public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
 

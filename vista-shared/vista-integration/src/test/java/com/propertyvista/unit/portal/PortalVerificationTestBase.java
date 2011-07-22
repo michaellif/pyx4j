@@ -20,23 +20,23 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.selenium.D;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.common.domain.contact.IAddress;
-import com.propertyvista.common.domain.contact.IAddressFull;
+import com.propertyvista.domain.EmergencyContact;
+import com.propertyvista.domain.Pet;
+import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.Vehicle;
+import com.propertyvista.domain.PriorAddress.OwnedRented;
+import com.propertyvista.domain.contact.IAddress;
+import com.propertyvista.domain.contact.IAddressFull;
+import com.propertyvista.domain.tenant.income.IEmploymentInfo;
+import com.propertyvista.domain.tenant.income.IIncomeInfo;
+import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
+import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
+import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
+import com.propertyvista.domain.tenant.income.TenantAsset;
+import com.propertyvista.domain.tenant.income.TenantGuarantor;
+import com.propertyvista.domain.tenant.income.TenantIncome;
+import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
-import com.propertyvista.portal.domain.ptapp.Address;
-import com.propertyvista.portal.domain.ptapp.Address.OwnedRented;
-import com.propertyvista.portal.domain.ptapp.EmergencyContact;
-import com.propertyvista.portal.domain.ptapp.IEmploymentInfo;
-import com.propertyvista.portal.domain.ptapp.IIncomeInfo;
-import com.propertyvista.portal.domain.ptapp.IncomeInfoEmployer;
-import com.propertyvista.portal.domain.ptapp.IncomeInfoSelfEmployed;
-import com.propertyvista.portal.domain.ptapp.IncomeInfoStudentIncome;
-import com.propertyvista.portal.domain.ptapp.Pet;
-import com.propertyvista.portal.domain.ptapp.TenantAsset;
-import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
-import com.propertyvista.portal.domain.ptapp.TenantIncome;
-import com.propertyvista.portal.domain.ptapp.Vehicle;
-import com.propertyvista.portal.domain.ptapp.dto.PetsDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
@@ -44,10 +44,10 @@ import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.BusinessRules;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
+import com.propertyvista.portal.server.generator.TenantSummaryDTO;
 import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 import com.propertyvista.portal.server.ptapp.util.TenantTestAdapter;
-import com.propertyvista.server.domain.generator.TenantSummaryDTO;
 
 abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
 
@@ -189,7 +189,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertValueOnForm(formDebugId, address.country());
     }
 
-    protected void assertAddressForm(IDebugId formDebugId, Address address) {
+    protected void assertAddressForm(IDebugId formDebugId, PriorAddress address) {
         assertIAddressForm(formDebugId, address);
 
         assertValueOnForm(formDebugId, address.phone());

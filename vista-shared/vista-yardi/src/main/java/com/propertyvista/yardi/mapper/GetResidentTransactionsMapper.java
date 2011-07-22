@@ -21,12 +21,12 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.common.domain.tenant.Tenant;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EconomicStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.property.asset.unit.AptUnitType;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.yardi.bean.mits.Customer;
 import com.propertyvista.yardi.bean.mits.Information;
 import com.propertyvista.yardi.bean.resident.Property;

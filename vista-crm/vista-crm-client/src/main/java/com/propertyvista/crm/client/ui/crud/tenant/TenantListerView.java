@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.tenant;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
 
-import com.propertyvista.common.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.Tenant;
 
 public interface TenantListerView extends IListerView<Tenant> {
 

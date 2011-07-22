@@ -19,8 +19,8 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 
-import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.config.tests.VistaDBTestBase;
+import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.portal.server.preloader.MediaGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 

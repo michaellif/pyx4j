@@ -25,10 +25,10 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.PreloadConfig;
-import com.propertyvista.common.domain.User;
-import com.propertyvista.common.domain.VistaBehavior;
+import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.PreloadConfig;
+import com.propertyvista.domain.User;
+import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.UserCredential;
 

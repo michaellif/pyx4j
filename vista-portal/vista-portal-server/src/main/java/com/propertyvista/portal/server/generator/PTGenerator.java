@@ -33,42 +33,42 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.PreloadConfig;
-import com.propertyvista.common.domain.User;
-import com.propertyvista.common.domain.VistaBehavior;
-import com.propertyvista.common.domain.contact.IAddress;
-import com.propertyvista.common.domain.contact.IAddressFull;
-import com.propertyvista.common.domain.contact.IAddressFull.StreetDirection;
-import com.propertyvista.common.domain.contact.IAddressFull.StreetType;
-import com.propertyvista.common.domain.person.Person;
-import com.propertyvista.common.domain.ref.PetType;
-import com.propertyvista.common.domain.ref.Province;
-import com.propertyvista.common.domain.tenant.Tenant.Type;
-import com.propertyvista.common.domain.tenant.TenantInLease;
-import com.propertyvista.common.domain.tenant.TenantScreening;
+import com.propertyvista.domain.ApplicationDocument;
+import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.EmergencyContact;
+import com.propertyvista.domain.LegalQuestions;
+import com.propertyvista.domain.Pet;
+import com.propertyvista.domain.Pet.WeightUnit;
+import com.propertyvista.domain.PetType;
+import com.propertyvista.domain.PreloadConfig;
+import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.User;
+import com.propertyvista.domain.Vehicle;
+import com.propertyvista.domain.VistaBehavior;
+import com.propertyvista.domain.charges.ChargeLine.ChargeType;
+import com.propertyvista.domain.contact.IAddress;
+import com.propertyvista.domain.contact.IAddressFull;
+import com.propertyvista.domain.contact.IAddressFull.StreetDirection;
+import com.propertyvista.domain.contact.IAddressFull.StreetType;
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.tenant.Tenant.Type;
+import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
+import com.propertyvista.domain.tenant.income.IncomeSource;
+import com.propertyvista.domain.tenant.income.TenantAsset;
+import com.propertyvista.domain.tenant.income.TenantAsset.AssetType;
+import com.propertyvista.domain.tenant.income.TenantGuarantor;
+import com.propertyvista.domain.tenant.income.TenantIncome;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.domain.ptapp.Address;
-import com.propertyvista.portal.domain.ptapp.ApplicationDocument;
-import com.propertyvista.portal.domain.ptapp.ChargeLine.ChargeType;
+import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.domain.ptapp.EmergencyContact;
-import com.propertyvista.portal.domain.ptapp.IncomeInfoEmployer;
-import com.propertyvista.portal.domain.ptapp.IncomeSource;
-import com.propertyvista.portal.domain.ptapp.LegalQuestions;
-import com.propertyvista.portal.domain.ptapp.Pet;
-import com.propertyvista.portal.domain.ptapp.Pet.WeightUnit;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Summary;
-import com.propertyvista.portal.domain.ptapp.TenantAsset;
-import com.propertyvista.portal.domain.ptapp.TenantAsset.AssetType;
-import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
-import com.propertyvista.portal.domain.ptapp.TenantIncome;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
-import com.propertyvista.portal.domain.ptapp.Vehicle;
-import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.ptapp.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.server.preloader.PreloadPT;
 import com.propertyvista.portal.server.preloader.RandomUtil;
@@ -76,8 +76,6 @@ import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 import com.propertyvista.server.domain.UserCredential;
-import com.propertyvista.server.domain.generator.ApplicationSummaryDTO;
-import com.propertyvista.server.domain.generator.TenantSummaryDTO;
 
 public class PTGenerator {
 
@@ -149,7 +147,7 @@ public class PTGenerator {
                 + RandomUtil.random(DemoData.EMAIL_DOMAINS);
         contact.email().setValue(email);
 
-        Address address = createAddress();
+        PriorAddress address = createAddress();
         contact.address().set(address);
 
         return contact;
@@ -333,8 +331,8 @@ public class PTGenerator {
         }
     }
 
-    public Address createAddress() {
-        Address address = EntityFactory.create(Address.class);
+    public PriorAddress createAddress() {
+        PriorAddress address = EntityFactory.create(PriorAddress.class);
 
         populateAddress(address);
 
@@ -344,7 +342,7 @@ public class PTGenerator {
         address.payment().setValue(1000d + RandomUtil.randomInt(1000));
 
         address.phone().setValue(RandomUtil.randomPhone());
-        address.rented().setValue(RandomUtil.randomEnum(Address.OwnedRented.class));
+        address.rented().setValue(RandomUtil.randomEnum(PriorAddress.OwnedRented.class));
         address.managerName().setValue("Mr. " + RandomUtil.random(DemoData.LAST_NAMES));
 
         return address;
@@ -437,11 +435,11 @@ public class PTGenerator {
             tenantSummary.tenantScreening().secureIdentifier().setValue("649 951 282");
         }
 
-        Address currentAddress = createAddress();
+        PriorAddress currentAddress = createAddress();
         currentAddress.moveOutDate().setValue(RandomUtil.randomLogicalDate(2012, 2013)); // this has to be in the future
         tenantSummary.tenantScreening().currentAddress().set(currentAddress);
 
-        Address previousAddress = createAddress();
+        PriorAddress previousAddress = createAddress();
         // moveOut date for previous address is the same as the moveIn date for current address
         Date moveOut = currentAddress.moveInDate().getValue();
         // moveIn date for previous address is a few days/years back

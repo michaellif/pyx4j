@@ -17,10 +17,11 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+
+import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.StaticPageView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.domain.site.PageContent;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Landing;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Page;

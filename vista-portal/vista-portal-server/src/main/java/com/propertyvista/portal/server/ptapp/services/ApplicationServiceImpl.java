@@ -24,9 +24,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
-import com.propertyvista.common.domain.User;
-import com.propertyvista.common.domain.tenant.Tenant;
-import com.propertyvista.common.domain.tenant.TenantInLease;
+import com.propertyvista.domain.User;
+import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
@@ -107,7 +107,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
             PersistenceServicesFactory.getPersistenceService().persist(unitSelection);
 
         }
-        PtAppContext.setCurrentLeaseConcern(lease);
+        PtAppContext.setCurrentLease(lease);
 
         CurrentApplication currentApplication = new CurrentApplication();
         currentApplication.progress = progress;
@@ -122,7 +122,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
     @Override
     public void getApplicationProgress(AsyncCallback<ApplicationProgress> callback, ApplicationWizardStep currentStep, ApplicationWizardSubstep currentSubstep) {
         EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
-        applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().lease(), PtAppContext.getCurrentLeaseConcern()));
+        applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().lease(), PtAppContext.getCurrentLease()));
         ApplicationProgress progress = secureRetrieve(applicationProgressCriteria);
 
         if (currentStep != null) {

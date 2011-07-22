@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.settings;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.portal.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageDescriptor;
 
 public class ContentViewerImpl extends CrmViewerViewImplBase<PageDescriptor> implements ContentViewer {
     public ContentViewerImpl() {

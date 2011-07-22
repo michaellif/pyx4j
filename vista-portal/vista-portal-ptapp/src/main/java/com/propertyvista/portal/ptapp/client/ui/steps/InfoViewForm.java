@@ -65,13 +65,13 @@ import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
-import com.propertyvista.common.domain.ref.Country;
-import com.propertyvista.common.domain.ref.Province;
-import com.propertyvista.portal.domain.ptapp.Address;
-import com.propertyvista.portal.domain.ptapp.Address.OwnedRented;
-import com.propertyvista.portal.domain.ptapp.ApplicationDocument.DocumentType;
-import com.propertyvista.portal.domain.ptapp.EmergencyContact;
-import com.propertyvista.portal.domain.ptapp.Vehicle;
+import com.propertyvista.domain.EmergencyContact;
+import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.Vehicle;
+import com.propertyvista.domain.ApplicationDocument.DocumentType;
+import com.propertyvista.domain.PriorAddress.OwnedRented;
+import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.Province;
 import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.components.ApplicationDocumentsFolderUploader;
@@ -176,7 +176,7 @@ public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
 
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
-        if (member.getValueClass().equals(Address.class)) {
+        if (member.getValueClass().equals(PriorAddress.class)) {
             return createAddressEditor();
         } else {
             return super.create(member);
@@ -186,7 +186,7 @@ public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
     @Override
     public void addValidations() {
         @SuppressWarnings("unchecked")
-        CEntityEditor<Address> currentAddressForm = ((CEntityEditor<Address>) getRaw(proto().currentAddress()));
+        CEntityEditor<PriorAddress> currentAddressForm = ((CEntityEditor<PriorAddress>) getRaw(proto().currentAddress()));
         currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
 
             @Override
@@ -224,7 +224,7 @@ public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
         // ------------------------------------------------------------------------------------------------        
 
         @SuppressWarnings("unchecked")
-        final CEntityEditor<Address> previousAddressForm = ((CEntityEditor<Address>) getRaw(proto().previousAddress()));
+        final CEntityEditor<PriorAddress> previousAddressForm = ((CEntityEditor<PriorAddress>) getRaw(proto().previousAddress()));
         previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
 
             @Override
@@ -338,8 +338,8 @@ public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
         }
     }
 
-    private CEntityEditor<Address> createAddressEditor() {
-        return new CEntityEditor<Address>(Address.class) {
+    private CEntityEditor<PriorAddress> createAddressEditor() {
+        return new CEntityEditor<PriorAddress>(PriorAddress.class) {
             @SuppressWarnings({ "rawtypes", "unchecked" })
             @Override
             public IsWidget createContent() {
@@ -364,12 +364,12 @@ public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
             }
 
             @Override
-            public void populate(Address value) {
+            public void populate(PriorAddress value) {
                 super.populate(value);
                 setVizibility(value);
             }
 
-            private void setVizibility(Address value) {
+            private void setVizibility(PriorAddress value) {
                 boolean rented = OwnedRented.rented.equals(value.rented().getValue());
                 get(proto().payment()).setVisible(rented);
                 get(proto().managerName()).setVisible(rented);

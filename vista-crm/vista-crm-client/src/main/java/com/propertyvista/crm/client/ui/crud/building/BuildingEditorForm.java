@@ -32,13 +32,13 @@ import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
-import com.propertyvista.common.domain.contact.Address;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
 

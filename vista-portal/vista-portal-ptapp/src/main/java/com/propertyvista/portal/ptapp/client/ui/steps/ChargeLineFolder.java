@@ -23,7 +23,7 @@ import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.portal.domain.ptapp.ChargeLine;
+import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 

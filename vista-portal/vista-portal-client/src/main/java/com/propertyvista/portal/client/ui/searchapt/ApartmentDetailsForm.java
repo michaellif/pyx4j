@@ -32,8 +32,8 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.common.domain.RangeGroup;
-import com.propertyvista.common.domain.contact.IAddress;
+import com.propertyvista.domain.RangeGroup;
+import com.propertyvista.domain.contact.IAddress;
 import com.propertyvista.portal.client.MediaUtils;
 import com.propertyvista.portal.client.ui.decorations.FloorplanCardDecorator;
 import com.propertyvista.portal.client.ui.decorations.PortalListDecorator;

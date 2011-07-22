@@ -38,8 +38,8 @@ import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.VistaBehavior;
+import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep.Status;

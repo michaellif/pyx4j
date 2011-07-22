@@ -42,11 +42,11 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
-import com.propertyvista.portal.domain.ptapp.ChargeLine;
-import com.propertyvista.portal.domain.ptapp.Pet;
-import com.propertyvista.portal.domain.ptapp.Pet.WeightUnit;
-import com.propertyvista.portal.domain.ptapp.dto.PetsDTO;
-import com.propertyvista.portal.domain.util.DomainUtil;
+import com.propertyvista.domain.Pet;
+import com.propertyvista.domain.Pet.WeightUnit;
+import com.propertyvista.domain.charges.ChargeLine;
+import com.propertyvista.domain.util.DomainUtil;
+import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;

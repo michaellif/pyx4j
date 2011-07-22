@@ -41,9 +41,9 @@ import com.pyx4j.security.server.AppengineHelper;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.UserVisit;
 
-import com.propertyvista.common.domain.User;
-import com.propertyvista.common.domain.VistaBehavior;
 import com.propertyvista.crm.rpc.CrmUserVisit;
+import com.propertyvista.domain.User;
+import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
 import com.propertyvista.server.domain.UserCredential;
 

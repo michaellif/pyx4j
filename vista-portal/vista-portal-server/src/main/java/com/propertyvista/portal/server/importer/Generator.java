@@ -15,7 +15,7 @@ package com.propertyvista.portal.server.importer;
 
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
-import com.propertyvista.common.domain.DemoData;
+import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;

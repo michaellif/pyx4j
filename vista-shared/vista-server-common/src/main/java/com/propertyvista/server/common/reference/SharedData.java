@@ -15,8 +15,8 @@ package com.propertyvista.server.common.reference;
 
 import java.util.List;
 
-import com.propertyvista.common.domain.ref.Country;
-import com.propertyvista.common.domain.ref.Province;
+import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.Province;
 import com.propertyvista.server.common.generator.LocationsGenerator;
 
 public class SharedData {

@@ -18,7 +18,7 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.admin.rpc.services.AuthenticationService;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
-import com.propertyvista.common.domain.VistaBehavior;
+import com.propertyvista.domain.VistaBehavior;
 
 public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
 

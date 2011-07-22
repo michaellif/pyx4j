@@ -20,8 +20,8 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.portal.domain.site.PageContent;
-import com.propertyvista.portal.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageContent;
+import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.portal.server.generator.CommonsGenerator;
 
 public class PortalSitePreload extends AbstractDataPreloader {

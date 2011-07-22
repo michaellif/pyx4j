@@ -16,27 +16,26 @@ package com.propertyvista.crm.client.ui.crud.application;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.site.client.ui.crud.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.domain.tenant.TenantInLease;
 
-public class PotentialTenantLister extends ListerBase<PotentialTenantInfo> {
+public class PotentialTenantLister extends ListerBase<TenantInLease> {
 
     public PotentialTenantLister() {
-        super(PotentialTenantInfo.class, CrmSiteMap.Tenants.PotentialTenant.class);
+        super(TenantInLease.class, CrmSiteMap.Tenants.PotentialTenant.class);
         setFiltersVisible(false);
     }
 
     public PotentialTenantLister(boolean readOnly) {
-        super(PotentialTenantInfo.class, CrmSiteMap.Tenants.PotentialTenant.class, readOnly);
+        super(TenantInLease.class, CrmSiteMap.Tenants.PotentialTenant.class, readOnly);
         setFiltersVisible(false);
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<PotentialTenantInfo>> columnDescriptors, PotentialTenantInfo proto) {
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().birthDate()));
+    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<TenantInLease>> columnDescriptors, TenantInLease proto) {
+//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().name()));
+//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().birthDate()));
     }
 }

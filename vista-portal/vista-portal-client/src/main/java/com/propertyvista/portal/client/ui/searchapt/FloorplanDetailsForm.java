@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.common.domain.RangeGroup;
+import com.propertyvista.domain.RangeGroup;
 import com.propertyvista.portal.client.ui.decorations.PortalListDecorator;
 import com.propertyvista.portal.client.ui.util.Formatter;
 import com.propertyvista.portal.domain.dto.AmenityDTO;

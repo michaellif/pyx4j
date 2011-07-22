@@ -62,10 +62,10 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.common.domain.marketing.MarketRent;
+import com.propertyvista.domain.marketing.MarketRent;
+import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
-import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 

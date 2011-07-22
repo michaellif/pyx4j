@@ -23,8 +23,8 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.security.shared.SecurityViolationException;
 
-import com.propertyvista.portal.domain.ptapp.Application;
-import com.propertyvista.portal.domain.ptapp.IBoundToApplication;
+import com.propertyvista.domain.Application;
+import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class ApplicationEntityServiceImpl extends EntityServicesImpl {

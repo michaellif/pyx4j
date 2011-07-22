@@ -22,10 +22,6 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 import com.pyx4j.security.shared.AllPermissions;
 import com.pyx4j.security.shared.CoreBehavior;
 
-import com.propertyvista.common.domain.VistaBehavior;
-import com.propertyvista.common.domain.company.Company;
-import com.propertyvista.common.domain.ref.Country;
-import com.propertyvista.common.domain.tenant.Tenant;
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
 import com.propertyvista.crm.rpc.services.AuthenticationService;
 import com.propertyvista.crm.rpc.services.BoilerCrudService;
@@ -49,6 +45,9 @@ import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
+import com.propertyvista.domain.Application;
+import com.propertyvista.domain.VistaBehavior;
+import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.financial.Concession;
@@ -69,9 +68,10 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.tenant.Inquiry;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.server.common.security.SharedUserEntityInstanceAccess;
 
 public class VistaCrmAccessControlList extends ServletContainerAclBuilder {

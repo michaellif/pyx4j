@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class NavigItem {

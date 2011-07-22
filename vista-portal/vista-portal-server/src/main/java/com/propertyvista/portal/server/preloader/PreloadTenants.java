@@ -22,11 +22,11 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.PreloadConfig;
-import com.propertyvista.common.domain.company.Company;
-import com.propertyvista.common.domain.person.Person;
-import com.propertyvista.common.domain.tenant.Tenant;
+import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.PreloadConfig;
+import com.propertyvista.domain.company.Company;
+import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.server.generator.TenantsGenerator;
 
 public class PreloadTenants extends BaseVistaDataPreloader {

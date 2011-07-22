@@ -25,8 +25,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
-import com.propertyvista.portal.domain.site.PageContent;
-import com.propertyvista.portal.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageContent;
+import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDescriptor> implements PageDescriptorCrudService {
 

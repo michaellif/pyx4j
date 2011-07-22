@@ -19,7 +19,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.common.domain.company.Company;
+import com.propertyvista.domain.company.Company;
 
 public interface Vendor extends Company {
     @Translatable

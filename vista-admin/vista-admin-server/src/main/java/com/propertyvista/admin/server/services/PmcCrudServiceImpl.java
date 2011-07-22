@@ -33,9 +33,9 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.PreloadConfig;
-import com.propertyvista.common.domain.VistaBehavior;
+import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.PreloadConfig;
+import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
 import com.propertyvista.portal.server.preloader.PortalSitePreload;
 import com.propertyvista.portal.server.preloader.PreloadUsers;

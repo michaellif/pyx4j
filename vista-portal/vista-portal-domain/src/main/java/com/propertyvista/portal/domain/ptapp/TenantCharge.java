@@ -17,6 +17,8 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.charges.Charge;
+
 public interface TenantCharge extends Charge {
 
     @Detached

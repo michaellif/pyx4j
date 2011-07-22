@@ -24,10 +24,10 @@ import com.propertyvista.crm.client.ui.crud.application.ApplicationView;
 import com.propertyvista.crm.rpc.services.ApplicationTenantCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.dto.ApplicationDTO;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BuildingDTO;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 
 public class ApplicationActivityDelegate implements ApplicationView.Presenter {
 
@@ -46,8 +46,8 @@ public class ApplicationActivityDelegate implements ApplicationView.Presenter {
         unitsLister = new ListerActivityBase<AptUnitDTO>(view.getUnitListerView(), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class),
                 AptUnitDTO.class);
 
-        tenantsLister = new ListerActivityBase<PotentialTenantInfo>(view.getTenantListerView(),
-                (AbstractCrudService<PotentialTenantInfo>) GWT.create(ApplicationTenantCrudService.class), PotentialTenantInfo.class);
+        tenantsLister = new ListerActivityBase<TenantInLease>(view.getTenantListerView(),
+                (AbstractCrudService<TenantInLease>) GWT.create(ApplicationTenantCrudService.class), TenantInLease.class);
     }
 
     public void populate(ApplicationDTO current) {

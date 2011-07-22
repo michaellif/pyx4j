@@ -39,8 +39,8 @@ import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
-import com.propertyvista.common.domain.DemoData;
-import com.propertyvista.common.domain.PreloadConfig;
+import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.PreloadConfig;
 
 public class LoginViewImpl extends SimplePanel implements LoginView {
     private Presenter presenter;

@@ -18,8 +18,8 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.common.domain.person.Person;
-import com.propertyvista.common.domain.tenant.TenantInLeaseFragment;
+import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.tenant.TenantInLeaseFragment;
 
 @Transient
 public interface TenantEditorDTO extends IEntity, TenantInLeaseFragment {

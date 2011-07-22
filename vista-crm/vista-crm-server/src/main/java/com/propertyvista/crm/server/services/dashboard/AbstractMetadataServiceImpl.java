@@ -26,8 +26,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.common.domain.User;
 import com.propertyvista.crm.rpc.services.dashboard.AbstractMetadataService;
+import com.propertyvista.domain.User;
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata;

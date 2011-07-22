@@ -18,7 +18,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 
 import com.propertyvista.common.client.ui.components.CMoney;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.domain.financial.Money;
+import com.propertyvista.domain.financial.Money;
 
 public class CrmEditorsComponentFactory extends VistaEditorsComponentFactory {
 
