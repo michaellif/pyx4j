@@ -41,12 +41,12 @@ import com.propertyvista.portal.domain.ptapp.IncomeInfoEmployer;
 import com.propertyvista.portal.domain.ptapp.IncomeInfoSelfEmployed;
 import com.propertyvista.portal.domain.ptapp.IncomeInfoStudentIncome;
 import com.propertyvista.portal.domain.ptapp.Pet;
-import com.propertyvista.portal.domain.ptapp.Pets;
 import com.propertyvista.portal.domain.ptapp.TenantAsset;
 import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
 import com.propertyvista.portal.domain.ptapp.TenantIncome;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.Vehicle;
+import com.propertyvista.portal.domain.ptapp.dto.PetsDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
@@ -423,8 +423,8 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Pets.class));
         int num = 0;
         for (Pet pet : pets) {
-            selenium.click(D.id(proto(Pets.class).pets(), FormNavigationDebugId.Form_Add));
-            enterPetRow(D.id(proto(Pets.class).pets(), num), detach(pet));
+            selenium.click(D.id(proto(PetsDTO.class).pets(), FormNavigationDebugId.Form_Add));
+            enterPetRow(D.id(proto(PetsDTO.class).pets(), num), detach(pet));
             num++;
         }
 

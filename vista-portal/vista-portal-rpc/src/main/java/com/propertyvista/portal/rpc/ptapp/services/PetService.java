@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.rpc.ptapp.services;
 
-import com.propertyvista.portal.domain.ptapp.Pets;
+import com.propertyvista.portal.domain.ptapp.dto.PetsDTO;
 
-public interface PetService extends AbstractWizardService<Pets> {
+public interface PetService extends AbstractWizardService<PetsDTO> {
 
 }

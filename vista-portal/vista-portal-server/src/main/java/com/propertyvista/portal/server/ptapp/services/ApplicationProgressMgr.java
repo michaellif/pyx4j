@@ -28,7 +28,6 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.domain.tenant.TenantInLease;
 import com.propertyvista.common.domain.tenant.TenantInLeaseFragment;
-import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
@@ -97,9 +96,9 @@ public class ApplicationProgressMgr {
         return (TimeUtils.isOlderThen(birthDate, 18));
     }
 
-    public static void invalidateChargesStep(Application application) {
+    public static void invalidateChargesStep() {
         EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
-        applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().application(), application));
+        applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().lease(), PtAppContext.getCurrentLeaseConcern()));
         ApplicationProgress progress = EntityServicesImpl.secureRetrieve(applicationProgressCriteria);
         ApplicationWizardStep chargesStep = findWizardStep(progress, PtSiteMap.Charges.class);
         switch (chargesStep.status().getValue()) {

@@ -25,7 +25,6 @@ import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.common.domain.contact.IAddress;
-import com.propertyvista.domain.tenant.TenantApplication;
 import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
@@ -33,9 +32,7 @@ import com.propertyvista.portal.domain.ptapp.ChargeLine;
 import com.propertyvista.portal.domain.ptapp.ChargeLineList;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.EmergencyContact;
-import com.propertyvista.portal.domain.ptapp.Pets;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.Pet;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.TenantChargeList;
@@ -85,9 +82,9 @@ public class PreloadPT extends BaseVistaDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(PotentialTenantList.class, PotentialTenantInfo.class, Charges.class, ChargeLineList.class, ChargeLine.class,
-                    TenantChargeList.class, TenantCharge.class, Application.class, UnitSelection.class, ApplicationProgress.class, TenantApplication.class,
-                    Pets.class, EmergencyContact.class, Summary.class, Address.class, ApplicationDocumentData.class);
+            return deleteAll(Charges.class, ChargeLineList.class, ChargeLine.class, TenantChargeList.class, TenantCharge.class, Application.class,
+                    UnitSelection.class, ApplicationProgress.class, Pet.class, EmergencyContact.class, Summary.class, Address.class,
+                    ApplicationDocumentData.class);
         } else {
             return "This is production";
         }

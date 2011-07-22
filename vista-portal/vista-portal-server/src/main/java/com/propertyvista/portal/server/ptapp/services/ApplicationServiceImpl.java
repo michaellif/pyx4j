@@ -112,6 +112,9 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
         CurrentApplication currentApplication = new CurrentApplication();
         currentApplication.progress = progress;
 
+        // Fix serialization
+        currentApplication.progress.lease().set(null);
+
         log.debug("Progress {}", currentApplication.progress);
         callback.onSuccess(currentApplication);
     }

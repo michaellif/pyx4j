@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
+import com.propertyvista.portal.domain.ptapp.dto.PetsDTO;
 
 public interface Summary extends IEntity, IBoundToApplication {
 
@@ -42,7 +43,7 @@ public interface Summary extends IEntity, IBoundToApplication {
     IList<SummaryPotentialTenantFinancial> tenantFinancials();
 
     @Transient
-    Pets pets();
+    PetsDTO pets();
 
     @Transient
     @EmbeddedEntity

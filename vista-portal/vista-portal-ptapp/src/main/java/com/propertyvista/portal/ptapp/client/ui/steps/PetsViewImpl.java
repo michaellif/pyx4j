@@ -13,9 +13,9 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import com.propertyvista.portal.domain.ptapp.Pets;
+import com.propertyvista.portal.domain.ptapp.dto.PetsDTO;
 
-public class PetsViewImpl extends WizardStepViewImpl<Pets, PetsViewPresenter> implements PetsView {
+public class PetsViewImpl extends WizardStepViewImpl<PetsDTO, PetsViewPresenter> implements PetsView {
 
     public PetsViewImpl() {
         super(new PetsViewForm());

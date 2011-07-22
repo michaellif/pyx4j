@@ -121,7 +121,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             }
         }
 
-        retrieveApplicationEntity(summary.pets(), summary.application());
+        //retrieveApplicationEntity(summary.pets(), summary.application());
         retrieveApplicationEntity(summary.charges(), summary.application());
 
         // Move selected upgrades for presentation.

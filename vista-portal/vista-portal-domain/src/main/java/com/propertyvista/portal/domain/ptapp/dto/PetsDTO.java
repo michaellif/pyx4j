@@ -11,7 +11,7 @@
  * @author antonk
  * @version $Id$
  */
-package com.propertyvista.portal.domain.ptapp;
+package com.propertyvista.portal.domain.ptapp.dto;
 
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
@@ -20,7 +20,11 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Pets extends IEntity, IBoundToApplication {
+import com.propertyvista.portal.domain.ptapp.Pet;
+import com.propertyvista.portal.domain.ptapp.PetChargeRule;
+
+@Transient
+public interface PetsDTO extends IEntity {
 
     @Owned
     @Length(3)

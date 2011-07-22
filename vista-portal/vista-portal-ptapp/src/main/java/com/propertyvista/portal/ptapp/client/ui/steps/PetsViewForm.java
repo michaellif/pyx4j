@@ -45,14 +45,14 @@ import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.portal.domain.ptapp.ChargeLine;
 import com.propertyvista.portal.domain.ptapp.Pet;
 import com.propertyvista.portal.domain.ptapp.Pet.WeightUnit;
-import com.propertyvista.portal.domain.ptapp.Pets;
+import com.propertyvista.portal.domain.ptapp.dto.PetsDTO;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
-public class PetsViewForm extends CEntityForm<Pets> {
+public class PetsViewForm extends CEntityForm<PetsDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(PetsViewForm.class);
 
@@ -61,11 +61,11 @@ public class PetsViewForm extends CEntityForm<Pets> {
     private int maxPets;
 
     public PetsViewForm() {
-        super(Pets.class);
+        super(PetsDTO.class);
     }
 
     public PetsViewForm(IEditableComponentFactory factory) {
-        super(Pets.class, factory);
+        super(PetsDTO.class, factory);
         summaryViewMode = true;
     }
 
@@ -82,30 +82,30 @@ public class PetsViewForm extends CEntityForm<Pets> {
 
     @Override
     public void addValidations() {
-        super.addValueValidator(new EditableValueValidator<Pets>() {
+        super.addValueValidator(new EditableValueValidator<PetsDTO>() {
 
             @Override
-            public boolean isValid(CEditableComponent<Pets, ?> component, Pets value) {
+            public boolean isValid(CEditableComponent<PetsDTO, ?> component, PetsDTO value) {
                 return !EntityGraph.hasBusinessDuplicates(getValue().pets());
             }
 
             @Override
-            public String getValidationMessage(CEditableComponent<Pets, ?> component, Pets value) {
+            public String getValidationMessage(CEditableComponent<PetsDTO, ?> component, PetsDTO value) {
                 return i18n.tr("Duplicate pets specified");
             }
         });
 
         maxPets = proto().pets().getMeta().getLength();
-        super.addValueValidator(new EditableValueValidator<Pets>() {
+        super.addValueValidator(new EditableValueValidator<PetsDTO>() {
 
             @Override
-            public boolean isValid(CEditableComponent<Pets, ?> component, Pets value) {
+            public boolean isValid(CEditableComponent<PetsDTO, ?> component, PetsDTO value) {
                 int size = getValue().pets().size();
                 return (size <= maxPets) && ((value.petsMaximum().isNull() || (size <= value.petsMaximum().getValue())));
             }
 
             @Override
-            public String getValidationMessage(CEditableComponent<Pets, ?> component, Pets value) {
+            public String getValidationMessage(CEditableComponent<PetsDTO, ?> component, PetsDTO value) {
                 return i18n.tr("Exceeded number of allowed pets");
             }
         });

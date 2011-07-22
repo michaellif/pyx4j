@@ -28,12 +28,12 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.domain.ptapp.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.Pet;
-import com.propertyvista.portal.domain.ptapp.Pets;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
+import com.propertyvista.portal.domain.ptapp.dto.PetsDTO;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
@@ -63,14 +63,14 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         PotentialTenantList tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(tenantCriteria);
 
         // find appropriate pet charges
-        EntityQueryCriteria<Pets> petCriteria = EntityQueryCriteria.create(Pets.class);
-        petCriteria.add(PropertyCriterion.eq(petCriteria.proto().application(), charges.application()));
-        Pets pets = PersistenceServicesFactory.getPersistenceService().retrieve(petCriteria);
+        EntityQueryCriteria<PetsDTO> petCriteria = EntityQueryCriteria.create(PetsDTO.class);
+        //TODO petCriteria.add(PropertyCriterion.eq(petCriteria.proto().application(), charges.application()));
+        PetsDTO pets = null;//PersistenceServicesFactory.getPersistenceService().retrieve(petCriteria);
 
         updateChargesFromObjects(charges, unitSelection, selectedUnit, tenantList, pets);
     }
 
-    public static void updateChargesFromObjects(Charges charges, UnitSelection unitSelection, AptUnit selectedUnit, PotentialTenantList tenantList, Pets pets) {
+    public static void updateChargesFromObjects(Charges charges, UnitSelection unitSelection, AptUnit selectedUnit, PotentialTenantList tenantList, PetsDTO pets) {
         double rentAmount = 0;
         double depositAmount = 0;
 
@@ -134,18 +134,18 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
      * @param pets
      * @return true if pets are changed
      */
-    public static boolean needToUpdateChargesForPets(Pets pets, Pets existingPets) {
+    public static boolean needToUpdateChargesForPets(List<Pet> pets, List<Pet> existingPets) {
         if (existingPets == null) {
             return true;
         }
-        if (pets.pets().size() != existingPets.pets().size()) {
-            log.info("Number of pets has changed from {} to {}", existingPets.pets().size(), pets.pets().size());
+        if (pets.size() != existingPets.size()) {
+            log.info("Number of pets has changed from {} to {}", existingPets.size(), pets.size());
             return true;
         }
 
-        for (int i = 0; i < pets.pets().size(); i++) {
-            Pet pet = pets.pets().get(i);
-            Pet existingPet = existingPets.pets().get(i);
+        for (int i = 0; i < pets.size(); i++) {
+            Pet pet = pets.get(i);
+            Pet existingPet = existingPets.get(i);
             if (pet.chargeLine().charge().amount().getValue() != existingPet.chargeLine().charge().amount().getValue()) {
                 log.info("Pet's charge has changed from {} to {}", existingPet.chargeLine().charge(), pet.chargeLine().charge());
                 return true;

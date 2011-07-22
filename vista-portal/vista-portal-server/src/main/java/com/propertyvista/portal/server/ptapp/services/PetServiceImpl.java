@@ -13,20 +13,23 @@
  */
 package com.propertyvista.portal.server.ptapp.services;
 
+import java.util.List;
+import java.util.Vector;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.common.domain.financial.ChargeType;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.ptapp.Pet;
 import com.propertyvista.portal.domain.ptapp.PetChargeRule;
-import com.propertyvista.portal.domain.ptapp.Pets;
+import com.propertyvista.portal.domain.ptapp.dto.PetsDTO;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.ptapp.services.PetService;
 import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
@@ -37,25 +40,29 @@ public class PetServiceImpl extends ApplicationEntityServiceImpl implements PetS
     private final static Logger log = LoggerFactory.getLogger(PetServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<Pets> callback, Key tenantId) {
-        log.info("Retrieving pets for tenant {}", tenantId);
-        EntityQueryCriteria<Pets> criteria = EntityQueryCriteria.create(Pets.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
-        Pets pets = secureRetrieve(criteria);
-        if (pets == null) {
-            pets = EntityFactory.create(Pets.class);
-        }
+    public void retrieve(AsyncCallback<PetsDTO> callback, Key tenantId) {
+        log.info("Retrieving pets");
+        Lease lease = PersistenceServicesFactory.getPersistenceService().retrieve(Lease.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
+        PersistenceServicesFactory.getPersistenceService().retrieve(lease.pets());
+
+        PetsDTO pets = EntityFactory.create(PetsDTO.class);
+        pets.pets().addAll(lease.pets());
+
         loadTransientData(pets);
 
         callback.onSuccess(pets);
     }
 
     @Override
-    public void save(AsyncCallback<Pets> callback, Pets pets) {
+    public void save(AsyncCallback<PetsDTO> callback, PetsDTO pets) {
         log.info("Saving pets {}", pets);
 
+        Lease lease = PersistenceServicesFactory.getPersistenceService().retrieve(Lease.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
+        PersistenceServicesFactory.getPersistenceService().retrieve(lease.pets());
+
         // This value will never be null, since we are always creating it at retrieve
-        Pets existingPets = findApplicationEntity(Pets.class);
+        List<Pet> existingPets = new Vector<Pet>();
+        existingPets.addAll(lease.pets());
 
         // Calculate charges on server to avoid Front End API Hackers.
         PetChargeRule petChargeRule = loadPetChargeRule();
@@ -63,10 +70,15 @@ public class PetServiceImpl extends ApplicationEntityServiceImpl implements PetS
             ChargesSharedCalculation.calculatePetCharges(petChargeRule, pet);
         }
 
-        saveApplicationEntity(pets);
+        lease.pets().clear();
+        lease.pets().addAll(pets.pets());
 
-        if (ChargesServerCalculation.needToUpdateChargesForPets(pets, existingPets)) {
-            ApplicationProgressMgr.invalidateChargesStep(pets.application());
+        //TODO use merge
+        PersistenceServicesFactory.getPersistenceService().persist(lease.pets());
+        PersistenceServicesFactory.getPersistenceService().persist(lease);
+
+        if (ChargesServerCalculation.needToUpdateChargesForPets(lease.pets(), existingPets)) {
+            ApplicationProgressMgr.invalidateChargesStep();
         }
 
         loadTransientData(pets);
@@ -79,7 +91,7 @@ public class PetServiceImpl extends ApplicationEntityServiceImpl implements PetS
      * want to save on number of requests to make application work faster for users, each
      * request may take 10 seconds on slow network connection.
      */
-    private static void loadTransientData(Pets pets) {
+    private static void loadTransientData(PetsDTO pets) {
         // TODO get it from building
         PetChargeRule petCharge = loadPetChargeRule();
         pets.petChargeRule().set(petCharge);

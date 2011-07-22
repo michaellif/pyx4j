@@ -32,11 +32,11 @@ import com.propertyvista.portal.domain.ptapp.IncomeInfoEmployer;
 import com.propertyvista.portal.domain.ptapp.IncomeInfoSelfEmployed;
 import com.propertyvista.portal.domain.ptapp.IncomeInfoStudentIncome;
 import com.propertyvista.portal.domain.ptapp.Pet;
-import com.propertyvista.portal.domain.ptapp.Pets;
 import com.propertyvista.portal.domain.ptapp.TenantAsset;
 import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
 import com.propertyvista.portal.domain.ptapp.TenantIncome;
 import com.propertyvista.portal.domain.ptapp.Vehicle;
+import com.propertyvista.portal.domain.ptapp.dto.PetsDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
@@ -365,10 +365,10 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Pets.class));
         int num = 0;
         for (Pet pet : pets) {
-            verifyPetRow(D.id(proto(Pets.class).pets(), num), detach(pet));
+            verifyPetRow(D.id(proto(PetsDTO.class).pets(), num), detach(pet));
             num++;
         }
-        assertNotPresent(D.id(proto(Pets.class).pets(), num, proto(Pet.class).type()));
+        assertNotPresent(D.id(proto(PetsDTO.class).pets(), num, proto(Pet.class).type()));
         if (doSave) {
             saveAndContinue();
         }

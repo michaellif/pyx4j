@@ -41,7 +41,7 @@ public class ApplicationDebug {
         summary.application().set(application);
         retrieveApplicationEntity(summary.unitSelection(), application);
         retrieveApplicationEntity(summary.tenantList(), application);
-        retrieveApplicationEntity(summary.pets(), application);
+        //retrieveApplicationEntity(summary.pets(), application);
         retrieveApplicationEntity(summary.charges(), application);
 
 //        EntityQueryCriteria<TenantFinancialEditorDTO> financialCriteria = EntityQueryCriteria.create(TenantFinancialEditorDTO.class);
