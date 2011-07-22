@@ -30,7 +30,6 @@ import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
-import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
@@ -59,8 +58,6 @@ public class DatePickerTestBase extends WizardSeleniumTestBase {
     protected void login() {
         PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, PreloadConfig.createTest());
         User user = generator.createUser(1);
-        Application application = generator.createApplication(user);
-        unitSelection = generator.createUnitSelection(application, null);
         selenium.click(VistaFormsDebugId.Auth_Login);
         selenium.type(D.id(proto(AuthenticationRequest.class).email()), user.email().getValue());
         selenium.type(D.id(proto(AuthenticationRequest.class).password()), user.email().getValue());

@@ -23,13 +23,12 @@ import com.propertyvista.common.domain.DemoData;
 import com.propertyvista.common.domain.PreloadConfig;
 import com.propertyvista.common.domain.User;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
-import com.propertyvista.portal.domain.ptapp.Application;
-import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.server.generator.PTGenerator;
 import com.propertyvista.server.common.reference.SharedData;
+import com.propertyvista.server.domain.generator.ApplicationSummaryDTO;
 
 public class PreloadedUsersTest extends PortalVerificationTestBase {
 
@@ -44,9 +43,7 @@ public class PreloadedUsersTest extends PortalVerificationTestBase {
     public void testFullFlow() throws Exception {
         PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, PreloadConfig.createTest());
         User user = generator.createUser(1);
-        Application application = generator.createApplication(user);
-        Summary summary = generator.createSummary(application, null);
-        UnitSelection unitSel = generator.createUnitSelection(application, null);
+        ApplicationSummaryDTO summary = generator.createSummary(user, null);
 
         selenium.click(VistaFormsDebugId.Auth_Login);
         selenium.type(D.id(proto(AuthenticationRequest.class).email()), user.email().getValue());
@@ -54,11 +51,12 @@ public class PreloadedUsersTest extends PortalVerificationTestBase {
         selenium.click(CrudDebugId.Criteria_Submit);
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Apartment.class)));
 
-        verifyAptPage(unitSel);
-        verifyTenantsPage(summary, true);
-        verifyInfoPages(summary, true);
-        verifyFinancialPages(summary, true);
-        verifyPetsPages(summary, false);
+        verifyAptPage(summary.unitSelection());
+
+        verifyTenantsPage(summary.tenants(), true);
+        verifyInfoPages(summary.tenants(), true);
+        verifyFinancialPages(summary.tenants(), true);
+        verifyPetsPages(summary.lease().pets(), false);
 
     }
 

@@ -28,12 +28,12 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.common.domain.tenant.TenantInLease;
-import com.propertyvista.common.domain.tenant.TenantInLeaseFragment;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 
 public class TenantServiceImpl extends ApplicationEntityServiceImpl implements TenantService {
 
@@ -51,15 +51,11 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             PersistenceServicesFactory.getPersistenceService().retrieve(tenantInLease);
             PersistenceServicesFactory.getPersistenceService().retrieve(tenantInLease.tenant());
 
-            TenantEditorDTO dto = tenants.tenants().$();
-
-            dto.setPrimaryKey(tenantInLease.getPrimaryKey());
-            dto.person().set(tenantInLease.tenant().person());
-
-            EntityGraph.copyFragment(TenantInLeaseFragment.class, tenantInLease, dto);
-
-            tenants.tenants().add(dto);
+            tenants.tenants().add(new TenantConverter.TenantEditorConverter().dto(tenantInLease));
         }
+
+        //TODO use policy
+        tenants.tenantsMaximum().setValue(6);
 
         callback.onSuccess(tenants);
     }
@@ -70,6 +66,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
         List<TenantInLease> existingTenants = new Vector<TenantInLease>();
         existingTenants.addAll(lease.tenants());
         lease.tenants().clear();
+        TenantListEditorDTO ret = EntityFactory.create(TenantListEditorDTO.class);
         for (TenantEditorDTO dto : tenants.tenants()) {
             // Find existing record
             TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
@@ -91,13 +88,12 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
                 }
             }
 
-            tenantInLease.tenant().person().set(dto.person());
+            new TenantConverter.TenantEditorConverter().toDbo(dto, tenantInLease);
+
             PersistenceServicesFactory.getPersistenceService().persist(tenantInLease.tenant());
-
-            EntityGraph.copyFragment(TenantInLeaseFragment.class, dto, tenantInLease);
-
             PersistenceServicesFactory.getPersistenceService().persist(tenantInLease);
             lease.tenants().add(tenantInLease);
+            ret.tenants().add(new TenantConverter.TenantEditorConverter().dto(tenantInLease));
         }
 
         PersistenceServicesFactory.getPersistenceService().persist(lease);
@@ -107,6 +103,9 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
         }
 
         ApplicationProgressMgr.syncroizeApplicationProgress(tenants.tenants());
+
+        //TODO use policy
+        ret.tenantsMaximum().setValue(6);
 
         //TODO
 
@@ -124,6 +123,6 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
 //
 //        CampaignManager.fireEvent(CampaignTriger.Registration, tenants);
 
-        callback.onSuccess(tenants);
+        callback.onSuccess(ret);
     }
 }

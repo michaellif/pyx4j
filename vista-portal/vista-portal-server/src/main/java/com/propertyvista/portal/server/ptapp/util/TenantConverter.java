@@ -15,24 +15,26 @@ package com.propertyvista.portal.server.ptapp.util;
 
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
+import com.propertyvista.common.domain.tenant.TenantInLease;
+import com.propertyvista.common.domain.tenant.TenantInLeaseFragment;
 import com.propertyvista.common.domain.tenant.TenantScreeningSecureInfoFragment;
+import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
 import com.propertyvista.server.domain.generator.TenantSummaryDTO;
 
 public class TenantConverter {
 
-    public static class TenantFinancialEditorConverter extends EntityDtoBinder<TenantSummaryDTO, TenantFinancialEditorDTO> {
+    public static class TenantEditorConverter extends EntityDtoBinder<TenantInLease, TenantEditorDTO> {
 
-        public TenantFinancialEditorConverter() {
-            super(TenantSummaryDTO.class, TenantFinancialEditorDTO.class);
+        public TenantEditorConverter() {
+            super(TenantInLease.class, TenantEditorDTO.class);
         }
 
         @Override
         protected void bind() {
-            bind(dtoProto.incomes(), dboProto.tenantScreening().incomes());
-            bind(dtoProto.assets(), dboProto.tenantScreening().assets());
-            bind(dtoProto.guarantors(), dboProto.tenantScreening().guarantors());
+            bind(dtoProto.person(), dboProto.tenant().person());
+            bind(TenantInLeaseFragment.class, dtoProto, dboProto);
         }
 
     }
@@ -60,4 +62,20 @@ public class TenantConverter {
         }
 
     }
+
+    public static class TenantFinancialEditorConverter extends EntityDtoBinder<TenantSummaryDTO, TenantFinancialEditorDTO> {
+
+        public TenantFinancialEditorConverter() {
+            super(TenantSummaryDTO.class, TenantFinancialEditorDTO.class);
+        }
+
+        @Override
+        protected void bind() {
+            bind(dtoProto.incomes(), dboProto.tenantScreening().incomes());
+            bind(dtoProto.assets(), dboProto.tenantScreening().assets());
+            bind(dtoProto.guarantors(), dboProto.tenantScreening().guarantors());
+        }
+
+    }
+
 }

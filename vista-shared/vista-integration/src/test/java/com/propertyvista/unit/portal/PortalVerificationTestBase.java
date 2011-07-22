@@ -13,6 +13,8 @@
  */
 package com.propertyvista.unit.portal;
 
+import java.util.List;
+
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.selenium.D;
@@ -23,7 +25,6 @@ import com.propertyvista.common.domain.contact.IAddressFull;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.Address.OwnedRented;
-import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.domain.ptapp.EmergencyContact;
 import com.propertyvista.portal.domain.ptapp.IEmploymentInfo;
 import com.propertyvista.portal.domain.ptapp.IIncomeInfo;
@@ -32,18 +33,21 @@ import com.propertyvista.portal.domain.ptapp.IncomeInfoSelfEmployed;
 import com.propertyvista.portal.domain.ptapp.IncomeInfoStudentIncome;
 import com.propertyvista.portal.domain.ptapp.Pet;
 import com.propertyvista.portal.domain.ptapp.Pets;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
-import com.propertyvista.portal.domain.ptapp.Summary;
-import com.propertyvista.portal.domain.ptapp.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.TenantAsset;
 import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
 import com.propertyvista.portal.domain.ptapp.TenantIncome;
 import com.propertyvista.portal.domain.ptapp.Vehicle;
+import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.BusinessRules;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-import com.propertyvista.portal.server.ptapp.services.ApplicationServiceImpl;
+import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
+import com.propertyvista.portal.server.ptapp.util.TenantConverter;
+import com.propertyvista.portal.server.ptapp.util.TenantTestAdapter;
+import com.propertyvista.server.domain.generator.TenantSummaryDTO;
 
 abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
 
@@ -57,24 +61,25 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertValueOnForm(formDebugId, aUnit.avalableForRent());
     }
 
-    protected void verifyTenantsPage(Summary summary, boolean doSave) {
+    protected void verifyTenantsPage(List<TenantSummaryDTO> tenantsSummaryList, boolean doSave) {
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Tenants.class)));
         selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Tenants.class));
 
+        TenantListEditorDTO tenants = TenantTestAdapter.getTenantListEditorDTO(tenantsSummaryList);
         int num = 0;
-        for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
-            assertTenantRow(D.id(proto(PotentialTenantList.class).tenants(), num), detach(tenant), (num != 0));
+        for (TenantEditorDTO tenant : tenants.tenants()) {
+            assertTenantRow(D.id(proto(TenantListEditorDTO.class).tenants(), num), detach(tenant), (num != 0));
             num++;
         }
 
-        assertNotPresent(D.id(proto(PotentialTenantList.class).tenants(), num, proto(PotentialTenantInfo.class).person().name().firstName()));
+        assertNotPresent(D.id(proto(TenantListEditorDTO.class).tenants(), num, proto(TenantEditorDTO.class).person().name().firstName()));
 
         if (doSave) {
             saveAndContinue();
         }
     }
 
-    protected void assertTenantRow(IDebugId formDebugId, PotentialTenantInfo tenant, boolean fullInfo) {
+    protected void assertTenantRow(IDebugId formDebugId, TenantEditorDTO tenant, boolean fullInfo) {
         assertValueOnForm(formDebugId, tenant.person().name().firstName());
         assertValueOnForm(formDebugId, tenant.person().name().lastName());
         assertValueOnForm(formDebugId, tenant.person().name().middleName());
@@ -89,11 +94,11 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         }
     }
 
-    protected void verifyInfoPages(Summary summary, boolean doSave) {
+    protected void verifyInfoPages(List<TenantSummaryDTO> tenants, boolean doSave) {
         int id = 0;
-        for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
-            if (ApplicationServiceImpl.shouldEnterInformation(tenant)) {
-                verifyInfoPage(detach(tenant), id);
+        for (TenantSummaryDTO tenantSummary : tenants) {
+            if (ApplicationProgressMgr.shouldEnterInformation(tenantSummary)) {
+                verifyInfoPage(new TenantConverter.TenantInfoEditorConverter().dto(tenantSummary), id);
                 if (doSave) {
                     saveAndContinue();
                 }
@@ -105,14 +110,14 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertNotPresent(D.id(VistaFormsDebugId.SecondNavigation_Prefix, PtSiteMap.Info.class, id));
     }
 
-    protected void verifyInfoPage(PotentialTenantInfo tenant, int id) {
+    protected void verifyInfoPage(TenantInfoEditorDTO tenant, int id) {
         assertVisible(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Info.class));
         selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Info.class));
         selenium.click(D.id(VistaFormsDebugId.SecondNavigation_Prefix, PtSiteMap.Info.class, id));
         assertInfoPage(tenant);
     }
 
-    protected void assertInfoPage(PotentialTenantInfo tenant) {
+    protected void assertInfoPage(TenantInfoEditorDTO tenant) {
         assertValueOnForm(tenant.person().name().firstName());
         assertValueOnForm(tenant.person().name().lastName());
         assertValueOnForm(tenant.person().name().middleName());
@@ -141,7 +146,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
             row++;
         }
         //verify size (e.g. no next row exists)
-        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantInfo.class).vehicles(), row, proto(Vehicle.class).plateNumber())));
+        assertFalse(selenium.isElementPresent(D.id(proto(TenantInfoEditorDTO.class).vehicles(), row, proto(Vehicle.class).plateNumber())));
 
         //Legal Questions
         assertValueOnForm(tenant.legalQuestions().suedForRent());
@@ -158,7 +163,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
             assertEmContactsForm(D.id(tenant.emergencyContacts(), row), detach(contact));
             row++;
         }
-        assertNotPresent(D.id(proto(PotentialTenantInfo.class).emergencyContacts(), row, proto(EmergencyContact.class).name().firstName()));
+        assertNotPresent(D.id(proto(TenantInfoEditorDTO.class).emergencyContacts(), row, proto(EmergencyContact.class).name().firstName()));
     }
 
     protected void assertIAddressForm(IDebugId formDebugId, IAddress address) {
@@ -225,16 +230,11 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertIAddressForm(formDebugId, contact.address());
     }
 
-    protected void verifyFinancialPages(Summary summary, boolean doSave) {
+    protected void verifyFinancialPages(List<TenantSummaryDTO> tenants, boolean doSave) {
         int num = 0;
-        int i = 0;
-        for (SummaryPotentialTenantFinancial tenantFin : summary.tenantFinancials()) {
-            // tenants and tenantFinancials are mapped one to one in created data
-            PotentialTenantInfo tenant = summary.tenantList().tenants().get(i);
-            i++;
-
-            if (ApplicationServiceImpl.shouldEnterInformation(tenant)) {
-                verifyFinancialPage(detach(tenantFin.tenantFinancial()), num);
+        for (TenantSummaryDTO tenantSummary : tenants) {
+            if (ApplicationProgressMgr.shouldEnterInformation(tenantSummary)) {
+                verifyFinancialPage(new TenantConverter.TenantFinancialEditorConverter().dto(tenantSummary), num);
                 if (doSave) {
                     saveAndContinue();
                 }
@@ -271,7 +271,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
 
         row = 0;
         for (TenantGuarantor guarantor : financial.guarantors()) {
-            debugID = D.id(financial.assets(), row);
+            debugID = D.id(financial.guarantors(), row);
             verifyGuarantor(debugID, detach(guarantor));
             row++;
         }
@@ -361,10 +361,10 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertValueOnForm(debugID, guarantor.email());
     }
 
-    protected void verifyPetsPages(Summary summary, boolean doSave) {
+    protected void verifyPetsPages(List<Pet> pets, boolean doSave) {
         selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Pets.class));
         int num = 0;
-        for (Pet pet : summary.pets().pets()) {
+        for (Pet pet : pets) {
             verifyPetRow(D.id(proto(Pets.class).pets(), num), detach(pet));
             num++;
         }

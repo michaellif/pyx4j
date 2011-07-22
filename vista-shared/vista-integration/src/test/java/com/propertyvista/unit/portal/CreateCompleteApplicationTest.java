@@ -13,6 +13,7 @@
  */
 package com.propertyvista.unit.portal;
 
+import java.util.List;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -20,7 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -34,8 +34,6 @@ import com.propertyvista.common.domain.contact.IAddressFull;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Address;
 import com.propertyvista.portal.domain.ptapp.Address.OwnedRented;
-import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
-import com.propertyvista.portal.domain.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.EmergencyContact;
 import com.propertyvista.portal.domain.ptapp.IEmploymentInfo;
 import com.propertyvista.portal.domain.ptapp.IIncomeInfo;
@@ -44,22 +42,26 @@ import com.propertyvista.portal.domain.ptapp.IncomeInfoSelfEmployed;
 import com.propertyvista.portal.domain.ptapp.IncomeInfoStudentIncome;
 import com.propertyvista.portal.domain.ptapp.Pet;
 import com.propertyvista.portal.domain.ptapp.Pets;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
-import com.propertyvista.portal.domain.ptapp.Summary;
-import com.propertyvista.portal.domain.ptapp.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.TenantAsset;
 import com.propertyvista.portal.domain.ptapp.TenantGuarantor;
 import com.propertyvista.portal.domain.ptapp.TenantIncome;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.Vehicle;
+import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.BusinessRules;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.server.generator.PTGenerator;
-import com.propertyvista.portal.server.ptapp.services.ApplicationServiceImpl;
+import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
+import com.propertyvista.portal.server.ptapp.util.TenantConverter;
+import com.propertyvista.portal.server.ptapp.util.TenantTestAdapter;
 import com.propertyvista.server.common.reference.SharedData;
+import com.propertyvista.server.domain.generator.ApplicationSummaryDTO;
+import com.propertyvista.server.domain.generator.TenantSummaryDTO;
 
 public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
 
@@ -97,15 +99,15 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         log.info("execute flow with seed {}", seed);
         PTGenerator generator = new PTGenerator(seed, PreloadConfig.createTest());
         User user = createTestUser();
-        Application application = generator.createApplication(user);
-        Summary summary = generator.createSummary(application, null);
+        ApplicationSummaryDTO summary = generator.createSummary(user, null);
 
         createAccount(user);
         enterUnitSelection();
-        enterTenantsPage(summary);
-        enterTestInfoPages(summary);
-        enterFinancialPages(summary);
-        enterPetsPage(summary);
+        enterTenantsPage(summary.tenants());
+        enterTestInfoPages(summary.tenants());
+        enterFinancialPages(summary.tenants());
+        enterPetsPage(summary.lease().pets());
+
         enterChargesPage(summary);
 
         enterSummaryPage(summary);
@@ -121,10 +123,10 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         assertNoMessages();
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Apartment.class)));
 
-        verifyTenantsPage(summary, false);
-        verifyInfoPages(summary, false);
-        verifyFinancialPages(summary, false);
-        verifyPetsPages(summary, false);
+        verifyTenantsPage(summary.tenants(), false);
+        verifyInfoPages(summary.tenants(), false);
+        verifyFinancialPages(summary.tenants(), false);
+        verifyPetsPages(summary.lease().pets(), false);
 
         //TODO Leon
 
@@ -146,19 +148,20 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         saveAndContinue();
     }
 
-    private void enterTenantsPage(Summary summary) {
+    private void enterTenantsPage(List<TenantSummaryDTO> tenantsSummaryList) {
         int num = 0;
-        for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
+        TenantListEditorDTO tenants = TenantTestAdapter.getTenantListEditorDTO(tenantsSummaryList);
+        for (TenantEditorDTO tenant : tenants.tenants()) {
             if (num != 0) {
-                selenium.click(D.id(proto(PotentialTenantList.class).tenants(), FormNavigationDebugId.Form_Add));
+                selenium.click(D.id(proto(TenantListEditorDTO.class).tenants(), FormNavigationDebugId.Form_Add));
             }
-            enterTenantRow(D.id(proto(PotentialTenantList.class).tenants(), num), detach(tenant), (num != 0));
+            enterTenantRow(D.id(proto(TenantListEditorDTO.class).tenants(), num), detach(tenant), (num != 0));
             num++;
         }
         saveAndContinue();
     }
 
-    private void enterTenantRow(IDebugId fromDebugId, PotentialTenantInfo tenant, boolean fullInfo) {
+    private void enterTenantRow(IDebugId fromDebugId, TenantEditorDTO tenant, boolean fullInfo) {
         setValueOnForm(fromDebugId, tenant.person().name().firstName());
         setValueOnForm(fromDebugId, tenant.person().name().lastName());
         setValueOnForm(fromDebugId, tenant.person().name().middleName());
@@ -172,18 +175,18 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         }
     }
 
-    private void enterTestInfoPages(Summary summary) {
+    private void enterTestInfoPages(List<TenantSummaryDTO> tenants) {
         int id = 0;
-        for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
-            if (ApplicationServiceImpl.shouldEnterInformation(tenant)) {
-                enterTestInfo(detach(tenant));
+        for (TenantSummaryDTO tenantSummary : tenants) {
+            if (ApplicationProgressMgr.shouldEnterInformation(tenantSummary)) {
+                enterTestInfo(new TenantConverter.TenantInfoEditorConverter().dto(tenantSummary));
                 saveAndContinue();
                 id++;
             }
         }
     }
 
-    private void enterTestInfo(PotentialTenantInfo tenant) {
+    private void enterTestInfo(TenantInfoEditorDTO tenant) {
         assertValueOnForm(tenant.person().name().firstName());
         assertValueOnForm(tenant.person().name().lastName());
         //setValueOnForm(tenant.person().name().firstName());
@@ -216,7 +219,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
             num++;
         }
         //verify size (e.g. no next row exists)
-        assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantInfo.class).vehicles(), num, proto(Vehicle.class).plateNumber())));
+        assertFalse(selenium.isElementPresent(D.id(proto(TenantInfoEditorDTO.class).vehicles(), num, proto(Vehicle.class).plateNumber())));
 
         //Legal Questions
         setValueOnForm(tenant.legalQuestions().suedForRent());
@@ -300,15 +303,10 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         enterIAddressForm(fomrDebugId, contact.address());
     }
 
-    private void enterFinancialPages(Summary summary) {
-        int i = 0;
-        for (SummaryPotentialTenantFinancial tenantFin : summary.tenantFinancials()) {
-            // tenants and tenantFinancials are mapped one to one in created data
-            PotentialTenantInfo tenant = summary.tenantList().tenants().get(i);
-            i++;
-
-            if (ApplicationServiceImpl.shouldEnterInformation(tenant)) {
-                enterFinancialForm(detach(tenantFin.tenantFinancial()));
+    private void enterFinancialPages(List<TenantSummaryDTO> tenants) {
+        for (TenantSummaryDTO tenantSummary : tenants) {
+            if (ApplicationProgressMgr.shouldEnterInformation(tenantSummary)) {
+                enterFinancialForm(new TenantConverter.TenantFinancialEditorConverter().dto(tenantSummary));
                 saveAndContinue();
             }
         }
@@ -421,10 +419,10 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         setValueOnForm(fromDebugId, guarantor.email());
     }
 
-    private void enterPetsPage(Summary summary) {
+    private void enterPetsPage(List<Pet> pets) {
         selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Pets.class));
         int num = 0;
-        for (Pet pet : summary.pets().pets()) {
+        for (Pet pet : pets) {
             selenium.click(D.id(proto(Pets.class).pets(), FormNavigationDebugId.Form_Add));
             enterPetRow(D.id(proto(Pets.class).pets(), num), detach(pet));
             num++;
@@ -448,23 +446,23 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         //assertValueOnForm(debugID, pet.chargeLine());
     }
 
-    private void enterChargesPage(Summary summary) {
+    private void enterChargesPage(ApplicationSummaryDTO summary) {
         // TODO Leon
 
         saveAndContinue();
     }
 
     @SuppressWarnings("unchecked")
-    private void enterSummaryPage(Summary summary) {
+    private void enterSummaryPage(ApplicationSummaryDTO summary) {
         // This data is not generated
         // Forge the  Digital Signature
-        summary.agree().setValue(Boolean.TRUE);
+        //TODO summary.agree().setValue(Boolean.TRUE);
 
-        PotentialTenantInfo mainTenant = summary.tenantList().tenants().get(0);
-        summary.fullName().setValue(EntityFromatUtils.nvl_concat(" ", mainTenant.person().name().firstName(), mainTenant.person().name().lastName()));
+        TenantSummaryDTO mainTenant = summary.tenants().get(0);
+        //TODO summary.fullName().setValue(EntityFromatUtils.nvl_concat(" ", mainTenant.person().name().firstName(), mainTenant.person().name().lastName()));
 
-        setValueOnForm(summary.agree());
-        setValueOnForm(summary.fullName());
+        //TODO setValueOnForm(summary.agree());
+        //TODO setValueOnForm(summary.fullName());
 
         saveAndContinue();
 
