@@ -28,6 +28,11 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 
+/**
+ * The target of this class is bidirectional copy of data between two objects.
+ * 
+ * bind() function should be implemented to map members that needs to be copied of one class to another.
+ */
 public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> {
 
     protected Class<DBO> dboClass;
