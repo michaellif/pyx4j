@@ -108,6 +108,8 @@ public class PTGenerator {
         createTenantList(user, summary.tenants());
 
         createPets(summary.lease().pets());
+        createVehicles(summary.lease().vehicles());
+
         //summary.charges().set(createCharges(summary, selectedUnit));
 
         return summary;
@@ -120,19 +122,6 @@ public class PTGenerator {
         charges.application().set(summary.application());
         ///ChargesServerCalculation.updateChargesFromObjects(charges, summary.unitSelection(), selectedUnit, summary.tenantList(), summary.pets());
         return charges;
-    }
-
-    private Vehicle createVehicle() {
-        Vehicle vehicle = EntityFactory.create(Vehicle.class);
-
-        vehicle.plateNumber().setValue("ML" + RandomUtil.randomInt(9999) + "K");
-        vehicle.year().setValue(RandomUtil.randomYear(1992, 2012));
-        vehicle.make().setValue(RandomUtil.random(DemoData.CAR_MAKES));
-        vehicle.model().setValue(RandomUtil.random(DemoData.CAR_MODELS));
-        vehicle.province().set(RandomUtil.random(SharedData.getProvinces()));
-        vehicle.country().set(vehicle.province().country());
-
-        return vehicle;
     }
 
     public EmergencyContact createEmergencyContact() {
@@ -282,7 +271,23 @@ public class PTGenerator {
 
             pets.add(pet);
         }
+    }
 
+    private void createVehicles(IList<Vehicle> vehicles) {
+
+        int maxVehicles = RandomUtil.randomInt(3);
+        for (int i = 0; i < maxVehicles; i++) {
+            Vehicle vehicle = EntityFactory.create(Vehicle.class);
+
+            vehicle.plateNumber().setValue("ML" + RandomUtil.randomInt(9999) + "K");
+            vehicle.year().setValue(RandomUtil.randomYear(1992, 2012));
+            vehicle.make().setValue(RandomUtil.random(DemoData.CAR_MAKES));
+            vehicle.model().setValue(RandomUtil.random(DemoData.CAR_MODELS));
+            vehicle.province().set(RandomUtil.random(SharedData.getProvinces()));
+            vehicle.country().set(vehicle.province().country());
+
+            vehicles.add(vehicle);
+        }
     }
 
     public void populateAddress(IAddress address) {
@@ -413,11 +418,6 @@ public class PTGenerator {
 
         EmergencyContact ec2 = createEmergencyContact();
         tenantSummary.tenant().emergencyContacts().add(ec2);
-
-        for (int i = 0; i < RandomUtil.randomInt(3); i++) {
-            Vehicle vehicle = createVehicle();
-            tenantSummary.tenant().vehicles().add(vehicle);
-        }
 
         // Screening
 

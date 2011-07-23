@@ -14,10 +14,13 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.Tenant;
 
 @Transient
 public interface TenantDTO extends Tenant {
 
+    @Transient
+    IPrimitive<String> displayName();
 }

@@ -26,6 +26,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.CountryReferenceAdapter;
 import com.propertyvista.domain.ref.Province;
@@ -54,4 +55,6 @@ public interface Vehicle extends IEntity {
     @Editor(type = EditorType.combo)
     @Reference(adapter = CountryReferenceAdapter.class)
     Country country();
+
+    ParkingSpot parkingSpot();
 }

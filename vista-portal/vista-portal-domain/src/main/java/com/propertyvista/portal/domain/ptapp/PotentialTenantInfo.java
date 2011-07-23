@@ -19,7 +19,6 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.tenant.TenantScreening;
 
 @Deprecated
@@ -36,11 +35,6 @@ public interface PotentialTenantInfo extends PotentialTenant, TenantScreening {
     @Override
     @Owned
     PriorAddress previousAddress();
-
-    @Override
-    @Owned
-    @Length(3)
-    IList<Vehicle> vehicles();
 
     @Override
     @Owned

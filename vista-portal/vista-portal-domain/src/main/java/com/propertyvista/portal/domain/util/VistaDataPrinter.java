@@ -53,11 +53,14 @@ public class VistaDataPrinter {
         sb.append("\n\n---------------------------- TENANTS ---------------------------------\n");
         sb.append(print(summary.tenantList()));
 
-        sb.append("\n\n---------------------------- FINANCIALS ---------------------------------\n");
-        sb.append(print(summary.tenantFinancials()));
+        sb.append("\n\n---------------------------- FINANCIALS ------------------------------\n");
+        sb.append(printFinancial(summary.tenantFinancials()));
 
         sb.append("\n\n---------------------------- PETS ------------------------------------\n");
         sb.append(print(summary.pets()));
+
+        sb.append("\n\n---------------------------- VEHICLES --------------------------------\n");
+        sb.append(printVehicles(summary.vehicles()));
 
         sb.append("\n\n---------------------------- CHARGES ---------------------------------\n");
         sb.append(print(summary.charges()));
@@ -122,19 +125,11 @@ public class VistaDataPrinter {
         sb.append(VistaDataPrinter.print(tenant.previousAddress()));
 
         sb.append("\nVehicles\n");
-        // vehicles
-        for (Vehicle vehicle : tenant.vehicles()) {
-            sb.append("\n\t");
-            sb.append(vehicle.year().getStringView()).append(" ");
-            sb.append(vehicle.province().getStringView()).append(" ");
-            sb.append(vehicle.make().getStringView()).append(" ").append(vehicle.model().getStringView()).append(" ");
-            sb.append(vehicle.plateNumber().getStringView()).append(" ");
-        }
 
         return sb.toString();
     }
 
-    public static String print(IList<SummaryPotentialTenantFinancial> tenantFinancials) {
+    public static String printFinancial(IList<SummaryPotentialTenantFinancial> tenantFinancials) {
         StringBuilder sb = new StringBuilder();
 
         for (SummaryPotentialTenantFinancial summaryFinancial : tenantFinancials) {
@@ -218,6 +213,20 @@ public class VistaDataPrinter {
             sb.append(pet.chargeLine().charge().amount().getValue());
 
             sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    public static String printVehicles(IList<Vehicle> vehicles) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("vehicles\n");
+
+        for (Vehicle vehicle : vehicles) {
+            sb.append("\n\t");
+            sb.append(vehicle.year().getStringView()).append(" ");
+            sb.append(vehicle.province().getStringView()).append(" ");
+            sb.append(vehicle.make().getStringView()).append(" ").append(vehicle.model().getStringView()).append(" ");
+            sb.append(vehicle.plateNumber().getStringView()).append(" ");
         }
         return sb.toString();
     }

@@ -48,7 +48,6 @@ public class TenantConverter {
         @Override
         protected void bind() {
             bind(dtoProto.person(), dboProto.tenant().person());
-            bind(dtoProto.vehicles(), dboProto.tenant().vehicles());
             bind(dtoProto.emergencyContacts(), dboProto.tenant().emergencyContacts());
 
             bind(TenantScreeningSecureInfoFragment.class, dtoProto, dboProto.tenantScreening());

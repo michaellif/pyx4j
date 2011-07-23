@@ -21,10 +21,12 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.Pet;
+import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.util.DomainUtil;
@@ -66,11 +68,14 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         EntityQueryCriteria<PetsDTO> petCriteria = EntityQueryCriteria.create(PetsDTO.class);
         //TODO petCriteria.add(PropertyCriterion.eq(petCriteria.proto().application(), charges.application()));
         PetsDTO pets = null;//PersistenceServicesFactory.getPersistenceService().retrieve(petCriteria);
+        // TODO retrieve vehicles list here from lease:
+        IList<Vehicle> vehicles = null;
 
-        updateChargesFromObjects(charges, unitSelection, selectedUnit, tenantList, pets);
+        updateChargesFromObjects(charges, unitSelection, selectedUnit, tenantList, pets, vehicles);
     }
 
-    public static void updateChargesFromObjects(Charges charges, UnitSelection unitSelection, AptUnit selectedUnit, PotentialTenantList tenantList, PetsDTO pets) {
+    public static void updateChargesFromObjects(Charges charges, UnitSelection unitSelection, AptUnit selectedUnit, PotentialTenantList tenantList,
+            PetsDTO pets, IList<Vehicle> vehicles) {
         double rentAmount = 0;
         double depositAmount = 0;
 
@@ -85,10 +90,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.monthlyRent, rentAmount));
         charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.locker, 25)); // TODO make this dynamic
 
-        int carsCount = 0;
-        for (PotentialTenantInfo pti : tenantList.tenants()) {
-            carsCount += pti.vehicles().size();
-        }
+        int carsCount = vehicles.size();
 
         if (carsCount > 0) {
             double parkingChargeAmount = carsCount * 50;

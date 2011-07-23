@@ -205,6 +205,5 @@ public class PetsViewForm extends CEntityForm<PetsDTO> {
             }
 
         };
-
     }
 }

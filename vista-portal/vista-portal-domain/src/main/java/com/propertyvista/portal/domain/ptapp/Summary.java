@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.IBoundToApplication;
+import com.propertyvista.domain.Vehicle;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 
@@ -45,6 +46,9 @@ public interface Summary extends IEntity, IBoundToApplication {
 
     @Transient
     PetsDTO pets();
+
+    @Transient
+    IList<Vehicle> vehicles();
 
     @Transient
     @EmbeddedEntity

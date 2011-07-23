@@ -121,7 +121,9 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             }
         }
 
+// TODO here should be retrived from Lease:        
         //retrieveApplicationEntity(summary.pets(), summary.application());
+        //retrieveApplicationEntity(summary.vehicles(), summary.application());
         retrieveApplicationEntity(summary.charges(), summary.application());
 
         // Move selected upgrades for presentation.

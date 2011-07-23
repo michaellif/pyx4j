@@ -128,18 +128,6 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTe
         fullViewPanel.add(sp);
 
         // ----------------------------------------------------------------------
-        // Vehicles:
-
-        fullViewPanel.add(new HTML(h3(proto().vehicles().getMeta().getCaption())));
-
-        bind(createVehicleFolderEditorColumns(), proto().vehicles());
-        fullViewPanel.add(get(proto().vehicles()));
-
-        sp = new VistaLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
-        sp.getElement().getStyle().setPadding(0, Unit.EM);
-        fullViewPanel.add(sp);
-
-        // ----------------------------------------------------------------------
         // legal Questions:
 
         DecorationData ddQuestionay = new DecorationData(80, Unit.PCT, 10, Unit.PCT);

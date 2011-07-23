@@ -28,7 +28,6 @@ import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.User;
-import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.person.Person;
 
@@ -62,10 +61,6 @@ public interface Tenant extends IEntity {
 
     @EmbeddedEntity
     Company company();
-
-    @Owned
-    @Length(3)
-    IList<Vehicle> vehicles();
 
     @Owned
     @Length(3)
