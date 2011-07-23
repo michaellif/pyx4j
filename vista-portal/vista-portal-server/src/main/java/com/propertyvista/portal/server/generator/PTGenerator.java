@@ -70,8 +70,8 @@ import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.ApplicationDocumentServletParameters;
-import com.propertyvista.portal.server.generator.dto.ApplicationSummaryDTO;
-import com.propertyvista.portal.server.generator.dto.TenantSummaryDTO;
+import com.propertyvista.portal.server.generator.gdo.ApplicationSummaryGDO;
+import com.propertyvista.portal.server.generator.gdo.TenantSummaryGDO;
 import com.propertyvista.portal.server.preloader.PreloadPT;
 import com.propertyvista.portal.server.preloader.RandomUtil;
 import com.propertyvista.server.common.reference.SharedData;
@@ -102,8 +102,8 @@ public class PTGenerator {
         return user;
     }
 
-    public ApplicationSummaryDTO createSummary(User user, AptUnit selectedUnit) {
-        ApplicationSummaryDTO summary = EntityFactory.create(ApplicationSummaryDTO.class);
+    public ApplicationSummaryGDO createSummary(User user, AptUnit selectedUnit) {
+        ApplicationSummaryGDO summary = EntityFactory.create(ApplicationSummaryGDO.class);
         summary.lease().status().setValue(Lease.Status.ApplicationCreated);
 
         createUnitSelection(summary.unitSelection(), selectedUnit);
@@ -361,20 +361,20 @@ public class PTGenerator {
         return address;
     }
 
-    private void createTenantList(User user, IList<TenantSummaryDTO> list) {
+    private void createTenantList(User user, IList<TenantSummaryGDO> list) {
         int maxTenants = config.getNumPotentialTenants();
         if (Math.abs(this.seed) > 1000) {
             maxTenants = 1 + RandomUtil.randomInt(5);
         }
 
         for (int i = 0; i < maxTenants; i++) {
-            TenantSummaryDTO tenantInfo = createTenantSummary(user, i);
+            TenantSummaryGDO tenantInfo = createTenantSummary(user, i);
             list.add(tenantInfo);
         }
     }
 
-    private TenantSummaryDTO createTenantSummary(User user, int index) {
-        TenantSummaryDTO tenantSummary = EntityFactory.create(TenantSummaryDTO.class);
+    private TenantSummaryGDO createTenantSummary(User user, int index) {
+        TenantSummaryGDO tenantSummary = EntityFactory.create(TenantSummaryGDO.class);
 
         // Join the objects
         tenantSummary.tenantInLease().tenant().set(tenantSummary.tenant());

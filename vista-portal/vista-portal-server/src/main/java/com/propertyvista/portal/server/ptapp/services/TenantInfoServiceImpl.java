@@ -29,7 +29,7 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
-import com.propertyvista.portal.server.generator.dto.TenantSummaryDTO;
+import com.propertyvista.portal.server.generator.gdo.TenantSummaryGDO;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 
@@ -37,8 +37,8 @@ public class TenantInfoServiceImpl extends ApplicationEntityServiceImpl implemen
 
     private final static Logger log = LoggerFactory.getLogger(TenantInfoServiceImpl.class);
 
-    static TenantSummaryDTO getTenantSummaryDTO(Key tenantId) {
-        TenantSummaryDTO summary = EntityFactory.create(TenantSummaryDTO.class);
+    static TenantSummaryGDO getTenantSummaryDTO(Key tenantId) {
+        TenantSummaryGDO summary = EntityFactory.create(TenantSummaryGDO.class);
 
         TenantInLease tenantInLease = PersistenceServicesFactory.getPersistenceService().retrieve(TenantInLease.class, tenantId);
         if ((tenantInLease == null) || (!tenantInLease.lease().id().equals(PtAppContext.getCurrentLease().id()))) {
@@ -68,7 +68,7 @@ public class TenantInfoServiceImpl extends ApplicationEntityServiceImpl implemen
     @Override
     public void retrieve(AsyncCallback<TenantInfoEditorDTO> callback, Key tenantId) {
         log.debug("Retrieving Info for tenant {}", tenantId);
-        TenantSummaryDTO summary = getTenantSummaryDTO(tenantId);
+        TenantSummaryGDO summary = getTenantSummaryDTO(tenantId);
 
         TenantInfoEditorDTO dto = new TenantConverter.TenantInfoEditorConverter().dto(summary);
         callback.onSuccess(dto);
@@ -76,7 +76,7 @@ public class TenantInfoServiceImpl extends ApplicationEntityServiceImpl implemen
 
     @Override
     public void save(AsyncCallback<TenantInfoEditorDTO> callback, TenantInfoEditorDTO dto) {
-        TenantSummaryDTO summary = getTenantSummaryDTO(dto.getPrimaryKey());
+        TenantSummaryGDO summary = getTenantSummaryDTO(dto.getPrimaryKey());
 
         new TenantConverter.TenantInfoEditorConverter().toDbo(dto, summary);
 

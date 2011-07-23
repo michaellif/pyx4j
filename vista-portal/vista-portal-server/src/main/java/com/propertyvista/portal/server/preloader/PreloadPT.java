@@ -40,8 +40,8 @@ import com.propertyvista.portal.domain.ptapp.TenantChargeList;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
 import com.propertyvista.portal.server.generator.PTGenerator;
-import com.propertyvista.portal.server.generator.dto.ApplicationSummaryDTO;
-import com.propertyvista.portal.server.generator.dto.TenantSummaryDTO;
+import com.propertyvista.portal.server.generator.gdo.ApplicationSummaryGDO;
+import com.propertyvista.portal.server.generator.gdo.TenantSummaryGDO;
 import com.propertyvista.portal.server.ptapp.services.ApplicationDebug;
 import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
 import com.propertyvista.server.domain.ApplicationDocumentData;
@@ -144,7 +144,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, PreloadConfig.createTest());
 
         // TODO retrieve some unit
-        ApplicationSummaryDTO summary = generator.createSummary(user, null);
+        ApplicationSummaryGDO summary = generator.createSummary(user, null);
 
         persistFullApplication(summary, generator);
         //List<ApplicationDocument> adocs = PersistenceServicesFactory.getPersistenceService().query(EntityQueryCriteria.create(ApplicationDocument.class));
@@ -156,7 +156,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
         return b.toString();
     }
 
-    private void persistFullApplication(ApplicationSummaryDTO summary, PTGenerator generator) {
+    private void persistFullApplication(ApplicationSummaryGDO summary, PTGenerator generator) {
 
         PersistenceServicesFactory.getPersistenceService().persist(summary.lease().pets());
 
@@ -169,7 +169,7 @@ public class PreloadPT extends BaseVistaDataPreloader {
 
         persist(summary.lease());
 
-        for (TenantSummaryDTO tenantSummary : summary.tenants()) {
+        for (TenantSummaryGDO tenantSummary : summary.tenants()) {
             persist(tenantSummary.tenant());
 
             tenantSummary.tenantInLease().lease().set(summary.lease());

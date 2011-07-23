@@ -18,13 +18,13 @@ import java.util.List;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
-import com.propertyvista.portal.server.generator.dto.TenantSummaryDTO;
+import com.propertyvista.portal.server.generator.gdo.TenantSummaryGDO;
 
 public class TenantTestAdapter {
 
-    public static TenantListEditorDTO getTenantListEditorDTO(List<TenantSummaryDTO> tenant) {
+    public static TenantListEditorDTO getTenantListEditorDTO(List<TenantSummaryGDO> tenant) {
         TenantListEditorDTO dto = EntityFactory.create(TenantListEditorDTO.class);
-        for (TenantSummaryDTO tenantSummary : tenant) {
+        for (TenantSummaryGDO tenantSummary : tenant) {
             dto.tenants().add(new TenantConverter.TenantEditorConverter().dto(tenantSummary.tenantInLease()));
         }
         return dto;

@@ -23,7 +23,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
-import com.propertyvista.portal.server.generator.dto.TenantSummaryDTO;
+import com.propertyvista.portal.server.generator.gdo.TenantSummaryGDO;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 
 public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl implements TenantFinancialService {
@@ -33,7 +33,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
     @Override
     public void retrieve(AsyncCallback<TenantFinancialEditorDTO> callback, Key tenantId) {
         log.debug("Retrieving financials for tenant {}", tenantId);
-        TenantSummaryDTO summary = TenantInfoServiceImpl.getTenantSummaryDTO(tenantId);
+        TenantSummaryGDO summary = TenantInfoServiceImpl.getTenantSummaryDTO(tenantId);
 
         TenantFinancialEditorDTO dto = new TenantConverter.TenantFinancialEditorConverter().dto(summary);
         callback.onSuccess(dto);
@@ -42,7 +42,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
     @Override
     public void save(AsyncCallback<TenantFinancialEditorDTO> callback, TenantFinancialEditorDTO dto) {
         log.debug("Saving tenantFinancial {}", dto);
-        TenantSummaryDTO summary = TenantInfoServiceImpl.getTenantSummaryDTO(dto.getPrimaryKey());
+        TenantSummaryGDO summary = TenantInfoServiceImpl.getTenantSummaryDTO(dto.getPrimaryKey());
 
         new TenantConverter.TenantFinancialEditorConverter().toDbo(dto, summary);
 

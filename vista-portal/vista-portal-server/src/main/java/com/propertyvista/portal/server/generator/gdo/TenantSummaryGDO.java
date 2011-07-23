@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.generator.dto;
+package com.propertyvista.portal.server.generator.gdo;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -21,7 +21,8 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
 
 @Transient
-public interface TenantSummaryDTO extends IEntity {
+//Generator/Preloader Data OBject only!
+public interface TenantSummaryGDO extends IEntity {
 
     Tenant tenant();
 

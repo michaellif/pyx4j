@@ -57,8 +57,8 @@ import com.propertyvista.portal.rpc.ptapp.BusinessRules;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.server.generator.PTGenerator;
-import com.propertyvista.portal.server.generator.dto.ApplicationSummaryDTO;
-import com.propertyvista.portal.server.generator.dto.TenantSummaryDTO;
+import com.propertyvista.portal.server.generator.gdo.ApplicationSummaryGDO;
+import com.propertyvista.portal.server.generator.gdo.TenantSummaryGDO;
 import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 import com.propertyvista.portal.server.ptapp.util.TenantTestAdapter;
@@ -100,7 +100,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         log.info("execute flow with seed {}", seed);
         PTGenerator generator = new PTGenerator(seed, PreloadConfig.createTest());
         User user = createTestUser();
-        ApplicationSummaryDTO summary = generator.createSummary(user, null);
+        ApplicationSummaryGDO summary = generator.createSummary(user, null);
 
         createAccount(user);
         enterUnitSelection();
@@ -150,7 +150,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         saveAndContinue();
     }
 
-    private void enterTenantsPage(List<TenantSummaryDTO> tenantsSummaryList) {
+    private void enterTenantsPage(List<TenantSummaryGDO> tenantsSummaryList) {
         int num = 0;
         TenantListEditorDTO tenants = TenantTestAdapter.getTenantListEditorDTO(tenantsSummaryList);
         for (TenantEditorDTO tenant : tenants.tenants()) {
@@ -177,9 +177,9 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         }
     }
 
-    private void enterTestInfoPages(List<TenantSummaryDTO> tenants) {
+    private void enterTestInfoPages(List<TenantSummaryGDO> tenants) {
         int id = 0;
-        for (TenantSummaryDTO tenantSummary : tenants) {
+        for (TenantSummaryGDO tenantSummary : tenants) {
             if (ApplicationProgressMgr.shouldEnterInformation(tenantSummary)) {
                 enterTestInfo(new TenantConverter.TenantInfoEditorConverter().dto(tenantSummary));
                 saveAndContinue();
@@ -298,8 +298,8 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         enterIAddressForm(fomrDebugId, contact.address());
     }
 
-    private void enterFinancialPages(List<TenantSummaryDTO> tenants) {
-        for (TenantSummaryDTO tenantSummary : tenants) {
+    private void enterFinancialPages(List<TenantSummaryGDO> tenants) {
+        for (TenantSummaryGDO tenantSummary : tenants) {
             if (ApplicationProgressMgr.shouldEnterInformation(tenantSummary)) {
                 enterFinancialForm(new TenantConverter.TenantFinancialEditorConverter().dto(tenantSummary));
                 saveAndContinue();
@@ -454,19 +454,19 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         //assertValueOnForm(debugID, pet.chargeLine());
     }
 
-    private void enterChargesPage(ApplicationSummaryDTO summary) {
+    private void enterChargesPage(ApplicationSummaryGDO summary) {
         // TODO Leon
 
         saveAndContinue();
     }
 
     @SuppressWarnings("unchecked")
-    private void enterSummaryPage(ApplicationSummaryDTO summary) {
+    private void enterSummaryPage(ApplicationSummaryGDO summary) {
         // This data is not generated
         // Forge the  Digital Signature
         //TODO summary.agree().setValue(Boolean.TRUE);
 
-        TenantSummaryDTO mainTenant = summary.tenants().get(0);
+        TenantSummaryGDO mainTenant = summary.tenants().get(0);
         //TODO summary.fullName().setValue(EntityFromatUtils.nvl_concat(" ", mainTenant.person().name().firstName(), mainTenant.person().name().lastName()));
 
         //TODO setValueOnForm(summary.agree());

@@ -21,7 +21,7 @@ import com.propertyvista.domain.tenant.TenantScreeningSecureInfoFragment;
 import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
-import com.propertyvista.portal.server.generator.dto.TenantSummaryDTO;
+import com.propertyvista.portal.server.generator.gdo.TenantSummaryGDO;
 
 public class TenantConverter {
 
@@ -39,10 +39,10 @@ public class TenantConverter {
 
     }
 
-    public static class TenantInfoEditorConverter extends EntityDtoBinder<TenantSummaryDTO, TenantInfoEditorDTO> {
+    public static class TenantInfoEditorConverter extends EntityDtoBinder<TenantSummaryGDO, TenantInfoEditorDTO> {
 
         public TenantInfoEditorConverter() {
-            super(TenantSummaryDTO.class, TenantInfoEditorDTO.class);
+            super(TenantSummaryGDO.class, TenantInfoEditorDTO.class);
         }
 
         @Override
@@ -62,10 +62,10 @@ public class TenantConverter {
 
     }
 
-    public static class TenantFinancialEditorConverter extends EntityDtoBinder<TenantSummaryDTO, TenantFinancialEditorDTO> {
+    public static class TenantFinancialEditorConverter extends EntityDtoBinder<TenantSummaryGDO, TenantFinancialEditorDTO> {
 
         public TenantFinancialEditorConverter() {
-            super(TenantSummaryDTO.class, TenantFinancialEditorDTO.class);
+            super(TenantSummaryGDO.class, TenantFinancialEditorDTO.class);
         }
 
         @Override

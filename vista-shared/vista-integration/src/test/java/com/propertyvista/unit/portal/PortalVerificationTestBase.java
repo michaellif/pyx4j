@@ -44,7 +44,7 @@ import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.BusinessRules;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-import com.propertyvista.portal.server.generator.dto.TenantSummaryDTO;
+import com.propertyvista.portal.server.generator.gdo.TenantSummaryGDO;
 import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 import com.propertyvista.portal.server.ptapp.util.TenantTestAdapter;
@@ -61,7 +61,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertValueOnForm(formDebugId, aUnit.avalableForRent());
     }
 
-    protected void verifyTenantsPage(List<TenantSummaryDTO> tenantsSummaryList, boolean doSave) {
+    protected void verifyTenantsPage(List<TenantSummaryGDO> tenantsSummaryList, boolean doSave) {
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Tenants.class)));
         selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Tenants.class));
 
@@ -94,9 +94,9 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         }
     }
 
-    protected void verifyInfoPages(List<TenantSummaryDTO> tenants, boolean doSave) {
+    protected void verifyInfoPages(List<TenantSummaryGDO> tenants, boolean doSave) {
         int id = 0;
-        for (TenantSummaryDTO tenantSummary : tenants) {
+        for (TenantSummaryGDO tenantSummary : tenants) {
             if (ApplicationProgressMgr.shouldEnterInformation(tenantSummary)) {
                 verifyInfoPage(new TenantConverter.TenantInfoEditorConverter().dto(tenantSummary), id);
                 if (doSave) {
@@ -230,9 +230,9 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertIAddressForm(formDebugId, contact.address());
     }
 
-    protected void verifyFinancialPages(List<TenantSummaryDTO> tenants, boolean doSave) {
+    protected void verifyFinancialPages(List<TenantSummaryGDO> tenants, boolean doSave) {
         int num = 0;
-        for (TenantSummaryDTO tenantSummary : tenants) {
+        for (TenantSummaryGDO tenantSummary : tenants) {
             if (ApplicationProgressMgr.shouldEnterInformation(tenantSummary)) {
                 verifyFinancialPage(new TenantConverter.TenantFinancialEditorConverter().dto(tenantSummary), num);
                 if (doSave) {

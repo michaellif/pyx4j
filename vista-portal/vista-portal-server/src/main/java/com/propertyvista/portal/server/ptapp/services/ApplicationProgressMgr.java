@@ -35,7 +35,7 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.portal.server.generator.dto.TenantSummaryDTO;
+import com.propertyvista.portal.server.generator.gdo.TenantSummaryGDO;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class ApplicationProgressMgr {
@@ -81,7 +81,7 @@ public class ApplicationProgressMgr {
         return (TimeUtils.isOlderThen(tenant.person().birthDate().getValue(), 18));
     }
 
-    public static boolean shouldEnterInformation(TenantSummaryDTO tenantSummary) {
+    public static boolean shouldEnterInformation(TenantSummaryGDO tenantSummary) {
         return shouldEnterInformation(tenantSummary.tenantInLease(), tenantSummary.tenant().person().birthDate().getValue());
     }
 
