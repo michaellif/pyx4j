@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.site.client.ui.crud.IListerView;
-import com.pyx4j.widgets.client.dialog.DialogPanelNew;
+import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
@@ -98,7 +98,7 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
         box.show();
     }
 
-    private class SelectTypeBox extends DialogPanelNew {
+    private class SelectTypeBox extends DialogPanel {
 
         private final I18n i18n = I18nFactory.getI18n(SelectTypeBox.class);
 

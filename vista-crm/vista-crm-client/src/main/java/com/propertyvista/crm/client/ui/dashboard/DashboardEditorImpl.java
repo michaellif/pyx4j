@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.widgets.client.dialog.DialogPanelNew;
+import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -61,7 +61,7 @@ public class DashboardEditorImpl extends CrmEditorViewImplBase<DashboardMetadata
         box.show();
     }
 
-    private class SelectTypeBox extends DialogPanelNew {
+    private class SelectTypeBox extends DialogPanel {
 
         private final I18n i18n = I18nFactory.getI18n(SelectTypeBox.class);
 

@@ -32,12 +32,12 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.widgets.client.dashboard.IGadget;
-import com.pyx4j.widgets.client.dialog.DialogPanelNew;
+import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
-public class AddGadgetBox extends DialogPanelNew {
+public class AddGadgetBox extends DialogPanel {
 
     private final I18n i18n = I18nFactory.getI18n(AddGadgetBox.class);
 
