@@ -277,7 +277,13 @@ public class PTGenerator {
 
     private void createVehicles(IList<Vehicle> vehicles) {
 
-        int maxVehicles = RandomUtil.randomInt(3);
+        int maxVehicles;
+        if (Math.abs(this.seed) < 1000) {
+            maxVehicles = 1 + RandomUtil.randomInt(2);
+        } else {
+            maxVehicles = RandomUtil.randomInt(3);
+        }
+
         for (int i = 0; i < maxVehicles; i++) {
             Vehicle vehicle = EntityFactory.create(Vehicle.class);
 

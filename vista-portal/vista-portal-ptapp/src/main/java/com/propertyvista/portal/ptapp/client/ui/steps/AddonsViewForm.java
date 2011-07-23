@@ -92,7 +92,7 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
         main.add(new VistaHeaderBar(proto().pets().pets()));
         main.add(inject(proto().pets().pets(), createPetsEditorColumns()));
 
-        main.add(new VistaHeaderBar(i18n.tr("Parking")));
+        main.add(new VistaHeaderBar(i18n.tr("Vehicles/Parking")));
         main.add(inject(proto().vehicles(), createVehicleEditorColumns()));
 
         return main;
@@ -250,8 +250,8 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
                 columns.add(new EntityFolderColumnDescriptor(proto().make(), "8em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().model(), "8em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().country(), "9em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().province(), "17em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().parkingSpot(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().province(), "16em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().parkingSpot(), "13em"));
                 //  TODO : filter that parking spot on available spots only and from current building!..                  
             }
 
