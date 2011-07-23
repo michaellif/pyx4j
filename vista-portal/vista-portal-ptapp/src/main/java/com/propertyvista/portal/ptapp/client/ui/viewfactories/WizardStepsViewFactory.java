@@ -28,8 +28,8 @@ import com.propertyvista.portal.ptapp.client.ui.steps.InfoView;
 import com.propertyvista.portal.ptapp.client.ui.steps.InfoViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.PaymentView;
 import com.propertyvista.portal.ptapp.client.ui.steps.PaymentViewImpl;
-import com.propertyvista.portal.ptapp.client.ui.steps.PetsView;
-import com.propertyvista.portal.ptapp.client.ui.steps.PetsViewImpl;
+import com.propertyvista.portal.ptapp.client.ui.steps.AddonsView;
+import com.propertyvista.portal.ptapp.client.ui.steps.AddonsViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.SummaryView;
 import com.propertyvista.portal.ptapp.client.ui.steps.SummaryViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.TenantsView;
@@ -47,8 +47,8 @@ public class WizardStepsViewFactory extends ViewFactoryBase {
                 map.put(type, new InfoViewImpl());
             } else if (FinancialView.class.equals(type)) {
                 map.put(type, new FinancialViewImpl());
-            } else if (PetsView.class.equals(type)) {
-                map.put(type, new PetsViewImpl());
+            } else if (AddonsView.class.equals(type)) {
+                map.put(type, new AddonsViewImpl());
             } else if (ChargesView.class.equals(type)) {
                 map.put(type, new ChargesViewImpl());
             } else if (SummaryView.class.equals(type)) {

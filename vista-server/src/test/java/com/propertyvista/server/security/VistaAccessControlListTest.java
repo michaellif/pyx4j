@@ -52,7 +52,7 @@ import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
-import com.propertyvista.portal.rpc.ptapp.services.PetService;
+import com.propertyvista.portal.rpc.ptapp.services.AddonsService;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
@@ -99,7 +99,7 @@ public class VistaAccessControlListTest {
         assertPermission(false, TenantService.class);
         assertPermission(false, TenantInfoService.class);
         assertPermission(false, TenantFinancialService.class);
-        assertPermission(false, PetService.class);
+        assertPermission(false, AddonsService.class);
         assertPermission(false, ChargesService.class);
         assertPermission(false, SummaryService.class);
         assertPermission(false, PaymentService.class);
@@ -117,7 +117,7 @@ public class VistaAccessControlListTest {
         assertPermission(true, TenantService.class);
         assertPermission(true, TenantInfoService.class);
         assertPermission(true, TenantFinancialService.class);
-        assertPermission(true, PetService.class);
+        assertPermission(true, AddonsService.class);
         assertPermission(true, ChargesService.class);
         assertPermission(true, SummaryService.class);
         assertPermission(true, PaymentService.class);

@@ -23,8 +23,8 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
+import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.contact.IAddress;
 import com.propertyvista.domain.contact.IAddressFull;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
@@ -141,12 +141,12 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
 
         //Vehicles
         int row = 0;
-        for (Vehicle vehicle : tenant.vehicles()) {
-            assertVehicleRow(D.id(tenant.vehicles(), row), detach(vehicle));
-            row++;
-        }
-        //verify size (e.g. no next row exists)
-        assertFalse(selenium.isElementPresent(D.id(proto(TenantInfoEditorDTO.class).vehicles(), row, proto(Vehicle.class).plateNumber())));
+//        for (Vehicle vehicle : tenant.vehicles()) {
+//            assertVehicleRow(D.id(tenant.vehicles(), row), detach(vehicle));
+//            row++;
+//        }
+//        //verify size (e.g. no next row exists)
+//        assertFalse(selenium.isElementPresent(D.id(proto(TenantInfoEditorDTO.class).vehicles(), row, proto(Vehicle.class).plateNumber())));
 
         //Legal Questions
         assertValueOnForm(tenant.legalQuestions().suedForRent());
@@ -362,7 +362,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
     }
 
     protected void verifyPetsPages(List<Pet> pets, boolean doSave) {
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Pets.class));
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Addons.class));
         int num = 0;
         for (Pet pet : pets) {
             verifyPetRow(D.id(proto(PetsDTO.class).pets(), num), detach(pet));

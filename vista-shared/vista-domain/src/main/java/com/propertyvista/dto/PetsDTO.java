@@ -13,7 +13,6 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -27,7 +26,6 @@ import com.propertyvista.domain.PetChargeRule;
 public interface PetsDTO extends IEntity {
 
     @Owned
-    @Length(3)
     IList<Pet> pets();
 
     @Transient

@@ -17,16 +17,16 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.dto.PetsDTO;
-import com.propertyvista.portal.ptapp.client.ui.steps.PetsView;
-import com.propertyvista.portal.ptapp.client.ui.steps.PetsViewPresenter;
+import com.propertyvista.portal.domain.ptapp.dto.AddOnsDTO;
+import com.propertyvista.portal.ptapp.client.ui.steps.AddonsView;
+import com.propertyvista.portal.ptapp.client.ui.steps.AddonsViewPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
-import com.propertyvista.portal.rpc.ptapp.services.PetService;
+import com.propertyvista.portal.rpc.ptapp.services.AddonsService;
 
-public class PetsActivity extends WizardStepActivity<PetsDTO, PetsViewPresenter> implements PetsViewPresenter {
+public class AddonsActivity extends WizardStepActivity<AddOnsDTO, AddonsViewPresenter> implements AddonsViewPresenter {
 
-    public PetsActivity(AppPlace place) {
-        super((PetsView) WizardStepsViewFactory.instance(PetsView.class), PetsDTO.class, (PetService) GWT.create(PetService.class));
+    public AddonsActivity(AppPlace place) {
+        super((AddonsView) WizardStepsViewFactory.instance(AddonsView.class), AddOnsDTO.class, (AddonsService) GWT.create(AddonsService.class));
         withPlace(place);
     }
 }

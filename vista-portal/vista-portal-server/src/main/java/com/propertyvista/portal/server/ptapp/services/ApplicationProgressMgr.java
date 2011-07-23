@@ -53,7 +53,7 @@ public class ApplicationProgressMgr {
         progress.steps().add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
         progress.steps().add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
         progress.steps().add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(PtSiteMap.Pets.class, ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(PtSiteMap.Addons.class, ApplicationWizardStep.Status.notVisited));
         progress.steps().add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
         progress.steps().add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
         progress.steps().add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));

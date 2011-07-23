@@ -31,9 +31,9 @@ import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.Vehicle;
-import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.contact.IAddress;
 import com.propertyvista.domain.contact.IAddressFull;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
@@ -47,6 +47,7 @@ import com.propertyvista.domain.tenant.income.TenantIncome;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
+import com.propertyvista.portal.domain.ptapp.dto.AddOnsDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
@@ -107,6 +108,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         enterTestInfoPages(summary.tenants());
         enterFinancialPages(summary.tenants());
         enterPetsPage(summary.lease().pets());
+        enterVehiclesPage(summary.lease().vehicles());
 
         enterChargesPage(summary);
 
@@ -213,13 +215,6 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
 
         //Vehicles
         int num = 0;
-        for (Vehicle vehicle : tenant.vehicles()) {
-            selenium.click(D.id(tenant.vehicles(), FormNavigationDebugId.Form_Add));
-            enterVehicleRow(D.id(tenant.vehicles(), num), detach(vehicle));
-            num++;
-        }
-        //verify size (e.g. no next row exists)
-        assertFalse(selenium.isElementPresent(D.id(proto(TenantInfoEditorDTO.class).vehicles(), num, proto(Vehicle.class).plateNumber())));
 
         //Legal Questions
         setValueOnForm(tenant.legalQuestions().suedForRent());
@@ -420,13 +415,26 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
     }
 
     private void enterPetsPage(List<Pet> pets) {
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Pets.class));
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Addons.class));
         int num = 0;
         for (Pet pet : pets) {
             selenium.click(D.id(proto(PetsDTO.class).pets(), FormNavigationDebugId.Form_Add));
             enterPetRow(D.id(proto(PetsDTO.class).pets(), num), detach(pet));
             num++;
         }
+        saveAndContinue();
+    }
+
+    private void enterVehiclesPage(List<Vehicle> vehicles) {
+        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Addons.class));
+        int num = 0;
+        for (Vehicle vehicle : vehicles) {
+            selenium.click(D.id(proto(AddOnsDTO.class).vehicles(), FormNavigationDebugId.Form_Add));
+            enterVehicleRow(D.id(proto(AddOnsDTO.class).vehicles(), num), detach(vehicle));
+            num++;
+        }
+        //verify size (e.g. no next row exists)
+        assertFalse(selenium.isElementPresent(D.id(proto(AddOnsDTO.class).vehicles(), num, proto(Vehicle.class).plateNumber())));
 
         saveAndContinue();
     }

@@ -13,11 +13,11 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import com.propertyvista.dto.PetsDTO;
+import com.propertyvista.portal.domain.ptapp.dto.AddOnsDTO;
 
-public class PetsViewImpl extends WizardStepViewImpl<PetsDTO, PetsViewPresenter> implements PetsView {
+public class AddonsViewImpl extends WizardStepViewImpl<AddOnsDTO, AddonsViewPresenter> implements AddonsView {
 
-    public PetsViewImpl() {
-        super(new PetsViewForm());
+    public AddonsViewImpl() {
+        super(new AddonsViewForm());
     }
 }

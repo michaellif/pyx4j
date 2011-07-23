@@ -25,7 +25,6 @@ import com.propertyvista.domain.ApplicationDocument;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.TenantScreeningSecureInfoFragment;
 
@@ -42,10 +41,6 @@ public interface TenantInfoEditorDTO extends IEntity, TenantScreeningSecureInfoF
 
     @EmbeddedEntity
     PriorAddress previousAddress();
-
-    @Owned
-    @Length(3)
-    IList<Vehicle> vehicles();
 
     @Owned
     @Caption(name = "General Questions")

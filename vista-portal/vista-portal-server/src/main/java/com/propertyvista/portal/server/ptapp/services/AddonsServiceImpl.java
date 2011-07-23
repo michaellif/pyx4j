@@ -30,32 +30,34 @@ import com.propertyvista.domain.PetChargeRule;
 import com.propertyvista.domain.charges.ChargeType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.PetsDTO;
+import com.propertyvista.portal.domain.ptapp.dto.AddOnsDTO;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
-import com.propertyvista.portal.rpc.ptapp.services.PetService;
+import com.propertyvista.portal.rpc.ptapp.services.AddonsService;
 import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
-public class PetServiceImpl extends ApplicationEntityServiceImpl implements PetService {
+public class AddonsServiceImpl extends ApplicationEntityServiceImpl implements AddonsService {
 
-    private final static Logger log = LoggerFactory.getLogger(PetServiceImpl.class);
+    private final static Logger log = LoggerFactory.getLogger(AddonsServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<PetsDTO> callback, Key tenantId) {
+    public void retrieve(AsyncCallback<AddOnsDTO> callback, Key tenantId) {
         log.info("Retrieving pets");
         Lease lease = PersistenceServicesFactory.getPersistenceService().retrieve(Lease.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
         PersistenceServicesFactory.getPersistenceService().retrieve(lease.pets());
 
-        PetsDTO pets = EntityFactory.create(PetsDTO.class);
-        pets.pets().addAll(lease.pets());
+        AddOnsDTO addOns = EntityFactory.create(AddOnsDTO.class);
+        addOns.pets().pets().addAll(lease.pets());
+        addOns.vehicles().addAll(lease.vehicles());
 
-        loadTransientData(pets);
+        loadTransientData(addOns.pets());
 
-        callback.onSuccess(pets);
+        callback.onSuccess(addOns);
     }
 
     @Override
-    public void save(AsyncCallback<PetsDTO> callback, PetsDTO pets) {
-        log.info("Saving pets {}", pets);
+    public void save(AsyncCallback<AddOnsDTO> callback, AddOnsDTO addOns) {
+        log.info("Saving pets {}", addOns);
 
         Lease lease = PersistenceServicesFactory.getPersistenceService().retrieve(Lease.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
         PersistenceServicesFactory.getPersistenceService().retrieve(lease.pets());
@@ -66,24 +68,28 @@ public class PetServiceImpl extends ApplicationEntityServiceImpl implements PetS
 
         // Calculate charges on server to avoid Front End API Hackers.
         PetChargeRule petChargeRule = loadPetChargeRule();
-        for (Pet pet : pets.pets()) {
+        for (Pet pet : addOns.pets().pets()) {
             ChargesSharedCalculation.calculatePetCharges(petChargeRule, pet);
         }
 
         lease.pets().clear();
-        lease.pets().addAll(pets.pets());
+        lease.pets().addAll(addOns.pets().pets());
+
+        lease.vehicles().clear();
+        lease.vehicles().addAll(addOns.vehicles());
 
         //TODO use merge
         PersistenceServicesFactory.getPersistenceService().persist(lease.pets());
+        PersistenceServicesFactory.getPersistenceService().persist(lease.vehicles());
         PersistenceServicesFactory.getPersistenceService().persist(lease);
 
         if (ChargesServerCalculation.needToUpdateChargesForPets(lease.pets(), existingPets)) {
             ApplicationProgressMgr.invalidateChargesStep();
         }
 
-        loadTransientData(pets);
+        loadTransientData(addOns.pets());
 
-        callback.onSuccess(pets);
+        callback.onSuccess(addOns);
     }
 
     /*

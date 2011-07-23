@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -28,32 +27,23 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.Range;
 
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.utils.EntityGraph;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
@@ -63,15 +53,11 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
+import com.propertyvista.domain.ApplicationDocument.DocumentType;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.Vehicle;
-import com.propertyvista.domain.ApplicationDocument.DocumentType;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
 import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.components.ApplicationDocumentsFolderUploader;
@@ -143,9 +129,6 @@ public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
 
         main.add(previousAddressHeader = new VistaHeaderBar(proto().previousAddress()));
         main.add(inject(proto().previousAddress()));
-
-        main.add(new VistaHeaderBar(proto().vehicles()));
-        main.add(inject(proto().vehicles(), createVehicleFolderEditorColumns()));
 
         main.add(new VistaHeaderBar(proto().legalQuestions()));
 
@@ -291,19 +274,6 @@ public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
 
         get(proto().secureIdentifier()).addValueValidator(new CanadianSinValidator());
 
-        get(proto().vehicles()).addValueValidator(new EditableValueValidator<List<Map<String, Object>>>() {
-
-            @Override
-            public boolean isValid(CEditableComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
-                return !EntityGraph.hasBusinessDuplicates(getValue().vehicles());
-            }
-
-            @Override
-            public String getValidationMessage(CEditableComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
-                return i18n.tr("Duplicate vehicles specified");
-            }
-        });
-
         get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<Map<String, Object>>>() {
 
             @Override
@@ -373,72 +343,6 @@ public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
                 boolean rented = OwnedRented.rented.equals(value.rented().getValue());
                 get(proto().payment()).setVisible(rented);
                 get(proto().managerName()).setVisible(rented);
-            }
-
-        };
-
-    }
-
-    private CEntityFolderEditor<Vehicle> createVehicleFolderEditorColumns() {
-        return new CEntityFolderEditor<Vehicle>(Vehicle.class) {
-
-            private List<EntityFolderColumnDescriptor> columns;
-
-            {
-                columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().plateNumber(), "8em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().year(), "5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().make(), "8em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().model(), "8em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().country(), "9em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().province(), "17em"));
-            }
-
-            @Override
-            protected IFolderEditorDecorator<Vehicle> createFolderDecorator() {
-                return new TableFolderEditorDecorator<Vehicle>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
-                        i18n.tr("Add a vehicle"));
-            }
-
-            @Override
-            protected CEntityFolderItemEditor<Vehicle> createItem() {
-                return createVehicleRowEditor(columns);
-            }
-
-            private CEntityFolderItemEditor<Vehicle> createVehicleRowEditor(final List<EntityFolderColumnDescriptor> columns) {
-                return new CEntityFolderRowEditor<Vehicle>(Vehicle.class, columns) {
-
-                    @Override
-                    public IFolderItemEditorDecorator<Vehicle> createFolderItemDecorator() {
-                        return new TableFolderItemEditorDecorator<Vehicle>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
-                                i18n.tr("Remove vehicle"));
-                    }
-
-                    @Override
-                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-                        CComponent<?> comp = super.createCell(column);
-                        if (column.getObject() == proto().year() && comp instanceof CMonthYearPicker) {
-                            ((CMonthYearPicker) comp).setYearRange(new Range(1900, TimeUtils.today().getYear() + 1));
-                        }
-                        return comp;
-                    }
-
-                    @Override
-                    public void addValidations() {
-                        ProvinceContryFilters.attachFilters(get(proto().province()), get(proto().country()), new OptionsFilter<Province>() {
-                            @Override
-                            public boolean acceptOption(Province entity) {
-                                if (getValue() == null) {
-                                    return true;
-                                } else {
-                                    Country country = getValue().country();
-                                    return country.isNull() || EqualsHelper.equals(entity.country().name(), country.name());
-                                }
-                            }
-                        });
-                    }
-
-                };
             }
 
         };

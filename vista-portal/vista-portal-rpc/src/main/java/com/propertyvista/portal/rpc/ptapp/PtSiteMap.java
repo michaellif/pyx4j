@@ -64,9 +64,9 @@ public class PtSiteMap implements SiteMap {
     public static class Financial extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Pets")
-    @PlaceProperties(caption = "Pets")
-    public static class Pets extends AppPlace {
+    @NavigationItem(navigLabel = "Addons")
+    @PlaceProperties(caption = "Addons")
+    public static class Addons extends AppPlace {
     }
 
     @NavigationItem(navigLabel = "Charges")

@@ -7,14 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 16, 2011
- * @author michaellif
+ * Created on Feb 8, 2011
+ * @author Misha
  * @version $Id$
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import com.propertyvista.dto.PetsDTO;
+import com.propertyvista.portal.domain.ptapp.dto.AddOnsDTO;
 
-public interface PetsViewPresenter extends WizardStepPresenter<PetsDTO> {
+public interface AddonsView extends WizardStepView<AddOnsDTO, AddonsViewPresenter> {
 
 }

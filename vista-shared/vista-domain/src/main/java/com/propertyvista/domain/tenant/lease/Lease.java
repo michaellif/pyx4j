@@ -15,7 +15,6 @@ package com.propertyvista.domain.tenant.lease;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -61,8 +60,6 @@ public interface Lease extends IEntity {
     @Detached
     IList<TenantInLease> tenants();
 
-// TODO check if we need Owned flag:    
-    @Owned
     IList<Vehicle> vehicles();
 
     IList<Pet> pets();

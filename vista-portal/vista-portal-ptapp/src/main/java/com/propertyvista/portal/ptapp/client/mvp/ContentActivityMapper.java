@@ -31,7 +31,7 @@ import com.propertyvista.portal.ptapp.client.activity.steps.CompletionActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.FinancialActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.InfoActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.PaymentActivity;
-import com.propertyvista.portal.ptapp.client.activity.steps.PetsActivity;
+import com.propertyvista.portal.ptapp.client.activity.steps.AddonsActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.SummaryActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.TenantsActivity;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
@@ -62,8 +62,8 @@ public class ContentActivityMapper implements ActivityMapper {
             return new InfoActivity((AppPlace) place);
         } else if (place instanceof PtSiteMap.Financial) {
             return new FinancialActivity((AppPlace) place);
-        } else if (place instanceof PtSiteMap.Pets) {
-            return new PetsActivity((AppPlace) place);
+        } else if (place instanceof PtSiteMap.Addons) {
+            return new AddonsActivity((AppPlace) place);
         } else if (place instanceof PtSiteMap.Charges) {
             return new ChargesActivity((AppPlace) place);
         } else if (place instanceof PtSiteMap.Summary) {

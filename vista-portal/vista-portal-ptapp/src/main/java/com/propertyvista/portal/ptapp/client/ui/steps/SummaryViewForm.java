@@ -125,8 +125,8 @@ public class SummaryViewForm extends CEntityForm<Summary> {
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Financial"), new PtSiteMap.Financial())));
         main.add(inject(proto().tenantFinancials(), createFinancialView()));
 
-        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Pets"), new PtSiteMap.Pets())));
-        main.add(inject(proto().pets(), new PetsViewForm(this)));
+        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Addons"), new PtSiteMap.Addons())));
+        main.add(inject(proto().pets(), new AddonsViewForm(this)));
 
         main.add(alignWidth(new VistaHeaderBar(i18n.tr("Lease Terms"))));
         main.add(new LeaseTermsCheck());

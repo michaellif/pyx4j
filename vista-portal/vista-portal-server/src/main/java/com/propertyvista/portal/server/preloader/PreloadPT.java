@@ -28,6 +28,7 @@ import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.User;
+import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineList;
 import com.propertyvista.domain.contact.IAddress;
@@ -158,6 +159,14 @@ public class PreloadPT extends BaseVistaDataPreloader {
     private void persistFullApplication(ApplicationSummaryDTO summary, PTGenerator generator) {
 
         PersistenceServicesFactory.getPersistenceService().persist(summary.lease().pets());
+
+        for (Vehicle vh : summary.lease().vehicles()) {
+            persist(vh.province());
+            persist(vh.country());
+            persist(vh.parkingSpot());
+            persist(vh);
+        }
+
         persist(summary.lease());
 
         for (TenantSummaryDTO tenantSummary : summary.tenants()) {

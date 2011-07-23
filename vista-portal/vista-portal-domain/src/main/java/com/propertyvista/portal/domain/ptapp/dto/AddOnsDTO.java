@@ -7,14 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 10, 2011
- * @author vlads
+ * Created on 2011-07-22
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.services;
+package com.propertyvista.portal.domain.ptapp.dto;
 
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+
+import com.propertyvista.domain.Vehicle;
 import com.propertyvista.dto.PetsDTO;
 
-public interface PetService extends AbstractWizardService<PetsDTO> {
+public interface AddOnsDTO extends IEntity {
 
+    PetsDTO pets();
+
+    @Owned
+    IList<Vehicle> vehicles();
 }
