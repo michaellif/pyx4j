@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.ria.demo.client.proving.ProvingManager;
-import com.pyx4j.widgets.client.dialog.DialogPanel;
+import com.pyx4j.widgets.client.dialog.DialogPanelNew;
 
 //TODO import com.pyx4j.client.log.Logger;
 
@@ -65,7 +65,7 @@ public class MainMenu extends MenuBar {
         helpMenuBar.addItem(new MenuItem("About", new Command() {
             @Override
             public void execute() {
-                DialogPanel aboutPanel = new DialogPanel(true, false);
+                DialogPanelNew aboutPanel = new DialogPanelNew(true, false);
                 aboutPanel.setPixelSize(400, 400);
                 aboutPanel
                         .setWidget(new HTML(
