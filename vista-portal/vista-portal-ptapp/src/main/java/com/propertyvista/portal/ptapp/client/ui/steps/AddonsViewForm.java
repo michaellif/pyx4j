@@ -257,8 +257,18 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
 
             @Override
             protected IFolderEditorDecorator<Vehicle> createFolderDecorator() {
-                return new TableFolderEditorDecorator<Vehicle>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
-                        i18n.tr("Add a vehicle"));
+                if (isSummaryViewMode()) {
+                    return new BoxReadOnlyFolderDecorator<Vehicle>() {
+                        @Override
+                        public void setFolder(CEntityFolderEditor<?> w) {
+                            super.setFolder(w);
+                            this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+                        }
+                    };
+                } else {
+                    return new TableFolderEditorDecorator<Vehicle>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
+                            i18n.tr("Add a vehicle"));
+                }
             }
 
             @Override
@@ -271,8 +281,12 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
 
                     @Override
                     public IFolderItemEditorDecorator<Vehicle> createFolderItemDecorator() {
-                        return new TableFolderItemEditorDecorator<Vehicle>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
-                                i18n.tr("Remove vehicle"));
+                        if (isSummaryViewMode()) {
+                            return new BoxReadOnlyFolderItemDecorator<Vehicle>(false);
+                        } else {
+                            return new TableFolderItemEditorDecorator<Vehicle>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+                                    i18n.tr("Remove vehicle"));
+                        }
                     }
 
                     @Override
