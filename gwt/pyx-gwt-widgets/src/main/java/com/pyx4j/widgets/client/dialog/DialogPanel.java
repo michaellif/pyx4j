@@ -49,9 +49,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.style.CSSClass;
 
-public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseMoveHandler, MouseUpHandler, MouseDownHandler {
+public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMoveHandler, MouseUpHandler, MouseDownHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(DialogPanelNew.class);
+    private static final Logger log = LoggerFactory.getLogger(DialogPanel.class);
 
     private static final int DRAG_ZONE_WIDTH = 5;
 
@@ -120,7 +120,7 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
 
     private int dragStartHeight;
 
-    public DialogPanelNew(boolean autoHide, boolean modal) {
+    public DialogPanel(boolean autoHide, boolean modal) {
         super(autoHide, modal);
         setStylePrimaryName(CSSClass.pyx4j_Dialog.name());
 
@@ -364,9 +364,9 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
             setHeight("22px");
             DOM.setStyleAttribute(this.getElement(), "cursor", "move");
 
-            addDomHandler(DialogPanelNew.this, MouseMoveEvent.getType());
-            addDomHandler(DialogPanelNew.this, MouseUpEvent.getType());
-            addDomHandler(DialogPanelNew.this, MouseDownEvent.getType());
+            addDomHandler(DialogPanel.this, MouseMoveEvent.getType());
+            addDomHandler(DialogPanel.this, MouseUpEvent.getType());
+            addDomHandler(DialogPanel.this, MouseDownEvent.getType());
 
         }
 

@@ -73,7 +73,7 @@ import com.pyx4j.widgets.client.style.CSSClass;
 /**
  * Shared implementation for Modal Dialogs
  */
-public class Dialog extends DialogPanelNew {
+public class Dialog extends DialogPanel {
 
     private static final Logger log = LoggerFactory.getLogger(Dialog.class);
 
