@@ -11,12 +11,14 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant;
+package com.propertyvista.crm.server.services;
 
-import com.pyx4j.site.client.ui.crud.IListerView;
+import com.propertyvista.crm.rpc.services.TenantScreeningCrudService;
+import com.propertyvista.domain.tenant.TenantScreening;
 
-import com.propertyvista.dto.TenantDTO;
+public class TenantScreeningCrudServiceImpl extends GenericCrudServiceImpl<TenantScreening> implements TenantScreeningCrudService {
 
-public interface TenantListerView extends IListerView<TenantDTO> {
-
+    public TenantScreeningCrudServiceImpl() {
+        super(TenantScreening.class);
+    }
 }

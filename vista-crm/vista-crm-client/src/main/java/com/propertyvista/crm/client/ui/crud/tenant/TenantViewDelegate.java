@@ -7,16 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
- * @author Vlad
+ * Created on 2011-06-28
+ * @author TPRGLET
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
-import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.domain.tenant.TenantScreening;
 
-public interface TenantListerView extends IListerView<TenantDTO> {
+public class TenantViewDelegate implements TenantView {
 
+    private final IListerView<TenantScreening> screeningLister;
+
+    public TenantViewDelegate(boolean readOnly) {
+        screeningLister = new ListerInternalViewImplBase<TenantScreening>(new TenantScreeningLister());
+    }
+
+    @Override
+    public IListerView<TenantScreening> getScreeningListerView() {
+        return screeningLister;
+    }
 }

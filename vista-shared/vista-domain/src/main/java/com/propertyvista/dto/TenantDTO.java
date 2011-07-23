@@ -21,6 +21,5 @@ import com.propertyvista.domain.tenant.Tenant;
 @Transient
 public interface TenantDTO extends Tenant {
 
-    @Transient
     IPrimitive<String> displayName();
 }

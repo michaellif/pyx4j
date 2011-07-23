@@ -17,6 +17,8 @@ import com.pyx4j.site.client.ui.crud.IViewerView;
 
 import com.propertyvista.dto.TenantDTO;
 
-public interface TenantViewerView extends IViewerView<TenantDTO> {
+public interface TenantViewerView extends IViewerView<TenantDTO>, TenantView {
 
+    interface Presenter extends IViewerView.Presenter, TenantView.Presenter {
+    }
 }

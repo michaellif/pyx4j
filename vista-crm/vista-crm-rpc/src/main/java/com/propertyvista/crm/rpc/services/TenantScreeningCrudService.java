@@ -7,16 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-06-29
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant;
+package com.propertyvista.crm.rpc.services;
 
-import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.domain.tenant.TenantScreening;
 
-public interface TenantListerView extends IListerView<TenantDTO> {
-
+public interface TenantScreeningCrudService extends AbstractCrudService<TenantScreening> {
 }

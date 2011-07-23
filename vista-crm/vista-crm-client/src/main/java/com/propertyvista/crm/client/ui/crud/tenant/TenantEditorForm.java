@@ -13,16 +13,18 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.site.client.ui.crud.IView;
 
+import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
@@ -31,19 +33,21 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
     private final VistaDecoratorsFlowPanel company = new VistaDecoratorsFlowPanel();
 
-    public TenantEditorForm() {
-        super(TenantDTO.class, new CrmEditorsComponentFactory());
+    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
+
+    public TenantEditorForm(IView<TenantDTO> parentView) {
+        this(new CrmEditorsComponentFactory(), parentView);
     }
 
-    public TenantEditorForm(IEditableComponentFactory factory) {
+    public TenantEditorForm(IEditableComponentFactory factory, IView<TenantDTO> parentView) {
         super(TenantDTO.class, factory);
+        setParentView(parentView);
     }
 
     @Override
     public IsWidget createContent() {
 
         //Person
-        person.add(new CrmHeader1Decorator(i18n.tr("Details")));
         person.add(inject(proto().person().name().namePrefix()), 7);
         person.add(inject(proto().person().name().firstName()), 15);
         person.add(inject(proto().person().name().middleName()), 15);
@@ -58,21 +62,13 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         person.add(inject(proto().person().email()), 20);
 
         //Company
-        company.add(new CrmHeader1Decorator(i18n.tr("Company")));
         company.add(inject(proto().company().name()), 25);
         company.add(inject(proto().company().website()), 25);
-        //TODO Leon
-        //Is a new sub page necessary for addresses?
         SubtypeInjectors.injectPhones(company, proto().company().phones(), this);
         SubtypeInjectors.injectEmails(company, proto().company().emails(), this);
-        //TODO Leon
-        //Is a new sub page necessary for OrganizationContacts?
 
-        FlowPanel main = new FlowPanel();
-        main.add(person);
-        main.add(company);
-        main.setWidth("100%");
-        return main;
+        tabPanel.setSize("100%", "100%");
+        return tabPanel;
     }
 
     @Override
@@ -82,17 +78,17 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
     }
 
     private void setVisibility(TenantDTO tenant) {
-
-        person.setVisible(false);
-        company.setVisible(false);
-
+        tabPanel.clear();
         switch (tenant.type().getValue()) {
         case person:
-            person.setVisible(true);
+            tabPanel.add(person, i18n.tr("Details"));
+            tabPanel.addDisable(((TenantView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
             break;
         case company:
-            company.setVisible(true);
+            tabPanel.add(company, i18n.tr("Company"));
             break;
         }
+
+        tabPanel.setDisableMode(isEditable());
     }
 }

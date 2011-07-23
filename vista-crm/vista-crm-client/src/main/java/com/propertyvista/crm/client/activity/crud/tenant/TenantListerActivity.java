@@ -22,14 +22,14 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.TenantCrudService;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.dto.TenantDTO;
 
-public class TenantListerActivity extends ListerActivityBase<Tenant> {
+public class TenantListerActivity extends ListerActivityBase<TenantDTO> {
 
     @SuppressWarnings("unchecked")
     public TenantListerActivity(Place place) {
-        super((TenantListerView) TenantViewFactory.instance(TenantListerView.class), (AbstractCrudService<Tenant>) GWT.create(TenantCrudService.class),
-                Tenant.class);
+        super((TenantListerView) TenantViewFactory.instance(TenantListerView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class),
+                TenantDTO.class);
         withPlace(place);
     }
 

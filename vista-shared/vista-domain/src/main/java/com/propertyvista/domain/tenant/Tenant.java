@@ -51,14 +51,14 @@ public interface Tenant extends IEntity {
     @MemberColumn(name = "user_id")
     User user();
 
-    @ToString(index = 1)
     @MemberColumn(name = "tenantType")
     IPrimitive<Type> type();
 
-    @ToString
+    @ToString(index = 0)
     @EmbeddedEntity
     Person person();
 
+    @ToString(index = 1)
     @EmbeddedEntity
     Company company();
 

@@ -20,18 +20,17 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.site.client.ui.crud.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.dto.TenantDTO;
 
-public class TenantLister extends ListerBase<Tenant> {
+public class TenantLister extends ListerBase<TenantDTO> {
 
     public TenantLister() {
-        super(Tenant.class, CrmSiteMap.Tenants.Tenant.class);
+        super(TenantDTO.class, CrmSiteMap.Tenants.Tenant.class);
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Tenant>> columnDescriptors, Tenant proto) {
+    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<TenantDTO>> columnDescriptors, TenantDTO proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.company()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.displayName()));
     }
 }

@@ -79,8 +79,12 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
             }
         }
 
-        if (disable && isDisabledTab(getSelectedIndex())) {
-            selectFirstAvailableTab();
+        try {
+            if (disable && isDisabledTab(getSelectedIndex())) {
+                selectFirstAvailableTab();
+            }
+        } catch (IndexOutOfBoundsException e) {
+            // do nothing - it's just incorrect (-1) SelectedIndex because tabs are empty!...   
         }
     }
 

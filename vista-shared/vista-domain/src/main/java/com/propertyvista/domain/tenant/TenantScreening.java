@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -32,11 +33,12 @@ import com.propertyvista.domain.tenant.income.TenantIncome;
 
 public interface TenantScreening extends IEntity, TenantScreeningSecureInfoFragment {
 
+    @Owner
     @Detached
     Tenant tenant();
 
     @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> screeningData();
+    IPrimitive<LogicalDate> screeningDate();
 
     @Owned
     PriorAddress currentAddress();
@@ -51,6 +53,7 @@ public interface TenantScreening extends IEntity, TenantScreeningSecureInfoFragm
     @Owned
     IList<ApplicationDocument> documents();
 
+// Financial:
     @Owned
     @Length(3)
     IList<TenantIncome> incomes();
