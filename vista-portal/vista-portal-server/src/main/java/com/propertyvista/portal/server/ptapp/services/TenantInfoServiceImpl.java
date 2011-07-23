@@ -29,7 +29,7 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
-import com.propertyvista.portal.server.generator.TenantSummaryDTO;
+import com.propertyvista.portal.server.generator.dto.TenantSummaryDTO;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 

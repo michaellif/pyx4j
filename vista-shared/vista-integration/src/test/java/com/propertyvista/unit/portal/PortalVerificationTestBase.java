@@ -44,7 +44,7 @@ import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.BusinessRules;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-import com.propertyvista.portal.server.generator.TenantSummaryDTO;
+import com.propertyvista.portal.server.generator.dto.TenantSummaryDTO;
 import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 import com.propertyvista.portal.server.ptapp.util.TenantTestAdapter;

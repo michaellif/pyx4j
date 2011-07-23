@@ -18,6 +18,7 @@ import junit.framework.TestCase;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.User;
 import com.propertyvista.portal.server.TestUtil;
+import com.propertyvista.portal.server.generator.dto.ApplicationSummaryDTO;
 import com.propertyvista.server.common.reference.SharedData;
 
 public class VistaDataGeneratorTest extends TestCase {

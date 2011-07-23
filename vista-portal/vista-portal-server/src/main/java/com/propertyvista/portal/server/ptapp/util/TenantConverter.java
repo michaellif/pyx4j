@@ -21,7 +21,7 @@ import com.propertyvista.domain.tenant.TenantScreeningSecureInfoFragment;
 import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
-import com.propertyvista.portal.server.generator.TenantSummaryDTO;
+import com.propertyvista.portal.server.generator.dto.TenantSummaryDTO;
 
 public class TenantConverter {
 

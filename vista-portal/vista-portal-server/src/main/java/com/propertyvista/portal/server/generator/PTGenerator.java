@@ -70,6 +70,8 @@ import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.ApplicationDocumentServletParameters;
+import com.propertyvista.portal.server.generator.dto.ApplicationSummaryDTO;
+import com.propertyvista.portal.server.generator.dto.TenantSummaryDTO;
 import com.propertyvista.portal.server.preloader.PreloadPT;
 import com.propertyvista.portal.server.preloader.RandomUtil;
 import com.propertyvista.server.common.reference.SharedData;

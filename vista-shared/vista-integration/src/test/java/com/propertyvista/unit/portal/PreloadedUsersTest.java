@@ -26,8 +26,8 @@ import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-import com.propertyvista.portal.server.generator.ApplicationSummaryDTO;
 import com.propertyvista.portal.server.generator.PTGenerator;
+import com.propertyvista.portal.server.generator.dto.ApplicationSummaryDTO;
 import com.propertyvista.server.common.reference.SharedData;
 
 public class PreloadedUsersTest extends PortalVerificationTestBase {
