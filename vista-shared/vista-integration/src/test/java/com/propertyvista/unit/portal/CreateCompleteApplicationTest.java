@@ -45,9 +45,9 @@ import com.propertyvista.domain.tenant.income.TenantAsset;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.income.TenantIncome;
 import com.propertyvista.dto.PetsDTO;
+import com.propertyvista.dto.VehiclesDTO;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
-import com.propertyvista.portal.domain.ptapp.dto.AddOnsDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
@@ -418,8 +418,8 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Addons.class));
         int num = 0;
         for (Pet pet : pets) {
-            selenium.click(D.id(proto(PetsDTO.class).pets(), FormNavigationDebugId.Form_Add));
-            enterPetRow(D.id(proto(PetsDTO.class).pets(), num), detach(pet));
+            selenium.click(D.id(proto(PetsDTO.class).list(), FormNavigationDebugId.Form_Add));
+            enterPetRow(D.id(proto(PetsDTO.class).list(), num), detach(pet));
             num++;
         }
         saveAndContinue();
@@ -429,12 +429,12 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Addons.class));
         int num = 0;
         for (Vehicle vehicle : vehicles) {
-            selenium.click(D.id(proto(AddOnsDTO.class).vehicles(), FormNavigationDebugId.Form_Add));
-            enterVehicleRow(D.id(proto(AddOnsDTO.class).vehicles(), num), detach(vehicle));
+            selenium.click(D.id(proto(VehiclesDTO.class).list(), FormNavigationDebugId.Form_Add));
+            enterVehicleRow(D.id(proto(VehiclesDTO.class).list(), num), detach(vehicle));
             num++;
         }
         //verify size (e.g. no next row exists)
-        assertFalse(selenium.isElementPresent(D.id(proto(AddOnsDTO.class).vehicles(), num, proto(Vehicle.class).plateNumber())));
+        assertFalse(selenium.isElementPresent(D.id(proto(VehiclesDTO.class).list(), num, proto(Vehicle.class).plateNumber())));
 
         saveAndContinue();
     }

@@ -13,17 +13,17 @@
  */
 package com.propertyvista.portal.domain.ptapp.dto;
 
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.Vehicle;
 import com.propertyvista.dto.PetsDTO;
+import com.propertyvista.dto.VehiclesDTO;
 
 public interface AddOnsDTO extends IEntity {
 
+    @Caption(name = "Pets")
     PetsDTO pets();
 
-    @Owned
-    IList<Vehicle> vehicles();
+    @Caption(name = "Vehicles/Parking")
+    VehiclesDTO vehicles();
 }

@@ -7,38 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-14
- * @author antonk
+ * Created on 2011-02-24
+ * @author aroytbur
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.domain;
 
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.Pet;
-import com.propertyvista.domain.PetChargeRule;
+import com.propertyvista.domain.charges.ChargeType;
 
-@Transient
-public interface PetsDTO extends IEntity {
+public interface VehicleChargeRule extends IEntity {
 
-    @Owned
-    @MemberColumn(name = "petsList")
-    IList<Pet> list();
+    IPrimitive<ChargeType> chargeType();
 
-    @Transient
-    PetChargeRule chargeRule();
-
-    @Transient
-    IPrimitive<Integer> maxTotal();
-
-    /**
-     * This limit is expressed in Kg.
-     */
-    @Transient
-    IPrimitive<Integer> maxPetWeight();
+    @MemberColumn(name = "vl")
+    IPrimitive<Integer> value(); // TODO this probably would have to be a double instead of an integer
 }

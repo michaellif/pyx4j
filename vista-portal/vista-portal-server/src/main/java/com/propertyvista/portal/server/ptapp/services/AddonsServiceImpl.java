@@ -47,8 +47,8 @@ public class AddonsServiceImpl extends ApplicationEntityServiceImpl implements A
         PersistenceServicesFactory.getPersistenceService().retrieve(lease.pets());
 
         AddOnsDTO addOns = EntityFactory.create(AddOnsDTO.class);
-        addOns.pets().pets().addAll(lease.pets());
-        addOns.vehicles().addAll(lease.vehicles());
+        addOns.pets().list().addAll(lease.pets());
+        addOns.vehicles().list().addAll(lease.vehicles());
 
         loadTransientData(addOns.pets());
 
@@ -68,15 +68,15 @@ public class AddonsServiceImpl extends ApplicationEntityServiceImpl implements A
 
         // Calculate charges on server to avoid Front End API Hackers.
         PetChargeRule petChargeRule = loadPetChargeRule();
-        for (Pet pet : addOns.pets().pets()) {
+        for (Pet pet : addOns.pets().list()) {
             ChargesSharedCalculation.calculatePetCharges(petChargeRule, pet);
         }
 
         lease.pets().clear();
-        lease.pets().addAll(addOns.pets().pets());
+        lease.pets().addAll(addOns.pets().list());
 
         lease.vehicles().clear();
-        lease.vehicles().addAll(addOns.vehicles());
+        lease.vehicles().addAll(addOns.vehicles().list());
 
         //TODO use merge
         PersistenceServicesFactory.getPersistenceService().persist(lease.pets());
@@ -100,9 +100,9 @@ public class AddonsServiceImpl extends ApplicationEntityServiceImpl implements A
     private static void loadTransientData(PetsDTO pets) {
         // TODO get it from building
         PetChargeRule petCharge = loadPetChargeRule();
-        pets.petChargeRule().set(petCharge);
-        pets.petWeightMaximum().setValue(25);
-        pets.petsMaximum().setValue(3);
+        pets.chargeRule().set(petCharge);
+        pets.maxPetWeight().setValue(25);
+        pets.maxTotal().setValue(3);
     }
 
     private static PetChargeRule loadPetChargeRule() {

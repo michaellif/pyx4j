@@ -103,7 +103,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         }
 
         double petChargeAmount = 0d;
-        for (Pet pet : pets.pets()) {
+        for (Pet pet : pets.list()) {
             petChargeAmount += pet.chargeLine().charge().amount().getValue();
         }
         if (petChargeAmount > 0) {

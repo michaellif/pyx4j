@@ -365,10 +365,10 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Addons.class));
         int num = 0;
         for (Pet pet : pets) {
-            verifyPetRow(D.id(proto(PetsDTO.class).pets(), num), detach(pet));
+            verifyPetRow(D.id(proto(PetsDTO.class).list(), num), detach(pet));
             num++;
         }
-        assertNotPresent(D.id(proto(PetsDTO.class).pets(), num, proto(Pet.class).type()));
+        assertNotPresent(D.id(proto(PetsDTO.class).list(), num, proto(Pet.class).type()));
         if (doSave) {
             saveAndContinue();
         }

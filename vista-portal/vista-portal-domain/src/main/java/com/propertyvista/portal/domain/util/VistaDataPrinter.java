@@ -26,6 +26,7 @@ import com.propertyvista.domain.tenant.income.TenantAsset;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.income.TenantIncome;
 import com.propertyvista.dto.PetsDTO;
+import com.propertyvista.dto.VehiclesDTO;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
@@ -57,10 +58,10 @@ public class VistaDataPrinter {
         sb.append(printFinancial(summary.tenantFinancials()));
 
         sb.append("\n\n---------------------------- PETS ------------------------------------\n");
-        sb.append(print(summary.pets()));
+        sb.append(print(summary.addons().pets()));
 
         sb.append("\n\n---------------------------- VEHICLES --------------------------------\n");
-        sb.append(printVehicles(summary.vehicles()));
+        sb.append(printVehicles(summary.addons().vehicles()));
 
         sb.append("\n\n---------------------------- CHARGES ---------------------------------\n");
         sb.append(print(summary.charges()));
@@ -193,40 +194,28 @@ public class VistaDataPrinter {
         StringBuilder sb = new StringBuilder();
         sb.append("Pets\n");
 
-        for (Pet pet : pets.pets()) {
-            sb.append("\t");
-            sb.append(pet.type().getValue());
-
-            sb.append(" \t");
-            sb.append(pet.name().getStringView());
-
-            sb.append(" \t");
-            sb.append(pet.color().getStringView());
-
-            sb.append(" \t");
-            sb.append(pet.breed().getStringView());
-
-            sb.append(" \t");
-            sb.append(pet.weight().getValue()).append(" ").append(pet.weightUnit().getValue());
-
-            sb.append(" $");
+        for (Pet pet : pets.list()) {
+            sb.append("\n\t");
+            sb.append(pet.type().getValue()).append(" ");
+            sb.append(pet.name().getStringView()).append(" ");
+            sb.append(pet.color().getStringView()).append(" ");
+            sb.append(pet.breed().getStringView()).append(" ");
+            sb.append(pet.weight().getValue()).append(" ").append(pet.weightUnit().getValue()).append(" $");
             sb.append(pet.chargeLine().charge().amount().getValue());
-
-            sb.append("\n");
         }
         return sb.toString();
     }
 
-    public static String printVehicles(IList<Vehicle> vehicles) {
+    public static String printVehicles(VehiclesDTO vehicles) {
         StringBuilder sb = new StringBuilder();
         sb.append("vehicles\n");
 
-        for (Vehicle vehicle : vehicles) {
+        for (Vehicle vehicle : vehicles.list()) {
             sb.append("\n\t");
             sb.append(vehicle.year().getStringView()).append(" ");
             sb.append(vehicle.province().getStringView()).append(" ");
             sb.append(vehicle.make().getStringView()).append(" ").append(vehicle.model().getStringView()).append(" ");
-            sb.append(vehicle.plateNumber().getStringView()).append(" ");
+            sb.append(vehicle.plateNumber().getStringView());
         }
         return sb.toString();
     }

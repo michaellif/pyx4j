@@ -107,7 +107,7 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
     private Widget createPetsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(inject(proto().pets().pets(), createPetsListEditor()));
+        main.add(inject(proto().pets().list(), createPetsListEditor()));
 
         main.setWidth("100%");
         return main;
@@ -160,13 +160,13 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
                             public boolean isValid(CEditableComponent<Integer, ?> component, Integer value) {
                                 return (value == null)
                                         || DomainUtil.getWeightKg(value, getValue().weightUnit().getValue()) <= ApplicationEditorForm.this.getValue().pets()
-                                                .petWeightMaximum().getValue();
+                                                .maxPetWeight().getValue();
                             }
 
                             @Override
                             public String getValidationMessage(CEditableComponent<Integer, ?> component, Integer value) {
                                 return i18n.tr("Max allowed weight {0} {1} ",
-                                        DomainUtil.getWeightKgToUnit(ApplicationEditorForm.this.getValue().pets().petWeightMaximum(), getValue().weightUnit()),
+                                        DomainUtil.getWeightKgToUnit(ApplicationEditorForm.this.getValue().pets().maxPetWeight(), getValue().weightUnit()),
                                         getValue().weightUnit().getStringView());
                             }
                         };

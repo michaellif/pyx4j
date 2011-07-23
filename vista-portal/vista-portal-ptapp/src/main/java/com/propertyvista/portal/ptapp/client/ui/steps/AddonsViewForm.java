@@ -89,11 +89,11 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
-        main.add(new VistaHeaderBar(proto().pets().pets()));
-        main.add(inject(proto().pets().pets(), createPetsEditorColumns()));
+        main.add(new VistaHeaderBar(proto().pets()));
+        main.add(inject(proto().pets().list(), createPetsEditorColumns()));
 
-        main.add(new VistaHeaderBar(i18n.tr("Vehicles/Parking")));
-        main.add(inject(proto().vehicles(), createVehicleEditorColumns()));
+        main.add(new VistaHeaderBar(proto().vehicles()));
+        main.add(inject(proto().vehicles().list(), createVehicleEditorColumns()));
 
         return main;
     }
@@ -104,7 +104,7 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
 
             @Override
             public boolean isValid(CEditableComponent<AddOnsDTO, ?> component, AddOnsDTO value) {
-                return !EntityGraph.hasBusinessDuplicates(getValue().pets().pets());
+                return !EntityGraph.hasBusinessDuplicates(getValue().pets().list());
             }
 
             @Override
@@ -113,13 +113,13 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
             }
         });
 
-        maxPets = proto().pets().pets().getMeta().getLength();
+        maxPets = proto().pets().list().getMeta().getLength();
         super.addValueValidator(new EditableValueValidator<AddOnsDTO>() {
 
             @Override
             public boolean isValid(CEditableComponent<AddOnsDTO, ?> component, AddOnsDTO value) {
-                int size = getValue().pets().pets().size();
-                return (size <= maxPets) && ((value.pets().petsMaximum().isNull() || (size <= value.pets().petsMaximum().getValue())));
+                int size = getValue().pets().list().size();
+                return (size <= maxPets) && ((value.pets().maxTotal().isNull() || (size <= value.pets().maxTotal().getValue())));
             }
 
             @Override
@@ -128,11 +128,11 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
             }
         });
 
-        get(proto().vehicles()).addValueValidator(new EditableValueValidator<List<Map<String, Object>>>() {
+        get(proto().vehicles().list()).addValueValidator(new EditableValueValidator<List<Map<String, Object>>>() {
 
             @Override
             public boolean isValid(CEditableComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
-                return !EntityGraph.hasBusinessDuplicates(getValue().vehicles());
+                return !EntityGraph.hasBusinessDuplicates(getValue().vehicles().list());
             }
 
             @Override
@@ -209,14 +209,15 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
                             public boolean isValid(CEditableComponent<Integer, ?> component, Integer value) {
                                 return (value == null)
                                         || DomainUtil.getWeightKg(value, getValue().weightUnit().getValue()) <= AddonsViewForm.this.getValue().pets()
-                                                .petWeightMaximum().getValue();
+                                                .maxPetWeight().getValue();
                             }
 
                             @Override
                             public String getValidationMessage(CEditableComponent<Integer, ?> component, Integer value) {
-                                return i18n.tr("Max allowed weight {0} {1} ",
-                                        DomainUtil.getWeightKgToUnit(AddonsViewForm.this.getValue().pets().petWeightMaximum(), getValue().weightUnit()),
-                                        getValue().weightUnit().getStringView());
+                                return i18n
+                                        .tr("Max allowed weight {0} {1} ",
+                                                DomainUtil.getWeightKgToUnit(AddonsViewForm.this.getValue().pets().maxPetWeight(), getValue().weightUnit()),
+                                                getValue().weightUnit().getStringView());
                             }
                         };
 
@@ -232,7 +233,7 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
             @Override
             protected void createNewEntity(Pet newEntity, AsyncCallback<Pet> callback) {
                 newEntity.weightUnit().setValue(WeightUnit.lb);
-                ChargesSharedCalculation.calculatePetCharges(AddonsViewForm.this.getValue().pets().petChargeRule(), newEntity);
+                ChargesSharedCalculation.calculatePetCharges(AddonsViewForm.this.getValue().pets().chargeRule(), newEntity);
                 super.createNewEntity(newEntity, callback);
             }
         };
