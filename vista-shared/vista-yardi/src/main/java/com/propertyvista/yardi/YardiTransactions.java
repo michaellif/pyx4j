@@ -110,7 +110,7 @@ public class YardiTransactions {
 
         log.debug("Result: {}", xml);
         Properties properties = MarshallUtil.unmarshal(Properties.class, xml);
-        log.info("\n--- GetPropertyConfigurations ---\n{}\n", properties);
+        log.debug("\n--- GetPropertyConfigurations ---\n{}\n", properties);
         return properties;
     }
 

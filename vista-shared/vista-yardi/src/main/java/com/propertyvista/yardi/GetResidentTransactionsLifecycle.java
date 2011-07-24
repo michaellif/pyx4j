@@ -14,26 +14,58 @@
 package com.propertyvista.yardi;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
 import org.apache.axis2.AxisFault;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.server.common.generator.Model;
 import com.propertyvista.yardi.bean.resident.ResidentTransactions;
 import com.propertyvista.yardi.mapper.GetResidentTransactionsMapper;
+import com.propertyvista.yardi.merger.UnitsMerger;
 
 public class GetResidentTransactionsLifecycle {
-    private final static Logger log = LoggerFactory.getLogger(GetResidentTransactionsLifecycle.class);
+//    private final static Logger log = LoggerFactory.getLogger(GetResidentTransactionsLifecycle.class);
 
-    public void download(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
+    public Model load() {
+        List<AptUnit> units = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<AptUnit>(AptUnit.class));
+        List<Tenant> tenants = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Tenant>(Tenant.class));
+        List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Building>(Building.class));
+        Model model = new Model();
+        model.getAptUnits().addAll(units);
+        model.getTenants().addAll(tenants);
+        model.getBuildings().addAll(buildings);
+        return model;
+    }
+
+    public Model download(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
         ResidentTransactions transactions = YardiTransactions.getResidentTransactions(c, yp);
 
         GetResidentTransactionsMapper mapper = new GetResidentTransactionsMapper();
         mapper.map(transactions);
 
-        log.info("Downloaded {} units", mapper.getUnits().size());
-        log.info("Downloaded {} tenants", mapper.getTenants().size());
+        return mapper.getModel();
+    }
+
+    public Model merge(YardiClient c, YardiParameters yp, boolean persist) throws AxisFault, RemoteException, JAXBException {
+        Model imported = download(c, yp);
+        Model existing = load();
+        UnitsMerger merger = new UnitsMerger();
+        Model merged = merger.merge(imported, existing);
+
+        if (persist) {
+            for (AptUnit unit : merged.getAptUnits()) {
+                PersistenceServicesFactory.getPersistenceService().persist(unit);
+            }
+        }
+
+        return merged;
     }
 }

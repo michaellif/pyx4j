@@ -18,6 +18,8 @@ import java.util.List;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.FloorplanDTO;
 
 public class Model {
@@ -29,6 +31,11 @@ public class Model {
     private final List<FloorplanDTO> floorplans = new ArrayList<FloorplanDTO>();
 
     private final List<BuildingAmenity> buildingAmenities = new ArrayList<BuildingAmenity>();
+
+    // TODO this overlaps with <UnitRelatedData> units, the two probably will need to be merged
+    private final List<AptUnit> aptUnits = new ArrayList<AptUnit>();
+
+    private final List<Tenant> tenants = new ArrayList<Tenant>();
 
     public List<Building> getBuildings() {
         return buildings;
@@ -44,5 +51,13 @@ public class Model {
 
     public List<BuildingAmenity> getBuildingAmenities() {
         return buildingAmenities;
+    }
+
+    public List<AptUnit> getAptUnits() {
+        return aptUnits;
+    }
+
+    public List<Tenant> getTenants() {
+        return tenants;
     }
 }

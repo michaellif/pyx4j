@@ -27,6 +27,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.server.common.generator.Model;
 import com.propertyvista.server.common.reference.SharedData;
 
 public class YardiInteractiveExample {
@@ -56,8 +57,8 @@ public class YardiInteractiveExample {
             while (true) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Enter command: \n");
-                sb.append("1: GetPropertyConfigurations\n");
-                sb.append("2: GetResidentTransactions\n");
+                sb.append("1: GetPropertyConfigurations (buildings)\n");
+                sb.append("2: GetResidentTransactions (units and tenants)\n");
                 sb.append("0: Exit\n");
                 System.out.println(sb.toString());
                 String command = read();
@@ -84,11 +85,25 @@ public class YardiInteractiveExample {
         StringBuilder sb = new StringBuilder();
         sb.append("- GetResidentTransactions -\n");
         sb.append("1: Download from Yardi\n");
+        sb.append("2: Load from the database\n");
+        sb.append("3: Dry merge\n");
+        sb.append("4: Real merge\n");
         System.out.println(sb);
         String command = read();
         GetResidentTransactionsLifecycle lifecycle = new GetResidentTransactionsLifecycle();
         if (command.equals("1")) {
-            lifecycle.download(c, yp);
+            Model model = lifecycle.download(c, yp);
+            log.info("Has {} units, {} tenants", model.getAptUnits().size(), model.getTenants().size());
+        } else if (command.equals("2")) {
+            Model model = lifecycle.load();
+            log.info("Has {} units, {} tenants", model.getAptUnits().size(), model.getTenants().size());
+        } else if (command.equals("3")) {
+            Model model = lifecycle.merge(c, yp, false);
+            log.info("Merged {} units, {} tenants", model.getAptUnits().size(), model.getTenants().size());
+        } else if (command.equals("4")) {
+            Model model = lifecycle.merge(c, yp, true);
+            log.info("Saved {} units, {} tenants", model.getAptUnits().size(), model.getTenants().size());
+
         }
     }
 
@@ -97,18 +112,28 @@ public class YardiInteractiveExample {
         sb.append("- GetPropertyConfigurations -\n");
         sb.append("1: Download from Yardi\n");
         sb.append("2: Load from local database\n");
-        sb.append("3: Merge\n");
+        sb.append("3: Dry merge\n");
+        sb.append("4: Real merge\n");
         System.out.println(sb);
         String command = read();
         GetPropertyConfigurationLifecycle lifecycle = new GetPropertyConfigurationLifecycle();
         if (command.equals("1")) {
             List<Building> buildings = lifecycle.download(c, yp);
             log.info("Has {} buildings", buildings.size());
+            for (Building building : buildings) {
+                log.info("{}", building.info().propertyCode().getValue());
+            }
         } else if (command.equals("2")) {
             List<Building> buildings = lifecycle.load();
             log.info("Has {} buildings", buildings.size());
+            for (Building building : buildings) {
+                log.info("{}", building.info().propertyCode().getValue());
+            }
         } else if (command.equals("3")) {
-            List<Building> buildings = lifecycle.merge(c, yp);
+            List<Building> buildings = lifecycle.merge(c, yp, false);
+            log.info("Merged {} buildings", buildings.size());
+        } else if (command.equals("4")) {
+            List<Building> buildings = lifecycle.merge(c, yp, true);
             log.info("Merged {} buildings", buildings.size());
         }
     }

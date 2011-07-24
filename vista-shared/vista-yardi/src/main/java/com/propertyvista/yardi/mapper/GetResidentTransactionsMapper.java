@@ -22,11 +22,13 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EconomicStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.property.asset.unit.AptUnitType;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.server.common.generator.Model;
 import com.propertyvista.yardi.bean.mits.Customer;
 import com.propertyvista.yardi.bean.mits.Information;
 import com.propertyvista.yardi.bean.resident.Property;
@@ -38,15 +40,12 @@ public class GetResidentTransactionsMapper {
 
     private final static Logger log = LoggerFactory.getLogger(GetResidentTransactionsMapper.class);
 
-    private List<AptUnit> units = new ArrayList<AptUnit>();
-
-    private List<Tenant> tenants = new ArrayList<Tenant>();
+    private Model model = new Model();
 
     // TODO for now we are not converting these just yet
     private List<AptUnitOccupancy> occupancies = new ArrayList<AptUnitOccupancy>();
 
     // TODO later we will need to do transactions here
-
     public void map(ResidentTransactions transactions) {
         for (Property property : transactions.getProperties()) {
             map(property);
@@ -54,13 +53,18 @@ public class GetResidentTransactionsMapper {
     }
 
     public void map(Property property) {
+        // convert building, for now only need the identifier
+        Building building = EntityFactory.create(Building.class);
+        building.info().propertyCode().setValue(property.getPropertyId().getIdentification().getPrimaryId());
+        model.getBuildings().add(building);
+
         for (RTCustomer customer : property.getCustomers()) {
-            map(customer);
+            map(customer, building);
         }
     }
 
-    public void map(RTCustomer rtCustomer) {
-        map(rtCustomer.getRtunit());
+    public void map(RTCustomer rtCustomer, Building building) {
+        map(rtCustomer.getRtunit(), building);
         for (Customer customer : rtCustomer.getCustomers().getCustomers()) {
             map(customer);
         }
@@ -75,11 +79,13 @@ public class GetResidentTransactionsMapper {
             tenant.person().name().middleName().setValue(customer.getName().getMiddleName());
         }
 
-        tenants.add(tenant);
+        model.getTenants().add(tenant);
     }
 
-    public void map(RTUnit unitFrom) {
+    public void map(RTUnit unitFrom, Building building) {
         AptUnit unitTo = EntityFactory.create(AptUnit.class);
+
+        unitTo.belongsTo().set(building);
 
         // info
         Information info = unitFrom.getUnit().getInformation();
@@ -105,9 +111,7 @@ public class GetResidentTransactionsMapper {
         unitTo.financial().unitRent().setValue(info.getUnitRent());
         unitTo.financial().marketRent().setValue(info.getMarketRent());
 
-        units.add(unitTo);
-
-//        mapOccupancy(info);
+        model.getAptUnits().add(unitTo);
     }
 
     /**
@@ -119,15 +123,7 @@ public class GetResidentTransactionsMapper {
         occupancies.add(occupancy);
     }
 
-    public List<AptUnit> getUnits() {
-        return units;
-    }
-
-    public List<Tenant> getTenants() {
-        return tenants;
-    }
-
-    public List<AptUnitOccupancy> getOccupancies() {
-        return occupancies;
+    public Model getModel() {
+        return model;
     }
 }

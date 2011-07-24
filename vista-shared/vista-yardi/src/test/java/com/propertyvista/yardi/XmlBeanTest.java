@@ -159,8 +159,8 @@ public class XmlBeanTest {
         GetResidentTransactionsMapper mapper = new GetResidentTransactionsMapper();
         mapper.map(transactions);
 
-        Assert.assertTrue("Has units", !mapper.getUnits().isEmpty());
-        for (AptUnit unit : mapper.getUnits()) {
+        Assert.assertTrue("Has units", !mapper.getModel().getUnits().isEmpty());
+        for (AptUnit unit : mapper.getModel().getUnits()) {
             log.debug("Unit {}", unit);
 
             // info
@@ -184,8 +184,8 @@ public class XmlBeanTest {
             Assert.assertFalse(financial.marketRent().isNull());
         }
 
-        Assert.assertTrue("Has tenants", !mapper.getTenants().isEmpty());
-        for (Tenant tenant : mapper.getTenants()) {
+        Assert.assertTrue("Has tenants", !mapper.getModel().getTenants().isEmpty());
+        for (Tenant tenant : mapper.getModel().getTenants()) {
             log.info("Tenant {}", tenant);
 
             // name

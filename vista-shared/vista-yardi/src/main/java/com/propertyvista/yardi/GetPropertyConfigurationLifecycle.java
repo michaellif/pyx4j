@@ -43,15 +43,17 @@ public class GetPropertyConfigurationLifecycle {
         return buildings;
     }
 
-    public List<Building> merge(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException, JAXBException {
+    public List<Building> merge(YardiClient c, YardiParameters yp, boolean persist) throws AxisFault, RemoteException, JAXBException {
         List<Building> imported = download(c, yp);
         List<Building> existing = load();
         List<Building> merged = new BuildingsMerger().merge(imported, existing);
-        for (Building building : merged) {
-            PersistenceServicesFactory.getPersistenceService().persist(building.info().address());
-            PersistenceServicesFactory.getPersistenceService().persist(building.info());
-            PersistenceServicesFactory.getPersistenceService().persist(building.marketing());
-            PersistenceServicesFactory.getPersistenceService().persist(building);
+        if (persist) {
+            for (Building building : merged) {
+                PersistenceServicesFactory.getPersistenceService().persist(building.info().address());
+                PersistenceServicesFactory.getPersistenceService().persist(building.info());
+                PersistenceServicesFactory.getPersistenceService().persist(building.marketing());
+                PersistenceServicesFactory.getPersistenceService().persist(building);
+            }
         }
         return merged;
     }

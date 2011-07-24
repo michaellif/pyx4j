@@ -67,16 +67,16 @@ public class BuildingsMerger {
     /**
      * We could make this method generic, by iterating over meta data
      */
-    public void merge(Building imported, Building existing) {
+    private void merge(Building imported, Building existing) {
         merge(imported.info(), existing.info());
         merge(imported.marketing(), existing.marketing());
     }
 
-    public void merge(BuildingInfo imported, BuildingInfo existing) {
+    private void merge(BuildingInfo imported, BuildingInfo existing) {
         merge(imported.address(), existing.address());
     }
 
-    public void merge(Address imported, Address existing) {
+    private void merge(Address imported, Address existing) {
         existing.streetName().setValue(imported.streetName().getValue());
         existing.streetDirection().setValue(imported.streetDirection().getValue());
         existing.streetName().setValue(imported.streetName().getValue());
@@ -87,7 +87,7 @@ public class BuildingsMerger {
         existing.addressType().setValue(imported.addressType().getValue());
     }
 
-    public void merge(Marketing imported, Marketing existing) {
+    private void merge(Marketing imported, Marketing existing) {
         existing.name().setValue(imported.name().getValue());
     }
 }

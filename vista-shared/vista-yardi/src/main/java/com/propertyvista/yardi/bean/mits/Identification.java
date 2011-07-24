@@ -20,7 +20,7 @@ public class Identification {
 
     private String type;
 
-    private String primaryId;
+    private String primaryId; // building.info.propertyCode
 
     private String marketingName;
 
