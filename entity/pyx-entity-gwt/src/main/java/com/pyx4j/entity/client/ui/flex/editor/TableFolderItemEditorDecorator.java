@@ -83,15 +83,6 @@ public class TableFolderItemEditorDecorator<E extends IEntity> extends BaseFolde
     }
 
     @Override
-    public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
-        if (getRemoveImage() != null) {
-            return getRemoveImage().addClickHandler(handler);
-        } else {
-            return null;
-        }
-    }
-
-    @Override
     public HandlerRegistration addItemClickHandler(final ClickHandler handler) {
         //TODO add proper handler removal
         return getRowHolder().addDomHandler(new ClickHandler() {
@@ -116,19 +107,6 @@ public class TableFolderItemEditorDecorator<E extends IEntity> extends BaseFolde
     @Override
     public HandlerRegistration addRowCollapseClickHandler(ClickHandler handler) {
         return null;
-    }
-
-    @Override
-    public boolean isRemovable() {
-        return isRemovable();
-    }
-
-    @Override
-    public void setRemovable(boolean removable) {
-        super.setRemovable(removable);
-        if (getImageHolder() != null) {
-            getImageHolder().setVisible(removable);
-        }
     }
 
     @Override

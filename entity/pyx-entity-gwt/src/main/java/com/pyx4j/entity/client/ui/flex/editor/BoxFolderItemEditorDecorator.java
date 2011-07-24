@@ -70,11 +70,6 @@ public class BoxFolderItemEditorDecorator<E extends IEntity> extends BaseFolderI
     }
 
     @Override
-    public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
-        return getRemoveImage().addClickHandler(handler);
-    }
-
-    @Override
     public HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
         return null;
     }

@@ -55,7 +55,7 @@ public abstract class BaseFolderEditorDecorator<E extends IEntity> extends FlowP
     public BaseFolderEditorDecorator(ImageResource addButton, ImageResource addButtonHover, String title, boolean addable) {
         this.addable = addable && (addButton != null);
 
-        if (addButton != null) {
+        if (addable) {
             addImage = new ImageButton(addButton, addButtonHover, title);
             addImage.getElement().getStyle().setFloat(Float.LEFT);
 
@@ -75,19 +75,18 @@ public abstract class BaseFolderEditorDecorator<E extends IEntity> extends FlowP
         }
 
         container = new SimplePanel();
-
     }
 
     protected SimplePanel getContainer() {
         return container;
     }
 
-    protected Image getAddImage() {
-        return addImage;
-    }
-
     protected FlowPanel getImageHolder() {
         return imageHolder;
+    }
+
+    protected Image getAddImage() {
+        return addImage;
     }
 
     protected boolean isAddable() {
@@ -96,14 +95,13 @@ public abstract class BaseFolderEditorDecorator<E extends IEntity> extends FlowP
 
     @Override
     public HandlerRegistration addItemAddClickHandler(ClickHandler handler) {
-        if (!addable) {
-            return null;
+        if (isAddable()) {
+            HandlerRegistrationGC h = new HandlerRegistrationGC();
+            h.add(addImage.addClickHandler(handler));
+            h.add(addButtonLabel.addClickHandler(handler));
+            return h;
         }
-
-        HandlerRegistrationGC h = new HandlerRegistrationGC();
-        h.add(addImage.addClickHandler(handler));
-        h.add(addButtonLabel.addClickHandler(handler));
-        return h;
+        return null;
     }
 
     @Override
@@ -116,7 +114,7 @@ public abstract class BaseFolderEditorDecorator<E extends IEntity> extends FlowP
         super.onEnsureDebugId(baseID);
         //TODO use inheritance of objects
         //image.ensureDebugId(CompositeDebugId.debugId(parentFolder.getDebugId(), FormNavigationDebugId.Form_Add));
-        if (addable) {
+        if (isAddable()) {
             if (baseID.endsWith(IFolderEditorDecorator.DEBUGID_SUFIX)) {
                 baseID = baseID.substring(0, baseID.length() - IFolderEditorDecorator.DEBUGID_SUFIX.length());
             }

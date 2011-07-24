@@ -22,6 +22,8 @@ package com.pyx4j.entity.client.ui.flex.editor;
 
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -54,8 +56,7 @@ public abstract class BaseFolderItemEditorDecorator<E extends IEntity> extends S
         rowHolder = new FlowPanel();
         rowHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-        imageHolder = null;
-        if (button != null) {
+        if (removable) {
             removeImage = new ImageButton(button, buttonHover, title);
             imageHolder = new ImageHolder(removeImage);
             imageHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
@@ -67,6 +68,7 @@ public abstract class BaseFolderItemEditorDecorator<E extends IEntity> extends S
             rowHolder.add(imageHolder);
         } else {
             removeImage = null;
+            imageHolder = null;
         }
 
         content = new SimplePanel();
@@ -88,19 +90,15 @@ public abstract class BaseFolderItemEditorDecorator<E extends IEntity> extends S
         return rowHolder;
     }
 
-    protected Image getRemoveImage() {
-        return removeImage;
-    }
-
     protected ImageHolder getImageHolder() {
         return imageHolder;
     }
 
-    public void setRemovable(boolean removable) {
-        this.removable = removable;
+    protected Image getRemoveImage() {
+        return removeImage;
     }
 
-    protected boolean isRemovable() {
+    public boolean isRemovable() {
         return removable;
     }
 
@@ -115,5 +113,13 @@ public abstract class BaseFolderItemEditorDecorator<E extends IEntity> extends S
         if (removeImage != null) {
             removeImage.ensureDebugId(baseID + "-" + FormNavigationDebugId.Form_Remove.debugId());
         }
+    }
+
+    @Override
+    public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
+        if (isRemovable()) {
+            return getRemoveImage().addClickHandler(handler);
+        }
+        return null;
     }
 }

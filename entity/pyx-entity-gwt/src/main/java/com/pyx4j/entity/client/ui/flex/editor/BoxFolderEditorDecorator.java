@@ -53,13 +53,14 @@ public class BoxFolderEditorDecorator<E extends IEntity> extends BaseFolderEdito
 
         add(getContainer());
 
-        add(getImageHolder());
+        if (addable) {
+            add(getImageHolder());
+        }
     }
 
     @Override
     public void onValueChange(ValueChangeEvent<IList<E>> event) {
         // TODO Auto-generated method stub
-
     }
 
 }
