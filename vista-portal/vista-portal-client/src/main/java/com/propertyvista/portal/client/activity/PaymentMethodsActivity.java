@@ -28,6 +28,7 @@ import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
 import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.PaymentMethods;
 
 public class PaymentMethodsActivity extends SecurityAwareActivity implements PaymentMethodsView.Presenter {
 
@@ -76,7 +77,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
 
     @Override
     public void editPaymentMethod(PaymentMethodDTO paymentmethod) {
-        AppPlace place = new PortalSiteMap.Residents.EditPaymentMethod();
+        AppPlace place = new PaymentMethods.EditPaymentMethod();
         place.putArg(PortalSiteMap.ARG_PAYMENT_METHOD_ID, paymentmethod.id().getValue().toString());
         AppSite.getPlaceController().goTo(place);
 
@@ -84,7 +85,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
 
     @Override
     public void addPaymentMethod() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.NewPaymentMethod());
+        AppSite.getPlaceController().goTo(new PaymentMethods.NewPaymentMethod());
 
     }
 

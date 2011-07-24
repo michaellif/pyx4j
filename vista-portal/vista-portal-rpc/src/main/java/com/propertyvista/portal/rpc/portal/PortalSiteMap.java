@@ -79,21 +79,21 @@ public class PortalSiteMap implements SiteMap {
         }
 
         public static class Maintenance extends AppPlace {
-        }
 
-        public static class MaintenanceListHistory extends CrudAppPlace {
+            public static class MaintenanceListHistory extends CrudAppPlace {
+            }
         }
 
         public static class BillingHistory extends AppPlace {
         }
 
         public static class PaymentMethods extends AppPlace {
-        }
 
-        public static class NewPaymentMethod extends AppPlace {
-        }
+            public static class NewPaymentMethod extends AppPlace {
+            }
 
-        public static class EditPaymentMethod extends AppPlace {
+            public static class EditPaymentMethod extends AppPlace {
+            }
         }
 
         public static class CurrentBill extends AppPlace {

@@ -41,6 +41,8 @@ import com.propertyvista.portal.client.activity.RetrievePasswordActivity;
 import com.propertyvista.portal.client.activity.SearchApartmentActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Maintenance;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.PaymentMethods;
 
 public class ContentActivityMapper implements AppActivityMapper {
 
@@ -70,7 +72,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new PersonalInfoActivity(place);
                 } else if (place instanceof Residents.Maintenance) {
                     activity = new MaintenanceAcitvity(place);
-                } else if (place instanceof Residents.MaintenanceListHistory) {
+                } else if (place instanceof Maintenance.MaintenanceListHistory) {
                     activity = new MaintenanceListerActivity(place);
                 } else if (place instanceof Residents.BillingHistory) {
                     activity = new BillingHistoryActivity(place);
@@ -88,11 +90,11 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new CurrentBillActivity(place);
                 } else if (place instanceof PortalSiteMap.PotentialTenants) {
                     activity = new PotentialTenantActivity(place);
-                } else if (place instanceof PortalSiteMap.Residents.NewPaymentMethod) {
+                } else if (place instanceof PaymentMethods.NewPaymentMethod) {
                     activity = new NewPaymentMethodActivity(place);
                 } else if (place instanceof PortalSiteMap.Residents.CurrentBill) {
                     activity = new CurrentBillActivity(place);
-                } else if (place instanceof PortalSiteMap.Residents.EditPaymentMethod) {
+                } else if (place instanceof PaymentMethods.EditPaymentMethod) {
                     activity = new EditPaymentMethodActivity(place);
                 }
 

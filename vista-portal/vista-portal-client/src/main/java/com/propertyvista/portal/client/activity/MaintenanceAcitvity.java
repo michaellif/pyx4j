@@ -23,7 +23,7 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.portal.client.ui.residents.MaintenanceView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Maintenance;
 
 public class MaintenanceAcitvity extends SecurityAwareActivity implements MaintenanceView.Presenter {
     private final MaintenanceView view;
@@ -55,7 +55,7 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
 
     @Override
     public void showSupportHistory() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.MaintenanceListHistory());
+        AppSite.getPlaceController().goTo(new Maintenance.MaintenanceListHistory());
 
     }
 }

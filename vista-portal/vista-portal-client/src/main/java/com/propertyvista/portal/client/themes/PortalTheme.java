@@ -474,11 +474,9 @@ public abstract class PortalTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Label));
-        style.addProperty("height", "20px");
-        style.addProperty("line-height", "20px");
         style.addProperty("font-style", "normal");
-        style.addProperty("padding-left", "5px");
-        style.addProperty("padding-right", "5px");
+        style.addProperty("padding-top", "10px");
+        style.addProperty("padding-bottom", "4px");
         addStyle(style);
 
     }

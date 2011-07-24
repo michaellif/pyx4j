@@ -78,7 +78,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
                 NavigTabList secondaryNavig = tab.getSecondaryNavig();
                 if (secondaryNavig != null) {
                     NavigTab secondSelected = secondaryNavig.getSelectedTab();
-                    if (secondSelected != null) {
+                    if (secondSelected != null && !isMyPlace(secondSelected.getNavigItem().getPlace(), (AppPlace) this.presenter.getWhere())) {
                         secondSelected.deselect();
                     }
                 }
@@ -89,18 +89,18 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
     @Override
     public void setMainNavig(List<NavigItem> items) {
-        Place secondarySelected = null;
+        AppPlace secondarySelected = null;
         for (NavigItem item : items) {
             List<NavigItem> secondaryItems = item.getSecondaryNavigation();
             NavigTab mainNavigTab = new NavigTab(item, DEFAULT_STYLE_PREFIX);
             tabsHolder.add(mainNavigTab);
 
-            Place currentPlace = presenter.getWhere();
+            AppPlace currentPlace = (AppPlace) presenter.getWhere();
             if (item.getPlace().equals(currentPlace)) {
                 mainNavigTab.select();
             } else if (secondaryItems != null) {
                 for (NavigItem secondary : secondaryItems) {
-                    if (secondary.getPlace().equals(currentPlace)) {
+                    if (isMyPlace(secondary.getPlace(), currentPlace)) {
                         mainNavigTab.select();
                         secondarySelected = secondary.getPlace();
                         break;
@@ -121,8 +121,28 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
         }
     }
 
+    private boolean isMyPlace(AppPlace parentPlace, AppPlace placeInQuestion) {
+        if (parentPlace == null || placeInQuestion == null) {
+            return false;
+        }
+        if (parentPlace.equals(placeInQuestion)) {
+            return true;
+        }
+        String token = placeInQuestion.getToken();
+        int idx = token.lastIndexOf(com.pyx4j.site.shared.meta.NavigNode.PAGE_SEPARATOR);
+        if (idx > -1) {
+            token = token.substring(0, idx);
+        }
+        if (token.endsWith(parentPlace.getToken())) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
     @Override
-    public void setSecondaryNavig(Place mainItemPlace, List<NavigItem> secondayItems) {
+    public void setSecondaryNavig(AppPlace mainItemPlace, List<NavigItem> secondayItems) {
         if (mainItemPlace == null) {
             return;
         }
@@ -246,6 +266,10 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             selected = true;
         }
 
+        public Label getLabel() {
+            return label;
+        }
+
         @Override
         public void add(Widget w) {
             super.add(w, getElement());
@@ -284,10 +308,11 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
                 parent.add(secondaryNavig);
             }
         }
+
     }
 
     @Override
-    public void changePlace(Place place) {
+    public void changePlace(AppPlace place) {
         NavigTab mainTag = tabsHolder.getTabByPlace(place);
         NavigTab selectedTab = tabsHolder.getSelectedTab();
 
@@ -308,7 +333,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
                 if (secondaryNavig != null) {
                     NavigTab secondaryTab = secondaryNavig.getTabByPlace(place);
                     NavigTab secondarySelectedTab = secondaryNavig.getSelectedTab();
-                    if (secondarySelectedTab != null) {
+                    if (secondarySelectedTab != null && !isMyPlace(secondarySelectedTab.getNavigItem().getPlace(), place)) {
                         secondarySelectedTab.deselect();
                     }
                     if (secondaryTab != null) {

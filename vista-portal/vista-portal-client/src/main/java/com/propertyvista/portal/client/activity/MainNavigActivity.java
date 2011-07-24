@@ -45,7 +45,7 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
 
     private final MainNavigView view;
 
-    private final Place place;
+    private final AppPlace place;
 
     private static final Place ResidentsPlace = new PortalSiteMap.Residents();
 
@@ -56,7 +56,7 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     public MainNavigActivity(Place place) {
         this.view = (MainNavigView) PortalViewFactory.instance(MainNavigView.class);
         view.setPresenter(this);
-        this.place = place;
+        this.place = (AppPlace) place;
         withPlace(place);
     }
 
@@ -72,7 +72,7 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
             public void onSecurityContextChange(SecurityControllerEvent event) {
                 if (items != null && !items.isEmpty()) {
                     for (NavigItem item : items) {
-                        Place place = item.getPlace();
+                        AppPlace place = item.getPlace();
 
                         if (place != null && place.equals(ResidentsPlace))
                             if (ClientContext.isAuthenticated()) {
