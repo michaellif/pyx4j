@@ -67,6 +67,7 @@ public abstract class BaseFolderItemEditorDecorator<E extends IEntity> extends S
             rowHolder.add(imageHolder);
         }
 
+        content.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
         rowHolder.add(content);
 
         if (removeImage != null) {

@@ -53,7 +53,7 @@ public class BoxFolderEditorDecorator<E extends IEntity> extends BaseFolderEdito
 
         add(getContainer());
 
-        if (getImageHolder() != null) {
+        if (isAddable()) {
             add(getImageHolder());
         }
     }
