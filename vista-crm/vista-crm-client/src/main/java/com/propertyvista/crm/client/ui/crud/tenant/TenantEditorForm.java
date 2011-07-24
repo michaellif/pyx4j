@@ -19,6 +19,7 @@ import java.util.Map;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
@@ -110,7 +111,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
             break;
         }
 
-        tabPanel.add(contacts, proto().emergencyContacts().getMeta().getCaption());
+        tabPanel.add(new ScrollPanel(contacts), proto().emergencyContacts().getMeta().getCaption());
         tabPanel.setDisableMode(isEditable());
     }
 

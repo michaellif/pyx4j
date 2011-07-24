@@ -26,7 +26,11 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -42,6 +46,7 @@ import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
+import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
@@ -50,6 +55,7 @@ import com.propertyvista.domain.ApplicationDocument.DocumentType;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.income.TenantIncome;
 import com.propertyvista.misc.BusinessRules;
 
 public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
@@ -326,7 +332,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
     private Widget createIncomesTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        // TODO Auto-generated method stub
+        main.add(inject(proto().incomes(), createIncomeFolderEditor()));
         main.setWidth("100%");
         return main;
     }
@@ -343,5 +349,22 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         // TODO Auto-generated method stub
         main.setWidth("100%");
         return main;
+    }
+
+    private CEntityFolderEditor<TenantIncome> createIncomeFolderEditor() {
+
+        return new CEntityFolderEditor<TenantIncome>(TenantIncome.class) {
+
+            @Override
+            protected IFolderEditorDecorator<TenantIncome> createFolderDecorator() {
+                return new BoxFolderEditorDecorator<TenantIncome>(CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add an income source"),
+                        TenantScreeningEditorForm.this.isEditable());
+            }
+
+            @Override
+            protected CEntityFolderItemEditor<TenantIncome> createItem() {
+                return new TenantFinancialViewIncomeForm(!TenantScreeningEditorForm.this.isEditable());
+            }
+        };
     }
 }
