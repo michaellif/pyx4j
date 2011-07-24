@@ -18,9 +18,6 @@ import java.util.List;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
@@ -28,13 +25,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.CrudAppPlace;
-
-import com.propertyvista.crm.client.resources.CrmImages;
 
 public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEditor<E> {
     protected static I18n i18n = I18nFactory.getI18n(CrmEntityFolder.class);
@@ -45,20 +36,17 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
 
     private final boolean editable;
 
-    private final Class<? extends CrudAppPlace> placeClass;
-
     private final CEntityForm<?> parent;
 
     public CrmEntityFolder(Class<E> clazz, String itemName, boolean editable) {
-        this(clazz, itemName, editable, null, null);
+        this(clazz, itemName, editable, null);
     }
 
-    public CrmEntityFolder(Class<E> clazz, String itemName, boolean editable, Class<? extends CrudAppPlace> placeClass, CEntityForm<?> parent) {
+    public CrmEntityFolder(Class<E> clazz, String itemName, boolean editable, CEntityForm<?> parent) {
         super(clazz);
         this.clazz = clazz;
         this.itemName = itemName;
         this.editable = editable;
-        this.placeClass = placeClass;
         this.parent = parent;
     }
 
@@ -67,53 +55,15 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
     @Override
     protected CEntityFolderItemEditor<E> createItem() {
         return new CEntityFolderRowEditor<E>(clazz, columns()) {
-
             @Override
             public IFolderItemEditorDecorator<E> createFolderItemDecorator() {
-                IFolderItemEditorDecorator<E> decor;
-                if (placeClass != null) {
-                    decor = new CrmFolderItemDecorator<E>(i18n.tr("Remove ") + itemName, editable);
-                    decor.addItemClickHandler(new ClickHandler() {
-                        @Override
-                        public void onClick(ClickEvent event) {
-                            CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
-
-                            if (editable) {
-                                place.formEditorPlace(getValue().getPrimaryKey());
-                            } else {
-                                place.formViewerPlace(getValue().getPrimaryKey());
-                            }
-
-                            AppSite.getPlaceController().goTo(place);
-                        }
-                    });
-                } else {
-                    decor = new TableFolderItemEditorDecorator<E>(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove ") + itemName,
-                            editable);
-                }
-                return decor;
+                return new CrmFolderItemDecorator<E>(i18n.tr("Remove ") + itemName, editable);
             }
         };
     }
 
     @Override
     protected IFolderEditorDecorator<E> createFolderDecorator() {
-        if (placeClass != null && parent != null) {
-            CrmTableFolderDecorator<E> decor = new CrmTableFolderDecorator<E>(columns(), i18n.tr("Add new ") + itemName, editable);
-            decor.addNewItemClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    if (parent.getValue().getPrimaryKey() != null) { // parent shouldn't be new unsaved value!..
-                        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
-                        place.formNewItemPlace(parent.getValue().getPrimaryKey());
-                        AppSite.getPlaceController().goTo(place);
-                    }
-                }
-            });
-            return decor;
-        } else {
-            return new TableFolderEditorDecorator<E>(columns(), CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add new ") + itemName,
-                    editable);
-        }
+        return new CrmTableFolderDecorator<E>(columns(), i18n.tr("Add new ") + itemName, editable);
     }
 }

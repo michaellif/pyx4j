@@ -18,7 +18,6 @@ import java.util.Date;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -28,6 +27,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -37,6 +37,7 @@ import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderU
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
@@ -57,7 +58,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
     private ApplicationDocumentsFolderUploader fileUpload;
 
-    private Widget previousAddressHeader;
+    private CEntityEditor<PriorAddress> previousAddressHeader;
 
     public TenantScreeningEditorForm() {
         super(TenantScreening.class, new CrmEditorsComponentFactory());
@@ -80,6 +81,19 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
+    }
+
+    @Override
+    public void populate(TenantScreening value) {
+        super.populate(value);
+
+        enablePreviousAddress();
+
+        get(proto().secureIdentifier()).setEnabled(!value.notCanadianCitizen().isBooleanTrue());
+        fileUpload.setVisible(value.notCanadianCitizen().isBooleanTrue());
+        if (value != null) {
+            fileUpload.setTenantID(((IEntity) value).getPrimaryKey());
+        }
     }
 
     private Widget createSecureInformationTab() {
@@ -119,8 +133,8 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         main.add(new CrmHeader2Decorator(proto().currentAddress().getMeta().getCaption()));
         main.add(inject(proto().currentAddress(), createAddressEditor()));
 
-        main.add(new CrmHeader2Decorator(proto().currentAddress().getMeta().getCaption()));
-        main.add(inject(proto().previousAddress(), createAddressEditor()));
+        main.add(new CrmHeader2Decorator(proto().previousAddress().getMeta().getCaption()));
+        main.add(inject(proto().previousAddress(), previousAddressHeader = createAddressEditor()));
 
         main.setWidth("100%");
         return main;
@@ -175,10 +189,15 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-                AddressUtils.injectIAddress(main, proto(), this);
-                main.add(inject(proto().moveInDate()), 8.2);
-                main.add(inject(proto().moveOutDate()), 8.2);
-                main.add(inject(proto().phone()), 15);
+                VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+
+                main.add(split);
+
+                AddressUtils.injectIAddress(split, proto(), this);
+
+                split.getLeftPanel().add(inject(proto().moveInDate()), 8.2);
+                split.getLeftPanel().add(inject(proto().moveOutDate()), 8.2);
+                split.getLeftPanel().add(inject(proto().phone()), 15);
 
                 CEditableComponent<?, ?> rentedComponent = inject(proto().rented());
                 rentedComponent.addValueChangeHandler(new ValueChangeHandler() {
@@ -187,10 +206,11 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
                         setVizibility(getValue());
                     }
                 });
-                main.add(rentedComponent, 15);
-                main.add(inject(proto().payment()), 8);
-                main.add(inject(proto().managerName()), 30);
-                main.add(new HTML());
+
+                split.getRightPanel().add(rentedComponent, 15);
+                split.getRightPanel().add(inject(proto().payment()), 8);
+                split.getRightPanel().add(inject(proto().managerName()), 15);
+
                 return main;
             }
 
@@ -205,7 +225,6 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
                 get(proto().payment()).setVisible(rented);
                 get(proto().managerName()).setVisible(rented);
             }
-
         };
     }
 

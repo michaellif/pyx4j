@@ -302,7 +302,6 @@ public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
 
         get(proto().secureIdentifier()).setEnabled(!value.notCanadianCitizen().isBooleanTrue());
         fileUpload.setVisible(value.notCanadianCitizen().isBooleanTrue());
-
         if (value != null) {
             fileUpload.setTenantID(((IEntity) value).getPrimaryKey());
         }

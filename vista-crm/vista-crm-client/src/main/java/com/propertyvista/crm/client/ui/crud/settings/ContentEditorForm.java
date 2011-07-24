@@ -127,7 +127,7 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
             protected IFolderEditorDecorator<PageDescriptor> createFolderDecorator() {
                 CrmTableFolderDecorator<PageDescriptor> decor = new CrmTableFolderDecorator<PageDescriptor>(columns, i18n.tr("Add new Page"),
                         !ContentEditorForm.this.isEditable());
-                decor.addNewItemClickHandler(new ClickHandler() {
+                decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
                         if (ContentEditorForm.this.getValue().getPrimaryKey() != null) { // parent shouldn't be new unsaved value!..

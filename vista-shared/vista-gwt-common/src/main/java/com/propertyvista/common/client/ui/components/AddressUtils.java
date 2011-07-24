@@ -71,7 +71,6 @@ public class AddressUtils {
         main.add(parent.inject(proto.streetName()), 15);
         main.add(parent.inject(proto.streetType()), 10);
         main.add(parent.inject(proto.streetDirection()), 10);
-        main.add(parent.inject(proto.streetNumber()), 5);
 
         main.add(parent.inject(proto.city()), 15);
         main.add(parent.inject(proto.county()), 15);
@@ -98,7 +97,6 @@ public class AddressUtils {
         split.getLeftPanel().add(parent.inject(proto.streetName()), 15);
         split.getLeftPanel().add(parent.inject(proto.streetType()), 10);
         split.getLeftPanel().add(parent.inject(proto.streetDirection()), 10);
-        split.getRightPanel().add(parent.inject(proto.streetNumber()), 5);
 
         split.getRightPanel().add(parent.inject(proto.city()), 15);
         split.getRightPanel().add(parent.inject(proto.county()), 15);

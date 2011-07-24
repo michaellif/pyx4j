@@ -13,64 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.components;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-
-import com.pyx4j.entity.client.ui.flex.editor.BaseFolderItemEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 
-public class CrmFolderItemDecorator<E extends IEntity> extends BaseFolderItemEditorDecorator<E> {
-
-    protected static I18n i18n = I18nFactory.getI18n(CrmFolderItemDecorator.class);
-
-    protected final AnchorButton actionButton;
+public class CrmFolderItemDecorator<E extends IEntity> extends TableFolderItemEditorDecorator<E> {
 
     public CrmFolderItemDecorator(String title, boolean editable) {
         super(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), title, editable);
-        actionButton = new AnchorButton(i18n.tr(editable ? "Edit" : "View"));
-        actionButton.getElement().getStyle().setMarginLeft(2, Unit.EM);
-        getRowHolder().add(actionButton);
-        setWidget(getRowHolder());
     }
 
-    @Override
-    public void setFolderItem(CEntityFolderItemEditor<E> folderItem) {
-        folderItem.setEditable(false);
-        super.setFolderItem(folderItem);
-    }
-
-    @Override
-    public HandlerRegistration addItemClickHandler(ClickHandler handler) {
-        return actionButton.addClickHandler(handler);
-    }
-
-    @Override
-    public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
-        if (isRemovable() && getRemoveImage() != null) {
-            return getRemoveImage().addClickHandler(handler);
-        }
-        return null;
-    }
-
-    @Override
-    public HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
-        return null;
-    }
-
-    @Override
-    public HandlerRegistration addRowDownClickHandler(ClickHandler handler) {
-        return null;
-    }
-
-    @Override
-    public HandlerRegistration addRowCollapseClickHandler(ClickHandler handler) {
-        return null;
-    }
 }

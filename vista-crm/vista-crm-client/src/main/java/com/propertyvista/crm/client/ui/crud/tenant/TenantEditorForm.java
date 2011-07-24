@@ -136,7 +136,8 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
             @Override
             protected IFolderEditorDecorator<EmergencyContact> createFolderDecorator() {
-                return new BoxFolderEditorDecorator<EmergencyContact>(CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add one more contact"));
+                return new BoxFolderEditorDecorator<EmergencyContact>(CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add one more Contact"),
+                        TenantEditorForm.this.isEditable());
             }
 
             @Override
@@ -147,7 +148,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
             @Override
             public void populate(IList<EmergencyContact> value) {
                 super.populate(value);
-                if (value.isEmpty()) {
+                if (TenantEditorForm.this.isEditable() && value.isEmpty()) {
                     addItem(); // at least one Emergency Contact should be present!..
                 }
             }
@@ -173,8 +174,8 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
             @Override
             public IFolderItemEditorDecorator<EmergencyContact> createFolderItemDecorator() {
-                return new BoxFolderItemEditorDecorator<EmergencyContact>(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove contact"),
-                        !isFirst());
+                return new BoxFolderItemEditorDecorator<EmergencyContact>(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove Contact"),
+                        !isFirst() && TenantEditorForm.this.isEditable());
             }
         };
     }
