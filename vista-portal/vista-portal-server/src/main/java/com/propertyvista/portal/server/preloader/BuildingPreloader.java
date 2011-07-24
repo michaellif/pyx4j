@@ -52,17 +52,18 @@ import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.server.generator.BuildingsGenerator;
+import com.propertyvista.portal.server.generator.MediaGenerator;
 import com.propertyvista.portal.server.importer.Importer;
 import com.propertyvista.portal.server.portal.PublicDataUpdater;
 import com.propertyvista.server.common.generator.UnitRelatedData;
 import com.propertyvista.server.domain.FileBlob;
 import com.propertyvista.server.domain.ThumbnailBlob;
 
-public class PreloadBuildings extends BaseVistaDataPreloader {
+public class BuildingPreloader extends BaseVistaDataPreloader {
 
-    private final static Logger log = LoggerFactory.getLogger(PreloadBuildings.class);
+    private final static Logger log = LoggerFactory.getLogger(BuildingPreloader.class);
 
-    public PreloadBuildings(PreloadConfig config) {
+    public BuildingPreloader(PreloadConfig config) {
         super(config);
     }
 

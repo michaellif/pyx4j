@@ -26,7 +26,7 @@ import com.propertyvista.domain.ref.Province;
 import com.propertyvista.server.common.generator.LocationsGenerator;
 import com.propertyvista.server.common.reference.SharedData;
 
-public class LocationsPreload extends AbstractDataPreloader {
+public class LocationPreloader extends AbstractDataPreloader {
 
     @Override
     public String create() {

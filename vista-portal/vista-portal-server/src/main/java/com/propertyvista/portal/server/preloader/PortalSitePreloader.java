@@ -24,7 +24,7 @@ import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.portal.server.generator.CommonsGenerator;
 
-public class PortalSitePreload extends AbstractDataPreloader {
+public class PortalSitePreloader extends AbstractDataPreloader {
 
     @Override
     public String create() {

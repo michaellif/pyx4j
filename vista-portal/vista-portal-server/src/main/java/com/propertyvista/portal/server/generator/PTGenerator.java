@@ -72,7 +72,7 @@ import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.server.generator.gdo.ApplicationSummaryGDO;
 import com.propertyvista.portal.server.generator.gdo.TenantSummaryGDO;
-import com.propertyvista.portal.server.preloader.PreloadPT;
+import com.propertyvista.portal.server.preloader.PtPreloader;
 import com.propertyvista.portal.server.preloader.RandomUtil;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.server.common.security.PasswordEncryptor;
@@ -186,7 +186,7 @@ public class PTGenerator {
         applicationDocument.type().setValue(documentType);
         applicationDocument.filename().setValue(fileName);
 
-        String filename = IOUtils.resourceFileName(fileName, PreloadPT.class);
+        String filename = IOUtils.resourceFileName(fileName, PtPreloader.class);
         try {
             byte[] data = IOUtils.getResource(filename);
             if (data == null) {
@@ -204,7 +204,7 @@ public class PTGenerator {
     }
 
     public ApplicationDocumentData createApplicationDocumentData(PotentialTenantInfo tenantInfo, String fileName) {
-        String filename = IOUtils.resourceFileName(fileName, PreloadPT.class);
+        String filename = IOUtils.resourceFileName(fileName, PtPreloader.class);
         try {
             byte[] data = IOUtils.getResource(filename);
             if (data == null) {

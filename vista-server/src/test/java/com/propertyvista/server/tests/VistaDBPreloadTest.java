@@ -21,7 +21,7 @@ import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.PreloadConfig;
-import com.propertyvista.portal.server.preloader.MediaGenerator;
+import com.propertyvista.portal.server.generator.MediaGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 public class VistaDBPreloadTest extends VistaDBTestBase {

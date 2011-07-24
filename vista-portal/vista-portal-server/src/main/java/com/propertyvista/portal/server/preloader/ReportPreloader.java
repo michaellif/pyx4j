@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.util.Random;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
@@ -24,25 +26,31 @@ import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
-public class DashboardPreload extends AbstractDataPreloader {
+public class ReportPreloader extends AbstractDataPreloader {
 
     @Override
     public String create() {
 
-// first demo dashboard:        
+// first demo report:        
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd = EntityFactory.create(DashboardMetadata.class);
         dmd.type().setValue(DashboardType.system);
-        dmd.isShared().setValue(true);
-        dmd.name().setValue("System Dashboard");
-        dmd.description().setValue("Shows default system data");
-        dmd.layoutType().setValue(LayoutType.One);
+        dmd.layoutType().setValue(LayoutType.Report);
+        dmd.name().setValue("System Report");
 
-        GadgetMetadata gmd;
-        gmd = EntityFactory.create(GadgetMetadata.class);
+        for (int i = 0; i < 3; ++i) {
+            GadgetMetadata gmd = EntityFactory.create(GadgetMetadata.class);
+            gmd.type().setValue(GadgetType.Demo);
+            gmd.name().setValue("Gadget #" + i);
+            gmd.column().setValue(new Random().nextInt(2));
+
+            gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
+            dmd.gadgets().add(gmd);
+        }
+
+        GadgetMetadata gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.type().setValue(GadgetType.BuildingLister);
         gmd.name().setValue("Building lister");
-        gmd.column().setValue(0);
+        gmd.column().setValue(-1);
 
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.gadgets().add(gmd);
@@ -50,14 +58,14 @@ public class DashboardPreload extends AbstractDataPreloader {
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.type().setValue(GadgetType.BarChartDisplay);
         gmd.name().setValue("Bar Chart Demo");
-        gmd.column().setValue(0);
+        gmd.column().setValue(-1);
 
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.gadgets().add(gmd);
 
         gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.LineChartDisplay);
-        gmd.name().setValue("Line Chart Demo");
+        gmd.type().setValue(GadgetType.PieChartDisplay);
+        gmd.name().setValue("Pie Chart Demo");
         gmd.column().setValue(0);
 
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
@@ -68,17 +76,15 @@ public class DashboardPreload extends AbstractDataPreloader {
 
 // the second one:
         dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.type().setValue(DashboardType.building);
-        dmd.isShared().setValue(true);
-        dmd.name().setValue("Building dashboard");
-        dmd.description().setValue("Shows default building data");
-        dmd.layoutType().setValue(LayoutType.Two21);
+        dmd.type().setValue(DashboardType.system);
+        dmd.layoutType().setValue(LayoutType.Report);
+        dmd.name().setValue("Test Report");
 
         for (int i = 0; i < 3; ++i) {
             gmd = EntityFactory.create(GadgetMetadata.class);
             gmd.type().setValue(GadgetType.Demo);
             gmd.name().setValue("Gadget #" + i);
-            gmd.column().setValue(1);
+            gmd.column().setValue(new Random().nextInt(2));
 
             gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
             dmd.gadgets().add(gmd);
@@ -87,15 +93,7 @@ public class DashboardPreload extends AbstractDataPreloader {
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.type().setValue(GadgetType.BarChartDisplay);
         gmd.name().setValue("Bar Chart Demo");
-        gmd.column().setValue(0);
-
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.LineChartDisplay);
-        gmd.name().setValue("Line Chart Demo");
-        gmd.column().setValue(0);
+        gmd.column().setValue(-1);
 
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.gadgets().add(gmd);
@@ -103,7 +101,7 @@ public class DashboardPreload extends AbstractDataPreloader {
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.type().setValue(GadgetType.PieChartDisplay);
         gmd.name().setValue("Pie Chart Demo");
-        gmd.column().setValue(1);
+        gmd.column().setValue(0);
 
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.gadgets().add(gmd);
@@ -111,7 +109,7 @@ public class DashboardPreload extends AbstractDataPreloader {
         dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         PersistenceServicesFactory.getPersistenceService().persist(dmd);
 
-        return "Created " + 2 + "demo dashboards";
+        return "Created " + 2 + "demo reports";
     }
 
     @SuppressWarnings("unchecked")

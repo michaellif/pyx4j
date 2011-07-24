@@ -21,9 +21,9 @@ import com.propertyvista.server.domain.CampaignHistory;
 import com.propertyvista.server.domain.CampaignTriger;
 import com.propertyvista.server.domain.PhoneCallCampaign;
 
-public class CampaignPreload extends BaseVistaDataPreloader {
+public class CampaignPreloader extends BaseVistaDataPreloader {
 
-    public CampaignPreload(PreloadConfig config) {
+    public CampaignPreloader(PreloadConfig config) {
         super(config);
     }
 

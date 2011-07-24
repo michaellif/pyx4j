@@ -50,7 +50,7 @@ public class LocationsGenerator {
         return toSaveCountry;
     }
 
-    private static List<City> merjeProvinces(List<City> list) {
+    private static List<City> mergeProvinces(List<City> list) {
         List<City> all = new Vector<City>();
         String provinceName = null;
         for (City c : list) {
@@ -68,8 +68,8 @@ public class LocationsGenerator {
 
     public static List<City> loadCityFromFile() {
         List<City> all = new Vector<City>();
-        all.addAll(merjeProvinces(EntityCSVReciver.create(City.class).loadFile(IOUtils.resourceFileName("City-Canada-city.csv", LocationsGenerator.class))));
-        all.addAll(merjeProvinces(EntityCSVReciver.create(City.class).loadFile(IOUtils.resourceFileName("City-Canada-town.csv", LocationsGenerator.class))));
+        all.addAll(mergeProvinces(EntityCSVReciver.create(City.class).loadFile(IOUtils.resourceFileName("City-Canada-city.csv", LocationsGenerator.class))));
+        all.addAll(mergeProvinces(EntityCSVReciver.create(City.class).loadFile(IOUtils.resourceFileName("City-Canada-town.csv", LocationsGenerator.class))));
         return all;
     }
 }

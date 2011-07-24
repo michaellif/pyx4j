@@ -19,26 +19,19 @@ import com.propertyvista.domain.PreloadConfig;
 
 public class VistaDataPreloaders extends DataPreloaderCollection {
 
-//    private Map<String, Serializable> parameters = Collections.emptyMap();
-
     public VistaDataPreloaders(PreloadConfig config) {
-//        parameters.put(PreloadConfig.KEY, config);
 
-        add(new LocationsPreload());
-        add(new PreloadUsers(config));
-        add(new CampaignPreload(config));
-        add(new PreloadBuildings(config));
+        add(new LocationPreloader());
+        add(new PmcPreloader());
+        add(new UserPreloader(config));
+        add(new CampaignPreloader(config));
+        add(new BuildingPreloader(config));
         add(new PreloadTenants(config));
-        add(new PreloadPT(config));
-        add(new PortalSitePreload());
-        add(new DevelopmentSecurityPreload());
-        add(new DashboardPreload());
-        add(new ReportPreload());
+        add(new PtPreloader(config));
+        add(new PortalSitePreloader());
+        add(new DevelopmentSecurityPreloader());
+        add(new DashboardPreloader());
+        add(new ReportPreloader());
     }
 
-//    @Override
-//    protected void add(DataPreloader preloader) {
-//        preloader.setParametersValues(parameters);
-//        super.add(preloader);
-//    }
 }

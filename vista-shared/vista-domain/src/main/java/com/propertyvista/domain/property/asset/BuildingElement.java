@@ -7,19 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 3, 2011
- * @author dmitry
+ * Created on Jul 23, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.server.preloader;
+package com.propertyvista.domain.property.asset;
 
-import com.pyx4j.essentials.server.preloader.DataGenerator;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.domain.DemoData;
+@AbstractEntity
+public interface BuildingElement extends IEntity {
 
-public class BusinessDataGenerator {
-    public static String createEmail() {
-        String email = DataGenerator.randomLastName().toLowerCase() + DataGenerator.randomInt(Integer.MAX_VALUE) + DemoData.USERS_DOMAIN;
-        return email;
-    }
 }

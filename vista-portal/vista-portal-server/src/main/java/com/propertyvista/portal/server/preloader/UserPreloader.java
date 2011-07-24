@@ -32,15 +32,15 @@ import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.UserCredential;
 
-public class PreloadUsers extends BaseVistaDataPreloader {
+public class UserPreloader extends BaseVistaDataPreloader {
 
-    private final static Logger log = LoggerFactory.getLogger(PreloadUsers.class);
+    private final static Logger log = LoggerFactory.getLogger(UserPreloader.class);
 
     private int userCount;
 
     private int custCount;
 
-    public PreloadUsers(PreloadConfig config) {
+    public UserPreloader(PreloadConfig config) {
         super(config);
     }
 

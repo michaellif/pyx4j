@@ -22,8 +22,8 @@ import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.Application;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.server.generator.BusinessDataGenerator;
 import com.propertyvista.portal.server.generator.PTGenerator;
-import com.propertyvista.portal.server.preloader.BusinessDataGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 public class PortalServicesTest extends VistaDBTestBase {

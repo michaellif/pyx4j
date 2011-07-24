@@ -17,13 +17,11 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-//TODO - replace inheritance on IEntity!!
-public interface ParkingSpot extends IEntity {
+public interface ParkingSpot extends BuildingElement {
 
     @Translatable
     public enum Type {

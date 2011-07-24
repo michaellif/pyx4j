@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.preloader;
+package com.propertyvista.portal.server.generator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +22,8 @@ import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.server.importer.PictureUtil;
+import com.propertyvista.portal.server.preloader.BuildingPreloader;
+import com.propertyvista.portal.server.preloader.RandomUtil;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
 
@@ -56,7 +58,7 @@ public class MediaGenerator {
     }
 
     private static Map<Media, byte[]> loadFloorplanMedia(String filename) {
-        Map<Media, byte[]> data = PictureUtil.loadResourceMedia(filename, PreloadBuildings.class);
+        Map<Media, byte[]> data = PictureUtil.loadResourceMedia(filename, BuildingPreloader.class);
         for (Map.Entry<Media, byte[]> me : data.entrySet()) {
             Media m = me.getKey();
             m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentType().getValue()));

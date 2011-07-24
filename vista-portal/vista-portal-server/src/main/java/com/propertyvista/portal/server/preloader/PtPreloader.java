@@ -46,13 +46,13 @@ import com.propertyvista.portal.server.ptapp.services.ApplicationDebug;
 import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 
-public class PreloadPT extends BaseVistaDataPreloader {
+public class PtPreloader extends BaseVistaDataPreloader {
 
-    private final static Logger log = LoggerFactory.getLogger(PreloadPT.class);
+    private final static Logger log = LoggerFactory.getLogger(PtPreloader.class);
 
     private User user;
 
-    public PreloadPT(PreloadConfig config) {
+    public PtPreloader(PreloadConfig config) {
         super(config);
     }
 
