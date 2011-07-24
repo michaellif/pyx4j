@@ -38,6 +38,10 @@ import com.propertyvista.crm.client.ui.crud.tenant.TenantEditorView;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantListerView;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.TenantScreeningEditorView;
+import com.propertyvista.crm.client.ui.crud.tenant.TenantScreeningEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.TenantScreeningViewerView;
+import com.propertyvista.crm.client.ui.crud.tenant.TenantScreeningViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerViewImpl;
 
@@ -51,6 +55,11 @@ public class TenantViewFactory extends ViewFactoryBase {
                 map.put(type, new TenantViewerViewImpl());
             } else if (TenantEditorView.class.equals(type)) {
                 map.put(type, new TenantEditorViewImpl());
+
+            } else if (TenantScreeningViewerView.class.equals(type)) {
+                map.put(type, new TenantScreeningViewerViewImpl());
+            } else if (TenantScreeningEditorView.class.equals(type)) {
+                map.put(type, new TenantScreeningEditorViewImpl());
 
             } else if (LeaseListerView.class.equals(type)) {
                 map.put(type, new LeaseListerViewImpl());

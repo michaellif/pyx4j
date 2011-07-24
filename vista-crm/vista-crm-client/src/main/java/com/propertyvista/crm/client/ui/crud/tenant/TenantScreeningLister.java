@@ -25,12 +25,12 @@ import com.propertyvista.domain.tenant.TenantScreening;
 public class TenantScreeningLister extends ListerBase<TenantScreening> {
 
     public TenantScreeningLister() {
-        super(TenantScreening.class, CrmSiteMap.Tenants.TenantSceening.class);
+        super(TenantScreening.class, CrmSiteMap.Tenants.TenantScreening.class);
         getListPanel().getDataTable().setHasCheckboxColumn(false);
     }
 
     public TenantScreeningLister(boolean readOnly) {
-        super(TenantScreening.class, CrmSiteMap.Tenants.TenantSceening.class, readOnly);
+        super(TenantScreening.class, CrmSiteMap.Tenants.TenantScreening.class, readOnly);
         getListPanel().getDataTable().setHasCheckboxColumn(false);
     }
 

@@ -65,6 +65,8 @@ import com.propertyvista.crm.client.activity.crud.tenant.LeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.LeaseViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantListerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.TenantScreeningEditorActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.TenantScreeningViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantViewerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitItemEditorActivity;
@@ -266,6 +268,16 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
+                } else if (place instanceof CrmSiteMap.Tenants.TenantScreening) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new TenantScreeningEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new TenantScreeningViewerActivity(place);
+                        break;
+                    }
+
                 } else if (place instanceof CrmSiteMap.Tenants.Lease) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
@@ -304,19 +316,6 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new ApplicationListerActivity(place);
                         break;
                     }
-
-//                } else if (place instanceof CrmSiteMap.Tenants.PotentialTenant) {
-//                    switch (((CrudAppPlace) place).getType()) {
-//                    case editor:
-//                        activity = new PotentialTenantEditorActivity(place);
-//                        break;
-//                    case viewer:
-//                        activity = new PotentialTenantViewerActivity(place);
-//                        break;
-//                    case lister:
-//                        activity = new PotentialTenantListerActivity(place);
-//                        break;
-//                    }
 
 // Reports:
                 } else if (place instanceof CrmSiteMap.Report) {
