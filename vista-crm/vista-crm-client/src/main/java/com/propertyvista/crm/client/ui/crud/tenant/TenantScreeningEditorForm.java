@@ -162,27 +162,6 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         return main;
     }
 
-    private Widget createGuarantorsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        // TODO Auto-generated method stub
-        main.setWidth("100%");
-        return main;
-    }
-
-    private Widget createAssetsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        // TODO Auto-generated method stub
-        main.setWidth("100%");
-        return main;
-    }
-
-    private Widget createIncomesTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        // TODO Auto-generated method stub
-        main.setWidth("100%");
-        return main;
-    }
-
     private CEntityEditor<PriorAddress> createAddressEditor() {
         return new CEntityEditor<PriorAddress>(PriorAddress.class) {
             @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -343,4 +322,26 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         previousAddressHeader.setVisible(enabled);
     }
 
+// Financial: ------------------------------------------------------------------------------------------------
+
+    private Widget createIncomesTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        // TODO Auto-generated method stub
+        main.setWidth("100%");
+        return main;
+    }
+
+    private Widget createAssetsTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        // TODO Auto-generated method stub
+        main.setWidth("100%");
+        return main;
+    }
+
+    private Widget createGuarantorsTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        // TODO Auto-generated method stub
+        main.setWidth("100%");
+        return main;
+    }
 }
