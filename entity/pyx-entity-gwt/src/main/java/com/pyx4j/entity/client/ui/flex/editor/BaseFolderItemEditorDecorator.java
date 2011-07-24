@@ -36,15 +36,15 @@ import com.pyx4j.widgets.client.ImageButton;
 
 public abstract class BaseFolderItemEditorDecorator<E extends IEntity> extends SimplePanel implements IFolderItemEditorDecorator<E> {
 
-    private Image removeImage;
+    private final FlowPanel rowHolder = new FlowPanel();;
 
-    private final SimplePanel content;
+    private final SimplePanel content = new SimplePanel();;
 
-    private final FlowPanel rowHolder;
+    private ImageHolder imageHolder = null;
+
+    private Image removeImage = null;
 
     private boolean removable;
-
-    private ImageHolder imageHolder;
 
     public BaseFolderItemEditorDecorator(ImageResource button, String title, boolean buttonVisible) {
         this(button, null, title, buttonVisible);
@@ -53,10 +53,9 @@ public abstract class BaseFolderItemEditorDecorator<E extends IEntity> extends S
     public BaseFolderItemEditorDecorator(ImageResource button, ImageResource buttonHover, String title, boolean buttonVisible) {
         this.removable = (buttonVisible && button != null);
 
-        rowHolder = new FlowPanel();
         rowHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-        if (removable) {
+        if (button != null) {
             removeImage = new ImageButton(button, buttonHover, title);
             imageHolder = new ImageHolder(removeImage);
             imageHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
@@ -66,13 +65,7 @@ public abstract class BaseFolderItemEditorDecorator<E extends IEntity> extends S
             }
 
             rowHolder.add(imageHolder);
-        } else {
-            removeImage = null;
-            imageHolder = null;
         }
-
-        content = new SimplePanel();
-        content.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
 
         rowHolder.add(content);
 
@@ -100,6 +93,10 @@ public abstract class BaseFolderItemEditorDecorator<E extends IEntity> extends S
 
     public boolean isRemovable() {
         return removable;
+    }
+
+    public void setRemovable(boolean removable) {
+        this.removable = removable;
     }
 
     @Override

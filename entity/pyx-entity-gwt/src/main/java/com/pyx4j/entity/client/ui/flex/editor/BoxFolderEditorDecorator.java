@@ -53,7 +53,7 @@ public class BoxFolderEditorDecorator<E extends IEntity> extends BaseFolderEdito
 
         add(getContainer());
 
-        if (addable) {
+        if (getImageHolder() != null) {
             add(getImageHolder());
         }
     }
@@ -62,5 +62,4 @@ public class BoxFolderEditorDecorator<E extends IEntity> extends BaseFolderEdito
     public void onValueChange(ValueChangeEvent<IList<E>> event) {
         // TODO Auto-generated method stub
     }
-
 }

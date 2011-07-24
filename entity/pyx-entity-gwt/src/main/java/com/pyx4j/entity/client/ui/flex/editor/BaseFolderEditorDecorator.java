@@ -38,11 +38,11 @@ import com.pyx4j.widgets.client.ImageButton;
 
 public abstract class BaseFolderEditorDecorator<E extends IEntity> extends FlowPanel implements IFolderEditorDecorator<E> {
 
-    private SimplePanel container;
+    private final SimplePanel container = new SimplePanel();
 
-    private Image addImage;
+    private FlowPanel imageHolder = null;
 
-    private FlowPanel imageHolder;
+    private Image addImage = null;
 
     private Label addButtonLabel;
 
@@ -55,7 +55,7 @@ public abstract class BaseFolderEditorDecorator<E extends IEntity> extends FlowP
     public BaseFolderEditorDecorator(ImageResource addButton, ImageResource addButtonHover, String title, boolean addable) {
         this.addable = addable && (addButton != null);
 
-        if (addable) {
+        if (addButton != null) {
             addImage = new ImageButton(addButton, addButtonHover, title);
             addImage.getElement().getStyle().setFloat(Float.LEFT);
 
@@ -68,13 +68,7 @@ public abstract class BaseFolderEditorDecorator<E extends IEntity> extends FlowP
             addButtonLabel.getElement().getStyle().setPaddingLeft(3, Unit.PX);
             addButtonLabel.getElement().getStyle().setFloat(Float.LEFT);
             imageHolder.add(addButtonLabel);
-
-        } else {
-            addImage = null;
-            addButtonLabel = null;
         }
-
-        container = new SimplePanel();
     }
 
     protected SimplePanel getContainer() {
@@ -91,6 +85,10 @@ public abstract class BaseFolderEditorDecorator<E extends IEntity> extends FlowP
 
     protected boolean isAddable() {
         return addable;
+    }
+
+    public void setAddable(boolean addable) {
+        this.addable = addable;
     }
 
     @Override

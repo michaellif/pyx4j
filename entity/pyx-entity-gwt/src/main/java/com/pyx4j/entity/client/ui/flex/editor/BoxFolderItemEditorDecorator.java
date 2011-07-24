@@ -41,7 +41,6 @@ public class BoxFolderItemEditorDecorator<E extends IEntity> extends BaseFolderI
         getContent().getElement().getStyle().setBorderColor("#999");
 
         setWidget(getRowHolder());
-
     }
 
     public BoxFolderItemEditorDecorator(ImageResource removeButton, String title, boolean removable) {
