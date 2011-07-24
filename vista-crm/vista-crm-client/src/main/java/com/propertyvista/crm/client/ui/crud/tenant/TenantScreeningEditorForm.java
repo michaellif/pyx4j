@@ -13,11 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -26,11 +31,17 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -40,6 +51,7 @@ import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
+import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
@@ -55,7 +67,11 @@ import com.propertyvista.domain.ApplicationDocument.DocumentType;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.income.TenantAsset;
+import com.propertyvista.domain.tenant.income.TenantAsset.AssetType;
+import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.income.TenantIncome;
+import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.misc.BusinessRules;
 
 public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
@@ -96,21 +112,21 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         enablePreviousAddress();
 
         get(proto().secureIdentifier()).setEnabled(!value.notCanadianCitizen().isBooleanTrue());
-        fileUpload.setVisible(value.notCanadianCitizen().isBooleanTrue());
+        fileUpload.setVisible(isEditable() && value.notCanadianCitizen().isBooleanTrue());
         if (value != null) {
             fileUpload.setTenantID(((IEntity) value).getPrimaryKey());
         }
     }
 
     private Widget createSecureInformationTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
-        main.add(new VistaWidgetDecorator(inject(proto().driversLicense()), new DecorationData(14d, 20)));
-        main.add(new VistaWidgetDecorator(inject(proto().driversLicenseState()), new DecorationData(14d, 17)));
+        main.add(inject(proto().driversLicense()), 14d, 20);
+        main.add(inject(proto().driversLicenseState()), 14d, 17);
         final CEditableComponent<?, ?> sin = inject(proto().secureIdentifier());
-        main.add(new VistaWidgetDecorator(sin, new DecorationData(14d, 7)));
+        main.add(sin, 14d, 7);
 
-        main.add(new VistaWidgetDecorator(inject(proto().notCanadianCitizen()), new DecorationData(14d, 3)));
+        main.add(inject(proto().notCanadianCitizen()), 14d, 3);
 
         main.add(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.securityInfo)));
         fileUpload.asWidget().getElement().getStyle().setMarginLeft(14, Unit.EM);
@@ -134,7 +150,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     }
 
     private Widget createAddressesTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
         main.add(new CrmHeader2Decorator(proto().currentAddress().getMeta().getCaption()));
         main.add(inject(proto().currentAddress(), createAddressEditor()));
@@ -147,21 +163,21 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     }
 
     private Widget createlegalQuestionsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
         DecorationData decor = new DecorationData(43d, HasHorizontalAlignment.ALIGN_LEFT, 8);
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().suedForRent()), decor));
-        main.add(new VistaLineSeparator(50, Unit.EM));
+        main.add(new VistaLineSeparator(45, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().suedForDamages()), decor));
-        main.add(new VistaLineSeparator(50, Unit.EM));
+        main.add(new VistaLineSeparator(45, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().everEvicted()), decor));
-        main.add(new VistaLineSeparator(50, Unit.EM));
+        main.add(new VistaLineSeparator(45, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().defaultedOnLease()), decor));
-        main.add(new VistaLineSeparator(50, Unit.EM));
+        main.add(new VistaLineSeparator(45, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().convictedOfFelony()), decor));
-        main.add(new VistaLineSeparator(50, Unit.EM));
+        main.add(new VistaLineSeparator(45, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().legalTroubles()), decor));
-        main.add(new VistaLineSeparator(50, Unit.EM));
+        main.add(new VistaLineSeparator(45, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().filedBankruptcy()), decor));
 
         main.setWidth("100%");
@@ -173,9 +189,8 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             @SuppressWarnings({ "rawtypes", "unchecked" })
             @Override
             public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-                VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
-
+                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!TenantScreeningEditorForm.this.isEditable());
+                VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!TenantScreeningEditorForm.this.isEditable());
                 main.add(split);
 
                 AddressUtils.injectIAddress(split, proto(), this);
@@ -339,14 +354,14 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
     private Widget createAssetsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        // TODO Auto-generated method stub
+        main.add(inject(proto().assets(), createAssetFolderEditorColumns()));
         main.setWidth("100%");
         return main;
     }
 
     private Widget createGuarantorsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        // TODO Auto-generated method stub
+        main.add(inject(proto().guarantors(), createGuarantorFolderEditorColumns()));
         main.setWidth("100%");
         return main;
     }
@@ -365,6 +380,134 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             protected CEntityFolderItemEditor<TenantIncome> createItem() {
                 return new TenantFinancialViewIncomeForm(!TenantScreeningEditorForm.this.isEditable());
             }
+        };
+    }
+
+    private CEntityFolderEditor<TenantAsset> createAssetFolderEditorColumns() {
+        return new CEntityFolderEditor<TenantAsset>(TenantAsset.class) {
+
+            private List<EntityFolderColumnDescriptor> columns;
+            {
+                columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().assetType(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().percent(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().assetValue(), "15em"));
+            }
+
+            @Override
+            protected IFolderEditorDecorator<TenantAsset> createFolderDecorator() {
+                return new TableFolderEditorDecorator<TenantAsset>(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add an asset"),
+                        TenantScreeningEditorForm.this.isEditable());
+            }
+
+            @Override
+            protected CEntityFolderItemEditor<TenantAsset> createItem() {
+                return new CEntityFolderRowEditor<TenantAsset>(TenantAsset.class, columns) {
+
+                    @Override
+                    public IFolderItemEditorDecorator<TenantAsset> createFolderItemDecorator() {
+                        return new TableFolderItemEditorDecorator<TenantAsset>(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(),
+                                i18n.tr("Remove asset"), TenantScreeningEditorForm.this.isEditable());
+                    }
+
+                    @Override
+                    public void addValidations() {
+                        get(proto().percent()).addValueValidator(new EditableValueValidator<Double>() {
+
+                            @Override
+                            public boolean isValid(CEditableComponent<Double, ?> component, Double value) {
+                                return (value == null) || ((value >= 0) && (value <= 100));
+                            }
+
+                            @Override
+                            public String getValidationMessage(CEditableComponent<Double, ?> component, Double value) {
+                                return i18n.tr("Value can not increase 100%");
+                            }
+
+                        });
+
+                        get(proto().assetType()).addValueChangeHandler(new ValueChangeHandler<TenantAsset.AssetType>() {
+
+                            @Override
+                            public void onValueChange(ValueChangeEvent<AssetType> event) {
+                                if (get(proto().percent()).getValue() == null) {
+                                    get(proto().percent()).setValue(100d);
+                                }
+
+                            }
+                        });
+                    }
+                };
+            }
+        };
+    }
+
+    private CEntityFolderEditor<TenantGuarantor> createGuarantorFolderEditorColumns() {
+        return new CEntityFolderEditor<TenantGuarantor>(TenantGuarantor.class) {
+
+            @Override
+            protected IFolderEditorDecorator<TenantGuarantor> createFolderDecorator() {
+                return new BoxFolderEditorDecorator<TenantGuarantor>(CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add guarantor"),
+                        TenantScreeningEditorForm.this.isEditable());
+            }
+
+            @Override
+            protected CEntityFolderItemEditor<TenantGuarantor> createItem() {
+                return createGuarantorRowEditor();
+            }
+
+            private CEntityFolderItemEditor<TenantGuarantor> createGuarantorRowEditor() {
+                return new CEntityFolderItemEditor<TenantGuarantor>(TenantGuarantor.class) {
+
+                    @Override
+                    public IsWidget createContent() {
+                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!TenantScreeningEditorForm.this.isEditable());
+                        if (TenantScreeningEditorForm.this.isEditable()) {
+                            FlowPanel person = DecorationUtils.formFullName(this, proto());
+                            person.getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+                            person.getElement().getStyle().setFontSize(1.1, Unit.EM);
+                            main.add(person);
+                        } else {
+                            main.add(inject(proto().name().firstName()), 12);
+                            main.add(inject(proto().name().middleName()), 12);
+                            main.add(inject(proto().name().lastName()), 20);
+                        }
+                        main.add(inject(proto().homePhone()), 15);
+                        main.add(inject(proto().mobilePhone()), 15);
+                        main.add(inject(proto().workPhone()), 15);
+                        main.add(inject(proto().birthDate()), 8);
+                        main.add(inject(proto().email()), 15);
+                        main.add(new HTML());
+                        return main;
+                    }
+
+                    @Override
+                    public IFolderItemEditorDecorator<TenantGuarantor> createFolderItemDecorator() {
+                        return new BoxFolderItemEditorDecorator<TenantGuarantor>(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(),
+                                i18n.tr("Remove guarantor"), TenantScreeningEditorForm.this.isEditable());
+                    }
+
+                    @Override
+                    public void addValidations() {
+
+                        get(proto().email()).setMandatory(true);
+
+                        get(proto().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
+
+                            @Override
+                            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                                return ValidationUtils.isOlderThen18(value);
+                            }
+
+                            @Override
+                            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                                return i18n.tr("Guarantor should be at least 18 years old");
+                            }
+                        });
+                    }
+                };
+            }
+
         };
     }
 }

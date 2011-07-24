@@ -37,6 +37,8 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.domain.ApplicationDocument.DocumentType;
@@ -200,13 +202,24 @@ public class TenantFinancialViewIncomeForm extends CEntityFolderItemEditor<Tenan
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
+
                 main.add(inject(proto().name()), 12);
                 main.add(inject(proto().employedForYears()), 4);
-                AddressUtils.injectIAddress(main, proto(), this);
-                injectIEmploymentInfo(main, proto(), this);
 
-                main.add(inject(proto().starts()), 8.2);
-                main.add(inject(proto().ends()), 8.2);
+                VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!TenantFinancialViewIncomeForm.this.isEditable());
+                main.add(new VistaLineSeparator());
+                main.add(split);
+
+                AddressUtils.injectIAddress(split, proto(), this);
+
+                VistaDecoratorsSplitFlowPanel split2 = new VistaDecoratorsSplitFlowPanel(!TenantFinancialViewIncomeForm.this.isEditable());
+                main.add(new VistaLineSeparator());
+                main.add(split2);
+
+                injectIEmploymentInfo(split2.getLeftPanel(), proto(), this);
+
+                split2.getRightPanel().add(inject(proto().starts()), 8.2);
+                split2.getRightPanel().add(inject(proto().ends()), 8.2);
                 return main;
             }
 

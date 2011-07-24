@@ -24,6 +24,7 @@ import com.pyx4j.widgets.client.style.ThemeColor;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.CrmView;
 import com.propertyvista.crm.client.ui.NavigViewImpl;
@@ -425,6 +426,14 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("padding", "0.5em 1em 0.5em 1.5em");
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(VistaLineSeparator.DEFAULT_STYLE_PREFIX));
+        style.addProperty("border-top-width", "1px");
+        style.addProperty("border-top-style", "dotted");
+        style.addProperty("border-top-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("margin-bottom", "0.5em");
+        style.addProperty("width", "100%");
         addStyle(style);
     }
 

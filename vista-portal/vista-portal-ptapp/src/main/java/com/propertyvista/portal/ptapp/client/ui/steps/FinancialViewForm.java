@@ -53,9 +53,9 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.domain.tenant.income.TenantAsset;
+import com.propertyvista.domain.tenant.income.TenantAsset.AssetType;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.income.TenantIncome;
-import com.propertyvista.domain.tenant.income.TenantAsset.AssetType;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
@@ -174,7 +174,7 @@ public class FinancialViewForm extends CEntityForm<TenantFinancialEditorDTO> {
             private List<EntityFolderColumnDescriptor> columns;
             {
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().assetType(), "11em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().assetType(), "15em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().percent(), "7em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().assetValue(), "15em"));
             }
