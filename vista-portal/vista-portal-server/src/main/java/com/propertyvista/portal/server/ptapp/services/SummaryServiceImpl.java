@@ -35,13 +35,13 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.charges.ChargeLineSelectable;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.misc.ServletMapping;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
-import com.propertyvista.portal.rpc.ptapp.ServletMapping;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.util.Converter;

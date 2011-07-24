@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 
-import com.propertyvista.portal.rpc.ptapp.ApplicationDocumentServletParameters;
+import com.propertyvista.misc.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 

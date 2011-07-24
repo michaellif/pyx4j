@@ -1,24 +1,19 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on 2011-05-25
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps;
+package com.propertyvista.crm.client.ui.crud.tenant;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -26,79 +21,70 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
-import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
+import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
+import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
+import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.domain.ApplicationDocument.DocumentType;
-import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
+import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.misc.BusinessRules;
-import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
-import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 
-public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
+public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
-    private static I18n i18n = I18nFactory.getI18n(InfoViewForm.class);
-
-    private Widget previousAddressHeader;
+    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
     private ApplicationDocumentsFolderUploader fileUpload;
 
-    public InfoViewForm() {
-        super(TenantInfoEditorDTO.class, new VistaEditorsComponentFactory());
+    private Widget previousAddressHeader;
+
+    public TenantScreeningEditorForm() {
+        super(TenantScreening.class, new CrmEditorsComponentFactory());
+    }
+
+    public TenantScreeningEditorForm(IEditableComponentFactory factory) {
+        super(TenantScreening.class, factory);
     }
 
     @Override
     public IsWidget createContent() {
+
+        tabPanel.add(new ScrollPanel(createSecureInformationTab()), i18n.tr("Secure Information"));
+        tabPanel.add(new ScrollPanel(createAddressesTab()), i18n.tr("Addresses"));
+        tabPanel.add(new ScrollPanel(createlegalQuestionsTab()), i18n.tr(proto().legalQuestions().getMeta().getCaption()));
+        tabPanel.add(new ScrollPanel(createIncomesTab()), i18n.tr("Incomes"));
+        tabPanel.add(new ScrollPanel(createAssetsTab()), i18n.tr("Assets"));
+        tabPanel.add(new ScrollPanel(createGuarantorsTab()), i18n.tr("Guarantors"));
+
+        tabPanel.setDisableMode(isEditable());
+        tabPanel.setSize("100%", "100%");
+        return tabPanel;
+    }
+
+    private Widget createSecureInformationTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(new VistaHeaderBar(i18n.tr("Contact Details")));
-
-        DecorationData decorData = new DecorationData(14d, 12);
-        decorData.editable = false;
-        main.add(new VistaWidgetDecorator(inject(proto().person().name().firstName()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().person().name().middleName()), new DecorationData(14d, 12)));
-
-        decorData = new DecorationData(14d, 20);
-        decorData.editable = false;
-        main.add(new VistaWidgetDecorator(inject(proto().person().name().lastName()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().person().homePhone()), new DecorationData(14d, 15)));
-        main.add(new VistaWidgetDecorator(inject(proto().person().mobilePhone()), new DecorationData(14d, 15)));
-        main.add(new VistaWidgetDecorator(inject(proto().person().workPhone()), new DecorationData(14d, 15)));
-
-        decorData = new DecorationData(14d, 25);
-        decorData.editable = false;
-        main.add(new VistaWidgetDecorator(inject(proto().person().email()), decorData));
-
-        main.add(new VistaHeaderBar(i18n.tr("Secure Information")));
         main.add(new VistaWidgetDecorator(inject(proto().driversLicense()), new DecorationData(14d, 20)));
         main.add(new VistaWidgetDecorator(inject(proto().driversLicenseState()), new DecorationData(14d, 17)));
         final CEditableComponent<?, ?> sin = inject(proto().secureIdentifier());
@@ -123,14 +109,25 @@ public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
                 fileUpload.setVisible(event.getValue());
             }
         });
+        main.setWidth("100%");
+        return main;
+    }
 
-        main.add(new VistaHeaderBar(proto().currentAddress()));
-        main.add(inject(proto().currentAddress()));
+    private Widget createAddressesTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(previousAddressHeader = new VistaHeaderBar(proto().previousAddress()));
-        main.add(inject(proto().previousAddress()));
+        main.add(new CrmHeader2Decorator(proto().currentAddress().getMeta().getCaption()));
+        main.add(inject(proto().currentAddress(), createAddressEditor()));
 
-        main.add(new VistaHeaderBar(proto().legalQuestions()));
+        main.add(new CrmHeader2Decorator(proto().currentAddress().getMeta().getCaption()));
+        main.add(inject(proto().previousAddress(), createAddressEditor()));
+
+        main.setWidth("100%");
+        return main;
+    }
+
+    private Widget createlegalQuestionsTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
         DecorationData decor = new DecorationData(43d, HasHorizontalAlignment.ALIGN_LEFT, 8);
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().suedForRent()), decor));
@@ -147,23 +144,69 @@ public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
         main.add(new VistaLineSeparator(50, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().filedBankruptcy()), decor));
 
-        main.add(new VistaHeaderBar(proto().emergencyContacts()));
-        main.add(inject(proto().emergencyContacts(), createEmergencyContactFolderEditor()));
-
-        main.setWidth("800px");
-
-        addValidations();
-
+        main.setWidth("100%");
         return main;
     }
 
-    @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
-        if (member.getValueClass().equals(PriorAddress.class)) {
-            return createAddressEditor();
-        } else {
-            return super.create(member);
-        }
+    private Widget createGuarantorsTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        // TODO Auto-generated method stub
+        main.setWidth("100%");
+        return main;
+    }
+
+    private Widget createAssetsTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        // TODO Auto-generated method stub
+        main.setWidth("100%");
+        return main;
+    }
+
+    private Widget createIncomesTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        // TODO Auto-generated method stub
+        main.setWidth("100%");
+        return main;
+    }
+
+    private CEntityEditor<PriorAddress> createAddressEditor() {
+        return new CEntityEditor<PriorAddress>(PriorAddress.class) {
+            @SuppressWarnings({ "rawtypes", "unchecked" })
+            @Override
+            public IsWidget createContent() {
+                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+                AddressUtils.injectIAddress(main, proto(), this);
+                main.add(inject(proto().moveInDate()), 8.2);
+                main.add(inject(proto().moveOutDate()), 8.2);
+                main.add(inject(proto().phone()), 15);
+
+                CEditableComponent<?, ?> rentedComponent = inject(proto().rented());
+                rentedComponent.addValueChangeHandler(new ValueChangeHandler() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent event) {
+                        setVizibility(getValue());
+                    }
+                });
+                main.add(rentedComponent, 15);
+                main.add(inject(proto().payment()), 8);
+                main.add(inject(proto().managerName()), 30);
+                main.add(new HTML());
+                return main;
+            }
+
+            @Override
+            public void populate(PriorAddress value) {
+                super.populate(value);
+                setVizibility(value);
+            }
+
+            private void setVizibility(PriorAddress value) {
+                boolean rented = OwnedRented.rented.equals(value.rented().getValue());
+                get(proto().payment()).setVisible(rented);
+                get(proto().managerName()).setVisible(rented);
+            }
+
+        };
     }
 
     @Override
@@ -273,19 +316,6 @@ public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
         // ------------------------------------------------------------------------------------------------
 
         get(proto().secureIdentifier()).addValueValidator(new CanadianSinValidator());
-
-        get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<Map<String, Object>>>() {
-
-            @Override
-            public boolean isValid(CEditableComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
-                return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts());
-            }
-
-            @Override
-            public String getValidationMessage(CEditableComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
-                return i18n.tr("Duplicate contacts specified");
-            }
-        });
     }
 
     private void enablePreviousAddress() {
@@ -294,108 +324,4 @@ public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
         previousAddressHeader.setVisible(enabled);
     }
 
-    @Override
-    public void populate(TenantInfoEditorDTO value) {
-        super.populate(value);
-
-        enablePreviousAddress();
-
-        get(proto().secureIdentifier()).setEnabled(!value.notCanadianCitizen().isBooleanTrue());
-        fileUpload.setVisible(value.notCanadianCitizen().isBooleanTrue());
-
-        if (value != null) {
-            fileUpload.setTenantID(((IEntity) value).getPrimaryKey());
-        }
-    }
-
-    private CEntityEditor<PriorAddress> createAddressEditor() {
-        return new CEntityEditor<PriorAddress>(PriorAddress.class) {
-            @SuppressWarnings({ "rawtypes", "unchecked" })
-            @Override
-            public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-                AddressUtils.injectIAddress(main, proto(), this);
-                main.add(inject(proto().moveInDate()), 8.2);
-                main.add(inject(proto().moveOutDate()), 8.2);
-                main.add(inject(proto().phone()), 15);
-
-                CEditableComponent<?, ?> rentedComponent = inject(proto().rented());
-                rentedComponent.addValueChangeHandler(new ValueChangeHandler() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent event) {
-                        setVizibility(getValue());
-                    }
-                });
-                main.add(rentedComponent, 15);
-                main.add(inject(proto().payment()), 8);
-                main.add(inject(proto().managerName()), 30);
-                main.add(new HTML());
-                return main;
-            }
-
-            @Override
-            public void populate(PriorAddress value) {
-                super.populate(value);
-                setVizibility(value);
-            }
-
-            private void setVizibility(PriorAddress value) {
-                boolean rented = OwnedRented.rented.equals(value.rented().getValue());
-                get(proto().payment()).setVisible(rented);
-                get(proto().managerName()).setVisible(rented);
-            }
-
-        };
-
-    }
-
-    private CEntityFolderEditor<EmergencyContact> createEmergencyContactFolderEditor() {
-
-        return new CEntityFolderEditor<EmergencyContact>(EmergencyContact.class) {
-
-            @Override
-            protected IFolderEditorDecorator<EmergencyContact> createFolderDecorator() {
-                return new BoxFolderEditorDecorator<EmergencyContact>(PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
-                        i18n.tr("Add one more contact"));
-            }
-
-            @Override
-            protected CEntityFolderItemEditor<EmergencyContact> createItem() {
-                return createEmergencyContactItem();
-            }
-
-            @Override
-            public void populate(IList<EmergencyContact> value) {
-                super.populate(value);
-                if (value.isEmpty()) {
-                    addItem(); // at least one Emergency Contact should be present!..
-                }
-            }
-        };
-    }
-
-    private CEntityFolderItemEditor<EmergencyContact> createEmergencyContactItem() {
-
-        return new CEntityFolderItemEditor<EmergencyContact>(EmergencyContact.class) {
-            @Override
-            public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-                main.add(inject(proto().name().firstName()), 12);
-                main.add(inject(proto().name().middleName()), 12);
-                main.add(inject(proto().name().lastName()), 20);
-                main.add(inject(proto().homePhone()), 15);
-                main.add(inject(proto().mobilePhone()), 15);
-                main.add(inject(proto().workPhone()), 15);
-                AddressUtils.injectIAddress(main, proto().address(), this);
-                main.add(new HTML());
-                return main;
-            }
-
-            @Override
-            public IFolderItemEditorDecorator<EmergencyContact> createFolderItemDecorator() {
-                return new BoxFolderItemEditorDecorator<EmergencyContact>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
-                        i18n.tr("Remove contact"), !isFirst());
-            }
-        };
-    }
 }

@@ -33,7 +33,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
 import com.propertyvista.crm.server.report.ReportReport;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.portal.rpc.ptapp.ServletMapping;
+import com.propertyvista.misc.ServletMapping;
 
 public class ReportMetadataServiceImpl extends AbstractMetadataServiceImpl implements ReportMetadataService {
 

@@ -4,7 +4,6 @@
 <module rename-to='portal'>
 
     <inherits name='com.google.gwt.user.User'/>
-    <inherits name='gwtupload.GWTUpload' />
     
     <inherits name='com.propertyvista.portal.Rpc' />
     <inherits name='com.propertyvista.portal.Domain' />

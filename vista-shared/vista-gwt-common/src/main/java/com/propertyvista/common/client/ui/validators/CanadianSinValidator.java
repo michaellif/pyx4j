@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.validators;
+package com.propertyvista.common.client.ui.validators;
 
 import org.xnap.commons.i18n.I18n;
 

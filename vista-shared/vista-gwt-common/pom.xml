@@ -35,6 +35,15 @@
         	<artifactId>vista-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.googlecode.gwtupload</groupId>
+            <artifactId>gwtupload</artifactId>
+            <exclusions>
+                <exclusion><groupId>commons-fileupload</groupId><artifactId>commons-fileupload</artifactId></exclusion>
+                <exclusion><groupId>commons-io</groupId><artifactId>commons-io</artifactId></exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 
     <properties>

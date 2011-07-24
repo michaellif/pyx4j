@@ -13,11 +13,14 @@
  */
 package com.propertyvista.common.client.resources;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
 
 import com.pyx4j.forms.client.ImageFactory.FormsImageBundle;
 
 public interface FormImageBundle extends FormsImageBundle {
+
+    FormImageBundle INSTANCE = GWT.create(FormImageBundle.class);
 
     @Override
     @Source("date.png")
@@ -35,8 +38,22 @@ public interface FormImageBundle extends FormsImageBundle {
     @Source("date.png")
     ImageResource triggerBlueDisabled();
 
+    @Source("clip.png")
+    ImageResource clip();
+
+    @Source("add.png")
+    ImageResource addRow();
+
+    @Source("add_hover.png")
+    ImageResource addRowHover();
+
+    @Source("del.png")
+    ImageResource delRow();
+
+    @Source("del_hover.png")
+    ImageResource delRowHover();
+
     @Override
     @Source("qv.png")
-    public ImageResource formTooltipInfo();
-
+    ImageResource formTooltipInfo();
 }

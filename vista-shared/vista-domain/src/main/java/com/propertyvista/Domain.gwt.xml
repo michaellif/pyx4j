@@ -6,4 +6,5 @@
    
     <source path="domain"/>
     <source path="dto"/>
+    <source path="misc"/>
 </module>

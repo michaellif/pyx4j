@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.components;
+package com.propertyvista.common.client.ui.components;
 
 import gwtupload.client.BaseUploadStatus;
 import gwtupload.client.IFileInput.FileInputType;
@@ -59,11 +59,11 @@ import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 
+import com.propertyvista.common.client.resources.FormImageBundle;
 import com.propertyvista.domain.ApplicationDocument;
 import com.propertyvista.domain.ApplicationDocument.DocumentType;
-import com.propertyvista.portal.ptapp.client.resources.PortalImages;
-import com.propertyvista.portal.rpc.ptapp.ApplicationDocumentServletParameters;
-import com.propertyvista.portal.rpc.ptapp.ServletMapping;
+import com.propertyvista.misc.ApplicationDocumentServletParameters;
+import com.propertyvista.misc.ServletMapping;
 
 public class ApplicationDocumentsFolderUploader extends CEntityFolderEditor<ApplicationDocument> {
 
@@ -112,7 +112,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolderEditor<Appl
 
             @Override
             public IFolderItemEditorDecorator createFolderItemDecorator() {
-                return new TableFolderItemEditorDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove file"));
+                return new TableFolderItemEditorDecorator(FormImageBundle.INSTANCE.delRow(), FormImageBundle.INSTANCE.delRowHover(), i18n.tr("Remove file"));
             }
         };
     }
@@ -141,7 +141,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolderEditor<Appl
             }
 
             add(new HTML("&nbsp;&nbsp;&nbsp;"));
-            add(new Image(PortalImages.INSTANCE.clip()));
+            add(new Image(FormImageBundle.INSTANCE.clip()));
 
             FlowPanel fp = new FlowPanel();
             fp.getElement().getStyle().setPaddingLeft(1, Unit.EM);

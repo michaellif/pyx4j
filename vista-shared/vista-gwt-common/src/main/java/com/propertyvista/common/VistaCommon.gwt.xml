@@ -11,6 +11,10 @@
     
     <inherits name='com.pyx4j.Commons' />
 	<inherits name='com.pyx4j.site.GwtSite' />
+
+    <inherits name='com.propertyvista.Domain' />
+    
+    <inherits name='gwtupload.GWTUpload' />
     
     <source path="client"/>
     

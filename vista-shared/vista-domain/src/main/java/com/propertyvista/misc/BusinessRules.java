@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp;
+package com.propertyvista.misc;
 
 import java.util.Date;
 

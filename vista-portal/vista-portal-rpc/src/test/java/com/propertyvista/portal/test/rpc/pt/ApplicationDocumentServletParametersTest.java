@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 
-import com.propertyvista.portal.rpc.ptapp.ApplicationDocumentServletParameters;
+import com.propertyvista.misc.ApplicationDocumentServletParameters;
 
 public class ApplicationDocumentServletParametersTest extends TestCase {
 

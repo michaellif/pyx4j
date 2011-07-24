@@ -13,18 +13,35 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
+import java.util.List;
+import java.util.Map;
+
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.IView;
 
+import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
+import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
@@ -32,6 +49,8 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
     private final VistaDecoratorsFlowPanel person = new VistaDecoratorsFlowPanel();
 
     private final VistaDecoratorsFlowPanel company = new VistaDecoratorsFlowPanel();
+
+    private final VistaDecoratorsFlowPanel contacts = new VistaDecoratorsFlowPanel();
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
@@ -67,6 +86,8 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         SubtypeInjectors.injectPhones(company, proto().company().phones(), this);
         SubtypeInjectors.injectEmails(company, proto().company().emails(), this);
 
+        contacts.add(inject(proto().emergencyContacts(), createEmergencyContactFolderEditor()));
+
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }
@@ -85,10 +106,76 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
             tabPanel.addDisable(((TenantView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
             break;
         case company:
-            tabPanel.add(company, i18n.tr("Company"));
+            tabPanel.add(company, proto().company().getMeta().getCaption());
             break;
         }
 
+        tabPanel.add(contacts, proto().emergencyContacts().getMeta().getCaption());
         tabPanel.setDisableMode(isEditable());
+    }
+
+    @Override
+    public void addValidations() {
+        get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<Map<String, Object>>>() {
+
+            @Override
+            public boolean isValid(CEditableComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
+                return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts());
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
+                return i18n.tr("Duplicate contacts specified");
+            }
+        });
+    }
+
+    private CEntityFolderEditor<EmergencyContact> createEmergencyContactFolderEditor() {
+
+        return new CEntityFolderEditor<EmergencyContact>(EmergencyContact.class) {
+
+            @Override
+            protected IFolderEditorDecorator<EmergencyContact> createFolderDecorator() {
+                return new BoxFolderEditorDecorator<EmergencyContact>(CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add one more contact"));
+            }
+
+            @Override
+            protected CEntityFolderItemEditor<EmergencyContact> createItem() {
+                return createEmergencyContactItem();
+            }
+
+            @Override
+            public void populate(IList<EmergencyContact> value) {
+                super.populate(value);
+                if (value.isEmpty()) {
+                    addItem(); // at least one Emergency Contact should be present!..
+                }
+            }
+        };
+    }
+
+    private CEntityFolderItemEditor<EmergencyContact> createEmergencyContactItem() {
+
+        return new CEntityFolderItemEditor<EmergencyContact>(EmergencyContact.class) {
+            @Override
+            public IsWidget createContent() {
+                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+                main.add(inject(proto().name().firstName()), 12);
+                main.add(inject(proto().name().middleName()), 12);
+                main.add(inject(proto().name().lastName()), 20);
+                main.add(inject(proto().homePhone()), 15);
+                main.add(inject(proto().mobilePhone()), 15);
+                main.add(inject(proto().workPhone()), 15);
+                AddressUtils.injectIAddress(main, proto().address(), this);
+                main.add(new HTML());
+                return main;
+            }
+
+            @Override
+            public IFolderItemEditorDecorator<EmergencyContact> createFolderItemDecorator() {
+                return new BoxFolderItemEditorDecorator<EmergencyContact>(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove contact"),
+                        !isFirst());
+            }
+        };
     }
 }

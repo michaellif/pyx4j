@@ -33,8 +33,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.MimeMap;
 
+import com.propertyvista.misc.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.rpc.ptapp.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceImpl;
 import com.propertyvista.server.domain.ApplicationDocumentData;
