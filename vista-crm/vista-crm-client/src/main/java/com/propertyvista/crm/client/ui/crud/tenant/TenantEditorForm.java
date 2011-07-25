@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
@@ -37,6 +36,8 @@ import com.pyx4j.site.client.ui.crud.IView;
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
@@ -47,11 +48,11 @@ import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
-    private final VistaDecoratorsFlowPanel person = new VistaDecoratorsFlowPanel();
+    private final VistaDecoratorsFlowPanel person = new VistaDecoratorsFlowPanel(!isEditable());
 
-    private final VistaDecoratorsFlowPanel company = new VistaDecoratorsFlowPanel();
+    private final VistaDecoratorsFlowPanel company = new VistaDecoratorsFlowPanel(!isEditable());
 
-    private final VistaDecoratorsFlowPanel contacts = new VistaDecoratorsFlowPanel();
+    private final VistaDecoratorsFlowPanel contacts = new VistaDecoratorsFlowPanel(!isEditable());
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
@@ -161,15 +162,24 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         return new CEntityFolderItemEditor<EmergencyContact>(EmergencyContact.class) {
             @Override
             public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-                main.add(inject(proto().name().firstName()), 12);
-                main.add(inject(proto().name().middleName()), 12);
-                main.add(inject(proto().name().lastName()), 20);
-                main.add(inject(proto().homePhone()), 15);
-                main.add(inject(proto().mobilePhone()), 15);
-                main.add(inject(proto().workPhone()), 15);
-                AddressUtils.injectIAddress(main, proto().address(), this);
-                main.add(new HTML());
+                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!TenantEditorForm.this.isEditable());
+                VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!TenantEditorForm.this.isEditable());
+                main.add(split);
+
+                split.getLeftPanel().add(inject(proto().name().firstName()), 12);
+                split.getLeftPanel().add(inject(proto().name().middleName()), 12);
+                split.getLeftPanel().add(inject(proto().name().lastName()), 20);
+
+                split.getRightPanel().add(inject(proto().homePhone()), 15);
+                split.getRightPanel().add(inject(proto().mobilePhone()), 15);
+                split.getRightPanel().add(inject(proto().workPhone()), 15);
+
+                VistaDecoratorsSplitFlowPanel split2 = new VistaDecoratorsSplitFlowPanel(!TenantEditorForm.this.isEditable());
+                main.add(new VistaLineSeparator());
+                main.add(split2);
+
+                AddressUtils.injectIAddress(split2, proto().address(), this);
+
                 return main;
             }
 

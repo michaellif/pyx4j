@@ -220,6 +220,7 @@ public class TenantFinancialViewIncomeForm extends CEntityFolderItemEditor<Tenan
 
                 split2.getRightPanel().add(inject(proto().starts()), 8.2);
                 split2.getRightPanel().add(inject(proto().ends()), 8.2);
+
                 return main;
             }
 
@@ -236,12 +237,24 @@ public class TenantFinancialViewIncomeForm extends CEntityFolderItemEditor<Tenan
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
-                main.add(inject(proto().name()), 10);
-                AddressUtils.injectIAddress(main, proto(), this);
-                injectIEmploymentInfo(main, proto(), this);
 
-                main.add(inject(proto().starts()), 8.2);
-                main.add(inject(proto().ends()), 8.2);
+                main.add(inject(proto().name()), 10);
+
+                VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!TenantFinancialViewIncomeForm.this.isEditable());
+                main.add(new VistaLineSeparator());
+                main.add(split);
+
+                AddressUtils.injectIAddress(split, proto(), this);
+
+                VistaDecoratorsSplitFlowPanel split2 = new VistaDecoratorsSplitFlowPanel(!TenantFinancialViewIncomeForm.this.isEditable());
+                main.add(new VistaLineSeparator());
+                main.add(split2);
+
+                injectIEmploymentInfo(split2.getLeftPanel(), proto(), this);
+
+                split2.getRightPanel().add(inject(proto().starts()), 8.2);
+                split2.getRightPanel().add(inject(proto().ends()), 8.2);
+
                 return main;
             }
 
@@ -258,17 +271,27 @@ public class TenantFinancialViewIncomeForm extends CEntityFolderItemEditor<Tenan
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
+
                 main.add(inject(proto().name()), 10);
-                AddressUtils.injectIAddress(main, proto(), this);
 
-                main.add(inject(proto().program()), 10);
-                main.add(inject(proto().fieldOfStudy()), 10);
-                main.add(inject(proto().fundingChoices()), 10);
+                VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!TenantFinancialViewIncomeForm.this.isEditable());
+                main.add(new VistaLineSeparator());
+                main.add(split);
 
-                main.add(inject(proto().monthlyAmount()), 10);
+                AddressUtils.injectIAddress(split, proto(), this);
 
-                main.add(inject(proto().starts()), 8.2);
-                main.add(inject(proto().ends()), 8.2);
+                VistaDecoratorsSplitFlowPanel split2 = new VistaDecoratorsSplitFlowPanel(!TenantFinancialViewIncomeForm.this.isEditable());
+                main.add(new VistaLineSeparator());
+                main.add(split2);
+
+                split2.getLeftPanel().add(inject(proto().program()), 10);
+                split2.getLeftPanel().add(inject(proto().fieldOfStudy()), 10);
+                split2.getLeftPanel().add(inject(proto().fundingChoices()), 10);
+                split2.getLeftPanel().add(inject(proto().monthlyAmount()), 10);
+
+                split2.getRightPanel().add(inject(proto().starts()), 8.2);
+                split2.getRightPanel().add(inject(proto().ends()), 8.2);
+
                 return main;
             }
 
@@ -285,15 +308,28 @@ public class TenantFinancialViewIncomeForm extends CEntityFolderItemEditor<Tenan
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
-                main.add(inject(proto().name()), 10);
-                AddressUtils.injectIAddress(main, proto(), this);
-                injectIEmploymentInfo(main, proto(), this);
-                main.add(inject(proto().fullyOwned()), 10);
-                main.add(inject(proto().monthlyRevenue()), 10);
-                main.add(inject(proto().numberOfEmployees()), 4);
 
-                main.add(inject(proto().starts()), 8.2);
-                main.add(inject(proto().ends()), 8.2);
+                main.add(inject(proto().name()), 10);
+
+                VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!TenantFinancialViewIncomeForm.this.isEditable());
+                main.add(new VistaLineSeparator());
+                main.add(split);
+
+                AddressUtils.injectIAddress(split, proto(), this);
+
+                VistaDecoratorsSplitFlowPanel split2 = new VistaDecoratorsSplitFlowPanel(!TenantFinancialViewIncomeForm.this.isEditable());
+                main.add(new VistaLineSeparator());
+                main.add(split2);
+
+                injectIEmploymentInfo(split2.getLeftPanel(), proto(), this);
+
+                split2.getLeftPanel().add(inject(proto().fullyOwned()), 10);
+                split2.getLeftPanel().add(inject(proto().monthlyRevenue()), 10);
+                split2.getLeftPanel().add(inject(proto().numberOfEmployees()), 4);
+
+                split2.getRightPanel().add(inject(proto().starts()), 8.2);
+                split2.getRightPanel().add(inject(proto().ends()), 8.2);
+
                 return main;
             }
 
@@ -310,12 +346,24 @@ public class TenantFinancialViewIncomeForm extends CEntityFolderItemEditor<Tenan
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
-                main.add(inject(proto().name()), 10);
-                AddressUtils.injectIAddress(main, proto(), this);
-                injectIEmploymentInfo(main, proto(), this);
 
-                main.add(inject(proto().starts()), 8.2);
-                main.add(inject(proto().ends()), 8.2);
+                main.add(inject(proto().name()), 10);
+
+                VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!TenantFinancialViewIncomeForm.this.isEditable());
+                main.add(new VistaLineSeparator());
+                main.add(split);
+
+                AddressUtils.injectIAddress(split, proto(), this);
+
+                VistaDecoratorsSplitFlowPanel split2 = new VistaDecoratorsSplitFlowPanel(!TenantFinancialViewIncomeForm.this.isEditable());
+                main.add(new VistaLineSeparator());
+                main.add(split2);
+
+                injectIEmploymentInfo(split2.getLeftPanel(), proto(), this);
+
+                split2.getRightPanel().add(inject(proto().starts()), 8.2);
+                split2.getRightPanel().add(inject(proto().ends()), 8.2);
+
                 return main;
             }
 
@@ -332,9 +380,11 @@ public class TenantFinancialViewIncomeForm extends CEntityFolderItemEditor<Tenan
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
+
                 main.add(inject(proto().name()), 10);
                 main.add(inject(proto().monthlyAmount()), 10);
                 main.add(inject(proto().ends()), 8.2);
+
                 return main;
             }
         };

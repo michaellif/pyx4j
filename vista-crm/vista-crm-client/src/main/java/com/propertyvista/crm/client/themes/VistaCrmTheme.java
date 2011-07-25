@@ -432,7 +432,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("border-top-width", "1px");
         style.addProperty("border-top-style", "dotted");
         style.addProperty("border-top-color", ThemeColor.OBJECT_TONE4);
-        style.addProperty("margin-bottom", "0.5em");
+        style.addProperty("margin", "0.2em 0");
         style.addProperty("width", "100%");
         addStyle(style);
     }

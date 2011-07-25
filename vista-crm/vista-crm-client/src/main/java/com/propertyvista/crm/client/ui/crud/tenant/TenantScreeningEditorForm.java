@@ -22,7 +22,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -145,7 +144,6 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
                 fileUpload.setVisible(event.getValue());
             }
         });
-        main.setWidth("100%");
         return main;
     }
 
@@ -158,29 +156,29 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         main.add(new CrmHeader2Decorator(proto().previousAddress().getMeta().getCaption()));
         main.add(inject(proto().previousAddress(), previousAddressHeader = createAddressEditor()));
 
-        main.setWidth("100%");
         return main;
     }
 
     private Widget createlegalQuestionsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
+        double width = (isEditable() ? 50 : 45);
         DecorationData decor = new DecorationData(43d, HasHorizontalAlignment.ALIGN_LEFT, 8);
+
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().suedForRent()), decor));
-        main.add(new VistaLineSeparator(45, Unit.EM));
+        main.add(new VistaLineSeparator(width, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().suedForDamages()), decor));
-        main.add(new VistaLineSeparator(45, Unit.EM));
+        main.add(new VistaLineSeparator(width, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().everEvicted()), decor));
-        main.add(new VistaLineSeparator(45, Unit.EM));
+        main.add(new VistaLineSeparator(width, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().defaultedOnLease()), decor));
-        main.add(new VistaLineSeparator(45, Unit.EM));
+        main.add(new VistaLineSeparator(width, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().convictedOfFelony()), decor));
-        main.add(new VistaLineSeparator(45, Unit.EM));
+        main.add(new VistaLineSeparator(width, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().legalTroubles()), decor));
-        main.add(new VistaLineSeparator(45, Unit.EM));
+        main.add(new VistaLineSeparator(width, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().filedBankruptcy()), decor));
 
-        main.setWidth("100%");
         return main;
     }
 
@@ -348,21 +346,18 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     private Widget createIncomesTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         main.add(inject(proto().incomes(), createIncomeFolderEditor()));
-        main.setWidth("100%");
         return main;
     }
 
     private Widget createAssetsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         main.add(inject(proto().assets(), createAssetFolderEditorColumns()));
-        main.setWidth("100%");
         return main;
     }
 
     private Widget createGuarantorsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         main.add(inject(proto().guarantors(), createGuarantorFolderEditorColumns()));
-        main.setWidth("100%");
         return main;
     }
 
@@ -462,10 +457,11 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
                     @Override
                     public IsWidget createContent() {
                         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!TenantScreeningEditorForm.this.isEditable());
-                        if (TenantScreeningEditorForm.this.isEditable()) {
+                        if (!TenantScreeningEditorForm.this.isEditable()) {
                             FlowPanel person = DecorationUtils.formFullName(this, proto());
                             person.getElement().getStyle().setFontWeight(FontWeight.BOLDER);
                             person.getElement().getStyle().setFontSize(1.1, Unit.EM);
+                            person.getElement().getStyle().setMarginBottom(0.3, Unit.EM);
                             main.add(person);
                         } else {
                             main.add(inject(proto().name().firstName()), 12);
@@ -477,7 +473,6 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
                         main.add(inject(proto().workPhone()), 15);
                         main.add(inject(proto().birthDate()), 8);
                         main.add(inject(proto().email()), 15);
-                        main.add(new HTML());
                         return main;
                     }
 
