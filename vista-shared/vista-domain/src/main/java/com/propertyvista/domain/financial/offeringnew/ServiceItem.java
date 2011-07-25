@@ -25,6 +25,8 @@ public interface ServiceItem extends IEntity {
 
     IPrimitive<Double> price();
 
+    ServiceItemType type();
+
     @Detached
     BuildingElement element();
 
