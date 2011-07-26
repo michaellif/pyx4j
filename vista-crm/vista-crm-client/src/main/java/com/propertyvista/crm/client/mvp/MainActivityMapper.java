@@ -26,9 +26,6 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.activity.AccountActivity;
 import com.propertyvista.crm.client.activity.AlertActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
-import com.propertyvista.crm.client.activity.crud.application.ApplicationEditorActivity;
-import com.propertyvista.crm.client.activity.crud.application.ApplicationListerActivity;
-import com.propertyvista.crm.client.activity.crud.application.ApplicationViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.BoilerEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.BoilerViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.BuildingEditorActivity;
@@ -60,14 +57,17 @@ import com.propertyvista.crm.client.activity.crud.settings.ContentViewerActivity
 import com.propertyvista.crm.client.activity.crud.tenant.InquiryEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.InquiryListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.InquiryViewerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.LeaseEditorActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.LeaseListerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.LeaseViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantScreeningEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantScreeningViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantViewerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.application.ApplicationEditorActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.application.ApplicationListerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.application.ApplicationViewerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseEditorActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseListerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseViewerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitItemEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitItemViewerActivity;
@@ -278,31 +278,6 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-                } else if (place instanceof CrmSiteMap.Tenants.Lease) {
-                    switch (((CrudAppPlace) place).getType()) {
-                    case editor:
-                        activity = new LeaseEditorActivity(place);
-                        break;
-                    case viewer:
-                        activity = new LeaseViewerActivity(place);
-                        break;
-                    case lister:
-                        activity = new LeaseListerActivity(place);
-                        break;
-                    }
-
-                } else if (place instanceof CrmSiteMap.Tenants.Inquiry) {
-                    switch (((CrudAppPlace) place).getType()) {
-                    case editor:
-                        activity = new InquiryEditorActivity(place);
-                        break;
-                    case viewer:
-                        activity = new InquiryViewerActivity(place);
-                        break;
-                    case lister:
-                        activity = new InquiryListerActivity(place);
-                        break;
-                    }
 // Tenant-Application:
                 } else if (place instanceof CrmSiteMap.Tenants.Application) {
                     switch (((CrudAppPlace) place).getType()) {
@@ -317,6 +292,33 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
+// Tenant-Lease:
+                } else if (place instanceof CrmSiteMap.Tenants.Lease) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new LeaseEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new LeaseViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new LeaseListerActivity(place);
+                        break;
+                    }
+
+// Tenant-Inquiry:
+                } else if (place instanceof CrmSiteMap.Tenants.Inquiry) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new InquiryEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new InquiryViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new InquiryListerActivity(place);
+                        break;
+                    }
 // Reports:
                 } else if (place instanceof CrmSiteMap.Report) {
                     activity = new ReportViewActivity(place);

@@ -145,9 +145,8 @@ public class ApartmentUnitDetailsPanel extends FlowPanel implements HasHandlers 
         FlowPanel amenitiesPanel = new FlowPanel();
         amenitiesPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         amenitiesPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-        amenitiesPanel.add(new HTML(h3(i18n.tr("Amenities/Utilities"))));
+        amenitiesPanel.add(new HTML(h3(i18n.tr("Amenities"))));
         amenitiesPanel.add(new HTML(unit.amenities().getStringView()));
-        amenitiesPanel.add(new HTML(unit.utilities().getStringView()));
         amenitiesPanel.getElement().getStyle().setMarginRight(3, Unit.PCT);
         amenitiesPanel.setWidth("30%");
         unitDetailPanel.add(amenitiesPanel);

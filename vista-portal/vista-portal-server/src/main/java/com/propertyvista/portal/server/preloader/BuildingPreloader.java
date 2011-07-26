@@ -44,7 +44,6 @@ import com.propertyvista.domain.property.asset.Locker;
 import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.ParkingSpot;
-import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
@@ -71,9 +70,9 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Email.class, Phone.class, Complex.class, Utility.class,
-                    Amenity.class, Concession.class, LeaseTerms.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class, Media.class,
-                    ThumbnailBlob.class, FileBlob.class, Feature.class, ResidentialRent.class, ParkingRent.class, StorageRent.class, PetCharge.class);
+            return deleteAll(Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Email.class, Phone.class, Complex.class, Amenity.class,
+                    Concession.class, LeaseTerms.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class, Media.class, ThumbnailBlob.class,
+                    FileBlob.class, Feature.class, ResidentialRent.class, ParkingRent.class, StorageRent.class, PetCharge.class);
         } else {
             return "This is production";
         }
@@ -143,9 +142,6 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             unitCount += units.size();
             for (UnitRelatedData unitData : units) {
                 // persist plain internal lists:
-                for (Utility utility : unitData.info().utilities()) {
-                    persist(utility);
-                }
 
                 AptUnit unit = down(unitData, AptUnit.class);
                 persist(unit); // persist real unit here, not DTO!..
@@ -291,7 +287,6 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
                 sb.append(" | ");
                 sb.append(unit.marketing().floorplan().name().getStringView()); // .append(" ").append(unit.floorplan().pictures());
                 sb.append("\n");
-                sb.append("\t\t").append(unit.info().utilities()).append("\n");
             }
         }
         sb.append("\n");

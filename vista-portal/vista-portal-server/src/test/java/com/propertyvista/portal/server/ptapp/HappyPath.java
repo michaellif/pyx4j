@@ -20,7 +20,7 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 
 import com.propertyvista.domain.Application;
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
@@ -105,7 +105,7 @@ public class HappyPath {
         return unitSelection;
     }
 
-    public static PotentialTenantList step4createTenants() {
+    public static Tenant step4createTenants() {
         //        PotentialTenantList tenantList = generator.createPotentialTenantList(application);
         //        tenantList.tenants().get(0).email().setValue(email);
 
@@ -123,7 +123,7 @@ public class HappyPath {
         //        }, null);
 
         TenantServiceSync service = new TenantServiceSync();
-        PotentialTenantList tenantList = service.retrieve();
+        Tenant tenantList = service.retrieve();
 
         //        Assert.assertEquals("prepopulated email", tenantList.tenants().get(0).email(), result.tenants().get(0).email());
         return tenantList;

@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -25,8 +22,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.OptionsFilter;
-import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.site.client.ui.crud.IView;
 
@@ -35,11 +30,9 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
@@ -60,7 +53,6 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
         tabPanel.addDisable(((UnitView) getParentView()).getUnitItemsListerView().asWidget(), i18n.tr("Details"));
-        tabPanel.add(new ScrollPanel(createUtilitiesTab()), i18n.tr("Utilities"));
         tabPanel.addDisable(((UnitView) getParentView()).getOccupanciesListerView().asWidget(), i18n.tr("Occupancies"));
         tabPanel.add(new ScrollPanel(createFinancialsTab()), i18n.tr("Financial"));
         tabPanel.add(new ScrollPanel(createMarketingTab()), i18n.tr("Marketing"));
@@ -112,12 +104,6 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         return main;
     }
 
-    private Widget createUtilitiesTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        main.add(inject(proto().info().utilities(), createUtilitiesListEditor()));
-        return main;
-    }
-
     private Widget createGeneralTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
@@ -142,18 +128,4 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         return main;
     }
-
-    private CEntityFolderEditor<Utility> createUtilitiesListEditor() {
-        return new CrmEntityFolder<Utility>(Utility.class, "Utility", isEditable()) {
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                List<EntityFolderColumnDescriptor> columns;
-                columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().description(), "35em"));
-                return columns;
-            }
-        };
-    }
-
 }

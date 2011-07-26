@@ -15,13 +15,13 @@ package com.propertyvista.portal.server.sync;
 
 import com.pyx4j.unit.server.TestServiceFactory;
 
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 
 public class TenantServiceSync {
-    private PotentialTenantList tenantList;
+    private Tenant tenantList;
 
-    public PotentialTenantList retrieve() {
+    public Tenant retrieve() {
         tenantList = null;
 
         TenantService service = TestServiceFactory.create(TenantService.class);

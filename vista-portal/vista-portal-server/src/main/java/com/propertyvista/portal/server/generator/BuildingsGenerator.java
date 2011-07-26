@@ -51,7 +51,6 @@ import com.propertyvista.domain.property.asset.Locker;
 import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.ParkingSpot;
-import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
@@ -452,20 +451,6 @@ public class BuildingsGenerator {
         unit.financial().unitRent().setValue(800. + RandomUtil.randomInt(200));
         unit.financial().marketRent().setValue(900. + RandomUtil.randomInt(200));
 
-        // mandatory utilities
-        unit.info().utilities().add(createUtility(Utility.Type.water));
-        unit.info().utilities().add(createUtility(Utility.Type.heat));
-        unit.info().utilities().add(createUtility(Utility.Type.gas));
-        unit.info().utilities().add(createUtility(Utility.Type.electric));
-
-        // optional utilities
-        if (RandomUtil.randomBoolean()) {
-            unit.info().utilities().add(createUtility(Utility.Type.cable));
-        }
-        if (RandomUtil.randomBoolean()) {
-            unit.info().utilities().add(createUtility(Utility.Type.internet));
-        }
-
         // info items
         if (RandomUtil.randomBoolean()) {
             unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
@@ -528,12 +513,6 @@ public class BuildingsGenerator {
         AptUnitAmenity amenity = EntityFactory.create(AptUnitAmenity.class);
         amenity.type().setValue(type);
         return amenity;
-    }
-
-    public static Utility createUtility(Utility.Type type) {
-        Utility utility = EntityFactory.create(Utility.class);
-        utility.type().setValue(type);
-        return utility;
     }
 
 // Property

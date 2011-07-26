@@ -392,7 +392,9 @@ public class PTGenerator {
             tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.Dependant);
         }
         tenantSummary.tenantInLease().relationship().setValue(RandomUtil.randomEnum(TenantInLease.Relationship.class));
-        tenantSummary.tenantInLease().payment().setValue(1.0d + RandomUtil.randomInt(3000));
+
+// TODO check %-ge correctness bettween tenants here:        
+        tenantSummary.tenantInLease().percentage().setValue(RandomUtil.randomInt(100));
 
         if (EnumSet.of(TenantInLease.Relationship.Daughter, TenantInLease.Relationship.Son).contains(tenantSummary.tenantInLease().relationship().getValue())) {
             tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.Dependant);

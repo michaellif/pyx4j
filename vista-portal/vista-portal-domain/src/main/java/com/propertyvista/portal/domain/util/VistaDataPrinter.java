@@ -30,7 +30,7 @@ import com.propertyvista.dto.VehiclesDTO;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
@@ -71,7 +71,7 @@ public class VistaDataPrinter {
         return sb.toString();
     }
 
-    public static String print(PotentialTenantList tenantList) {
+    public static String print(Tenant tenantList) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(tenantList.tenants().size()).append(" potential tenants");

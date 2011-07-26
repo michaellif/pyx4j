@@ -24,7 +24,7 @@ import com.pyx4j.selenium.D;
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.Tenant;
 
 public class DatePickerValidationTest extends DatePickerTestBase {
 
@@ -193,6 +193,6 @@ public class DatePickerValidationTest extends DatePickerTestBase {
     }
 
     private IDebugId baseID(int index) {
-        return D.id(proto(PotentialTenantList.class).tenants(), index);
+        return D.id(proto(Tenant.class).tenants(), index);
     }
 }

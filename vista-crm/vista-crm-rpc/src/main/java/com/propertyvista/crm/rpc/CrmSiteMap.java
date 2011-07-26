@@ -141,9 +141,9 @@ public class CrmSiteMap implements SiteMap {
         public static class TenantScreening extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "PotentialTenant")
-        @NavigationItem(navigLabel = "PotentialTenants")
-        public static class PotentialTenant extends CrudAppPlace {
+        @PlaceProperties(caption = "Tenant in Lease")
+        @NavigationItem(navigLabel = "Tenants in Lease")
+        public static class TenantInLease extends CrudAppPlace {
         }
 
         @PlaceProperties(caption = "Lease")

@@ -28,7 +28,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.callfire.CallFire;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.domain.CampaignHistory;
 import com.propertyvista.server.domain.CampaignTriger;
@@ -38,7 +38,7 @@ public class CampaignManager {
 
     private final static Logger log = LoggerFactory.getLogger(CampaignManager.class);
 
-    public static void fireEvent(CampaignTriger trigger, PotentialTenantList tenants) {
+    public static void fireEvent(CampaignTriger trigger, Tenant tenants) {
         for (PotentialTenantInfo tenantInfo : tenants.tenants()) {
             Status status = tenantInfo.status().getValue();
 

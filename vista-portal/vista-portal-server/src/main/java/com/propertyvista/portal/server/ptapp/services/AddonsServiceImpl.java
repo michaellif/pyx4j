@@ -30,6 +30,7 @@ import com.propertyvista.domain.PetChargeRule;
 import com.propertyvista.domain.charges.ChargeType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.PetsDTO;
+import com.propertyvista.dto.VehiclesDTO;
 import com.propertyvista.portal.domain.ptapp.dto.AddOnsDTO;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.ptapp.services.AddonsService;
@@ -45,12 +46,14 @@ public class AddonsServiceImpl extends ApplicationEntityServiceImpl implements A
         log.info("Retrieving pets");
         Lease lease = PersistenceServicesFactory.getPersistenceService().retrieve(Lease.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
         PersistenceServicesFactory.getPersistenceService().retrieve(lease.pets());
+        PersistenceServicesFactory.getPersistenceService().retrieve(lease.vehicles());
 
         AddOnsDTO addOns = EntityFactory.create(AddOnsDTO.class);
         addOns.pets().list().addAll(lease.pets());
         addOns.vehicles().list().addAll(lease.vehicles());
 
         loadTransientData(addOns.pets());
+        loadTransientData(addOns.vehicles());
 
         callback.onSuccess(addOns);
     }
@@ -61,6 +64,7 @@ public class AddonsServiceImpl extends ApplicationEntityServiceImpl implements A
 
         Lease lease = PersistenceServicesFactory.getPersistenceService().retrieve(Lease.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
         PersistenceServicesFactory.getPersistenceService().retrieve(lease.pets());
+        PersistenceServicesFactory.getPersistenceService().retrieve(lease.vehicles());
 
         // This value will never be null, since we are always creating it at retrieve
         List<Pet> existingPets = new Vector<Pet>();
@@ -88,6 +92,7 @@ public class AddonsServiceImpl extends ApplicationEntityServiceImpl implements A
         }
 
         loadTransientData(addOns.pets());
+        loadTransientData(addOns.vehicles());
 
         callback.onSuccess(addOns);
     }
@@ -105,11 +110,16 @@ public class AddonsServiceImpl extends ApplicationEntityServiceImpl implements A
         pets.maxTotal().setValue(3);
     }
 
+    private static void loadTransientData(VehiclesDTO vehicles) {
+        // TODO get it from building
+//        vehicles.chargeRule().set(vehicleCharge);
+        vehicles.maxTotal().setValue(3);
+    }
+
     private static PetChargeRule loadPetChargeRule() {
         PetChargeRule petChargeRule = EntityFactory.create(PetChargeRule.class);
         petChargeRule.chargeType().setValue(ChargeType.monthly);
         petChargeRule.value().setValue(20);
         return petChargeRule;
     }
-
 }

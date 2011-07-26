@@ -13,11 +13,24 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Transient;
 
+import com.propertyvista.domain.financial.offeringnew.ServiceCatalog;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
 public interface LeaseDTO extends Lease {
 
+//  Note: While show ApplicationDTO - make 2 tabs (or 1 tab with 2 listers in it with Building and Unit selection) for:
+    @Detached
+    Building selectedBuilding();
+
+//    Tenant primaryTenant();
+
+//  Note : While show ApplicationDTO - make tab with :
+//  IList<TenantInLease> tenants();
+
+    ServiceCatalog serviceCatalog();
 }

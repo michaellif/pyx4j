@@ -24,7 +24,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
-import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.StructureType;
@@ -33,7 +32,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnitType;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.server.generator.CommonsGenerator;
 import com.propertyvista.portal.server.importer.bean.City;
-import com.propertyvista.portal.server.importer.bean.Include;
 import com.propertyvista.portal.server.importer.bean.Property;
 import com.propertyvista.portal.server.importer.bean.Region;
 import com.propertyvista.portal.server.importer.bean.Residential;
@@ -154,10 +152,6 @@ public class Mapper {
 
         // unit.info().floor().setValue(floor);
 
-        for (Include include : property.getIncludes().getIncludes()) {
-            unit.info().utilities().add(mapUtility(include));
-        }
-
         model.getUnits().add(unit);
     }
 
@@ -208,33 +202,6 @@ public class Mapper {
         }
         log.info("Unknown value [" + type + "]");
         return null;
-    }
-
-    private static Utility mapUtility(Include include) {
-        Utility utility = EntityFactory.create(Utility.class);
-
-        String name = include.getValue();
-
-        Utility.Type type = null;
-
-        if (name.trim().isEmpty()) {
-            type = null;
-        } else if (name.equals("Hot Water")) {
-            type = Utility.Type.hotWater;
-        } else if (name.equals("Heat")) {
-            type = Utility.Type.heat;
-        } else if (name.equals("Electricity")) { // not sure about this one
-            type = Utility.Type.electric;
-        } else if (name.equals("Hydro")) { // not sure about this one
-            type = Utility.Type.water;
-        } else {
-            log.info("Unknown utility [" + name + "]");
-        }
-
-        utility.type().setValue(type);
-        utility.description().setValue(name);
-
-        return utility;
     }
 
     private static Address mapAddress(com.propertyvista.portal.server.importer.bean.Address from) {

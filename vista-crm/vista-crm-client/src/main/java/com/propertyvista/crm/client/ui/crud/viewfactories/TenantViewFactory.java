@@ -16,24 +16,12 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
-import com.propertyvista.crm.client.ui.crud.application.ApplicationEditorView;
-import com.propertyvista.crm.client.ui.crud.application.ApplicationEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.application.ApplicationListerView;
-import com.propertyvista.crm.client.ui.crud.application.ApplicationListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.application.ApplicationViewerView;
-import com.propertyvista.crm.client.ui.crud.application.ApplicationViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.InquiryEditorView;
 import com.propertyvista.crm.client.ui.crud.tenant.InquiryEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.InquiryListerView;
 import com.propertyvista.crm.client.ui.crud.tenant.InquiryListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.InquiryViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.InquiryViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.LeaseEditorView;
-import com.propertyvista.crm.client.ui.crud.tenant.LeaseEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.LeaseListerView;
-import com.propertyvista.crm.client.ui.crud.tenant.LeaseListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.LeaseViewerView;
-import com.propertyvista.crm.client.ui.crud.tenant.LeaseViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantEditorView;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantListerView;
@@ -44,6 +32,18 @@ import com.propertyvista.crm.client.ui.crud.tenant.TenantScreeningViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantScreeningViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationEditorView;
+import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationListerView;
+import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationViewerView;
+import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseEditorView;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseListerView;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseViewerView;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseViewerViewImpl;
 
 public class TenantViewFactory extends ViewFactoryBase {
 

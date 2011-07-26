@@ -32,7 +32,7 @@ import com.propertyvista.portal.domain.ptapp.PaymentInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
 import com.propertyvista.portal.server.campaign.CampaignManager;
@@ -70,7 +70,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
 
         boolean callFireDemo = false;
         if (callFireDemo) {
-            EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
+            EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
             CampaignManager.fireEvent(CampaignTriger.ApplicationCompleated, secureRetrieve(criteria));
         }
@@ -98,7 +98,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
             }
         }
         // Get the currentAddress
-        EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
+        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         for (PotentialTenantInfo tenantInfo : secureRetrieve(criteria).tenants()) {
             if (tenantInfo.status().getValue().equals(Status.Applicant)) {

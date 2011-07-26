@@ -111,10 +111,6 @@ public interface AptUnitDTO extends IEntity {
 
     IPrimitiveSet<String> amenities();
 
-//    IList<Amenity> amenities();
-
-    IPrimitive<String> utilities();
-
     IPrimitive<String> infoDetails();
 
     IPrimitive<String> concessions();

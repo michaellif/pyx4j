@@ -31,7 +31,6 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
-import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -139,10 +138,6 @@ public class Importer {
 
         for (UnitRelatedData unitData : model.getUnits()) {
             // persist plain internal lists:
-            for (Utility utility : unitData.info().utilities()) {
-                persist(utility);
-            }
-
             AptUnit unit = down(unitData, AptUnit.class);
             persist(unit); // persist real unit here, not DTO!..
 

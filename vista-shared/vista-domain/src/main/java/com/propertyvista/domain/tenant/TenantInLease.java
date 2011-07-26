@@ -30,6 +30,22 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public interface TenantInLease extends IEntity, TenantInLeaseFragment /* TODO IBoundToApplication ? */{
 
     @Translatable
+    public static enum Status implements Serializable {
+
+        Applicant,
+
+        @Translation("Co-applicant")
+        CoApplicant,
+
+        Dependant;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    @Translatable
     public static enum Relationship implements Serializable {
 
         Spouse,
@@ -58,31 +74,17 @@ public interface TenantInLease extends IEntity, TenantInLeaseFragment /* TODO IB
         }
     }
 
-    public static enum Status implements Serializable {
-
-        Applicant,
-
-        @Translation("Co-applicant")
-        CoApplicant,
-
-        Dependant;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
-
     @ReadOnly
     @Detached
     @NotNull
     @Indexed
     Lease lease();
 
-    IPrimitive<Double> payment();
-
-    @Detached
     @ReadOnly
     Tenant tenant();
 
+    /**
+     * Tenant's payment share:
+     */
+    IPrimitive<Integer> percentage();
 }

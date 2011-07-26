@@ -34,10 +34,10 @@ public interface Summary extends IEntity, IBoundToApplication {
     AptUnitDTO selectedUnit();
 
     @Transient
-    PotentialTenantList tenantList();
+    Tenant tenantList();
 
     @Transient
-    PotentialTenantList tenantsWithInfo();
+    Tenant tenantsWithInfo();
 
     @Transient
     @EmbeddedEntity

@@ -42,7 +42,7 @@ import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
@@ -148,7 +148,7 @@ public class VistaAccessControlListTest {
         assertEntityPermission(false, ApplicationProgress.class, null);
         assertEntityPermission(false, UnitSelection.class, null);
         assertEntityPermission(false, ApplicationDocument.class, null);
-        assertEntityPermission(false, PotentialTenantList.class, null);
+        assertEntityPermission(false, Tenant.class, null);
         assertEntityPermission(false, PotentialTenantInfo.class, null);
         assertEntityPermission(false, PetsDTO.class, null);
         assertEntityPermission(false, TenantFinancialEditorDTO.class, null);
@@ -169,7 +169,7 @@ public class VistaAccessControlListTest {
         assertEntityPermission(true, ApplicationProgress.class, application);
         assertEntityPermission(true, UnitSelection.class, application);
         assertEntityPermission(true, ApplicationDocument.class, application);
-        assertEntityPermission(true, PotentialTenantList.class, application);
+        assertEntityPermission(true, Tenant.class, application);
         assertEntityPermission(true, PotentialTenantInfo.class, application);
         assertEntityPermission(true, PetsDTO.class, application);
         assertEntityPermission(true, TenantFinancialEditorDTO.class, application);
@@ -182,7 +182,7 @@ public class VistaAccessControlListTest {
         assertEntityPermission(false, ApplicationProgress.class, application2);
         assertEntityPermission(false, UnitSelection.class, application2);
         assertEntityPermission(false, ApplicationDocument.class, application2);
-        assertEntityPermission(false, PotentialTenantList.class, application2);
+        assertEntityPermission(false, Tenant.class, application2);
         assertEntityPermission(false, PotentialTenantInfo.class, application2);
         assertEntityPermission(false, PetsDTO.class, application2);
         assertEntityPermission(false, TenantFinancialEditorDTO.class, application2);

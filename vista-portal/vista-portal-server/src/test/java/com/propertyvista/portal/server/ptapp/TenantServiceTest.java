@@ -25,7 +25,7 @@ import com.propertyvista.domain.Application;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.server.generator.PTGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
@@ -60,7 +60,7 @@ public class TenantServiceTest extends VistaDBTestBase {
 
     public void testHappyPath() {
         happyPath();
-        PotentialTenantList tenantList = HappyPath.step4createTenants();
+        Tenant tenantList = HappyPath.step4createTenants();
         log.info(tenantList.toString());
         Assert.assertEquals("One tenant", 1, tenantList.tenants().size());
 
@@ -75,7 +75,7 @@ public class TenantServiceTest extends VistaDBTestBase {
 
         PTGenerator generator = new PTGenerator(10l, PreloadConfig.createTest());
 
-        PotentialTenantList tenantList = HappyPath.step4createTenants();
+        Tenant tenantList = HappyPath.step4createTenants();
         // PotentialTenantList tenantList2 = generator.createPotentialTenantList(application);
 
         //        tenantService.save(new UnitTestsAsyncCallback<PotentialTenantList>() {

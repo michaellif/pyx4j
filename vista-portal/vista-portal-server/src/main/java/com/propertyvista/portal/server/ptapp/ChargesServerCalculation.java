@@ -34,7 +34,7 @@ import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
@@ -60,9 +60,9 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             selectedUnit = PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, unitSelection.selectedUnitId().getValue());
         }
 
-        EntityQueryCriteria<PotentialTenantList> tenantCriteria = EntityQueryCriteria.create(PotentialTenantList.class);
+        EntityQueryCriteria<Tenant> tenantCriteria = EntityQueryCriteria.create(Tenant.class);
         tenantCriteria.add(PropertyCriterion.eq(tenantCriteria.proto().application(), charges.application()));
-        PotentialTenantList tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(tenantCriteria);
+        Tenant tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(tenantCriteria);
 
         // find appropriate pet charges
         EntityQueryCriteria<PetsDTO> petCriteria = EntityQueryCriteria.create(PetsDTO.class);
@@ -74,7 +74,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         updateChargesFromObjects(charges, unitSelection, selectedUnit, tenantList, pets, vehicles);
     }
 
-    public static void updateChargesFromObjects(Charges charges, UnitSelection unitSelection, AptUnit selectedUnit, PotentialTenantList tenantList,
+    public static void updateChargesFromObjects(Charges charges, UnitSelection unitSelection, AptUnit selectedUnit, Tenant tenantList,
             PetsDTO pets, IList<Vehicle> vehicles) {
         double rentAmount = 0;
         double depositAmount = 0;
@@ -172,7 +172,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         }
     }
 
-    public static void updatePaymentSplitCharges(Charges charges, PotentialTenantList tenantList) {
+    public static void updatePaymentSplitCharges(Charges charges, Tenant tenantList) {
         //        // find all potential tenants 
         //        EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
         //        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
@@ -241,7 +241,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         return true;
     }
 
-    private static void resetPaymentSplitCharges(Charges charges, PotentialTenantList tenantList) {
+    private static void resetPaymentSplitCharges(Charges charges, Tenant tenantList) {
         charges.paymentSplitCharges().charges().clear();
         for (PotentialTenantInfo tenant : tenantList.tenants()) {
             Status status = tenant.status().getValue();
