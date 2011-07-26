@@ -104,6 +104,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             public List<ColumnDescriptor<E>> getColumnDescriptors() {
                 ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
                 ListerGadgetBase.this.fillDefaultColumnDescriptors(columnDescriptors, proto());
+                assert !columnDescriptors.isEmpty() : "shouldn't be empty!..";
                 return columnDescriptors;
             }
         };
@@ -132,6 +133,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         listPanel.setPageSize(10);
         listPanel.removeUpperActionsBar();
 
+        listPanel.getDataTable().setMarkSelectedRow(false);
         listPanel.getDataTable().setAutoColumnsWidth(true);
         listPanel.getDataTable().renderTable();
     }

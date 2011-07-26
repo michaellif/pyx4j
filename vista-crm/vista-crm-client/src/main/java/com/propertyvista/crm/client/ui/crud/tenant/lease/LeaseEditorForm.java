@@ -111,13 +111,13 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
         main.add(inject(proto().leaseID()), 15);
-        main.add(inject(proto().leaseFrom()), 10);
-        main.add(inject(proto().leaseTo()), 10);
-        main.add(inject(proto().expectedMoveIn()), 10);
-        main.add(inject(proto().expectedMoveOut()), 10);
-        main.add(inject(proto().actualMoveIn()), 10);
-        main.add(inject(proto().actualMoveOut()), 10);
-        main.add(inject(proto().signDate()), 10);
+        main.add(inject(proto().leaseFrom()), 8.2);
+        main.add(inject(proto().leaseTo()), 8.2);
+        main.add(inject(proto().expectedMoveIn()), 8.2);
+        main.add(inject(proto().expectedMoveOut()), 8.2);
+        main.add(inject(proto().actualMoveIn()), 8.2);
+        main.add(inject(proto().actualMoveOut()), 8.2);
+        main.add(inject(proto().signDate()), 8.2);
 
         return main;
     }
