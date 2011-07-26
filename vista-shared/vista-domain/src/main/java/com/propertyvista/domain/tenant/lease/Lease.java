@@ -84,7 +84,7 @@ public interface Lease extends IEntity {
 
     IPrimitive<LogicalDate> signDate();
 
-    ServiceAgreement financial();
+    ServiceAgreement serviceAgreement();
 
     IList<Document> documents();
 }

@@ -55,18 +55,8 @@ public interface Service extends IEntity {
         }
     }
 
-    /**
-     * Anchor service may specify dependent services
-     * 
-     * @return
-     */
     IList<Feature> features();
 
-    /**
-     * Anchor service may specify dependent services
-     * 
-     * @return
-     */
     IList<Concession> concessions();
 
     IPrimitive<String> name();
