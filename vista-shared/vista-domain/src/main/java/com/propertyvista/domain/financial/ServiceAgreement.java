@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IList;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.financial.offeringnew.ChargeItem;
 
-public interface LeaseFinancial extends IEntity {
+public interface ServiceAgreement extends IEntity {
 
     IList<ChargeItem> chargeItems();
 
@@ -29,5 +29,6 @@ public interface LeaseFinancial extends IEntity {
     @MemberColumn(name = "leaseAccount")
     Account account();
 
+    @Deprecated
     IList<ChargeLine> charges();
 }
