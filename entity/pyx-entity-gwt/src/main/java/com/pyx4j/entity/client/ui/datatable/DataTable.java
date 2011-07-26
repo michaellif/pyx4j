@@ -327,8 +327,10 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             getCellFormatter().setHorizontalAlignment(0, colIndex, HasHorizontalAlignment.ALIGN_CENTER);
         }
 
-        Element rowElement = getRowFormatter().getElement(0);
-        UIObject.setStyleName(rowElement, BASE_NAME + StyleSuffix.Header);
+        if (getRowCount() > 0) {
+            Element rowElement = getRowFormatter().getElement(0);
+            UIObject.setStyleName(rowElement, BASE_NAME + StyleSuffix.Header);
+        }
     }
 
     private void renderBody() {

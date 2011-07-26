@@ -115,6 +115,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             public List<ColumnDescriptor<E>> getColumnDescriptors() {
                 ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
                 ListerBase.this.fillDefaultColumnDescriptors(columnDescriptors, proto());
+                assert !columnDescriptors.isEmpty() : "should's be empty!..";
                 return columnDescriptors;
             }
         };
