@@ -21,7 +21,7 @@ import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.services.dashboard.AbstractMetadataCrudService;
-import com.propertyvista.crm.server.services.GenericCrudServiceImpl;
+import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.server.common.security.VistaContext;
 
