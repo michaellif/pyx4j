@@ -7,18 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 18, 2011
- * @author vlads
+ * Created on 2011-05-09
+ * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.server.services;
 
-import com.propertyvista.crm.rpc.services.ApplicationTenantCrudService;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.crm.rpc.services.LeaseUnitCrudService;
+import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public class ApplicationTenantCrudServiceImpl extends GenericCrudServiceImpl<TenantInLease> implements ApplicationTenantCrudService {
+public class LeaseUnitCrudServiceImpl extends GenericCrudServiceImpl<AptUnit> implements LeaseUnitCrudService {
 
-    public ApplicationTenantCrudServiceImpl() {
-        super(TenantInLease.class);
+    public LeaseUnitCrudServiceImpl() {
+        super(AptUnit.class);
     }
 }

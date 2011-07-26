@@ -18,11 +18,12 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
+import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantApplication;
 import com.propertyvista.dto.ApplicationDTO;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantList;
+import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 
 public class ApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<TenantApplication, ApplicationDTO> implements ApplicationCrudService {
@@ -46,9 +47,9 @@ public class ApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<Tenant
             }
 
             {
-                EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
+                EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().application(), tenantApplication.application()));
-                PotentialTenantList potentialTenantList = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+                Tenant potentialTenantList = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
 
                 if (potentialTenantList.tenants().size() > 0) {
                     PotentialTenantInfo potentialTenantInfo = potentialTenantList.tenants().get(0);

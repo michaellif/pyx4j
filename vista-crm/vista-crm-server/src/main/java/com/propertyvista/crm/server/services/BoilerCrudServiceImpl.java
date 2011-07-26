@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services;
 
 import com.propertyvista.crm.rpc.services.BoilerCrudService;
+import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.dto.BoilerDTO;
 

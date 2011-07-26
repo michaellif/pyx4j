@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services;
 
 import com.propertyvista.crm.rpc.services.UnitItemCrudService;
+import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
 public class UnitItemCrudServiceImpl extends GenericCrudServiceImpl<AptUnitItem> implements UnitItemCrudService {

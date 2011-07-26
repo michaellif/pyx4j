@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services;
 
 import com.propertyvista.crm.rpc.services.ElevatorCrudService;
+import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.property.asset.Elevator;
 import com.propertyvista.dto.ElevatorDTO;
 

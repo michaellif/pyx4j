@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services;
 
 import com.propertyvista.crm.rpc.services.ConcessionCrudService;
+import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.financial.Concession;
 
 public class ConcessionCrudServiceImpl extends GenericCrudServiceImpl<Concession> implements ConcessionCrudService {

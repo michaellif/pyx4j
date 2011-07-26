@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services;
 
 import com.propertyvista.crm.rpc.services.ParkingSpotCrudService;
+import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.property.asset.ParkingSpot;
 
 public class ParkingSpotCrudServiceImpl extends GenericCrudServiceImpl<ParkingSpot> implements ParkingSpotCrudService {

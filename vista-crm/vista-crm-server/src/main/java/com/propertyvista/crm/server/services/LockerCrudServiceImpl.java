@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services;
 
 import com.propertyvista.crm.rpc.services.LockerCrudService;
+import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.property.asset.Locker;
 
 public class LockerCrudServiceImpl extends GenericCrudServiceImpl<Locker> implements LockerCrudService {

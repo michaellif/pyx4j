@@ -7,20 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
- * @author Vlad
+ * Created on Jul 18, 2011
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.crm.server.services;
 
-import com.propertyvista.crm.rpc.services.ParkingCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
-import com.propertyvista.domain.property.asset.Parking;
-import com.propertyvista.dto.ParkingDTO;
+import com.propertyvista.crm.rpc.services.TenantInLeaseCrudService;
+import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
+import com.propertyvista.domain.tenant.TenantInLease;
 
-public class ParkingCrudServiceImpl extends GenericCrudServiceDtoImpl<Parking, ParkingDTO> implements ParkingCrudService {
+public class TenantInLeaseCrudServiceImpl extends GenericCrudServiceImpl<TenantInLease> implements TenantInLeaseCrudService {
 
-    public ParkingCrudServiceImpl() {
-        super(Parking.class, ParkingDTO.class);
+    public TenantInLeaseCrudServiceImpl() {
+        super(TenantInLease.class);
     }
 }

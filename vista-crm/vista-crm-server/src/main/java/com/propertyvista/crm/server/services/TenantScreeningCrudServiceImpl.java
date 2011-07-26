@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services;
 
 import com.propertyvista.crm.rpc.services.TenantScreeningCrudService;
+import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.tenant.TenantScreening;
 
 public class TenantScreeningCrudServiceImpl extends GenericCrudServiceImpl<TenantScreening> implements TenantScreeningCrudService {
