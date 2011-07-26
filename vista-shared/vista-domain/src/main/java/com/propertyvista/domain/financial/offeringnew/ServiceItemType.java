@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 22, 2011
+ * Created on Jul 26, 2011
  * @author michaellif
  * @version $Id$
  */
@@ -16,6 +16,7 @@ package com.propertyvista.domain.financial.offeringnew;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.offeringnew.Feature.FeatureType;
 import com.propertyvista.domain.financial.offeringnew.Service.ServiceType;
 
 public interface ServiceItemType extends IEntity {
@@ -23,5 +24,7 @@ public interface ServiceItemType extends IEntity {
     IPrimitive<String> name();
 
     IPrimitive<ServiceType> serviceType();
+
+    IPrimitive<FeatureType> featureType();
 
 }

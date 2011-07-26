@@ -28,6 +28,8 @@ public interface ServiceCatalog extends IEntity {
 
     IList<Service> services();
 
+    IList<Feature> features();
+
     IList<Concession> concessions();
 
 }

@@ -15,8 +15,12 @@ package com.propertyvista.domain.financial.offeringnew;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public interface ServiceAgreement extends IEntity {
+import com.propertyvista.domain.financial.Discount;
+
+public interface ChargeItem extends IEntity {
 
     ServiceItem item();
+
+    Discount discount();
 
 }

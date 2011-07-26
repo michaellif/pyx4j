@@ -38,14 +38,14 @@ public class PmcPreloader extends AbstractDataPreloader {
 
         PmcGenerator generator = new PmcGenerator();
 
-        List<ServiceItemType> types = generator.createServiceItemTypes();
+        List<ServiceItemType> types = generator.createChargeItemTypes();
 
         for (ServiceItemType type : types) {
             PersistenceServicesFactory.getPersistenceService().persist(type);
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Created ").append(types.size()).append(" ServiceItemTypes");
+        sb.append("Created ").append(types.size()).append(" ChargeItemType");
         return sb.toString();
     }
 

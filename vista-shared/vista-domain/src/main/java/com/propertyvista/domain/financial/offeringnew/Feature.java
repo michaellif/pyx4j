@@ -20,24 +20,30 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.domain.financial.Concession;
-
-public interface Service extends IEntity {
+public interface Feature extends IEntity {
 
     @Translatable
-    public enum ServiceType {
+    public enum FeatureType {
 
-        residentialUnit,
+        parking,
 
-        commercialUnit,
+        pet,
 
-        residentialShortTermUnit,
+        addOn,
 
-        roof,
+        utility,
 
-        sundry,
+        locker;
 
-        garage;
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    @Translatable
+    enum PriceType {
+        percentageFromAnchorPrice, fixed;
 
         @Override
         public String toString() {
@@ -55,28 +61,16 @@ public interface Service extends IEntity {
         }
     }
 
-    /**
-     * Anchor service may specify dependent services
-     * 
-     * @return
-     */
-    IList<Feature> features();
-
-    /**
-     * Anchor service may specify dependent services
-     * 
-     * @return
-     */
-    IList<Concession> concessions();
-
     IPrimitive<String> name();
 
     IPrimitive<String> description();
 
-    IPrimitive<ServiceType> serviceType();
+    IPrimitive<FeatureType> featureType();
 
     @Owned
     IList<ServiceItem> items();
+
+    IPrimitive<PriceType> priceType();
 
     IPrimitive<Boolean> isRecurring();
 

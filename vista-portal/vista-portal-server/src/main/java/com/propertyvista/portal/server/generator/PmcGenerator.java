@@ -18,40 +18,48 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.financial.offeringnew.Service.ServiceType;
 import com.propertyvista.domain.financial.offeringnew.ServiceItemType;
+import com.propertyvista.domain.financial.offeringnew.Feature.FeatureType;
+import com.propertyvista.domain.financial.offeringnew.Service.ServiceType;
 
 public class PmcGenerator {
 
-    public List<ServiceItemType> createServiceItemTypes() {
+    public List<ServiceItemType> createChargeItemTypes() {
         List<ServiceItemType> types = new ArrayList<ServiceItemType>();
-        types.add(createServiceItemType("Regular Residential Unit", ServiceType.residentialUnit));
-        types.add(createServiceItemType("Regular Commercial Unit", ServiceType.commercialUnit));
-        types.add(createServiceItemType("Regular Short Term Residential Unit", ServiceType.residentialShortTermUnit));
-        types.add(createServiceItemType("Roof Spot", ServiceType.roof));
-        types.add(createServiceItemType("Billboard", ServiceType.sundry));
-        types.add(createServiceItemType("Regular Parking", ServiceType.parking));
-        types.add(createServiceItemType("Wide Parking", ServiceType.parking));
-        types.add(createServiceItemType("Nerrow Parking", ServiceType.parking));
-        types.add(createServiceItemType("Disabled Parking", ServiceType.parking));
-        types.add(createServiceItemType("Cat", ServiceType.pet));
-        types.add(createServiceItemType("Dog", ServiceType.pet));
-        types.add(createServiceItemType("Small Locker", ServiceType.locker));
-        types.add(createServiceItemType("Medium Locker", ServiceType.locker));
-        types.add(createServiceItemType("Large Locker", ServiceType.locker));
-        types.add(createServiceItemType("Fitness", ServiceType.addOn));
-        types.add(createServiceItemType("Pool", ServiceType.addOn));
-        types.add(createServiceItemType("Furnished", ServiceType.addOn));
-        types.add(createServiceItemType("Key", ServiceType.addOn));
-        types.add(createServiceItemType("Access Card", ServiceType.addOn));
-        types.add(createServiceItemType("Cable", ServiceType.addOn));
+        types.add(createChargeItemType("Regular Residential Unit", ServiceType.residentialUnit));
+        types.add(createChargeItemType("Regular Commercial Unit", ServiceType.commercialUnit));
+        types.add(createChargeItemType("Regular Short Term Residential Unit", ServiceType.residentialShortTermUnit));
+        types.add(createChargeItemType("Roof Spot", ServiceType.roof));
+        types.add(createChargeItemType("Billboard", ServiceType.sundry));
+        types.add(createChargeItemType("Regular Parking", FeatureType.parking));
+        types.add(createChargeItemType("Wide Parking", FeatureType.parking));
+        types.add(createChargeItemType("Nerrow Parking", FeatureType.parking));
+        types.add(createChargeItemType("Disabled Parking", FeatureType.parking));
+        types.add(createChargeItemType("Cat", FeatureType.pet));
+        types.add(createChargeItemType("Dog", FeatureType.pet));
+        types.add(createChargeItemType("Small Locker", FeatureType.locker));
+        types.add(createChargeItemType("Medium Locker", FeatureType.locker));
+        types.add(createChargeItemType("Large Locker", FeatureType.locker));
+        types.add(createChargeItemType("Fitness", FeatureType.addOn));
+        types.add(createChargeItemType("Pool", FeatureType.addOn));
+        types.add(createChargeItemType("Furnished", FeatureType.addOn));
+        types.add(createChargeItemType("Key", FeatureType.addOn));
+        types.add(createChargeItemType("Access Card", FeatureType.addOn));
+        types.add(createChargeItemType("Cable", FeatureType.addOn));
         return types;
     }
 
-    public ServiceItemType createServiceItemType(String name, ServiceType serviceType) {
+    public ServiceItemType createChargeItemType(String name, ServiceType serviceType) {
         ServiceItemType type = EntityFactory.create(ServiceItemType.class);
         type.name().setValue(name);
         type.serviceType().setValue(serviceType);
+        return type;
+    }
+
+    public ServiceItemType createChargeItemType(String name, FeatureType featureType) {
+        ServiceItemType type = EntityFactory.create(ServiceItemType.class);
+        type.name().setValue(name);
+        type.featureType().setValue(featureType);
         return type;
     }
 
