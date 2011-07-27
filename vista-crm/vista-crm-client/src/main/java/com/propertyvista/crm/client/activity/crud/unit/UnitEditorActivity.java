@@ -47,10 +47,4 @@ public class UnitEditorActivity extends EditorActivityBase<AptUnitDTO> implement
     public Presenter getOccupanciesPresenter() {
         return delegate.getOccupanciesPresenter();
     }
-
-    @Override
-    public void onPopulateSuccess(AptUnitDTO result) {
-        super.onPopulateSuccess(result);
-        delegate.populate(result.getPrimaryKey());
-    }
 }

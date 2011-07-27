@@ -71,12 +71,6 @@ public class FeatureEditorActivity extends EditorActivityBase<Feature> implement
     }
 
     @Override
-    public void onPopulateSuccess(Feature result) {
-        super.onPopulateSuccess(result);
-        delegate.populate(result.getPrimaryKey());
-    }
-
-    @Override
     protected void createNewEntity(AsyncCallback<Feature> callback) {
         assert (featureClass != null);
         callback.onSuccess(EntityFactory.create(featureClass));

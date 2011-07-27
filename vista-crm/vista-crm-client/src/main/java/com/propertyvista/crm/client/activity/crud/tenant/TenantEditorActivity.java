@@ -76,10 +76,4 @@ public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implemen
             entity.type().setValue(tenantType);
         }
     }
-
-    @Override
-    public void onPopulateSuccess(TenantDTO result) {
-        super.onPopulateSuccess(result);
-        delegate.populate(result.getPrimaryKey());
-    }
 }

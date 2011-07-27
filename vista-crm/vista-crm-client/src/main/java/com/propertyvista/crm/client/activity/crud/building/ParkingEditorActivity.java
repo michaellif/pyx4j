@@ -49,10 +49,4 @@ public class ParkingEditorActivity extends EditorActivityBase<ParkingDTO> implem
     public IListerView.Presenter getSpotPresenter() {
         return delegate.getSpotPresenter();
     }
-
-    @Override
-    public void onPopulateSuccess(ParkingDTO result) {
-        super.onPopulateSuccess(result);
-        delegate.populate(result.getPrimaryKey());
-    }
 }

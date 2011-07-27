@@ -78,10 +78,4 @@ public class BuildingEditorActivity extends EditorActivityBase<BuildingDTO> impl
     public Presenter getLockerAreaDTOPresenter() {
         return delegate.getLockerAreaDTOPresenter();
     }
-
-    @Override
-    public void onPopulateSuccess(BuildingDTO result) {
-        super.onPopulateSuccess(result);
-        delegate.populate(result.getPrimaryKey());
-    }
 }

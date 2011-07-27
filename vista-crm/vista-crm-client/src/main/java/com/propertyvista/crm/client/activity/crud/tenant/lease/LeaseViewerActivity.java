@@ -51,10 +51,4 @@ public class LeaseViewerActivity extends ViewerActivityBase<LeaseDTO> implements
     public Presenter getTenantPresenter() {
         return delegate.getTenantPresenter();
     }
-
-    @Override
-    public void onPopulateSuccess(LeaseDTO result) {
-        super.onPopulateSuccess(result);
-        delegate.populate(result);
-    }
 }

@@ -24,6 +24,7 @@ import com.propertyvista.crm.client.ui.crud.tenant.TenantView;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.TenantCrudService;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantViewerActivity extends ViewerActivityBase<TenantDTO> implements TenantViewerView.Presenter {
@@ -45,6 +46,8 @@ public class TenantViewerActivity extends ViewerActivityBase<TenantDTO> implemen
     @Override
     public void onPopulateSuccess(TenantDTO result) {
         super.onPopulateSuccess(result);
-        delegate.populate(result.getPrimaryKey());
+        if (Tenant.Type.person.equals(result.type().getValue())) {
+            delegate.populate(result.getPrimaryKey());
+        }
     }
 }

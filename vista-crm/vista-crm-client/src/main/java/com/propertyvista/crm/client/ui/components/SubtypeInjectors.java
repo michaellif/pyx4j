@@ -111,7 +111,7 @@ public class SubtypeInjectors {
 
         split.getLeftPanel().add(parent.inject(proto.contractID()), 15);
 //        injectVendor(main, proto.contractor(), parent);
-        split.getLeftPanel().add(parent.inject(proto.contractor()), 15);
+        split.getLeftPanel().add(parent.inject(proto.contractor()), 20);
         split.getLeftPanel().add(parent.inject(proto.cost()), 15);
         split.getRightPanel().add(parent.inject(proto.start()), 8.2);
         split.getRightPanel().add(parent.inject(proto.end()), 8.2);
@@ -164,9 +164,9 @@ public class SubtypeInjectors {
         main.add(split = new VistaDecoratorsSplitFlowPanel());
         SubtypeInjectors.injectWarranty(main, split, proto.warranty(), parent);
 
-        main.add(new CrmHeader1Decorator(i18n.tr(proto.maitenance().getMeta().getCaption())));
+        main.add(new CrmHeader1Decorator(i18n.tr(proto.maintenance().getMeta().getCaption())));
         main.add(split = new VistaDecoratorsSplitFlowPanel());
-        SubtypeInjectors.injectMaintenance(main, split, proto.maitenance(), parent);
+        SubtypeInjectors.injectMaintenance(main, split, proto.maintenance(), parent);
 
         main.add(parent.inject(proto.notes()), 23);
     }

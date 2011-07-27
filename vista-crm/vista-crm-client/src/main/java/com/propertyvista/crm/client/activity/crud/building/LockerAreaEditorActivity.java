@@ -49,10 +49,4 @@ public class LockerAreaEditorActivity extends EditorActivityBase<LockerAreaDTO> 
     public IListerView.Presenter getLockerPresenter() {
         return delegate.getLockerPresenter();
     }
-
-    @Override
-    public void onPopulateSuccess(LockerAreaDTO result) {
-        super.onPopulateSuccess(result);
-        delegate.populate(result.getPrimaryKey());
-    }
 }

@@ -42,10 +42,4 @@ public class FloorplanEditorActivity extends EditorActivityBase<FloorplanDTO> im
     public Presenter getFeaturesPresenter() {
         return delegate.getFeaturesPresenter();
     }
-
-    @Override
-    public void onPopulateSuccess(FloorplanDTO result) {
-        super.onPopulateSuccess(result);
-        delegate.populate(result.getPrimaryKey());
-    }
 }
