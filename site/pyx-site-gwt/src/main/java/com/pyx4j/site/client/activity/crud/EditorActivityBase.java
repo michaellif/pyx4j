@@ -98,7 +98,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
                     }
 
                     initNewItem(entity); // let descendant to initialise item... 
-                    view.populate(entity);
+                    onPopulateSuccess(entity);
                 }
 
                 @Override
