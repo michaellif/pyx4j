@@ -35,14 +35,11 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
 
     private static I18n i18n = I18nFactory.getI18n(AdminViewerViewImplBase.class);
 
-    protected final Class<? extends CrudAppPlace> placeClass;
-
     protected final AdminHeaderDecorator header;
 
     protected final String defaultCaption;
 
     public AdminViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CEntityForm<E> form) {
-        this.placeClass = placeClass;
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
         addNorth(header = new AdminHeaderDecorator(defaultCaption, createActionsPanel()), 3);
         form.initialize();
@@ -60,7 +57,7 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
         AnchorButton btnEdit = new AnchorButton(i18n.tr("Edit"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.edit(placeClass);
+                presenter.edit();
             }
         });
         btnEdit.addStyleName(btnEdit.getStylePrimaryName() + VistaAdminTheme.StyleSuffixEx.EditButton);

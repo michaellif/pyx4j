@@ -152,7 +152,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
     }
 
     protected void enableButtons(boolean enable) {
-        btnApply.setEnabled(enable);
+//        btnApply.setEnabled(enable);
         btnSave.setEnabled(enable);
     }
 

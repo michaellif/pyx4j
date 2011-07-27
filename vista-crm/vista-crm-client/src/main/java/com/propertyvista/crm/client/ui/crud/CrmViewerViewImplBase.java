@@ -35,14 +35,11 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     private static I18n i18n = I18nFactory.getI18n(CrmViewerViewImplBase.class);
 
-    protected final Class<? extends CrudAppPlace> placeClass;
-
     protected final CrmHeaderDecorator header;
 
     protected final String defaultCaption;
 
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        this.placeClass = placeClass;
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
         addNorth(header = new CrmHeaderDecorator(defaultCaption, createActionsPanel()), VistaCrmTheme.defaultHeaderHeight);
     }
@@ -64,7 +61,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         AnchorButton btnEdit = new AnchorButton(i18n.tr("Edit"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.edit(placeClass);
+                presenter.edit();
             }
         });
         btnEdit.addStyleName(btnEdit.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.EditButton);
