@@ -520,7 +520,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         private AptUnit selectedUnit;
 
         public SelectUnitBox() {
-            super("Select Unit");
+            super("Unit Selection");
         }
 
         @Override
@@ -535,7 +535,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             });
 
             VerticalPanel vPanel = new VerticalPanel();
+            vPanel.add(new CrmHeader2Decorator(i18n.tr("Select Building:")));
             vPanel.add(((LeaseView) getParentView()).getBuildingListerView().asWidget());
+            vPanel.add(new CrmHeader2Decorator(i18n.tr("Select Unit:")));
             vPanel.add(((LeaseView) getParentView()).getUnitListerView().asWidget());
             vPanel.setWidth("100%");
             return vPanel;
