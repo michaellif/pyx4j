@@ -21,7 +21,6 @@
 package com.pyx4j.site.client.ui.crud;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.rpc.CrudAppPlace;
 
 public interface IViewerView<E extends IEntity> extends IView<E> {
 
@@ -29,7 +28,7 @@ public interface IViewerView<E extends IEntity> extends IView<E> {
 
         public void populate();
 
-        public void edit(Class<? extends CrudAppPlace> editPlaceClass);
+        public void edit();
 
         public void cancel();
     }

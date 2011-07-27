@@ -43,6 +43,8 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected Key entityId;
 
+    Class<? extends CrudAppPlace> placeClass;
+
     public ViewerActivityBase(IViewerView<E> view, AbstractCrudService<E> service) {
         this.view = view;
         this.service = service;
@@ -51,6 +53,9 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     public ViewerActivityBase<E> withPlace(Place place) {
         entityId = null;
+
+        placeClass = ((CrudAppPlace) place).getClass();
+
         String id;
         if ((id = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID)) != null) {
             entityId = new Key(id);
@@ -85,8 +90,8 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
-    public void edit(Class<? extends CrudAppPlace> editPlaceClass) {
-        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(editPlaceClass);
+    public void edit() {
+        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
         place.formEditorPlace(entityId);
         AppSite.getPlaceController().goTo(place);
     }

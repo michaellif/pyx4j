@@ -31,6 +31,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.IEditorView;
 import com.pyx4j.site.client.ui.crud.IEditorView.EditMode;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -48,6 +49,8 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected Key parentID = null;
 
+    Class<? extends CrudAppPlace> placeClass;
+
     public EditorActivityBase(IEditorView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
         this.view = view;
         this.service = service;
@@ -55,9 +58,12 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         view.setPresenter(this);
     }
 
+    @SuppressWarnings("unchecked")
     public EditorActivityBase<E> withPlace(Place place) {
         entityID = null;
         parentID = null;
+
+        placeClass = ((CrudAppPlace) place).getClass();
 
         String id;
         if ((id = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID)) != null) {
@@ -182,7 +188,13 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected void onSaveSuccess(E result) {
         view.onSaveSuccess();
-        History.back();
+        if (isNewItem()) {
+            CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
+            place.formViewerPlace(result.getPrimaryKey());
+            AppSite.getPlaceController().goTo(place);
+        } else {
+            History.back();
+        }
     }
 
     protected void onSaveFail(Throwable caught) {
