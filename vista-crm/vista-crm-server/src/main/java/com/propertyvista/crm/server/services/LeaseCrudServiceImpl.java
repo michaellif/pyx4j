@@ -21,6 +21,7 @@ import com.propertyvista.crm.rpc.services.LeaseCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
@@ -45,15 +46,24 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             }
             // fill transient data: 
             dto.selectedBuilding().set(PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, dto.unit().belongsTo().getPrimaryKey()));
+
+            dto.tenants().clear();
+            EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
+            dto.tenants().addAll(PersistenceServicesFactory.getPersistenceService().query(criteria));
         }
     }
 
     @Override
-    protected void enhanceSave(Lease dbo, LeaseDTO dto) {
+    protected void enhanceSaveDTO(Lease dbo, LeaseDTO dto) {
         // set currently selected unit:
         EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().lease(), dbo));
         UnitSelection unitSelection = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
         unitSelection.selectedUnitId().setValue(dto.unit().getPrimaryKey());
+        // update Tenants:
+        for (TenantInLease tenant : dto.tenants()) {
+            tenant.lease().set(dbo);
+        }
     }
 }

@@ -20,7 +20,7 @@ import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -50,7 +50,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
     }
 
     @Override
-    public IListerView<TenantInLease> getTenantListerView() {
+    public IListerView<Tenant> getTenantListerView() {
         return delegate.getTenantListerView();
     }
 }

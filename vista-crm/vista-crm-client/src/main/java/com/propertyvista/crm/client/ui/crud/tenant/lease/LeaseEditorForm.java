@@ -14,36 +14,82 @@
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.Widget;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.Range;
+
+import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CMonthYearPicker;
+import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.IView;
+import com.pyx4j.site.client.ui.crud.ListerBase.ItemSelectionHandler;
+import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
+import com.propertyvista.common.client.ui.validators.OldAgeValidator;
+import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
+import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.CrmFolderItemDecorator;
+import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.Pet.WeightUnit;
+import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.charges.ChargeLine;
+import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
@@ -62,12 +108,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     @Override
     public IsWidget createContent() {
 
-        tabPanel.add(createBuildingTab(), i18n.tr("Building"));
-        tabPanel.add(createUnitTab(), i18n.tr("Unit"));
-        tabPanel.addDisable(((LeaseView) getParentView()).getTenantListerView().asWidget(), i18n.tr("Tenants"));
-        tabPanel.add(new ScrollPanel(createPetsTab()), i18n.tr("Add-ons"));
-
         tabPanel.add(new ScrollPanel(createDetailsTab()), i18n.tr("Details"));
+        tabPanel.add(new ScrollPanel(createTenantsTab()), i18n.tr("Tenants"));
+        tabPanel.add(new ScrollPanel(createAddonsTab()), i18n.tr("Add-ons"));
         tabPanel.add(new ScrollPanel(createFinancialsTab()), i18n.tr("Financials"));
 
         tabPanel.setDisableMode(isEditable());
@@ -99,18 +142,11 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         return main;
     }
 
-    private Widget createPetsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-
-        main.add(inject(proto().pets(), createPetListViewer()));
-
-        return main;
-    }
-
     private Widget createDetailsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
         main.add(inject(proto().leaseID()), 15);
+        main.add(inject(proto().status()), 15);
         main.add(inject(proto().leaseFrom()), 8.2);
         main.add(inject(proto().leaseTo()), 8.2);
         main.add(inject(proto().expectedMoveIn()), 8.2);
@@ -118,6 +154,23 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.add(inject(proto().actualMoveIn()), 8.2);
         main.add(inject(proto().actualMoveOut()), 8.2);
         main.add(inject(proto().signDate()), 8.2);
+
+        return main;
+    }
+
+    private Widget createTenantsTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        main.add(inject(proto().tenants(), createTenantsEditorColumns()));
+        return main;
+    }
+
+    private Widget createAddonsTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+
+        main.add(new CrmHeader2Decorator(proto().pets()));
+        main.add(inject(proto().pets(), createPetListViewer()));
+        main.add(new CrmHeader2Decorator(proto().vehicles()));
+        main.add(inject(proto().vehicles(), createVehicleListViewer()));
 
         return main;
     }
@@ -143,6 +196,195 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().label(), "10em"));
                 return columns;
+            }
+        };
+    }
+
+    private CEntityFolderEditor<TenantInLease> createTenantsEditorColumns() {
+
+        return new CrmEntityFolder<TenantInLease>(TenantInLease.class, i18n.tr("Tenant"), isEditable()) {
+
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().tenant(), "20em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().birthDate(), "8.2em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().email(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().status(), "8.5em"));
+//                columns.add(new EntityFolderColumnDescriptor(proto().takeOwnership(), "5em"));
+                return columns;
+            }
+
+            @Override
+            protected IFolderEditorDecorator<TenantInLease> createFolderDecorator() {
+                IFolderEditorDecorator<TenantInLease> decor = new CrmTableFolderDecorator<TenantInLease>(columns(), i18n.tr("Add new Tenant"),
+                        LeaseEditorForm.this.isEditable());
+                setExternalAddItemProcessing(true);
+                decor.addItemAddClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        final SelectTenantBox box = new SelectTenantBox();
+                        box.setPopupPositionAndShow(new PositionCallback() {
+                            @Override
+                            public void setPosition(int offsetWidth, int offsetHeight) {
+                                box.setPopupPosition((Window.getClientWidth() - offsetWidth) / 2, (Window.getClientHeight() - offsetHeight) / 3);
+                            }
+                        });
+                        box.addCloseHandler(new CloseHandler<PopupPanel>() {
+                            @Override
+                            public void onClose(CloseEvent<PopupPanel> event) {
+                                if (box.getSelectedTenant() != null) {
+                                    TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
+                                    newTenantInLease.tenant().set(box.getSelectedTenant());
+                                    addItem(newTenantInLease);
+                                }
+                            }
+                        });
+
+                        box.show();
+                    }
+                });
+                return decor;
+            }
+
+            @Override
+            protected CEntityFolderItemEditor<TenantInLease> createItem() {
+                return new CEntityFolderRowEditor<TenantInLease>(TenantInLease.class, columns()) {
+
+                    @SuppressWarnings("rawtypes")
+                    @Override
+                    public IsWidget createContent() {
+                        if (isFirst()) {
+                            HorizontalPanel main = new HorizontalPanel();
+                            for (EntityFolderColumnDescriptor column : columns) {
+                                CComponent<?> component = createCell(column);
+                                // Don't show relation and takeOwnership 
+                                if (column.getObject() == proto().relationship() || column.getObject() == proto().takeOwnership()) {
+                                    component.setVisible(false);
+                                } else if (column.getObject() == proto().tenant().person().email()) {
+                                    ((CEditableComponent) component).setEditable(false);
+                                }
+                                main.add(createCellDecorator(column, component, column.getWidth()));
+                            }
+                            main.setWidth("100%");
+                            return main;
+                        } else {
+                            return super.createContent();
+                        }
+                    }
+
+                    @SuppressWarnings({ "unchecked", "rawtypes" })
+                    @Override
+                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                        CComponent<?> comp = null;
+                        if (isFirst() && proto().status() == column.getObject()) {
+                            CTextField textComp = new CTextField();
+                            textComp.setEditable(false);
+                            textComp.setValue(TenantInLease.Status.Applicant.name());
+                            comp = textComp;
+                        } else if (proto().tenant() == column.getObject()) {
+                            comp = inject(column.getObject(), new CEntityLabel());
+                        } else if (proto().tenant().person().birthDate() == column.getObject()) {
+                            comp = inject(column.getObject(), new CLabel());
+                        } else if (proto().tenant().person().email() == column.getObject()) {
+                            comp = inject(column.getObject(), new CLabel());
+                        } else {
+                            comp = super.createCell(column);
+
+                            if (proto().status() == column.getObject() && comp instanceof CComboBox) {
+                                Collection<TenantInLease.Status> status = EnumSet.allOf(TenantInLease.Status.class);
+                                status.remove(TenantInLease.Status.Applicant);
+                                ((CComboBox) comp).setOptions(status);
+                            }
+                        }
+                        return comp;
+                    }
+
+                    @Override
+                    public void populate(TenantInLease value) {
+                        super.populate(value);
+
+                        if (!isFirst() && !value.tenant().person().birthDate().isNull()) {
+                            if (ValidationUtils.isOlderThen18(value.tenant().person().birthDate().getValue())) {
+                                enableStatusAndOwnership();
+                            } else {
+                                setMandatoryDependant();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void addValidations() {
+
+                        get(proto().tenant().person().birthDate()).addValueValidator(new OldAgeValidator());
+
+                        get(proto().tenant().person().birthDate()).addValueValidator(new BirthdayDateValidator());
+
+                        get(proto().tenant().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
+
+                            @Override
+                            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                                TenantInLease.Status status = getValue().status().getValue();
+                                if ((status == TenantInLease.Status.Applicant) || (status == TenantInLease.Status.CoApplicant)) {
+                                    // TODO I Believe that this is not correct, this logic has to be applied to Dependents as well, as per VISTA-273
+                                    return ValidationUtils.isOlderThen18(value);
+                                } else {
+                                    return true;
+                                }
+                            }
+
+                            @Override
+                            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                                return LeaseEditorForm.i18n.tr("Applicant and co-applicant should be at least 18 years old");
+                            }
+                        });
+
+                        if (!isFirst()) { // all this stuff isn't for primary applicant:  
+                            get(proto().tenant().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+
+                                @Override
+                                public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                                    TenantInLease.Status status = getValue().status().getValue();
+                                    if ((status == null) || (status == TenantInLease.Status.Dependant)) {
+                                        if (ValidationUtils.isOlderThen18(event.getValue())) {
+                                            boolean currentEditableState = get(proto().status()).isEditable();
+                                            enableStatusAndOwnership();
+                                            if (!currentEditableState) {
+                                                get(proto().status()).setValue(null);
+                                            }
+                                        } else {
+                                            setMandatoryDependant();
+                                        }
+                                    }
+                                }
+                            });
+
+                            get(proto().status()).addValueChangeHandler(
+                                    new RevalidationTrigger<TenantInLease.Status>(get(proto().tenant().person().birthDate())));
+                        }
+                    }
+
+                    @Override
+                    public IFolderItemEditorDecorator<TenantInLease> createFolderItemDecorator() {
+                        return new CrmFolderItemDecorator<TenantInLease>(LeaseEditorForm.this.i18n.tr("Remove Tenant"), LeaseEditorForm.this.isEditable()
+                                && !isFirst());
+                    }
+
+                    private void setMandatoryDependant() {
+                        get(proto().status()).setValue(TenantInLease.Status.Dependant);
+                        get(proto().status()).setEditable(false);
+
+//                        get(proto().takeOwnership()).setValue(true);
+//                        get(proto().takeOwnership()).setEnabled(false);
+                    }
+
+                    private void enableStatusAndOwnership() {
+                        get(proto().status()).setEditable(true);
+//                        get(proto().takeOwnership()).setEnabled(true);
+                    }
+                };
             }
         };
     }
@@ -180,8 +422,11 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         return new CrmFolderItemDecorator<Pet>(LeaseEditorForm.this.i18n.tr("Remove Pet"), LeaseEditorForm.this.isEditable());
                     }
 
-//                    @Override
-//                    public void addValidations() {
+                    @Override
+                    public void addValidations() {
+//                        
+// TODO find out what to do with weight validation:                        
+//                        
 //                        EditableValueValidator<Integer> weightValidator = new EditableValueValidator<Integer>() {
 //                            @Override
 //                            public boolean isValid(CEditableComponent<Integer, ?> component, Integer value) {
@@ -201,8 +446,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 //                        get(proto().weight()).addValueValidator(weightValidator);
 //                        get(proto().weightUnit()).addValueChangeHandler(new RevalidationTrigger<WeightUnit>(get(proto().weight())));
 //
-//                        get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
-//                    }
+                        get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
+                    }
 
                 };
             }
@@ -217,5 +462,112 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 super.createNewEntity(newEntity, callback);
             }
         };
+    }
+
+    private CEntityFolderEditor<Vehicle> createVehicleListViewer() {
+        return new CrmEntityFolder<Vehicle>(Vehicle.class, i18n.tr("Vehicle"), isEditable()) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().plateNumber(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().year(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().make(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().model(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().country(), "9em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().province(), "16em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().parkingSpot(), "13em"));
+                //  TODO : filter that parking spot on available spots only and from current building!..                  
+                return columns;
+            }
+
+            @Override
+            protected CEntityFolderItemEditor<Vehicle> createItem() {
+                return new CEntityFolderRowEditor<Vehicle>(Vehicle.class, columns()) {
+
+                    @Override
+                    public IFolderItemEditorDecorator<Vehicle> createFolderItemDecorator() {
+                        return new CrmFolderItemDecorator<Vehicle>(LeaseEditorForm.this.i18n.tr("Remove Vehicle"), LeaseEditorForm.this.isEditable());
+                    }
+
+                    @Override
+                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                        CComponent<?> comp = super.createCell(column);
+                        if (column.getObject() == proto().year() && comp instanceof CMonthYearPicker) {
+                            ((CMonthYearPicker) comp).setYearRange(new Range(1900, TimeUtils.today().getYear() + 1));
+                        }
+                        return comp;
+                    }
+
+                    @Override
+                    public void addValidations() {
+                        ProvinceContryFilters.attachFilters(get(proto().province()), get(proto().country()), new OptionsFilter<Province>() {
+                            @Override
+                            public boolean acceptOption(Province entity) {
+                                if (getValue() == null) {
+                                    return true;
+                                } else {
+                                    Country country = getValue().country();
+                                    return country.isNull() || EqualsHelper.equals(entity.country().name(), country.name());
+                                }
+                            }
+                        });
+                    }
+
+                };
+            }
+        };
+    }
+
+    private class SelectTenantBox extends DialogPanel {
+
+        private final I18n i18n = I18nFactory.getI18n(SelectTenantBox.class);
+
+        private Tenant selectedTenant = null;
+
+        private Button okButton;
+
+        public SelectTenantBox() {
+            super(false, true);
+            setCaption(i18n.tr("Select Tenant"));
+
+            HorizontalPanel buttons = new HorizontalPanel();
+            buttons.add(okButton = new Button(i18n.tr("OK"), new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    hide();
+                }
+            }));
+            buttons.add(new Button(i18n.tr("Cancel"), new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    selectedTenant = null;
+                    hide();
+                }
+            }));
+            buttons.setSpacing(8);
+
+            okButton.setEnabled(false);
+            ((LeaseView) getParentView()).getTenantListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<Tenant>() {
+                @Override
+                public void onSelect(Tenant selectedItem) {
+                    selectedTenant = selectedItem;
+                    okButton.setEnabled(true);
+                }
+            });
+
+            VerticalPanel vPanel = new VerticalPanel();
+            vPanel.add(((LeaseView) getParentView()).getTenantListerView().asWidget());
+            vPanel.add(buttons);
+            vPanel.setCellHorizontalAlignment(buttons, HasHorizontalAlignment.ALIGN_CENTER);
+            vPanel.setSpacing(8);
+            vPanel.setSize("100%", "100%");
+
+            setContentWidget(vPanel);
+            setSize("700px", "400px");
+        }
+
+        public Tenant getSelectedTenant() {
+            return selectedTenant;
+        }
     }
 }

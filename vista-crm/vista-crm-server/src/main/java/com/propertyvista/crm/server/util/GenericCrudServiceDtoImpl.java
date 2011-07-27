@@ -67,14 +67,18 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
         callback.onSuccess(dto);
     }
 
-    protected void enhanceSave(DBO dbo, DTO dto) {
+    protected void enhanceSaveDBO(DBO dbo, DTO dto) {
+    }
+
+    protected void enhanceSaveDTO(DBO dbo, DTO dto) {
     }
 
     @Override
     public void save(AsyncCallback<DTO> callback, DTO dto) {
         DBO entity = GenericConverter.convertDTO2DBO(dto, dboClass);
-        enhanceSave(entity, dto);
+        enhanceSaveDBO(entity, dto);
         PersistenceServicesFactory.getPersistenceService().merge(entity);
+        enhanceSaveDTO(entity, dto);
         callback.onSuccess(GenericConverter.convertDBO2DTO(entity, dtoClass));
     }
 

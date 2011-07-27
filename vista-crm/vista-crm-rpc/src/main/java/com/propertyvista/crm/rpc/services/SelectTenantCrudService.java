@@ -7,19 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 18, 2011
- * @author vlads
+ * Created on 2011-05-09
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.crm.rpc.services;
 
-import com.propertyvista.crm.rpc.services.TenantInLeaseCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-public class TenantInLeaseCrudServiceImpl extends GenericCrudServiceImpl<TenantInLease> implements TenantInLeaseCrudService {
+import com.propertyvista.domain.tenant.Tenant;
 
-    public TenantInLeaseCrudServiceImpl() {
-        super(TenantInLease.class);
-    }
+public interface SelectTenantCrudService extends AbstractCrudService<Tenant> {
 }

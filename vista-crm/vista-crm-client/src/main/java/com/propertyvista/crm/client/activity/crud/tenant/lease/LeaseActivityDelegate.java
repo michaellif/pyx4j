@@ -23,9 +23,9 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseView;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.LeaseUnitCrudService;
-import com.propertyvista.crm.rpc.services.TenantInLeaseCrudService;
+import com.propertyvista.crm.rpc.services.SelectTenantCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -46,8 +46,8 @@ public class LeaseActivityDelegate implements LeaseView.Presenter {
         unitsLister = new ListerActivityBase<AptUnit>(view.getUnitListerView(), (AbstractCrudService<AptUnit>) GWT.create(LeaseUnitCrudService.class),
                 AptUnit.class);
 
-        tenantsLister = new ListerActivityBase<TenantInLease>(view.getTenantListerView(),
-                (AbstractCrudService<TenantInLease>) GWT.create(TenantInLeaseCrudService.class), TenantInLease.class);
+        tenantsLister = new ListerActivityBase<Tenant>(view.getTenantListerView(), (AbstractCrudService<Tenant>) GWT.create(SelectTenantCrudService.class),
+                Tenant.class);
     }
 
     public void populate(LeaseDTO current) {

@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.tenant.application;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
-import com.propertyvista.crm.client.ui.crud.tenant.lease.TenantInLeaseLister;
 import com.propertyvista.domain.tenant.TenantInLease;
 
 public class ApplicationViewDelegate implements ApplicationView {

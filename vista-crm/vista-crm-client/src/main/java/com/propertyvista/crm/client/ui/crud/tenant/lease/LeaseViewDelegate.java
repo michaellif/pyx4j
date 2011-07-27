@@ -17,7 +17,7 @@ import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.BuildingDTO;
 
 public class LeaseViewDelegate implements LeaseView {
@@ -26,12 +26,12 @@ public class LeaseViewDelegate implements LeaseView {
 
     private final IListerView<AptUnit> unitLister;
 
-    private final IListerView<TenantInLease> tenantLister;
+    private final IListerView<Tenant> tenantLister;
 
     public LeaseViewDelegate(boolean readOnly) {
         buildingLister = new ListerInternalViewImplBase<BuildingDTO>(new SelectedBuildingLister(/* readOnly */));
         unitLister = new ListerInternalViewImplBase<AptUnit>(new SelectedUnitLister(/* readOnly */));
-        tenantLister = new ListerInternalViewImplBase<TenantInLease>(new TenantInLeaseLister(/* readOnly */));
+        tenantLister = new ListerInternalViewImplBase<Tenant>(new SelectTenantLister(/* readOnly */));
     }
 
     @Override
@@ -45,7 +45,7 @@ public class LeaseViewDelegate implements LeaseView {
     }
 
     @Override
-    public IListerView<TenantInLease> getTenantListerView() {
+    public IListerView<Tenant> getTenantListerView() {
         return tenantLister;
     }
 }

@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant.lease;
+package com.propertyvista.crm.client.ui.crud.tenant.application;
 
 import java.util.List;
 
@@ -25,13 +25,9 @@ import com.propertyvista.domain.tenant.TenantInLease;
 public class TenantInLeaseLister extends ListerBase<TenantInLease> {
 
     public TenantInLeaseLister() {
-        super(TenantInLease.class, CrmSiteMap.Tenants.TenantInLease.class);
-        setFiltersVisible(false);
-    }
-
-    public TenantInLeaseLister(boolean readOnly) {
-        super(TenantInLease.class, CrmSiteMap.Tenants.TenantInLease.class, readOnly);
-        setFiltersVisible(false);
+        super(TenantInLease.class, null, true);
+        getListPanel().getDataTable().setMarkSelectedRow(true);
+        getListPanel().getDataTable().setHasCheckboxColumn(false);
     }
 
     @Override
