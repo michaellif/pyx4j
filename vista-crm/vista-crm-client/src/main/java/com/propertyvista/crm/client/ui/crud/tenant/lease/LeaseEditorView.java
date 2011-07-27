@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 import com.pyx4j.site.client.ui.crud.IEditorView;
 
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseEditorView extends IEditorView<LeaseDTO>, LeaseView {
@@ -24,7 +23,5 @@ public interface LeaseEditorView extends IEditorView<LeaseDTO>, LeaseView {
     interface Presenter extends IEditorView.Presenter, LeaseView.Presenter {
 
         void setSelectedBuilding(Building selected);
-
-        void setSelectedUnit(AptUnit selected);
     }
 }

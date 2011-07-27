@@ -27,6 +27,7 @@ public class SelectedBuildingLister extends ListerBase<BuildingDTO> {
         super(BuildingDTO.class, null, true);
         getListPanel().getDataTable().setMarkSelectedRow(true);
         getListPanel().getDataTable().setHasCheckboxColumn(false);
+        getListPanel().setPageSize(5);
     }
 
     @Override

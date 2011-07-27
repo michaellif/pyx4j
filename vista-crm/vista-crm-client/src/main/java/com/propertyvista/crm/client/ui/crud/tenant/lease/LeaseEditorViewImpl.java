@@ -40,14 +40,6 @@ public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> impleme
                 enableButtons(true);
             }
         });
-        delegate.getUnitListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<AptUnit>() {
-            @Override
-            public void onSelect(AptUnit selectedItem) {
-                ((LeaseEditorView.Presenter) presenter).setSelectedUnit(selectedItem);
-                enableButtons(true);
-            }
-        });
-
         // create/init/set main form here: 
         CrmEntityForm<LeaseDTO> form = new LeaseEditorForm(this);
         form.initialize();

@@ -25,7 +25,6 @@ import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements LeaseEditorView.Presenter {
@@ -65,13 +64,6 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     public void setSelectedBuilding(Building selected) {
         LeaseDTO current = view.getValue();
         current.selectedBuilding().set(selected);
-        onPopulateSuccess(current);
-    }
-
-    @Override
-    public void setSelectedUnit(AptUnit selected) {
-        LeaseDTO current = view.getValue();
-        current.unit().set(selected);
-        onPopulateSuccess(current);
+        delegate.populateUnitLister(selected);
     }
 }

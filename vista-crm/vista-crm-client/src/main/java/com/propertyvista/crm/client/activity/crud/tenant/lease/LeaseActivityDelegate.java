@@ -24,6 +24,7 @@ import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseView;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.LeaseUnitCrudService;
 import com.propertyvista.crm.rpc.services.SelectTenantCrudService;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.BuildingDTO;
@@ -53,13 +54,15 @@ public class LeaseActivityDelegate implements LeaseView.Presenter {
     public void populate(LeaseDTO current) {
 
         buildingsLister.populateData(0);
+        populateUnitLister(current.selectedBuilding());
+        tenantsLister.populateData(0);
+    }
 
-        if (!current.selectedBuilding().isEmpty()) {
-            unitsLister.setParentFiltering(current.selectedBuilding().getPrimaryKey());
+    public void populateUnitLister(Building selected) {
+        if (!selected.isEmpty()) {
+            unitsLister.setParentFiltering(selected.getPrimaryKey());
         }
         unitsLister.populateData(0);
-
-        tenantsLister.populateData(0);
     }
 
     @Override

@@ -32,7 +32,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -85,6 +84,7 @@ import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.Pet.WeightUnit;
 import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.charges.ChargeLine;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.Tenant;
@@ -118,35 +118,39 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         return tabPanel;
     }
 
-    private Widget createBuildingTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-
-        main.add(new HTML("&nbsp"));
-        main.add(inject(proto().selectedBuilding(), new CEntityLabel()), 50);
-        if (isEditable()) {
-            main.add(((LeaseView) getParentView()).getBuildingListerView().asWidget());
-        }
-
-        return main;
-    }
-
-    private Widget createUnitTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-
-        main.add(new HTML("&nbsp"));
-        main.add(inject(proto().unit(), new CEntityLabel()), 50);
-        if (isEditable()) {
-            main.add(((LeaseView) getParentView()).getUnitListerView().asWidget());
-        }
-
-        return main;
-    }
-
     private Widget createDetailsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
         main.add(inject(proto().leaseID()), 15);
         main.add(inject(proto().status()), 15);
+
+        HorizontalPanel unitPanel = new HorizontalPanel();
+        unitPanel.add(main.createDecorator(inject(proto().unit(), new CEntityLabel()), 15));
+        if (isEditable()) {
+            unitPanel.add(new Button("Select...", new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    final SelectUnitBox box = new SelectUnitBox();
+                    box.setPopupPositionAndShow(new PositionCallback() {
+                        @Override
+                        public void setPosition(int offsetWidth, int offsetHeight) {
+                            box.setPopupPosition((Window.getClientWidth() - offsetWidth) / 2, (Window.getClientHeight() - offsetHeight) / 3);
+                        }
+                    });
+                    box.addCloseHandler(new CloseHandler<PopupPanel>() {
+                        @Override
+                        public void onClose(CloseEvent<PopupPanel> event) {
+                            if (box.getSelectedUnit() != null) {
+                                get(proto().unit()).setValue(box.getSelectedUnit());
+                            }
+                        }
+                    });
+                    box.show();
+                }
+            }));
+        }
+        main.add(unitPanel);
+
         main.add(inject(proto().leaseFrom()), 8.2);
         main.add(inject(proto().leaseTo()), 8.2);
         main.add(inject(proto().expectedMoveIn()), 8.2);
@@ -203,7 +207,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     private CEntityFolderEditor<TenantInLease> createTenantsEditorColumns() {
 
         return new CrmEntityFolder<TenantInLease>(TenantInLease.class, i18n.tr("Tenant"), isEditable()) {
-
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
@@ -242,7 +245,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                 }
                             }
                         });
-
                         box.show();
                     }
                 });
@@ -252,7 +254,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             @Override
             protected CEntityFolderItemEditor<TenantInLease> createItem() {
                 return new CEntityFolderRowEditor<TenantInLease>(TenantInLease.class, columns()) {
-
                     @SuppressWarnings("rawtypes")
                     @Override
                     public IsWidget createContent() {
@@ -319,11 +320,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     public void addValidations() {
 
                         get(proto().tenant().person().birthDate()).addValueValidator(new OldAgeValidator());
-
                         get(proto().tenant().person().birthDate()).addValueValidator(new BirthdayDateValidator());
-
                         get(proto().tenant().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
-
                             @Override
                             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
                                 TenantInLease.Status status = getValue().status().getValue();
@@ -368,7 +366,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                     @Override
                     public IFolderItemEditorDecorator<TenantInLease> createFolderItemDecorator() {
-                        return new CrmFolderItemDecorator<TenantInLease>(LeaseEditorForm.this.i18n.tr("Remove Tenant"), LeaseEditorForm.this.isEditable()
+                        return new CrmFolderItemDecorator<TenantInLease>(CrmEntityForm.i18n.tr("Remove Tenant"), LeaseEditorForm.this.isEditable()
                                 && !isFirst());
                     }
 
@@ -419,7 +417,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 return new CEntityFolderRowEditor<Pet>(Pet.class, columns()) {
                     @Override
                     public IFolderItemEditorDecorator<Pet> createFolderItemDecorator() {
-                        return new CrmFolderItemDecorator<Pet>(LeaseEditorForm.this.i18n.tr("Remove Pet"), LeaseEditorForm.this.isEditable());
+                        return new CrmFolderItemDecorator<Pet>(CrmEntityForm.i18n.tr("Remove Pet"), LeaseEditorForm.this.isEditable());
                     }
 
                     @Override
@@ -475,7 +473,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 columns.add(new EntityFolderColumnDescriptor(proto().model(), "8em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().country(), "9em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().province(), "16em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().parkingSpot(), "13em"));
+//                columns.add(new EntityFolderColumnDescriptor(proto().parkingSpot(), "13em"));
                 //  TODO : filter that parking spot on available spots only and from current building!..                  
                 return columns;
             }
@@ -486,7 +484,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                     @Override
                     public IFolderItemEditorDecorator<Vehicle> createFolderItemDecorator() {
-                        return new CrmFolderItemDecorator<Vehicle>(LeaseEditorForm.this.i18n.tr("Remove Vehicle"), LeaseEditorForm.this.isEditable());
+                        return new CrmFolderItemDecorator<Vehicle>(CrmEntityForm.i18n.tr("Remove Vehicle"), LeaseEditorForm.this.isEditable());
                     }
 
                     @Override
@@ -516,6 +514,60 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 };
             }
         };
+    }
+
+    private class SelectUnitBox extends DialogPanel {
+
+        private final I18n i18n = I18nFactory.getI18n(SelectUnitBox.class);
+
+        private AptUnit selectedUnit = null;
+
+        private Button okButton;
+
+        public SelectUnitBox() {
+            super(false, true);
+            setCaption(i18n.tr("Select Unit"));
+
+            HorizontalPanel buttons = new HorizontalPanel();
+            buttons.add(okButton = new Button(i18n.tr("OK"), new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    hide();
+                }
+            }));
+            buttons.add(new Button(i18n.tr("Cancel"), new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    selectedUnit = null;
+                    hide();
+                }
+            }));
+            buttons.setSpacing(8);
+
+            okButton.setEnabled(false);
+            ((LeaseView) getParentView()).getUnitListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<AptUnit>() {
+                @Override
+                public void onSelect(AptUnit selectedItem) {
+                    selectedUnit = selectedItem;
+                    okButton.setEnabled(true);
+                }
+            });
+
+            VerticalPanel vPanel = new VerticalPanel();
+            vPanel.add(((LeaseView) getParentView()).getBuildingListerView().asWidget());
+            vPanel.add(((LeaseView) getParentView()).getUnitListerView().asWidget());
+            vPanel.add(buttons);
+            vPanel.setCellHorizontalAlignment(buttons, HasHorizontalAlignment.ALIGN_CENTER);
+            vPanel.setSpacing(8);
+            vPanel.setSize("100%", "100%");
+
+            setContentWidget(vPanel);
+            setSize("900px", "500px");
+        }
+
+        public AptUnit getSelectedUnit() {
+            return selectedUnit;
+        }
     }
 
     private class SelectTenantBox extends DialogPanel {

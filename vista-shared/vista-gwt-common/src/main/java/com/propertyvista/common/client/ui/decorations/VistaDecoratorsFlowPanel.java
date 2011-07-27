@@ -60,6 +60,21 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
     }
 
     public void add(final CComponent<?> component, double labelWidth, double componentWidth, String componentCaption) {
+        super.add(createDecorator(component, labelWidth, componentWidth, componentCaption));
+        if (!readOnlyMode) {
+            super.add(new HTML());
+        }
+    }
+
+    public VistaWidgetDecorator createDecorator(final CComponent<?> component, double componentWidth) {
+        return this.createDecorator(component, defaultLabelWidth, componentWidth);
+    }
+
+    public VistaWidgetDecorator createDecorator(final CComponent<?> component, double labelWidth, double componentWidth) {
+        return this.createDecorator(component, labelWidth, componentWidth, null);
+    }
+
+    public VistaWidgetDecorator createDecorator(final CComponent<?> component, double labelWidth, double componentWidth, String componentCaption) {
         DecorationData decorData = new DecorationData();
         decorData.componentWidth = componentWidth;
         decorData.componentCaption = componentCaption;
@@ -71,10 +86,7 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
         if (readOnlyMode) {
             decorData.labelAlignment = HasHorizontalAlignment.ALIGN_LEFT;
         }
-        super.add(new VistaWidgetDecorator(component, decorData));
-        if (!readOnlyMode) {
-            super.add(new HTML());
-        }
+        return new VistaWidgetDecorator(component, decorData);
     }
 
     public double getDefaultLabelWidth() {
