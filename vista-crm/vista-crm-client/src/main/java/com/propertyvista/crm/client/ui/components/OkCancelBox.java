@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 /**
- * Draws pop-up dialog box with OK and Cancel button and
+ * Draws pop-up dialog box with OK and Cancel buttons and
  * user definable content (by means of {@link #createContent()}) inside.
  * 
  * @author Vlad
@@ -72,19 +72,28 @@ public abstract class OkCancelBox extends DialogPanel {
     }
 
     /**
-     * Implement in derived class - actual inner content of the box.
+     * Implement in derived class - your inner content of the box.
      * 
      * @return widget with user's content.
      */
     protected abstract Widget createContent();
 
+    /**
+     * Override to set your desired size
+     */
     protected void setSize() {
         setSize("400px", "300px");
     }
 
+    /**
+     * Override for some meaningful action.
+     */
     protected void onOk() {
     }
 
+    /**
+     * Override for some meaningful action.
+     */
     protected void onCancel() {
     }
 }

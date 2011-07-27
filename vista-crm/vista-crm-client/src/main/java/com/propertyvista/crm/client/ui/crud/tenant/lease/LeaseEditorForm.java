@@ -22,17 +22,12 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -75,6 +70,7 @@ import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.CrmFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.OkCancelBox;
+import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.Pet.WeightUnit;
@@ -126,22 +122,14 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             unitPanel.add(new Button("Select...", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    final SelectUnitBox box = new SelectUnitBox();
-                    box.setPopupPositionAndShow(new PositionCallback() {
+                    new ShowPopUpBox<SelectUnitBox>(new SelectUnitBox()) {
                         @Override
-                        public void setPosition(int offsetWidth, int offsetHeight) {
-                            box.setPopupPosition((Window.getClientWidth() - offsetWidth) / 2, (Window.getClientHeight() - offsetHeight) / 3);
-                        }
-                    });
-                    box.addCloseHandler(new CloseHandler<PopupPanel>() {
-                        @Override
-                        public void onClose(CloseEvent<PopupPanel> event) {
+                        protected void onClose(SelectUnitBox box) {
                             if (box.getSelectedUnit() != null) {
                                 get(proto().unit()).setValue(box.getSelectedUnit());
                             }
                         }
-                    });
-                    box.show();
+                    };
                 }
             }));
         }
@@ -224,24 +212,16 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
-                        final SelectTenantBox box = new SelectTenantBox();
-                        box.setPopupPositionAndShow(new PositionCallback() {
+                        new ShowPopUpBox<SelectTenantBox>(new SelectTenantBox()) {
                             @Override
-                            public void setPosition(int offsetWidth, int offsetHeight) {
-                                box.setPopupPosition((Window.getClientWidth() - offsetWidth) / 2, (Window.getClientHeight() - offsetHeight) / 3);
-                            }
-                        });
-                        box.addCloseHandler(new CloseHandler<PopupPanel>() {
-                            @Override
-                            public void onClose(CloseEvent<PopupPanel> event) {
+                            protected void onClose(SelectTenantBox box) {
                                 if (box.getSelectedTenant() != null) {
                                     TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
                                     newTenantInLease.tenant().set(box.getSelectedTenant());
                                     addItem(newTenantInLease);
                                 }
                             }
-                        });
-                        box.show();
+                        };
                     }
                 });
                 return decor;
