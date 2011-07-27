@@ -41,6 +41,12 @@ public final class PreloadConfig {
 
     private int numUnitsPerFloor = 4;
 
+    private int numElevators = 3;
+
+    private int numBoilers = 2;
+
+    private int numRoofs = 1;
+
     private PreloadConfig() {
     }
 
@@ -112,6 +118,30 @@ public final class PreloadConfig {
 
     public void setNumFloorplans(int numFloorplans) {
         this.numFloorplans = numFloorplans;
+    }
+
+    public int getNumElevators() {
+        return numElevators;
+    }
+
+    public void setNumElevators(int numElevators) {
+        this.numElevators = numElevators;
+    }
+
+    public int getNumBoilers() {
+        return numBoilers;
+    }
+
+    public void setNumBoilers(int numBoilers) {
+        this.numBoilers = numBoilers;
+    }
+
+    public int getNumRoofs() {
+        return numRoofs;
+    }
+
+    public void setNumRoofs(int numRoofs) {
+        this.numRoofs = numRoofs;
     }
 
     public int getNumParkings() {

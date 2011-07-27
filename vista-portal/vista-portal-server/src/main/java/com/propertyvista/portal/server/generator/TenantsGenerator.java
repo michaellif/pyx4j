@@ -19,10 +19,6 @@ import java.util.List;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
-import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.company.Company;
-import com.propertyvista.domain.company.OrganizationContact;
-import com.propertyvista.domain.company.OrganizationContacts;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.server.preloader.RandomUtil;
 
@@ -49,64 +45,10 @@ public class TenantsGenerator {
             tenant.person().set(CommonsGenerator.createPerson());
             break;
         case company:
-            tenant.company().set(createCompany());
+            tenant.company().set(CompanyVendor.createCompany());
             break;
         }
 
         return tenant;
-    }
-
-    public Company createCompany() {
-        Company company = EntityFactory.create(Company.class);
-
-        company.name().setValue(RandomUtil.random(DemoData.EMPLOYER_NAMES));
-
-        for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-            company.addresses().add(CommonsGenerator.createAddress());
-        }
-
-        for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-            company.phones().add(CommonsGenerator.createPhone());
-        }
-
-        String domain = company.name().getStringView().toLowerCase() + ".com";
-        String website = "http://www." + domain;
-        company.website().setValue(website);
-
-        for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-            String email = "contact" + (i + 1) + "@" + domain;
-            company.emails().add(CommonsGenerator.createEmail(email));
-        }
-
-        for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-            OrganizationContacts contacts = createOrganizationContacts();
-            company.contacts().add(contacts);
-        }
-
-        // TODO Add logo
-        //Picture logo();
-
-        return company;
-    }
-
-    private OrganizationContacts createOrganizationContacts() {
-        OrganizationContacts contacts = EntityFactory.create(OrganizationContacts.class);
-
-        contacts.companyRole().name().setValue(RandomUtil.random(DemoData.COMPANY_ROLES));
-
-        for (int i = 0; i < RandomUtil.randomInt(2); i++) {
-            OrganizationContact contact = createOrganizationContact();
-            contacts.contactList().add(contact);
-        }
-        return contacts;
-    }
-
-    private OrganizationContact createOrganizationContact() {
-        OrganizationContact contact = EntityFactory.create(OrganizationContact.class);
-
-        contact.contactRole().name().setValue(RandomUtil.random(DemoData.CONTACT_ROLES));
-        contact.person().set(CommonsGenerator.createPerson());
-
-        return contact;
     }
 }

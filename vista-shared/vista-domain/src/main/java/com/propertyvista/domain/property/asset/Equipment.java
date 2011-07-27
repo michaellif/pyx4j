@@ -16,6 +16,8 @@ package com.propertyvista.domain.property.asset;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -47,6 +49,7 @@ public interface Equipment extends IEntity {
     @ToString(index = 1)
     IPrimitive<String> model();
 
+    @Editor(type = EditorType.yearpicker)
     IPrimitive<LogicalDate> build();
 
     @EmbeddedEntity
@@ -57,7 +60,7 @@ public interface Equipment extends IEntity {
 
     @EmbeddedEntity
     @Caption(name = "Maintenance Contract")
-    Maintenance maitenance();
+    Maintenance maintenance();
 
 // TODO create some notes object/domain which defines list of notes with dates and creators (one user can't delete notes of the others)...
     IPrimitive<String> notes();

@@ -28,6 +28,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PetChargeRule;
@@ -44,13 +46,16 @@ import com.propertyvista.domain.financial.offering.PetPrice;
 import com.propertyvista.domain.financial.offering.ResidentialRent;
 import com.propertyvista.domain.financial.offering.StorageRent;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
+import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
+import com.propertyvista.domain.property.asset.Elevator;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Locker;
 import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.ParkingSpot;
+import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
@@ -164,6 +169,82 @@ public class BuildingsGenerator {
         return building;
     }
 
+// Mechanicals:    
+    public List<Elevator> createElevators(Building owner, int num) {
+        List<Elevator> items = new ArrayList<Elevator>();
+        for (int i = 0; i < num; i++) {
+            Elevator item = EntityFactory.create(Elevator.class);
+            item.belongsTo().set(owner);
+
+            item.type().setValue("Elevator");
+            item.make().setValue("Bosh");
+            item.model().setValue("Elevator" + RandomUtil.randomInt(100));
+            item.build().setValue(RandomUtil.randomLogicalDate());
+
+            item.licence().number().setValue(String.valueOf(RandomUtil.randomInt(8)));
+            item.licence().expiration().setValue(RandomUtil.randomLogicalDate());
+            item.licence().renewal().setValue(RandomUtil.randomLogicalDate());
+
+            item.warranty().set(CompanyVendor.createnWarranty());
+            item.maintenance().set(CompanyVendor.createnMaintenance());
+
+            item.isForMoveInOut().setValue(RandomUtil.randomBoolean());
+
+            items.add(item);
+        }
+        return items;
+    }
+
+    public List<Boiler> createBoilers(Building owner, int num) {
+        List<Boiler> items = new ArrayList<Boiler>();
+        for (int i = 0; i < num; i++) {
+            Boiler item = EntityFactory.create(Boiler.class);
+            item.belongsTo().set(owner);
+
+            item.type().setValue("Boiler");
+            item.make().setValue("Electra");
+            item.model().setValue("Boiler" + RandomUtil.randomInt(100));
+            item.build().setValue(RandomUtil.randomLogicalDate());
+
+            item.licence().number().setValue(String.valueOf(RandomUtil.randomInt(8)));
+            item.licence().expiration().setValue(RandomUtil.randomLogicalDate());
+            item.licence().renewal().setValue(RandomUtil.randomLogicalDate());
+
+            item.warranty().set(CompanyVendor.createnWarranty());
+            item.maintenance().set(CompanyVendor.createnMaintenance());
+
+            items.add(item);
+        }
+        return items;
+    }
+
+    @Translatable
+    enum RoofType {
+        GableRoof, CrossGabledRoof, MansardRoof, HipRoof, PyramidHipRoof, CrossHippedRoof, SaltboxRoof, GambrelRoof, FlatRoof, BonnetRoof;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    public List<Roof> createRoofs(Building owner, int num) {
+        List<Roof> items = new ArrayList<Roof>();
+        for (int i = 0; i < num; i++) {
+            Roof item = EntityFactory.create(Roof.class);
+            item.belongsTo().set(owner);
+
+            item.type().setValue(RandomUtil.randomEnum(RoofType.class).toString());
+            item.year().setValue(RandomUtil.randomLogicalDate());
+
+            item.warranty().set(CompanyVendor.createnWarranty());
+            item.maintenance().set(CompanyVendor.createnMaintenance());
+
+            items.add(item);
+        }
+        return items;
+    }
+
 // Lockers:
     public List<LockerArea> createLockerAreas(Building owner, int num) {
         List<LockerArea> lockerAreas = new ArrayList<LockerArea>();
@@ -211,6 +292,7 @@ public class BuildingsGenerator {
         return locker;
     }
 
+    // Parking:
     public List<Parking> createParkings(Building owner, int numParkings) {
         List<Parking> parkings = new ArrayList<Parking>();
         for (int i = 0; i < numParkings; i++) {
@@ -219,7 +301,6 @@ public class BuildingsGenerator {
         return parkings;
     }
 
-// Parking:
     private Parking createParking(Building building, int index) {
         Parking parking = EntityFactory.create(Parking.class);
         parking.belongsTo().set(building);

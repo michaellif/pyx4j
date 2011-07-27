@@ -25,10 +25,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.company.Company;
-import com.propertyvista.domain.company.OrganizationContact;
-import com.propertyvista.domain.company.OrganizationContacts;
-import com.propertyvista.domain.contact.Email;
-import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.server.generator.TenantsGenerator;
@@ -83,27 +79,7 @@ public class PreloadTenants extends BaseVistaDataPreloader {
         return sb.toString();
     }
 
-    private void persistCompany(Company company) {
-        log.debug("Persisting company");
-        for (Phone phone : company.phones()) {
-            persist(phone);
-        }
-        for (Email email : company.emails()) {
-            persist(email);
-        }
-        for (OrganizationContacts contacts : company.contacts()) {
-            persist(contacts.companyRole());
-            for (OrganizationContact contact : contacts.contactList()) {
-                persist(contact.contactRole());
-                persist(contact.person());
-                persist(contact);
-            }
-            persist(contacts);
-        }
-        persist(company);
-    }
-
-    private void persistTenant(Tenant tenant) {
+    public void persistTenant(Tenant tenant) {
         switch (tenant.type().getValue()) {
         case person:
             log.debug("Persisting tenant {}", tenant.person().name());
@@ -111,7 +87,7 @@ public class PreloadTenants extends BaseVistaDataPreloader {
             break;
         case company:
             log.debug("Persisting tenant {}", tenant.company().name());
-            persistCompany(tenant.company());
+            CmpanyVendorPersistHelper.persistCompany(tenant.company());
             break;
         }
         persist(tenant);

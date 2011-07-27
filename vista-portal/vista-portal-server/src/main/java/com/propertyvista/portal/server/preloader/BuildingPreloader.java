@@ -37,17 +37,21 @@ import com.propertyvista.domain.financial.offering.ResidentialRent;
 import com.propertyvista.domain.financial.offering.StorageRent;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
+import com.propertyvista.domain.property.asset.Elevator;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Locker;
 import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.ParkingSpot;
+import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.server.generator.BuildingsGenerator;
@@ -71,8 +75,9 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Email.class, Phone.class, Complex.class, Amenity.class,
-                    Concession.class, LeaseTerms.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class, Media.class, ThumbnailBlob.class,
-                    FileBlob.class, Feature.class, ResidentialRent.class, ParkingRent.class, StorageRent.class, PetCharge.class);
+                    Concession.class, LeaseTerms.class, Vendor.class, Elevator.class, Boiler.class, Roof.class, Parking.class, ParkingSpot.class,
+                    LockerArea.class, Locker.class, Media.class, ThumbnailBlob.class, FileBlob.class, Feature.class, ResidentialRent.class, ParkingRent.class,
+                    StorageRent.class, PetCharge.class);
         } else {
             return "This is production";
         }
@@ -89,6 +94,30 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         for (Building building : buildings) {
             // TODO Need to be saving PropertyProfile, PetCharge
             persist(building);
+
+            // Elevators
+            List<Elevator> elevators = generator.createElevators(building, config.getNumElevators());
+            for (Elevator elevator : elevators) {
+                CmpanyVendorPersistHelper.persistWarranty(elevator.warranty());
+                CmpanyVendorPersistHelper.persistMaintenance(elevator.maintenance());
+                persist(elevator);
+            }
+
+            // Boilers
+            List<Boiler> boilers = generator.createBoilers(building, config.getNumBoilers());
+            for (Boiler boiler : boilers) {
+                CmpanyVendorPersistHelper.persistWarranty(boiler.warranty());
+                CmpanyVendorPersistHelper.persistMaintenance(boiler.maintenance());
+                persist(boiler);
+            }
+
+            // Roofs
+            List<Roof> roofs = generator.createRoofs(building, config.getNumRoofs());
+            for (Roof roof : roofs) {
+                CmpanyVendorPersistHelper.persistWarranty(roof.warranty());
+                CmpanyVendorPersistHelper.persistMaintenance(roof.maintenance());
+                persist(roof);
+            }
 
             // Parking:
             List<Parking> parkings = generator.createParkings(building, config.getNumParkings());
