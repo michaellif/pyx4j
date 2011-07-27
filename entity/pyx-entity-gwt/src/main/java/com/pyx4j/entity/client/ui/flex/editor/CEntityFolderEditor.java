@@ -67,6 +67,8 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
 
     private final E entityPrototype;
 
+    private boolean externalAddItemProcessing = false;
+
     public CEntityFolderEditor(Class<E> rowClass) {
         container = new FlowPanel();
         itemsMap = new LinkedHashMap<E, CEntityFolderItemEditor<E>>();
@@ -149,6 +151,10 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
 
     protected abstract IFolderEditorDecorator<E> createFolderDecorator();
 
+    public void setExternalAddItemProcessing(boolean externalAddItemProcessing) {
+        this.externalAddItemProcessing = externalAddItemProcessing;
+    }
+
     public void setFolderDecorator(IFolderEditorDecorator<E> folderDecorator) {
         this.folderDecorator = folderDecorator;
 
@@ -158,12 +164,14 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
 
         folderDecorator.setFolder(this);
 
-        folderDecorator.addItemAddClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                addItem();
-            }
-        });
+        if (!externalAddItemProcessing) {
+            folderDecorator.addItemAddClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    addItem();
+                }
+            });
+        }
         //TODO use components inheritance
         if (this.getDebugId() != null) {
             folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderEditorDecorator.DEBUGID_SUFIX);
@@ -182,19 +190,19 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected void addItem() {
+        addItem((E) EntityFactory.create(entityPrototype.getValueClass()));
+    }
+
+    protected void addItem(E newEntity) {
         if (getValue() == null) {
             log.warn("Request to add item has been issued before the form populated with value");
             return;
         }
 
         final CEntityFolderItemEditor<E> comp = createItemPrivate();
-
-        @SuppressWarnings("unchecked")
-        E newEntity = (E) EntityFactory.create(comp.proto().getValueClass());
-
         createNewEntity(newEntity, new DefaultAsyncCallback<E>() {
-
             @Override
             public void onSuccess(E result) {
                 comp.setFirst(container.getWidgetCount() == 0);
