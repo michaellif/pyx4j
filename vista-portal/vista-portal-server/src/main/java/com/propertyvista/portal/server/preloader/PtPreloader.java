@@ -178,6 +178,7 @@ public class PtPreloader extends BaseVistaDataPreloader {
 
             summary.lease().tenants().add(tenantSummary.tenantInLease());
         }
+
         persist(summary.lease());
 
         ApplicationProgress progress = ApplicationProgressMgr.createApplicationProgress();
@@ -235,5 +236,4 @@ public class PtPreloader extends BaseVistaDataPreloader {
 
         return sb.toString();
     }
-
 }

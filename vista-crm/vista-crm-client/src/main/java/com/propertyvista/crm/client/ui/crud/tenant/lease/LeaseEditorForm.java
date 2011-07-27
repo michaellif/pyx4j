@@ -19,9 +19,6 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -32,7 +29,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -65,7 +61,6 @@ import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.IView;
 import com.pyx4j.site.client.ui.crud.ListerBase.ItemSelectionHandler;
-import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -79,6 +74,7 @@ import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.CrmFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
+import com.propertyvista.crm.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.Pet.WeightUnit;
@@ -516,34 +512,19 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         };
     }
 
-    private class SelectUnitBox extends DialogPanel {
+//
+// Selection Boxes:
 
-        private final I18n i18n = I18nFactory.getI18n(SelectUnitBox.class);
+    private class SelectUnitBox extends OkCancelBox {
 
-        private AptUnit selectedUnit = null;
-
-        private Button okButton;
+        private AptUnit selectedUnit;
 
         public SelectUnitBox() {
-            super(false, true);
-            setCaption(i18n.tr("Select Unit"));
+            super("Select Unit");
+        }
 
-            HorizontalPanel buttons = new HorizontalPanel();
-            buttons.add(okButton = new Button(i18n.tr("OK"), new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    hide();
-                }
-            }));
-            buttons.add(new Button(i18n.tr("Cancel"), new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    selectedUnit = null;
-                    hide();
-                }
-            }));
-            buttons.setSpacing(8);
-
+        @Override
+        protected Widget createContent() {
             okButton.setEnabled(false);
             ((LeaseView) getParentView()).getUnitListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<AptUnit>() {
                 @Override
@@ -556,48 +537,35 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             VerticalPanel vPanel = new VerticalPanel();
             vPanel.add(((LeaseView) getParentView()).getBuildingListerView().asWidget());
             vPanel.add(((LeaseView) getParentView()).getUnitListerView().asWidget());
-            vPanel.add(buttons);
-            vPanel.setCellHorizontalAlignment(buttons, HasHorizontalAlignment.ALIGN_CENTER);
-            vPanel.setSpacing(8);
-            vPanel.setSize("100%", "100%");
+            vPanel.setWidth("100%");
+            return vPanel;
+        }
 
-            setContentWidget(vPanel);
+        @Override
+        protected void setSize() {
             setSize("900px", "500px");
         }
 
-        public AptUnit getSelectedUnit() {
+        @Override
+        protected void onCancel() {
+            selectedUnit = null;
+        }
+
+        protected AptUnit getSelectedUnit() {
             return selectedUnit;
         }
     }
 
-    private class SelectTenantBox extends DialogPanel {
+    private class SelectTenantBox extends OkCancelBox {
 
-        private final I18n i18n = I18nFactory.getI18n(SelectTenantBox.class);
-
-        private Tenant selectedTenant = null;
-
-        private Button okButton;
+        private Tenant selectedTenant;
 
         public SelectTenantBox() {
-            super(false, true);
-            setCaption(i18n.tr("Select Tenant"));
+            super("Select Tenant");
+        }
 
-            HorizontalPanel buttons = new HorizontalPanel();
-            buttons.add(okButton = new Button(i18n.tr("OK"), new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    hide();
-                }
-            }));
-            buttons.add(new Button(i18n.tr("Cancel"), new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    selectedTenant = null;
-                    hide();
-                }
-            }));
-            buttons.setSpacing(8);
-
+        @Override
+        protected Widget createContent() {
             okButton.setEnabled(false);
             ((LeaseView) getParentView()).getTenantListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<Tenant>() {
                 @Override
@@ -609,16 +577,21 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
             VerticalPanel vPanel = new VerticalPanel();
             vPanel.add(((LeaseView) getParentView()).getTenantListerView().asWidget());
-            vPanel.add(buttons);
-            vPanel.setCellHorizontalAlignment(buttons, HasHorizontalAlignment.ALIGN_CENTER);
-            vPanel.setSpacing(8);
-            vPanel.setSize("100%", "100%");
+            vPanel.setWidth("100%");
+            return vPanel;
+        }
 
-            setContentWidget(vPanel);
+        @Override
+        protected void setSize() {
             setSize("700px", "400px");
         }
 
-        public Tenant getSelectedTenant() {
+        @Override
+        protected void onCancel() {
+            selectedTenant = null;
+        }
+
+        protected Tenant getSelectedTenant() {
             return selectedTenant;
         }
     }

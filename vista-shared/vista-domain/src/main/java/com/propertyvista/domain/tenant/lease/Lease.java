@@ -15,7 +15,6 @@ package com.propertyvista.domain.tenant.lease;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -61,9 +60,8 @@ public interface Lease extends IEntity {
     @Caption(name = "Selected Unit")
     AptUnit unit();
 
-    // double reference (TenantInLease has reference to Lease!)
-    @Detached
-    IList<TenantInLease> tenants();
+//  @Detached
+    IList<TenantInLease> tenants(); // double reference (TenantInLease has reference to Lease already!)
 
     IList<Vehicle> vehicles();
 

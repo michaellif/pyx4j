@@ -47,10 +47,10 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             // fill transient data: 
             dto.selectedBuilding().set(PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, dto.unit().belongsTo().getPrimaryKey()));
 
-            dto.tenants().clear();
-            EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
-            dto.tenants().addAll(PersistenceServicesFactory.getPersistenceService().query(criteria));
+//            dto.tenants().clear();
+//            EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
+//            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
+//            dto.tenants().addAll(PersistenceServicesFactory.getPersistenceService().query(criteria));
         }
     }
 

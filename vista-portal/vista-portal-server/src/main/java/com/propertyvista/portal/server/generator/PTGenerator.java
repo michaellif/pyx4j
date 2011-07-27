@@ -104,11 +104,16 @@ public class PTGenerator {
 
     public ApplicationSummaryGDO createSummary(User user, AptUnit selectedUnit) {
         ApplicationSummaryGDO summary = EntityFactory.create(ApplicationSummaryGDO.class);
-        summary.lease().status().setValue(Lease.Status.ApplicationCreated);
 
-        createUnitSelection(summary.unitSelection(), selectedUnit);
+        if (selectedUnit != null) {
+            createUnitSelection(summary.unitSelection(), selectedUnit);
+        }
         createTenantList(user, summary.tenants());
 
+        // lease:
+        summary.lease().leaseID().setValue(RandomUtil.randomLetters(8));
+        summary.lease().status().setValue(Lease.Status.ApplicationCreated);
+        summary.lease().unit().set(selectedUnit);
         createPets(summary.lease().pets());
         createVehicles(summary.lease().vehicles());
 
