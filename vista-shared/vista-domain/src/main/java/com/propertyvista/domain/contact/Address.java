@@ -14,16 +14,13 @@
 package com.propertyvista.domain.contact;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-
 @EmbeddedEntity
-@ToStringFormat("{0} {1} {2} {3}, {4} {5}")
 public interface Address extends IEntity, IAddressFull {
 
     @Translatable
