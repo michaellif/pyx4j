@@ -439,6 +439,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             private final PopupPanel pp = new PopupPanel(true);
             {
                 pp.setStyleName(BASE_NAME + StyleSuffix.ColumnMenu);
+                pp.getElement().getStyle().setZIndex(1000);
             }
 
             @Override
