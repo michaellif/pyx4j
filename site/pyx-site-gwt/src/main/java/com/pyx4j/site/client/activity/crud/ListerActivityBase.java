@@ -54,6 +54,8 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private final Class<E> entityClass;
 
+    private FilterData parentFiltering;
+
     private List<FilterData> preDefinedFilters;
 
     private List<FilterData> userDefinedFilters;
@@ -79,10 +81,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void setParentFiltering(Key parentID) {
-        if (preDefinedFilters == null) {
-            preDefinedFilters = new ArrayList<FilterData>();
-        }
-        preDefinedFilters.add(new FilterData(new Path(entityClass, EntityFactory.getEntityMeta(entityClass).getOwnerMemberName()), Operands.is, parentID));
+        parentFiltering = new FilterData(new Path(entityClass, EntityFactory.getEntityMeta(entityClass).getOwnerMemberName()), Operands.is, parentID);
     }
 
     @Override
@@ -151,6 +150,9 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         List<FilterData> currentFilters = new ArrayList<FilterData>();
 
         // combine filters:
+        if (parentFiltering != null) {
+            currentFilters.add(parentFiltering);
+        }
         if (preDefinedFilters != null) {
             currentFilters.addAll(preDefinedFilters);
         }
