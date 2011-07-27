@@ -40,6 +40,10 @@ public abstract class OkCancelBox extends DialogPanel {
     protected Button okButton;
 
     public OkCancelBox(String caption) {
+        this(caption, false);
+    }
+
+    public OkCancelBox(String caption, boolean hideCancel) {
         super(false, true);
         setCaption(i18n.tr(caption));
 
@@ -51,13 +55,15 @@ public abstract class OkCancelBox extends DialogPanel {
                 hide();
             }
         }));
-        buttons.add(new Button(i18n.tr("Cancel"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                onCancel();
-                hide();
-            }
-        }));
+        if (!hideCancel) {
+            buttons.add(new Button(i18n.tr("Cancel"), new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    onCancel();
+                    hide();
+                }
+            }));
+        }
         buttons.setSpacing(8);
 
         VerticalPanel vPanel = new VerticalPanel();

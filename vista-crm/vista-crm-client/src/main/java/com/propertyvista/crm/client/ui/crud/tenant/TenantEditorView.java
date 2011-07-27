@@ -13,12 +13,17 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.site.client.ui.crud.IEditorView;
 
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
 
 public interface TenantEditorView extends IEditorView<TenantDTO>, TenantView {
 
     interface Presenter extends IEditorView.Presenter, TenantView.Presenter {
     }
+
+    void showSelectTypePopUp(AsyncCallback<Tenant.Type> callback);
 }

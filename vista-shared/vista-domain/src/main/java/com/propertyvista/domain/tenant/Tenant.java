@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -51,6 +52,7 @@ public interface Tenant extends IEntity {
     @MemberColumn(name = "user_id")
     User user();
 
+    @NotNull
     @MemberColumn(name = "tenantType")
     IPrimitive<Type> type();
 
