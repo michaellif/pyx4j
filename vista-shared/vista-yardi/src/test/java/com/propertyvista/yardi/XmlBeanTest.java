@@ -159,8 +159,8 @@ public class XmlBeanTest {
         GetResidentTransactionsMapper mapper = new GetResidentTransactionsMapper();
         mapper.map(transactions);
 
-        Assert.assertTrue("Has units", !mapper.getModel().getUnits().isEmpty());
-        for (AptUnit unit : mapper.getModel().getUnits()) {
+        Assert.assertTrue("Has units", !mapper.getModel().getAptUnits().isEmpty());
+        for (AptUnit unit : mapper.getModel().getAptUnits()) {
             log.debug("Unit {}", unit);
 
             // info

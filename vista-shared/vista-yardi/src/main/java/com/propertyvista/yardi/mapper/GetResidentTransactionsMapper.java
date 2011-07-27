@@ -91,7 +91,14 @@ public class GetResidentTransactionsMapper {
         Information info = unitFrom.getUnit().getInformation();
         unitTo.info().name().setValue(unitFrom.getUnitId());
         unitTo.info().number().setValue(info.getUnitId());
-        unitTo.info().type().setValue(AptUnitType.oneBedroom); // TODO this later needs to be dynamic
+
+        // unit type: prv11b1
+        if (info.getFloorplanId().equals("prv11b1")) {
+            unitTo.info().type().setValue(AptUnitType.oneBedroom);
+        } else {
+            log.warn("Unknown unit type {}, need to handle this in code mapping", info.getFloorplanId());
+            unitTo.info().type().setValue(AptUnitType.oneBedroom);
+        }
         unitTo.info().bedrooms().setValue(info.getUnitBedrooms());
         unitTo.info().bathrooms().setValue(info.getUnitBathrooms());
         unitTo.info().area().setValue(info.getMaxSquareFeet().doubleValue());
