@@ -16,6 +16,8 @@ package com.propertyvista.portal.server.ptapp.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.propertvista.generator.CommonsGenerator;
+
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -36,7 +38,6 @@ import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
 import com.propertyvista.portal.domain.dto.MediaDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
-import com.propertyvista.portal.server.generator.CommonsGenerator;
 
 public class Converter {
 

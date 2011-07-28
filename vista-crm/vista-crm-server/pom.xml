@@ -44,6 +44,12 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
+            <artifactId>vista-generator</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
             <artifactId>vista-payment</artifactId>
             <version>${project.version}</version>
         </dependency>

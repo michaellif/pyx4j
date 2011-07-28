@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server.generator;
+package com.propertvista.generator;
 
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 

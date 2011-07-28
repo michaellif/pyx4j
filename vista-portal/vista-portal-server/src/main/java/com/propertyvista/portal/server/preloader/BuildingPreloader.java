@@ -17,6 +17,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertvista.generator.BuildingsGenerator;
+import com.propertvista.generator.MediaGenerator;
+
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -54,8 +57,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
-import com.propertyvista.portal.server.generator.BuildingsGenerator;
-import com.propertyvista.portal.server.generator.MediaGenerator;
 import com.propertyvista.portal.server.importer.Importer;
 import com.propertyvista.portal.server.portal.PublicDataUpdater;
 import com.propertyvista.server.common.generator.UnitRelatedData;

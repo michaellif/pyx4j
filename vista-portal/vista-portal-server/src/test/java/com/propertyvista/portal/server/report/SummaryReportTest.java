@@ -20,6 +20,8 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Test;
 
+import com.propertvista.generator.PTGenerator;
+
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.report.test.ReportsTestBase;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -37,7 +39,6 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.User;
 import com.propertyvista.portal.domain.ptapp.Summary;
-import com.propertyvista.portal.server.generator.PTGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.portal.server.ptapp.services.SummaryServiceImpl;
 

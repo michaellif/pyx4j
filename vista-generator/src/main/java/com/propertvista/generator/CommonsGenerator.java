@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server.generator;
+package com.propertvista.generator;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.csv.CSVLoad;
@@ -30,7 +30,6 @@ import com.propertyvista.domain.contact.IAddressFull.StreetType;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.ref.Province;
-import com.propertyvista.portal.server.preloader.RandomUtil;
 import com.propertyvista.server.common.reference.SharedData;
 
 public class CommonsGenerator {

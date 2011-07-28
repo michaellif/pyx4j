@@ -18,12 +18,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertvista.generator.PmcGenerator;
+
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
 import com.propertyvista.domain.financial.offeringnew.ServiceItemType;
-import com.propertyvista.portal.server.generator.PmcGenerator;
 
 public class PmcPreloader extends AbstractDataPreloader {
 

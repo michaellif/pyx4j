@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server.preloader;
+package com.propertvista.generator;
 
 import java.util.Calendar;
 import java.util.Date;

@@ -15,6 +15,8 @@ package com.propertyvista.portal.server.ptapp.services;
 
 import java.util.List;
 
+import com.propertvista.generator.gdo.TenantSummaryGDO;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.EntityServicesImpl;
@@ -35,7 +37,6 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.portal.server.generator.gdo.TenantSummaryGDO;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class ApplicationProgressMgr {

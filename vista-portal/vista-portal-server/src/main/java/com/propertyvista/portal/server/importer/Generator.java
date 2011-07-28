@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.server.importer;
 
+import com.propertvista.generator.BuildingsGenerator;
+import com.propertvista.generator.CommonsGenerator;
+
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.DemoData;
@@ -20,8 +23,6 @@ import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.FloorplanDTO;
-import com.propertyvista.portal.server.generator.BuildingsGenerator;
-import com.propertyvista.portal.server.generator.CommonsGenerator;
 import com.propertyvista.server.common.generator.Model;
 
 public class Generator {

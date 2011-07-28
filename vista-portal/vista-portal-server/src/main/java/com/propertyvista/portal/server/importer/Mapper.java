@@ -19,6 +19,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertvista.generator.CommonsGenerator;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -30,7 +32,6 @@ import com.propertyvista.domain.property.asset.building.BuildingInfo.StructureTy
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.property.asset.unit.AptUnitType;
 import com.propertyvista.dto.FloorplanDTO;
-import com.propertyvista.portal.server.generator.CommonsGenerator;
 import com.propertyvista.portal.server.importer.bean.City;
 import com.propertyvista.portal.server.importer.bean.Property;
 import com.propertyvista.portal.server.importer.bean.Region;

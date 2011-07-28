@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.ptapp.util;
 
+import com.propertvista.generator.gdo.TenantSummaryGDO;
+
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -21,7 +23,6 @@ import com.propertyvista.domain.tenant.TenantScreeningSecureInfoFragment;
 import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
-import com.propertyvista.portal.server.generator.gdo.TenantSummaryGDO;
 
 public class TenantConverter {
 

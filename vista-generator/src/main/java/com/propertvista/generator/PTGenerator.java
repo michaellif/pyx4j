@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server.generator;
+package com.propertvista.generator;
 
 import gwtupload.server.exceptions.UploadActionException;
 
@@ -22,6 +22,9 @@ import java.util.GregorianCalendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.propertvista.generator.gdo.ApplicationSummaryGDO;
+import com.propertvista.generator.gdo.TenantSummaryGDO;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
@@ -70,10 +73,6 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
-import com.propertyvista.portal.server.generator.gdo.ApplicationSummaryGDO;
-import com.propertyvista.portal.server.generator.gdo.TenantSummaryGDO;
-import com.propertyvista.portal.server.preloader.PtPreloader;
-import com.propertyvista.portal.server.preloader.RandomUtil;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.ApplicationDocumentData;
@@ -191,7 +190,7 @@ public class PTGenerator {
         applicationDocument.type().setValue(documentType);
         applicationDocument.filename().setValue(fileName);
 
-        String filename = IOUtils.resourceFileName(fileName, PtPreloader.class);
+        String filename = IOUtils.resourceFileName(fileName, PTGenerator.class);
         try {
             byte[] data = IOUtils.getResource(filename);
             if (data == null) {
@@ -209,7 +208,7 @@ public class PTGenerator {
     }
 
     public ApplicationDocumentData createApplicationDocumentData(PotentialTenantInfo tenantInfo, String fileName) {
-        String filename = IOUtils.resourceFileName(fileName, PtPreloader.class);
+        String filename = IOUtils.resourceFileName(fileName, PTGenerator.class);
         try {
             byte[] data = IOUtils.getResource(filename);
             if (data == null) {

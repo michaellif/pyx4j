@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.server.generator;
+package com.propertvista.generator;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -24,7 +24,6 @@ import com.propertyvista.domain.property.vendor.Maintenance;
 import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.domain.property.vendor.Warranty;
 import com.propertyvista.domain.property.vendor.WarrantyItem;
-import com.propertyvista.portal.server.preloader.RandomUtil;
 
 public class CompanyVendor {
 

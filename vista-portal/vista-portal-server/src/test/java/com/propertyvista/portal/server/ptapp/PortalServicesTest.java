@@ -16,14 +16,15 @@ package com.propertyvista.portal.server.ptapp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertvista.generator.BusinessDataGenerator;
+import com.propertvista.generator.PTGenerator;
+
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.Application;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.portal.domain.ptapp.Tenant;
-import com.propertyvista.portal.server.generator.BusinessDataGenerator;
-import com.propertyvista.portal.server.generator.PTGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 public class PortalServicesTest extends VistaDBTestBase {

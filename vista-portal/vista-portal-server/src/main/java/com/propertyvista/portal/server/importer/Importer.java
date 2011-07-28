@@ -22,6 +22,9 @@ import javax.xml.bind.JAXBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertvista.generator.MediaGenerator;
+import com.propertvista.generator.PictureUtil;
+
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -38,7 +41,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
-import com.propertyvista.portal.server.generator.MediaGenerator;
 import com.propertyvista.portal.server.geo.GeoLocator;
 import com.propertyvista.portal.server.geo.GeoLocator.Mode;
 import com.propertyvista.portal.server.portal.PublicDataUpdater;

@@ -167,6 +167,7 @@
         <module>vista-portal</module>
         <module>vista-shared</module>
         <module>vista-admin</module>
+        <module>vista-generator</module>
         <module>vista-crm</module>
         <module>vista-paypad</module>
         <module>vista-server</module>

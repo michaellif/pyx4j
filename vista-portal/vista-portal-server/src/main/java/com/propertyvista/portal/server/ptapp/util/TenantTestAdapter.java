@@ -15,10 +15,11 @@ package com.propertyvista.portal.server.ptapp.util;
 
 import java.util.List;
 
+import com.propertvista.generator.gdo.TenantSummaryGDO;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
-import com.propertyvista.portal.server.generator.gdo.TenantSummaryGDO;
 
 public class TenantTestAdapter {
 

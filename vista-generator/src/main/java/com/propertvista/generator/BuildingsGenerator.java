@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server.generator;
+package com.propertvista.generator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,7 +66,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnitType;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.PropertyProfile;
-import com.propertyvista.portal.server.preloader.RandomUtil;
 import com.propertyvista.server.common.generator.UnitRelatedData;
 
 public class BuildingsGenerator {

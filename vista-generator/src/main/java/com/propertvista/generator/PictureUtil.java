@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server.importer;
+package com.propertvista.generator;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

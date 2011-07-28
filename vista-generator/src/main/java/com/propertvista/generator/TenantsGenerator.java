@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server.generator;
+package com.propertvista.generator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.portal.server.preloader.RandomUtil;
 
 public class TenantsGenerator {
 

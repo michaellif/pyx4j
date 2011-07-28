@@ -18,6 +18,27 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-server-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+         <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-domain-srv</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+ 
+         <dependency>
+            <groupId>com.googlecode.gwtupload</groupId>
+            <artifactId>gwtupload</artifactId>
+        </dependency>
  
 
     </dependencies>

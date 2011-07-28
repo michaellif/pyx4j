@@ -17,6 +17,8 @@ import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertvista.generator.BusinessDataGenerator;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -32,7 +34,6 @@ import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 import com.propertyvista.portal.server.TestUtil;
-import com.propertyvista.portal.server.generator.BusinessDataGenerator;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 public class ActivationServiceTest extends VistaDBTestBase {

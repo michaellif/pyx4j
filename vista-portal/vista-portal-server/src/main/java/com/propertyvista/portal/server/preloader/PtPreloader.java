@@ -16,6 +16,10 @@ package com.propertyvista.portal.server.preloader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertvista.generator.PTGenerator;
+import com.propertvista.generator.gdo.ApplicationSummaryGDO;
+import com.propertvista.generator.gdo.TenantSummaryGDO;
+
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -39,9 +43,6 @@ import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.TenantChargeList;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
-import com.propertyvista.portal.server.generator.PTGenerator;
-import com.propertyvista.portal.server.generator.gdo.ApplicationSummaryGDO;
-import com.propertyvista.portal.server.generator.gdo.TenantSummaryGDO;
 import com.propertyvista.portal.server.ptapp.services.ApplicationDebug;
 import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
 import com.propertyvista.server.domain.ApplicationDocumentData;

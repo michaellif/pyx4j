@@ -7,26 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 20, 2011
+ * Created on Jul 19, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.generator.gdo;
+package com.propertvista.generator.gdo;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.portal.domain.ptapp.UnitSelection;
 
 @Transient
 //Generator/Preloader Data OBject only!
-public interface TenantSummaryGDO extends IEntity {
+public interface ApplicationSummaryGDO extends IEntity {
 
-    Tenant tenant();
+    UnitSelection unitSelection();
 
-    TenantInLease tenantInLease();
+    Lease lease();
 
-    TenantScreening tenantScreening();
+    IList<TenantSummaryGDO> tenants();
 }
