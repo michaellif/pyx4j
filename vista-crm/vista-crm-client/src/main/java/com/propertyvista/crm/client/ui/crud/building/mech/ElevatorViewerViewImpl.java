@@ -7,18 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-25
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building;
+package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.dto.RoofDTO;
+import com.propertyvista.dto.ElevatorDTO;
 
-public class RoofEditorViewImpl extends CrmEditorViewImplBase<RoofDTO> implements RoofEditorView {
-    public RoofEditorViewImpl() {
-        super(CrmSiteMap.Properties.Roof.class, new RoofEditorForm());
+public class ElevatorViewerViewImpl extends CrmViewerViewImplBase<ElevatorDTO> implements ElevatorViewerView {
+
+    public ElevatorViewerViewImpl() {
+        super(CrmSiteMap.Properties.Elevator.class, new ElevatorEditorForm(new CrmViewersComponentFactory()));
     }
 }

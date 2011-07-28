@@ -7,16 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on 2011-05-25
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building;
+package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import com.pyx4j.site.client.ui.crud.IViewerView;
+import com.pyx4j.site.client.ui.crud.IEditorView;
 
-import com.propertyvista.dto.RoofDTO;
+import com.propertyvista.dto.ElevatorDTO;
 
-public interface RoofViewerView extends IViewerView<RoofDTO> {
+public interface ElevatorEditorView extends IEditorView<ElevatorDTO> {
 
 }

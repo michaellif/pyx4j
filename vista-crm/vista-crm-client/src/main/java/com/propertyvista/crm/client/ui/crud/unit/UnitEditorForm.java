@@ -66,10 +66,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     @SuppressWarnings("unchecked")
     private Widget createMarketingTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
-        main.add(split);
 
-        SubtypeInjectors.injectMarketing(main, split, proto().marketing(), this);
+        SubtypeInjectors.injectMarketing(main, proto().marketing(), this);
 
         main.add(inject(proto().marketing().floorplan()), 15);
 

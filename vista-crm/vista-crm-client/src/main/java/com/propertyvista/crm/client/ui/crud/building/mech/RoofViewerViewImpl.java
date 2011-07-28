@@ -11,12 +11,16 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building;
+package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import com.pyx4j.site.client.ui.crud.IViewerView;
+import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.dto.RoofDTO;
 
-import com.propertyvista.dto.BoilerDTO;
+public class RoofViewerViewImpl extends CrmViewerViewImplBase<RoofDTO> implements RoofViewerView {
 
-public interface BoilerViewerView extends IViewerView<BoilerDTO> {
-
+    public RoofViewerViewImpl() {
+        super(CrmSiteMap.Properties.Roof.class, new RoofEditorForm(new CrmViewersComponentFactory()));
+    }
 }

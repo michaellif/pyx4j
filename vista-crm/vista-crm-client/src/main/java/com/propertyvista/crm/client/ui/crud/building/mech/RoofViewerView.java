@@ -11,12 +11,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building;
+package com.propertyvista.crm.client.ui.crud.building.mech;
 
 import com.pyx4j.site.client.ui.crud.IViewerView;
 
-import com.propertyvista.dto.ElevatorDTO;
+import com.propertyvista.dto.RoofDTO;
 
-public interface ElevatorViewerView extends IViewerView<ElevatorDTO> {
+public interface RoofViewerView extends IViewerView<RoofDTO> {
 
 }

@@ -104,4 +104,12 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
     public void setShowMandatory(boolean showMandatory) {
         this.showMandatory = showMandatory;
     }
+
+    public boolean isReadOnlyMode() {
+        return readOnlyMode;
+    }
+
+    public void setReadOnlyMode(boolean readOnlyMode) {
+        this.readOnlyMode = readOnlyMode;
+    }
 }

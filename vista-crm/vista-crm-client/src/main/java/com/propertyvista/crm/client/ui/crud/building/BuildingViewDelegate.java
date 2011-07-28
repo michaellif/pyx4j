@@ -16,6 +16,9 @@ package com.propertyvista.crm.client.ui.crud.building;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
+import com.propertyvista.crm.client.ui.crud.building.mech.BoilerLister;
+import com.propertyvista.crm.client.ui.crud.building.mech.ElevatorLister;
+import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;

@@ -62,10 +62,15 @@ public class AddressUtils {
         });
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void injectIAddress(VistaDecoratorsFlowPanel main, final IAddressFull proto, final CEntityEditor<?> parent) {
+        injectIAddress(main, proto, parent, true);
+    }
 
-        main.add(parent.inject(proto.unitNumber()), 5);
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static void injectIAddress(VistaDecoratorsFlowPanel main, final IAddressFull proto, final CEntityEditor<?> parent, boolean showUnit) {
+        if (showUnit) {
+            main.add(parent.inject(proto.unitNumber()), 5);
+        }
         main.add(parent.inject(proto.streetNumber()), 5);
         main.add(parent.inject(proto.streetNumberSuffix()), 5);
         main.add(parent.inject(proto.streetName()), 15);
@@ -88,10 +93,15 @@ public class AddressUtils {
         attachFilters(proto, parent, province, country, postalCode);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void injectIAddress(VistaDecoratorsSplitFlowPanel split, final IAddressFull proto, final CEntityEditor<?> parent) {
+        injectIAddress(split, proto, parent, true);
+    }
 
-        split.getLeftPanel().add(parent.inject(proto.unitNumber()), 5);
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static void injectIAddress(VistaDecoratorsSplitFlowPanel split, final IAddressFull proto, final CEntityEditor<?> parent, boolean showUnit) {
+        if (showUnit) {
+            split.getLeftPanel().add(parent.inject(proto.unitNumber()), 5);
+        }
         split.getLeftPanel().add(parent.inject(proto.streetNumber()), 5);
         split.getLeftPanel().add(parent.inject(proto.streetNumberSuffix()), 5);
         split.getLeftPanel().add(parent.inject(proto.streetName()), 15);

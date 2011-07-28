@@ -11,16 +11,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.building;
+package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
-import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.pyx4j.site.client.ui.crud.IViewerView;
+
 import com.propertyvista.dto.ElevatorDTO;
 
-public class ElevatorViewerViewImpl extends CrmViewerViewImplBase<ElevatorDTO> implements ElevatorViewerView {
+public interface ElevatorViewerView extends IViewerView<ElevatorDTO> {
 
-    public ElevatorViewerViewImpl() {
-        super(CrmSiteMap.Properties.Elevator.class, new ElevatorEditorForm(new CrmViewersComponentFactory()));
-    }
 }
