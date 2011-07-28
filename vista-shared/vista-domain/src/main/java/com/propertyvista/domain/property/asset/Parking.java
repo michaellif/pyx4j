@@ -66,7 +66,7 @@ public interface Parking extends IEntity {
     @Format("#0.#")
     IPrimitive<Double> levels();
 
-    // Read-Only items:     
+    // Read-Only (recalculated) items:     
     @Editor(type = EditorType.label)
     IPrimitive<Integer> totalSpaces();
 

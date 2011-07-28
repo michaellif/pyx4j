@@ -19,7 +19,7 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.building.ParkingSpotEditorView;
+import com.propertyvista.crm.client.ui.crud.building.parking.ParkingSpotEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.ParkingSpotCrudService;
 import com.propertyvista.domain.property.asset.ParkingSpot;

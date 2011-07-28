@@ -19,7 +19,7 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.building.LockerEditorView;
+import com.propertyvista.crm.client.ui.crud.building.lockers.LockerEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.LockerCrudService;
 import com.propertyvista.domain.property.asset.Locker;
