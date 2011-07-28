@@ -13,29 +13,21 @@
  */
 package com.propertyvista.portal.server.ptapp.services;
 
-import java.io.ByteArrayOutputStream;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.report.JasperFileFormat;
-import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityFromatUtils;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
-import com.pyx4j.essentials.server.download.Downloadable;
-import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.charges.ChargeLineSelectable;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.misc.ServletMapping;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Summary;
@@ -45,7 +37,6 @@ import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.util.Converter;
-import com.propertyvista.portal.server.report.SummaryReport;
 
 public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements SummaryService {
 
@@ -151,17 +142,17 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 
     @Override
     public void downloadSummary(AsyncCallback<String> callback, VoidSerializable none) {
-
-        Summary summary = retrieveSummary();
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        try {
-            JasperReportProcessor.createReport(SummaryReport.createModel(summary), JasperFileFormat.PDF, bos);
-            Downloadable d = new Downloadable(bos.toByteArray(), Downloadable.getContentType(DownloadFormat.PDF));
-            String fileName = "ApplicationSummary.pdf";
-            d.save(fileName);
-            callback.onSuccess(ServletMapping.REPORTS_DOWNLOAD + "/" + System.currentTimeMillis() + "/" + fileName);
-        } finally {
-            IOUtils.closeQuietly(bos);
-        }
+//TODO reports should be reviewd after domain change
+//        Summary summary = retrieveSummary();
+//        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//        try {
+//            JasperReportProcessor.createReport(SummaryReport.createModel(summary), JasperFileFormat.PDF, bos);
+//            Downloadable d = new Downloadable(bos.toByteArray(), Downloadable.getContentType(DownloadFormat.PDF));
+//            String fileName = "ApplicationSummary.pdf";
+//            d.save(fileName);
+//            callback.onSuccess(ServletMapping.REPORTS_DOWNLOAD + "/" + System.currentTimeMillis() + "/" + fileName);
+//        } finally {
+//            IOUtils.closeQuietly(bos);
+//        }
     }
 }
