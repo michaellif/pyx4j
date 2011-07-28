@@ -190,7 +190,7 @@
             <build>
                 <plugins>
 
-                    <plugin>
+                  <!--  <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>jasperreports-maven-plugin</artifactId>
                         <version>1.0-beta-2</version>
@@ -218,7 +218,7 @@
                                 <version>1.2.16</version>
                             </dependency>
                         </dependencies>
-                    </plugin>
+                    </plugin> -->
 
                 </plugins>
             </build>
