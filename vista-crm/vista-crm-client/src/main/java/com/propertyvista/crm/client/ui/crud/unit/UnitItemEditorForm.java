@@ -41,7 +41,7 @@ public class UnitItemEditorForm extends CrmEntityForm<AptUnitItem> {
 
         main.add(inject(proto().type()), 10);
         main.add(inject(proto().description()), 35);
-        main.add(inject(proto().conditionNotes()), 35);
+        main.add(inject(proto().conditionNotes()), 55);
 
         VistaDecoratorsSplitFlowPanel split;
         main.add(new CrmHeader2Decorator(i18n.tr("Details")));

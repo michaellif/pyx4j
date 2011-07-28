@@ -603,7 +603,7 @@ public class BuildingsGenerator {
         // some ServerSideDomainUtils
         unit.avalableForRent().setValue(new LogicalDate(avalable.getTime().getTime()));
         AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
-        occupancy.status().setValue(AptUnitOccupancy.StatusType.available);
+        occupancy.status().setValue(AptUnitOccupancy.Status.available);
         occupancy.dateFrom().setValue(new LogicalDate(avalable.getTime().getTime()));
         unit.occupancies().add(occupancy);
 

@@ -39,5 +39,6 @@ public class UnitOccupancyLister extends ListerBase<AptUnitOccupancy> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.dateTo()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.offMarket()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.description()));
     }
 }

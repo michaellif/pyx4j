@@ -26,7 +26,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public interface AptUnitOccupancy extends IEntity {
 
     @Translatable
-    public enum StatusType {
+    public enum Status {
 
         leased,
 
@@ -76,7 +76,7 @@ public interface AptUnitOccupancy extends IEntity {
      */
     IPrimitive<LogicalDate> dateTo();
 
-    IPrimitive<StatusType> status();
+    IPrimitive<Status> status();
 
     IPrimitive<OffMarketType> offMarket();
 

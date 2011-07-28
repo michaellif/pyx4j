@@ -38,7 +38,8 @@ public class UnitItemLister extends ListerBase<AptUnitItem> {
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<AptUnitItem>> columnDescriptors, AptUnitItem proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.description()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.conditionNotes()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.wallColour()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.flooringType()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.cabinetsType()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.counterTopType()));
     }
 }
