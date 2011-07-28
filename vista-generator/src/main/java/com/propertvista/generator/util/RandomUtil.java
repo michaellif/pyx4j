@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertvista.generator;
+package com.propertvista.generator.util;
 
 import java.util.Calendar;
 import java.util.Date;

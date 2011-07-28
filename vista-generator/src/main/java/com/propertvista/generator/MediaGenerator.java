@@ -16,6 +16,9 @@ package com.propertvista.generator;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.propertvista.generator.util.PictureUtil;
+import com.propertvista.generator.util.RandomUtil;
+
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 
 import com.propertyvista.domain.media.Media;

@@ -14,7 +14,7 @@
 package com.propertyvista.portal.server.importer;
 
 import com.propertvista.generator.BuildingsGenerator;
-import com.propertvista.generator.CommonsGenerator;
+import com.propertvista.generator.util.CommonsGenerator;
 
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 

@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import com.propertvista.generator.gdo.ApplicationSummaryGDO;
 import com.propertvista.generator.gdo.TenantSummaryGDO;
+import com.propertvista.generator.util.CommonsGenerator;
+import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;

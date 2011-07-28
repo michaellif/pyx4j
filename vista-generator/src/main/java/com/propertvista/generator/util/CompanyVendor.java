@@ -11,7 +11,8 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertvista.generator;
+package com.propertvista.generator.util;
+
 
 import com.pyx4j.entity.shared.EntityFactory;
 

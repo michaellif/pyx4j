@@ -23,6 +23,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertvista.generator.util.CommonsGenerator;
+import com.propertvista.generator.util.CompanyVendor;
+import com.propertvista.generator.util.RandomUtil;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
@@ -179,6 +183,8 @@ public class BuildingsGenerator {
             item.make().setValue("Bosh");
             item.model().setValue("Elevator" + RandomUtil.randomInt(100));
             item.build().setValue(RandomUtil.randomLogicalDate());
+            item.description().setValue(RandomUtil.randomLetters(35).toLowerCase());
+            item.notes().setValue(CommonsGenerator.lipsum());
 
             item.licence().number().setValue(String.valueOf(RandomUtil.randomInt(8)));
             item.licence().expiration().setValue(RandomUtil.randomLogicalDate());
@@ -204,6 +210,8 @@ public class BuildingsGenerator {
             item.make().setValue("Electra");
             item.model().setValue("Boiler" + RandomUtil.randomInt(100));
             item.build().setValue(RandomUtil.randomLogicalDate());
+            item.description().setValue(RandomUtil.randomLetters(35).toLowerCase());
+            item.notes().setValue(CommonsGenerator.lipsum());
 
             item.licence().number().setValue(String.valueOf(RandomUtil.randomInt(8)));
             item.licence().expiration().setValue(RandomUtil.randomLogicalDate());
@@ -235,6 +243,7 @@ public class BuildingsGenerator {
 
             item.type().setValue(RandomUtil.randomEnum(RoofType.class).toString());
             item.year().setValue(RandomUtil.randomLogicalDate());
+            item.notes().setValue(CommonsGenerator.lipsum());
 
             item.warranty().set(CompanyVendor.createnWarranty());
             item.maintenance().set(CompanyVendor.createnMaintenance());
@@ -246,11 +255,11 @@ public class BuildingsGenerator {
 
 // Lockers:
     public List<LockerArea> createLockerAreas(Building owner, int num) {
-        List<LockerArea> lockerAreas = new ArrayList<LockerArea>();
+        List<LockerArea> items = new ArrayList<LockerArea>();
         for (int i = 0; i < num; i++) {
-            lockerAreas.add(createLockerArea(owner, (i + 1)));
+            items.add(createLockerArea(owner, (i + 1)));
         }
-        return lockerAreas;
+        return items;
     }
 
     private LockerArea createLockerArea(Building owner, int index) {
@@ -275,11 +284,11 @@ public class BuildingsGenerator {
     }
 
     public List<Locker> createLockers(LockerArea owner, int num) {
-        List<Locker> lockers = new ArrayList<Locker>();
+        List<Locker> items = new ArrayList<Locker>();
         for (int i = 0; i < num; i++) {
-            lockers.add(createLocker(owner, (i + 1)));
+            items.add(createLocker(owner, (i + 1)));
         }
-        return lockers;
+        return items;
     }
 
     private Locker createLocker(LockerArea owner, int index) {
@@ -292,12 +301,12 @@ public class BuildingsGenerator {
     }
 
     // Parking:
-    public List<Parking> createParkings(Building owner, int numParkings) {
-        List<Parking> parkings = new ArrayList<Parking>();
-        for (int i = 0; i < numParkings; i++) {
-            parkings.add(createParking(owner, (i + 1)));
+    public List<Parking> createParkings(Building owner, int num) {
+        List<Parking> items = new ArrayList<Parking>();
+        for (int i = 0; i < num; i++) {
+            items.add(createParking(owner, (i + 1)));
         }
-        return parkings;
+        return items;
     }
 
     private Parking createParking(Building building, int index) {
@@ -315,6 +324,7 @@ public class BuildingsGenerator {
         int doubleSpaces = (int) (totalSpaces * 0.1);
         int narrowSpaces = (int) (totalSpaces * 0.07);
         int regularSpaces = totalSpaces - (disabledSpaces + doubleSpaces + narrowSpaces);
+
         parking.totalSpaces().setValue(totalSpaces);
         parking.disabledSpaces().setValue(disabledSpaces);
         parking.regularSpaces().setValue(regularSpaces);
@@ -338,7 +348,32 @@ public class BuildingsGenerator {
 
         spot.name().setValue("Spot" + index);
         spot.type().setValue(RandomUtil.random(ParkingSpot.Type.values()));
+
         return spot;
+    }
+
+    // Amenities
+    public List<BuildingAmenity> createBuildingAmenities(Building owner, int num) {
+        List<BuildingAmenity> items = new ArrayList<BuildingAmenity>();
+        for (int i = 0; i < num; i++) {
+            items.add(createBuildingAmenity(owner));
+        }
+        return items;
+    }
+
+    public BuildingAmenity createBuildingAmenity(Building building) {
+        BuildingAmenity amenity = EntityFactory.create(BuildingAmenity.class);
+        amenity.belongsTo().set(building);
+
+        amenity.type().setValue(RandomUtil.randomEnum(BuildingAmenity.Type.class));
+        amenity.subType().setValue(RandomUtil.randomEnum(BuildingAmenity.SubType.class));
+
+        amenity.rank().setValue(RandomUtil.randomInt(1000));
+        amenity.description().setValue(RandomUtil.randomLetters(20).toLowerCase());
+        amenity.rent().setValue(RandomUtil.randomDouble(30));
+        amenity.deposit().setValue(RandomUtil.randomDouble(100));
+
+        return amenity;
     }
 
 // Floorplans:
@@ -386,8 +421,15 @@ public class BuildingsGenerator {
 
     public static FloorplanAmenity createFloorplanAmenity() {
         FloorplanAmenity amenity = EntityFactory.create(FloorplanAmenity.class);
+
         amenity.type().setValue(RandomUtil.random(FloorplanAmenity.Type.values()));
         amenity.subType().setValue(RandomUtil.random(FloorplanAmenity.SubType.values()));
+
+        amenity.rank().setValue(RandomUtil.randomInt(1000));
+        amenity.description().setValue(RandomUtil.randomLetters(35).toLowerCase());
+        amenity.rent().setValue(RandomUtil.randomDouble(30));
+        amenity.deposit().setValue(RandomUtil.randomDouble(100));
+
         return amenity;
     }
 
@@ -572,7 +614,10 @@ public class BuildingsGenerator {
 
     public static AptUnitItem createUnitDetailItem(AptUnitItem.Type type) {
         AptUnitItem item = EntityFactory.create(AptUnitItem.class);
+
         item.type().setValue(type);
+        item.description().setValue(RandomUtil.randomLetters(35).toLowerCase());
+        item.conditionNotes().setValue(CommonsGenerator.lipsum());
 
         item.flooringType().setValue(RandomUtil.random(AptUnitItem.FlooringType.values()));
         item.flooringInstallDate().setValue(RandomUtil.randomLogicalDate());
@@ -624,22 +669,13 @@ public class BuildingsGenerator {
             return null;
 
         Complex complex = EntityFactory.create(Complex.class);
+        complex.name().setValue(RandomUtil.randomLetters(8));
 
         for (int i = 0; i < numBuildings; i++) {
             // Building building
         }
 
         return complex;
-    }
-
-    public BuildingAmenity createBuildingAmenity(Building building) {
-        BuildingAmenity amenity = EntityFactory.create(BuildingAmenity.class);
-
-        amenity.belongsTo().set(building);
-        amenity.type().setValue(RandomUtil.random(BuildingAmenity.Type.values()));
-        amenity.subType().setValue(RandomUtil.random(BuildingAmenity.SubType.values()));
-
-        return amenity;
     }
 
     public LeaseTerms createLeaseTerms() {

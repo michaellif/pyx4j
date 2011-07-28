@@ -16,7 +16,7 @@ package com.propertyvista.portal.server.ptapp.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.propertvista.generator.CommonsGenerator;
+import com.propertvista.generator.util.CommonsGenerator;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;

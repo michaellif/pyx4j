@@ -15,7 +15,7 @@ package com.propertyvista.portal.server.preloader;
 
 import java.io.IOException;
 
-import com.propertvista.generator.CommonsGenerator;
+import com.propertvista.generator.util.CommonsGenerator;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;

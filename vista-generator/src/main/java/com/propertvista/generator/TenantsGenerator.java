@@ -16,6 +16,10 @@ package com.propertvista.generator;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.propertvista.generator.util.CommonsGenerator;
+import com.propertvista.generator.util.CompanyVendor;
+import com.propertvista.generator.util.RandomUtil;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 

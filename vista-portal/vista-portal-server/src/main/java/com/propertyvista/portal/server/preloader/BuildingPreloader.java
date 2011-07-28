@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.propertvista.generator.BuildingsGenerator;
 import com.propertvista.generator.MediaGenerator;
+import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -51,6 +52,7 @@ import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
@@ -133,13 +135,19 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
 
             // Lockers:
             List<LockerArea> lockerAreas = generator.createLockerAreas(building, config.getNumLockerAreas());
-            for (LockerArea lockerArea : lockerAreas) {
-                persist(lockerArea);
+            for (LockerArea item : lockerAreas) {
+                persist(item);
 
-                List<Locker> lockers = generator.createLockers(lockerArea, config.getNumLockers());
+                List<Locker> lockers = generator.createLockers(item, config.getNumLockers());
                 for (Locker locker : lockers) {
                     persist(locker);
                 }
+            }
+
+            // Amenities:
+            List<BuildingAmenity> amenities = generator.createBuildingAmenities(building, 1 + RandomUtil.randomInt(3));
+            for (BuildingAmenity item : amenities) {
+                persist(item);
             }
 
             // Floorplans:
