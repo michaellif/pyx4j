@@ -14,25 +14,21 @@
 package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.Notes;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.vendor.Maintenance;
-import com.propertyvista.domain.property.vendor.Warranty;
+import com.propertyvista.domain.property.vendor.LicencedWarrantedMaintained;
 
 @ToStringFormat("{0} {1}")
-public interface Roof extends IEntity, Notes {
+public interface Roof extends LicencedWarrantedMaintained, Notes {
 
     @Owner
     @Detached
@@ -46,13 +42,6 @@ public interface Roof extends IEntity, Notes {
     @MemberColumn(name = "roofYear")
     @Editor(type = EditorType.yearpicker)
     IPrimitive<LogicalDate> year();
-
-    @EmbeddedEntity
-    Warranty warranty();
-
-    @Caption(name = "Maintenance Contract")
-    @EmbeddedEntity
-    Maintenance maintenance();
 
     // TODO create some notes object/domain which defines list of notes with dates and creators (one user can't delete notes of the others)...
     IPrimitive<String> notes();

@@ -13,28 +13,20 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.dto.BoilerDTO;
 
-public class BoilerEditorForm extends CrmEntityForm<BoilerDTO> {
-
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
+public class BoilerEditorForm extends MechlBaseEditorForm<BoilerDTO> {
 
     public BoilerEditorForm() {
         super(BoilerDTO.class, new CrmEditorsComponentFactory());
@@ -45,18 +37,7 @@ public class BoilerEditorForm extends CrmEntityForm<BoilerDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
-
-        tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
-        tabPanel.add(new ScrollPanel(createWarrantyTab()), i18n.tr("Warranty"));
-        tabPanel.add(new ScrollPanel(createMaintenantceTab()), i18n.tr("Maintenantce"));
-
-        tabPanel.setDisableMode(isEditable());
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
-    }
-
-    private Widget createGeneralTab() {
+    protected Widget createGeneralTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
         main.add(split);
@@ -75,26 +56,6 @@ public class BoilerEditorForm extends CrmEntityForm<BoilerDTO> {
         main.add(new VistaLineSeparator());
         main.add(new HTML("&nbsp"));
         main.add(inject(proto().notes()), 40);
-
-        return main;
-    }
-
-    private Widget createWarrantyTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
-        main.add(split);
-
-        SubtypeInjectors.injectWarranty(main, split, proto().warranty(), this);
-
-        return main;
-    }
-
-    private Widget createMaintenantceTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
-        main.add(split);
-
-        SubtypeInjectors.injectMaintenance(main, split, proto().maintenance(), this);
 
         return main;
     }
