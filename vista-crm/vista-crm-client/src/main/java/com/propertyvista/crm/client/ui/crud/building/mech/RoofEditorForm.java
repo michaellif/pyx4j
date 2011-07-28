@@ -22,6 +22,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.dto.RoofDTO;
 
 public class RoofEditorForm extends MechlBaseEditorForm<RoofDTO> {
@@ -47,6 +48,6 @@ public class RoofEditorForm extends MechlBaseEditorForm<RoofDTO> {
         main.add(new HTML("&nbsp"));
         main.add(inject(proto().notes()), 40);
 
-        return main;
+        return new CrmScrollPanel(main);
     }
 }

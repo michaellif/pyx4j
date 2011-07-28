@@ -21,6 +21,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.Concession;
 
 public class ConcessionEditorForm extends CrmEntityForm<Concession> {
@@ -47,7 +48,6 @@ public class ConcessionEditorForm extends CrmEntityForm<Concession> {
         split.getLeftPanel().add(inject(proto().start()), 8.2);
         split.getLeftPanel().add(inject(proto().end()), 8.2);
 
-        main.setWidth("100%");
-        return main;
+        return new CrmScrollPanel(main);
     }
 }

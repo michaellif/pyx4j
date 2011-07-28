@@ -30,7 +30,7 @@ public class TenantLister extends ListerBase<TenantDTO> {
 
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<TenantDTO>> columnDescriptors, TenantDTO proto) {
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.displayName()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
     }
 }

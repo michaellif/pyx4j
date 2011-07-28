@@ -25,6 +25,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.offering.Feature;
 
 public abstract class FeatureEditorForm<T extends Feature> extends CrmEntityForm<T> {
@@ -43,9 +44,9 @@ public abstract class FeatureEditorForm<T extends Feature> extends CrmEntityForm
 
     @Override
     public IsWidget createContent() {
-        tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
+        tabPanel.add(createGeneralTab(), i18n.tr("General"));
 
-        tabPanel.addDisable(((FeatureView) getParentView()).getConcessionsListerView().asWidget(), i18n.tr("Concessions"));
+        tabPanel.addDisable(new ScrollPanel(((FeatureView) getParentView()).getConcessionsListerView().asWidget()), i18n.tr("Concessions"));
 
         addMoreTabs(tabPanel);
 
@@ -64,7 +65,6 @@ public abstract class FeatureEditorForm<T extends Feature> extends CrmEntityForm
         split.getLeftPanel().add(inject(proto().start()), 8.2);
         split.getRightPanel().add(inject(proto().end()), 8.2);
 
-        main.setWidth("100%");
-        return main;
+        return new CrmScrollPanel(main);
     }
 }

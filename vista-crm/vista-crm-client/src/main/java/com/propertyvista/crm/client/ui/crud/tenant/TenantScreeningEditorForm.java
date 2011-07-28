@@ -62,6 +62,7 @@ import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.ApplicationDocument.DocumentType;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
@@ -92,12 +93,12 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     @Override
     public IsWidget createContent() {
 
-        tabPanel.add(new ScrollPanel(createSecureInformationTab()), i18n.tr("Secure Information"));
-        tabPanel.add(new ScrollPanel(createAddressesTab()), i18n.tr("Addresses"));
-        tabPanel.add(new ScrollPanel(createlegalQuestionsTab()), i18n.tr(proto().legalQuestions().getMeta().getCaption()));
-        tabPanel.add(new ScrollPanel(createIncomesTab()), i18n.tr("Incomes"));
-        tabPanel.add(new ScrollPanel(createAssetsTab()), i18n.tr("Assets"));
-        tabPanel.add(new ScrollPanel(createGuarantorsTab()), i18n.tr("Guarantors"));
+        tabPanel.add(createSecureInformationTab(), i18n.tr("Secure Information"));
+        tabPanel.add(createAddressesTab(), i18n.tr("Addresses"));
+        tabPanel.add(createlegalQuestionsTab(), i18n.tr(proto().legalQuestions().getMeta().getCaption()));
+        tabPanel.add(createIncomesTab(), i18n.tr("Incomes"));
+        tabPanel.add(createAssetsTab(), i18n.tr("Assets"));
+        tabPanel.add(createGuarantorsTab(), i18n.tr("Guarantors"));
 
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
@@ -144,7 +145,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
                 fileUpload.setVisible(event.getValue());
             }
         });
-        return main;
+        return new CrmScrollPanel(main);
     }
 
     private Widget createAddressesTab() {
@@ -156,7 +157,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         main.add(new CrmHeader2Decorator(proto().previousAddress().getMeta().getCaption()));
         main.add(inject(proto().previousAddress(), previousAddressHeader = createAddressEditor()));
 
-        return main;
+        return new CrmScrollPanel(main);
     }
 
     private Widget createlegalQuestionsTab() {
@@ -179,7 +180,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         main.add(new VistaLineSeparator(width, Unit.EM));
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().filedBankruptcy()), decor));
 
-        return main;
+        return new CrmScrollPanel(main);
     }
 
     private CEntityEditor<PriorAddress> createAddressEditor() {
@@ -346,19 +347,19 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     private Widget createIncomesTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         main.add(inject(proto().incomes(), createIncomeFolderEditor()));
-        return main;
+        return new ScrollPanel(main);
     }
 
     private Widget createAssetsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         main.add(inject(proto().assets(), createAssetFolderEditorColumns()));
-        return main;
+        return new CrmScrollPanel(main);
     }
 
     private Widget createGuarantorsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         main.add(inject(proto().guarantors(), createGuarantorFolderEditorColumns()));
-        return main;
+        return new ScrollPanel(main);
     }
 
     private CEntityFolderEditor<TenantIncome> createIncomeFolderEditor() {

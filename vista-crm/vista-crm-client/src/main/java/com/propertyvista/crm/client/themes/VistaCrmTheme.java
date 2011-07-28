@@ -38,6 +38,7 @@ import com.propertyvista.crm.client.ui.decorations.CrmHeader0Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 
 public abstract class VistaCrmTheme extends VistaTheme {
 
@@ -450,7 +451,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
     protected void initVistaDecoratorsPanelStyles() {
         String prefix = VistaDecoratorsFlowPanel.DEFAULT_STYLE_NAME;
 
-        Style style = new Style(prefix);
+        Style style = new Style(Selector.valueOf(prefix));
 
         /*
          * anchors within the class:
@@ -464,6 +465,10 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("text-decoration", "underline");
         addStyle(style);
 
+        // internal scroll panel:
+        style = new Style(Selector.valueOf(CrmScrollPanel.DEFAULT_STYLE_PREFIX));
+        style.addProperty("padding", "1em");
+        addStyle(style);
     }
 
     protected void initDashboardView() {

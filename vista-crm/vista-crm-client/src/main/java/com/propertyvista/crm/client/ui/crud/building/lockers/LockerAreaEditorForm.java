@@ -28,6 +28,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPa
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.dto.LockerAreaDTO;
 
 public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
@@ -47,9 +48,9 @@ public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
     public IsWidget createContent() {
 
 //        tabPanel.addDisable(((LockerAreaView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
-        tabPanel.add(new ScrollPanel(createDetailsTab()), i18n.tr("Details"));
+        tabPanel.add(createDetailsTab(), i18n.tr("Details"));
         tabPanel.addDisable(new ScrollPanel(((LockerAreaView) getParentView()).getLockerView().asWidget()), i18n.tr("Lockers"));
-        tabPanel.addDisable(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
+        tabPanel.addDisable(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
 
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
@@ -59,6 +60,7 @@ public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
     private Widget createDetailsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
+        main.add(split);
 
         split.getLeftPanel().add(inject(proto().name()), 15);
         split.getLeftPanel().add(inject(proto().description()), 15);
@@ -70,7 +72,6 @@ public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
         split.getRightPanel().add(inject(proto().largeLockers()), 7);
         split.getRightPanel().add(inject(proto().smallLockers()), 7);
 
-        main.add(split);
-        return main;
+        return new CrmScrollPanel(main);
     }
 }

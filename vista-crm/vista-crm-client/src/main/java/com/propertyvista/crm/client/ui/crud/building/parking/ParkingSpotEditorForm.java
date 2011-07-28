@@ -20,6 +20,7 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.ParkingSpot;
 
 public class ParkingSpotEditorForm extends CrmEntityForm<ParkingSpot> {
@@ -39,7 +40,6 @@ public class ParkingSpotEditorForm extends CrmEntityForm<ParkingSpot> {
         main.add(inject(proto().name()), 10);
         main.add(inject(proto().type()), 8);
 
-        main.setWidth("100%");
-        return main;
+        return new CrmScrollPanel(main);
     }
 }

@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.building.mech;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -27,6 +26,7 @@ import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.vendor.LicencedWarrantedMaintained;
 
 public abstract class MechlBaseEditorForm<E extends LicencedWarrantedMaintained> extends CrmEntityForm<E> {
@@ -44,9 +44,9 @@ public abstract class MechlBaseEditorForm<E extends LicencedWarrantedMaintained>
     @Override
     public IsWidget createContent() {
 
-        tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
-        tabPanel.add(new ScrollPanel(createWarrantyTab()), i18n.tr("Warranty"));
-        tabPanel.add(new ScrollPanel(createMaintenantceTab()), i18n.tr("Maintenantce"));
+        tabPanel.add(createGeneralTab(), i18n.tr("General"));
+        tabPanel.add(createWarrantyTab(), i18n.tr("Warranty"));
+        tabPanel.add(createMaintenantceTab(), i18n.tr("Maintenantce"));
 
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
@@ -62,7 +62,7 @@ public abstract class MechlBaseEditorForm<E extends LicencedWarrantedMaintained>
 
         SubtypeInjectors.injectWarranty(main, split, proto().warranty(), this);
 
-        return main;
+        return new CrmScrollPanel(main);
     }
 
     protected Widget createMaintenantceTab() {
@@ -72,6 +72,6 @@ public abstract class MechlBaseEditorForm<E extends LicencedWarrantedMaintained>
 
         SubtypeInjectors.injectMaintenance(main, split, proto().maintenance(), this);
 
-        return main;
+        return new CrmScrollPanel(main);
     }
 }

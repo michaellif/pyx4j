@@ -24,6 +24,7 @@ import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.dto.BoilerDTO;
 
 public class BoilerEditorForm extends MechlBaseEditorForm<BoilerDTO> {
@@ -57,6 +58,6 @@ public class BoilerEditorForm extends MechlBaseEditorForm<BoilerDTO> {
         main.add(new HTML("&nbsp"));
         main.add(inject(proto().notes()), 40);
 
-        return main;
+        return new CrmScrollPanel(main);
     }
 }

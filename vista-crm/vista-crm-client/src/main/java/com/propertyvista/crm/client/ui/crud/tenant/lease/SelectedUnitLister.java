@@ -26,7 +26,7 @@ public class SelectedUnitLister extends ListerBase<AptUnit> {
     public SelectedUnitLister() {
         super(AptUnit.class, null, true);
         getListPanel().getDataTable().setMarkSelectedRow(true);
-        getListPanel().setPageSize(10);
+        getListPanel().setPageSize(8);
     }
 
     @Override
@@ -39,8 +39,6 @@ public class SelectedUnitLister extends ListerBase<AptUnit> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().bathrooms()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().name(), i18n.tr("Marketing Name")));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().description(), i18n.tr("Marketing Description")));
-
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.floorplan().name(), i18n.tr("Floorplan Name")));
     }
 
@@ -48,9 +46,7 @@ public class SelectedUnitLister extends ListerBase<AptUnit> {
     protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<AptUnit>> columnDescriptors, AptUnit proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().type()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().typeDescription()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().economicStatus()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().economicStatusDescription()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().floor()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().number()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().area()));
@@ -62,9 +58,6 @@ public class SelectedUnitLister extends ListerBase<AptUnit> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().marketRent()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().name(), i18n.tr("Marketing Name")));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().description(), i18n.tr("Marketing Description")));
-
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.floorplan().name(), i18n.tr("Floorplan Name")));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.floorplan().description(), i18n.tr("Floorplan Description")));
     }
 }

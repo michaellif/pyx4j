@@ -20,6 +20,7 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
 public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancy> {
@@ -44,7 +45,6 @@ public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancy> {
 
         main.add(inject(proto().lease()), 15);
 
-        main.setWidth("100%");
-        return main;
+        return new CrmScrollPanel(main);
     }
 }

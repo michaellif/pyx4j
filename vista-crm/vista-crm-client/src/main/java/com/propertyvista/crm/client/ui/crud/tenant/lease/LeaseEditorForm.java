@@ -28,7 +28,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.Range;
@@ -72,6 +71,7 @@ import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.Pet.WeightUnit;
 import com.propertyvista.domain.Vehicle;
@@ -100,10 +100,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     @Override
     public IsWidget createContent() {
 
-        tabPanel.add(new ScrollPanel(createDetailsTab()), i18n.tr("Details"));
-        tabPanel.add(new ScrollPanel(createTenantsTab()), i18n.tr("Tenants"));
-        tabPanel.add(new ScrollPanel(createAddonsTab()), i18n.tr("Add-ons"));
-        tabPanel.add(new ScrollPanel(createFinancialsTab()), i18n.tr("Financials"));
+        tabPanel.add(createDetailsTab(), i18n.tr("Details"));
+        tabPanel.add(createTenantsTab(), i18n.tr("Tenants"));
+        tabPanel.add(createAddonsTab(), i18n.tr("Add-ons"));
+        tabPanel.add(createFinancialsTab(), i18n.tr("Financials"));
 
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
@@ -143,13 +143,15 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.add(inject(proto().actualMoveOut()), 8.2);
         main.add(inject(proto().signDate()), 8.2);
 
-        return main;
+        return new CrmScrollPanel(main);
     }
 
     private Widget createTenantsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+
         main.add(inject(proto().tenants(), createTenantsEditorColumns()));
-        return main;
+
+        return new CrmScrollPanel(main);
     }
 
     private Widget createAddonsTab() {
@@ -160,7 +162,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.add(new CrmHeader2Decorator(proto().vehicles()));
         main.add(inject(proto().vehicles(), createVehicleListViewer()));
 
-        return main;
+        return new CrmScrollPanel(main);
     }
 
     private Widget createFinancialsTab() {
@@ -172,7 +174,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 //        main.add(inject(proto().charges(), createChargesListViewer()));
 //        main.add(inject(proto().specialStatus()), 15);
 
-        return main;
+        return new CrmScrollPanel(main);
 
     }
 

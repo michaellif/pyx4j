@@ -40,6 +40,7 @@ import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
 
@@ -66,8 +67,8 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         tabPanel.addDisable(((BuildingView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
 
-        tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
-        tabPanel.add(new ScrollPanel(createDetailsTab()), i18n.tr("Details"));
+        tabPanel.add(createGeneralTab(), i18n.tr("General"));
+        tabPanel.add(createDetailsTab(), i18n.tr("Details"));
 
         tabPanel.addDisable(new ScrollPanel(((BuildingView) getParentView()).getFloorplanListerView().asWidget()), i18n.tr("Floorplans"));
         tabPanel.addDisable(new ScrollPanel(((BuildingView) getParentView()).getUnitListerView().asWidget()), i18n.tr("Units"));
@@ -86,10 +87,10 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         combinedtab.add(((BuildingView) getParentView()).getLockerAreaListerView().asWidget());
         tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Parking & Locker Area"));
 
-        tabPanel.add(new ScrollPanel(createFinancialTab()), i18n.tr("Financial"));
-        tabPanel.add(new ScrollPanel(createMarketingTab()), i18n.tr("Marketing"));
-        tabPanel.add(new ScrollPanel(createContactTab()), i18n.tr("Contact Information"));
-        tabPanel.addDisable(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
+        tabPanel.add(createFinancialTab(), i18n.tr("Financial"));
+        tabPanel.add(createMarketingTab(), i18n.tr("Marketing"));
+        tabPanel.add(createContactTab(), i18n.tr("Contact Information"));
+        tabPanel.addDisable(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
 
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
@@ -117,7 +118,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(new CrmHeader2Decorator(proto().amenities().getMeta().getCaption()));
         main.add(inject(proto().amenities(), createAmenitiesListEditor()));
 
-        return main;
+        return new CrmScrollPanel(main);
     }
 
     private Widget createDetailsTab() {
@@ -135,7 +136,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().info().centralAir()), 15);
         split.getRightPanel().add(inject(proto().info().centralHeat()), 15);
 
-        return main;
+        return new CrmScrollPanel(main);
     }
 
     private Widget createFinancialTab() {
@@ -151,7 +152,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().financial().lastAppraisalValue()), 10);
         split.getRightPanel().add(inject(proto().financial().currency().name()), split.getRightPanel().getDefaultLabelWidth(), 10, i18n.tr("Currency Name"));
 
-        return main;
+        return new CrmScrollPanel(main);
     }
 
     private Widget createMarketingTab() {
@@ -159,7 +160,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         SubtypeInjectors.injectMarketing(main, proto().marketing(), this);
 
-        return main;
+        return new CrmScrollPanel(main);
     }
 
     private Widget createContactTab() {
@@ -169,7 +170,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(inject(proto().contacts().email().address()), main.getDefaultLabelWidth(), 30, i18n.tr("Email Address"));
         SubtypeInjectors.injectPhones(main, proto().contacts().phones(), this);
 
-        return main;
+        return new CrmScrollPanel(main);
     }
 
     private CEntityFolderEditor<BuildingAmenity> createAmenitiesListEditor() {

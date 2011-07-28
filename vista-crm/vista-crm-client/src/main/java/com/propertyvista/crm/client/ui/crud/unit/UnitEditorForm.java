@@ -32,6 +32,7 @@ import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.dto.AptUnitDTO;
 
@@ -51,14 +52,14 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     @Override
     public IsWidget createContent() {
 
-        tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
+        tabPanel.add(createGeneralTab(), i18n.tr("General"));
 
-        tabPanel.addDisable(((UnitView) getParentView()).getUnitItemsListerView().asWidget(), i18n.tr("Details"));
-        tabPanel.addDisable(((UnitView) getParentView()).getOccupanciesListerView().asWidget(), i18n.tr("Occupancies"));
+        tabPanel.addDisable(new ScrollPanel(((UnitView) getParentView()).getUnitItemsListerView().asWidget()), i18n.tr("Details"));
+        tabPanel.addDisable(new ScrollPanel(((UnitView) getParentView()).getOccupanciesListerView().asWidget()), i18n.tr("Occupancies"));
 
-        tabPanel.add(new ScrollPanel(createFinancialsTab()), i18n.tr("Financial"));
-        tabPanel.add(new ScrollPanel(createMarketingTab()), i18n.tr("Marketing"));
-        tabPanel.add(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
+        tabPanel.add(createFinancialsTab(), i18n.tr("Financial"));
+        tabPanel.add(createMarketingTab(), i18n.tr("Marketing"));
+        tabPanel.add(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
 
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
@@ -100,7 +101,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
             });
         }
 
-        return main;
+        return new CrmScrollPanel(main);
     }
 
     private Widget createFinancialsTab() {
@@ -109,7 +110,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         main.add(inject(proto().financial().unitRent()), 10);
         main.add(inject(proto().financial().marketRent()), 10);
 
-        return main;
+        return new CrmScrollPanel(main);
     }
 
     private Widget createMarketingTab() {
@@ -117,6 +118,6 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         SubtypeInjectors.injectMarketing(main, proto().marketing(), this);
 
-        return main;
+        return new CrmScrollPanel(main);
     }
 }

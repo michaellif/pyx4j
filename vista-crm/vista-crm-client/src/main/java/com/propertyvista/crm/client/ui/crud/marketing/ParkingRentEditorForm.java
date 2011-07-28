@@ -23,6 +23,7 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ParkingRent;
 
@@ -45,14 +46,15 @@ public class ParkingRentEditorForm extends FeatureEditorForm<ParkingRent> {
     private Widget createFinancialTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+        main.add(split);
 
         split.getLeftPanel().add(inject(proto().regularRent()), 7);
         split.getLeftPanel().add(inject(proto().disableRent()), 7);
-        split.getRightPanel().add(inject(proto().wideRent()), 7);
-        split.getRightPanel().add(inject(proto().narrowRent()), 7);
         split.getLeftPanel().add(inject(proto().deposit()), 7);
 
-        main.add(split);
-        return main;
+        split.getRightPanel().add(inject(proto().wideRent()), 7);
+        split.getRightPanel().add(inject(proto().narrowRent()), 7);
+
+        return new CrmScrollPanel(main);
     }
 }

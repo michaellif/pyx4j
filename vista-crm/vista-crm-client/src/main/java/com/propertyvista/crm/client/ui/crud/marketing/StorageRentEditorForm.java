@@ -23,6 +23,7 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.StorageRent;
 
@@ -45,12 +46,13 @@ public class StorageRentEditorForm extends FeatureEditorForm<StorageRent> {
     private Widget createFinancialTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+        main.add(split);
 
         split.getLeftPanel().add(inject(proto().largeRent()), 7);
         split.getLeftPanel().add(inject(proto().regularRent()), 7);
+
         split.getRightPanel().add(inject(proto().smallRent()), 7);
 
-        main.add(split);
-        return main;
+        return new CrmScrollPanel(main);
     }
 }

@@ -22,6 +22,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPa
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
 public class UnitItemEditorForm extends CrmEntityForm<AptUnitItem> {
@@ -58,7 +59,6 @@ public class UnitItemEditorForm extends CrmEntityForm<AptUnitItem> {
         split.getRightPanel().add(inject(proto().cabinetsInstallDate()), 8.2);
         split.getRightPanel().add(inject(proto().cabinetsValue()), 8.2);
 
-        main.setWidth("100%");
-        return main;
+        return new CrmScrollPanel(main);
     }
 }

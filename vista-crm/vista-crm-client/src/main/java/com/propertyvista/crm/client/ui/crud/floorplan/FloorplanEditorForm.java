@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -34,6 +33,7 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.dto.FloorplanDTO;
 
@@ -52,9 +52,9 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
 
     @Override
     public IsWidget createContent() {
-        tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
+        tabPanel.add(createGeneralTab(), i18n.tr("General"));
 
-        tabPanel.addDisable(((FloorplanView) getParentView()).getFeaturesListerView().asWidget(), i18n.tr("Features"));
+//        tabPanel.addDisable(((FloorplanView) getParentView()).getFeaturesListerView().asWidget(), i18n.tr("Features"));
 
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
@@ -77,8 +77,7 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
         main.add(new CrmHeader2Decorator(proto().amenities().getMeta().getCaption()));
         main.add(inject(proto().amenities(), createAmenitiesListEditor()));
 
-        main.setWidth("100%");
-        return main;
+        return new CrmScrollPanel(main);
     }
 
     private CEntityFolderEditor<FloorplanAmenity> createAmenitiesListEditor() {
