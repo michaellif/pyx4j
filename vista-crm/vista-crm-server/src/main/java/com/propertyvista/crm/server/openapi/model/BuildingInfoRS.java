@@ -8,33 +8,15 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Jul 27, 2011
- * @author michaellif
- * @version $Id$
+ * @author dmitry
  */
 package com.propertyvista.crm.server.openapi.model;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class AddressRS {
+public class BuildingInfoRS {
 
-    @XmlElement(name = "streetNumber")
-    public String streetNumber;
+    @XmlElement(name = "address")
+    public AddressRS address;
 
-    @XmlElement(name = "streetName")
-    public String streetName;
-
-    @XmlElement(name = "streetType")
-    public String streetType;
-
-    @XmlElement(name = "city")
-    public String city;
-
-    @XmlElement(name = "province")
-    public String province;
-
-    @XmlElement(name = "postalCode")
-    public String postalCode;
-
-    @XmlElement(name = "country")
-    public String country;
 }

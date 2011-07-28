@@ -7,21 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 26, 2011
- * @author michaellif
+ * Created on Jul 28, 2011
+ * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.crm.server.openapi;
+package com.propertyvista.crm.server.openapi.model;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import java.util.ArrayList;
+import java.util.List;
 
-@Path("/hello")
-public class HelloResource {
-    @GET
-    @Produces("text/plain")
-    public String sayHello() {
-        return "Hello Vista";
-    }
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "floorplans")
+public class FloorplansRS {
+
+    @XmlElement(name = "floorplan")
+    public List<FloorplanRS> floorplans = new ArrayList<FloorplanRS>();
 }
