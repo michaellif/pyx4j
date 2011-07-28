@@ -152,6 +152,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         listPanel.removeUpperActionsBar();
         listPanel.setPageSize(ApplicationMode.isDevelopment() ? 10 : 30);
         listPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.listPanel);
+        listPanel.getDataTable().setHasCheckboxColumn(false);
         listPanel.getDataTable().setMarkSelectedRow(false);
         listPanel.getDataTable().setAutoColumnsWidth(true);
         listPanel.getDataTable().renderTable();
