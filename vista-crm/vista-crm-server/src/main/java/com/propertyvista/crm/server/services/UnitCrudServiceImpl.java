@@ -13,8 +13,11 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.dto.AptUnitDTO;
 
@@ -28,5 +31,8 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
     protected void enhanceRetrieveDTO(AptUnit in, AptUnitDTO dto, boolean fromList) {
         //TODO: calculate value here:
         dto.numberOfOccupants().setValue(0.0);
+
+        dto.buildingCode().set(
+                PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, dto.belongsTo().getPrimaryKey()).propertyCode());
     }
 }

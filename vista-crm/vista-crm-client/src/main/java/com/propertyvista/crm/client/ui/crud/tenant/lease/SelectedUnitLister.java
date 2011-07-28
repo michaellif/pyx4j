@@ -26,7 +26,6 @@ public class SelectedUnitLister extends ListerBase<AptUnit> {
     public SelectedUnitLister() {
         super(AptUnit.class, null, true);
         getListPanel().getDataTable().setMarkSelectedRow(true);
-        getListPanel().getDataTable().setHasCheckboxColumn(false);
         getListPanel().setPageSize(10);
     }
 
@@ -42,7 +41,7 @@ public class SelectedUnitLister extends ListerBase<AptUnit> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().name(), i18n.tr("Marketing Name")));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().description(), i18n.tr("Marketing Description")));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().floorplan().name(), i18n.tr("Floorplan Name")));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.floorplan().name(), i18n.tr("Floorplan Name")));
     }
 
     @Override
@@ -65,8 +64,7 @@ public class SelectedUnitLister extends ListerBase<AptUnit> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().name(), i18n.tr("Marketing Name")));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().description(), i18n.tr("Marketing Description")));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().floorplan().name(), i18n.tr("Floorplan Name")));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().floorplan().description(),
-                i18n.tr("Floorplan Description")));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.floorplan().name(), i18n.tr("Floorplan Name")));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.floorplan().description(), i18n.tr("Floorplan Description")));
     }
 }

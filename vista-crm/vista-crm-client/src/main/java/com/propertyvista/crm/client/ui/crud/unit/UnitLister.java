@@ -26,14 +26,19 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
 
     public UnitLister() {
         super(AptUnitDTO.class, CrmSiteMap.Properties.Unit.class);
+        getListPanel().getDataTable().setHasCheckboxColumn(false);
     }
 
     public UnitLister(boolean readOnly) {
         super(AptUnitDTO.class, CrmSiteMap.Properties.Unit.class, readOnly);
+        getListPanel().getDataTable().setHasCheckboxColumn(false);
     }
 
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<AptUnitDTO>> columnDescriptors, AptUnitDTO proto) {
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingCode()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.floorplan().name(), i18n.tr("Floorplan Name")));
+
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().floor()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().number()));
@@ -45,11 +50,14 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().marketRent()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().name(), i18n.tr("Marketing Name")));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().floorplan().name(), i18n.tr("Floorplan Name")));
     }
 
     @Override
     protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<AptUnitDTO>> columnDescriptors, AptUnitDTO proto) {
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingCode()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.floorplan().name(), i18n.tr("Floorplan Name")));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.floorplan().description(), i18n.tr("Floorplan Description")));
+
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().typeDescription()));
@@ -68,8 +76,5 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().name(), i18n.tr("Marketing Name")));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().description(), i18n.tr("Marketing Description")));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().floorplan().name(), i18n.tr("Floorplan Name")));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().floorplan().description(),
-                i18n.tr("Floorplan Description")));
     }
 }

@@ -132,7 +132,7 @@ public class BuildingsGenerator {
             Email email) {
         Building building = EntityFactory.create(Building.class);
 
-        building.info().propertyCode().setValue(propertyCode);
+        building.propertyCode().setValue(propertyCode);
         building.info().name().setValue(RandomUtil.randomLetters(5));
         building.info().address().set(address);
         building.info().type().setValue(buildingType);
@@ -345,7 +345,7 @@ public class BuildingsGenerator {
     public List<FloorplanDTO> createFloorplans(Building building, int num) {
         List<FloorplanDTO> floorplans = new ArrayList<FloorplanDTO>();
         for (int i = 0; i < num; i++) {
-            String floorplanName = building.info().propertyCode().getStringView() + "-" + i;
+            String floorplanName = building.propertyCode().getStringView() + "-" + i;
             if (i == 1) {
                 floorplanName = DemoData.REGISTRATION_DEFAULT_FLOORPLAN;
             }
@@ -565,7 +565,7 @@ public class BuildingsGenerator {
         occupancy.dateFrom().setValue(new LogicalDate(avalable.getTime().getTime()));
         unit.occupancies().add(occupancy);
 
-        unit.marketing().floorplan().set(floorplan);
+        unit.marketing().set(floorplan);
 
         return unit;
     }

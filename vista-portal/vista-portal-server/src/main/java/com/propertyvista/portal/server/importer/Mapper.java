@@ -95,7 +95,7 @@ public class Mapper {
     private void create(Property property) {
         Building building = EntityFactory.create(Building.class);
 
-        building.info().propertyCode().setValue(property.getCode());
+        building.propertyCode().setValue(property.getCode());
         building.info().name().setValue(property.getName());
         building.info().structureType().setValue(mapStructureType(property.getType()));
         building.info().type().setValue(BuildingInfo.Type.residential);

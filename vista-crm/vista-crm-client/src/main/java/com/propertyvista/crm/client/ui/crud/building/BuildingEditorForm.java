@@ -101,7 +101,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
         main.add(split);
 
-        split.getLeftPanel().add(inject(proto().info().propertyCode()), 12);
+        split.getLeftPanel().add(inject(proto().propertyCode()), 12);
         split.getLeftPanel().add(inject(proto().info().name()), 15);
         split.getLeftPanel().add(inject(proto().info().type()), 12);
         split.getLeftPanel().add(inject(proto().complex()), 15);

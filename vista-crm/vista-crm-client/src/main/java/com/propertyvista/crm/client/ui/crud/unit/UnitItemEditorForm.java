@@ -21,7 +21,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
 public class UnitItemEditorForm extends CrmEntityForm<AptUnitItem> {
@@ -36,27 +36,27 @@ public class UnitItemEditorForm extends CrmEntityForm<AptUnitItem> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
-        main.add(split);
-        split.getLeftPanel().add(inject(proto().type()), 15);
-        split.getLeftPanel().add(inject(proto().description()), 15);
-        split.getRightPanel().add(inject(proto().conditionNotes()), 7);
+        main.add(inject(proto().type()), 10);
+        main.add(inject(proto().description()), 35);
+        main.add(inject(proto().conditionNotes()), 35);
 
-        main.add(new CrmHeader1Decorator(i18n.tr("Details")));
+        VistaDecoratorsSplitFlowPanel split;
+        main.add(new CrmHeader2Decorator(i18n.tr("Details")));
+        main.add(split = new VistaDecoratorsSplitFlowPanel(!isEditable(), 15));
 
-        main.add(split = new VistaDecoratorsSplitFlowPanel());
-        split.getLeftPanel().add(inject(proto().wallColour()), 15);
-        split.getLeftPanel().add(inject(proto().flooringType()), 15);
-        split.getLeftPanel().add(inject(proto().flooringInstallDate()), 8);
-        split.getLeftPanel().add(inject(proto().flooringValue()), 7);
-        split.getLeftPanel().add(inject(proto().counterTopType()), 15);
-        split.getRightPanel().add(inject(proto().counterTopInstallDate()), 8);
-        split.getRightPanel().add(inject(proto().counterTopValue()), 7);
-        split.getRightPanel().add(inject(proto().cabinetsType()), 15);
-        split.getRightPanel().add(inject(proto().cabinetsInstallDate()), 8);
-        split.getRightPanel().add(inject(proto().cabinetsValue()), 7);
+        split.getLeftPanel().add(inject(proto().wallColour()), 10);
+        split.getLeftPanel().add(inject(proto().flooringType()), 10);
+        split.getLeftPanel().add(inject(proto().flooringInstallDate()), 8.2);
+        split.getLeftPanel().add(inject(proto().flooringValue()), 8.2);
+        split.getLeftPanel().add(inject(proto().counterTopType()), 10);
+
+        split.getRightPanel().add(inject(proto().counterTopInstallDate()), 8.2);
+        split.getRightPanel().add(inject(proto().counterTopValue()), 8.2);
+        split.getRightPanel().add(inject(proto().cabinetsType()), 10);
+        split.getRightPanel().add(inject(proto().cabinetsInstallDate()), 8.2);
+        split.getRightPanel().add(inject(proto().cabinetsValue()), 8.2);
 
         main.setWidth("100%");
         return main;

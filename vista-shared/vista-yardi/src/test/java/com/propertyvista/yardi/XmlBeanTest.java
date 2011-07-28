@@ -91,7 +91,7 @@ public class XmlBeanTest {
         Assert.assertEquals("Converted size", properties.getProperties().size(), mapper.getBuildings().size());
         for (Building building : mapper.getBuildings()) {
             log.debug("Building {}", building);
-            Assert.assertNotNull(building.info().propertyCode());
+            Assert.assertNotNull(building.propertyCode());
         }
     }
 

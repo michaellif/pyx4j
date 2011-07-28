@@ -13,17 +13,8 @@
  */
 package com.propertyvista.domain.property.asset.unit;
 
-import com.pyx4j.entity.annotations.Detached;
 
 import com.propertyvista.domain.marketing.Marketing;
-import com.propertyvista.domain.property.asset.Floorplan;
 
 public interface AptUnitMarketing extends Marketing {
-
-    /**
-     * Object used as part of a marketing campaign to demonstrate the design, structure,
-     * and appearance of unit.
-     */
-    @Detached
-    Floorplan floorplan();
 }

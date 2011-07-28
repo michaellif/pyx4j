@@ -52,8 +52,10 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     public IsWidget createContent() {
 
         tabPanel.add(new ScrollPanel(createGeneralTab()), i18n.tr("General"));
+
         tabPanel.addDisable(((UnitView) getParentView()).getUnitItemsListerView().asWidget(), i18n.tr("Details"));
         tabPanel.addDisable(((UnitView) getParentView()).getOccupanciesListerView().asWidget(), i18n.tr("Occupancies"));
+
         tabPanel.add(new ScrollPanel(createFinancialsTab()), i18n.tr("Financial"));
         tabPanel.add(new ScrollPanel(createMarketingTab()), i18n.tr("Marketing"));
         tabPanel.add(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
@@ -63,20 +65,30 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         return tabPanel;
     }
 
-    @SuppressWarnings("unchecked")
-    private Widget createMarketingTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+    private Widget createGeneralTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
+        main.add(split);
 
-        SubtypeInjectors.injectMarketing(main, proto().marketing(), this);
+        split.getLeftPanel().add(inject(proto().info().name()), 15);
+        split.getLeftPanel().add(inject(proto().info().type()), 15);
+        split.getLeftPanel().add(inject(proto().info().economicStatus()), 15);
+        split.getLeftPanel().add(inject(proto().info().economicStatusDescription()), 15);
+        split.getLeftPanel().add(inject(proto().floorplan()), 15);
 
-        main.add(inject(proto().marketing().floorplan()), 15);
+        split.getRightPanel().add(inject(proto().info().floor()), 5);
+        split.getRightPanel().add(inject(proto().info().number()), 5);
+        split.getRightPanel().add(inject(proto().info().bedrooms()), 5);
+        split.getRightPanel().add(inject(proto().info().bathrooms()), 5);
+        split.getRightPanel().add(inject(proto().info().area()), 8);
+        split.getRightPanel().add(inject(proto().info().areaUnits()), 8);
 
         // restrict floorplan combo here to current building:
-        CEditableComponent<Floorplan, ?> comp = get(proto().marketing().floorplan());
-        if (comp instanceof CEntityComboBox<?>) {
+        CEditableComponent<Floorplan, ?> comp = get(proto().floorplan());
+        if (isEditable() && comp instanceof CEntityComboBox<?>) {
+            @SuppressWarnings("unchecked")
             CEntityComboBox<Floorplan> floorplanCompbo = (CEntityComboBox<Floorplan>) comp;
             floorplanCompbo.setOptionsFilter(new OptionsFilter<Floorplan>() {
-
                 @Override
                 public boolean acceptOption(Floorplan entity) {
                     if ((getValue() == null) || getValue().isNull()) {
@@ -92,37 +104,18 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     private Widget createFinancialsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
-        split.getLeftPanel().add(inject(proto().financial().unitRent()), 15);
-        split.getRightPanel().add(inject(proto().financial().marketRent()), 15);
-        main.add(split);
+        main.add(inject(proto().financial().unitRent()), 10);
+        main.add(inject(proto().financial().marketRent()), 10);
 
         return main;
     }
 
-    private Widget createGeneralTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+    private Widget createMarketingTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
-        split.getLeftPanel().add(inject(proto().info().name()), 15);
-        split.getLeftPanel().add(inject(proto().marketing().name()), 15);
-
-        split.getLeftPanel().add(inject(proto().info().type()), 15);
-
-        split.getLeftPanel().add(inject(proto().info().economicStatus()), 15);
-        split.getLeftPanel().add(inject(proto().info().economicStatusDescription()), 15);
-
-        split.getLeftPanel().add(inject(proto().info().floor()), 15);
-        split.getRightPanel().add(inject(proto().info().number()), 15);
-
-        split.getRightPanel().add(inject(proto().info().area()), 15);
-        split.getRightPanel().add(inject(proto().info().areaUnits()), 15);
-
-        split.getRightPanel().add(inject(proto().info().bedrooms()), 15);
-        split.getRightPanel().add(inject(proto().info().bathrooms()), 15);
-        main.add(split);
+        SubtypeInjectors.injectMarketing(main, proto().marketing(), this);
 
         return main;
     }

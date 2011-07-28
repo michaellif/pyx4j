@@ -121,13 +121,13 @@ public class YardiInteractiveExample {
             List<Building> buildings = lifecycle.download(c, yp);
             log.info("Has {} buildings", buildings.size());
             for (Building building : buildings) {
-                log.info("{}", building.info().propertyCode().getValue());
+                log.info("{}", building.propertyCode().getValue());
             }
         } else if (command.equals("2")) {
             List<Building> buildings = lifecycle.load();
             log.info("Has {} buildings", buildings.size());
             for (Building building : buildings) {
-                log.info("{}", building.info().propertyCode().getValue());
+                log.info("{}", building.propertyCode().getValue());
             }
         } else if (command.equals("3")) {
             List<Building> buildings = lifecycle.merge(c, yp, false);

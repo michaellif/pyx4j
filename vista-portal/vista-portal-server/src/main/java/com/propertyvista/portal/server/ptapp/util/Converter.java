@@ -74,7 +74,7 @@ public class Converter {
         to.id().set(from.id());
 
         // iEntity
-        to.floorplan().set(convert(from.marketing().floorplan()));
+        to.floorplan().set(convert(from.floorplan()));
 // TODO get consession from list of Features here:        
 //        to.concessions().setValue(from.marketing().floorplan().concessions().getStringView());
 

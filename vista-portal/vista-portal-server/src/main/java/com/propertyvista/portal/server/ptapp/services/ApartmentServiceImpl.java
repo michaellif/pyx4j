@@ -87,7 +87,7 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
 
         // find building first, don't use building from unit selection
         EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
-        buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().info().propertyCode(), selectionCriteria.propertyCode().getValue()));
+        buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), selectionCriteria.propertyCode().getValue()));
         Building building = PersistenceServicesFactory.getPersistenceService().retrieve(buildingCriteria);
         if (building == null) {
             log.debug("Could not find building for propertyCode {}", selectionCriteria.propertyCode().getStringView());
@@ -109,7 +109,7 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
         log.debug("Found floorplan {}, now can look for Units in building {}", floorplan, building);
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
-        criteria.add(PropertyCriterion.eq(criteria.proto().marketing().floorplan(), floorplan));
+        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
 
         if (!selectionCriteria.availableFrom().isNull()) {
             criteria.add(new PropertyCriterion(criteria.proto().avalableForRent(), PropertyCriterion.Restriction.GREATER_THAN_OR_EQUAL, selectionCriteria
@@ -144,7 +144,7 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
         log.debug("Found {} units", units.size());
         if (!units.isEmpty()) {
             AptUnit firstUnit = units.get(0);
-            Floorplan floorplan = firstUnit.marketing().floorplan();
+            Floorplan floorplan = firstUnit.floorplan();
 
             availableUnits.floorplan().set(Converter.convert(floorplan));
 

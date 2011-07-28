@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.property.asset.BuildingElement;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public interface AptUnit extends BuildingElement {
@@ -32,6 +33,9 @@ public interface AptUnit extends BuildingElement {
     @Detached
     @Caption(name = "Building")
     Building belongsTo();
+
+    @Detached
+    Floorplan floorplan();
 
     /**
      * Denormalized field used for search, derived from @see AptUnitOccupancy
@@ -54,5 +58,4 @@ public interface AptUnit extends BuildingElement {
 
     @EmbeddedEntity
     AptUnitMarketing marketing();
-
 }

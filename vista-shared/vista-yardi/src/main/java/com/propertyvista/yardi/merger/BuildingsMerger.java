@@ -47,14 +47,14 @@ public class BuildingsMerger {
             // try finding the same building in existing list
             Building existing = null;
             for (Building building : existingList) {
-                if (building.info().propertyCode().getValue().equals(imported.info().propertyCode().getValue())) {
+                if (building.propertyCode().getValue().equals(imported.propertyCode().getValue())) {
                     existing = building;
                     break;
                 }
             }
 
             if (existing == null) {
-                log.info("Did not find a bulding for property code {}", imported.info().propertyCode().getValue());
+                log.info("Did not find a bulding for property code {}", imported.propertyCode().getValue());
                 merged.add(imported);
             } else {
                 merge(imported, existing);

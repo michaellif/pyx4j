@@ -40,10 +40,10 @@ public class GetResidentTransactionsMapper {
 
     private final static Logger log = LoggerFactory.getLogger(GetResidentTransactionsMapper.class);
 
-    private Model model = new Model();
+    private final Model model = new Model();
 
     // TODO for now we are not converting these just yet
-    private List<AptUnitOccupancy> occupancies = new ArrayList<AptUnitOccupancy>();
+    private final List<AptUnitOccupancy> occupancies = new ArrayList<AptUnitOccupancy>();
 
     // TODO later we will need to do transactions here
     public void map(ResidentTransactions transactions) {
@@ -55,7 +55,7 @@ public class GetResidentTransactionsMapper {
     public void map(Property property) {
         // convert building, for now only need the identifier
         Building building = EntityFactory.create(Building.class);
-        building.info().propertyCode().setValue(property.getPropertyId().getIdentification().getPrimaryId());
+        building.propertyCode().setValue(property.getPropertyId().getIdentification().getPrimaryId());
         model.getBuildings().add(building);
 
         for (RTCustomer customer : property.getCustomers()) {

@@ -27,7 +27,7 @@ import com.propertyvista.yardi.bean.Property;
 public class GetPropertyConfigurationsMapper {
 
     // TODO this later will go into the Model
-    private List<Building> buildings = new ArrayList<Building>();
+    private final List<Building> buildings = new ArrayList<Building>();
 
     public void map(Properties properties) {
         for (Property property : properties.getProperties()) {
@@ -52,7 +52,7 @@ public class GetPropertyConfigurationsMapper {
     public Building map(Property property) {
         Building building = EntityFactory.create(Building.class);
 
-        building.info().propertyCode().setValue(property.getCode());
+        building.propertyCode().setValue(property.getCode());
         building.marketing().name().setValue(property.getMarketingName());
 
         // address

@@ -156,10 +156,10 @@ public class Importer {
     }
 
     private void loadBuildingMedia(Building building) {
-        if (building.info().propertyCode().isNull()) {
+        if (building.propertyCode().isNull()) {
             return;
         }
-        Map<Media, byte[]> data = PictureUtil.loadbuildingMedia(building.info().propertyCode().getValue());
+        Map<Media, byte[]> data = PictureUtil.loadbuildingMedia(building.propertyCode().getValue());
         for (Map.Entry<Media, byte[]> me : data.entrySet()) {
             Media m = me.getKey();
             m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentType().getValue()));

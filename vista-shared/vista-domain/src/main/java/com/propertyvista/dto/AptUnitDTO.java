@@ -20,6 +20,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 @Transient
 public interface AptUnitDTO extends AptUnit {
-    @Transient
+
     IPrimitive<Double> numberOfOccupants();
+
+    IPrimitive<String> buildingCode();
 }

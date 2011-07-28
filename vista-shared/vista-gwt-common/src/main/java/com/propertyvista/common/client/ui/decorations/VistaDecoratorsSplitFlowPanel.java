@@ -27,8 +27,12 @@ public class VistaDecoratorsSplitFlowPanel extends HorizontalPanel {
     }
 
     public VistaDecoratorsSplitFlowPanel(boolean readOnlyMode) {
-        this.add(left = new VistaDecoratorsFlowPanel(readOnlyMode, 12));
-        this.add(right = new VistaDecoratorsFlowPanel(readOnlyMode, 12));
+        this(readOnlyMode, 12);
+    }
+
+    public VistaDecoratorsSplitFlowPanel(boolean readOnlyMode, double defaultLabelWidth) {
+        this.add(left = new VistaDecoratorsFlowPanel(readOnlyMode, defaultLabelWidth));
+        this.add(right = new VistaDecoratorsFlowPanel(readOnlyMode, defaultLabelWidth));
 
         left.getElement().getStyle().setPadding(0, Unit.EM);
         right.getElement().getStyle().setPadding(0, Unit.EM);

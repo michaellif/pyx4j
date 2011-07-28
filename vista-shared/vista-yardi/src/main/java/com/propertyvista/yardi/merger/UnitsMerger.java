@@ -32,10 +32,10 @@ public class UnitsMerger {
     private final static Logger log = LoggerFactory.getLogger(UnitsMerger.class);
 
     // loaded from the database, use this for look up by info.propertyCode.getValue
-    private Map<String, Building> buildingsByCode = new HashMap<String, Building>();
+    private final Map<String, Building> buildingsByCode = new HashMap<String, Building>();
 
     // loaded from the database, look up by building.id
-    private Map<Key, Building> buildingsById = new HashMap<Key, Building>();
+    private final Map<Key, Building> buildingsById = new HashMap<Key, Building>();
 
     /**
      * Merge two lists, one is what comes to us form an external system - imported
@@ -56,7 +56,7 @@ public class UnitsMerger {
 
         // cache buildings for lookup
         for (Building building : existing.getBuildings()) {
-            buildingsByCode.put(building.info().propertyCode().getValue(), building);
+            buildingsByCode.put(building.propertyCode().getValue(), building);
             buildingsById.put(building.id().getValue(), building);
         }
 
@@ -73,7 +73,7 @@ public class UnitsMerger {
             // try finding the same unit in existing list
             AptUnit existing = null;
             String importedName = imported.info().name().getValue();
-            String importedPropertyCode = imported.belongsTo().info().propertyCode().getValue();
+            String importedPropertyCode = imported.belongsTo().propertyCode().getValue();
             Building building = buildingsByCode.get(importedPropertyCode);
             if (building == null) {
                 log.warn("Downloaded unit references building {} that does not exist locally", importedPropertyCode);
@@ -82,7 +82,7 @@ public class UnitsMerger {
 
             for (AptUnit unit : existingList) {
                 Building existingBuilding = buildingsById.get(unit.belongsTo().id().getValue());
-                String existingPropertyCode = existingBuilding.info().propertyCode().getValue();
+                String existingPropertyCode = existingBuilding.propertyCode().getValue();
 
                 // first check that the buildings are the same
                 log.debug("Comparing building codes {} and {}", importedPropertyCode, existingPropertyCode);

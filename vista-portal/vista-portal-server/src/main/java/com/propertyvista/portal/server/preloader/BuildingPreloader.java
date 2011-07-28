@@ -311,11 +311,11 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
                 sb.append(" ");
                 sb.append(unit.info().area().getStringView()).append(" sq. ft.");
                 sb.append(" ");
-                sb.append(unit.belongsTo().info().propertyCode().getStringView());
+                sb.append(unit.belongsTo().propertyCode().getStringView());
                 sb.append(" ");
-                sb.append(unit.marketing().floorplan());
+                sb.append(unit.floorplan());
                 sb.append(" | ");
-                sb.append(unit.marketing().floorplan().name().getStringView()); // .append(" ").append(unit.floorplan().pictures());
+                sb.append(unit.floorplan().name().getStringView()); // .append(" ").append(unit.floorplan().pictures());
                 sb.append("\n");
             }
         }
