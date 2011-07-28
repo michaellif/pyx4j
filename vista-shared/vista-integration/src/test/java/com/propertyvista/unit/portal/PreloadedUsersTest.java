@@ -13,6 +13,9 @@
  */
 package com.propertyvista.unit.portal;
 
+import com.propertvista.generator.PTGenerator;
+import com.propertvista.generator.gdo.ApplicationSummaryGDO;
+
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -26,8 +29,6 @@ import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-import com.propertyvista.portal.server.generator.PTGenerator;
-import com.propertyvista.portal.server.generator.gdo.ApplicationSummaryGDO;
 import com.propertyvista.server.common.reference.SharedData;
 
 public class PreloadedUsersTest extends PortalVerificationTestBase {

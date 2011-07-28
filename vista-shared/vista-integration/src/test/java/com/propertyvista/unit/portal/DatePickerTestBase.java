@@ -17,6 +17,8 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import com.propertvista.generator.PTGenerator;
+
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.StringDebugId;
@@ -33,7 +35,6 @@ import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-import com.propertyvista.portal.server.generator.PTGenerator;
 import com.propertyvista.server.common.reference.SharedData;
 
 public class DatePickerTestBase extends WizardSeleniumTestBase {

@@ -15,6 +15,8 @@ package com.propertyvista.unit.portal;
 
 import java.util.List;
 
+import com.propertvista.generator.gdo.TenantSummaryGDO;
+
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.selenium.D;
@@ -44,7 +46,6 @@ import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-import com.propertyvista.portal.server.generator.gdo.TenantSummaryGDO;
 import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 import com.propertyvista.portal.server.ptapp.util.TenantTestAdapter;

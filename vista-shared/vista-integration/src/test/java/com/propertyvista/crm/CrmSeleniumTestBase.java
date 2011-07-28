@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm;
 
+import com.propertvista.generator.PTGenerator;
+
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.selenium.D;
@@ -22,7 +24,6 @@ import com.pyx4j.selenium.SeleniumTestBase;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.User;
-import com.propertyvista.portal.server.generator.PTGenerator;
 import com.propertyvista.unit.VistaDevLogin;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;

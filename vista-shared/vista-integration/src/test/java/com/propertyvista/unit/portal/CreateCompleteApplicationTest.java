@@ -19,6 +19,10 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertvista.generator.PTGenerator;
+import com.propertvista.generator.gdo.ApplicationSummaryGDO;
+import com.propertvista.generator.gdo.TenantSummaryGDO;
+
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
@@ -56,9 +60,6 @@ import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-import com.propertyvista.portal.server.generator.PTGenerator;
-import com.propertyvista.portal.server.generator.gdo.ApplicationSummaryGDO;
-import com.propertyvista.portal.server.generator.gdo.TenantSummaryGDO;
 import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 import com.propertyvista.portal.server.ptapp.util.TenantTestAdapter;
