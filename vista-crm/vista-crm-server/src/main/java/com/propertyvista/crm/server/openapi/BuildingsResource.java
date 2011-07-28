@@ -30,7 +30,9 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.server.openapi.model.BuildingRS;
 import com.propertyvista.crm.server.openapi.model.BuildingsRS;
+import com.propertyvista.crm.server.openapi.model.FloorplanRS;
 import com.propertyvista.crm.server.openapi.model.util.Converter;
+import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -62,20 +64,19 @@ public class BuildingsResource {
             EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
             floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
             List<Floorplan> floorplans = service.query(floorplanCriteria);
-//            for (Floorplan floorplan : floorplans) {
-//                for (Media media : floorplan.media()) {
-//                    log.info("Floor Media {}", media);
-//                    EntityQueryCriteria<Media> mediaCriteria = EntityQueryCriteria.create(Media.class);
-//                    mediaCriteria.add(PropertyCriterion.eq(mediaCriteria.proto().id(), media.id()));
-//                }
-//            }
+            for (Floorplan floorplan : floorplans) {
+                FloorplanRS floorplanRS = Converter.convertFloorplan(floorplan);
 
-            buildingRS.floorplans = Converter.convertFloorplans(floorplans);
-
-//            for (Media media : building.media()) {
-//                log.info("Media {}", media);
-//                EntityQueryCriteria<Media> mediaCriteria = EntityQueryCriteria.create(Media.class);
-//            }
+                for (Media media : floorplan.media()) {
+                    EntityQueryCriteria<Media> mediaCriteria = EntityQueryCriteria.create(Media.class);
+                    mediaCriteria.add(PropertyCriterion.eq(mediaCriteria.proto().id(), media.id().getValue()));
+                    List<Media> fetchedMedias = service.query(mediaCriteria);
+                    for (Media fetchedMedia : fetchedMedias) {
+                        floorplanRS.medias.media.add(Converter.convertMedia(fetchedMedia));
+                    }
+                }
+                buildingRS.floorplans.floorplans.add(floorplanRS);
+            }
         }
 
         return buildingsRS;

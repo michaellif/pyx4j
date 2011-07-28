@@ -22,17 +22,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "buildings")
 public class BuildingsRS {
 
-    @XmlElement(name = "buildings")
+    @XmlElement(name = "building")
     public List<BuildingRS> buildings = new ArrayList<BuildingRS>();
-
-//    public static BuildingsRS valueOf(List<Building> buildingList) {
-//        BuildingsRS buildings = new BuildingsRS();
-//        buildings.buildings = new ArrayList<BuildingRS>();
-//
-//        for (Building building : buildingList) {
-//            buildings.buildings.add(new BuildingRS(building));
-//        }
-//
-//        return buildings;
-//    }
 }

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class AddressRS {
 
-    @XmlElement(name = "streetNumber")
+    @XmlElement(name = "streetNumber", required = true)
     public String streetNumber;
 
     @XmlElement(name = "streetName")

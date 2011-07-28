@@ -13,16 +13,18 @@
  */
 package com.propertyvista.crm.server.openapi.model;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "floorplan")
 public class FloorplanRS {
 
-//    @XmlElement(name = "name")
     public String name;
 
-//    @XmlElement(name = "description")
     public String description;
 
     public Integer floorCount;
+
+    @XmlElement(name = "medias")
+    public MediasRS medias = new MediasRS();
 }

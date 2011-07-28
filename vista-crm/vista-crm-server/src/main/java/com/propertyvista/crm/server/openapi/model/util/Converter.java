@@ -21,8 +21,10 @@ import com.propertyvista.crm.server.openapi.model.BuildingsRS;
 import com.propertyvista.crm.server.openapi.model.FloorplanRS;
 import com.propertyvista.crm.server.openapi.model.FloorplansRS;
 import com.propertyvista.crm.server.openapi.model.MarketingRS;
+import com.propertyvista.crm.server.openapi.model.MediaRS;
 import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.marketing.Marketing;
+import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
@@ -91,6 +93,14 @@ public class Converter {
         to.name = from.name().getStringView();
         to.description = from.description().getStringView();
         to.floorCount = from.floorCount().getValue();
+
+        return to;
+    }
+
+    public static MediaRS convertMedia(Media from) {
+        MediaRS to = new MediaRS();
+
+        to.filename = from.file().filename().getStringView();
 
         return to;
     }

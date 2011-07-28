@@ -7,24 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 27, 2011
- * @author michaellif
+ * Created on Jul 28, 2011
+ * @author dmitry
  * @version $Id$
  */
 package com.propertyvista.crm.server.openapi.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "building")
-public class BuildingRS {
+@XmlRootElement(name = "medias")
+public class MediasRS {
 
-    @XmlElement(name = "info")
-    public BuildingInfoRS info;
-
-    @XmlElement(name = "marketing")
-    public MarketingRS marketing;
-
-    @XmlElement(name = "floorplans")
-    public FloorplansRS floorplans = new FloorplansRS();
+    @XmlElement(name = "media")
+    public List<MediaRS> media = new ArrayList<MediaRS>();
 }
