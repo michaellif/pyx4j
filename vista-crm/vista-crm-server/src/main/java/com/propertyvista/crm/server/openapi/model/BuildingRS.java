@@ -19,6 +19,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "building")
 public class BuildingRS {
 
+    public String propertyCode;
+
     @XmlElement(name = "info")
     public BuildingInfoRS info;
 

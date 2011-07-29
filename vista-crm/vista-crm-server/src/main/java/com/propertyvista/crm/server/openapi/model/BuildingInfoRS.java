@@ -12,11 +12,52 @@
  */
 package com.propertyvista.crm.server.openapi.model;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.propertyvista.crm.server.openapi.model.util.LogicalDateXmlAdapter;
+import com.propertyvista.domain.property.asset.building.BuildingInfo;
+import com.propertyvista.domain.property.asset.building.BuildingInfo.ConstructionType;
+import com.propertyvista.domain.property.asset.building.BuildingInfo.FloorType;
+import com.propertyvista.domain.property.asset.building.BuildingInfo.FoundationType;
+import com.propertyvista.domain.property.asset.building.BuildingInfo.WaterSupply;
 
 public class BuildingInfoRS {
+
+    public String name;
+
+    public BuildingInfo.Type type;
 
     @XmlElement(name = "address")
     public AddressRS address;
 
+    public BuildingInfo.Shape shape;
+
+    public String totalStories;
+
+    public String residentialStories;
+
+    public BuildingInfo.StructureType structureType;
+
+    @XmlSchemaType(name = "date")
+    @XmlElement(required = true)
+    @XmlJavaTypeAdapter(LogicalDateXmlAdapter.class)
+    public Date structureBuildYear;
+
+    public ConstructionType constructionType;
+
+    public FoundationType foundationType;
+
+    public FloorType floorType;
+
+    public String landArea;
+
+    public WaterSupply waterSupply;
+
+    public Boolean centralAir;
+
+    public Boolean centralHeat;
 }

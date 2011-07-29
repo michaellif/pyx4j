@@ -7,19 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 27, 2011
+ * Created on Jul 29, 2011
  * @author dmitry
+ * @version $Id$
  */
 package com.propertyvista.crm.server.openapi.model;
 
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class MarketingRS {
-    public String name;
-
-    @XmlElement(name = "description")
-    public String description;
-
-    @XmlElement(name = "blurbs")
-    public AdvertisingBlurbsRS blurbs = new AdvertisingBlurbsRS();
+@XmlRootElement(name = "advertisingBlurb")
+public class AdvertisingBlurbRS {
+    public String content;
 }

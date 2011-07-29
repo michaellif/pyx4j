@@ -12,9 +12,11 @@
  */
 package com.propertyvista.crm.server.openapi.model.util;
 
+import java.util.Date;
 import java.util.List;
 
 import com.propertyvista.crm.server.openapi.model.AddressRS;
+import com.propertyvista.crm.server.openapi.model.AdvertisingBlurbRS;
 import com.propertyvista.crm.server.openapi.model.BuildingInfoRS;
 import com.propertyvista.crm.server.openapi.model.BuildingRS;
 import com.propertyvista.crm.server.openapi.model.BuildingsRS;
@@ -23,6 +25,7 @@ import com.propertyvista.crm.server.openapi.model.FloorplansRS;
 import com.propertyvista.crm.server.openapi.model.MarketingRS;
 import com.propertyvista.crm.server.openapi.model.MediaRS;
 import com.propertyvista.domain.contact.Address;
+import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -41,6 +44,8 @@ public class Converter {
     public static BuildingRS convertBuilding(Building from) {
         BuildingRS to = new BuildingRS();
 
+        to.propertyCode = from.propertyCode().getStringView();
+
         to.info = convertBuildingInfo(from.info());
         to.marketing = convertMarketing(from.marketing());
 
@@ -50,7 +55,21 @@ public class Converter {
     public static MarketingRS convertMarketing(Marketing from) {
         MarketingRS to = new MarketingRS();
 
+        to.name = from.name().getStringView();
         to.description = from.description().getStringView();
+
+        for (AdvertisingBlurb blurb : from.addBlurbs()) {
+            AdvertisingBlurbRS blurbRS = convertBlurb(blurb);
+            to.blurbs.blurbs.add(blurbRS);
+        }
+
+        return to;
+    }
+
+    public static AdvertisingBlurbRS convertBlurb(AdvertisingBlurb blurb) {
+        AdvertisingBlurbRS to = new AdvertisingBlurbRS();
+
+        to.content = blurb.content().getStringView();
 
         return to;
     }
@@ -58,7 +77,23 @@ public class Converter {
     public static BuildingInfoRS convertBuildingInfo(BuildingInfo from) {
         BuildingInfoRS to = new BuildingInfoRS();
 
+        to.name = from.name().getStringView();
         to.address = convertAddress(from.address());
+        to.type = from.type().getValue();
+
+        to.totalStories = from.totalStories().getStringView();
+        to.residentialStories = from.residentialStories().getStringView();
+        to.structureType = from.structureType().getValue();
+        // TODO this does not work at the moment but will be fixed
+        to.structureBuildYear = new Date();
+//        to.structureBuildYear = from.structureBuildYear().getValue();
+        to.constructionType = from.constructionType().getValue();
+        to.foundationType = from.foundationType().getValue();
+        to.floorType = from.floorType().getValue();
+        to.landArea = from.landArea().getValue();
+        to.waterSupply = from.waterSupply().getValue();
+        to.centralAir = from.centralAir().getValue();
+        to.centralHeat = from.centralHeat().getValue();
 
         return to;
     }
