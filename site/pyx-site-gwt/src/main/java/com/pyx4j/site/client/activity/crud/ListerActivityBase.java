@@ -35,7 +35,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -58,10 +57,6 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private List<FilterData> preDefinedFilters;
 
-    private List<FilterData> userDefinedFilters;
-
-    private List<Sort> userDefinedSorts;
-
     private Key parentID;
 
     public ListerActivityBase(IListerView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
@@ -78,7 +73,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         containerWidget.setWidget(view);
-        populateData(0);
+        populate(0);
     }
 
     @Override
@@ -98,7 +93,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
-    public void populateData(final int pageNumber) {
+    public void populate(final int pageNumber) {
         EntityListCriteria<E> criteria = constructSearchCriteria();
         criteria.setPageSize(view.getPageSize());
         criteria.setPageNumber(pageNumber);
@@ -111,21 +106,9 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
             @Override
             public void onSuccess(EntitySearchResult<E> result) {
-                view.populateData(result.getData(), pageNumber, result.hasMoreData());
+                view.populate(result.getData(), pageNumber, result.hasMoreData());
             }
         }, criteria);
-    }
-
-    @Override
-    public void applyFiltering(List<FilterData> filters) {
-        userDefinedFilters = filters;
-        populateData(0);
-    }
-
-    @Override
-    public void applySorting(List<Sort> sorts) {
-        userDefinedSorts = sorts;
-        populateData(0);
     }
 
     @Override
@@ -159,6 +142,8 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         if (preDefinedFilters != null) {
             currentFilters.addAll(preDefinedFilters);
         }
+
+        List<FilterData> userDefinedFilters = view.getFiltering();
         if (userDefinedFilters != null) {
             currentFilters.addAll(userDefinedFilters);
         }
@@ -188,7 +173,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         }
 
         // apply sorts:
-        criteria.setSorts(userDefinedSorts);
+        criteria.setSorts(view.getSorting());
 
         return criteria;
     }

@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implements IListerView<E> {
 
@@ -84,8 +85,18 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
     }
 
     @Override
-    public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData) {
+    public void populate(List<E> entityes, int pageNumber, boolean hasMoreData) {
         assert (lister != null);
-        lister.populateData(entityes, pageNumber, hasMoreData);
+        lister.populate(entityes, pageNumber, hasMoreData);
+    }
+
+    @Override
+    public List<FilterData> getFiltering() {
+        return lister.getFiltering();
+    }
+
+    @Override
+    public List<Sort> getSorting() {
+        return lister.getSorting();
     }
 }

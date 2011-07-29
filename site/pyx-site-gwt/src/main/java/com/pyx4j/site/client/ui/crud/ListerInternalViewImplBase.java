@@ -28,6 +28,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 public class ListerInternalViewImplBase<E extends IEntity> extends ScrollPanel implements IListerView<E> {
 
@@ -72,8 +73,18 @@ public class ListerInternalViewImplBase<E extends IEntity> extends ScrollPanel i
     }
 
     @Override
-    public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData) {
+    public void populate(List<E> entityes, int pageNumber, boolean hasMoreData) {
         assert (lister != null);
-        lister.populateData(entityes, pageNumber, hasMoreData);
+        lister.populate(entityes, pageNumber, hasMoreData);
+    }
+
+    @Override
+    public List<FilterData> getFiltering() {
+        return lister.getFiltering();
+    }
+
+    @Override
+    public List<Sort> getSorting() {
+        return lister.getSorting();
     }
 }

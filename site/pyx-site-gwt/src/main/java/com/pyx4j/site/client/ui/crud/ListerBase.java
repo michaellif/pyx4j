@@ -111,6 +111,8 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     private boolean openEditor;
 
+    private List<Sort> sorting;
+
     public ListerBase(Class<E> clazz) {
         setStyleName(DEFAULT_STYLE_PREFIX);
 
@@ -146,9 +148,9 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         listPanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
             public void onChange(ColumnDescriptor<E> column) {
-                List<Sort> sorts = new ArrayList<Sort>(1);
-                sorts.add(new Sort(column.getColumnName(), !column.isSortAscending()));
-                presenter.applySorting(sorts);
+                sorting = new ArrayList<Sort>(1);
+                sorting.add(new Sort(column.getColumnName(), !column.isSortAscending()));
+                presenter.populate(getListPanel().getDataTable().getDataTableModel().getPageNumber());
             }
         });
 
@@ -317,13 +319,13 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 // IListerView implementation:
 
     @Override
-    public ListerBase<E> getLister() {
-        return this;
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
+    public ListerBase<E> getLister() {
+        return this;
     }
 
     @Override
@@ -332,15 +334,25 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     }
 
     @Override
-    public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData) {
+    public void populate(List<E> entityes, int pageNumber, boolean hasMoreData) {
         setActionsActive(false);
         getListPanel().populateData(entityes, pageNumber, hasMoreData);
     }
 
     protected void populateData(int pageNumber) {
         if (presenter != null) {
-            presenter.populateData(pageNumber);
+            presenter.populate(pageNumber);
         }
+    }
+
+    @Override
+    public List<FilterData> getFiltering() {
+        return filters.getFiltersData();
+    }
+
+    @Override
+    public List<Sort> getSorting() {
+        return sorting;
     }
 
     /**
@@ -378,7 +390,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.applyFiltering(filters.getFiltersData());
+                presenter.populate(0);
             }
         });
         btnApply.setEnabled(false);
@@ -464,7 +476,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                         Filters.this.remove(Filter.this);
                         if (filters.getFilterCount() == 0) {
                             btnApply.setEnabled(false);
-                            presenter.applyFiltering(filters.getFiltersData());
+                            presenter.populate(0);
                         }
                     }
                 });

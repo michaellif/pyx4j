@@ -35,26 +35,26 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
         public List<FilterData> getPreDefinedFilters();
 
-        public void setPreDefinedFilters(List<FilterData> filters);
+        void setPreDefinedFilters(List<FilterData> filters);
 
-        public void populateData(final int pageNumber);
+        void populate(final int pageNumber);
 
-        public void applyFiltering(List<FilterData> filters);
+        void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID);
 
-        public void applySorting(List<Sort> sorts);
+        void edit(Class<? extends CrudAppPlace> openPlaceClass, Key itemID);
 
-        public void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID);
-
-        public void edit(Class<? extends CrudAppPlace> openPlaceClass, Key itemID);
-
-        public void editNew(Class<? extends CrudAppPlace> openPlaceClass, Key parentID);
+        void editNew(Class<? extends CrudAppPlace> openPlaceClass, Key parentID);
     }
-
-    ListerBase<E> getLister();
 
     void setPresenter(Presenter presenter);
 
+    ListerBase<E> getLister();
+
     int getPageSize();
 
-    void populateData(List<E> entityes, int pageNumber, boolean hasMoreData);
+    void populate(List<E> entityes, int pageNumber, boolean hasMoreData);
+
+    List<FilterData> getFiltering();
+
+    List<Sort> getSorting();
 }
