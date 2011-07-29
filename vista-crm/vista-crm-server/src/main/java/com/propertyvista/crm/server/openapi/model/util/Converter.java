@@ -128,6 +128,8 @@ public class Converter {
         to.name = from.name().getStringView();
         to.description = from.description().getStringView();
         to.floorCount = from.floorCount().getValue();
+        to.bedrooms = from.bedrooms().getValue();
+        to.bathrooms = from.bathrooms().getValue();
 
         return to;
     }
@@ -136,6 +138,7 @@ public class Converter {
         MediaRS to = new MediaRS();
 
         to.filename = from.file().filename().getStringView();
+        to.caption = from.file().caption().getStringView();
 
         return to;
     }

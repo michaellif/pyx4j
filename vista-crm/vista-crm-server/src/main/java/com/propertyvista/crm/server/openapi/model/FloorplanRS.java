@@ -25,6 +25,10 @@ public class FloorplanRS {
 
     public Integer floorCount;
 
+    public Double bedrooms;
+
+    public Double bathrooms;
+
     @XmlElement(name = "medias")
     public MediasRS medias = new MediasRS();
 }

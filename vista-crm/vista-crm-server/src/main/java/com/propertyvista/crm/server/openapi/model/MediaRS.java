@@ -18,4 +18,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "media")
 public class MediaRS {
     public String filename;
+
+    public String caption;
 }
