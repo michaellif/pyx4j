@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.building;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
 
-import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.AptUnitDTO;

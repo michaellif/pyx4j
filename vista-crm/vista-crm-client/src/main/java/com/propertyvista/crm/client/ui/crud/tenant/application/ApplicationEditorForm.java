@@ -44,7 +44,7 @@ import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.Pet.WeightUnit;
 import com.propertyvista.domain.charges.ChargeLine;
@@ -73,6 +73,16 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
+    }
+
+    @Override
+    public void setActiveTab(int index) {
+        tabPanel.selectTab(index);
+    }
+
+    @Override
+    public int getActiveTab() {
+        return tabPanel.getSelectedIndex();
     }
 
     private Widget createPetsTab() {

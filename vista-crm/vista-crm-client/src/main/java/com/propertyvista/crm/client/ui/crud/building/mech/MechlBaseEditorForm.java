@@ -24,8 +24,8 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.vendor.LicencedWarrantedMaintained;
 
@@ -51,6 +51,16 @@ public abstract class MechlBaseEditorForm<E extends LicencedWarrantedMaintained>
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
+    }
+
+    @Override
+    public void setActiveTab(int index) {
+        tabPanel.selectTab(index);
+    }
+
+    @Override
+    public int getActiveTab() {
+        return tabPanel.getSelectedIndex();
     }
 
     protected abstract Widget createGeneralTab();

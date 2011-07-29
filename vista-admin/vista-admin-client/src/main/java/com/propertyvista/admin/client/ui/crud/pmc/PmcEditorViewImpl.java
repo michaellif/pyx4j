@@ -13,7 +13,7 @@
  */
 package com.propertyvista.admin.client.ui.crud.pmc;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 
 import com.propertyvista.admin.client.ui.crud.AdminEditorViewImplBase;
 import com.propertyvista.admin.rpc.AdminSiteMap;
@@ -21,9 +21,9 @@ import com.propertyvista.admin.rpc.PmcDTO;
 
 public class PmcEditorViewImpl extends AdminEditorViewImplBase<PmcDTO> implements PmcEditorView {
 
-    private final CEntityForm<PmcDTO> existingItemForm = new PmcEditorForm();
+    private final CrudEntityForm<PmcDTO> existingItemForm = new PmcEditorForm();
 
-    private final CEntityForm<PmcDTO> newItemForm = new PmcEditorFormNewItem();
+    private final CrudEntityForm<PmcDTO> newItemForm = new PmcEditorFormNewItem();
 
     public PmcEditorViewImpl() {
         super(AdminSiteMap.Properties.PMC.class);

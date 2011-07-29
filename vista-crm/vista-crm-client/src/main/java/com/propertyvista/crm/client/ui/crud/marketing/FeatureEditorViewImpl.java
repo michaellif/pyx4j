@@ -37,8 +37,8 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
-import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.Concession;
 import com.propertyvista.domain.financial.offering.Feature;

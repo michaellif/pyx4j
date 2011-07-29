@@ -37,8 +37,8 @@ import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
-import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -95,6 +95,16 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
+    }
+
+    @Override
+    public void setActiveTab(int index) {
+        tabPanel.selectTab(index);
+    }
+
+    @Override
+    public int getActiveTab() {
+        return tabPanel.getSelectedIndex();
     }
 
     private Widget createGeneralTab() {

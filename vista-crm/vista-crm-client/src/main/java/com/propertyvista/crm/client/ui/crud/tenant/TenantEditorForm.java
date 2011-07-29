@@ -41,8 +41,8 @@ import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.dto.TenantDTO;
@@ -93,6 +93,16 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;
+    }
+
+    @Override
+    public void setActiveTab(int index) {
+        tabPanel.selectTab(index);
+    }
+
+    @Override
+    public int getActiveTab() {
+        return tabPanel.getSelectedIndex();
     }
 
     @Override

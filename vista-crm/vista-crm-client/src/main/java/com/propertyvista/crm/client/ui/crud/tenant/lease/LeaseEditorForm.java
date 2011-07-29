@@ -65,11 +65,11 @@ import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
-import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.CrmFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.Pet;
@@ -108,6 +108,16 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
+    }
+
+    @Override
+    public void setActiveTab(int index) {
+        tabPanel.selectTab(index);
+    }
+
+    @Override
+    public int getActiveTab() {
+        return tabPanel.getSelectedIndex();
     }
 
     private Widget createDetailsTab() {

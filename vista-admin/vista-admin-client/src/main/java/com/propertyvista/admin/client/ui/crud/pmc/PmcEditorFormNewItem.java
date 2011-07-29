@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 
 import com.propertyvista.admin.client.ui.components.AdminEditorsComponentFactory;
-import com.propertyvista.admin.client.ui.components.AdminEntityForm;
+import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 

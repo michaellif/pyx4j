@@ -19,7 +19,7 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class DashboardEditorForm extends CrmEntityForm<DashboardMetadata> {

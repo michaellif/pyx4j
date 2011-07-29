@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -28,12 +25,9 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
-import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 
 public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase<E> {
-
-    private static I18n i18n = I18nFactory.getI18n(CrmViewerViewImplBase.class);
 
     protected final CrmHeaderDecorator header;
 

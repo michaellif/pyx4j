@@ -20,10 +20,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
 
-import com.propertyvista.crm.client.ui.components.CrmEntityForm;
 import com.propertyvista.crm.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantScreening;

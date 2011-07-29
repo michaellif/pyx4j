@@ -28,7 +28,7 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
 
     public static final String TAB_DIASBLED_STYLE = "vista-TabLayoutPanelTabDisabled";
 
-    private boolean disabledMode = false;
+    private boolean disableMode = false;
 
     private final List<IsWidget> disableTabs = new ArrayList<IsWidget>();
 
@@ -38,7 +38,7 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
         addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
             @Override
             public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
-                if (disabledMode) {
+                if (disableMode) {
                     if (isDisabledTab(event.getItem())) {
                         event.cancel();
                     }
@@ -70,7 +70,7 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
     }
 
     public void setDisableMode(boolean disable) {
-        disabledMode = disable;
+        disableMode = disable;
         for (IsWidget w : disableTabs) {
             if (disable) {
                 getTabWidget(w).asWidget().addStyleName(TAB_DIASBLED_STYLE);
@@ -81,22 +81,31 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
 
         try {
             if (disable && isDisabledTab(getSelectedIndex())) {
-                selectFirstAvailableTab();
+                selectFirstAvailableTab(false);
             }
         } catch (IndexOutOfBoundsException e) {
             // do nothing - it's just incorrect (-1) SelectedIndex because tabs are empty!...   
         }
     }
 
-    public void selectFirstAvailableTab() {
-        if (disabledMode) {
+    @Override
+    public void selectTab(int index, boolean fireEvents) {
+        if (disableMode && isDisabledTab(index)) {
+            selectFirstAvailableTab(fireEvents);
+        } else {
+            super.selectTab(index, fireEvents);
+        }
+    }
+
+    protected void selectFirstAvailableTab(boolean fireEvents) {
+        if (disableMode) {
             for (int i = getWidgetCount() - 1; i >= 0; --i) { // iterate backward! - the tabs stored in reverse order!?
                 if (!isDisabledTab(i)) {
-                    selectTab(i, false);
+                    super.selectTab(i, false);
                 }
             }
         } else {
-            selectTab(0, false);
+            super.selectTab(0, false);
         }
     }
 
