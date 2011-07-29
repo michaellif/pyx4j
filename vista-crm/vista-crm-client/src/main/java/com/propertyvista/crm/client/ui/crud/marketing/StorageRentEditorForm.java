@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.site.client.ui.crud.IView;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -29,11 +29,11 @@ import com.propertyvista.domain.financial.offering.StorageRent;
 
 public class StorageRentEditorForm extends FeatureEditorForm<StorageRent> {
 
-    public StorageRentEditorForm(IView<Feature> parentView) {
+    public StorageRentEditorForm(IFormView<Feature> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
     }
 
-    public StorageRentEditorForm(IEditableComponentFactory factory, IView<Feature> parentView) {
+    public StorageRentEditorForm(IEditableComponentFactory factory, IFormView<Feature> parentView) {
         super(StorageRent.class, factory);
         setParentView(parentView);
     }

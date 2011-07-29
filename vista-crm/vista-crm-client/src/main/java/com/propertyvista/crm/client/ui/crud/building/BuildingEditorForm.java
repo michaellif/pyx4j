@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
-import com.pyx4j.site.client.ui.crud.IView;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -48,11 +48,11 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
-    public BuildingEditorForm(IView<BuildingDTO> parentView) {
+    public BuildingEditorForm(IFormView<BuildingDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
     }
 
-    public BuildingEditorForm(IEditableComponentFactory factory, IView<BuildingDTO> parentView) {
+    public BuildingEditorForm(IEditableComponentFactory factory, IFormView<BuildingDTO> parentView) {
         super(BuildingDTO.class, factory);
         setParentView(parentView);
     }

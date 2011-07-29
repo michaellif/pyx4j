@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
-import com.pyx4j.site.client.ui.crud.IView;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -41,11 +41,11 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
-    public FloorplanEditorForm(IView<FloorplanDTO> parentView) {
+    public FloorplanEditorForm(IFormView<FloorplanDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
     }
 
-    public FloorplanEditorForm(IEditableComponentFactory factory, IView<FloorplanDTO> parentView) {
+    public FloorplanEditorForm(IEditableComponentFactory factory, IFormView<FloorplanDTO> parentView) {
         super(FloorplanDTO.class, factory);
         setParentView(parentView);
     }

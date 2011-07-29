@@ -53,7 +53,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.site.client.ui.crud.IView;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.ListerBase.ItemSelectionHandler;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -88,11 +88,11 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
-    public LeaseEditorForm(IView<LeaseDTO> parentView) {
+    public LeaseEditorForm(IFormView<LeaseDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
     }
 
-    public LeaseEditorForm(IEditableComponentFactory factory, IView<LeaseDTO> parentView) {
+    public LeaseEditorForm(IEditableComponentFactory factory, IFormView<LeaseDTO> parentView) {
         super(LeaseDTO.class, factory);
         setParentView(parentView);
     }

@@ -23,7 +23,7 @@ import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.site.client.ui.crud.IView;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -40,11 +40,11 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
-    public UnitEditorForm(IView<AptUnitDTO> parentView) {
+    public UnitEditorForm(IFormView<AptUnitDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
     }
 
-    public UnitEditorForm(IEditableComponentFactory factory, IView<AptUnitDTO> parentView) {
+    public UnitEditorForm(IEditableComponentFactory factory, IFormView<AptUnitDTO> parentView) {
         super(AptUnitDTO.class, factory);
         setParentView(parentView);
     }

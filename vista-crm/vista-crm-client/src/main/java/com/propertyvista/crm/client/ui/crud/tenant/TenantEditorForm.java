@@ -31,7 +31,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.site.client.ui.crud.IView;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -57,11 +57,11 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
-    public TenantEditorForm(IView<TenantDTO> parentView) {
+    public TenantEditorForm(IFormView<TenantDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
     }
 
-    public TenantEditorForm(IEditableComponentFactory factory, IView<TenantDTO> parentView) {
+    public TenantEditorForm(IEditableComponentFactory factory, IFormView<TenantDTO> parentView) {
         super(TenantDTO.class, factory);
         setParentView(parentView);
     }

@@ -35,7 +35,7 @@ import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.site.client.ui.crud.IView;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -55,11 +55,11 @@ public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
-    public ApplicationEditorForm(IView<ApplicationDTO> parentView) {
+    public ApplicationEditorForm(IFormView<ApplicationDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
     }
 
-    public ApplicationEditorForm(IEditableComponentFactory factory, IView<ApplicationDTO> parentView) {
+    public ApplicationEditorForm(IEditableComponentFactory factory, IFormView<ApplicationDTO> parentView) {
         super(ApplicationDTO.class, factory);
         setParentView(parentView);
     }

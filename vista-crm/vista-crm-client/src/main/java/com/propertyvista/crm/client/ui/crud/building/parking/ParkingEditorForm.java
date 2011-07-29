@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.site.client.ui.crud.IView;
+import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -35,11 +35,11 @@ public class ParkingEditorForm extends CrmEntityForm<ParkingDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
-    public ParkingEditorForm(IView<ParkingDTO> parentView) {
+    public ParkingEditorForm(IFormView<ParkingDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
     }
 
-    public ParkingEditorForm(IEditableComponentFactory factory, IView<ParkingDTO> parentView) {
+    public ParkingEditorForm(IEditableComponentFactory factory, IFormView<ParkingDTO> parentView) {
         super(ParkingDTO.class, factory);
         setParentView(parentView);
     }
