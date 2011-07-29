@@ -62,6 +62,8 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private List<Sort> userDefinedSorts;
 
+    private Key parentID;
+
     public ListerActivityBase(IListerView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
         this.view = view;
         this.service = service;
@@ -82,6 +84,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     @Override
     public void setParentFiltering(Key parentID) {
         parentFiltering = new FilterData(new Path(entityClass, EntityFactory.getEntityMeta(entityClass).getOwnerMemberName()), Operands.is, parentID);
+        this.parentID = parentID; // save parent id for newItem creation...
     }
 
     @Override
@@ -142,7 +145,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     @Override
     public void editNew(Class<? extends CrudAppPlace> openPlaceClass, Key parentID) {
         CrudAppPlace place = AppSite.getHistoryMapper().createPlace(openPlaceClass);
-        place.formNewItemPlace(parentID);
+        place.formNewItemPlace(parentID != null ? parentID : this.parentID);
         AppSite.getPlaceController().goTo(place);
     }
 

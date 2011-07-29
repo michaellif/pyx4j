@@ -107,6 +107,10 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     private List<ItemSelectionHandler<E>> itemSelectionHandlers;
 
+    private Class<? extends CrudAppPlace> itemOpenPlaceClass;
+
+    private boolean openEditor;
+
     public ListerBase(Class<E> clazz) {
         setStyleName(DEFAULT_STYLE_PREFIX);
 
@@ -182,46 +186,46 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         setWidth("100%");
     }
 
-    public ListerBase(Class<E> clazz, final Class<? extends CrudAppPlace> itemOpenPlaceClass) {
+    public ListerBase(Class<E> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass) {
         this(clazz, itemOpenPlaceClass, false, true);
     }
 
-    public ListerBase(Class<E> clazz, final Class<? extends CrudAppPlace> itemOpenPlaceClass, boolean readOnly) {
+    public ListerBase(Class<E> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass, boolean readOnly) {
         this(clazz, itemOpenPlaceClass, !readOnly, !readOnly);
     }
 
-    public ListerBase(Class<E> clazz, final Class<? extends CrudAppPlace> itemOpenPlaceClass, final boolean openEditor, boolean allowAddNew) {
+    public ListerBase(Class<E> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass, boolean openEditor, boolean allowAddNew) {
         this(clazz);
 
+        this.itemOpenPlaceClass = itemOpenPlaceClass;
+        this.openEditor = openEditor;
+
         if (itemOpenPlaceClass != null) {
+            // item selection stuff:
             listPanel.getDataTable().addItemSelectionHandler(new DataTable.ItemSelectionHandler() {
                 @Override
                 public void onSelect(int selectedRow) {
                     E item = getListPanel().getDataTable().getSelectedItem();
                     if (item != null) {
-                        if (openEditor) {
-                            presenter.edit(itemOpenPlaceClass, item.getPrimaryKey());
-                        } else {
-                            presenter.view(itemOpenPlaceClass, item.getPrimaryKey());
-                        }
+                        onItemSelect(item);
                     }
                 }
             });
-        }
 
-// new item button stuff:
-        if (allowAddNew) {
-            actionsPanel.setVisible(true);
-            actionsPanel.add(btnNewItem = new Button(i18n.tr("Add&nbspnew&nbspitem...")));
-            actionsPanel.setCellWidth(btnNewItem, "1%");
-            btnNewItem.getElement().getStyle().setMarginRight(1, Unit.EM);
-            btnNewItem.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    presenter.editNew(itemOpenPlaceClass, null);
-                }
-            });
-            btnNewItem.ensureDebugId(new CompositeDebugId(NavigationIDs.Navigation_Button, NavigationIDs.ItemDescriptionIDs.Add_New_Item).toString());
+            // new item stuff:
+            if (allowAddNew) {
+                actionsPanel.setVisible(true);
+                actionsPanel.add(btnNewItem = new Button(i18n.tr("Add&nbspnew&nbspitem...")));
+                actionsPanel.setCellWidth(btnNewItem, "1%");
+                btnNewItem.getElement().getStyle().setMarginRight(1, Unit.EM);
+                btnNewItem.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        onItemNew();
+                    }
+                });
+                btnNewItem.ensureDebugId(new CompositeDebugId(NavigationIDs.Navigation_Button, NavigationIDs.ItemDescriptionIDs.Add_New_Item).toString());
+            }
         }
     }
 
@@ -277,18 +281,37 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         return listPanel;
     }
 
-    /*
+    /**
      * Implement in derived class to set default table columns set.
      * Note, that it's called from within constructor!
      */
     protected abstract void fillDefaultColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto);
 
-    /*
+    /**
      * Override in derived class to set available table columns set.
      * Note, that it's called from within constructor!
      */
     protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto) {
         columnDescriptors.addAll(listPanel.getDataTable().getDataTableModel().getColumnDescriptors());
+    }
+
+    // Actions:
+    /**
+     * Override in derived class for your own select item procedure.
+     */
+    protected void onItemSelect(E item) {
+        if (itemOpenPlaceClass != null && openEditor) {
+            presenter.edit(itemOpenPlaceClass, item.getPrimaryKey());
+        } else {
+            presenter.view(itemOpenPlaceClass, item.getPrimaryKey());
+        }
+    }
+
+    /**
+     * Override in derived class for your own new item creation procedure.
+     */
+    protected void onItemNew() {
+        presenter.editNew(itemOpenPlaceClass, null);
     }
 
 // IListerView implementation:
@@ -320,7 +343,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         }
     }
 
-    /*
+    /**
      * Override in derived class to fill pages with data.
      */
     protected void onPrevPage() {
