@@ -54,4 +54,13 @@ public class ViewerViewImplBase<E extends IEntity> extends ViewImplBase<E> imple
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
     }
+
+    @Override
+    public void setActiveTab(int number) {
+    }
+
+    @Override
+    public int getActiveTab() {
+        return -1;
+    }
 }

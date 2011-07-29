@@ -22,7 +22,7 @@ package com.pyx4j.site.client.ui.crud;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public interface IEditorView<E extends IEntity> extends IView<E> {
+public interface IEditorView<E extends IEntity> extends IFormView<E> {
 
     public interface Presenter {
 
@@ -35,15 +35,13 @@ public interface IEditorView<E extends IEntity> extends IView<E> {
         public void cancel();
     }
 
-    void setPresenter(Presenter presenter);
-
     enum EditMode {
         existingItem, newItem
     }
 
-    void setEditMode(EditMode mode);
+    void setPresenter(Presenter presenter);
 
-    public void populate(E value);
+    void setEditMode(EditMode mode);
 
     public E getValue();
 

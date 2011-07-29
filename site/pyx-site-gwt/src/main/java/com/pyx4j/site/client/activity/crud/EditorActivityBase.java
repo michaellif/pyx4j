@@ -45,9 +45,11 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected final Class<E> entityClass;
 
-    protected Key entityID = null;
+    protected Key entityID;
 
-    protected Key parentID = null;
+    protected Key parentID;
+
+    protected int tabNumer;
 
     Class<? extends CrudAppPlace> placeClass;
 
@@ -62,15 +64,19 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     public EditorActivityBase<E> withPlace(Place place) {
         entityID = null;
         parentID = null;
+        tabNumer = -1;
 
         placeClass = ((CrudAppPlace) place).getClass();
 
-        String id;
-        if ((id = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID)) != null) {
-            entityID = new Key(id);
+        String val;
+        if ((val = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID)) != null) {
+            entityID = new Key(val);
         }
-        if ((id = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_PARENT_ID)) != null) {
-            parentID = new Key(id);
+        if ((val = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_PARENT_ID)) != null) {
+            parentID = new Key(val);
+        }
+        if ((val = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_TAB_NUM)) != null) {
+            tabNumer = Integer.parseInt(val);
         }
 
         return this;
@@ -128,6 +134,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     public void onPopulateSuccess(E result) {
         view.populate(result);
+        view.setActiveTab(tabNumer);
     }
 
     @Override
@@ -190,7 +197,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         view.onSaveSuccess();
         if (isNewItem()) {
             CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
-            place.formViewerPlace(result.getPrimaryKey());
+            place.formViewerPlace(result.getPrimaryKey(), view.getActiveTab());
             AppSite.getPlaceController().goTo(place);
         } else {
             History.back();

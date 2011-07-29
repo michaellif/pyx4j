@@ -76,4 +76,13 @@ public class EditorViewImplBase<E extends IEntity> extends ViewImplBase<E> imple
     public boolean onSaveFail(Throwable caught) {
         return false;
     }
+
+    @Override
+    public void setActiveTab(int number) {
+    }
+
+    @Override
+    public int getActiveTab() {
+        return -1;
+    }
 }

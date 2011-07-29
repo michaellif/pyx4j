@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  * 
- * Created on 2011-05-17
+ * Created on 2011-06-09
  * @author Vlad
  * @version $Id$
  */
@@ -22,16 +22,11 @@ package com.pyx4j.site.client.ui.crud;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public interface IViewerView<E extends IEntity> extends IFormView<E> {
+public interface IFormView<E extends IEntity> extends IView<E> {
 
-    public interface Presenter {
+    public void populate(E value);
 
-        public void populate();
+    public void setActiveTab(int number);
 
-        public void edit();
-
-        public void cancel();
-    }
-
-    void setPresenter(Presenter presenter);
+    public int getActiveTab();
 }

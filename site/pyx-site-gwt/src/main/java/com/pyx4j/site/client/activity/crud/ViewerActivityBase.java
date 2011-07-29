@@ -43,6 +43,8 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected Key entityId;
 
+    protected int tabNumer;
+
     Class<? extends CrudAppPlace> placeClass;
 
     public ViewerActivityBase(IViewerView<E> view, AbstractCrudService<E> service) {
@@ -53,13 +55,18 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     public ViewerActivityBase<E> withPlace(Place place) {
         entityId = null;
+        tabNumer = -1;
 
         placeClass = ((CrudAppPlace) place).getClass();
 
-        String id;
-        if ((id = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID)) != null) {
-            entityId = new Key(id);
+        String val;
+        if ((val = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID)) != null) {
+            entityId = new Key(val);
         }
+        if ((val = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_TAB_NUM)) != null) {
+            tabNumer = Integer.parseInt(val);
+        }
+
         assert (entityId != null);
         return this;
     }
@@ -85,14 +92,15 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
         }, entityId);
     }
 
-    public void onPopulateSuccess(E result) {
+    protected void onPopulateSuccess(E result) {
         view.populate(result);
+        view.setActiveTab(tabNumer);
     }
 
     @Override
     public void edit() {
         CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
-        place.formEditorPlace(entityId);
+        place.formEditorPlace(entityId, view.getActiveTab());
         AppSite.getPlaceController().goTo(place);
     }
 
