@@ -20,17 +20,11 @@
  */
 package com.pyx4j.site.client.ui.crud;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 
 public class EditorViewImplBase<E extends IEntity> extends ViewImplBase<E> implements IEditorView<E> {
-
-    private static I18n i18n = I18nFactory.getI18n(EditorViewImplBase.class);
 
     protected Presenter presenter;
 
@@ -38,7 +32,7 @@ public class EditorViewImplBase<E extends IEntity> extends ViewImplBase<E> imple
         super();
     }
 
-    public EditorViewImplBase(CEntityForm<E> form) {
+    public EditorViewImplBase(CrudEntityForm<E> form) {
         super(form);
     }
 
@@ -46,7 +40,7 @@ public class EditorViewImplBase<E extends IEntity> extends ViewImplBase<E> imple
         super(header, size);
     }
 
-    public EditorViewImplBase(Widget header, double size, CEntityForm<E> form) {
+    public EditorViewImplBase(Widget header, double size, CrudEntityForm<E> form) {
         super(header, size, form);
     }
 
@@ -75,14 +69,5 @@ public class EditorViewImplBase<E extends IEntity> extends ViewImplBase<E> imple
     @Override
     public boolean onSaveFail(Throwable caught) {
         return false;
-    }
-
-    @Override
-    public void setActiveTab(int number) {
-    }
-
-    @Override
-    public int getActiveTab() {
-        return -1;
     }
 }

@@ -43,7 +43,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected Key entityId;
 
-    protected int tabNumer;
+    protected int tabIndex;
 
     Class<? extends CrudAppPlace> placeClass;
 
@@ -55,7 +55,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     public ViewerActivityBase<E> withPlace(Place place) {
         entityId = null;
-        tabNumer = -1;
+        tabIndex = -1;
 
         placeClass = ((CrudAppPlace) place).getClass();
 
@@ -63,8 +63,8 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
         if ((val = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID)) != null) {
             entityId = new Key(val);
         }
-        if ((val = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_TAB_NUM)) != null) {
-            tabNumer = Integer.parseInt(val);
+        if ((val = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_TAB_IDX)) != null) {
+            tabIndex = Integer.parseInt(val);
         }
 
         assert (entityId != null);
@@ -94,7 +94,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected void onPopulateSuccess(E result) {
         view.populate(result);
-        view.setActiveTab(tabNumer);
+        view.setActiveTab(tabIndex);
     }
 
     @Override

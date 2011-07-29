@@ -20,6 +20,9 @@
  */
 package com.pyx4j.site.client.ui.crud;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -27,18 +30,19 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 
-public class ViewImplBase<E extends IEntity> extends DockLayoutPanel {
+public class ViewImplBase<E extends IEntity> extends DockLayoutPanel implements IFormView<E> {
 
-    protected CEntityForm<E> form = null;
+    protected static I18n i18n = I18nFactory.getI18n(ViewImplBase.class);
+
+    protected CrudEntityForm<E> form;
 
     public ViewImplBase() {
         super(Unit.EM);
     }
 
-    public ViewImplBase(CEntityForm<E> form) {
+    public ViewImplBase(CrudEntityForm<E> form) {
         this();
         form.initialize();
         setForm(form);
@@ -49,7 +53,7 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel {
         addNorth(header, size);
     }
 
-    public ViewImplBase(Widget header, double size, CEntityForm<E> form) {
+    public ViewImplBase(Widget header, double size, CrudEntityForm<E> form) {
         this(header, size);
         form.initialize();
         setForm(form);
@@ -59,7 +63,7 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel {
      * Should be called by descendant upon initialisation.
      */
     @SuppressWarnings("unchecked")
-    protected void setForm(CEntityForm<? extends E> form) {
+    protected void setForm(CrudEntityForm<? extends E> form) {
 
         if (getCenter() == null) { // finalise UI here:
             add(new LayoutPanel());
@@ -70,7 +74,7 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel {
             return; // already!?.
         }
 
-        this.form = (CEntityForm<E>) form;
+        this.form = (CrudEntityForm<E>) form;
 
         LayoutPanel center = (LayoutPanel) getCenter();
         center.clear(); // remove current form...
@@ -81,8 +85,23 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel {
         }
     }
 
+    @Override
     public void populate(E value) {
         assert (form != null);
         form.populate(value);
+    }
+
+    @Override
+    public void setActiveTab(int index) {
+        if (index >= 0) {
+            assert (form != null);
+            form.setActiveTab(index);
+        }
+    }
+
+    @Override
+    public int getActiveTab() {
+        assert (form != null);
+        return form.getActiveTab();
     }
 }

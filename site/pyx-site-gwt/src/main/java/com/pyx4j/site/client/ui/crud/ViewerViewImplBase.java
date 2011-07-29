@@ -20,17 +20,11 @@
  */
 package com.pyx4j.site.client.ui.crud;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 
 public class ViewerViewImplBase<E extends IEntity> extends ViewImplBase<E> implements IViewerView<E> {
-
-    private static I18n i18n = I18nFactory.getI18n(ViewerViewImplBase.class);
 
     protected Presenter presenter;
 
@@ -38,7 +32,7 @@ public class ViewerViewImplBase<E extends IEntity> extends ViewImplBase<E> imple
         super();
     }
 
-    public ViewerViewImplBase(CEntityForm<E> form) {
+    public ViewerViewImplBase(CrudEntityForm<E> form) {
         super(form);
     }
 
@@ -46,21 +40,12 @@ public class ViewerViewImplBase<E extends IEntity> extends ViewImplBase<E> imple
         super(header, size);
     }
 
-    public ViewerViewImplBase(Widget header, double size, CEntityForm<E> form) {
+    public ViewerViewImplBase(Widget header, double size, CrudEntityForm<E> form) {
         super(header, size, form);
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
-    }
-
-    @Override
-    public void setActiveTab(int number) {
-    }
-
-    @Override
-    public int getActiveTab() {
-        return -1;
     }
 }

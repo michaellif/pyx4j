@@ -31,7 +31,7 @@ import com.pyx4j.entity.shared.IEntity;
 
 public class ListerInternalViewImplBase<E extends IEntity> extends ScrollPanel implements IListerView<E> {
 
-    private static I18n i18n = I18nFactory.getI18n(ListerInternalViewImplBase.class);
+    protected static I18n i18n = I18nFactory.getI18n(ListerInternalViewImplBase.class);
 
     protected ListerBase<E> lister = null;
 

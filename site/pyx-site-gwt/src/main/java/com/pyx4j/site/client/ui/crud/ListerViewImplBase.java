@@ -34,7 +34,7 @@ import com.pyx4j.entity.shared.IEntity;
 
 public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel implements IListerView<E> {
 
-    private static I18n i18n = I18nFactory.getI18n(ListerViewImplBase.class);
+    protected static I18n i18n = I18nFactory.getI18n(ListerViewImplBase.class);
 
     protected ListerBase<E> lister = null;
 

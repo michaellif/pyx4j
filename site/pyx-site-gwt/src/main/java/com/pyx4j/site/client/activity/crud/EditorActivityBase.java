@@ -49,7 +49,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected Key parentID;
 
-    protected int tabNumer;
+    protected int tabIndex;
 
     Class<? extends CrudAppPlace> placeClass;
 
@@ -64,7 +64,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     public EditorActivityBase<E> withPlace(Place place) {
         entityID = null;
         parentID = null;
-        tabNumer = -1;
+        tabIndex = -1;
 
         placeClass = ((CrudAppPlace) place).getClass();
 
@@ -75,8 +75,8 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         if ((val = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_PARENT_ID)) != null) {
             parentID = new Key(val);
         }
-        if ((val = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_TAB_NUM)) != null) {
-            tabNumer = Integer.parseInt(val);
+        if ((val = ((CrudAppPlace) place).getArg(CrudAppPlace.ARG_NAME_TAB_IDX)) != null) {
+            tabIndex = Integer.parseInt(val);
         }
 
         return this;
@@ -134,7 +134,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     public void onPopulateSuccess(E result) {
         view.populate(result);
-        view.setActiveTab(tabNumer);
+        view.setActiveTab(tabIndex);
     }
 
     @Override
@@ -149,7 +149,11 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void cancel() {
-        History.back();
+        if (isNewItem()) {
+            History.back();
+        } else {
+            goToViewer(entityID);
+        }
     }
 
     public void trySave(final boolean apply) {
@@ -195,13 +199,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected void onSaveSuccess(E result) {
         view.onSaveSuccess();
-        if (isNewItem()) {
-            CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
-            place.formViewerPlace(result.getPrimaryKey(), view.getActiveTab());
-            AppSite.getPlaceController().goTo(place);
-        } else {
-            History.back();
-        }
+        goToViewer(result.getPrimaryKey());
     }
 
     protected void onSaveFail(Throwable caught) {
@@ -216,5 +214,11 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     protected void initNewItem(E entity) {
+    }
+
+    protected void goToViewer(Key entityID) {
+        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
+        place.formViewerPlace(entityID, view.getActiveTab());
+        AppSite.getPlaceController().goTo(place);
     }
 }

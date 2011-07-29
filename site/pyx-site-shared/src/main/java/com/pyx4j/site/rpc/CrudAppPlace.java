@@ -32,7 +32,7 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public static final String ARG_VALUE_NEW_ITEM = "new";
 
-    public static final String ARG_NAME_TAB_NUM = "tabNum";
+    public static final String ARG_NAME_TAB_IDX = "tabIdx";
 
     public static enum Type {
         editor, viewer, lister, dashboard, report
@@ -69,10 +69,10 @@ public abstract class CrudAppPlace extends AppPlace {
         putArg(ARG_NAME_ITEM_ID, itemID.toString());
     }
 
-    public void formViewerPlace(Key itemID, int tabNumber) {
+    public void formViewerPlace(Key itemID, int tabIndex) {
         formViewerPlace(itemID);
-        if (tabNumber > 0) {
-            putArg(ARG_NAME_TAB_NUM, String.valueOf(tabNumber));
+        if (tabIndex >= 0) {
+            putArg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
         }
     }
 
@@ -81,10 +81,10 @@ public abstract class CrudAppPlace extends AppPlace {
         putArg(ARG_NAME_ITEM_ID, itemID.toString());
     }
 
-    public void formEditorPlace(Key itemID, int tabNumber) {
+    public void formEditorPlace(Key itemID, int tabIndex) {
         formEditorPlace(itemID);
-        if (tabNumber > 0) {
-            putArg(ARG_NAME_TAB_NUM, String.valueOf(tabNumber));
+        if (tabIndex >= 0) {
+            putArg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
         }
     }
 
