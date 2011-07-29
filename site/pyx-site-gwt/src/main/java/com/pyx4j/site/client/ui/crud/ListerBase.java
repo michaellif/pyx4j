@@ -339,12 +339,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         getListPanel().populateData(entityes, pageNumber, hasMoreData);
     }
 
-    protected void populateData(int pageNumber) {
-        if (presenter != null) {
-            presenter.populate(pageNumber);
-        }
-    }
-
     @Override
     public List<FilterData> getFiltering() {
         return filters.getFiltersData();
@@ -359,11 +353,11 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
      * Override in derived class to fill pages with data.
      */
     protected void onPrevPage() {
-        populateData(getListPanel().getDataTable().getDataTableModel().getPageNumber() - 1);
+        presenter.populate(getListPanel().getDataTable().getDataTableModel().getPageNumber() - 1);
     }
 
     protected void onNextPage() {
-        populateData(getListPanel().getDataTable().getDataTableModel().getPageNumber() + 1);
+        presenter.populate(getListPanel().getDataTable().getDataTableModel().getPageNumber() + 1);
     }
 
     private void setActionsActive(boolean active) {
@@ -374,7 +368,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         }
     }
 
-// Internals:    
+// Internals: ------------------------------------------------------------------------------------------   
 
     private Widget createAddApplyPanel() {
 
