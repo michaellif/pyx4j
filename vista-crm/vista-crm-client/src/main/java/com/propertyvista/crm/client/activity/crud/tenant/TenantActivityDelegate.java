@@ -43,6 +43,6 @@ public class TenantActivityDelegate implements TenantView.Presenter {
 
     public void populate(Key parentID) {
         screeningLister.setParentFiltering(parentID);
-        screeningLister.populateData(0);
+        screeningLister.populate(0);
     }
 }

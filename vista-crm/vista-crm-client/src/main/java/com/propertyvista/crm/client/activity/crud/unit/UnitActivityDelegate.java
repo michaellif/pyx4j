@@ -56,9 +56,9 @@ public class UnitActivityDelegate implements UnitView.Presenter {
     public void populate(Key parentID) {
 
         unitItemsLister.setParentFiltering(parentID);
-        unitItemsLister.populateData(0);
+        unitItemsLister.populate(0);
 
         OccupanciesLister.setParentFiltering(parentID);
-        OccupanciesLister.populateData(0);
+        OccupanciesLister.populate(0);
     }
 }

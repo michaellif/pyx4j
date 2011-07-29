@@ -43,6 +43,6 @@ public class FeatureActivityDelegate implements FeatureView.Presenter {
 
     public void populate(Key parentID) {
         concessionsLister.setParentFiltering(parentID);
-        concessionsLister.populateData(0);
+        concessionsLister.populate(0);
     }
 }

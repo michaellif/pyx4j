@@ -58,6 +58,6 @@ public class ParkingActivityDelegate implements ParkingView.Presenter {
         dashboard.populate();
 
         spotLister.setParentFiltering(parentID);
-        spotLister.populateData(0);
+        spotLister.populate(0);
     }
 }

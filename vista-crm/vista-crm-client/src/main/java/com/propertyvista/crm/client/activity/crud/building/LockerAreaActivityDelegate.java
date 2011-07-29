@@ -57,6 +57,6 @@ public class LockerAreaActivityDelegate implements LockerAreaView.Presenter {
         dashboard.populate();
 
         lockerLister.setParentFiltering(parentID);
-        lockerLister.populateData(0);
+        lockerLister.populate(0);
     }
 }

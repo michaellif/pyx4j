@@ -53,16 +53,16 @@ public class LeaseActivityDelegate implements LeaseView.Presenter {
 
     public void populate(LeaseDTO current) {
 
-        buildingsLister.populateData(0);
+        buildingsLister.populate(0);
         populateUnitLister(current.selectedBuilding());
-        tenantsLister.populateData(0);
+        tenantsLister.populate(0);
     }
 
     public void populateUnitLister(Building selected) {
         if (!selected.isEmpty()) {
             unitsLister.setParentFiltering(selected.getPrimaryKey());
         }
-        unitsLister.populateData(0);
+        unitsLister.populate(0);
     }
 
     @Override

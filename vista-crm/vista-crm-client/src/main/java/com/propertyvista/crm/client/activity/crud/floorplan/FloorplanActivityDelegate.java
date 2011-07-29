@@ -43,6 +43,6 @@ public class FloorplanActivityDelegate implements FloorplanView.Presenter {
 
     public void populate(Key parentID) {
 //        featuresLister.setParentFiltering(parentID);
-        featuresLister.populateData(0);
+        featuresLister.populate(0);
     }
 }

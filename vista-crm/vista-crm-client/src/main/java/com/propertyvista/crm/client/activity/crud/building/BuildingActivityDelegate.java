@@ -129,24 +129,24 @@ public class BuildingActivityDelegate implements BuildingView.Presenter {
         dashboard.populate();
 
         floorplanLister.setParentFiltering(parentID);
-        floorplanLister.populateData(0);
+        floorplanLister.populate(0);
 
         unitLister.setParentFiltering(parentID);
-        unitLister.populateData(0);
+        unitLister.populate(0);
 
         elevatorLister.setParentFiltering(parentID);
-        elevatorLister.populateData(0);
+        elevatorLister.populate(0);
 
         boilerLister.setParentFiltering(parentID);
-        boilerLister.populateData(0);
+        boilerLister.populate(0);
 
         roofLister.setParentFiltering(parentID);
-        roofLister.populateData(0);
+        roofLister.populate(0);
 
         parkingLister.setParentFiltering(parentID);
-        parkingLister.populateData(0);
+        parkingLister.populate(0);
 
         lockerAreaLister.setParentFiltering(parentID);
-        lockerAreaLister.populateData(0);
+        lockerAreaLister.populate(0);
     }
 }

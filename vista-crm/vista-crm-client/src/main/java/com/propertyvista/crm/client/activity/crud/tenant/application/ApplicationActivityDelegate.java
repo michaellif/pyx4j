@@ -38,7 +38,7 @@ public class ApplicationActivityDelegate implements ApplicationView.Presenter {
 
     public void populate(ApplicationDTO current) {
 
-        tenantsLister.populateData(0);
+        tenantsLister.populate(0);
     }
 
     @Override
