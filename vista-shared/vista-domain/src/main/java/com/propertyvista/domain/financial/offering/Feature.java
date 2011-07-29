@@ -15,18 +15,21 @@ package com.propertyvista.domain.financial.offering;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.Concession;
+import com.propertyvista.domain.property.asset.Floorplan;
 
 public interface Feature extends IEntity {
-//
-//    @Owner
-//    @Detached
-//    Floorplan belongsTo();
+
+    @Owner
+    @Detached
+    Floorplan belongsTo();
 
     @Caption(name = "Offering Start")
     @MemberColumn(name = "featureStart")
