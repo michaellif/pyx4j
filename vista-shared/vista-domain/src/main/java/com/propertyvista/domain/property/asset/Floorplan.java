@@ -22,7 +22,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -50,5 +49,5 @@ public interface Floorplan extends IEntity {
     @Detached
     IList<Media> media();
 
-    IList<Feature> features();
+//    IList<Feature> features();
 }

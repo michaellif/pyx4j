@@ -17,9 +17,6 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
-
-import com.propertyvista.domain.property.asset.building.Building;
 
 public interface Complex extends IEntity {
 
@@ -30,5 +27,6 @@ public interface Complex extends IEntity {
     @Caption(name = "Legal Name")
     IPrimitive<String> name();
 
-    ISet<Building> buildings();
+// Let's leave just one-directional reference in Building?! 
+//    ISet<Building> buildings();
 }

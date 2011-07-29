@@ -77,7 +77,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Email.class, Phone.class, Complex.class, Amenity.class,
+            return deleteAll(Complex.class, Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Email.class, Phone.class, Amenity.class,
                     Concession.class, LeaseTerms.class, Vendor.class, Elevator.class, Boiler.class, Roof.class, Parking.class, ParkingSpot.class,
                     LockerArea.class, Locker.class, Media.class, ThumbnailBlob.class, FileBlob.class, Feature.class, ResidentialRent.class, ParkingRent.class,
                     StorageRent.class, PetCharge.class);
@@ -92,10 +92,21 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         LeaseTerms leaseTerms = generator.createLeaseTerms();
         PersistenceServicesFactory.getPersistenceService().persist(leaseTerms);
 
-        List<Building> buildings = generator.createBuildings(config.getNumResidentialBuildings());
+        // create some complexes:
+        Complex complex = generator.createComplex("Complex #1");
+        persist(complex);
+
+        complex = generator.createComplex("Complex #2");
+        persist(complex);
+
+        complex = generator.createComplex("Complex #3");
+        persist(complex);
+
         int unitCount = 0;
+        List<Building> buildings = generator.createBuildings(config.getNumResidentialBuildings(), complex);
         for (Building building : buildings) {
             // TODO Need to be saving PropertyProfile, PetCharge
+
             persist(building);
 
             // Elevators
@@ -159,12 +170,12 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
                 }
 
                 // persist plain internal lists:
-                for (Feature feature : floorplanDTO.features()) {
-                    for (Concession concession : feature.concessions()) {
-                        persist(concession);
-                    }
-                    persist(feature);
-                }
+//                for (Feature feature : floorplanDTO.features()) {
+//                    for (Concession concession : feature.concessions()) {
+//                        persist(concession);
+//                    }
+//                    persist(feature);
+//                }
 
                 Floorplan floorplan = down(floorplanDTO, Floorplan.class);
                 persist(floorplan); // persist real unit here, not DTO!..

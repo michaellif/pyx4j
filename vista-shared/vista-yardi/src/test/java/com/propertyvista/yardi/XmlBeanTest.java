@@ -27,12 +27,12 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitFinancial;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
-import com.propertyvista.domain.property.asset.unit.AptUnitMarketing;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.yardi.bean.Properties;
@@ -175,7 +175,7 @@ public class XmlBeanTest {
             Assert.assertFalse(info.economicStatus().isNull());
 
             // marketing
-            AptUnitMarketing marketing = unit.marketing();
+            Marketing marketing = unit.marketing();
             Assert.assertFalse(marketing.name().isNull());
 
             // financial

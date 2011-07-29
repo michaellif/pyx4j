@@ -49,6 +49,7 @@ import com.propertyvista.domain.financial.offering.PetCharge;
 import com.propertyvista.domain.financial.offering.PetPrice;
 import com.propertyvista.domain.financial.offering.ResidentialRent;
 import com.propertyvista.domain.financial.offering.StorageRent;
+import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
@@ -64,6 +65,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
+import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.property.asset.unit.AptUnitType;
@@ -83,25 +85,20 @@ public class BuildingsGenerator {
         this.seed = seed;
     }
 
-    public List<Building> createBuildings(int numBuildings) {
+    public List<Building> createBuildings(int numBuildings, Complex complex) {
         List<Building> buildings = new ArrayList<Building>();
         for (int b = 0; b < numBuildings; b++) {
-            Building building = createBuilding(b);
+            Building building = createBuilding(complex, b);
             buildings.add(building);
         }
         return buildings;
     }
 
-    public Building createBuilding(int b) {
+    public Building createBuilding(Complex complex, int counter) {
         // building type
         BuildingInfo.Type buildingType = RandomUtil.random(BuildingInfo.Type.values());
 
-        Complex complex = null;
-        if (b % 3 == 0) {
-            complex = createComplex(2);
-        }
-
-        String website = "www.property" + (b + 1) + ".com";
+        String website = "www.property" + (counter + 1) + ".com";
 
         // address
         Address address = CommonsGenerator.createAddress();
@@ -111,20 +108,20 @@ public class BuildingsGenerator {
         phones.add(CommonsGenerator.createPhone());
 
         // email
-        String emailAddress = "building" + (b + 1) + "@propertyvista.com";
+        String emailAddress = "building" + (counter + 1) + "@propertyvista.com";
         Email email = CommonsGenerator.createEmail(emailAddress);
 
         // organization contacts - not many fields there at the moment, will do
         // this later
-        String propertyCode = "A" + String.valueOf(b);
-        if (b == 0) {
+        String propertyCode = "A" + String.valueOf(counter);
+        if (counter == 0) {
             // UI is looking for this building, see references!
             propertyCode = DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE;
         }
 
         // property profile TODO - nobody is using this property profile right
         // now
-        PropertyProfile propertyProfile = createPropertyProfile(b);
+        PropertyProfile propertyProfile = createPropertyProfile(counter);
 
         Building building = createBuilding(propertyCode, buildingType, complex, website, address, phones, email);
         // log.info("Created: " + building);
@@ -136,7 +133,9 @@ public class BuildingsGenerator {
             Email email) {
         Building building = EntityFactory.create(Building.class);
 
+        building.complex().set(complex);
         building.propertyCode().setValue(propertyCode);
+
         building.info().name().setValue(RandomUtil.randomLetters(5));
         building.info().address().set(address);
         building.info().type().setValue(buildingType);
@@ -162,6 +161,11 @@ public class BuildingsGenerator {
 
         building.marketing().name().setValue(RandomUtil.randomLetters(4) + " " + RandomUtil.randomLetters(6));
         building.marketing().description().setValue(CommonsGenerator.lipsum());
+        for (int i = 0; 1 < RandomUtil.randomInt(3); ++i) {
+            AdvertisingBlurb item = EntityFactory.create(AdvertisingBlurb.class);
+            item.content().setValue(CommonsGenerator.lipsum());
+            building.marketing().addBlurbs().add(item);
+        }
 
         for (Phone phone : phones) {
             building.contacts().phones().add(phone);
@@ -412,7 +416,7 @@ public class BuildingsGenerator {
             Feature feature = createFloorplanFeature();
             if (feature != null) {
 //                feature.belongsTo().set(floorplan);
-                floorplan.features().add(feature);
+//                floorplan.features().add(feature);
             }
         }
 
@@ -562,13 +566,19 @@ public class BuildingsGenerator {
 
         unit.belongsTo().set(building);
 
-        unit.info().number().setValue(suiteNumber);
-        unit.info().floor().setValue(floor);
+        unit.info().name().setValue(RandomUtil.randomLetters(4));
         unit.info().type().setValue(RandomUtil.random(AptUnitType.values()));
-        unit.info().area().setValue(area);
-        unit.info().areaUnits().setValue(AreaMeasurementUnit.sqFeet);
+        unit.info().economicStatus().setValue(RandomUtil.random(AptUnitInfo.EconomicStatus.values()));
+        unit.info().economicStatusDescription().setValue(RandomUtil.randomLetters(35).toLowerCase());
+
+        unit.info().floor().setValue(floor);
+        unit.info().number().setValue(suiteNumber);
+
         unit.info().bedrooms().setValue(bedrooms);
         unit.info().bathrooms().setValue(bathrooms);
+
+        unit.info().area().setValue(area);
+        unit.info().areaUnits().setValue(AreaMeasurementUnit.sqFeet);
 
         unit.financial().unitRent().setValue(800. + RandomUtil.randomInt(200));
         unit.financial().marketRent().setValue(900. + RandomUtil.randomInt(200));
@@ -602,12 +612,22 @@ public class BuildingsGenerator {
         // TODO populate currentOccupancies and then set avalableForRent using
         // some ServerSideDomainUtils
         unit.avalableForRent().setValue(new LogicalDate(avalable.getTime().getTime()));
+
         AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
         occupancy.status().setValue(AptUnitOccupancy.Status.available);
         occupancy.dateFrom().setValue(new LogicalDate(avalable.getTime().getTime()));
+        occupancy.dateTo().setValue(new LogicalDate(avalable.getTime().getTime() + RandomUtil.randomInt()));
+        occupancy.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
         unit.occupancies().add(occupancy);
 
-        unit.marketing().set(floorplan);
+        unit.floorplan().set(floorplan);
+
+        unit.marketing().set(floorplan); // copy floorplan marketing here?!..
+        for (int i = 0; 1 < RandomUtil.randomInt(3); ++i) {
+            AdvertisingBlurb item = EntityFactory.create(AdvertisingBlurb.class);
+            item.content().setValue(CommonsGenerator.lipsum());
+            unit.marketing().addBlurbs().add(item);
+        }
 
         return unit;
     }
@@ -664,16 +684,9 @@ public class BuildingsGenerator {
         return petCharge;
     }
 
-    private Complex createComplex(int numBuildings) {
-        if (numBuildings == 0)
-            return null;
-
+    public Complex createComplex(String name) {
         Complex complex = EntityFactory.create(Complex.class);
-        complex.name().setValue(RandomUtil.randomLetters(8));
-
-        for (int i = 0; i < numBuildings; i++) {
-            // Building building
-        }
+        complex.name().setValue(name);
 
         return complex;
     }

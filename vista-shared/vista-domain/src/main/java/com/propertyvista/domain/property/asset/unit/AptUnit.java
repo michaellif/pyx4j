@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -57,5 +58,5 @@ public interface AptUnit extends BuildingElement {
     AptUnitFinancial financial();
 
     @EmbeddedEntity
-    AptUnitMarketing marketing();
+    Marketing marketing();
 }
