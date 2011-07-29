@@ -27,5 +27,5 @@ public interface Marketing extends IEntity {
     IPrimitive<String> description();
 
     @Owned
-    IList<AdvertisingBlurb> addBlurbs();
+    IList<AdvertisingBlurb> adBlurbs();
 }

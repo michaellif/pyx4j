@@ -58,7 +58,7 @@ public class Converter {
         to.name = from.name().getStringView();
         to.description = from.description().getStringView();
 
-        for (AdvertisingBlurb blurb : from.addBlurbs()) {
+        for (AdvertisingBlurb blurb : from.adBlurbs()) {
             AdvertisingBlurbRS blurbRS = convertBlurb(blurb);
             to.blurbs.blurbs.add(blurbRS);
         }

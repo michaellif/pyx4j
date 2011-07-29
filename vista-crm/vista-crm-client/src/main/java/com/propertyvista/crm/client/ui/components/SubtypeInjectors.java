@@ -183,8 +183,8 @@ public class SubtypeInjectors {
         main.add(parent.inject(proto.name()), 15);
         main.add(parent.inject(proto.description()), 45);
 
-        main.add(new CrmHeader2Decorator(proto.addBlurbs().getMeta().getCaption()));
-        main.add(parent.inject(proto.addBlurbs(),
+        main.add(new CrmHeader2Decorator(proto.adBlurbs().getMeta().getCaption()));
+        main.add(parent.inject(proto.adBlurbs(),
                 new CrmEntityFolder<AdvertisingBlurb>(AdvertisingBlurb.class, i18n.tr("Advertising Blurb"), parent.isEditable()) {
                     @Override
                     protected List<EntityFolderColumnDescriptor> columns() {
