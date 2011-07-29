@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.svg.basic.SvgFactory;
@@ -27,18 +28,17 @@ import com.pyx4j.svg.chart.GridBasedChartConfigurator;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.chart.LineChart;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
-import com.pyx4j.widgets.client.svg.SvgPanel;
 
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
 public class LineChartGadget extends GadgetBase {
 
-    private final SvgPanel svgpanel;
+    private final SimplePanel panel;
 
     public LineChartGadget(GadgetMetadata gmd) {
         super(gmd);
-        svgpanel = new SvgPanel();
+        panel = new SimplePanel();
 
         DataSource ds = new DataSource();
         List<Double> values = new ArrayList<Double>(5);
@@ -95,8 +95,8 @@ public class LineChartGadget extends GadgetBase {
         SvgRoot svgroot = factory.getSvgRoot();
         svgroot.add(new LineChart(config));
 
-        svgpanel.add((Widget) svgroot);
-        svgpanel.setSize("700px", "200px");
+        panel.add((Widget) svgroot);
+        panel.setSize("700px", "200px");
 
     }
 
@@ -109,7 +109,7 @@ public class LineChartGadget extends GadgetBase {
 
     @Override
     public Widget asWidget() {
-        ScrollPanel scroll = new ScrollPanel(svgpanel);
+        ScrollPanel scroll = new ScrollPanel(panel);
         scroll.setWidth("100%");
         return scroll;
     }

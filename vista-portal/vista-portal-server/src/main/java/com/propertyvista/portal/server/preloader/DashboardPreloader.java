@@ -74,13 +74,13 @@ public class DashboardPreloader extends AbstractDataPreloader {
         dmd.description().setValue("Shows default building data");
         dmd.layoutType().setValue(LayoutType.Two21);
 
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 1; ++i) {
             gmd = EntityFactory.create(GadgetMetadata.class);
             gmd.type().setValue(GadgetType.Demo);
             gmd.name().setValue("Gadget #" + i);
             gmd.column().setValue(1);
 
-            gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
+            gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage
             dmd.gadgets().add(gmd);
         }
 
@@ -103,6 +103,14 @@ public class DashboardPreloader extends AbstractDataPreloader {
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.type().setValue(GadgetType.PieChartDisplay);
         gmd.name().setValue("Pie Chart Demo");
+        gmd.column().setValue(1);
+
+        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
+        dmd.gadgets().add(gmd);
+
+        gmd = EntityFactory.create(GadgetMetadata.class);
+        gmd.type().setValue(GadgetType.GaugeDisplay);
+        gmd.name().setValue("Gauge Demo");
         gmd.column().setValue(1);
 
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 

@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 7, 2011
- * @author Dad
+ * Created on 2011-07-28
+ * @author vadim
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.gadgets;
@@ -25,60 +25,44 @@ import com.pyx4j.svg.basic.SvgRoot;
 import com.pyx4j.svg.chart.ArcBasedChartConfigurator;
 import com.pyx4j.svg.chart.ChartTheme;
 import com.pyx4j.svg.chart.DataSource;
-import com.pyx4j.svg.chart.PieChart2D;
+import com.pyx4j.svg.chart.Gauge;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
-public class PieChart2DGadget extends GadgetBase {
+public class GaugeGadget extends GadgetBase {
 
     private final SimplePanel panel;
 
-    public PieChart2DGadget(GadgetMetadata gmd) {
+    public GaugeGadget(GadgetMetadata gmd) {
         super(gmd);
         panel = new SimplePanel();
-
         DataSource ds = new DataSource();
-        List<Double> values = new ArrayList<Double>(5);
-        values.add(80d);
+        List<Double> values = new ArrayList<Double>(1);
+        values.add(32d);
         ds.addDataSet(ds.new Metric("Building 1"), values);
-
-        values = new ArrayList<Double>(5);
-        values.add(35d);
-        ds.addDataSet(ds.new Metric("Building 2"), values);
-
-        values = new ArrayList<Double>(5);
-        values.add(13d);
-        ds.addDataSet(ds.new Metric("Building 3"), values);
-
-        values = new ArrayList<Double>(5);
-        values.add(41d);
-        ds.addDataSet(ds.new Metric("Building 4"), values);
-
-        values = new ArrayList<Double>(5);
-        values.add(7d);
-        ds.addDataSet(ds.new Metric("Building 5"), values);
+        ds.addSeriesDescription("2008");
 
         SvgFactory factory = new SvgFactoryForGwt();
 
         ArcBasedChartConfigurator config = new ArcBasedChartConfigurator(factory, ds);
-        config.setLegend(true);
+        config.setScaleMaximum(100d);
         config.setTheme(ChartTheme.Bright);
-        config.setRadius(65);
+        config.setRadius(80);
+        config.setShowValueLabels(true);
 
         SvgRoot svgroot = factory.getSvgRoot();
-        svgroot.add(new PieChart2D(config));
+        svgroot.add(new Gauge(config));
 
         panel.add((Widget) svgroot);
-        panel.setSize("300px", "150px");
-
+        panel.setSize("300px", "200px");
     }
 
     @Override
     protected void selfInit(GadgetMetadata gmd) {
-        gmd.type().setValue(GadgetType.PieChartDisplay);
-        gmd.name().setValue("Pie Chart 2D Display Gadget");
+        gmd.type().setValue(GadgetType.GaugeDisplay);
+        gmd.name().setValue("Gauge Display Gadget");
 
     }
 
@@ -93,4 +77,5 @@ public class PieChart2DGadget extends GadgetBase {
     public boolean isFullWidth() {
         return false;
     }
+
 }

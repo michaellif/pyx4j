@@ -37,7 +37,9 @@ public interface GadgetMetadata extends ISharedUserEntity {
 
         BarChartDisplayBuilding,
 
-        PieChartDisplayBuilding
+        PieChartDisplayBuilding,
+
+        GaugeDisplay
     }
 
     @MemberColumn(name = "gadgetType")

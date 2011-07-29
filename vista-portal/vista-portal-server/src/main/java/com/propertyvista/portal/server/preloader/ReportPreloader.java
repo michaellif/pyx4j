@@ -43,7 +43,7 @@ public class ReportPreloader extends AbstractDataPreloader {
             gmd.name().setValue("Gadget #" + i);
             gmd.column().setValue(new Random().nextInt(2));
 
-            gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
+            gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage
             dmd.gadgets().add(gmd);
         }
 
@@ -71,6 +71,14 @@ public class ReportPreloader extends AbstractDataPreloader {
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.gadgets().add(gmd);
 
+        gmd = EntityFactory.create(GadgetMetadata.class);
+        gmd.type().setValue(GadgetType.GaugeDisplay);
+        gmd.name().setValue("Gauge Demo");
+        gmd.column().setValue(0);
+
+        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
+        dmd.gadgets().add(gmd);
+
         dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         PersistenceServicesFactory.getPersistenceService().persist(dmd);
 
@@ -86,7 +94,7 @@ public class ReportPreloader extends AbstractDataPreloader {
             gmd.name().setValue("Gadget #" + i);
             gmd.column().setValue(new Random().nextInt(2));
 
-            gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
+            gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage
             dmd.gadgets().add(gmd);
         }
 
@@ -101,6 +109,14 @@ public class ReportPreloader extends AbstractDataPreloader {
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.type().setValue(GadgetType.PieChartDisplay);
         gmd.name().setValue("Pie Chart Demo");
+        gmd.column().setValue(0);
+
+        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
+        dmd.gadgets().add(gmd);
+
+        gmd = EntityFactory.create(GadgetMetadata.class);
+        gmd.type().setValue(GadgetType.GaugeDisplay);
+        gmd.name().setValue("Gauge Demo");
         gmd.column().setValue(0);
 
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
