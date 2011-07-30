@@ -20,7 +20,9 @@ import com.propertvista.generator.util.PictureUtil;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.media.File;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
@@ -35,6 +37,22 @@ public class MediaGenerator {
     static final boolean blob_mimize_Preload_Data_Size = true;
 
     private static Map<String, Map<Media, byte[]>> blob_Shared_GenerateMedia = new HashMap<String, Map<Media, byte[]>>();
+
+    /**
+     * This is a light-weight method that simply creates a file media with a fictitious filename
+     * 
+     * @return
+     */
+    public static Media createMedia() {
+        Media media = EntityFactory.create(Media.class);
+
+        File file = EntityFactory.create(File.class);
+        file.filename().setValue("file102.jpg");
+        file.caption().setValue("file102");
+        media.file().set(file);
+
+        return media;
+    }
 
     public static void attachGeneratedFloorplanMedia(Floorplan floorplan) {
         int imageIndex = RandomUtil.randomInt(5) + 1;
