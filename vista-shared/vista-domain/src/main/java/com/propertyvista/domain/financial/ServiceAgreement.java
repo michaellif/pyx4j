@@ -18,6 +18,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.financial.offeringnew.ChargeItem;
+import com.propertyvista.domain.financial.offeringnew.Concession;
 
 public interface ServiceAgreement extends IEntity {
 

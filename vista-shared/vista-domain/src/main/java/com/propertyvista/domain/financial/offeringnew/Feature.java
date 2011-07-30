@@ -25,15 +25,27 @@ public interface Feature extends IEntity {
     @Translatable
     public enum FeatureType {
 
-        parking,
+        parking(true),
 
-        pet,
+        pet(true),
 
-        addOn,
+        addOn(true),
 
-        utility,
+        utility(true),
 
-        locker;
+        locker(true),
+
+        booking(false);
+
+        private final boolean inAgreement;
+
+        FeatureType(boolean inAgreement) {
+            this.inAgreement = inAgreement;
+        }
+
+        public boolean isInAgreement() {
+            return inAgreement;
+        };
 
         @Override
         public String toString() {
@@ -73,6 +85,8 @@ public interface Feature extends IEntity {
     IPrimitive<PriceType> priceType();
 
     IPrimitive<Boolean> isRecurring();
+
+    IPrimitive<Boolean> isMandatory();
 
     IPrimitive<DepositType> depositType();
 

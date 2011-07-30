@@ -20,7 +20,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.domain.financial.Concession;
 
 public interface Service extends IEntity {
 
@@ -67,8 +66,6 @@ public interface Service extends IEntity {
 
     @Owned
     IList<ServiceItem> items();
-
-    IPrimitive<Boolean> isRecurring();
 
     IPrimitive<DepositType> depositType();
 

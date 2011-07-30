@@ -16,7 +16,6 @@ package com.propertyvista.domain.financial.offeringnew;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.financial.Concession;
 
 /**
  * Defines Services on a given Building

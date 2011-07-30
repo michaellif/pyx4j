@@ -22,7 +22,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPa
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.financial.Concession;
+import com.propertyvista.domain.financial.offeringnew.Concession;
 
 public class ConcessionEditorForm extends CrmEntityForm<Concession> {
 
@@ -45,8 +45,8 @@ public class ConcessionEditorForm extends CrmEntityForm<Concession> {
         split.getLeftPanel().add(inject(proto().condition()), 7);
         split.getRightPanel().add(inject(proto().status()), 15);
         split.getLeftPanel().add(inject(proto().approvedBy()), 20);
-        split.getLeftPanel().add(inject(proto().start()), 8.2);
-        split.getLeftPanel().add(inject(proto().end()), 8.2);
+        split.getLeftPanel().add(inject(proto().effectiveDate()), 8.2);
+        split.getLeftPanel().add(inject(proto().expirationDate()), 8.2);
 
         return new CrmScrollPanel(main);
     }

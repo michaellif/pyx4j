@@ -23,7 +23,7 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.marketing.FeatureView;
 import com.propertyvista.crm.rpc.services.ConcessionCrudService;
-import com.propertyvista.domain.financial.Concession;
+import com.propertyvista.domain.financial.offeringnew.Concession;
 
 public class FeatureActivityDelegate implements FeatureView.Presenter {
 

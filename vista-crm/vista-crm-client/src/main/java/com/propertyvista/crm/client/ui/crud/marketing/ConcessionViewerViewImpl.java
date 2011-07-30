@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.marketing;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.Concession;
+import com.propertyvista.domain.financial.offeringnew.Concession;
 
 public class ConcessionViewerViewImpl extends CrmViewerViewImplBase<Concession> implements ConcessionViewerView {
 

@@ -20,7 +20,7 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.site.client.ui.crud.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.Concession;
+import com.propertyvista.domain.financial.offeringnew.Concession;
 
 public class ConcessionLister extends ListerBase<Concession> {
     public ConcessionLister() {
@@ -39,7 +39,7 @@ public class ConcessionLister extends ListerBase<Concession> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.value()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.condition()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.start()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.end()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.effectiveDate()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.expirationDate()));
     }
 }

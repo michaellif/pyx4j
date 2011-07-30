@@ -34,7 +34,7 @@ import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
-import com.propertyvista.domain.financial.Concession;
+import com.propertyvista.domain.financial.offeringnew.Concession;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.property.asset.Equipment;
@@ -210,8 +210,8 @@ public class SubtypeInjectors {
                 columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().approvedBy(), "20em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().status(), "7em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().start(), "8.2em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().end(), "8.2em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().expirationDate(), "8.2em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().expirationDate(), "8.2em"));
                 return columns;
             }
         };

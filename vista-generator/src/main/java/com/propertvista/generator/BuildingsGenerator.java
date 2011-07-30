@@ -42,13 +42,13 @@ import com.propertyvista.domain.charges.ChargeType;
 import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
-import com.propertyvista.domain.financial.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ParkingRent;
 import com.propertyvista.domain.financial.offering.PetCharge;
 import com.propertyvista.domain.financial.offering.PetPrice;
 import com.propertyvista.domain.financial.offering.ResidentialRent;
 import com.propertyvista.domain.financial.offering.StorageRent;
+import com.propertyvista.domain.financial.offeringnew.Concession;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Boiler;
@@ -521,10 +521,8 @@ public class BuildingsGenerator {
             concession.value().setValue(10d + RandomUtil.randomInt(90));
         } else if (concession.type().getValue() == Concession.Type.monetaryOff) {
             concession.value().setValue(50d + RandomUtil.randomInt(50));
-        } else if (concession.type().getValue() == Concession.Type.gift) {
+        } else if (concession.type().getValue() == Concession.Type.promotionalItem) {
             concession.value().setValue(100d + RandomUtil.randomInt(100));
-        } else if (concession.type().getValue() == Concession.Type.skipFirstPayment) {
-            concession.value().setValue(1d + RandomUtil.randomInt(5));
         }
 
         concession.condition().setValue(RandomUtil.random(Concession.Condition.values()));
@@ -534,8 +532,8 @@ public class BuildingsGenerator {
             concession.approvedBy().setValue("Geoge W. Bush Jr.");
         }
 
-        concession.start().setValue(DataGenerator.randomDate(2));
-        concession.end().setValue(DataGenerator.randomDate(4));
+        concession.effectiveDate().setValue(DataGenerator.randomDate(2));
+        concession.expirationDate().setValue(DataGenerator.randomDate(4));
 
         return concession;
     }

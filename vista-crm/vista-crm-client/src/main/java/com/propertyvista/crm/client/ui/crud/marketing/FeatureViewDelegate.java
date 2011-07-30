@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.marketing;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
-import com.propertyvista.domain.financial.Concession;
+import com.propertyvista.domain.financial.offeringnew.Concession;
 
 public class FeatureViewDelegate implements FeatureView {
 

@@ -14,13 +14,15 @@
 package com.propertyvista.domain.financial.offeringnew;
 
 import com.pyx4j.entity.shared.IEntity;
-
-import com.propertyvista.domain.financial.Discount;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 public interface ChargeItem extends IEntity {
 
     ServiceItem item();
 
-    Discount discount();
+    IPrimitive<Double> price();
+
+    IList<ChargeItemAdjustment> adjustments();
 
 }

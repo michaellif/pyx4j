@@ -40,11 +40,11 @@ import com.pyx4j.widgets.client.dialog.DialogPanel;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ParkingRent;
 import com.propertyvista.domain.financial.offering.ResidentialRent;
 import com.propertyvista.domain.financial.offering.StorageRent;
+import com.propertyvista.domain.financial.offeringnew.Concession;
 
 public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implements FeatureEditorView {
 

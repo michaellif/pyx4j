@@ -11,10 +11,8 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.financial;
+package com.propertyvista.domain.financial.offeringnew;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
@@ -23,11 +21,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-public interface Concession extends IEntity {
+public interface ChargeItemAdjustment extends IEntity {
 
     @Translatable
     enum Type {
-        gift, percentageOff, monetaryOff, skipFirstPayment, skipLastPayment, noDeposit, free;
+        percentage, monetary, free;
 
         @Override
         public String toString() {
@@ -36,59 +34,28 @@ public interface Concession extends IEntity {
     }
 
     @Translatable
-    enum Condition {
-        compliance, none;
+    enum TermType {
+        firstMonth, lastMonth, term;
 
         @Override
         public String toString() {
             return I18nEnum.tr(this);
         }
     }
-
-    @Translatable
-    public enum Status {
-
-        suggested,
-
-        approved;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
-
-// ----------------------------------------------
 
     @ToString(index = 0)
     @MemberColumn(name = "concessionType")
     IPrimitive<Type> type();
 
+    IPrimitive<TermType> termType();
+
     /*
-     * for Gift - gift price
      * for percentageOff - percentage
      * for monetaryOff - amount
-     * for skipFirstPayment - number of terms
      */
     @ToString(index = 1)
     @Format("#0.00")
     @MemberColumn(name = "concessionValue")
     IPrimitive<Double> value();
 
-    @MemberColumn(name = "concessionondition")
-    IPrimitive<Condition> condition();
-
-// ----------------------------------------------
-
-    IPrimitive<Status> status();
-
-    IPrimitive<String> approvedBy();
-
-    @Caption(name = "Available From")
-    @MemberColumn(name = "concessionStart")
-    IPrimitive<LogicalDate> start();
-
-    @Caption(name = "Available Till")
-    @MemberColumn(name = "concessionEnd")
-    IPrimitive<LogicalDate> end();
 }
