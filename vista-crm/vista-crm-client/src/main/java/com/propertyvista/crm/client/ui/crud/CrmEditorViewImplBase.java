@@ -47,6 +47,8 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
 
     protected Button btnSave;
 
+    protected EditMode mode;
+
     public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
         addNorth(header = new CrmHeaderDecorator(defaultCaption), VistaCrmTheme.defaultHeaderHeight);
@@ -75,7 +77,16 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
     public void populate(E value) {
         enableButtons(false);
         header.setCaption(defaultCaption + " " + value.getStringView());
+        if (EditMode.newItem.equals(mode)) {
+            form.setActiveTab(0);
+        }
+
         super.populate(value);
+    }
+
+    @Override
+    public void setEditMode(EditMode mode) {
+        this.mode = mode;
     }
 
     @Override
