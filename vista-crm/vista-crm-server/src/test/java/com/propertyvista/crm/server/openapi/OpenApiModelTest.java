@@ -21,14 +21,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertvista.generator.BuildingsGenerator;
-import com.propertvista.generator.MediaGenerator;
 
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.crm.server.openapi.model.BuildingRS;
 import com.propertyvista.crm.server.openapi.model.BuildingsRS;
 import com.propertyvista.crm.server.openapi.model.FloorplanRS;
-import com.propertyvista.crm.server.openapi.model.MediaRS;
 import com.propertyvista.crm.server.openapi.model.util.Converter;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -54,12 +52,12 @@ public class OpenApiModelTest {
             BuildingRS buildingRS = Converter.convertBuilding(building);
             buildingsRS.buildings.add(buildingRS);
 
-            Floorplan floorplan = (Floorplan) generator.createFloorplan("MyFloorplan");
+            Floorplan floorplan = generator.createFloorplan("MyFloorplan");
             FloorplanRS floorplanRS = Converter.convertFloorplan(floorplan);
             buildingRS.floorplans.floorplans.add(floorplanRS);
-
-            MediaRS mediaRS = Converter.convertMedia(MediaGenerator.createMedia());
-            floorplanRS.medias.media.add(mediaRS);
+// TODO Dmitry - theris no createMedia() in current MediaGenerator!? 
+//            MediaRS mediaRS = Converter.convertMedia(MediaGenerator.createMedia());
+//            floorplanRS.medias.media.add(mediaRS);
         }
         String xml = MarshallUtil.marshall(buildingsRS);
 

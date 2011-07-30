@@ -80,6 +80,10 @@ public class BuildingsGenerator {
 
     private final long seed;
 
+    public BuildingsGenerator() {
+        this(DemoData.BUILDINGS_GENERATION_SEED);
+    }
+
     public BuildingsGenerator(long seed) {
         DataGenerator.setRandomSeed(seed);
         this.seed = seed;
@@ -164,7 +168,7 @@ public class BuildingsGenerator {
         for (int i = 0; 1 < RandomUtil.randomInt(3); ++i) {
             AdvertisingBlurb item = EntityFactory.create(AdvertisingBlurb.class);
             item.content().setValue(CommonsGenerator.lipsum());
-            building.marketing().addBlurbs().add(item);
+            building.marketing().adBlurbs().add(item);
         }
 
         for (Phone phone : phones) {
@@ -396,7 +400,7 @@ public class BuildingsGenerator {
         return floorplans;
     }
 
-    private FloorplanDTO createFloorplan(String name) {
+    public FloorplanDTO createFloorplan(String name) {
         FloorplanDTO floorplan = EntityFactory.create(FloorplanDTO.class);
 
         floorplan.name().setValue(name);
@@ -626,7 +630,7 @@ public class BuildingsGenerator {
         for (int i = 0; 1 < RandomUtil.randomInt(3); ++i) {
             AdvertisingBlurb item = EntityFactory.create(AdvertisingBlurb.class);
             item.content().setValue(CommonsGenerator.lipsum());
-            unit.marketing().addBlurbs().add(item);
+            unit.marketing().adBlurbs().add(item);
         }
 
         return unit;

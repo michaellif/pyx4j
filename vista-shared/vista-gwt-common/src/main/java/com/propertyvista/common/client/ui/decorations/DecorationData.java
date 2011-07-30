@@ -48,7 +48,7 @@ public class DecorationData {
 
     public VerticalAlign componentVerticalAlignment = VerticalAlign.BASELINE;
 
-    public DecorationData.ShowMandatory showMandatory = ShowMandatory.Optional;
+    public DecorationData.ShowMandatory showMandatory = ShowMandatory.Mandatory;
 
     public boolean hideInfoHolder = false;
 
