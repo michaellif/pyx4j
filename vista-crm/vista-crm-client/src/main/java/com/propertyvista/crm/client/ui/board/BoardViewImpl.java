@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.dashboard.BoardEvent;
@@ -91,8 +90,6 @@ public abstract class BoardViewImpl extends DockLayoutPanel implements BoardView
         actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         actionsPanel.setWidth("100%");
         actionsPanel.add(new HTML()); // just for %-tage cells alignment...
-        addNorth(actionsPanel, VistaCrmTheme.defaultHeaderHeight);
-        actionsPanel.setVisible(false);
 
         if (showSaveButton) {
             addActionButton(btnSave);
@@ -106,13 +103,16 @@ public abstract class BoardViewImpl extends DockLayoutPanel implements BoardView
             });
         }
 
-        VerticalPanel main = new VerticalPanel();
-        main.add(actionsPanel);
-        main.add(scroll);
+//        FlowPanel main = new FlowPanel();
+//        main.add(actionsPanel);
+//        main.add(scroll);
+//
+//        add(main);
+//
+//        main.setWidth("100%");
 
-        add(main);
+        add(scroll);
 
-        main.setWidth("100%");
         setSize("100%", "100%");
     }
 

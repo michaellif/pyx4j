@@ -102,43 +102,9 @@ public interface FloorplanAmenity extends Amenity {
         }
     }
 
-    @Translatable
-    public enum SubType {
-
-        central,
-
-        window,
-
-        wall,
-
-        gas,
-
-        gasOrElectric,
-
-        luxury,
-
-        wood,
-
-        electric,
-
-        radiant,
-
-        decorative,
-
-        unspecified;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
-
     @ToString(index = 0)
     @MemberColumn(name = "floorplanType")
     IPrimitive<Type> type();
-
-    @ToString(index = 1)
-    IPrimitive<SubType> subType();
 
     @Owner
     @Detached

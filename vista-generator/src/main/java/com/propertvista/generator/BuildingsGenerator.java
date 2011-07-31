@@ -64,7 +64,6 @@ import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
-import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
@@ -374,12 +373,9 @@ public class BuildingsGenerator {
         amenity.belongsTo().set(building);
 
         amenity.type().setValue(RandomUtil.randomEnum(BuildingAmenity.Type.class));
-        amenity.subType().setValue(RandomUtil.randomEnum(BuildingAmenity.SubType.class));
 
-        amenity.rank().setValue(RandomUtil.randomInt(1000));
+        amenity.name().setValue(RandomUtil.randomLetters(6));
         amenity.description().setValue(RandomUtil.randomLetters(20).toLowerCase());
-        amenity.rent().setValue(RandomUtil.randomDouble(30));
-        amenity.deposit().setValue(RandomUtil.randomDouble(100));
 
         return amenity;
     }
@@ -431,12 +427,9 @@ public class BuildingsGenerator {
         FloorplanAmenity amenity = EntityFactory.create(FloorplanAmenity.class);
 
         amenity.type().setValue(RandomUtil.random(FloorplanAmenity.Type.values()));
-        amenity.subType().setValue(RandomUtil.random(FloorplanAmenity.SubType.values()));
 
-        amenity.rank().setValue(RandomUtil.randomInt(1000));
+        amenity.name().setValue(RandomUtil.randomLetters(6));
         amenity.description().setValue(RandomUtil.randomLetters(35).toLowerCase());
-        amenity.rent().setValue(RandomUtil.randomDouble(30));
-        amenity.deposit().setValue(RandomUtil.randomDouble(100));
 
         return amenity;
     }
@@ -654,12 +647,6 @@ public class BuildingsGenerator {
         item.cabinetsValue().setValue(1000. + RandomUtil.randomInt(200));
 
         return item;
-    }
-
-    public static AptUnitAmenity createUnitAmenity(AptUnitAmenity.Type type) {
-        AptUnitAmenity amenity = EntityFactory.create(AptUnitAmenity.class);
-        amenity.type().setValue(type);
-        return amenity;
     }
 
 // Property

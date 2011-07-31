@@ -118,21 +118,6 @@ public interface BuildingAmenity extends Amenity {
         }
     }
 
-    @Translatable
-    public enum SubType {
-
-        attached,
-
-        detached,
-
-        both;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
-
     @Owner
     @Detached
     Building belongsTo();
@@ -140,7 +125,4 @@ public interface BuildingAmenity extends Amenity {
     @ToString(index = 0)
     @MemberColumn(name = "buildingAmenityType")
     IPrimitive<Type> type();
-
-    @ToString(index = 0)
-    IPrimitive<SubType> subType();
 }

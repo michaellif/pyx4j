@@ -189,11 +189,8 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().subType(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().rank(), "3em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().rent(), "5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().deposit(), "5em"));
                 return columns;
             }
         };

@@ -31,7 +31,6 @@ import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.AptUnitAmenity;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
@@ -81,14 +80,6 @@ public class Converter {
         //TODO is it necessary to pull out all unit details here (IList<AptUnitItem>)?
         // it seems that it should be different details or somehow converted... 
         to.infoDetails().setValue("Unit details here...");
-
-        // List of amenities
-        EntityQueryCriteria<AptUnitAmenity> amenitysCriteria = EntityQueryCriteria.create(AptUnitAmenity.class);
-        amenitysCriteria.add(new PropertyCriterion(EntityFactory.getEntityPrototype(AptUnitAmenity.class).belongsTo().getPath().toString(), Restriction.EQUAL,
-                from));
-        for (AptUnitAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(amenitysCriteria)) {
-            to.amenities().add(amenity.type().getStringView());
-        }
 
         //TODO VS
         //to.status().set(from.status());

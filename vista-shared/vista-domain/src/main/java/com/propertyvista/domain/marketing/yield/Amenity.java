@@ -13,19 +13,14 @@
  */
 package com.propertyvista.domain.marketing.yield;
 
-import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Amenity extends IEntity {
 
-    IPrimitive<Integer> rank();
+    @ToString(index = 1)
+    IPrimitive<String> name();
 
     IPrimitive<String> description();
-
-    @Format("#0.00")
-    IPrimitive<Double> rent();
-
-    @Format("#0.00")
-    IPrimitive<Double> deposit();
 }
