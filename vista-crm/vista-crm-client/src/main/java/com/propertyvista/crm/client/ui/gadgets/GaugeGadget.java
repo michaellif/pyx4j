@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.gadgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -57,6 +58,7 @@ public class GaugeGadget extends GadgetBase {
 
         panel.add((Widget) svgroot);
         panel.setSize("300px", "200px");
+        panel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
     }
 
     @Override
