@@ -195,6 +195,12 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected void onApplySuccess(E result) {
         view.onApplySuccess();
+
+        if (isNewItem()) { // switch new item to regular editing after successful apply!..
+            entityID = result.getPrimaryKey();
+            view.setEditMode(isNewItem() ? EditMode.newItem : EditMode.existingItem);
+            populate();
+        }
     }
 
     protected void onSaveSuccess(E result) {
