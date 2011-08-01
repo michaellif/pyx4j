@@ -24,6 +24,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 
+import com.propertyvista.common.client.ui.decorations.DecorationData;
+import com.propertyvista.common.client.ui.decorations.DecorationData.ShowMandatory;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.crm.client.ui.login.NewPasswordView.ConversationType;
 import com.propertyvista.crm.rpc.PasswordChangeRequest;
@@ -45,13 +47,16 @@ public class NewPasswordViewForm extends CEntityForm<PasswordChangeRequest> {
         header.getElement().getStyle().setMarginBottom(1, Unit.EM);
         main.add(header);
 
-        main.add(new HTML());
-        main.add(new VistaWidgetDecorator(inject(proto().currentPassword()), 144, 152));
+        DecorationData decor = new DecorationData(144, 152);
+        decor.showMandatory = ShowMandatory.Mandatory;
 
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(inject(proto().newPassword()), 144, 152));
+        main.add(new VistaWidgetDecorator(inject(proto().currentPassword()), decor));
+
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(inject(proto().newPassword2()), 144, 152));
+        main.add(new VistaWidgetDecorator(inject(proto().newPassword()), decor));
+        main.add(new HTML());
+        main.add(new VistaWidgetDecorator(inject(proto().newPassword2()), decor));
         setWidget(main);
         return main;
     }
