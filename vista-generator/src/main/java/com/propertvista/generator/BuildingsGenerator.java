@@ -50,6 +50,7 @@ import com.propertyvista.domain.financial.offering.ResidentialRent;
 import com.propertyvista.domain.financial.offering.StorageRent;
 import com.propertyvista.domain.financial.offeringnew.Concession;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
+import com.propertyvista.domain.property.StarlightPmc;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
@@ -678,6 +679,13 @@ public class BuildingsGenerator {
         complex.name().setValue(name);
 
         return complex;
+    }
+
+    public StarlightPmc createPmc(String name) {
+        StarlightPmc pmc = EntityFactory.create(StarlightPmc.class);
+        pmc.name().setValue(name);
+
+        return pmc;
     }
 
     public LeaseTerms createLeaseTerms() {

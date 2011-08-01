@@ -48,13 +48,12 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<BuildingDTO>> columnDescriptors, BuildingDTO proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManager()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().province()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().country()));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.contacts().email().address(), i18n.tr("Email")));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().dateAquired()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().purchasePrice()));
@@ -68,6 +67,7 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
     @Override
     protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<BuildingDTO>> columnDescriptors, BuildingDTO proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManager()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().type()));

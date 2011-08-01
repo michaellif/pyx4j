@@ -41,6 +41,7 @@ import com.propertyvista.domain.financial.offering.StorageRent;
 import com.propertyvista.domain.financial.offeringnew.Concession;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.property.StarlightPmc;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Elevator;
@@ -80,7 +81,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             return deleteAll(Complex.class, Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Email.class, Phone.class, Amenity.class,
                     Concession.class, LeaseTerms.class, Vendor.class, Elevator.class, Boiler.class, Roof.class, Parking.class, ParkingSpot.class,
                     LockerArea.class, Locker.class, Media.class, ThumbnailBlob.class, FileBlob.class, Feature.class, ResidentialRent.class, ParkingRent.class,
-                    StorageRent.class, PetCharge.class);
+                    StorageRent.class, PetCharge.class, StarlightPmc.class);
         } else {
             return "This is production";
         }
@@ -102,10 +103,22 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         complex = generator.createComplex("Complex #3");
         persist(complex);
 
+        // create some StarlightPmc:
+        StarlightPmc pmc = generator.createPmc("PMC #1");
+        persist(pmc);
+
+        pmc = generator.createPmc("PMC #2");
+        persist(pmc);
+
+        pmc = generator.createPmc("PMC #3");
+        persist(pmc);
+
         int unitCount = 0;
         List<Building> buildings = generator.createBuildings(config.getNumResidentialBuildings(), complex);
         for (Building building : buildings) {
             // TODO Need to be saving PropertyProfile, PetCharge
+
+            building.propertyManager().set(pmc); // temporary for Starlight!..
 
             persist(building);
 
