@@ -35,9 +35,11 @@ import com.pyx4j.widgets.client.dialog.DialogPanel;
  */
 public abstract class OkCancelBox extends DialogPanel {
 
-    protected final I18n i18n = I18nFactory.getI18n(OkCancelBox.class);
+    protected final static I18n i18n = I18nFactory.getI18n(OkCancelBox.class);
 
     protected Button okButton;
+
+    protected Button clButton;
 
     public OkCancelBox(String caption) {
         this(caption, false);
@@ -45,7 +47,7 @@ public abstract class OkCancelBox extends DialogPanel {
 
     public OkCancelBox(String caption, boolean hideCancel) {
         super(false, true);
-        setCaption(i18n.tr(caption));
+        setCaption(caption);
 
         HorizontalPanel buttons = new HorizontalPanel();
         buttons.add(okButton = new Button(i18n.tr("OK"), new ClickHandler() {
@@ -56,7 +58,7 @@ public abstract class OkCancelBox extends DialogPanel {
             }
         }));
         if (!hideCancel) {
-            buttons.add(new Button(i18n.tr("Cancel"), new ClickHandler() {
+            buttons.add(clButton = new Button(i18n.tr("Cancel"), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     onCancel();
@@ -88,7 +90,7 @@ public abstract class OkCancelBox extends DialogPanel {
      * Override to set your desired size
      */
     protected void setSize() {
-        setSize("400px", "300px");
+        setSize("200px", "100px");
     }
 
     /**

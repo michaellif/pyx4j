@@ -20,6 +20,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -35,6 +36,8 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
+import com.propertyvista.crm.client.ui.components.OkCancelBox;
+import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 
 public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
@@ -127,7 +130,14 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.cancel();
+                new ShowPopUpBox<YesNoBox>(new YesNoBox()) {
+                    @Override
+                    protected void onClose(YesNoBox box) {
+                        if (box.getYes()) {
+                            presenter.cancel();
+                        }
+                    }
+                };
             }
         });
 
@@ -158,7 +168,36 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
     }
 
     protected void enableButtons(boolean enable) {
+//        
+// TODO Currently buttons are enabled always - more precise form dirty-state mechanics should be implemented!..
+//        
 //        btnApply.setEnabled(enable);
-        btnSave.setEnabled(enable);
+//        btnSave.setEnabled(enable);
+    }
+
+    private class YesNoBox extends OkCancelBox {
+
+        private boolean yes;
+
+        public YesNoBox() {
+            super(i18n.tr("Please confurm"));
+
+            okButton.setText(i18n.tr("Yes"));
+            clButton.setText(i18n.tr("No"));
+        }
+
+        @Override
+        protected Widget createContent() {
+            return new HTML("Do you really want to cancel?");
+        }
+
+        @Override
+        protected void onOk() {
+            yes = true;
+        }
+
+        public boolean getYes() {
+            return yes;
+        }
     }
 }
