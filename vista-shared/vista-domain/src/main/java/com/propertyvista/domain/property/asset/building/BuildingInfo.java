@@ -197,9 +197,9 @@ public interface BuildingInfo extends IEntity {
 
     IPrimitive<Shape> shape();
 
-    IPrimitive<String> totalStories();
+    IPrimitive<String> totalStoreys();
 
-    IPrimitive<String> residentialStories();
+    IPrimitive<String> residentialStoreys();
 
     IPrimitive<StructureType> structureType();
 

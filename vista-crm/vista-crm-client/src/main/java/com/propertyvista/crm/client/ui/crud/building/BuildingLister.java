@@ -72,8 +72,8 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().shape()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().totalStories()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().residentialStories()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().totalStoreys()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().residentialStoreys()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().structureType()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().structureBuildYear()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().constructionType()));

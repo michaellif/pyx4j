@@ -118,8 +118,8 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getLeftPanel().add(inject(proto().propertyManager()), 15);
 
         split.getRightPanel().add(inject(proto().info().shape()), 7);
-        split.getRightPanel().add(inject(proto().info().totalStories()), 5);
-        split.getRightPanel().add(inject(proto().info().residentialStories()), 5);
+        split.getRightPanel().add(inject(proto().info().totalStoreys()), 5);
+        split.getRightPanel().add(inject(proto().info().residentialStoreys()), 5);
         split.getRightPanel().add(inject(proto().complex()), 15);
 
         main.add(new VistaLineSeparator());

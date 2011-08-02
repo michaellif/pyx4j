@@ -81,8 +81,8 @@ public class Converter {
         to.address = convertAddress(from.address());
         to.type = from.type().getValue();
 
-        to.totalStories = from.totalStories().getStringView();
-        to.residentialStories = from.residentialStories().getStringView();
+        to.totalStories = from.totalStoreys().getStringView();
+        to.residentialStories = from.residentialStoreys().getStringView();
         to.structureType = from.structureType().getValue();
         // TODO this does not work at the moment but will be fixed
         to.structureBuildYear = new Date();

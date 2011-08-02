@@ -144,8 +144,8 @@ public class BuildingsGenerator {
         building.info().address().set(address);
         building.info().type().setValue(buildingType);
         building.info().shape().setValue(RandomUtil.random(BuildingInfo.Shape.values()));
-        building.info().totalStories().setValue("" + (1 + RandomUtil.randomInt(20)));
-        building.info().residentialStories().setValue("" + RandomUtil.randomInt(20));
+        building.info().totalStoreys().setValue("" + (1 + RandomUtil.randomInt(20)));
+        building.info().residentialStoreys().setValue("" + RandomUtil.randomInt(20));
         building.info().structureType().setValue(RandomUtil.random(BuildingInfo.StructureType.values()));
         building.info().structureBuildYear().setValue(RandomUtil.randomYear(1700, 2011));
         building.info().constructionType().setValue(RandomUtil.random(BuildingInfo.ConstructionType.values()));
