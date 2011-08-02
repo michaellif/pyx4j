@@ -49,7 +49,7 @@ public interface AptUnit extends BuildingElement {
     @Deprecated
     @Indexed
     @Format("MM/dd/yyyy")
-    @Caption(name = "Available")
+    @Caption(name = "Availability")
     IPrimitive<LogicalDate> avalableForRent();
 
     @ToString

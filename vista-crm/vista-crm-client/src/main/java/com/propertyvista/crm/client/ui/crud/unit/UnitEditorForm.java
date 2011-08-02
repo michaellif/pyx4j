@@ -86,6 +86,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         split.getLeftPanel().add(inject(proto().info().economicStatus()), 15);
         split.getLeftPanel().add(inject(proto().info().economicStatusDescription()), 15);
         split.getLeftPanel().add(inject(proto().floorplan()), 15);
+        split.getLeftPanel().add(inject(proto().avalableForRent()), 8.2);
 
         split.getRightPanel().add(inject(proto().info().floor()), 5);
         split.getRightPanel().add(inject(proto().info().number()), 5);
@@ -102,11 +103,10 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
             floorplanCompbo.setOptionsFilter(new OptionsFilter<Floorplan>() {
                 @Override
                 public boolean acceptOption(Floorplan entity) {
-                    if ((getValue() == null) || getValue().isNull()) {
-                        return false;
-                    } else {
+                    if ((getValue() != null) && !getValue().isNull()) {
                         return entity.building().equals(getValue().belongsTo());
                     }
+                    return false;
                 }
             });
         }
