@@ -28,6 +28,7 @@ import com.pyx4j.site.client.ui.crud.IFormView;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
@@ -74,6 +75,11 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     @Override
     public int getActiveTab() {
         return tabPanel.getSelectedIndex();
+    }
+
+    @Override
+    public void addValidations() {
+        new FutureDateValidation(get(proto().avalableForRent()));
     }
 
     private Widget createGeneralTab() {

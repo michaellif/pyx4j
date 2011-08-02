@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
@@ -56,6 +55,8 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPa
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
+import com.propertyvista.common.client.ui.validators.FutureDateValidation;
+import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
@@ -126,6 +127,70 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         if (value != null) {
             fileUpload.setTenantID(((IEntity) value).getPrimaryKey());
         }
+    }
+
+    @Override
+    public void addValidations() {
+        @SuppressWarnings("unchecked")
+        CEntityEditor<PriorAddress> currentAddressForm = ((CEntityEditor<PriorAddress>) getRaw(proto().currentAddress()));
+
+        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                enablePreviousAddress();
+            }
+        });
+
+        new FutureDateValidation(currentAddressForm.get(currentAddressForm.proto().moveInDate()));
+        new PastDateValidation(currentAddressForm.get(currentAddressForm.proto().moveOutDate()));
+
+        // ------------------------------------------------------------------------------------------------        
+
+        @SuppressWarnings("unchecked")
+        final CEntityEditor<PriorAddress> previousAddressForm = ((CEntityEditor<PriorAddress>) getRaw(proto().previousAddress()));
+
+        new FutureDateValidation(previousAddressForm.get(previousAddressForm.proto().moveInDate()));
+
+        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
+            @Override
+            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                IPrimitive<LogicalDate> date = getValue().previousAddress().moveOutDate();
+                return (date.isNull() || value.before(date.getValue()));
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                return i18n.tr("The move out date can not be equal or after move out one.");
+            }
+        });
+
+        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueChangeHandler(
+                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveOutDate())));
+
+        // ------------------------------------------------------------------------------------------------        
+
+        new FutureDateValidation(previousAddressForm.get(previousAddressForm.proto().moveOutDate()));
+
+        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
+
+            @Override
+            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                IPrimitive<LogicalDate> date = getValue().previousAddress().moveInDate();
+                return (date.isNull() || value.after(date.getValue()));
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                return i18n.tr("The move out date can not be before or equal move in one.");
+            }
+        });
+
+        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(
+                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
+
+        // ------------------------------------------------------------------------------------------------
+
+        get(proto().secureIdentifier()).addValueValidator(new CanadianSinValidator());
     }
 
     private Widget createSecureInformationTab() {
@@ -235,115 +300,6 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
                 get(proto().managerName()).setVisible(rented);
             }
         };
-    }
-
-    @Override
-    public void addValidations() {
-        @SuppressWarnings("unchecked")
-        CEntityEditor<PriorAddress> currentAddressForm = ((CEntityEditor<PriorAddress>) getRaw(proto().currentAddress()));
-        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
-
-            @Override
-            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                enablePreviousAddress();
-            }
-        });
-
-        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                return (value != null) && value.before(TimeUtils.today());
-            }
-
-            @Override
-            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The date can not be equal today or in the future.");
-            }
-        });
-
-        currentAddressForm.get(currentAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                return (value != null) && value.after(TimeUtils.today());
-            }
-
-            @Override
-            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The date can not be equal today or in the past.");
-            }
-        });
-
-        // ------------------------------------------------------------------------------------------------        
-
-        @SuppressWarnings("unchecked")
-        final CEntityEditor<PriorAddress> previousAddressForm = ((CEntityEditor<PriorAddress>) getRaw(proto().previousAddress()));
-        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                return (value != null) && value.before(TimeUtils.today());
-            }
-
-            @Override
-            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The date can not be equal today or in the future.");
-            }
-        });
-
-        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                IPrimitive<LogicalDate> date = getValue().previousAddress().moveOutDate();
-                return (date.isNull() || value.before(date.getValue()));
-            }
-
-            @Override
-            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The move out date can not be equal or after move out one.");
-            }
-        });
-
-        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueChangeHandler(
-                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveOutDate())));
-
-        // ------------------------------------------------------------------------------------------------        
-
-        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                return (value != null) && value.before(TimeUtils.today());
-            }
-
-            @Override
-            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The date can not be equal today or in the future.");
-            }
-        });
-
-        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
-
-            @Override
-            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                IPrimitive<LogicalDate> date = getValue().previousAddress().moveInDate();
-                return (date.isNull() || value.after(date.getValue()));
-            }
-
-            @Override
-            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The move out date can not be before or equal move in one.");
-            }
-        });
-
-        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(
-                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
-
-        // ------------------------------------------------------------------------------------------------
-
-        get(proto().secureIdentifier()).addValueValidator(new CanadianSinValidator());
     }
 
     private void enablePreviousAddress() {

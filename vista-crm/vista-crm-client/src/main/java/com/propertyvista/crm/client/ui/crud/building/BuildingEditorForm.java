@@ -34,6 +34,7 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
+import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
@@ -98,6 +99,13 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     @Override
+    public void addValidations() {
+        new FutureDateValidation(get(proto().info().structureBuildYear()));
+        new FutureDateValidation(get(proto().financial().dateAquired()));
+        new FutureDateValidation(get(proto().financial().lastAppraisalDate()));
+    }
+
+    @Override
     public void setActiveTab(int index) {
         tabPanel.selectTab(index);
     }
@@ -139,10 +147,11 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(split);
 
         split.getLeftPanel().add(inject(proto().info().structureType()), 15);
-        split.getLeftPanel().add(inject(proto().info().structureBuildYear()), 15);
+        split.getLeftPanel().add(inject(proto().info().structureBuildYear()), 10);
         split.getLeftPanel().add(inject(proto().info().constructionType()), 15);
         split.getLeftPanel().add(inject(proto().info().foundationType()), 15);
         split.getLeftPanel().add(inject(proto().info().floorType()), 15);
+
         split.getRightPanel().add(inject(proto().info().landArea()), 15);
         split.getRightPanel().add(inject(proto().info().waterSupply()), 15);
         split.getRightPanel().add(inject(proto().info().centralAir()), 15);

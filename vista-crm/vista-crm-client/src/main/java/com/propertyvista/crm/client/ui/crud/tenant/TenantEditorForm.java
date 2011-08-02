@@ -111,22 +111,6 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         setVisibility(value);
     }
 
-    private void setVisibility(TenantDTO tenant) {
-        tabPanel.clear();
-        switch (tenant.type().getValue()) {
-        case person:
-            tabPanel.add(new CrmScrollPanel(person), i18n.tr("Details"));
-            tabPanel.addDisable(((TenantView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
-            break;
-        case company:
-            tabPanel.add(new CrmScrollPanel(company), proto().company().getMeta().getCaption());
-            break;
-        }
-
-        tabPanel.add(new ScrollPanel(contacts), proto().emergencyContacts().getMeta().getCaption());
-        tabPanel.setDisableMode(isEditable());
-    }
-
     @Override
     public void addValidations() {
         get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<Map<String, Object>>>() {
@@ -141,6 +125,22 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
                 return i18n.tr("Duplicate contacts specified");
             }
         });
+    }
+
+    private void setVisibility(TenantDTO tenant) {
+        tabPanel.clear();
+        switch (tenant.type().getValue()) {
+        case person:
+            tabPanel.add(new CrmScrollPanel(person), i18n.tr("Details"));
+            tabPanel.addDisable(((TenantView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
+            break;
+        case company:
+            tabPanel.add(new CrmScrollPanel(company), proto().company().getMeta().getCaption());
+            break;
+        }
+
+        tabPanel.add(new ScrollPanel(contacts), proto().emergencyContacts().getMeta().getCaption());
+        tabPanel.setDisableMode(isEditable());
     }
 
     private CEntityFolderEditor<EmergencyContact> createEmergencyContactFolderEditor() {

@@ -21,6 +21,7 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
+import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.dto.RoofDTO;
@@ -49,5 +50,10 @@ public class RoofEditorForm extends MechlBaseEditorForm<RoofDTO> {
         main.add(inject(proto().notes()), 40);
 
         return new CrmScrollPanel(main);
+    }
+
+    @Override
+    public void addValidations() {
+        new FutureDateValidation(get(proto().year()));
     }
 }
