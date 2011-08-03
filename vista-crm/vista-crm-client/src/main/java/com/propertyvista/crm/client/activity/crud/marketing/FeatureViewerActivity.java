@@ -22,9 +22,9 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.marketing.FeatureView;
 import com.propertyvista.crm.client.ui.crud.marketing.FeatureViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.FeatureCrudService;
-import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offeringnew.Feature;
 
 public class FeatureViewerActivity extends ViewerActivityBase<Feature> implements FeatureViewerView.Presenter {
 
@@ -32,7 +32,7 @@ public class FeatureViewerActivity extends ViewerActivityBase<Feature> implement
 
     @SuppressWarnings("unchecked")
     public FeatureViewerActivity(Place place) {
-        super((FeatureViewerView) BuildingViewFactory.instance(FeatureViewerView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class));
+        super((FeatureViewerView) MarketingViewFactory.instance(FeatureViewerView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class));
         delegate = new FeatureActivityDelegate((FeatureView) view);
         withPlace(place);
     }

@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.marketing;
+package com.propertyvista.crm.client.ui.crud.building.catalog;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.site.client.ui.crud.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offeringnew.Feature;
 
 public class FeatureLister extends ListerBase<Feature> {
 
@@ -36,8 +36,9 @@ public class FeatureLister extends ListerBase<Feature> {
 
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Feature>> columnDescriptors, Feature proto) {
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.description()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.start()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.end()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isMandatory()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isRecurring()));
     }
 }

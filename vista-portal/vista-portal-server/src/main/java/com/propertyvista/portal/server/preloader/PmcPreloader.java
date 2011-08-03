@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +22,9 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
+import com.propertyvista.domain.financial.offeringnew.Concession;
+import com.propertyvista.domain.financial.offeringnew.Feature;
+import com.propertyvista.domain.financial.offeringnew.Service;
 import com.propertyvista.domain.financial.offeringnew.ServiceItemType;
 
 public class PmcPreloader extends AbstractDataPreloader {
@@ -34,29 +35,32 @@ public class PmcPreloader extends AbstractDataPreloader {
 
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public String delete() {
+        if (ApplicationMode.isDevelopment()) {
+            return deleteAll(ServiceItemType.class, Service.class, Feature.class, Concession.class);
+        } else {
+            return "This is production";
+        }
+    }
+
     @Override
     public String create() {
 
         PmcGenerator generator = new PmcGenerator();
 
-        List<ServiceItemType> types = generator.createChargeItemTypes();
+        for (ServiceItemType type : generator.getServiceItemTypes()) {
+            PersistenceServicesFactory.getPersistenceService().persist(type);
+        }
 
-        for (ServiceItemType type : types) {
+        for (ServiceItemType type : generator.getFeatureItemTypes()) {
             PersistenceServicesFactory.getPersistenceService().persist(type);
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Created ").append(types.size()).append(" ChargeItemType");
+        sb.append("Created ").append(generator.getServiceItemTypes().size() + generator.getFeatureItemTypes().size()).append(" ChargeItemType");
         return sb.toString();
-    }
-
-    @Override
-    public String delete() {
-        if (ApplicationMode.isDevelopment()) {
-            return deleteAll(ServiceItemType.class);
-        } else {
-            return "This is production";
-        }
     }
 
 }

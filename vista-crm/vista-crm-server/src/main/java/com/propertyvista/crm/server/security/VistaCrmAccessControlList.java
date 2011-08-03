@@ -37,6 +37,7 @@ import com.propertyvista.crm.rpc.services.LockerCrudService;
 import com.propertyvista.crm.rpc.services.ParkingCrudService;
 import com.propertyvista.crm.rpc.services.ParkingSpotCrudService;
 import com.propertyvista.crm.rpc.services.RoofCrudService;
+import com.propertyvista.crm.rpc.services.ServiceCrudService;
 import com.propertyvista.crm.rpc.services.TenantCrudService;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.crm.rpc.services.UnitItemCrudService;
@@ -50,12 +51,13 @@ import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
-import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ParkingRent;
 import com.propertyvista.domain.financial.offering.PetCharge;
 import com.propertyvista.domain.financial.offering.ResidentialRent;
 import com.propertyvista.domain.financial.offering.StorageRent;
 import com.propertyvista.domain.financial.offeringnew.Concession;
+import com.propertyvista.domain.financial.offeringnew.Feature;
+import com.propertyvista.domain.financial.offeringnew.Service;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Elevator;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -152,17 +154,21 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Inquiry.class, EntityPermission.ALL));
         grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(InquiryCrudService.class));
 
-// - Marketing-related:
+// - Service-related:
+        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Service.class, EntityPermission.ALL));
+        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ServiceCrudService.class));
+
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Feature.class, EntityPermission.ALL));
         grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(FeatureCrudService.class));
 
+        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Concession.class, EntityPermission.ALL));
+        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ConcessionCrudService.class));
+
+// - Marketing-related:
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(ResidentialRent.class, EntityPermission.ALL));
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(ParkingRent.class, EntityPermission.ALL));
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(StorageRent.class, EntityPermission.ALL));
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(PetCharge.class, EntityPermission.ALL));
-
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Concession.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ConcessionCrudService.class));
 
 // - Other:
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Company.class, EntityPermission.ALL));

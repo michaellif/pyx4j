@@ -19,6 +19,9 @@ import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.financial.offeringnew.Concession;
+import com.propertyvista.domain.financial.offeringnew.Feature;
+import com.propertyvista.domain.financial.offeringnew.Service;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.BuildingDTO;
@@ -81,5 +84,20 @@ public class BuildingEditorViewImpl extends CrmEditorViewImplBase<BuildingDTO> i
     @Override
     public IListerView<LockerAreaDTO> getLockerAreaListerView() {
         return delegate.getLockerAreaListerView();
+    }
+
+    @Override
+    public IListerView<Service> getServiceListerView() {
+        return delegate.getServiceListerView();
+    }
+
+    @Override
+    public IListerView<Feature> getFeatureListerView() {
+        return delegate.getFeatureListerView();
+    }
+
+    @Override
+    public IListerView<Concession> getConcessionListerView() {
+        return delegate.getConcessionListerView();
     }
 }

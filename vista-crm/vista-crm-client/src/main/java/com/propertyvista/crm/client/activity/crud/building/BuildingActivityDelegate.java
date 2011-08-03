@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
@@ -26,12 +25,19 @@ import com.propertyvista.crm.client.ui.crud.building.BuildingView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.BoilerCrudService;
+import com.propertyvista.crm.rpc.services.ConcessionCrudService;
 import com.propertyvista.crm.rpc.services.ElevatorCrudService;
+import com.propertyvista.crm.rpc.services.FeatureCrudService;
 import com.propertyvista.crm.rpc.services.FloorplanCrudService;
 import com.propertyvista.crm.rpc.services.LockerAreaCrudService;
 import com.propertyvista.crm.rpc.services.ParkingCrudService;
 import com.propertyvista.crm.rpc.services.RoofCrudService;
+import com.propertyvista.crm.rpc.services.ServiceCrudService;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
+import com.propertyvista.domain.financial.offeringnew.Concession;
+import com.propertyvista.domain.financial.offeringnew.Feature;
+import com.propertyvista.domain.financial.offeringnew.Service;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.ElevatorDTO;
@@ -58,6 +64,12 @@ public class BuildingActivityDelegate implements BuildingView.Presenter {
 
     private final IListerView.Presenter lockerAreaLister;
 
+    private final IListerView.Presenter serviceLister;
+
+    private final IListerView.Presenter featureLister;
+
+    private final IListerView.Presenter concessionLister;
+
     @SuppressWarnings("unchecked")
     public BuildingActivityDelegate(BuildingView view) {
 
@@ -82,6 +94,14 @@ public class BuildingActivityDelegate implements BuildingView.Presenter {
 
         lockerAreaLister = new ListerActivityBase<LockerAreaDTO>(view.getLockerAreaListerView(),
                 (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class), LockerAreaDTO.class);
+
+        serviceLister = new ListerActivityBase<Service>(view.getServiceListerView(), (AbstractCrudService<Service>) GWT.create(ServiceCrudService.class),
+                Service.class);
+        featureLister = new ListerActivityBase<Feature>(view.getFeatureListerView(), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class),
+                Feature.class);
+        concessionLister = new ListerActivityBase<Concession>(view.getConcessionListerView(),
+                (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class);
+
     }
 
     @Override
@@ -120,33 +140,61 @@ public class BuildingActivityDelegate implements BuildingView.Presenter {
     }
 
     @Override
-    public Presenter getLockerAreaDTOPresenter() {
+    public Presenter getLockerAreaPresenter() {
         return lockerAreaLister;
     }
 
-    public void populate(Key parentID) {
+    @Override
+    public Presenter getServicePresenter() {
+        return serviceLister;
+    }
+
+    @Override
+    public Presenter getFeaturePresenter() {
+        return featureLister;
+    }
+
+    @Override
+    public Presenter getConcessionPresenter() {
+        return concessionLister;
+    }
+
+    public void populate(Building parent) {
 
         dashboard.populate();
 
-        floorplanLister.setParentFiltering(parentID);
+        // -------------------------------------------------------
+
+        floorplanLister.setParentFiltering(parent.getPrimaryKey());
         floorplanLister.populate(0);
 
-        unitLister.setParentFiltering(parentID);
+        unitLister.setParentFiltering(parent.getPrimaryKey());
         unitLister.populate(0);
 
-        elevatorLister.setParentFiltering(parentID);
+        elevatorLister.setParentFiltering(parent.getPrimaryKey());
         elevatorLister.populate(0);
 
-        boilerLister.setParentFiltering(parentID);
+        boilerLister.setParentFiltering(parent.getPrimaryKey());
         boilerLister.populate(0);
 
-        roofLister.setParentFiltering(parentID);
+        roofLister.setParentFiltering(parent.getPrimaryKey());
         roofLister.populate(0);
 
-        parkingLister.setParentFiltering(parentID);
+        parkingLister.setParentFiltering(parent.getPrimaryKey());
         parkingLister.populate(0);
 
-        lockerAreaLister.setParentFiltering(parentID);
+        lockerAreaLister.setParentFiltering(parent.getPrimaryKey());
         lockerAreaLister.populate(0);
+
+        // -----------------------------------------------------------------------
+
+        serviceLister.setParentFiltering(parent.serviceCatalog().getPrimaryKey());
+        serviceLister.populate(0);
+
+        featureLister.setParentFiltering(parent.serviceCatalog().getPrimaryKey());
+        featureLister.populate(0);
+
+        concessionLister.setParentFiltering(parent.serviceCatalog().getPrimaryKey());
+        concessionLister.populate(0);
     }
 }

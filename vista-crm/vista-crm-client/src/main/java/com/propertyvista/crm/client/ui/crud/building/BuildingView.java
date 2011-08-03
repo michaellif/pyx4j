@@ -16,6 +16,9 @@ package com.propertyvista.crm.client.ui.crud.building;
 import com.pyx4j.site.client.ui.crud.IListerView;
 
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
+import com.propertyvista.domain.financial.offeringnew.Concession;
+import com.propertyvista.domain.financial.offeringnew.Feature;
+import com.propertyvista.domain.financial.offeringnew.Service;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.ElevatorDTO;
@@ -42,7 +45,13 @@ public interface BuildingView {
 
         IListerView.Presenter getParkingPresenter();
 
-        IListerView.Presenter getLockerAreaDTOPresenter();
+        IListerView.Presenter getLockerAreaPresenter();
+
+        IListerView.Presenter getServicePresenter();
+
+        IListerView.Presenter getFeaturePresenter();
+
+        IListerView.Presenter getConcessionPresenter();
     }
 
     DashboardView getDashboardView();
@@ -60,4 +69,10 @@ public interface BuildingView {
     IListerView<ParkingDTO> getParkingListerView();
 
     IListerView<LockerAreaDTO> getLockerAreaListerView();
+
+    IListerView<Service> getServiceListerView();
+
+    IListerView<Feature> getFeatureListerView();
+
+    IListerView<Concession> getConcessionListerView();
 }

@@ -7,18 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on 2011-06-29
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.marketing;
+package com.propertyvista.crm.rpc.services;
 
-import com.pyx4j.site.client.ui.crud.IViewerView;
+import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.domain.financial.offeringnew.Feature;
+import com.propertyvista.domain.financial.offeringnew.Service;
 
-public interface FeatureViewerView extends IViewerView<Feature>, FeatureView {
-
-    interface Presenter extends IViewerView.Presenter, FeatureView.Presenter {
-    }
+public interface ServiceCrudService extends AbstractCrudService<Service> {
 }

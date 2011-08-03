@@ -113,20 +113,26 @@ public class CrmSiteMap implements SiteMap {
         public static class UnitOccupancy extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Concession")
-        @NavigationItem(navigLabel = "Concessions")
-        public static class Concession extends CrudAppPlace {
-        }
-
         @PlaceProperties(caption = "Floorplan")
         @NavigationItem(navigLabel = "Floorplan")
         public static class Floorplan extends CrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Service")
+        @NavigationItem(navigLabel = "Services")
+        public static class Service extends CrudAppPlace {
         }
 
         @PlaceProperties(caption = "Feature")
         @NavigationItem(navigLabel = "Feature")
         public static class Feature extends CrudAppPlace {
         }
+
+        @PlaceProperties(caption = "Concession")
+        @NavigationItem(navigLabel = "Concessions")
+        public static class Concession extends CrudAppPlace {
+        }
+
     }
 
     public static class Tenants extends AppPlace {

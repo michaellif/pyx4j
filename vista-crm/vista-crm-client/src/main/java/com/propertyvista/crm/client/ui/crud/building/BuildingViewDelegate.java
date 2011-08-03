@@ -16,15 +16,21 @@ package com.propertyvista.crm.client.ui.crud.building;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
+import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureLister;
+import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceLister;
 import com.propertyvista.crm.client.ui.crud.building.lockers.LockerAreaLister;
 import com.propertyvista.crm.client.ui.crud.building.mech.BoilerLister;
 import com.propertyvista.crm.client.ui.crud.building.mech.ElevatorLister;
 import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
+import com.propertyvista.crm.client.ui.crud.marketing.ConcessionLister;
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
+import com.propertyvista.domain.financial.offeringnew.Concession;
+import com.propertyvista.domain.financial.offeringnew.Feature;
+import com.propertyvista.domain.financial.offeringnew.Service;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.ElevatorDTO;
@@ -51,15 +57,29 @@ public class BuildingViewDelegate implements BuildingView {
 
     private final IListerView<LockerAreaDTO> lockerAreaLister;
 
+    private final IListerView<Service> serviceLister;
+
+    private final IListerView<Feature> featureLister;
+
+    private final IListerView<Concession> concessionLister;
+
     public BuildingViewDelegate(boolean readOnly) {
         dashboardView = new DashboardViewImpl("", true);
+
         floorplanLister = new ListerInternalViewImplBase<FloorplanDTO>(new FloorplanLister(/* readOnly */));
+
         unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new UnitLister(/* readOnly */));
+
         elevatorLister = new ListerInternalViewImplBase<ElevatorDTO>(new ElevatorLister(/* readOnly */));
         boilerLister = new ListerInternalViewImplBase<BoilerDTO>(new BoilerLister(/* readOnly */));
         roofLister = new ListerInternalViewImplBase<RoofDTO>(new RoofLister(/* readOnly */));
+
         parkingLister = new ListerInternalViewImplBase<ParkingDTO>(new ParkingLister(/* readOnly */));
         lockerAreaLister = new ListerInternalViewImplBase<LockerAreaDTO>(new LockerAreaLister(/* readOnly */));
+
+        serviceLister = new ListerInternalViewImplBase<Service>(new ServiceLister(/* readOnly */));
+        featureLister = new ListerInternalViewImplBase<Feature>(new FeatureLister(/* readOnly */));
+        concessionLister = new ListerInternalViewImplBase<Concession>(new ConcessionLister(/* readOnly */));
     }
 
     @Override
@@ -100,5 +120,20 @@ public class BuildingViewDelegate implements BuildingView {
     @Override
     public IListerView<LockerAreaDTO> getLockerAreaListerView() {
         return lockerAreaLister;
+    }
+
+    @Override
+    public IListerView<Service> getServiceListerView() {
+        return serviceLister;
+    }
+
+    @Override
+    public IListerView<Feature> getFeatureListerView() {
+        return featureLister;
+    }
+
+    @Override
+    public IListerView<Concession> getConcessionListerView() {
+        return concessionLister;
     }
 }

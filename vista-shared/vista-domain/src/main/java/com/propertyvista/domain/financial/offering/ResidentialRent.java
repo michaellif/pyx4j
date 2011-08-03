@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import com.propertyvista.domain.financial.offeringnew.Feature;
 
 public interface ResidentialRent extends Feature {
 

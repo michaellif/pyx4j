@@ -16,6 +16,7 @@ package com.propertyvista.domain.financial.offering;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.offeringnew.Feature;
 import com.propertyvista.domain.property.asset.Parking;
 
 public interface ParkingRent extends Feature {

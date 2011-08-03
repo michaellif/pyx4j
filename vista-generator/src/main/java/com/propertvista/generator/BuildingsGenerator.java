@@ -42,13 +42,9 @@ import com.propertyvista.domain.charges.ChargeType;
 import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
-import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.ParkingRent;
 import com.propertyvista.domain.financial.offering.PetCharge;
 import com.propertyvista.domain.financial.offering.PetPrice;
-import com.propertyvista.domain.financial.offering.ResidentialRent;
-import com.propertyvista.domain.financial.offering.StorageRent;
-import com.propertyvista.domain.financial.offeringnew.Concession;
+import com.propertyvista.domain.financial.offeringnew.Feature;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.property.StarlightPmc;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
@@ -177,6 +173,7 @@ public class BuildingsGenerator {
         building.contacts().website().setValue(website);
         building.contacts().email().set(email); // not sure yet what to do about
                                                 // the email and its type
+
         return building;
     }
 
@@ -413,14 +410,6 @@ public class BuildingsGenerator {
             floorplan.amenities().add(amenity);
         }
 
-        for (int i = 0; i < 3; i++) {
-            Feature feature = createFloorplanFeature();
-            if (feature != null) {
-//                feature.belongsTo().set(floorplan);
-//                floorplan.features().add(feature);
-            }
-        }
-
         return floorplan;
     }
 
@@ -435,65 +424,6 @@ public class BuildingsGenerator {
         return amenity;
     }
 
-    // various Feature types:
-    public Feature createFloorplanFeature() {
-        Feature feature = null;
-        if (RandomUtil.randomBoolean()) {
-            feature = createParkingRent();
-        } else if (RandomUtil.randomBoolean()) {
-            feature = createStorageRent();
-        } else if (RandomUtil.randomBoolean()) {
-            feature = createPetCharge();
-        } else if (RandomUtil.randomBoolean()) {
-            feature = createResidentialRent();
-        }
-
-        if (feature != null) {
-            feature.start().setValue(DataGenerator.randomDate(2));
-            feature.end().setValue(DataGenerator.randomDate(4));
-
-            // concessions
-            for (int i = 0; i < 1 + DataGenerator.randomInt(4); i++) {
-                feature.concessions().add(createConcession());
-            }
-        }
-
-        return feature;
-    }
-
-    private Feature createResidentialRent() {
-        ResidentialRent feature = EntityFactory.create(ResidentialRent.class);
-
-        // currently nothing here...
-
-        return feature;
-    }
-
-    private Feature createParkingRent() {
-        ParkingRent feature = EntityFactory.create(ParkingRent.class);
-
-        double regularRent = 20d + RandomUtil.randomInt(30);
-        feature.disableRent().setValue(regularRent * 0.8);
-        feature.regularRent().setValue(regularRent);
-        feature.wideRent().setValue(regularRent * 1.2);
-        feature.narrowRent().setValue(regularRent * 0.9);
-        feature.deposit().setValue(50d + RandomUtil.randomInt(50));
-
-        return feature;
-    }
-
-    private Feature createStorageRent() {
-        StorageRent feature = EntityFactory.create(StorageRent.class);
-
-        double regularRent = 10d + RandomUtil.randomInt(20);
-        feature.regularRent().setValue(regularRent);
-        feature.largeRent().setValue(regularRent * 1.2);
-        feature.smallRent().setValue(regularRent * 0.9);
-        feature.deposit().setValue(20d + RandomUtil.randomInt(50));
-
-        return feature;
-    }
-
     private Feature createPetCharge() {
         PetCharge feature = EntityFactory.create(PetCharge.class);
 
@@ -504,32 +434,6 @@ public class BuildingsGenerator {
         }
 
         return feature;
-    }
-
-    private Concession createConcession() {
-        Concession concession = EntityFactory.create(Concession.class);
-
-        concession.type().setValue(RandomUtil.random(Concession.Type.values()));
-
-        if (concession.type().getValue() == Concession.Type.percentageOff) {
-            concession.value().setValue(10d + RandomUtil.randomInt(90));
-        } else if (concession.type().getValue() == Concession.Type.monetaryOff) {
-            concession.value().setValue(50d + RandomUtil.randomInt(50));
-        } else if (concession.type().getValue() == Concession.Type.promotionalItem) {
-            concession.value().setValue(100d + RandomUtil.randomInt(100));
-        }
-
-        concession.condition().setValue(RandomUtil.random(Concession.Condition.values()));
-        concession.status().setValue(RandomUtil.random(Concession.Status.values()));
-
-        if (concession.status().getValue() == Concession.Status.approved) {
-            concession.approvedBy().setValue("Geoge W. Bush Jr.");
-        }
-
-        concession.effectiveDate().setValue(DataGenerator.randomDate(2));
-        concession.expirationDate().setValue(DataGenerator.randomDate(4));
-
-        return concession;
     }
 
 // Units:
@@ -559,7 +463,6 @@ public class BuildingsGenerator {
 
     private UnitRelatedData createUnit(Building building, String suiteNumber, int floor, double area, double bedrooms, double bathrooms, Floorplan floorplan) {
         UnitRelatedData unit = EntityFactory.create(UnitRelatedData.class);
-
         unit.belongsTo().set(building);
 
         unit.info().name().setValue(RandomUtil.randomLetters(4));

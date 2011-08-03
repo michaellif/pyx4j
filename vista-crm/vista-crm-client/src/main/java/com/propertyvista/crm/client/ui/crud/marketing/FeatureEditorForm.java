@@ -26,7 +26,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPa
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offeringnew.Feature;
 
 public abstract class FeatureEditorForm<T extends Feature> extends CrmEntityForm<T> {
 
@@ -69,11 +69,12 @@ public abstract class FeatureEditorForm<T extends Feature> extends CrmEntityForm
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
 
-        main.add(inject(proto().description()), 43);
-
         main.add(split);
-        split.getLeftPanel().add(inject(proto().start()), 8.2);
-        split.getRightPanel().add(inject(proto().end()), 8.2);
+        split.getLeftPanel().add(inject(proto().type()), 10);
+
+        split.getRightPanel().add(inject(proto().name()), 10);
+
+        main.add(inject(proto().description()), 43);
 
         return new CrmScrollPanel(main);
     }

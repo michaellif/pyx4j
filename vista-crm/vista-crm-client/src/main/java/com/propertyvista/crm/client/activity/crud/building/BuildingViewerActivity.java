@@ -75,13 +75,28 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
     }
 
     @Override
-    public Presenter getLockerAreaDTOPresenter() {
-        return delegate.getLockerAreaDTOPresenter();
+    public Presenter getLockerAreaPresenter() {
+        return delegate.getLockerAreaPresenter();
+    }
+
+    @Override
+    public Presenter getServicePresenter() {
+        return delegate.getServicePresenter();
+    }
+
+    @Override
+    public Presenter getFeaturePresenter() {
+        return delegate.getFeaturePresenter();
+    }
+
+    @Override
+    public Presenter getConcessionPresenter() {
+        return delegate.getConcessionPresenter();
     }
 
     @Override
     public void onPopulateSuccess(BuildingDTO result) {
         super.onPopulateSuccess(result);
-        delegate.populate(result.getPrimaryKey());
+        delegate.populate(result);
     }
 }

@@ -16,47 +16,156 @@ package com.propertvista.generator;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.propertvista.generator.util.RandomUtil;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.server.preloader.DataGenerator;
+
+import com.propertyvista.domain.financial.offeringnew.Concession;
+import com.propertyvista.domain.financial.offeringnew.DepositType;
 import com.propertyvista.domain.financial.offeringnew.Feature;
 import com.propertyvista.domain.financial.offeringnew.Service;
+import com.propertyvista.domain.financial.offeringnew.ServiceCatalog;
 import com.propertyvista.domain.financial.offeringnew.ServiceItemType;
 
 public class PmcGenerator {
 
-    public List<ServiceItemType> createChargeItemTypes() {
-        List<ServiceItemType> types = new ArrayList<ServiceItemType>();
-        types.add(createChargeItemType("Regular Residential Unit", Service.Type.residentialUnit));
-        types.add(createChargeItemType("Regular Commercial Unit", Service.Type.commercialUnit));
-        types.add(createChargeItemType("Regular Short Term Residential Unit", Service.Type.residentialShortTermUnit));
-        types.add(createChargeItemType("Roof Spot", Service.Type.roof));
-        types.add(createChargeItemType("Billboard", Service.Type.sundry));
-        types.add(createChargeItemType("Regular Parking", Feature.Type.parking));
-        types.add(createChargeItemType("Wide Parking", Feature.Type.parking));
-        types.add(createChargeItemType("Nerrow Parking", Feature.Type.parking));
-        types.add(createChargeItemType("Disabled Parking", Feature.Type.parking));
-        types.add(createChargeItemType("Cat", Feature.Type.pet));
-        types.add(createChargeItemType("Dog", Feature.Type.pet));
-        types.add(createChargeItemType("Small Locker", Feature.Type.locker));
-        types.add(createChargeItemType("Medium Locker", Feature.Type.locker));
-        types.add(createChargeItemType("Large Locker", Feature.Type.locker));
-        types.add(createChargeItemType("Fitness", Feature.Type.addOn));
-        types.add(createChargeItemType("Pool", Feature.Type.addOn));
-        types.add(createChargeItemType("Furnished", Feature.Type.addOn));
-        types.add(createChargeItemType("Key", Feature.Type.addOn));
-        types.add(createChargeItemType("Access Card", Feature.Type.addOn));
-        types.add(createChargeItemType("Cable", Feature.Type.addOn));
-        return types;
+    List<ServiceItemType> serviceItemTypes = new ArrayList<ServiceItemType>();
+
+    List<ServiceItemType> featureItemTypes = new ArrayList<ServiceItemType>();
+
+    public PmcGenerator() {
+
+        // preload types:
+        serviceItemTypes.add(createChargeItemType("Regular Residential Unit", Service.Type.residentialUnit));
+        serviceItemTypes.add(createChargeItemType("Regular Commercial Unit", Service.Type.commercialUnit));
+        serviceItemTypes.add(createChargeItemType("Regular Short Term Residential Unit", Service.Type.residentialShortTermUnit));
+        serviceItemTypes.add(createChargeItemType("Roof Spot", Service.Type.roof));
+        serviceItemTypes.add(createChargeItemType("Billboard", Service.Type.sundry));
+
+        featureItemTypes.add(createChargeItemType("Regular Parking", Feature.Type.parking));
+        featureItemTypes.add(createChargeItemType("Wide Parking", Feature.Type.parking));
+        featureItemTypes.add(createChargeItemType("Narrow Parking", Feature.Type.parking));
+        featureItemTypes.add(createChargeItemType("Disabled Parking", Feature.Type.parking));
+        featureItemTypes.add(createChargeItemType("Cat", Feature.Type.pet));
+        featureItemTypes.add(createChargeItemType("Dog", Feature.Type.pet));
+        featureItemTypes.add(createChargeItemType("Small Locker", Feature.Type.locker));
+        featureItemTypes.add(createChargeItemType("Medium Locker", Feature.Type.locker));
+        featureItemTypes.add(createChargeItemType("Large Locker", Feature.Type.locker));
+        featureItemTypes.add(createChargeItemType("Fitness", Feature.Type.addOn));
+        featureItemTypes.add(createChargeItemType("Pool", Feature.Type.addOn));
+        featureItemTypes.add(createChargeItemType("Furnished", Feature.Type.addOn));
+        featureItemTypes.add(createChargeItemType("Key", Feature.Type.addOn));
+        featureItemTypes.add(createChargeItemType("Access Card", Feature.Type.addOn));
+        featureItemTypes.add(createChargeItemType("Cable", Feature.Type.addOn));
     }
 
-    public ServiceItemType createChargeItemType(String name, Service.Type serviceType) {
+    public List<ServiceItemType> getServiceItemTypes() {
+        return serviceItemTypes;
+    }
+
+    public List<ServiceItemType> getFeatureItemTypes() {
+        return featureItemTypes;
+    }
+
+    public ServiceCatalog createServiceCatalog() {
+        ServiceCatalog catalog = EntityFactory.create(ServiceCatalog.class);
+        catalog.name().setValue(RandomUtil.randomLetters(4));
+        return catalog;
+    }
+
+    public List<Service> createServices(ServiceCatalog catalog) {
+        List<Service> items = new ArrayList<Service>(4);
+        for (ServiceItemType item : serviceItemTypes) {
+            items.add(createService(catalog, item.serviceType().getValue()));
+        }
+        return items;
+    }
+
+    public List<Feature> createFeatures(ServiceCatalog catalog) {
+        List<Feature> items = new ArrayList<Feature>(4);
+        for (ServiceItemType item : featureItemTypes) {
+            items.add(createFeature(catalog, item.featureType().getValue()));
+        }
+        return items;
+    }
+
+    public List<Concession> createConcessions(ServiceCatalog catalog) {
+        List<Concession> items = new ArrayList<Concession>(4);
+        for (int i = 0; i < 4; ++i) {
+            items.add(createConcession(catalog));
+        }
+        return items;
+    }
+
+// internals:    
+    private Service createService(ServiceCatalog catalog, Service.Type type) {
+        Service item = EntityFactory.create(Service.class);
+        item.catalog().set(catalog);
+
+        item.type().setValue(type);
+        item.name().setValue(RandomUtil.randomLetters(6));
+        item.description().setValue(RandomUtil.randomLetters(50));
+
+        item.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
+
+        return item;
+    }
+
+    private Feature createFeature(ServiceCatalog catalog, Feature.Type type) {
+        Feature item = EntityFactory.create(Feature.class);
+        item.catalog().set(catalog);
+
+        item.type().setValue(type);
+        item.name().setValue(RandomUtil.randomLetters(6));
+        item.description().setValue(RandomUtil.randomLetters(50));
+
+        item.priceType().setValue(RandomUtil.randomEnum(Feature.PriceType.class));
+        item.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
+
+        item.isRecurring().setValue(RandomUtil.randomBoolean());
+        item.isMandatory().setValue(RandomUtil.randomBoolean());
+
+        return item;
+    }
+
+    private Concession createConcession(ServiceCatalog catalog) {
+        Concession concession = EntityFactory.create(Concession.class);
+        concession.catalog().set(catalog);
+
+        concession.type().setValue(RandomUtil.random(Concession.Type.values()));
+
+        if (concession.type().getValue() == Concession.Type.percentageOff) {
+            concession.value().setValue(10d + RandomUtil.randomInt(90));
+        } else if (concession.type().getValue() == Concession.Type.monetaryOff) {
+            concession.value().setValue(50d + RandomUtil.randomInt(50));
+        } else if (concession.type().getValue() == Concession.Type.promotionalItem) {
+            concession.value().setValue(100d + RandomUtil.randomInt(100));
+        } else if (concession.type().getValue() == Concession.Type.free) {
+            concession.value().setValue(200d + RandomUtil.randomInt(100));
+        }
+
+        concession.condition().setValue(RandomUtil.random(Concession.Condition.values()));
+        concession.status().setValue(RandomUtil.random(Concession.Status.values()));
+
+        if (concession.status().getValue() == Concession.Status.approved) {
+            concession.approvedBy().setValue("Geoge W. Bush Jr.");
+        }
+
+        concession.effectiveDate().setValue(DataGenerator.randomDate(2));
+        concession.expirationDate().setValue(DataGenerator.randomDate(4));
+
+        return concession;
+    }
+
+    private ServiceItemType createChargeItemType(String name, Service.Type serviceType) {
         ServiceItemType type = EntityFactory.create(ServiceItemType.class);
         type.name().setValue(name);
         type.serviceType().setValue(serviceType);
         return type;
     }
 
-    public ServiceItemType createChargeItemType(String name, Feature.Type featureType) {
+    private ServiceItemType createChargeItemType(String name, Feature.Type featureType) {
         ServiceItemType type = EntityFactory.create(ServiceItemType.class);
         type.name().setValue(name);
         type.featureType().setValue(featureType);

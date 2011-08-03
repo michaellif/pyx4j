@@ -15,7 +15,7 @@ package com.propertyvista.crm.server.services;
 
 import com.propertyvista.crm.rpc.services.FeatureCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
-import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offeringnew.Feature;
 
 public class FeatureCrudServiceImpl extends GenericCrudServiceImpl<Feature> implements FeatureCrudService {
 

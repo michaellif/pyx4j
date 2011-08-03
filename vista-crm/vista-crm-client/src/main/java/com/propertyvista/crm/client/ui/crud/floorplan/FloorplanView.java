@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.floorplan;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
 
-import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offeringnew.Feature;
 
 public interface FloorplanView {
 

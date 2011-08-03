@@ -18,8 +18,8 @@ import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ResidentialRent;
+import com.propertyvista.domain.financial.offeringnew.Feature;
 
 public class ResidentialRentEditorForm extends FeatureEditorForm<ResidentialRent> {
 

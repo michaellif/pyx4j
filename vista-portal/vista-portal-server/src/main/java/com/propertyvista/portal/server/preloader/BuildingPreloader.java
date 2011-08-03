@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.propertvista.generator.BuildingsGenerator;
 import com.propertvista.generator.MediaGenerator;
+import com.propertvista.generator.PmcGenerator;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -33,12 +34,14 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
-import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ParkingRent;
 import com.propertyvista.domain.financial.offering.PetCharge;
 import com.propertyvista.domain.financial.offering.ResidentialRent;
 import com.propertyvista.domain.financial.offering.StorageRent;
 import com.propertyvista.domain.financial.offeringnew.Concession;
+import com.propertyvista.domain.financial.offeringnew.Feature;
+import com.propertyvista.domain.financial.offeringnew.Service;
+import com.propertyvista.domain.financial.offeringnew.ServiceCatalog;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.StarlightPmc;
@@ -79,9 +82,9 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Complex.class, Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Email.class, Phone.class, Amenity.class,
-                    Concession.class, LeaseTerms.class, Vendor.class, Elevator.class, Boiler.class, Roof.class, Parking.class, ParkingSpot.class,
-                    LockerArea.class, Locker.class, Media.class, ThumbnailBlob.class, FileBlob.class, Feature.class, ResidentialRent.class, ParkingRent.class,
-                    StorageRent.class, PetCharge.class, StarlightPmc.class);
+                    LeaseTerms.class, Vendor.class, Elevator.class, Boiler.class, Roof.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class,
+                    Media.class, ThumbnailBlob.class, FileBlob.class, Feature.class, ResidentialRent.class, ParkingRent.class, StorageRent.class,
+                    PetCharge.class, StarlightPmc.class, ServiceCatalog.class);
         } else {
             return "This is production";
         }
@@ -89,9 +92,10 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
 
     private String generate() {
         BuildingsGenerator generator = new BuildingsGenerator(DemoData.BUILDINGS_GENERATION_SEED);
+        PmcGenerator pmcGenerator = new PmcGenerator();
 
         LeaseTerms leaseTerms = generator.createLeaseTerms();
-        PersistenceServicesFactory.getPersistenceService().persist(leaseTerms);
+        persist(leaseTerms);
 
         // create some complexes:
         Complex complex = generator.createComplex("Complex #1");
@@ -119,6 +123,27 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             // TODO Need to be saving PropertyProfile, PetCharge
 
             building.propertyManager().set(pmc); // temporary for Starlight!..
+
+            // Service Catalog:
+            ServiceCatalog catalog = pmcGenerator.createServiceCatalog();
+            persist(catalog);
+
+            List<Service> services = pmcGenerator.createServices(catalog);
+            for (Service item : services) {
+                persist(item);
+            }
+
+            List<Feature> features = pmcGenerator.createFeatures(catalog);
+            for (Feature item : features) {
+                persist(item);
+            }
+
+            List<Concession> concessions = pmcGenerator.createConcessions(catalog);
+            for (Concession item : concessions) {
+                persist(item);
+            }
+
+            building.serviceCatalog().set(catalog);
 
             persist(building);
 
@@ -182,14 +207,6 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
                     MediaGenerator.attachGeneratedFloorplanMedia(floorplanDTO);
                 }
 
-                // persist plain internal lists:
-//                for (Feature feature : floorplanDTO.features()) {
-//                    for (Concession concession : feature.concessions()) {
-//                        persist(concession);
-//                    }
-//                    persist(feature);
-//                }
-
                 Floorplan floorplan = down(floorplanDTO, Floorplan.class);
                 persist(floorplan); // persist real unit here, not DTO!..
 
@@ -223,7 +240,6 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             if (true) {
                 PublicDataUpdater.updateIndexData(building);
             }
-
         }
 
         StringBuilder sb = new StringBuilder();

@@ -16,6 +16,8 @@ package com.propertyvista.domain.financial.offering;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.financial.offeringnew.Feature;
+
 public interface PetCharge extends Feature {
 
     @EmbeddedEntity

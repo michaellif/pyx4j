@@ -88,8 +88,8 @@ public interface Concession extends IEntity {
 
     IPrimitive<String> description();
 
-    /*
-     * for Gift - gift price
+    /**
+     * for free item - gift price
      * for percentageOff - percentage
      * for monetaryOff - amount
      * for skipFirstPayment - number of terms
