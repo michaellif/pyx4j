@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.crud.IEditorView;
 
-import com.propertyvista.domain.financial.offeringnew.Feature;
+import com.propertyvista.domain.financial.offering.Feature;
 
 public interface FeatureEditorView extends IEditorView<Feature>, FeatureView {
 

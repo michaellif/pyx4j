@@ -20,7 +20,7 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.site.client.ui.crud.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.offeringnew.Service;
+import com.propertyvista.domain.financial.offering.Service;
 
 public class ServiceLister extends ListerBase<Service> {
 

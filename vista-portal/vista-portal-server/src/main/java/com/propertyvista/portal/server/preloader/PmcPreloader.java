@@ -22,10 +22,10 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
-import com.propertyvista.domain.financial.offeringnew.Concession;
-import com.propertyvista.domain.financial.offeringnew.Feature;
-import com.propertyvista.domain.financial.offeringnew.Service;
-import com.propertyvista.domain.financial.offeringnew.ServiceItemType;
+import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 public class PmcPreloader extends AbstractDataPreloader {
 

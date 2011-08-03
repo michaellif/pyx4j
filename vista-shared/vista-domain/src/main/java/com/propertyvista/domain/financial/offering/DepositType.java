@@ -7,22 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-07-02
+ * Created on Aug 3, 2011
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.domain.financial.offering;
 
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.domain.PetType;
+@Translatable
+public
+enum DepositType {
+    percentageFromPrice, fixed;
 
-public interface PetPrice extends IEntity {
-
-    @MemberColumn(name = "petType")
-    IPrimitive<PetType> type();
-
-    IPrimitive<Double> price();
+    @Override
+    public String toString() {
+        return I18nEnum.tr(this);
+    }
 }

@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.ui.crud.building;
 import com.pyx4j.site.client.ui.crud.IListerView;
 
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
-import com.propertyvista.domain.financial.offeringnew.Concession;
-import com.propertyvista.domain.financial.offeringnew.Feature;
-import com.propertyvista.domain.financial.offeringnew.Service;
+import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.ElevatorDTO;

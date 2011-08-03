@@ -38,13 +38,9 @@ import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.offering.ParkingRent;
-import com.propertyvista.domain.financial.offering.ResidentialRent;
-import com.propertyvista.domain.financial.offering.StorageRent;
-import com.propertyvista.domain.financial.offeringnew.Concession;
-import com.propertyvista.domain.financial.offeringnew.Feature;
+import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
 
 public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implements FeatureEditorView {
 
@@ -53,24 +49,6 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
     public FeatureEditorViewImpl() {
         super(CrmSiteMap.Properties.Feature.class);
         delegate = new FeatureViewDelegate(false);
-    }
-
-    @Override
-    public void populate(Feature value) {
-        if (value instanceof ResidentialRent) {
-            CrmEntityForm<ResidentialRent> formResidential = new ResidentialRentEditorForm(this);
-            formResidential.initialize();
-            setForm(formResidential);
-        } else if (value instanceof ParkingRent) {
-            CrmEntityForm<ParkingRent> formParking = new ParkingRentEditorForm(this);
-            formParking.initialize();
-            setForm(formParking);
-        } else if (value instanceof StorageRent) {
-            CrmEntityForm<StorageRent> formStorage = new StorageRentEditorForm(this);
-            formStorage.initialize();
-            setForm(formStorage);
-        }
-        super.populate(value);
     }
 
     @Override
@@ -136,9 +114,6 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
             Collection<FeatureType> opt = new ArrayList<FeatureType>();
 
             // fill available variants here:
-            opt.add(new FeatureType(ResidentialRent.class, i18n.tr("Residential Rent")));
-            opt.add(new FeatureType(ParkingRent.class, i18n.tr("Parking Rent")));
-            opt.add(new FeatureType(StorageRent.class, i18n.tr("Storage Rent")));
 
             features.setOptions(opt);
             features.setWidth("100%");

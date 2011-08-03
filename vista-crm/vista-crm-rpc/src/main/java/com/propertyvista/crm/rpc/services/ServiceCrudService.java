@@ -15,7 +15,7 @@ package com.propertyvista.crm.rpc.services;
 
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.domain.financial.offeringnew.Service;
+import com.propertyvista.domain.financial.offering.Service;
 
 public interface ServiceCrudService extends AbstractCrudService<Service> {
 }

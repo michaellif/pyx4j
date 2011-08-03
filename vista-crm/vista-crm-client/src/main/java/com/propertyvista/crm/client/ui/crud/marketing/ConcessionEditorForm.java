@@ -22,7 +22,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPa
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.financial.offeringnew.Concession;
+import com.propertyvista.domain.financial.offering.Concession;
 
 public class ConcessionEditorForm extends CrmEntityForm<Concession> {
 

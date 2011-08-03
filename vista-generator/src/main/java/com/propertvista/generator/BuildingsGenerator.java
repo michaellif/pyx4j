@@ -37,14 +37,10 @@ import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PetChargeRule;
-import com.propertyvista.domain.PetType;
 import com.propertyvista.domain.charges.ChargeType;
 import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
-import com.propertyvista.domain.financial.offering.PetCharge;
-import com.propertyvista.domain.financial.offering.PetPrice;
-import com.propertyvista.domain.financial.offeringnew.Feature;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.property.StarlightPmc;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
@@ -422,18 +418,6 @@ public class BuildingsGenerator {
         amenity.description().setValue(RandomUtil.randomLetters(35).toLowerCase());
 
         return amenity;
-    }
-
-    private Feature createPetCharge() {
-        PetCharge feature = EntityFactory.create(PetCharge.class);
-
-        for (PetType pet : PetType.values()) {
-            PetPrice price = EntityFactory.create(PetPrice.class);
-            price.type().setValue(pet);
-            price.price().setValue(5d + RandomUtil.randomInt(10));
-        }
-
-        return feature;
     }
 
 // Units:

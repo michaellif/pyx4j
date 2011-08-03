@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.offeringnew.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.StarlightPmc;

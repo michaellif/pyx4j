@@ -26,7 +26,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPa
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.financial.offeringnew.Feature;
+import com.propertyvista.domain.financial.offering.Feature;
 
 public abstract class FeatureEditorForm<T extends Feature> extends CrmEntityForm<T> {
 

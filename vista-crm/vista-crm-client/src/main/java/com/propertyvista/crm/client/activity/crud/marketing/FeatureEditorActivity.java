@@ -29,7 +29,7 @@ import com.propertyvista.crm.client.ui.crud.marketing.FeatureEditorView;
 import com.propertyvista.crm.client.ui.crud.marketing.FeatureView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.FeatureCrudService;
-import com.propertyvista.domain.financial.offeringnew.Feature;
+import com.propertyvista.domain.financial.offering.Feature;
 
 public class FeatureEditorActivity extends EditorActivityBase<Feature> implements FeatureEditorView.Presenter {
 

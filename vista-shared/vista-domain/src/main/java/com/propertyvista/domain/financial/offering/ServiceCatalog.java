@@ -7,22 +7,32 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-07-25
- * @author Vlad
+ * Created on Jul 22, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.financial.offeringnew;
+package com.propertyvista.domain.financial.offering;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface ChargeItem extends IEntity {
+/**
+ * Defines Services on a given Building
+ * 
+ * @author michaellif
+ * 
+ */
+public interface ServiceCatalog extends IEntity {
 
-    ServiceItem item();
+    IPrimitive<String> name();
 
-    IPrimitive<Double> price();
-
-    IList<ChargeItemAdjustment> adjustments();
-
+//    
+// Double links - main dependency in appropriate entity:
+// currently not used...
+//    
+//    IList<Service> services();
+//
+//    IList<Feature> features();
+//
+//    IList<Concession> concessions();
 }

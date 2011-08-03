@@ -21,12 +21,12 @@ import com.propertvista.generator.util.RandomUtil;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
-import com.propertyvista.domain.financial.offeringnew.Concession;
-import com.propertyvista.domain.financial.offeringnew.DepositType;
-import com.propertyvista.domain.financial.offeringnew.Feature;
-import com.propertyvista.domain.financial.offeringnew.Service;
-import com.propertyvista.domain.financial.offeringnew.ServiceCatalog;
-import com.propertyvista.domain.financial.offeringnew.ServiceItemType;
+import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.DepositType;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 public class PmcGenerator {
 

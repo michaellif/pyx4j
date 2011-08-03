@@ -16,7 +16,7 @@ package com.propertyvista.dto;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.domain.financial.offeringnew.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 

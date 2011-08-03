@@ -15,14 +15,10 @@ package com.propertyvista.crm.client.ui.crud.marketing;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
 
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.offering.ParkingRent;
-import com.propertyvista.domain.financial.offering.ResidentialRent;
-import com.propertyvista.domain.financial.offering.StorageRent;
-import com.propertyvista.domain.financial.offeringnew.Concession;
-import com.propertyvista.domain.financial.offeringnew.Feature;
+import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
 
 public class FeatureViewerViewImpl extends CrmViewerViewImplBase<Feature> implements FeatureViewerView {
 
@@ -31,24 +27,6 @@ public class FeatureViewerViewImpl extends CrmViewerViewImplBase<Feature> implem
     public FeatureViewerViewImpl() {
         super(CrmSiteMap.Properties.Feature.class);
         delegate = new FeatureViewDelegate(true);
-    }
-
-    @Override
-    public void populate(Feature value) {
-        if (value instanceof ResidentialRent) {
-            CrmEntityForm<ResidentialRent> formResidential = new ResidentialRentEditorForm(this);
-            formResidential.initialize();
-            setForm(formResidential);
-        } else if (value instanceof ParkingRent) {
-            CrmEntityForm<ParkingRent> formParking = new ParkingRentEditorForm(this);
-            formParking.initialize();
-            setForm(formParking);
-        } else if (value instanceof StorageRent) {
-            CrmEntityForm<StorageRent> formStorage = new StorageRentEditorForm(this);
-            formStorage.initialize();
-            setForm(formStorage);
-        }
-        super.populate(value);
     }
 
     @Override

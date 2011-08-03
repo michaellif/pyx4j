@@ -17,7 +17,7 @@ import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureLister;
-import com.propertyvista.domain.financial.offeringnew.Feature;
+import com.propertyvista.domain.financial.offering.Feature;
 
 public class FloorplanViewDelegate implements FloorplanView {
 

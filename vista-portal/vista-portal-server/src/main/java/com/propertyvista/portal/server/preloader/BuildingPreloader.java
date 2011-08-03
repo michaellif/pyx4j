@@ -34,14 +34,10 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
-import com.propertyvista.domain.financial.offering.ParkingRent;
-import com.propertyvista.domain.financial.offering.PetCharge;
-import com.propertyvista.domain.financial.offering.ResidentialRent;
-import com.propertyvista.domain.financial.offering.StorageRent;
-import com.propertyvista.domain.financial.offeringnew.Concession;
-import com.propertyvista.domain.financial.offeringnew.Feature;
-import com.propertyvista.domain.financial.offeringnew.Service;
-import com.propertyvista.domain.financial.offeringnew.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.StarlightPmc;
@@ -83,8 +79,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Complex.class, Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Email.class, Phone.class, Amenity.class,
                     LeaseTerms.class, Vendor.class, Elevator.class, Boiler.class, Roof.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class,
-                    Media.class, ThumbnailBlob.class, FileBlob.class, Feature.class, ResidentialRent.class, ParkingRent.class, StorageRent.class,
-                    PetCharge.class, StarlightPmc.class, ServiceCatalog.class);
+                    Media.class, ThumbnailBlob.class, FileBlob.class, Feature.class, StarlightPmc.class, ServiceCatalog.class);
         } else {
             return "This is production";
         }

@@ -11,10 +11,11 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.financial.offeringnew;
+package com.propertyvista.domain.financial.offering;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -22,22 +23,42 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-public interface Service extends IEntity {
+public interface Feature extends IEntity {
 
     @Translatable
     public enum Type {
 
-        residentialUnit,
+        parking(true),
 
-        commercialUnit,
+        pet(true),
 
-        residentialShortTermUnit,
+        addOn(true),
 
-        roof,
+        utility(true),
 
-        sundry,
+        locker(true),
 
-        garage;
+        booking(false);
+
+        private final boolean inAgreement;
+
+        Type(boolean inAgreement) {
+            this.inAgreement = inAgreement;
+        }
+
+        public boolean isInAgreement() {
+            return inAgreement;
+        };
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    @Translatable
+    enum PriceType {
+        percentageFromServicePrice, fixed;
 
         @Override
         public String toString() {
@@ -53,19 +74,21 @@ public interface Service extends IEntity {
 
 // ----------------------------------------------
 
-    @MemberColumn(name = "serviceType")
+    @MemberColumn(name = "featureType")
     IPrimitive<Type> type();
 
     IPrimitive<String> name();
 
     IPrimitive<String> description();
 
-    // Double link - main dependency in item entity
+    @Owned
     IList<ServiceItem> items();
+
+    IPrimitive<PriceType> priceType();
 
     IPrimitive<DepositType> depositType();
 
-    IList<Feature> features();
+    IPrimitive<Boolean> isRecurring();
 
-    IList<Concession> concessions();
+    IPrimitive<Boolean> isMandatory();
 }

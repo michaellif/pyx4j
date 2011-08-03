@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.marketing;
 
 import com.pyx4j.site.client.ui.crud.IViewerView;
 
-import com.propertyvista.domain.financial.offeringnew.Concession;
+import com.propertyvista.domain.financial.offering.Concession;
 
 public interface ConcessionViewerView extends IViewerView<Concession> {
 

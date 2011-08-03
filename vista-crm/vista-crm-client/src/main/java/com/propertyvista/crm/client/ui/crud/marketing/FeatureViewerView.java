@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.marketing;
 
 import com.pyx4j.site.client.ui.crud.IViewerView;
 
-import com.propertyvista.domain.financial.offeringnew.Feature;
+import com.propertyvista.domain.financial.offering.Feature;
 
 public interface FeatureViewerView extends IViewerView<Feature>, FeatureView {
 

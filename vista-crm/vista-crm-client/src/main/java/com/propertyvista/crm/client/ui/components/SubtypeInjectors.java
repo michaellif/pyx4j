@@ -34,7 +34,7 @@ import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
-import com.propertyvista.domain.financial.offeringnew.Concession;
+import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.property.asset.Equipment;
