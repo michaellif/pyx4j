@@ -80,7 +80,7 @@
         <configuration>
           <runTarget>Site.html</runTarget>
           <hostedWebapp>${webappDirectory}</hostedWebapp>
-          <i18nMessagesBundle>com.starlight.client.Messages</i18nMessagesBundle>
+          <i18nMessagesBundle>com.pyx4j.wicketsite.client.Messages</i18nMessagesBundle>
         </configuration>
       </plugin>
 

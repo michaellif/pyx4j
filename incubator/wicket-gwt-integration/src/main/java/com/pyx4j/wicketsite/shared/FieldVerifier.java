@@ -1,4 +1,4 @@
-package com.starlight.shared;
+package com.pyx4j.wicketsite.shared;
 
 /**
  * <p>

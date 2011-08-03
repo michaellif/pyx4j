@@ -1,8 +1,9 @@
-package com.starlight.server;
+package com.pyx4j.wicketsite.server;
 
-import com.starlight.client.GreetingService;
-import com.starlight.shared.FieldVerifier;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
+import com.pyx4j.wicketsite.client.GreetingService;
+import com.pyx4j.wicketsite.shared.FieldVerifier;
 
 /**
  * The server side implementation of the RPC service.

@@ -1,4 +1,4 @@
-package com.starlight.client;
+package com.pyx4j.wicketsite.client;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
