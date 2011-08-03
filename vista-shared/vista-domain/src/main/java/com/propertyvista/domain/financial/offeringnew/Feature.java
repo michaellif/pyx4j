@@ -58,7 +58,7 @@ public interface Feature extends IEntity {
 
     @Translatable
     enum PriceType {
-        percentageFromAnchorPrice, fixed;
+        percentageFromServicePrice, fixed;
 
         @Override
         public String toString() {
