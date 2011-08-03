@@ -82,6 +82,8 @@ public interface Lease extends IEntity {
 
     IPrimitive<LogicalDate> actualMoveOut();
 
+    IPrimitive<LogicalDate> moveOutNotice();
+
     IPrimitive<LogicalDate> signDate();
 
     ServiceAgreement serviceAgreement();
