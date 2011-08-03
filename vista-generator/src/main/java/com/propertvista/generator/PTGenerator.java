@@ -113,7 +113,7 @@ public class PTGenerator {
 
         // lease:
         summary.lease().leaseID().setValue(RandomUtil.randomLetters(8));
-        summary.lease().status().setValue(Lease.Status.ApplicationCreated);
+        summary.lease().status().setValue(Lease.Status.Draft);
         summary.lease().unit().set(selectedUnit);
         createPets(summary.lease().pets());
         createVehicles(summary.lease().vehicles());

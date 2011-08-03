@@ -34,17 +34,19 @@ public interface Lease extends IEntity {
     @Translatable
     public enum Status {
 
-        ApplicationCreated,
+        Draft,
 
-        ApplicationSubmited,
+        DraftPendingApproval,
 
-        ApplicationDeclined,
+        Declined,
 
-        ApplicationAproved,
+        Aproved,
 
-        Active,
+        Completed,
 
-        Completed;
+        Broken,
+
+        Transferred;
 
         @Override
         public String toString() {

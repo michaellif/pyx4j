@@ -85,7 +85,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
             }
 
             lease = EntityFactory.create(Lease.class);
-            lease.status().setValue(Lease.Status.ApplicationCreated);
+            lease.status().setValue(Lease.Status.Draft);
             PersistenceServicesFactory.getPersistenceService().persist(lease);
             tenantInLease = EntityFactory.create(TenantInLease.class);
             tenantInLease.status().setValue(TenantInLease.Status.Applicant);
