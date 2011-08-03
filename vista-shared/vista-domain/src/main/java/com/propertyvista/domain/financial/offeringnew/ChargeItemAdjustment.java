@@ -34,6 +34,16 @@ public interface ChargeItemAdjustment extends IEntity {
     }
 
     @Translatable
+    enum ChargeType {
+        discount, priceChange;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    @Translatable
     enum TermType {
         firstMonth, lastMonth, term;
 

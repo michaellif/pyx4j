@@ -40,7 +40,7 @@ public interface Lease extends IEntity {
 
         Declined,
 
-        Aproved,
+        Approved,
 
         Completed,
 
