@@ -13,7 +13,10 @@
  */
 package com.propertyvista.domain.financial.offeringnew;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -23,7 +26,7 @@ import com.pyx4j.i18n.shared.Translatable;
 public interface Feature extends IEntity {
 
     @Translatable
-    public enum FeatureType {
+    public enum Type {
 
         parking(true),
 
@@ -39,7 +42,7 @@ public interface Feature extends IEntity {
 
         private final boolean inAgreement;
 
-        FeatureType(boolean inAgreement) {
+        Type(boolean inAgreement) {
             this.inAgreement = inAgreement;
         }
 
@@ -63,31 +66,29 @@ public interface Feature extends IEntity {
         }
     }
 
-    @Translatable
-    enum DepositType {
-        percentageFromPrice, fixed;
+// ----------------------------------------------
 
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
+    @Owner
+    @Detached
+    ServiceCatalog catalog();
+
+// ----------------------------------------------
+
+    @MemberColumn(name = "featureType")
+    IPrimitive<Type> type();
 
     IPrimitive<String> name();
 
     IPrimitive<String> description();
-
-    IPrimitive<FeatureType> featureType();
 
     @Owned
     IList<ServiceItem> items();
 
     IPrimitive<PriceType> priceType();
 
+    IPrimitive<DepositType> depositType();
+
     IPrimitive<Boolean> isRecurring();
 
     IPrimitive<Boolean> isMandatory();
-
-    IPrimitive<DepositType> depositType();
-
 }

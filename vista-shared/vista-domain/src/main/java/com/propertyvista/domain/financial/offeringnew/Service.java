@@ -13,18 +13,19 @@
  */
 package com.propertyvista.domain.financial.offeringnew;
 
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-
 public interface Service extends IEntity {
 
     @Translatable
-    public enum ServiceType {
+    public enum Type {
 
         residentialUnit,
 
@@ -44,29 +45,27 @@ public interface Service extends IEntity {
         }
     }
 
-    @Translatable
-    enum DepositType {
-        percentageFromPrice, fixed;
+// ----------------------------------------------
 
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
+    @Owner
+    @Detached
+    ServiceCatalog catalog();
 
-    IList<Feature> features();
+// ----------------------------------------------
 
-    IList<Concession> concessions();
+    @MemberColumn(name = "serviceType")
+    IPrimitive<Type> type();
 
     IPrimitive<String> name();
 
     IPrimitive<String> description();
 
-    IPrimitive<ServiceType> serviceType();
-
-    @Owned
+    // Double link - main dependency in item entity
     IList<ServiceItem> items();
 
     IPrimitive<DepositType> depositType();
 
+    IList<Feature> features();
+
+    IList<Concession> concessions();
 }

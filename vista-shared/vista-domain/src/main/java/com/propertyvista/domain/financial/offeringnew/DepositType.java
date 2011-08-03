@@ -7,20 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 26, 2011
- * @author michaellif
+ * Created on Aug 3, 2011
+ * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.domain.financial.offeringnew;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
-public interface ServiceItemType extends IEntity {
+@Translatable
+public
+enum DepositType {
+    percentageFromPrice, fixed;
 
-    IPrimitive<String> name();
-
-    IPrimitive<Service.Type> serviceType();
-
-    IPrimitive<Feature.Type> featureType();
+    @Override
+    public String toString() {
+        return I18nEnum.tr(this);
+    }
 }

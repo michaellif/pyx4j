@@ -15,8 +15,10 @@ package com.propertyvista.domain.financial.offeringnew;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -36,7 +38,7 @@ public interface Concession extends IEntity {
     }
 
     @Translatable
-    enum TermType {
+    enum Term {
         firstMonth, lastMonth, term;
 
         @Override
@@ -72,11 +74,17 @@ public interface Concession extends IEntity {
 
 // ----------------------------------------------
 
+    @Owner
+    @Detached
+    ServiceCatalog catalog();
+
+// ----------------------------------------------
+
     @ToString(index = 0)
     @MemberColumn(name = "concessionType")
     IPrimitive<Type> type();
 
-    IPrimitive<TermType> termType();
+    IPrimitive<Term> term();
 
     IPrimitive<String> description();
 

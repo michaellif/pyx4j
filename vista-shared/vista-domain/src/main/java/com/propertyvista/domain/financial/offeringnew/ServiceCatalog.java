@@ -16,7 +16,6 @@ package com.propertyvista.domain.financial.offeringnew;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-
 /**
  * Defines Services on a given Building
  * 
@@ -25,10 +24,11 @@ import com.pyx4j.entity.shared.IList;
  */
 public interface ServiceCatalog extends IEntity {
 
+// Double links - main dependency in appropriate entity
+
     IList<Service> services();
 
     IList<Feature> features();
 
     IList<Concession> concessions();
-
 }

@@ -14,6 +14,7 @@
 package com.propertyvista.domain.financial.offeringnew;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -21,13 +22,20 @@ import com.propertyvista.domain.property.asset.BuildingElement;
 
 public interface ServiceItem extends IEntity {
 
-    IPrimitive<String> description();
+// ----------------------------------------------
 
-    IPrimitive<Double> price();
+    @Owner
+    @Detached
+    Service service();
+
+// ----------------------------------------------
 
     ServiceItemType itemType();
 
+    IPrimitive<Double> price();
+
+    IPrimitive<String> description();
+
     @Detached
     BuildingElement element();
-
 }
