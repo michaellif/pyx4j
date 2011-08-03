@@ -60,6 +60,11 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     private Key parentID;
 
     public ListerActivityBase(IListerView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
+        // development correctness checks:
+        assert (view != null);
+        assert (service != null);
+        assert (entityClass != null);
+
         this.view = view;
         this.service = service;
         this.entityClass = entityClass;

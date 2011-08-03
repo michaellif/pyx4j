@@ -54,6 +54,11 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     Class<? extends CrudAppPlace> placeClass;
 
     public EditorActivityBase(IEditorView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
+        // development correctness checks:
+        assert (view != null);
+        assert (service != null);
+        assert (entityClass != null);
+
         this.view = view;
         this.service = service;
         this.entityClass = entityClass;
@@ -215,7 +220,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     protected boolean isNewItem() {
-        assert (entityID != null);
         return (entityID.toString().equals(CrudAppPlace.ARG_VALUE_NEW_ITEM));
     }
 

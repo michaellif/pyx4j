@@ -48,6 +48,10 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     Class<? extends CrudAppPlace> placeClass;
 
     public ViewerActivityBase(IViewerView<E> view, AbstractCrudService<E> service) {
+// development correctness checks:
+        assert (view != null);
+        assert (service != null);
+
         this.view = view;
         this.service = service;
         view.setPresenter(this);
