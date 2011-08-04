@@ -7,18 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
- * @author Vlad
+ * Created on Aug 4, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant.application;
+package com.propertyvista.domain;
 
-import com.pyx4j.site.client.ui.crud.IViewerView;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.dto.ApplicationDTO;
+public interface MasterApplication extends IEntity {
 
-public interface ApplicationViewerView extends IViewerView<ApplicationDTO>, ApplicationView {
+    IList<Application> applications();
 
-    interface Presenter extends IViewerView.Presenter, ApplicationView.Presenter {
-    }
 }

@@ -13,27 +13,11 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.TenantApplication;
+import com.propertyvista.domain.Application;
 
 @Transient
-public interface ApplicationDTO extends TenantApplication {
+public interface ApplicationDTO extends Application {
 
-//  Note: While show ApplicationDTO - make 2 tabs (Building and Unit selection listers) for:
-    Building selectedBuilding();
-
-    AptUnit selectedUnit();
-
-    Tenant primaryTenant();
-
-//  Note : While show ApplicationDTO - make tab with :
-//  IList<PotentialTenantInfo> tenants();
-
-    @Owned
-    PetsDTO pets();
 }

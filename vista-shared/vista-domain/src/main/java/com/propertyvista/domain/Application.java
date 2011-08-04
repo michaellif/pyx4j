@@ -14,11 +14,30 @@
 package com.propertyvista.domain;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.domain.financial.Money;
-
-@Deprecated
 public interface Application extends IEntity, IUserEntity {
 
-    Money rent();
+    @Translatable
+    public enum Status {
+
+        created,
+
+        submited,
+
+        approved,
+
+        declined,
+
+        returned;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    IPrimitive<Status> status();
 }
