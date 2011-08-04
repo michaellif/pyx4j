@@ -17,34 +17,18 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
-import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.marketing.FeatureView;
 import com.propertyvista.crm.client.ui.crud.marketing.FeatureViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.FeatureCrudService;
 import com.propertyvista.domain.financial.offering.Feature;
 
-public class FeatureViewerActivity extends ViewerActivityBase<Feature> implements FeatureViewerView.Presenter {
-
-    private final FeatureActivityDelegate delegate;
+public class FeatureViewerActivity extends ViewerActivityBase<Feature> {
 
     @SuppressWarnings("unchecked")
     public FeatureViewerActivity(Place place) {
         super((FeatureViewerView) MarketingViewFactory.instance(FeatureViewerView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class));
-        delegate = new FeatureActivityDelegate((FeatureView) view);
         withPlace(place);
-    }
-
-    @Override
-    public Presenter getConcessionsPresenter() {
-        return delegate.getConcessionsPresenter();
-    }
-
-    @Override
-    public void onPopulateSuccess(Feature result) {
-        super.onPopulateSuccess(result);
-        delegate.populate(result.getPrimaryKey());
     }
 }

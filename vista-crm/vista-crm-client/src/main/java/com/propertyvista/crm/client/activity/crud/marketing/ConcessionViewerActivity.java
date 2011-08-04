@@ -32,5 +32,4 @@ public class ConcessionViewerActivity extends ViewerActivityBase<Concession> {
                 .create(ConcessionCrudService.class));
         withPlace(place);
     }
-
 }

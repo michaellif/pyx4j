@@ -13,11 +13,13 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface ServiceItemType extends IEntity {
 
+    @ToString
     IPrimitive<String> name();
 
     IPrimitive<Service.Type> serviceType();

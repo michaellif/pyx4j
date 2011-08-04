@@ -24,4 +24,7 @@ public class CrmFolderItemDecorator<E extends IEntity> extends TableFolderItemEd
         super(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), title, editable);
     }
 
+    public CrmFolderItemDecorator(CrmEntityFolder<E> parent) {
+        this(parent.getItemName(), parent.isEditable());
+    }
 }

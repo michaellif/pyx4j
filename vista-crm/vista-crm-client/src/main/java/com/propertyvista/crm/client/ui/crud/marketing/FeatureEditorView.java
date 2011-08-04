@@ -19,10 +19,7 @@ import com.pyx4j.site.client.ui.crud.IEditorView;
 
 import com.propertyvista.domain.financial.offering.Feature;
 
-public interface FeatureEditorView extends IEditorView<Feature>, FeatureView {
+public interface FeatureEditorView extends IEditorView<Feature> {
 
-    interface Presenter extends IEditorView.Presenter, FeatureView.Presenter {
-    }
-
-    void showSelectTypePopUp(AsyncCallback<Class<? extends Feature>> callback);
+    void showSelectTypePopUp(AsyncCallback<Feature.Type> callback);
 }

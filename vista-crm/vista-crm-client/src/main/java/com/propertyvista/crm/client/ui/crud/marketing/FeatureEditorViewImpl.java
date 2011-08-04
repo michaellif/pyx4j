@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.marketing;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
@@ -34,30 +35,20 @@ import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 
 public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implements FeatureEditorView {
 
-    private final FeatureViewDelegate delegate;
-
     public FeatureEditorViewImpl() {
-        super(CrmSiteMap.Properties.Feature.class);
-        delegate = new FeatureViewDelegate(false);
+        super(CrmSiteMap.Properties.Feature.class, new FeatureEditorForm());
     }
 
     @Override
-    public IListerView<Concession> getConcessionsListerView() {
-        return delegate.getConcessionsListerView();
-    }
-
-    @Override
-    public void showSelectTypePopUp(final AsyncCallback<Class<? extends Feature>> callback) {
+    public void showSelectTypePopUp(final AsyncCallback<Feature.Type> callback) {
         final SelectTypeBox box = new SelectTypeBox();
         box.setPopupPositionAndShow(new PositionCallback() {
             @Override
@@ -68,8 +59,8 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
         box.addCloseHandler(new CloseHandler<PopupPanel>() {
             @Override
             public void onClose(CloseEvent<PopupPanel> event) {
-                defaultCaption = box.getSelectedType().name;
-                callback.onSuccess(box.getSelectedType().type);
+                defaultCaption = box.getSelectedType().toString();
+                callback.onSuccess(box.getSelectedType());
             }
         });
 
@@ -80,30 +71,13 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
 
         private final I18n i18n = I18nFactory.getI18n(SelectTypeBox.class);
 
-        private class FeatureType {
-
-            private final String name;
-
-            private final Class<? extends Feature> type;
-
-            public FeatureType(Class<? extends Feature> type, String name) {
-                this.type = type;
-                this.name = name;
-            }
-
-            @Override
-            public String toString() {
-                return name;
-            }
-        }
-
-        private final CComboBox<FeatureType> features = new CComboBox<FeatureType>("Features", true);
+        private final CComboBox<Feature.Type> features = new CComboBox<Feature.Type>(i18n.tr("Types"), true);
 
         public SelectTypeBox() {
             super(false, true);
             setCaption(i18n.tr("Select Feature Type"));
 
-            final Button btnOk = new Button(i18n.tr("Ok"), new ClickHandler() {
+            final Button btnOk = new Button(i18n.tr("OK"), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     hide();
@@ -111,15 +85,14 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
             });
             btnOk.setEnabled(false);
 
-            Collection<FeatureType> opt = new ArrayList<FeatureType>();
-
-            // fill available variants here:
+            Collection<Feature.Type> opt = new ArrayList<Feature.Type>();
+            opt.addAll(EnumSet.allOf(Feature.Type.class));
 
             features.setOptions(opt);
             features.setWidth("100%");
-            features.addValueChangeHandler(new ValueChangeHandler<FeatureType>() {
+            features.addValueChangeHandler(new ValueChangeHandler<Feature.Type>() {
                 @Override
-                public void onValueChange(ValueChangeEvent<FeatureType> event) {
+                public void onValueChange(ValueChangeEvent<Feature.Type> event) {
                     btnOk.setEnabled(true);
                 }
             });
@@ -135,7 +108,7 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
             setSize("250px", "100px");
         }
 
-        public FeatureType getSelectedType() {
+        public Feature.Type getSelectedType() {
             return features.getValue();
         }
     }

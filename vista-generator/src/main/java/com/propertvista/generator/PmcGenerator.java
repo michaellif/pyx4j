@@ -105,7 +105,7 @@ public class PmcGenerator {
 
         item.type().setValue(type);
         item.name().setValue(RandomUtil.randomLetters(6));
-        item.description().setValue(RandomUtil.randomLetters(50));
+        item.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
 
         item.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
@@ -118,7 +118,7 @@ public class PmcGenerator {
 
         item.type().setValue(type);
         item.name().setValue(RandomUtil.randomLetters(6));
-        item.description().setValue(RandomUtil.randomLetters(50));
+        item.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
 
         item.priceType().setValue(RandomUtil.randomEnum(Feature.PriceType.class));
         item.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
@@ -145,15 +145,17 @@ public class PmcGenerator {
             concession.value().setValue(200d + RandomUtil.randomInt(100));
         }
 
+        concession.term().setValue(RandomUtil.random(Concession.Term.values()));
         concession.condition().setValue(RandomUtil.random(Concession.Condition.values()));
         concession.status().setValue(RandomUtil.random(Concession.Status.values()));
-
         if (concession.status().getValue() == Concession.Status.approved) {
             concession.approvedBy().setValue("Geoge W. Bush Jr.");
         }
 
         concession.effectiveDate().setValue(DataGenerator.randomDate(2));
         concession.expirationDate().setValue(DataGenerator.randomDate(4));
+
+        concession.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
 
         return concession;
     }

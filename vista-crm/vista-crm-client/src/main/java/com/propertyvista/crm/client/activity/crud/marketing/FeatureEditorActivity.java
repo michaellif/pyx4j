@@ -19,39 +19,33 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
-import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.marketing.FeatureEditorView;
-import com.propertyvista.crm.client.ui.crud.marketing.FeatureView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.FeatureCrudService;
 import com.propertyvista.domain.financial.offering.Feature;
 
-public class FeatureEditorActivity extends EditorActivityBase<Feature> implements FeatureEditorView.Presenter {
+public class FeatureEditorActivity extends EditorActivityBase<Feature> {
 
-    private final FeatureActivityDelegate delegate;
-
-    private Class<? extends Feature> featureClass;
+    private Feature.Type featureType;
 
     @SuppressWarnings("unchecked")
     public FeatureEditorActivity(Place place) {
         super((FeatureEditorView) MarketingViewFactory.instance(FeatureEditorView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class),
                 Feature.class);
-        delegate = new FeatureActivityDelegate((FeatureView) view);
         withPlace(place);
     }
 
     @Override
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
         if (isNewItem()) {
-            ((FeatureEditorView) view).showSelectTypePopUp(new AsyncCallback<Class<? extends Feature>>() {
+            ((FeatureEditorView) view).showSelectTypePopUp(new AsyncCallback<Feature.Type>() {
                 @Override
-                public void onSuccess(Class<? extends Feature> result) {
-                    featureClass = result;
+                public void onSuccess(Feature.Type result) {
+                    featureType = result;
                     FeatureEditorActivity.super.start(panel, eventBus);
                 }
 
@@ -66,13 +60,8 @@ public class FeatureEditorActivity extends EditorActivityBase<Feature> implement
     }
 
     @Override
-    public Presenter getConcessionsPresenter() {
-        return delegate.getConcessionsPresenter();
-    }
-
-    @Override
-    protected void createNewEntity(AsyncCallback<Feature> callback) {
-        assert (featureClass != null);
-        callback.onSuccess(EntityFactory.create(featureClass));
+    protected void initNewItem(Feature entity) {
+        super.initNewItem(entity);
+        entity.type().setValue(featureType);
     }
 }

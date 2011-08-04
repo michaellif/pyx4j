@@ -13,69 +13,111 @@
  */
 package com.propertyvista.crm.client.ui.crud.marketing;
 
-import com.google.gwt.dom.client.Style.Unit;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.client.ui.OptionsFilter;
+import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CLabel;
 
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
+import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
+import com.propertyvista.crm.client.ui.components.CrmFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 
-public abstract class FeatureEditorForm<T extends Feature> extends CrmEntityForm<T> {
+public class FeatureEditorForm extends CrmEntityForm<Feature> {
 
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
-
-    public FeatureEditorForm(Class<T> rootClass) {
-        super(rootClass);
+    public FeatureEditorForm() {
+        super(Feature.class, new CrmEditorsComponentFactory());
     }
 
-    public FeatureEditorForm(Class<T> rootClass, IEditableComponentFactory factory) {
-        super(rootClass, factory);
+    public FeatureEditorForm(IEditableComponentFactory factory) {
+        super(Feature.class, factory);
     }
-
-    protected abstract void addMoreTabs(VistaTabLayoutPanel tabPanel);
 
     @Override
     public IsWidget createContent() {
-        tabPanel.add(createGeneralTab(), i18n.tr("General"));
-
-        tabPanel.addDisable(new ScrollPanel(((FeatureView) getParentView()).getConcessionsListerView().asWidget()), i18n.tr("Concessions"));
-
-        addMoreTabs(tabPanel);
-
-        tabPanel.setDisableMode(isEditable());
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
-    }
-
-    @Override
-    public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
-    }
-
-    @Override
-    public int getActiveTab() {
-        return tabPanel.getSelectedIndex();
-    }
-
-    private Widget createGeneralTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
 
         main.add(split);
-        split.getLeftPanel().add(inject(proto().type()), 10);
+        split.getLeftPanel().add(inject(proto().type(), new CLabel()), 10);
+        split.getLeftPanel().add(inject(proto().name()), 10);
+        split.getLeftPanel().add(inject(proto().isMandatory()), 4);
 
-        split.getRightPanel().add(inject(proto().name()), 10);
+        split.getRightPanel().add(inject(proto().priceType()), 18);
+        split.getRightPanel().add(inject(proto().depositType()), 15);
+        split.getRightPanel().add(inject(proto().isRecurring()), 4);
 
-        main.add(inject(proto().description()), 43);
+        main.add(inject(proto().description()), 50);
+
+        main.add(new CrmHeader2Decorator(i18n.tr("Items:")));
+        main.add(inject(proto().items(), createItemsFolderEditor()));
 
         return new CrmScrollPanel(main);
+    }
+
+    private CEntityFolderEditor<ServiceItem> createItemsFolderEditor() {
+        return new CrmEntityFolder<ServiceItem>(ServiceItem.class, i18n.tr("Item"), isEditable()) {
+            private final CrmEntityFolder<ServiceItem> thisRef = this;
+
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().itemType(), "20em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
+//                columns.add(new EntityFolderColumnDescriptor(proto().element(), "15em"));
+                return columns;
+            }
+
+            @Override
+            protected CEntityFolderItemEditor<ServiceItem> createItem() {
+                return new CEntityFolderRowEditor<ServiceItem>(ServiceItem.class, columns()) {
+                    @Override
+                    public IFolderItemEditorDecorator<ServiceItem> createFolderItemDecorator() {
+                        return new CrmFolderItemDecorator<ServiceItem>(thisRef);
+                    }
+
+                    @Override
+                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                        CComponent<?> comp = super.createCell(column);
+                        if (column.getObject() == proto().itemType()) {
+                            if (comp instanceof CEntityComboBox<?>) {
+                                @SuppressWarnings("unchecked")
+                                CEntityComboBox<ServiceItemType> floorplanCompbo = (CEntityComboBox<ServiceItemType>) comp;
+                                floorplanCompbo.setOptionsFilter(new OptionsFilter<ServiceItemType>() {
+                                    @Override
+                                    public boolean acceptOption(ServiceItemType entity) {
+                                        Feature value = FeatureEditorForm.this.getValue();
+                                        if (value != null && !value.isNull()) {
+                                            return entity.featureType().equals(value.type());
+                                        }
+                                        return false;
+                                    }
+                                });
+                            }
+                        }
+                        return comp;
+                    }
+                };
+            }
+        };
     }
 }

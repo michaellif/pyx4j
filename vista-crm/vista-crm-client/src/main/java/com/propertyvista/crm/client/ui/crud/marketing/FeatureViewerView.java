@@ -17,8 +17,5 @@ import com.pyx4j.site.client.ui.crud.IViewerView;
 
 import com.propertyvista.domain.financial.offering.Feature;
 
-public interface FeatureViewerView extends IViewerView<Feature>, FeatureView {
-
-    interface Presenter extends IViewerView.Presenter, FeatureView.Presenter {
-    }
+public interface FeatureViewerView extends IViewerView<Feature> {
 }

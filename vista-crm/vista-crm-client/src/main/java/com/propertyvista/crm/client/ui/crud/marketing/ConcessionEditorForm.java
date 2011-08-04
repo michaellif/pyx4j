@@ -40,13 +40,17 @@ public class ConcessionEditorForm extends CrmEntityForm<Concession> {
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
 
         main.add(split);
-        split.getLeftPanel().add(inject(proto().type()), 15);
-        split.getLeftPanel().add(inject(proto().value()), 7);
-        split.getLeftPanel().add(inject(proto().condition()), 7);
-        split.getRightPanel().add(inject(proto().status()), 15);
-        split.getLeftPanel().add(inject(proto().approvedBy()), 20);
-        split.getLeftPanel().add(inject(proto().effectiveDate()), 8.2);
-        split.getLeftPanel().add(inject(proto().expirationDate()), 8.2);
+        split.getLeftPanel().add(inject(proto().type()), 12);
+        split.getLeftPanel().add(inject(proto().term()), 12);
+        split.getLeftPanel().add(inject(proto().value()), 6);
+        split.getLeftPanel().add(inject(proto().condition()), 8);
+
+        split.getRightPanel().add(inject(proto().status()), 8);
+        split.getRightPanel().add(inject(proto().approvedBy()), 20);
+        split.getRightPanel().add(inject(proto().effectiveDate()), 8.2);
+        split.getRightPanel().add(inject(proto().expirationDate()), 8.2);
+
+        main.add(inject(proto().description()), 50);
 
         return new CrmScrollPanel(main);
     }

@@ -26,4 +26,8 @@ public class CrmTableFolderDecorator<E extends IEntity> extends TableFolderEdito
     public CrmTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, String title, boolean editable) {
         super(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), title, editable);
     }
+
+    public CrmTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, CrmEntityFolder<E> parent) {
+        super(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), parent.getItemName(), parent.isEditable());
+    }
 }
