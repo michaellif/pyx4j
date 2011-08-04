@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on 2011-05-17
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.marketing;
+package com.propertyvista.crm.client.activity.crud.building.catalog;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
@@ -19,17 +19,16 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.marketing.ConcessionViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
-import com.propertyvista.crm.rpc.services.ConcessionCrudService;
-import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureViewerView;
+import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
+import com.propertyvista.crm.rpc.services.FeatureCrudService;
+import com.propertyvista.domain.financial.offering.Feature;
 
-public class ConcessionViewerActivity extends ViewerActivityBase<Concession> {
+public class FeatureViewerActivity extends ViewerActivityBase<Feature> {
 
     @SuppressWarnings("unchecked")
-    public ConcessionViewerActivity(Place place) {
-        super((ConcessionViewerView) UnitViewFactory.instance(ConcessionViewerView.class), (AbstractCrudService<Concession>) GWT
-                .create(ConcessionCrudService.class));
+    public FeatureViewerActivity(Place place) {
+        super((FeatureViewerView) MarketingViewFactory.instance(FeatureViewerView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class));
         withPlace(place);
     }
 }

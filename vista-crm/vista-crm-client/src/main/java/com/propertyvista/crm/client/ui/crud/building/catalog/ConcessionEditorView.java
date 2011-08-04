@@ -11,15 +11,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.marketing;
+package com.propertyvista.crm.client.ui.crud.building.catalog;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.pyx4j.site.client.ui.crud.IEditorView;
+
 import com.propertyvista.domain.financial.offering.Concession;
 
-public class ConcessionEditorViewImpl extends CrmEditorViewImplBase<Concession> implements ConcessionEditorView {
+public interface ConcessionEditorView extends IEditorView<Concession> {
 
-    public ConcessionEditorViewImpl() {
-        super(CrmSiteMap.Properties.Concession.class, new ConcessionEditorForm());
-    }
 }

@@ -11,12 +11,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.marketing;
+package com.propertyvista.crm.client.ui.crud.building.catalog;
 
-import com.pyx4j.site.client.ui.crud.IEditorView;
+import com.pyx4j.site.client.ui.crud.IViewerView;
 
 import com.propertyvista.domain.financial.offering.Concession;
 
-public interface ConcessionEditorView extends IEditorView<Concession> {
+public interface ConcessionViewerView extends IViewerView<Concession> {
 
 }

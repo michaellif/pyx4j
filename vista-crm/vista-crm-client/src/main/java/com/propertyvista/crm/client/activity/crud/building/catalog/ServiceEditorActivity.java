@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.marketing;
+package com.propertyvista.crm.client.activity.crud.building.catalog;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -23,30 +23,30 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.marketing.FeatureEditorView;
+import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
-import com.propertyvista.crm.rpc.services.FeatureCrudService;
-import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.crm.rpc.services.ServiceCrudService;
+import com.propertyvista.domain.financial.offering.Service;
 
-public class FeatureEditorActivity extends EditorActivityBase<Feature> {
+public class ServiceEditorActivity extends EditorActivityBase<Service> {
 
-    private Feature.Type featureType;
+    private Service.Type itemType;
 
     @SuppressWarnings("unchecked")
-    public FeatureEditorActivity(Place place) {
-        super((FeatureEditorView) MarketingViewFactory.instance(FeatureEditorView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class),
-                Feature.class);
+    public ServiceEditorActivity(Place place) {
+        super((ServiceEditorView) MarketingViewFactory.instance(ServiceEditorView.class), (AbstractCrudService<Service>) GWT.create(ServiceCrudService.class),
+                Service.class);
         withPlace(place);
     }
 
     @Override
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
         if (isNewItem()) {
-            ((FeatureEditorView) view).showSelectTypePopUp(new AsyncCallback<Feature.Type>() {
+            ((ServiceEditorView) view).showSelectTypePopUp(new AsyncCallback<Service.Type>() {
                 @Override
-                public void onSuccess(Feature.Type result) {
-                    featureType = result;
-                    FeatureEditorActivity.super.start(panel, eventBus);
+                public void onSuccess(Service.Type result) {
+                    itemType = result;
+                    ServiceEditorActivity.super.start(panel, eventBus);
                 }
 
                 @Override
@@ -60,8 +60,8 @@ public class FeatureEditorActivity extends EditorActivityBase<Feature> {
     }
 
     @Override
-    protected void initNewItem(Feature entity) {
+    protected void initNewItem(Service entity) {
         super.initNewItem(entity);
-        entity.type().setValue(featureType);
+        entity.type().setValue(itemType);
     }
 }

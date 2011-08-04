@@ -45,12 +45,14 @@ import com.propertyvista.crm.client.activity.crud.building.ParkingSpotViewerActi
 import com.propertyvista.crm.client.activity.crud.building.ParkingViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.RoofEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.RoofViewerActivity;
+import com.propertyvista.crm.client.activity.crud.building.catalog.ConcessionEditorActivity;
+import com.propertyvista.crm.client.activity.crud.building.catalog.ConcessionViewerActivity;
+import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureEditorActivity;
+import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureViewerActivity;
+import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceEditorActivity;
+import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceViewerActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
-import com.propertyvista.crm.client.activity.crud.marketing.ConcessionEditorActivity;
-import com.propertyvista.crm.client.activity.crud.marketing.ConcessionViewerActivity;
-import com.propertyvista.crm.client.activity.crud.marketing.FeatureEditorActivity;
-import com.propertyvista.crm.client.activity.crud.marketing.FeatureViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ContentActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ContentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ContentViewerActivity;
@@ -234,6 +236,16 @@ public class MainActivityMapper implements AppActivityMapper {
                     }
 
 // - Marketing-related:
+                } else if (place instanceof CrmSiteMap.Properties.Service) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new ServiceEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new ServiceViewerActivity(place);
+                        break;
+                    }
+
                 } else if (place instanceof CrmSiteMap.Properties.Feature) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:

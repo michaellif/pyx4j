@@ -16,20 +16,28 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
-import com.propertyvista.crm.client.ui.crud.marketing.ConcessionEditorView;
-import com.propertyvista.crm.client.ui.crud.marketing.ConcessionEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.ConcessionViewerView;
-import com.propertyvista.crm.client.ui.crud.marketing.ConcessionViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.FeatureEditorView;
-import com.propertyvista.crm.client.ui.crud.marketing.FeatureEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.FeatureViewerView;
-import com.propertyvista.crm.client.ui.crud.marketing.FeatureViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionEditorView;
+import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionViewerView;
+import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureEditorView;
+import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureViewerView;
+import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceEditorView;
+import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceViewerView;
+import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceViewerViewImpl;
 
 public class MarketingViewFactory extends ViewFactoryBase {
 
     public static IView<? extends IEntity> instance(Class<? extends IView<? extends IEntity>> type) {
         if (!map.containsKey(type)) {
-            if (FeatureViewerView.class.equals(type)) {
+            if (ServiceViewerView.class.equals(type)) {
+                map.put(type, new ServiceViewerViewImpl());
+            } else if (ServiceEditorView.class.equals(type)) {
+                map.put(type, new ServiceEditorViewImpl());
+            } else if (FeatureViewerView.class.equals(type)) {
                 map.put(type, new FeatureViewerViewImpl());
             } else if (FeatureEditorView.class.equals(type)) {
                 map.put(type, new FeatureEditorViewImpl());

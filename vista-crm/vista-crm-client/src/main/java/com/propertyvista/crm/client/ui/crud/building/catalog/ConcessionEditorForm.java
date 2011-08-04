@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.marketing;
+package com.propertyvista.crm.client.ui.crud.building.catalog;
 
 import com.google.gwt.user.client.ui.IsWidget;
 

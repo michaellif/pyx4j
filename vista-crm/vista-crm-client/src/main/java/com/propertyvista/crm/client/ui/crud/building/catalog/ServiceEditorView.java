@@ -11,15 +11,15 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.marketing;
+package com.propertyvista.crm.client.ui.crud.building.catalog;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.crud.IEditorView;
 
-import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Service;
 
-public interface FeatureEditorView extends IEditorView<Feature> {
+public interface ServiceEditorView extends IEditorView<Service> {
 
-    void showSelectTypePopUp(AsyncCallback<Feature.Type> callback);
+    void showSelectTypePopUp(AsyncCallback<Service.Type> callback);
 }

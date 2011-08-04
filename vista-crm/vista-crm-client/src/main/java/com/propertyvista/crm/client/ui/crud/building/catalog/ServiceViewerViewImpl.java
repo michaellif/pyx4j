@@ -11,16 +11,16 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.marketing;
+package com.propertyvista.crm.client.ui.crud.building.catalog;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Service;
 
-public class ConcessionViewerViewImpl extends CrmViewerViewImplBase<Concession> implements ConcessionViewerView {
+public class ServiceViewerViewImpl extends CrmViewerViewImplBase<Service> implements ServiceViewerView {
 
-    public ConcessionViewerViewImpl() {
-        super(CrmSiteMap.Properties.Concession.class, new ConcessionEditorForm(new CrmViewersComponentFactory()));
+    public ServiceViewerViewImpl() {
+        super(CrmSiteMap.Properties.Service.class, new ServiceEditorForm(new CrmViewersComponentFactory()));
     }
 }

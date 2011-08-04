@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.marketing;
+package com.propertyvista.crm.client.ui.crud.building.catalog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,18 +37,18 @@ import com.propertyvista.crm.client.ui.components.CrmFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
-public class FeatureEditorForm extends CrmEntityForm<Feature> {
+public class ServiceEditorForm extends CrmEntityForm<Service> {
 
-    public FeatureEditorForm() {
-        super(Feature.class, new CrmEditorsComponentFactory());
+    public ServiceEditorForm() {
+        super(Service.class, new CrmEditorsComponentFactory());
     }
 
-    public FeatureEditorForm(IEditableComponentFactory factory) {
-        super(Feature.class, factory);
+    public ServiceEditorForm(IEditableComponentFactory factory) {
+        super(Service.class, factory);
     }
 
     @Override
@@ -59,11 +59,8 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
         main.add(split);
         split.getLeftPanel().add(inject(proto().type(), new CLabel()), 10);
         split.getLeftPanel().add(inject(proto().name()), 10);
-        split.getLeftPanel().add(inject(proto().isMandatory()), 4);
 
-        split.getRightPanel().add(inject(proto().priceType()), 18);
         split.getRightPanel().add(inject(proto().depositType()), 15);
-        split.getRightPanel().add(inject(proto().isRecurring()), 4);
 
         main.add(inject(proto().description()), 50);
 
@@ -105,9 +102,9 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
                                 floorplanCompbo.setOptionsFilter(new OptionsFilter<ServiceItemType>() {
                                     @Override
                                     public boolean acceptOption(ServiceItemType entity) {
-                                        Feature value = FeatureEditorForm.this.getValue();
+                                        Service value = ServiceEditorForm.this.getValue();
                                         if (value != null && !value.isNull()) {
-                                            return entity.featureType().equals(value.type());
+                                            return entity.serviceType().equals(value.type());
                                         }
                                         return false;
                                     }

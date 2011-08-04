@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.building;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
+import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceLister;
 import com.propertyvista.crm.client.ui.crud.building.lockers.LockerAreaLister;
@@ -24,7 +25,6 @@ import com.propertyvista.crm.client.ui.crud.building.mech.ElevatorLister;
 import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
-import com.propertyvista.crm.client.ui.crud.marketing.ConcessionLister;
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;

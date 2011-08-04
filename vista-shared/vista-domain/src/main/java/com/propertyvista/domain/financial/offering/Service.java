@@ -15,6 +15,7 @@ package com.propertyvista.domain.financial.offering;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -60,7 +61,7 @@ public interface Service extends IEntity {
 
     IPrimitive<String> description();
 
-    // Double link - main dependency in item entity
+    @Owned
     IList<ServiceItem> items();
 
     IPrimitive<DepositType> depositType();

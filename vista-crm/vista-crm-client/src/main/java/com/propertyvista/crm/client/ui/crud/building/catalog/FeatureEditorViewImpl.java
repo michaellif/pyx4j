@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.marketing;
+package com.propertyvista.crm.client.ui.crud.building.catalog;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -71,7 +71,7 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
 
         private final I18n i18n = I18nFactory.getI18n(SelectTypeBox.class);
 
-        private final CComboBox<Feature.Type> features = new CComboBox<Feature.Type>(i18n.tr("Types"), true);
+        private final CComboBox<Feature.Type> types = new CComboBox<Feature.Type>(i18n.tr("Types"), true);
 
         public SelectTypeBox() {
             super(false, true);
@@ -88,9 +88,9 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
             Collection<Feature.Type> opt = new ArrayList<Feature.Type>();
             opt.addAll(EnumSet.allOf(Feature.Type.class));
 
-            features.setOptions(opt);
-            features.setWidth("100%");
-            features.addValueChangeHandler(new ValueChangeHandler<Feature.Type>() {
+            types.setOptions(opt);
+            types.setWidth("100%");
+            types.addValueChangeHandler(new ValueChangeHandler<Feature.Type>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<Feature.Type> event) {
                     btnOk.setEnabled(true);
@@ -98,7 +98,7 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
             });
 
             VerticalPanel vPanel = new VerticalPanel();
-            vPanel.add(features);
+            vPanel.add(types);
             vPanel.add(btnOk);
             vPanel.setCellHorizontalAlignment(btnOk, HasHorizontalAlignment.ALIGN_CENTER);
             vPanel.setSpacing(8);
@@ -109,7 +109,7 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
         }
 
         public Feature.Type getSelectedType() {
-            return features.getValue();
+            return types.getValue();
         }
     }
 }

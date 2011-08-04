@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.marketing;
+package com.propertyvista.crm.client.activity.crud.building.catalog;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
@@ -19,16 +19,16 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.marketing.FeatureViewerView;
+import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
-import com.propertyvista.crm.rpc.services.FeatureCrudService;
-import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.crm.rpc.services.ServiceCrudService;
+import com.propertyvista.domain.financial.offering.Service;
 
-public class FeatureViewerActivity extends ViewerActivityBase<Feature> {
+public class ServiceViewerActivity extends ViewerActivityBase<Service> {
 
     @SuppressWarnings("unchecked")
-    public FeatureViewerActivity(Place place) {
-        super((FeatureViewerView) MarketingViewFactory.instance(FeatureViewerView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class));
+    public ServiceViewerActivity(Place place) {
+        super((ServiceViewerView) MarketingViewFactory.instance(ServiceViewerView.class), (AbstractCrudService<Service>) GWT.create(ServiceCrudService.class));
         withPlace(place);
     }
 }

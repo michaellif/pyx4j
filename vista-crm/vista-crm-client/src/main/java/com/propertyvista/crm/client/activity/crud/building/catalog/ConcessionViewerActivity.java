@@ -11,25 +11,25 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.marketing;
+package com.propertyvista.crm.client.activity.crud.building.catalog;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.marketing.ConcessionEditorView;
+import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
 import com.propertyvista.crm.rpc.services.ConcessionCrudService;
 import com.propertyvista.domain.financial.offering.Concession;
 
-public class ConcessionEditorActivity extends EditorActivityBase<Concession> {
+public class ConcessionViewerActivity extends ViewerActivityBase<Concession> {
 
     @SuppressWarnings("unchecked")
-    public ConcessionEditorActivity(Place place) {
-        super((ConcessionEditorView) UnitViewFactory.instance(ConcessionEditorView.class), (AbstractCrudService<Concession>) GWT
-                .create(ConcessionCrudService.class), Concession.class);
+    public ConcessionViewerActivity(Place place) {
+        super((ConcessionViewerView) UnitViewFactory.instance(ConcessionViewerView.class), (AbstractCrudService<Concession>) GWT
+                .create(ConcessionCrudService.class));
         withPlace(place);
     }
 }

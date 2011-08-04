@@ -11,11 +11,16 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.marketing;
+package com.propertyvista.crm.client.ui.crud.building.catalog;
 
-import com.pyx4j.site.client.ui.crud.IViewerView;
-
+import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Feature;
 
-public interface FeatureViewerView extends IViewerView<Feature> {
+public class FeatureViewerViewImpl extends CrmViewerViewImplBase<Feature> implements FeatureViewerView {
+
+    public FeatureViewerViewImpl() {
+        super(CrmSiteMap.Properties.Feature.class, new FeatureEditorForm(new CrmViewersComponentFactory()));
+    }
 }
