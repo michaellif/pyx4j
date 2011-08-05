@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.propertvista.generator.BusinessDataGenerator;
 
-import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -28,9 +28,7 @@ import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PreloadConfig;
-import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 import com.propertyvista.portal.server.TestUtil;
@@ -55,9 +53,7 @@ public class ActivationServiceTest extends VistaDBTestBase {
         return TestServiceFactory.create(ActivationService.class);
     }
 
-    public void testUnitExistsEmpty() {
-        UnitSelectionCriteria criteria = EntityFactory.create(UnitSelectionCriteria.class);
-
+    public void testUnitIsNotExist() {
         ActivationService service = createService();
         service.unitExists(new UnitTestsAsyncCallback<Boolean>() {
             @Override
@@ -65,38 +61,17 @@ public class ActivationServiceTest extends VistaDBTestBase {
                 log.info("Received {}", result);
                 Assert.assertFalse("No unit found", result.booleanValue());
             }
-        }, criteria);
-    }
-
-    public void testUnitExistsWrongData() {
-        UnitSelectionCriteria criteria = EntityFactory.create(UnitSelectionCriteria.class);
-        criteria.floorplanName().setValue("DoesNotExist");
-        criteria.propertyCode().setValue("DoesNotExistAsWell");
-        criteria.availableFrom().setValue(new LogicalDate());
-        criteria.availableTo().setValue(new LogicalDate());
-
-        ActivationService service = createService();
-        service.unitExists(new UnitTestsAsyncCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean result) {
-                log.info("Received {}", result);
-                Assert.assertFalse("No unit found", result.booleanValue());
-            }
-        }, criteria);
+        }, new Key(Long.MAX_VALUE));
     }
 
     public void testUnitExists() {
-        UnitSelectionCriteria criteria = EntityFactory.create(UnitSelectionCriteria.class);
-        criteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
-        criteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
-
         ActivationService service = createService();
         service.unitExists(new UnitTestsAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
-                Assert.assertTrue("Units found", result.booleanValue());
+                Assert.assertTrue("Unit found", result.booleanValue());
             }
-        }, criteria);
+        }, new Key(1));
     }
 
     /**

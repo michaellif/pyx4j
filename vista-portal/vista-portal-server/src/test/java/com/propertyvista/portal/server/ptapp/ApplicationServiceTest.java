@@ -15,7 +15,6 @@ package com.propertyvista.portal.server.ptapp;
 
 import org.junit.Assert;
 
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
@@ -23,7 +22,6 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.PreloadConfig;
-import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
@@ -55,8 +53,6 @@ public class ApplicationServiceTest extends VistaDBTestBase {
     public void testGetCurrentApplicationNewBadCriteria() {
         HappyPath.step1createAccount();
 
-        UnitSelectionCriteria unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
-
         ApplicationService applicationService = createService();
         applicationService.getCurrentApplication(new UnitTestsAsyncCallback<CurrentApplication>() {
             @Override
@@ -69,6 +65,6 @@ public class ApplicationServiceTest extends VistaDBTestBase {
                 Assert.assertNotNull("Error", error);
                 Assert.assertEquals(UserRuntimeException.class, error.getClass());
             }
-        }, unitSelectionCriteria);
+        });
     }
 }

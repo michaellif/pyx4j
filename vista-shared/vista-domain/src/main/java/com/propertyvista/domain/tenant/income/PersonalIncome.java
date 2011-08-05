@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.ApplicationDocument;
 
-public interface TenantIncome extends IEntity {
+public interface PersonalIncome extends IEntity {
 
     @NotNull
     IPrimitive<IncomeSource> incomeSource();

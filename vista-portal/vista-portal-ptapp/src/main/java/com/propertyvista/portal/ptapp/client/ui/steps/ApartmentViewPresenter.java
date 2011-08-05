@@ -14,11 +14,7 @@
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
-import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 
 public interface ApartmentViewPresenter extends WizardStepPresenter<UnitSelection> {
-
-    // request available units by date period
-    void selectByDates(UnitSelectionCriteria entity);
 
 }

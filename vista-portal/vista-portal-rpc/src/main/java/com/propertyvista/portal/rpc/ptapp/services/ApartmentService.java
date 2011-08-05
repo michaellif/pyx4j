@@ -15,12 +15,13 @@ package com.propertyvista.portal.rpc.ptapp.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
+import com.pyx4j.commons.Key;
+
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
-import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 
 public interface ApartmentService extends AbstractWizardService<UnitSelection> {
 
-    public void retrieveUnitSelection(AsyncCallback<AvailableUnitsByFloorplan> callback, UnitSelectionCriteria criteria);
+    public void retrieveUnit(AsyncCallback<AptUnit> callback, Key unitId);
 
 }

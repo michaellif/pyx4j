@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.EntityServicesImpl;
@@ -47,7 +48,6 @@ import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.VistaBehavior;
-import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.PasswordChangeRequest;
 import com.propertyvista.portal.rpc.ptapp.PasswordRetrievalRequest;
@@ -67,9 +67,9 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
      * createAccount
      */
     @Override
-    public void unitExists(AsyncCallback<Boolean> callback, UnitSelectionCriteria selectionCriteria) {
-        log.debug("Checking if unit exists {}", selectionCriteria);
-        callback.onSuccess(new ApartmentServiceImpl().areUnitsAvailable(selectionCriteria));
+    public void unitExists(AsyncCallback<Boolean> callback, Key unitId) {
+        log.debug("Checking if unit exists {}", unitId);
+        callback.onSuccess(new ApartmentServiceImpl().isUnitExist(unitId));
     }
 
     public static boolean validEmailAddress(String email) {

@@ -52,10 +52,10 @@ import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.domain.financial.Money;
-import com.propertyvista.domain.tenant.income.TenantAsset;
-import com.propertyvista.domain.tenant.income.TenantAsset.AssetType;
+import com.propertyvista.domain.tenant.income.PersonalAsset;
+import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
-import com.propertyvista.domain.tenant.income.TenantIncome;
+import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
@@ -140,14 +140,14 @@ public class FinancialViewForm extends CEntityForm<TenantFinancialEditorDTO> {
         });
     }
 
-    private CEntityFolderEditor<TenantIncome> createIncomeFolderEditor() {
+    private CEntityFolderEditor<PersonalIncome> createIncomeFolderEditor() {
 
-        return new CEntityFolderEditor<TenantIncome>(TenantIncome.class) {
+        return new CEntityFolderEditor<PersonalIncome>(PersonalIncome.class) {
 
             @Override
-            protected IFolderEditorDecorator<TenantIncome> createFolderDecorator() {
+            protected IFolderEditorDecorator<PersonalIncome> createFolderDecorator() {
                 if (isSummaryViewMode()) {
-                    return new BoxReadOnlyFolderDecorator<TenantIncome>() {
+                    return new BoxReadOnlyFolderDecorator<PersonalIncome>() {
                         @Override
                         public void setFolder(CEntityFolderEditor<?> w) {
                             super.setFolder(w);
@@ -155,21 +155,21 @@ public class FinancialViewForm extends CEntityForm<TenantFinancialEditorDTO> {
                         }
                     };
                 } else {
-                    return new BoxFolderEditorDecorator<TenantIncome>(PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
+                    return new BoxFolderEditorDecorator<PersonalIncome>(PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
                             i18n.tr("Add an income source"));
                 }
             }
 
             @Override
-            protected CEntityFolderItemEditor<TenantIncome> createItem() {
+            protected CEntityFolderItemEditor<PersonalIncome> createItem() {
                 return new FinancialViewIncomeForm(summaryViewMode);
             }
 
         };
     }
 
-    private CEntityFolderEditor<TenantAsset> createAssetFolderEditorColumns() {
-        return new CEntityFolderEditor<TenantAsset>(TenantAsset.class) {
+    private CEntityFolderEditor<PersonalAsset> createAssetFolderEditorColumns() {
+        return new CEntityFolderEditor<PersonalAsset>(PersonalAsset.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
             {
@@ -180,9 +180,9 @@ public class FinancialViewForm extends CEntityForm<TenantFinancialEditorDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<TenantAsset> createFolderDecorator() {
+            protected IFolderEditorDecorator<PersonalAsset> createFolderDecorator() {
                 if (isSummaryViewMode()) {
-                    return new BoxReadOnlyFolderDecorator<TenantAsset>() {
+                    return new BoxReadOnlyFolderDecorator<PersonalAsset>() {
                         @Override
                         public void setFolder(CEntityFolderEditor<?> w) {
                             super.setFolder(w);
@@ -190,21 +190,21 @@ public class FinancialViewForm extends CEntityForm<TenantFinancialEditorDTO> {
                         }
                     };
                 } else {
-                    return new TableFolderEditorDecorator<TenantAsset>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
+                    return new TableFolderEditorDecorator<PersonalAsset>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
                             i18n.tr("Add an asset"));
                 }
             }
 
             @Override
-            protected CEntityFolderItemEditor<TenantAsset> createItem() {
-                return new CEntityFolderRowEditor<TenantAsset>(TenantAsset.class, columns) {
+            protected CEntityFolderItemEditor<PersonalAsset> createItem() {
+                return new CEntityFolderRowEditor<PersonalAsset>(PersonalAsset.class, columns) {
 
                     @Override
-                    public IFolderItemEditorDecorator<TenantAsset> createFolderItemDecorator() {
+                    public IFolderItemEditorDecorator<PersonalAsset> createFolderItemDecorator() {
                         if (isSummaryViewMode()) {
-                            return new BoxReadOnlyFolderItemDecorator<TenantAsset>(false);
+                            return new BoxReadOnlyFolderItemDecorator<PersonalAsset>(false);
                         } else {
-                            return new TableFolderItemEditorDecorator<TenantAsset>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+                            return new TableFolderItemEditorDecorator<PersonalAsset>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
                                     i18n.tr("Remove asset"));
                         }
                     }
@@ -225,7 +225,7 @@ public class FinancialViewForm extends CEntityForm<TenantFinancialEditorDTO> {
 
                         });
 
-                        get(proto().assetType()).addValueChangeHandler(new ValueChangeHandler<TenantAsset.AssetType>() {
+                        get(proto().assetType()).addValueChangeHandler(new ValueChangeHandler<PersonalAsset.AssetType>() {
 
                             @Override
                             public void onValueChange(ValueChangeEvent<AssetType> event) {

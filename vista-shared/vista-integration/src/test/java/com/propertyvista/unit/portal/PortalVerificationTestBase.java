@@ -34,9 +34,9 @@ import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
-import com.propertyvista.domain.tenant.income.TenantAsset;
+import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
-import com.propertyvista.domain.tenant.income.TenantIncome;
+import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
@@ -253,7 +253,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
 
         IDebugId debugID;
         int row = 0;
-        for (TenantIncome income : financial.incomes()) {
+        for (PersonalIncome income : financial.incomes()) {
             debugID = D.id(financial.incomes(), row);
             verifyIncome(debugID, detach(income));
             row++;
@@ -263,12 +263,12 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         //assertFalse(selenium.isElementPresent(D.id(proto(PotentialTenantFinancial.class).incomes(), row, proto(TenantIncome.class).())));
 
         row = 0;
-        for (TenantAsset asset : financial.assets()) {
+        for (PersonalAsset asset : financial.assets()) {
             debugID = D.id(financial.assets(), row);
             verifyAsset(debugID, detach(asset));
             row++;
         }
-        assertFalse(selenium.isElementPresent(D.id(proto(TenantFinancialEditorDTO.class).assets(), row, proto(TenantAsset.class).assetType())));
+        assertFalse(selenium.isElementPresent(D.id(proto(TenantFinancialEditorDTO.class).assets(), row, proto(PersonalAsset.class).assetType())));
 
         row = 0;
         for (TenantGuarantor guarantor : financial.guarantors()) {
@@ -279,7 +279,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertNotPresent(D.id(proto(TenantFinancialEditorDTO.class).guarantors(), row, proto(TenantGuarantor.class).name().firstName()));
     }
 
-    private void verifyIncome(IDebugId formDebugId, TenantIncome income) {
+    private void verifyIncome(IDebugId formDebugId, PersonalIncome income) {
         switch (income.incomeSource().getValue()) {
         case fulltime:
             assertEmployerForm(D.id(formDebugId, income.employer()), detach(income.employer()));
@@ -342,7 +342,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertValueOnForm(formDebugId, income.ends());
     }
 
-    private void verifyAsset(IDebugId debugID, TenantAsset asset) {
+    private void verifyAsset(IDebugId debugID, PersonalAsset asset) {
         assertValueOnForm(debugID, asset.assetType());
 
         //TODO VladS

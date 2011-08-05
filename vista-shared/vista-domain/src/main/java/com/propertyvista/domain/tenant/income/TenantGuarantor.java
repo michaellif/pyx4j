@@ -16,13 +16,17 @@ package com.propertyvista.domain.tenant.income;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
+import com.propertyvista.domain.ApplicationDocument;
 import com.propertyvista.domain.person.Person;
 
 public interface TenantGuarantor extends IEntity, Person {
@@ -42,9 +46,21 @@ public interface TenantGuarantor extends IEntity, Person {
     @NotNull
     IPrimitive<Relationship> relationship();
 
+    @Override
     @Caption(name = "Birth Date")
     @NotNull
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> birthDate();
 
+    @Owned
+    IList<ApplicationDocument> documents();
+
+// Financial:
+    @Owned
+    @Length(3)
+    IList<PersonalIncome> incomes();
+
+    @Owned
+    @Length(3)
+    IList<PersonalAsset> assets();
 }

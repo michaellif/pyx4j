@@ -31,7 +31,6 @@ import com.pyx4j.widgets.client.datepicker.DatePickerIDs;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.User;
-import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
@@ -67,10 +66,6 @@ public class DatePickerTestBase extends WizardSeleniumTestBase {
 
         //navigate to tenants page
         selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Apartment.class));
-        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(AptUnitDTO.class).unitType()));
-        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, "leaseTerm_12"));
-        String avlDate = selenium.getText(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(AptUnitDTO.class).avalableForRent()));
-        selenium.setValue(D.id(proto(UnitSelection.class).rentStart()), avlDate);
         saveAndContinue();
         selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Tenants.class));
     }

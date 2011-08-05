@@ -22,7 +22,6 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.tenant.Tenant;
@@ -31,8 +30,6 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
-import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
@@ -42,7 +39,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
     private final static Logger log = LoggerFactory.getLogger(ApplicationServiceImpl.class);
 
     @Override
-    public void getCurrentApplication(AsyncCallback<CurrentApplication> callback, UnitSelectionCriteria usCriteria) {
+    public void getCurrentApplication(AsyncCallback<CurrentApplication> callback) {
 
         User currentUser = PtAppContext.getCurrentUser();
         log.debug("Asking for current application for current user {}", currentUser);
@@ -78,12 +75,6 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
             }
         } else {
 
-            // TODO this message seems to be wrong, instead we should say that no units were found
-            if (!new ApartmentServiceImpl().areUnitsAvailable(usCriteria)) {
-                log.debug("Could not find building with propertyCode {}", usCriteria.propertyCode());
-                throw new UserRuntimeException("No units avalable");
-            }
-
             lease = EntityFactory.create(Lease.class);
             lease.status().setValue(Lease.Status.Draft);
             PersistenceServicesFactory.getPersistenceService().persist(lease);
@@ -99,12 +90,6 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
             progress = ApplicationProgressMgr.createApplicationProgress();
             progress.lease().set(lease);
             PersistenceServicesFactory.getPersistenceService().persist(progress);
-
-            // create unit selection with provided criteria
-            UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
-            unitSelection.selectionCriteria().set(usCriteria);
-            unitSelection.lease().set(lease);
-            PersistenceServicesFactory.getPersistenceService().persist(unitSelection);
 
         }
         PtAppContext.setCurrentLease(lease);

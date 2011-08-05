@@ -21,10 +21,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
 import com.propertyvista.domain.Application;
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
-import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
 import com.propertyvista.portal.server.TestUtil;
@@ -63,13 +61,8 @@ public class HappyPath {
     }
 
     public static Application step2createApplication() {
-        // start application process
-        UnitSelectionCriteria unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
-        unitSelectionCriteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
-        unitSelectionCriteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
-
         ApplicationServiceSync service = new ApplicationServiceSync();
-        CurrentApplication currentApplication = service.getCurrentApplication(unitSelectionCriteria);
+        CurrentApplication currentApplication = service.getCurrentApplication();
         return currentApplication.application;
     }
 
@@ -79,8 +72,6 @@ public class HappyPath {
         UnitSelection unitSelection = service.retrieve();
 
         Assert.assertNotNull("Unit selection", unitSelection);
-        Assert.assertNotNull("Retrieved units", unitSelection.availableUnits().units());
-        Assert.assertFalse("Found units", unitSelection.availableUnits().units().isEmpty());
 
         //        for (ApartmentUnit unit : unitSelection.availableUnits().units()) {
         //            log.debug("Found unit {}", unit);

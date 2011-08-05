@@ -29,7 +29,6 @@ import com.propertyvista.portal.ptapp.client.ui.CaptionViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.MainNavigViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.PtAppSiteView;
 import com.propertyvista.portal.ptapp.client.ui.SecondNavigViewImpl;
-import com.propertyvista.portal.ptapp.client.ui.steps.ApartmentUnitsTable;
 import com.propertyvista.portal.ptapp.client.ui.steps.PaymentViewForm;
 import com.propertyvista.portal.ptapp.client.ui.steps.SummaryViewForm;
 
@@ -199,51 +198,6 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
     }
 
     protected void initVistaApartmentViewStyles() {
-        String prefix = ApartmentUnitsTable.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitListHeader));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE5);
-        style.addProperty("width", "700px");
-        style.addProperty("height", "2em");
-        style.addProperty("margin-top", "-10px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitListHeader) + " td");
-        style.addProperty("line-height", "2em");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitRowPanel));
-        style.addProperty("background-color", "auto");
-        style.addProperty("border", "none");
-        style.addProperty("cursor", "pointer");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitRowPanel, ApartmentUnitsTable.StyleDependent.selected));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
-        style.addProperty("border-top", "1px solid #bbb");
-        style.addProperty("border-left", "1px solid #bbb");
-        style.addProperty("border-right", "1px solid #bbb");
-        style.addProperty("cursor", "default");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitRowPanel, ApartmentUnitsTable.StyleDependent.hover));
-        style.addProperty("background-color", ThemeColor.SELECTION);
-        style.addProperty("border-left", "1px solid");
-        style.addProperty("border-right", "1px solid");
-        style.addProperty("border-left-color", ThemeColor.SELECTION);
-        style.addProperty("border-right-color", ThemeColor.SELECTION);
-        style.addProperty("color", ThemeColor.SELECTION_TEXT);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitDetailPanel));
-        style.addProperty("border", "none");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitDetailPanel, ApartmentUnitsTable.StyleDependent.selected));
-        style.addProperty("border-bottom", "1px solid #bbb");
-        style.addProperty("border-left", "1px solid #bbb");
-        style.addProperty("border-right", "1px solid #bbb");
-        addStyle(style);
 
     }
 

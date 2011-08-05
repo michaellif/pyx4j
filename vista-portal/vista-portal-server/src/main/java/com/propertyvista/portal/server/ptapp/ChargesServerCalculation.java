@@ -74,8 +74,8 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         updateChargesFromObjects(charges, unitSelection, selectedUnit, tenantList, pets, vehicles);
     }
 
-    public static void updateChargesFromObjects(Charges charges, UnitSelection unitSelection, AptUnit selectedUnit, Tenant tenantList,
-            PetsDTO pets, IList<Vehicle> vehicles) {
+    public static void updateChargesFromObjects(Charges charges, UnitSelection unitSelection, AptUnit selectedUnit, Tenant tenantList, PetsDTO pets,
+            IList<Vehicle> vehicles) {
         double rentAmount = 0;
         double depositAmount = 0;
 
@@ -85,7 +85,6 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 //            depositAmount = selectedUnit.requiredDeposit().amount().getValue();
         }
 
-        charges.rentStart().setValue(unitSelection.rentStart().getValue());
         charges.monthlyCharges().charges().clear();
         charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.monthlyRent, rentAmount));
         charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.locker, 25)); // TODO make this dynamic

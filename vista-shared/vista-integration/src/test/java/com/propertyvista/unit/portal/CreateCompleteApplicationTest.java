@@ -45,14 +45,12 @@ import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
-import com.propertyvista.domain.tenant.income.TenantAsset;
+import com.propertyvista.domain.tenant.income.PersonalAsset;
+import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
-import com.propertyvista.domain.tenant.income.TenantIncome;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.dto.VehiclesDTO;
 import com.propertyvista.misc.BusinessRules;
-import com.propertyvista.portal.domain.dto.AptUnitDTO;
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
@@ -104,7 +102,6 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         ApplicationSummaryGDO summary = generator.createSummary(user, null);
 
         createAccount(user);
-        enterUnitSelection();
         enterTenantsPage(summary.tenants());
         enterTestInfoPages(summary.tenants());
         enterFinancialPages(summary.tenants());
@@ -142,13 +139,6 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         selenium.type(proto(AccountCreationRequest.class).password(), user.email().getValue());
         selenium.type("id=recaptcha_response_field", "x");
         selenium.click(VistaFormsDebugId.Auth_LetsStart);
-    }
-
-    private void enterUnitSelection() {
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Apartment.class));
-        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 0, proto(AptUnitDTO.class).unitType()));
-        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 0, "leaseTerm_12"));
-        saveAndContinue();
     }
 
     private void enterTenantsPage(List<TenantSummaryGDO> tenantsSummaryList) {
@@ -311,14 +301,14 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
     private void enterFinancialForm(TenantFinancialEditorDTO tenantFin) {
         //incomes
         int num = 0;
-        for (TenantIncome income : tenantFin.incomes()) {
+        for (PersonalIncome income : tenantFin.incomes()) {
             selenium.click(D.id(tenantFin.incomes(), FormNavigationDebugId.Form_Add));
             enterIncomeRow(D.id(tenantFin.incomes(), num), detach(income));
             num++;
         }
 
         num = 0;
-        for (TenantAsset asset : tenantFin.assets()) {
+        for (PersonalAsset asset : tenantFin.assets()) {
             selenium.click(D.id(tenantFin.assets(), FormNavigationDebugId.Form_Add));
             enterAssetRow(D.id(tenantFin.assets(), num), detach(asset));
             num++;
@@ -333,7 +323,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
 
     }
 
-    private void enterIncomeRow(IDebugId formDebugId, TenantIncome income) {
+    private void enterIncomeRow(IDebugId formDebugId, PersonalIncome income) {
         setValueOnForm(formDebugId, income.incomeSource());
 
         switch (income.incomeSource().getValue()) {
@@ -398,7 +388,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         setValueOnForm(formDebugId, income.ends());
     }
 
-    private void enterAssetRow(IDebugId formDebugId, TenantAsset asset) {
+    private void enterAssetRow(IDebugId formDebugId, PersonalAsset asset) {
         setValueOnForm(formDebugId, asset.assetType());
         setValueOnForm(formDebugId, asset.percent());
         setValueOnForm(formDebugId, asset.assetValue());

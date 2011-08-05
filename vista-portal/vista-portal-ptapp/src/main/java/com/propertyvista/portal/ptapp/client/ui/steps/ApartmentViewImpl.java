@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 
 public class ApartmentViewImpl extends WizardStepViewImpl<UnitSelection, ApartmentViewPresenter> implements ApartmentView {
@@ -29,8 +28,4 @@ public class ApartmentViewImpl extends WizardStepViewImpl<UnitSelection, Apartme
         ((ApartmentViewForm) getForm()).setPresenter(getPresenter());
     }
 
-    @Override
-    public void setAvailableUnits(AvailableUnitsByFloorplan availableUnits) {
-        ((ApartmentViewForm) getForm()).setAvailableUnits(availableUnits);
-    }
 }

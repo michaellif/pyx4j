@@ -78,12 +78,6 @@ public class ApartmentServiceTest extends VistaDBTestBase {
         }, null);
 
         Assert.assertNotNull("Unit selection", unitSelection);
-        Assert.assertNotNull("Retrieved units", unitSelection.availableUnits().units());
-        Assert.assertFalse("Found units", unitSelection.availableUnits().units().isEmpty());
-
-        // select the first unit
-        Assert.assertTrue("No unit selected at this point", unitSelection.selectedUnitId().isNull());
-        unitSelection.selectedUnitId().setValue(unitSelection.availableUnits().units().get(0).id().getValue());
 
         // save unit selection
         apartmentService.save(new UnitTestsAsyncCallback<UnitSelection>() {
@@ -134,17 +128,12 @@ public class ApartmentServiceTest extends VistaDBTestBase {
             }
         }, unitSelection);
 
-        Assert.assertNotNull("Retrieved units", unitSelection.availableUnits().units());
-        Assert.assertFalse("Found units", unitSelection.availableUnits().units().isEmpty());
-
         // make sure that generated values are correct
         // now let's load unit selection
         apartmentService.retrieve(new UnitTestsAsyncCallback<UnitSelection>() {
             @Override
             public void onSuccess(UnitSelection result) {
                 Assert.assertFalse("Result", result.isNull());
-                log.debug("Two dates are {} {}", unitSelection.selectionCriteria().availableFrom().getValue().getTime(), result.selectionCriteria()
-                        .availableFrom().getValue().getTime());
                 TestUtil.assertEqual("UnitSelection", unitSelection, result);
                 unitSelection = result; // update local unit
             }

@@ -13,11 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 
 public interface ApartmentView extends WizardStepView<UnitSelection, ApartmentViewPresenter> {
-
-    public void setAvailableUnits(AvailableUnitsByFloorplan availableUnits);
 
 }

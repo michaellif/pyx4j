@@ -21,7 +21,6 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
-import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
 
 /**
@@ -40,7 +39,7 @@ public interface ApplicationService extends IService {
      * @throws UserRuntimeException
      *             if search criteria did not yield any results
      */
-    public void getCurrentApplication(AsyncCallback<CurrentApplication> callback, UnitSelectionCriteria request);
+    public void getCurrentApplication(AsyncCallback<CurrentApplication> callback);
 
     public void getApplicationProgress(AsyncCallback<ApplicationProgress> callback, ApplicationWizardStep currentStep, ApplicationWizardSubstep substep);
 

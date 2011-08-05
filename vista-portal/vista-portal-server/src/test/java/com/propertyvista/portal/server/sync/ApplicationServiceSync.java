@@ -18,14 +18,13 @@ import org.junit.Assert;
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 
-import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 
 public class ApplicationServiceSync {
     private CurrentApplication currentApplication;
 
-    public CurrentApplication getCurrentApplication(UnitSelectionCriteria unitSelectionCriteria) {
+    public CurrentApplication getCurrentApplication() {
         currentApplication = null;
 
         ApplicationService applicationService = TestServiceFactory.create(ApplicationService.class);
@@ -36,7 +35,7 @@ public class ApplicationServiceSync {
                 Assert.assertFalse("Application", result.application.isNull());
                 currentApplication = result;
             }
-        }, unitSelectionCriteria);
+        });
 
         Assert.assertNotNull(currentApplication);
         Assert.assertNotNull(currentApplication.application);

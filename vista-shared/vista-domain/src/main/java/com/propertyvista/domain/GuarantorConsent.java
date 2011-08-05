@@ -7,19 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-09
- * @author vlads
+ * Created on Aug 4, 2011
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.domain;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-public interface Application extends IEntity, IUserEntity {
+public interface GuarantorConsent extends IEntity {
 
     @Translatable
     public enum Status {
@@ -28,9 +27,7 @@ public interface Application extends IEntity, IUserEntity {
 
         created,
 
-        submited,
-
-        returned;
+        submited;
 
         @Override
         public String toString() {
@@ -39,7 +36,5 @@ public interface Application extends IEntity, IUserEntity {
     }
 
     IPrimitive<Status> status();
-
-    IList<GuarantorConsent> guarantorConsents();
 
 }

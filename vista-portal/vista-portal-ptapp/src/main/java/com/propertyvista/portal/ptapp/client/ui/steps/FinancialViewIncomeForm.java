@@ -48,11 +48,11 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoSocialServices;
 import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.IncomeSource;
-import com.propertyvista.domain.tenant.income.TenantIncome;
+import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
-public class FinancialViewIncomeForm extends CEntityFolderItemEditor<TenantIncome> {
+public class FinancialViewIncomeForm extends CEntityFolderItemEditor<PersonalIncome> {
 
     private static I18n i18n = I18nFactory.getI18n(FinancialViewIncomeForm.class);
 
@@ -61,7 +61,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItemEditor<TenantIncom
     private ApplicationDocumentsFolderUploader fileUpload;
 
     public FinancialViewIncomeForm(boolean summaryViewMode) {
-        super(TenantIncome.class);
+        super(PersonalIncome.class);
         this.summaryViewMode = summaryViewMode;
     }
 
@@ -101,16 +101,16 @@ public class FinancialViewIncomeForm extends CEntityFolderItemEditor<TenantIncom
     }
 
     @Override
-    public IFolderItemEditorDecorator<TenantIncome> createFolderItemDecorator() {
+    public IFolderItemEditorDecorator<PersonalIncome> createFolderItemDecorator() {
         if (summaryViewMode) {
-            return new BoxReadOnlyFolderItemDecorator<TenantIncome>(!isFirst());
+            return new BoxReadOnlyFolderItemDecorator<PersonalIncome>(!isFirst());
         } else {
-            return new BoxFolderItemEditorDecorator<TenantIncome>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover());
+            return new BoxFolderItemEditorDecorator<PersonalIncome>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover());
         }
     }
 
     @Override
-    public void populate(TenantIncome value) {
+    public void populate(PersonalIncome value) {
         super.populate(value);
         setVisibility(value.incomeSource().getValue());
         if (value != null && fileUpload != null) {

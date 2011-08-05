@@ -280,16 +280,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
             content.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
             content.getElement().getStyle().setPaddingLeft(1, Unit.EM);
 
-            Widget label = inject(proto().unitSelection().selectedLeaseTerm()).asWidget();
-            label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            content.add(DecorationUtils.inline(label, "auto"));
-            label = new HTML("&nbsp;" + i18n.tr("month Rent"));
-            label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            content.add(DecorationUtils.inline(label));
-
-            content.add(DecorationUtils.block(new HTML()));
-
-            label = inject(proto().selectedUnit().unitRent()).asWidget();
+            Widget label = inject(proto().selectedUnit().unitRent()).asWidget();
             label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             content.add(DecorationUtils.inline(label, "auto"));
             label = new HTML("&nbsp;/ " + i18n.tr("month"));

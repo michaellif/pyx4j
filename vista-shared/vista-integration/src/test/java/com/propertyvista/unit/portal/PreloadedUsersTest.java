@@ -25,8 +25,6 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.User;
-import com.propertyvista.portal.domain.dto.AptUnitDTO;
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.server.common.reference.SharedData;
@@ -52,34 +50,11 @@ public class PreloadedUsersTest extends PortalVerificationTestBase {
         selenium.click(CrudDebugId.Criteria_Submit);
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Apartment.class)));
 
-//TODO - there is no unitSelection() in ApplicationSummaryDTO currently!...           
-//        verifyAptPage(summary.unitSelection());
-
         verifyTenantsPage(summary.tenants(), true);
         verifyInfoPages(summary.tenants(), true);
         verifyFinancialPages(summary.tenants(), true);
         verifyPetsPages(summary.lease().pets(), false);
 
-    }
-
-    private void verifyAptPage(UnitSelection unitSel) {
-        assertVisible(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Apartment.class));
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Apartment.class));
-
-        //verify all of them
-        int num = 0;
-        //TODO VLAD:: why this always returns empty list? How to do that properly? 
-        int size2 = unitSel.availableUnits().units().size();
-        for (AptUnitDTO aUnit : unitSel.availableUnits().units()) {
-            assertAptUnitForm(D.id(unitSel.availableUnits().units(), num), detach(aUnit));
-            num++;
-        }
-
-        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(AptUnitDTO.class).unitType()));
-        selenium.click(D.id(proto(UnitSelection.class).availableUnits().units(), 1, "leaseTerm_12"));
-        String avlDate = selenium.getText(D.id(proto(UnitSelection.class).availableUnits().units(), 1, proto(AptUnitDTO.class).avalableForRent()));
-        selenium.setValue(D.id(proto(UnitSelection.class).rentStart()), avlDate);
-        saveAndContinue();
     }
 
 }

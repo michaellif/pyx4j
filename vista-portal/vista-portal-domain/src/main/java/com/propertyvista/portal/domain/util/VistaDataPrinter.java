@@ -22,12 +22,11 @@ import com.propertyvista.domain.User;
 import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineSelectable;
-import com.propertyvista.domain.tenant.income.TenantAsset;
+import com.propertyvista.domain.tenant.income.PersonalAsset;
+import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
-import com.propertyvista.domain.tenant.income.TenantIncome;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.dto.VehiclesDTO;
-import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Summary;
@@ -151,7 +150,7 @@ public class VistaDataPrinter {
         sb.append("\nFinancial Info\n");
 
         sb.append("Incomes\n");
-        for (TenantIncome income : financial.incomes()) {
+        for (PersonalIncome income : financial.incomes()) {
             sb.append("\t");
             sb.append(income.incomeSource().getValue());
             sb.append(" $");
@@ -166,7 +165,7 @@ public class VistaDataPrinter {
         }
 
         sb.append("Assets\n");
-        for (TenantAsset asset : financial.assets()) {
+        for (PersonalAsset asset : financial.assets()) {
             sb.append("\t");
             sb.append(asset.assetType().getValue());
             sb.append(" $");
@@ -261,38 +260,7 @@ public class VistaDataPrinter {
 
     public static String print(UnitSelection unitSelection) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Criteria\n\t");
-        sb.append(unitSelection.selectionCriteria());
-        sb.append("\n\n");
-
-        sb.append(unitSelection.availableUnits().units().size());
-        sb.append(" available units\n");
-        for (AptUnitDTO unit : unitSelection.availableUnits().units()) {
-            sb.append("\t");
-            //            sb.append(unit.suiteNumber().getStringView());
-            //            sb.append(" ");
-            sb.append(unit.bedrooms().getValue()).append(" beds, ");
-            sb.append(unit.bathrooms().getValue()).append(" baths,");
-            sb.append(" ");
-            sb.append(unit.area().getValue()).append(", sq ft");
-
-            sb.append(" available on ");
-            sb.append(unit.avalableForRent().getStringView());
-
-            //            log.info("Available {}", unit.building());
-
-            //sb.append(", status: ").append(unit.status().getStringView());
-
-            sb.append("\n");
-
-            // show rent
-            sb.append("\t\t");
-            sb.append(unit.unitRent().getValue()).append("");
-            sb.append("\n");
-
-            sb.append("\t\tDeposit: $").append(unit.requiredDeposit().getValue()).append("\n");
-        }
-
+        sb.append(unitSelection.selectedUnitId().getValue());
         return sb.toString();
     }
 

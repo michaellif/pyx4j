@@ -15,12 +15,9 @@ package com.propertyvista.portal.ptapp.client.activity.steps;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
-import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.ptapp.client.ui.steps.ApartmentView;
 import com.propertyvista.portal.ptapp.client.ui.steps.ApartmentViewPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
@@ -35,17 +32,4 @@ public class ApartmentActivity extends WizardStepActivity<UnitSelection, Apartme
         withPlace(place);
     }
 
-    @Override
-    public void selectByDates(UnitSelectionCriteria entity) {
-        srv.retrieveUnitSelection(new DefaultAsyncCallback<AvailableUnitsByFloorplan>() {
-
-            @Override
-            public void onSuccess(AvailableUnitsByFloorplan result) {
-                log.debug("received AvailableUnits {}", result.units().size());
-                ((ApartmentView) getView()).setAvailableUnits(result);
-            }
-
-        }, entity);
-
-    }
 }

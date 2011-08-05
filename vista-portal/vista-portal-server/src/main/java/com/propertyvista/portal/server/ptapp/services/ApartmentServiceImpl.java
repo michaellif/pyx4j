@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.server.ptapp.services;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,16 +24,11 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.portal.domain.ptapp.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
-import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
-import com.propertyvista.portal.server.ptapp.util.Converter;
 
 public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implements ApartmentService {
 
@@ -53,106 +46,32 @@ public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implement
             //            log.info("Loaded existing unit selection {}", unitSelection);
         }
 
-        //        log.info("Found unit selection\n{}", PrintUtil.print(unitSelection));
-        log.debug("Loading unit selection with criteria {}", unitSelection.selectionCriteria());
-
-        loadTransientData(unitSelection);
-
         callback.onSuccess(unitSelection);
     }
 
     @Override
     public void save(AsyncCallback<UnitSelection> callback, UnitSelection unitSelection) {
         log.debug("Saving unit selection\n{}", VistaDataPrinter.print(unitSelection));
-        log.debug("Saving unit selection with criteria {}", unitSelection.selectionCriteria());
 
         saveApplicationEntity(unitSelection);
-
-        loadTransientData(unitSelection);
 
         callback.onSuccess(unitSelection);
     }
 
     @Override
-    public void retrieveUnitSelection(AsyncCallback<AvailableUnitsByFloorplan> callback, UnitSelectionCriteria selectionCriteria) {
-        callback.onSuccess(loadAvailableUnits(selectionCriteria));
+    public void retrieveUnit(AsyncCallback<AptUnit> callback, Key unitId) {
+        AptUnit unit = PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, unitId);
+        callback.onSuccess(unit);
     }
 
-    public void loadTransientData(UnitSelection unitSelection) {
-        unitSelection.availableUnits().set(loadAvailableUnits(unitSelection.selectionCriteria()));
-    }
-
-    public EntityQueryCriteria<AptUnit> createAptUnitCriteria(UnitSelectionCriteria selectionCriteria) {
-        log.info("Looking for units from {} to {}", selectionCriteria.availableFrom().getStringView(), selectionCriteria.availableTo().getStringView());
-
-        // find building first, don't use building from unit selection
-        EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
-        buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), selectionCriteria.propertyCode().getValue()));
-        Building building = PersistenceServicesFactory.getPersistenceService().retrieve(buildingCriteria);
-        if (building == null) {
-            log.debug("Could not find building for propertyCode {}", selectionCriteria.propertyCode().getStringView());
-            return null;
+    public boolean isUnitExist(Key unitId) {
+        AptUnit unit = PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, unitId);
+        if (unit != null) {
+            log.debug("Unit {} is found", unit.getStringView());
+        } else {
+            log.debug("Unit is not found");
         }
-
-        // find floor plan
-        EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
-        floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), selectionCriteria.floorplanName().getValue()));
-        floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
-        Floorplan floorplan = PersistenceServicesFactory.getPersistenceService().retrieve(floorplanCriteria);
-
-        if (floorplan == null) {
-            log.debug("Could not find floorplan {}", selectionCriteria.floorplanName());
-            return null;
-        }
-
-        // find units
-        log.debug("Found floorplan {}, now can look for Units in building {}", floorplan, building);
-        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
-        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
-
-        if (!selectionCriteria.availableFrom().isNull()) {
-            criteria.add(new PropertyCriterion(criteria.proto().avalableForRent(), PropertyCriterion.Restriction.GREATER_THAN_OR_EQUAL, selectionCriteria
-                    .availableFrom().getValue()));
-        }
-        if (!selectionCriteria.availableTo().isNull()) {
-            criteria.add(new PropertyCriterion(criteria.proto().avalableForRent(), PropertyCriterion.Restriction.LESS_THAN_OR_EQUAL, selectionCriteria
-                    .availableTo().getValue()));
-        }
-        return criteria;
-    }
-
-    public boolean areUnitsAvailable(UnitSelectionCriteria selectionCriteria) {
-        EntityQueryCriteria<AptUnit> criteria = createAptUnitCriteria(selectionCriteria);
-        if (criteria == null) {
-            log.info("Could not construct a valid criteria based on selection criteria");
-            return false;
-        }
-        int count = PersistenceServicesFactory.getPersistenceService().count(criteria);
-        log.debug("Found {} units", count);
-        return (count > 0);
-    }
-
-    public AvailableUnitsByFloorplan loadAvailableUnits(UnitSelectionCriteria selectionCriteria) {
-        log.debug("Loading available units {}", selectionCriteria);
-        AvailableUnitsByFloorplan availableUnits = EntityFactory.create(AvailableUnitsByFloorplan.class);
-        EntityQueryCriteria<AptUnit> criteria = createAptUnitCriteria(selectionCriteria);
-        if (criteria == null) {
-            return availableUnits;
-        }
-        List<AptUnit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
-        log.debug("Found {} units", units.size());
-        if (!units.isEmpty()) {
-            AptUnit firstUnit = units.get(0);
-            Floorplan floorplan = firstUnit.floorplan();
-
-            availableUnits.floorplan().set(Converter.convert(floorplan));
-
-            for (AptUnit unit : units) {
-                availableUnits.units().add(Converter.convert(unit));
-            }
-        }
-        return availableUnits;
+        return unit != null;
     }
 
 }

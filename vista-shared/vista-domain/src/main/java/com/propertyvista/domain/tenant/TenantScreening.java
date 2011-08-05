@@ -27,9 +27,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.ApplicationDocument;
 import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.tenant.income.TenantAsset;
+import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
-import com.propertyvista.domain.tenant.income.TenantIncome;
+import com.propertyvista.domain.tenant.income.PersonalIncome;
 
 public interface TenantScreening extends IEntity, TenantScreeningSecureInfoFragment {
 
@@ -56,11 +56,11 @@ public interface TenantScreening extends IEntity, TenantScreeningSecureInfoFragm
 // Financial:
     @Owned
     @Length(3)
-    IList<TenantIncome> incomes();
+    IList<PersonalIncome> incomes();
 
     @Owned
     @Length(3)
-    IList<TenantAsset> assets();
+    IList<PersonalAsset> assets();
 
     @Owned
     @Length(2)

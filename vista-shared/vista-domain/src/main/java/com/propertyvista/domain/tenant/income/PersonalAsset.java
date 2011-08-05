@@ -23,7 +23,7 @@ import com.pyx4j.i18n.shared.Translation;
 
 import com.propertyvista.domain.financial.Money;
 
-public interface TenantAsset extends IEntity {
+public interface PersonalAsset extends IEntity {
 
     public enum AssetType {
 

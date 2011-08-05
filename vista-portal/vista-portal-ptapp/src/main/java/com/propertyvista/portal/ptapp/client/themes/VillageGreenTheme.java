@@ -14,11 +14,8 @@
 package com.propertyvista.portal.ptapp.client.themes;
 
 import com.pyx4j.widgets.client.style.ColorFactory;
-import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
-
-import com.propertyvista.portal.ptapp.client.ui.steps.ApartmentUnitsTable;
 
 public class VillageGreenTheme extends VistaTheme {
 
@@ -54,22 +51,5 @@ public class VillageGreenTheme extends VistaTheme {
     @Override
     protected void initVistaApartmentViewStyles() {
         super.initVistaApartmentViewStyles();
-
-        String prefix = ApartmentUnitsTable.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitListHeader));
-        style.addProperty("background-color", "#558E00");
-        style.addProperty("color", ThemeColor.SELECTION_TEXT);
-        style.addProperty("font-weight", "bolder");
-        style.addProperty("width", "700px");
-        style.addProperty("height", "2em");
-        style.addProperty("margin-top", "-10px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ApartmentUnitsTable.StyleSuffix.UnitRowPanel, ApartmentUnitsTable.StyleDependent.selected));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
-        style.addProperty("border", "1px solid #bbb");
-        style.addProperty("cursor", "default");
-        addStyle(style);
     }
 }

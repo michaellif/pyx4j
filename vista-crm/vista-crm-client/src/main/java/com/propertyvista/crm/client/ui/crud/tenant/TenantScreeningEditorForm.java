@@ -68,10 +68,10 @@ import com.propertyvista.domain.ApplicationDocument.DocumentType;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.tenant.TenantScreening;
-import com.propertyvista.domain.tenant.income.TenantAsset;
-import com.propertyvista.domain.tenant.income.TenantAsset.AssetType;
+import com.propertyvista.domain.tenant.income.PersonalAsset;
+import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
-import com.propertyvista.domain.tenant.income.TenantIncome;
+import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.misc.BusinessRules;
 
@@ -328,25 +328,25 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         return new ScrollPanel(main);
     }
 
-    private CEntityFolderEditor<TenantIncome> createIncomeFolderEditor() {
+    private CEntityFolderEditor<PersonalIncome> createIncomeFolderEditor() {
 
-        return new CEntityFolderEditor<TenantIncome>(TenantIncome.class) {
+        return new CEntityFolderEditor<PersonalIncome>(PersonalIncome.class) {
 
             @Override
-            protected IFolderEditorDecorator<TenantIncome> createFolderDecorator() {
-                return new BoxFolderEditorDecorator<TenantIncome>(CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add an income source"),
+            protected IFolderEditorDecorator<PersonalIncome> createFolderDecorator() {
+                return new BoxFolderEditorDecorator<PersonalIncome>(CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add an income source"),
                         TenantScreeningEditorForm.this.isEditable());
             }
 
             @Override
-            protected CEntityFolderItemEditor<TenantIncome> createItem() {
+            protected CEntityFolderItemEditor<PersonalIncome> createItem() {
                 return new TenantFinancialViewIncomeForm(!TenantScreeningEditorForm.this.isEditable());
             }
         };
     }
 
-    private CEntityFolderEditor<TenantAsset> createAssetFolderEditorColumns() {
-        return new CEntityFolderEditor<TenantAsset>(TenantAsset.class) {
+    private CEntityFolderEditor<PersonalAsset> createAssetFolderEditorColumns() {
+        return new CEntityFolderEditor<PersonalAsset>(PersonalAsset.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
             {
@@ -357,18 +357,18 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             }
 
             @Override
-            protected IFolderEditorDecorator<TenantAsset> createFolderDecorator() {
-                return new TableFolderEditorDecorator<TenantAsset>(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add an asset"),
+            protected IFolderEditorDecorator<PersonalAsset> createFolderDecorator() {
+                return new TableFolderEditorDecorator<PersonalAsset>(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add an asset"),
                         TenantScreeningEditorForm.this.isEditable());
             }
 
             @Override
-            protected CEntityFolderItemEditor<TenantAsset> createItem() {
-                return new CEntityFolderRowEditor<TenantAsset>(TenantAsset.class, columns) {
+            protected CEntityFolderItemEditor<PersonalAsset> createItem() {
+                return new CEntityFolderRowEditor<PersonalAsset>(PersonalAsset.class, columns) {
 
                     @Override
-                    public IFolderItemEditorDecorator<TenantAsset> createFolderItemDecorator() {
-                        return new TableFolderItemEditorDecorator<TenantAsset>(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(),
+                    public IFolderItemEditorDecorator<PersonalAsset> createFolderItemDecorator() {
+                        return new TableFolderItemEditorDecorator<PersonalAsset>(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(),
                                 i18n.tr("Remove asset"), TenantScreeningEditorForm.this.isEditable());
                     }
 
@@ -388,7 +388,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
                         });
 
-                        get(proto().assetType()).addValueChangeHandler(new ValueChangeHandler<TenantAsset.AssetType>() {
+                        get(proto().assetType()).addValueChangeHandler(new ValueChangeHandler<PersonalAsset.AssetType>() {
 
                             @Override
                             public void onValueChange(ValueChangeEvent<AssetType> event) {

@@ -16,8 +16,12 @@ package com.propertyvista.domain;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.tenant.lease.Lease;
+
 public interface MasterApplication extends IEntity {
 
     IList<Application> applications();
+
+    Lease lease();
 
 }

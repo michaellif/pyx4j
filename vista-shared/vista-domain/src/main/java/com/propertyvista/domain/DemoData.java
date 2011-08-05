@@ -35,6 +35,8 @@ public class DemoData {
 
     public final static String REGISTRATION_DEFAULT_PROPERTY_CODE = "740";
 
+    public final static String REGISTRATION_DEFAULT_UNIT_ID = "1";
+
     public final static String REGISTRATION_DEFAULT_FLOORPLAN = "Luxury 2-bedroom";
 
     public final static Relationship[] RELATIONSHIPS = { Relationship.Spouse, Relationship.Daughter, Relationship.Son, Relationship.Mother,

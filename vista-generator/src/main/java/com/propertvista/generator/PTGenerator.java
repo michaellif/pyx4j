@@ -15,10 +15,8 @@ package com.propertvista.generator;
 
 import gwtupload.server.exceptions.UploadActionException;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumSet;
-import java.util.GregorianCalendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,18 +61,16 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeSource;
-import com.propertyvista.domain.tenant.income.TenantAsset;
-import com.propertyvista.domain.tenant.income.TenantAsset.AssetType;
+import com.propertyvista.domain.tenant.income.PersonalAsset;
+import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
+import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
-import com.propertyvista.domain.tenant.income.TenantIncome;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.misc.ApplicationDocumentServletParameters;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Summary;
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
-import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.ApplicationDocumentData;
@@ -106,9 +102,6 @@ public class PTGenerator {
     public ApplicationSummaryGDO createSummary(User user, AptUnit selectedUnit) {
         ApplicationSummaryGDO summary = EntityFactory.create(ApplicationSummaryGDO.class);
 
-        if (selectedUnit != null) {
-            createUnitSelection(summary.unitSelection(), selectedUnit);
-        }
         createTenantList(user, summary.tenants());
 
         // lease:
@@ -479,7 +472,7 @@ public class PTGenerator {
     private void createFinancialInfo(TenantScreening tenantScreening) {
 
         for (int i = 0; i < RandomUtil.randomInt(2); i++) {
-            TenantIncome income = EntityFactory.create(TenantIncome.class);
+            PersonalIncome income = EntityFactory.create(PersonalIncome.class);
 
             income.incomeSource().setValue(IncomeSource.fulltime);
             income.employer().set(createEmployer());
@@ -502,7 +495,7 @@ public class PTGenerator {
             minAssets = 1;
         }
         for (int i = 0; i < minAssets + RandomUtil.randomInt(3); i++) {
-            TenantAsset asset = EntityFactory.create(TenantAsset.class);
+            PersonalAsset asset = EntityFactory.create(PersonalAsset.class);
 
             asset.assetType().setValue(RandomUtil.random(AssetType.values()));
             asset.percent().setValue((double) RandomUtil.randomInt(100));
@@ -539,30 +532,4 @@ public class PTGenerator {
         return user;
     }
 
-    private void createUnitSelection(UnitSelection unitSelection, AptUnit selectedUnit) {
-        // unit selection criteria
-        UnitSelectionCriteria criteria = EntityFactory.create(UnitSelectionCriteria.class);
-        criteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
-        criteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
-
-        // from
-        Calendar availableFrom = DateUtils.calRoundedNow();
-        DateUtils.dayStart(availableFrom);
-        criteria.availableFrom().setValue(new LogicalDate(availableFrom.getTime()));
-
-        // to will be one month in the future
-        Calendar avalableTo = new GregorianCalendar();
-        avalableTo.setTime(availableFrom.getTime());
-        avalableTo.add(Calendar.MONTH, 1);
-        DateUtils.dayStart(avalableTo);
-        criteria.availableTo().setValue(new LogicalDate(avalableTo.getTime()));
-
-        unitSelection.selectionCriteria().set(criteria);
-
-        if (selectedUnit != null) {
-            unitSelection.selectedUnitId().setValue(selectedUnit.getPrimaryKey());
-// TODO: there is no list of MarketRent in Unit now!?.             
-//            unitSelection.selectedLeaseTerm().set(RandomUtil.random(selectedUnit.marketRent()).leaseTerm());
-        }
-    }
 }

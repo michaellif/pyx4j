@@ -51,9 +51,9 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoSocialServices;
 import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.IncomeSource;
-import com.propertyvista.domain.tenant.income.TenantIncome;
+import com.propertyvista.domain.tenant.income.PersonalIncome;
 
-public class TenantFinancialViewIncomeForm extends CEntityFolderItemEditor<TenantIncome> {
+public class TenantFinancialViewIncomeForm extends CEntityFolderItemEditor<PersonalIncome> {
 
     private static I18n i18n = I18nFactory.getI18n(TenantFinancialViewIncomeForm.class);
 
@@ -62,7 +62,7 @@ public class TenantFinancialViewIncomeForm extends CEntityFolderItemEditor<Tenan
     private ApplicationDocumentsFolderUploader fileUpload;
 
     public TenantFinancialViewIncomeForm(boolean readOnlyMode) {
-        super(TenantIncome.class);
+        super(PersonalIncome.class);
         this.readOnlyMode = readOnlyMode;
     }
 
@@ -102,12 +102,12 @@ public class TenantFinancialViewIncomeForm extends CEntityFolderItemEditor<Tenan
     }
 
     @Override
-    public IFolderItemEditorDecorator<TenantIncome> createFolderItemDecorator() {
-        return new BoxFolderItemEditorDecorator<TenantIncome>(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove income"), !readOnlyMode);
+    public IFolderItemEditorDecorator<PersonalIncome> createFolderItemDecorator() {
+        return new BoxFolderItemEditorDecorator<PersonalIncome>(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove income"), !readOnlyMode);
     }
 
     @Override
-    public void populate(TenantIncome value) {
+    public void populate(PersonalIncome value) {
         super.populate(value);
         setVisibility(value.incomeSource().getValue());
         if (value != null && fileUpload != null) {

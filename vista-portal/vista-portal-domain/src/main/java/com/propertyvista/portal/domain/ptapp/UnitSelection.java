@@ -14,11 +14,6 @@
 package com.propertyvista.portal.domain.ptapp;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -26,18 +21,6 @@ import com.propertyvista.domain.IBoundToApplication;
 
 public interface UnitSelection extends IEntity, IBoundToApplication {
 
-    @EmbeddedEntity
-    UnitSelectionCriteria selectionCriteria();
-
-    // Found by App server
-    @Transient
-    AvailableUnitsByFloorplan availableUnits();
-
     IPrimitive<Key> selectedUnitId();
 
-    IPrimitive<Integer> selectedLeaseTerm();
-
-    @Caption(name = "Start Rent Date")
-    @NotNull
-    IPrimitive<LogicalDate> rentStart();
 }

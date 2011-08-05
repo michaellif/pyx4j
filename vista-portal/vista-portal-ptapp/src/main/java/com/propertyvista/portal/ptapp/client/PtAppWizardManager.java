@@ -23,11 +23,9 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.datepicker.client.CalendarUtil;
 
-import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -44,7 +42,6 @@ import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep.Status;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
-import com.propertyvista.portal.domain.ptapp.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
 import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
@@ -61,7 +58,7 @@ public class PtAppWizardManager {
 
     private ApplicationProgress applicationProgress;
 
-    private UnitSelectionCriteria unitSelectionCriteria;
+    private String unitId;
 
     private PtAppWizardManager() {
         AppSite.getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
@@ -97,7 +94,7 @@ public class PtAppWizardManager {
 
                     @Override
                     public void onSuccess(Boolean result) {
-                        obtainUnitSelection();
+                        obtainUnit();
                     }
 
                     //TODO remove this when initial application message is implemented
@@ -109,30 +106,17 @@ public class PtAppWizardManager {
                 });
     }
 
-    private void obtainUnitSelection() {
-        unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
-        unitSelectionCriteria.propertyCode().setValue(Window.Location.getParameter("b"));
-        unitSelectionCriteria.floorplanName().setValue(Window.Location.getParameter("u"));
-        unitSelectionCriteria.availableFrom().setValue(new LogicalDate());
-        LogicalDate d = new LogicalDate();
-        // Now + 1 months
-        CalendarUtil.addMonthsToDate(d, 1);
-        unitSelectionCriteria.availableTo().setValue(d);
-
+    private void obtainUnit() {
+        unitId = Window.Location.getParameter("u");
         if (ApplicationMode.isDevelopment()) {
-            if (unitSelectionCriteria.floorplanName().isNull()) {
-                unitSelectionCriteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
-            }
-            if (unitSelectionCriteria.propertyCode().isNull()) {
-                unitSelectionCriteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
-            }
+            unitId = DemoData.REGISTRATION_DEFAULT_UNIT_ID;
         }
         ((ActivationService) GWT.create(ActivationService.class)).unitExists(new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 PtAppSite.getHistoryHandler().handleCurrentHistory();
                 if (!result) {
-                    PtAppSite.instance().showMessageDialog(i18n.tr("We can't find that Building or avalable Units"), "Error", "Back", new Command() {
+                    PtAppSite.instance().showMessageDialog(i18n.tr("We can't find requested Unit"), "Error", "Back", new Command() {
                         @Override
                         public void execute() {
                             History.back();
@@ -147,7 +131,7 @@ public class PtAppWizardManager {
                 PtAppSite.getHistoryHandler().handleCurrentHistory();
                 super.onFailure(caught);
             }
-        }, unitSelectionCriteria);
+        }, new Key(unitId));
 
     }
 
@@ -236,7 +220,7 @@ public class PtAppWizardManager {
                     applicationProgress = result.progress;
                     initApplicationProcess();
                 }
-            }, unitSelectionCriteria);
+            });
 
         } else {
             applicationProgress = null;

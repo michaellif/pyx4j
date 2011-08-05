@@ -19,9 +19,9 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.IService;
 
-public interface AbstractWizardService<EditableEntity extends IEntity> extends IService {
+public interface AbstractWizardService<E extends IEntity> extends IService {
 
-    public void retrieve(AsyncCallback<EditableEntity> callback, Key tenantId);
+    public void retrieve(AsyncCallback<E> callback, Key tenantId);
 
-    public void save(AsyncCallback<EditableEntity> callback, EditableEntity editableEntity);
+    public void save(AsyncCallback<E> callback, E editableEntity);
 }
