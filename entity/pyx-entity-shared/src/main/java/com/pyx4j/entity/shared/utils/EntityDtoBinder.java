@@ -75,30 +75,32 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public DTO dto(DBO dbo) {
+    public DTO createDTO(DBO dbo) {
         DTO dto = EntityFactory.create(dtoClass);
         dto.setPrimaryKey(dbo.getPrimaryKey());
+        copyDBOtoDTO(dbo, dto);
+        return dto;
+    }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public void copyDBOtoDTO(DBO dbo, DTO dto) {
         init();
         for (Map.Entry<Path, Path> me : binding.entrySet()) {
             IObject dtoM = dto.getMember(me.getKey());
             IObject dboM = dbo.getMember(me.getValue());
             dtoM.setValue(dboM.getValue());
         }
-
-        return dto;
     }
 
-    public DBO dbo(DTO dto) {
+    public DBO createDBO(DTO dto) {
         DBO dbo = EntityFactory.create(dboClass);
         dbo.setPrimaryKey(dto.getPrimaryKey());
-        toDbo(dto, dbo);
+        copyDTOtoDBO(dto, dbo);
         return dbo;
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public void toDbo(DTO dto, DBO dbo) {
+    public void copyDTOtoDBO(DTO dto, DBO dbo) {
         init();
         for (Map.Entry<Path, Path> me : binding.entrySet()) {
             IObject dtoM = dto.getMember(me.getKey());
