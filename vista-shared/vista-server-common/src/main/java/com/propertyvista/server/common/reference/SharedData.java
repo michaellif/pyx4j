@@ -26,6 +26,9 @@ public class SharedData {
     private static List<Country> countries;
 
     public static void init() {
+        if (provinces != null) { // assume that this is already initialized
+            return;
+        }
         provinces = LocationsGenerator.loadProvincesFromFile();
         countries = LocationsGenerator.createCountries(provinces);
     }

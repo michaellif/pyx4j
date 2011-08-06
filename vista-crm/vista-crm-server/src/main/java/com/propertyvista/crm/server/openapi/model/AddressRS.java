@@ -17,14 +17,22 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class AddressRS {
 
+    public String addressType;
+
     @XmlElement(name = "streetNumber", required = true)
     public String streetNumber;
 
     @XmlElement(name = "streetName")
     public String streetName;
 
+    public String streetNumberSuffix;
+
+    public String streetDirection;
+
     @XmlElement(name = "streetType")
     public String streetType;
+
+    public String unitNumber;
 
     @XmlElement(name = "city")
     public String city;
@@ -37,4 +45,6 @@ public class AddressRS {
 
     @XmlElement(name = "country")
     public String country;
+
+    public String county;
 }

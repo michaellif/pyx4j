@@ -13,7 +13,12 @@
  */
 package com.propertyvista.crm.server.openapi;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.xml.bind.JAXBException;
+
+import junit.framework.Assert;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -23,7 +28,12 @@ import org.slf4j.LoggerFactory;
 import com.propertvista.generator.BuildingsGenerator;
 import com.propertvista.generator.MediaGenerator;
 
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
+import com.pyx4j.essentials.server.dev.DataDump;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.crm.server.openapi.model.BuildingRS;
 import com.propertyvista.crm.server.openapi.model.BuildingsRS;
@@ -43,8 +53,51 @@ public class OpenApiModelTest {
         MarshallUtil.printSchema(BuildingsRS.class, System.out, true);
     }
 
+    public static void assertEqual(String name, IEntity expected, IEntity actual) {
+        Path changePath = EntityGraph.getChangedDataPath(expected, actual);
+        if (changePath != null) {
+            DataDump.dump("client", expected);
+            DataDump.dump("server", actual);
+
+            // we need to log this on the info level, since this information is quite important
+            log.info("expected {}", expected);
+            log.info("actual {}", actual);
+//            Object expectedValue = expected.getMember(changePath).getValue();
+//            Object actualValue = actual.getMember(changePath).getValue();
+//            log.info("Expected {}, Actual {}", expectedValue, actualValue);
+            Assert.fail(name + " are not the same: " + changePath);// + " expected " + expectedValue + ", actual " + actualValue);
+        }
+    }
+
     @Test
-    public void testXmlBuildings() throws Exception {
+    public void testConvert() {
+        BuildingsGenerator generator = new BuildingsGenerator();
+        List<Building> buildings = generator.createBuildings(10, null);
+
+        for (Building building : buildings) {
+            BuildingRS buildingRS = Converter.convertBuilding(building);
+
+            Assert.assertNotNull("Converted building", buildingRS);
+
+            Building building2 = Converter.convertBuilding(buildingRS);
+            Assert.assertEquals("propertyCode", building.propertyCode().getStringView(), building2.propertyCode().getStringView());
+
+            // TODO we need to 
+            assertEqual("building", building, building2);
+        }
+    }
+
+    @Test
+    public void testXmlBuildingsUnmarshall() throws IOException, JAXBException {
+        String xml = IOUtils.getTextResource("buildings.xml", BuildingsResource.class);
+
+        BuildingsRS buildings = MarshallUtil.unmarshal(BuildingsRS.class, xml);
+        Assert.assertNotNull("Converted buildings", buildings);
+        Assert.assertTrue("Has buildings", !buildings.buildings.isEmpty());
+    }
+
+    @Test
+    public void testXmlBuildingsMarshall() throws Exception {
 
         BuildingsGenerator generator = new BuildingsGenerator();
         List<Building> buildings = generator.createBuildings(1, null);
@@ -52,6 +105,8 @@ public class OpenApiModelTest {
         BuildingsRS buildingsRS = new BuildingsRS();
         for (Building building : buildings) {
             BuildingRS buildingRS = Converter.convertBuilding(building);
+            log.info("building date {}", building.info().structureBuildYear().getValue());
+            log.info("building date {}", buildingRS.info.structureBuildYear);
             buildingsRS.buildings.add(buildingRS);
 
             Floorplan floorplan = generator.createFloorplan("MyFloorplan");
