@@ -35,15 +35,15 @@ import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
-import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
+import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantInfoDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListItemDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
@@ -66,21 +66,21 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Tenants.class)));
         selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Tenants.class));
 
-        TenantListEditorDTO tenants = TenantTestAdapter.getTenantListEditorDTO(tenantsSummaryList);
+        TenantListDTO tenants = TenantTestAdapter.getTenantListEditorDTO(tenantsSummaryList);
         int num = 0;
-        for (TenantEditorDTO tenant : tenants.tenants()) {
-            assertTenantRow(D.id(proto(TenantListEditorDTO.class).tenants(), num), detach(tenant), (num != 0));
+        for (TenantListItemDTO tenant : tenants.tenants()) {
+            assertTenantRow(D.id(proto(TenantListDTO.class).tenants(), num), detach(tenant), (num != 0));
             num++;
         }
 
-        assertNotPresent(D.id(proto(TenantListEditorDTO.class).tenants(), num, proto(TenantEditorDTO.class).person().name().firstName()));
+        assertNotPresent(D.id(proto(TenantListDTO.class).tenants(), num, proto(TenantListItemDTO.class).person().name().firstName()));
 
         if (doSave) {
             saveAndContinue();
         }
     }
 
-    protected void assertTenantRow(IDebugId formDebugId, TenantEditorDTO tenant, boolean fullInfo) {
+    protected void assertTenantRow(IDebugId formDebugId, TenantListItemDTO tenant, boolean fullInfo) {
         assertValueOnForm(formDebugId, tenant.person().name().firstName());
         assertValueOnForm(formDebugId, tenant.person().name().lastName());
         assertValueOnForm(formDebugId, tenant.person().name().middleName());
@@ -99,7 +99,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         int id = 0;
         for (TenantSummaryGDO tenantSummary : tenants) {
             if (ApplicationProgressMgr.shouldEnterInformation(tenantSummary)) {
-                verifyInfoPage(new TenantConverter.TenantInfoEditorConverter().dto(tenantSummary), id);
+                verifyInfoPage(new TenantConverter.TenantInfoEditorConverter().createDTO(tenantSummary), id);
                 if (doSave) {
                     saveAndContinue();
                 }
@@ -111,14 +111,14 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertNotPresent(D.id(VistaFormsDebugId.SecondNavigation_Prefix, PtSiteMap.Info.class, id));
     }
 
-    protected void verifyInfoPage(TenantInfoEditorDTO tenant, int id) {
+    protected void verifyInfoPage(TenantInfoDTO tenant, int id) {
         assertVisible(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Info.class));
         selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Info.class));
         selenium.click(D.id(VistaFormsDebugId.SecondNavigation_Prefix, PtSiteMap.Info.class, id));
         assertInfoPage(tenant);
     }
 
-    protected void assertInfoPage(TenantInfoEditorDTO tenant) {
+    protected void assertInfoPage(TenantInfoDTO tenant) {
         assertValueOnForm(tenant.person().name().firstName());
         assertValueOnForm(tenant.person().name().lastName());
         assertValueOnForm(tenant.person().name().middleName());
@@ -164,7 +164,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
             assertEmContactsForm(D.id(tenant.emergencyContacts(), row), detach(contact));
             row++;
         }
-        assertNotPresent(D.id(proto(TenantInfoEditorDTO.class).emergencyContacts(), row, proto(EmergencyContact.class).name().firstName()));
+        assertNotPresent(D.id(proto(TenantInfoDTO.class).emergencyContacts(), row, proto(EmergencyContact.class).name().firstName()));
     }
 
     protected void assertIAddressForm(IDebugId formDebugId, IAddress address) {
@@ -235,7 +235,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         int num = 0;
         for (TenantSummaryGDO tenantSummary : tenants) {
             if (ApplicationProgressMgr.shouldEnterInformation(tenantSummary)) {
-                verifyFinancialPage(new TenantConverter.TenantFinancialEditorConverter().dto(tenantSummary), num);
+                verifyFinancialPage(new TenantConverter.TenantFinancialEditorConverter().createDTO(tenantSummary.tenantScreening()), num);
                 if (doSave) {
                     saveAndContinue();
                 }
@@ -247,7 +247,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertNotPresent(D.id(VistaFormsDebugId.SecondNavigation_Prefix, PtSiteMap.Financial.class, num));
     }
 
-    protected void verifyFinancialPage(TenantFinancialEditorDTO financial, int id) {
+    protected void verifyFinancialPage(TenantFinancialDTO financial, int id) {
         selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Financial.class));
         selenium.click(D.id(VistaFormsDebugId.SecondNavigation_Prefix, PtSiteMap.Financial.class, id));
 
@@ -268,7 +268,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
             verifyAsset(debugID, detach(asset));
             row++;
         }
-        assertFalse(selenium.isElementPresent(D.id(proto(TenantFinancialEditorDTO.class).assets(), row, proto(PersonalAsset.class).assetType())));
+        assertFalse(selenium.isElementPresent(D.id(proto(TenantFinancialDTO.class).assets(), row, proto(PersonalAsset.class).assetType())));
 
         row = 0;
         for (TenantGuarantor guarantor : financial.guarantors()) {
@@ -276,7 +276,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
             verifyGuarantor(debugID, detach(guarantor));
             row++;
         }
-        assertNotPresent(D.id(proto(TenantFinancialEditorDTO.class).guarantors(), row, proto(TenantGuarantor.class).name().firstName()));
+        assertNotPresent(D.id(proto(TenantFinancialDTO.class).guarantors(), row, proto(TenantGuarantor.class).name().firstName()));
     }
 
     private void verifyIncome(IDebugId formDebugId, PersonalIncome income) {

@@ -18,32 +18,33 @@ import com.propertvista.generator.gdo.TenantSummaryGDO;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.TenantInLeaseFragment;
-import com.propertyvista.domain.tenant.TenantScreeningSecureInfoFragment;
-import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
+import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantInfoDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListItemDTO;
 
 public class TenantConverter {
 
-    public static class TenantEditorConverter extends EntityDtoBinder<TenantInLease, TenantEditorDTO> {
+    public static class TenantEditorConverter extends EntityDtoBinder<TenantInLease, TenantListItemDTO> {
 
         public TenantEditorConverter() {
-            super(TenantInLease.class, TenantEditorDTO.class);
+            super(TenantInLease.class, TenantListItemDTO.class);
         }
 
         @Override
         protected void bind() {
             bind(dtoProto.person(), dboProto.tenant().person());
-            bind(TenantInLeaseFragment.class, dtoProto, dboProto);
+            bind(dtoProto.relationship(), dboProto.relationship());
+            bind(dtoProto.status(), dboProto.status());
+            bind(dtoProto.takeOwnership(), dboProto.takeOwnership());
         }
 
     }
 
-    public static class TenantInfoEditorConverter extends EntityDtoBinder<TenantSummaryGDO, TenantInfoEditorDTO> {
+    public static class TenantInfoEditorConverter extends EntityDtoBinder<TenantSummaryGDO, TenantInfoDTO> {
 
         public TenantInfoEditorConverter() {
-            super(TenantSummaryGDO.class, TenantInfoEditorDTO.class);
+            super(TenantSummaryGDO.class, TenantInfoDTO.class);
         }
 
         @Override
@@ -51,7 +52,10 @@ public class TenantConverter {
             bind(dtoProto.person(), dboProto.tenant().person());
             bind(dtoProto.emergencyContacts(), dboProto.tenant().emergencyContacts());
 
-            bind(TenantScreeningSecureInfoFragment.class, dtoProto, dboProto.tenantScreening());
+            bind(dtoProto.driversLicense(), dboProto.tenantScreening().driversLicense());
+            bind(dtoProto.driversLicenseState(), dboProto.tenantScreening().driversLicenseState());
+            bind(dtoProto.secureIdentifier(), dboProto.tenantScreening().secureIdentifier());
+            bind(dtoProto.notCanadianCitizen(), dboProto.tenantScreening().notCanadianCitizen());
 
             bind(dtoProto.documents(), dboProto.tenantScreening().documents());
 
@@ -63,17 +67,17 @@ public class TenantConverter {
 
     }
 
-    public static class TenantFinancialEditorConverter extends EntityDtoBinder<TenantSummaryGDO, TenantFinancialEditorDTO> {
+    public static class TenantFinancialEditorConverter extends EntityDtoBinder<TenantScreening, TenantFinancialDTO> {
 
         public TenantFinancialEditorConverter() {
-            super(TenantSummaryGDO.class, TenantFinancialEditorDTO.class);
+            super(TenantScreening.class, TenantFinancialDTO.class);
         }
 
         @Override
         protected void bind() {
-            bind(dtoProto.incomes(), dboProto.tenantScreening().incomes());
-            bind(dtoProto.assets(), dboProto.tenantScreening().assets());
-            bind(dtoProto.guarantors(), dboProto.tenantScreening().guarantors());
+            bind(dtoProto.incomes(), dboProto.incomes());
+            bind(dtoProto.assets(), dboProto.assets());
+            bind(dtoProto.guarantors(), dboProto.guarantors());
         }
 
     }

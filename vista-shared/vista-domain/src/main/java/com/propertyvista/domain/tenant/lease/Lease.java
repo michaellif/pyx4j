@@ -36,6 +36,8 @@ public interface Lease extends IEntity {
 
         Draft,
 
+        ScreeningRequested,
+
         PendingApproval,
 
         Declined,

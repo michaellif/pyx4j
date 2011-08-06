@@ -17,16 +17,16 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.ptapp.client.ui.steps.FinancialView;
 import com.propertyvista.portal.ptapp.client.ui.steps.FinancialViewPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 
-public class FinancialActivity extends WizardStepWithSubstepsActivity<TenantFinancialEditorDTO, FinancialViewPresenter> implements FinancialViewPresenter {
+public class FinancialActivity extends WizardStepWithSubstepsActivity<TenantFinancialDTO, FinancialViewPresenter> implements FinancialViewPresenter {
 
     public FinancialActivity(AppPlace place) {
-        super((FinancialView) WizardStepsViewFactory.instance(FinancialView.class), TenantFinancialEditorDTO.class, (TenantFinancialService) GWT
+        super((FinancialView) WizardStepsViewFactory.instance(FinancialView.class), TenantFinancialDTO.class, (TenantFinancialService) GWT
                 .create(TenantFinancialService.class));
         withPlace(place);
     }

@@ -13,9 +13,9 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantInfoDTO;
 
-public class InfoViewImpl extends WizardStepViewImpl<TenantInfoEditorDTO, InfoViewPresenter> implements InfoView {
+public class InfoViewImpl extends WizardStepViewImpl<TenantInfoDTO, InfoViewPresenter> implements InfoView {
 
     public InfoViewImpl() {
         super(new InfoViewForm());

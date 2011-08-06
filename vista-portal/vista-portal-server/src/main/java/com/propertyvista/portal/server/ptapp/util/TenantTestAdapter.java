@@ -19,14 +19,14 @@ import com.propertvista.generator.gdo.TenantSummaryGDO;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListDTO;
 
 public class TenantTestAdapter {
 
-    public static TenantListEditorDTO getTenantListEditorDTO(List<TenantSummaryGDO> tenant) {
-        TenantListEditorDTO dto = EntityFactory.create(TenantListEditorDTO.class);
+    public static TenantListDTO getTenantListEditorDTO(List<TenantSummaryGDO> tenant) {
+        TenantListDTO dto = EntityFactory.create(TenantListDTO.class);
         for (TenantSummaryGDO tenantSummary : tenant) {
-            dto.tenants().add(new TenantConverter.TenantEditorConverter().dto(tenantSummary.tenantInLease()));
+            dto.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantSummary.tenantInLease()));
         }
         return dto;
     }

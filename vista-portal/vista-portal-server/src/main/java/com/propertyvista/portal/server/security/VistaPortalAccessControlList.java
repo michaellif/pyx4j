@@ -37,7 +37,7 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
-import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.MaintenanceRequestCrudService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
@@ -103,7 +103,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(Tenant.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(PotentialTenantInfo.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(PetsDTO.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(TenantFinancialEditorDTO.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(TenantFinancialDTO.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(Charges.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(Summary.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.POTENTIAL_TENANT, new EntityPermission(PaymentInfo.class, applicationEntityAccess, CRUD));

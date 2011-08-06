@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialDTO;
 
-public interface FinancialView extends WizardStepView<TenantFinancialEditorDTO, FinancialViewPresenter> {
+public interface FinancialView extends WizardStepView<TenantFinancialDTO, FinancialViewPresenter> {
 
 }

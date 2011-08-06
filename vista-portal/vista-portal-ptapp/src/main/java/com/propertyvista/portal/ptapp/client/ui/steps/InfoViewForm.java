@@ -61,10 +61,10 @@ import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.misc.BusinessRules;
-import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantInfoDTO;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 
-public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
+public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(InfoViewForm.class);
 
@@ -73,7 +73,7 @@ public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
     private ApplicationDocumentsFolderUploader fileUpload;
 
     public InfoViewForm() {
-        super(TenantInfoEditorDTO.class, new VistaEditorsComponentFactory());
+        super(TenantInfoDTO.class, new VistaEditorsComponentFactory());
     }
 
     @Override
@@ -295,7 +295,7 @@ public class InfoViewForm extends CEntityForm<TenantInfoEditorDTO> {
     }
 
     @Override
-    public void populate(TenantInfoEditorDTO value) {
+    public void populate(TenantInfoDTO value) {
         super.populate(value);
 
         enablePreviousAddress();

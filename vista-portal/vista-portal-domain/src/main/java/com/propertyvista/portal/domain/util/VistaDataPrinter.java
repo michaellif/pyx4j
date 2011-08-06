@@ -34,7 +34,7 @@ import com.propertyvista.portal.domain.ptapp.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
-import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialDTO;
 
 public class VistaDataPrinter {
 
@@ -139,7 +139,7 @@ public class VistaDataPrinter {
         return sb.toString();
     }
 
-    public static String print(TenantFinancialEditorDTO financial) {
+    public static String print(TenantFinancialDTO financial) {
         StringBuilder sb = new StringBuilder();
 
         if (financial == null) {

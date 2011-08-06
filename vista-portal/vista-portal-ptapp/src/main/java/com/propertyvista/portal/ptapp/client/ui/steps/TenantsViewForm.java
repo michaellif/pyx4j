@@ -32,18 +32,18 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
-import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListItemDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListDTO;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 
-public class TenantsViewForm extends CEntityForm<TenantListEditorDTO> {
+public class TenantsViewForm extends CEntityForm<TenantListDTO> {
 
     static I18n i18n = I18nFactory.getI18n(TenantsViewForm.class);
 
     private int maxTenants;
 
     public TenantsViewForm() {
-        super(TenantListEditorDTO.class);
+        super(TenantListDTO.class);
     }
 
     @Override
@@ -55,38 +55,38 @@ public class TenantsViewForm extends CEntityForm<TenantListEditorDTO> {
 
     @Override
     public void addValidations() {
-        super.addValueValidator(new EditableValueValidator<TenantListEditorDTO>() {
+        super.addValueValidator(new EditableValueValidator<TenantListDTO>() {
 
             @Override
-            public boolean isValid(CEditableComponent<TenantListEditorDTO, ?> component, TenantListEditorDTO value) {
+            public boolean isValid(CEditableComponent<TenantListDTO, ?> component, TenantListDTO value) {
                 return !EntityGraph.hasBusinessDuplicates(getValue().tenants());
             }
 
             @Override
-            public String getValidationMessage(CEditableComponent<TenantListEditorDTO, ?> component, TenantListEditorDTO value) {
+            public String getValidationMessage(CEditableComponent<TenantListDTO, ?> component, TenantListDTO value) {
                 return i18n.tr("Duplicate tenants specified");
             }
         });
 
         maxTenants = proto().tenants().getMeta().getLength();
-        super.addValueValidator(new EditableValueValidator<TenantListEditorDTO>() {
+        super.addValueValidator(new EditableValueValidator<TenantListDTO>() {
 
             @Override
-            public boolean isValid(CEditableComponent<TenantListEditorDTO, ?> component, TenantListEditorDTO value) {
+            public boolean isValid(CEditableComponent<TenantListDTO, ?> component, TenantListDTO value) {
                 int size = getValue().tenants().size();
                 return (size <= maxTenants) && ((value.tenantsMaximum().isNull() || (size <= value.tenantsMaximum().getValue())));
             }
 
             @Override
-            public String getValidationMessage(CEditableComponent<TenantListEditorDTO, ?> component, TenantListEditorDTO value) {
+            public String getValidationMessage(CEditableComponent<TenantListDTO, ?> component, TenantListDTO value) {
                 return i18n.tr("Exceeded number of allowed tenants");
             }
         });
     }
 
-    private CEntityFolderEditor<TenantEditorDTO> createTenantsEditorColumns() {
+    private CEntityFolderEditor<TenantListItemDTO> createTenantsEditorColumns() {
 
-        return new CEntityFolderEditor<TenantEditorDTO>(TenantEditorDTO.class) {
+        return new CEntityFolderEditor<TenantListItemDTO>(TenantListItemDTO.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
             {
@@ -102,13 +102,13 @@ public class TenantsViewForm extends CEntityForm<TenantListEditorDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<TenantEditorDTO> createFolderDecorator() {
-                return new TableFolderEditorDecorator<TenantEditorDTO>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
+            protected IFolderEditorDecorator<TenantListItemDTO> createFolderDecorator() {
+                return new TableFolderEditorDecorator<TenantListItemDTO>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
                         i18n.tr("Add a person"));
             }
 
             @Override
-            protected CEntityFolderItemEditor<TenantEditorDTO> createItem() {
+            protected CEntityFolderItemEditor<TenantListItemDTO> createItem() {
                 return new TenantsViewFolderRow(columns);
             }
         };

@@ -28,7 +28,7 @@ import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
-import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
@@ -66,24 +66,24 @@ public class TenantInfoServiceImpl extends ApplicationEntityServiceImpl implemen
     }
 
     @Override
-    public void retrieve(AsyncCallback<TenantInfoEditorDTO> callback, Key tenantId) {
+    public void retrieve(AsyncCallback<TenantInfoDTO> callback, Key tenantId) {
         log.debug("Retrieving Info for tenant {}", tenantId);
         TenantSummaryGDO summary = getTenantSummaryDTO(tenantId);
 
-        TenantInfoEditorDTO dto = new TenantConverter.TenantInfoEditorConverter().dto(summary);
+        TenantInfoDTO dto = new TenantConverter.TenantInfoEditorConverter().createDTO(summary);
         callback.onSuccess(dto);
     }
 
     @Override
-    public void save(AsyncCallback<TenantInfoEditorDTO> callback, TenantInfoEditorDTO dto) {
+    public void save(AsyncCallback<TenantInfoDTO> callback, TenantInfoDTO dto) {
         TenantSummaryGDO summary = getTenantSummaryDTO(dto.getPrimaryKey());
 
-        new TenantConverter.TenantInfoEditorConverter().toDbo(dto, summary);
+        new TenantConverter.TenantInfoEditorConverter().copyDTOtoDBO(dto, summary);
 
         PersistenceServicesFactory.getPersistenceService().merge(summary.tenant());
         PersistenceServicesFactory.getPersistenceService().merge(summary.tenantScreening());
 
-        dto = new TenantConverter.TenantInfoEditorConverter().dto(summary);
+        dto = new TenantConverter.TenantInfoEditorConverter().createDTO(summary);
         callback.onSuccess(dto);
     }
 }

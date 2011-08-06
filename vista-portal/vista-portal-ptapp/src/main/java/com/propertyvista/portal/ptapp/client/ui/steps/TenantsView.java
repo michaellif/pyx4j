@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListDTO;
 
-public interface TenantsView extends WizardStepView<TenantListEditorDTO, TenantsViewPresenter> {
+public interface TenantsView extends WizardStepView<TenantListDTO, TenantsViewPresenter> {
 
 }

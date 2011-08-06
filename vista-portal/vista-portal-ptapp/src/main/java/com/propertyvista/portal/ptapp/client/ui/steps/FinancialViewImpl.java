@@ -13,9 +13,9 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialDTO;
 
-public class FinancialViewImpl extends WizardStepViewImpl<TenantFinancialEditorDTO, FinancialViewPresenter> implements FinancialView {
+public class FinancialViewImpl extends WizardStepViewImpl<TenantFinancialDTO, FinancialViewPresenter> implements FinancialView {
 
     public FinancialViewImpl() {
         super(new FinancialViewForm());

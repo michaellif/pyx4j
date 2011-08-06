@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.rpc.ptapp.services;
 
-import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantInfoDTO;
 
-public interface TenantInfoService extends AbstractWizardService<TenantInfoEditorDTO> {
+public interface TenantInfoService extends AbstractWizardService<TenantInfoDTO> {
 
 }

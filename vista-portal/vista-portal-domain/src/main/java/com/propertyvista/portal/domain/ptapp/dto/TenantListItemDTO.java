@@ -11,17 +11,34 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.tenant;
+package com.propertyvista.portal.domain.ptapp.dto;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@AbstractEntity
-public interface TenantInLeaseFragment extends IEntity {
+import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.tenant.TenantInLease;
+
+@Transient
+public interface TenantListItemDTO extends IEntity {
+
+    @EmbeddedEntity
+    Person person();
+
+    public static enum ChangeStatus {
+
+        New,
+
+        Updated;
+
+    }
+
+    IPrimitive<ChangeStatus> changeStatus();
 
     @ToString(index = 0)
     @NotNull

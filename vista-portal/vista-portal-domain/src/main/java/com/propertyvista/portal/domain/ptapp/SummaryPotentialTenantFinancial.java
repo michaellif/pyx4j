@@ -18,7 +18,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialDTO;
 
 @Transient
 public interface SummaryPotentialTenantFinancial extends IEntity {
@@ -26,5 +26,5 @@ public interface SummaryPotentialTenantFinancial extends IEntity {
     IPrimitive<String> tenantFullName();
 
     @Owned
-    TenantFinancialEditorDTO tenantFinancial();
+    TenantFinancialDTO tenantFinancial();
 }

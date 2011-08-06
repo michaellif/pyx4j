@@ -16,6 +16,8 @@ package com.propertyvista.domain.tenant;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
@@ -27,11 +29,12 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.ApplicationDocument;
 import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
-import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
+import com.propertyvista.domain.tenant.income.TenantGuarantor;
 
-public interface TenantScreening extends IEntity, TenantScreeningSecureInfoFragment {
+public interface TenantScreening extends IEntity {
 
     @Owner
     @Detached
@@ -53,7 +56,8 @@ public interface TenantScreening extends IEntity, TenantScreeningSecureInfoFragm
     @Owned
     IList<ApplicationDocument> documents();
 
-// Financial:
+    //=============== Financial =============//
+
     @Owned
     @Length(3)
     IList<PersonalIncome> incomes();
@@ -65,4 +69,19 @@ public interface TenantScreening extends IEntity, TenantScreeningSecureInfoFragm
     @Owned
     @Length(2)
     IList<TenantGuarantor> guarantors();
+
+    //=============== Security Info =============//
+
+    IPrimitive<String> driversLicense();
+
+    @Caption(name = "Province/State", description = "Province/State, in which a license has been issued.")
+    @Editor(type = EditorType.combo)
+    Province driversLicenseState();
+
+    @Caption(name = "SIN")
+    IPrimitive<String> secureIdentifier();
+
+    @Caption(name = "I'm not resident of Canada")
+    IPrimitive<Boolean> notCanadianCitizen();
+
 }

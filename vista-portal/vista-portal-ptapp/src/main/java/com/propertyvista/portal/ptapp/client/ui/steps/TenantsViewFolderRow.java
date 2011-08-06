@@ -39,13 +39,13 @@ import com.propertyvista.common.client.ui.validators.OldAgeValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.util.ValidationUtils;
-import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListItemDTO;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 
-final class TenantsViewFolderRow extends CEntityFolderRowEditor<TenantEditorDTO> {
+final class TenantsViewFolderRow extends CEntityFolderRowEditor<TenantListItemDTO> {
 
     TenantsViewFolderRow(List<EntityFolderColumnDescriptor> columns) {
-        super(TenantEditorDTO.class, columns);
+        super(TenantListItemDTO.class, columns);
     }
 
     @SuppressWarnings("rawtypes")
@@ -121,7 +121,7 @@ final class TenantsViewFolderRow extends CEntityFolderRowEditor<TenantEditorDTO>
     }
 
     @Override
-    public void populate(TenantEditorDTO value) {
+    public void populate(TenantListItemDTO value) {
         super.populate(value);
 
         if (!isFirst() && !value.person().birthDate().isNull()) {
@@ -156,8 +156,8 @@ final class TenantsViewFolderRow extends CEntityFolderRowEditor<TenantEditorDTO>
     }
 
     @Override
-    public IFolderItemEditorDecorator<TenantEditorDTO> createFolderItemDecorator() {
-        return new TableFolderItemEditorDecorator<TenantEditorDTO>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+    public IFolderItemEditorDecorator<TenantListItemDTO> createFolderItemDecorator() {
+        return new TableFolderItemEditorDecorator<TenantListItemDTO>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
                 TenantsViewForm.i18n.tr("Remove person"), !isFirst());
     }
 

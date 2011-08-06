@@ -51,10 +51,10 @@ import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.dto.VehiclesDTO;
 import com.propertyvista.misc.BusinessRules;
-import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantInfoEditorDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantListEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantInfoDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListItemDTO;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
@@ -143,18 +143,18 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
 
     private void enterTenantsPage(List<TenantSummaryGDO> tenantsSummaryList) {
         int num = 0;
-        TenantListEditorDTO tenants = TenantTestAdapter.getTenantListEditorDTO(tenantsSummaryList);
-        for (TenantEditorDTO tenant : tenants.tenants()) {
+        TenantListDTO tenants = TenantTestAdapter.getTenantListEditorDTO(tenantsSummaryList);
+        for (TenantListItemDTO tenant : tenants.tenants()) {
             if (num != 0) {
-                selenium.click(D.id(proto(TenantListEditorDTO.class).tenants(), FormNavigationDebugId.Form_Add));
+                selenium.click(D.id(proto(TenantListDTO.class).tenants(), FormNavigationDebugId.Form_Add));
             }
-            enterTenantRow(D.id(proto(TenantListEditorDTO.class).tenants(), num), detach(tenant), (num != 0));
+            enterTenantRow(D.id(proto(TenantListDTO.class).tenants(), num), detach(tenant), (num != 0));
             num++;
         }
         saveAndContinue();
     }
 
-    private void enterTenantRow(IDebugId fromDebugId, TenantEditorDTO tenant, boolean fullInfo) {
+    private void enterTenantRow(IDebugId fromDebugId, TenantListItemDTO tenant, boolean fullInfo) {
         setValueOnForm(fromDebugId, tenant.person().name().firstName());
         setValueOnForm(fromDebugId, tenant.person().name().lastName());
         setValueOnForm(fromDebugId, tenant.person().name().middleName());
@@ -172,14 +172,14 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         int id = 0;
         for (TenantSummaryGDO tenantSummary : tenants) {
             if (ApplicationProgressMgr.shouldEnterInformation(tenantSummary)) {
-                enterTestInfo(new TenantConverter.TenantInfoEditorConverter().dto(tenantSummary));
+                enterTestInfo(new TenantConverter.TenantInfoEditorConverter().createDTO(tenantSummary));
                 saveAndContinue();
                 id++;
             }
         }
     }
 
-    private void enterTestInfo(TenantInfoEditorDTO tenant) {
+    private void enterTestInfo(TenantInfoDTO tenant) {
         assertValueOnForm(tenant.person().name().firstName());
         assertValueOnForm(tenant.person().name().lastName());
         //setValueOnForm(tenant.person().name().firstName());
@@ -292,13 +292,13 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
     private void enterFinancialPages(List<TenantSummaryGDO> tenants) {
         for (TenantSummaryGDO tenantSummary : tenants) {
             if (ApplicationProgressMgr.shouldEnterInformation(tenantSummary)) {
-                enterFinancialForm(new TenantConverter.TenantFinancialEditorConverter().dto(tenantSummary));
+                enterFinancialForm(new TenantConverter.TenantFinancialEditorConverter().createDTO(tenantSummary.tenantScreening()));
                 saveAndContinue();
             }
         }
     }
 
-    private void enterFinancialForm(TenantFinancialEditorDTO tenantFin) {
+    private void enterFinancialForm(TenantFinancialDTO tenantFin) {
         //incomes
         int num = 0;
         for (PersonalIncome income : tenantFin.incomes()) {

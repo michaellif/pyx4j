@@ -45,7 +45,7 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
-import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
@@ -151,7 +151,7 @@ public class VistaAccessControlListTest {
         assertEntityPermission(false, Tenant.class, null);
         assertEntityPermission(false, PotentialTenantInfo.class, null);
         assertEntityPermission(false, PetsDTO.class, null);
-        assertEntityPermission(false, TenantFinancialEditorDTO.class, null);
+        assertEntityPermission(false, TenantFinancialDTO.class, null);
         assertEntityPermission(false, Charges.class, null);
         assertEntityPermission(false, Summary.class, null);
         assertEntityPermission(false, PaymentInfo.class, null);
@@ -172,7 +172,7 @@ public class VistaAccessControlListTest {
         assertEntityPermission(true, Tenant.class, application);
         assertEntityPermission(true, PotentialTenantInfo.class, application);
         assertEntityPermission(true, PetsDTO.class, application);
-        assertEntityPermission(true, TenantFinancialEditorDTO.class, application);
+        assertEntityPermission(true, TenantFinancialDTO.class, application);
         assertEntityPermission(true, Charges.class, application);
         assertEntityPermission(true, Summary.class, application);
         assertEntityPermission(true, PaymentInfo.class, application);
@@ -185,7 +185,7 @@ public class VistaAccessControlListTest {
         assertEntityPermission(false, Tenant.class, application2);
         assertEntityPermission(false, PotentialTenantInfo.class, application2);
         assertEntityPermission(false, PetsDTO.class, application2);
-        assertEntityPermission(false, TenantFinancialEditorDTO.class, application2);
+        assertEntityPermission(false, TenantFinancialDTO.class, application2);
         assertEntityPermission(false, Charges.class, application2);
         assertEntityPermission(false, Summary.class, application2);
         assertEntityPermission(false, PaymentInfo.class, application2);

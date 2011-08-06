@@ -22,7 +22,7 @@ import com.propertvista.generator.gdo.TenantSummaryGDO;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 
-import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 
@@ -31,24 +31,24 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
     private final static Logger log = LoggerFactory.getLogger(TenantFinancialServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<TenantFinancialEditorDTO> callback, Key tenantId) {
+    public void retrieve(AsyncCallback<TenantFinancialDTO> callback, Key tenantId) {
         log.debug("Retrieving financials for tenant {}", tenantId);
         TenantSummaryGDO summary = TenantInfoServiceImpl.getTenantSummaryDTO(tenantId);
 
-        TenantFinancialEditorDTO dto = new TenantConverter.TenantFinancialEditorConverter().dto(summary);
+        TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(summary.tenantScreening());
         callback.onSuccess(dto);
     }
 
     @Override
-    public void save(AsyncCallback<TenantFinancialEditorDTO> callback, TenantFinancialEditorDTO dto) {
+    public void save(AsyncCallback<TenantFinancialDTO> callback, TenantFinancialDTO dto) {
         log.debug("Saving tenantFinancial {}", dto);
         TenantSummaryGDO summary = TenantInfoServiceImpl.getTenantSummaryDTO(dto.getPrimaryKey());
 
-        new TenantConverter.TenantFinancialEditorConverter().toDbo(dto, summary);
+        new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(dto, summary.tenantScreening());
 
         PersistenceServicesFactory.getPersistenceService().merge(summary.tenantScreening());
 
-        dto = new TenantConverter.TenantFinancialEditorConverter().dto(summary);
+        dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(summary.tenantScreening());
         callback.onSuccess(dto);
     }
 

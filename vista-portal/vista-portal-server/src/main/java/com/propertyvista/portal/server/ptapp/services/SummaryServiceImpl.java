@@ -41,7 +41,7 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.SummaryPotentialTenantFinancial;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
-import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.util.Converter;
@@ -101,10 +101,10 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             }
         }
 
-        EntityQueryCriteria<TenantFinancialEditorDTO> financialCriteria = EntityQueryCriteria.create(TenantFinancialEditorDTO.class);
+        EntityQueryCriteria<TenantFinancialDTO> financialCriteria = EntityQueryCriteria.create(TenantFinancialDTO.class);
         //TODO financialCriteria.add(PropertyCriterion.eq(financialCriteria.proto().application(), summary.application()));
         summary.tenantFinancials().clear();
-        for (TenantFinancialEditorDTO fin : PersistenceServicesFactory.getPersistenceService().query(financialCriteria)) {
+        for (TenantFinancialDTO fin : PersistenceServicesFactory.getPersistenceService().query(financialCriteria)) {
             // Update Transient values and see if we need to show this Tenant
             findTenenat: for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
                 if (fin.id().equals(tenant.id())) {

@@ -15,9 +15,11 @@ package com.propertyvista.domain.tenant;
 
 import java.io.Serializable;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -27,7 +29,7 @@ import com.pyx4j.i18n.shared.Translation;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface TenantInLease extends IEntity, TenantInLeaseFragment /* TODO IBoundToApplication ? */{
+public interface TenantInLease extends IEntity /* TODO IBoundToApplication ? */{
 
     @Translatable
     public static enum Status implements Serializable {
@@ -87,4 +89,17 @@ public interface TenantInLease extends IEntity, TenantInLeaseFragment /* TODO IB
      * Tenant's payment share:
      */
     IPrimitive<Integer> percentage();
+
+    @ToString(index = 0)
+    @NotNull
+    IPrimitive<TenantInLease.Relationship> relationship();
+
+    @ToString(index = 1)
+    @NotNull
+    IPrimitive<TenantInLease.Status> status();
+
+    //TODO add appropriate description
+    @Caption(name = "Take Ownership", description = "Take Ownership of application filling means ...")
+    IPrimitive<Boolean> takeOwnership();
+
 }

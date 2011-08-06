@@ -29,13 +29,12 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.TenantInLeaseFragment;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
 import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.dto.TenantEditorDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListItemDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
@@ -86,7 +85,18 @@ public class ApplicationProgressMgr {
         return shouldEnterInformation(tenantSummary.tenantInLease(), tenantSummary.tenant().person().birthDate().getValue());
     }
 
-    public static boolean shouldEnterInformation(TenantInLeaseFragment tenant, LogicalDate birthDate) {
+    public static boolean shouldEnterInformation(TenantInLease tenant, LogicalDate birthDate) {
+        //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
+        if (tenant.status().getValue() == TenantInLease.Status.Applicant) {
+            return true;
+        }
+        if (!tenant.takeOwnership().isBooleanTrue()) {
+            return false;
+        }
+        return (TimeUtils.isOlderThen(birthDate, 18));
+    }
+
+    public static boolean shouldEnterInformation(TenantListItemDTO tenant, LogicalDate birthDate) {
         //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
         if (tenant.status().getValue() == TenantInLease.Status.Applicant) {
             return true;
@@ -110,7 +120,7 @@ public class ApplicationProgressMgr {
         }
     }
 
-    public static void syncroizeApplicationProgress(List<TenantEditorDTO> tenants) {
+    public static void syncroizeApplicationProgress(List<TenantListItemDTO> tenants) {
         EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
         applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().lease(), PtAppContext.getCurrentLease()));
 
@@ -124,7 +134,7 @@ public class ApplicationProgressMgr {
 
         infoStep.substeps().clear();
         financialStep.substeps().clear();
-        for (TenantEditorDTO tenant : tenants) {
+        for (TenantListItemDTO tenant : tenants) {
             if (shouldEnterInformation(tenant, tenant.person().birthDate().getValue())) {
                 ApplicationWizardSubstep infoSubstep = merge(tenant, infoSubSteps);
                 infoStep.substeps().add(infoSubstep);
@@ -176,7 +186,7 @@ public class ApplicationProgressMgr {
     }
 
     @SuppressWarnings("unchecked")
-    private static ApplicationWizardSubstep merge(TenantEditorDTO tenant, ApplicationWizardSubstep[] origSubSteps) {
+    private static ApplicationWizardSubstep merge(TenantListItemDTO tenant, ApplicationWizardSubstep[] origSubSteps) {
 
         ApplicationWizardSubstep step = EntityFactory.create(ApplicationWizardSubstep.class);
         //TODO serialize key.
@@ -192,7 +202,7 @@ public class ApplicationProgressMgr {
                 step.status().set(origStep.status());
 
                 // see if something changed between tenantNew and tenantOrig
-                if ((tenant.changeStatus().getValue() == TenantEditorDTO.ChangeStatus.Updated)
+                if ((tenant.changeStatus().getValue() == TenantListItemDTO.ChangeStatus.Updated)
                         && (step.status().getValue() == ApplicationWizardStep.Status.complete)) {
                     step.status().setValue(ApplicationWizardStep.Status.invalid);
                 }

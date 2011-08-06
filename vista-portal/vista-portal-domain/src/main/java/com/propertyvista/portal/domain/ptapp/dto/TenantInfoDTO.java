@@ -14,22 +14,25 @@
 package com.propertyvista.portal.domain.ptapp.dto;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.ApplicationDocument;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.tenant.TenantScreeningSecureInfoFragment;
+import com.propertyvista.domain.ref.Province;
 
 @Transient
-public interface TenantInfoEditorDTO extends IEntity, TenantScreeningSecureInfoFragment {
+public interface TenantInfoDTO extends IEntity {
 
     @EmbeddedEntity
     Person person();
@@ -49,4 +52,17 @@ public interface TenantInfoEditorDTO extends IEntity, TenantScreeningSecureInfoF
     @Owned
     @Length(3)
     IList<EmergencyContact> emergencyContacts();
+
+    IPrimitive<String> driversLicense();
+
+    @Caption(name = "Province/State", description = "Province/State, in which a license has been issued.")
+    @Editor(type = EditorType.combo)
+    Province driversLicenseState();
+
+    @Caption(name = "SIN")
+    IPrimitive<String> secureIdentifier();
+
+    @Caption(name = "I'm not resident of Canada")
+    IPrimitive<Boolean> notCanadianCitizen();
+
 }

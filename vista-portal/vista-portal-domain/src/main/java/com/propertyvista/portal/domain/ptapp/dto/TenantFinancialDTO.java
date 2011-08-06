@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 20, 2011
- * @author vlads
+ * Created on Feb 12, 2011
+ * @author dmitry
  * @version $Id$
  */
 package com.propertyvista.portal.domain.ptapp.dto;
@@ -18,16 +18,24 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.tenant.income.PersonalAsset;
+import com.propertyvista.domain.tenant.income.TenantGuarantor;
+import com.propertyvista.domain.tenant.income.PersonalIncome;
 
 @Transient
-public interface TenantListEditorDTO extends IEntity {
+public interface TenantFinancialDTO extends IEntity {
 
     @Owned
-    @Length(6)
-    IList<TenantEditorDTO> tenants();
+    @Length(3)
+    IList<PersonalIncome> incomes();
 
-    //TODO this should be AptUnit property
-    @Transient
-    IPrimitive<Integer> tenantsMaximum();
+    @Owned
+    @Length(3)
+    IList<PersonalAsset> assets();
+
+    @Owned
+    @Length(2)
+    IList<TenantGuarantor> guarantors();
+
 }
