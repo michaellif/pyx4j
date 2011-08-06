@@ -35,16 +35,32 @@ import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 
 public class ServiceEditorViewImpl extends CrmEditorViewImplBase<Service> implements ServiceEditorView {
 
+    private final IListerView<Feature> featureLister;
+
+    private final IListerView<Concession> concessionLister;
+
     public ServiceEditorViewImpl() {
-        super(CrmSiteMap.Properties.Service.class, new ServiceEditorForm());
+        super(CrmSiteMap.Properties.Service.class);
+        featureLister = new ListerInternalViewImplBase<Feature>(new SelectFeatrueLister());
+        concessionLister = new ListerInternalViewImplBase<Concession>(new SelectConcessionLister());
+
+        // create/init/set main form here: 
+        CrmEntityForm<Service> form = new ServiceEditorForm(this);
+        form.initialize();
+        setForm(form);
     }
 
     @Override
@@ -111,5 +127,15 @@ public class ServiceEditorViewImpl extends CrmEditorViewImplBase<Service> implem
         public Service.Type getSelectedType() {
             return types.getValue();
         }
+    }
+
+    @Override
+    public IListerView<Feature> getFeatureListerView() {
+        return featureLister;
+    }
+
+    @Override
+    public IListerView<Concession> getConcessionListerView() {
+        return concessionLister;
     }
 }

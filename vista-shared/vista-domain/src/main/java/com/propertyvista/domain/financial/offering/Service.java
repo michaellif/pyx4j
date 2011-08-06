@@ -66,7 +66,9 @@ public interface Service extends IEntity {
 
     IPrimitive<DepositType> depositType();
 
-    IList<Feature> features();
+    @Owned
+    IList<ServiceFeature> features();
 
-    IList<Concession> concessions();
+    @Owned
+    IList<ServiceConcession> concessions();
 }

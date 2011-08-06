@@ -16,10 +16,24 @@ package com.propertyvista.crm.client.ui.crud.building.catalog;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.crud.IEditorView;
+import com.pyx4j.site.client.ui.crud.IListerView;
 
+import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 
 public interface ServiceEditorView extends IEditorView<Service> {
 
+    interface Presenter extends IEditorView.Presenter {
+
+        IListerView.Presenter getFeaturePresenter();
+
+        IListerView.Presenter getConcessionPresenter();
+    }
+
     void showSelectTypePopUp(AsyncCallback<Service.Type> callback);
+
+    IListerView<Feature> getFeatureListerView();
+
+    IListerView<Concession> getConcessionListerView();
 }

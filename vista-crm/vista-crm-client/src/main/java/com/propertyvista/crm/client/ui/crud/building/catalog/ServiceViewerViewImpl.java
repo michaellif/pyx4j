@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.building.catalog;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Service;
@@ -21,6 +22,11 @@ import com.propertyvista.domain.financial.offering.Service;
 public class ServiceViewerViewImpl extends CrmViewerViewImplBase<Service> implements ServiceViewerView {
 
     public ServiceViewerViewImpl() {
-        super(CrmSiteMap.Properties.Service.class, new ServiceEditorForm(new CrmViewersComponentFactory()));
+        super(CrmSiteMap.Properties.Service.class);
+
+        // create/init/set main form here: 
+        CrmEntityForm<Service> form = new ServiceEditorForm(new CrmViewersComponentFactory(), this);
+        form.initialize();
+        setForm(form);
     }
 }
