@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -74,11 +75,14 @@ public interface Feature extends IEntity {
 
 // ----------------------------------------------
 
+    @ToString(index = 0)
     @MemberColumn(name = "featureType")
     IPrimitive<Type> type();
 
+    @ToString(index = 1)
     IPrimitive<String> name();
 
+    @ToString(index = 2)
     IPrimitive<String> description();
 
     @Owned

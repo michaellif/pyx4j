@@ -86,6 +86,7 @@ public interface Concession extends IEntity {
 
     IPrimitive<Term> term();
 
+    @ToString(index = 2)
     IPrimitive<String> description();
 
     /**

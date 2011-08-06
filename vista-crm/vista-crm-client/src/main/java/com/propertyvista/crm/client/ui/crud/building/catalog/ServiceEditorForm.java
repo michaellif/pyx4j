@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.building.catalog;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.CEntityComboBox;
@@ -29,19 +30,25 @@ import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 
+import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 public class ServiceEditorForm extends CrmEntityForm<Service> {
+
+    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
     public ServiceEditorForm() {
         super(Service.class, new CrmEditorsComponentFactory());
@@ -53,6 +60,27 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
 
     @Override
     public IsWidget createContent() {
+
+        tabPanel.add(createGeneralTab(), i18n.tr("General"));
+        tabPanel.add(createEligibilityTab(), i18n.tr("Eligibility"));
+
+        tabPanel.setDisableMode(isEditable());
+        tabPanel.setSize("100%", "100%");
+        return tabPanel;
+
+    }
+
+    @Override
+    public void setActiveTab(int index) {
+        tabPanel.selectTab(index);
+    }
+
+    @Override
+    public int getActiveTab() {
+        return tabPanel.getSelectedIndex();
+    }
+
+    public IsWidget createGeneralTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
 
@@ -66,6 +94,18 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
 
         main.add(new CrmHeader2Decorator(i18n.tr("Items:")));
         main.add(inject(proto().items(), createItemsFolderEditor()));
+
+        return new CrmScrollPanel(main);
+    }
+
+    public IsWidget createEligibilityTab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+
+        main.add(new CrmHeader2Decorator(i18n.tr("Features:")));
+        main.add(inject(proto().features(), createFeaturesFolderEditor()));
+
+        main.add(new CrmHeader2Decorator(i18n.tr("Concessions:")));
+        main.add(inject(proto().concessions(), createConcessionsFolderEditor()));
 
         return new CrmScrollPanel(main);
     }
@@ -98,13 +138,103 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
                         if (column.getObject() == proto().itemType()) {
                             if (comp instanceof CEntityComboBox<?>) {
                                 @SuppressWarnings("unchecked")
-                                CEntityComboBox<ServiceItemType> floorplanCompbo = (CEntityComboBox<ServiceItemType>) comp;
-                                floorplanCompbo.setOptionsFilter(new OptionsFilter<ServiceItemType>() {
+                                CEntityComboBox<ServiceItemType> combo = (CEntityComboBox<ServiceItemType>) comp;
+                                combo.setOptionsFilter(new OptionsFilter<ServiceItemType>() {
                                     @Override
                                     public boolean acceptOption(ServiceItemType entity) {
                                         Service value = ServiceEditorForm.this.getValue();
                                         if (value != null && !value.isNull()) {
                                             return entity.serviceType().equals(value.type());
+                                        }
+                                        return false;
+                                    }
+                                });
+                            }
+                        }
+                        return comp;
+                    }
+                };
+            }
+        };
+    }
+
+    private CEntityFolderEditor<Feature> createFeaturesFolderEditor() {
+        return new CrmEntityFolder<Feature>(Feature.class, i18n.tr("Feature"), isEditable()) {
+            private final CrmEntityFolder<Feature> thisRef = this;
+
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto(), "50em"));
+                return columns;
+            }
+
+            @Override
+            protected CEntityFolderItemEditor<Feature> createItem() {
+                return new CEntityFolderRowEditor<Feature>(Feature.class, columns()) {
+                    @Override
+                    public IFolderItemEditorDecorator<Feature> createFolderItemDecorator() {
+                        return new CrmFolderItemDecorator<Feature>(thisRef);
+                    }
+
+                    @Override
+                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                        CComponent<?> comp = super.createCell(column);
+                        if (column.getObject() == proto()) {
+                            if (comp instanceof CEntityComboBox<?>) {
+                                @SuppressWarnings("unchecked")
+                                CEntityComboBox<Feature> combo = (CEntityComboBox<Feature>) comp;
+                                combo.setOptionsFilter(new OptionsFilter<Feature>() {
+                                    @Override
+                                    public boolean acceptOption(Feature entity) {
+                                        Service value = ServiceEditorForm.this.getValue();
+                                        if (value != null && !value.isNull()) {
+                                            return entity.catalog().equals(value.catalog());
+                                        }
+                                        return false;
+                                    }
+                                });
+                            }
+                        }
+                        return comp;
+                    }
+                };
+            }
+        };
+    }
+
+    private CEntityFolderEditor<Concession> createConcessionsFolderEditor() {
+        return new CrmEntityFolder<Concession>(Concession.class, i18n.tr("Concession"), isEditable()) {
+            private final CrmEntityFolder<Concession> thisRef = this;
+
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto(), "50em"));
+                return columns;
+            }
+
+            @Override
+            protected CEntityFolderItemEditor<Concession> createItem() {
+                return new CEntityFolderRowEditor<Concession>(Concession.class, columns()) {
+                    @Override
+                    public IFolderItemEditorDecorator<Concession> createFolderItemDecorator() {
+                        return new CrmFolderItemDecorator<Concession>(thisRef);
+                    }
+
+                    @Override
+                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                        CComponent<?> comp = super.createCell(column);
+                        if (column.getObject() == proto()) {
+                            if (comp instanceof CEntityComboBox<?>) {
+                                @SuppressWarnings("unchecked")
+                                CEntityComboBox<Concession> combo = (CEntityComboBox<Concession>) comp;
+                                combo.setOptionsFilter(new OptionsFilter<Concession>() {
+                                    @Override
+                                    public boolean acceptOption(Concession entity) {
+                                        Service value = ServiceEditorForm.this.getValue();
+                                        if (value != null && !value.isNull()) {
+                                            return entity.catalog().equals(value.catalog());
                                         }
                                         return false;
                                     }

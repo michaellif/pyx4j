@@ -101,8 +101,8 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
                         if (column.getObject() == proto().itemType()) {
                             if (comp instanceof CEntityComboBox<?>) {
                                 @SuppressWarnings("unchecked")
-                                CEntityComboBox<ServiceItemType> floorplanCompbo = (CEntityComboBox<ServiceItemType>) comp;
-                                floorplanCompbo.setOptionsFilter(new OptionsFilter<ServiceItemType>() {
+                                CEntityComboBox<ServiceItemType> combo = (CEntityComboBox<ServiceItemType>) comp;
+                                combo.setOptionsFilter(new OptionsFilter<ServiceItemType>() {
                                     @Override
                                     public boolean acceptOption(ServiceItemType entity) {
                                         Feature value = FeatureEditorForm.this.getValue();
