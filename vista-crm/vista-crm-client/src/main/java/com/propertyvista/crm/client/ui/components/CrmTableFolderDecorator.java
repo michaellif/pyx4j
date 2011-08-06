@@ -15,6 +15,9 @@ package com.propertyvista.crm.client.ui.components;
 
 import java.util.List;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
 import com.pyx4j.entity.shared.IEntity;
@@ -22,12 +25,17 @@ import com.pyx4j.entity.shared.IEntity;
 import com.propertyvista.crm.client.resources.CrmImages;
 
 public class CrmTableFolderDecorator<E extends IEntity> extends TableFolderEditorDecorator<E> {
+    protected static I18n i18n = I18nFactory.getI18n(CrmTableFolderDecorator.class);
 
     public CrmTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, String title, boolean editable) {
         super(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), title, editable);
     }
 
+    public CrmTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, CrmEntityFolder<E> parent, boolean editable) {
+        this(columns, i18n.tr("Add new ") + parent.getItemName(), editable);
+    }
+
     public CrmTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, CrmEntityFolder<E> parent) {
-        super(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), parent.getItemName(), parent.isEditable());
+        this(columns, parent, parent.isEditable());
     }
 }

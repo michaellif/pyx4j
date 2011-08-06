@@ -13,18 +13,27 @@
  */
 package com.propertyvista.crm.client.ui.components;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 
 public class CrmFolderItemDecorator<E extends IEntity> extends TableFolderItemEditorDecorator<E> {
+    protected static I18n i18n = I18nFactory.getI18n(CrmFolderItemDecorator.class);
 
     public CrmFolderItemDecorator(String title, boolean editable) {
         super(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), title, editable);
     }
 
-    public CrmFolderItemDecorator(CrmEntityFolder<E> parent) {
-        this(parent.getItemName(), parent.isEditable());
+    public CrmFolderItemDecorator(CrmEntityFolder<E> parent, boolean editable) {
+        this(i18n.tr("Remove ") + parent.getItemName(), editable);
     }
+
+    public CrmFolderItemDecorator(CrmEntityFolder<E> parent) {
+        this(parent, parent.isEditable());
+    }
+
 }

@@ -203,6 +203,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     private CEntityFolderEditor<TenantInLease> createTenantsEditorColumns() {
 
         return new CrmEntityFolder<TenantInLease>(TenantInLease.class, i18n.tr("Tenant"), isEditable()) {
+            private final CrmEntityFolder<TenantInLease> parent = this;
+
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
@@ -218,8 +220,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
             @Override
             protected IFolderEditorDecorator<TenantInLease> createFolderDecorator() {
-                IFolderEditorDecorator<TenantInLease> decor = new CrmTableFolderDecorator<TenantInLease>(columns(), i18n.tr("Add new Tenant"),
-                        LeaseEditorForm.this.isEditable());
+                IFolderEditorDecorator<TenantInLease> decor = new CrmTableFolderDecorator<TenantInLease>(columns(), parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
@@ -354,8 +355,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                     @Override
                     public IFolderItemEditorDecorator<TenantInLease> createFolderItemDecorator() {
-                        return new CrmFolderItemDecorator<TenantInLease>(CrmEntityForm.i18n.tr("Remove Tenant"), LeaseEditorForm.this.isEditable()
-                                && !isFirst());
+                        return new CrmFolderItemDecorator<TenantInLease>(parent, parent.isEditable() && !isFirst());
                     }
 
                     private void setMandatoryDependant() {
@@ -377,6 +377,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     private CEntityFolderEditor<Pet> createPetListViewer() {
         return new CrmEntityFolder<Pet>(Pet.class, i18n.tr("Pet"), isEditable()) {
+            private final CrmEntityFolder<Pet> parent = this;
+
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
@@ -405,7 +407,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 return new CEntityFolderRowEditor<Pet>(Pet.class, columns()) {
                     @Override
                     public IFolderItemEditorDecorator<Pet> createFolderItemDecorator() {
-                        return new CrmFolderItemDecorator<Pet>(CrmEntityForm.i18n.tr("Remove Pet"), LeaseEditorForm.this.isEditable());
+                        return new CrmFolderItemDecorator<Pet>(parent);
                     }
 
                     @Override
@@ -452,6 +454,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     private CEntityFolderEditor<Vehicle> createVehicleListViewer() {
         return new CrmEntityFolder<Vehicle>(Vehicle.class, i18n.tr("Vehicle"), isEditable()) {
+            private final CrmEntityFolder<Vehicle> parent = this;
+
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
@@ -472,7 +476,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                     @Override
                     public IFolderItemEditorDecorator<Vehicle> createFolderItemDecorator() {
-                        return new CrmFolderItemDecorator<Vehicle>(CrmEntityForm.i18n.tr("Remove Vehicle"), LeaseEditorForm.this.isEditable());
+                        return new CrmFolderItemDecorator<Vehicle>(parent);
                     }
 
                     @Override
