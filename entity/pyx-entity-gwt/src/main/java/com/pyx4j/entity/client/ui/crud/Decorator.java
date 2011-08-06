@@ -38,6 +38,11 @@ public class Decorator implements IPrimitive<String> {
     }
 
     @Override
+    public boolean isRootEntity() {
+        return false;
+    }
+
+    @Override
     public void setValue(String value) throws ClassCastException {
     }
 

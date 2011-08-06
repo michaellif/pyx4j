@@ -87,30 +87,33 @@ public class TableFolderEditorDecorator<E extends IEntity> extends BaseFolderEdi
             cellPanel.getElement().getStyle().setMarginLeft(3, Unit.PX);
             cellPanel.getElement().getStyle().setMarginRight(3, Unit.PX);
 
-            String caption = column.getObject().getMeta().getCaption();
-            if (caption == "") {
-                caption = "&nbsp";
+            if (!column.getObject().isRootEntity()) {
+                String caption = column.getObject().getMeta().getCaption();
+                if (caption == "") {
+                    caption = "&nbsp";
+                }
+                HTML label = new HTML(caption);
+                label.getElement().getStyle().setMarginLeft(3, Unit.PX);
+                cellPanel.add(label);
+                cellPanel.setCellVerticalAlignment(label, HorizontalPanel.ALIGN_BOTTOM);
+
+                String descr = column.getObject().getMeta().getDescription();
+                if ((descr != null) && !descr.trim().equals("")) {
+                    Image info = new Image(ImageFactory.getImages().formTooltipInfo());
+                    info.getElement().getStyle().setPaddingRight(2, Unit.PX);
+                    cellPanel.add(info);
+                    cellPanel.setCellVerticalAlignment(info, HorizontalPanel.ALIGN_BOTTOM);
+                    Tooltip.tooltip(info, column.getObject().getMeta().getDescription());
+                }
+
+                header.add(cellPanel);
+                header.setCellVerticalAlignment(cellPanel, HorizontalPanel.ALIGN_BOTTOM);
             }
-            HTML label = new HTML(caption);
-            label.getElement().getStyle().setMarginLeft(3, Unit.PX);
-            cellPanel.add(label);
-            cellPanel.setCellVerticalAlignment(label, HorizontalPanel.ALIGN_BOTTOM);
-
-            String descr = column.getObject().getMeta().getDescription();
-            if ((descr != null) && !descr.trim().equals("")) {
-                Image info = new Image(ImageFactory.getImages().formTooltipInfo());
-
-                info.getElement().getStyle().setPaddingRight(2, Unit.PX);
-                cellPanel.add(info);
-                cellPanel.setCellVerticalAlignment(info, HorizontalPanel.ALIGN_BOTTOM);
-                Tooltip.tooltip(info, column.getObject().getMeta().getDescription());
-            }
-
-            header.add(cellPanel);
-            header.setCellVerticalAlignment(cellPanel, HorizontalPanel.ALIGN_BOTTOM);
         }
 
-        add(header);
+        if (header.getWidgetCount() > 0) {
+            add(header);
+        }
 
         add(getContainer());
 

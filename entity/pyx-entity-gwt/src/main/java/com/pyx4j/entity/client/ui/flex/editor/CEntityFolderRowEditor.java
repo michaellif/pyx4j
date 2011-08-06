@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -62,8 +63,14 @@ public abstract class CEntityFolderRowEditor<E extends IEntity> extends CEntityF
         return wrapper;
     }
 
+    @SuppressWarnings("unchecked")
     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-        CComponent<?> comp = inject(column.getObject());
+        CComponent<?> comp;
+        if (column.getObject().isRootEntity()) {
+            comp = inject(column.getObject(), new CEntityComboBox<E>((Class<E>) column.getObject().getObjectClass()));
+        } else {
+            comp = inject(column.getObject());
+        }
 
         //Special TableFolder customisation
         if (comp instanceof CCheckBox) {
@@ -72,5 +79,4 @@ public abstract class CEntityFolderRowEditor<E extends IEntity> extends CEntityF
 
         return comp;
     }
-
 }
