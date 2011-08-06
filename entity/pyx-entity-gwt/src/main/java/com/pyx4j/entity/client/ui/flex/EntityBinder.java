@@ -134,22 +134,20 @@ public class EntityBinder<E extends IEntity> {
     }
 
     protected void applyAttributes(CEditableComponent<?, ?> component, IObject<?> member) {
-        if (!member.isRootEntity()) {
-            MemberMeta mm = member.getMeta();
-            if (mm.isValidatorAnnotationPresent(NotNull.class)) {
-                component.setMandatory(true);
-            }
-            if ((String.class == mm.getValueClass()) && (component instanceof CTextComponent)) {
-                ((CTextComponent<?, ?>) component).setMaxLength(mm.getLength());
-                if (mm.getDescription() != null) {
-                    ((CTextComponent<?, ?>) component).setWatermark(mm.getWatermark());
-                }
-            }
-            if (mm.getDescription() != null) {
-                component.setToolTip(mm.getDescription());
-            }
-            component.setTitle(mm.getCaption());
+        MemberMeta mm = member.getMeta();
+        if (mm.isValidatorAnnotationPresent(NotNull.class)) {
+            component.setMandatory(true);
         }
+        if ((String.class == mm.getValueClass()) && (component instanceof CTextComponent)) {
+            ((CTextComponent<?, ?>) component).setMaxLength(mm.getLength());
+            if (mm.getDescription() != null) {
+                ((CTextComponent<?, ?>) component).setWatermark(mm.getWatermark());
+            }
+        }
+        if (mm.getDescription() != null) {
+            component.setToolTip(mm.getDescription());
+        }
+        component.setTitle(mm.getCaption());
         component.setDebugId(member.getPath());
     }
 

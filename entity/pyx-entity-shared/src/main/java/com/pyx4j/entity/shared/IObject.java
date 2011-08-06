@@ -29,11 +29,6 @@ public interface IObject<VALUE_TYPE> {
      */
     public boolean isNull();
 
-    /**
-     * @return true if object isn't a member field, but root entity
-     */
-    public boolean isRootEntity();
-
     public void setValue(VALUE_TYPE value) throws ClassCastException;
 
     public VALUE_TYPE getValue();

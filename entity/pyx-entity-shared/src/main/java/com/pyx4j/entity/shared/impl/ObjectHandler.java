@@ -59,11 +59,6 @@ public abstract class ObjectHandler<VALUE_TYPE> implements IObject<VALUE_TYPE>, 
     }
 
     @Override
-    public boolean isRootEntity() {
-        return (parent == null);
-    }
-
-    @Override
     public IObject<?> getParent() {
         return parent;
     }
@@ -98,4 +93,5 @@ public abstract class ObjectHandler<VALUE_TYPE> implements IObject<VALUE_TYPE>, 
         assert (clazz != null) : this.getClass() + " objectClass is null";
         return clazz;
     }
+
 }
