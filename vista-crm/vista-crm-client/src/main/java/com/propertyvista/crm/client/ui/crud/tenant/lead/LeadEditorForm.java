@@ -81,10 +81,12 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         split.getLeftPanel().add(inject(proto().person().mobilePhone()), 15);
         split.getLeftPanel().add(inject(proto().informedFrom()), 10);
 
-        split.getRightPanel().add(inject(proto().moveInDate()), 8.2);
+        split.getRightPanel().add(inject(proto().moveInDate()), 8);
+
         split.getRightPanel().add(inject(proto().rent().min()), 5, i18n.tr("Min rent"));
         split.getRightPanel().add(inject(proto().rent().max()), 5, i18n.tr("Max rent"));
-        split.getRightPanel().add(inject(proto().term()), 10);
+
+        split.getRightPanel().add(inject(proto().term()), 8);
         split.getRightPanel().add(inject(proto().beds()), 4);
         split.getRightPanel().add(inject(proto().baths()), 4);
         split.getRightPanel().add(inject(proto().floorplan()), 15);
@@ -114,7 +116,7 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().date(), "8.2em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().date(), "8em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().time(), "6em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().address(), "20em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().agent(), "10em"));

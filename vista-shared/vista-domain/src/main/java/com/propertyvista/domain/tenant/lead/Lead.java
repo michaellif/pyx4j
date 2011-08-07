@@ -146,4 +146,8 @@ public interface Lead extends IEntity {
 
     @Owned
     IList<Appointment> appointments();
+
+    // === Internals:    
+    IPrimitive<Boolean> convertedToLease();
+
 }

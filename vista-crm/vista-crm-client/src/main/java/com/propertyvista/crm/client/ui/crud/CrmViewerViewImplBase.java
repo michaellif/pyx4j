@@ -13,8 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -33,9 +36,17 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     protected final String defaultCaption;
 
+    protected final HorizontalPanel actionsPanel;
+
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
-        addNorth(header = new CrmHeaderDecorator(defaultCaption, createActionsPanel()), VistaCrmTheme.defaultHeaderHeight);
+
+        actionsPanel = new HorizontalPanel();
+        actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        actionsPanel.setWidth("100%");
+        actionsPanel.add(new HTML()); // just for %-tage cells alignment...
+
+        addNorth(header = new CrmHeaderDecorator(defaultCaption, fillActionsPanel()), VistaCrmTheme.defaultHeaderHeight);
     }
 
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form) {
@@ -50,8 +61,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         header.setCaption(defaultCaption + " " + value.getStringView());
     }
 
-    private Widget createActionsPanel() {
-        HorizontalPanel buttons = new HorizontalPanel();
+    private Widget fillActionsPanel() {
         AnchorButton btnEdit = new AnchorButton(i18n.tr("Edit"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -59,8 +69,14 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
             }
         });
         btnEdit.addStyleName(btnEdit.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.EditButton);
-        buttons.add(btnEdit);
-        return buttons;
+        addActionButton(btnEdit);
+        return actionsPanel;
+    }
+
+    protected void addActionButton(Widget action) {
+        actionsPanel.insert(action, 1);
+        actionsPanel.setCellWidth(action, "1%");
+        action.getElement().getStyle().setMarginRight(1, Unit.EM);
     }
 
     protected CrmEntityForm<E> getForm() {

@@ -17,12 +17,14 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
 // TODO define basic phone + contactPhone + BuildingPhone etc. which has different types enum...
+@ToStringFormat("{0} ext.{1}")
 public interface Phone extends IEntity {
 
     @Translatable
@@ -50,7 +52,7 @@ public interface Phone extends IEntity {
     IPrimitive<Type> type();
 
     /**
-     * (max 20 char)
+     * in format 123-4567 123-456-7890 )
      */
     @ToString(index = 0)
     @MemberColumn(name = "phoneNumber")
@@ -58,8 +60,8 @@ public interface Phone extends IEntity {
     IPrimitive<String> number();
 
     /**
-     * (max 20 char)
+     * (max 5 integers)
      */
     @ToString(index = 1)
-    IPrimitive<String> extension();
+    IPrimitive<Integer> extension();
 }

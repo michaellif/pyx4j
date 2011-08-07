@@ -49,7 +49,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
     public static double defaultTabHeight = 2.7;
 
     public static enum StyleSuffixEx implements IStyleSuffix {
-        SaveButton, CancelButton, EditButton;
+        SaveButton, CancelButton, EditButton, ActionButton;
     }
 
     public VistaCrmTheme() {
@@ -353,6 +353,15 @@ public abstract class VistaCrmTheme extends VistaTheme {
         //
         // Edit AnchorButton: 
         buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX, StyleSuffixEx.EditButton);
+        style = new Style(buttonEx);
+        style.addProperty("color", "yellow");
+        style.addProperty("font-size", "1.1em");
+        style.addProperty("font-weight", "bolder");
+        addStyle(style);
+
+        //
+        // Action AnchorButton: 
+        buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX, StyleSuffixEx.ActionButton);
         style = new Style(buttonEx);
         style.addProperty("color", ThemeColor.OBJECT_TONE15);
         style.addProperty("font-size", "1.1em");

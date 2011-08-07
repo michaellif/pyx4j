@@ -75,7 +75,7 @@ public class CommonsGenerator {
 
         person.homePhone().setValue(createPhone().number().getStringView());
         person.mobilePhone().setValue(createPhone().number().getStringView());
-        person.workPhone().setValue(createPhone().number().getStringView());
+        person.workPhone().setValue(createPhone(DataGenerator.randomPhone("905"), Phone.Type.work, 123).getStringView());
 
         String email = name.firstName().getStringView() + "." + name.lastName().getStringView() + "@" + RandomUtil.random(DemoData.EMAIL_DOMAINS);
         person.email().setValue(createEmail(email).address().getStringView());
@@ -93,17 +93,19 @@ public class CommonsGenerator {
     }
 
     public static Phone createPhone() {
-        String code = RandomUtil.randomBoolean() ? "416" : "905";
-        int digits = RandomUtil.randomInt(10) * 1000 + RandomUtil.randomInt(10) * 100 + RandomUtil.randomInt(10) * 10 + RandomUtil.randomInt(10);
-        String phoneNumber = "(" + code + ") 555-" + digits;
-        return createPhone(phoneNumber);
+        return createPhone(DataGenerator.randomPhone(RandomUtil.randomBoolean() ? "416" : "905"));
     }
 
-    public static Phone createPhone(String phoneNumber) {
+    public static Phone createPhone(String number) {
+        return createPhone(number, null, null);
+    }
+
+    public static Phone createPhone(String number, Phone.Type type, Integer ext) {
         Phone phone = EntityFactory.create(Phone.class);
 
-        phone.type().setValue(Phone.Type.work);
-        phone.number().setValue(phoneNumber);
+        phone.type().setValue(type);
+        phone.number().setValue(number);
+        phone.extension().setValue(ext);
 
         return phone;
     }

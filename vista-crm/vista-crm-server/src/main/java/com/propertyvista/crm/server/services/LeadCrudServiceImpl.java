@@ -13,13 +13,29 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.EntityServicesImpl;
+import com.pyx4j.entity.shared.EntityFactory;
+
 import com.propertyvista.crm.rpc.services.LeadCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements LeadCrudService {
 
     public LeadCrudServiceImpl() {
         super(Lead.class);
+    }
+
+    @Override
+    public void convertToLease(AsyncCallback<Lease> callback, Key entityId) {
+
+        Lead lead = EntityServicesImpl.secureRetrieve(dboClass, entityId);
+        Lease lease = EntityFactory.create(Lease.class);
+        lease.leaseFrom().setValue(lead.moveInDate().getValue());
+
     }
 }

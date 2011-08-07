@@ -83,7 +83,8 @@ public class TenantsGenerator {
         item.assignedTo().setValue(CommonsGenerator.createName().getStringView());
         item.status().setValue(RandomUtil.randomEnum(Lead.Status.class));
 
-        for (int i = 0; i < RandomUtil.randomInt(3); ++i) {
+        int count = 1 + RandomUtil.randomInt(3);
+        for (int i = 0; i < count; ++i) {
             item.appointments().add(createAppointment());
         }
 
