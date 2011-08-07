@@ -31,6 +31,10 @@ public class LeadLister extends ListerBase<Lead> {
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Lead>> columnDescriptors, Lead proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveInDate()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.term()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplan()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.createDate()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
     }
 }
