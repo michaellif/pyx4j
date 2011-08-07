@@ -36,8 +36,8 @@ public class ConcessionEditorForm extends CrmEntityForm<Concession> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
 
         main.add(split);
         split.getLeftPanel().add(inject(proto().type()), 12);
