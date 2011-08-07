@@ -46,14 +46,14 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
     @Override
     public void populate(Lead value) {
-        btnconvert.setEnabled(!value.convertedToLease().isBooleanTrue());
+        btnconvert.setVisible(!value.convertedToLease().isBooleanTrue());
         super.populate(value);
     }
 
     @Override
     public void onLeaseConvertionSuccess(Lease result) {
         MessageDialog.info("Information", "Conversion is succeeded!");
-        btnconvert.setEnabled(false);
+        btnconvert.setVisible(false);
     }
 
     @Override
