@@ -16,6 +16,8 @@ package com.propertyvista.crm.client.ui.crud.tenant.lead;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
+import com.pyx4j.widgets.client.dialog.MessageDialog;
+
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
@@ -50,11 +52,17 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
     @Override
     public void onLeaseConvertionSuccess(Lease result) {
+        MessageDialog.info("Information", "Conversion is succeeded!");
         btnconvert.setEnabled(false);
     }
 
     @Override
     public boolean onConvertionFail(Throwable caught) {
-        return false;
+        if (caught instanceof Error) {
+            MessageDialog.error("Error", caught.getMessage());
+        } else {
+            MessageDialog.error("Error", "Conversion is failed!");
+        }
+        return true;
     }
 }

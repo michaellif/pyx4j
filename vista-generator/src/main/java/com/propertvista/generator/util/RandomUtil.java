@@ -32,7 +32,7 @@ public class RandomUtil extends DataGenerator {
 
     public static Date randomDate(int yearFrom, int yearTo) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, yearFrom + randomInt(yearTo - yearFrom));
+        calendar.set(Calendar.YEAR, yearFrom + ((yearTo - yearFrom) > 0 ? randomInt(yearTo - yearFrom) : 0));
         calendar.set(Calendar.DAY_OF_YEAR, randomInt(365));
         DateUtils.dayStart(calendar);
         return calendar.getTime();

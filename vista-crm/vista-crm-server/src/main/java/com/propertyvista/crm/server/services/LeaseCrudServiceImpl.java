@@ -35,32 +35,36 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     protected void enhanceRetrieveDTO(Lease in, LeaseDTO dto, boolean fromList) {
         if (!fromList) {
-            // fill selected building & unit:
+            // fill selected unit:
             if (in.unit().isEmpty()) {
                 EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
                 UnitSelection unitSelection = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-                if (!unitSelection.selectedUnitId().isNull()) {
+                if (unitSelection != null && !unitSelection.isNull() && !unitSelection.selectedUnitId().isNull()) {
                     dto.unit().set(PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, unitSelection.selectedUnitId().getValue()));
                 }
             }
-            // fill transient data: 
+            // and building:
             dto.selectedBuilding().set(PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, dto.unit().belongsTo().getPrimaryKey()));
 
-//            dto.tenants().clear();
-//            EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
-//            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
-//            dto.tenants().addAll(PersistenceServicesFactory.getPersistenceService().query(criteria));
+            // fill tenants:
+            dto.tenants().clear();
+            EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
+            dto.tenants().addAll(PersistenceServicesFactory.getPersistenceService().query(criteria));
         }
     }
 
     @Override
     protected void enhanceSaveDTO(Lease dbo, LeaseDTO dto) {
-        // set currently selected unit:
+        // save currently selected unit to UnitSelection:
         EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().lease(), dbo));
         UnitSelection unitSelection = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-        unitSelection.selectedUnitId().setValue(dto.unit().getPrimaryKey());
+        if (unitSelection != null && !unitSelection.isNull()) {
+            unitSelection.selectedUnitId().setValue(dto.unit().getPrimaryKey());
+        }
+
         // update Tenants:
         for (TenantInLease tenant : dto.tenants()) {
             tenant.lease().set(dbo);
