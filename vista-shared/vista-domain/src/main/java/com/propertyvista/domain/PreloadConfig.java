@@ -23,6 +23,8 @@ public final class PreloadConfig {
 
     private int numResidentialBuildings = 10;
 
+    private int numLeads = 5;
+
     private int numTenants = 10;
 
     private int numPotentialTenants = 4;
@@ -86,6 +88,14 @@ public final class PreloadConfig {
 
     public void setNumResidentialBuildings(int numResidentialBuildings) {
         this.numResidentialBuildings = numResidentialBuildings;
+    }
+
+    public int getNumLeads() {
+        return numLeads;
+    }
+
+    public void setNumLeads(int numLeads) {
+        this.numLeads = numLeads;
     }
 
     public int getNumTenants() {

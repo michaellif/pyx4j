@@ -16,6 +16,7 @@ package com.propertyvista.domain.contact;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -51,6 +52,7 @@ public interface Phone extends IEntity {
     /**
      * (max 20 char)
      */
+    @ToString(index = 0)
     @MemberColumn(name = "phoneNumber")
     @Editor(type = EditorType.phone)
     IPrimitive<String> number();
@@ -58,5 +60,6 @@ public interface Phone extends IEntity {
     /**
      * (max 20 char)
      */
+    @ToString(index = 1)
     IPrimitive<String> extension();
 }

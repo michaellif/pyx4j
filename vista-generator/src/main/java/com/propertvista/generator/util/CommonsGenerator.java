@@ -13,7 +13,6 @@
  */
 package com.propertvista.generator.util;
 
-
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
@@ -22,12 +21,12 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.RangeGroup;
 import com.propertyvista.domain.contact.Address;
-import com.propertyvista.domain.contact.Email;
-import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.contact.Address.AddressType;
+import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Email.Type;
 import com.propertyvista.domain.contact.IAddressFull.StreetDirection;
 import com.propertyvista.domain.contact.IAddressFull.StreetType;
+import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.ref.Province;
@@ -74,12 +73,12 @@ public class CommonsGenerator {
         person.name().set(name);
         person.birthDate().setValue(RandomUtil.randomLogicalDate(1930, 1980));
 
-        person.homePhone().setValue(createPhone().getStringView());
-        person.mobilePhone().setValue(createPhone().getStringView());
-        person.workPhone().setValue(createPhone().getStringView());
+        person.homePhone().setValue(createPhone().number().getStringView());
+        person.mobilePhone().setValue(createPhone().number().getStringView());
+        person.workPhone().setValue(createPhone().number().getStringView());
 
         String email = name.firstName().getStringView() + "." + name.lastName().getStringView() + "@" + RandomUtil.random(DemoData.EMAIL_DOMAINS);
-        person.email().setValue(createEmail(email).getStringView());
+        person.email().setValue(createEmail(email).address().getStringView());
 
         return person;
     }

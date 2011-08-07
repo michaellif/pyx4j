@@ -55,6 +55,10 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
         this.add(component, defaultLabelWidth, componentWidth);
     }
 
+    public void add(final CComponent<?> component, double componentWidth, String componentCaption) {
+        this.add(component, defaultLabelWidth, componentWidth, componentCaption);
+    }
+
     public void add(final CComponent<?> component, double labelWidth, double componentWidth) {
         this.add(component, labelWidth, componentWidth, null);
     }

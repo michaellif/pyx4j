@@ -13,6 +13,7 @@
  */
 package com.propertvista.generator.util;
 
+import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -69,4 +70,9 @@ public class RandomUtil extends DataGenerator {
         return person.name().firstName().getStringView().toLowerCase() + "." + person.name().lastName().getStringView().toLowerCase() + "@"
                 + DataGenerator.random(DemoData.EMAIL_DOMAINS);
     }
+
+    public static Time randomTime() {
+        return new Time(randomInt(86400 * 1000));
+    }
+
 }

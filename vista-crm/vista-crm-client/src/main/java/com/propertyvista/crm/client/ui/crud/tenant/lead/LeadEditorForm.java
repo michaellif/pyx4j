@@ -82,14 +82,14 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         split.getLeftPanel().add(inject(proto().informedFrom()), 10);
 
         split.getRightPanel().add(inject(proto().moveInDate()), 8.2);
-        split.getRightPanel().add(inject(proto().rent().min()), 8);
-        split.getRightPanel().add(inject(proto().rent().max()), 8);
+        split.getRightPanel().add(inject(proto().rent().min()), 5, i18n.tr("Min rent"));
+        split.getRightPanel().add(inject(proto().rent().max()), 5, i18n.tr("Max rent"));
         split.getRightPanel().add(inject(proto().term()), 10);
         split.getRightPanel().add(inject(proto().beds()), 4);
         split.getRightPanel().add(inject(proto().baths()), 4);
         split.getRightPanel().add(inject(proto().floorplan()), 15);
 
-        main.add(inject(proto().comments()), 45);
+        main.add(inject(proto().comments()), 50);
 
         main.add(new VistaLineSeparator());
 
@@ -117,10 +117,11 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
                 columns.add(new EntityFolderColumnDescriptor(proto().date(), "8.2em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().time(), "6em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().address(), "20em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().agent(), "15em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().phone(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().email(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().status(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().agent(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().phone().number(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().phone().extension(), "3em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().email(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().status(), "7em"));
                 return columns;
             }
         };

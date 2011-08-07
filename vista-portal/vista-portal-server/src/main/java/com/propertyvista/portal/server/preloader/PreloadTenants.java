@@ -29,6 +29,8 @@ import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lead.Appointment;
+import com.propertyvista.domain.tenant.lead.Lead;
 
 public class PreloadTenants extends BaseVistaDataPreloader {
 
@@ -42,7 +44,7 @@ public class PreloadTenants extends BaseVistaDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(Tenant.class, Person.class, Company.class);
+            return deleteAll(Tenant.class, Person.class, Company.class, Lead.class, Appointment.class);
         } else {
             return "This is production";
         }
@@ -56,6 +58,11 @@ public class PreloadTenants extends BaseVistaDataPreloader {
         List<Tenant> tenants = generator.createTenants(config.getNumTenants());
         for (Tenant tenant : tenants) {
             persistTenant(tenant);
+        }
+
+        List<Lead> leads = generator.createLeads(config.getNumLeads());
+        for (Lead lead : leads) {
+            persist(lead);
         }
 
         StringBuilder sb = new StringBuilder();

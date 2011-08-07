@@ -18,12 +18,15 @@ import java.sql.Time;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
+
+import com.propertyvista.domain.contact.Phone;
 
 public interface Appointment extends IEntity {
 
@@ -55,7 +58,8 @@ public interface Appointment extends IEntity {
     IPrimitive<String> agent();
 
     @Editor(type = EditorType.phone)
-    IPrimitive<String> phone();
+    @EmbeddedEntity
+    Phone phone();
 
     @Editor(type = EditorType.email)
     IPrimitive<String> email();
