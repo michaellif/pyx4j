@@ -64,6 +64,9 @@ import com.propertyvista.crm.client.activity.crud.tenant.TenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantScreeningEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantScreeningViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantViewerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.lead.LeadEditorActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.lead.LeadListerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.lead.LeadViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseViewerActivity;
@@ -264,6 +267,19 @@ public class MainActivityMapper implements AppActivityMapper {
                     }
 
 // - Tenant-related:
+                } else if (place instanceof CrmSiteMap.Tenants.Lead) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new LeadEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new LeadViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new LeadListerActivity(place);
+                        break;
+                    }
+
                 } else if (place instanceof CrmSiteMap.Tenants.Tenant) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
@@ -287,7 +303,6 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-// Tenant-Lease:
                 } else if (place instanceof CrmSiteMap.Tenants.Lease) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
@@ -301,7 +316,6 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-// Tenant-Inquiry:
                 } else if (place instanceof CrmSiteMap.Tenants.Inquiry) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
