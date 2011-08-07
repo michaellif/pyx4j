@@ -35,7 +35,7 @@ public class CTimeField extends CTextFieldBase<Time, NativeTextBox<Time>> {
 
     protected static I18n i18n = I18nFactory.getI18n(CTimeField.class);
 
-    private static final String defaultTimeFormat = i18n.tr("h:mm a");
+    public static final String defaultTimeFormat = i18n.tr("h:mm a");
 
     public CTimeField() {
         this(null);
@@ -43,7 +43,7 @@ public class CTimeField extends CTextFieldBase<Time, NativeTextBox<Time>> {
 
     public CTimeField(String title) {
         super(title);
-        setFormat(new TimeFormat(defaultTimeFormat));
+        setTimeFormat(defaultTimeFormat);
         addValueValidator(new TextBoxParserValidator<Time>(i18n.tr("Not a valid time. Must be in the format 12:00 AM")));
     }
 
@@ -52,7 +52,7 @@ public class CTimeField extends CTextFieldBase<Time, NativeTextBox<Time>> {
         return new NativeTextBox<Time>(this);
     }
 
-    public void setTimeFormat(final String format) {
+    public void setTimeFormat(String format) {
         setFormat(new TimeFormat(format));
     }
 

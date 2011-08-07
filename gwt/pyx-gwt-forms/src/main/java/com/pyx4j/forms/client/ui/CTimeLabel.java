@@ -8,34 +8,34 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.util.Date;
+import java.sql.Time;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 
-public class CDateLabel extends CAbstractLabel<Date> {
+public class CTimeLabel extends CAbstractLabel<Time> {
 
-    public CDateLabel() {
+    public CTimeLabel() {
         this(null);
     }
 
-    public CDateLabel(String title) {
+    public CTimeLabel(String title) {
         super(title);
-        setDateFormat(CDatePicker.defaultDateFormat);
+        setTimeFormat(CTimeField.defaultTimeFormat);
     }
 
-    public void setDateFormat(final String format) {
+    public void setTimeFormat(final String format) {
         if (format != null) {
-            setFormat(new IFormat<Date>() {
+            setFormat(new IFormat<Time>() {
 
                 DateTimeFormat formatter = DateTimeFormat.getFormat(format);
 
                 @Override
-                public String format(Date value) {
+                public String format(Time value) {
                     return formatter.format(value);
                 }
 
                 @Override
-                public Date parse(String string) {
+                public Time parse(String string) {
                     return null;
                 }
 

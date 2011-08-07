@@ -36,6 +36,8 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
 
     protected static I18n i18n = I18nFactory.getI18n(CDatePicker.class);
 
+    public static final String defaultDateFormat = i18n.tr("MM/dd/yyyy");
+
     private boolean pastDateSelectionAllowed = true;
 
     private String dateConditionValidationMessage;
@@ -105,7 +107,7 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
 
         private static DateTimeFormat parser = DateTimeFormat.getFormat(i18n.tr("MM/dd/yy"));
 
-        private static DateTimeFormat formatter = DateTimeFormat.getFormat(i18n.tr("MM/dd/yyyy"));
+        private static DateTimeFormat formatter = DateTimeFormat.getFormat(defaultDateFormat);
 
         @Override
         public String format(Date value) {
