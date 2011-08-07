@@ -186,7 +186,7 @@ public class DataGenerator {
     public static String randomPhone(String areaCode) {
         DecimalFormat nf = new DecimalFormat("0000000");
         String unformatedPhone = areaCode + nf.format((random().nextInt(10000000)));
-        return unformatedPhone.subSequence(0, 3) + "-" + unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10);
+        return "(" + unformatedPhone.subSequence(0, 3) + ") " + unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10);
     }
 
     public static int randomInt() {
