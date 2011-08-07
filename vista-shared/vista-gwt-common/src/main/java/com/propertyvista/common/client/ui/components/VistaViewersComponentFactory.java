@@ -13,6 +13,7 @@
  */
 package com.propertyvista.common.client.ui.components;
 
+import java.sql.Time;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
@@ -27,6 +28,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
+import com.pyx4j.forms.client.ui.CTimeLabel;
 
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.domain.ref.Country;
@@ -52,6 +54,12 @@ public class VistaViewersComponentFactory extends EntityFormComponentFactory {
                 CDateLabel comp = new CDateLabel();
                 if (mm.getFormat() != null) {
                     (comp).setDateFormat(mm.getFormat());
+                }
+                return comp;
+            } else if (mm.getValueClass().equals(Time.class)) {
+                CTimeLabel comp = new CTimeLabel();
+                if (mm.getFormat() != null) {
+                    (comp).setTimeFormat(mm.getFormat());
                 }
                 return comp;
             } else if (mm.getValueClass() == Boolean.class) {
