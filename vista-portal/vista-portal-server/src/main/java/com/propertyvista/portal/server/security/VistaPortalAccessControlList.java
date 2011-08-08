@@ -22,12 +22,12 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 import com.pyx4j.security.shared.AllPermissions;
 import com.pyx4j.security.shared.CoreBehavior;
 
-import com.propertyvista.domain.Application;
 import com.propertyvista.domain.ApplicationDocument;
 import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;

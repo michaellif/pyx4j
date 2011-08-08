@@ -25,8 +25,8 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
-import com.propertyvista.domain.Application;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
 import com.propertyvista.server.common.security.VistaContext;
 
@@ -49,7 +49,6 @@ public class PtAppContext extends VistaContext {
         return ((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey();
     }
 
-    @Deprecated
     public static Application getCurrentUserApplication() {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn())) {
@@ -65,7 +64,6 @@ public class PtAppContext extends VistaContext {
         return application;
     }
 
-    @Deprecated
     public static void setCurrentUserApplication(Application application) {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn())) {

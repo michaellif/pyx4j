@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
@@ -22,10 +24,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -36,16 +35,13 @@ import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.VistaBehavior;
-import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep.Status;
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
+import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
+import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep.Status;
+import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
-import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 
 public class PtAppWizardManager {
@@ -56,9 +52,7 @@ public class PtAppWizardManager {
 
     private static PtAppWizardManager instance;
 
-    private ApplicationProgress applicationProgress;
-
-    private String unitId;
+    private Application application;
 
     private PtAppWizardManager() {
         AppSite.getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
@@ -94,7 +88,14 @@ public class PtAppWizardManager {
 
                     @Override
                     public void onSuccess(Boolean result) {
-                        obtainUnit();
+                        if (!result) {
+                            PtAppSite.instance().showMessageDialog(i18n.tr("We can't find requested Application"), "Error", "Back", new Command() {
+                                @Override
+                                public void execute() {
+                                    History.back();
+                                }
+                            });
+                        }
                     }
 
                     //TODO remove this when initial application message is implemented
@@ -106,37 +107,8 @@ public class PtAppWizardManager {
                 });
     }
 
-    private void obtainUnit() {
-        unitId = Window.Location.getParameter("u");
-        if (ApplicationMode.isDevelopment()) {
-            unitId = DemoData.REGISTRATION_DEFAULT_UNIT_ID;
-        }
-        ((ActivationService) GWT.create(ActivationService.class)).unitExists(new DefaultAsyncCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean result) {
-                PtAppSite.getHistoryHandler().handleCurrentHistory();
-                if (!result) {
-                    PtAppSite.instance().showMessageDialog(i18n.tr("We can't find requested Unit"), "Error", "Back", new Command() {
-                        @Override
-                        public void execute() {
-                            History.back();
-                        }
-                    });
-                }
-            }
-
-            //TODO remove this when initial application message is implemented
-            @Override
-            public void onFailure(Throwable caught) {
-                PtAppSite.getHistoryHandler().handleCurrentHistory();
-                super.onFailure(caught);
-            }
-        }, new Key(unitId));
-
-    }
-
-    public ApplicationProgress getApplicationProgress() {
-        return applicationProgress;
+    public List<ApplicationWizardStep> getApplicationWizardSteps() {
+        return application.steps();
     }
 
     private ApplicationWizardStep getStep(Place place) {
@@ -144,7 +116,7 @@ public class PtAppWizardManager {
         if (placeId == null) {
             return null;
         }
-        for (ApplicationWizardStep step : applicationProgress.steps()) {
+        for (ApplicationWizardStep step : application.steps()) {
             if (placeId.equals(step.placeId().getValue())) {
                 return step;
             }
@@ -174,10 +146,10 @@ public class PtAppWizardManager {
         AppPlace currentPlace = AppSite.getWhere();
         ApplicationWizardStep currentStep = getStep(currentPlace);
         ApplicationWizardSubstep substep = getSubStep(currentPlace, currentStep);
-        ((ApplicationService) GWT.create(ApplicationService.class)).getApplicationProgress(new DefaultAsyncCallback<ApplicationProgress>() {
+        ((ApplicationService) GWT.create(ApplicationService.class)).getApplicationProgress(new DefaultAsyncCallback<Application>() {
             @Override
-            public void onSuccess(ApplicationProgress result) {
-                applicationProgress = result;
+            public void onSuccess(Application result) {
+                application = result;
                 navigationByApplicationProgress();
             }
         }, currentStep, substep);
@@ -188,7 +160,7 @@ public class PtAppWizardManager {
     }
 
     private void navigationByApplicationProgress() {
-        for (ApplicationWizardStep step : applicationProgress.steps()) {
+        for (ApplicationWizardStep step : application.steps()) {
             if (shouldSelect(step.status())) {
                 AppPlace place = AppSite.getHistoryMapper().getPlace(step.placeId().getValue());
                 if (step.substeps().size() > 0) {
@@ -214,16 +186,16 @@ public class PtAppWizardManager {
     private void loadCurrentApplication() {
         if (ClientSecurityController.checkBehavior(VistaBehavior.POTENTIAL_TENANT)) {
 
-            ((ApplicationService) GWT.create(ApplicationService.class)).getCurrentApplication(new DefaultAsyncCallback<CurrentApplication>() {
+            ((ApplicationService) GWT.create(ApplicationService.class)).getApplication(new DefaultAsyncCallback<Application>() {
                 @Override
-                public void onSuccess(CurrentApplication result) {
-                    applicationProgress = result.progress;
+                public void onSuccess(Application result) {
+                    application = result;
                     initApplicationProcess();
                 }
             });
 
         } else {
-            applicationProgress = null;
+            application = null;
             AppSite.getPlaceController().goTo(new PtSiteMap.CreateAccount());
         }
     }

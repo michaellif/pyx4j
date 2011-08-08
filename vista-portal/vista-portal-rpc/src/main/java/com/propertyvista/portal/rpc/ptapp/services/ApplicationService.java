@@ -16,12 +16,10 @@ package com.propertyvista.portal.rpc.ptapp.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
-import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
-import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
+import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
+import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
 
 /**
  * This is secure services, user need to lodged in to use application.
@@ -30,17 +28,9 @@ public interface ApplicationService extends IService {
 
     /**
      * Find existing application for user.
-     * 
-     * If no application exists, new one will be created, together with the progress and
-     * unit selection
-     * For new applications:
-     * search criteria must be provided
-     * 
-     * @throws UserRuntimeException
-     *             if search criteria did not yield any results
      */
-    public void getCurrentApplication(AsyncCallback<CurrentApplication> callback);
+    public void getApplication(AsyncCallback<Application> callback);
 
-    public void getApplicationProgress(AsyncCallback<ApplicationProgress> callback, ApplicationWizardStep currentStep, ApplicationWizardSubstep substep);
+    public void getApplicationProgress(AsyncCallback<Application> callback, ApplicationWizardStep currentStep, ApplicationWizardSubstep substep);
 
 }

@@ -15,7 +15,6 @@ package com.propertyvista.portal.domain.util;
 
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.Application;
 import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.User;
@@ -25,6 +24,7 @@ import com.propertyvista.domain.charges.ChargeLineSelectable;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.dto.VehiclesDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;

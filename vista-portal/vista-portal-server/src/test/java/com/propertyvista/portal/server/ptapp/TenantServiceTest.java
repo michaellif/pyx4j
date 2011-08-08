@@ -23,8 +23,8 @@ import com.propertvista.generator.PTGenerator;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.domain.Application;
 import com.propertyvista.domain.PreloadConfig;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Tenant;

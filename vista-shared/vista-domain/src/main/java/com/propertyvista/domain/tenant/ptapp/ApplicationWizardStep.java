@@ -7,39 +7,33 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-09
+ * Created on 2011-02-24
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.domain.tenant.ptapp;
 
+import java.io.Serializable;
+
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
-public interface Application extends IEntity, IUserEntity {
 
-    @Translatable
-    public enum Status {
+public interface ApplicationWizardStep extends IEntity {
 
-        inactive,
+    public enum Status implements Serializable {
 
-        created,
+        notVisited, latest, complete, invalid
 
-        submited,
-
-        returned;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
     }
+
+    IPrimitive<String> placeId();
 
     IPrimitive<Status> status();
 
-    IList<GuarantorConsent> guarantorConsents();
+    @Owned
+    IList<ApplicationWizardSubstep> substeps();
 
 }

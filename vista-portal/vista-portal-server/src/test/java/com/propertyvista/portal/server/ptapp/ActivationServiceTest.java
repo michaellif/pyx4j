@@ -13,25 +13,15 @@
  */
 package com.propertyvista.portal.server.ptapp;
 
-import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertvista.generator.BusinessDataGenerator;
-
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.rpc.shared.UserRuntimeException;
-import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.unit.server.TestServiceFactory;
-import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.PreloadConfig;
-import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
-import com.propertyvista.portal.server.TestUtil;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 public class ActivationServiceTest extends VistaDBTestBase {
@@ -53,133 +43,112 @@ public class ActivationServiceTest extends VistaDBTestBase {
         return TestServiceFactory.create(ActivationService.class);
     }
 
-    public void testUnitIsNotExist() {
-        ActivationService service = createService();
-        service.unitExists(new UnitTestsAsyncCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean result) {
-                log.info("Received {}", result);
-                Assert.assertFalse("No unit found", result.booleanValue());
-            }
-        }, new Key(Long.MAX_VALUE));
-    }
-
-    public void testUnitExists() {
-        ActivationService service = createService();
-        service.unitExists(new UnitTestsAsyncCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean result) {
-                Assert.assertTrue("Unit found", result.booleanValue());
-            }
-        }, new Key(1));
-    }
-
     /**
      * Submit a simple account creation request
      */
     public void testCreateAccount() {
         HappyPath.step1createAccount();
     }
-
-    /**
-     * Test invalid email address
-     */
-    public void testCreateAccountInvalidEmail() {
-        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
-
-        final String email = "abc"; // this is invalid email
-        request.email().setValue(email);
-        request.password().setValue("1234");
-        request.captcha().setValue(TestUtil.createCaptcha());
-
-        ActivationService service = createService();
-        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                Assert.fail("Should never come here");
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                Assert.assertNotNull("Received failure", throwable);
-                Assert.assertEquals(UserRuntimeException.class, throwable.getClass());
-            }
-        }, request);
-    }
-
-    public void testCreateAccountNoPassword() {
-        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
-
-        final String email = BusinessDataGenerator.createEmail();
-        request.email().setValue(email);
-        request.captcha().setValue(TestUtil.createCaptcha());
-
-        ActivationService service = createService();
-        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                Assert.fail("Should never come here");
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                Assert.assertNotNull("Received failure", throwable);
-                Assert.assertEquals(UserRuntimeException.class, throwable.getClass());
-            }
-        }, request);
-    }
-
-    public void testCreateAccountNoCaptcha() {
-        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
-
-        final String email = BusinessDataGenerator.createEmail();
-        request.email().setValue(email);
-        request.password().setValue("abc-password");
-
-        ActivationService service = createService();
-        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                Assert.fail("Should never come here");
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                Assert.assertNotNull("Received failure", throwable);
-                Assert.assertEquals(UserRuntimeException.class, throwable.getClass());
-            }
-        }, request);
-    }
-
-    public void testCreateAccountAlreadyExists() {
-        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
-
-        final String email = BusinessDataGenerator.createEmail();
-        request.email().setValue(email);
-        request.password().setValue("1234");
-        request.captcha().setValue(TestUtil.createCaptcha());
-
-        ActivationService service = createService();
-        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                Assert.assertNotNull("Got the visit", result.getUserVisit());
-                Assert.assertEquals("Email is correct", email, result.getUserVisit().getEmail());
-            }
-        }, request);
-
-        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                Assert.fail("Should not see success");
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                // this means that there was a problem creating the same account
-                Assert.assertNotNull("Received failure", throwable);
-                Assert.assertEquals(UserRuntimeException.class, throwable.getClass());
-            }
-        }, request);
-    }
+//
+//    /**
+//     * Test invalid email address
+//     */
+//    public void testCreateAccountInvalidEmail() {
+//        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
+//
+//        final String email = "abc"; // this is invalid email
+//        request.email().setValue(email);
+//        request.password().setValue("1234");
+//        request.captcha().setValue(TestUtil.createCaptcha());
+//
+//        ActivationService service = createService();
+//        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
+//            @Override
+//            public void onSuccess(AuthenticationResponse result) {
+//                Assert.fail("Should never come here");
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable throwable) {
+//                Assert.assertNotNull("Received failure", throwable);
+//                Assert.assertEquals(UserRuntimeException.class, throwable.getClass());
+//            }
+//        }, request);
+//    }
+//
+//    public void testCreateAccountNoPassword() {
+//        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
+//
+//        final String email = BusinessDataGenerator.createEmail();
+//        request.email().setValue(email);
+//        request.captcha().setValue(TestUtil.createCaptcha());
+//
+//        ActivationService service = createService();
+//        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
+//            @Override
+//            public void onSuccess(AuthenticationResponse result) {
+//                Assert.fail("Should never come here");
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable throwable) {
+//                Assert.assertNotNull("Received failure", throwable);
+//                Assert.assertEquals(UserRuntimeException.class, throwable.getClass());
+//            }
+//        }, request);
+//    }
+//
+//    public void testCreateAccountNoCaptcha() {
+//        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
+//
+//        final String email = BusinessDataGenerator.createEmail();
+//        request.email().setValue(email);
+//        request.password().setValue("abc-password");
+//
+//        ActivationService service = createService();
+//        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
+//            @Override
+//            public void onSuccess(AuthenticationResponse result) {
+//                Assert.fail("Should never come here");
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable throwable) {
+//                Assert.assertNotNull("Received failure", throwable);
+//                Assert.assertEquals(UserRuntimeException.class, throwable.getClass());
+//            }
+//        }, request);
+//    }
+//
+//    public void testCreateAccountAlreadyExists() {
+//        AccountCreationRequest request = EntityFactory.create(AccountCreationRequest.class);
+//
+//        final String email = BusinessDataGenerator.createEmail();
+//        request.email().setValue(email);
+//        request.password().setValue("1234");
+//        request.captcha().setValue(TestUtil.createCaptcha());
+//
+//        ActivationService service = createService();
+//        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
+//            @Override
+//            public void onSuccess(AuthenticationResponse result) {
+//                Assert.assertNotNull("Got the visit", result.getUserVisit());
+//                Assert.assertEquals("Email is correct", email, result.getUserVisit().getEmail());
+//            }
+//        }, request);
+//
+//        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
+//            @Override
+//            public void onSuccess(AuthenticationResponse result) {
+//                Assert.fail("Should not see success");
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable throwable) {
+//                // this means that there was a problem creating the same account
+//                Assert.assertNotNull("Received failure", throwable);
+//                Assert.assertEquals(UserRuntimeException.class, throwable.getClass());
+//            }
+//        }, request);
+//    }
 }

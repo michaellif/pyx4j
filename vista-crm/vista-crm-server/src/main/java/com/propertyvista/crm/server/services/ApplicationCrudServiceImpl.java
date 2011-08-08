@@ -15,7 +15,7 @@ package com.propertyvista.crm.server.services;
 
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
-import com.propertyvista.domain.Application;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.ApplicationDTO;
 
 public class ApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<Application, ApplicationDTO> implements ApplicationCrudService {

@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.ptapp.services;
 
 import java.util.List;
+import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
@@ -27,9 +28,9 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
+import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.dto.TenantListItemDTO;
@@ -45,17 +46,17 @@ public class ApplicationProgressMgr {
         return ws;
     }
 
-    public static ApplicationProgress createApplicationProgress() {
-        ApplicationProgress progress = EntityFactory.create(ApplicationProgress.class);
-        progress.steps().add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
-        progress.steps().add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(PtSiteMap.Addons.class, ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
+    public static List<ApplicationWizardStep> createApplicationProgress() {
+        List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
+        progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
+        progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Addons.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
         return progress;
     }
 

@@ -15,33 +15,14 @@ package com.propertyvista.portal.rpc.ptapp.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
-import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.PasswordChangeRequest;
 import com.propertyvista.portal.rpc.ptapp.PasswordRetrievalRequest;
 
 public interface ActivationService extends IService {
-
-    /**
-     * Verify that Unit exists before we allow to start Application process, e.g.
-     * createAccount
-     */
-    public void unitExists(AsyncCallback<Boolean> callback, Key unitId);
-
-    /**
-     * Create account (user and credentials) and start session
-     * 
-     * @throws UserRuntimeException
-     *             if email is invalid
-     * @throws UserRuntimeException
-     *             if email is already registered by an existing user
-     */
-    public void createAccount(AsyncCallback<AuthenticationResponse> callback, AccountCreationRequest request);
 
     /**
      * Request E-mail to be sent to customer with 'token' for PasswordReset.

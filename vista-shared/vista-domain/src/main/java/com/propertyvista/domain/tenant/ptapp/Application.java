@@ -7,32 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-24
+ * Created on 2011-02-09
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.ptapp;
-
-import java.io.Serializable;
+package com.propertyvista.domain.tenant.ptapp;
 
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface ApplicationWizardStep extends IEntity {
+import com.propertyvista.domain.IUserEntity;
 
-    public enum Status implements Serializable {
-
-        notVisited, latest, complete, invalid
-
-    }
-
-    IPrimitive<String> placeId();
-
-    IPrimitive<Status> status();
+public interface Application extends IEntity, IUserEntity {
 
     @Owned
-    IList<ApplicationWizardSubstep> substeps();
+    IList<ApplicationWizardStep> steps();
+
+    IPrimitive<Boolean> submited();
 
 }

@@ -14,11 +14,8 @@
 package com.propertyvista.portal.server.sync;
 
 import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.unit.server.TestServiceFactory;
-import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
-import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 
 public class ActivationServiceSync {
 
@@ -27,13 +24,13 @@ public class ActivationServiceSync {
     public AuthenticationResponse createAccount(AccountCreationRequest request) {
         response = null;
 
-        ActivationService service = TestServiceFactory.create(ActivationService.class);
-        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                response = result;
-            }
-        }, request);
+//        ActivationService service = TestServiceFactory.create(ActivationService.class);
+//        service.createAccount(new UnitTestsAsyncCallback<AuthenticationResponse>() {
+//            @Override
+//            public void onSuccess(AuthenticationResponse result) {
+//                response = result;
+//            }
+//        }, request);
 
         return response;
     }

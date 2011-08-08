@@ -27,10 +27,9 @@ import com.propertyvista.domain.User;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
-import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
+import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
+import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
@@ -39,7 +38,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
     private final static Logger log = LoggerFactory.getLogger(ApplicationServiceImpl.class);
 
     @Override
-    public void getCurrentApplication(AsyncCallback<CurrentApplication> callback) {
+    public void getApplication(AsyncCallback<Application> callback) {
 
         User currentUser = PtAppContext.getCurrentUser();
         log.debug("Asking for current application for current user {}", currentUser);
@@ -64,51 +63,30 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
             EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
             tenantInLease = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-        }
-        ApplicationProgress progress;
-        if (tenantInLease != null) {
-            lease = PersistenceServicesFactory.getPersistenceService().retrieve(Lease.class, tenantInLease.lease().getPrimaryKey());
-            {
-                EntityQueryCriteria<ApplicationProgress> criteria = EntityQueryCriteria.create(ApplicationProgress.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
-                progress = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+            if (tenantInLease == null) {
+                throw new Error("Invalid application");
             }
-        } else {
-
-            lease = EntityFactory.create(Lease.class);
-            lease.status().setValue(Lease.Status.Draft);
-            PersistenceServicesFactory.getPersistenceService().persist(lease);
-            tenantInLease = EntityFactory.create(TenantInLease.class);
-            tenantInLease.status().setValue(TenantInLease.Status.Applicant);
-            tenantInLease.tenant().set(tenant);
-            tenantInLease.lease().set(lease);
-            PersistenceServicesFactory.getPersistenceService().persist(tenantInLease);
-
-            lease.tenants().add(tenantInLease);
-            PersistenceServicesFactory.getPersistenceService().persist(lease);
-
-            progress = ApplicationProgressMgr.createApplicationProgress();
-            progress.lease().set(lease);
-            PersistenceServicesFactory.getPersistenceService().persist(progress);
-
         }
+        lease = PersistenceServicesFactory.getPersistenceService().retrieve(Lease.class, tenantInLease.lease().getPrimaryKey());
+
+        Application application;
+        {
+            EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
+            application = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        }
+
+        PtAppContext.setCurrentUserApplication(application);
         PtAppContext.setCurrentLease(lease);
 
-        CurrentApplication currentApplication = new CurrentApplication();
-        currentApplication.progress = progress;
-
-        // Fix serialization
-        currentApplication.progress.lease().set(null);
-
-        log.debug("Progress {}", currentApplication.progress);
-        callback.onSuccess(currentApplication);
+        log.debug("Application {}", application);
+        callback.onSuccess(application);
     }
 
     @Override
-    public void getApplicationProgress(AsyncCallback<ApplicationProgress> callback, ApplicationWizardStep currentStep, ApplicationWizardSubstep currentSubstep) {
-        EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
-        applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().lease(), PtAppContext.getCurrentLease()));
-        ApplicationProgress progress = secureRetrieve(applicationProgressCriteria);
+    public void getApplicationProgress(AsyncCallback<Application> callback, ApplicationWizardStep currentStep, ApplicationWizardSubstep currentSubstep) {
+        Application progress = PersistenceServicesFactory.getPersistenceService().retrieve(Application.class,
+                PtAppContext.getCurrentUserApplicationPrimaryKey());
 
         if (currentStep != null) {
             int idx = progress.steps().indexOf(currentStep);

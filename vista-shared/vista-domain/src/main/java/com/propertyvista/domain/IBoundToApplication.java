@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.ptapp.Application;
 
 /**
  * Mark that IEntity is only bound to one PotentialTenant Application.

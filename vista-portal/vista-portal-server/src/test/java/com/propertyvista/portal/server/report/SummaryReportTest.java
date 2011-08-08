@@ -34,10 +34,10 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
-import com.propertyvista.domain.Application;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.User;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.portal.server.ptapp.services.SummaryServiceImpl;

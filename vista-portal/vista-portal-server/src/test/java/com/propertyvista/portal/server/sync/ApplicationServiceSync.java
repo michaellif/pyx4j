@@ -18,27 +18,26 @@ import org.junit.Assert;
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 
-import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 
 public class ApplicationServiceSync {
-    private CurrentApplication currentApplication;
 
-    public CurrentApplication getCurrentApplication() {
+    private Application currentApplication;
+
+    public Application getCurrentApplication() {
         currentApplication = null;
 
         ApplicationService applicationService = TestServiceFactory.create(ApplicationService.class);
-        applicationService.getCurrentApplication(new UnitTestsAsyncCallback<CurrentApplication>() {
+        applicationService.getApplication(new UnitTestsAsyncCallback<Application>() {
             @Override
-            public void onSuccess(CurrentApplication result) {
-                Assert.assertNotNull("Application", result.application);
-                Assert.assertFalse("Application", result.application.isNull());
+            public void onSuccess(Application result) {
+                Assert.assertNotNull("Application", result);
                 currentApplication = result;
             }
         });
 
         Assert.assertNotNull(currentApplication);
-        Assert.assertNotNull(currentApplication.application);
         return currentApplication;
     }
 }

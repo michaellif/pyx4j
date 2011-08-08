@@ -15,7 +15,7 @@ package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.domain.Application;
+import com.propertyvista.domain.tenant.ptapp.Application;
 
 @Transient
 public interface ApplicationDTO extends Application {

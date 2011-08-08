@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
+import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 
 public interface SecondNavigView extends IsWidget {
 

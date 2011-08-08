@@ -20,11 +20,10 @@ import com.propertvista.generator.BusinessDataGenerator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
-import com.propertyvista.domain.Application;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
-import com.propertyvista.portal.rpc.ptapp.CurrentApplication;
 import com.propertyvista.portal.server.TestUtil;
 import com.propertyvista.portal.server.sync.ActivationServiceSync;
 import com.propertyvista.portal.server.sync.ApartmentServiceSync;
@@ -62,8 +61,7 @@ public class HappyPath {
 
     public static Application step2createApplication() {
         ApplicationServiceSync service = new ApplicationServiceSync();
-        CurrentApplication currentApplication = service.getCurrentApplication();
-        return currentApplication.application;
+        return service.getCurrentApplication();
     }
 
     public static UnitSelection step3loadUnitSelection() {

@@ -17,7 +17,6 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -32,8 +31,8 @@ import com.propertyvista.portal.client.ui.residents.CreateAccountView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
-import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 
+@Deprecated
 public class CreateAccountActivity extends AbstractActivity implements CreateAccountView.Presenter {
 
     private static I18n i18n = I18nFactory.getI18n(CreateAccountActivity.class);
@@ -71,6 +70,6 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
             }
 
         };
-        ((ActivationService) GWT.create(ActivationService.class)).createAccount(callback, request);
+        //((ActivationService) GWT.create(ActivationService.class)).createAccount(callback, request);
     }
 }

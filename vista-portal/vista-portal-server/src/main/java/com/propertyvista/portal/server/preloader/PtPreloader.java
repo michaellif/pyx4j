@@ -22,10 +22,10 @@ import com.propertvista.generator.gdo.TenantSummaryGDO;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.Application;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.Pet;
@@ -36,6 +36,8 @@ import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineList;
 import com.propertyvista.domain.contact.IAddress;
+import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.Summary;
@@ -182,9 +184,15 @@ public class PtPreloader extends BaseVistaDataPreloader {
 
         persist(summary.lease());
 
-        ApplicationProgress progress = ApplicationProgressMgr.createApplicationProgress();
-        progress.lease().set(summary.lease());
-        persist(progress);
+        MasterApplication ma = EntityFactory.create(MasterApplication.class);
+        ma.lease().set(summary.lease());
+
+        Application a = EntityFactory.create(Application.class);
+        a.steps().addAll(ApplicationProgressMgr.createApplicationProgress());
+        a.user().set(user);
+        ma.applications().add(a);
+
+        persist(ma);
 
         summary.unitSelection().lease().set(summary.lease());
         persist(summary.unitSelection());

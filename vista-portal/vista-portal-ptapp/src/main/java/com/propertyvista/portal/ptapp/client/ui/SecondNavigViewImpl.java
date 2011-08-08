@@ -34,8 +34,8 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep;
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardSubstep;
+import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
+import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 

@@ -13,15 +13,25 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.IBoundToApplication;
+import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 
 public interface ApplicationProgress extends IEntity, IBoundToApplication {
 
     @Owned
     IList<ApplicationWizardStep> steps();
 
+    @Override
+    @Detached
+    @NotNull
+    @Indexed
+    Application application();
 }

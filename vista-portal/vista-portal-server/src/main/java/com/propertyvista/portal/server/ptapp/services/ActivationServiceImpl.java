@@ -28,16 +28,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
-import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
-import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -47,8 +43,6 @@ import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.domain.User;
-import com.propertyvista.domain.VistaBehavior;
-import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.PasswordChangeRequest;
 import com.propertyvista.portal.rpc.ptapp.PasswordRetrievalRequest;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
@@ -61,16 +55,6 @@ import com.propertyvista.server.domain.UserCredential;
 public class ActivationServiceImpl extends ApplicationEntityServiceImpl implements ActivationService {
 
     private final static Logger log = LoggerFactory.getLogger(ActivationServiceImpl.class);
-
-    /**
-     * Verify that Unit exists before we allow to start Application process, e.g.
-     * createAccount
-     */
-    @Override
-    public void unitExists(AsyncCallback<Boolean> callback, Key unitId) {
-        log.debug("Checking if unit exists {}", unitId);
-        //callback.onSuccess(new ApartmentServiceImpl().isUnitExist(unitId));
-    }
 
     public static boolean validEmailAddress(String email) {
 
@@ -92,63 +76,6 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         } catch (AddressException e) {
             return false;
         }
-    }
-
-    @Override
-    public void createAccount(AsyncCallback<AuthenticationResponse> callback, AccountCreationRequest request) {
-        if (ServerSideConfiguration.instance().datastoreReadOnly()) {
-            throw new UnRecoverableRuntimeException(EntityServicesImpl.applicationReadOnlyMessage());
-        }
-
-        // validate email
-        String email = request.email().getValue().toLowerCase(); // intentionally convert this to lowercase before validation
-        log.info("Creating account for email={}", email);
-        if (!validEmailAddress(email)) {
-            log.info("Invalid Email [{}]", email);
-            throw new UserRuntimeException(i18n.tr("Invalid Email " + email));
-        }
-
-        // captcha (TODO this should probably go even before we validate email)
-        AbstractAntiBot.assertCaptcha(request.captcha().getValue());
-
-        // check if user is already registered
-        EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
-        List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
-        if (users.size() != 0) {
-            throw new UserRuntimeException(i18n.tr("Email already registered"));
-        }
-
-        // validate password
-        String password = request.password().getValue();
-        if (password == null || password.length() == 0) {
-            throw new UserRuntimeException(i18n.tr("Password can not be empty"));
-        }
-
-        // create account (user + credential)
-        UserCredential credential = EntityFactory.create(UserCredential.class);
-
-        User user = EntityFactory.create(User.class);
-        user.email().setValue(email);
-        user.name().setValue(request.email().getValue());
-
-        credential.credential().setValue(PasswordEncryptor.encryptPassword(password));
-        credential.enabled().setValue(Boolean.TRUE);
-        credential.behavior().setValue(VistaBehavior.POTENTIAL_TENANT);
-
-        // save to db
-        PersistenceServicesFactory.getPersistenceService().persist(user);
-        credential.setPrimaryKey(user.getPrimaryKey());
-        PersistenceServicesFactory.getPersistenceService().persist(credential);
-
-        //            Audit audit = EntityFactory.create(Audit.class);
-        //            audit.user().set(user);
-        //            audit.clientIP().setValue(Context.getRequestRemoteAddr());
-        //            audit.event().setValue("registered");
-        //            PersistenceServicesFactory.getPersistenceService().persist(audit);
-
-        callback.onSuccess(AuthenticationServiceImpl.createAuthenticationResponse(VistaAuthenticationServicesImpl.beginSession(user, credential)));
-
     }
 
     /**

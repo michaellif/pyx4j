@@ -7,26 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-07-18
- * @author Vlad
+ * Created on 2011-03-14
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.tenant;
+package com.propertyvista.domain.tenant.ptapp;
 
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.Application;
+import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep.Status;
 
-@Deprecated
-public interface TenantApplication extends IEntity {
+public interface ApplicationWizardSubstep extends IEntity {
 
-    @ReadOnly
-    @Detached
-    @NotNull
-    @Indexed
-    Application application();
+    IPrimitive<String> name();
+
+    IPrimitive<String> placeArgument();
+
+    IPrimitive<Status> status();
 }

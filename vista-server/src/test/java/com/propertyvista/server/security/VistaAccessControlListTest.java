@@ -33,10 +33,10 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.domain.Application;
 import com.propertyvista.domain.ApplicationDocument;
 import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.VistaBehavior;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.Charges;

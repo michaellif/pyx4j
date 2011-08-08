@@ -7,22 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-03-14
- * @author vlads
+ * Created on Aug 4, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.domain.ptapp;
+package com.propertyvista.domain.tenant.ptapp;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.portal.domain.ptapp.ApplicationWizardStep.Status;
+import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface ApplicationWizardSubstep extends IEntity {
+public interface MasterApplication extends IEntity {
 
-    IPrimitive<String> name();
+    @Owned
+    IList<Application> applications();
 
-    IPrimitive<String> placeArgument();
+    @Detached
+    Lease lease();
 
-    IPrimitive<Status> status();
 }

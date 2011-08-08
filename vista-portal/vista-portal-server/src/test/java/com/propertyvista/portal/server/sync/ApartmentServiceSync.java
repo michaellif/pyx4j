@@ -13,13 +13,7 @@
  */
 package com.propertyvista.portal.server.sync;
 
-import org.junit.Assert;
-
-import com.pyx4j.unit.server.TestServiceFactory;
-import com.pyx4j.unit.server.UnitTestsAsyncCallback;
-
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
-import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 
 public class ApartmentServiceSync {
 
@@ -27,15 +21,15 @@ public class ApartmentServiceSync {
 
     public UnitSelection retrieve() {
         unitSelection = null;
-
-        ApartmentService apartmentService = TestServiceFactory.create(ApartmentService.class);
-        apartmentService.retrieve(new UnitTestsAsyncCallback<UnitSelection>() {
-            @Override
-            public void onSuccess(UnitSelection result) {
-                Assert.assertNotNull("Unit selection", result);
-                unitSelection = result;
-            }
-        }, null);
+//
+//        ApartmentService apartmentService = TestServiceFactory.create(ApartmentService.class);
+//        apartmentService.retrieve(new UnitTestsAsyncCallback<UnitSelection>() {
+//            @Override
+//            public void onSuccess(UnitSelection result) {
+//                Assert.assertNotNull("Unit selection", result);
+//                unitSelection = result;
+//            }
+//        }, null);
         return unitSelection;
     }
 }

@@ -19,6 +19,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.IBoundToApplication;
 
+@Deprecated
 public interface UnitSelection extends IEntity, IBoundToApplication {
 
     IPrimitive<Key> selectedUnitId();

@@ -51,7 +51,6 @@ import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
-import com.propertyvista.domain.Application;
 import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -80,6 +79,7 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.server.common.security.SharedUserEntityInstanceAccess;
 
 public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
