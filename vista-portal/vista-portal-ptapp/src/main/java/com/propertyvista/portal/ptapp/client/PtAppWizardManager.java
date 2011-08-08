@@ -94,6 +94,7 @@ public class PtAppWizardManager {
 //                                }
 //                            });
 //                        }
+                        PtAppSite.getHistoryHandler().handleCurrentHistory();
                     }
 
                     //TODO remove this when initial application message is implemented
