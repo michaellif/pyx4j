@@ -29,8 +29,8 @@ import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.domain.ptapp.dto.TenantListItemDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantListDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListItemDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
@@ -88,7 +88,9 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
 
             new TenantConverter.TenantEditorConverter().copyDTOtoDBO(dto, tenantInLease);
 
+            PersistenceServicesFactory.getPersistenceService().persist(tenantInLease.tenant());
             PersistenceServicesFactory.getPersistenceService().persist(tenantInLease);
+            dto.setPrimaryKey(tenantInLease.getPrimaryKey());
             lease.tenants().add(tenantInLease);
             ret.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
         }
