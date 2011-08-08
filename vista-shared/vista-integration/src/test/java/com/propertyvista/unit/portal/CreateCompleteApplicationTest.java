@@ -58,9 +58,7 @@ import com.propertyvista.portal.domain.ptapp.dto.TenantListItemDTO;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
-import com.propertyvista.portal.server.ptapp.util.TenantTestAdapter;
 import com.propertyvista.server.common.reference.SharedData;
 
 public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
@@ -171,8 +169,12 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
     private void enterTestInfoPages(List<TenantSummaryGDO> tenants) {
         int id = 0;
         for (TenantSummaryGDO tenantSummary : tenants) {
-            if (ApplicationProgressMgr.shouldEnterInformation(tenantSummary)) {
-                enterTestInfo(new TenantConverter.TenantInfoEditorConverter().createDTO(tenantSummary));
+            if (shouldEnterInformation(tenantSummary)) {
+
+                TenantInfoDTO dto = new TenantConverter.Tenant2TenantInfo().createDTO(tenantSummary.tenant());
+                new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tenantSummary.tenantScreening(), dto);
+
+                enterTestInfo(dto);
                 saveAndContinue();
                 id++;
             }
@@ -291,7 +293,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
 
     private void enterFinancialPages(List<TenantSummaryGDO> tenants) {
         for (TenantSummaryGDO tenantSummary : tenants) {
-            if (ApplicationProgressMgr.shouldEnterInformation(tenantSummary)) {
+            if (shouldEnterInformation(tenantSummary)) {
                 enterFinancialForm(new TenantConverter.TenantFinancialEditorConverter().createDTO(tenantSummary.tenantScreening()));
                 saveAndContinue();
             }

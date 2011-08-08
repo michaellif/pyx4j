@@ -48,9 +48,12 @@ import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
-import com.propertyvista.portal.server.ptapp.util.TenantTestAdapter;
 
 abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
+
+    protected static boolean shouldEnterInformation(TenantSummaryGDO tenantSummary) {
+        return ApplicationProgressMgr.shouldEnterInformation(tenantSummary.tenantInLease(), tenantSummary.tenant().person().birthDate().getValue());
+    }
 
     protected void assertAptUnitForm(IDebugId formDebugId, AptUnitDTO aUnit) {
         assertValueOnForm(formDebugId, aUnit.unitType());
@@ -98,8 +101,12 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
     protected void verifyInfoPages(List<TenantSummaryGDO> tenants, boolean doSave) {
         int id = 0;
         for (TenantSummaryGDO tenantSummary : tenants) {
-            if (ApplicationProgressMgr.shouldEnterInformation(tenantSummary)) {
-                verifyInfoPage(new TenantConverter.TenantInfoEditorConverter().createDTO(tenantSummary), id);
+            if (shouldEnterInformation(tenantSummary)) {
+
+                TenantInfoDTO dto = new TenantConverter.Tenant2TenantInfo().createDTO(tenantSummary.tenant());
+                new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tenantSummary.tenantScreening(), dto);
+
+                verifyInfoPage(dto, id);
                 if (doSave) {
                     saveAndContinue();
                 }
@@ -234,7 +241,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
     protected void verifyFinancialPages(List<TenantSummaryGDO> tenants, boolean doSave) {
         int num = 0;
         for (TenantSummaryGDO tenantSummary : tenants) {
-            if (ApplicationProgressMgr.shouldEnterInformation(tenantSummary)) {
+            if (shouldEnterInformation(tenantSummary)) {
                 verifyFinancialPage(new TenantConverter.TenantFinancialEditorConverter().createDTO(tenantSummary.tenantScreening()), num);
                 if (doSave) {
                     saveAndContinue();

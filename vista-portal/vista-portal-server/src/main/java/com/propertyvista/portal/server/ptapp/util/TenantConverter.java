@@ -13,10 +13,9 @@
  */
 package com.propertyvista.portal.server.ptapp.util;
 
-import com.propertvista.generator.gdo.TenantSummaryGDO;
-
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialDTO;
@@ -41,27 +40,38 @@ public class TenantConverter {
 
     }
 
-    public static class TenantInfoEditorConverter extends EntityDtoBinder<TenantSummaryGDO, TenantInfoDTO> {
+    public static class Tenant2TenantInfo extends EntityDtoBinder<Tenant, TenantInfoDTO> {
 
-        public TenantInfoEditorConverter() {
-            super(TenantSummaryGDO.class, TenantInfoDTO.class);
+        public Tenant2TenantInfo() {
+            super(Tenant.class, TenantInfoDTO.class);
         }
 
         @Override
         protected void bind() {
-            bind(dtoProto.person(), dboProto.tenant().person());
-            bind(dtoProto.emergencyContacts(), dboProto.tenant().emergencyContacts());
+            bind(dtoProto.person(), dboProto.person());
+            bind(dtoProto.emergencyContacts(), dboProto.emergencyContacts());
+        }
 
-            bind(dtoProto.driversLicense(), dboProto.tenantScreening().driversLicense());
-            bind(dtoProto.driversLicenseState(), dboProto.tenantScreening().driversLicenseState());
-            bind(dtoProto.secureIdentifier(), dboProto.tenantScreening().secureIdentifier());
-            bind(dtoProto.notCanadianCitizen(), dboProto.tenantScreening().notCanadianCitizen());
+    }
 
-            bind(dtoProto.documents(), dboProto.tenantScreening().documents());
+    public static class TenantScreening2TenantInfo extends EntityDtoBinder<TenantScreening, TenantInfoDTO> {
 
-            bind(dtoProto.currentAddress(), dboProto.tenantScreening().currentAddress());
-            bind(dtoProto.previousAddress(), dboProto.tenantScreening().previousAddress());
-            bind(dtoProto.legalQuestions(), dboProto.tenantScreening().legalQuestions());
+        public TenantScreening2TenantInfo() {
+            super(TenantScreening.class, TenantInfoDTO.class);
+        }
+
+        @Override
+        protected void bind() {
+            bind(dtoProto.driversLicense(), dboProto.driversLicense());
+            bind(dtoProto.driversLicenseState(), dboProto.driversLicenseState());
+            bind(dtoProto.secureIdentifier(), dboProto.secureIdentifier());
+            bind(dtoProto.notCanadianCitizen(), dboProto.notCanadianCitizen());
+
+            bind(dtoProto.documents(), dboProto.documents());
+
+            bind(dtoProto.currentAddress(), dboProto.currentAddress());
+            bind(dtoProto.previousAddress(), dboProto.previousAddress());
+            bind(dtoProto.legalQuestions(), dboProto.legalQuestions());
 
         }
 

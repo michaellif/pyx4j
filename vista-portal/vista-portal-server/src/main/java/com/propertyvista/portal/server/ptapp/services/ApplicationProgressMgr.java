@@ -15,8 +15,6 @@ package com.propertyvista.portal.server.ptapp.services;
 
 import java.util.List;
 
-import com.propertvista.generator.gdo.TenantSummaryGDO;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.EntityServicesImpl;
@@ -79,10 +77,6 @@ public class ApplicationProgressMgr {
             return false;
         }
         return (TimeUtils.isOlderThen(tenant.person().birthDate().getValue(), 18));
-    }
-
-    public static boolean shouldEnterInformation(TenantSummaryGDO tenantSummary) {
-        return shouldEnterInformation(tenantSummary.tenantInLease(), tenantSummary.tenant().person().birthDate().getValue());
     }
 
     public static boolean shouldEnterInformation(TenantInLease tenant, LogicalDate birthDate) {

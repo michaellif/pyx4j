@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.propertvista.generator.gdo.TenantSummaryGDO;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -33,22 +32,27 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
     @Override
     public void retrieve(AsyncCallback<TenantFinancialDTO> callback, Key tenantId) {
         log.debug("Retrieving financials for tenant {}", tenantId);
-        TenantSummaryGDO summary = TenantInfoServiceImpl.getTenantSummaryDTO(tenantId);
+        TenantRetriever r = new TenantRetriever();
+        r.retrieve(tenantId);
 
-        TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(summary.tenantScreening());
+        TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(r.tenantScreening);
+        dto.setPrimaryKey(r.tenantInLease.getPrimaryKey());
         callback.onSuccess(dto);
     }
 
     @Override
     public void save(AsyncCallback<TenantFinancialDTO> callback, TenantFinancialDTO dto) {
         log.debug("Saving tenantFinancial {}", dto);
-        TenantSummaryGDO summary = TenantInfoServiceImpl.getTenantSummaryDTO(dto.getPrimaryKey());
 
-        new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(dto, summary.tenantScreening());
+        TenantRetriever r = new TenantRetriever();
+        r.retrieve(dto.getPrimaryKey());
 
-        PersistenceServicesFactory.getPersistenceService().merge(summary.tenantScreening());
+        new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(dto, r.tenantScreening);
 
-        dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(summary.tenantScreening());
+        PersistenceServicesFactory.getPersistenceService().merge(r.tenantScreening);
+
+        dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(r.tenantScreening);
+        dto.setPrimaryKey(r.tenantInLease.getPrimaryKey());
         callback.onSuccess(dto);
     }
 
