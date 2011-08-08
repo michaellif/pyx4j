@@ -41,7 +41,6 @@ public class TenantRetriever {
 
         tenant = EntityFactory.create(Tenant.class);
         tenant.set(tenantInLease.tenant());
-        PersistenceServicesFactory.getPersistenceService().retrieve(tenant);
         {
             EntityQueryCriteria<TenantScreening> criteria = EntityQueryCriteria.create(TenantScreening.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenantInLease.tenant()));
