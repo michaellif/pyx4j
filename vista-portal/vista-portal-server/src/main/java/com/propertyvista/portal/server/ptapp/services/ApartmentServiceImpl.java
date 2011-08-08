@@ -29,14 +29,12 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Override
     public void retrieve(AsyncCallback<UnitInfoDTO> callback, Key tenantId) {
-        // TODO Auto-generated method stub
-
+        callback.onSuccess(null);
     }
 
     @Override
     public void save(AsyncCallback<UnitInfoDTO> callback, UnitInfoDTO editableEntity) {
-        // TODO Auto-generated method stub
-
+        callback.onSuccess(null);
     }
 
 }

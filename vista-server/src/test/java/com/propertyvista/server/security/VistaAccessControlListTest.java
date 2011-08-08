@@ -38,21 +38,20 @@ import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.PetsDTO;
-import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.domain.ptapp.Summary;
+import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
+import com.propertyvista.portal.rpc.ptapp.services.AddonsService;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
-import com.propertyvista.portal.rpc.ptapp.services.AddonsService;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
@@ -145,8 +144,6 @@ public class VistaAccessControlListTest {
     public void publicApplicationEntityInstanceAccess() {
         TestLifecycle.beginRequest();
 
-        assertEntityPermission(false, ApplicationProgress.class, null);
-        assertEntityPermission(false, UnitSelection.class, null);
         assertEntityPermission(false, ApplicationDocument.class, null);
         assertEntityPermission(false, Tenant.class, null);
         assertEntityPermission(false, PotentialTenantInfo.class, null);
@@ -166,7 +163,6 @@ public class VistaAccessControlListTest {
         application.setPrimaryKey(new Key(-251));
         PtAppContext.setCurrentUserApplication(application);
 
-        assertEntityPermission(true, ApplicationProgress.class, application);
         assertEntityPermission(true, UnitSelection.class, application);
         assertEntityPermission(true, ApplicationDocument.class, application);
         assertEntityPermission(true, Tenant.class, application);
@@ -179,7 +175,6 @@ public class VistaAccessControlListTest {
 
         Application application2 = EntityFactory.create(Application.class);
         application2.setPrimaryKey(new Key(-252));
-        assertEntityPermission(false, ApplicationProgress.class, application2);
         assertEntityPermission(false, UnitSelection.class, application2);
         assertEntityPermission(false, ApplicationDocument.class, application2);
         assertEntityPermission(false, Tenant.class, application2);

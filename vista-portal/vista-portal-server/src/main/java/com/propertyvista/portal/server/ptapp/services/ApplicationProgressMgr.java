@@ -18,19 +18,16 @@ import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
-import com.propertyvista.portal.domain.ptapp.ApplicationProgress;
 import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.dto.TenantListItemDTO;
@@ -60,7 +57,7 @@ public class ApplicationProgressMgr {
         return progress;
     }
 
-    private static ApplicationWizardStep findWizardStep(ApplicationProgress progress, Class<? extends AppPlace> place) {
+    private static ApplicationWizardStep findWizardStep(Application progress, Class<? extends AppPlace> place) {
         for (ApplicationWizardStep step : progress.steps()) {
             if (step.placeId().getValue().equals(AppPlaceInfo.getPlaceId(place))) {
                 return step;
@@ -103,10 +100,8 @@ public class ApplicationProgressMgr {
     }
 
     public static void invalidateChargesStep() {
-        EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
-        applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().lease(), PtAppContext.getCurrentLease()));
-        ApplicationProgress progress = EntityServicesImpl.secureRetrieve(applicationProgressCriteria);
-        ApplicationWizardStep chargesStep = findWizardStep(progress, PtSiteMap.Charges.class);
+        Application app = PersistenceServicesFactory.getPersistenceService().retrieve(Application.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
+        ApplicationWizardStep chargesStep = findWizardStep(app, PtSiteMap.Charges.class);
         switch (chargesStep.status().getValue()) {
         case latest:
         case complete:
@@ -116,13 +111,10 @@ public class ApplicationProgressMgr {
     }
 
     public static void syncroizeApplicationProgress(List<TenantListItemDTO> tenants) {
-        EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
-        applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().lease(), PtAppContext.getCurrentLease()));
+        Application app = PersistenceServicesFactory.getPersistenceService().retrieve(Application.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
 
-        ApplicationProgress progress = EntityServicesImpl.secureRetrieve(applicationProgressCriteria);
-
-        ApplicationWizardStep infoStep = findWizardStep(progress, PtSiteMap.Info.class);
-        ApplicationWizardStep financialStep = findWizardStep(progress, PtSiteMap.Financial.class);
+        ApplicationWizardStep infoStep = findWizardStep(app, PtSiteMap.Info.class);
+        ApplicationWizardStep financialStep = findWizardStep(app, PtSiteMap.Financial.class);
         //Keep original values to be able to merge Steps
         ApplicationWizardSubstep[] infoSubSteps = infoStep.substeps().toArray(new ApplicationWizardSubstep[infoStep.substeps().size()]);
         ApplicationWizardSubstep[] financialSubSteps = financialStep.substeps().toArray(new ApplicationWizardSubstep[financialStep.substeps().size()]);

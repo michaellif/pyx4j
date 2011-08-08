@@ -22,8 +22,6 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.History;
 
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -88,14 +86,14 @@ public class PtAppWizardManager {
 
                     @Override
                     public void onSuccess(Boolean result) {
-                        if (!result) {
-                            PtAppSite.instance().showMessageDialog(i18n.tr("We can't find requested Application"), "Error", "Back", new Command() {
-                                @Override
-                                public void execute() {
-                                    History.back();
-                                }
-                            });
-                        }
+//                        if (!result) {
+//                            PtAppSite.instance().showMessageDialog(i18n.tr("We can't find requested Application"), "Error", "Back", new Command() {
+//                                @Override
+//                                public void execute() {
+//                                    History.back();
+//                                }
+//                            });
+//                        }
                     }
 
                     //TODO remove this when initial application message is implemented
