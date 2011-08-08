@@ -32,12 +32,24 @@ import com.propertyvista.crm.client.ui.crud.tenant.TenantScreeningViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantScreeningViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.lead.AppointmentEditorView;
+import com.propertyvista.crm.client.ui.crud.tenant.lead.AppointmentEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.lead.AppointmentListerView;
+import com.propertyvista.crm.client.ui.crud.tenant.lead.AppointmentListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.lead.AppointmentViewerView;
+import com.propertyvista.crm.client.ui.crud.tenant.lead.AppointmentViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.lead.LeadEditorView;
 import com.propertyvista.crm.client.ui.crud.tenant.lead.LeadEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.lead.LeadListerView;
 import com.propertyvista.crm.client.ui.crud.tenant.lead.LeadListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.lead.LeadViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.lead.LeadViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.lead.ShowingEditorView;
+import com.propertyvista.crm.client.ui.crud.tenant.lead.ShowingEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.lead.ShowingListerView;
+import com.propertyvista.crm.client.ui.crud.tenant.lead.ShowingListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.lead.ShowingViewerView;
+import com.propertyvista.crm.client.ui.crud.tenant.lead.ShowingViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseEditorView;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseListerView;
@@ -81,6 +93,20 @@ public class TenantViewFactory extends ViewFactoryBase {
                 map.put(type, new LeadViewerViewImpl());
             } else if (LeadEditorView.class.equals(type)) {
                 map.put(type, new LeadEditorViewImpl());
+
+            } else if (AppointmentListerView.class.equals(type)) {
+                map.put(type, new AppointmentListerViewImpl());
+            } else if (AppointmentViewerView.class.equals(type)) {
+                map.put(type, new AppointmentViewerViewImpl());
+            } else if (AppointmentEditorView.class.equals(type)) {
+                map.put(type, new AppointmentEditorViewImpl());
+
+            } else if (ShowingListerView.class.equals(type)) {
+                map.put(type, new ShowingListerViewImpl());
+            } else if (ShowingViewerView.class.equals(type)) {
+                map.put(type, new ShowingViewerViewImpl());
+            } else if (ShowingEditorView.class.equals(type)) {
+                map.put(type, new ShowingEditorViewImpl());
             }
         }
         return map.get(type);

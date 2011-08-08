@@ -23,6 +23,7 @@ import com.pyx4j.security.shared.AllPermissions;
 import com.pyx4j.security.shared.CoreBehavior;
 
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
+import com.propertyvista.crm.rpc.services.AppointmentCrudService;
 import com.propertyvista.crm.rpc.services.AuthenticationService;
 import com.propertyvista.crm.rpc.services.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
@@ -39,6 +40,7 @@ import com.propertyvista.crm.rpc.services.ParkingCrudService;
 import com.propertyvista.crm.rpc.services.ParkingSpotCrudService;
 import com.propertyvista.crm.rpc.services.RoofCrudService;
 import com.propertyvista.crm.rpc.services.ServiceCrudService;
+import com.propertyvista.crm.rpc.services.ShowingCrudService;
 import com.propertyvista.crm.rpc.services.TenantCrudService;
 import com.propertyvista.crm.rpc.services.TenantInLeaseCrudService;
 import com.propertyvista.crm.rpc.services.TenantScreeningCrudService;
@@ -74,7 +76,9 @@ import com.propertyvista.domain.tenant.Inquiry;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.security.SharedUserEntityInstanceAccess;
 
@@ -146,6 +150,12 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 // - Tenant-related:
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Lead.class, EntityPermission.ALL));
         grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(LeadCrudService.class));
+
+        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Appointment.class, EntityPermission.ALL));
+        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(AppointmentCrudService.class));
+
+        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Showing.class, EntityPermission.ALL));
+        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ShowingCrudService.class));
 
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Tenant.class, EntityPermission.ALL));
         grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(TenantCrudService.class));

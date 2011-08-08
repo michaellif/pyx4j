@@ -140,6 +140,18 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(caption = "Lead")
         @NavigationItem(navigLabel = "Leads")
         public static class Lead extends CrudAppPlace {
+
+        }
+
+        @PlaceProperties(caption = "Appointment")
+        @NavigationItem(navigLabel = "Appointments")
+        public static class Appointment extends CrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Showing")
+        @NavigationItem(navigLabel = "Showings")
+        public static class Showing extends CrudAppPlace {
+
         }
 
         @PlaceProperties(caption = "Tenant")

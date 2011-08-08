@@ -24,31 +24,30 @@ import com.pyx4j.site.client.ui.crud.IFormView;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lead.Appointment;
 
-public class LeadEditorForm extends CrmEntityForm<Lead> {
+public class AppointmentEditorForm extends CrmEntityForm<Appointment> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
-    public LeadEditorForm() {
-        super(Lead.class, new CrmEditorsComponentFactory());
+    public AppointmentEditorForm() {
+        super(Appointment.class, new CrmEditorsComponentFactory());
     }
 
-    public LeadEditorForm(IEditableComponentFactory factory, IFormView<Lead> parent) {
-        super(Lead.class, factory);
-        setParentView(parent);
+    public AppointmentEditorForm(IEditableComponentFactory factory, IFormView<Appointment> parentView) {
+        super(Appointment.class, factory);
+        setParentView(parentView);
     }
 
     @Override
     public IsWidget createContent() {
 
         tabPanel.add(createGeneralTab(), i18n.tr("General"));
-        tabPanel.addDisable(createAppointmentsTab(), i18n.tr("Appointments"));
+        tabPanel.addDisable(createShowingsTab(), i18n.tr("ShowingsTab"));
 
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
@@ -70,40 +69,22 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         VistaDecoratorsSplitFlowPanel split;
 
         main.add(split = new VistaDecoratorsSplitFlowPanel(!isEditable()));
-        split.getLeftPanel().add(inject(proto().person().name().firstName()), 15);
-        split.getLeftPanel().add(inject(proto().person().name().lastName()), 15);
-        split.getLeftPanel().add(inject(proto().person().email()), 20);
-        split.getLeftPanel().add(inject(proto().person().homePhone()), 15);
-        split.getLeftPanel().add(inject(proto().person().mobilePhone()), 15);
-        split.getLeftPanel().add(inject(proto().informedFrom()), 10);
+        split.getLeftPanel().add(inject(proto().date()), 8);
+        split.getLeftPanel().add(inject(proto().time()), 6);
+        split.getLeftPanel().add(inject(proto().address()), 20);
+        split.getLeftPanel().add(inject(proto().status()), 8);
 
-        split.getRightPanel().add(inject(proto().moveInDate()), 8);
-
-        split.getRightPanel().add(inject(proto().rent().min()), 5, i18n.tr("Min rent"));
-        split.getRightPanel().add(inject(proto().rent().max()), 5, i18n.tr("Max rent"));
-
-        split.getRightPanel().add(inject(proto().term()), 8);
-        split.getRightPanel().add(inject(proto().beds()), 4);
-        split.getRightPanel().add(inject(proto().baths()), 4);
-        split.getRightPanel().add(inject(proto().floorplan()), 15);
-
-        main.add(inject(proto().comments()), 50);
-
-        main.add(new VistaLineSeparator());
-
-        main.add(split = new VistaDecoratorsSplitFlowPanel(!isEditable()));
-        split.getLeftPanel().add(inject(proto().source()), 15);
-        split.getLeftPanel().add(inject(proto().assignedTo()), 15);
-
-        split.getRightPanel().add(inject(proto().createDate()), 8.2);
-        split.getRightPanel().add(inject(proto().status()), 10);
+        split.getRightPanel().add(inject(proto().agent()), 15);
+        split.getRightPanel().add(inject(proto().phone().number()), 10, i18n.tr("Agent Phone"));
+        split.getRightPanel().add(inject(proto().phone().extension()), 4);
+        split.getRightPanel().add(inject(proto().email()), 15, i18n.tr("Agent Email"));
 
         return new CrmScrollPanel(main);
     }
 
-    private Widget createAppointmentsTab() {
+    private Widget createShowingsTab() {
         if (!isEditable()) {
-            return new CrmScrollPanel(((LeadViewerView) getParentView()).getAppointmentsListerView().asWidget());
+            return new CrmScrollPanel(((AppointmentViewerView) getParentView()).getShowingsListerView().asWidget());
         }
         return new HTML(); // just stub - not necessary for editing mode!.. 
     }

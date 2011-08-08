@@ -64,9 +64,15 @@ import com.propertyvista.crm.client.activity.crud.tenant.TenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantScreeningEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantScreeningViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantViewerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.lead.AppointmentEditorActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.lead.AppointmentListerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.lead.AppointmentViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lead.LeadEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lead.LeadListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lead.LeadViewerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.lead.ShowingEditorActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.lead.ShowingListerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.lead.ShowingViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseViewerActivity;
@@ -277,6 +283,32 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     case lister:
                         activity = new LeadListerActivity(place);
+                        break;
+                    }
+
+                } else if (place instanceof CrmSiteMap.Tenants.Appointment) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new AppointmentEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new AppointmentViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new AppointmentListerActivity(place);
+                        break;
+                    }
+
+                } else if (place instanceof CrmSiteMap.Tenants.Showing) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new ShowingEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new ShowingViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new ShowingListerActivity(place);
                         break;
                     }
 

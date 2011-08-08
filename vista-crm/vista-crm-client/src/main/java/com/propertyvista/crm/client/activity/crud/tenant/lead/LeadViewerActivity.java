@@ -18,20 +18,30 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.tenant.lead.LeadViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
+import com.propertyvista.crm.rpc.services.AppointmentCrudService;
 import com.propertyvista.crm.rpc.services.LeadCrudService;
+import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeadViewerActivity extends ViewerActivityBase<Lead> implements LeadViewerView.Presenter {
 
+    private final IListerView.Presenter appointmentsLister;
+
     @SuppressWarnings("unchecked")
     public LeadViewerActivity(Place place) {
         super((LeadViewerView) TenantViewFactory.instance(LeadViewerView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class));
+
+        appointmentsLister = new ListerActivityBase<Appointment>(((LeadViewerView) view).getAppointmentsListerView(),
+                (AbstractCrudService<Appointment>) GWT.create(AppointmentCrudService.class), Appointment.class);
         withPlace(place);
     }
 
@@ -59,5 +69,18 @@ public class LeadViewerActivity extends ViewerActivityBase<Lead> implements Lead
         if (!((LeadViewerView) view).onConvertionFail(caught)) {
             throw new UnrecoverableClientError(caught);
         }
+    }
+
+    @Override
+    public Presenter getAppointmentsPresenter() {
+        return appointmentsLister;
+    }
+
+    @Override
+    protected void onPopulateSuccess(Lead result) {
+        super.onPopulateSuccess(result);
+
+        appointmentsLister.setParentFiltering(result.getPrimaryKey());
+        appointmentsLister.populate(0);
     }
 }
