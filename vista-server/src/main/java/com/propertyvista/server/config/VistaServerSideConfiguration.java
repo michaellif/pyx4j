@@ -20,8 +20,10 @@ import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.essentials.server.EssentialsRPCServiceFactory;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.security.shared.AclCreator;
@@ -91,6 +93,11 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
     @Override
     public DataPreloaderCollection getDataPreloaders() {
         return new VistaDataPreloaders(PreloadConfig.createDefault());
+    }
+
+    @Override
+    public IServiceFactory getRPCServiceFactory() {
+        return new EssentialsRPCServiceFactory();
     }
 
     @Override
