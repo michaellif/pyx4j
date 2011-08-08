@@ -13,9 +13,9 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
+import com.propertyvista.portal.rpc.ptapp.dto.UnitInfoDTO;
 
-public class ApartmentViewImpl extends WizardStepViewImpl<UnitSelection, ApartmentViewPresenter> implements ApartmentView {
+public class ApartmentViewImpl extends WizardStepViewImpl<UnitInfoDTO, ApartmentViewPresenter> implements ApartmentView {
 
     public ApartmentViewImpl() {
         super(new ApartmentViewForm());

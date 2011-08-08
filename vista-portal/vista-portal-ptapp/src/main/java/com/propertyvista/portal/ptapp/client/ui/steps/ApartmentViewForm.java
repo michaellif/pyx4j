@@ -20,23 +20,19 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.portal.domain.dto.AptUnitDTO;
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
+import com.propertyvista.portal.rpc.ptapp.dto.UnitInfoDTO;
 
-public class ApartmentViewForm extends CEntityForm<UnitSelection> {
+public class ApartmentViewForm extends CEntityForm<UnitInfoDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(ApartmentViewForm.class);
 
     private ApartmentViewPresenter presenter;
 
-    private final AptUnitDTO selectedUnit = EntityFactory.create(AptUnitDTO.class);
-
     public ApartmentViewForm() {
-        super(UnitSelection.class, new VistaEditorsComponentFactory());
+        super(UnitInfoDTO.class, new VistaEditorsComponentFactory());
     }
 
     public void setPresenter(ApartmentViewPresenter presenter) {
@@ -52,7 +48,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
     }
 
     @Override
-    public void populate(UnitSelection value) {
+    public void populate(UnitInfoDTO value) {
         super.populate(value);
     }
 

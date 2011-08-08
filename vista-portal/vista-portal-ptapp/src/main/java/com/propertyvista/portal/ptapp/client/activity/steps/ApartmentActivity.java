@@ -17,18 +17,18 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.ptapp.client.ui.steps.ApartmentView;
 import com.propertyvista.portal.ptapp.client.ui.steps.ApartmentViewPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
+import com.propertyvista.portal.rpc.ptapp.dto.UnitInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 
-public class ApartmentActivity extends WizardStepActivity<UnitSelection, ApartmentViewPresenter> implements ApartmentViewPresenter {
+public class ApartmentActivity extends WizardStepActivity<UnitInfoDTO, ApartmentViewPresenter> implements ApartmentViewPresenter {
 
     static ApartmentService srv = GWT.create(ApartmentService.class);
 
     public ApartmentActivity(AppPlace place) {
-        super((ApartmentView) WizardStepsViewFactory.instance(ApartmentView.class), UnitSelection.class, srv);
+        super((ApartmentView) WizardStepsViewFactory.instance(ApartmentView.class), UnitInfoDTO.class, srv);
         withPlace(place);
     }
 

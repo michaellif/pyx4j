@@ -7,14 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 10, 2011
- * @author vlads
+ * Created on Aug 8, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.services;
+package com.propertyvista.portal.rpc.ptapp.dto;
 
-import com.propertyvista.portal.rpc.ptapp.dto.UnitInfoDTO;
+import com.pyx4j.entity.shared.IEntity;
 
-public interface ApartmentService extends AbstractWizardService<UnitInfoDTO> {
+/**
+ * For primary - Unit for lease info + price + term
+ * For secondary/guarantor - Unit for lease info + price + term + all tenants + split info, add-ons
+ * 
+ * @author michaellif
+ * 
+ */
+public interface UnitInfoDTO extends IEntity {
 
 }

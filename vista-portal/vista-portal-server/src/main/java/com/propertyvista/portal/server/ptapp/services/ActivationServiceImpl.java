@@ -69,7 +69,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
     @Override
     public void unitExists(AsyncCallback<Boolean> callback, Key unitId) {
         log.debug("Checking if unit exists {}", unitId);
-        callback.onSuccess(new ApartmentServiceImpl().isUnitExist(unitId));
+        //callback.onSuccess(new ApartmentServiceImpl().isUnitExist(unitId));
     }
 
     public static boolean validEmailAddress(String email) {

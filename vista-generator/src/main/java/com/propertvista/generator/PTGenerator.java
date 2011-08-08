@@ -68,9 +68,7 @@ import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.misc.ApplicationDocumentServletParameters;
-import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.ApplicationDocumentData;
@@ -121,15 +119,6 @@ public class PTGenerator {
         //summary.charges().set(createCharges(summary, selectedUnit));
 
         return summary;
-    }
-
-    private Charges createCharges(Summary summary, AptUnit selectedUnit) {
-        assert (summary.application() != null);
-
-        Charges charges = EntityFactory.create(Charges.class);
-        charges.application().set(summary.application());
-        ///ChargesServerCalculation.updateChargesFromObjects(charges, summary.unitSelection(), selectedUnit, summary.tenantList(), summary.pets());
-        return charges;
     }
 
     public EmergencyContact createEmergencyContact() {

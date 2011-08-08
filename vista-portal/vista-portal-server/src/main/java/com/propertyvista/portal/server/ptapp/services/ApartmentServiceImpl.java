@@ -19,59 +19,24 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
-import com.propertyvista.portal.domain.util.VistaDataPrinter;
+import com.propertyvista.portal.rpc.ptapp.dto.UnitInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
-import com.propertyvista.portal.server.ptapp.PtAppContext;
 
-public class ApartmentServiceImpl extends ApplicationEntityServiceImpl implements ApartmentService {
+public class ApartmentServiceImpl implements ApartmentService {
 
     private final static Logger log = LoggerFactory.getLogger(ApartmentServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<UnitSelection> callback, Key tenantId) {
-        EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), PtAppContext.getCurrentLease()));
-        UnitSelection unitSelection = secureRetrieve(criteria);
-        if (unitSelection == null) {
-            log.debug("Creating new unit selection");
-            unitSelection = EntityFactory.create(UnitSelection.class);
-        } else {
-            //            log.info("Loaded existing unit selection {}", unitSelection);
-        }
+    public void retrieve(AsyncCallback<UnitInfoDTO> callback, Key tenantId) {
+        // TODO Auto-generated method stub
 
-        callback.onSuccess(unitSelection);
     }
 
     @Override
-    public void save(AsyncCallback<UnitSelection> callback, UnitSelection unitSelection) {
-        log.debug("Saving unit selection\n{}", VistaDataPrinter.print(unitSelection));
+    public void save(AsyncCallback<UnitInfoDTO> callback, UnitInfoDTO editableEntity) {
+        // TODO Auto-generated method stub
 
-        saveApplicationEntity(unitSelection);
-
-        callback.onSuccess(unitSelection);
-    }
-
-    @Override
-    public void retrieveUnit(AsyncCallback<AptUnit> callback, Key unitId) {
-        AptUnit unit = PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, unitId);
-        callback.onSuccess(unit);
-    }
-
-    public boolean isUnitExist(Key unitId) {
-        AptUnit unit = PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, unitId);
-        if (unit != null) {
-            log.debug("Unit {} is found", unit.getStringView());
-        } else {
-            log.debug("Unit is not found");
-        }
-        return unit != null;
     }
 
 }

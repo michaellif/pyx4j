@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
+import com.propertyvista.portal.rpc.ptapp.dto.UnitInfoDTO;
 
-public interface ApartmentView extends WizardStepView<UnitSelection, ApartmentViewPresenter> {
+public interface ApartmentView extends WizardStepView<UnitInfoDTO, ApartmentViewPresenter> {
 
 }
