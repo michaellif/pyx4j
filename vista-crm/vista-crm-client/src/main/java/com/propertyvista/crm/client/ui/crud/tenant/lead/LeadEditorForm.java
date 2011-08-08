@@ -107,7 +107,6 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
 
     private Widget createAppointmentsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        main.add(inject(proto().appointments(), createAppointmentsFolderEditor()));
         return new CrmScrollPanel(main);
     }
 

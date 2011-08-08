@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertvista.generator.TenantsGenerator;
+import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -31,6 +32,7 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lead.Showing;
 
 public class PreloadTenants extends BaseVistaDataPreloader {
 
@@ -60,9 +62,22 @@ public class PreloadTenants extends BaseVistaDataPreloader {
             persistTenant(tenant);
         }
 
+        // Leads:
         List<Lead> leads = generator.createLeads(config.getNumLeads());
         for (Lead lead : leads) {
             persist(lead);
+
+            List<Appointment> apps = generator.createAppointments(1 + RandomUtil.randomInt(3));
+            for (Appointment app : apps) {
+                app.lead().set(lead);
+                persist(app);
+
+                List<Showing> shws = generator.createShowings(1 + RandomUtil.randomInt(3));
+                for (Showing shw : shws) {
+                    shw.appointment().set(app);
+                    persist(shw);
+                }
+            }
         }
 
         StringBuilder sb = new StringBuilder();

@@ -26,6 +26,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lead.Showing;
 
 public class TenantsGenerator {
 
@@ -58,11 +59,11 @@ public class TenantsGenerator {
     }
 
     public List<Lead> createLeads(int num) {
-        List<Lead> item = new ArrayList<Lead>();
+        List<Lead> items = new ArrayList<Lead>();
         for (int i = 0; i < num; i++) {
-            item.add(createLead());
+            items.add(createLead());
         }
-        return item;
+        return items;
     }
 
     public Lead createLead() {
@@ -83,12 +84,15 @@ public class TenantsGenerator {
         item.assignedTo().setValue(CommonsGenerator.createName().getStringView());
         item.status().setValue(RandomUtil.randomEnum(Lead.Status.class));
 
-        int count = 1 + RandomUtil.randomInt(3);
-        for (int i = 0; i < count; ++i) {
-            item.appointments().add(createAppointment());
-        }
-
         return item;
+    }
+
+    public List<Appointment> createAppointments(int num) {
+        List<Appointment> items = new ArrayList<Appointment>();
+        for (int i = 0; i < num; ++i) {
+            items.add(createAppointment());
+        }
+        return items;
     }
 
     public Appointment createAppointment() {
@@ -101,6 +105,24 @@ public class TenantsGenerator {
         item.phone().set(CommonsGenerator.createPhone());
         item.email().setValue(RandomUtil.randomLetters(5).toLowerCase() + "@sympatico.ca");
         item.status().setValue(RandomUtil.randomEnum(Appointment.Status.class));
+
+        return item;
+    }
+
+    public List<Showing> createShowings(int num) {
+        List<Showing> items = new ArrayList<Showing>();
+        for (int i = 0; i < num; ++i) {
+            items.add(createShowing());
+        }
+        return items;
+    }
+
+    public Showing createShowing() {
+        Showing item = EntityFactory.create(Showing.class);
+
+        item.status().setValue(RandomUtil.randomEnum(Showing.Status.class));
+        item.result().setValue(RandomUtil.randomEnum(Showing.Result.class));
+        item.reason().setValue(RandomUtil.randomEnum(Showing.Reason.class));
 
         return item;
     }

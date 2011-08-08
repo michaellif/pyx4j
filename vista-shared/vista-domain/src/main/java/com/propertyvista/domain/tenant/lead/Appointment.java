@@ -16,11 +16,13 @@ package com.propertyvista.domain.tenant.lead;
 import java.sql.Time;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -45,6 +47,10 @@ public interface Appointment extends IEntity {
         }
     }
 
+    @Owner
+    @Detached
+    Lead lead();
+
     @Format("MM/dd/yyyy")
     @MemberColumn(name = "appointmentDate")
     IPrimitive<LogicalDate> date();
@@ -65,4 +71,7 @@ public interface Appointment extends IEntity {
     IPrimitive<String> email();
 
     IPrimitive<Status> status();
+
+// double reference - currently use just back reference from Showing itself.
+//    IList<Showing> showings();
 }
