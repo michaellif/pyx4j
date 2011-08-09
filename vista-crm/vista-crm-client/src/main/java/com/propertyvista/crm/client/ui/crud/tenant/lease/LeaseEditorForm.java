@@ -56,6 +56,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.ListerBase.ItemSelectionHandler;
 
+import com.propertyvista.common.client.ui.components.CEmailLabel;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
@@ -279,7 +280,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         } else if (proto().tenant().person().birthDate() == column.getObject()) {
                             comp = inject(column.getObject(), new CLabel());
                         } else if (proto().tenant().person().email() == column.getObject()) {
-                            comp = inject(column.getObject(), new CLabel());
+                            comp = inject(column.getObject(), new CEmailLabel());
                         } else {
                             comp = super.createCell(column);
 
