@@ -46,7 +46,7 @@ import com.propertyvista.domain.User;
 import com.propertyvista.portal.rpc.ptapp.PasswordChangeRequest;
 import com.propertyvista.portal.rpc.ptapp.PasswordRetrievalRequest;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
-import com.propertyvista.portal.server.mail.MessageTemplates;
+import com.propertyvista.server.common.mail.MessageTemplates;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;

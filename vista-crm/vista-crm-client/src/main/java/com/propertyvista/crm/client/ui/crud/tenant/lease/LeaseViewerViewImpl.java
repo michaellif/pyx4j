@@ -59,7 +59,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
     @Override
     public void populate(LeaseDTO value) {
-        createApplicationButton.setVisible(!Lease.Status.Draft.equals(value.status().getValue()));
+        createApplicationButton.setVisible(Lease.Status.Draft.equals(value.status().getValue()));
         super.populate(value);
     }
 

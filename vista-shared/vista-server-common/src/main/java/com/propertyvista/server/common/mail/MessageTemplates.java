@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.mail;
+package com.propertyvista.server.common.mail;
 
 import java.io.IOException;
 
@@ -56,5 +56,13 @@ public class MessageTemplates {
 
         ServerSideConfiguration.instance().getMainApplicationURL(),
                 AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, PtSiteMap.ResetPassword.class, ActivationService.PASSWORD_TOKEN, token)));
+    }
+
+    public static String createMasterApplicationInvitationEmail(String name, String token) {
+        return wrapHtml(i18n.tr("Dear {0},<br/>\n" + "This email was sent to you in response to your request to apply your Property Vista appartemts.<br/>\n"
+                + "Click the link below to go to the Property Vista site:<br/>\n" + "    <a style=\"color:#929733\" href=\"{1}{2}\">Application</a>", name,
+
+        ServerSideConfiguration.instance().getMainApplicationURL(),
+                AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, PtSiteMap.Login.class, ActivationService.PASSWORD_TOKEN, token)));
     }
 }
