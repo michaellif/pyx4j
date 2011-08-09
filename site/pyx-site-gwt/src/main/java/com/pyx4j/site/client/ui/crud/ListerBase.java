@@ -21,6 +21,7 @@
 package com.pyx4j.site.client.ui.crud;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -532,8 +533,12 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 Operands operand = operandsList.getValue();
 
                 Serializable value = null;
-                if (((INativeEditableComponent<?>) valueHolder.getWidget()).getNativeValue() != null) {
-                    value = (Serializable) ((INativeEditableComponent<?>) valueHolder.getWidget()).getNativeValue();
+                try {
+                    if (((INativeEditableComponent<?>) valueHolder.getWidget()).getNativeValue() != null) {
+                        value = (Serializable) ((INativeEditableComponent<?>) valueHolder.getWidget()).getNativeValue();
+                    }
+                } catch (ParseException e) {
+                    // Do nothing here..
                 }
 
                 return new FilterData(path, operand, value);

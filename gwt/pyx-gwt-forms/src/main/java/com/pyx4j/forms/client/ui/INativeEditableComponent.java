@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
 public interface INativeEditableComponent<E> extends INativeFocusComponent {
 
     public void setEditable(boolean editable);
@@ -28,7 +30,7 @@ public interface INativeEditableComponent<E> extends INativeFocusComponent {
 
     void setNativeValue(E value);
 
-    E getNativeValue();
+    E getNativeValue() throws ParseException;
 
     void setValid(boolean valid);
 

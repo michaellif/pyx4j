@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Vector;
 
@@ -58,6 +59,8 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     private String validationMessage;
 
+    private boolean parseFailed;
+
     public CEditableComponent() {
         this(null);
     }
@@ -68,6 +71,14 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     public boolean isValid() {
         return valid;
+    }
+
+    protected void setValid(boolean newValid) {
+        if (!newValid || (newValid != valid)) {
+            valid = newValid;
+            asWidget().setValid(valid);
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
+        }
     }
 
     public void revalidate() {
@@ -83,12 +94,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
         (isMandatoryConditionMet() && (isValueEmpty() || isValidationConditionMet()));
 
-        if (!newValid || (newValid != valid)) {
-            valid = newValid;
-            asWidget().setValid(valid);
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
-        }
-
+        setValid(newValid);
     }
 
     protected boolean update(DATA_TYPE value) {
@@ -310,8 +316,19 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         if (isEnabled() && isVisible() && isEditable()) {
             visited = true;
             editing = false;
-            update(asWidget().getNativeValue());
+            parseFailed = false;
+            try {
+                update(asWidget().getNativeValue());
+            } catch (ParseException e) {
+                parseFailed = true;
+                // Initiate not valid state:
+                validationMessage = e.getMessage();
+                setValid(false);
+            }
         }
     }
 
+    public boolean isParseFailed() {
+        return parseFailed;
+    }
 }
