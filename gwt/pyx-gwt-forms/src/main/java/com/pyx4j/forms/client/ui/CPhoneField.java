@@ -50,7 +50,7 @@ public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
 
         }
 
-        public static String normalize(String value) {
+        private static String normalize(String value) {
             if (value == null) {
                 return null;
             } else {
