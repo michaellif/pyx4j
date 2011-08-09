@@ -36,7 +36,7 @@ public interface Lease extends IEntity {
 
         Draft,
 
-        ScreeningRequested,
+        OnlineApplicationInProgress,
 
         PendingApproval,
 
@@ -92,6 +92,4 @@ public interface Lease extends IEntity {
 
     IList<Document> documents();
 
-    // === Internals:    
-    IPrimitive<Boolean> convertedToApplication();
 }

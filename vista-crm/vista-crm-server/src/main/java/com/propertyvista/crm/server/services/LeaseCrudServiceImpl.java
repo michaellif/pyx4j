@@ -20,6 +20,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
@@ -27,7 +28,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 
@@ -77,22 +78,17 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     }
 
     @Override
-    public void convertToApplication(AsyncCallback<Application> callback, Key entityId) {
+    public void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease lease = PersistenceServicesFactory.getPersistenceService().retrieve(dboClass, entityId);
-        if (lease.convertedToApplication().isBooleanTrue()) {
-            callback.onFailure(new Error("The Lease is converted to Lease already!"));
-        } else {
-            Application application = EntityFactory.create(Application.class);
+        MasterApplication ma = EntityFactory.create(MasterApplication.class);
 
-            // TODO : actual conversion here... 
+        // TODO : actual conversion here... 
 
-            PersistenceServicesFactory.getPersistenceService().merge(application);
+        PersistenceServicesFactory.getPersistenceService().merge(ma);
 
-            // mark Lease as converted:
-            lease.convertedToApplication().setValue(true);
-            PersistenceServicesFactory.getPersistenceService().merge(lease);
+        PersistenceServicesFactory.getPersistenceService().merge(lease);
 
-            callback.onSuccess(application);
-        }
+        callback.onSuccess(null);
+
     }
 }

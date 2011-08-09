@@ -18,6 +18,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
@@ -26,7 +27,6 @@ import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseView;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
-import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerActivity extends ViewerActivityBase<LeaseDTO> implements LeaseViewerView.Presenter {
@@ -56,28 +56,19 @@ public class LeaseViewerActivity extends ViewerActivityBase<LeaseDTO> implements
     }
 
     @Override
-    public void convertToApplication() {
-        ((LeaseCrudService) service).convertToApplication(new AsyncCallback<Application>() {
+    public void createMasterApplication() {
+        ((LeaseCrudService) service).createMasterApplication(new AsyncCallback<VoidSerializable>() {
 
             @Override
-            public void onSuccess(Application result) {
-                onApplicationConvertionSuccess(result);
+            public void onSuccess(VoidSerializable result) {
+
             }
 
             @Override
             public void onFailure(Throwable caught) {
-                onConvertionFail(caught);
+                throw new UnrecoverableClientError(caught);
             }
         }, entityId);
     }
 
-    public void onApplicationConvertionSuccess(Application result) {
-        ((LeaseViewerView) view).onApplicationConvertionSuccess(result);
-    }
-
-    protected void onConvertionFail(Throwable caught) {
-        if (!((LeaseViewerView) view).onConvertionFail(caught)) {
-            throw new UnrecoverableClientError(caught);
-        }
-    }
 }

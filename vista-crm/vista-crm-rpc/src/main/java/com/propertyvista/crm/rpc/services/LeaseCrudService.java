@@ -16,12 +16,12 @@ package com.propertyvista.crm.rpc.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseCrudService extends AbstractCrudService<LeaseDTO> {
 
-    void convertToApplication(AsyncCallback<Application> callback, Key entityId);
+    void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId);
 }

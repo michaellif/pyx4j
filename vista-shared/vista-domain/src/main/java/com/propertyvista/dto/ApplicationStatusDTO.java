@@ -7,21 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
- * @author Vlad
+ * Created on Aug 9, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant.lease;
+package com.propertyvista.dto;
 
-import com.pyx4j.site.client.ui.crud.IViewerView;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.dto.LeaseDTO;
+public interface ApplicationStatusDTO extends IEntity {
 
-public interface LeaseViewerView extends IViewerView<LeaseDTO>, LeaseView {
+    IPrimitive<String> name();
 
-    interface Presenter extends IViewerView.Presenter, LeaseView.Presenter {
+    /**
+     * Primary Tenant, Co-signer or Guarantor
+     */
+    IPrimitive<String> type();
 
-        void createMasterApplication();
-    }
+    /**
+     * Completed steps/total steps in %
+     */
+    IPrimitive<String> progress();
 
 }
