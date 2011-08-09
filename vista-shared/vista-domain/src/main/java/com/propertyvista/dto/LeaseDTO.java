@@ -33,4 +33,6 @@ public interface LeaseDTO extends Lease {
 //  IList<TenantInLease> tenants();
 
     ServiceCatalog serviceCatalog();
+
+    MasterApplicationStatusDTO masterApplicationStatus();
 }
