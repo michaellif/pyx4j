@@ -13,21 +13,37 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lead;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.ListerBase.ItemSelectionHandler;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
+import com.propertyvista.crm.client.ui.components.OkCancelBox;
+import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Showing;
+import com.propertyvista.dto.BuildingDTO;
 
 public class ShowingEditorForm extends CrmEntityForm<Showing> {
 
-    public ShowingEditorForm() {
+    public ShowingEditorForm(IFormView<Showing> parent) {
         super(Showing.class, new CrmEditorsComponentFactory());
+        setParentView(parent);
     }
 
     public ShowingEditorForm(IEditableComponentFactory factory) {
@@ -37,16 +53,102 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
     @Override
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
 
-        main.add(split);
-        split.getLeftPanel().add(inject(proto().building()), 20);
-        split.getLeftPanel().add(inject(proto().unit()), 20);
+        HorizontalPanel unitPanel = new HorizontalPanel();
+        unitPanel.add(main.createDecorator(inject(proto().unit(), new CEntityLabel()), 15));
+        if (isEditable()) {
+            unitPanel.add(new Button("Select...", new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    new ShowPopUpBox<SelectUnitBox>(new SelectUnitBox()) {
+                        @Override
+                        protected void onClose(SelectUnitBox box) {
+                            if (box.getSelectedUnit() != null) {
+                                get(proto().building()).setValue(box.getSelectedBuilding());
+                                get(proto().unit()).setValue(box.getSelectedUnit());
+                            }
+                        }
+                    };
+                }
+            }));
+        }
+
+        VistaDecoratorsSplitFlowPanel split;
+        main.add(split = new VistaDecoratorsSplitFlowPanel(!isEditable()));
+
+        split.getLeftPanel().add(main.createDecorator(inject(proto().building(), new CEntityLabel()), 15));
+        split.getLeftPanel().add(unitPanel);
 
         split.getRightPanel().add(inject(proto().status()), 12);
         split.getRightPanel().add(inject(proto().result()), 12);
         split.getRightPanel().add(inject(proto().reason()), 12);
 
         return new CrmScrollPanel(main);
+    }
+
+    //
+    // Selection Boxes:
+    //
+    private class SelectUnitBox extends OkCancelBox {
+
+        private Building selectedBuilding;
+
+        private AptUnit selectedUnit;
+
+        public SelectUnitBox() {
+            super("Unit Selection");
+        }
+
+        @Override
+        protected Widget createContent() {
+            okButton.setEnabled(false);
+            ((ShowingEditorView) getParentView()).getBuildingListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<BuildingDTO>() {
+                @Override
+                public void onSelect(BuildingDTO selectedItem) {
+                    selectedBuilding = selectedItem;
+                    enableOkButton();
+                }
+            });
+            ((ShowingEditorView) getParentView()).getUnitListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<AptUnit>() {
+                @Override
+                public void onSelect(AptUnit selectedItem) {
+                    selectedUnit = selectedItem;
+                    enableOkButton();
+                }
+            });
+
+            VerticalPanel vPanel = new VerticalPanel();
+            vPanel.add(new CrmHeader2Decorator(i18n.tr("Select Building:")));
+            vPanel.add(((ShowingEditorView) getParentView()).getBuildingListerView().asWidget());
+            vPanel.add(new CrmHeader2Decorator(i18n.tr("Select Unit:")));
+            vPanel.add(((ShowingEditorView) getParentView()).getUnitListerView().asWidget());
+            vPanel.setWidth("100%");
+            return vPanel;
+        }
+
+        @Override
+        protected void setSize() {
+            setSize("900px", "500px");
+        }
+
+        @Override
+        protected void onCancel() {
+            selectedBuilding = null;
+            selectedUnit = null;
+        }
+
+        protected Building getSelectedBuilding() {
+            return selectedBuilding;
+        }
+
+        protected AptUnit getSelectedUnit() {
+            return selectedUnit;
+        }
+
+        private void enableOkButton() {
+            if (selectedBuilding != null && selectedUnit != null) {
+                okButton.setEnabled(true);
+            }
+        }
     }
 }

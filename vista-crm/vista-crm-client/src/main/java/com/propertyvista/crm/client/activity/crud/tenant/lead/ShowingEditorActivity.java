@@ -17,19 +17,64 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.tenant.lead.ShowingEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
+import com.propertyvista.crm.rpc.services.BuildingCrudService;
+import com.propertyvista.crm.rpc.services.LeaseUnitCrudService;
 import com.propertyvista.crm.rpc.services.ShowingCrudService;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Showing;
+import com.propertyvista.dto.BuildingDTO;
 
-public class ShowingEditorActivity extends EditorActivityBase<Showing> {
+public class ShowingEditorActivity extends EditorActivityBase<Showing> implements ShowingEditorView.Presenter {
+
+    private final IListerView.Presenter buildingsLister;
+
+    private final IListerView.Presenter unitsLister;
 
     @SuppressWarnings("unchecked")
     public ShowingEditorActivity(Place place) {
         super((ShowingEditorView) TenantViewFactory.instance(ShowingEditorView.class), (AbstractCrudService<Showing>) GWT.create(ShowingCrudService.class),
                 Showing.class);
+
+        buildingsLister = new ListerActivityBase<BuildingDTO>(((ShowingEditorView) view).getBuildingListerView(),
+                (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class), BuildingDTO.class);
+
+        unitsLister = new ListerActivityBase<AptUnit>(((ShowingEditorView) view).getUnitListerView(),
+                (AbstractCrudService<AptUnit>) GWT.create(LeaseUnitCrudService.class), AptUnit.class);
+
         withPlace(place);
+    }
+
+    @Override
+    public Presenter getBuildingPresenter() {
+        return buildingsLister;
+    }
+
+    @Override
+    public Presenter getUnitPresenter() {
+        return unitsLister;
+    }
+
+    @Override
+    public void onPopulateSuccess(Showing result) {
+        super.onPopulateSuccess(result);
+
+        buildingsLister.populate(0);
+        unitsLister.populate(0);
+    }
+
+    @Override
+    public void setSelectedBuilding(Building selected) {
+        Showing current = view.getValue();
+        current.building().set(selected);
+        unitsLister.setParentFiltering(selected.getPrimaryKey());
+        unitsLister.populate(0);
     }
 }
