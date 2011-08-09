@@ -22,6 +22,7 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 
@@ -73,13 +74,14 @@ public class NativePhone extends HorizontalPanel implements INativeEditableCompo
 
         if (cComponent.isShowType()) {
             add(type = new ListBox());
-            setCellWidth(type, "30%");
+            setCellWidth(type, "84px");
+            DOM.getParent(type.getElement()).getStyle().setPaddingRight(5, Unit.PX);
+
             for (Phone.Type item : Phone.Type.values()) {
                 type.addItem(item.toString(), item.name());
             }
             type.setSelectedIndex(-1);
             type.setWidth("100%");
-            type.getElement().getStyle().setMarginRight(5, Unit.PX);
             type.addFocusHandler(groupFocusHandler);
             type.addBlurHandler(groupBlurHandler);
         } else {
@@ -93,9 +95,10 @@ public class NativePhone extends HorizontalPanel implements INativeEditableCompo
 
         if (cComponent.isShowExtention()) {
             add(extention = new TextBox());
-            setCellWidth(extention, "20%");
+            setCellWidth(extention, "48px");
+            DOM.getParent(extention.getElement()).getStyle().setPaddingLeft(5, Unit.PX);
+
             extention.setWidth("100%");
-            extention.getElement().getStyle().setMarginLeft(5, Unit.PX);
             extention.addFocusHandler(groupFocusHandler);
             extention.addBlurHandler(groupBlurHandler);
         } else {

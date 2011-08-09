@@ -22,6 +22,7 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 
@@ -71,13 +72,14 @@ public class NativeEmail extends HorizontalPanel implements INativeEditableCompo
 
         if (cComponent.isShowType()) {
             add(type = new ListBox());
-            setCellWidth(type, "20%");
+            setCellWidth(type, "60px");
+            DOM.getParent(type.getElement()).getStyle().setPaddingRight(5, Unit.PX);
+
             for (Email.Type item : Email.Type.values()) {
                 type.addItem(item.toString(), item.name());
             }
             type.setSelectedIndex(-1);
             type.setWidth("100%");
-            type.getElement().getStyle().setMarginRight(5, Unit.PX);
             type.addFocusHandler(groupFocusHandler);
             type.addBlurHandler(groupBlurHandler);
         } else {

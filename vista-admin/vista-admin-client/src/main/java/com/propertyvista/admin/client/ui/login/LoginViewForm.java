@@ -26,6 +26,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
+import com.propertyvista.common.client.ui.decorations.DecorationData;
+import com.propertyvista.common.client.ui.decorations.DecorationData.ShowMandatory;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 
 public class LoginViewForm extends CEntityForm<AuthenticationRequest> {
@@ -41,13 +43,16 @@ public class LoginViewForm extends CEntityForm<AuthenticationRequest> {
         HTML header = new HTML(h2(i18n.tr("Login to Vista Administration")));
         header.getElement().getStyle().setMarginBottom(1, Unit.EM);
 
+        DecorationData decor = new DecorationData(90, 160);
+        decor.showMandatory = ShowMandatory.None;
+
         FlowPanel main = new FlowPanel();
         main.add(header);
-        main.add(new VistaWidgetDecorator(inject(proto().email()), 90, 160));
+        main.add(new VistaWidgetDecorator(inject(proto().email()), decor));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(inject(proto().password()), 90, 160));
+        main.add(new VistaWidgetDecorator(inject(proto().password()), decor));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(inject(proto().captcha()), 90, 160));
+        main.add(new VistaWidgetDecorator(inject(proto().captcha()), decor));
         return main;
     }
 }
