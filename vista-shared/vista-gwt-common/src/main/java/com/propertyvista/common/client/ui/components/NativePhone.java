@@ -14,7 +14,6 @@
 package com.propertyvista.common.client.ui.components;
 
 import java.text.ParseException;
-import java.util.Arrays;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -23,13 +22,12 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ListBox;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.TextBox;
-import com.pyx4j.widgets.client.combobox.ListBox;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.Selector;
 
@@ -47,53 +45,23 @@ public class NativePhone extends HorizontalPanel implements INativeEditableCompo
 
     private final TextBox extention;
 
-    private final ListBox<Phone.Type> type;
+    private final ListBox type;
 
     private final CPhone cComponent;
 
     private final HandlerManager focusHandlerManager;
 
-    private final FocusWidget focusWidget;
-
     public NativePhone(CPhone cComponent) {
         super();
         this.cComponent = cComponent;
 
-        setWidth("100%");
-
-        if (cComponent.isShowType()) {
-            add(type = new ListBox<Phone.Type>(false, true));
-            setCellWidth(type, "30%");
-            type.setOptions(Arrays.asList(Phone.Type.values()));
-            type.setWidth("100%");
-            type.getElement().getStyle().setMarginRight(5, Unit.PX);
-        } else {
-            type = null;
-        }
-
-        add(number = new TextBox());
-        number.setWidth("100%");
-
-        if (cComponent.isShowExtention()) {
-            add(extention = new TextBox());
-            setCellWidth(extention, "20%");
-            extention.setWidth("100%");
-            extention.getElement().getStyle().setMarginLeft(5, Unit.PX);
-        } else {
-            extention = null;
-        }
-
-        setStyleName(DEFAULT_STYLE_PREFIX);
-
         focusHandlerManager = new HandlerManager(this);
-
         FocusHandler groupFocusHandler = new FocusHandler() {
             @Override
             public void onFocus(FocusEvent e) {
                 focusHandlerManager.fireEvent(e);
             }
         };
-
         BlurHandler groupBlurHandler = new BlurHandler() {
             @Override
             public void onBlur(final BlurEvent e) {
@@ -101,9 +69,40 @@ public class NativePhone extends HorizontalPanel implements INativeEditableCompo
             }
         };
 
-        focusWidget = number;
-        focusWidget.addFocusHandler(groupFocusHandler);
-        focusWidget.addBlurHandler(groupBlurHandler);
+        setWidth("100%");
+
+        if (cComponent.isShowType()) {
+            add(type = new ListBox());
+            setCellWidth(type, "30%");
+            for (Phone.Type item : Phone.Type.values()) {
+                type.addItem(item.toString(), item.name());
+            }
+            type.setSelectedIndex(-1);
+            type.setWidth("100%");
+            type.getElement().getStyle().setMarginRight(5, Unit.PX);
+            type.addFocusHandler(groupFocusHandler);
+            type.addBlurHandler(groupBlurHandler);
+        } else {
+            type = null;
+        }
+
+        add(number = new TextBox());
+        number.setWidth("100%");
+        number.addFocusHandler(groupFocusHandler);
+        number.addBlurHandler(groupBlurHandler);
+
+        if (cComponent.isShowExtention()) {
+            add(extention = new TextBox());
+            setCellWidth(extention, "20%");
+            extention.setWidth("100%");
+            extention.getElement().getStyle().setMarginLeft(5, Unit.PX);
+            extention.addFocusHandler(groupFocusHandler);
+            extention.addBlurHandler(groupBlurHandler);
+        } else {
+            extention = null;
+        }
+
+        setStyleName(DEFAULT_STYLE_PREFIX);
     }
 
     @Override
@@ -175,14 +174,30 @@ public class NativePhone extends HorizontalPanel implements INativeEditableCompo
 
     @Override
     public void setNativeValue(Phone value) {
+        clearUI();
         if (value != null && !value.number().isNull()) {
             number.setText(cComponent.getFormat().format(value));
             if (type != null && !value.type().isNull()) {
-                type.setSelection(value.type().getValue());
+                for (int i = 0; i < type.getItemCount(); ++i) {
+                    if (value.type().getValue().name().compareTo(type.getValue(i)) == 0) {
+                        type.setSelectedIndex(i);
+                        break;
+                    }
+                }
             }
             if (extention != null && !value.extension().isNull()) {
                 extention.setText(value.extension().getStringView());
             }
+        }
+    }
+
+    private void clearUI() {
+        number.setText("");
+        if (type != null) {
+            type.setSelectedIndex(-1);
+        }
+        if (extention != null) {
+            extention.setText("");
         }
     }
 
@@ -191,8 +206,8 @@ public class NativePhone extends HorizontalPanel implements INativeEditableCompo
         Phone value;
         value = cComponent.getFormat().parse(number.getText());
         if (value != null) {
-            if (type != null && !type.getSelection().isEmpty()) {
-                value.type().setValue(type.getSelection().iterator().next());
+            if (type != null && type.getSelectedIndex() >= 0) {
+                value.type().setValue(Phone.Type.valueOf(type.getValue(type.getSelectedIndex())));
             }
             if (extention != null && !extention.getValue().isEmpty()) {
                 value.extension().setValue(Integer.decode(extention.getValue()));

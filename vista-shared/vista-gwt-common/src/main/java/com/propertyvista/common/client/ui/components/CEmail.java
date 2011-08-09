@@ -27,7 +27,7 @@ public class CEmail extends CEditableComponent<Email, NativeEmail> {
 
     private IFormat<Email> format;
 
-    private boolean showType = false;
+    private boolean showType;
 
     public CEmail() {
         this(null);

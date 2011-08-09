@@ -14,7 +14,6 @@
 package com.propertyvista.common.client.ui.components;
 
 import java.text.ParseException;
-import java.util.Arrays;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -23,13 +22,12 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ListBox;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.TextBox;
-import com.pyx4j.widgets.client.combobox.ListBox;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.Selector;
 
@@ -45,44 +43,23 @@ public class NativeEmail extends HorizontalPanel implements INativeEditableCompo
 
     private final TextBox address;
 
-    private final ListBox<Email.Type> type;
+    private final ListBox type;
 
     private final CEmail cComponent;
 
     private final HandlerManager focusHandlerManager;
 
-    private final FocusWidget focusWidget;
-
     public NativeEmail(CEmail cComponent) {
         super();
         this.cComponent = cComponent;
 
-        setWidth("100%");
-
-        if (cComponent.isShowType()) {
-            add(type = new ListBox<Email.Type>(false, true));
-            setCellWidth(type, "30%");
-            type.setOptions(Arrays.asList(Email.Type.values()));
-            type.setWidth("100%");
-            type.getElement().getStyle().setMarginLeft(5, Unit.PX);
-        } else {
-            type = null;
-        }
-
-        add(address = new TextBox());
-        address.setWidth("100%");
-
-        setStyleName(DEFAULT_STYLE_PREFIX);
-
         focusHandlerManager = new HandlerManager(this);
-
         FocusHandler groupFocusHandler = new FocusHandler() {
             @Override
             public void onFocus(FocusEvent e) {
                 focusHandlerManager.fireEvent(e);
             }
         };
-
         BlurHandler groupBlurHandler = new BlurHandler() {
             @Override
             public void onBlur(final BlurEvent e) {
@@ -90,9 +67,30 @@ public class NativeEmail extends HorizontalPanel implements INativeEditableCompo
             }
         };
 
-        focusWidget = address;
-        focusWidget.addFocusHandler(groupFocusHandler);
-        focusWidget.addBlurHandler(groupBlurHandler);
+        setWidth("100%");
+
+        if (cComponent.isShowType()) {
+            add(type = new ListBox());
+            setCellWidth(type, "20%");
+            for (Email.Type item : Email.Type.values()) {
+                type.addItem(item.toString(), item.name());
+            }
+            type.setSelectedIndex(-1);
+            type.setWidth("100%");
+            type.getElement().getStyle().setMarginRight(5, Unit.PX);
+            type.addFocusHandler(groupFocusHandler);
+            type.addBlurHandler(groupBlurHandler);
+        } else {
+            type = null;
+        }
+
+        add(address = new TextBox());
+        address.setWidth("100%");
+        address.addFocusHandler(groupFocusHandler);
+        address.addBlurHandler(groupBlurHandler);
+
+        setStyleName(DEFAULT_STYLE_PREFIX);
+
     }
 
     @Override
@@ -164,11 +162,24 @@ public class NativeEmail extends HorizontalPanel implements INativeEditableCompo
 
     @Override
     public void setNativeValue(Email value) {
+        clearUI();
         if (value != null && !value.address().isNull()) {
             address.setText(cComponent.getFormat().format(value));
             if (type != null && !value.type().isNull()) {
-                type.setSelection(value.type().getValue());
+                for (int i = 0; i < type.getItemCount(); ++i) {
+                    if (value.type().getValue().name().compareTo(type.getValue(i)) == 0) {
+                        type.setSelectedIndex(i);
+                        break;
+                    }
+                }
             }
+        }
+    }
+
+    private void clearUI() {
+        address.setText("");
+        if (type != null) {
+            type.setSelectedIndex(-1);
         }
     }
 
@@ -176,8 +187,8 @@ public class NativeEmail extends HorizontalPanel implements INativeEditableCompo
     public Email getNativeValue() throws ParseException {
         Email value;
         value = cComponent.getFormat().parse(address.getText());
-        if (value != null && type != null && !type.getSelection().isEmpty()) {
-            value.type().setValue(type.getSelection().iterator().next());
+        if (type != null && type.getSelectedIndex() >= 0) {
+            value.type().setValue(Email.Type.valueOf(type.getValue(type.getSelectedIndex())));
         }
         return value;
     }

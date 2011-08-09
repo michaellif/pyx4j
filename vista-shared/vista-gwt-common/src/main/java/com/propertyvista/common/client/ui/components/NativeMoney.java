@@ -22,7 +22,6 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
@@ -50,14 +49,28 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
 
     private final HandlerManager focusHandlerManager;
 
-    private final FocusWidget focusWidget;
-
     public NativeMoney(CMoney cComponent) {
         super();
         this.cComponent = cComponent;
 
+        focusHandlerManager = new HandlerManager(this);
+        FocusHandler groupFocusHandler = new FocusHandler() {
+            @Override
+            public void onFocus(FocusEvent e) {
+                focusHandlerManager.fireEvent(e);
+            }
+        };
+        BlurHandler groupBlurHandler = new BlurHandler() {
+            @Override
+            public void onBlur(final BlurEvent e) {
+                focusHandlerManager.fireEvent(e);
+            }
+        };
+
         add(amount = new TextBox());
         amount.setWidth("100%");
+        amount.addFocusHandler(groupFocusHandler);
+        amount.addBlurHandler(groupBlurHandler);
 
         if (cComponent.isShowCurrency()) {
             add(currency = new Label());
@@ -69,26 +82,6 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
         }
 
         setStyleName(DEFAULT_STYLE_PREFIX);
-
-        focusHandlerManager = new HandlerManager(this);
-
-        FocusHandler groupFocusHandler = new FocusHandler() {
-            @Override
-            public void onFocus(FocusEvent e) {
-                focusHandlerManager.fireEvent(e);
-            }
-        };
-
-        BlurHandler groupBlurHandler = new BlurHandler() {
-            @Override
-            public void onBlur(final BlurEvent e) {
-                focusHandlerManager.fireEvent(e);
-            }
-        };
-
-        focusWidget = amount;
-        focusWidget.addFocusHandler(groupFocusHandler);
-        focusWidget.addBlurHandler(groupBlurHandler);
     }
 
     @Override
@@ -160,11 +153,19 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
 
     @Override
     public void setNativeValue(Money value) {
+        clearUI();
         if (value != null && !value.amount().isNull()) {
             amount.setText(cComponent.getFormat().format(value));
             if (currency != null && !value.currency().isNull()) {
                 currency.setText(value.currency().getStringView());
             }
+        }
+    }
+
+    private void clearUI() {
+        amount.setText("");
+        if (currency != null) {
+            currency.setText("");
         }
     }
 

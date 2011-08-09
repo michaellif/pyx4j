@@ -30,15 +30,15 @@ public interface Phone extends IEntity {
     @Translatable
     public enum Type {
 
-        mobile,
+        home,
 
         work,
 
-        home,
+        mobile,
 
-        work_fax,
+        faxHome,
 
-        home_fax,
+        faxWork,
 
         other;
 
