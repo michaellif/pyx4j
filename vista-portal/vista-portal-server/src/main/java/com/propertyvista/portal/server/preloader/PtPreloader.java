@@ -44,7 +44,7 @@ import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.TenantChargeList;
 import com.propertyvista.portal.domain.util.VistaDataPrinter;
 import com.propertyvista.portal.server.ptapp.services.ApplicationDebug;
-import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
+import com.propertyvista.server.common.ptapp.ApplicationMgr;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 
 public class PtPreloader extends BaseVistaDataPreloader {
@@ -185,7 +185,7 @@ public class PtPreloader extends BaseVistaDataPreloader {
         ma.lease().set(summary.lease());
 
         Application a = EntityFactory.create(Application.class);
-        a.steps().addAll(ApplicationProgressMgr.createApplicationProgress());
+        a.steps().addAll(ApplicationMgr.createApplicationProgress());
         a.user().set(user);
         ma.applications().add(a);
 

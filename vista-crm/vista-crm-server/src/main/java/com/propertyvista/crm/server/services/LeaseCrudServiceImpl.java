@@ -28,9 +28,11 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
+import com.propertyvista.server.common.ptapp.ApplicationMgr;
 
 public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, LeaseDTO> implements LeaseCrudService {
 
@@ -80,15 +82,22 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     public void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease lease = PersistenceServicesFactory.getPersistenceService().retrieve(dboClass, entityId);
+        lease.status().setValue(Lease.Status.OnlineApplicationInProgress);
+
         MasterApplication ma = EntityFactory.create(MasterApplication.class);
+        ma.lease().set(lease);
 
-        // TODO : actual conversion here... 
-
+        for (TenantInLease tenantInLease : lease.tenants()) {
+            if (TenantInLease.Status.Applicant == tenantInLease.status().getValue()) {
+                Application a = EntityFactory.create(Application.class);
+                a.steps().addAll(ApplicationMgr.createApplicationProgress());
+                a.user().set(tenantInLease.tenant().user());
+                ma.applications().add(a);
+            }
+        }
         PersistenceServicesFactory.getPersistenceService().merge(ma);
-
         PersistenceServicesFactory.getPersistenceService().merge(lease);
 
         callback.onSuccess(null);
-
     }
 }

@@ -14,7 +14,6 @@
 package com.propertyvista.portal.server.ptapp.services;
 
 import java.util.List;
-import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
@@ -33,29 +32,9 @@ import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.dto.TenantListItemDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.server.common.ptapp.ApplicationMgr;
 
-public class ApplicationProgressMgr {
-
-    private static ApplicationWizardStep createWizardStep(Class<? extends AppPlace> place, ApplicationWizardStep.Status status) {
-        ApplicationWizardStep ws = EntityFactory.create(ApplicationWizardStep.class);
-        ws.placeId().setValue(AppPlaceInfo.getPlaceId(place));
-        ws.status().setValue(status);
-        return ws;
-    }
-
-    public static List<ApplicationWizardStep> createApplicationProgress() {
-        List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
-        progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
-        progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Addons.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
-        return progress;
-    }
+public class ApplicationProgressMgr extends ApplicationMgr {
 
     private static ApplicationWizardStep findWizardStep(Application progress, Class<? extends AppPlace> place) {
         for (ApplicationWizardStep step : progress.steps()) {
