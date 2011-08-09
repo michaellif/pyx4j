@@ -15,6 +15,9 @@ package com.propertyvista.common.client.ui.components;
 
 import java.text.ParseException;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.i18n.client.NumberFormat;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -23,7 +26,9 @@ import com.pyx4j.forms.client.ui.IFormat;
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.domain.util.DomainUtil;
 
-public class DefaultMoneyFormatter implements IFormat<Money> {
+public class MoneyFormatter implements IFormat<Money> {
+
+    private static I18n i18n = I18nFactory.getI18n(MoneyFormatter.class);
 
     public static enum ShowCurrency {
         hide, show, use$
@@ -33,19 +38,19 @@ public class DefaultMoneyFormatter implements IFormat<Money> {
 
     private final NumberFormat numberFormat;
 
-    public DefaultMoneyFormatter() {
+    public MoneyFormatter() {
         this((String) null);
     }
 
-    public DefaultMoneyFormatter(String format) {
+    public MoneyFormatter(String format) {
         this(format, ShowCurrency.hide);
     }
 
-    public DefaultMoneyFormatter(ShowCurrency showCurrency) {
+    public MoneyFormatter(ShowCurrency showCurrency) {
         this(null, showCurrency);
     }
 
-    public DefaultMoneyFormatter(String format, ShowCurrency showCurrency) {
+    public MoneyFormatter(String format, ShowCurrency showCurrency) {
         numberFormat = NumberFormat.getFormat(format != null ? format : "#0.00");
         this.showCurrency = showCurrency;
     }
@@ -81,7 +86,7 @@ public class DefaultMoneyFormatter implements IFormat<Money> {
             }
             return DomainUtil.createMoney(Double.valueOf(string));
         } catch (NumberFormatException e) {
-            return DomainUtil.createMoney(Double.NaN); // incorrect user entry case (checked by validator!)
+            throw new ParseException(i18n.tr("Amount should be a numeric value."), 0);
         }
     }
 }

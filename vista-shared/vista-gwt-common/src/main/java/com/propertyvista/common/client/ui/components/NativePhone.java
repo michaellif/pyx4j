@@ -14,6 +14,7 @@
 package com.propertyvista.common.client.ui.components;
 
 import java.text.ParseException;
+import java.util.Arrays;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -24,48 +25,62 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.TextBox;
+import com.pyx4j.widgets.client.combobox.ListBox;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.Selector;
 
-import com.propertyvista.domain.financial.Money;
+import com.propertyvista.domain.contact.Phone;
 
-public class NativeMoney extends HorizontalPanel implements INativeEditableComponent<Money> {
+public class NativePhone extends HorizontalPanel implements INativeEditableComponent<Phone> {
 
-    public static String DEFAULT_STYLE_PREFIX = "pyx4j_Money";
+    public static String DEFAULT_STYLE_PREFIX = "pyx4j_Phone";
 
     public static enum StyleDependent implements IStyleDependent {
         disabled, readOnly, invalid
     }
 
-    private final TextBox amount;
+    private final TextBox number;
 
-    private final Label currency;
+    private final TextBox extention;
 
-    private final CMoney cComponent;
+    private final ListBox<Phone.Type> type;
+
+    private final CPhone cComponent;
 
     private final HandlerManager focusHandlerManager;
 
     private final FocusWidget focusWidget;
 
-    public NativeMoney(CMoney cComponent) {
+    public NativePhone(CPhone cComponent) {
         super();
         this.cComponent = cComponent;
 
-        add(amount = new TextBox());
-        amount.setWidth("100%");
+        setWidth("100%");
 
-        if (cComponent.isShowCurrency()) {
-            add(currency = new Label());
-            currency.setWidth("100%");
-            currency.getElement().getStyle().setMarginLeft(5, Unit.PX);
+        if (cComponent.isShowType()) {
+            add(type = new ListBox<Phone.Type>(false, true));
+            setCellWidth(type, "30%");
+            type.setOptions(Arrays.asList(Phone.Type.values()));
+            type.setWidth("100%");
+            type.getElement().getStyle().setMarginRight(5, Unit.PX);
         } else {
-            currency = null;
-            setCellWidth(amount, "100%");
+            type = null;
+        }
+
+        add(number = new TextBox());
+        number.setWidth("100%");
+
+        if (cComponent.isShowExtention()) {
+            add(extention = new TextBox());
+            setCellWidth(extention, "20%");
+            extention.setWidth("100%");
+            extention.getElement().getStyle().setMarginLeft(5, Unit.PX);
+        } else {
+            extention = null;
         }
 
         setStyleName(DEFAULT_STYLE_PREFIX);
@@ -86,7 +101,7 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
             }
         };
 
-        focusWidget = amount;
+        focusWidget = number;
         focusWidget.addFocusHandler(groupFocusHandler);
         focusWidget.addBlurHandler(groupBlurHandler);
     }
@@ -108,7 +123,7 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
 
     @Override
     public void setEnabled(boolean enabled) {
-        amount.setEnabled(enabled);
+        number.setEnabled(enabled);
         String dependentSuffix = Selector.getDependentName(StyleDependent.disabled);
         if (enabled) {
             removeStyleDependentName(dependentSuffix);
@@ -119,12 +134,12 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
 
     @Override
     public boolean isEnabled() {
-        return amount.isEnabled();
+        return number.isEnabled();
     }
 
     @Override
     public void setEditable(boolean editable) {
-        amount.setReadOnly(!editable);
+        number.setReadOnly(!editable);
         String dependentSuffix = Selector.getDependentName(StyleDependent.readOnly);
         if (editable) {
             removeStyleDependentName(dependentSuffix);
@@ -135,7 +150,7 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
 
     @Override
     public boolean isEditable() {
-        return !amount.isReadOnly();
+        return !number.isReadOnly();
     }
 
     @Override
@@ -150,34 +165,38 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
 
     @Override
     public void setFocus(boolean focused) {
-        amount.setFocus(focused);
+        number.setFocus(focused);
     }
 
     @Override
     public void setTabIndex(int index) {
-        amount.setTabIndex(index);
+        number.setTabIndex(index);
     }
 
     @Override
-    public void setNativeValue(Money value) {
-        if (value != null && !value.amount().isNull()) {
-            amount.setText(cComponent.getFormat().format(value));
-            if (currency != null && !value.currency().isNull()) {
-                currency.setText(value.currency().getStringView());
+    public void setNativeValue(Phone value) {
+        if (value != null && !value.number().isNull()) {
+            number.setText(cComponent.getFormat().format(value));
+            if (type != null && !value.type().isNull()) {
+                type.setSelection(value.type().getValue());
+            }
+            if (extention != null && !value.extension().isNull()) {
+                extention.setText(value.extension().getStringView());
             }
         }
     }
 
     @Override
-    public Money getNativeValue() {
-        Money value;
-        try {
-            value = cComponent.getFormat().parse(amount.getText());
-        } catch (ParseException e) {
-            value = null;
-        }
-        if (value != null && currency != null) {
-            value.currency().name().setValue(currency.getText());
+    public Phone getNativeValue() throws ParseException {
+        Phone value;
+        value = cComponent.getFormat().parse(number.getText());
+        if (value != null) {
+            if (type != null && !type.getSelection().isEmpty()) {
+                value.type().setValue(type.getSelection().iterator().next());
+            }
+            if (extention != null && !extention.getValue().isEmpty()) {
+                value.extension().setValue(Integer.decode(extention.getValue()));
+            }
         }
         return value;
     }
@@ -189,6 +208,6 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
 
     @Override
     protected void onEnsureDebugId(String baseID) {
-        amount.ensureDebugId(baseID);
+        number.ensureDebugId(baseID);
     }
 }

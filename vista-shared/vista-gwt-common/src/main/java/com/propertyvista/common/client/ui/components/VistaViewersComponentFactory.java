@@ -30,6 +30,8 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 
+import com.propertyvista.domain.contact.Email;
+import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
@@ -73,6 +75,10 @@ public class VistaViewersComponentFactory extends EntityFormComponentFactory {
             return new CMoneyLabel();
         } else if (mm.isEntity() && !mm.isDetached() && !mm.isOwnedRelationships()) {
             return new CEntityLabel();
+        } else if (member.getValueClass().equals(Phone.class)) {
+            return new CPhoneLabel();
+        } else if (member.getValueClass().equals(Email.class)) {
+            return new CEmailLabel();
         }
         return super.create(member);
     }

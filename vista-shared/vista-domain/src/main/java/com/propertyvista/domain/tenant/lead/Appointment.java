@@ -63,7 +63,6 @@ public interface Appointment extends IEntity {
 
     IPrimitive<String> agent();
 
-    @Editor(type = EditorType.phone)
     @EmbeddedEntity
     Phone phone();
 

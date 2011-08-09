@@ -22,7 +22,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.person.Name;
 
 public class RandomUtil extends DataGenerator {
 
@@ -66,8 +66,8 @@ public class RandomUtil extends DataGenerator {
         return new LogicalDate(calendar.getTime().getTime());
     }
 
-    public static String randomPersonEmail(Person person) {
-        return person.name().firstName().getStringView().toLowerCase() + "." + person.name().lastName().getStringView().toLowerCase() + "@"
+    public static String randomPersonEmail(Name person) {
+        return person.firstName().getStringView().toLowerCase() + "." + person.lastName().getStringView().toLowerCase() + "@"
                 + DataGenerator.random(DemoData.EMAIL_DOMAINS);
     }
 

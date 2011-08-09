@@ -16,14 +16,15 @@ package com.propertyvista.domain.person;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.contact.Email;
+import com.propertyvista.domain.contact.Phone;
 
 public interface Person extends IEntity {
 
@@ -32,18 +33,18 @@ public interface Person extends IEntity {
     @EmbeddedEntity
     Name name();
 
-    @Editor(type = EditorType.phone)
-    IPrimitive<String> homePhone();
+    @EmbeddedEntity
+    Phone homePhone();
 
-    @Editor(type = EditorType.phone)
-    IPrimitive<String> mobilePhone();
+    @EmbeddedEntity
+    Phone mobilePhone();
 
-    @Editor(type = EditorType.phone)
-    IPrimitive<String> workPhone();
+    @EmbeddedEntity
+    Phone workPhone();
 
-    @Editor(type = EditorType.email)
     @Caption(name = "Email Address")
-    IPrimitive<String> email();
+    @EmbeddedEntity
+    Email email();
 
     @NotNull
     @Format("MM/dd/yyyy")

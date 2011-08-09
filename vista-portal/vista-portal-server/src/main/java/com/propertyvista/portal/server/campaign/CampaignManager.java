@@ -79,7 +79,7 @@ public class CampaignManager {
     private static void execute(PhoneCallCampaign phoneCallCampaign, PotentialTenantInfo tenant) {
         List<String> numbers = new ArrayList<String>();
         String name = tenant.person().name().firstName().getValue() + " " + tenant.person().name().lastName().getValue();
-        String number = tenant.person().homePhone().getValue();
+        String number = tenant.person().homePhone().number().getValue();
         if (ApplicationMode.isDevelopment()) {
             String allowedNumber = DevelopmentSecurity.callNumberFilter(number);
             log.info("We will call {} instead of {}", allowedNumber, number);

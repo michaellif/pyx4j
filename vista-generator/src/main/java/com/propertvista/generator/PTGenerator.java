@@ -126,12 +126,10 @@ public class PTGenerator {
 
         contact.name().set(CommonsGenerator.createName());
 
-        contact.homePhone().setValue(RandomUtil.randomPhone());
-        contact.mobilePhone().setValue(RandomUtil.randomPhone());
+        contact.homePhone().set(CommonsGenerator.createPhone());
+        contact.mobilePhone().set(CommonsGenerator.createPhone());
 
-        String email = contact.name().firstName().getStringView().toLowerCase() + "." + contact.name().lastName().getStringView().toLowerCase() + "@"
-                + RandomUtil.random(DemoData.EMAIL_DOMAINS);
-        contact.email().setValue(email);
+        contact.email().set(CommonsGenerator.createEmail(contact.name()));
 
         PriorAddress address = createAddress();
         contact.address().set(address);
@@ -349,7 +347,7 @@ public class PTGenerator {
 
         address.payment().setValue(1000d + RandomUtil.randomInt(1000));
 
-        address.phone().setValue(RandomUtil.randomPhone());
+        address.phone().set(CommonsGenerator.createPhone());
         address.rented().setValue(RandomUtil.randomEnum(PriorAddress.OwnedRented.class));
         address.managerName().setValue("Mr. " + RandomUtil.random(DemoData.LAST_NAMES));
 
@@ -408,14 +406,14 @@ public class PTGenerator {
         }
 
         person.birthDate().setValue(RandomUtil.randomLogicalDate(1930, 1980));
-        person.homePhone().setValue(RandomUtil.randomPhone());
-        person.mobilePhone().setValue(RandomUtil.randomPhone());
-        person.workPhone().setValue(RandomUtil.randomPhone());
+        person.homePhone().set(CommonsGenerator.createPhone());
+        person.mobilePhone().set(CommonsGenerator.createPhone());
+        person.workPhone().set(CommonsGenerator.createPhone());
 
-        person.email().setValue(RandomUtil.randomPersonEmail(person));
+        person.email().set(CommonsGenerator.createEmail(person.name()));
 
         if (index == 0) {
-            person.email().setValue(user.email().getValue());
+            person.email().address().setValue(user.email().getValue());
         }
 
         EmergencyContact ec1 = createEmergencyContact();
@@ -506,7 +504,7 @@ public class PTGenerator {
             guarantor.name().lastName().setValue(DataGenerator.randomLastName());
             guarantor.relationship().setValue(RandomUtil.random(TenantGuarantor.Relationship.values()));
             guarantor.birthDate().setValue(RandomUtil.randomLogicalDate(1960, 2011 - 18));
-            guarantor.email().setValue(RandomUtil.randomPersonEmail(guarantor));
+            guarantor.email().set(CommonsGenerator.createEmail(guarantor.name()));
             tenantScreening.guarantors().add(guarantor);
         }
 
@@ -527,5 +525,4 @@ public class PTGenerator {
 
         return user;
     }
-
 }

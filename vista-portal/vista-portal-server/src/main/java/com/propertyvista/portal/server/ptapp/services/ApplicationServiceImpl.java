@@ -53,7 +53,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
                 tenant = EntityFactory.create(Tenant.class);
                 tenant.user().set(currentUser);
                 tenant.type().setValue(Tenant.Type.person);
-                tenant.person().email().set(currentUser.email());
+                tenant.person().email().address().set(currentUser.email());
                 PersistenceServicesFactory.getPersistenceService().persist(tenant);
             }
         }

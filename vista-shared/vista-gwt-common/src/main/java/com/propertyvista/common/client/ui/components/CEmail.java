@@ -13,50 +13,55 @@
  */
 package com.propertyvista.common.client.ui.components;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.IFormat;
 
-import com.propertyvista.domain.financial.Money;
+import com.propertyvista.domain.contact.Email;
 
-public class CMoney extends CEditableComponent<Money, NativeMoney> {
+public class CEmail extends CEditableComponent<Email, NativeEmail> {
 
-    private IFormat<Money> format;
+    protected static I18n i18n = I18nFactory.getI18n(CEmail.class);
 
-    private boolean showCurrency = true;
+    private IFormat<Email> format;
 
-    public CMoney() {
+    private boolean showType = false;
+
+    public CEmail() {
         this(null);
     }
 
-    public CMoney(String title) {
-        this(title, true);
+    public CEmail(String title) {
+        this(title, false);
     }
 
-    public CMoney(String title, boolean showCurrency) {
+    public CEmail(String title, boolean showType) {
         super(title);
-        setShowCurrency(showCurrency);
-        setFormat(new MoneyFormatter());
+        setShowType(showType);
+        setFormat(new EmailFormatter());
     }
 
-    public void setShowCurrency(boolean showCurrency) {
-        this.showCurrency = showCurrency;
+    public void setShowType(boolean showType) {
+        this.showType = showType;
     }
 
-    public boolean isShowCurrency() {
-        return showCurrency;
+    public boolean isShowType() {
+        return showType;
     }
 
     @Override
-    protected NativeMoney createWidget() {
-        NativeMoney w = new NativeMoney(this);
+    protected NativeEmail createWidget() {
+        NativeEmail w = new NativeEmail(this);
         return w;
     }
 
-    public void setFormat(IFormat<Money> format) {
+    public void setFormat(IFormat<Email> format) {
         this.format = format;
     }
 
-    public IFormat<Money> getFormat() {
+    public IFormat<Email> getFormat() {
         return format;
     }
 

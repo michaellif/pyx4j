@@ -25,6 +25,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.Address;
+import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
@@ -106,7 +107,7 @@ public class Mapper {
 
         building.info().address().set(mapAddress(property.getAddress()));
 
-        building.contacts().email().set(CommonsGenerator.createEmail(property.getContact().getEmail()));
+        building.contacts().email().set(CommonsGenerator.createEmail(property.getContact().getEmail(), Email.Type.other));
 
         building.contacts().phones().add(CommonsGenerator.createPhone(property.getContact().getTel()));
 

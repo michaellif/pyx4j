@@ -73,21 +73,24 @@ public class CommonsGenerator {
         person.name().set(name);
         person.birthDate().setValue(RandomUtil.randomLogicalDate(1930, 1980));
 
-        person.homePhone().setValue(createPhone().number().getStringView());
-        person.mobilePhone().setValue(createPhone().number().getStringView());
-        person.workPhone().setValue(createPhone(DataGenerator.randomPhone("905"), Phone.Type.work, 123).getStringView());
+        person.homePhone().set(createPhone());
+        person.mobilePhone().set(createPhone());
+        person.workPhone().set(createPhone(DataGenerator.randomPhone("905"), Phone.Type.work, 123));
 
-        String email = name.firstName().getStringView() + "." + name.lastName().getStringView() + "@" + RandomUtil.random(DemoData.EMAIL_DOMAINS);
-        person.email().setValue(createEmail(email).address().getStringView());
+        person.email().set(createEmail(name));
 
         return person;
     }
 
-    public static Email createEmail(String emailAddress) {
+    public static Email createEmail(Name person) {
+        return createEmail(RandomUtil.randomPersonEmail(person), Type.home);
+    }
+
+    public static Email createEmail(String address, Email.Type type) {
         Email email = EntityFactory.create(Email.class);
 
-        email.type().setValue(Type.work);
-        email.address().setValue(emailAddress);
+        email.type().setValue(type);
+        email.address().setValue(address);
 
         return email;
     }

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.tenant;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -31,6 +32,7 @@ public interface Inquiry extends IEntity {
 
     IList<Phone> phones();
 
+    @EmbeddedEntity
     Email email();
 
     IPrimitive<String> description();

@@ -17,6 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -26,6 +27,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.contact.IAddressFull;
+import com.propertyvista.domain.contact.Phone;
 
 @Table(name = "pt_address")
 public interface PriorAddress extends IEntity, IAddressFull {
@@ -54,8 +56,8 @@ public interface PriorAddress extends IEntity, IAddressFull {
     @Format("#0.00")
     IPrimitive<Double> payment();
 
-    @Editor(type = EditorType.phone)
-    IPrimitive<String> phone();
+    @EmbeddedEntity
+    Phone phone();
 
     @NotNull
     @Caption(name = "Owned/Rented")

@@ -251,7 +251,7 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
             get(proto().billingAddress().city()).setValue(getValue().currentAddress().city().getValue());
             get(proto().billingAddress().county()).setValue(getValue().currentAddress().county().getValue());
             get(proto().billingAddress().postalCode()).setValue(getValue().currentAddress().postalCode().getValue());
-            get(proto().billingAddress().phone()).setValue(getValue().currentPhone().getValue());
+            get(proto().billingAddress().phone()).setValue(getValue().currentPhone());
 
             @SuppressWarnings("unchecked")
             CEditableComponent<Country, ?> country = (CEditableComponent<Country, ?>) getRaw(proto().billingAddress().country());

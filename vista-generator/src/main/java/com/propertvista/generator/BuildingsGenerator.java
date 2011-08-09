@@ -105,7 +105,7 @@ public class BuildingsGenerator {
 
         // email
         String emailAddress = "building" + (counter + 1) + "@propertyvista.com";
-        Email email = CommonsGenerator.createEmail(emailAddress);
+        Email email = CommonsGenerator.createEmail(emailAddress, Email.Type.work);
 
         // organization contacts - not many fields there at the moment, will do
         // this later

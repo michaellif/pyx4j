@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.contact;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -37,6 +39,7 @@ public interface Email extends IEntity {
     IPrimitive<Type> type();
 
     @ToString(index = 0)
+    @Editor(type = EditorType.email)
     IPrimitive<String> address();
 
 }

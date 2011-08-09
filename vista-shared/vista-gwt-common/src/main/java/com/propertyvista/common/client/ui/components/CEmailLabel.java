@@ -13,24 +13,25 @@
  */
 package com.propertyvista.common.client.ui.components;
 
+
 import com.pyx4j.forms.client.ui.CAbstractLabel;
+import com.pyx4j.forms.client.ui.IFormat;
 
-import com.propertyvista.common.client.ui.components.MoneyFormatter.ShowCurrency;
-import com.propertyvista.domain.financial.Money;
+import com.propertyvista.domain.contact.Email;
 
-public class CMoneyLabel extends CAbstractLabel<Money> {
+public class CEmailLabel extends CAbstractLabel<Email> {
 
-    public CMoneyLabel() {
+    public CEmailLabel() {
         super();
-        setMoneyFormat(null, ShowCurrency.use$);
+        setEmailFormat(null);
     }
 
-    public CMoneyLabel(String title) {
+    public CEmailLabel(String title) {
         super(title);
-        setMoneyFormat(null, ShowCurrency.use$);
+        setEmailFormat(null);
     }
 
-    public void setMoneyFormat(String format, ShowCurrency showCurrency) {
-        setFormat(new MoneyFormatter(format, showCurrency));
+    public void setEmailFormat(IFormat<Email> format) {
+        setFormat(format != null ? format : new EmailFormatter());
     }
 }

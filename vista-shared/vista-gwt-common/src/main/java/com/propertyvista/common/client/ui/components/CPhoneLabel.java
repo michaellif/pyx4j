@@ -14,23 +14,31 @@
 package com.propertyvista.common.client.ui.components;
 
 import com.pyx4j.forms.client.ui.CAbstractLabel;
+import com.pyx4j.forms.client.ui.IFormat;
 
-import com.propertyvista.common.client.ui.components.MoneyFormatter.ShowCurrency;
-import com.propertyvista.domain.financial.Money;
+import com.propertyvista.domain.contact.Phone;
 
-public class CMoneyLabel extends CAbstractLabel<Money> {
+public class CPhoneLabel extends CAbstractLabel<Phone> {
 
-    public CMoneyLabel() {
+    public CPhoneLabel() {
         super();
-        setMoneyFormat(null, ShowCurrency.use$);
+        setPhoneFormat(null);
     }
 
-    public CMoneyLabel(String title) {
+    public CPhoneLabel(String title) {
         super(title);
-        setMoneyFormat(null, ShowCurrency.use$);
+        setPhoneFormat(null);
     }
 
-    public void setMoneyFormat(String format, ShowCurrency showCurrency) {
-        setFormat(new MoneyFormatter(format, showCurrency));
+    public void setPhoneFormat(IFormat<Phone> format) {
+        setFormat(format != null ? format : new LabelPhoneFormatter());
+    }
+
+    class LabelPhoneFormatter extends PhoneFormatter {
+
+        @Override
+        public String format(Phone value) {
+            return super.format(value) + (value.extension().isNull() ? "" : " ex. " + value.extension().getValue().toString());
+        }
     }
 }

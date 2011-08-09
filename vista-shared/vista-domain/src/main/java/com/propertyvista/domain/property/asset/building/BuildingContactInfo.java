@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.property.asset.building;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
@@ -28,7 +29,7 @@ public interface BuildingContactInfo extends IEntity {
     @Length(100)
     IPrimitive<String> website();
 
-    @Owned
+    @EmbeddedEntity
     Email email(); // email business is not clear at the moment, we need a bit more detail on this
 
     @Owned
