@@ -13,9 +13,11 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
+@Transient
 public interface MasterApplicationStatusDTO extends IEntity {
 
     IList<ApplicationStatusDTO> individualApplications();

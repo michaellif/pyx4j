@@ -61,7 +61,7 @@ public class LeaseViewerActivity extends ViewerActivityBase<LeaseDTO> implements
 
             @Override
             public void onSuccess(VoidSerializable result) {
-
+                populate();
             }
 
             @Override
