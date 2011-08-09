@@ -56,7 +56,7 @@ public abstract class AppSite implements EntryPoint {
 
     private final AppSiteEventBus eventBus;
 
-    private final PlaceController placeController;
+    private final AppPlaceContorller placeController;
 
     public AppSite(Class<? extends SiteMap> siteMapClass) {
         ClientEntityFactory.ensureIEntityImplementations();
@@ -67,7 +67,7 @@ public abstract class AppSite implements EntryPoint {
         historyMapper = new AppPlaceHistoryMapper(siteMapClass);
         historyHandler = new PlaceHistoryHandler(historyMapper);
         eventBus = new AppSiteEventBus();
-        placeController = new PlaceController(eventBus);
+        placeController = new AppPlaceContorller(eventBus);
     }
 
     public static AppSite instance() {
