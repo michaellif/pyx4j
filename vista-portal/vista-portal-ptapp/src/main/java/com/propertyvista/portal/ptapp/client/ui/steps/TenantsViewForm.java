@@ -32,8 +32,9 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
-import com.propertyvista.portal.domain.ptapp.dto.TenantListItemDTO;
+import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.portal.domain.ptapp.dto.TenantListDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListItemDTO;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 
 public class TenantsViewForm extends CEntityForm<TenantListDTO> {
@@ -43,7 +44,7 @@ public class TenantsViewForm extends CEntityForm<TenantListDTO> {
     private int maxTenants;
 
     public TenantsViewForm() {
-        super(TenantListDTO.class);
+        super(TenantListDTO.class, new VistaEditorsComponentFactory());
     }
 
     @Override

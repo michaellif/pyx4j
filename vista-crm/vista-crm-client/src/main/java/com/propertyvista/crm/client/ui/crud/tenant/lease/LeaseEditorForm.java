@@ -254,8 +254,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                 // Don't show relation and takeOwnership 
                                 if (column.getObject() == proto().relationship() || column.getObject() == proto().takeOwnership()) {
                                     component.setVisible(false);
-                                } else if (column.getObject() == proto().tenant().person().email()) {
-                                    ((CEditableComponent) component).setEditable(false);
                                 }
                                 main.add(createCellDecorator(column, component, column.getWidth()));
                             }

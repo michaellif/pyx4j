@@ -49,6 +49,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
+import com.propertyvista.common.client.ui.components.CEmailLabel;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -94,7 +95,7 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
         main.add(new VistaWidgetDecorator(inject(proto().person().workPhone()), new DecorationData(14d, 15)));
 
         decorData = new DecorationData(14d, 25);
-        main.add(new VistaWidgetDecorator(inject(proto().person().email(), new CLabel()), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().person().email(), new CEmailLabel()), decorData));
 
         main.add(new VistaHeaderBar(i18n.tr("Secure Information")));
         main.add(new VistaWidgetDecorator(inject(proto().driversLicense()), new DecorationData(14d, 20)));

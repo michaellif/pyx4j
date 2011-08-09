@@ -47,6 +47,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
+import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
@@ -73,7 +74,7 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
     private int maxPets;
 
     public AddonsViewForm() {
-        super(AddOnsDTO.class);
+        super(AddOnsDTO.class, new VistaEditorsComponentFactory());
     }
 
     public AddonsViewForm(IEditableComponentFactory factory) {
