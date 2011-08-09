@@ -91,4 +91,7 @@ public interface Lease extends IEntity {
     ServiceAgreement serviceAgreement();
 
     IList<Document> documents();
+
+    // === Internals:    
+    IPrimitive<Boolean> convertedToApplication();
 }

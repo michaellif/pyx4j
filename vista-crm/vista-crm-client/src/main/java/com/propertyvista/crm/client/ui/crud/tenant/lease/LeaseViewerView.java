@@ -15,10 +15,19 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
 import com.pyx4j.site.client.ui.crud.IViewerView;
 
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseViewerView extends IViewerView<LeaseDTO>, LeaseView {
 
     interface Presenter extends IViewerView.Presenter, LeaseView.Presenter {
+
+        void convertToApplication();
     }
+
+    public void onApplicationConvertionSuccess(Application result);
+
+    // may return TRUE in case of processed event and no need to re-throw the exception further.
+    // FALSE - re-throws the exception (new UnrecoverableClientError(caught)).
+    boolean onConvertionFail(Throwable caught);
 }

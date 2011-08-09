@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -26,6 +27,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.portal.domain.ptapp.UnitSelection;
 
@@ -75,8 +77,22 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     }
 
     @Override
-    public void convertToLease(AsyncCallback<LeaseDTO> callback, Key entityId) {
-        // TODO Auto-generated method stub
+    public void convertToApplication(AsyncCallback<Application> callback, Key entityId) {
+        Lease lease = PersistenceServicesFactory.getPersistenceService().retrieve(dboClass, entityId);
+        if (lease.convertedToApplication().isBooleanTrue()) {
+            callback.onFailure(new Error("The Lease is converted to Lease already!"));
+        } else {
+            Application application = EntityFactory.create(Application.class);
 
+            // TODO : actual conversion here... 
+
+            PersistenceServicesFactory.getPersistenceService().merge(application);
+
+            // mark Lease as converted:
+            lease.convertedToApplication().setValue(true);
+            PersistenceServicesFactory.getPersistenceService().merge(lease);
+
+            callback.onSuccess(application);
+        }
     }
 }

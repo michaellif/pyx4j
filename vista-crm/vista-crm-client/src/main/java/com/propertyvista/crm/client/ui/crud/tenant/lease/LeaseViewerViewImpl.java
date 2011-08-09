@@ -13,8 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
-import com.pyx4j.site.client.ui.crud.IListerView;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 
+import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
+
+import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -22,14 +28,27 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> implements LeaseViewerView {
+
+    private final AnchorButton btnconvert;
 
     private final LeaseViewDelegate delegate;
 
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
+
+        btnconvert = new AnchorButton(i18n.tr("Convert to Application"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                ((LeaseViewerView.Presenter) presenter).convertToApplication();
+            }
+        });
+        btnconvert.addStyleName(btnconvert.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.ActionButton);
+        btnconvert.setWordWrap(false);
+        addActionButton(btnconvert);
 
         delegate = new LeaseViewDelegate(true);
 
@@ -37,6 +56,12 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         CrmEntityForm<LeaseDTO> form = new LeaseEditorForm(new CrmViewersComponentFactory(), this);
         form.initialize();
         setForm(form);
+    }
+
+    @Override
+    public void populate(LeaseDTO value) {
+        btnconvert.setVisible(!value.convertedToApplication().isBooleanTrue());
+        super.populate(value);
     }
 
     @Override
@@ -52,5 +77,21 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
     @Override
     public IListerView<Tenant> getTenantListerView() {
         return delegate.getTenantListerView();
+    }
+
+    @Override
+    public void onApplicationConvertionSuccess(Application result) {
+        MessageDialog.info("Information", "Conversion is succeeded!");
+        btnconvert.setVisible(false);
+    }
+
+    @Override
+    public boolean onConvertionFail(Throwable caught) {
+        if (caught instanceof Error) {
+            MessageDialog.error("Error", caught.getMessage());
+        } else {
+            MessageDialog.error("Error", "Conversion is failed!");
+        }
+        return true;
     }
 }
