@@ -111,6 +111,8 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public <T extends IEntity> T cast();
 
+    public <T extends IEntity> T cast(Class<T> entityClass);
+
     public boolean isObjectClassSameAsDef();
 
     /**

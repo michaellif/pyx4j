@@ -542,6 +542,22 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     }
 
     @Override
+    public <T extends IEntity> T cast(Class<T> entityClass) {
+        Map<String, Object> entityValue = getValue();
+        T entity = EntityFactory.create(entityClass);
+        if (!entity.getEntityMeta().isEntityClassAssignableFrom(this)) {
+            throw new ClassCastException(entity.getEntityMeta().getCaption() + " is not assignable from " + this.getEntityMeta().getCaption());
+        }
+        entity.setPrimaryKey(this.getPrimaryKey());
+        for (String memberName : entity.getEntityMeta().getMemberNames()) {
+            if (entityValue.containsKey(memberName)) {
+                entity.setMemberValue(memberName, entityValue.get(memberName));
+            }
+        }
+        return entity;
+    }
+
+    @Override
     public boolean isObjectClassSameAsDef() {
         Map<String, Object> entityValue = getValue();
         if (entityValue == null) {
