@@ -20,6 +20,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.forms.client.ui.CLabel;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
@@ -50,13 +51,13 @@ public class EditPaymentMethodForm extends CEntityForm<PaymentMethodDTO> {
         container.add(subtitle);
 
         DecorationData decor = new DecorationData();
+        decor.componentWidth = 15;
         decor.componentCaption = i18n.tr("Card Number");
-        decor.editable = false;
-        container.add(new VistaWidgetDecorator(inject(proto().cardNumber()), decor));
+        container.add(new VistaWidgetDecorator(inject(proto().cardNumber(), new CLabel()), decor));
 
         decor = new DecorationData();
-        decor.editable = false;
-        container.add(new VistaWidgetDecorator(inject(proto().nameOnAccount()), decor));
+        decor.componentWidth = 15;
+        container.add(new VistaWidgetDecorator(inject(proto().nameOnAccount(), new CLabel()), decor));
 
         container.add(new VistaWidgetDecorator(inject(proto().expiry())));
 

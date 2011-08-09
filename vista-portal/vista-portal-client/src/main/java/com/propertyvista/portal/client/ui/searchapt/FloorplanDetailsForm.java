@@ -41,7 +41,6 @@ public class FloorplanDetailsForm extends CEntityForm<FloorplanDetailsDTO> imple
     public FloorplanDetailsForm() {
         super(FloorplanDetailsDTO.class);
         decor = new DecorationData(7d, 40);
-        decor.editable = false;
         listDecor = new DecorationData(0, Unit.PCT, 100, Unit.PCT);
     }
 

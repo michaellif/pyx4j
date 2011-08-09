@@ -57,7 +57,6 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         super(PropertyDetailsDTO.class);
         //    decor = new DecorationData(10, Unit.PCT, 90, Unit.PCT);
         decor = new DecorationData(7d, 40);
-        decor.editable = false;
         listDecor = new DecorationData(0, Unit.PCT, 100, Unit.PCT);
     }
 

@@ -24,8 +24,6 @@ public class DecorationData {
         Mandatory, Optional, None
     }
 
-    public boolean editable = true;
-
     public boolean readOnlyMode = false;
 
     public double labelWidth = 12;

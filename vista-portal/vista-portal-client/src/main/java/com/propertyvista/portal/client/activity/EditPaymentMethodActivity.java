@@ -17,11 +17,13 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.client.ui.residents.EditPaymentMethodView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
+import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class EditPaymentMethodActivity extends SecurityAwareActivity implements EditPaymentMethodView.Presenter {
@@ -37,6 +39,14 @@ public class EditPaymentMethodActivity extends SecurityAwareActivity implements 
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
         panel.setWidget(view);
+
+        PaymentMethodDTO paymentMethod = EntityFactory.create(PaymentMethodDTO.class);
+        paymentMethod.cardNumber().setValue("XXXX XXXXX XXXX 7890");
+        paymentMethod.nameOnAccount().setValue("Mahershalalhashbaz Alibaba");
+        paymentMethod.type().setValue(PaymentType.Visa);
+
+        view.populate(paymentMethod);
+
     }
 
     @Override

@@ -157,7 +157,6 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
         //Specify tested component decorator for all but CHyperlink and CLabel
 
         DecorationData ddata = new DecorationData(120, 200);
-        ddata.editable = true;
         ddata.hideInfoHolder = false;
         CComponent<?> cm = this.component;
         VistaWidgetDecorator decoratedcomp = new VistaWidgetDecorator(cm, ddata);

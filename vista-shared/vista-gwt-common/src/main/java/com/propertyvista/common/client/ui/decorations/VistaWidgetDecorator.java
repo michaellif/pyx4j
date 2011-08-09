@@ -125,10 +125,6 @@ public class VistaWidgetDecorator extends VerticalPanel {
         validationLabel.ensureDebugId(new CompositeDebugId(component.getDebugId(), VistaDecoratorsIds.Validation.name()).debugId());
         nativeComponent = component.asWidget();
 
-        if (component instanceof CEditableComponent) {
-            ((CEditableComponent<?, ?>) component).setEditable(decorData.editable);
-        }
-
         if (nativeComponent == null) {
             throw new RuntimeException("initNativeComponent() method call on [" + component.getClass() + "] returns null.");
         }
