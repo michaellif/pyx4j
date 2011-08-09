@@ -38,7 +38,7 @@ public class CPhoneLabel extends CAbstractLabel<Phone> {
 
         @Override
         public String format(Phone value) {
-            return super.format(value) + (value.extension().isNull() ? "" : " ex. " + value.extension().getValue().toString());
+            return super.format(value) + (value.extension().isNull() ? "" : " ex." + value.extension().getValue().toString());
         }
     }
 }

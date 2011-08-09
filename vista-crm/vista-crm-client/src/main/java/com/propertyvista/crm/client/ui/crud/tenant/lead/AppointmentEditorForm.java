@@ -75,8 +75,7 @@ public class AppointmentEditorForm extends CrmEntityForm<Appointment> {
         split.getLeftPanel().add(inject(proto().status()), 8);
 
         split.getRightPanel().add(inject(proto().agent()), 15);
-        split.getRightPanel().add(inject(proto().phone().number()), 10, i18n.tr("Agent Phone"));
-        split.getRightPanel().add(inject(proto().phone().extension()), 4);
+        split.getRightPanel().add(inject(proto().phone()), 15, i18n.tr("Agent Phone"));
         split.getRightPanel().add(inject(proto().email()), 15, i18n.tr("Agent Email"));
 
         return new CrmScrollPanel(main);
