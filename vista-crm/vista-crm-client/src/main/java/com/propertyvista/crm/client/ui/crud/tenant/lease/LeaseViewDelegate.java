@@ -16,6 +16,9 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
+import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
+import com.propertyvista.crm.client.ui.crud.tenant.SelectTenantLister;
+import com.propertyvista.crm.client.ui.crud.unit.SelectedUnitLister;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;

@@ -19,8 +19,8 @@ import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.tenant.lease.SelectedBuildingLister;
-import com.propertyvista.crm.client.ui.crud.tenant.lease.SelectedUnitLister;
+import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
+import com.propertyvista.crm.client.ui.crud.unit.SelectedUnitLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
