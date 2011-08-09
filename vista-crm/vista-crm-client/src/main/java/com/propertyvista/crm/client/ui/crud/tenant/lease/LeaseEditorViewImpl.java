@@ -19,9 +19,9 @@ import com.pyx4j.site.client.ui.crud.ListerBase.ItemSelectionHandler;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> implements LeaseEditorView {
@@ -33,9 +33,9 @@ public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> impleme
 
         delegate = new LeaseViewDelegate(true);
 
-        delegate.getBuildingListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<BuildingDTO>() {
+        delegate.getBuildingListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<Building>() {
             @Override
-            public void onSelect(BuildingDTO selectedItem) {
+            public void onSelect(Building selectedItem) {
                 ((LeaseEditorView.Presenter) presenter).setSelectedBuilding(selectedItem);
                 enableButtons(true);
             }
@@ -47,7 +47,7 @@ public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> impleme
     }
 
     @Override
-    public IListerView<BuildingDTO> getBuildingListerView() {
+    public IListerView<Building> getBuildingListerView() {
         return delegate.getBuildingListerView();
     }
 

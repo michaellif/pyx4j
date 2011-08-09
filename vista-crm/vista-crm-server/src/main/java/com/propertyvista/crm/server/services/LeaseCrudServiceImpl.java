@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -69,5 +72,11 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         for (TenantInLease tenant : dto.tenants()) {
             tenant.lease().set(dbo);
         }
+    }
+
+    @Override
+    public void convertToLease(AsyncCallback<LeaseDTO> callback, Key entityId) {
+        // TODO Auto-generated method stub
+
     }
 }

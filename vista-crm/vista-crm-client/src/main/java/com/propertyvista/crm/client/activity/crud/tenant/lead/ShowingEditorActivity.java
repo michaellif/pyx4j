@@ -24,13 +24,12 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.tenant.lead.ShowingEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.BuildingCrudService;
-import com.propertyvista.crm.rpc.services.LeaseUnitCrudService;
+import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
+import com.propertyvista.crm.rpc.services.SelectUnitCrudService;
 import com.propertyvista.crm.rpc.services.ShowingCrudService;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Showing;
-import com.propertyvista.dto.BuildingDTO;
 
 public class ShowingEditorActivity extends EditorActivityBase<Showing> implements ShowingEditorView.Presenter {
 
@@ -43,11 +42,11 @@ public class ShowingEditorActivity extends EditorActivityBase<Showing> implement
         super((ShowingEditorView) TenantViewFactory.instance(ShowingEditorView.class), (AbstractCrudService<Showing>) GWT.create(ShowingCrudService.class),
                 Showing.class);
 
-        buildingsLister = new ListerActivityBase<BuildingDTO>(((ShowingEditorView) view).getBuildingListerView(),
-                (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class), BuildingDTO.class);
+        buildingsLister = new ListerActivityBase<Building>(((ShowingEditorView) view).getBuildingListerView(),
+                (AbstractCrudService<Building>) GWT.create(SelectBuildingCrudService.class), Building.class);
 
         unitsLister = new ListerActivityBase<AptUnit>(((ShowingEditorView) view).getUnitListerView(),
-                (AbstractCrudService<AptUnit>) GWT.create(LeaseUnitCrudService.class), AptUnit.class);
+                (AbstractCrudService<AptUnit>) GWT.create(SelectUnitCrudService.class), AptUnit.class);
 
         withPlace(place);
     }

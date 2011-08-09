@@ -21,13 +21,12 @@ import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseView;
-import com.propertyvista.crm.rpc.services.BuildingCrudService;
-import com.propertyvista.crm.rpc.services.LeaseUnitCrudService;
+import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
 import com.propertyvista.crm.rpc.services.SelectTenantCrudService;
+import com.propertyvista.crm.rpc.services.SelectUnitCrudService;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseActivityDelegate implements LeaseView.Presenter {
@@ -41,10 +40,10 @@ public class LeaseActivityDelegate implements LeaseView.Presenter {
     @SuppressWarnings("unchecked")
     public LeaseActivityDelegate(LeaseView view) {
 
-        buildingsLister = new ListerActivityBase<BuildingDTO>(view.getBuildingListerView(),
-                (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class), BuildingDTO.class);
+        buildingsLister = new ListerActivityBase<Building>(view.getBuildingListerView(),
+                (AbstractCrudService<Building>) GWT.create(SelectBuildingCrudService.class), Building.class);
 
-        unitsLister = new ListerActivityBase<AptUnit>(view.getUnitListerView(), (AbstractCrudService<AptUnit>) GWT.create(LeaseUnitCrudService.class),
+        unitsLister = new ListerActivityBase<AptUnit>(view.getUnitListerView(), (AbstractCrudService<AptUnit>) GWT.create(SelectUnitCrudService.class),
                 AptUnit.class);
 
         tenantsLister = new ListerActivityBase<Tenant>(view.getTenantListerView(), (AbstractCrudService<Tenant>) GWT.create(SelectTenantCrudService.class),

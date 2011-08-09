@@ -7,20 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
- * @author Vlad
+ * Created on 2011-05-21
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.crm.server.services;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
+import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
+import com.propertyvista.domain.property.asset.building.Building;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.site.rpc.services.AbstractCrudService;
+public class SelectBuildingCrudServiceImpl extends GenericCrudServiceImpl<Building> implements SelectBuildingCrudService {
 
-import com.propertyvista.dto.LeaseDTO;
-
-public interface LeaseCrudService extends AbstractCrudService<LeaseDTO> {
-
-    void convertToLease(AsyncCallback<LeaseDTO> callback, Key entityId);
+    public SelectBuildingCrudServiceImpl() {
+        super(Building.class);
+    }
 }

@@ -19,18 +19,18 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.site.client.ui.crud.ListerBase;
 
-import com.propertyvista.dto.BuildingDTO;
+import com.propertyvista.domain.property.asset.building.Building;
 
-public class SelectedBuildingLister extends ListerBase<BuildingDTO> {
+public class SelectedBuildingLister extends ListerBase<Building> {
 
     public SelectedBuildingLister() {
-        super(BuildingDTO.class, null, true);
+        super(Building.class, null, true);
         getListPanel().getDataTable().setMarkSelectedRow(true);
         getListPanel().setPageSize(5);
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<BuildingDTO>> columnDescriptors, BuildingDTO proto) {
+    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Building>> columnDescriptors, Building proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().country()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().province()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().city()));
@@ -45,7 +45,7 @@ public class SelectedBuildingLister extends ListerBase<BuildingDTO> {
     }
 
     @Override
-    protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<BuildingDTO>> columnDescriptors, BuildingDTO proto) {
+    protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<Building>> columnDescriptors, Building proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().country()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().province()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().city()));

@@ -37,7 +37,6 @@ import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Showing;
-import com.propertyvista.dto.BuildingDTO;
 
 public class ShowingEditorForm extends CrmEntityForm<Showing> {
 
@@ -63,8 +62,10 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
                     new ShowPopUpBox<SelectUnitBox>(new SelectUnitBox()) {
                         @Override
                         protected void onClose(SelectUnitBox box) {
-                            if (box.getSelectedUnit() != null) {
+                            if (box.getSelectedBuilding() != null) {
                                 get(proto().building()).setValue(box.getSelectedBuilding());
+                            }
+                            if (box.getSelectedUnit() != null) {
                                 get(proto().unit()).setValue(box.getSelectedUnit());
                             }
                         }
@@ -102,9 +103,9 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
         @Override
         protected Widget createContent() {
             okButton.setEnabled(false);
-            ((ShowingEditorView) getParentView()).getBuildingListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<BuildingDTO>() {
+            ((ShowingEditorView) getParentView()).getBuildingListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<Building>() {
                 @Override
-                public void onSelect(BuildingDTO selectedItem) {
+                public void onSelect(Building selectedItem) {
                     selectedBuilding = selectedItem;
                     enableOkButton();
                 }

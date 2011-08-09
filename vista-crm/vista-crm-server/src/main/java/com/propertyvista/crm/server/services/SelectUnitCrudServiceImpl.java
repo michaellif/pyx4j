@@ -11,11 +11,15 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.crm.server.services;
 
-import com.pyx4j.site.rpc.services.AbstractCrudService;
-
+import com.propertyvista.crm.rpc.services.SelectUnitCrudService;
+import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public interface LeaseUnitCrudService extends AbstractCrudService<AptUnit> {
+public class SelectUnitCrudServiceImpl extends GenericCrudServiceImpl<AptUnit> implements SelectUnitCrudService {
+
+    public SelectUnitCrudServiceImpl() {
+        super(AptUnit.class);
+    }
 }

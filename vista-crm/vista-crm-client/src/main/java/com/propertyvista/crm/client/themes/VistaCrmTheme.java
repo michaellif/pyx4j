@@ -354,7 +354,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         // Edit AnchorButton: 
         buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX, StyleSuffixEx.EditButton);
         style = new Style(buttonEx);
-        style.addProperty("color", "yellow");
+        style.addProperty("color", "white");
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bolder");
         addStyle(style);

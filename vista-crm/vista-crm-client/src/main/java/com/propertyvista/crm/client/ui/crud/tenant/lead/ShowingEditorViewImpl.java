@@ -22,23 +22,23 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.SelectedBuildingLister;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.SelectedUnitLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Showing;
-import com.propertyvista.dto.BuildingDTO;
 
 public class ShowingEditorViewImpl extends CrmEditorViewImplBase<Showing> implements ShowingEditorView {
 
-    private final IListerView<BuildingDTO> buildingLister;
+    private final IListerView<Building> buildingLister;
 
     private final IListerView<AptUnit> unitLister;
 
     public ShowingEditorViewImpl() {
         super(CrmSiteMap.Tenants.Showing.class);
 
-        buildingLister = new ListerInternalViewImplBase<BuildingDTO>(new SelectedBuildingLister(/* readOnly */));
-        buildingLister.getLister().addItemSelectionHandler(new ItemSelectionHandler<BuildingDTO>() {
+        buildingLister = new ListerInternalViewImplBase<Building>(new SelectedBuildingLister(/* readOnly */));
+        buildingLister.getLister().addItemSelectionHandler(new ItemSelectionHandler<Building>() {
             @Override
-            public void onSelect(BuildingDTO selectedItem) {
+            public void onSelect(Building selectedItem) {
                 ((ShowingEditorView.Presenter) presenter).setSelectedBuilding(selectedItem);
                 enableButtons(true);
             }
@@ -52,7 +52,7 @@ public class ShowingEditorViewImpl extends CrmEditorViewImplBase<Showing> implem
     }
 
     @Override
-    public IListerView<BuildingDTO> getBuildingListerView() {
+    public IListerView<Building> getBuildingListerView() {
         return buildingLister;
     }
 

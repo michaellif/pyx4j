@@ -19,7 +19,6 @@ import com.pyx4j.site.client.ui.crud.IListerView;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Showing;
-import com.propertyvista.dto.BuildingDTO;
 
 public interface ShowingEditorView extends IEditorView<Showing> {
 
@@ -32,7 +31,7 @@ public interface ShowingEditorView extends IEditorView<Showing> {
         void setSelectedBuilding(Building selected);
     }
 
-    IListerView<BuildingDTO> getBuildingListerView();
+    IListerView<Building> getBuildingListerView();
 
     IListerView<AptUnit> getUnitListerView();
 }

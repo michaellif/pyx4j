@@ -13,14 +13,9 @@
  */
 package com.propertyvista.crm.rpc.services;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public interface LeaseCrudService extends AbstractCrudService<LeaseDTO> {
-
-    void convertToLease(AsyncCallback<LeaseDTO> callback, Key entityId);
+public interface SelectUnitCrudService extends AbstractCrudService<AptUnit> {
 }

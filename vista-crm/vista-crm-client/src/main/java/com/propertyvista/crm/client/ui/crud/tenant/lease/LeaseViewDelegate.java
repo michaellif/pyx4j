@@ -16,26 +16,26 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.dto.BuildingDTO;
 
 public class LeaseViewDelegate implements LeaseView {
 
-    private final IListerView<BuildingDTO> buildingLister;
+    private final IListerView<Building> buildingLister;
 
     private final IListerView<AptUnit> unitLister;
 
     private final IListerView<Tenant> tenantLister;
 
     public LeaseViewDelegate(boolean readOnly) {
-        buildingLister = new ListerInternalViewImplBase<BuildingDTO>(new SelectedBuildingLister(/* readOnly */));
+        buildingLister = new ListerInternalViewImplBase<Building>(new SelectedBuildingLister(/* readOnly */));
         unitLister = new ListerInternalViewImplBase<AptUnit>(new SelectedUnitLister(/* readOnly */));
         tenantLister = new ListerInternalViewImplBase<Tenant>(new SelectTenantLister(/* readOnly */));
     }
 
     @Override
-    public IListerView<BuildingDTO> getBuildingListerView() {
+    public IListerView<Building> getBuildingListerView() {
         return buildingLister;
     }
 

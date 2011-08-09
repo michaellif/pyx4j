@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.EntityServicesImpl;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.rpc.services.LeadCrudService;
@@ -36,14 +36,14 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
     @Override
     public void convertToLease(AsyncCallback<Lease> callback, Key entityId) {
 
-        Lead lead = EntityServicesImpl.secureRetrieve(dboClass, entityId);
+        Lead lead = PersistenceServicesFactory.getPersistenceService().retrieve(dboClass, entityId);
         if (lead.convertedToLease().isBooleanTrue()) {
             callback.onFailure(new Error("The Lead is converted to Lease already!"));
         } else {
             Tenant tenant = EntityFactory.create(Tenant.class);
             tenant.type().setValue(Tenant.Type.person);
             tenant.person().set(lead.person());
-            EntityServicesImpl.secureSave(tenant);
+            PersistenceServicesFactory.getPersistenceService().merge(tenant);
 
             Lease lease = EntityFactory.create(Lease.class);
             lease.leaseID().setValue(RandomUtil.randomLetters(10));
@@ -51,17 +51,17 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
             lease.leaseFrom().setValue(lead.moveInDate().getValue());
             lease.expectedMoveIn().setValue(lead.moveInDate().getValue());
 //        lease.tenants().add(tenantInLease);
-            EntityServicesImpl.secureSave(lease);
+            PersistenceServicesFactory.getPersistenceService().merge(lease);
 
             TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
             tenantInLease.tenant().set(tenant);
             tenantInLease.status().setValue(TenantInLease.Status.Applicant);
             tenantInLease.lease().set(lease);
-            EntityServicesImpl.secureSave(tenantInLease);
+            PersistenceServicesFactory.getPersistenceService().merge(tenantInLease);
 
             // mark Lead as converted:
             lead.convertedToLease().setValue(true);
-            EntityServicesImpl.secureSave(lead);
+            PersistenceServicesFactory.getPersistenceService().merge(lead);
 
             callback.onSuccess(lease);
         }
