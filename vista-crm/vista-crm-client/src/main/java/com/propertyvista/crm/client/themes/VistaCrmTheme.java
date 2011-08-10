@@ -597,16 +597,39 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.actionsPanel));
-        style.addProperty("margin-top", "0.5em");
-        style.addProperty("margin-bottom", "0.5em");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE40);
+        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        style.addProperty("height", defaultActionBarHeight + "em");
+//        style.addProperty("margin-top", "0.5em");
+//        style.addProperty("margin-bottom", "0.5em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.filtersPanel));
-        style.addProperty("padding-top", "0.5em");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
+        style.addProperty("padding-top", "0.5em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.listPanel));
+        addStyle(style);
+
+        String buttonEx = Selector.valueOf("gwt-Button", ListerBase.StyleSuffix.newItemButton);
+        style = new Style(buttonEx);
+        style.addProperty("color", ThemeColor.OBJECT_TONE10);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE85);
+        addStyle(style);
+
+        style = new Style(buttonEx + ":hover");
+        style.addProperty("border", "1px solid #555");
+        addStyle(style);
+
+        buttonEx = Selector.valueOf("gwt-Button", ListerBase.StyleSuffix.actionButton);
+        style = new Style(buttonEx);
+        style.addProperty("color", ThemeColor.OBJECT_TONE15);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
+        addStyle(style);
+
+        style = new Style(buttonEx + ":hover");
+        style.addProperty("border", "1px solid #555");
         addStyle(style);
     }
 
