@@ -15,13 +15,13 @@ package com.propertyvista.crm.client.ui.crud.tenant.lead;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
-import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -32,21 +32,20 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements LeadViewerView {
 
-    private final AnchorButton btnconvert;
+    private final Button btnconvert;
 
     private final IListerView<Appointment> appointmentLister;
 
     public LeadViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lead.class);
 
-        btnconvert = new AnchorButton(i18n.tr("Convert to Lease"), new ClickHandler() {
+        btnconvert = new Button(i18n.tr("Convert&nbspto&nbspLease"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 ((LeadViewerView.Presenter) presenter).convertToLease();
             }
         });
         btnconvert.addStyleName(btnconvert.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.ActionButton);
-        btnconvert.setWordWrap(false);
         addActionButton(btnconvert);
 
         appointmentLister = new ListerInternalViewImplBase<Appointment>(new AppointmentLister());

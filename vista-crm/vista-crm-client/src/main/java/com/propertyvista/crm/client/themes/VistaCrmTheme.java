@@ -34,6 +34,7 @@ import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
+import com.propertyvista.crm.client.ui.decorations.CrmActionsBarDecorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader0Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
@@ -44,9 +45,11 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
     public static double defaultHeaderHeight = 3;
 
-    public static double defaultFooterHeight = 4;
+    public static double defaultFooterHeight = 3;
 
-    public static double defaultTabHeight = 2.7;
+    public static double defaultActionBarHeight = 2.9;
+
+    public static double defaultTabHeight = 2.6;
 
     public static enum StyleSuffixEx implements IStyleSuffix {
         SaveButton, CancelButton, EditButton, ActionButton;
@@ -331,11 +334,27 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
         style = new Style(buttonEx + ":hover");
         style.addProperty("border", "1px solid #555");
-//        style.addProperty("background-color", ThemeColor.OBJECT_TONE85);
         addStyle(style);
 
-        style = new Style(buttonEx + "[disabled]:hover");
-        style.addProperty("border", "1px outset #555");
+        buttonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.EditButton);
+        style = new Style(buttonEx);
+        style.addProperty("color", ThemeColor.OBJECT_TONE10);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE85);
+        addStyle(style);
+
+        style = new Style(buttonEx + ":hover");
+        style.addProperty("border", "1px solid #555");
+        addStyle(style);
+
+        buttonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.ActionButton);
+        style = new Style(buttonEx);
+        style.addProperty("color", ThemeColor.OBJECT_TONE15);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
+        addStyle(style);
+
+        style = new Style(buttonEx + ":hover");
+        style.addProperty("border", "1px solid #555");
+        addStyle(style);
 
         //
         // default AnchorButton: 
@@ -363,7 +382,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         // Action AnchorButton: 
         buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX, StyleSuffixEx.ActionButton);
         style = new Style(buttonEx);
-        style.addProperty("color", ThemeColor.OBJECT_TONE15);
+        style.addProperty("color", ThemeColor.OBJECT_TONE85);
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bolder");
         addStyle(style);
@@ -392,6 +411,18 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CrmHeaderDecorator.StyleSuffix.Caption));
+        style.addProperty("padding", "0.3em 1em 0.4em 1em");
+        style.addProperty("font-size", "1.3em");
+        addStyle(style);
+
+        prefix = CrmActionsBarDecorator.DEFAULT_STYLE_PREFIX;
+        style = new Style(Selector.valueOf(prefix));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE40);
+        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CrmActionsBarDecorator.StyleSuffix.Caption));
         style.addProperty("padding", "0.3em 1em 0.4em 1em");
         style.addProperty("font-size", "1.3em");
         addStyle(style);

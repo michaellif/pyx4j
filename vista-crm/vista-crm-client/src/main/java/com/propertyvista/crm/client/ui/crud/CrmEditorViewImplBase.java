@@ -148,15 +148,15 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
 
         btnSave.addStyleName(btnSave.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.SaveButton);
         btnSave.setWidth("7em");
-        btnCancel.setWidth("5em");
 
         buttons.add(btnApply);
         buttons.add(btnSave);
         buttons.add(btnCancel);
 
+        buttons.setCellWidth(btnCancel, "60px");
         buttons.setCellHorizontalAlignment(btnCancel, HasHorizontalAlignment.ALIGN_CENTER);
         buttons.setCellVerticalAlignment(btnCancel, HasVerticalAlignment.ALIGN_MIDDLE);
-        buttons.setSpacing(10);
+        buttons.setSpacing(5);
 
         SimplePanel wrap = new SimplePanel();
         wrap.getElement().getStyle().setProperty("borderTop", "1px solid #bbb");

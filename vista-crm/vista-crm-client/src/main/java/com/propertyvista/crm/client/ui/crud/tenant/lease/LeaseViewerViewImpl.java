@@ -15,11 +15,11 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
-import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -32,21 +32,20 @@ import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> implements LeaseViewerView {
 
-    private final AnchorButton createApplicationButton;
+    private final Button createApplicationButton;
 
     private final LeaseViewDelegate delegate;
 
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
 
-        createApplicationButton = new AnchorButton(i18n.tr("Convert to Application"), new ClickHandler() {
+        createApplicationButton = new Button(i18n.tr("Convert&nbspto&nbspApplication"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 ((LeaseViewerView.Presenter) presenter).createMasterApplication();
             }
         });
         createApplicationButton.addStyleName(createApplicationButton.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.ActionButton);
-        createApplicationButton.setWordWrap(false);
         addActionButton(createApplicationButton);
 
         delegate = new LeaseViewDelegate(true);

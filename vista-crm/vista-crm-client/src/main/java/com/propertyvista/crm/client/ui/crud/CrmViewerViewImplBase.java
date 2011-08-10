@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -27,7 +27,7 @@ import com.pyx4j.site.client.ui.crud.ViewerViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
-import com.propertyvista.crm.client.ui.components.AnchorButton;
+import com.propertyvista.crm.client.ui.decorations.CrmActionsBarDecorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 
 public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase<E> {
@@ -45,8 +45,10 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         actionsPanel.setWidth("100%");
         actionsPanel.add(new HTML()); // just for %-tage cells alignment...
+        actionsPanel.setSpacing(4);
 
-        addNorth(header = new CrmHeaderDecorator(defaultCaption, fillActionsPanel()), VistaCrmTheme.defaultHeaderHeight);
+        addNorth(header = new CrmHeaderDecorator(defaultCaption), VistaCrmTheme.defaultHeaderHeight);
+        addNorth(new CrmActionsBarDecorator(null, fillActionsPanel()), VistaCrmTheme.defaultActionBarHeight);
     }
 
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form) {
@@ -62,7 +64,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     }
 
     private Widget fillActionsPanel() {
-        AnchorButton btnEdit = new AnchorButton(i18n.tr("Edit"), new ClickHandler() {
+        Button btnEdit = new Button(i18n.tr("Edit"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.edit();
@@ -76,7 +78,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     protected void addActionButton(Widget action) {
         actionsPanel.insert(action, 1);
         actionsPanel.setCellWidth(action, "1%");
-        action.getElement().getStyle().setMarginRight(1, Unit.EM);
+//        action.getElement().getStyle().setMarginRight(5, Unit.PX);
     }
 
     protected CrmEntityForm<E> getForm() {
