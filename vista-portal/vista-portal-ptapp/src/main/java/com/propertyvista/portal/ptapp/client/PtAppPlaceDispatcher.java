@@ -13,28 +13,26 @@
  */
 package com.propertyvista.portal.ptapp.client;
 
-import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.site.client.AppPlaceDispatcher;
 import com.pyx4j.site.rpc.AppPlace;
-
-import com.propertyvista.domain.VistaBehavior;
-import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class PtAppPlaceDispatcher extends AppPlaceDispatcher {
 
     @Override
     public AppPlace forwardTo(AppPlace newPlace) {
-        if (ClientSecurityController.checkBehavior(VistaBehavior.PROSPECTIVE_TENANT) || ClientSecurityController.checkBehavior(VistaBehavior.GUARANTOR)) {
-            if (newPlace instanceof PtSiteMap.Login) {
-                return null;
-            }
-        }
+        return newPlace;
 
-        if (newPlace instanceof PtSiteMap.Login) {
-            return new PtSiteMap.Apartment();
-        } else {
-            return newPlace;
-        }
+//        if (ClientSecurityController.checkBehavior(VistaBehavior.PROSPECTIVE_TENANT) || ClientSecurityController.checkBehavior(VistaBehavior.GUARANTOR)) {
+//            if (newPlace instanceof PtSiteMap.Login) {
+//                return null;
+//            }
+//        }
+//
+//        if (newPlace instanceof PtSiteMap.Login) {
+//            return new PtSiteMap.Apartment();
+//        } else {
+//            return newPlace;
+//        }
 
     }
 
