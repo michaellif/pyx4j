@@ -94,7 +94,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     public void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease lease = PersistenceServicesFactory.getPersistenceService().retrieve(dboClass, entityId);
-        lease.status().setValue(Lease.Status.OnlineApplicationInProgress);
+        lease.status().setValue(Lease.Status.ApplicationInProgress);
 
         MasterApplication ma = EntityFactory.create(MasterApplication.class);
         ma.lease().set(lease);

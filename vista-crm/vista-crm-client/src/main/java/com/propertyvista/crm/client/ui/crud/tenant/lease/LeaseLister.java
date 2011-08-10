@@ -33,5 +33,6 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseID()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseFrom()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseTo()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
     }
 }

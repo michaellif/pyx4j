@@ -82,12 +82,16 @@ import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.ValidationUtils;
+import com.propertyvista.dto.ApplicationStatusDTO;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
+
+    private Widget appStatusTab;
 
     public LeaseEditorForm(IFormView<LeaseDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
@@ -106,9 +110,23 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         tabPanel.add(createAddonsTab(), i18n.tr("Add-ons"));
         tabPanel.add(createFinancialsTab(), i18n.tr("Financials"));
 
+        appStatusTab = createAppStatustab();
+
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
+    }
+
+    @Override
+    public void populate(LeaseDTO value) {
+
+        if (value != null && Lease.Status.ApplicationInProgress.equals(value.status().getValue())) {
+            tabPanel.add(appStatusTab, i18n.tr("Application Status"));
+        } else {
+            tabPanel.remove(appStatusTab);
+        }
+
+        super.populate(value);
     }
 
     @Override
@@ -189,6 +207,15 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     }
 
+    private Widget createAppStatustab() {
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+
+        main.add(new CrmHeader2Decorator(proto().masterApplicationStatus().individualApplications()));
+        main.add(inject(proto().masterApplicationStatus().individualApplications(), createAppStatusListViewer()));
+
+        return new CrmScrollPanel(main);
+    }
+
     private CEntityFolderEditor<ChargeLine> createChargesListViewer() {
         return new CrmEntityFolder<ChargeLine>(ChargeLine.class, i18n.tr("Charge Line"), isEditable()) {
             @Override
@@ -202,7 +229,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     }
 
     private CEntityFolderEditor<TenantInLease> createTenantsEditorColumns() {
-
         return new CrmEntityFolder<TenantInLease>(TenantInLease.class, i18n.tr("Tenant"), isEditable()) {
             private final CrmEntityFolder<TenantInLease> parent = this;
 
@@ -503,6 +529,20 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
 
                 };
+            }
+        };
+    }
+
+    private CEntityFolderEditor<ApplicationStatusDTO> createAppStatusListViewer() {
+        return new CrmEntityFolder<ApplicationStatusDTO>(ApplicationStatusDTO.class, i18n.tr("Status"), false) {
+
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().name(), "20em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().progress(), "10em"));
+                return columns;
             }
         };
     }

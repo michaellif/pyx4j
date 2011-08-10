@@ -21,7 +21,6 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IList;
@@ -197,11 +196,7 @@ public class SubtypeInjectors {
     }
 
     public static CrmEntityFolder<Concession> injectConcessions(boolean isEditable) {
-        return injectConcessions(isEditable, null);
-    }
-
-    public static CrmEntityFolder<Concession> injectConcessions(boolean isEditable, CEntityForm<?> parent) {
-        return new CrmEntityFolder<Concession>(Concession.class, "Concession", isEditable, parent) {
+        return new CrmEntityFolder<Concession>(Concession.class, "Concession", isEditable) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 List<EntityFolderColumnDescriptor> columns;

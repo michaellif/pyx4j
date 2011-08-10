@@ -36,7 +36,7 @@ public interface Lease extends IEntity {
 
         Draft,
 
-        OnlineApplicationInProgress,
+        ApplicationInProgress,
 
         PendingApproval,
 

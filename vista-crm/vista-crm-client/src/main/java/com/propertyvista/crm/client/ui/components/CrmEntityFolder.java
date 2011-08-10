@@ -36,18 +36,11 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
 
     private final boolean editable;
 
-    private final CEntityForm<?> parent;
-
     public CrmEntityFolder(Class<E> clazz, String itemName, boolean editable) {
-        this(clazz, itemName, editable, null);
-    }
-
-    public CrmEntityFolder(Class<E> clazz, String itemName, boolean editable, CEntityForm<?> parent) {
         super(clazz);
         this.clazz = clazz;
         this.itemName = itemName;
         this.editable = editable;
-        this.parent = parent;
     }
 
     protected abstract List<EntityFolderColumnDescriptor> columns();
