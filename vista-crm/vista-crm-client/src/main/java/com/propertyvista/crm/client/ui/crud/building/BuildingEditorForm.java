@@ -147,7 +147,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(split2);
         AddressUtils.injectIAddress(split2, proto().info().address(), this, false);
         main.add(new HTML("&nbsp"));
-        main.add(new CrmHeader2Decorator(proto().amenities().getMeta().getCaption()));
+        main.add(new CrmHeader2Decorator(i18n.tr("Amenities:")));
         main.add(inject(proto().amenities(), createAmenitiesListEditor()));
 
         return new CrmScrollPanel(main);
