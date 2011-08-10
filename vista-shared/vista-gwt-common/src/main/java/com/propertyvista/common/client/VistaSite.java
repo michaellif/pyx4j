@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.log4gwt.rpcappender.RPCAppender;
 import com.pyx4j.log4gwt.shared.Level;
+import com.pyx4j.site.client.AppPlaceDispatcher;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.shared.meta.SiteMap;
 import com.pyx4j.widgets.client.CaptchaComposite;
@@ -38,6 +39,10 @@ public abstract class VistaSite extends AppSite {
 
     public VistaSite(Class<? extends SiteMap> siteMapClass) {
         super(siteMapClass);
+    }
+
+    public VistaSite(Class<? extends SiteMap> siteMapClass, AppPlaceDispatcher dispatcher) {
+        super(siteMapClass, dispatcher);
     }
 
     @Override

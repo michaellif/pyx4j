@@ -18,8 +18,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
 import com.propertyvista.portal.ptapp.client.ui.CaptionView;
 import com.propertyvista.portal.ptapp.client.ui.CaptionViewImpl;
-import com.propertyvista.portal.ptapp.client.ui.CreateAccountView;
-import com.propertyvista.portal.ptapp.client.ui.CreateAccountViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.FooterView;
 import com.propertyvista.portal.ptapp.client.ui.FooterViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.GenericMessageView;
@@ -67,8 +65,6 @@ public class PtAppViewFactory extends ViewFactoryBase {
             } else if (SecondNavigView.class.equals(type)) {
                 map.put(type, new SecondNavigViewImpl());
 
-            } else if (CreateAccountView.class.equals(type)) {
-                map.put(type, new CreateAccountViewImpl());
             } else if (LoginView.class.equals(type)) {
                 map.put(type, new LoginViewImpl());
             } else if (NewPasswordView.class.equals(type)) {

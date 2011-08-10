@@ -17,8 +17,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
@@ -46,13 +44,9 @@ public class PtAppWizardManager {
 
     private final static Logger log = LoggerFactory.getLogger(PtAppWizardManager.class);
 
-    private static I18n i18n = I18nFactory.getI18n(PtAppWizardManager.class);
-
-    private static PtAppWizardManager instance;
-
     private Application application;
 
-    private PtAppWizardManager() {
+    PtAppWizardManager() {
         AppSite.getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
 
             @Override
@@ -63,21 +57,6 @@ public class PtAppWizardManager {
         //TODO implement initial application message
         //showMessageDialog(i18n.tr("Application is looking for building availability..."), i18n.tr("Loading..."), null, null);
         obtainAuthenticationData();
-    }
-
-    public static void initWizard() {
-        if (instance == null) {
-            instance = new PtAppWizardManager();
-        } else {
-            throw new RuntimeException("PtAppWizardManager is already initialized");
-        }
-    }
-
-    public static PtAppWizardManager instance() {
-        if (instance == null) {
-            throw new RuntimeException("PtAppWizardManager is not yet initialized");
-        }
-        return instance;
     }
 
     private void obtainAuthenticationData() {
@@ -177,25 +156,21 @@ public class PtAppWizardManager {
         throw new UnrecoverableClientError("Application Wizard doesn't have 'latest' step");
     }
 
-    private void initApplicationProcess() {
-        log.info("start application");
-        navigationByApplicationProgress();
-    }
-
     private void loadCurrentApplication() {
-        if (ClientSecurityController.checkBehavior(VistaBehavior.POTENTIAL_TENANT)) {
+        if (ClientSecurityController.checkBehavior(VistaBehavior.PROSPECTIVE_TENANT) || ClientSecurityController.checkBehavior(VistaBehavior.GUARANTOR)) {
 
             ((ApplicationService) GWT.create(ApplicationService.class)).getApplication(new DefaultAsyncCallback<Application>() {
                 @Override
                 public void onSuccess(Application result) {
                     application = result;
-                    initApplicationProcess();
+                    log.info("start application");
+                    navigationByApplicationProgress();
                 }
             });
 
         } else {
             application = null;
-            AppSite.getPlaceController().goTo(new PtSiteMap.CreateAccount());
+            AppSite.getPlaceController().goTo(new PtSiteMap.Login());
         }
     }
 

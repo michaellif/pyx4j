@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.ptapp.client.PtAppWizardManager;
+import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepPresenter;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepView;
 import com.propertyvista.portal.rpc.ptapp.services.AbstractWizardService;
@@ -105,7 +105,7 @@ public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter
             public void onSuccess(E result) {
                 log.info("SAVED {}", result);
                 WizardStepActivity.this.entity = result;
-                PtAppWizardManager.instance().nextStep();
+                PtAppSite.getWizardManager().nextStep();
             }
         }, entity);
     }

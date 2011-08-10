@@ -98,13 +98,13 @@ public class UserPreloader extends BaseVistaDataPreloader {
             for (int i = 1; i <= config.getMaxCustomers(); i++) {
                 switch (custCount % 3) {
                 case 0:
-                    createUser(DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.POTENTIAL_TENANT);
+                    createUser(DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.PROSPECTIVE_TENANT);
                     break;
                 case 1:
-                    createUser(DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.POTENTIAL_TENANT);
+                    createUser(DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.PROSPECTIVE_TENANT);
                     break;
                 case 2:
-                    createUser(DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.POTENTIAL_TENANT);
+                    createUser(DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.PROSPECTIVE_TENANT);
                     break;
                 }
                 custCount++;

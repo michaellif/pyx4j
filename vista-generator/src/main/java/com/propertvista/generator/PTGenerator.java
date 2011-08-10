@@ -521,7 +521,7 @@ public class PTGenerator {
         credential.user().set(user);
         credential.credential().setValue(PasswordEncryptor.encryptPassword("london"));
         credential.enabled().setValue(Boolean.TRUE);
-        credential.behavior().setValue(VistaBehavior.POTENTIAL_TENANT);
+        credential.behavior().setValue(VistaBehavior.PROSPECTIVE_TENANT);
 
         return user;
     }

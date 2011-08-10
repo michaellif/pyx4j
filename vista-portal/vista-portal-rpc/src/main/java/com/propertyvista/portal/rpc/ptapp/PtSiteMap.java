@@ -25,10 +25,6 @@ public class PtSiteMap implements SiteMap {
     public final static String STEP_ARG_NAME = "substep";
 
     @PlaceProperties(caption = "Application Form")
-    public static class CreateAccount extends AppPlace {
-    }
-
-    @PlaceProperties(caption = "Application Form")
     public static class Login extends AppPlace {
     }
 

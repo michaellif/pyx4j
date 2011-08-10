@@ -27,8 +27,10 @@ import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class PtAppSite extends VistaSite {
 
+    private PtAppWizardManager wizardManager;
+
     public PtAppSite() {
-        super(PtSiteMap.class);
+        super(PtSiteMap.class, new PtAppPlaceDispatcher());
     }
 
     @Override
@@ -37,7 +39,7 @@ public class PtAppSite extends VistaSite {
 
         UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler());
 
-        getHistoryHandler().register(getPlaceController(), getEventBus(), new PtSiteMap.CreateAccount());
+        getHistoryHandler().register(getPlaceController(), getEventBus(), new PtSiteMap.Login());
 
         RootPanel.get().add(new PtAppSiteView());
 
@@ -45,7 +47,9 @@ public class PtAppSite extends VistaSite {
 
         SessionInactiveDialog.register();
 
-        PtAppWizardManager.initWizard();
+        wizardManager = new PtAppWizardManager();
+
+        PtAppSite.getHistoryHandler().handleCurrentHistory();
     }
 
     @Override
@@ -53,4 +57,9 @@ public class PtAppSite extends VistaSite {
         setMessage(new Message(message, title, buttonText, command));
         getPlaceController().goTo(new PtSiteMap.GenericMessage());
     }
+
+    public static PtAppWizardManager getWizardManager() {
+        return ((PtAppSite) instance()).wizardManager;
+    }
+
 }

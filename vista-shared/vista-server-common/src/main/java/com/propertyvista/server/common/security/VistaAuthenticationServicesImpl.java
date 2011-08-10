@@ -104,7 +104,7 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.add(userCredential.behavior().getValue());
         final UserVisit visit;
-        if (behaviors.contains(VistaBehavior.POTENTIAL_TENANT)) {
+        if (behaviors.contains(VistaBehavior.PROSPECTIVE_TENANT)) {
             visit = new PtUserVisit(user.getPrimaryKey(), user.name().getValue());
         } else if (behaviors.contains(VistaBehavior.PROPERTY_MANAGER)) {
             visit = new CrmUserVisit(user.getPrimaryKey(), user.name().getValue());

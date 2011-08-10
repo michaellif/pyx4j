@@ -20,18 +20,17 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.ptapp.client.activity.ChangePasswordActivity;
-import com.propertyvista.portal.ptapp.client.activity.CreateAccountActivity;
 import com.propertyvista.portal.ptapp.client.activity.GenericMessageActivity;
 import com.propertyvista.portal.ptapp.client.activity.LoginActivity;
 import com.propertyvista.portal.ptapp.client.activity.ResetPasswordActivity;
 import com.propertyvista.portal.ptapp.client.activity.RetrievePasswordActivity;
+import com.propertyvista.portal.ptapp.client.activity.steps.AddonsActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.ApartmentActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.ChargesActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.CompletionActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.FinancialActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.InfoActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.PaymentActivity;
-import com.propertyvista.portal.ptapp.client.activity.steps.AddonsActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.SummaryActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.TenantsActivity;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
@@ -41,9 +40,7 @@ public class ContentActivityMapper implements ActivityMapper {
     @Override
     public Activity getActivity(Place place) {
 
-        if (place instanceof PtSiteMap.CreateAccount) {
-            return new CreateAccountActivity(place);
-        } else if (place instanceof PtSiteMap.Login) {
+        if (place instanceof PtSiteMap.Login) {
             return new LoginActivity(place);
         } else if (place instanceof PtSiteMap.RetrievePassword) {
             return new RetrievePasswordActivity(place);

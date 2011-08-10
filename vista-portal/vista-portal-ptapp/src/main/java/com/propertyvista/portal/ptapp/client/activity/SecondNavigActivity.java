@@ -22,7 +22,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
-import com.propertyvista.portal.ptapp.client.PtAppWizardManager;
+import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.ui.SecondNavigView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 
@@ -61,7 +61,7 @@ public class SecondNavigActivity extends AbstractActivity implements SecondNavig
         ApplicationWizardStep wizardStep = null;
         String placeId = AppSite.getHistoryMapper().getPlaceId(getWhere());
         if (placeId != null) {
-            for (ApplicationWizardStep step : PtAppWizardManager.instance().getApplicationWizardSteps()) {
+            for (ApplicationWizardStep step : PtAppSite.getWizardManager().getApplicationWizardSteps()) {
                 if (placeId.equals(step.placeId().getValue())) {
                     wizardStep = step;
                     break;
