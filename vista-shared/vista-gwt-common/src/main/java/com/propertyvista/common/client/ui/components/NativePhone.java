@@ -26,6 +26,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.TextBox;
@@ -212,8 +213,8 @@ public class NativePhone extends HorizontalPanel implements INativeEditableCompo
             if (type != null && type.getSelectedIndex() >= 0) {
                 value.type().setValue(Phone.Type.valueOf(type.getValue(type.getSelectedIndex())));
             }
-            if (extention != null && !extention.getValue().isEmpty()) {
-                value.extension().setValue(Integer.decode(extention.getValue()));
+            if (extention != null) {
+                value.extension().setValue(!CommonsStringUtils.isEmpty(extention.getValue()) ? Integer.decode(extention.getValue()) : null);
             }
         }
         return value;
