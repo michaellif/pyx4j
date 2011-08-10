@@ -35,7 +35,6 @@ import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
 import com.propertyvista.crm.client.ui.decorations.CrmActionsBarDecorator;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader0Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
@@ -326,6 +325,8 @@ public abstract class VistaCrmTheme extends VistaTheme {
     }
 
     protected void initButtonStylesEx() {
+        //
+        // Save Button: 
         String buttonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.SaveButton);
         Style style = new Style(buttonEx);
         style.addProperty("color", ThemeColor.OBJECT_TONE10);
@@ -336,6 +337,8 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("border", "1px solid #555");
         addStyle(style);
 
+        //
+        // Edit Button: 
         buttonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.EditButton);
         style = new Style(buttonEx);
         style.addProperty("color", ThemeColor.OBJECT_TONE10);
@@ -346,6 +349,8 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("border", "1px solid #555");
         addStyle(style);
 
+        //
+        // Action Button: 
         buttonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.ActionButton);
         style = new Style(buttonEx);
         style.addProperty("color", ThemeColor.OBJECT_TONE15);
@@ -418,26 +423,13 @@ public abstract class VistaCrmTheme extends VistaTheme {
         prefix = CrmActionsBarDecorator.DEFAULT_STYLE_PREFIX;
         style = new Style(Selector.valueOf(prefix));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE40);
-        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        style.addProperty("color", ThemeColor.OBJECT_TONE90);
         style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CrmActionsBarDecorator.StyleSuffix.Caption));
         style.addProperty("padding", "0.3em 1em 0.4em 1em");
         style.addProperty("font-size", "1.3em");
-        addStyle(style);
-
-        prefix = CrmHeader0Decorator.DEFAULT_STYLE_PREFIX;
-        style = new Style(Selector.valueOf(prefix));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE20);
-        style.addProperty("color", ThemeColor.OBJECT_TONE85);
-        style.addProperty("width", "100%");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CrmHeader2Decorator.StyleSuffix.Caption));
-        style.addProperty("padding", "0.5em 1em 0.6em 1.5em");
-        style.addProperty("font-size", "1.2em");
-//        style.addProperty("font-weight", "bold");
         addStyle(style);
 
         prefix = CrmHeader1Decorator.DEFAULT_STYLE_PREFIX;

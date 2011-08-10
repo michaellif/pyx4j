@@ -39,7 +39,7 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader0Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmActionsBarDecorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.client.ui.gadgets.GadgetsFactory;
 import com.propertyvista.crm.client.ui.gadgets.IGadgetBase;
@@ -82,8 +82,11 @@ public abstract class BoardViewImpl extends DockLayoutPanel implements BoardView
     public BoardViewImpl(String caption, boolean internal) {
         super(Unit.EM);
 
-        addNorth(header = (internal ? new CrmHeader0Decorator(caption, createHeaderWidget()) : new CrmHeaderDecorator(caption, createHeaderWidget())),
-                VistaCrmTheme.defaultHeaderHeight);
+        if (internal) {
+            addNorth(header = new CrmActionsBarDecorator(caption, createHeaderWidget()), VistaCrmTheme.defaultActionBarHeight);
+        } else {
+            addNorth(header = new CrmHeaderDecorator(caption, createHeaderWidget()), VistaCrmTheme.defaultHeaderHeight);
+        }
 
         actionsPanel = new HorizontalPanel();
         actionsPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.actionsPanel);
@@ -102,14 +105,6 @@ public abstract class BoardViewImpl extends DockLayoutPanel implements BoardView
                 }
             });
         }
-
-//        FlowPanel main = new FlowPanel();
-//        main.add(actionsPanel);
-//        main.add(scroll);
-//
-//        add(main);
-//
-//        main.setWidth("100%");
 
         add(scroll);
 
