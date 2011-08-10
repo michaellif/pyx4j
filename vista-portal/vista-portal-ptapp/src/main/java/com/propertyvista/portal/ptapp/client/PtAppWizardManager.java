@@ -17,17 +17,17 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
-import com.pyx4j.security.client.SecurityControllerEvent;
-import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -36,53 +36,18 @@ import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep.Status;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
-import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 
 public class PtAppWizardManager {
+
+    private static I18n i18n = I18nFactory.getI18n(PtAppWizardManager.class);
 
     private final static Logger log = LoggerFactory.getLogger(PtAppWizardManager.class);
 
     private Application application;
 
     PtAppWizardManager() {
-        AppSite.getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
-
-            @Override
-            public void onSecurityContextChange(SecurityControllerEvent event) {
-                loadCurrentApplication();
-            }
-        });
-        //TODO implement initial application message
-        //showMessageDialog(i18n.tr("Application is looking for building availability..."), i18n.tr("Loading..."), null, null);
-        obtainAuthenticationData();
-    }
-
-    private void obtainAuthenticationData() {
-        ClientContext.obtainAuthenticationData((com.pyx4j.security.rpc.AuthenticationService) GWT.create(AuthenticationService.class),
-                new DefaultAsyncCallback<Boolean>() {
-
-                    @Override
-                    public void onSuccess(Boolean result) {
-//                        if (!result) {
-//                            PtAppSite.instance().showMessageDialog(i18n.tr("We can't find requested Application"), "Error", "Back", new Command() {
-//                                @Override
-//                                public void execute() {
-//                                    History.back();
-//                                }
-//                            });
-//                        }
-                        PtAppSite.getHistoryHandler().handleCurrentHistory();
-                    }
-
-                    //TODO remove this when initial application message is implemented
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        PtAppSite.getHistoryHandler().handleCurrentHistory();
-                        super.onFailure(caught);
-                    }
-                });
     }
 
     public List<ApplicationWizardStep> getApplicationWizardSteps() {
@@ -128,16 +93,65 @@ public class PtAppWizardManager {
             @Override
             public void onSuccess(Application result) {
                 application = result;
-                navigationByApplicationProgress();
+                forwardByApplicationProgress(new DefaultAsyncCallback<AppPlace>() {
+
+                    @Override
+                    public void onSuccess(AppPlace result) {
+                        AppSite.getPlaceController().goTo(result);
+                    }
+                });
             }
         }, currentStep, substep);
+    }
+
+    public void forwardTo(final AppPlace place, final AsyncCallback<AppPlace> callback) {
+        if (!ClientSecurityController.checkAnyBehavior(VistaBehavior.PROSPECTIVE_TENANT, VistaBehavior.GUARANTOR)) {
+            callback.onSuccess(null);
+        }
+        if (application != null) {
+            forwardToApplicationNavigablePlace(place, callback);
+        } else {
+            ((ApplicationService) GWT.create(ApplicationService.class)).getApplication(new DefaultAsyncCallback<Application>() {
+                @Override
+                public void onSuccess(Application result) {
+                    application = result;
+                    forwardToApplicationNavigablePlace(place, callback);
+                }
+            });
+        }
+    }
+
+    private boolean isPlaceNavigable(AppPlace place) {
+        for (ApplicationWizardStep step : application.steps()) {
+            if (place.getToken().equals(step.placeId().getValue()) && (!ApplicationWizardStep.Status.notVisited.equals(step.status().getValue()))) {
+                if (step.substeps().size() > 0) {
+                    for (ApplicationWizardSubstep substep : step.substeps()) {
+                        if (substep.placeArgument().getStringView().equals(place.getArg(PtSiteMap.STEP_ARG_NAME))) {
+                            return (!ApplicationWizardStep.Status.notVisited.equals(substep.status().getValue()));
+                        }
+                    }
+                } else {
+                    return true;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
+
+    private void forwardToApplicationNavigablePlace(AppPlace place, AsyncCallback<AppPlace> callback) {
+        if (isPlaceNavigable(place)) {
+            callback.onSuccess(place);
+        } else {
+            forwardByApplicationProgress(callback);
+        }
     }
 
     private boolean shouldSelect(IPrimitive<Status> status) {
         return (ApplicationWizardStep.Status.latest.equals(status.getValue()) || ApplicationWizardStep.Status.invalid.equals(status.getValue()));
     }
 
-    private void navigationByApplicationProgress() {
+    private void forwardByApplicationProgress(AsyncCallback<AppPlace> callback) {
         for (ApplicationWizardStep step : application.steps()) {
             if (shouldSelect(step.status())) {
                 AppPlace place = AppSite.getHistoryMapper().getPlace(step.placeId().getValue());
@@ -149,29 +163,9 @@ public class PtAppWizardManager {
                         }
                     }
                 }
-                AppSite.getPlaceController().goTo(place);
-                return;
+                callback.onSuccess(place);
             }
         }
-        throw new UnrecoverableClientError("Application Wizard doesn't have 'latest' step");
+        callback.onFailure(new UnrecoverableClientError("Application Wizard doesn't have 'latest' step"));
     }
-
-    private void loadCurrentApplication() {
-        if (ClientSecurityController.checkBehavior(VistaBehavior.PROSPECTIVE_TENANT) || ClientSecurityController.checkBehavior(VistaBehavior.GUARANTOR)) {
-
-            ((ApplicationService) GWT.create(ApplicationService.class)).getApplication(new DefaultAsyncCallback<Application>() {
-                @Override
-                public void onSuccess(Application result) {
-                    application = result;
-                    log.info("start application");
-                    navigationByApplicationProgress();
-                }
-            });
-
-        } else {
-            application = null;
-            AppSite.getPlaceController().goTo(new PtSiteMap.Login());
-        }
-    }
-
 }
