@@ -76,10 +76,14 @@ public class PtAppSite extends VistaSite {
         PtAppSite.getHistoryHandler().handleCurrentHistory();
 
         AppSite.getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
-
             @Override
             public void onSecurityContextChange(SecurityControllerEvent event) {
-                // TODO
+                if (!ClientContext.isAuthenticated()) {
+                    getWizardManager().onLogout();
+                }
+
+                getPlaceController().goTo(getPlaceController().getWhere());
+
             }
         });
 

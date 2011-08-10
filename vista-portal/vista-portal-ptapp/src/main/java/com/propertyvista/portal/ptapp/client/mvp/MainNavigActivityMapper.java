@@ -18,16 +18,14 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import com.pyx4j.security.client.ClientContext;
-
 import com.propertyvista.portal.ptapp.client.activity.MainNavigActivity;
-import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.WizardStepPlace;
 
 public class MainNavigActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        if (ClientContext.isAuthenticated() && !(place instanceof PtSiteMap.Completion)) {
+        if (place instanceof WizardStepPlace) {
             RootPanel.getBodyElement().setClassName("body-nonavig");
             return new MainNavigActivity(place);
         } else {

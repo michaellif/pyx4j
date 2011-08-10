@@ -25,59 +25,59 @@ public class PtSiteMap implements SiteMap {
     public final static String STEP_ARG_NAME = "substep";
 
     @PlaceProperties(caption = "Application Form")
-    public static class Login extends AppPlace {
+    public static class Login extends AppPlace implements AuthPublicPlace {
     }
 
     @PlaceProperties(caption = "Application Form")
-    public static class RetrievePassword extends AppPlace {
+    public static class RetrievePassword extends AppPlace implements AuthPublicPlace {
     }
 
     @PlaceProperties(caption = "Application Form")
-    public static class ResetPassword extends AppPlace {
+    public static class ResetPassword extends AppPlace implements AuthPrivatePlace {
     }
 
     @PlaceProperties(caption = "Application Form")
-    public static class ChangePassword extends AppPlace {
+    public static class ChangePassword extends AppPlace implements AuthPrivatePlace {
     }
 
     @NavigationItem(navigLabel = "Apartment")
     @PlaceProperties(caption = "Apartment Info")
-    public static class Apartment extends AppPlace {
+    public static class Apartment extends AppPlace implements WizardStepPlace {
     }
 
     @NavigationItem(navigLabel = "Tenants")
     @PlaceProperties(caption = "Tenants")
-    public static class Tenants extends AppPlace {
+    public static class Tenants extends AppPlace implements WizardStepPlace {
     }
 
     @NavigationItem(navigLabel = "Info")
     @PlaceProperties(caption = "Applicant Info")
-    public static class Info extends AppPlace {
+    public static class Info extends AppPlace implements WizardStepPlace {
     }
 
     @NavigationItem(navigLabel = "Financial")
     @PlaceProperties(caption = "Financial")
-    public static class Financial extends AppPlace {
+    public static class Financial extends AppPlace implements WizardStepPlace {
     }
 
     @NavigationItem(navigLabel = "Addons")
     @PlaceProperties(caption = "Addons")
-    public static class Addons extends AppPlace {
+    public static class Addons extends AppPlace implements WizardStepPlace {
     }
 
     @NavigationItem(navigLabel = "Charges")
     @PlaceProperties(caption = "Charges")
-    public static class Charges extends AppPlace {
+    public static class Charges extends AppPlace implements WizardStepPlace {
     }
 
     @NavigationItem(navigLabel = "Summary")
     @PlaceProperties(caption = "Summary")
-    public static class Summary extends AppPlace {
+    public static class Summary extends AppPlace implements WizardStepPlace {
     }
 
     @NavigationItem(navigLabel = "Payment")
     @PlaceProperties(caption = "Payment")
-    public static class Payment extends AppPlace {
+    public static class Payment extends AppPlace implements WizardStepPlace {
     }
 
     @NavigationItem(navigLabel = "Completion")

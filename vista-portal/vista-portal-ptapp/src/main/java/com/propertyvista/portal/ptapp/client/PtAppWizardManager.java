@@ -121,9 +121,13 @@ public class PtAppWizardManager {
         }
     }
 
-    private boolean isPlaceNavigable(AppPlace place) {
+    public void onLogout() {
+        application = null;
+    }
+
+    private boolean isStepNavigable(AppPlace place) {
         for (ApplicationWizardStep step : application.steps()) {
-            if (place.getToken().equals(step.placeId().getValue()) && (!ApplicationWizardStep.Status.notVisited.equals(step.status().getValue()))) {
+            if (place.getPlaceId().equals(step.placeId().getValue()) && (!ApplicationWizardStep.Status.notVisited.equals(step.status().getValue()))) {
                 if (step.substeps().size() > 0) {
                     for (ApplicationWizardSubstep substep : step.substeps()) {
                         if (substep.placeArgument().getStringView().equals(place.getArg(PtSiteMap.STEP_ARG_NAME))) {
@@ -140,7 +144,7 @@ public class PtAppWizardManager {
     }
 
     private void forwardToApplicationNavigablePlace(AppPlace place, AsyncCallback<AppPlace> callback) {
-        if (isPlaceNavigable(place)) {
+        if (place != null && isStepNavigable(place)) {
             callback.onSuccess(place);
         } else {
             forwardByApplicationProgress(callback);
@@ -164,6 +168,7 @@ public class PtAppWizardManager {
                     }
                 }
                 callback.onSuccess(place);
+                return;
             }
         }
         callback.onFailure(new UnrecoverableClientError("Application Wizard doesn't have 'latest' step"));

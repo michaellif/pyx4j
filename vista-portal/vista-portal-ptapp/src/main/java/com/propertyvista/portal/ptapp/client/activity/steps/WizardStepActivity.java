@@ -79,14 +79,14 @@ public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter
                         @Override
                         public void onSuccess(E result) {
                             entity = result;
-                            log.info("CREATED {}", entity);
+                            //log.info("CREATED {}", entity);
                             view.populate(entity);
                         }
 
                     });
                 } else {
                     entity = result;
-                    log.info("LOADED {}", entity);
+                    //log.info("LOADED {}", entity);
                     view.populate(entity);
                 }
             }
@@ -103,7 +103,7 @@ public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter
         wizardServices.save(new DefaultAsyncCallback<E>() {
             @Override
             public void onSuccess(E result) {
-                log.info("SAVED {}", result);
+                //log.info("SAVED {}", result);
                 WizardStepActivity.this.entity = result;
                 PtAppSite.getWizardManager().nextStep();
             }

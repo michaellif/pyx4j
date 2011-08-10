@@ -13,27 +13,37 @@
  */
 package com.propertyvista.portal.ptapp.client;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.site.client.AppPlaceDispatcher;
 import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.domain.VistaBehavior;
+import com.propertyvista.portal.rpc.ptapp.AuthPublicPlace;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.WizardStepPlace;
 
 public class PtAppPlaceDispatcher extends AppPlaceDispatcher {
 
     @Override
-    public AppPlace forwardTo(AppPlace newPlace) {
-        return newPlace;
+    public void forwardTo(AppPlace newPlace, AsyncCallback<AppPlace> callback) {
 
-//        if (ClientSecurityController.checkBehavior(VistaBehavior.PROSPECTIVE_TENANT) || ClientSecurityController.checkBehavior(VistaBehavior.GUARANTOR)) {
-//            if (newPlace instanceof PtSiteMap.Login) {
-//                return null;
-//            }
-//        }
-//
-//        if (newPlace instanceof PtSiteMap.Login) {
-//            return new PtSiteMap.Apartment();
-//        } else {
-//            return newPlace;
-//        }
+        if (ClientSecurityController.checkBehavior(VistaBehavior.PROSPECTIVE_TENANT) || ClientSecurityController.checkBehavior(VistaBehavior.GUARANTOR)) {
+            if (newPlace instanceof WizardStepPlace) {
+                PtAppSite.getWizardManager().forwardTo(newPlace, callback);
+                return;
+            } else if (newPlace instanceof AuthPublicPlace) {
+                PtAppSite.getWizardManager().forwardTo(null, callback);
+                return;
+            }
+        } else {
+            if (!(newPlace instanceof AuthPublicPlace)) {
+                callback.onSuccess(new PtSiteMap.Login());
+                return;
+            }
+        }
 
+        callback.onSuccess(newPlace);
     }
-
 }
