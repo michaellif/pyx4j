@@ -20,10 +20,12 @@
  */
 package com.pyx4j.site.client;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.site.rpc.AppPlace;
 
 public abstract class AppPlaceDispatcher {
 
-    public abstract AppPlace forwardTo(AppPlace newPlace);
+    public abstract void forwardTo(AppPlace newPlace, AsyncCallback<AppPlace> callback);
 
 }

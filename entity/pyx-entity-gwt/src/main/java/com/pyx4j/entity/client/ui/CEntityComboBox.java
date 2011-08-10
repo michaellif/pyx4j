@@ -139,13 +139,11 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
                         optFiltered.add(en);
                     }
                 }
-                log.debug("filtered {}", this);
             } else {
                 optFiltered.addAll(opt);
             }
             if (comparator != null) {
                 Collections.sort(optFiltered, comparator);
-                log.debug("sorted {}", this);
             }
             super.setOptions(optFiltered);
         }
@@ -201,7 +199,6 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
 
                 @Override
                 public void onSuccess(List<E> result) {
-                    log.debug("loaded {} {}", result.size(), CEntityComboBox.this);
                     isLoading = false;
                     isUnavailable = false;
                     if (unavailableValidator != null) {

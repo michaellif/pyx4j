@@ -31,6 +31,7 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.Window.ClosingHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -42,7 +43,7 @@ public class AppPlaceContorller extends PlaceController {
 
     private Place where = Place.NOWHERE;
 
-    private Place forwardedFrom = Place.NOWHERE;
+    private AppPlace forwardedFrom = AppPlace.NOWHERE;
 
     private final AppPlaceDispatcher dispatcher;
 
@@ -53,7 +54,7 @@ public class AppPlaceContorller extends PlaceController {
         Window.addWindowClosingHandler(new ClosingHandler() {
             @Override
             public void onWindowClosing(ClosingEvent event) {
-                String warning = maybeGoTo(Place.NOWHERE);
+                String warning = maybeGoTo(AppPlace.NOWHERE);
                 if (warning != null) {
                     event.setMessage(warning);
                 }
@@ -75,29 +76,42 @@ public class AppPlaceContorller extends PlaceController {
     }
 
     @Override
-    public void goTo(Place newPlace) {
-        log.debug("goTo: " + newPlace);
+    public void goTo(final Place newPlace) {
+        log.debug("requested to go to: " + newPlace);
 
-        if (getWhere().equals(newPlace)) {
-            log.debug("Asked to return to the same place: " + newPlace);
-            return;
-        }
-        where = dispatcher.forwardTo((AppPlace) newPlace);
+        AsyncCallback<AppPlace> callback = new AsyncCallback<AppPlace>() {
 
-        if (where == null) {
-            where = Place.NOWHERE;
-            return;
-        }
+            @Override
+            public void onSuccess(AppPlace result) {
+                if (result == null) {
+                    where = AppPlace.NOWHERE;
+                    return;
+                } else {
+                    where = result;
+                }
 
-        String warning = maybeGoTo(newPlace);
-        if (warning == null || confirm(warning)) {
-            if (where == newPlace) {
-                forwardedFrom = Place.NOWHERE;
-            } else {
-                forwardedFrom = newPlace;
+                String warning = maybeGoTo(result);
+                if (warning == null || confirm(warning)) {
+                    if (where.equals(newPlace)) {
+                        forwardedFrom = AppPlace.NOWHERE;
+                        log.debug("go to: " + where);
+                    } else {
+                        forwardedFrom = (AppPlace) newPlace;
+                        log.debug("forwarded to: {} from {}", where, forwardedFrom);
+                    }
+                    eventBus.fireEvent(new PlaceChangeEvent(where));
+                }
             }
-            eventBus.fireEvent(new PlaceChangeEvent(newPlace));
-        }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                // TODO Auto-generated method stub
+
+            }
+        };
+
+        dispatcher.forwardTo((AppPlace) newPlace, callback);
+
     }
 
     private String maybeGoTo(Place newPlace) {

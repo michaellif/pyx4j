@@ -40,6 +40,9 @@ public class AppPlace extends Place {
 
     private Map<String, String> args;
 
+    public static final AppPlace NOWHERE = new AppPlace() {
+    };
+
     public AppPlace() {
     }
 
@@ -81,7 +84,11 @@ public class AppPlace extends Place {
     }
 
     public String getToken() {
-        return AppPlaceInfo.getPlaceId(getClass()) + createQueryString();
+        return getPlaceId() + createQueryString();
+    }
+
+    public String getPlaceId() {
+        return AppPlaceInfo.getPlaceId(getClass());
     }
 
     @Override
