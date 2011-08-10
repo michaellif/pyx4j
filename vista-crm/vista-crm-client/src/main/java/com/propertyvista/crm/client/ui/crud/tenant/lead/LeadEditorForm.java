@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.tenant.lead;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -103,7 +104,7 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
 
     private Widget createAppointmentsTab() {
         if (!isEditable()) {
-            return new CrmScrollPanel(((LeadViewerView) getParentView()).getAppointmentsListerView().asWidget());
+            return new ScrollPanel(((LeadViewerView) getParentView()).getAppointmentsListerView().asWidget());
         }
         return new HTML(); // just stub - not necessary for editing mode!.. 
     }

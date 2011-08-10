@@ -186,9 +186,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     private Widget createAddonsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
-        main.add(new CrmHeader2Decorator(proto().pets()));
+        main.add(new CrmHeader2Decorator(i18n.tr("Pets:")));
         main.add(inject(proto().pets(), createPetListViewer()));
-        main.add(new CrmHeader2Decorator(proto().vehicles()));
+        main.add(new CrmHeader2Decorator(i18n.tr("Vehicles/Parking:")));
         main.add(inject(proto().vehicles(), createVehicleListViewer()));
 
         return new CrmScrollPanel(main);

@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.tenant.lead;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -47,7 +48,7 @@ public class AppointmentEditorForm extends CrmEntityForm<Appointment> {
     public IsWidget createContent() {
 
         tabPanel.add(createGeneralTab(), i18n.tr("General"));
-        tabPanel.addDisable(createShowingsTab(), i18n.tr("ShowingsTab"));
+        tabPanel.addDisable(createShowingsTab(), i18n.tr("Showings"));
 
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
@@ -83,7 +84,7 @@ public class AppointmentEditorForm extends CrmEntityForm<Appointment> {
 
     private Widget createShowingsTab() {
         if (!isEditable()) {
-            return new CrmScrollPanel(((AppointmentViewerView) getParentView()).getShowingsListerView().asWidget());
+            return new ScrollPanel(((AppointmentViewerView) getParentView()).getShowingsListerView().asWidget());
         }
         return new HTML(); // just stub - not necessary for editing mode!.. 
     }

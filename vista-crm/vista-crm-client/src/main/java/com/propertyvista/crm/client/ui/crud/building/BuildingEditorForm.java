@@ -84,9 +84,11 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Mechanicals"));
 
         combinedtab = new FlowPanel();
+        combinedtab.add(new CrmHeader2Decorator(i18n.tr("Parkings:")));
         combinedtab.add(((BuildingView) getParentView()).getParkingListerView().asWidget());
+        combinedtab.add(new CrmHeader2Decorator(i18n.tr("Locker Areas:")));
         combinedtab.add(((BuildingView) getParentView()).getLockerAreaListerView().asWidget());
-        tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Parking & Locker Area"));
+        tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Add-ons"));
 
         tabPanel.add(createFinancialTab(), i18n.tr("Financial"));
         tabPanel.add(createMarketingTab(), i18n.tr("Marketing"));
