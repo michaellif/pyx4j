@@ -20,13 +20,90 @@
  */
 package com.pyx4j.site.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceChangeEvent;
+import com.google.gwt.place.shared.PlaceChangeRequestEvent;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.ClosingEvent;
+import com.google.gwt.user.client.Window.ClosingHandler;
+
+import com.pyx4j.site.rpc.AppPlace;
 
 public class AppPlaceContorller extends PlaceController {
 
-    public AppPlaceContorller(EventBus eventBus) {
+    private static final Logger log = LoggerFactory.getLogger(AppPlaceContorller.class);
+
+    private final EventBus eventBus;
+
+    private Place where = Place.NOWHERE;
+
+    private Place forwardedFrom = Place.NOWHERE;
+
+    private final AppPlaceDispatcher dispatcher;
+
+    public AppPlaceContorller(EventBus eventBus, AppPlaceDispatcher dispatcher) {
         super(eventBus);
+        this.eventBus = eventBus;
+        this.dispatcher = dispatcher;
+        Window.addWindowClosingHandler(new ClosingHandler() {
+            @Override
+            public void onWindowClosing(ClosingEvent event) {
+                String warning = maybeGoTo(Place.NOWHERE);
+                if (warning != null) {
+                    event.setMessage(warning);
+                }
+            }
+        });
     }
 
+    @Override
+    public Place getWhere() {
+        return where;
+    }
+
+    public Place getForwardedFrom() {
+        return forwardedFrom;
+    }
+
+    public boolean confirm(String message) {
+        return Window.confirm(message);
+    }
+
+    @Override
+    public void goTo(Place newPlace) {
+        log.debug("goTo: " + newPlace);
+
+        if (getWhere().equals(newPlace)) {
+            log.debug("Asked to return to the same place: " + newPlace);
+            return;
+        }
+        where = dispatcher.forwardTo((AppPlace) newPlace);
+
+        if (where == null) {
+            where = Place.NOWHERE;
+            return;
+        }
+
+        String warning = maybeGoTo(newPlace);
+        if (warning == null || confirm(warning)) {
+            if (where == newPlace) {
+                forwardedFrom = Place.NOWHERE;
+            } else {
+                forwardedFrom = newPlace;
+            }
+            eventBus.fireEvent(new PlaceChangeEvent(newPlace));
+        }
+    }
+
+    private String maybeGoTo(Place newPlace) {
+        PlaceChangeRequestEvent willChange = new PlaceChangeRequestEvent(newPlace);
+        eventBus.fireEvent(willChange);
+        String warning = willChange.getWarning();
+        return warning;
+    }
 }

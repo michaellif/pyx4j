@@ -27,7 +27,6 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -58,7 +57,7 @@ public abstract class AppSite implements EntryPoint {
 
     private final AppPlaceContorller placeController;
 
-    public AppSite(Class<? extends SiteMap> siteMapClass) {
+    public AppSite(Class<? extends SiteMap> siteMapClass, AppPlaceDispatcher dispatcher) {
         ClientEntityFactory.ensureIEntityImplementations();
         instance = this;
         Element head = Document.get().getElementsByTagName("html").getItem(0);
@@ -67,7 +66,16 @@ public abstract class AppSite implements EntryPoint {
         historyMapper = new AppPlaceHistoryMapper(siteMapClass);
         historyHandler = new PlaceHistoryHandler(historyMapper);
         eventBus = new AppSiteEventBus();
-        placeController = new AppPlaceContorller(eventBus);
+        placeController = new AppPlaceContorller(eventBus, dispatcher);
+    }
+
+    public AppSite(Class<? extends SiteMap> siteMapClass) {
+        this(siteMapClass, new AppPlaceDispatcher() {
+            @Override
+            public AppPlace forwardTo(AppPlace newPlace) {
+                return newPlace;
+            }
+        });
     }
 
     public static AppSite instance() {
@@ -90,7 +98,7 @@ public abstract class AppSite implements EntryPoint {
         return instance().eventBus;
     }
 
-    public static PlaceController getPlaceController() {
+    public static AppPlaceContorller getPlaceController() {
         return instance().placeController;
     }
 
