@@ -82,7 +82,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     public static String DEFAULT_STYLE_PREFIX = "vista_Lister";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        actionsPanel, filtersPanel, listPanel
+        actionsPanel, filtersPanel, listPanel, newItemButton, actionButton
     }
 
 // Events:
@@ -168,8 +168,10 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         actionsPanel = new HorizontalPanel();
         actionsPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.actionsPanel);
         actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        actionsPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         actionsPanel.setWidth("100%");
         actionsPanel.add(new HTML()); // just for %-tage cells alignment...
+        actionsPanel.setSpacing(4);
         actionsPanel.setVisible(false);
 
         filtersPanel = new HorizontalPanel();
@@ -218,9 +220,8 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             // new item stuff:
             if (allowAddNew) {
                 actionsPanel.setVisible(true);
-                actionsPanel.add(btnNewItem = new Button(i18n.tr("Add&nbspnew&nbspitem...")));
+                actionsPanel.add(btnNewItem = new Button(i18n.tr("Add")));
                 actionsPanel.setCellWidth(btnNewItem, "1%");
-                btnNewItem.getElement().getStyle().setMarginRight(1, Unit.EM);
                 btnNewItem.addClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
@@ -228,6 +229,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                     }
                 });
                 btnNewItem.ensureDebugId(new CompositeDebugId(NavigationIDs.Navigation_Button, NavigationIDs.ItemDescriptionIDs.Add_New_Item).toString());
+                btnNewItem.addStyleName(btnNewItem.getStylePrimaryName() + StyleSuffix.newItemButton);
             }
         }
     }
@@ -236,7 +238,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         actionsPanel.setVisible(true);
         actionsPanel.insert(action, 1);
         actionsPanel.setCellWidth(action, "1%");
-        action.getElement().getStyle().setMarginRight(1, Unit.EM);
     }
 
     public void setFiltersVisible(boolean visible) {
@@ -381,6 +382,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 btnApply.setEnabled(filters.getFilterCount() > 0);
             }
         });
+        HTML lblAdd = new HTML(i18n.tr("Add filter..."));
 
         btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
@@ -390,22 +392,19 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         });
         btnApply.setEnabled(false);
 
-        HorizontalPanel addWrap = new HorizontalPanel();
-        addWrap.add(btnAdd);
-        btnAdd.getElement().getStyle().setMarginTop(0.3, Unit.EM);
-        addWrap.setCellVerticalAlignment(btnAdd, HasVerticalAlignment.ALIGN_MIDDLE);
-        HTML lblAdd = new HTML(i18n.tr("Add filter..."));
-        lblAdd.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        addWrap.add(lblAdd);
-        addWrap.setCellVerticalAlignment(lblAdd, HasVerticalAlignment.ALIGN_MIDDLE);
-
         HorizontalPanel panel = new HorizontalPanel();
-        panel.add(addWrap);
+        panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+
+        panel.add(btnAdd);
+        btnAdd.getElement().getStyle().setMarginTop(0.3, Unit.EM);
+
+        panel.add(lblAdd);
+        lblAdd.getElement().getStyle().setMarginLeft(0.5, Unit.EM);
+
         panel.add(btnApply);
-        panel.setCellHorizontalAlignment(btnApply, HasHorizontalAlignment.ALIGN_RIGHT);
-        btnApply.getElement().getStyle().setMarginRight(1, Unit.EM);
-        btnApply.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
-        panel.setWidth("100%");
+        btnApply.getElement().getStyle().setMarginLeft(1, Unit.EM);
+        btnApply.getElement().getStyle().setMarginBottom(0.3, Unit.EM);
+
         return panel;
     }
 
