@@ -12,7 +12,8 @@
  */
 package com.propertyvista.crm.server.openapi.model;
 
-import javax.xml.bind.annotation.XmlElement;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.ConstructionType;
@@ -22,11 +23,30 @@ import com.propertyvista.domain.property.asset.building.BuildingInfo.WaterSupply
 
 public class BuildingInfoRS {
 
+    public enum BuildingType {
+
+        agricultural,
+
+        commercial,
+
+        mixed_residential,
+
+        residential,
+
+        industrial,
+
+        military,
+
+        parking_storage,
+
+        other;
+
+    }
+
     public String name;
 
-    public BuildingInfo.Type type;
+    public BuildingType buildingType;
 
-    @XmlElement(name = "address")
     public AddressRS address;
 
     public String shape;
@@ -57,4 +77,9 @@ public class BuildingInfoRS {
     public Boolean centralAir;
 
     public Boolean centralHeat;
+
+    public List<String> includedUtilities = new ArrayList<String>();
+
+    public List<String> parkingTypes = new ArrayList<String>();
+
 }

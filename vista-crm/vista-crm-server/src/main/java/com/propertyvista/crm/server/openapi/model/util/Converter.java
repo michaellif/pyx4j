@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.crm.server.openapi.model.AddressRS;
 import com.propertyvista.crm.server.openapi.model.AdvertisingBlurbRS;
 import com.propertyvista.crm.server.openapi.model.BuildingInfoRS;
+import com.propertyvista.crm.server.openapi.model.BuildingInfoRS.BuildingType;
 import com.propertyvista.crm.server.openapi.model.BuildingRS;
 import com.propertyvista.crm.server.openapi.model.BuildingsRS;
 import com.propertyvista.crm.server.openapi.model.FloorplanRS;
@@ -123,7 +124,7 @@ public class Converter {
 
         to.name = from.name().getStringView();
         to.address = convertAddress(from.address());
-        to.type = from.type().getValue();
+        to.buildingType = BuildingType.valueOf(from.type().getValue().name());
         if (!from.shape().isNull()) {
             to.shape = from.shape().getValue().name();
         }
@@ -150,7 +151,7 @@ public class Converter {
 
         to.name().setValue(from.name);
         to.address().set(convertAddress(from.address));
-        to.type().setValue(from.type);
+        to.type().setValue(BuildingInfo.Type.valueOf(from.buildingType.name()));
 
         to.shape().setValue(Shape.valueOf(from.shape));
         to.totalStoreys().setValue(from.totalStoreys);
@@ -187,6 +188,7 @@ public class Converter {
         }
         to.city = from.city().getStringView();
         to.province = from.province().getStringView();
+        to.provinceCode = from.province().code().getStringView();
         to.postalCode = from.postalCode().getStringView();
         to.country = from.country().getStringView();
         if (!from.county().isNull()) {

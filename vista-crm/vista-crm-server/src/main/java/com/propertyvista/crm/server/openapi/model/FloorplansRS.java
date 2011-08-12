@@ -16,12 +16,7 @@ package com.propertyvista.crm.server.openapi.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement(name = "floorplans")
 public class FloorplansRS {
 
-    @XmlElement(name = "floorplan")
     public List<FloorplanRS> floorplans = new ArrayList<FloorplanRS>();
 }

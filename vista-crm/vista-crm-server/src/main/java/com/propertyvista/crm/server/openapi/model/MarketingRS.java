@@ -12,14 +12,11 @@
  */
 package com.propertyvista.crm.server.openapi.model;
 
-import javax.xml.bind.annotation.XmlElement;
 
 public class MarketingRS {
     public String name;
 
-    @XmlElement(name = "description")
     public String description;
 
-    @XmlElement(name = "blurbs")
     public AdvertisingBlurbsRS blurbs = new AdvertisingBlurbsRS();
 }

@@ -7,36 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 28, 2011
- * @author dmitry
+ * Created on Aug 12, 2011
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.crm.server.openapi.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class FloorplanRS {
+public class AmenityRS {
 
     public String name;
 
     public String description;
 
-    public Integer floorCount;
-
-    public Double bedrooms;
-
-    public Double bathrooms;
-
-    public Double rentFrom;
-
-    public Double rentTo;
-
-    public Double sqftFrom;
-
-    public Double sqftTo;
-
-    public List<AmenityRS> amenities = new ArrayList<AmenityRS>();
-
-    public MediasRS medias = new MediasRS();
 }

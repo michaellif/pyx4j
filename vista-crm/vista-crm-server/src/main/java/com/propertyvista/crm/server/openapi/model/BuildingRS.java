@@ -13,20 +13,29 @@
  */
 package com.propertyvista.crm.server.openapi.model;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.List;
 
-@XmlRootElement(name = "building")
 public class BuildingRS {
 
     public String propertyCode;
 
-    @XmlElement(name = "info")
     public BuildingInfoRS info;
 
-    @XmlElement(name = "marketing")
     public MarketingRS marketing;
 
-    @XmlElement(name = "floorplans")
+    public List<AmenityRS> amenities = new ArrayList<AmenityRS>();
+
+    public Double rentFrom;
+
+    public Double rentTo;
+
+    public Double sqftFrom;
+
+    public Double sqftTo;
+
+    public Integer unitCount;
+
     public FloorplansRS floorplans = new FloorplansRS();
+
 }

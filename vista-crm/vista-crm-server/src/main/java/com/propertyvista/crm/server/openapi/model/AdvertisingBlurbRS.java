@@ -13,9 +13,7 @@
  */
 package com.propertyvista.crm.server.openapi.model;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "advertisingBlurb")
 public class AdvertisingBlurbRS {
     public String content;
 }

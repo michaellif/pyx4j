@@ -16,12 +16,7 @@ package com.propertyvista.crm.server.openapi.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement(name = "medias")
 public class MediasRS {
 
-    @XmlElement(name = "media")
     public List<MediaRS> media = new ArrayList<MediaRS>();
 }
