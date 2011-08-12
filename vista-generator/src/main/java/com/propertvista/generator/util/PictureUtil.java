@@ -61,7 +61,7 @@ public class PictureUtil {
             m.file().filename().setValue(filename);
             m.file().caption().setValue(FilenameUtils.getBaseName(filename));
             String mime = MimeMap.getContentType(FilenameUtils.getExtension(filename));
-            m.file().contentType().setValue(mime);
+            m.file().contentMimeType().setValue(mime);
 
             m.file().fileSize().setValue(raw.length);
 
@@ -105,7 +105,7 @@ public class PictureUtil {
 
                 m.file().filename().setValue(file.getName());
                 m.file().caption().setValue(FilenameUtils.getBaseName(file.getName()));
-                m.file().contentType().setValue(mime);
+                m.file().contentMimeType().setValue(mime);
 
                 in = new FileInputStream(file);
                 IOUtils.copyStream(in, b, 1024);

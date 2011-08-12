@@ -63,8 +63,8 @@ public class PublicMediaServlet extends HttpServlet {
             return;
         } else {
             if (thumbnailSize == null) {
-                if (!medium.file().contentType().isNull()) {
-                    response.setContentType(medium.file().contentType().getValue());
+                if (!medium.file().contentMimeType().isNull()) {
+                    response.setContentType(medium.file().contentMimeType().getValue());
                 }
                 BlobService.serve(medium.file().blobKey().getValue(), response);
             } else {

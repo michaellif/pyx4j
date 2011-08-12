@@ -31,6 +31,6 @@ public interface File extends IEntity {
 
     IPrimitive<Integer> fileSize();
 
-    IPrimitive<String> contentType();
+    IPrimitive<String> contentMimeType();
 
 }

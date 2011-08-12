@@ -15,9 +15,21 @@ package com.propertyvista.crm.server.openapi.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.propertyvista.domain.media.Media;
+
 @XmlRootElement(name = "media")
 public class MediaRS {
-    public String filename;
+
+    public Media.Type type;
 
     public String caption;
+
+    public String mimeType;
+
+    public String fileId;
+
+    public String youTubeVideoID;
+
+    public String url;
+
 }

@@ -16,10 +16,36 @@ package com.propertyvista.domain.media;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
 public interface Media extends IEntity {
 
+    @Translatable
+    public enum Type {
+
+        file,
+
+        youTube,
+
+        externalUrl;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    @MemberColumn(name = "mediaType")
+    IPrimitive<Type> type();
+
     @EmbeddedEntity
-    @MemberColumn(name = "mediumFile")
+    @MemberColumn(name = "mediaFile")
     com.propertyvista.domain.media.File file();
+
+    IPrimitive<String> youTubeVideoID();
+
+    IPrimitive<String> url();
+
 }

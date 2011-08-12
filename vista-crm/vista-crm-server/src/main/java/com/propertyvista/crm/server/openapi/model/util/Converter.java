@@ -240,7 +240,7 @@ public class Converter {
     public static MediaRS convertMedia(Media from) {
         MediaRS to = new MediaRS();
 
-        to.filename = from.file().filename().getStringView();
+        to.fileId = from.file().blobKey().getStringView();
         to.caption = from.file().caption().getStringView();
 
         return to;

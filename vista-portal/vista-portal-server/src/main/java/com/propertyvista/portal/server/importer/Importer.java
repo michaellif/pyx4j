@@ -160,7 +160,7 @@ public class Importer {
         Map<Media, byte[]> data = PictureUtil.loadbuildingMedia(building.propertyCode().getValue());
         for (Map.Entry<Media, byte[]> me : data.entrySet()) {
             Media m = me.getKey();
-            m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentType().getValue()));
+            m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentMimeType().getValue()));
 
             ThumbnailService.persist(m.file().blobKey().getValue(), me.getValue(), ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM,
                     ImageConsts.BUILDING_LARGE);
