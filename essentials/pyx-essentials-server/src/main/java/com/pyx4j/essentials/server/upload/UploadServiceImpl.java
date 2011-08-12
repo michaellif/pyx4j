@@ -14,31 +14,38 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Aug 10, 2011
+ * Created on Aug 12, 2011
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.rpc.upload;
+package com.pyx4j.essentials.server.upload;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.essentials.rpc.upload.UploadId;
+import com.pyx4j.essentials.rpc.upload.UploadService;
+import com.pyx4j.essentials.server.deferred.DeferredProcessServicesImpl;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public interface UploadService extends IService {
+public class UploadServiceImpl implements UploadService {
 
-    public static final String PostCorrelationID = "correlationID";
+    protected void onpPepareUpload(IEntity data, UploadId id) {
 
-    public static final String PostUploadKey = "uploadKey";
+    }
 
-    public static final String PostUploadDescription = "uploadDescription";
+    @Override
+    public void prepareUpload(AsyncCallback<UploadId> callback, IEntity data) {
+        UploadId id = new UploadId();
+        onpPepareUpload(data, id);
+        id.setDeferredCorrelationId(DeferredProcessServicesImpl.register(new UploadDeferredProcess()));
+        callback.onSuccess(id);
+    }
 
-    public static final String ResponsePrefix = "UploadResponse";
-
-    public void prepareUpload(AsyncCallback<UploadId> callback, IEntity data);
-
-    public void cancelUpload(AsyncCallback<VoidSerializable> callback, Key uploadKey);
+    @Override
+    public void cancelUpload(AsyncCallback<VoidSerializable> callback, Key uploadKey) {
+        callback.onSuccess(null);
+    }
 
 }

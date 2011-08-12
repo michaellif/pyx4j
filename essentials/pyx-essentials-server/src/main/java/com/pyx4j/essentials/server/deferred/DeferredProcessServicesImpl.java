@@ -132,4 +132,8 @@ public class DeferredProcessServicesImpl implements DeferredProcessServices {
         log.debug("process created {}", deferredCorrelationID);
         return deferredCorrelationID;
     }
+
+    public static synchronized IDeferredProcess getDeferredProcess(String deferredCorrelationID) {
+        return getMap().get(deferredCorrelationID);
+    }
 }
