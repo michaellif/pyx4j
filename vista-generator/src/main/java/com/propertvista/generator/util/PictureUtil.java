@@ -58,6 +58,7 @@ public class PictureUtil {
                 return;
             }
             Media m = EntityFactory.create(Media.class);
+            m.type().setValue(Media.Type.file);
             m.file().filename().setValue(filename);
             m.file().caption().setValue(FilenameUtils.getBaseName(filename));
             String mime = MimeMap.getContentType(FilenameUtils.getExtension(filename));
@@ -102,6 +103,7 @@ public class PictureUtil {
             InputStream in = null;
             try {
                 Media m = EntityFactory.create(Media.class);
+                m.type().setValue(Media.Type.file);
 
                 m.file().filename().setValue(file.getName());
                 m.file().caption().setValue(FilenameUtils.getBaseName(file.getName()));

@@ -111,9 +111,9 @@ public class OpenApiModelTest {
 
             Floorplan floorplan = generator.createFloorplan("MyFloorplan");
             FloorplanRS floorplanRS = Converter.convertFloorplan(floorplan);
-            buildingRS.floorplans.floorplans.add(floorplanRS);
+            buildingRS.floorplans.add(floorplanRS);
             MediaRS mediaRS = Converter.convertMedia(MediaGenerator.createMedia());
-            floorplanRS.medias.media.add(mediaRS);
+            floorplanRS.medias.add(mediaRS);
         }
         String xml = MarshallUtil.marshall(buildingsRS);
 

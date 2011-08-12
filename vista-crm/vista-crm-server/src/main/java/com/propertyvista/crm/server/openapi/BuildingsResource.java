@@ -43,7 +43,10 @@ import com.propertyvista.crm.server.openapi.model.FloorplanRS;
 import com.propertyvista.crm.server.openapi.model.util.Converter;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.server.common.reference.SharedData;
 
 @Path("/buildings")
@@ -104,24 +107,87 @@ public class BuildingsResource {
             BuildingRS buildingRS = Converter.convertBuilding(building);
             buildingsRS.buildings.add(buildingRS);
 
+            //Get Amenity
+            {
+                EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+                for (BuildingAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(criteria)) {
+                    buildingRS.amenities.add(Converter.convertBuildingAmenity(amenity));
+                }
+            }
+            if (!building.media().isEmpty()) {
+                PersistenceServicesFactory.getPersistenceService().retrieve(building.media());
+                for (Media media : building.media()) {
+                    buildingRS.medias.add(Converter.convertMedia(media));
+                }
+            }
+
+            buildingRS.unitCount = 0;
+
             EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
             floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
             List<Floorplan> floorplans = service.query(floorplanCriteria);
             for (Floorplan floorplan : floorplans) {
                 FloorplanRS floorplanRS = Converter.convertFloorplan(floorplan);
 
-                for (Media media : floorplan.media()) {
-                    EntityQueryCriteria<Media> mediaCriteria = EntityQueryCriteria.create(Media.class);
-                    mediaCriteria.add(PropertyCriterion.eq(mediaCriteria.proto().id(), media.id().getValue()));
-                    List<Media> fetchedMedias = service.query(mediaCriteria);
-                    for (Media fetchedMedia : fetchedMedias) {
-                        floorplanRS.medias.media.add(Converter.convertMedia(fetchedMedia));
+                //Get Amenity
+                {
+                    EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
+                    criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), floorplan));
+                    for (FloorplanAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(criteria)) {
+                        floorplanRS.amenities.add(Converter.convertFloorplanAmenity(amenity));
                     }
                 }
-                buildingRS.floorplans.floorplans.add(floorplanRS);
+
+                // Count Units and get stats
+                {
+                    EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+                    criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
+                    for (AptUnit u : PersistenceServicesFactory.getPersistenceService().query(criteria)) {
+                        buildingRS.unitCount++;
+
+                        floorplanRS.rentFrom = min(floorplanRS.rentFrom, u.financial().unitRent().getValue());
+                        floorplanRS.rentTo = max(floorplanRS.rentTo, u.financial().unitRent().getValue());
+                        floorplanRS.sqftFrom = min(floorplanRS.sqftFrom, u.info().area().getValue());
+                        floorplanRS.sqftTo = max(floorplanRS.sqftTo, u.info().area().getValue());
+                    }
+                }
+                buildingRS.rentFrom = min(buildingRS.rentFrom, floorplanRS.rentFrom);
+                buildingRS.rentTo = max(buildingRS.rentTo, floorplanRS.rentTo);
+                buildingRS.sqftFrom = min(buildingRS.sqftFrom, floorplanRS.sqftFrom);
+                buildingRS.sqftTo = max(buildingRS.sqftTo, floorplanRS.sqftTo);
+
+                if (!floorplan.media().isEmpty()) {
+                    PersistenceServicesFactory.getPersistenceService().retrieve(floorplan.media());
+                    for (Media media : floorplan.media()) {
+                        floorplanRS.medias.add(Converter.convertMedia(media));
+                    }
+                }
+
+                buildingRS.floorplans.add(floorplanRS);
             }
         }
 
         return buildingsRS;
+    }
+
+    Double min(Double a, Double b) {
+        if (a == null) {
+            return b;
+        } else if (b == null) {
+            return a;
+        } else {
+            return Math.min(a, b);
+        }
+    }
+
+    Double max(Double a, Double b) {
+        if (a == null) {
+            return b;
+        } else if (b == null) {
+            return a;
+        } else {
+            return Math.max(a, b);
+        }
     }
 }

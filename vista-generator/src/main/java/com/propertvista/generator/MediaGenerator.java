@@ -21,6 +21,8 @@ import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.essentials.server.download.MimeMap;
 
 import com.propertyvista.domain.media.File;
 import com.propertyvista.domain.media.Media;
@@ -45,10 +47,13 @@ public class MediaGenerator {
      */
     public static Media createMedia() {
         Media media = EntityFactory.create(Media.class);
+        media.type().setValue(Media.Type.file);
 
         File file = EntityFactory.create(File.class);
+
         file.filename().setValue("file102.jpg");
         file.caption().setValue("file102");
+        file.contentMimeType().setValue(MimeMap.getContentType(DownloadFormat.JPEG));
         media.file().set(file);
 
         return media;
@@ -79,6 +84,7 @@ public class MediaGenerator {
         Map<Media, byte[]> data = PictureUtil.loadResourceMedia(filename, BuildingsGenerator.class);
         for (Map.Entry<Media, byte[]> me : data.entrySet()) {
             Media m = me.getKey();
+            m.type().setValue(Media.Type.file);
             m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentMimeType().getValue()));
 
             //TODO what sizes to use for Floorplan images?

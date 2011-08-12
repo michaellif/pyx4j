@@ -12,11 +12,20 @@
  */
 package com.propertyvista.crm.server.openapi.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 
 public class MarketingRS {
+
     public String name;
 
     public String description;
 
-    public AdvertisingBlurbsRS blurbs = new AdvertisingBlurbsRS();
+    @XmlElementWrapper
+    @XmlElements(@XmlElement(name = "blurb", type = AdvertisingBlurbRS.class))
+    public List<AdvertisingBlurbRS> blurbs = new ArrayList<AdvertisingBlurbRS>();
 }

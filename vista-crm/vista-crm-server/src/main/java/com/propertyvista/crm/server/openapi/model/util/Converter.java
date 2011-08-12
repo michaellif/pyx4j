@@ -20,12 +20,12 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.server.openapi.model.AddressRS;
 import com.propertyvista.crm.server.openapi.model.AdvertisingBlurbRS;
+import com.propertyvista.crm.server.openapi.model.AmenityRS;
 import com.propertyvista.crm.server.openapi.model.BuildingInfoRS;
 import com.propertyvista.crm.server.openapi.model.BuildingInfoRS.BuildingType;
 import com.propertyvista.crm.server.openapi.model.BuildingRS;
 import com.propertyvista.crm.server.openapi.model.BuildingsRS;
 import com.propertyvista.crm.server.openapi.model.FloorplanRS;
-import com.propertyvista.crm.server.openapi.model.FloorplansRS;
 import com.propertyvista.crm.server.openapi.model.MarketingRS;
 import com.propertyvista.crm.server.openapi.model.MediaRS;
 import com.propertyvista.domain.contact.Address;
@@ -34,8 +34,10 @@ import com.propertyvista.domain.contact.IAddressFull.StreetDirection;
 import com.propertyvista.domain.contact.IAddressFull.StreetType;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
+import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.Shape;
@@ -83,7 +85,7 @@ public class Converter {
 
         for (AdvertisingBlurb blurb : from.adBlurbs()) {
             AdvertisingBlurbRS blurbRS = convertBlurb(blurb);
-            to.blurbs.blurbs.add(blurbRS);
+            to.blurbs.add(blurbRS);
         }
 
         return to;
@@ -95,7 +97,7 @@ public class Converter {
         to.name().setValue(from.name);
         to.description().setValue(from.description);
 
-        for (AdvertisingBlurbRS blurbRS : from.blurbs.blurbs) {
+        for (AdvertisingBlurbRS blurbRS : from.blurbs) {
             AdvertisingBlurb blurb = convertBlurb(blurbRS);
             to.adBlurbs().add(blurb);
         }
@@ -198,6 +200,24 @@ public class Converter {
         return to;
     }
 
+    public static AmenityRS convertBuildingAmenity(Amenity from) {
+        AmenityRS to = new AmenityRS();
+
+        to.name = from.name().getStringView();
+        to.description = from.name().getStringView();
+
+        return to;
+    }
+
+    public static AmenityRS convertFloorplanAmenity(FloorplanAmenity from) {
+        AmenityRS to = new AmenityRS();
+
+        to.name = from.name().getStringView();
+        to.description = from.name().getStringView();
+
+        return to;
+    }
+
     public static Address convertAddress(AddressRS from) {
         Address to = EntityFactory.create(Address.class);
 
@@ -217,16 +237,6 @@ public class Converter {
         return to;
     }
 
-    public static FloorplansRS convertFloorplans(List<Floorplan> from) {
-        FloorplansRS to = new FloorplansRS();
-
-        for (Floorplan floorplan : from) {
-            to.floorplans.add(convertFloorplan(floorplan));
-        }
-
-        return to;
-    }
-
     public static FloorplanRS convertFloorplan(Floorplan from) {
         FloorplanRS to = new FloorplanRS();
 
@@ -242,7 +252,15 @@ public class Converter {
     public static MediaRS convertMedia(Media from) {
         MediaRS to = new MediaRS();
 
-        to.fileId = from.file().blobKey().getStringView();
+        switch (from.type().getValue()) {
+        case file:
+            to.fileId = from.file().blobKey().getStringView();
+            to.mediaType = MediaRS.MediaType.file;
+            to.mimeType = from.file().contentMimeType().getStringView();
+            break;
+        default:
+            throw new Error("TODO");
+        }
         to.caption = from.file().caption().getStringView();
 
         return to;

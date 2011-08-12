@@ -16,6 +16,10 @@ package com.propertyvista.crm.server.openapi.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
+
 public class FloorplanRS {
 
     public String name;
@@ -36,7 +40,11 @@ public class FloorplanRS {
 
     public Double sqftTo;
 
+    @XmlElementWrapper
+    @XmlElements(@XmlElement(name = "amenity", type = AmenityRS.class))
     public List<AmenityRS> amenities = new ArrayList<AmenityRS>();
 
-    public MediasRS medias = new MediasRS();
+    @XmlElementWrapper
+    @XmlElements(@XmlElement(name = "media", type = MediaRS.class))
+    public List<MediaRS> medias = new ArrayList<MediaRS>();
 }

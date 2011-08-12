@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.server.openapi.model;
 
-
 public class AdvertisingBlurbRS {
+
     public String content;
+
 }
