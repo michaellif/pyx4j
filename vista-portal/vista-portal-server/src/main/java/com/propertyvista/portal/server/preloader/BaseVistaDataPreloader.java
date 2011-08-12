@@ -33,4 +33,7 @@ abstract class BaseVistaDataPreloader extends AbstractDataPreloader {
         PersistenceServicesFactory.getPersistenceService().persist(entity);
     }
 
+    protected static void merge(IEntity entity) {
+        PersistenceServicesFactory.getPersistenceService().merge(entity);
+    }
 }

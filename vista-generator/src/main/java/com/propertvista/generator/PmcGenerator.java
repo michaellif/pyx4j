@@ -26,6 +26,7 @@ import com.propertyvista.domain.financial.offering.DepositType;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 public class PmcGenerator {
@@ -109,6 +110,21 @@ public class PmcGenerator {
 
         item.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
+        item.items().add(createServiceItem(type));
+
+        return item;
+    }
+
+    private ServiceItem createServiceItem(Service.Type type) {
+        ServiceItem item = EntityFactory.create(ServiceItem.class);
+
+        item.type().set(EntityFactory.create(ServiceItemType.class));
+        item.type().name().setValue(type.toString());
+        item.type().serviceType().setValue(type);
+
+        item.price().setValue(500d + RandomUtil.randomInt(500));
+        item.description().setValue(type.toString() + " description here...");
+
         return item;
     }
 
@@ -125,6 +141,23 @@ public class PmcGenerator {
 
         item.isRecurring().setValue(RandomUtil.randomBoolean());
         item.isMandatory().setValue(RandomUtil.randomBoolean());
+
+        for (int i = 0; i < 3; ++i) {
+            item.items().add(createFeatureItem(type));
+        }
+
+        return item;
+    }
+
+    private ServiceItem createFeatureItem(Feature.Type type) {
+        ServiceItem item = EntityFactory.create(ServiceItem.class);
+
+        item.type().set(EntityFactory.create(ServiceItemType.class));
+        item.type().name().setValue(type.toString());
+        item.type().featureType().setValue(type);
+
+        item.price().setValue(100d + RandomUtil.randomInt(100));
+        item.description().setValue(type.toString() + " description here...");
 
         return item;
     }

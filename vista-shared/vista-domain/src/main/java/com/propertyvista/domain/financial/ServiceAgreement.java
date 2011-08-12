@@ -18,15 +18,16 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.financial.offering.ChargeItem;
-import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.ServiceConcession;
 
 public interface ServiceAgreement extends IEntity {
 
-    IList<ChargeItem> chargeItems();
+    ChargeItem serviceItem();
 
-    IList<Concession> concessions();
+    IList<ChargeItem> featureItems();
+
+    IList<ServiceConcession> concessions();
 
     @MemberColumn(name = "leaseAccount")
     Account account();
-
 }

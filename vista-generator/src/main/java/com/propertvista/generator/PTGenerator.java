@@ -53,6 +53,7 @@ import com.propertyvista.domain.contact.IAddress;
 import com.propertyvista.domain.contact.IAddressFull;
 import com.propertyvista.domain.contact.IAddressFull.StreetDirection;
 import com.propertyvista.domain.contact.IAddressFull.StreetType;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
@@ -104,6 +105,8 @@ public class PTGenerator {
 
         // lease:
         summary.lease().leaseID().setValue(RandomUtil.randomLetters(8));
+        summary.lease().type().setValue(Service.Type.residentialUnit);
+//        summary.lease().type().setValue(RandomUtil.randomEnum(Service.Type.class));
         summary.lease().status().setValue(Lease.Status.Draft);
         summary.lease().unit().set(selectedUnit);
         summary.lease().leaseFrom().setValue(RandomUtil.randomLogicalDate(2011, 2011));

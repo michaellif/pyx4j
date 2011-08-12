@@ -38,6 +38,7 @@ import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.StarlightPmc;
@@ -125,19 +126,29 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
 
             List<Service> services = pmcGenerator.createServices(catalog);
             for (Service item : services) {
+                for (ServiceItem item2 : item.items()) {
+                    persist(item2.type());
+                }
                 persist(item);
+                catalog.services().add(item);
             }
 
             List<Feature> features = pmcGenerator.createFeatures(catalog);
             for (Feature item : features) {
+                for (ServiceItem item2 : item.items()) {
+                    persist(item2.type());
+                }
                 persist(item);
+                catalog.features().add(item);
             }
 
             List<Concession> concessions = pmcGenerator.createConcessions(catalog);
             for (Concession item : concessions) {
                 persist(item);
+                catalog.concessions().add(item);
             }
 
+            merge(catalog);
             building.serviceCatalog().set(catalog);
 
             persist(building);

@@ -7,22 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-07-25
+ * Created on 2011-06-29
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.financial.offering;
+package com.propertyvista.crm.rpc.services;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-public interface ChargeItem extends IEntity {
+import com.propertyvista.domain.financial.offering.ServiceItem;
 
-    ServiceItem item();
-
-    // base price from item - read only!
-    IPrimitive<Double> price();
-
-    IList<ChargeItemAdjustment> adjustments();
+public interface ServiceItemCrudService extends AbstractCrudService<ServiceItem> {
 }

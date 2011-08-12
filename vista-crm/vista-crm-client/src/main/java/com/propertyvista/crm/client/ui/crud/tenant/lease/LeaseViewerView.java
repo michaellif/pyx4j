@@ -17,9 +17,9 @@ import com.pyx4j.site.client.ui.crud.IViewerView;
 
 import com.propertyvista.dto.LeaseDTO;
 
-public interface LeaseViewerView extends IViewerView<LeaseDTO>, LeaseView {
+public interface LeaseViewerView extends IViewerView<LeaseDTO> {
 
-    interface Presenter extends IViewerView.Presenter, LeaseView.Presenter {
+    interface Presenter extends IViewerView.Presenter {
 
         void createMasterApplication();
     }

@@ -78,6 +78,12 @@ public class ServiceEditorActivity extends EditorActivityBase<Service> implement
     }
 
     @Override
+    protected void initNewItem(Service entity) {
+        super.initNewItem(entity);
+        entity.type().setValue(itemType);
+    }
+
+    @Override
     public void onPopulateSuccess(Service result) {
         super.onPopulateSuccess(result);
 
@@ -86,12 +92,6 @@ public class ServiceEditorActivity extends EditorActivityBase<Service> implement
 
         concessionLister.setParentFiltering(result.catalog().getPrimaryKey());
         concessionLister.populate(0);
-    }
-
-    @Override
-    protected void initNewItem(Service entity) {
-        super.initNewItem(entity);
-        entity.type().setValue(itemType);
     }
 
     @Override

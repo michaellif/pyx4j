@@ -20,10 +20,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
-import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseView;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
@@ -31,28 +29,10 @@ import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerActivity extends ViewerActivityBase<LeaseDTO> implements LeaseViewerView.Presenter {
 
-    private final LeaseActivityDelegate delegate;
-
     @SuppressWarnings("unchecked")
     public LeaseViewerActivity(Place place) {
         super((LeaseViewerView) TenantViewFactory.instance(LeaseViewerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class));
-        delegate = new LeaseActivityDelegate((LeaseView) view);
         withPlace(place);
-    }
-
-    @Override
-    public Presenter getBuildingPresenter() {
-        return delegate.getBuildingPresenter();
-    }
-
-    @Override
-    public Presenter getUnitPresenter() {
-        return delegate.getUnitPresenter();
-    }
-
-    @Override
-    public Presenter getTenantPresenter() {
-        return delegate.getTenantPresenter();
     }
 
     @Override

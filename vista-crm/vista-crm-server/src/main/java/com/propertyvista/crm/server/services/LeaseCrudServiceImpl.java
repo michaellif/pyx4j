@@ -66,6 +66,9 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             }
             // and building:
             dto.selectedBuilding().set(PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, dto.unit().belongsTo().getPrimaryKey()));
+            if (dto.selectedBuilding() != null && !dto.selectedBuilding().isNull()) {
+                dto.serviceCatalog().set(dto.selectedBuilding().serviceCatalog());
+            }
 
             // fill tenants:
             dto.tenants().clear();

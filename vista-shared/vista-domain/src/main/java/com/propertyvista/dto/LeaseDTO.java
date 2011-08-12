@@ -15,8 +15,11 @@ package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -33,6 +36,12 @@ public interface LeaseDTO extends Lease {
 //  IList<TenantInLease> tenants();
 
     ServiceCatalog serviceCatalog();
+
+    IList<ServiceItem> selectedServiceItems();
+
+    IList<ServiceItem> selectedFeatureItems();
+
+    IList<Concession> selectedConcesions();
 
     MasterApplicationStatusDTO masterApplicationStatus();
 }

@@ -14,11 +14,13 @@
 package com.propertyvista.domain.media;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface File extends IEntity {
 
+    @ToString(index = 0)
     IPrimitive<String> caption();
 
     IPrimitive<String> accessKey();
@@ -27,8 +29,10 @@ public interface File extends IEntity {
 
     IPrimitive<Integer> cacheVersion();
 
+    @ToString(index = 2)
     IPrimitive<String> filename();
 
+    @ToString(index = 1)
     IPrimitive<Integer> fileSize();
 
     IPrimitive<String> contentMimeType();

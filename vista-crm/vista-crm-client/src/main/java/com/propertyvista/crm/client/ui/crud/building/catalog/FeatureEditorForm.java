@@ -80,7 +80,7 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().itemType(), "20em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "20em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
 //                columns.add(new EntityFolderColumnDescriptor(proto().element(), "15em"));
@@ -98,7 +98,7 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
                         CComponent<?> comp = super.createCell(column);
-                        if (column.getObject() == proto().itemType()) {
+                        if (column.getObject() == proto().type()) {
                             if (comp instanceof CEntityComboBox<?>) {
                                 @SuppressWarnings("unchecked")
                                 CEntityComboBox<ServiceItemType> combo = (CEntityComboBox<ServiceItemType>) comp;

@@ -15,6 +15,7 @@ package com.propertyvista.domain.tenant.lease;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -25,6 +26,7 @@ import com.pyx4j.i18n.shared.Translatable;
 import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.financial.ServiceAgreement;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.media.Document;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -61,10 +63,12 @@ public interface Lease extends IEntity {
 
     IPrimitive<Status> status();
 
+    @MemberColumn(name = "leaseType")
+    IPrimitive<Service.Type> type();
+
     @Caption(name = "Selected Unit")
     AptUnit unit();
 
-//  @Detached
     IList<TenantInLease> tenants(); // double reference (TenantInLease has reference to Lease already!)
 
     IList<Vehicle> vehicles();

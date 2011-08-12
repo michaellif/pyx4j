@@ -13,12 +13,17 @@
  */
 package com.propertyvista.crm.server.services;
 
+import java.util.List;
+
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
+import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
@@ -38,6 +43,32 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
             for (BuildingAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(amenitysCriteria)) {
                 dto.amenities().add(amenity);
             }
+        }
+    }
+
+    @Override
+    protected void enhanceSaveDBO(Building dbo, BuildingDTO dto) {
+
+        // update service catalogue double-reference lists:
+        EntityQueryCriteria<Service> serviceCriteria = EntityQueryCriteria.create(Service.class);
+        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), dto.serviceCatalog()));
+        List<Service> services = PersistenceServicesFactory.getPersistenceService().query(serviceCriteria);
+        if (services != null) {
+            dbo.serviceCatalog().services().addAll(services);
+        }
+
+        EntityQueryCriteria<Feature> featureCriteria = EntityQueryCriteria.create(Feature.class);
+        featureCriteria.add(PropertyCriterion.eq(featureCriteria.proto().catalog(), dto.serviceCatalog()));
+        List<Feature> features = PersistenceServicesFactory.getPersistenceService().query(featureCriteria);
+        if (services != null) {
+            dbo.serviceCatalog().features().addAll(features);
+        }
+
+        EntityQueryCriteria<Concession> concessionCriteria = EntityQueryCriteria.create(Concession.class);
+        concessionCriteria.add(PropertyCriterion.eq(concessionCriteria.proto().catalog(), dto.serviceCatalog()));
+        List<Concession> concessions = PersistenceServicesFactory.getPersistenceService().query(concessionCriteria);
+        if (services != null) {
+            dbo.serviceCatalog().concessions().addAll(concessions);
         }
     }
 }

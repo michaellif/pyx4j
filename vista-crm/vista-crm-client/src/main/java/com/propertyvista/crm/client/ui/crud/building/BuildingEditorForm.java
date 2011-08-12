@@ -62,8 +62,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     public IsWidget createContent() {
 
         // TODO - add this data processing later! :
-        //  main.add(inject(proto().contactsList()), 15);
-        // TODO - add this data processing later! :
         //  main.add(inject(proto().media()), 15);
 
         tabPanel.addDisable(((BuildingView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));

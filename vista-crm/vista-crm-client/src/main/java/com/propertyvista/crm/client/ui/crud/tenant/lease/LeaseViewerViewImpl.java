@@ -34,8 +34,6 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
     private final Button createApplicationButton;
 
-    private final LeaseViewDelegate delegate;
-
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
 
@@ -48,8 +46,6 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         createApplicationButton.addStyleName(createApplicationButton.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.ActionButton);
         addActionButton(createApplicationButton);
 
-        delegate = new LeaseViewDelegate(true);
-
         // create/init/set main form here: 
         CrmEntityForm<LeaseDTO> form = new LeaseEditorForm(new CrmViewersComponentFactory(), this);
         form.initialize();
@@ -61,20 +57,4 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         createApplicationButton.setVisible(Lease.Status.Draft.equals(value.status().getValue()));
         super.populate(value);
     }
-
-    @Override
-    public IListerView<Building> getBuildingListerView() {
-        return delegate.getBuildingListerView();
-    }
-
-    @Override
-    public IListerView<AptUnit> getUnitListerView() {
-        return delegate.getUnitListerView();
-    }
-
-    @Override
-    public IListerView<Tenant> getTenantListerView() {
-        return delegate.getTenantListerView();
-    }
-
 }

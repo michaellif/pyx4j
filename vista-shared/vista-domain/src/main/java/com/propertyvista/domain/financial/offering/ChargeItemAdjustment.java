@@ -57,6 +57,8 @@ public interface ChargeItemAdjustment extends IEntity {
     @MemberColumn(name = "concessionType")
     IPrimitive<Type> type();
 
+    IPrimitive<ChargeType> chargeType();
+
     IPrimitive<TermType> termType();
 
     /*

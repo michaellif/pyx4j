@@ -15,10 +15,19 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerBase.ItemSelectionHandler;
+import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
+import com.propertyvista.crm.client.ui.crud.building.catalog.SelectConcessionLister;
+import com.propertyvista.crm.client.ui.crud.building.catalog.SelectFeatrueLister;
+import com.propertyvista.crm.client.ui.crud.tenant.SelectTenantLister;
+import com.propertyvista.crm.client.ui.crud.unit.SelectedUnitLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
@@ -26,14 +35,29 @@ import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> implements LeaseEditorView {
 
-    private final LeaseViewDelegate delegate;
+    private final IListerView<Building> buildingLister;
+
+    private final IListerView<AptUnit> unitLister;
+
+    private final IListerView<Tenant> tenantLister;
+
+    private final IListerView<ServiceItem> serviceItemLister;
+
+    private final IListerView<Feature> featureLister;
+
+    private final IListerView<Concession> concessionLister;
 
     public LeaseEditorViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
 
-        delegate = new LeaseViewDelegate(true);
+        buildingLister = new ListerInternalViewImplBase<Building>(new SelectedBuildingLister(/* readOnly */));
+        unitLister = new ListerInternalViewImplBase<AptUnit>(new SelectedUnitLister(/* readOnly */));
+        tenantLister = new ListerInternalViewImplBase<Tenant>(new SelectTenantLister(/* readOnly */));
+        serviceItemLister = new ListerInternalViewImplBase<ServiceItem>(new SelectServiceItemLister());
+        featureLister = new ListerInternalViewImplBase<Feature>(new SelectFeatrueLister());
+        concessionLister = new ListerInternalViewImplBase<Concession>(new SelectConcessionLister());
 
-        delegate.getBuildingListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<Building>() {
+        buildingLister.getLister().addItemSelectionHandler(new ItemSelectionHandler<Building>() {
             @Override
             public void onSelect(Building selectedItem) {
                 ((LeaseEditorView.Presenter) presenter).setSelectedBuilding(selectedItem);
@@ -48,16 +72,31 @@ public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> impleme
 
     @Override
     public IListerView<Building> getBuildingListerView() {
-        return delegate.getBuildingListerView();
+        return buildingLister;
     }
 
     @Override
     public IListerView<AptUnit> getUnitListerView() {
-        return delegate.getUnitListerView();
+        return unitLister;
     }
 
     @Override
     public IListerView<Tenant> getTenantListerView() {
-        return delegate.getTenantListerView();
+        return tenantLister;
+    }
+
+    @Override
+    public IListerView<ServiceItem> getServiceItemListerView() {
+        return serviceItemLister;
+    }
+
+    @Override
+    public IListerView<Feature> getFeatureListerView() {
+        return featureLister;
+    }
+
+    @Override
+    public IListerView<Concession> getConcessionListerView() {
+        return concessionLister;
     }
 }

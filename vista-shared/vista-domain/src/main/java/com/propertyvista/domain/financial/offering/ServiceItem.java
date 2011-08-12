@@ -14,6 +14,8 @@
 package com.propertyvista.domain.financial.offering;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -21,8 +23,11 @@ import com.propertyvista.domain.property.asset.BuildingElement;
 
 public interface ServiceItem extends IEntity {
 
-    ServiceItemType itemType();
+    @ToString(index = 0)
+    @MemberColumn(name = "itemType")
+    ServiceItemType type();
 
+    @ToString(index = 1)
     IPrimitive<Double> price();
 
     IPrimitive<String> description();

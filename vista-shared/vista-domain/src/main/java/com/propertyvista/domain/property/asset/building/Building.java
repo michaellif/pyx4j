@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.StarlightPmc;
@@ -58,4 +59,8 @@ public interface Building extends IEntity {
     IList<Media> media();
 
     ServiceCatalog serviceCatalog();
+
+    // utlitiies included in price and should be EXCLUDED from ServiceCatalog 
+    // TODO: validate that logic is implemented! 
+    IList<ServiceItemType> includedUtilities();
 }
