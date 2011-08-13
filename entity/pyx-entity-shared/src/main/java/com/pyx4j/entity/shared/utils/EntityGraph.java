@@ -240,4 +240,15 @@ public class EntityGraph {
             dst.setMemberValue(memberName, src.getMemberValue(memberName));
         }
     }
+
+    /**
+     * Downcasting IEntity
+     * 
+     * @param src
+     * @param destinationClass
+     * @return new instance of destinationClass Entity
+     */
+    public static <D extends IEntity, S extends D> D cast(S src, Class<D> destinationClass) {
+        return src.cast(destinationClass);
+    }
 }
