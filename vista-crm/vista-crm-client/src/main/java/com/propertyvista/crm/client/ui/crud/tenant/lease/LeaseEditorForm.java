@@ -20,6 +20,8 @@ import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -29,6 +31,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.Range;
@@ -591,10 +594,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox()) {
                             @Override
                             protected void onClose(SelectFeatureBox box) {
-                                if (box.getSelectedItem() != null) {
-                                    ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                                    newItem.item().set(box.getSelectedItem());
-                                    addItem(newItem);
+                                if (box.getSelectedItems() != null) {
+                                    for (ServiceItem item : box.getSelectedItems()) {
+                                        ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                                        newItem.item().set(item);
+                                        addItem(newItem);
+                                    }
                                 }
                             }
                         };
@@ -818,37 +823,34 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     private class SelectFeatureBox extends OkCancelBox {
 
-        private ServiceItem selectedItem;
+        private ListBox list;
+
+        private List<ServiceItem> selectedItems;
 
         public SelectFeatureBox() {
-            super("Select Feature");
+            super("Select Features");
         }
 
         @Override
         protected Widget createContent() {
             okButton.setEnabled(false);
 
-            CComboBox<ServiceItem> combo = new CComboBox<ServiceItem>() {
+            list = new ListBox(true);
+            list.addChangeHandler(new ChangeHandler() {
                 @Override
-                public String getItemName(ServiceItem o) {
-                    if (o == null) {
-                        return super.getItemName(o);
-                    } else {
-                        return o.getStringView();
-                    }
-                }
-            };
-            combo.setOptions(getValue().selectedFeatureItems());
-            combo.addValueChangeHandler(new ValueChangeHandler<ServiceItem>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<ServiceItem> event) {
-                    selectedItem = event.getValue();
-                    okButton.setEnabled(true);
+                public void onChange(ChangeEvent event) {
+                    okButton.setEnabled(list.getSelectedIndex() >= 0);
                 }
             });
 
-            combo.setWidth("100%");
-            return combo.asWidget();
+            for (ServiceItem item : getValue().selectedFeatureItems()) {
+                list.addItem(item.getStringView());
+                list.setValue(list.getItemCount() - 1, item.id().toString());
+            }
+            list.setVisibleItemCount(4);
+            list.setWidth("100%");
+            return list.asWidget();
+
         }
 
         @Override
@@ -857,12 +859,28 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         }
 
         @Override
-        protected void onCancel() {
-            selectedItem = null;
+        protected void onOk() {
+            selectedItems = new ArrayList<ServiceItem>(4);
+            for (int i = 0; i < list.getItemCount(); ++i) {
+                if (list.isItemSelected(i)) {
+                    for (ServiceItem item : getValue().selectedFeatureItems()) {
+                        if (list.getValue(i).contentEquals(item.id().toString())) {
+                            selectedItems.add(item);
+                        }
+                    }
+                }
+            }
+
+            super.onOk();
         }
 
-        protected ServiceItem getSelectedItem() {
-            return selectedItem;
+        @Override
+        protected void onCancel() {
+            selectedItems = null;
+        }
+
+        protected List<ServiceItem> getSelectedItems() {
+            return selectedItems;
         }
     }
 
@@ -930,11 +948,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                 @Override
                 public boolean onClickCancel() {
-                    return false;
+                    return true;
                 }
             });
 
             setOptionalItems(getValue().selectedConcesions());
+            setSize("500px", "100px");
         }
 
         @Override

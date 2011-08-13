@@ -81,6 +81,7 @@ public abstract class OkCancelBox extends DialogPanel {
 
     /**
      * Implement in derived class - your inner content of the box.
+     * Note: called from withinparent's constructor!!!
      * 
      * @return widget with user's content.
      */

@@ -87,6 +87,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
         populateUnitLister(result.selectedBuilding());
         fillserviceItems(result);
+        fillServiceEligibilityData(result, result.serviceAgreement().serviceItem().item());
 
         super.onPopulateSuccess(result);
     }
@@ -116,6 +117,30 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     @Override
     public void setSelectedService(ServiceItem serviceItem) {
         LeaseDTO currentValue = view.getValue();
+        if (fillServiceEligibilityData(currentValue, serviceItem)) {
+            view.populate(currentValue);
+        }
+    }
+
+    public void populateUnitLister(Building selected) {
+        if (!selected.isEmpty()) {
+            unitsLister.setParentFiltering(selected.getPrimaryKey());
+        }
+        unitsLister.populate(0);
+    }
+
+    private void fillserviceItems(LeaseDTO currentValue) {
+        for (Service service : currentValue.selectedBuilding().serviceCatalog().services()) {
+            if (service.type().equals(currentValue.type())) {
+                currentValue.selectedServiceItems().addAll(service.items());
+            }
+        }
+    }
+
+    private boolean fillServiceEligibilityData(LeaseDTO currentValue, ServiceItem serviceItem) {
+        if (serviceItem == null) {
+            return false;
+        }
 
         // find the service by Service item:
         Service selecteService = null;
@@ -139,23 +164,8 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             for (ServiceConcession consession : selecteService.concessions()) {
                 currentValue.selectedConcesions().add(consession.concession());
             }
-
-            view.populate(currentValue);
         }
-    }
 
-    public void populateUnitLister(Building selected) {
-        if (!selected.isEmpty()) {
-            unitsLister.setParentFiltering(selected.getPrimaryKey());
-        }
-        unitsLister.populate(0);
-    }
-
-    private void fillserviceItems(LeaseDTO currentValue) {
-        for (Service service : currentValue.selectedBuilding().serviceCatalog().services()) {
-            if (service.type().equals(currentValue.type())) {
-                currentValue.selectedServiceItems().addAll(service.items());
-            }
-        }
+        return (selecteService != null);
     }
 }
