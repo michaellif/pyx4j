@@ -36,7 +36,7 @@ public abstract class ListSelectionPopup<E> extends Dialog {
         super(title == null ? "Selection Dialog" : title, callback);
         ListBoxDisplayProperties displayProperties = new ListBoxDisplayProperties();
         displayProperties.visibleItemCount = 4;
-        setBody(new AvailableSelectedBox(displayProperties));
+        setBody(selectedBox = new AvailableSelectedBox(displayProperties));
     }
 
     public void setComparator(Comparator<E> comparator) {
