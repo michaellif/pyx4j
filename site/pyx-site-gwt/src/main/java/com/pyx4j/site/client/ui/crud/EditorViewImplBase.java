@@ -50,6 +50,11 @@ public class EditorViewImplBase<E extends IEntity> extends ViewImplBase<E> imple
     }
 
     @Override
+    public Presenter getPresenter() {
+        return presenter;
+    }
+
+    @Override
     public void setEditMode(EditMode mode) {
     }
 

@@ -48,4 +48,9 @@ public class ViewerViewImplBase<E extends IEntity> extends ViewImplBase<E> imple
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
     }
+
+    @Override
+    public Presenter getPresenter() {
+        return presenter;
+    }
 }

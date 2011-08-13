@@ -48,6 +48,8 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
     void setPresenter(Presenter presenter);
 
+    Presenter getPresenter();
+
     ListerBase<E> getLister();
 
     int getPageSize();

@@ -41,6 +41,8 @@ public interface IEditorView<E extends IEntity> extends IFormView<E> {
 
     void setPresenter(Presenter presenter);
 
+    Presenter getPresenter();
+
     void setEditMode(EditMode mode);
 
     public E getValue();

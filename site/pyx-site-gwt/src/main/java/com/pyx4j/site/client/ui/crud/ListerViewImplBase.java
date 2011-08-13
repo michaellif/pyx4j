@@ -81,6 +81,12 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     }
 
     @Override
+    public Presenter getPresenter() {
+        assert (lister != null);
+        return lister.getPresenter();
+    }
+
+    @Override
     public int getPageSize() {
         assert (lister != null);
         return lister.getPageSize();

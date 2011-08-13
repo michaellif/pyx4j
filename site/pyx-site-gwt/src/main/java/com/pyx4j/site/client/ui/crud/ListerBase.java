@@ -326,6 +326,11 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     }
 
     @Override
+    public Presenter getPresenter() {
+        return presenter;
+    }
+
+    @Override
     public ListerBase<E> getLister() {
         return this;
     }
