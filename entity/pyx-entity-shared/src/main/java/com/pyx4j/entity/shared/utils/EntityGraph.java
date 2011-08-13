@@ -248,7 +248,7 @@ public class EntityGraph {
      * @param destinationClass
      * @return new instance of destinationClass Entity
      */
-    public static <D extends IEntity, S extends D> D cast(S src, Class<D> destinationClass) {
-        return src.cast(destinationClass);
+    public static <D extends IEntity, S extends D> D clone(S src, Class<D> destinationClass) {
+        return src.clone(destinationClass);
     }
 }

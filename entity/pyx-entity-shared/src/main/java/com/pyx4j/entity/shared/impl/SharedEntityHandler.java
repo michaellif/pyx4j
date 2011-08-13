@@ -542,7 +542,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     }
 
     @Override
-    public <T extends IEntity> T cast(Class<T> entityClass) {
+    public <T extends IEntity> T clone(Class<T> entityClass) {
         Map<String, Object> entityValue = getValue();
         T entity = EntityFactory.create(entityClass);
         if (!entity.getEntityMeta().isEntityClassAssignableFrom(this)) {

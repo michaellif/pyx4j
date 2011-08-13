@@ -105,17 +105,17 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
     public IEntity cloneEntity();
 
     /**
+     * Copy all existing members to new Entity
+     * This function is run-time type safe!
+     */
+    public <T extends IEntity> T clone(Class<T> entityClass);
+
+    /**
      * Detach IEntity from its parent but keep the same shared value object
      */
     public <T extends IEntity> T detach();
 
     public <T extends IEntity> T cast();
-
-    /**
-     * Copy all existing members to new Entity
-     * This function is run-time type safe!
-     */
-    public <T extends IEntity> T cast(Class<T> entityClass);
 
     public boolean isObjectClassSameAsDef();
 
