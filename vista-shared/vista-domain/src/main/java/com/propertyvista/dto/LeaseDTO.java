@@ -35,6 +35,9 @@ public interface LeaseDTO extends Lease {
 //  Note : While show ApplicationDTO - make tab with :
 //  IList<TenantInLease> tenants();
 
+    // -----------------------------------------------------
+    // temporary runtime data:
+
     ServiceCatalog serviceCatalog();
 
     IList<ServiceItem> selectedServiceItems();
@@ -42,6 +45,8 @@ public interface LeaseDTO extends Lease {
     IList<ServiceItem> selectedFeatureItems();
 
     IList<Concession> selectedConcesions();
+
+    // -----------------------------------------------------
 
     MasterApplicationStatusDTO masterApplicationStatus();
 }

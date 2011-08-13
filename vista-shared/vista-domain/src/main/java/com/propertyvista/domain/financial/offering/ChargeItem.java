@@ -13,12 +13,14 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface ChargeItem extends IEntity {
 
+    @ToString(index = 0)
     ServiceItem item();
 
     // base price from item - read only!

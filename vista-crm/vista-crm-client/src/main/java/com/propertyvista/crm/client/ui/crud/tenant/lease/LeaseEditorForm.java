@@ -80,7 +80,6 @@ import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceConcession;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -153,7 +152,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.add(inject(proto().status()), 15);
 
         HorizontalPanel unitPanel = new HorizontalPanel();
-        unitPanel.add(main.createDecorator(inject(proto().unit(), new CEntityLabel()), 15));
+        unitPanel.add(main.createDecorator(inject(proto().unit(), new CEntityLabel()), 25));
         if (isEditable()) {
             unitPanel.add(new Button("Select...", new ClickHandler() {
                 @Override
@@ -205,7 +204,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
         HorizontalPanel serviceItemPanel = new HorizontalPanel();
-        serviceItemPanel.add(main.createDecorator(inject(proto().serviceAgreement().serviceItem(), new CEntityLabel()), 15));
+        serviceItemPanel.add(main.createDecorator(inject(proto().serviceAgreement().serviceItem(), new CEntityLabel()), 25));
         if (isEditable()) {
             serviceItemPanel.add(new Button("Select...", new ClickHandler() {
                 @Override
@@ -218,6 +217,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                 newItem.item().set(box.getSelectedItem());
                                 newItem.price().setValue(box.getSelectedItem().price().getValue());
                                 get(proto().serviceAgreement().serviceItem()).setValue(newItem);
+                                ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedService(box.getSelectedItem());
                             }
                         }
                     };
@@ -236,7 +236,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.add(inject(proto().serviceAgreement().account()), 15);
 
         return new CrmScrollPanel(main);
-
     }
 
     private Widget createAppStatustab() {
@@ -589,9 +588,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox()) {
                             @Override
                             protected void onClose(SelectFeatureBox box) {
-                                if (box.getSelectedFeature() != null) {
+                                if (box.getSelectedItem() != null) {
                                     ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                                    newItem.item().set(box.getSelectedFeature());
+                                    newItem.item().set(box.getSelectedItem());
                                     addItem(newItem);
                                 }
                             }
@@ -643,9 +642,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         new ShowPopUpBox<SelectConcessionBox>(new SelectConcessionBox()) {
                             @Override
                             protected void onClose(SelectConcessionBox box) {
-                                if (box.getSelectedConcession() != null) {
+                                if (box.getSelectedItem() != null) {
                                     ServiceConcession newItem = EntityFactory.create(ServiceConcession.class);
-                                    newItem.concession().set(box.getSelectedConcession());
+                                    newItem.concession().set(box.getSelectedItem());
                                     addItem(newItem);
                                 }
                             }
@@ -762,86 +761,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         }
     }
 
-    private class SelectFeatureBox extends OkCancelBox {
-
-        private Feature selectedFeature;
-
-        public SelectFeatureBox() {
-            super("Select Feature");
-        }
-
-        @Override
-        protected Widget createContent() {
-            okButton.setEnabled(false);
-            ((LeaseEditorView) getParentView()).getFeatureListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<Feature>() {
-                @Override
-                public void onSelect(Feature selectedItem) {
-                    selectedFeature = selectedItem;
-                    okButton.setEnabled(true);
-                }
-            });
-
-            VerticalPanel vPanel = new VerticalPanel();
-            vPanel.add(((LeaseEditorView) getParentView()).getFeatureListerView().asWidget());
-            vPanel.setWidth("100%");
-            return vPanel;
-        }
-
-        @Override
-        protected void setSize() {
-            setSize("700px", "200px");
-        }
-
-        @Override
-        protected void onCancel() {
-            selectedFeature = null;
-        }
-
-        protected Feature getSelectedFeature() {
-            return selectedFeature;
-        }
-    }
-
-    private class SelectConcessionBox extends OkCancelBox {
-
-        private Concession selectedConcession;
-
-        public SelectConcessionBox() {
-            super("Select Concession");
-        }
-
-        @Override
-        protected Widget createContent() {
-            okButton.setEnabled(false);
-            ((LeaseEditorView) getParentView()).getConcessionListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<Concession>() {
-                @Override
-                public void onSelect(Concession selectedItem) {
-                    selectedConcession = selectedItem;
-                    okButton.setEnabled(true);
-                }
-            });
-
-            VerticalPanel vPanel = new VerticalPanel();
-            vPanel.add(((LeaseEditorView) getParentView()).getConcessionListerView().asWidget());
-            vPanel.setWidth("100%");
-            return vPanel;
-        }
-
-        @Override
-        protected void setSize() {
-            setSize("700px", "200px");
-        }
-
-        @Override
-        protected void onCancel() {
-            selectedConcession = null;
-        }
-
-        protected Concession getSelectedConcession() {
-            return selectedConcession;
-        }
-    }
-
     private class SelectServiceItemBox extends OkCancelBox {
 
         private ServiceItem selectedItem;
@@ -888,6 +807,107 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         }
 
         protected ServiceItem getSelectedItem() {
+            return selectedItem;
+        }
+    }
+
+    private class SelectFeatureBox extends OkCancelBox {
+
+        private ServiceItem selectedItem;
+
+        public SelectFeatureBox() {
+            super("Select Feature");
+        }
+
+        @Override
+        protected Widget createContent() {
+            okButton.setEnabled(false);
+
+            CComboBox<ServiceItem> combo = new CComboBox<ServiceItem>() {
+                @Override
+                public String getItemName(ServiceItem o) {
+                    if (o == null) {
+                        return super.getItemName(o);
+                    } else {
+                        return o.getStringView();
+                    }
+                }
+            };
+            combo.setOptions(getValue().selectedFeatureItems());
+            combo.addValueChangeHandler(new ValueChangeHandler<ServiceItem>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<ServiceItem> event) {
+                    selectedItem = event.getValue();
+                    okButton.setEnabled(true);
+                }
+            });
+
+            combo.setWidth("100%");
+            return combo.asWidget();
+        }
+
+        @Override
+        protected void setSize() {
+            setSize("300px", "100px");
+        }
+
+        @Override
+        protected void onCancel() {
+            selectedItem = null;
+        }
+
+        protected ServiceItem getSelectedItem() {
+            return selectedItem;
+        }
+    }
+
+    private class SelectConcessionBox extends OkCancelBox {
+
+        private Concession selectedItem;
+
+        public SelectConcessionBox() {
+            super("Select Concession");
+        }
+
+        @Override
+        protected Widget createContent() {
+            okButton.setEnabled(false);
+
+            CComboBox<Concession> combo = new CComboBox<Concession>() {
+                @Override
+                public String getItemName(Concession o) {
+                    if (o == null) {
+                        return super.getItemName(o);
+                    } else {
+                        return o.getStringView();
+                    }
+                }
+            };
+            combo.setOptions(getValue().selectedConcesions());
+            combo.addValueChangeHandler(new ValueChangeHandler<Concession>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Concession> event) {
+                    selectedItem = event.getValue();
+                    okButton.setEnabled(true);
+                }
+            });
+
+            combo.setWidth("100%");
+            return combo.asWidget();
+
+        }
+
+        @Override
+        protected void setSize() {
+            setSize("300px", "100px");
+        }
+
+        @Override
+        protected void onCancel() {
+            selectedItem = null;
+        }
+
+        protected Concession getSelectedItem() {
             return selectedItem;
         }
     }

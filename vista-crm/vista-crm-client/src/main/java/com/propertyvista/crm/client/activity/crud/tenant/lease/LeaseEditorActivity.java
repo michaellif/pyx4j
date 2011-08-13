@@ -24,15 +24,10 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.ConcessionCrudService;
-import com.propertyvista.crm.rpc.services.FeatureCrudService;
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
 import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
 import com.propertyvista.crm.rpc.services.SelectTenantCrudService;
 import com.propertyvista.crm.rpc.services.SelectUnitCrudService;
-import com.propertyvista.crm.rpc.services.ServiceItemCrudService;
-import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceConcession;
 import com.propertyvista.domain.financial.offering.ServiceFeature;
@@ -50,12 +45,6 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     private final IListerView.Presenter tenantsLister;
 
-    private final IListerView.Presenter serviceItemLister;
-
-    private final IListerView.Presenter featureLister;
-
-    private final IListerView.Presenter concessionLister;
-
     @SuppressWarnings("unchecked")
     public LeaseEditorActivity(Place place) {
         super((LeaseEditorView) TenantViewFactory.instance(LeaseEditorView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class),
@@ -69,15 +58,6 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
         tenantsLister = new ListerActivityBase<Tenant>(((LeaseEditorView) view).getTenantListerView(),
                 (AbstractCrudService<Tenant>) GWT.create(SelectTenantCrudService.class), Tenant.class);
-
-        featureLister = new ListerActivityBase<Feature>(((LeaseEditorView) view).getFeatureListerView(),
-                (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class), Feature.class);
-
-        serviceItemLister = new ListerActivityBase<ServiceItem>(((LeaseEditorView) view).getServiceItemListerView(),
-                (AbstractCrudService<ServiceItem>) GWT.create(ServiceItemCrudService.class), ServiceItem.class);
-
-        concessionLister = new ListerActivityBase<Concession>(((LeaseEditorView) view).getConcessionListerView(),
-                (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class);
 
         withPlace(place);
     }
@@ -98,21 +78,6 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     }
 
     @Override
-    public Presenter getserviceItemPresenter() {
-        return serviceItemLister;
-    }
-
-    @Override
-    public Presenter getFeaturePresenter() {
-        return featureLister;
-    }
-
-    @Override
-    public Presenter getConcessionPresenter() {
-        return concessionLister;
-    }
-
-    @Override
     public void onPopulateSuccess(LeaseDTO result) {
 
         buildingsLister.populate(0);
@@ -126,14 +91,45 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     @Override
     public void setSelectedBuilding(Building selected) {
-        LeaseDTO current = view.getValue();
-        current.selectedBuilding().set(selected);
-        current.serviceCatalog().set(selected.serviceCatalog());
+        LeaseDTO currentValue = view.getValue();
+        currentValue.selectedBuilding().set(selected);
+        currentValue.serviceCatalog().set(selected.serviceCatalog());
 
         populateUnitLister(selected);
-        fillserviceItems(current);
+        fillserviceItems(currentValue);
 
-        view.populate(current);
+        view.populate(currentValue);
+    }
+
+    @Override
+    public void setSelectedService(ServiceItem serviceItem) {
+        LeaseDTO currentValue = view.getValue();
+
+        // find the service by Service item:
+        Service selecteService = null;
+        for (Service service : currentValue.serviceCatalog().services()) {
+            for (ServiceItem item : service.items()) {
+                if (item.equals(serviceItem)) {
+                    selecteService = service;
+                    break;
+                }
+            }
+            if (selecteService != null) {
+                break; // found!..
+            }
+        }
+        // fill related features and concession:
+        if (selecteService != null) {
+            for (ServiceFeature feature : selecteService.features()) {
+                currentValue.selectedFeatureItems().addAll(feature.feature().items());
+            }
+
+            for (ServiceConcession consession : selecteService.concessions()) {
+                currentValue.selectedConcesions().add(consession.concession());
+            }
+
+            view.populate(currentValue);
+        }
     }
 
     public void populateUnitLister(Building selected) {
@@ -147,14 +143,6 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         for (Service service : currentValue.serviceCatalog().services()) {
             if (service.type().equals(currentValue.type())) {
                 currentValue.selectedServiceItems().addAll(service.items());
-
-                for (ServiceFeature feature : service.features()) {
-                    currentValue.selectedFeatureItems().addAll(feature.feature().items());
-                }
-
-                for (ServiceConcession consession : service.concessions()) {
-                    currentValue.selectedConcesions().add(consession.concession());
-                }
             }
         }
     }

@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 import com.pyx4j.site.client.ui.crud.IEditorView;
 import com.pyx4j.site.client.ui.crud.IListerView;
 
-import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -34,13 +32,9 @@ public interface LeaseEditorView extends IEditorView<LeaseDTO> {
 
         IListerView.Presenter getTenantPresenter();
 
-        IListerView.Presenter getserviceItemPresenter();
-
-        IListerView.Presenter getFeaturePresenter();
-
-        IListerView.Presenter getConcessionPresenter();
-
         void setSelectedBuilding(Building selected);
+
+        void setSelectedService(ServiceItem serviceItem);
     }
 
     IListerView<Building> getBuildingListerView();
@@ -49,9 +43,4 @@ public interface LeaseEditorView extends IEditorView<LeaseDTO> {
 
     IListerView<Tenant> getTenantListerView();
 
-    IListerView<ServiceItem> getServiceItemListerView();
-
-    IListerView<Feature> getFeatureListerView();
-
-    IListerView<Concession> getConcessionListerView();
 }
