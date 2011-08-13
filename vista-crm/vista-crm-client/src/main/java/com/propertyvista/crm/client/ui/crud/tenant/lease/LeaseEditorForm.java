@@ -54,9 +54,11 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CListBox;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.forms.client.ui.ListSelectionPopup;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.ListerBase.ItemSelectionHandler;
+import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.common.client.ui.components.CEmailLabel;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -640,9 +642,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
-                        new ShowPopUpBox<SelectConcessionBox>(new SelectConcessionBox()) {
+                        new ShowPopUpBox<ConsessionSelection>(new ConsessionSelection()) {
                             @Override
-                            protected void onClose(SelectConcessionBox box) {
+                            protected void onClose(ConsessionSelection box) {
                                 if (box.getSelectedItems() != null) {
                                     for (Concession item : box.getSelectedItems()) {
                                         ServiceConcession newItem = EntityFactory.create(ServiceConcession.class);
@@ -886,6 +888,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
                 }
             };
+            list.populate(getValue().selectedConcesions());
             list.setOptions(getValue().selectedConcesions());
             list.setMultipleSelect(true);
             list.setVisibleItemCount(6);
@@ -897,12 +900,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         @Override
         protected void setSize() {
-            setSize("300px", "100px");
+            setSize("500px", "100px");
         }
 
         @Override
         protected void onOk() {
-            selectedItems = list.getValue();
+            selectedItems = list.getOptions();
             super.onOk();
         }
 
@@ -913,6 +916,34 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         protected List<Concession> getSelectedItems() {
             return selectedItems;
+        }
+    }
+
+    private class ConsessionSelection extends ListSelectionPopup<Concession> {
+
+        public ConsessionSelection() {
+            super("Select Concessions", new OkCancelOption() {
+                @Override
+                public boolean onClickOk() {
+                    return true;
+                }
+
+                @Override
+                public boolean onClickCancel() {
+                    return false;
+                }
+            });
+
+            setOptionalItems(getValue().selectedConcesions());
+        }
+
+        @Override
+        public String getItemName(Concession item) {
+            if (item == null) {
+                return "- NULL -";
+            } else {
+                return item.getStringView();
+            }
         }
     }
 }

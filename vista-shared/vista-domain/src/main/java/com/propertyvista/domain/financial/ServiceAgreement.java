@@ -13,7 +13,9 @@
  */
 package com.propertyvista.domain.financial;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
@@ -22,10 +24,13 @@ import com.propertyvista.domain.financial.offering.ServiceConcession;
 
 public interface ServiceAgreement extends IEntity {
 
+    @EmbeddedEntity
     ChargeItem serviceItem();
 
+    @Owned
     IList<ChargeItem> featureItems();
 
+    @Owned
     IList<ServiceConcession> concessions();
 
     @MemberColumn(name = "leaseAccount")
