@@ -26,6 +26,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
@@ -53,8 +54,8 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CListBox;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.ListSelectionPopup;
@@ -581,6 +582,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().item(), "20em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().price(), "6em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().adjustments(), "15em"));
                 return columns;
             }
 
@@ -621,6 +623,26 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
                         if (column.getObject() == proto().item()) {
                             return inject(column.getObject(), new CEntityLabel());
+                        } else if (column.getObject() == proto().adjustments()) {
+                            return inject(column.getObject(), new CHyperlink("adjustment  goes here!?..", new Command() {
+                                @Override
+                                public void execute() {
+                                    // TODO Auto-generated method stub
+
+                                }
+                            }) {
+                                @Override
+                                public void setValue(String value) {
+                                    // noting should be here!..
+                                    super.setValue("adjustment  goes here!?..");
+                                }
+//
+//                                @Override
+//                                public void populate(String value) {
+//                                    // noting should be here!..
+//                                    super.populate("adjustment  goes here!?..");
+//                                }
+                            });
                         }
                         return super.createCell(column);
                     }
@@ -647,9 +669,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
-                        new ShowPopUpBox<ConsessionSelection>(new ConsessionSelection()) {
+                        new ShowPopUpBox<SelectConcessionBox>(new SelectConcessionBox()) {
                             @Override
-                            protected void onClose(ConsessionSelection box) {
+                            protected void onClose(SelectConcessionBox box) {
                                 if (box.getSelectedItems() != null) {
                                     for (Concession item : box.getSelectedItems()) {
                                         ServiceConcession newItem = EntityFactory.create(ServiceConcession.class);
@@ -870,7 +892,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
                 }
             }
-
             super.onOk();
         }
 
@@ -886,31 +907,31 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     private class SelectConcessionBox extends OkCancelBox {
 
+        private ListBox list;
+
         private List<Concession> selectedItems;
 
-        private CListBox<Concession> list;
-
         public SelectConcessionBox() {
-            super("Select Concession");
+            super("Select Concessions");
         }
 
         @Override
         protected Widget createContent() {
-            list = new CListBox<Concession>() {
-                @Override
-                public String getItemName(Concession o) {
-                    if (o == null) {
-                        return super.getItemName(o);
-                    } else {
-                        return o.getStringView();
-                    }
-                }
-            };
-            list.populate(getValue().selectedConcesions());
-            list.setOptions(getValue().selectedConcesions());
-            list.setMultipleSelect(true);
-            list.setVisibleItemCount(6);
+            okButton.setEnabled(false);
 
+            list = new ListBox(true);
+            list.addChangeHandler(new ChangeHandler() {
+                @Override
+                public void onChange(ChangeEvent event) {
+                    okButton.setEnabled(list.getSelectedIndex() >= 0);
+                }
+            });
+
+            for (Concession item : getValue().selectedConcesions()) {
+                list.addItem(item.getStringView());
+                list.setValue(list.getItemCount() - 1, item.id().toString());
+            }
+            list.setVisibleItemCount(4);
             list.setWidth("100%");
             return list.asWidget();
 
@@ -918,12 +939,21 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         @Override
         protected void setSize() {
-            setSize("500px", "100px");
+            setSize("400px", "100px");
         }
 
         @Override
         protected void onOk() {
-            selectedItems = list.getOptions();
+            selectedItems = new ArrayList<Concession>(4);
+            for (int i = 0; i < list.getItemCount(); ++i) {
+                if (list.isItemSelected(i)) {
+                    for (Concession item : getValue().selectedConcesions()) {
+                        if (list.getValue(i).contentEquals(item.id().toString())) {
+                            selectedItems.add(item);
+                        }
+                    }
+                }
+            }
             super.onOk();
         }
 
@@ -937,9 +967,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         }
     }
 
-    private class ConsessionSelection extends ListSelectionPopup<Concession> {
+    private class SelectConcessionBox2 extends ListSelectionPopup<Concession> {
 
-        public ConsessionSelection() {
+        public SelectConcessionBox2() {
             super("Select Concessions", new OkCancelOption() {
                 @Override
                 public boolean onClickOk() {
