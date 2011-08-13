@@ -51,6 +51,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CListBox;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -642,10 +643,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         new ShowPopUpBox<SelectConcessionBox>(new SelectConcessionBox()) {
                             @Override
                             protected void onClose(SelectConcessionBox box) {
-                                if (box.getSelectedItem() != null) {
-                                    ServiceConcession newItem = EntityFactory.create(ServiceConcession.class);
-                                    newItem.concession().set(box.getSelectedItem());
-                                    addItem(newItem);
+                                if (box.getSelectedItems() != null) {
+                                    for (Concession item : box.getSelectedItems()) {
+                                        ServiceConcession newItem = EntityFactory.create(ServiceConcession.class);
+                                        newItem.concession().set(item);
+                                        addItem(newItem);
+                                    }
                                 }
                             }
                         };
@@ -863,7 +866,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     private class SelectConcessionBox extends OkCancelBox {
 
-        private Concession selectedItem;
+        private List<Concession> selectedItems;
+
+        private CListBox<Concession> list;
 
         public SelectConcessionBox() {
             super("Select Concession");
@@ -871,9 +876,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         @Override
         protected Widget createContent() {
-            okButton.setEnabled(false);
-
-            CComboBox<Concession> combo = new CComboBox<Concession>() {
+            list = new CListBox<Concession>() {
                 @Override
                 public String getItemName(Concession o) {
                     if (o == null) {
@@ -883,17 +886,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
                 }
             };
-            combo.setOptions(getValue().selectedConcesions());
-            combo.addValueChangeHandler(new ValueChangeHandler<Concession>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<Concession> event) {
-                    selectedItem = event.getValue();
-                    okButton.setEnabled(true);
-                }
-            });
+            list.setOptions(getValue().selectedConcesions());
+            list.setMultipleSelect(true);
+            list.setVisibleItemCount(6);
 
-            combo.setWidth("100%");
-            return combo.asWidget();
+            list.setWidth("100%");
+            return list.asWidget();
 
         }
 
@@ -903,12 +901,18 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         }
 
         @Override
-        protected void onCancel() {
-            selectedItem = null;
+        protected void onOk() {
+            selectedItems = list.getValue();
+            super.onOk();
         }
 
-        protected Concession getSelectedItem() {
-            return selectedItem;
+        @Override
+        protected void onCancel() {
+            selectedItems = null;
+        }
+
+        protected List<Concession> getSelectedItems() {
+            return selectedItems;
         }
     }
 }

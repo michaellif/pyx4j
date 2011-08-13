@@ -15,7 +15,9 @@ package com.propertyvista.crm.client.activity.crud.tenant.lease;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.IListerView;
@@ -91,14 +93,24 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     @Override
     public void setSelectedBuilding(Building selected) {
-        LeaseDTO currentValue = view.getValue();
-        currentValue.selectedBuilding().set(selected);
-        currentValue.serviceCatalog().set(selected.serviceCatalog());
+        ((LeaseCrudService) service).syncBuildingServiceCatalog(new AsyncCallback<Building>() {
 
-        populateUnitLister(selected);
-        fillserviceItems(currentValue);
+            @Override
+            public void onSuccess(Building building) {
+                LeaseDTO currentValue = view.getValue();
+                currentValue.selectedBuilding().set(building);
 
-        view.populate(currentValue);
+                populateUnitLister(building);
+                fillserviceItems(currentValue);
+
+                view.populate(currentValue);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+        }, selected);
     }
 
     @Override
@@ -107,7 +119,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
         // find the service by Service item:
         Service selecteService = null;
-        for (Service service : currentValue.serviceCatalog().services()) {
+        for (Service service : currentValue.selectedBuilding().serviceCatalog().services()) {
             for (ServiceItem item : service.items()) {
                 if (item.equals(serviceItem)) {
                     selecteService = service;
@@ -140,7 +152,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     }
 
     private void fillserviceItems(LeaseDTO currentValue) {
-        for (Service service : currentValue.serviceCatalog().services()) {
+        for (Service service : currentValue.selectedBuilding().serviceCatalog().services()) {
             if (service.type().equals(currentValue.type())) {
                 currentValue.selectedServiceItems().addAll(service.items());
             }

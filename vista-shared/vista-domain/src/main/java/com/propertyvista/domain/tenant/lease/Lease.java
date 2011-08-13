@@ -15,6 +15,7 @@ package com.propertyvista.domain.tenant.lease;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -92,6 +93,7 @@ public interface Lease extends IEntity {
 
     IPrimitive<LogicalDate> signDate();
 
+    @EmbeddedEntity
     ServiceAgreement serviceAgreement();
 
     IList<Document> documents();

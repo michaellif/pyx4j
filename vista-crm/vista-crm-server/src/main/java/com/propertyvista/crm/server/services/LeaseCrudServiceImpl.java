@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services;
 
+import java.util.List;
+
 import org.xnap.commons.i18n.I18n;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -32,6 +34,9 @@ import com.pyx4j.server.mail.MailMessage;
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.User;
+import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -67,7 +72,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             // and building:
             dto.selectedBuilding().set(PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, dto.unit().belongsTo().getPrimaryKey()));
             if (dto.selectedBuilding() != null && !dto.selectedBuilding().isNull()) {
-                dto.serviceCatalog().set(dto.selectedBuilding().serviceCatalog());
+                syncBuildingServiceCatalog(dto.selectedBuilding());
             }
 
             // fill tenants:
@@ -92,6 +97,39 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         for (TenantInLease tenant : dto.tenants()) {
             tenant.lease().set(dbo);
         }
+    }
+
+    @Override
+    public void syncBuildingServiceCatalog(AsyncCallback<Building> callback, Building building) {
+
+        callback.onSuccess(syncBuildingServiceCatalog(building));
+    }
+
+    private Building syncBuildingServiceCatalog(Building building) {
+
+        // update service catalogue double-reference lists:
+        EntityQueryCriteria<Service> serviceCriteria = EntityQueryCriteria.create(Service.class);
+        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), building.serviceCatalog()));
+        List<Service> services = PersistenceServicesFactory.getPersistenceService().query(serviceCriteria);
+        if (services != null) {
+            building.serviceCatalog().services().addAll(services);
+        }
+
+        EntityQueryCriteria<Feature> featureCriteria = EntityQueryCriteria.create(Feature.class);
+        featureCriteria.add(PropertyCriterion.eq(featureCriteria.proto().catalog(), building.serviceCatalog()));
+        List<Feature> features = PersistenceServicesFactory.getPersistenceService().query(featureCriteria);
+        if (services != null) {
+            building.serviceCatalog().features().addAll(features);
+        }
+
+        EntityQueryCriteria<Concession> concessionCriteria = EntityQueryCriteria.create(Concession.class);
+        concessionCriteria.add(PropertyCriterion.eq(concessionCriteria.proto().catalog(), building.serviceCatalog()));
+        List<Concession> concessions = PersistenceServicesFactory.getPersistenceService().query(concessionCriteria);
+        if (services != null) {
+            building.serviceCatalog().concessions().addAll(concessions);
+        }
+
+        return building;
     }
 
     @Override
