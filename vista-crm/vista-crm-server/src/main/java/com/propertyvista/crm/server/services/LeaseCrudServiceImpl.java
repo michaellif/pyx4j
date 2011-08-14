@@ -60,25 +60,23 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         if (!fromList) {
             // fill selected building by unit:
             dto.selectedBuilding().set(PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, dto.unit().belongsTo().getPrimaryKey()));
-            if (dto.selectedBuilding() != null && !dto.selectedBuilding().isNull()) {
-                syncBuildingServiceCatalog(dto.selectedBuilding());
-            }
+            syncBuildingServiceCatalog(dto.selectedBuilding());
 
-            // update Tenants double links::
-            EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
-            dto.tenants().clear();
-            dto.tenants().addAll(PersistenceServicesFactory.getPersistenceService().query(criteria));
+//            // update Tenants double links::
+//            EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
+//            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
+//            dto.tenants().clear();
+//            dto.tenants().addAll(PersistenceServicesFactory.getPersistenceService().query(criteria));
         }
     }
 
-    @Override
-    protected void enhanceSaveDBO(Lease dbo, LeaseDTO dto) {
-        // persist Tenants:
-        for (TenantInLease tenant : dbo.tenants()) {
-            PersistenceServicesFactory.getPersistenceService().merge(tenant);
-        }
-    }
+//    @Override
+//    protected void enhanceSaveDBO(Lease dbo, LeaseDTO dto) {
+//        // persist Tenants:
+//        for (TenantInLease tenant : dbo.tenants()) {
+//            PersistenceServicesFactory.getPersistenceService().merge(tenant);
+//        }
+//    }
 
     @Override
     public void syncBuildingServiceCatalog(AsyncCallback<Building> callback, Building building) {
@@ -86,6 +84,9 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     }
 
     private Building syncBuildingServiceCatalog(Building building) {
+        if (building == null || building.isNull()) {
+            return null;
+        }
         // update service catalogue double-reference lists:
         EntityQueryCriteria<Service> serviceCriteria = EntityQueryCriteria.create(Service.class);
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), building.serviceCatalog()));
