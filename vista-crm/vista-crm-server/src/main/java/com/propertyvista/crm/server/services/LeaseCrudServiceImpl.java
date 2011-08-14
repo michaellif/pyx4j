@@ -73,10 +73,10 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     }
 
     @Override
-    protected void enhanceSaveDTO(Lease dbo, LeaseDTO dto) {
-        // sync Tenants double links:
-        for (TenantInLease tenant : dto.tenants()) {
-            tenant.lease().set(dbo);
+    protected void enhanceSaveDBO(Lease dbo, LeaseDTO dto) {
+        // persist Tenants:
+        for (TenantInLease tenant : dbo.tenants()) {
+            PersistenceServicesFactory.getPersistenceService().merge(tenant);
         }
     }
 

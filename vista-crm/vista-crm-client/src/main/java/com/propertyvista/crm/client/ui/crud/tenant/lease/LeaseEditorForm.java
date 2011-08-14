@@ -155,7 +155,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
         main.add(inject(proto().leaseID()), 15);
-        main.add(inject(proto().type(), new CLabel()), 15);
+        main.add(inject(proto().type()), 15);
         main.add(inject(proto().status()), 15);
 
         HorizontalPanel unitPanel = new HorizontalPanel();
@@ -283,6 +283,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                             protected void onClose(SelectTenantBox box) {
                                 if (box.getSelectedTenant() != null) {
                                     TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
+                                    newTenantInLease.lease().setPrimaryKey(LeaseEditorForm.this.getValue().getPrimaryKey());
                                     newTenantInLease.tenant().set(box.getSelectedTenant());
                                     addItem(newTenantInLease);
                                 }
@@ -291,6 +292,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
                 });
                 return decor;
+            }
+
+            @Override
+            protected void removeItem(CEntityFolderItemEditor<TenantInLease> item, IFolderItemEditorDecorator<TenantInLease> folderItemDecorator) {
+                item.getValue().lease().setPrimaryKey(null);
+                super.removeItem(item, folderItemDecorator);
             }
 
             @Override

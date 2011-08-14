@@ -76,13 +76,13 @@ public interface TenantInLease extends IEntity /* TODO IBoundToApplication ? */{
         }
     }
 
-    @ReadOnly
     @Detached
     @NotNull
     @Indexed
     Lease lease();
 
     @ReadOnly
+    @NotNull
     Tenant tenant();
 
     /**
