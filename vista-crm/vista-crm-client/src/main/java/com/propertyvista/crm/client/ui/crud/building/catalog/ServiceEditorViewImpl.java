@@ -20,14 +20,9 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -35,6 +30,7 @@ import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
+import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -61,22 +57,13 @@ public class ServiceEditorViewImpl extends CrmEditorViewImplBase<Service> implem
 
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Service.Type> callback) {
-        final SelectTypeBox box = new SelectTypeBox();
-        box.setPopupPositionAndShow(new PositionCallback() {
+        new ShowPopUpBox<SelectTypeBox>(new SelectTypeBox()) {
             @Override
-            public void setPosition(int offsetWidth, int offsetHeight) {
-                box.setPopupPosition((Window.getClientWidth() - offsetWidth) / 2, (Window.getClientHeight() - offsetHeight) / 3);
-            }
-        });
-        box.addCloseHandler(new CloseHandler<PopupPanel>() {
-            @Override
-            public void onClose(CloseEvent<PopupPanel> event) {
+            public void onClose(SelectTypeBox box) {
                 defaultCaption = box.getSelectedType().toString();
                 callback.onSuccess(box.getSelectedType());
             }
-        });
-
-        box.show();
+        };
     }
 
     private class SelectTypeBox extends DialogPanel {

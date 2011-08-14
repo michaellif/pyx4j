@@ -37,7 +37,7 @@ public abstract class ShowPopUpBox<T extends PopupPanel> {
         this.box.setPopupPositionAndShow(new PositionCallback() {
             @Override
             public void setPosition(int offsetWidth, int offsetHeight) {
-                ShowPopUpBox.this.box.setPopupPosition((Window.getClientWidth() - offsetWidth) / 2, (Window.getClientHeight() - offsetHeight) / 2);
+                ShowPopUpBox.this.box.setPopupPosition((Window.getClientWidth() - offsetWidth) / 2, (Window.getClientHeight() - offsetHeight) * 2 / 5);
             }
         });
         this.box.addCloseHandler(new CloseHandler<PopupPanel>() {
