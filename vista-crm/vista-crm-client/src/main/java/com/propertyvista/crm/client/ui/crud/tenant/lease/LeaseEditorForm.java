@@ -624,7 +624,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         if (column.getObject() == proto().item()) {
                             return inject(column.getObject(), new CEntityLabel());
                         } else if (column.getObject() == proto().adjustments()) {
-                            return inject(column.getObject(), new CHyperlink("adjustment  goes here!?..", new Command() {
+                            return inject(column.getObject(), new CHyperlink("adjustment goes here!?..", new Command() {
                                 @Override
                                 public void execute() {
                                     // TODO Auto-generated method stub
@@ -634,13 +634,13 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                 @Override
                                 public void setValue(String value) {
                                     // noting should be here!..
-                                    super.setValue("adjustment  goes here!?..");
+                                    super.setValue("adjustment goes here!?..");
                                 }
 //
 //                                @Override
 //                                public void populate(String value) {
 //                                    // noting should be here!..
-//                                    super.populate("adjustment  goes here!?..");
+//                                    super.populate("adjustment goes here!?..");
 //                                }
                             });
                         }
@@ -795,6 +795,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     private class SelectServiceItemBox extends OkCancelBox {
 
+        private CComboBox<ServiceItem> combo;
+
         private ServiceItem selectedItem;
 
         public SelectServiceItemBox() {
@@ -805,7 +807,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         protected Widget createContent() {
             okButton.setEnabled(false);
 
-            CComboBox<ServiceItem> combo = new CComboBox<ServiceItem>() {
+            combo = new CComboBox<ServiceItem>() {
                 @Override
                 public String getItemName(ServiceItem o) {
                     if (o == null) {
@@ -815,14 +817,17 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
                 }
             };
-            combo.setOptions(getValue().selectedServiceItems());
-            combo.addValueChangeHandler(new ValueChangeHandler<ServiceItem>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<ServiceItem> event) {
-                    selectedItem = event.getValue();
-                    okButton.setEnabled(true);
-                }
-            });
+            if (!getValue().selectedServiceItems().isEmpty()) {
+                combo.setOptions(getValue().selectedServiceItems());
+                combo.setValue(getValue().selectedServiceItems().get(0));
+                combo.addValueChangeHandler(new ValueChangeHandler<ServiceItem>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<ServiceItem> event) {
+                        okButton.setEnabled(event.getValue() != null);
+                    }
+                });
+                okButton.setEnabled(true);
+            }
 
             combo.setWidth("100%");
             return combo.asWidget();
@@ -831,6 +836,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         @Override
         protected void setSize() {
             setSize("300px", "100px");
+        }
+
+        @Override
+        protected void onOk() {
+            selectedItem = combo.getValue();
+            super.onOk();
         }
 
         @Override

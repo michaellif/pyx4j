@@ -29,6 +29,9 @@ public interface ServiceCatalog extends IEntity {
 
     // ----------------------------------------------------     
     // Double links - main dependency in appropriate entity:
+    // Note: Is not maintained! Should be synchronised if necessary in service!!!
+    // (see @link LeaseCrudServiceImpl.syncBuildingServiceCatalog).
+    //
     IList<Service> services();
 
     IList<Feature> features();

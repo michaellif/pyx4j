@@ -38,13 +38,11 @@ import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.server.common.mail.MessageTemplates;
 import com.propertyvista.server.common.ptapp.ApplicationMgr;
 import com.propertyvista.server.common.security.UserAccessUtils;
@@ -60,40 +58,23 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     protected void enhanceRetrieveDTO(Lease in, LeaseDTO dto, boolean fromList) {
         if (!fromList) {
-            // fill selected unit:
-            if (in.unit().isEmpty()) {
-                EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
-                UnitSelection unitSelection = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-                if (unitSelection != null && !unitSelection.isNull() && !unitSelection.selectedUnitId().isNull()) {
-                    dto.unit().set(PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, unitSelection.selectedUnitId().getValue()));
-                }
-            }
-            // and building:
+            // fill selected building by unit:
             dto.selectedBuilding().set(PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, dto.unit().belongsTo().getPrimaryKey()));
             if (dto.selectedBuilding() != null && !dto.selectedBuilding().isNull()) {
                 syncBuildingServiceCatalog(dto.selectedBuilding());
             }
 
-            // fill tenants:
-            dto.tenants().clear();
+            // update Tenants double links::
             EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
+            dto.tenants().clear();
             dto.tenants().addAll(PersistenceServicesFactory.getPersistenceService().query(criteria));
         }
     }
 
     @Override
     protected void enhanceSaveDTO(Lease dbo, LeaseDTO dto) {
-        // save currently selected unit to UnitSelection:
-        EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), dbo));
-        UnitSelection unitSelection = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-        if (unitSelection != null && !unitSelection.isNull()) {
-            unitSelection.selectedUnitId().setValue(dto.unit().getPrimaryKey());
-        }
-
-        // update Tenants:
+        // sync Tenants double links:
         for (TenantInLease tenant : dto.tenants()) {
             tenant.lease().set(dbo);
         }
@@ -101,33 +82,28 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 
     @Override
     public void syncBuildingServiceCatalog(AsyncCallback<Building> callback, Building building) {
-
         callback.onSuccess(syncBuildingServiceCatalog(building));
     }
 
     private Building syncBuildingServiceCatalog(Building building) {
-
         // update service catalogue double-reference lists:
         EntityQueryCriteria<Service> serviceCriteria = EntityQueryCriteria.create(Service.class);
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), building.serviceCatalog()));
         List<Service> services = PersistenceServicesFactory.getPersistenceService().query(serviceCriteria);
-        if (services != null) {
-            building.serviceCatalog().services().addAll(services);
-        }
+        building.serviceCatalog().services().clear();
+        building.serviceCatalog().services().addAll(services);
 
         EntityQueryCriteria<Feature> featureCriteria = EntityQueryCriteria.create(Feature.class);
         featureCriteria.add(PropertyCriterion.eq(featureCriteria.proto().catalog(), building.serviceCatalog()));
         List<Feature> features = PersistenceServicesFactory.getPersistenceService().query(featureCriteria);
-        if (services != null) {
-            building.serviceCatalog().features().addAll(features);
-        }
+        building.serviceCatalog().features().clear();
+        building.serviceCatalog().features().addAll(features);
 
         EntityQueryCriteria<Concession> concessionCriteria = EntityQueryCriteria.create(Concession.class);
         concessionCriteria.add(PropertyCriterion.eq(concessionCriteria.proto().catalog(), building.serviceCatalog()));
         List<Concession> concessions = PersistenceServicesFactory.getPersistenceService().query(concessionCriteria);
-        if (services != null) {
-            building.serviceCatalog().concessions().addAll(concessions);
-        }
+        building.serviceCatalog().concessions().clear();
+        building.serviceCatalog().concessions().addAll(concessions);
 
         return building;
     }

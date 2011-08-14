@@ -40,5 +40,4 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
             }
         }
     }
-
 }

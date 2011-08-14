@@ -70,7 +70,7 @@ public interface Lease extends IEntity {
     @Caption(name = "Selected Unit")
     AptUnit unit();
 
-    IList<TenantInLease> tenants(); // double reference (TenantInLease has reference to Lease already!)
+    IList<TenantInLease> tenants(); // double reference (@link TenantInLease has reference to Lease already!)
 
     IList<Vehicle> vehicles();
 

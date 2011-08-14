@@ -130,6 +130,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     }
 
     private void fillserviceItems(LeaseDTO currentValue) {
+        currentValue.selectedServiceItems().clear();
         for (Service service : currentValue.selectedBuilding().serviceCatalog().services()) {
             if (service.type().equals(currentValue.type())) {
                 currentValue.selectedServiceItems().addAll(service.items());
@@ -155,12 +156,14 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
                 break; // found!..
             }
         }
+
         // fill related features and concession:
+        currentValue.selectedFeatureItems().clear();
+        currentValue.selectedConcesions().clear();
         if (selecteService != null) {
             for (ServiceFeature feature : selecteService.features()) {
                 currentValue.selectedFeatureItems().addAll(feature.feature().items());
             }
-
             for (ServiceConcession consession : selecteService.concessions()) {
                 currentValue.selectedConcesions().add(consession.concession());
             }
