@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.rpc.services.LeadCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lead.Lead;
@@ -47,6 +48,7 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
 
             Lease lease = EntityFactory.create(Lease.class);
             lease.leaseID().setValue(RandomUtil.randomLetters(10));
+            lease.type().setValue(RandomUtil.randomEnum(Service.Type.class));
             lease.status().setValue(Lease.Status.Draft);
             lease.leaseFrom().setValue(lead.moveInDate().getValue());
             lease.expectedMoveIn().setValue(lead.moveInDate().getValue());
