@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.EnumSet;
 
 import org.xnap.commons.i18n.I18n;
@@ -24,8 +22,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -99,19 +95,10 @@ public class ServiceEditorViewImpl extends CrmEditorViewImplBase<Service> implem
                     hide();
                 }
             });
-            btnOk.setEnabled(false);
 
-            Collection<Service.Type> opt = new ArrayList<Service.Type>();
-            opt.addAll(EnumSet.allOf(Service.Type.class));
-
-            types.setOptions(opt);
+            types.setOptions(EnumSet.allOf(Service.Type.class));
+            types.setValue(types.getOptions().get(0));
             types.setWidth("100%");
-            types.addValueChangeHandler(new ValueChangeHandler<Service.Type>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<Service.Type> event) {
-                    btnOk.setEnabled(true);
-                }
-            });
 
             VerticalPanel vPanel = new VerticalPanel();
             vPanel.add(types);
