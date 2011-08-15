@@ -22,8 +22,8 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 import com.pyx4j.security.shared.AllPermissions;
 import com.pyx4j.security.shared.CoreBehavior;
 
-import com.propertyvista.domain.ApplicationDocument;
 import com.propertyvista.domain.VistaBehavior;
+import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;

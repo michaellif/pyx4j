@@ -22,6 +22,8 @@ import com.pyx4j.i18n.shared.Translatable;
 
 public interface Media extends IEntity {
 
+    static final String YOU_TUBE_URL = "http://www.youtube.com/watch?v=";
+
     @Translatable
     public enum Type {
 
@@ -42,7 +44,7 @@ public interface Media extends IEntity {
 
     @EmbeddedEntity
     @MemberColumn(name = "mediaFile")
-    com.propertyvista.domain.media.File file();
+    File file();
 
     IPrimitive<String> youTubeVideoID();
 

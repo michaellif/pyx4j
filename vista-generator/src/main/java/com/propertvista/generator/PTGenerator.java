@@ -36,7 +36,6 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.domain.ApplicationDocument;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.LegalQuestions;
@@ -54,6 +53,7 @@ import com.propertyvista.domain.contact.IAddressFull;
 import com.propertyvista.domain.contact.IAddressFull.StreetDirection;
 import com.propertyvista.domain.contact.IAddressFull.StreetType;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;

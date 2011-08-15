@@ -29,10 +29,10 @@ public interface File extends IEntity {
 
     IPrimitive<Integer> cacheVersion();
 
-    @ToString(index = 2)
+    @ToString(index = 1)
     IPrimitive<String> filename();
 
-    @ToString(index = 1)
+    @ToString(index = 2)
     IPrimitive<Integer> fileSize();
 
     IPrimitive<String> contentMimeType();

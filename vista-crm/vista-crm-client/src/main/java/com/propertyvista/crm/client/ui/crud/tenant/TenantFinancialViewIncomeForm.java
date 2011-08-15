@@ -41,7 +41,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPa
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.crm.client.resources.CrmImages;
-import com.propertyvista.domain.ApplicationDocument.DocumentType;
+import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;

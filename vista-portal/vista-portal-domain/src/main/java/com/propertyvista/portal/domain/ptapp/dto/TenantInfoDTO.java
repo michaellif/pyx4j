@@ -24,10 +24,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.ApplicationDocument;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.ref.Province;
 

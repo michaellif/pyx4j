@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.domain.media;
 
 import java.io.Serializable;
 
@@ -19,6 +19,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.IBoundToApplication;
 
 public interface ApplicationDocument extends IEntity, IBoundToApplication {
 

@@ -38,6 +38,7 @@ import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
+import com.propertyvista.crm.client.ui.components.CrmMediaListViewer;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
@@ -166,6 +167,9 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().info().waterSupply()), 15);
         split.getRightPanel().add(inject(proto().info().centralAir()), 15);
         split.getRightPanel().add(inject(proto().info().centralHeat()), 15);
+
+        main.add(new CrmHeader2Decorator(i18n.tr("Media:")));
+        main.add(inject(proto().media(), new CrmMediaListViewer(isEditable())));
 
         return new CrmScrollPanel(main);
     }

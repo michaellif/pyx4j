@@ -840,7 +840,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
                 };
                 combo.setOptions(getValue().selectedServiceItems());
-                combo.setValue(getValue().selectedServiceItems().get(0));
+                combo.setValue(combo.getOptions().get(0));
                 combo.addValueChangeHandler(new ValueChangeHandler<ServiceItem>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<ServiceItem> event) {

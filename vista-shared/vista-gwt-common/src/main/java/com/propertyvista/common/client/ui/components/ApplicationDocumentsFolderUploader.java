@@ -60,8 +60,8 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 
 import com.propertyvista.common.client.resources.FormImageBundle;
-import com.propertyvista.domain.ApplicationDocument;
-import com.propertyvista.domain.ApplicationDocument.DocumentType;
+import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.misc.ApplicationDocumentServletParameters;
 import com.propertyvista.misc.ServletMapping;
 

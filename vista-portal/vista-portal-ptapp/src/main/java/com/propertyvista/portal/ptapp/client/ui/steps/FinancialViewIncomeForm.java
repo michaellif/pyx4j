@@ -38,7 +38,7 @@ import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
-import com.propertyvista.domain.ApplicationDocument.DocumentType;
+import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;

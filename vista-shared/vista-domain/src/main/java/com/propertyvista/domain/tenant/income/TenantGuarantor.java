@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.domain.ApplicationDocument;
+import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.person.Person;
 
 public interface TenantGuarantor extends IEntity, Person {
