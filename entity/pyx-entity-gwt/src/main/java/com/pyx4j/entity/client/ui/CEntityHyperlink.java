@@ -31,18 +31,9 @@ public class CEntityHyperlink extends CAbstractHyperlink<IEntity> {
 
     private final String uriPrefix;
 
-    public CEntityHyperlink(String title, String uriPrefix) {
-        super(title);
-        this.uriPrefix = uriPrefix;
-
-        setCommand(new Command() {
-
-            @Override
-            public void execute() {
-                History.newItem(getEntityHistoryToken(getValue()));
-            }
-        });
-
+    // set default formatting (kind of common constructor):
+    {
+        setWordWrap(true);
         this.setFormat(new IFormat<IEntity>() {
             @Override
             public String format(IEntity value) {
@@ -60,8 +51,27 @@ public class CEntityHyperlink extends CAbstractHyperlink<IEntity> {
         });
     }
 
+    public CEntityHyperlink(Command command) {
+        this(null, command);
+    }
+
+    public CEntityHyperlink(String title, Command command) {
+        super(title, command);
+        this.uriPrefix = null;
+    }
+
+    public CEntityHyperlink(String title, String uriPrefix) {
+        super(title);
+        this.uriPrefix = uriPrefix;
+        setCommand(new Command() {
+            @Override
+            public void execute() {
+                History.newItem(getEntityHistoryToken(getValue()));
+            }
+        });
+    }
+
     protected String getEntityHistoryToken(IEntity value) {
         return uriPrefix + value.getPrimaryKey();
     }
-
 }
