@@ -92,7 +92,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     }
 
     @Override
-    public void removeTeant(AsyncCallback<Boolean> callback, TenantInLease tenant) {
+    public void removeTenat(AsyncCallback<Boolean> callback, TenantInLease tenant) {
         // TODO it's possible just nullify lease reference and 
         // leave it as is for further reusing of garbage collector:
         tenant.lease().set(null);

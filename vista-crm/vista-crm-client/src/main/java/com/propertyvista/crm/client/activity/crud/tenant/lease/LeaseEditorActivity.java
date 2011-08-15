@@ -124,8 +124,8 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     }
 
     @Override
-    public void removeTeant(TenantInLease tenant) {
-        ((LeaseCrudService) service).removeTeant(new AsyncCallback<Boolean>() {
+    public void removeTenat(TenantInLease tenant) {
+        ((LeaseCrudService) service).removeTenat(new AsyncCallback<Boolean>() {
 
             @Override
             public void onSuccess(Boolean result) {

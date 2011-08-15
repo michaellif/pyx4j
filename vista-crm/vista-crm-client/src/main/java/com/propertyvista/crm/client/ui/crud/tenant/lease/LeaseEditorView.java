@@ -37,7 +37,7 @@ public interface LeaseEditorView extends IEditorView<LeaseDTO> {
 
         void setSelectedService(ServiceItem serviceItem);
 
-        void removeTeant(TenantInLease tenant);
+        void removeTenat(TenantInLease tenant);
     }
 
     IListerView<Building> getBuildingListerView();

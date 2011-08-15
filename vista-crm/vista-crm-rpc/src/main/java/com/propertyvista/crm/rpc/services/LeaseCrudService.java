@@ -27,7 +27,7 @@ public interface LeaseCrudService extends AbstractCrudService<LeaseDTO> {
 
     void syncBuildingServiceCatalog(AsyncCallback<Building> callback, Building building);
 
-    void removeTeant(AsyncCallback<Boolean> callback, TenantInLease tenant);
+    void removeTenat(AsyncCallback<Boolean> callback, TenantInLease tenant);
 
     void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId);
 }
