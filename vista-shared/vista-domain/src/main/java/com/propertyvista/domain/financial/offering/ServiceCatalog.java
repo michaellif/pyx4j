@@ -27,11 +27,11 @@ public interface ServiceCatalog extends IEntity {
 
     IPrimitive<String> name();
 
-    // ----------------------------------------------------     
-    // Double links - main dependency in appropriate entity:
-    // Note: Is not maintained! Should be synchronised if necessary in service!!!
-    // (see @link LeaseCrudServiceImpl.syncBuildingServiceCatalog).
-    //
+    /**
+     * Double links - main dependency in appropriate entity:
+     * Note: Is not maintained! Should be synchronised if necessary in service!!!
+     * (see @link LeaseCrudServiceImpl.syncBuildingServiceCatalog(Building building)).
+     */
     IList<Service> services();
 
     IList<Feature> features();

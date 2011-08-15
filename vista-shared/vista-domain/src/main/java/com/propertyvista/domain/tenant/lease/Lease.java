@@ -73,9 +73,13 @@ public interface Lease extends IEntity {
     @Caption(name = "Selected Unit")
     AptUnit unit();
 
-    // Double-references - TenantInLease holds main reference!
-    // Note: LeaseCrudService re-fills this list every time on Lease retrieve with current tenants which has referenced the Lease.
-    //       Every other service retrieved the lease supposed to do the same!!!  
+    /**
+     * Double-references - TenantInLease holds main reference!
+     * Note: Is not maintained! Should be synchronised if necessary in service!!!
+     * 
+     * @link LeaseCrudService re-fills this list every time on Lease retrieve with current tenants which has referenced the Lease.
+     *       Every other service retrieved the lease supposed to do the same!!!
+     */
     IList<TenantInLease> tenants();
 
     IList<Vehicle> vehicles();
