@@ -54,7 +54,6 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CTextField;
@@ -73,6 +72,7 @@ import com.propertyvista.common.client.ui.validators.OldAgeValidator;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.ui.components.CListHyperlink;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmFolderItemDecorator;
@@ -593,8 +593,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().item(), "20em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().price(), "6em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().adjustments(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().price(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().adjustments(), "10em"));
                 return columns;
             }
 
@@ -640,25 +640,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         if (column.getObject() == proto().item()) {
                             return inject(column.getObject(), new CEntityLabel());
                         } else if (column.getObject() == proto().adjustments()) {
-                            return inject(column.getObject(), new CHyperlink("adjustment goes here!?..", new Command() {
+                            return inject(column.getObject(), new CListHyperlink(new Command() {
                                 @Override
                                 public void execute() {
-                                    // TODO Auto-generated method stub
-
+                                    // TODO open adjustment setup here...
                                 }
-                            }) {
-                                @Override
-                                public void setValue(String value) {
-                                    // noting should be here!..
-                                    super.setValue("adjustment goes here!?..");
-                                }
-//
-//                                @Override
-//                                public void populate(String value) {
-//                                    // noting should be here!..
-//                                    super.populate("adjustment goes here!?..");
-//                                }
-                            });
+                            }));
                         }
                         return super.createCell(column);
                     }

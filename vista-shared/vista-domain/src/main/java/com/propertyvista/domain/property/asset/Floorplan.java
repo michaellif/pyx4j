@@ -48,6 +48,4 @@ public interface Floorplan extends IEntity {
 
     @Detached
     IList<Media> media();
-
-//    IList<Feature> features();
 }

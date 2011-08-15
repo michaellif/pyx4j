@@ -31,6 +31,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPa
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
+import com.propertyvista.crm.client.ui.components.CrmMediaListViewer;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -86,6 +87,9 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
 
         main.add(new CrmHeader2Decorator(proto().amenities().getMeta().getCaption()));
         main.add(inject(proto().amenities(), createAmenitiesListEditor()));
+
+        main.add(new CrmHeader2Decorator(i18n.tr("Media:")));
+        main.add(inject(proto().media(), new CrmMediaListViewer(isEditable())));
 
         return new CrmScrollPanel(main);
     }
