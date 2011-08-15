@@ -20,6 +20,7 @@ import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseEditorView extends IEditorView<LeaseDTO> {
@@ -35,6 +36,8 @@ public interface LeaseEditorView extends IEditorView<LeaseDTO> {
         void setSelectedBuilding(Building selected);
 
         void setSelectedService(ServiceItem serviceItem);
+
+        void removeTeant(TenantInLease tenant);
     }
 
     IListerView<Building> getBuildingListerView();

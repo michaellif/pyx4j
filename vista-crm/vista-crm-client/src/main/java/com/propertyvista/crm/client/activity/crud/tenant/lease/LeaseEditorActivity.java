@@ -37,6 +37,7 @@ import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements LeaseEditorView.Presenter {
@@ -120,6 +121,21 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         if (fillServiceEligibilityData(currentValue, serviceItem)) {
             view.populate(currentValue);
         }
+    }
+
+    @Override
+    public void removeTeant(TenantInLease tenant) {
+        ((LeaseCrudService) service).removeTeant(new AsyncCallback<Boolean>() {
+
+            @Override
+            public void onSuccess(Boolean result) {
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+        }, tenant);
     }
 
     public void populateUnitLister(Building selected) {

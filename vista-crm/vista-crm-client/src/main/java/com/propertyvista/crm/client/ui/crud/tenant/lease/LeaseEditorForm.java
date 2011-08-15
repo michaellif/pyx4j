@@ -191,7 +191,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     private Widget createTenantsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
-        main.add(inject(proto().tenants(), createTenantsEditorColumns()));
+        main.add(inject(proto().tenants(), createTenantsListViewer()));
 
         return new CrmScrollPanel(main);
     }
@@ -254,7 +254,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         return new CrmScrollPanel(main);
     }
 
-    private CEntityFolderEditor<TenantInLease> createTenantsEditorColumns() {
+    private CEntityFolderEditor<TenantInLease> createTenantsListViewer() {
         return new CrmEntityFolder<TenantInLease>(TenantInLease.class, i18n.tr("Tenant"), isEditable()) {
             private final CrmEntityFolder<TenantInLease> parent = this;
 
@@ -292,6 +292,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
                 });
                 return decor;
+            }
+
+            @Override
+            protected void removeItem(CEntityFolderItemEditor<TenantInLease> item, IFolderItemEditorDecorator<TenantInLease> folderItemDecorator) {
+                ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).removeTeant(item.getValue());
+                super.removeItem(item, folderItemDecorator);
             }
 
             @Override

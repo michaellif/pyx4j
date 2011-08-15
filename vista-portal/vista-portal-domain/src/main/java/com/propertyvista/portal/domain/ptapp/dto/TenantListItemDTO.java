@@ -48,8 +48,6 @@ public interface TenantListItemDTO extends IEntity {
     @NotNull
     IPrimitive<TenantInLease.Status> status();
 
-    //TODO add appropriate description
-    @Caption(name = "Take Ownership", description = "Take Ownership of application filling means ...")
+    @Caption(name = "Take Ownership", description = "Main Applicant fills this application.")
     IPrimitive<Boolean> takeOwnership();
-
 }

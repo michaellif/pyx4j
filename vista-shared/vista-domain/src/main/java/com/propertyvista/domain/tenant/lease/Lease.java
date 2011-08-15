@@ -17,7 +17,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -74,7 +73,9 @@ public interface Lease extends IEntity {
     @Caption(name = "Selected Unit")
     AptUnit unit();
 
-    @Owned
+    // Double-references - TenantInLease holds main reference!
+    // Note: LeaseCrudService re-fills this list every time on Lease retrieve with current tenants which has referenced the Lease.
+    //       Every other service retrieved the lease supposed to do the same!!!  
     IList<TenantInLease> tenants();
 
     IList<Vehicle> vehicles();

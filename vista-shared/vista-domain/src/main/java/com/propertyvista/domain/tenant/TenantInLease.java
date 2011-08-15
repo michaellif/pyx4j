@@ -78,7 +78,6 @@ public interface TenantInLease extends IEntity /* TODO IBoundToApplication ? */{
 
     @Detached
     @NotNull
-    @ReadOnly
     @Indexed
     Lease lease();
 
@@ -93,14 +92,12 @@ public interface TenantInLease extends IEntity /* TODO IBoundToApplication ? */{
 
     @ToString(index = 0)
     @NotNull
-    IPrimitive<TenantInLease.Relationship> relationship();
+    IPrimitive<Relationship> relationship();
 
     @ToString(index = 1)
     @NotNull
-    IPrimitive<TenantInLease.Status> status();
+    IPrimitive<Status> status();
 
-    //TODO add appropriate description
-    @Caption(name = "Take Ownership", description = "Take Ownership of application filling means ...")
+    @Caption(name = "Take Ownership", description = "Main Applicant fills this application.")
     IPrimitive<Boolean> takeOwnership();
-
 }

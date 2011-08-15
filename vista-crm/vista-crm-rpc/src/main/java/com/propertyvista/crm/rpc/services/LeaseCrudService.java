@@ -20,11 +20,14 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseCrudService extends AbstractCrudService<LeaseDTO> {
 
     void syncBuildingServiceCatalog(AsyncCallback<Building> callback, Building building);
+
+    void removeTeant(AsyncCallback<Boolean> callback, TenantInLease tenant);
 
     void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId);
 }

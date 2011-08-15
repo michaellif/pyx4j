@@ -33,7 +33,9 @@ import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
+import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.User;
+import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
@@ -62,25 +64,42 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             dto.selectedBuilding().set(PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, dto.unit().belongsTo().getPrimaryKey()));
             syncBuildingServiceCatalog(dto.selectedBuilding());
 
-//            // update Tenants double links::
-//            EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
-//            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
-//            dto.tenants().clear();
-//            dto.tenants().addAll(PersistenceServicesFactory.getPersistenceService().query(criteria));
+            // update Tenants double links:
+            EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
+            dto.tenants().clear();
+            dto.tenants().addAll(PersistenceServicesFactory.getPersistenceService().query(criteria));
         }
     }
 
-//    @Override
-//    protected void enhanceSaveDBO(Lease dbo, LeaseDTO dto) {
-//        // persist Tenants:
-//        for (TenantInLease tenant : dbo.tenants()) {
-//            PersistenceServicesFactory.getPersistenceService().merge(tenant);
-//        }
-//    }
+    @Override
+    protected void enhanceSaveDBO(Lease dbo, LeaseDTO dto) {
+        // persist non-owned lists items:
+        for (Pet item : dbo.pets()) {
+            PersistenceServicesFactory.getPersistenceService().merge(item);
+        }
+        for (Vehicle item : dbo.vehicles()) {
+            PersistenceServicesFactory.getPersistenceService().merge(item);
+        }
+        for (TenantInLease item : dbo.tenants()) {
+            PersistenceServicesFactory.getPersistenceService().merge(item);
+        }
+    }
 
     @Override
     public void syncBuildingServiceCatalog(AsyncCallback<Building> callback, Building building) {
         callback.onSuccess(syncBuildingServiceCatalog(building));
+    }
+
+    @Override
+    public void removeTeant(AsyncCallback<Boolean> callback, TenantInLease tenant) {
+        // TODO it's possible just nullify lease reference and 
+        // leave it as is for further reusing of garbage collector:
+        tenant.lease().set(null);
+        PersistenceServicesFactory.getPersistenceService().merge(tenant);
+        // or delete entity entirely:
+        PersistenceServicesFactory.getPersistenceService().delete(tenant);
+        callback.onSuccess(true);
     }
 
     private Building syncBuildingServiceCatalog(Building building) {
