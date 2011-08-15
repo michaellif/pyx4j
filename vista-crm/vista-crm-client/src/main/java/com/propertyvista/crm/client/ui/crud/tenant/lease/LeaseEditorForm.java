@@ -62,6 +62,7 @@ import com.pyx4j.forms.client.ui.ListSelectionPopup;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.ListerBase.ItemSelectionHandler;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.common.client.ui.components.CEmailLabel;
@@ -161,7 +162,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         HorizontalPanel unitPanel = new HorizontalPanel();
         unitPanel.add(main.createDecorator(inject(proto().unit(), new CEntityLabel()), 25));
         if (isEditable()) {
-            unitPanel.add(new Button("Select...", new ClickHandler() {
+            unitPanel.add(new Button(i18n.tr("Select..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     new ShowPopUpBox<SelectUnitBox>(new SelectUnitBox()) {
@@ -216,18 +217,22 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             serviceItemPanel.add(new Button("Select...", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    new ShowPopUpBox<SelectServiceItemBox>(new SelectServiceItemBox()) {
-                        @Override
-                        protected void onClose(SelectServiceItemBox box) {
-                            if (box.getSelectedItem() != null) {
-                                ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                                newItem.item().set(box.getSelectedItem());
-                                newItem.price().setValue(box.getSelectedItem().price().getValue());
-                                get(proto().serviceAgreement().serviceItem()).setValue(newItem);
-                                ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedService(box.getSelectedItem());
+                    if (getValue().selectedBuilding() == null || getValue().selectedBuilding().isNull()) {
+                        MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Select Building/Unit firs!"));
+                    } else {
+                        new ShowPopUpBox<SelectServiceItemBox>(new SelectServiceItemBox()) {
+                            @Override
+                            protected void onClose(SelectServiceItemBox box) {
+                                if (box.getSelectedItem() != null) {
+                                    ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                                    newItem.item().set(box.getSelectedItem());
+                                    newItem.price().setValue(box.getSelectedItem().price().getValue());
+                                    get(proto().serviceAgreement().serviceItem()).setValue(newItem);
+                                    ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedService(box.getSelectedItem());
+                                }
                             }
-                        }
-                    };
+                        };
+                    }
                 }
             }));
         }
@@ -600,18 +605,22 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
-                        new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox()) {
-                            @Override
-                            protected void onClose(SelectFeatureBox box) {
-                                if (box.getSelectedItems() != null) {
-                                    for (ServiceItem item : box.getSelectedItems()) {
-                                        ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                                        newItem.item().set(item);
-                                        addItem(newItem);
+                        if (LeaseEditorForm.this.getValue().serviceAgreement().serviceItem().isNull()) {
+                            MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Select Service Item firs!"));
+                        } else {
+                            new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox()) {
+                                @Override
+                                protected void onClose(SelectFeatureBox box) {
+                                    if (box.getSelectedItems() != null) {
+                                        for (ServiceItem item : box.getSelectedItems()) {
+                                            ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                                            newItem.item().set(item);
+                                            addItem(newItem);
+                                        }
                                     }
                                 }
-                            }
-                        };
+                            };
+                        }
                     }
                 });
                 decor.setShowHeader(false);
@@ -676,18 +685,22 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
-                        new ShowPopUpBox<SelectConcessionBox>(new SelectConcessionBox()) {
-                            @Override
-                            protected void onClose(SelectConcessionBox box) {
-                                if (box.getSelectedItems() != null) {
-                                    for (Concession item : box.getSelectedItems()) {
-                                        ServiceConcession newItem = EntityFactory.create(ServiceConcession.class);
-                                        newItem.concession().set(item);
-                                        addItem(newItem);
+                        if (LeaseEditorForm.this.getValue().serviceAgreement().serviceItem().isNull()) {
+                            MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Select Service Item firs!"));
+                        } else {
+                            new ShowPopUpBox<SelectConcessionBox>(new SelectConcessionBox()) {
+                                @Override
+                                protected void onClose(SelectConcessionBox box) {
+                                    if (box.getSelectedItems() != null) {
+                                        for (Concession item : box.getSelectedItems()) {
+                                            ServiceConcession newItem = EntityFactory.create(ServiceConcession.class);
+                                            newItem.concession().set(item);
+                                            addItem(newItem);
+                                        }
                                     }
                                 }
-                            }
-                        };
+                            };
+                        }
                     }
                 });
                 decor.setShowHeader(false);
@@ -814,17 +827,18 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         protected Widget createContent() {
             okButton.setEnabled(false);
 
-            combo = new CComboBox<ServiceItem>() {
-                @Override
-                public String getItemName(ServiceItem o) {
-                    if (o == null) {
-                        return super.getItemName(o);
-                    } else {
-                        return o.getStringView();
-                    }
-                }
-            };
             if (!getValue().selectedServiceItems().isEmpty()) {
+                okButton.setEnabled(true);
+                combo = new CComboBox<ServiceItem>() {
+                    @Override
+                    public String getItemName(ServiceItem o) {
+                        if (o == null) {
+                            return super.getItemName(o);
+                        } else {
+                            return o.getStringView();
+                        }
+                    }
+                };
                 combo.setOptions(getValue().selectedServiceItems());
                 combo.setValue(getValue().selectedServiceItems().get(0));
                 combo.addValueChangeHandler(new ValueChangeHandler<ServiceItem>() {
@@ -833,16 +847,17 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         okButton.setEnabled(event.getValue() != null);
                     }
                 });
-                okButton.setEnabled(true);
+                combo.setWidth("100%");
+                return combo.asWidget();
+            } else {
+                return new HTML(i18n.tr("There are no Service Items!.."));
             }
 
-            combo.setWidth("100%");
-            return combo.asWidget();
         }
 
         @Override
         protected void setSize() {
-            setSize("300px", "100px");
+            setSize("350px", "100px");
         }
 
         @Override
@@ -875,27 +890,30 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         protected Widget createContent() {
             okButton.setEnabled(false);
 
-            list = new ListBox(true);
-            list.addChangeHandler(new ChangeHandler() {
-                @Override
-                public void onChange(ChangeEvent event) {
-                    okButton.setEnabled(list.getSelectedIndex() >= 0);
+            if (!getValue().selectedFeatureItems().isEmpty()) {
+                list = new ListBox(true);
+                list.addChangeHandler(new ChangeHandler() {
+                    @Override
+                    public void onChange(ChangeEvent event) {
+                        okButton.setEnabled(list.getSelectedIndex() >= 0);
+                    }
+                });
+
+                for (ServiceItem item : getValue().selectedFeatureItems()) {
+                    list.addItem(item.getStringView());
+                    list.setValue(list.getItemCount() - 1, item.id().toString());
                 }
-            });
-
-            for (ServiceItem item : getValue().selectedFeatureItems()) {
-                list.addItem(item.getStringView());
-                list.setValue(list.getItemCount() - 1, item.id().toString());
+                list.setVisibleItemCount(4);
+                list.setWidth("100%");
+                return list.asWidget();
+            } else {
+                return new HTML(i18n.tr("There are no features!.."));
             }
-            list.setVisibleItemCount(4);
-            list.setWidth("100%");
-            return list.asWidget();
-
         }
 
         @Override
         protected void setSize() {
-            setSize("300px", "100px");
+            setSize("350px", "100px");
         }
 
         @Override
@@ -937,27 +955,30 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         protected Widget createContent() {
             okButton.setEnabled(false);
 
-            list = new ListBox(true);
-            list.addChangeHandler(new ChangeHandler() {
-                @Override
-                public void onChange(ChangeEvent event) {
-                    okButton.setEnabled(list.getSelectedIndex() >= 0);
+            if (!getValue().selectedConcesions().isEmpty()) {
+                list = new ListBox(true);
+                list.addChangeHandler(new ChangeHandler() {
+                    @Override
+                    public void onChange(ChangeEvent event) {
+                        okButton.setEnabled(list.getSelectedIndex() >= 0);
+                    }
+                });
+
+                for (Concession item : getValue().selectedConcesions()) {
+                    list.addItem(item.getStringView());
+                    list.setValue(list.getItemCount() - 1, item.id().toString());
                 }
-            });
-
-            for (Concession item : getValue().selectedConcesions()) {
-                list.addItem(item.getStringView());
-                list.setValue(list.getItemCount() - 1, item.id().toString());
+                list.setVisibleItemCount(4);
+                list.setWidth("100%");
+                return list.asWidget();
+            } else {
+                return new HTML(i18n.tr("There are no concessions!.."));
             }
-            list.setVisibleItemCount(4);
-            list.setWidth("100%");
-            return list.asWidget();
-
         }
 
         @Override
         protected void setSize() {
-            setSize("400px", "100px");
+            setSize("350px", "100px");
         }
 
         @Override
