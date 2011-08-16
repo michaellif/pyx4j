@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -26,5 +27,6 @@ public interface ChargeItem extends IEntity {
     // base price from item - read only!
     IPrimitive<Double> price();
 
+    @Owned
     IList<ChargeItemAdjustment> adjustments();
 }

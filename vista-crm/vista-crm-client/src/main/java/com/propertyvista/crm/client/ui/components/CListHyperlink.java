@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.IFormat;
 
 public class CListHyperlink extends CAbstractHyperlink<IList<?>> {
 
-    private String customTile = null;
+    private final String customTile;
 
     // set default formatting (kind of common constructor):
     {

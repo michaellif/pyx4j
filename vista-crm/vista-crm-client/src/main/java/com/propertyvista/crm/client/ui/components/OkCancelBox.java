@@ -53,8 +53,9 @@ public abstract class OkCancelBox extends DialogPanel {
         buttons.add(okButton = new Button(i18n.tr("OK"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                onOk();
-                hide();
+                if (onOk()) {
+                    hide();
+                }
             }
         }));
         if (!hideCancel) {
@@ -96,8 +97,11 @@ public abstract class OkCancelBox extends DialogPanel {
 
     /**
      * Override for some meaningful action.
+     * 
+     * @return true if dialog close allowed.
      */
-    protected void onOk() {
+    protected boolean onOk() {
+        return true;
     }
 
     /**

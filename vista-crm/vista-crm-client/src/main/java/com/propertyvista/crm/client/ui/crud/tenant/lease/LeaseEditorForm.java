@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.Range;
@@ -87,6 +88,7 @@ import com.propertyvista.domain.Pet.WeightUnit;
 import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.financial.offering.ChargeItem;
+import com.propertyvista.domain.financial.offering.ChargeItemAdjustment;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ServiceConcession;
 import com.propertyvista.domain.financial.offering.ServiceItem;
@@ -258,6 +260,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         return new CrmScrollPanel(main);
     }
+
+//
+// List Viewers:
 
     private CEntityFolderEditor<TenantInLease> createTenantsListViewer() {
         return new CrmEntityFolder<TenantInLease>(TenantInLease.class, i18n.tr("Tenant"), isEditable()) {
@@ -586,7 +591,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     }
 
     private CEntityFolderEditor<ChargeItem> createFeaturesFolderEditor() {
-        return new CrmEntityFolder<ChargeItem>(ChargeItem.class, i18n.tr("ChargeItem"), isEditable()) {
+        return new CrmEntityFolder<ChargeItem>(ChargeItem.class, i18n.tr("Charge Item"), isEditable()) {
             private final CrmEntityFolder<ChargeItem> parent = this;
 
             @Override
@@ -630,20 +635,30 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             @Override
             protected CEntityFolderItemEditor<ChargeItem> createItem() {
                 return new CEntityFolderRowEditor<ChargeItem>(ChargeItem.class, columns()) {
+
+                    private CEntityFolderEditor<ChargeItemAdjustment> adjustments;
+
                     @Override
                     public IFolderItemEditorDecorator<ChargeItem> createFolderItemDecorator() {
                         return new CrmFolderItemDecorator<ChargeItem>(parent);
                     }
 
+                    @SuppressWarnings("unchecked")
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
                         if (column.getObject() == proto().item()) {
                             return inject(column.getObject(), new CEntityLabel());
                         } else if (column.getObject() == proto().adjustments()) {
+                            adjustments = (CEntityFolderEditor<ChargeItemAdjustment>) inject(column.getObject(), createItemAdjustmentListView());
                             return inject(column.getObject(), new CListHyperlink(new Command() {
                                 @Override
                                 public void execute() {
-                                    // TODO open adjustment setup here...
+                                    new ShowPopUpBox<AdjustmentsBox>(new AdjustmentsBox(adjustments)) {
+                                        @Override
+                                        protected void onClose(AdjustmentsBox box) {
+                                            // TODO Auto-generated method stub
+                                        }
+                                    };
                                 }
                             }));
                         }
@@ -710,6 +725,20 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         return super.createCell(column);
                     }
                 };
+            }
+        };
+    }
+
+    private CEntityFolderEditor<ChargeItemAdjustment> createItemAdjustmentListView() {
+        return new CrmEntityFolder<ChargeItemAdjustment>(ChargeItemAdjustment.class, i18n.tr("Adjustment"), isEditable()) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().chargeType(), "9em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().termType(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
+                return columns;
             }
         };
     }
@@ -848,9 +877,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         }
 
         @Override
-        protected void onOk() {
+        protected boolean onOk() {
             selectedItem = combo.getValue();
-            super.onOk();
+            return super.onOk();
         }
 
         @Override
@@ -904,7 +933,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         }
 
         @Override
-        protected void onOk() {
+        protected boolean onOk() {
             selectedItems = new ArrayList<ServiceItem>(4);
             for (int i = 0; i < list.getItemCount(); ++i) {
                 if (list.isItemSelected(i)) {
@@ -915,7 +944,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
                 }
             }
-            super.onOk();
+            return super.onOk();
         }
 
         @Override
@@ -969,7 +998,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         }
 
         @Override
-        protected void onOk() {
+        protected boolean onOk() {
             selectedItems = new ArrayList<Concession>(4);
             for (int i = 0; i < list.getItemCount(); ++i) {
                 if (list.isItemSelected(i)) {
@@ -980,7 +1009,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
                 }
             }
-            super.onOk();
+            return super.onOk();
         }
 
         @Override
@@ -1019,6 +1048,44 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             } else {
                 return item.getStringView();
             }
+        }
+    }
+
+    private class AdjustmentsBox extends OkCancelBox {
+
+        private SimplePanel content;
+
+        private final CEntityFolderEditor<ChargeItemAdjustment> folder;
+
+        @SuppressWarnings("unchecked")
+        public AdjustmentsBox(CEntityFolderEditor<ChargeItemAdjustment> adjustments) {
+            super("Edit Adjustments", true);
+
+            folder = adjustments;
+            if (!isEditable() && folder.getValue().isEmpty()) {
+                content.add(new HTML(i18n.tr("There are no adjustments here!")));
+            } else {
+                content.add(folder);
+            }
+        }
+
+        @Override
+        protected Widget createContent() {
+            return (content = new SimplePanel());
+        }
+
+        @Override
+        protected void setSize() {
+            setSize("400px", "100px");
+        }
+
+        @Override
+        protected boolean onOk() {
+            return folder.isValid();
+        }
+
+        @Override
+        protected void onCancel() {
         }
     }
 }

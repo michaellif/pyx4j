@@ -192,8 +192,8 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         }
 
         @Override
-        protected void onOk() {
-            yes = true;
+        protected boolean onOk() {
+            return (yes = true);
         }
 
         public boolean getYes() {

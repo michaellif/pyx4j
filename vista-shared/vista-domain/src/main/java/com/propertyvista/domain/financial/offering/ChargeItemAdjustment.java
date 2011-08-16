@@ -16,6 +16,7 @@ package com.propertyvista.domain.financial.offering;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -53,20 +54,24 @@ public interface ChargeItemAdjustment extends IEntity {
         }
     }
 
+    @NotNull
     @ToString(index = 0)
     @MemberColumn(name = "concessionType")
     IPrimitive<Type> type();
 
+    @NotNull
     IPrimitive<ChargeType> chargeType();
 
+    @NotNull
     IPrimitive<TermType> termType();
 
     /*
      * for percentageOff - percentage
      * for monetaryOff - amount
      */
-    @ToString(index = 1)
+    @NotNull
     @Format("#0.00")
+    @ToString(index = 1)
     @MemberColumn(name = "concessionValue")
     IPrimitive<Double> value();
 

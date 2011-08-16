@@ -322,7 +322,7 @@ public class CrmMediaListViewer extends CrmEntityFolder<Media> {
         }
 
         @Override
-        protected void onOk() {
+        protected boolean onOk() {
             newItem = EntityFactory.create(Media.class);
             newItem.type().setValue(selectedType);
             switch (selectedType) {
@@ -336,7 +336,7 @@ public class CrmMediaListViewer extends CrmEntityFolder<Media> {
                 newItem.youTubeVideoID().setValue(text.getValue());
                 break;
             }
-            super.onOk();
+            return super.onOk();
         }
 
         @Override
