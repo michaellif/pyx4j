@@ -59,6 +59,10 @@ public class PmcGenerator {
         featureItemTypes.add(createChargeItemType("Key", Feature.Type.addOn));
         featureItemTypes.add(createChargeItemType("Access Card", Feature.Type.addOn));
         featureItemTypes.add(createChargeItemType("Cable", Feature.Type.addOn));
+        featureItemTypes.add(createChargeItemType("Water", Feature.Type.utility));
+        featureItemTypes.add(createChargeItemType("Gas", Feature.Type.utility));
+        featureItemTypes.add(createChargeItemType("Hydro", Feature.Type.utility));
+
     }
 
     public List<ServiceItemType> getServiceItemTypes() {
