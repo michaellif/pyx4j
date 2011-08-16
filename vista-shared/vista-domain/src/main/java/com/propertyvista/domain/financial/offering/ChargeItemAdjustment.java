@@ -66,8 +66,8 @@ public interface ChargeItemAdjustment extends IEntity {
     IPrimitive<TermType> termType();
 
     /*
-     * for percentageOff - percentage
-     * for monetaryOff - amount
+     * for percentage - percentage
+     * for monetary/free - amount
      */
     @NotNull
     @Format("#0.00")
