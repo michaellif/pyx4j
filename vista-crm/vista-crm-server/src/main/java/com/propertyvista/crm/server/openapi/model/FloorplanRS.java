@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.openapi.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -39,6 +40,8 @@ public class FloorplanRS {
     public Double sqftFrom;
 
     public Double sqftTo;
+
+    public Date availableFrom;
 
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "amenity", type = AmenityRS.class))

@@ -150,6 +150,12 @@ public class BuildingsResource {
                         floorplanRS.rentTo = max(floorplanRS.rentTo, u.financial().unitRent().getValue());
                         floorplanRS.sqftFrom = min(floorplanRS.sqftFrom, u.info().area().getValue());
                         floorplanRS.sqftTo = max(floorplanRS.sqftTo, u.info().area().getValue());
+
+                        if (!u.avalableForRent().isNull()) {
+                            if ((floorplanRS.availableFrom == null) || (floorplanRS.availableFrom.after(u.avalableForRent().getValue()))) {
+                                floorplanRS.availableFrom = u.avalableForRent().getValue();
+                            }
+                        }
                     }
                 }
                 buildingRS.rentFrom = min(buildingRS.rentFrom, floorplanRS.rentFrom);
