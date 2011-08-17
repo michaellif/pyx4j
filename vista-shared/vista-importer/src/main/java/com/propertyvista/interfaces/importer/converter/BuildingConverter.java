@@ -46,14 +46,13 @@ public class BuildingConverter extends EntityDtoBinder<Building, BuildingIO> {
         bind(dtoProto.website(), dboProto.contacts().website());
         bind(dtoProto.email(), dboProto.contacts().email().address());
 
-        //bind(dtoProto.address(), dboProto.info().address(), new AddressConverter());
+        bind(dtoProto.address(), dboProto.info().address(), new AddressConverter());
 
         bind(dtoProto.phones(), dboProto.contacts().phones());
 
         bind(dtoProto.marketing().name(), dboProto.marketing().name());
         bind(dtoProto.marketing().description(), dboProto.marketing().description());
 
-        //TODO  AdvertisingBlurb
-        //bind(dtoProto.marketing().adBlurbs(), dboProto.marketing().adBlurbs(), new AdvertisingBlurbConverter());
+        bind(dtoProto.marketing().blurbs(), dboProto.marketing().adBlurbs(), new AdvertisingBlurbConverter());
     }
 }

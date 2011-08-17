@@ -26,7 +26,6 @@ import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.interfaces.importer.converter.AddressConverter;
 import com.propertyvista.interfaces.importer.converter.AptUnitConverter;
 import com.propertyvista.interfaces.importer.converter.BuildingAmenityConverter;
 import com.propertyvista.interfaces.importer.converter.BuildingConverter;
@@ -42,7 +41,6 @@ public class BuildingRetriever {
     public BuildingIO getModel(Building building) {
 
         BuildingIO buildingIO = new BuildingConverter().createDTO(building);
-        new AddressConverter().copyDBOtoDTO(building.info().address(), buildingIO.address());
 
         //Get Amenity
         {
