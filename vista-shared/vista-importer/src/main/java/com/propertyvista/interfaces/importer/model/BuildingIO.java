@@ -17,6 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.domain.property.asset.building.BuildingInfo.ConstructionType;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.FloorType;
@@ -31,6 +32,8 @@ public interface BuildingIO extends IEntity {
     IPrimitive<String> propertyCode();
 
     IPrimitive<String> legalName();
+
+    IPrimitive<GeoPoint> addressCoordinates();
 
     AddressIO address();
 
