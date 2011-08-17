@@ -15,6 +15,7 @@ package com.propertyvista.portal.domain.ptapp;
 
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -24,6 +25,7 @@ import com.propertyvista.domain.IBoundToApplication;
 
 //TODO  Move to DTO and use data from Lease
 @Deprecated
+@Table(prefix = "old")
 public interface Tenant extends IEntity, IBoundToApplication {
 
     //TODO This would be TenantInLease
