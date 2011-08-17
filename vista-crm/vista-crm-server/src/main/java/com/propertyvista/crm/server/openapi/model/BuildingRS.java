@@ -49,4 +49,9 @@ public class BuildingRS {
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "media", type = MediaRS.class))
     public List<MediaRS> medias = new ArrayList<MediaRS>();
+
+    @XmlElementWrapper
+    @XmlElements(@XmlElement(name = "utility", type = UtilityRS.class))
+    public List<UtilityRS> includedUtilities = new ArrayList<UtilityRS>();
+
 }

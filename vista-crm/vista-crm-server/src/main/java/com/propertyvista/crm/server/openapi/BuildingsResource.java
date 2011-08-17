@@ -41,6 +41,7 @@ import com.propertyvista.crm.server.openapi.model.BuildingRS;
 import com.propertyvista.crm.server.openapi.model.BuildingsRS;
 import com.propertyvista.crm.server.openapi.model.FloorplanRS;
 import com.propertyvista.crm.server.openapi.model.util.Converter;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
@@ -119,6 +120,12 @@ public class BuildingsResource {
                 PersistenceServicesFactory.getPersistenceService().retrieve(building.media());
                 for (Media media : building.media()) {
                     buildingRS.medias.add(Converter.convertMedia(media));
+                }
+            }
+
+            {
+                for (ServiceItemType utility : building.includedUtilities()) {
+                    buildingRS.includedUtilities.add(Converter.convertBuildingIncludedUtility(utility));
                 }
             }
 

@@ -28,10 +28,12 @@ import com.propertyvista.crm.server.openapi.model.BuildingsRS;
 import com.propertyvista.crm.server.openapi.model.FloorplanRS;
 import com.propertyvista.crm.server.openapi.model.MarketingRS;
 import com.propertyvista.crm.server.openapi.model.MediaRS;
+import com.propertyvista.crm.server.openapi.model.UtilityRS;
 import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.contact.Address.AddressType;
 import com.propertyvista.domain.contact.IAddressFull.StreetDirection;
 import com.propertyvista.domain.contact.IAddressFull.StreetType;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.marketing.yield.Amenity;
@@ -205,6 +207,14 @@ public class Converter {
 
         to.name = from.name().getStringView();
         to.description = from.name().getStringView();
+
+        return to;
+    }
+
+    public static UtilityRS convertBuildingIncludedUtility(ServiceItemType from) {
+        UtilityRS to = new UtilityRS();
+
+        to.name = from.name().getStringView();
 
         return to;
     }
