@@ -13,15 +13,21 @@
  */
 package com.propertyvista.crm.client.activity.crud.building.catalog;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.client.ui.crud.FilterData;
+import com.pyx4j.site.client.ui.crud.FilterData.Operands;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
@@ -50,6 +56,11 @@ public class ServiceEditorActivity extends EditorActivityBase<Service> implement
 
         featureLister = new ListerActivityBase<Feature>(((ServiceEditorView) view).getFeatureListerView(),
                 (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class), Feature.class);
+
+        // filter out Utilities:
+        List<FilterData> filters = new ArrayList<FilterData>(1);
+        filters.add(new FilterData(new Path(Feature.class, "type"), Operands.isNot, Feature.Type.utility));
+        featureLister.setPreDefinedFilters(filters);
 
         concessionLister = new ListerActivityBase<Concession>(((ServiceEditorView) view).getConcessionListerView(),
                 (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class);

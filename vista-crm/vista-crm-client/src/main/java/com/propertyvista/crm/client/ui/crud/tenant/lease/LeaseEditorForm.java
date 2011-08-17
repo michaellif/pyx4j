@@ -240,7 +240,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         }
         main.add(serviceItemPanel);
 
-        main.add(new CrmHeader2Decorator(i18n.tr("Features:")));
+        main.add(new CrmHeader2Decorator(i18n.tr("Charge Items:")));
         main.add(inject(proto().serviceAgreement().featureItems(), createFeaturesFolderEditor()));
 
         main.add(new CrmHeader2Decorator(i18n.tr("Concessions:")));
@@ -919,7 +919,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     list.addItem(item.getStringView());
                     list.setValue(list.getItemCount() - 1, item.id().toString());
                 }
-                list.setVisibleItemCount(4);
+                list.setVisibleItemCount(8);
                 list.setWidth("100%");
                 return list.asWidget();
             } else {
@@ -984,7 +984,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     list.addItem(item.getStringView());
                     list.setValue(list.getItemCount() - 1, item.id().toString());
                 }
-                list.setVisibleItemCount(4);
+                list.setVisibleItemCount(8);
                 list.setWidth("100%");
                 return list.asWidget();
             } else {
