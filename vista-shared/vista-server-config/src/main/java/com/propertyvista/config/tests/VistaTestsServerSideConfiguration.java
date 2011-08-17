@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.IPersistenceConfiguration;
+import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
@@ -36,6 +37,11 @@ public class VistaTestsServerSideConfiguration extends EssentialsServerSideConfi
 
     public VistaTestsServerSideConfiguration(boolean testOnMySQL) {
         this.testOnMySQL = testOnMySQL;
+    }
+
+    @Override
+    public NamespaceResolver getNamespaceResolver() {
+        return new VistaTestsNamespaceResolver();
     }
 
     @Override

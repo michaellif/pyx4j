@@ -7,26 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 27, 2011
- * @author Misha
+ * Created on Aug 17, 2011
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.config.tests;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.server.contexts.NamespaceManager;
+import javax.servlet.http.HttpServletRequest;
 
-public class VistaTestDBSetup {
+import com.pyx4j.config.server.NamespaceResolver;
 
-    private static ServerSideConfiguration initOnce = null;
+public class VistaTestsNamespaceResolver implements NamespaceResolver {
 
-    public static synchronized void init() {
-        if (initOnce == null) {
-            initOnce = new VistaTestsServerSideConfiguration(false);
-            ServerSideConfiguration.setInstance(initOnce);
-            NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
-        }
+    public static final String demoNamespace = "vista";
 
+    @Override
+    public String getNamespace(HttpServletRequest httprequest) {
+        return demoNamespace;
     }
 
 }
