@@ -75,7 +75,6 @@ public class TableFolderEditorDecorator<E extends IEntity> extends BaseFolderEdi
         header = new HorizontalPanel();
         header.getElement().getStyle().setMarginBottom(3, Unit.PX);
         setHeaderVisible(false);
-        header.setWidth("100%");
         if (getAddImage() != null) {
             header.getElement().getStyle().setPaddingLeft(getAddImage().getWidth(), Unit.PX);
         }
