@@ -20,11 +20,13 @@
  */
 package com.pyx4j.entity.shared.utils;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Vector;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 
@@ -43,7 +45,24 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
 
     protected final DTO dtoProto;
 
-    private final HashMap<Path, Path> binding = new HashMap<Path, Path>();
+    private final List<Binding> binding = new Vector<Binding>();
+
+    private static class Binding {
+
+        Path dtoMemberPath;
+
+        Path dboMemberPath;
+
+        @SuppressWarnings("rawtypes")
+        EntityDtoBinder binder;
+
+        Binding(IObject<?> dtoMember, IObject<?> dboMember, @SuppressWarnings("rawtypes") EntityDtoBinder binder) {
+            dtoMemberPath = dtoMember.getPath();
+            dboMemberPath = dboMember.getPath();
+            this.binder = binder;
+        }
+
+    }
 
     protected EntityDtoBinder(Class<DBO> dboClass, Class<DTO> dtoClass) {
         this.dboClass = dboClass;
@@ -56,12 +75,20 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
     protected abstract void bind();
 
     protected final <TYPE> void bind(IObject<TYPE> dtoMember, IObject<TYPE> dboMember) {
-        binding.put(dtoMember.getPath(), dboMember.getPath());
+        binding.add(new Binding(dtoMember, dboMember, null));
+    }
+
+    protected final <TDBO extends IEntity, TDTO extends IEntity> void bind(TDTO dtoMember, TDBO dboMember, EntityDtoBinder<TDBO, TDTO> binder) {
+        binding.add(new Binding(dtoMember, dboMember, binder));
+    }
+
+    protected final <TDBO extends IEntity, TDTO extends IEntity> void bind(IList<TDTO> dtoMember, IList<TDBO> dboMember, EntityDtoBinder<TDBO, TDTO> binder) {
+        binding.add(new Binding(dtoMember, dboMember, binder));
     }
 
     protected final <F extends IEntity, S extends F, D extends F> void bind(Class<F> fragmentClass, S dto, D dbo) {
         for (String memberName : EntityFactory.getEntityMeta(fragmentClass).getMemberNames()) {
-            binding.put(dto.getMember(memberName).getPath(), dbo.getMember(memberName).getPath());
+            binding.add(new Binding(dto.getMember(memberName), dbo.getMember(memberName), null));
         }
     }
 
@@ -85,10 +112,18 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void copyDBOtoDTO(DBO dbo, DTO dto) {
         init();
-        for (Map.Entry<Path, Path> me : binding.entrySet()) {
-            IObject dtoM = dto.getMember(me.getKey());
-            IObject dboM = dbo.getMember(me.getValue());
-            dtoM.setValue(dboM.getValue());
+        for (Binding b : binding) {
+            IObject dtoM = dto.getMember(b.dtoMemberPath);
+            IObject dboM = dbo.getMember(b.dboMemberPath);
+            if (b.binder == null) {
+                dtoM.setValue(dboM.getValue());
+            } else if (dtoM instanceof IEntity) {
+                b.binder.copyDBOtoDTO((IEntity) dboM, (IEntity) dtoM);
+            } else if (dboM instanceof ICollection) {
+                for (IEntity dboMi : (ICollection<IEntity, ?>) dboM) {
+                    ((ICollection<IEntity, ?>) dtoM).add(b.binder.createDTO(dboMi));
+                }
+            }
         }
     }
 
@@ -102,10 +137,18 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void copyDTOtoDBO(DTO dto, DBO dbo) {
         init();
-        for (Map.Entry<Path, Path> me : binding.entrySet()) {
-            IObject dtoM = dto.getMember(me.getKey());
-            IObject dboM = dbo.getMember(me.getValue());
-            dboM.setValue(dtoM.getValue());
+        for (Binding b : binding) {
+            IObject dtoM = dto.getMember(b.dtoMemberPath);
+            IObject dboM = dbo.getMember(b.dboMemberPath);
+            if (b.binder == null) {
+                dboM.setValue(dtoM.getValue());
+            } else if (dtoM instanceof IEntity) {
+                b.binder.copyDTOtoDBO((IEntity) dtoM, (IEntity) dboM);
+            } else if (dtoM instanceof ICollection) {
+                for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
+                    ((ICollection<IEntity, ?>) dboM).add(b.binder.createDBO(dtoMi));
+                }
+            }
         }
     }
 
