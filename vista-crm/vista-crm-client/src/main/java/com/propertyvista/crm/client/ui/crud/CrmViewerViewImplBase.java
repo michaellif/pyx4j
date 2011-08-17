@@ -49,6 +49,8 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
         addNorth(header = new CrmHeaderDecorator(defaultCaption), VistaCrmTheme.defaultHeaderHeight);
         addNorth(new CrmActionsBarDecorator(null, fillActionsPanel()), VistaCrmTheme.defaultActionBarHeight);
+
+        header.setHeight("100%"); // fill all that defaultHeaderHeight!..
     }
 
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form) {

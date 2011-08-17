@@ -17,16 +17,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
@@ -38,11 +49,16 @@ import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
+import com.propertyvista.crm.client.ui.components.CrmFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmMediaListViewer;
+import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
+import com.propertyvista.crm.client.ui.components.OkCancelBox;
+import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
 
@@ -187,6 +203,9 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().financial().lastAppraisalValue()), 10);
         split.getRightPanel().add(inject(proto().financial().currency().name()), split.getRightPanel().getDefaultLabelWidth(), 10, i18n.tr("Currency Name"));
 
+        main.add(new CrmHeader2Decorator(i18n.tr("Included Utilities:")));
+        main.add(inject(proto().includedUtilities(), createUtilitiesListEditor()));
+
         return new CrmScrollPanel(main);
     }
 
@@ -219,5 +238,124 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                 return columns;
             }
         };
+    }
+
+    private CEntityFolderEditor<ServiceItemType> createUtilitiesListEditor() {
+        return new CrmEntityFolder<ServiceItemType>(ServiceItemType.class, i18n.tr("Utility"), isEditable()) {
+            private final CrmEntityFolder<ServiceItemType> parent = this;
+
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().name(), "30"));
+                return columns;
+            }
+
+            @Override
+            protected IFolderEditorDecorator<ServiceItemType> createFolderDecorator() {
+                CrmTableFolderDecorator<ServiceItemType> decor = new CrmTableFolderDecorator<ServiceItemType>(columns(), parent);
+                setExternalAddItemProcessing(true);
+                decor.addItemAddClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        new ShowPopUpBox<SelectConcessionBox>(new SelectConcessionBox()) {
+                            @Override
+                            protected void onClose(SelectConcessionBox box) {
+                                if (box.getSelectedItems() != null) {
+                                    for (ServiceItemType item : box.getSelectedItems()) {
+                                        addItem(item);
+                                    }
+                                }
+                            }
+                        };
+                    }
+                });
+                decor.setShowHeader(false);
+                return decor;
+            }
+
+            @Override
+            protected CEntityFolderItemEditor<ServiceItemType> createItem() {
+                return new CEntityFolderRowEditor<ServiceItemType>(ServiceItemType.class, columns()) {
+                    @Override
+                    public IFolderItemEditorDecorator<ServiceItemType> createFolderItemDecorator() {
+                        return new CrmFolderItemDecorator<ServiceItemType>(parent);
+                    }
+
+                    @Override
+                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                        if (column.getObject() == proto().name()) {
+                            return inject(column.getObject(), new CLabel());
+                        }
+                        return super.createCell(column);
+                    }
+                };
+            }
+        };
+    }
+
+    private class SelectConcessionBox extends OkCancelBox {
+
+        private ListBox list;
+
+        private List<ServiceItemType> selectedItems;
+
+        public SelectConcessionBox() {
+            super("Select Utilities");
+        }
+
+        @Override
+        protected Widget createContent() {
+            okButton.setEnabled(false);
+
+            if (!getValue().availableUtilities().isEmpty()) {
+                list = new ListBox(true);
+                list.addChangeHandler(new ChangeHandler() {
+                    @Override
+                    public void onChange(ChangeEvent event) {
+                        okButton.setEnabled(list.getSelectedIndex() >= 0);
+                    }
+                });
+
+                for (ServiceItemType item : getValue().availableUtilities()) {
+                    list.addItem(item.getStringView());
+                    list.setValue(list.getItemCount() - 1, item.id().toString());
+                }
+                list.setVisibleItemCount(8);
+                list.setWidth("100%");
+                return list.asWidget();
+            } else {
+                return new HTML(i18n.tr("There are no concessions!.."));
+            }
+        }
+
+        @Override
+        protected void setSize() {
+            setSize("350px", "100px");
+        }
+
+        @Override
+        protected boolean onOk() {
+            selectedItems = new ArrayList<ServiceItemType>(4);
+            for (int i = 0; i < list.getItemCount(); ++i) {
+                if (list.isItemSelected(i)) {
+                    for (ServiceItemType item : getValue().availableUtilities()) {
+                        if (list.getValue(i).contentEquals(item.id().toString())) {
+                            selectedItems.add(item);
+                        }
+                    }
+                }
+            }
+            return super.onOk();
+        }
+
+        @Override
+        protected void onCancel() {
+            selectedItems = null;
+        }
+
+        protected List<ServiceItemType> getSelectedItems() {
+            return selectedItems;
+        }
     }
 }

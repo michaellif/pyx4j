@@ -19,6 +19,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
@@ -35,8 +37,14 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
         if (!fromList) {
             EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
             amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), in));
-            for (BuildingAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(amenitysCriteria)) {
-                dto.amenities().add(amenity);
+            for (BuildingAmenity item : PersistenceServicesFactory.getPersistenceService().query(amenitysCriteria)) {
+                dto.amenities().add(item);
+            }
+
+            EntityQueryCriteria<ServiceItemType> serviceItemCriteria = EntityQueryCriteria.create(ServiceItemType.class);
+            serviceItemCriteria.add(PropertyCriterion.eq(serviceItemCriteria.proto().featureType(), Feature.Type.utility));
+            for (ServiceItemType item : PersistenceServicesFactory.getPersistenceService().query(serviceItemCriteria)) {
+                dto.availableUtilities().add(item);
             }
         }
     }

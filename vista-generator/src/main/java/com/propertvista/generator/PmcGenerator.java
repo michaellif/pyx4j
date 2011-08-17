@@ -123,8 +123,15 @@ public class PmcGenerator {
         ServiceItem item = EntityFactory.create(ServiceItem.class);
 
         item.type().set(EntityFactory.create(ServiceItemType.class));
-        item.type().name().setValue(type.toString());
-        item.type().serviceType().setValue(type);
+        List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
+        for (ServiceItemType itemType : serviceItemTypes) {
+            if (type.equals(itemType.serviceType().getValue())) {
+                allowedItemTypes.add(itemType);
+            }
+        }
+        ServiceItemType selectedItem = RandomUtil.random(allowedItemTypes);
+        item.type().name().setValue(selectedItem.getStringView());
+        item.type().serviceType().setValue(selectedItem.serviceType().getValue());
 
         item.price().setValue(500d + RandomUtil.randomInt(500));
         item.description().setValue(type.toString() + " description here...");
@@ -157,8 +164,16 @@ public class PmcGenerator {
         ServiceItem item = EntityFactory.create(ServiceItem.class);
 
         item.type().set(EntityFactory.create(ServiceItemType.class));
-        item.type().name().setValue(type.toString());
-        item.type().featureType().setValue(type);
+
+        List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
+        for (ServiceItemType itemType : featureItemTypes) {
+            if (type.equals(itemType.featureType().getValue())) {
+                allowedItemTypes.add(itemType);
+            }
+        }
+        ServiceItemType selectedItem = RandomUtil.random(allowedItemTypes);
+        item.type().name().setValue(selectedItem.getStringView());
+        item.type().featureType().setValue(selectedItem.featureType().getValue());
 
         item.price().setValue(100d + RandomUtil.randomInt(100));
         item.description().setValue(type.toString() + " description here...");

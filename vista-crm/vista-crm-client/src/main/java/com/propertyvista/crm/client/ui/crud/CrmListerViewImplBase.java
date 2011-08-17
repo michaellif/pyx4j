@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.ListerViewImplBase;
@@ -26,9 +23,10 @@ import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 
 public class CrmListerViewImplBase<E extends IEntity> extends ListerViewImplBase<E> {
 
-    private static I18n i18n = I18nFactory.getI18n(CrmListerViewImplBase.class);
+    protected final CrmHeaderDecorator header;
 
     public CrmListerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        super(new CrmHeaderDecorator(AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption()), VistaCrmTheme.defaultHeaderHeight);
+        addNorth(header = new CrmHeaderDecorator(AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption()), VistaCrmTheme.defaultHeaderHeight);
+        header.setHeight("100%"); // fill all that defaultHeaderHeight!..
     }
 }
