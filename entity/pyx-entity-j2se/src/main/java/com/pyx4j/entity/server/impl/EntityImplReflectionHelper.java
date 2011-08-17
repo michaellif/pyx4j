@@ -68,7 +68,7 @@ public class EntityImplReflectionHelper {
         try {
             method = interfaceClass.getMethod(memberName, (Class[]) null);
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException("Unknown member " + memberName);
+            throw new RuntimeException("Unknown member " + memberName + " in " + interfaceClass.getName());
         }
         Class<?> memberClass = method.getReturnType();
         if (IPrimitive.class.equals(memberClass)) {
