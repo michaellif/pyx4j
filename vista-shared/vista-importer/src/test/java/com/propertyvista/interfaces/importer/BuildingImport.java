@@ -25,8 +25,11 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.server.xml.XMLEntityParser;
+import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityFactory;
@@ -38,10 +41,13 @@ public class BuildingImport {
     public static void main(String[] args) throws Exception {
         long start = System.currentTimeMillis();
 
+        ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(true));
+        NamespaceManager.setNamespace("star");
+
         String fileName;
 
-        //fileName = "all-buildings-example.xml";
-        fileName = "buildings.xml";
+        fileName = "all-buildings-example.xml";
+        //fileName = "buildings.xml";
 
         XMLEntityParser parser = new XMLEntityParser(new ImportXMLEntityFactory());
 

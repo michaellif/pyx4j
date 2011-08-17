@@ -13,11 +13,23 @@
  */
 package com.propertyvista.interfaces.importer;
 
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingInfo;
+import com.propertyvista.interfaces.importer.converter.BuildingConverter;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 
 public class BuildingImporter {
 
-    public void persist(BuildingIO building) {
+    public void persist(BuildingIO buildingIO) {
+        // Set defaults
+        if (buildingIO.type().isNull()) {
+            buildingIO.type().setValue(BuildingInfo.Type.residential);
+        }
 
+        // Save building
+        Building building = new BuildingConverter().createDBO(buildingIO);
+        PersistenceServicesFactory.getPersistenceService().persist(building);
     }
 }
