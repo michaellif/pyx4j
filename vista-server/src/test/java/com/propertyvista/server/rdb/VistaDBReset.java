@@ -38,6 +38,7 @@ public class VistaDBReset {
     private static final Logger log = LoggerFactory.getLogger(VistaDBReset.class);
 
     public static void main(String[] args) {
+        long totalStart = System.currentTimeMillis();
         VistaServerSideConfiguration conf = new VistaServerSideConfiguration();
         ServerSideConfiguration.setInstance(conf);
         NamespaceManager.setNamespace(VistaNamespaceResolver.demoNamespace);
@@ -59,5 +60,6 @@ public class VistaDBReset {
         long start = System.currentTimeMillis();
         log.info(conf.getDataPreloaders().preloadAll());
         log.info("Preload time: " + TimeUtils.secSince(start));
+        log.info("Total time: " + TimeUtils.secSince(totalStart));
     }
 }
