@@ -178,7 +178,15 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         currentValue.selectedConcesions().clear();
         if (selecteService != null) {
             for (ServiceFeature feature : selecteService.features()) {
-                currentValue.selectedFeatureItems().addAll(feature.feature().items());
+                for (ServiceItem item : feature.feature().items())
+                    // filter out utilities included in price for selected building: 
+                    if (currentValue.selectedBuilding().includedUtilities() != null && !currentValue.selectedBuilding().includedUtilities().isEmpty()) {
+                        if (!currentValue.selectedBuilding().includedUtilities().contains(item.type())) {
+                            currentValue.selectedFeatureItems().add(item);
+                        }
+                    } else {
+                        currentValue.selectedFeatureItems().addAll(feature.feature().items());
+                    }
             }
             for (ServiceConcession consession : selecteService.concessions()) {
                 currentValue.selectedConcesions().add(consession.concession());
