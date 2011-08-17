@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
+import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -32,6 +33,7 @@ import com.propertyvista.interfaces.importer.converter.BuildingConverter;
 import com.propertyvista.interfaces.importer.converter.FloorplanAmenityConverter;
 import com.propertyvista.interfaces.importer.converter.FloorplanConverter;
 import com.propertyvista.interfaces.importer.converter.MediaConverter;
+import com.propertyvista.interfaces.importer.converter.ParkingConverter;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 
@@ -50,6 +52,14 @@ public class BuildingRetriever {
                 buildingIO.amenities().add(new BuildingAmenityConverter().createDTO(amenity));
             }
         }
+        //Parking
+        {
+            EntityQueryCriteria<Parking> criteria = EntityQueryCriteria.create(Parking.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            for (Parking i : PersistenceServicesFactory.getPersistenceService().query(criteria)) {
+                buildingIO.parkings().add(new ParkingConverter().createDTO(i));
+            }
+        }
 
         PersistenceServicesFactory.getPersistenceService().retrieve(building.media());
         for (Media media : building.media()) {
@@ -58,7 +68,6 @@ public class BuildingRetriever {
 
         //TODO
         //IList<ContactIO> contacts();
-        //IList<ParkingIO> parkings();
 
         EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
         floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
