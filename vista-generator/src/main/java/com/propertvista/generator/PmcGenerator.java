@@ -122,7 +122,6 @@ public class PmcGenerator {
     private ServiceItem createServiceItem(Service.Type type) {
         ServiceItem item = EntityFactory.create(ServiceItem.class);
 
-        item.type().set(EntityFactory.create(ServiceItemType.class));
         List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
         for (ServiceItemType itemType : serviceItemTypes) {
             if (type.equals(itemType.serviceType().getValue())) {
@@ -130,6 +129,8 @@ public class PmcGenerator {
             }
         }
         ServiceItemType selectedItem = RandomUtil.random(allowedItemTypes);
+
+        item.type().set(selectedItem);
         item.type().name().setValue(selectedItem.getStringView());
         item.type().serviceType().setValue(selectedItem.serviceType().getValue());
 
@@ -163,8 +164,6 @@ public class PmcGenerator {
     private ServiceItem createFeatureItem(Feature.Type type) {
         ServiceItem item = EntityFactory.create(ServiceItem.class);
 
-        item.type().set(EntityFactory.create(ServiceItemType.class));
-
         List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
         for (ServiceItemType itemType : featureItemTypes) {
             if (type.equals(itemType.featureType().getValue())) {
@@ -172,6 +171,8 @@ public class PmcGenerator {
             }
         }
         ServiceItemType selectedItem = RandomUtil.random(allowedItemTypes);
+
+        item.type().set(selectedItem);
         item.type().name().setValue(selectedItem.getStringView());
         item.type().featureType().setValue(selectedItem.featureType().getValue());
 
