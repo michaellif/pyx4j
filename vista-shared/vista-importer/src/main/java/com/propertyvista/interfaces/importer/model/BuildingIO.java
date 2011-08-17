@@ -33,6 +33,10 @@ public interface BuildingIO extends IEntity {
 
     IPrimitive<String> legalName();
 
+    IPrimitive<String> website();
+
+    IPrimitive<String> email();
+
     IPrimitive<GeoPoint> addressCoordinates();
 
     AddressIO address();

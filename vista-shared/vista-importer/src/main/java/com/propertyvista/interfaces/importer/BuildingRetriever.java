@@ -65,6 +65,7 @@ public class BuildingRetriever {
         List<Floorplan> floorplans = PersistenceServicesFactory.getPersistenceService().query(floorplanCriteria);
         for (Floorplan floorplan : floorplans) {
             FloorplanIO floorplanIO = new FloorplanConverter().createDTO(floorplan);
+            buildingIO.floorplans().add(floorplanIO);
 
             //Get Amenity
             {
