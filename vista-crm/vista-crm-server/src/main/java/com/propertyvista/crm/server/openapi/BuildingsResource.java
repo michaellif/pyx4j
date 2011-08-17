@@ -31,6 +31,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -97,6 +98,8 @@ public class BuildingsResource {
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public BuildingsRS listBuildings() {
+
+        long start = System.currentTimeMillis();
 
         EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
 
@@ -180,6 +183,8 @@ public class BuildingsResource {
                 buildingRS.floorplans.add(floorplanRS);
             }
         }
+
+        log.info("BuildingRS Retrive time {} msec", TimeUtils.since(start));
 
         return buildingsRS;
     }

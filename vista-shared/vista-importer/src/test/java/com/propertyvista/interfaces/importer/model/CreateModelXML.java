@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.report.XMLStringWriter;
-//import com.pyx4j.essentials.server.xml.XMLEntityModelWriter;
+import com.pyx4j.essentials.server.xml.XMLEntityModelWriter;
 
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityName;
 
@@ -40,9 +40,9 @@ public class CreateModelXML {
         try {
             w = new FileWriter(f);
             XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
-            //XMLEntityModelWriter xmlWriter = new XMLEntityModelWriter(xml, new ImportXMLEntityName());
-            //xmlWriter.setEmitId(false);
-            //xmlWriter.write(ent);
+            XMLEntityModelWriter xmlWriter = new XMLEntityModelWriter(xml, new ImportXMLEntityName());
+            xmlWriter.setEmitId(false);
+            xmlWriter.write(ent);
             w.write(xml.toString());
             w.flush();
         } catch (IOException e) {

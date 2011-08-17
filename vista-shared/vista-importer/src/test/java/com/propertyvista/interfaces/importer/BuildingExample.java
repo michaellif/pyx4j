@@ -22,6 +22,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -29,7 +30,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.report.XMLStringWriter;
 import com.pyx4j.essentials.server.xml.XMLEntityWriter;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.interfaces.importer.model.CreateModelXML;
@@ -41,7 +44,11 @@ public class BuildingExample {
     private final static Logger log = LoggerFactory.getLogger(CreateModelXML.class);
 
     public static void main(String[] args) {
+
+        long start = System.currentTimeMillis();
+
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(true));
+        NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
 
         ImportIO importIO = EntityFactory.create(ImportIO.class);
 
@@ -68,5 +75,7 @@ public class BuildingExample {
         } finally {
             IOUtils.closeQuietly(w);
         }
+        log.info("buildings {} ", buildings.size());
+        log.info("Total time {} msec", TimeUtils.since(start));
     }
 }
