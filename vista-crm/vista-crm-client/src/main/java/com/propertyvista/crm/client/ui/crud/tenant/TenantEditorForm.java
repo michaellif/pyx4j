@@ -144,7 +144,6 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
     }
 
     private CEntityFolderEditor<EmergencyContact> createEmergencyContactFolderEditor() {
-
         return new CEntityFolderEditor<EmergencyContact>(EmergencyContact.class) {
 
             @Override
@@ -155,7 +154,36 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
             @Override
             protected CEntityFolderItemEditor<EmergencyContact> createItem() {
-                return createEmergencyContactItem();
+                return new CEntityFolderItemEditor<EmergencyContact>(EmergencyContact.class) {
+                    @Override
+                    public IsWidget createContent() {
+                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!TenantEditorForm.this.isEditable());
+                        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!TenantEditorForm.this.isEditable());
+                        main.add(split);
+
+                        split.getLeftPanel().add(inject(proto().name().firstName()), 12);
+                        split.getLeftPanel().add(inject(proto().name().middleName()), 12);
+                        split.getLeftPanel().add(inject(proto().name().lastName()), 20);
+
+                        split.getRightPanel().add(inject(proto().homePhone()), 15);
+                        split.getRightPanel().add(inject(proto().mobilePhone()), 15);
+                        split.getRightPanel().add(inject(proto().workPhone()), 15);
+
+                        VistaDecoratorsSplitFlowPanel split2 = new VistaDecoratorsSplitFlowPanel(!TenantEditorForm.this.isEditable());
+                        main.add(new VistaLineSeparator());
+                        main.add(split2);
+
+                        AddressUtils.injectIAddress(split2, proto().address(), this);
+
+                        return main;
+                    }
+
+                    @Override
+                    public IFolderItemEditorDecorator<EmergencyContact> createFolderItemDecorator() {
+                        return new BoxFolderItemEditorDecorator<EmergencyContact>(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(),
+                                i18n.tr("Remove Contact"), !isFirst() && TenantEditorForm.this.isEditable());
+                    }
+                };
             }
 
             @Override
@@ -164,40 +192,6 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
                 if (TenantEditorForm.this.isEditable() && value.isEmpty()) {
                     addItem(); // at least one Emergency Contact should be present!..
                 }
-            }
-        };
-    }
-
-    private CEntityFolderItemEditor<EmergencyContact> createEmergencyContactItem() {
-
-        return new CEntityFolderItemEditor<EmergencyContact>(EmergencyContact.class) {
-            @Override
-            public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!TenantEditorForm.this.isEditable());
-                VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!TenantEditorForm.this.isEditable());
-                main.add(split);
-
-                split.getLeftPanel().add(inject(proto().name().firstName()), 12);
-                split.getLeftPanel().add(inject(proto().name().middleName()), 12);
-                split.getLeftPanel().add(inject(proto().name().lastName()), 20);
-
-                split.getRightPanel().add(inject(proto().homePhone()), 15);
-                split.getRightPanel().add(inject(proto().mobilePhone()), 15);
-                split.getRightPanel().add(inject(proto().workPhone()), 15);
-
-                VistaDecoratorsSplitFlowPanel split2 = new VistaDecoratorsSplitFlowPanel(!TenantEditorForm.this.isEditable());
-                main.add(new VistaLineSeparator());
-                main.add(split2);
-
-                AddressUtils.injectIAddress(split2, proto().address(), this);
-
-                return main;
-            }
-
-            @Override
-            public IFolderItemEditorDecorator<EmergencyContact> createFolderItemDecorator() {
-                return new BoxFolderItemEditorDecorator<EmergencyContact>(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove Contact"),
-                        !isFirst() && TenantEditorForm.this.isEditable());
             }
         };
     }

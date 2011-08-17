@@ -26,14 +26,12 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.Range;
@@ -73,7 +71,8 @@ import com.propertyvista.common.client.ui.validators.OldAgeValidator;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
-import com.propertyvista.crm.client.ui.components.CListHyperlink;
+import com.propertyvista.crm.client.ui.components.CrmBoxFolderDecorator;
+import com.propertyvista.crm.client.ui.components.CrmBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmFolderItemDecorator;
@@ -596,16 +595,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().item(), "20em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().price(), "5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().adjustments(), "10em"));
-                return columns;
+                return null;
             }
 
             @Override
             protected IFolderEditorDecorator<ChargeItem> createFolderDecorator() {
-                CrmTableFolderDecorator<ChargeItem> decor = new CrmTableFolderDecorator<ChargeItem>(columns(), parent);
+                CrmBoxFolderDecorator<ChargeItem> decor = new CrmBoxFolderDecorator<ChargeItem>(parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
@@ -620,6 +615,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                         for (ServiceItem item : box.getSelectedItems()) {
                                             ChargeItem newItem = EntityFactory.create(ChargeItem.class);
                                             newItem.item().set(item);
+                                            newItem.price().setValue(item.price().getValue());
                                             addItem(newItem);
                                         }
                                     }
@@ -628,7 +624,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         }
                     }
                 });
-                decor.setShowHeader(false);
                 return decor;
             }
 
@@ -636,33 +631,22 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             protected CEntityFolderItemEditor<ChargeItem> createItem() {
                 return new CEntityFolderRowEditor<ChargeItem>(ChargeItem.class, columns()) {
 
-                    private CEntityFolderEditor<ChargeItemAdjustment> adjustments;
-
                     @Override
                     public IFolderItemEditorDecorator<ChargeItem> createFolderItemDecorator() {
-                        return new CrmFolderItemDecorator<ChargeItem>(parent);
+                        return new CrmBoxFolderItemDecorator<ChargeItem>(parent);
                     }
 
-                    @SuppressWarnings("unchecked")
                     @Override
-                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-                        if (column.getObject() == proto().item()) {
-                            return inject(column.getObject(), new CEntityLabel());
-                        } else if (column.getObject() == proto().adjustments()) {
-                            adjustments = (CEntityFolderEditor<ChargeItemAdjustment>) inject(column.getObject(), createItemAdjustmentListView());
-                            return inject(column.getObject(), new CListHyperlink(new Command() {
-                                @Override
-                                public void execute() {
-                                    new ShowPopUpBox<AdjustmentsBox>(new AdjustmentsBox(adjustments)) {
-                                        @Override
-                                        protected void onClose(AdjustmentsBox box) {
-                                            // TODO Auto-generated method stub
-                                        }
-                                    };
-                                }
-                            }));
-                        }
-                        return super.createCell(column);
+                    public IsWidget createContent() {
+                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable());
+
+                        main.add(inject(proto().item(), new CEntityLabel()), 20);
+                        // TODO - it's unclear how to display adjusted price!?.. 
+                        //main.add(inject(proto().price(), new CLabel()), 6);
+
+                        main.add(new CrmHeader2Decorator(CrmEntityFolder.i18n.tr("Adjustments:")));
+                        main.add(inject(proto().adjustments(), createItemAdjustmentListView()));
+                        return main;
                     }
                 };
             }
@@ -1048,44 +1032,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             } else {
                 return item.getStringView();
             }
-        }
-    }
-
-    private class AdjustmentsBox extends OkCancelBox {
-
-        private SimplePanel content;
-
-        private final CEntityFolderEditor<ChargeItemAdjustment> folder;
-
-        @SuppressWarnings("unchecked")
-        public AdjustmentsBox(CEntityFolderEditor<ChargeItemAdjustment> adjustments) {
-            super("Edit Adjustments", true);
-
-            folder = adjustments;
-            if (!isEditable() && folder.getValue().isEmpty()) {
-                content.add(new HTML(i18n.tr("There are no adjustments here!")));
-            } else {
-                content.add(folder);
-            }
-        }
-
-        @Override
-        protected Widget createContent() {
-            return (content = new SimplePanel());
-        }
-
-        @Override
-        protected void setSize() {
-            setSize("400px", "100px");
-        }
-
-        @Override
-        protected boolean onOk() {
-            return folder.isValid();
-        }
-
-        @Override
-        protected void onCancel() {
         }
     }
 }
