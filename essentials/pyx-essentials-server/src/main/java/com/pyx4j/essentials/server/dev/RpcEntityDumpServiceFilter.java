@@ -23,6 +23,7 @@ package com.pyx4j.essentials.server.dev;
 import java.io.Serializable;
 
 import com.pyx4j.config.server.rpc.IServiceFilter;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.IServiceRequest;
 import com.pyx4j.rpc.shared.Service;
@@ -43,10 +44,13 @@ public class RpcEntityDumpServiceFilter implements IServiceFilter {
         return request;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Serializable filterOutgoing(Class<? extends Service<?, ?>> serviceClass, Serializable response) {
         if (response instanceof IEntity) {
             DataDump.dump("send", (IEntity) response);
+        } else if (response instanceof EntitySearchResult) {
+            DataDump.dump("send", ((EntitySearchResult<IEntity>) response).getData());
         }
         return response;
     }

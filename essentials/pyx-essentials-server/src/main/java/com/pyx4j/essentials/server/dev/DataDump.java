@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -60,15 +61,36 @@ public class DataDump {
 
     }
 
+    public static void dump(String type, List<? extends IEntity> entList) {
+        dumpAny(type, entList);
+    }
+
     public static void dump(String type, IEntity ent) {
-        if ((ent == null) || (!ServerSideConfiguration.instance().isDevelopmentBehavior())) {
+        dumpAny(type, ent);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void dumpAny(String type, Object item) {
+        if ((item == null) || (!ServerSideConfiguration.instance().isDevelopmentBehavior())) {
             return;
         }
         long id = ++debugCount;
         NumberFormat nf = new DecimalFormat("0000");
         StringBuffer name = new StringBuffer(nf.format(id));
-        name.append('-').append(type);
-        name.append('-').append(ent.getEntityMeta().getEntityClass().getSimpleName());
+        name.append('-').append(type).append('-');
+        {
+            IEntity ent = null;
+            if (item instanceof List) {
+                if (!((List<?>) item).isEmpty()) {
+                    ent = (IEntity) ((List<?>) item).get(0);
+                }
+            } else {
+                ent = (IEntity) item;
+            }
+            if (ent != null) {
+                name.append(ent.getEntityMeta().getEntityClass().getSimpleName());
+            }
+        }
         name.append(".xml");
         File dir;
         if (LoggerConfig.getContextName() != null) {
@@ -91,7 +113,17 @@ public class DataDump {
         try {
             w = new FileWriter(f);
             XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
-            new DumpXMLEntityWriter(xml).write(ent);
+            DumpXMLEntityWriter xmlWriter = new DumpXMLEntityWriter(xml);
+            if (item instanceof List) {
+                xml.start("list");
+                for (IEntity ent : (List<IEntity>) item) {
+                    xmlWriter.write(ent);
+                }
+                xml.end("list");
+            } else {
+                xmlWriter.write((IEntity) item);
+            }
+
             w.write(xml.toString());
             w.flush();
             log.debug("dumped value to file", f.getAbsolutePath());
