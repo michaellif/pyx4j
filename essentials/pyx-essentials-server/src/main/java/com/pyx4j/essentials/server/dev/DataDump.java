@@ -81,6 +81,7 @@ public class DataDump {
         {
             IEntity ent = null;
             if (item instanceof List) {
+                name.append("list");
                 if (!((List<?>) item).isEmpty()) {
                     ent = (IEntity) ((List<?>) item).get(0);
                 }
