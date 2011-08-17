@@ -21,6 +21,8 @@
 package com.pyx4j.entity.server;
 
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,50 +38,57 @@ public class ServerEntityFactory implements IEntityFactory {
 
     private static final Logger log = LoggerFactory.getLogger(ServerEntityFactory.class);
 
+    private static final Map<Class<?>, Class<?>> impClasses = new HashMap<Class<?>, Class<?>>();
+
     @Override
     @SuppressWarnings("unchecked")
     public <T extends IEntity> T create(Class<T> clazz, IObject<?> parent, String fieldName) {
         if (IEntity.class.equals(clazz)) {
             throw new Error("Should not use abstract IEntity class");
         }
-        String handlerClassName = clazz.getName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
         Class<?> handlerClass = null;
-        // Try to find class first
-        if (parent != null) {
-            try {
-                handlerClass = Class.forName(handlerClassName, true, parent.getClass().getClassLoader());
-            } catch (ClassNotFoundException ignore1) {
-                if (parent.getClass().getClassLoader() != clazz.getClassLoader()) {
-                    try {
-                        handlerClass = Class.forName(handlerClassName, true, clazz.getClassLoader());
-                    } catch (ClassNotFoundException ignore2) {
+        handlerClass = impClasses.get(clazz);
+        if (handlerClass == null) {
+            String handlerClassName = clazz.getName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
+            // Try to find class first
+            if (parent != null) {
+                try {
+                    handlerClass = Class.forName(handlerClassName, true, parent.getClass().getClassLoader());
+                } catch (ClassNotFoundException ignore1) {
+                    if (parent.getClass().getClassLoader() != clazz.getClassLoader()) {
+                        try {
+                            handlerClass = Class.forName(handlerClassName, true, clazz.getClassLoader());
+                        } catch (ClassNotFoundException ignore2) {
+                        }
                     }
                 }
-            }
-            if ((handlerClass == null) && (parent.getClass().getClassLoader() != clazz.getClassLoader())) {
+                if ((handlerClass == null) && (parent.getClass().getClassLoader() != clazz.getClassLoader())) {
+                    try {
+                        handlerClass = Class.forName(handlerClassName, true, clazz.getClassLoader());
+                    } catch (ClassNotFoundException ignore) {
+                    }
+                }
+            } else {
                 try {
                     handlerClass = Class.forName(handlerClassName, true, clazz.getClassLoader());
                 } catch (ClassNotFoundException ignore) {
                 }
             }
-        } else {
-            try {
-                handlerClass = Class.forName(handlerClassName, true, clazz.getClassLoader());
-            } catch (ClassNotFoundException ignore) {
+
+            if ((handlerClass == null) && (EntityImplGenerator.instance().getContextClassLoader() != clazz.getClassLoader())) {
+                try {
+                    handlerClass = Class.forName(handlerClassName, true, EntityImplGenerator.instance().getContextClassLoader());
+                } catch (ClassNotFoundException ignore) {
+                }
             }
+
+            if (handlerClass == null) {
+                log.debug("generate impl class {}", clazz.getName());
+                handlerClass = EntityImplGenerator.instance().generateImplementation(clazz);
+            }
+            impClasses.put(clazz, handlerClass);
         }
 
-        if ((handlerClass == null) && (EntityImplGenerator.instance().getContextClassLoader() != clazz.getClassLoader())) {
-            try {
-                handlerClass = Class.forName(handlerClassName, true, EntityImplGenerator.instance().getContextClassLoader());
-            } catch (ClassNotFoundException ignore) {
-            }
-        }
-
-        if (handlerClass == null) {
-            log.debug("generate impl class {}", clazz.getName());
-            handlerClass = EntityImplGenerator.instance().generateImplementation(clazz);
-        }
         try {
             if ((parent == null) && (fieldName == null)) {
                 return (T) handlerClass.newInstance();
@@ -88,7 +97,7 @@ public class ServerEntityFactory implements IEntityFactory {
                 return childConstructor.newInstance(parent, fieldName);
             }
         } catch (Throwable e) {
-            log.error(handlerClassName + " instantiation error", e);
+            log.error(handlerClass.getName() + " instantiation error", e);
             throw new Error(e.getMessage());
         }
     }
