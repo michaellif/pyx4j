@@ -24,6 +24,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface AsyncInlineWidgetFactory {
 
-    public void obtainWidget(String id, final AsyncCallback<InlineWidget> onInlineWidgetAvalable);
+    public void obtainWidget(String id, final AsyncCallback<InlineWidget> onInlineWidgetAvailable);
 
 }

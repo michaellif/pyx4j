@@ -71,7 +71,7 @@ public class ReflectionServiceFactory implements IServiceFactory {
             serviceClass = (Class<? extends Service<?, ?>>) Class.forName(serviceImplClassName);
         } catch (Throwable e) {
             log.error("RPC Service Class load error", e);
-            throw new ClassNotFoundException("RPC Service " + serviceImplClassName + " not avalable");
+            throw new ClassNotFoundException("RPC Service " + serviceImplClassName + " not available");
         }
         return serviceClass;
     }
@@ -85,7 +85,7 @@ public class ReflectionServiceFactory implements IServiceFactory {
             serviceClass = (Class<? extends IService>) Class.forName(serviceImplClassName);
         } catch (Throwable e) {
             log.error("RPC Service Class load error", e);
-            throw new ClassNotFoundException("RPC Service " + serviceImplClassName + " not avalable");
+            throw new ClassNotFoundException("RPC Service " + serviceImplClassName + " not available");
         }
         return serviceClass;
     }

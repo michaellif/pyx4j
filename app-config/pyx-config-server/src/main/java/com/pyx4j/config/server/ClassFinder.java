@@ -98,7 +98,7 @@ public class ClassFinder {
             return;
         }
         if (jar == null) {
-            log.error("JarFile is not avalable");
+            log.error("JarFile is not available");
             return;
         }
         try {

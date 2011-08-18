@@ -50,7 +50,7 @@ public class PersistenceServicesFactory {
                 instance = serviceClass.newInstance();
             } catch (Throwable e) {
                 log.error("creating PersistenceService from [" + serviceClass.getName() + "]", e);
-                throw new RuntimeException("PersistenceService not avalable");
+                throw new RuntimeException("PersistenceService not available");
             }
         }
         return instance;

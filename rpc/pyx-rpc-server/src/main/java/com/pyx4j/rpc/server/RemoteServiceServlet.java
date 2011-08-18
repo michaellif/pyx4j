@@ -66,7 +66,7 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
                     serviceFactory = (IServiceFactory) Class.forName(serviceFactoryClassName).newInstance();
                 } catch (Throwable e) {
                     log.error("GWT RPC ServiceFactory creation error", e);
-                    throw new ServletException("RPC ServiceFactory not avalable");
+                    throw new ServletException("RPC ServiceFactory not available");
                 }
             }
         }

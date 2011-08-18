@@ -88,7 +88,7 @@ public class ClientContext {
 
     private static boolean authenticationObtained = false;
 
-    private static List<AsyncCallback<Boolean>> onAuthenticationAvalableQueue = null;
+    private static List<AsyncCallback<Boolean>> onAuthenticationAvailableQueue = null;
 
     private static String logoutURL;
 
@@ -343,32 +343,32 @@ public class ClientContext {
         obtainAuthenticationData(null);
     }
 
-    public static void obtainAuthenticationData(final AsyncCallback<Boolean> onAuthenticationAvalable) {
-        obtainAuthenticationData(null, onAuthenticationAvalable, false, true);
+    public static void obtainAuthenticationData(final AsyncCallback<Boolean> onAuthenticationAvailable) {
+        obtainAuthenticationData(null, onAuthenticationAvailable, false, true);
     }
 
-    public static void obtainAuthenticationData(AuthenticationService authenticationService, final AsyncCallback<Boolean> onAuthenticationAvalable) {
-        obtainAuthenticationData(authenticationService, onAuthenticationAvalable, false, true);
+    public static void obtainAuthenticationData(AuthenticationService authenticationService, final AsyncCallback<Boolean> onAuthenticationAvailable) {
+        obtainAuthenticationData(authenticationService, onAuthenticationAvailable, false, true);
     }
 
-    public static void obtainAuthenticationData(AuthenticationService authenticationService, final AsyncCallback<Boolean> onAuthenticationAvalable,
+    public static void obtainAuthenticationData(AuthenticationService authenticationService, final AsyncCallback<Boolean> onAuthenticationAvailable,
             boolean force, boolean executeBackground) {
         if (authenticationService != null) {
             service = authenticationService;
         }
         if (!force && authenticationObtained) {
-            if (onAuthenticationAvalable != null) {
-                onAuthenticationAvalable.onSuccess(isAuthenticated());
+            if (onAuthenticationAvailable != null) {
+                onAuthenticationAvailable.onSuccess(isAuthenticated());
             }
         } else {
-            if (onAuthenticationAvalableQueue != null) {
-                if (onAuthenticationAvalable != null) {
-                    onAuthenticationAvalableQueue.add(onAuthenticationAvalable);
+            if (onAuthenticationAvailableQueue != null) {
+                if (onAuthenticationAvailable != null) {
+                    onAuthenticationAvailableQueue.add(onAuthenticationAvailable);
                 }
                 return;
             }
 
-            onAuthenticationAvalableQueue = new Vector<AsyncCallback<Boolean>>();
+            onAuthenticationAvailableQueue = new Vector<AsyncCallback<Boolean>>();
 
             AsyncCallback<AuthenticationResponse> callback = new RecoverableBlockingAsyncCallback<AuthenticationResponse>() {
 
@@ -376,28 +376,28 @@ public class ClientContext {
                 public void onFailure(Throwable caught) {
                     log.error("obtain authentication failure", caught);
                     ClientContext.authenticated(new AuthenticationResponse());
-                    if (onAuthenticationAvalable != null) {
-                        onAuthenticationAvalable.onFailure(caught);
+                    if (onAuthenticationAvailable != null) {
+                        onAuthenticationAvailable.onFailure(caught);
                     }
-                    if (onAuthenticationAvalableQueue != null) {
-                        for (AsyncCallback<Boolean> queued : onAuthenticationAvalableQueue) {
+                    if (onAuthenticationAvailableQueue != null) {
+                        for (AsyncCallback<Boolean> queued : onAuthenticationAvailableQueue) {
                             queued.onFailure(caught);
                         }
-                        onAuthenticationAvalableQueue = null;
+                        onAuthenticationAvailableQueue = null;
                     }
                 }
 
                 @Override
                 public void onSuccess(AuthenticationResponse result) {
                     ClientContext.authenticated(result);
-                    if (onAuthenticationAvalable != null) {
-                        onAuthenticationAvalable.onSuccess(isAuthenticated());
+                    if (onAuthenticationAvailable != null) {
+                        onAuthenticationAvailable.onSuccess(isAuthenticated());
                     }
-                    if (onAuthenticationAvalableQueue != null) {
-                        for (AsyncCallback<Boolean> queued : onAuthenticationAvalableQueue) {
+                    if (onAuthenticationAvailableQueue != null) {
+                        for (AsyncCallback<Boolean> queued : onAuthenticationAvailableQueue) {
                             queued.onSuccess(isAuthenticated());
                         }
-                        onAuthenticationAvalableQueue = null;
+                        onAuthenticationAvailableQueue = null;
                     }
                 }
             };

@@ -66,7 +66,7 @@ public class InitializationServletContextListener implements ServletContextListe
                 } catch (Throwable e) {
                     Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
                     log.error("ServerSideConfiguration creation error", e);
-                    throw new ServletException("ServerSideConfiguration not avalable");
+                    throw new ServletException("ServerSideConfiguration not available");
                 }
             } else {
                 ServerSideConfiguration.setInstance(new ServerSideConfiguration());

@@ -81,12 +81,12 @@ public abstract class ContentPanel extends SimplePanel {
         }
     }
 
-    public void createInlineWidgets(Iterable<String> widgetIds, AsyncCallback<Void> widgetsAvalable) {
+    public void createInlineWidgets(Iterable<String> widgetIds, AsyncCallback<Void> widgetsAvailable) {
         if (widgetIds == null) {
-            widgetsAvalable.onSuccess(null);
+            widgetsAvailable.onSuccess(null);
             return;
         }
-        final AsyncCallbackAggregator callback = new AsyncCallbackAggregator(widgetsAvalable);
+        final AsyncCallbackAggregator callback = new AsyncCallbackAggregator(widgetsAvailable);
         callback.expect();
         for (final String widgetId : widgetIds) {
             //check in local (page) factory

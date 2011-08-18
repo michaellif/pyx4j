@@ -52,7 +52,7 @@ public class StaticReportTest extends ReportsTestBase {
             ok = true;
         } finally {
             if (!ok) {
-                log.debug("avalable textItems {}", textItems);
+                log.debug("available textItems {}", textItems);
             }
         }
     }

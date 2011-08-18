@@ -65,7 +65,7 @@ public class RemoteJ2SEServiceServlet extends HttpServlet {
                     serviceFactory = (IServiceFactory) Class.forName(serviceFactoryClassName).newInstance();
                 } catch (Throwable e) {
                     log.error("J2SE ServiceFactory creation error", e);
-                    throw new ServletException("J2SE ServiceFactory not avalable");
+                    throw new ServletException("J2SE ServiceFactory not available");
                 }
             }
         }
