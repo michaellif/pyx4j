@@ -194,10 +194,12 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
                         new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox()) {
                             @Override
                             protected void onClose(SelectFeatureBox box) {
-                                if (box.getSelectedFeature() != null) {
-                                    ServiceFeature newItem = EntityFactory.create(ServiceFeature.class);
-                                    newItem.feature().set(box.getSelectedFeature());
-                                    addItem(newItem);
+                                if (box.getSelectedFeatures() != null) {
+                                    for (Feature item : box.getSelectedFeatures()) {
+                                        ServiceFeature newItem = EntityFactory.create(ServiceFeature.class);
+                                        newItem.feature().set(item);
+                                        addItem(newItem);
+                                    }
                                 }
                             }
                         };
@@ -248,10 +250,12 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
                         new ShowPopUpBox<SelectConcessionBox>(new SelectConcessionBox()) {
                             @Override
                             protected void onClose(SelectConcessionBox box) {
-                                if (box.getSelectedConcession() != null) {
-                                    ServiceConcession newItem = EntityFactory.create(ServiceConcession.class);
-                                    newItem.concession().set(box.getSelectedConcession());
-                                    addItem(newItem);
+                                if (box.getSelectedConcessions() != null) {
+                                    for (Concession item : box.getSelectedConcessions()) {
+                                        ServiceConcession newItem = EntityFactory.create(ServiceConcession.class);
+                                        newItem.concession().set(item);
+                                        addItem(newItem);
+                                    }
                                 }
                             }
                         };
@@ -283,10 +287,11 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
 
     private class SelectFeatureBox extends OkCancelBox {
 
-        private Feature selectedFeature;
+        private List<Feature> selectedFeatures;
 
         public SelectFeatureBox() {
             super("Select Feature");
+            ((ServiceEditorView) getParentView()).getFeatureListerView().getLister().releaseSelection();
         }
 
         @Override
@@ -295,8 +300,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             ((ServiceEditorView) getParentView()).getFeatureListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<Feature>() {
                 @Override
                 public void onSelect(Feature selectedItem) {
-                    selectedFeature = selectedItem;
-                    okButton.setEnabled(true);
+                    okButton.setEnabled(!((ServiceEditorView) getParentView()).getFeatureListerView().getLister().getSelectedItems().isEmpty());
                 }
             });
 
@@ -312,21 +316,28 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
         }
 
         @Override
-        protected void onCancel() {
-            selectedFeature = null;
+        protected boolean onOk() {
+            selectedFeatures = ((ServiceEditorView) getParentView()).getFeatureListerView().getLister().getSelectedItems();
+            return true;
         }
 
-        protected Feature getSelectedFeature() {
-            return selectedFeature;
+        @Override
+        protected void onCancel() {
+            selectedFeatures = null;
+        }
+
+        protected List<Feature> getSelectedFeatures() {
+            return selectedFeatures;
         }
     }
 
     private class SelectConcessionBox extends OkCancelBox {
 
-        private Concession selectedConcession;
+        private List<Concession> selectedConcessions;
 
         public SelectConcessionBox() {
             super("Select Concession");
+            ((ServiceEditorView) getParentView()).getConcessionListerView().getLister().releaseSelection();
         }
 
         @Override
@@ -335,8 +346,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             ((ServiceEditorView) getParentView()).getConcessionListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<Concession>() {
                 @Override
                 public void onSelect(Concession selectedItem) {
-                    selectedConcession = selectedItem;
-                    okButton.setEnabled(true);
+                    okButton.setEnabled(!((ServiceEditorView) getParentView()).getConcessionListerView().getLister().getSelectedItems().isEmpty());
                 }
             });
 
@@ -352,12 +362,18 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
         }
 
         @Override
-        protected void onCancel() {
-            selectedConcession = null;
+        protected boolean onOk() {
+            selectedConcessions = ((ServiceEditorView) getParentView()).getConcessionListerView().getLister().getSelectedItems();
+            return true;
         }
 
-        protected Concession getSelectedConcession() {
-            return selectedConcession;
+        @Override
+        protected void onCancel() {
+            selectedConcessions = null;
+        }
+
+        protected List<Concession> getSelectedConcessions() {
+            return selectedConcessions;
         }
     }
 }

@@ -27,6 +27,7 @@ public class SelectConcessionLister extends ListerBase<Concession> {
         super(Concession.class, null, true);
         getListPanel().getDataTable().setMarkSelectedRow(true);
         getListPanel().getDataTable().setHasCheckboxColumn(false);
+        setMultiSelect(true);
     }
 
     @Override
