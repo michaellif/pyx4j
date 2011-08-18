@@ -31,6 +31,7 @@ import org.w3c.dom.NodeList;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -152,11 +153,21 @@ public class XMLEntityParser {
     private Object parseValueNode(Element valueNode, MemberMeta memberMeta, IObject<?> member) {
         String str = valueNode.getTextContent();
         if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
+            if (CommonsStringUtils.isEmpty(str)) {
+                return null;
+            }
             Class<?> valueClass = member.getValueClass();
             if (valueClass.isAssignableFrom(byte[].class)) {
                 return new Base64().decode(str);
-            } else if (valueClass.isAssignableFrom(Date.class)) {
-                return DateUtils.detectDateformat(str);
+            } else if (Date.class.isAssignableFrom(valueClass)) {
+                Date date = DateUtils.detectDateformat(str);
+                if (valueClass.equals(java.sql.Date.class)) {
+                    return new java.sql.Date(date.getTime());
+                } else if (valueClass.equals(LogicalDate.class)) {
+                    return new LogicalDate(date);
+                } else {
+                    return date;
+                }
             } else if (valueClass.equals(GeoPoint.class)) {
                 return GeoPoint.valueOf(str);
             } else {
