@@ -84,6 +84,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private int selectedRow = -1;
 
+    private List<Integer> selectedRows;
+
     private boolean hasDetailsNavigation = false;
 
     private boolean hasColumnClickSorting = false;
@@ -93,6 +95,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     private boolean hasCheckboxColumn = false;
 
     private boolean markSelectedRow = true;
+
+    private final boolean isMultiSelect = false;
 
     private final List<SelectionCheckBox> selectionCheckBoxes = new ArrayList<SelectionCheckBox>();
 
@@ -155,12 +159,28 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         return selectedRow;
     }
 
+    public List<Integer> getSelectedRows() {
+        return selectedRows;
+    }
+
     public E getSelectedItem() {
         int selectedRow = getSelectedRow();
         if (selectedRow >= 0 && selectedRow < getDataTableModel().getData().size()) {
             return getDataTableModel().getData().get(selectedRow).getEntity();
         }
         return null;
+    }
+
+    public List<E> getSelectedItems() {
+        List<E> selected = new ArrayList<E>();
+
+        for (int selectedRow : selectedRows) {
+            if (selectedRow >= 0 && selectedRow < getDataTableModel().getData().size()) {
+                selected.add(getDataTableModel().getData().get(selectedRow).getEntity());
+            }
+        }
+
+        return selected;
     }
 
     public List<E> getCheckedItems() {
@@ -207,6 +227,35 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     public void setMarkSelectedRow(boolean markSelectedRow) {
         this.markSelectedRow = markSelectedRow;
+    }
+
+    public boolean isMultiSelect() {
+        return (selectedRows != null);
+    }
+
+    public void setMultiSelect(boolean isMultiSelect) {
+        if (isMultiSelect) {
+            if (!isMultiSelect()) {
+                selectedRows = new ArrayList<Integer>(getDataTableModel().getPageSize());
+            }
+        } else {
+            for (int i : selectedRows) {
+                markRow(i, false);
+            }
+            selectedRows = null;
+        }
+    }
+
+    public void releaseSelection() {
+        if (isMultiSelect()) {
+            for (int i : selectedRows) {
+                markRow(i, false);
+            }
+            selectedRows.clear();
+        } else {
+            markRow(getSelectedRow(), false);
+            selectedRow = -1;
+        }
     }
 
     public boolean isAutoColumnsWidth() {
@@ -387,16 +436,18 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     protected void setSelectedRow(int selectedRow) {
 
-        if (isMarkSelectedRow() && getSelectedRow() >= 0) {
-            Element previous = getRowFormatter().getElement(this.selectedRow + 1); // raw table row index - including the header!...
-            UIObject.setStyleName(previous, BASE_NAME + StyleSuffix.Row + "-" + DataTable.StyleDependent.selected.name(), false);
-        }
-
-        this.selectedRow = selectedRow; // actual table row index
-
-        if (isMarkSelectedRow() && getSelectedRow() >= 0) {
-            Element current = getRowFormatter().getElement(this.selectedRow + 1); // raw table row index - including the header!...
-            UIObject.setStyleName(current, BASE_NAME + StyleSuffix.Row + "-" + DataTable.StyleDependent.selected.name(), true);
+        if (isMultiSelect()) {
+            if (selectedRows.contains(new Integer(selectedRow))) {
+                selectedRows.remove(new Integer(selectedRow));
+                markRow(selectedRow, false);
+            } else {
+                selectedRows.add(selectedRow);
+                markRow(selectedRow, true);
+            }
+        } else {
+            markRow(getSelectedRow(), false);
+            this.selectedRow = selectedRow;
+            markRow(getSelectedRow(), true);
         }
 
         // notify listeners:
@@ -404,6 +455,13 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             for (ItemSelectionHandler handler : itemSelectionHandlers) {
                 handler.onSelect(getSelectedRow());
             }
+        }
+    }
+
+    protected void markRow(int row, boolean selected) {
+        if (isMarkSelectedRow() && row >= 0) {
+            Element previous = getRowFormatter().getElement(row + 1); // raw table row index - including the header!...
+            UIObject.setStyleName(previous, BASE_NAME + StyleSuffix.Row + "-" + DataTable.StyleDependent.selected.name(), selected);
         }
     }
 

@@ -254,8 +254,24 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         }
     }
 
+    public boolean isMultiSelect() {
+        return listPanel.getDataTable().isMultiSelect();
+    }
+
+    public void setMultiSelect(boolean isMultiSelect) {
+        listPanel.getDataTable().setMultiSelect(isMultiSelect);
+    }
+
+    public void releaseSelection() {
+        listPanel.getDataTable().releaseSelection();
+    }
+
     public E getSelectedItem() {
         return listPanel.getDataTable().getSelectedItem();
+    }
+
+    public List<E> getSelectedItems() {
+        return listPanel.getDataTable().getSelectedItems();
     }
 
     public void setSelectedItem(E item) {
