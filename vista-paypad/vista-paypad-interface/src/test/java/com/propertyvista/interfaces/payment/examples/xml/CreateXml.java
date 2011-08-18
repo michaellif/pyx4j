@@ -42,7 +42,7 @@ public class CreateXml {
         System.out.println("\n\n-- Sale/Token transaction Response(s) --");
         ResponseMessageCreator.makeSaleTransactionResponse();
 
-        System.out.println("\n\n-- System Not Avalable --");
+        System.out.println("\n\n-- System Not Available --");
         ResponseMessageCreator.makeSystemDown();
 
         System.out.println("\n\n-- ResponseMessage Schema --");
