@@ -22,13 +22,17 @@ public class ProvinceReferenceAdapter implements ReferenceAdapter<Province> {
     @Override
     public EntityQueryCriteria<Province> getMergeCriteria(Province newEntity) {
         EntityQueryCriteria<Province> c = EntityQueryCriteria.create(Province.class);
-        c.add(PropertyCriterion.eq(c.proto().name(), newEntity.name().getValue()));
+        if (!newEntity.code().isNull()) {
+            c.add(PropertyCriterion.eq(c.proto().code(), newEntity.code().getValue()));
+        } else {
+            c.add(PropertyCriterion.eq(c.proto().name(), newEntity.name().getValue()));
+        }
         return c;
     }
 
     @Override
     public Province onEntityCreation(Province newEntity) {
-        throw new Error("Can't create new Province/State " + newEntity.name().getValue());
+        throw new Error("Can't create new Province/State " + ((newEntity.code().isNull()) ? newEntity.name().getValue() : newEntity.code().getValue()));
     }
 
 }

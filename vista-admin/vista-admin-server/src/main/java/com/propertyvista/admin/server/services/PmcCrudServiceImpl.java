@@ -37,8 +37,8 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
-import com.propertyvista.portal.server.preloader.PortalSitePreloader;
 import com.propertyvista.portal.server.preloader.UserPreloader;
+import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.domain.admin.Pmc;
 
 public class PmcCrudServiceImpl implements PmcCrudService {
@@ -84,10 +84,8 @@ public class PmcCrudServiceImpl implements PmcCrudService {
 
     private static void preloadPmc(PmcDTO pmc) {
         NamespaceManager.setNamespace(pmc.dnsName().getValue());
-        //TODO remove this if
-        if (!pmc.email().isNull()) {
-            UserPreloader.createUser(pmc.email().getValue(), pmc.password().getValue(), VistaBehavior.PROPERTY_MANAGER);
-        }
+
+        UserPreloader.createUser(pmc.email().getValue(), pmc.password().getValue(), VistaBehavior.PROPERTY_MANAGER);
 
         if (ApplicationMode.isDevelopment()) {
             PreloadConfig config = PreloadConfig.createDefault();
@@ -97,7 +95,7 @@ public class PmcCrudServiceImpl implements PmcCrudService {
             }
         }
 
-        log.info("Preload {}", new PortalSitePreloader().create());
+        log.info("Preload {}", VistaDataPreloaders.productionPmcPreloaders().create());
     }
 
     @Override

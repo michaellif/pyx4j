@@ -20,18 +20,28 @@ import com.propertyvista.domain.PreloadConfig;
 public class VistaDataPreloaders extends DataPreloaderCollection {
 
     public VistaDataPreloaders(PreloadConfig config) {
+        this(config, false);
+    }
 
+    private VistaDataPreloaders(PreloadConfig config, boolean production) {
         add(new LocationPreloader());
         add(new PmcPreloader());
-        add(new UserPreloader(config));
-        add(new CampaignPreloader(config));
-        add(new BuildingPreloader(config));
-        add(new PreloadTenants(config));
-        add(new PtPreloader(config));
+
+        if (!production) {
+            add(new UserPreloader(config));
+            add(new CampaignPreloader(config));
+            add(new BuildingPreloader(config));
+            add(new PreloadTenants(config));
+            add(new PtPreloader(config));
+            add(new DevelopmentSecurityPreloader());
+            add(new DashboardPreloader());
+            add(new ReportPreloader());
+        }
         add(new PortalSitePreloader());
-        add(new DevelopmentSecurityPreloader());
-        add(new DashboardPreloader());
-        add(new ReportPreloader());
+    }
+
+    public static VistaDataPreloaders productionPmcPreloaders() {
+        return new VistaDataPreloaders(null, true);
     }
 
 }
