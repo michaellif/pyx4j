@@ -21,7 +21,7 @@ import com.propertyvista.interfaces.importer.model.BuildingIO;
 public class BuildingConverter extends EntityDtoBinder<Building, BuildingIO> {
 
     public BuildingConverter() {
-        super(Building.class, BuildingIO.class);
+        super(Building.class, BuildingIO.class, false);
     }
 
     @Override

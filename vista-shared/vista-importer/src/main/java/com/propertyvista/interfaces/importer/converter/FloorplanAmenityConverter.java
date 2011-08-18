@@ -21,7 +21,7 @@ import com.propertyvista.interfaces.importer.model.AmenityIO;
 public class FloorplanAmenityConverter extends EntityDtoBinder<FloorplanAmenity, AmenityIO> {
 
     public FloorplanAmenityConverter() {
-        super(FloorplanAmenity.class, AmenityIO.class);
+        super(FloorplanAmenity.class, AmenityIO.class, false);
     }
 
     @Override

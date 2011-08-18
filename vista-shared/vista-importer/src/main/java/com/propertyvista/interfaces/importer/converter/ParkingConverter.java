@@ -21,7 +21,7 @@ import com.propertyvista.interfaces.importer.model.ParkingIO;
 public class ParkingConverter extends EntityDtoBinder<Parking, ParkingIO> {
 
     public ParkingConverter() {
-        super(Parking.class, ParkingIO.class);
+        super(Parking.class, ParkingIO.class, false);
     }
 
     @Override

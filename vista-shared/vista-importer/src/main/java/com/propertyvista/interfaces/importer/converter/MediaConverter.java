@@ -21,7 +21,7 @@ import com.propertyvista.interfaces.importer.model.MediaIO;
 public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
 
     public MediaConverter() {
-        super(Media.class, MediaIO.class);
+        super(Media.class, MediaIO.class, false);
     }
 
     @Override

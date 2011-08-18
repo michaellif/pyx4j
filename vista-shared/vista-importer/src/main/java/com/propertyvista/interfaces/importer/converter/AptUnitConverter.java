@@ -21,7 +21,7 @@ import com.propertyvista.interfaces.importer.model.AptUnitIO;
 public class AptUnitConverter extends EntityDtoBinder<AptUnit, AptUnitIO> {
 
     public AptUnitConverter() {
-        super(AptUnit.class, AptUnitIO.class);
+        super(AptUnit.class, AptUnitIO.class, false);
     }
 
     @SuppressWarnings("deprecation")

@@ -21,7 +21,7 @@ import com.propertyvista.interfaces.importer.model.AddressIO;
 public class AddressConverter extends EntityDtoBinder<Address, AddressIO> {
 
     public AddressConverter() {
-        super(Address.class, AddressIO.class);
+        super(Address.class, AddressIO.class, false);
     }
 
     @Override

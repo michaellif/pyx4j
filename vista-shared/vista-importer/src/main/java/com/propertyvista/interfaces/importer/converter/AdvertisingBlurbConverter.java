@@ -21,7 +21,7 @@ import com.propertyvista.interfaces.importer.model.AdvertisingBlurbIO;
 public class AdvertisingBlurbConverter extends EntityDtoBinder<AdvertisingBlurb, AdvertisingBlurbIO> {
 
     public AdvertisingBlurbConverter() {
-        super(AdvertisingBlurb.class, AdvertisingBlurbIO.class);
+        super(AdvertisingBlurb.class, AdvertisingBlurbIO.class, false);
     }
 
     @Override

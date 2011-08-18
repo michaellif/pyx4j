@@ -21,7 +21,7 @@ import com.propertyvista.interfaces.importer.model.FloorplanIO;
 public class FloorplanConverter extends EntityDtoBinder<Floorplan, FloorplanIO> {
 
     public FloorplanConverter() {
-        super(Floorplan.class, FloorplanIO.class);
+        super(Floorplan.class, FloorplanIO.class, false);
     }
 
     @Override
