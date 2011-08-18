@@ -15,7 +15,6 @@ package com.propertyvista.admin.client.themes;
 
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.site.client.ui.crud.ListerBase;
-import com.pyx4j.widgets.client.dashboard.CSSNames;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
@@ -27,16 +26,29 @@ import com.propertyvista.admin.client.ui.NavigViewImpl;
 import com.propertyvista.admin.client.ui.SearchBox;
 import com.propertyvista.admin.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.admin.client.ui.ShortCutsViewImpl;
+import com.propertyvista.admin.client.ui.components.AnchorButton;
+import com.propertyvista.admin.client.ui.decorations.AdminActionsBarDecorator;
 import com.propertyvista.admin.client.ui.decorations.AdminHeader1Decorator;
 import com.propertyvista.admin.client.ui.decorations.AdminHeader2Decorator;
 import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;
+import com.propertyvista.admin.client.ui.decorations.AdminScrollPanel;
 import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 
 public abstract class VistaAdminTheme extends VistaTheme {
 
+    public static double defaultHeaderHeight = 3;
+
+    public static double defaultFooterHeight = 3;
+
+    public static double defaultActionBarHeight = 2.9;
+
+    public static double defaultTabHeight = 2.6;
+
     public static enum StyleSuffixEx implements IStyleSuffix {
-        SaveButton, CancelButton, EditButton;
+        SaveButton, CancelButton, EditButton, ActionButton;
     }
 
     public VistaAdminTheme() {
@@ -56,7 +68,8 @@ public abstract class VistaAdminTheme extends VistaTheme {
         initSearchBoxStyles();
         initButtonStylesEx();
         initHeadersStyle();
-        initDashboardReport();
+        initVistaTabStyles();
+        initVistaDecoratorsPanelStyles();
         initListerStyles();
         initEntityDataTableStyles();
     }
@@ -302,6 +315,8 @@ public abstract class VistaAdminTheme extends VistaTheme {
     }
 
     protected void initButtonStylesEx() {
+        //
+        // Save Button: 
         String buttonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.SaveButton);
         Style style = new Style(buttonEx);
         style.addProperty("color", ThemeColor.OBJECT_TONE10);
@@ -309,7 +324,62 @@ public abstract class VistaAdminTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(buttonEx + ":hover");
+        style.addProperty("border", "1px solid #555");
+        addStyle(style);
+
+        //
+        // Edit Button: 
+        buttonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.EditButton);
+        style = new Style(buttonEx);
+        style.addProperty("color", ThemeColor.OBJECT_TONE10);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE85);
+        addStyle(style);
+
+        style = new Style(buttonEx + ":hover");
+        style.addProperty("border", "1px solid #555");
+        addStyle(style);
+
+        //
+        // Action Button: 
+        buttonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.ActionButton);
+        style = new Style(buttonEx);
+        style.addProperty("color", ThemeColor.OBJECT_TONE15);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
+        addStyle(style);
+
+        style = new Style(buttonEx + ":hover");
+        style.addProperty("border", "1px solid #555");
+        addStyle(style);
+
+        //
+        // default AnchorButton: 
+        buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX);
+        style = new Style(buttonEx);
+        style.addProperty("color", ThemeColor.OBJECT_TONE95);
+        style.addProperty("font-size", "1.1em");
+        style.addProperty("font-weight", "bolder");
+        addStyle(style);
+
+        style = new Style(buttonEx + ":hover");
+        style.addProperty("text-decoration", "underline");
+        addStyle(style);
+
+        //
+        // Edit AnchorButton: 
+        buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX, StyleSuffixEx.EditButton);
+        style = new Style(buttonEx);
+        style.addProperty("color", "white");
+        style.addProperty("font-size", "1.1em");
+        style.addProperty("font-weight", "bolder");
+        addStyle(style);
+
+        //
+        // Action AnchorButton: 
+        buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX, StyleSuffixEx.ActionButton);
+        style = new Style(buttonEx);
+        style.addProperty("color", ThemeColor.OBJECT_TONE85);
+        style.addProperty("font-size", "1.1em");
+        style.addProperty("font-weight", "bolder");
         addStyle(style);
     }
 
@@ -327,10 +397,22 @@ public abstract class VistaAdminTheme extends VistaTheme {
         style.addProperty("font-size", "1.3em");
         addStyle(style);
 
+        prefix = AdminActionsBarDecorator.DEFAULT_STYLE_PREFIX;
+        style = new Style(Selector.valueOf(prefix));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE40);
+        style.addProperty("color", ThemeColor.OBJECT_TONE90);
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, AdminActionsBarDecorator.StyleSuffix.Caption));
+        style.addProperty("padding", "0.3em 1em 0.4em 1em");
+        style.addProperty("font-size", "1.3em");
+        addStyle(style);
+
         prefix = AdminHeader1Decorator.DEFAULT_STYLE_PREFIX;
         style = new Style(Selector.valueOf(prefix));
         style.addProperty("color", "#5E5E5E");
-        style.addProperty("margin", "0.2em 0 1em 0");
+        style.addProperty("margin", "0.2em 0 0.5em 0");
         style.addProperty("width", "100%");
         style.addProperty("border-top", "1px dotted #727171");
         style.addProperty("clear", "both");
@@ -345,7 +427,7 @@ public abstract class VistaAdminTheme extends VistaTheme {
         prefix = AdminHeader2Decorator.DEFAULT_STYLE_PREFIX;
         style = new Style(Selector.valueOf(prefix));
         style.addProperty("color", "#5E5E5E");
-        style.addProperty("margin", "0.2em 0 1em 0");
+        style.addProperty("margin", "0.2em 0 0.5em 0");
         style.addProperty("width", "100%");
         style.addProperty("border-top", "1px dotted #D8D8D8");
         addStyle(style);
@@ -355,71 +437,46 @@ public abstract class VistaAdminTheme extends VistaTheme {
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bold");
         addStyle(style);
+
+        style = new Style(Selector.valueOf(VistaLineSeparator.DEFAULT_STYLE_PREFIX));
+        style.addProperty("border-top-width", "1px");
+        style.addProperty("border-top-style", "dotted");
+        style.addProperty("border-top-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("margin", "0.2em 0 0.5em 0");
+        style.addProperty("width", "100%");
+        addStyle(style);
     }
 
-    protected void initDashboardReport() {
-        String prefix = CSSNames.BASE_NAME;
+    protected void initVistaTabStyles() {
+        String prefix = VistaTabLayoutPanel.TAB_DIASBLED_STYLE;
 
         Style style = new Style(Selector.valueOf(prefix));
-//        style.addProperty("border", "1px solid #aaa");
+//        style.addProperty("background-color", ThemeColor.DISABLED_TEXT_BACKGROUND);
+        style.addProperty("color", ThemeColor.OBJECT_TONE55);
+        style.addProperty("cursor", "default");
+        addStyle(style);
+    }
+
+    protected void initVistaDecoratorsPanelStyles() {
+        String prefix = VistaDecoratorsFlowPanel.DEFAULT_STYLE_NAME;
+
+        Style style = new Style(Selector.valueOf(prefix));
+
+        /*
+         * anchors within the class:
+         */
+        style = new Style(Selector.valueOf(prefix + " a:link, a:visited, a:active"));
+        style.addProperty("text-decoration", "none");
+        style.addProperty("color", ThemeColor.OBJECT_TONE85);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Column));
+        style = new Style(Selector.valueOf(prefix + " a:hover"));
+        style.addProperty("text-decoration", "underline");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.ColumnSpacer));
-        style.addProperty("height", "4em");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Holder));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
-        style.addProperty("border", "1px solid #ccc");
-        style.addProperty("margin", "5px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Holder, CSSNames.StyleDependent.maximized));
-        style.addProperty("margin", "0");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderSetup));
-        style.addProperty("background-color", ThemeColor.MANDATORY_TEXT_BACKGROUND);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
-        style.addProperty("color", ThemeColor.OBJECT_TONE95);
-        style.addProperty("font", "caption");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("height", "20px");
-        style.addProperty("padding-left", "1em");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption) + ":hover");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderHeading));
-        style.addProperty("padding-top", "2px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderMenu));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
-        style.addProperty("border", "1px solid #aaa");
-        style.addProperty("font", "menu");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.DndPositioner));
-        style.addProperty("border", "1px dotted #555");
-        style.addProperty("margin", "5px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.DndReportPositioner));
-        style.addProperty("border", "1px dotted #555");
-        style.addProperty("margin", "5px");
-        addStyle(style);
-
-        // overriding gwt-dnd styles:
-        style = new Style(".dragdrop-handle");
-        style.addProperty("cursor", "pointer");
+        // internal scroll panel:
+        style = new Style(Selector.valueOf(AdminScrollPanel.DEFAULT_STYLE_PREFIX));
+        style.addProperty("padding", "1em");
         addStyle(style);
     }
 
@@ -427,18 +484,42 @@ public abstract class VistaAdminTheme extends VistaTheme {
         String prefix = ListerBase.DEFAULT_STYLE_PREFIX;
 
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("padding-top", "0.5em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.actionsPanel));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE40);
+        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        style.addProperty("height", defaultActionBarHeight + "em");
+//        style.addProperty("margin-top", "0.5em");
+//        style.addProperty("margin-bottom", "0.5em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.filtersPanel));
-        style.addProperty("padding-top", "0.5em");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE15);
+        style.addProperty("padding-top", "0.5em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.listPanel));
+        addStyle(style);
+
+        String buttonEx = Selector.valueOf("gwt-Button", ListerBase.StyleSuffix.newItemButton);
+        style = new Style(buttonEx);
+        style.addProperty("color", ThemeColor.OBJECT_TONE10);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE85);
+        addStyle(style);
+
+        style = new Style(buttonEx + ":hover");
+        style.addProperty("border", "1px solid #555");
+        addStyle(style);
+
+        buttonEx = Selector.valueOf("gwt-Button", ListerBase.StyleSuffix.actionButton);
+        style = new Style(buttonEx);
+        style.addProperty("color", ThemeColor.OBJECT_TONE15);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
+        addStyle(style);
+
+        style = new Style(buttonEx + ":hover");
+        style.addProperty("border", "1px solid #555");
         addStyle(style);
     }
 
@@ -446,12 +527,36 @@ public abstract class VistaAdminTheme extends VistaTheme {
         String prefix = DataTable.BASE_NAME;
 
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("margin", "2px 0 2px 0");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Header));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE35);
         style.addProperty("color", ThemeColor.OBJECT_TONE95);
+        style.addProperty("font-weight", "bold");
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE60);
+        style.addProperty("color", ThemeColor.OBJECT_TONE10);
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector) + " a:link, a:visited, a:active");
+        style.addProperty("color", ThemeColor.OBJECT_TONE10);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector) + ":hover");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
+        style.addProperty("color", ThemeColor.OBJECT_TONE10);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnMenu));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE10);
+        style.addProperty("color", ThemeColor.OBJECT_TONE90);
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.OBJECT_TONE90);
+        style.addProperty("padding", "5px 7px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row));

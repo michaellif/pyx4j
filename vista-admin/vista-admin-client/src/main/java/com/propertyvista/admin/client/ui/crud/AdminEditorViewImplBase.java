@@ -13,13 +13,12 @@
  */
 package com.propertyvista.admin.client.ui.crud;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -40,43 +39,90 @@ import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;
 
 public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
 
-    private static I18n i18n = I18nFactory.getI18n(AdminEditorViewImplBase.class);
-
     protected final AdminHeaderDecorator header;
 
-    protected final String defaultCaption;
+    protected String defaultCaption;
+
+    protected Button btnApply;
+
+    protected Button btnSave;
+
+    protected EditMode mode;
 
     public AdminEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
-        addNorth(header = new AdminHeaderDecorator(defaultCaption), 3);
-        addSouth(createButtons(), 4);
+
+        addNorth(header = new AdminHeaderDecorator(defaultCaption), VistaAdminTheme.defaultHeaderHeight);
+        addSouth(createButtons(), VistaAdminTheme.defaultFooterHeight);
+
+        header.setHeight("100%"); // fill all that defaultHeaderHeight!..
     }
 
     public AdminEditorViewImplBase(Class<? extends CrudAppPlace> placeClass, CrudEntityForm<E> form) {
-        defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
-        addNorth(header = new AdminHeaderDecorator(defaultCaption), 3);
-        addSouth(createButtons(), 4);
+        this(placeClass);
         form.initialize();
         setForm(form);
     }
 
     @Override
+    protected void setForm(CrudEntityForm<? extends E> form) {
+        super.setForm(form);
+
+        this.form.addValueChangeHandler(new ValueChangeHandler<E>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<E> event) {
+                enableButtons(true);
+            }
+        });
+    }
+
+    @Override
     public void populate(E value) {
-        super.populate(value);
+        enableButtons(false);
         header.setCaption(defaultCaption + " " + value.getStringView());
+        if (EditMode.newItem.equals(mode)) {
+            form.setActiveTab(0);
+        }
+
+        super.populate(value);
+    }
+
+    @Override
+    public void setEditMode(EditMode mode) {
+        this.mode = mode;
+    }
+
+    @Override
+    public void onSaveSuccess() {
+        enableButtons(false);
+    }
+
+    @Override
+    public void onApplySuccess() {
+        enableButtons(false);
     }
 
     private Widget createButtons() {
         HorizontalPanel buttons = new HorizontalPanel();
 
-        Button btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
+        btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 form.setVisited(true);
                 if (!form.isValid()) {
                     throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 }
+                presenter.apply();
+            }
+        });
 
+        btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                form.setVisited(true);
+                if (!form.isValid()) {
+                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                }
                 presenter.save();
             }
         });
@@ -88,16 +134,22 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
             }
         });
 
+        enableButtons(false);
+
+        btnApply.addStyleName(btnSave.getStylePrimaryName() + VistaAdminTheme.StyleSuffixEx.SaveButton);
+        btnApply.setWidth("7em");
+
         btnSave.addStyleName(btnSave.getStylePrimaryName() + VistaAdminTheme.StyleSuffixEx.SaveButton);
-
         btnSave.setWidth("7em");
-        btnCancel.setWidth("5em");
 
+        buttons.add(btnApply);
         buttons.add(btnSave);
         buttons.add(btnCancel);
+
+        buttons.setCellWidth(btnCancel, "60px");
         buttons.setCellHorizontalAlignment(btnCancel, HasHorizontalAlignment.ALIGN_CENTER);
         buttons.setCellVerticalAlignment(btnCancel, HasVerticalAlignment.ALIGN_MIDDLE);
-        buttons.setSpacing(10);
+        buttons.setSpacing(5);
 
         SimplePanel wrap = new SimplePanel();
         wrap.getElement().getStyle().setProperty("borderTop", "1px solid #bbb");
@@ -106,5 +158,13 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
         wrap.setWidget(buttons);
         wrap.setWidth("100%");
         return wrap;
+    }
+
+    protected void enableButtons(boolean enable) {
+//        
+// TODO Currently buttons are enabled always - more precise form dirty-state mechanics should be implemented!..
+//        
+//        btnApply.setEnabled(enable);
+//        btnSave.setEnabled(enable);
     }
 }

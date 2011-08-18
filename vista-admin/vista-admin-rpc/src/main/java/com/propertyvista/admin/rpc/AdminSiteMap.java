@@ -45,14 +45,6 @@ public class AdminSiteMap implements SiteMap {
 
     }
 
-    @NavigationItem(navigLabel = "Some Report")
-    public static class Report extends AppPlace {
-    }
-
-    @NavigationItem(navigLabel = "Default Dashboard")
-    public static class Dashboard extends AppPlace {
-    }
-
     @NavigationItem(navigLabel = "Alerts")
     public static class Alert extends AppPlace {
     }

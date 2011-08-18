@@ -13,21 +13,20 @@
  */
 package com.propertyvista.admin.client.ui.crud;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.ListerViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.admin.client.themes.VistaAdminTheme;
 import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;
 
 public class AdminListerViewImplBase<E extends IEntity> extends ListerViewImplBase<E> {
 
-    private static I18n i18n = I18nFactory.getI18n(AdminListerViewImplBase.class);
+    protected final AdminHeaderDecorator header;
 
     public AdminListerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        super(new AdminHeaderDecorator(AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption()), 3);
+        addNorth(header = new AdminHeaderDecorator(AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption()), VistaAdminTheme.defaultHeaderHeight);
+        header.setHeight("100%"); // fill all that defaultHeaderHeight!..
     }
 }

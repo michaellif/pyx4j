@@ -46,7 +46,7 @@ public class AdminSite extends VistaSite {
 
         DefaultErrorHandlerDialog.register();
 
-        getHistoryHandler().register(getPlaceController(), getEventBus(), new AdminSiteMap.Dashboard());
+        getHistoryHandler().register(getPlaceController(), getEventBus(), new AdminSiteMap.Properties());
 
         RootPanel.get().add(RootLayoutPanel.get());
 
@@ -77,7 +77,7 @@ public class AdminSite extends VistaSite {
     private void init() {
         if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
             if (AdminSiteMap.Login.class.equals(AppSite.getPlaceController().getWhere().getClass())) {
-                AppSite.getPlaceController().goTo(new AdminSiteMap.Dashboard());
+                AppSite.getPlaceController().goTo(new AdminSiteMap.Properties());
             } else {
                 AdminSite.getHistoryHandler().handleCurrentHistory();
             }

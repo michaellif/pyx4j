@@ -26,5 +26,4 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         grant(new IServiceExecutePermission(AuthenticationService.class));
         grant(VistaBehavior.ADMIN, new IServiceExecutePermission(PmcCrudService.class));
     }
-
 }

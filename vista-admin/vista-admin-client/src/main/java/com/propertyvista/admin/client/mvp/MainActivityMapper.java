@@ -24,9 +24,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.activity.AccountActivity;
 import com.propertyvista.admin.client.activity.AlertActivity;
-import com.propertyvista.admin.client.activity.DashboardActivity;
 import com.propertyvista.admin.client.activity.MessageActivity;
-import com.propertyvista.admin.client.activity.ReportActivity;
 import com.propertyvista.admin.client.activity.SettingsActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcEditorActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcListerActivity;
@@ -59,10 +57,6 @@ public class MainActivityMapper implements AppActivityMapper {
                     }
 
                     // - Other:
-                } else if (place instanceof AdminSiteMap.Dashboard) {
-                    activity = new DashboardActivity(place);
-                } else if (place instanceof AdminSiteMap.Report) {
-                    activity = new ReportActivity(place);
                 } else if (place instanceof AdminSiteMap.Account) {
                     activity = new AccountActivity(place);
                 } else if (place instanceof AdminSiteMap.Alert) {

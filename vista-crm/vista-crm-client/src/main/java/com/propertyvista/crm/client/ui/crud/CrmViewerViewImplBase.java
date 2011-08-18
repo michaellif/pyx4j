@@ -80,7 +80,6 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     protected void addActionButton(Widget action) {
         actionsPanel.insert(action, 1);
         actionsPanel.setCellWidth(action, "1%");
-//        action.getElement().getStyle().setMarginRight(5, Unit.PX);
     }
 
     protected CrmEntityForm<E> getForm() {
