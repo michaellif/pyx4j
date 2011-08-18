@@ -25,6 +25,6 @@ public interface AptUnitIO extends IEntity {
 
     IPrimitive<Double> unitRent();
 
-    IPrimitive<LogicalDate> avalableForRent();
+    IPrimitive<LogicalDate> availableForRent();
 
 }

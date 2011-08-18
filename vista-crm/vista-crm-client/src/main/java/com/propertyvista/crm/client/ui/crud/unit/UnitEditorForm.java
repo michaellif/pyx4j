@@ -79,7 +79,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
     @Override
     public void addValidations() {
-        new FutureDateValidation(get(proto().avalableForRent()));
+        new FutureDateValidation(get(proto().availableForRent()));
     }
 
     private Widget createGeneralTab() {
@@ -92,7 +92,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         split.getLeftPanel().add(inject(proto().info().economicStatus()), 15);
         split.getLeftPanel().add(inject(proto().info().economicStatusDescription()), 15);
         split.getLeftPanel().add(inject(proto().floorplan()), 15);
-        split.getLeftPanel().add(inject(proto().avalableForRent()), 8.2);
+        split.getLeftPanel().add(inject(proto().availableForRent()), 8.2);
 
         split.getRightPanel().add(inject(proto().info().floor()), 5);
         split.getRightPanel().add(inject(proto().info().number()), 5);

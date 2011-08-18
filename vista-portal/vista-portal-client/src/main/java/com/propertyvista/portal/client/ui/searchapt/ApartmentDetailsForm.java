@@ -158,7 +158,7 @@ public class ApartmentDetailsForm extends CEntityForm<PropertyDetailsDTO> implem
         //from date
         Label item = new Label(i18n.tr("Starting from"));
         content.add(item);
-        item = new Label(value.avalableForRent().getStringView());
+        item = new Label(value.availableForRent().getStringView());
         item.getElement().getStyle().setMarginBottom(5d, Unit.PX);
         content.add(item);
         card.setMinorContent(content);

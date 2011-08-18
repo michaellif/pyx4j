@@ -13,12 +13,29 @@
  */
 package com.propertyvista.interfaces.importer;
 
+import java.util.List;
+import java.util.Vector;
+
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.FloorplanAmenity;
+import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.interfaces.importer.converter.AptUnitConverter;
+import com.propertyvista.interfaces.importer.converter.BuildingAmenityConverter;
 import com.propertyvista.interfaces.importer.converter.BuildingConverter;
+import com.propertyvista.interfaces.importer.converter.FloorplanAmenityConverter;
+import com.propertyvista.interfaces.importer.converter.FloorplanConverter;
+import com.propertyvista.interfaces.importer.converter.ParkingConverter;
+import com.propertyvista.interfaces.importer.model.AmenityIO;
+import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
+import com.propertyvista.interfaces.importer.model.FloorplanIO;
+import com.propertyvista.interfaces.importer.model.ParkingIO;
 
 public class BuildingImporter {
 
@@ -31,5 +48,59 @@ public class BuildingImporter {
         // Save building
         Building building = new BuildingConverter().createDBO(buildingIO);
         PersistenceServicesFactory.getPersistenceService().persist(building);
+
+        //BuildingAmenity
+        {
+            List<BuildingAmenity> items = new Vector<BuildingAmenity>();
+            for (AmenityIO iIO : buildingIO.amenities()) {
+                BuildingAmenity i = new BuildingAmenityConverter().createDBO(iIO);
+                i.belongsTo().set(building);
+                items.add(i);
+            }
+            PersistenceServicesFactory.getPersistenceService().persist(items);
+        }
+
+        //Parking
+        {
+            List<Parking> items = new Vector<Parking>();
+            for (ParkingIO iIO : buildingIO.parkings()) {
+                Parking i = new ParkingConverter().createDBO(iIO);
+                i.belongsTo().set(building);
+                items.add(i);
+            }
+            PersistenceServicesFactory.getPersistenceService().persist(items);
+        }
+
+        //Floorplan
+        {
+            for (FloorplanIO floorplanIO : buildingIO.floorplans()) {
+                Floorplan floorplan = new FloorplanConverter().createDBO(floorplanIO);
+                floorplan.building().set(building);
+                PersistenceServicesFactory.getPersistenceService().persist(floorplan);
+
+                //FloorplanAmenity
+                {
+                    List<FloorplanAmenity> items = new Vector<FloorplanAmenity>();
+                    for (AmenityIO iIO : buildingIO.amenities()) {
+                        FloorplanAmenity i = new FloorplanAmenityConverter().createDBO(iIO);
+                        i.belongsTo().set(floorplan);
+                        items.add(i);
+                    }
+                    PersistenceServicesFactory.getPersistenceService().persist(items);
+                }
+
+                {
+                    List<AptUnit> items = new Vector<AptUnit>();
+                    for (AptUnitIO iIO : floorplanIO.units()) {
+                        AptUnit i = new AptUnitConverter().createDBO(iIO);
+                        i.belongsTo().set(building);
+                        i.floorplan().set(floorplan);
+                        items.add(i);
+                    }
+                    PersistenceServicesFactory.getPersistenceService().persist(items);
+                }
+
+            }
+        }
     }
 }

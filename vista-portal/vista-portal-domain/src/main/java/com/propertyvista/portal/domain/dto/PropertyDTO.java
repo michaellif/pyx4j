@@ -54,6 +54,6 @@ public interface PropertyDTO extends IEntity {
      * Set on front-end by calling service that gets PropertyAvailabilityDTO
      */
     @RpcTransient
-    IPrimitive<LogicalDate> avalableForRent();
+    IPrimitive<LogicalDate> availableForRent();
 
 }

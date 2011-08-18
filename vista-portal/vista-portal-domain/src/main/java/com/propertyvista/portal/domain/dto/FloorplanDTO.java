@@ -34,7 +34,7 @@ public interface FloorplanDTO extends IEntity {
 
     RangeGroup marketRent();
 
-    IPrimitive<LogicalDate> avalableForRent();
+    IPrimitive<LogicalDate> availableForRent();
 
     @Caption(name = "Description")
     IPrimitive<String> description();

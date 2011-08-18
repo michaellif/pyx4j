@@ -95,7 +95,7 @@ public class Converter {
 // TODO calculate somehow (!?) from current Unit data those values:          
         to.requiredDeposit().setValue(-77.0);
 
-        to.avalableForRent().set(from.avalableForRent());
+        to.availableForRent().set(from.availableForRent());
 
         return to;
     }

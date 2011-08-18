@@ -142,7 +142,7 @@ public class Mapper {
         occupancy.status().setValue(AptUnitOccupancy.Status.available);
         occupancy.dateFrom().setValue(new LogicalDate(availableUnit.getAvailable().getTime()));
         unit.occupancies().add(occupancy);
-        unit.avalableForRent().setValue(occupancy.dateFrom().getValue()); // for consistency
+        unit.availableForRent().setValue(occupancy.dateFrom().getValue()); // for consistency
 
         unit.belongsTo().set(building);
         unit.info().type().setValue(mapUnitType(availableUnit.getType()));

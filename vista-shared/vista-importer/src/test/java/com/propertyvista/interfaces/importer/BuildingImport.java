@@ -46,8 +46,8 @@ public class BuildingImport {
 
         String fileName;
 
-        fileName = "all-buildings-example.xml";
-        //fileName = "buildings.xml";
+        //fileName = "all-buildings-example.xml";
+        fileName = "buildings.xml";
 
         XMLEntityParser parser = new XMLEntityParser(new ImportXMLEntityFactory());
 

@@ -177,7 +177,7 @@ public class PropertyMarker extends Marker {
             //from date
             item = new Label(i18n.tr("Starting from"));
             left.add(item);
-            item = new Label(property.avalableForRent().getStringView());
+            item = new Label(property.availableForRent().getStringView());
             item.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardLeftItem);
             left.add(item);
 

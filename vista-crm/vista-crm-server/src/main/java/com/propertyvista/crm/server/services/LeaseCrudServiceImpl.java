@@ -161,7 +161,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             m.setHtmlBody(MessageTemplates.createMasterApplicationInvitationEmail(user.name().getValue(), token));
 
             if (MailDeliveryStatus.Success != Mail.send(m)) {
-                throw new UserRuntimeException(i18n.tr("Mail Service is temporary unavalable, try again later"));
+                throw new UserRuntimeException(i18n.tr("Mail Service is temporary unavailable, try again later"));
             }
         }
 

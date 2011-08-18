@@ -255,7 +255,7 @@ public class SummaryViewForm extends CEntityForm<Summary> {
             addCell(tableLayout, content, "Beds", inject(proto().selectedUnit().bedrooms()).asWidget());
             addCell(tableLayout, content, "Baths", inject(proto().selectedUnit().bathrooms()).asWidget());
             addCell(tableLayout, content, "Sq F", inject(proto().selectedUnit().area()).asWidget());
-            addCell(tableLayout, content, "Available", inject(proto().selectedUnit().avalableForRent()).asWidget());
+            addCell(tableLayout, content, "Available", inject(proto().selectedUnit().availableForRent()).asWidget());
         }
 
         private void addCell(Map<String, String> tableLayout, FlowPanel content, String cellName, Widget cellContent) {

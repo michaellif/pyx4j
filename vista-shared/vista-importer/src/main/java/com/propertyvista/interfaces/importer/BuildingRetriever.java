@@ -83,7 +83,7 @@ public class BuildingRetriever {
                 }
             }
 
-            // Count Units and get stats
+            // Count Units
             {
                 EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));

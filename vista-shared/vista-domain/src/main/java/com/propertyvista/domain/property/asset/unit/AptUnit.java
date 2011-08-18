@@ -50,7 +50,7 @@ public interface AptUnit extends BuildingElement {
     @Indexed
     @Format("MM/dd/yyyy")
     @Caption(name = "Availability")
-    IPrimitive<LogicalDate> avalableForRent();
+    IPrimitive<LogicalDate> availableForRent();
 
     @ToString
     @EmbeddedEntity

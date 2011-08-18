@@ -485,21 +485,21 @@ public class BuildingsGenerator {
             unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
 
-        Calendar avalable = new GregorianCalendar();
+        Calendar available = new GregorianCalendar();
         // TODO Dima, We need to Use fixed date for values used in tests, and
         // current time for Ctrl+Q user :)
-        avalable.setTime(new Date());
-        avalable.add(Calendar.DATE, 5 + RandomUtil.randomInt(30));
-        DateUtils.dayStart(avalable);
+        available.setTime(new Date());
+        available.add(Calendar.DATE, 5 + RandomUtil.randomInt(30));
+        DateUtils.dayStart(available);
 
         // TODO populate currentOccupancies and then set avalableForRent using
         // some ServerSideDomainUtils
-        unit.avalableForRent().setValue(new LogicalDate(avalable.getTime().getTime()));
+        unit.availableForRent().setValue(new LogicalDate(available.getTime().getTime()));
 
         AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
         occupancy.status().setValue(AptUnitOccupancy.Status.available);
-        occupancy.dateFrom().setValue(new LogicalDate(avalable.getTime().getTime()));
-        occupancy.dateTo().setValue(new LogicalDate(avalable.getTime().getTime() + RandomUtil.randomInt()));
+        occupancy.dateFrom().setValue(new LogicalDate(available.getTime().getTime()));
+        occupancy.dateTo().setValue(new LogicalDate(available.getTime().getTime() + RandomUtil.randomInt()));
         occupancy.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
         unit.occupancies().add(occupancy);
 

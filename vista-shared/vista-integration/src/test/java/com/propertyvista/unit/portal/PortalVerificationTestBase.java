@@ -62,7 +62,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertValueOnForm(formDebugId, aUnit.bedrooms());
         assertValueOnForm(formDebugId, aUnit.bathrooms());
         assertValueOnForm(formDebugId, aUnit.area());
-        assertValueOnForm(formDebugId, aUnit.avalableForRent());
+        assertValueOnForm(formDebugId, aUnit.availableForRent());
     }
 
     protected void verifyTenantsPage(List<TenantSummaryGDO> tenantsSummaryList, boolean doSave) {

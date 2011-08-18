@@ -86,7 +86,7 @@ public interface AptUnitDTO extends IEntity {
 //
     @Format("MM/dd/yyyy")
     @Caption(name = "Available")
-    IPrimitive<LogicalDate> avalableForRent();
+    IPrimitive<LogicalDate> availableForRent();
 
     @Detached
     LeaseTerms newLeaseTerms();
