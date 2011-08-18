@@ -40,6 +40,8 @@ public class BuildingRetriever {
 
     public BuildingIO getModel(Building building) {
 
+        String imagesBaseFolder = "data/export/images/";
+
         BuildingIO buildingIO = new BuildingConverter().createDTO(building);
 
         //Get Amenity
@@ -61,7 +63,7 @@ public class BuildingRetriever {
 
         PersistenceServicesFactory.getPersistenceService().retrieve(building.media());
         for (Media media : building.media()) {
-            buildingIO.medias().add(new MediaConverter().createDTO(media));
+            buildingIO.medias().add(new MediaConverter(imagesBaseFolder).createDTO(media));
         }
 
         //TODO
@@ -94,7 +96,7 @@ public class BuildingRetriever {
 
             PersistenceServicesFactory.getPersistenceService().retrieve(floorplan.media());
             for (Media media : floorplan.media()) {
-                floorplanIO.medias().add(new MediaConverter().createDTO(media));
+                floorplanIO.medias().add(new MediaConverter(imagesBaseFolder).createDTO(media));
             }
 
         }

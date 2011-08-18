@@ -13,10 +13,14 @@
  */
 package com.propertyvista.server.common.blob;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FileUtils;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -48,7 +52,20 @@ public class BlobService {
         FileBlob blob = PersistenceServicesFactory.getPersistenceService().retrieve(FileBlob.class, key);
         if (blob != null) {
             response.setContentLength(blob.content().getValue().length);
-            ServletOutputStream out = response.getOutputStream();
+            OutputStream out = response.getOutputStream();
+            try {
+                out.write(blob.content().getValue());
+            } finally {
+                IOUtils.closeQuietly(out);
+            }
+        }
+    }
+
+    public static void save(Key key, File destination) throws IOException {
+        FileBlob blob = PersistenceServicesFactory.getPersistenceService().retrieve(FileBlob.class, key);
+        if (blob != null) {
+            FileUtils.forceMkdir(destination.getParentFile());
+            OutputStream out = new FileOutputStream(destination);
             try {
                 out.write(blob.content().getValue());
             } finally {

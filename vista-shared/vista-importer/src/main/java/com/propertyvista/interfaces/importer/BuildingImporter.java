@@ -30,11 +30,13 @@ import com.propertyvista.interfaces.importer.converter.BuildingAmenityConverter;
 import com.propertyvista.interfaces.importer.converter.BuildingConverter;
 import com.propertyvista.interfaces.importer.converter.FloorplanAmenityConverter;
 import com.propertyvista.interfaces.importer.converter.FloorplanConverter;
+import com.propertyvista.interfaces.importer.converter.MediaConverter;
 import com.propertyvista.interfaces.importer.converter.ParkingConverter;
 import com.propertyvista.interfaces.importer.model.AmenityIO;
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
+import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.interfaces.importer.model.ParkingIO;
 
 public class BuildingImporter {
@@ -44,6 +46,8 @@ public class BuildingImporter {
         if (buildingIO.type().isNull()) {
             buildingIO.type().setValue(BuildingInfo.Type.residential);
         }
+
+        String imagesBaseFolder = "data/export/images/";
 
         // Save building
         Building building = new BuildingConverter().createDBO(buildingIO);
@@ -71,6 +75,14 @@ public class BuildingImporter {
             PersistenceServicesFactory.getPersistenceService().persist(items);
         }
 
+        // Media
+        {
+            for (MediaIO iIO : buildingIO.medias()) {
+                building.media().add(new MediaConverter(imagesBaseFolder).createDBO(iIO));
+            }
+            PersistenceServicesFactory.getPersistenceService().persist(building.media());
+        }
+
         //Floorplan
         {
             for (FloorplanIO floorplanIO : buildingIO.floorplans()) {
@@ -89,6 +101,7 @@ public class BuildingImporter {
                     PersistenceServicesFactory.getPersistenceService().persist(items);
                 }
 
+                //Units
                 {
                     List<AptUnit> items = new Vector<AptUnit>();
                     for (AptUnitIO iIO : floorplanIO.units()) {
@@ -100,6 +113,13 @@ public class BuildingImporter {
                     PersistenceServicesFactory.getPersistenceService().persist(items);
                 }
 
+                // Media
+                {
+                    for (MediaIO iIO : floorplanIO.medias()) {
+                        floorplan.media().add(new MediaConverter(imagesBaseFolder).createDBO(iIO));
+                    }
+                    PersistenceServicesFactory.getPersistenceService().persist(floorplan.media());
+                }
             }
         }
     }

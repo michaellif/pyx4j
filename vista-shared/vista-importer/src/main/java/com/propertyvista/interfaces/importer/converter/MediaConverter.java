@@ -13,15 +13,31 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.commons.io.FilenameUtils;
+
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.essentials.server.download.MimeMap;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.interfaces.importer.model.MediaIO;
+import com.propertyvista.portal.rpc.portal.ImageConsts;
+import com.propertyvista.server.common.blob.BlobService;
+import com.propertyvista.server.common.blob.ThumbnailService;
 
 public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
 
-    public MediaConverter() {
+    private final String baseFolder;
+
+    public MediaConverter(String baseFolder) {
         super(Media.class, MediaIO.class, false);
+        this.baseFolder = baseFolder;
     }
 
     @Override
@@ -34,18 +50,65 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
         super.copyDBOtoDTO(dbo, dto);
         switch (dbo.type().getValue()) {
         case file:
-            dto.uri().setValue("images/" + dbo.file().blobKey().getStringView() + ".png");
+            dto.uri().setValue(baseFolder + dbo.file().blobKey().getStringView() + "-" + dbo.file().filename().getStringView());
             dto.mediaType().setValue(MediaIO.MediaType.file);
+            try {
+                BlobService.save(dbo.file().blobKey().getValue(), new File(dto.uri().getValue()));
+            } catch (IOException e) {
+                throw new Error(e);
+            }
             break;
-        default:
-            throw new Error("TODO");
+        case externalUrl:
+            dto.mediaType().setValue(MediaIO.MediaType.externalUrl);
+            dto.uri().setValue(dbo.url().getValue());
+            break;
+        case youTube:
+            dto.mediaType().setValue(MediaIO.MediaType.youTube);
+            dto.uri().setValue(dbo.youTubeVideoID().getValue());
+            break;
         }
     }
 
     @Override
     public void copyDTOtoDBO(MediaIO dto, Media dbo) {
         super.copyDTOtoDBO(dto, dbo);
-        //TODO
+        switch (dto.mediaType().getValue()) {
+        case file:
+            dbo.type().setValue(Media.Type.file);
+            File file = new File(new File(baseFolder), dto.uri().getValue());
+            dbo.file().filename().setValue(file.getName());
+            dbo.file().contentMimeType().setValue(MimeMap.getContentType(FilenameUtils.getExtension(file.getName())));
+            byte raw[] = getBinary(file);
+            dbo.file().fileSize().setValue(raw.length);
+
+            dbo.file().blobKey().setValue(BlobService.persist(raw, dbo.file().filename().getValue(), dbo.file().contentMimeType().getValue()));
+            ThumbnailService.persist(dbo.file().blobKey().getValue(), raw, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
+
+            break;
+        case externalUrl:
+            dbo.type().setValue(Media.Type.externalUrl);
+            dbo.url().setValue(dto.uri().getValue());
+            break;
+        case youTube:
+            dbo.type().setValue(Media.Type.youTube);
+            dbo.youTubeVideoID().setValue(dto.uri().getValue());
+            break;
+        }
+    }
+
+    private byte[] getBinary(File file) {
+        ByteArrayOutputStream b = new ByteArrayOutputStream();
+        InputStream in = null;
+        try {
+            in = new FileInputStream(file);
+            IOUtils.copyStream(in, b, 1024);
+            return b.toByteArray();
+        } catch (IOException e) {
+            throw new Error(e);
+        } finally {
+            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(b);
+        }
     }
 
 }
