@@ -45,6 +45,8 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
 
     protected final DTO dtoProto;
 
+    private final boolean copyPrimaryKey;
+
     private final List<Binding> binding = new Vector<Binding>();
 
     private static class Binding {
@@ -65,8 +67,16 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
     }
 
     protected EntityDtoBinder(Class<DBO> dboClass, Class<DTO> dtoClass) {
+        this(dboClass, dtoClass, true);
+    }
+
+    /**
+     * Allow to skip automatic copy of PK, Used to allow duplicated in XML
+     */
+    protected EntityDtoBinder(Class<DBO> dboClass, Class<DTO> dtoClass, boolean copyPrimaryKey) {
         this.dboClass = dboClass;
         this.dtoClass = dtoClass;
+        this.copyPrimaryKey = copyPrimaryKey;
 
         dboProto = EntityFactory.getEntityPrototype(dboClass);
         dtoProto = EntityFactory.getEntityPrototype(dtoClass);
@@ -104,7 +114,9 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
 
     public DTO createDTO(DBO dbo) {
         DTO dto = EntityFactory.create(dtoClass);
-        dto.setPrimaryKey(dbo.getPrimaryKey());
+        if (copyPrimaryKey) {
+            dto.setPrimaryKey(dbo.getPrimaryKey());
+        }
         copyDBOtoDTO(dbo, dto);
         return dto;
     }
@@ -129,7 +141,9 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
 
     public DBO createDBO(DTO dto) {
         DBO dbo = EntityFactory.create(dboClass);
-        dbo.setPrimaryKey(dto.getPrimaryKey());
+        if (copyPrimaryKey) {
+            dbo.setPrimaryKey(dto.getPrimaryKey());
+        }
         copyDTOtoDBO(dto, dbo);
         return dbo;
     }
