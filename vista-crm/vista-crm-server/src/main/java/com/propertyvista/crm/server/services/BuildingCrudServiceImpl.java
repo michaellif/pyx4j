@@ -56,7 +56,7 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
             }
         } else {
             // just clear unnecessary data before serialisation: 
-            in.marketing().description().set(null);
+            in.marketing().description().setValue(null);
         }
     }
 }

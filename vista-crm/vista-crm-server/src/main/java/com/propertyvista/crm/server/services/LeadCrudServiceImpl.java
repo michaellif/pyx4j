@@ -38,7 +38,7 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
     protected void enhanceRetrieve(Lead entity, boolean fromList) {
         if (fromList) {
             // just clear unnecessary data before serialisation: 
-            entity.comments().set(null);
+            entity.comments().setValue(null);
         }
     }
 

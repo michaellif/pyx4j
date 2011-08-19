@@ -38,8 +38,8 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
             PersistenceServicesFactory.getPersistenceService().retrieve(in.marketing().adBlurbs());
         } else {
             // just clear unnecessary data before serialisation: 
-            in.marketing().description().set(null);
-            in.info().economicStatusDescription().set(null);
+            in.marketing().description().setValue(null);
+            in.info().economicStatusDescription().setValue(null);
         }
     }
 }
