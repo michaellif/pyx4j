@@ -47,5 +47,6 @@ public interface Floorplan extends IEntity {
     IPrimitive<Double> bathrooms();
 
     @Detached
+    // should be loaded in service when necessary!..
     IList<Media> media();
 }

@@ -41,6 +41,7 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
             PersistenceServicesFactory.getPersistenceService().retrieve(in.includedUtilities());
             PersistenceServicesFactory.getPersistenceService().retrieve(in.contacts().phones());
             PersistenceServicesFactory.getPersistenceService().retrieve(in.contacts().contacts());
+            PersistenceServicesFactory.getPersistenceService().retrieve(in.marketing().adBlurbs());
 
             EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
             amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), in));
