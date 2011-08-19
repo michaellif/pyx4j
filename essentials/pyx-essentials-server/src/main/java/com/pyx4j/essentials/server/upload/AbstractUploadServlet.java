@@ -61,6 +61,10 @@ public abstract class AbstractUploadServlet extends HttpServlet {
      */
     protected int slowUploadSeconds = 0;
 
+    protected <T extends UploadReciver & UploadService> void bind(Class<T> serviceImpClass, String string) {
+
+    }
+
     /**
      * @return Maximum size of a single uploaded file.
      */

@@ -29,7 +29,7 @@ import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.essentials.server.deferred.DeferredProcessServicesImpl;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public class UploadServiceImpl implements UploadService {
+public abstract class UploadServiceImpl implements UploadService, UploadReciver {
 
     protected void onpPepareUpload(IEntity data, UploadId id) {
 
