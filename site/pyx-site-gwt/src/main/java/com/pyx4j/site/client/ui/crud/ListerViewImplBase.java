@@ -93,6 +93,12 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     }
 
     @Override
+    public int getPageNumber() {
+        assert (lister != null);
+        return lister.getPageNumber();
+    }
+
+    @Override
     public void populate(List<E> entityes, int pageNumber, boolean hasMoreData) {
         assert (lister != null);
         lister.populate(entityes, pageNumber, hasMoreData);

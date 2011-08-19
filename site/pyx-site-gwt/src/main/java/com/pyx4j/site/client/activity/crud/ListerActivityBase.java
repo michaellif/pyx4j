@@ -105,13 +105,13 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
         service.list(new AsyncCallback<EntitySearchResult<E>>() {
             @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
+            public void onSuccess(EntitySearchResult<E> result) {
+                view.populate(result.getData(), pageNumber, result.hasMoreData());
             }
 
             @Override
-            public void onSuccess(EntitySearchResult<E> result) {
-                view.populate(result.getData(), pageNumber, result.hasMoreData());
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
             }
         }, criteria);
     }
@@ -135,6 +135,21 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         CrudAppPlace place = AppSite.getHistoryMapper().createPlace(openPlaceClass);
         place.formNewItemPlace(parentID != null ? parentID : this.parentID);
         AppSite.getPlaceController().goTo(place);
+    }
+
+    @Override
+    public void delete(Key itemID) {
+        service.delete(new AsyncCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                populate(view.getPageNumber());
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+        }, itemID);
     }
 
     protected EntityListCriteria<E> constructSearchCriteria() {

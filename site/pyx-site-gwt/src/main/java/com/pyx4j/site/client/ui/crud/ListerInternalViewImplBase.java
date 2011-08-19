@@ -79,6 +79,12 @@ public class ListerInternalViewImplBase<E extends IEntity> extends ScrollPanel i
     }
 
     @Override
+    public int getPageNumber() {
+        assert (lister != null);
+        return lister.getPageNumber();
+    }
+
+    @Override
     public void populate(List<E> entityes, int pageNumber, boolean hasMoreData) {
         assert (lister != null);
         lister.populate(entityes, pageNumber, hasMoreData);

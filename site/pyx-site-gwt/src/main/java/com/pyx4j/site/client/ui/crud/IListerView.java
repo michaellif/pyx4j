@@ -44,6 +44,8 @@ public interface IListerView<E extends IEntity> extends IView<E> {
         void edit(Class<? extends CrudAppPlace> openPlaceClass, Key itemID);
 
         void editNew(Class<? extends CrudAppPlace> openPlaceClass, Key parentID);
+
+        void delete(Key itemID);
     }
 
     void setPresenter(Presenter presenter);
@@ -53,6 +55,8 @@ public interface IListerView<E extends IEntity> extends IView<E> {
     ListerBase<E> getLister();
 
     int getPageSize();
+
+    int getPageNumber();
 
     void populate(List<E> entityes, int pageNumber, boolean hasMoreData);
 
