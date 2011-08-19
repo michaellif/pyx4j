@@ -13,15 +13,15 @@
  */
 package com.propertyvista.portal.rpc.ptapp.dto;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 
 /**
  * For primary - Unit for lease info + price + term
  * For secondary/guarantor - Unit for lease info + price + term + all tenants + split info, add-ons
  * 
- * @author michaellif
- * 
  */
+@Transient
 public interface UnitInfoDTO extends IEntity {
 
 }

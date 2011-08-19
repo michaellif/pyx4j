@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.VehicleChargeRule;
 
+@Transient
 public interface VehiclesDTO extends IEntity {
 
     @Owned

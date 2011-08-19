@@ -14,11 +14,13 @@
 package com.propertyvista.portal.domain.ptapp.dto;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.dto.VehiclesDTO;
 
+@Transient
 public interface AddOnsDTO extends IEntity {
 
     @Caption(name = "Pets")

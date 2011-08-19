@@ -13,7 +13,9 @@
  */
 package com.propertyvista.server.tests;
 
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import junit.framework.Assert;
 
@@ -32,6 +34,9 @@ public class VistaDBResetTest extends VistaDBTestBase {
     public void testObjectsStructure() {
         List<String> allClasses = EntityClassFinder.findEntityClasses();
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) PersistenceServicesFactory.getPersistenceService();
+
+        Map<String, Class<? extends IEntity>> allTables = new Hashtable<String, Class<? extends IEntity>>();
+
         for (String className : allClasses) {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
@@ -39,11 +44,19 @@ public class VistaDBResetTest extends VistaDBTestBase {
                 continue;
             }
             if (className.endsWith("DTO")) {
+                System.err.println("DTO Object " + className + "  should be @Transient");
                 Assert.fail("DTO Object " + className + "  should be @Transient");
             }
+
+            if (allTables.containsKey(meta.getPersistenceName())) {
+                System.err.println("IEntity " + className + " has the same table name as " + allTables.get(meta.getPersistenceName()));
+                Assert.fail("IEntity " + className + " has the same table name as " + allTables.get(meta.getPersistenceName()));
+            }
+
             if (srv.isTableExists(meta.getEntityClass())) {
                 srv.dropTable(meta.getEntityClass());
             }
+            allTables.put(meta.getPersistenceName(), entityClass);
         }
     }
 }

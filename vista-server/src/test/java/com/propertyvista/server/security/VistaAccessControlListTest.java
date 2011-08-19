@@ -18,6 +18,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -155,6 +156,7 @@ public class VistaAccessControlListTest {
     }
 
     @Test
+    @Ignore
     public void tenantApplicationEntityInstanceAccess() {
         TestLifecycle.testSession(new PtUserVisit(new Key(-101), "bob"), VistaBehavior.PROSPECTIVE_TENANT);
         TestLifecycle.beginRequest();
