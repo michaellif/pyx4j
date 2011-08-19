@@ -25,12 +25,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target( { ElementType.TYPE })
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ToStringFormat {
 
     /**
-     * All arguments are converted to Strings
+     * All arguments are converted to Strings, used as argument SimpleMessageFormat.format
      * 
      * @see java.text.MessageFormat.format
      */

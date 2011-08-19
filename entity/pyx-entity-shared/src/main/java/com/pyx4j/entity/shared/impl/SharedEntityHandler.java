@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.shared.impl;
 
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -36,6 +35,7 @@ import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.commons.IdentityHashSet;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LoopCounter;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -470,7 +470,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             for (String memberName : sm) {
                 values.add(getMemberStringView(memberName, true));
             }
-            return MessageFormat.format(format, values.toArray());
+            return SimpleMessageFormat.format(format, values.toArray());
         } else {
             switch (sm.size()) {
             case 0:

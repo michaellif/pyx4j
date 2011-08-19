@@ -180,7 +180,7 @@ public class TimeUtils {
      * Date formatter base on java.text.SimpleDateFormat for non time critical functions
      */
     public static String simpleFormat(Date date, String pattern) {
-        return SimpleDateFormatImpl.format(date, pattern);
+        return SimpleDateFormatImpl.format(pattern, date);
     }
 
     /**

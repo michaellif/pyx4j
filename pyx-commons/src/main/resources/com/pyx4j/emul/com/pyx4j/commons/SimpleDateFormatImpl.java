@@ -27,8 +27,45 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 //TODO AsyncEntry
 public class SimpleDateFormatImpl {
 
-    public static String format(Date date, String pattern) {
-        return DateTimeFormat.getFormat(pattern).format(date);
+    public static String format(String pattern, Date date) {
+        DateTimeFormat fmt;
+        if (pattern == null) {
+            fmt = DateTimeFormat.getMediumDateFormat();
+            //fmt = DateTimeFormat.getFormat("d-MMM-yyyy");
+        } else if (pattern.equals("short")) {
+            fmt = DateTimeFormat.getShortDateFormat();
+            //03/01/70
+            //fmt = DateTimeFormat.getFormat("dd/MM/yy");
+        } else if (pattern.equals("medium")) {
+            fmt = DateTimeFormat.getMediumDateFormat();
+            //3-Jan-1970
+            //fmt = DateTimeFormat.getFormat("d-MMM-yyyy");
+        } else if (pattern.equals("long")) {
+            fmt = DateTimeFormat.getLongDateFormat();
+        } else if (pattern.equals("full")) {
+            fmt = DateTimeFormat.getFullDateFormat();
+        } else {
+            fmt = DateTimeFormat.getFormat(pattern);
+        }
+        return fmt.format(date);
+    }
+    
+    public static String formatTime(String pattern, Date date) {
+        DateTimeFormat fmt;
+        if (pattern == null) {
+            fmt = DateTimeFormat.getMediumTimeFormat();
+        } else if (pattern.equals("short")) {
+            fmt = DateTimeFormat.getShortTimeFormat();
+        } else if (pattern.equals("medium")) {
+            fmt = DateTimeFormat.getMediumTimeFormat();
+        } else if (pattern.equals("long")) {
+            fmt = DateTimeFormat.getLongTimeFormat();
+        } else if (pattern.equals("full")) {
+            fmt = DateTimeFormat.getFullTimeFormat();
+        } else {
+            fmt = DateTimeFormat.getFormat(pattern);
+        }
+        return fmt.format(date);
     }
 
     public static Date parse(String text, String pattern) throws IllegalArgumentException {

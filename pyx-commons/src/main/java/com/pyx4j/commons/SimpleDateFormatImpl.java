@@ -20,6 +20,7 @@
  */
 package com.pyx4j.commons;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,8 +30,40 @@ import java.util.Date;
  */
 class SimpleDateFormatImpl {
 
-    public static String format(Date date, String pattern) {
-        return new SimpleDateFormat(pattern).format(date);
+    public static String format(String pattern, Date date) {
+        DateFormat fmt;
+        if (pattern == null) {
+            fmt = DateFormat.getDateInstance(DateFormat.DEFAULT);
+        } else if (pattern.equals("short")) {
+            fmt = DateFormat.getDateInstance(DateFormat.SHORT);
+        } else if (pattern.equals("medium")) {
+            fmt = DateFormat.getDateInstance(DateFormat.DEFAULT);
+        } else if (pattern.equals("long")) {
+            fmt = DateFormat.getDateInstance(DateFormat.LONG);
+        } else if (pattern.equals("full")) {
+            fmt = DateFormat.getDateInstance(DateFormat.FULL);
+        } else {
+            fmt = new SimpleDateFormat(pattern);
+        }
+        return fmt.format(date);
+    }
+
+    public static String formatTime(String pattern, Date date) {
+        DateFormat fmt;
+        if (pattern == null) {
+            fmt = DateFormat.getTimeInstance(DateFormat.DEFAULT);
+        } else if (pattern.equals("short")) {
+            fmt = DateFormat.getTimeInstance(DateFormat.SHORT);
+        } else if (pattern.equals("medium")) {
+            fmt = DateFormat.getTimeInstance(DateFormat.DEFAULT);
+        } else if (pattern.equals("long")) {
+            fmt = DateFormat.getTimeInstance(DateFormat.LONG);
+        } else if (pattern.equals("full")) {
+            fmt = DateFormat.getTimeInstance(DateFormat.FULL);
+        } else {
+            fmt = new SimpleDateFormat(pattern);
+        }
+        return fmt.format(date);
     }
 
     public static Date parse(String text, String pattern) throws IllegalArgumentException {

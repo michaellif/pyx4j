@@ -32,12 +32,8 @@ import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.entity.test.shared.domain.Address;
-import com.pyx4j.entity.test.shared.domain.City;
-import com.pyx4j.entity.test.shared.domain.Country;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
-import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.AddressExt;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
@@ -59,48 +55,6 @@ public class EntityMetaTest extends InitializerTestCase {
         MemberMeta setMemberMeta = emp.tasks().getMeta();
         assertEquals("ISet Meta valueClass", Task.class, setMemberMeta.getValueClass());
         assertEquals("ISet Meta valueClass", ObjectClassType.EntitySet, setMemberMeta.getObjectClassType());
-    }
-
-    public void testStringView() {
-        City city = EntityFactory.create(City.class);
-        String cityName = "Toronto";
-        city.name().setValue(cityName);
-        assertEquals("City StringView", cityName, city.getStringView());
-
-        Task task = EntityFactory.create(Task.class);
-        task.description().setValue("Something");
-        task.status().setValue(Status.DEACTIVATED);
-        assertEquals("Task StringView", "Something Deactivated", task.getStringView());
-
-        // ---
-
-        Address address = EntityFactory.create(Address.class);
-        String streetName = "1 Bloor St.";
-        address.streetName().setValue(streetName);
-
-        Country country = EntityFactory.create(Country.class);
-        String countryName = "Canada";
-        country.name().setValue(countryName);
-        address.country().set(country);
-        address.city().set(city);
-
-        assertEquals("Address StringView", "1 Bloor St. " + cityName + " " + countryName, address.getStringView());
-    }
-
-    public void testCollectionStringView() {
-        Employee emp = EntityFactory.create(Employee.class);
-
-        Task task1 = EntityFactory.create(Task.class);
-        task1.description().setValue("Something1");
-
-        emp.tasks().add(task1);
-        assertTrue("ISet StringView", emp.tasks().getStringView().contains("Something1"));
-
-        Task task2 = EntityFactory.create(Task.class);
-        task2.description().setValue("nothing2");
-
-        emp.tasksSorted().add(task2);
-        assertTrue("IList StringView", emp.tasksSorted().getStringView().contains("nothing2"));
     }
 
     @Transient

@@ -20,7 +20,7 @@
  */
 package com.pyx4j.i18n.client;
 
-import java.text.MessageFormat;
+import com.pyx4j.commons.SimpleMessageFormat;
 
 /**
  * Port of gettext-commons to GWT.
@@ -45,7 +45,7 @@ public class I18nImpl {
     }
 
     public String tr(String text, Object... objects) {
-        return MessageFormat.format(tr(text), objects);
+        return SimpleMessageFormat.format(tr(text), objects);
     }
 
     //    public String trn(String text, String pluralText, long n) {

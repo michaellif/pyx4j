@@ -25,12 +25,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target( { ElementType.METHOD })
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Format {
 
     /**
-     * If messageFormat set to 'true' then value use as argument MessageFormat.format.
+     * If messageFormat set to 'true' then value use as argument SimpleMessageFormat.format.
      * 
      * @see java.text.MessageFormat.format
      */

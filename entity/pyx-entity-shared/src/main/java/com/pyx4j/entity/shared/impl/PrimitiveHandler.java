@@ -20,12 +20,12 @@
  */
 package com.pyx4j.entity.shared.impl;
 
-import java.text.MessageFormat;
 import java.util.Date;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.CompareHelper;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -179,12 +179,12 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
             return String.valueOf(thisValue);
         }
         if (mm.useMessageFormat()) {
-            return MessageFormat.format(format, thisValue);
+            return SimpleMessageFormat.format(format, thisValue);
         } else {
             if (thisValue instanceof Date) {
-                return MessageFormat.format("{0,date," + format + "}", thisValue);
+                return SimpleMessageFormat.format("{0,date," + format + "}", thisValue);
             } else if (thisValue instanceof Number) {
-                return MessageFormat.format("{0,number," + format + "}", thisValue);
+                return SimpleMessageFormat.format("{0,number," + format + "}", thisValue);
             } else {
                 return String.valueOf(thisValue);
             }

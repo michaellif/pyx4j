@@ -18,28 +18,29 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.gwt.test.commons;
+package com.pyx4j.test.commons;
 
-import java.text.MessageFormat;
 import java.util.Date;
 
 import junit.framework.TestCase;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.SimpleMessageFormat;
 
-//import com.pyx4j.gwt.emul.java.text.MessageFormat;
-
-public class MessageFormatTest extends TestCase {
+public class SimpleMessageFormatTest extends TestCase {
 
     private void assertMessageFormat(String expected, String pattern, Object... arguments) {
-        String result = MessageFormat.format(pattern, arguments);
+        String result = SimpleMessageFormat.format(pattern, arguments);
         assertEquals(pattern, expected, result);
     }
 
     public void testReplacements() {
         assertMessageFormat("A, B, C", "{0}, {1}, {2}", "A", "B", "C");
         assertMessageFormat("A, B, A", "{0}, {1}, {0}", "A", "B", "C");
-        assertMessageFormat("A, null, C", "{0}, {1}, {2}", "A", null, "C");
+
+        //Java default MessageFormat
+        //assertMessageFormat("A, null, C", "{0}, {1}, {2}", "A", null, "C");
+        assertMessageFormat("A, , C", "{0}, {1}, {2}", "A", null, "C");
 
         assertMessageFormat("{0}", "'{0}'", "A");
         assertMessageFormat("\"A\"", "\"{0}\"", "A");
@@ -71,7 +72,11 @@ public class MessageFormatTest extends TestCase {
         assertMessageFormat("2,000", "{0,number}", 2000);
         assertMessageFormat("2,000", "{0,number,integer}", 2000);
         assertMessageFormat("2000", "{0,number,#}", 2000);
-        assertMessageFormat("null", "{0,number,#}", (Object) null);
+
+        //Java default MessageFormat
+        //assertMessageFormat("null", "{0,number,#}", (Object) null);
+        assertMessageFormat("", "{0,number,#}", (Object) null);
+
         assertMessageFormat("2000.21", "{0,number,#.##}", 2000.21);
     }
 
@@ -100,22 +105,41 @@ public class MessageFormatTest extends TestCase {
         assertMessageFormat("is more than 3", pattern, 3.1);
     }
 
+    public void testChoiceFormatNulls() {
+        assertMessageFormat("Nil", "{0,choice,null#Nil|0#Zero|1#One}", (Object) null);
+    }
+
+    public void testDateFormat() {
+        @SuppressWarnings("deprecation")
+        int offset = (new Date(0)).getTimezoneOffset();
+        Date date = new Date(Consts.MIN2MSEC * (offset + (((3 - 1) * Consts.DAY2HOURS + 4) * Consts.HOURS2MIN) + 10));
+        assertMessageFormat("January 1970", "{0,date,MMMM yyyy}", date);
+        assertMessageFormat("Saturday, January 3, 1970", "{0,date,full}", date);
+    }
+
     /**
      * This can't be tested in generic way. Since we don't want to define java.util.Locale
      * in this implementation.
      */
-    public void Off_testDateFormat() {
+    public void Off_testDateFormatLocale() {
+        @SuppressWarnings("deprecation")
         int offset = (new Date(0)).getTimezoneOffset();
         Date date = new Date(Consts.MIN2MSEC * (offset + (((3 - 1) * Consts.DAY2HOURS + 4) * Consts.HOURS2MIN) + 10));
         assertMessageFormat("3-Jan-1970", "{0,date}", date);
         assertMessageFormat("03/01/70", "{0,date,short}", date);
         assertMessageFormat("3-Jan-1970", "{0,date,medium}", date);
         assertMessageFormat("January 3, 1970", "{0,date,long}", date);
-        assertMessageFormat("January 1970", "{0,date,MMMM yyyy}", date);
-        assertMessageFormat("Saturday, January 3, 1970", "{0,date,full}", date);
     }
 
-    public void Off_testTimeFormat() {
+    public void testTimeFormat() {
+        @SuppressWarnings("deprecation")
+        int offset = (new Date(0)).getTimezoneOffset();
+        Date date = new Date(Consts.MIN2MSEC * (offset + (((3 - 1) * Consts.DAY2HOURS + 4) * Consts.HOURS2MIN) + 10));
+        assertMessageFormat("4:10:00", "{0,time,H:mm:ss}", date);
+    }
+
+    public void Off_testTimeFormatLocale() {
+        @SuppressWarnings("deprecation")
         int offset = (new Date(0)).getTimezoneOffset();
         Date date = new Date(Consts.MIN2MSEC * (offset + (((3 - 1) * Consts.DAY2HOURS + 4) * Consts.HOURS2MIN) + 10));
         assertMessageFormat("4:10:00 AM", "{0,time}", date);

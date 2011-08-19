@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.shared.impl;
 
-import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -31,6 +30,7 @@ import java.util.Set;
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.ConverterUtils.ToStringConverter;
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -244,11 +244,11 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
             if (value == null) {
                 return memberMeta.getNullString();
             } else if (memberMeta.useMessageFormat()) {
-                return MessageFormat.format(memberMeta.getFormat(), value);
+                return SimpleMessageFormat.format(memberMeta.getFormat(), value);
             } else if (value instanceof Date) {
-                return MessageFormat.format("{0,date," + memberMeta.getFormat() + "}", value);
+                return SimpleMessageFormat.format("{0,date," + memberMeta.getFormat() + "}", value);
             } else if (value instanceof Number) {
-                return MessageFormat.format("{0,number," + memberMeta.getFormat() + "}", value);
+                return SimpleMessageFormat.format("{0,number," + memberMeta.getFormat() + "}", value);
             } else {
                 return String.valueOf(value);
             }
