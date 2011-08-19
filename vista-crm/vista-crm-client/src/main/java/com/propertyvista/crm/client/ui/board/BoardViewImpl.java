@@ -108,6 +108,7 @@ public abstract class BoardViewImpl extends DockLayoutPanel implements BoardView
 
         add(scroll);
 
+        header.setHeight("100%"); // fill all that defaultHeaderHeight!..
         setSize("100%", "100%");
     }
 

@@ -290,7 +290,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
         private List<Feature> selectedFeatures;
 
         public SelectFeatureBox() {
-            super("Select Feature");
+            super("Select Features");
             ((ServiceEditorView) getParentView()).getFeatureListerView().getLister().releaseSelection();
         }
 
@@ -336,7 +336,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
         private List<Concession> selectedConcessions;
 
         public SelectConcessionBox() {
-            super("Select Concession");
+            super("Select Concessions");
             ((ServiceEditorView) getParentView()).getConcessionListerView().getLister().releaseSelection();
         }
 

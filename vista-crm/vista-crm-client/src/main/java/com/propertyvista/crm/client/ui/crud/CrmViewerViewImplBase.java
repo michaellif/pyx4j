@@ -38,6 +38,8 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     protected final HorizontalPanel actionsPanel;
 
+    protected final Widget actionsWidget;
+
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
 
@@ -48,7 +50,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         actionsPanel.setSpacing(4);
 
         addNorth(header = new CrmHeaderDecorator(defaultCaption), VistaCrmTheme.defaultHeaderHeight);
-        addNorth(new CrmActionsBarDecorator(null, fillActionsPanel()), VistaCrmTheme.defaultActionBarHeight);
+        addNorth(actionsWidget = new CrmActionsBarDecorator(null, fillActionsPanel()), VistaCrmTheme.defaultActionBarHeight);
 
         header.setHeight("100%"); // fill all that defaultHeaderHeight!..
     }

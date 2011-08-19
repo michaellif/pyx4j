@@ -16,10 +16,16 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
-import com.propertyvista.crm.client.ui.crud.settings.ContentEditor;
-import com.propertyvista.crm.client.ui.crud.settings.ContentEditorImpl;
-import com.propertyvista.crm.client.ui.crud.settings.ContentViewer;
-import com.propertyvista.crm.client.ui.crud.settings.ContentViewerImpl;
+import com.propertyvista.crm.client.ui.crud.settings.content.ContentEditor;
+import com.propertyvista.crm.client.ui.crud.settings.content.ContentEditorImpl;
+import com.propertyvista.crm.client.ui.crud.settings.content.ContentViewer;
+import com.propertyvista.crm.client.ui.crud.settings.content.ContentViewerImpl;
+import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceDictionaryView;
+import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceDictionaryViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeEditorView;
+import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeViewerView;
+import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeViewerViewImpl;
 
 public class SettingsViewFactory extends ViewFactoryBase {
 
@@ -29,6 +35,14 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new ContentViewerImpl());
             } else if (ContentEditor.class.equals(type)) {
                 map.put(type, new ContentEditorImpl());
+
+            } else if (ServiceDictionaryView.class.equals(type)) {
+                map.put(type, new ServiceDictionaryViewImpl());
+
+            } else if (ServiceTypeViewerView.class.equals(type)) {
+                map.put(type, new ServiceTypeViewerViewImpl());
+            } else if (ServiceTypeEditorView.class.equals(type)) {
+                map.put(type, new ServiceTypeEditorViewImpl());
             }
         }
         return map.get(type);

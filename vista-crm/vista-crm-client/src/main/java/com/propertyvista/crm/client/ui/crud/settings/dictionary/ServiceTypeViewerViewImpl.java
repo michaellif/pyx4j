@@ -7,19 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 9, 2011
- * @author vadims
+ * Created on 2011-05-24
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings;
+package com.propertyvista.crm.client.ui.crud.settings.dictionary;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 
-public class ContentViewerImpl extends CrmViewerViewImplBase<PageDescriptor> implements ContentViewer {
-    public ContentViewerImpl() {
-        super(CrmSiteMap.Settings.Content.class, new ContentEditorForm(new CrmViewersComponentFactory()));
+public class ServiceTypeViewerViewImpl extends CrmViewerViewImplBase<ServiceItemType> implements ServiceTypeViewerView {
+
+    public ServiceTypeViewerViewImpl() {
+        super(CrmSiteMap.Settings.ServiceItemType.class, new ServiceTypeEditorForm(new CrmViewersComponentFactory()));
     }
 }

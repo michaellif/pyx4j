@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings;
+package com.propertyvista.crm.client.ui.crud.settings.content;
 
 import java.util.ArrayList;
 
@@ -39,7 +39,7 @@ import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.settings.ContentEditor.Presenter;
+import com.propertyvista.crm.client.ui.crud.settings.content.ContentEditor.Presenter;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.rpc.CrmSiteMap;

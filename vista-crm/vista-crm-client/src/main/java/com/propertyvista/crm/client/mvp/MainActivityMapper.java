@@ -56,6 +56,11 @@ import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActiv
 import com.propertyvista.crm.client.activity.crud.settings.ContentActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ContentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ContentViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.FeatureItemTypeEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.FeatureItemTypeViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.ServiceDictionaryViewActivity;
+import com.propertyvista.crm.client.activity.crud.settings.ServiceItemTypeEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.ServiceItemTypeViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.InquiryEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.InquiryListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.InquiryViewerActivity;
@@ -401,6 +406,26 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new ContentViewerActivity(place);
                             break;
                         }
+                    }
+                } else if (place instanceof CrmSiteMap.Settings.ServiceDictionary) {
+                    activity = new ServiceDictionaryViewActivity(place);
+                } else if (place instanceof CrmSiteMap.Settings.ServiceItemType) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new ServiceItemTypeEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new ServiceItemTypeViewerActivity(place);
+                        break;
+                    }
+                } else if (place instanceof CrmSiteMap.Settings.FeatureItemType) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new FeatureItemTypeEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new FeatureItemTypeViewerActivity(place);
+                        break;
                     }
                 }
 

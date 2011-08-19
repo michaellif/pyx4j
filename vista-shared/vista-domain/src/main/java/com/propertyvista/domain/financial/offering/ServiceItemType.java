@@ -13,11 +13,30 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
 public interface ServiceItemType extends IEntity {
+
+    @Translatable
+    public enum Type {
+
+        service, feature;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    @NotNull
+    @MemberColumn(name = "itemType")
+    IPrimitive<Type> type();
 
     @ToString
     IPrimitive<String> name();

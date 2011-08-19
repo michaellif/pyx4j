@@ -11,7 +11,7 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings;
+package com.propertyvista.crm.client.ui.crud.settings.content;
 
 import com.pyx4j.site.client.ui.crud.IViewerView;
 

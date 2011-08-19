@@ -266,6 +266,21 @@ public class CrmSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Content")
         public static class Content extends CrudAppPlace {
         }
+
+        @PlaceProperties(caption = "Service Dictionary")
+        @NavigationItem(navigLabel = "Service Dictionary")
+        public static class ServiceDictionary extends CrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Service Item Type")
+        @NavigationItem(navigLabel = "Service Item Type")
+        public static class ServiceItemType extends CrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Feature Item Type")
+        @NavigationItem(navigLabel = "Featrue Item Type")
+        public static class FeatureItemType extends CrudAppPlace {
+        }
     }
 
     @NavigationItem(navigLabel = "Alerts")

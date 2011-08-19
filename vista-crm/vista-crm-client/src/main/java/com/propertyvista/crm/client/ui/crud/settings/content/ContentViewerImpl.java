@@ -11,15 +11,15 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings;
+package com.propertyvista.crm.client.ui.crud.settings.content;
 
-import com.pyx4j.site.client.ui.crud.IEditorView;
-
+import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.site.PageDescriptor;
 
-public interface ContentEditor extends IEditorView<PageDescriptor> {
-
-    interface Presenter extends IEditorView.Presenter {
-        void deleteChildPage(PageDescriptor page);
+public class ContentViewerImpl extends CrmViewerViewImplBase<PageDescriptor> implements ContentViewer {
+    public ContentViewerImpl() {
+        super(CrmSiteMap.Settings.Content.class, new ContentEditorForm(new CrmViewersComponentFactory()));
     }
 }

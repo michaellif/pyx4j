@@ -16,20 +16,25 @@ package com.propertyvista.crm.client.activity.crud.settings;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.settings.content.ContentViewer;
+import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
-import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.crm.rpc.services.ServiceItemTypeCrudService;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 
-public class ContentViewerActivity extends ViewerActivityBase<PageDescriptor> {
+public class ServiceItemTypeEditorActivity extends EditorActivityBase<ServiceItemType> {
 
     @SuppressWarnings("unchecked")
-    public ContentViewerActivity(Place place) {
-        super((ContentViewer) SettingsViewFactory.instance(ContentViewer.class), (AbstractCrudService<PageDescriptor>) GWT
-                .create(PageDescriptorCrudService.class));
+    public ServiceItemTypeEditorActivity(Place place) {
+        super((ServiceTypeEditorView) SettingsViewFactory.instance(ServiceTypeEditorView.class), (AbstractCrudService<ServiceItemType>) GWT
+                .create(ServiceItemTypeCrudService.class), ServiceItemType.class);
         withPlace(place);
+    }
+
+    @Override
+    protected void initNewItem(ServiceItemType entity) {
+        entity.type().setValue(ServiceItemType.Type.service);
     }
 }

@@ -216,6 +216,7 @@ public class PmcGenerator {
     private ServiceItemType createChargeItemType(String name, Service.Type serviceType) {
         ServiceItemType type = EntityFactory.create(ServiceItemType.class);
         type.name().setValue(name);
+        type.type().setValue(ServiceItemType.Type.service);
         type.serviceType().setValue(serviceType);
         return type;
     }
@@ -223,6 +224,7 @@ public class PmcGenerator {
     private ServiceItemType createChargeItemType(String name, Feature.Type featureType) {
         ServiceItemType type = EntityFactory.create(ServiceItemType.class);
         type.name().setValue(name);
+        type.type().setValue(ServiceItemType.Type.feature);
         type.featureType().setValue(featureType);
         return type;
     }
