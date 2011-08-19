@@ -74,7 +74,7 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel implements 
 
         LayoutPanel center = (LayoutPanel) getCenter();
         center.clear(); // remove current form...
-        center.add(this.form = (CrudEntityForm<E>) form);
+        center.add((this.form = (CrudEntityForm<E>) form).asWidget());
         setSize("100%", "100%");
     }
 
