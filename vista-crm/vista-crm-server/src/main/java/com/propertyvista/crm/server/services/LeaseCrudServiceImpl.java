@@ -69,6 +69,12 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
             dto.tenants().clear();
             dto.tenants().addAll(PersistenceServicesFactory.getPersistenceService().query(criteria));
+
+            // load detached entities:
+            PersistenceServicesFactory.getPersistenceService().retrieve(in.unit());
+            PersistenceServicesFactory.getPersistenceService().retrieve(in.vehicles());
+            PersistenceServicesFactory.getPersistenceService().retrieve(in.pets());
+            PersistenceServicesFactory.getPersistenceService().retrieve(in.documents());
         }
     }
 

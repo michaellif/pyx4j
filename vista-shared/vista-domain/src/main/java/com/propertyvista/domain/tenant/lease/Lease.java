@@ -15,6 +15,7 @@ package com.propertyvista.domain.tenant.lease;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
@@ -70,6 +71,8 @@ public interface Lease extends IEntity {
     @MemberColumn(name = "leaseType")
     IPrimitive<Service.Type> type();
 
+    @Detached
+    // should be loaded in service when necessary!..
     @Caption(name = "Selected Unit")
     AptUnit unit();
 
@@ -82,8 +85,12 @@ public interface Lease extends IEntity {
      */
     IList<TenantInLease> tenants();
 
+    @Detached
+    // should be loaded in service when necessary!..
     IList<Vehicle> vehicles();
 
+    @Detached
+    // should be loaded in service when necessary!..
     IList<Pet> pets();
 
     // Dates:
@@ -106,6 +113,7 @@ public interface Lease extends IEntity {
     @EmbeddedEntity
     ServiceAgreement serviceAgreement();
 
+    @Detached
+    // should be loaded in service when necessary!..
     IList<Document> documents();
-
 }
