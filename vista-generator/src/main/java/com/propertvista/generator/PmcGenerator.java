@@ -110,7 +110,7 @@ public class PmcGenerator {
 
         item.type().setValue(type);
         item.name().setValue(RandomUtil.randomLetters(6));
-        item.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
+        item.description().setValue("Service description here...");
 
         item.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
@@ -146,7 +146,7 @@ public class PmcGenerator {
 
         item.type().setValue(type);
         item.name().setValue(RandomUtil.randomLetters(6));
-        item.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
+        item.description().setValue("Feature description here...");
 
         item.priceType().setValue(RandomUtil.randomEnum(Feature.PriceType.class));
         item.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
@@ -208,7 +208,7 @@ public class PmcGenerator {
         concession.effectiveDate().setValue(DataGenerator.randomDate(2));
         concession.expirationDate().setValue(DataGenerator.randomDate(4));
 
-        concession.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
+        concession.description().setValue("Concession description here...");
 
         return concession;
     }

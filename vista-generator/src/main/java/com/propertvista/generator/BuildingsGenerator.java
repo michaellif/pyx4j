@@ -184,15 +184,15 @@ public class BuildingsGenerator {
             item.make().setValue("Bosh");
             item.model().setValue("Elevator" + RandomUtil.randomInt(100));
             item.build().setValue(RandomUtil.randomLogicalDate());
-            item.description().setValue(RandomUtil.randomLetters(35).toLowerCase());
+            item.description().setValue("Elevator description here...");
             item.notes().setValue(CommonsGenerator.lipsum());
 
             item.licence().number().setValue(String.valueOf(RandomUtil.randomInt(8)));
             item.licence().expiration().setValue(RandomUtil.randomLogicalDate());
             item.licence().renewal().setValue(RandomUtil.randomLogicalDate());
 
-            item.warranty().set(CompanyVendor.createnWarranty());
-            item.maintenance().set(CompanyVendor.createnMaintenance());
+            item.warranty().set(CompanyVendor.createWarranty());
+            item.maintenance().set(CompanyVendor.createMaintenance());
 
             item.isForMoveInOut().setValue(RandomUtil.randomBoolean());
 
@@ -211,15 +211,15 @@ public class BuildingsGenerator {
             item.make().setValue("Electra");
             item.model().setValue("Boiler" + RandomUtil.randomInt(100));
             item.build().setValue(RandomUtil.randomLogicalDate());
-            item.description().setValue(RandomUtil.randomLetters(35).toLowerCase());
+            item.description().setValue("Boiler description here...");
             item.notes().setValue(CommonsGenerator.lipsum());
 
             item.licence().number().setValue(String.valueOf(RandomUtil.randomInt(8)));
             item.licence().expiration().setValue(RandomUtil.randomLogicalDate());
             item.licence().renewal().setValue(RandomUtil.randomLogicalDate());
 
-            item.warranty().set(CompanyVendor.createnWarranty());
-            item.maintenance().set(CompanyVendor.createnMaintenance());
+            item.warranty().set(CompanyVendor.createWarranty());
+            item.maintenance().set(CompanyVendor.createMaintenance());
 
             items.add(item);
         }
@@ -246,8 +246,8 @@ public class BuildingsGenerator {
             item.year().setValue(RandomUtil.randomLogicalDate());
             item.notes().setValue(CommonsGenerator.lipsum());
 
-            item.warranty().set(CompanyVendor.createnWarranty());
-            item.maintenance().set(CompanyVendor.createnMaintenance());
+            item.warranty().set(CompanyVendor.createWarranty());
+            item.maintenance().set(CompanyVendor.createMaintenance());
 
             items.add(item);
         }
@@ -369,7 +369,7 @@ public class BuildingsGenerator {
         amenity.type().setValue(RandomUtil.randomEnum(BuildingAmenity.Type.class));
 
         amenity.name().setValue(RandomUtil.randomLetters(6));
-        amenity.description().setValue(RandomUtil.randomLetters(20).toLowerCase());
+        amenity.description().setValue("Amenity description here...");
 
         return amenity;
     }
@@ -415,7 +415,7 @@ public class BuildingsGenerator {
         amenity.type().setValue(RandomUtil.random(FloorplanAmenity.Type.values()));
 
         amenity.name().setValue(RandomUtil.randomLetters(6));
-        amenity.description().setValue(RandomUtil.randomLetters(35).toLowerCase());
+        amenity.description().setValue("Amenity description here...");
 
         return amenity;
     }
@@ -519,7 +519,7 @@ public class BuildingsGenerator {
         AptUnitItem item = EntityFactory.create(AptUnitItem.class);
 
         item.type().setValue(type);
-        item.description().setValue(RandomUtil.randomLetters(35).toLowerCase());
+        item.description().setValue("UnitItem description here...");
         item.conditionNotes().setValue(CommonsGenerator.lipsum());
 
         item.flooringType().setValue(RandomUtil.random(AptUnitItem.FlooringType.values()));

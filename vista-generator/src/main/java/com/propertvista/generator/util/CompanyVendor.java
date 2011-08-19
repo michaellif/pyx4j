@@ -61,22 +61,22 @@ public class CompanyVendor {
         return company;
     }
 
-    public static Warranty createnWarranty() {
+    public static Warranty createWarranty() {
         Warranty item = EntityFactory.create(Warranty.class);
         item.set(createContract());
 
         item.type().setValue(RandomUtil.randomEnum(Warranty.Type.class));
-        item.title().setValue(RandomUtil.randomLetters(8));
+        item.title().setValue("Warranty title here...");
 
         for (int j = 0; j < 1; j++) {
             WarrantyItem e = EntityFactory.create(WarrantyItem.class);
-            e.name().setValue(RandomUtil.randomLetters(15).toLowerCase());
+            e.name().setValue("Warranty Item name #" + j);
             item.items().add(e);
         }
         return item;
     }
 
-    public static Maintenance createnMaintenance() {
+    public static Maintenance createMaintenance() {
         Maintenance item = EntityFactory.create(Maintenance.class);
         item.set(createContract());
 
