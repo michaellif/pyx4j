@@ -41,7 +41,7 @@ import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
-import com.propertyvista.domain.property.Pmc;
+import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Elevator;
@@ -80,7 +80,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Complex.class, Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Email.class, Phone.class, Amenity.class,
                     LeaseTerms.class, Vendor.class, Elevator.class, Boiler.class, Roof.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class,
-                    Media.class, ThumbnailBlob.class, FileBlob.class, Feature.class, Pmc.class, ServiceCatalog.class);
+                    Media.class, ThumbnailBlob.class, FileBlob.class, Feature.class, PropertyManager.class, ServiceCatalog.class);
         } else {
             return "This is production";
         }
@@ -104,7 +104,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         persist(complex);
 
         // create some StarlightPmc:
-        Pmc pmc = generator.createPmc("PMC #1");
+        PropertyManager pmc = generator.createPmc("PMC #1");
         persist(pmc);
 
         pmc = generator.createPmc("PMC #2");

@@ -42,6 +42,8 @@ public interface BuildingIO extends IEntity {
 
     IPrimitive<GeoPoint> addressCoordinates();
 
+    IPrimitive<String> propertyManager();
+
     AddressIO address();
 
     IPrimitive<String> totalStoreys();

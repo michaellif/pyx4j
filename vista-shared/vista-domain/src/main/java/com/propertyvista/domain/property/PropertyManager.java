@@ -13,12 +13,14 @@
  */
 package com.propertyvista.domain.property;
 
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Pmc extends IEntity {
+public interface PropertyManager extends IEntity {
 
     @ToString
+    @Indexed
     IPrimitive<String> name();
 }

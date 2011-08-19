@@ -14,7 +14,10 @@
 package com.propertyvista.domain.property.asset.building;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -25,7 +28,8 @@ import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.media.Media;
-import com.propertyvista.domain.property.Pmc;
+import com.propertyvista.domain.property.PropertyManager;
+import com.propertyvista.domain.property.PropertyManagerReferenceAdapter;
 import com.propertyvista.domain.property.asset.Complex;
 
 //TODO rename to Property?!
@@ -36,7 +40,9 @@ public interface Building extends IEntity {
     @NotNull
     IPrimitive<String> propertyCode();
 
-    Pmc propertyManager();
+    @Editor(type = EditorType.suggest)
+    @Reference(adapter = PropertyManagerReferenceAdapter.class)
+    PropertyManager propertyManager();
 
     @ToString
     @EmbeddedEntity
