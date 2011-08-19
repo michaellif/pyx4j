@@ -371,6 +371,11 @@ public class EntityMetaWriter {
             data.detached = (method.getAnnotation(Detached.class) != null);
 
             Owned aOwned = method.getAnnotation(Owned.class);
+
+            if ((aOwned != null) && data.detached) {
+                throw new RuntimeException("Unexpected @Detached annotation in member " + method.getName() + " of " + interfaceType.getQualifiedSourceName());
+            }
+
             boolean hasEmbedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null) || (method.getAnnotation(EmbeddedEntity.class) != null);
             if (hasEmbedded) {
                 data.embedded = true;
