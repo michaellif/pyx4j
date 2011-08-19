@@ -317,10 +317,11 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> impleme
             E entity = EntityFactory.create(entityClass);
             if (stringViewMemberName != null) {
                 entity.setMemberValue(stringViewMemberName, string);
+            } else {
+                entity.setMemberValue(entity.getEntityMeta().getToStringMemberNames().get(0), string);
             }
             return entity;
         }
-
     }
 
     @Override
