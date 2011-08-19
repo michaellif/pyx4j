@@ -39,7 +39,6 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
             PersistenceServicesFactory.getPersistenceService().retrieve(in.media());
             PersistenceServicesFactory.getPersistenceService().retrieve(in.serviceCatalog());
             PersistenceServicesFactory.getPersistenceService().retrieve(in.includedUtilities());
-            PersistenceServicesFactory.getPersistenceService().retrieve(in.contacts().phones());
             PersistenceServicesFactory.getPersistenceService().retrieve(in.contacts().contacts());
             PersistenceServicesFactory.getPersistenceService().retrieve(in.marketing().adBlurbs());
 

@@ -42,7 +42,6 @@ public class BuildingRetriever {
 
         String imagesBaseFolder = "data/export/images/";
 
-        PersistenceServicesFactory.getPersistenceService().retrieve(building.contacts().phones());
         PersistenceServicesFactory.getPersistenceService().retrieve(building.contacts().contacts());
         PersistenceServicesFactory.getPersistenceService().retrieve(building.marketing().adBlurbs());
 
