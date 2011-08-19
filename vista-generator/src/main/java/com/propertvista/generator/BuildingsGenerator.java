@@ -42,7 +42,7 @@ import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
-import com.propertyvista.domain.property.StarlightPmc;
+import com.propertyvista.domain.property.Pmc;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
@@ -568,8 +568,8 @@ public class BuildingsGenerator {
         return complex;
     }
 
-    public StarlightPmc createPmc(String name) {
-        StarlightPmc pmc = EntityFactory.create(StarlightPmc.class);
+    public Pmc createPmc(String name) {
+        Pmc pmc = EntityFactory.create(Pmc.class);
         pmc.name().setValue(name);
 
         return pmc;

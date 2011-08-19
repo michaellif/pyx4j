@@ -35,6 +35,13 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
     protected void enhanceRetrieveDTO(Building in, BuildingDTO dto, boolean fromList) {
 
         if (!fromList) {
+            // load detached entities:
+            PersistenceServicesFactory.getPersistenceService().retrieve(in.media());
+            PersistenceServicesFactory.getPersistenceService().retrieve(in.serviceCatalog());
+            PersistenceServicesFactory.getPersistenceService().retrieve(in.includedUtilities());
+            PersistenceServicesFactory.getPersistenceService().retrieve(in.contacts().phones());
+            PersistenceServicesFactory.getPersistenceService().retrieve(in.contacts().contacts());
+
             EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
             amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), in));
             for (BuildingAmenity item : PersistenceServicesFactory.getPersistenceService().query(amenitysCriteria)) {

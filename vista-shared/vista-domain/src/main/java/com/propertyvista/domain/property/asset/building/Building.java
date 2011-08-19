@@ -25,7 +25,7 @@ import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.media.Media;
-import com.propertyvista.domain.property.StarlightPmc;
+import com.propertyvista.domain.property.Pmc;
 import com.propertyvista.domain.property.asset.Complex;
 
 //TODO rename to Property?!
@@ -36,8 +36,7 @@ public interface Building extends IEntity {
     @NotNull
     IPrimitive<String> propertyCode();
 
-    // Property management field for Starlight. Temporary ?! ;)
-    StarlightPmc propertyManager();
+    Pmc propertyManager();
 
     @ToString
     @EmbeddedEntity
@@ -56,11 +55,15 @@ public interface Building extends IEntity {
     Complex complex();
 
     @Detached
+    // should be loaded in service when necessary!..
     IList<Media> media();
 
+    @Detached
+    // should be loaded in service when necessary!..
     ServiceCatalog serviceCatalog();
 
     // utlitiies included in price and should be EXCLUDED from ServiceCatalog 
-    // TODO: validate that logic is implemented! 
+    @Detached
+    // should be loaded in service when necessary!..
     IList<ServiceItemType> includedUtilities();
 }

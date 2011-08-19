@@ -106,6 +106,11 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         if (building == null || building.isNull()) {
             return null;
         }
+
+        // load detached entities:
+        PersistenceServicesFactory.getPersistenceService().retrieve(building.serviceCatalog());
+        PersistenceServicesFactory.getPersistenceService().retrieve(building.includedUtilities());
+
         // update service catalogue double-reference lists:
         EntityQueryCriteria<Service> serviceCriteria = EntityQueryCriteria.create(Service.class);
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), building.serviceCatalog()));

@@ -17,7 +17,7 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface StarlightPmc extends IEntity {
+public interface Pmc extends IEntity {
 
     @ToString
     IPrimitive<String> name();
