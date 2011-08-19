@@ -149,4 +149,15 @@ public class PmcCrudServiceImpl implements PmcCrudService {
 
     }
 
+    @Override
+    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+        try {
+            NamespaceManager.setNamespace(Pmc.adminNamespace);
+            PersistenceServicesFactory.getPersistenceService().delete(Pmc.class, entityId);
+        } finally {
+            NamespaceManager.remove();
+        }
+        callback.onSuccess(true);
+    }
+
 }

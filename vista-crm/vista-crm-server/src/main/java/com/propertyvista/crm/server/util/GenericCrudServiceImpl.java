@@ -18,6 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.EntityServicesImpl;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
@@ -52,7 +53,14 @@ public abstract class GenericCrudServiceImpl<DBO extends IEntity> implements Abs
     }
 
     @Override
+    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+        PersistenceServicesFactory.getPersistenceService().delete(dboClass, entityId);
+        callback.onSuccess(true);
+    }
+
+    @Override
     public void list(AsyncCallback<EntitySearchResult<DBO>> callback, EntityListCriteria<DBO> criteria) {
         callback.onSuccess(EntityLister.secureQuery(criteria));
     }
+
 }

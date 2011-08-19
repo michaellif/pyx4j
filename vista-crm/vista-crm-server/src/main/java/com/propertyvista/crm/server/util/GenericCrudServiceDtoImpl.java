@@ -82,6 +82,12 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
         callback.onSuccess(GenericConverter.convertDBO2DTO(entity, dtoClass));
     }
 
+    @Override
+    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+        PersistenceServicesFactory.getPersistenceService().delete(dboClass, entityId);
+        callback.onSuccess(true);
+    }
+
     protected void enhancePropertyCriterion(EntityListCriteria<DBO> dbCriteria, PropertyCriterion propertyCriterion) {
         throw new Error("Unsupported property");
     }

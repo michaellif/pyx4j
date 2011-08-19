@@ -61,4 +61,10 @@ public class MaintenanceRequestCrudServiceImpl implements MaintenanceRequestCrud
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+        // TODO Auto-generated method stub
+
+    }
 }
