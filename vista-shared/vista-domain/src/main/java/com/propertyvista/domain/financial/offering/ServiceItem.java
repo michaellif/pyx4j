@@ -16,12 +16,14 @@ package com.propertyvista.domain.financial.offering;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.property.asset.BuildingElement;
 
+@ToStringFormat("Type: {0}, Price: {1}")
 public interface ServiceItem extends IEntity {
 
     @NotNull
