@@ -36,6 +36,10 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
         if (!fromList) {
             // load detached entities:
             PersistenceServicesFactory.getPersistenceService().retrieve(in.marketing().adBlurbs());
+        } else {
+            // just clear unnecessary data before serialisation: 
+            in.marketing().description().set(null);
+            in.info().economicStatusDescription().set(null);
         }
     }
 }

@@ -41,14 +41,23 @@ public abstract class GenericCrudServiceImpl<DBO extends IEntity> implements Abs
         callback.onSuccess(entity);
     }
 
+    protected void enhanceRetrieve(DBO entity, boolean fromList) {
+    }
+
     @Override
     public void retrieve(AsyncCallback<DBO> callback, Key entityId) {
-        callback.onSuccess(EntityServicesImpl.secureRetrieve(dboClass, entityId));
+        DBO entity = EntityServicesImpl.secureRetrieve(dboClass, entityId);
+        enhanceRetrieve(entity, false);
+        callback.onSuccess(entity);
+    }
+
+    protected void enhanceSave(DBO entity) {
     }
 
     @Override
     public void save(AsyncCallback<DBO> callback, DBO entity) {
         EntityServicesImpl.secureSave(entity);
+        enhanceSave(entity);
         callback.onSuccess(entity);
     }
 
@@ -60,7 +69,10 @@ public abstract class GenericCrudServiceImpl<DBO extends IEntity> implements Abs
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<DBO>> callback, EntityListCriteria<DBO> criteria) {
-        callback.onSuccess(EntityLister.secureQuery(criteria));
+        EntitySearchResult<DBO> result = EntityLister.secureQuery(criteria);
+        for (DBO entity : result.getData()) {
+            enhanceRetrieve(entity, true);
+        }
+        callback.onSuccess(result);
     }
-
 }

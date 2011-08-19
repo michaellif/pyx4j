@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
@@ -43,10 +44,10 @@ public interface TenantScreening extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> screeningDate();
 
-    @Owned
+    @EmbeddedEntity
     PriorAddress currentAddress();
 
-    @Owned
+    @EmbeddedEntity
     PriorAddress previousAddress();
 
     @Owned
@@ -54,19 +55,23 @@ public interface TenantScreening extends IEntity {
     LegalQuestions legalQuestions();
 
     @Owned
+    @Detached
     IList<ApplicationDocument> documents();
 
     //=============== Financial =============//
 
     @Owned
+    @Detached
     @Length(3)
     IList<PersonalIncome> incomes();
 
     @Owned
+    @Detached
     @Length(3)
     IList<PersonalAsset> assets();
 
     @Owned
+    @Detached
     @Length(2)
     IList<TenantGuarantor> guarantors();
 

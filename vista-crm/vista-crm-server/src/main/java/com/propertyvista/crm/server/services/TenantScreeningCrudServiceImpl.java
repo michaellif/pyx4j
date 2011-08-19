@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+
 import com.propertyvista.crm.rpc.services.TenantScreeningCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.tenant.TenantScreening;
@@ -21,5 +23,16 @@ public class TenantScreeningCrudServiceImpl extends GenericCrudServiceImpl<Tenan
 
     public TenantScreeningCrudServiceImpl() {
         super(TenantScreening.class);
+    }
+
+    @Override
+    protected void enhanceRetrieve(TenantScreening entity, boolean fromList) {
+        if (!fromList) {
+            // load detached entities:
+            PersistenceServicesFactory.getPersistenceService().retrieve(entity.documents());
+            PersistenceServicesFactory.getPersistenceService().retrieve(entity.incomes());
+            PersistenceServicesFactory.getPersistenceService().retrieve(entity.assets());
+            PersistenceServicesFactory.getPersistenceService().retrieve(entity.guarantors());
+        }
     }
 }

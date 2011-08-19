@@ -54,6 +54,9 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
             for (ServiceItemType item : PersistenceServicesFactory.getPersistenceService().query(serviceItemCriteria)) {
                 dto.availableUtilities().add(item);
             }
+        } else {
+            // just clear unnecessary data before serialisation: 
+            in.marketing().description().set(null);
         }
     }
 }
