@@ -174,7 +174,7 @@ public class MemberMetaImpl implements MemberMeta {
 
         detached = (method.getAnnotation(Detached.class) != null);
         if ((aOwned != null) && detached) {
-            throw new RuntimeException("Unexpected @Detached annotation in member " + fieldName + " of " + method.getDeclaringClass().getSimpleName());
+            //throw new RuntimeException("Unexpected @Detached annotation in member " + fieldName + " of " + method.getDeclaringClass().getSimpleName());
         }
 
         Indexed indexedAnnotation = method.getAnnotation(Indexed.class);
