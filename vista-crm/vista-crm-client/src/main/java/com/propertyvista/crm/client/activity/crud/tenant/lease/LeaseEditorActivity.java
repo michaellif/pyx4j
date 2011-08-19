@@ -119,6 +119,10 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     public void setSelectedService(ServiceItem serviceItem) {
         LeaseDTO currentValue = view.getValue();
         if (fillServiceEligibilityData(currentValue, serviceItem)) {
+            // clear currently selected dependable data:
+            currentValue.serviceAgreement().featureItems().clear();
+            currentValue.serviceAgreement().concessions().clear();
+
             view.populate(currentValue);
         }
     }
@@ -191,10 +195,6 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             for (ServiceConcession consession : selecteService.concessions()) {
                 currentValue.selectedConcesions().add(consession.concession());
             }
-
-            // clear currently selected dependable data:
-            currentValue.serviceAgreement().featureItems().clear();
-            currentValue.serviceAgreement().concessions().clear();
         }
 
         return (selecteService != null);
