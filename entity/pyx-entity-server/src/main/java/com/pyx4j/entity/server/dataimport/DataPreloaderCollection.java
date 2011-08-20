@@ -118,7 +118,7 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
     }
 
     public String preloadAll() {
-        return preloadAll(true);
+        return preloadAll(false);
     }
 
     public String preloadAll(boolean print) {
