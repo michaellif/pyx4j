@@ -49,6 +49,11 @@ public class SubtypeInjectors {
     protected static I18n i18n = I18nFactory.getI18n(SubtypeInjectors.class);
 
     public static void injectPhones(VistaDecoratorsFlowPanel main, IList<Phone> proto, CEntityEditor<?> parent) {
+        injectPhones(main, proto, parent, true, false);
+    }
+
+    public static void injectPhones(VistaDecoratorsFlowPanel main, IList<Phone> proto, CEntityEditor<?> parent, final boolean showType,
+            final boolean showDescription) {
 
         main.add(new CrmHeader2Decorator(proto.getMeta().getCaption()));
         main.add(parent.inject(proto, new CrmEntityFolder<Phone>(Phone.class, i18n.tr("Phone"), parent.isEditable()) {
@@ -56,9 +61,14 @@ public class SubtypeInjectors {
             protected List<EntityFolderColumnDescriptor> columns() {
                 List<EntityFolderColumnDescriptor> columns;
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "8em"));
+                if (showType) {
+                    columns.add(new EntityFolderColumnDescriptor(proto().type(), "8em"));
+                }
                 columns.add(new EntityFolderColumnDescriptor(proto().number(), "15em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().extension(), "5em"));
+                if (showDescription) {
+                    columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
+                }
                 return columns;
             }
         }));

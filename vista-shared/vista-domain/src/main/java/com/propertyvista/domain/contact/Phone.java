@@ -64,4 +64,6 @@ public interface Phone extends IEntity {
      */
     @ToString(index = 1)
     IPrimitive<Integer> extension();
+
+    IPrimitive<String> description();
 }

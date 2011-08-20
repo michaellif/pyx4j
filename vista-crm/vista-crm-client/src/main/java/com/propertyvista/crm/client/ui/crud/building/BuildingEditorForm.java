@@ -47,6 +47,8 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPa
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.ui.components.CrmBoxFolderDecorator;
+import com.propertyvista.crm.client.ui.components.CrmBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmFolderItemDecorator;
@@ -58,6 +60,7 @@ import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.domain.company.OrganizationContact;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
@@ -222,11 +225,16 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         main.add(inject(proto().contacts().website()), 30);
         main.add(inject(proto().contacts().email().address()), main.getDefaultLabelWidth(), 30, i18n.tr("Email Address"));
-        SubtypeInjectors.injectPhones(main, proto().contacts().phones(), this);
+        SubtypeInjectors.injectPhones(main, proto().contacts().phones(), this, false, true);
+
+        main.add(new CrmHeader2Decorator(i18n.tr("Contacts:")));
+        main.add(inject(proto().contacts().contacts(), createContactsListEditor()));
 
         return new CrmScrollPanel(main);
     }
 
+//
+// List Viewers:
     private CEntityFolderEditor<BuildingAmenity> createAmenitiesListEditor() {
         return new CrmEntityFolder<BuildingAmenity>(BuildingAmenity.class, i18n.tr("Amenity"), isEditable()) {
             @Override
@@ -293,6 +301,58 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             }
         };
     }
+
+    private CEntityFolderEditor<OrganizationContact> createContactsListEditor() {
+        return new CrmEntityFolder<OrganizationContact>(OrganizationContact.class, i18n.tr("Contact"), isEditable()) {
+            private final CrmEntityFolder<OrganizationContact> parent = this;
+
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                return null;
+            }
+
+            @Override
+            protected IFolderEditorDecorator<OrganizationContact> createFolderDecorator() {
+                return new CrmBoxFolderDecorator<OrganizationContact>(parent);
+            }
+
+            @Override
+            protected CEntityFolderItemEditor<OrganizationContact> createItem() {
+                return new CEntityFolderRowEditor<OrganizationContact>(OrganizationContact.class, columns()) {
+
+                    @Override
+                    public IFolderItemEditorDecorator<OrganizationContact> createFolderItemDecorator() {
+                        return new CrmBoxFolderItemDecorator<OrganizationContact>(parent);
+                    }
+
+                    @Override
+                    public IsWidget createContent() {
+                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable());
+
+                        main.add(inject(proto().contactRole().name()), 20, CrmEntityFolder.i18n.tr("Contact Role"));
+                        main.add(inject(proto().description()), 35);
+
+                        main.add(new CrmHeader2Decorator(CrmEntityFolder.i18n.tr("Person:")));
+                        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
+                        main.add(split);
+
+                        split.getLeftPanel().add(inject(proto().person().name().firstName()), 15);
+                        split.getLeftPanel().add(inject(proto().person().name().lastName()), 15);
+                        split.getLeftPanel().add(inject(proto().person().email()), 20);
+
+                        split.getRightPanel().add(inject(proto().person().workPhone()), 15);
+                        split.getRightPanel().add(inject(proto().person().mobilePhone()), 15);
+                        split.getRightPanel().add(inject(proto().person().homePhone()), 15);
+
+                        return main;
+                    }
+                };
+            }
+        };
+    }
+
+//
+// Selection Boxes:
 
     private class SelectConcessionBox extends OkCancelBox {
 

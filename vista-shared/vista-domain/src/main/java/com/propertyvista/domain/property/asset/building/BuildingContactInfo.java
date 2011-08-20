@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.company.OrganizationContacts;
+import com.propertyvista.domain.company.OrganizationContact;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 
@@ -38,5 +38,5 @@ public interface BuildingContactInfo extends IEntity {
 
     @Detached
     // should be loaded in service when necessary!..
-    IList<OrganizationContacts> contacts();
+    IList<OrganizationContact> contacts();
 }

@@ -14,11 +14,11 @@
 package com.propertyvista.domain.company;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.shared.IList;
 
 public interface OrganizationContacts extends IEntity {
 
     CompanyRole companyRole();
 
-    ISet<OrganizationContact> contactList();
+    IList<OrganizationContact> contactList();
 }

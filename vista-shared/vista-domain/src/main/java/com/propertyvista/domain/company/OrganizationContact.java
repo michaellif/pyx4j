@@ -14,12 +14,15 @@
 package com.propertyvista.domain.company;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.person.Person;
 
 public interface OrganizationContact extends IEntity {
 
     ContactRole contactRole();
+
+    IPrimitive<String> description();
 
     Person person();
 }
