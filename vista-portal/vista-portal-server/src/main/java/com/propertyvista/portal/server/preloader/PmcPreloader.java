@@ -16,7 +16,7 @@ package com.propertyvista.portal.server.preloader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertvista.generator.PmcGenerator;
+import com.propertvista.generator.ServiceTypesGenerator;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -48,15 +48,9 @@ public class PmcPreloader extends AbstractDataPreloader {
     @Override
     public String create() {
 
-        PmcGenerator generator = new PmcGenerator();
-
-        for (ServiceItemType type : generator.getServiceItemTypes()) {
-            PersistenceServicesFactory.getPersistenceService().persist(type);
-        }
-
-        for (ServiceItemType type : generator.getFeatureItemTypes()) {
-            PersistenceServicesFactory.getPersistenceService().persist(type);
-        }
+        ServiceTypesGenerator generator = new ServiceTypesGenerator();
+        PersistenceServicesFactory.getPersistenceService().persist(generator.getServiceItemTypes());
+        PersistenceServicesFactory.getPersistenceService().persist(generator.getFeatureItemTypes());
 
         StringBuilder sb = new StringBuilder();
         sb.append("Created ").append(generator.getServiceItemTypes().size() + generator.getFeatureItemTypes().size()).append(" ChargeItemType");

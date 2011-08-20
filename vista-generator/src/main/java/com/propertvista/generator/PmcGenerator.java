@@ -16,6 +16,7 @@ package com.propertvista.generator;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.propertvista.generator.gdo.ServiceItemTypes;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -31,45 +32,18 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 public class PmcGenerator {
 
-    private final List<ServiceItemType> serviceItemTypes = new ArrayList<ServiceItemType>();
+    private final ServiceItemTypes serviceItemTypes;
 
-    private final List<ServiceItemType> featureItemTypes = new ArrayList<ServiceItemType>();
-
-    public PmcGenerator() {
-
-        // preload types:
-        serviceItemTypes.add(createChargeItemType("Regular Residential Unit", Service.Type.residentialUnit));
-        serviceItemTypes.add(createChargeItemType("Regular Commercial Unit", Service.Type.commercialUnit));
-        serviceItemTypes.add(createChargeItemType("Regular Short Term Residential Unit", Service.Type.residentialShortTermUnit));
-        serviceItemTypes.add(createChargeItemType("Roof Spot", Service.Type.roof));
-        serviceItemTypes.add(createChargeItemType("Billboard", Service.Type.sundry));
-
-        featureItemTypes.add(createChargeItemType("Regular Parking", Feature.Type.parking));
-        featureItemTypes.add(createChargeItemType("Wide Parking", Feature.Type.parking));
-        featureItemTypes.add(createChargeItemType("Narrow Parking", Feature.Type.parking));
-        featureItemTypes.add(createChargeItemType("Disabled Parking", Feature.Type.parking));
-        featureItemTypes.add(createChargeItemType("Cat", Feature.Type.pet));
-        featureItemTypes.add(createChargeItemType("Dog", Feature.Type.pet));
-        featureItemTypes.add(createChargeItemType("Small Locker", Feature.Type.locker));
-        featureItemTypes.add(createChargeItemType("Medium Locker", Feature.Type.locker));
-        featureItemTypes.add(createChargeItemType("Large Locker", Feature.Type.locker));
-        featureItemTypes.add(createChargeItemType("Fitness", Feature.Type.addOn));
-        featureItemTypes.add(createChargeItemType("Pool", Feature.Type.addOn));
-        featureItemTypes.add(createChargeItemType("Furnished", Feature.Type.addOn));
-        featureItemTypes.add(createChargeItemType("Key", Feature.Type.addOn));
-        featureItemTypes.add(createChargeItemType("Access Card", Feature.Type.addOn));
-        featureItemTypes.add(createChargeItemType("Cable", Feature.Type.addOn));
-        featureItemTypes.add(createChargeItemType("Water", Feature.Type.utility));
-        featureItemTypes.add(createChargeItemType("Gas", Feature.Type.utility));
-        featureItemTypes.add(createChargeItemType("Hydro", Feature.Type.utility));
+    public PmcGenerator(ServiceItemTypes serviceItemTypes) {
+        this.serviceItemTypes = serviceItemTypes;
     }
 
-    public List<ServiceItemType> getServiceItemTypes() {
-        return serviceItemTypes;
+    private List<ServiceItemType> getServiceItemTypes() {
+        return this.serviceItemTypes.serviceItemTypes;
     }
 
-    public List<ServiceItemType> getFeatureItemTypes() {
-        return featureItemTypes;
+    private List<ServiceItemType> getFeatureItemTypes() {
+        return this.serviceItemTypes.featureItemTypes;
     }
 
     public ServiceCatalog createServiceCatalog() {
@@ -80,7 +54,7 @@ public class PmcGenerator {
 
     public List<Service> createServices(ServiceCatalog catalog) {
         List<Service> items = new ArrayList<Service>(4);
-        for (ServiceItemType item : serviceItemTypes) {
+        for (ServiceItemType item : getServiceItemTypes()) {
             items.add(createService(catalog, item.serviceType().getValue()));
         }
         return items;
@@ -88,7 +62,7 @@ public class PmcGenerator {
 
     public List<Feature> createFeatures(ServiceCatalog catalog) {
         List<Feature> items = new ArrayList<Feature>(4);
-        for (ServiceItemType item : featureItemTypes) {
+        for (ServiceItemType item : getFeatureItemTypes()) {
             items.add(createFeature(catalog, item.featureType().getValue()));
         }
         return items;
@@ -122,7 +96,7 @@ public class PmcGenerator {
         ServiceItem item = EntityFactory.create(ServiceItem.class);
 
         List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
-        for (ServiceItemType itemType : serviceItemTypes) {
+        for (ServiceItemType itemType : getServiceItemTypes()) {
             if (type.equals(itemType.serviceType().getValue())) {
                 allowedItemTypes.add(itemType);
             }
@@ -164,7 +138,7 @@ public class PmcGenerator {
         ServiceItem item = EntityFactory.create(ServiceItem.class);
 
         List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
-        for (ServiceItemType itemType : featureItemTypes) {
+        for (ServiceItemType itemType : getFeatureItemTypes()) {
             if (type.equals(itemType.featureType().getValue())) {
                 allowedItemTypes.add(itemType);
             }
@@ -210,22 +184,6 @@ public class PmcGenerator {
         concession.description().setValue("Concession description here...");
 
         return concession;
-    }
-
-    private ServiceItemType createChargeItemType(String name, Service.Type serviceType) {
-        ServiceItemType type = EntityFactory.create(ServiceItemType.class);
-        type.name().setValue(name);
-        type.type().setValue(ServiceItemType.Type.service);
-        type.serviceType().setValue(serviceType);
-        return type;
-    }
-
-    private ServiceItemType createChargeItemType(String name, Feature.Type featureType) {
-        ServiceItemType type = EntityFactory.create(ServiceItemType.class);
-        type.name().setValue(name);
-        type.type().setValue(ServiceItemType.Type.feature);
-        type.featureType().setValue(featureType);
-        return type;
     }
 
 }

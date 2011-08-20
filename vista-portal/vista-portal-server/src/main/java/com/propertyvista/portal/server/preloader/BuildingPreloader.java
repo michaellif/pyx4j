@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import com.propertvista.generator.BuildingsGenerator;
 import com.propertvista.generator.MediaGenerator;
 import com.propertvista.generator.PmcGenerator;
+import com.propertvista.generator.gdo.ServiceItemTypes;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -38,7 +39,7 @@ import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyManager;
@@ -88,7 +89,20 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
 
     private String generate() {
         BuildingsGenerator generator = new BuildingsGenerator(DemoData.BUILDINGS_GENERATION_SEED);
-        PmcGenerator pmcGenerator = new PmcGenerator();
+
+        ServiceItemTypes serviceItemTypes = new ServiceItemTypes();
+        {
+            EntityQueryCriteria<ServiceItemType> criteria = EntityQueryCriteria.create(ServiceItemType.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().type(), ServiceItemType.Type.service));
+            serviceItemTypes.serviceItemTypes.addAll(PersistenceServicesFactory.getPersistenceService().query(criteria));
+        }
+        {
+            EntityQueryCriteria<ServiceItemType> criteria = EntityQueryCriteria.create(ServiceItemType.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().type(), ServiceItemType.Type.feature));
+            serviceItemTypes.featureItemTypes.addAll(PersistenceServicesFactory.getPersistenceService().query(criteria));
+        }
+
+        PmcGenerator pmcGenerator = new PmcGenerator(serviceItemTypes);
 
         LeaseTerms leaseTerms = generator.createLeaseTerms();
         persist(leaseTerms);
@@ -126,18 +140,12 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
 
             List<Service> services = pmcGenerator.createServices(catalog);
             for (Service item : services) {
-                for (ServiceItem item2 : item.items()) {
-                    persist(item2.type());
-                }
                 persist(item);
                 catalog.services().add(item);
             }
 
             List<Feature> features = pmcGenerator.createFeatures(catalog);
             for (Feature item : features) {
-                for (ServiceItem item2 : item.items()) {
-                    persist(item2.type());
-                }
                 persist(item);
                 catalog.features().add(item);
             }
