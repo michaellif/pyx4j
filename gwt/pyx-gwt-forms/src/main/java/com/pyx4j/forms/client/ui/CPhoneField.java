@@ -82,7 +82,7 @@ public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
                 return null; // empty value case
             }
             if (!string.matches(regex)) {
-                throw new ParseException("PhoneFormat", 0);
+                throw new ParseException("Not a valid phone number. Must be in the format 123-4567 or 123-456-7890 (dashes optional)", 0);
             }
             return format(string);
         }
