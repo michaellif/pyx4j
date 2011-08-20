@@ -19,8 +19,8 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.site.client.ui.crud.ListerViewImplBasePanel;
 
+import com.propertyvista.portal.client.ui.ListerViewImplBasePanel;
 import com.propertyvista.portal.client.ui.decorations.PortalHeaderBar;
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 

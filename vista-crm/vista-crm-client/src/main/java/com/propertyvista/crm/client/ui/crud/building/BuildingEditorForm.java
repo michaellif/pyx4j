@@ -58,7 +58,7 @@ import com.propertyvista.crm.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.company.OrganizationContact;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
@@ -93,18 +93,18 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         tabPanel.addDisable(new ScrollPanel(((BuildingView) getParentView()).getUnitListerView().asWidget()), i18n.tr("Units"));
 
         FlowPanel combinedtab = new FlowPanel();
-        combinedtab.add(new CrmHeader2Decorator(i18n.tr("Elevators:")));
+        combinedtab.add(new CrmSectionSeparator(i18n.tr("Elevators:")));
         combinedtab.add(((BuildingView) getParentView()).getElevatorListerView().asWidget());
-        combinedtab.add(new CrmHeader2Decorator(i18n.tr("Boilers:")));
+        combinedtab.add(new CrmSectionSeparator(i18n.tr("Boilers:")));
         combinedtab.add(((BuildingView) getParentView()).getBoilerListerView().asWidget());
-        combinedtab.add(new CrmHeader2Decorator(i18n.tr("Roofs:")));
+        combinedtab.add(new CrmSectionSeparator(i18n.tr("Roofs:")));
         combinedtab.add(((BuildingView) getParentView()).getRoofListerView().asWidget());
         tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Mechanicals"));
 
         combinedtab = new FlowPanel();
-        combinedtab.add(new CrmHeader2Decorator(i18n.tr("Parkings:")));
+        combinedtab.add(new CrmSectionSeparator(i18n.tr("Parkings:")));
         combinedtab.add(((BuildingView) getParentView()).getParkingListerView().asWidget());
-        combinedtab.add(new CrmHeader2Decorator(i18n.tr("Locker Areas:")));
+        combinedtab.add(new CrmSectionSeparator(i18n.tr("Locker Areas:")));
         combinedtab.add(((BuildingView) getParentView()).getLockerAreaListerView().asWidget());
         tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Add-ons"));
 
@@ -112,11 +112,11 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         tabPanel.add(createMarketingTab(), i18n.tr("Marketing"));
 
         combinedtab = new FlowPanel();
-        combinedtab.add(new CrmHeader2Decorator(i18n.tr("Services:")));
+        combinedtab.add(new CrmSectionSeparator(i18n.tr("Services:")));
         combinedtab.add(((BuildingView) getParentView()).getServiceListerView().asWidget());
-        combinedtab.add(new CrmHeader2Decorator(i18n.tr("Features:")));
+        combinedtab.add(new CrmSectionSeparator(i18n.tr("Features:")));
         combinedtab.add(((BuildingView) getParentView()).getFeatureListerView().asWidget());
-        combinedtab.add(new CrmHeader2Decorator(i18n.tr("Concessions:")));
+        combinedtab.add(new CrmSectionSeparator(i18n.tr("Concessions:")));
         combinedtab.add(((BuildingView) getParentView()).getConcessionListerView().asWidget());
         tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Service Catalog"));
 
@@ -165,7 +165,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(split2);
         AddressUtils.injectIAddress(split2, proto().info().address(), this, false);
         main.add(new HTML("&nbsp"));
-        main.add(new CrmHeader2Decorator(i18n.tr("Amenities:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Amenities:")));
         main.add(inject(proto().amenities(), createAmenitiesListEditor()));
 
         return new CrmScrollPanel(main);
@@ -187,7 +187,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().info().centralAir()), 15);
         split.getRightPanel().add(inject(proto().info().centralHeat()), 15);
 
-        main.add(new CrmHeader2Decorator(i18n.tr("Media:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Media:")));
         main.add(inject(proto().media(), new CrmMediaListViewer(isEditable())));
 
         return new CrmScrollPanel(main);
@@ -206,7 +206,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().financial().lastAppraisalValue()), 10);
         split.getRightPanel().add(inject(proto().financial().currency().name()), split.getRightPanel().getDefaultLabelWidth(), 10, i18n.tr("Currency Name"));
 
-        main.add(new CrmHeader2Decorator(i18n.tr("Included Utilities:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Included Utilities:")));
         main.add(inject(proto().includedUtilities(), createUtilitiesListEditor()));
 
         return new CrmScrollPanel(main);
@@ -227,7 +227,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(inject(proto().contacts().email().address()), main.getDefaultLabelWidth(), 30, i18n.tr("Email Address"));
         SubtypeInjectors.injectPhones(main, proto().contacts().phones(), this, false, true);
 
-        main.add(new CrmHeader2Decorator(i18n.tr("Contacts:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Contacts:")));
         main.add(inject(proto().contacts().contacts(), createContactsListEditor()));
 
         return new CrmScrollPanel(main);
@@ -332,7 +332,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                         main.add(inject(proto().contactRole().name()), 20, CrmEntityFolder.i18n.tr("Contact Role"));
                         main.add(inject(proto().description()), 35);
 
-                        main.add(new CrmHeader2Decorator(CrmEntityFolder.i18n.tr("Person:")));
+                        main.add(new CrmSectionSeparator(CrmEntityFolder.i18n.tr("Person:")));
                         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
                         main.add(split);
 

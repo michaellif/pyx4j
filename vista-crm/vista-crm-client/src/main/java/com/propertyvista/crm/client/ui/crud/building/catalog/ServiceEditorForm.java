@@ -50,7 +50,7 @@ import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -107,7 +107,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
 
         main.add(inject(proto().description()), 50);
 
-        main.add(new CrmHeader2Decorator(i18n.tr("Items:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Items:")));
         main.add(inject(proto().items(), createItemsFolderEditor()));
 
         return new CrmScrollPanel(main);
@@ -116,10 +116,10 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
     public IsWidget createEligibilityTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(new CrmHeader2Decorator(i18n.tr("Features:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Features:")));
         main.add(inject(proto().features(), createFeaturesFolderEditor()));
 
-        main.add(new CrmHeader2Decorator(i18n.tr("Concessions:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Concessions:")));
         main.add(inject(proto().concessions(), createConcessionsFolderEditor()));
 
         return new CrmScrollPanel(main);

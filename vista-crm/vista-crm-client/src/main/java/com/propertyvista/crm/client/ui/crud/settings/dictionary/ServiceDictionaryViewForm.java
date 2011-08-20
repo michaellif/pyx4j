@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 public class ServiceDictionaryViewForm extends CrmEntityForm<ServiceItemType> {
@@ -33,9 +33,9 @@ public class ServiceDictionaryViewForm extends CrmEntityForm<ServiceItemType> {
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(true);
 
-        main.add(new CrmHeader2Decorator(i18n.tr("Service Types:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Service Types:")));
         main.add(((ServiceDictionaryView) getParentView()).getServiceListerView().asWidget());
-        main.add(new CrmHeader2Decorator(i18n.tr("Feature Types:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Feature Types:")));
         main.add(((ServiceDictionaryView) getParentView()).getFeatureListerView().asWidget());
 
         return new ScrollPanel(main);

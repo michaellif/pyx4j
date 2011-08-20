@@ -24,7 +24,7 @@ import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.dto.ElevatorDTO;
 
@@ -51,7 +51,7 @@ public class ElevatorEditorForm extends MechlBaseEditorForm<ElevatorDTO> {
         split.getRightPanel().add(inject(proto().description()), 20);
         split.getRightPanel().add(inject(proto().isForMoveInOut()), 5);
 
-        main.add(new CrmHeader2Decorator("Licence"));
+        main.add(new CrmSectionSeparator("Licence"));
         VistaDecoratorsSplitFlowPanel split2 = new VistaDecoratorsSplitFlowPanel(!isEditable());
         SubtypeInjectors.injectLicence(main, split2, proto().licence(), this);
         main.add(split2);

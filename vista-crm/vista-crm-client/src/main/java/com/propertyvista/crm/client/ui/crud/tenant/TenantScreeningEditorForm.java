@@ -62,7 +62,7 @@ import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
@@ -226,10 +226,10 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     private Widget createAddressesTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
-        main.add(new CrmHeader2Decorator(proto().currentAddress().getMeta().getCaption()));
+        main.add(new CrmSectionSeparator(proto().currentAddress().getMeta().getCaption()));
         main.add(inject(proto().currentAddress(), createAddressEditor()));
 
-        main.add(new CrmHeader2Decorator(proto().previousAddress().getMeta().getCaption()));
+        main.add(new CrmSectionSeparator(proto().previousAddress().getMeta().getCaption()));
         main.add(inject(proto().previousAddress(), previousAddressHeader = createAddressEditor()));
 
         return new CrmScrollPanel(main);

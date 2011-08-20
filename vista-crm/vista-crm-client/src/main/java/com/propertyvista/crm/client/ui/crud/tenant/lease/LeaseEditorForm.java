@@ -80,7 +80,7 @@ import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.Pet.WeightUnit;
@@ -201,9 +201,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     private Widget createAddonsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
-        main.add(new CrmHeader2Decorator(i18n.tr("Pets:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Pets:")));
         main.add(inject(proto().pets(), createPetListViewer()));
-        main.add(new CrmHeader2Decorator(i18n.tr("Vehicles/Parking:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Vehicles/Parking:")));
         main.add(inject(proto().vehicles(), createVehicleListViewer()));
 
         return new CrmScrollPanel(main);
@@ -239,10 +239,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         }
         main.add(serviceItemPanel);
 
-        main.add(new CrmHeader2Decorator(i18n.tr("Charge Items:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Charge Items:")));
         main.add(inject(proto().serviceAgreement().featureItems(), createFeaturesFolderEditor()));
 
-        main.add(new CrmHeader2Decorator(i18n.tr("Concessions:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Concessions:")));
         main.add(inject(proto().serviceAgreement().concessions(), createConcessionsFolderEditor()));
 
         main.add(new HTML("&nbsp"));
@@ -254,7 +254,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     private Widget createAppStatustab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
-        main.add(new CrmHeader2Decorator(proto().masterApplicationStatus().individualApplications()));
+        main.add(new CrmSectionSeparator(proto().masterApplicationStatus().individualApplications()));
         main.add(inject(proto().masterApplicationStatus().individualApplications(), createAppStatusListViewer()));
 
         return new CrmScrollPanel(main);
@@ -644,7 +644,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         // TODO - it's unclear how to display adjusted price!?.. 
                         //main.add(inject(proto().price(), new CLabel()), 6);
 
-                        main.add(new CrmHeader2Decorator(CrmEntityFolder.i18n.tr("Adjustments:")));
+                        main.add(new CrmSectionSeparator(CrmEntityFolder.i18n.tr("Adjustments:")));
                         main.add(inject(proto().adjustments(), createItemAdjustmentListView()));
                         return main;
                     }
@@ -750,9 +750,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             });
 
             VerticalPanel vPanel = new VerticalPanel();
-            vPanel.add(new CrmHeader2Decorator(i18n.tr("Select Building:")));
+            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Building:")));
             vPanel.add(((LeaseEditorView) getParentView()).getBuildingListerView().asWidget());
-            vPanel.add(new CrmHeader2Decorator(i18n.tr("Select Unit:")));
+            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Unit:")));
             vPanel.add(((LeaseEditorView) getParentView()).getUnitListerView().asWidget());
             vPanel.setWidth("100%");
             return vPanel;

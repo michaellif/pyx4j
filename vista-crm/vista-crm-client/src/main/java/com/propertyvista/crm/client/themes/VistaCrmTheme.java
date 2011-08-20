@@ -35,10 +35,9 @@ import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
 import com.propertyvista.crm.client.ui.decorations.CrmActionsBarDecorator;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
 import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 
 public abstract class VistaCrmTheme extends VistaTheme {
 
@@ -71,6 +70,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         initSearchBoxStyles();
         initButtonStylesEx();
         initHeadersStyle();
+        initSectionSeparatorStyle();
         initVistaTabStyles();
         initVistaDecoratorsPanelStyles();
         initDashboardView();
@@ -432,30 +432,18 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("font-size", "1.3em");
         addStyle(style);
 
-        prefix = CrmHeader1Decorator.DEFAULT_STYLE_PREFIX;
-        style = new Style(Selector.valueOf(prefix));
-        style.addProperty("color", "#5E5E5E");
-        style.addProperty("margin", "0.2em 0 0.5em 0");
-        style.addProperty("width", "100%");
-        style.addProperty("border-top", "1px dotted #727171");
-        style.addProperty("clear", "both");
-        addStyle(style);
+    }
 
-        style = new Style(Selector.valueOf(prefix, CrmHeader1Decorator.StyleSuffix.Caption));
-        style.addProperty("padding", "0.6em 1em 0.1em 1em");
-        style.addProperty("font-size", "1.3em");
-        style.addProperty("font-weight", "bold");
-        addStyle(style);
-
-        prefix = CrmHeader2Decorator.DEFAULT_STYLE_PREFIX;
-        style = new Style(Selector.valueOf(prefix));
+    protected void initSectionSeparatorStyle() {
+        String prefix = CrmSectionSeparator.DEFAULT_STYLE_PREFIX;
+        Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("color", "#5E5E5E");
         style.addProperty("margin", "0.2em 0 0.5em 0");
         style.addProperty("width", "100%");
         style.addProperty("border-top", "1px dotted #D8D8D8");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CrmHeader2Decorator.StyleSuffix.Caption));
+        style = new Style(Selector.valueOf(prefix, CrmSectionSeparator.StyleSuffix.Caption));
         style.addProperty("padding", "0.5em 1em 0.5em 1.5em");
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bold");
@@ -468,6 +456,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("margin", "0.2em 0 0.5em 0");
         style.addProperty("width", "100%");
         addStyle(style);
+
     }
 
     protected void initVistaTabStyles() {

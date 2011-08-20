@@ -35,7 +35,7 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
@@ -67,7 +67,7 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
 
         main.add(inject(proto().description()), 50);
 
-        main.add(new CrmHeader2Decorator(i18n.tr("Items:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Items:")));
         main.add(inject(proto().items(), createItemsFolderEditor()));
 
         return new CrmScrollPanel(main);

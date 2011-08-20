@@ -21,7 +21,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
@@ -44,7 +44,7 @@ public class UnitItemEditorForm extends CrmEntityForm<AptUnitItem> {
         main.add(inject(proto().conditionNotes()), 55);
 
         VistaDecoratorsSplitFlowPanel split;
-        main.add(new CrmHeader2Decorator(i18n.tr("Details")));
+        main.add(new CrmSectionSeparator(i18n.tr("Details")));
         main.add(split = new VistaDecoratorsSplitFlowPanel(!isEditable(), 15));
 
         split.getLeftPanel().add(inject(proto().wallColour()), 10);

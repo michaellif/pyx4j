@@ -32,7 +32,7 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -119,9 +119,9 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
             });
 
             VerticalPanel vPanel = new VerticalPanel();
-            vPanel.add(new CrmHeader2Decorator(i18n.tr("Select Building:")));
+            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Building:")));
             vPanel.add(((ShowingEditorView) getParentView()).getBuildingListerView().asWidget());
-            vPanel.add(new CrmHeader2Decorator(i18n.tr("Select Unit:")));
+            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Unit:")));
             vPanel.add(((ShowingEditorView) getParentView()).getUnitListerView().asWidget());
             vPanel.setWidth("100%");
             return vPanel;

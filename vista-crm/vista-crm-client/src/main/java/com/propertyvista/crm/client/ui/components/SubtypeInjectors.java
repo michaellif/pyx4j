@@ -27,16 +27,13 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader1Decorator;
-import com.propertyvista.crm.client.ui.decorations.CrmHeader2Decorator;
+import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
-import com.propertyvista.domain.property.asset.Equipment;
 import com.propertyvista.domain.property.vendor.Contract;
 import com.propertyvista.domain.property.vendor.Licence;
 import com.propertyvista.domain.property.vendor.Maintenance;
@@ -55,7 +52,7 @@ public class SubtypeInjectors {
     public static void injectPhones(VistaDecoratorsFlowPanel main, IList<Phone> proto, CEntityEditor<?> parent, final boolean showType,
             final boolean showDescription) {
 
-        main.add(new CrmHeader2Decorator(proto.getMeta().getCaption()));
+        main.add(new CrmSectionSeparator(proto.getMeta().getCaption()));
         main.add(parent.inject(proto, new CrmEntityFolder<Phone>(Phone.class, i18n.tr("Phone"), parent.isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -77,7 +74,7 @@ public class SubtypeInjectors {
 
     public static void injectEmails(VistaDecoratorsFlowPanel main, IList<Email> proto, CEntityEditor<?> parent) {
 
-        main.add(new CrmHeader2Decorator(proto.getMeta().getCaption()));
+        main.add(new CrmSectionSeparator(proto.getMeta().getCaption()));
         main.add(parent.inject(proto, new CrmEntityFolder<Email>(Email.class, i18n.tr("Email"), parent.isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -135,7 +132,7 @@ public class SubtypeInjectors {
 
         injectContract(main, split, proto, parent);
 
-        main.add(new CrmHeader2Decorator("Maintenance Schedule"));
+        main.add(new CrmSectionSeparator("Maintenance Schedule"));
         main.add(split = new VistaDecoratorsSplitFlowPanel(main.isReadOnlyMode()));
 
         split.getLeftPanel().add(parent.inject(proto.lastService()), 8.2);
@@ -147,11 +144,11 @@ public class SubtypeInjectors {
         split.getLeftPanel().add(parent.inject(proto.title()), 15);
         split.getRightPanel().add(parent.inject(proto.type()), 11);
 
-        main.add(new CrmHeader2Decorator("Contract details"));
+        main.add(new CrmSectionSeparator("Contract details"));
         main.add(split = new VistaDecoratorsSplitFlowPanel(main.isReadOnlyMode()));
         injectContract(main, split, proto, parent);
 
-        main.add(new CrmHeader2Decorator(proto.items().getMeta().getCaption()));
+        main.add(new CrmSectionSeparator(proto.items().getMeta().getCaption()));
         main.add(parent.inject(proto.items(), new CrmEntityFolder<WarrantyItem>(WarrantyItem.class, i18n.tr("Warranty Item"), parent.isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -163,36 +160,12 @@ public class SubtypeInjectors {
         }));
     }
 
-    public static void injectEquipment(VistaDecoratorsFlowPanel main, VistaDecoratorsSplitFlowPanel split, Equipment proto, CEntityEditor<?> parent) {
-
-        split.getLeftPanel().add(parent.inject(proto.type()), 15);
-        split.getLeftPanel().add(parent.inject(proto.make()), 15);
-        split.getLeftPanel().add(parent.inject(proto.model()), 15);
-        split.getRightPanel().add(parent.inject(proto.build()), 8.2);
-        split.getRightPanel().add(parent.inject(proto.description()), 20);
-
-        main.add(new CrmHeader1Decorator(i18n.tr(proto.licence().getMeta().getCaption())));
-        main.add(split = new VistaDecoratorsSplitFlowPanel(main.isReadOnlyMode()));
-        SubtypeInjectors.injectLicence(main, split, proto.licence(), parent);
-
-        main.add(new CrmHeader1Decorator(i18n.tr(proto.warranty().getMeta().getCaption())));
-        main.add(split = new VistaDecoratorsSplitFlowPanel(main.isReadOnlyMode()));
-        SubtypeInjectors.injectWarranty(main, split, proto.warranty(), parent);
-
-        main.add(new CrmHeader1Decorator(i18n.tr(proto.maintenance().getMeta().getCaption())));
-        main.add(split = new VistaDecoratorsSplitFlowPanel(main.isReadOnlyMode()));
-        SubtypeInjectors.injectMaintenance(main, split, proto.maintenance(), parent);
-
-        main.add(new VistaLineSeparator());
-        main.add(parent.inject(proto.notes()), 23);
-    }
-
     public static void injectMarketing(VistaDecoratorsFlowPanel main, Marketing proto, CEntityEditor<?> parent) {
 
         main.add(parent.inject(proto.name()), 15);
         main.add(parent.inject(proto.description()), 45);
 
-        main.add(new CrmHeader2Decorator(proto.adBlurbs().getMeta().getCaption()));
+        main.add(new CrmSectionSeparator(proto.adBlurbs().getMeta().getCaption()));
         main.add(parent.inject(proto.adBlurbs(),
                 new CrmEntityFolder<AdvertisingBlurb>(AdvertisingBlurb.class, i18n.tr("Advertising Blurb"), parent.isEditable()) {
                     @Override
