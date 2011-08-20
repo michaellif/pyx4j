@@ -34,7 +34,6 @@ public interface BuildingContactInfo extends IEntity {
     Email email(); // email business is not clear at the moment, we need a bit more detail on this
 
     @Owned
-    // should be loaded in service when necessary!..
     IList<Phone> phones();
 
     @Detached
