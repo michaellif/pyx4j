@@ -20,8 +20,8 @@ import com.pyx4j.config.shared.ApplicationMode;
 
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.company.Company;
-import com.propertyvista.domain.company.OrganizationContact;
-import com.propertyvista.domain.company.OrganizationContacts;
+import com.propertyvista.domain.company.OrganisationContact;
+import com.propertyvista.domain.company.OrganisationContacts;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.property.vendor.Maintenance;
@@ -59,10 +59,9 @@ public class CmpanyVendorPersistHelper extends BaseVistaDataPreloader {
         for (Email email : company.emails()) {
             persist(email);
         }
-        for (OrganizationContacts contacts : company.contacts()) {
+        for (OrganisationContacts contacts : company.contacts()) {
             persist(contacts.companyRole());
-            for (OrganizationContact contact : contacts.contactList()) {
-                persist(contact.contactRole());
+            for (OrganisationContact contact : contacts.contactList()) {
                 persist(contact.person());
                 persist(contact);
             }

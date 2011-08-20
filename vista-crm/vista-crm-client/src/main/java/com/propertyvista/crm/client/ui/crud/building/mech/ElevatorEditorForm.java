@@ -58,7 +58,7 @@ public class ElevatorEditorForm extends MechlBaseEditorForm<ElevatorDTO> {
 
         main.add(new VistaLineSeparator());
         main.add(new HTML("&nbsp"));
-        main.add(inject(proto().notes()), 50);
+        main.add(inject(proto().notes()), 60);
 
         return new CrmScrollPanel(main);
     }

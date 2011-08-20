@@ -58,9 +58,9 @@ import com.propertyvista.crm.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.company.OrganizationContact;
+import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
+import com.propertyvista.domain.company.OrganisationContact;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
@@ -302,9 +302,9 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         };
     }
 
-    private CEntityFolderEditor<OrganizationContact> createContactsListEditor() {
-        return new CrmEntityFolder<OrganizationContact>(OrganizationContact.class, i18n.tr("Contact"), isEditable()) {
-            private final CrmEntityFolder<OrganizationContact> parent = this;
+    private CEntityFolderEditor<OrganisationContact> createContactsListEditor() {
+        return new CrmEntityFolder<OrganisationContact>(OrganisationContact.class, i18n.tr("Contact"), isEditable()) {
+            private final CrmEntityFolder<OrganisationContact> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -312,37 +312,25 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<OrganizationContact> createFolderDecorator() {
-                return new CrmBoxFolderDecorator<OrganizationContact>(parent);
+            protected IFolderEditorDecorator<OrganisationContact> createFolderDecorator() {
+                return new CrmBoxFolderDecorator<OrganisationContact>(parent);
             }
 
             @Override
-            protected CEntityFolderItemEditor<OrganizationContact> createItem() {
-                return new CEntityFolderRowEditor<OrganizationContact>(OrganizationContact.class, columns()) {
+            protected CEntityFolderItemEditor<OrganisationContact> createItem() {
+                return new CEntityFolderRowEditor<OrganisationContact>(OrganisationContact.class, columns()) {
 
                     @Override
-                    public IFolderItemEditorDecorator<OrganizationContact> createFolderItemDecorator() {
-                        return new CrmBoxFolderItemDecorator<OrganizationContact>(parent);
+                    public IFolderItemEditorDecorator<OrganisationContact> createFolderItemDecorator() {
+                        return new CrmBoxFolderItemDecorator<OrganisationContact>(parent);
                     }
 
                     @Override
                     public IsWidget createContent() {
                         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable());
 
-                        main.add(inject(proto().contactRole().name()), 20, CrmEntityFolder.i18n.tr("Contact Role"));
                         main.add(inject(proto().description()), 35);
-
-                        main.add(new CrmSectionSeparator(CrmEntityFolder.i18n.tr("Person:")));
-                        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
-                        main.add(split);
-
-                        split.getLeftPanel().add(inject(proto().person().name().firstName()), 15);
-                        split.getLeftPanel().add(inject(proto().person().name().lastName()), 15);
-                        split.getLeftPanel().add(inject(proto().person().email()), 20);
-
-                        split.getRightPanel().add(inject(proto().person().workPhone()), 15);
-                        split.getRightPanel().add(inject(proto().person().mobilePhone()), 15);
-                        split.getRightPanel().add(inject(proto().person().homePhone()), 15);
+                        main.add(inject(proto().person()), 35);
 
                         return main;
                     }

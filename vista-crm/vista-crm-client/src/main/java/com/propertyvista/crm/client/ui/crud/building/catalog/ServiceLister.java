@@ -25,7 +25,7 @@ import com.propertyvista.domain.financial.offering.Service;
 public class ServiceLister extends ListerBase<Service> {
 
     public ServiceLister() {
-        this(false);
+        super(Service.class, CrmSiteMap.Properties.Service.class);
     }
 
     public ServiceLister(boolean readOnly) {

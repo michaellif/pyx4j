@@ -19,7 +19,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
-import com.propertyvista.domain.company.OrganizationContact;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -57,16 +56,6 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
         } else {
             // just clear unnecessary data before serialisation: 
             in.marketing().description().setValue(null);
-        }
-    }
-
-    @Override
-    protected void enhanceSaveDBO(Building dbo, BuildingDTO dto) {
-
-        for (OrganizationContact item : dbo.contacts().contacts()) {
-            PersistenceServicesFactory.getPersistenceService().merge(item.contactRole());
-            PersistenceServicesFactory.getPersistenceService().merge(item.person());
-            PersistenceServicesFactory.getPersistenceService().merge(item);
         }
     }
 }

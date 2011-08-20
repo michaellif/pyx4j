@@ -7,18 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 27, 2011
- * @author Misha
+ * Created on 2011-05-24
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.company;
+package com.propertyvista.crm.client.ui.crud.organisation;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.site.client.ui.crud.IViewerView;
 
-public interface OrganizationContacts extends IEntity {
+import com.propertyvista.domain.company.Employee;
 
-    CompanyRole companyRole();
+public interface EmployeeViewerView extends IViewerView<Employee> {
 
-    IList<OrganizationContact> contactList();
 }

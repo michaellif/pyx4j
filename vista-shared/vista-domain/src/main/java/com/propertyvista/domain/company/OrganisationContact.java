@@ -13,32 +13,12 @@
  */
 package com.propertyvista.domain.company;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.contact.Address;
-import com.propertyvista.domain.contact.Email;
-import com.propertyvista.domain.contact.Phone;
-import com.propertyvista.domain.media.Media;
+public interface OrganisationContact extends IEntity {
 
-public interface Company extends IEntity {
+    IPrimitive<String> description();
 
-    @ToString
-    IPrimitive<String> name();
-
-    IList<Address> addresses();
-
-    IList<Phone> phones();
-
-    IPrimitive<String> website();
-
-    IList<Email> emails();
-
-    IList<OrganisationContacts> contacts();
-
-    @EmbeddedEntity
-    Media logo();
+    Employee person();
 }

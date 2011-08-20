@@ -25,7 +25,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 public class FeatureLister extends ListerBase<Feature> {
 
     public FeatureLister() {
-        this(false);
+        super(Feature.class, CrmSiteMap.Properties.Feature.class);
     }
 
     public FeatureLister(boolean readOnly) {

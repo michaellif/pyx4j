@@ -195,6 +195,19 @@ public class CrmSiteMap implements SiteMap {
     public static class Finance extends AppPlace {
     }
 
+    public static class Organisation extends AppPlace {
+
+        @PlaceProperties(caption = "Employee")
+        @NavigationItem(navigLabel = "Employees")
+        public static class Employee extends CrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Portfolio")
+        @NavigationItem(navigLabel = "Portfolios")
+        public static class Portfolio extends CrudAppPlace {
+        }
+    }
+
     @NavigationItem(navigLabel = "Report")
     public static class Report extends CrudAppPlace {
 

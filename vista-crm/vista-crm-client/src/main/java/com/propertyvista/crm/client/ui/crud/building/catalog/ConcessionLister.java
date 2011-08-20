@@ -25,7 +25,7 @@ import com.propertyvista.domain.financial.offering.Concession;
 public class ConcessionLister extends ListerBase<Concession> {
 
     public ConcessionLister() {
-        this(false);
+        super(Concession.class, CrmSiteMap.Properties.Concession.class);
     }
 
     public ConcessionLister(boolean readOnly) {

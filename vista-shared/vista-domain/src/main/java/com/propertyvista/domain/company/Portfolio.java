@@ -7,38 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 27, 2011
- * @author Misha
+ * Created on Aug 20, 2011
+ * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.domain.company;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.contact.Address;
-import com.propertyvista.domain.contact.Email;
-import com.propertyvista.domain.contact.Phone;
-import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.property.asset.building.Building;
 
-public interface Company extends IEntity {
+public interface Portfolio extends IEntity {
 
     @ToString
     IPrimitive<String> name();
 
-    IList<Address> addresses();
+    IPrimitive<String> description();
 
-    IList<Phone> phones();
-
-    IPrimitive<String> website();
-
-    IList<Email> emails();
-
-    IList<OrganisationContacts> contacts();
-
-    @EmbeddedEntity
-    Media logo();
+    @Detached
+    IList<Building> responsibilities();
 }

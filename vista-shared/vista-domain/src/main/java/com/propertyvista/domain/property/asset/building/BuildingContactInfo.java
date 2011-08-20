@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.property.asset.building;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
@@ -21,7 +20,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.company.OrganizationContact;
+import com.propertyvista.domain.company.OrganisationContact;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 
@@ -36,7 +35,6 @@ public interface BuildingContactInfo extends IEntity {
     @Owned
     IList<Phone> phones();
 
-    @Detached
-    // should be loaded in service when necessary!..
-    IList<OrganizationContact> contacts();
+    @Owned
+    IList<OrganisationContact> contacts();
 }

@@ -7,22 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 27, 2011
- * @author Misha
+ * Created on 2011-05-24
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.company;
+package com.propertyvista.crm.client.ui.crud.organisation;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.site.client.ui.crud.IEditorView;
 
-import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.company.Employee;
 
-public interface OrganizationContact extends IEntity {
+public interface EmployeeEditorView extends IEditorView<Employee> {
 
-    ContactRole contactRole();
-
-    IPrimitive<String> description();
-
-    Person person();
 }

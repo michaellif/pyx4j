@@ -113,6 +113,12 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder = new NavigFolder("Finance", CrmImages.INSTANCE.financeNormal(), CrmImages.INSTANCE.financeHover(), CrmImages.INSTANCE.financeActive());
         list.add(folder);
 
+        //Organisation
+        folder = new NavigFolder("Organisation", CrmImages.INSTANCE.tenantsNormal(), CrmImages.INSTANCE.tenantsHover(), CrmImages.INSTANCE.tenantsActive());
+        folder.addNavigItem(new CrmSiteMap.Organisation.Employee());
+        folder.addNavigItem(new CrmSiteMap.Organisation.Portfolio());
+        list.add(folder);
+
         //Reports
         folder = new NavigFolder("Reports", CrmImages.INSTANCE.reportsNormal(), CrmImages.INSTANCE.reportsHover(), CrmImages.INSTANCE.reportsActive());
         folder.addNavigItem(new CrmSiteMap.Report.Management());
@@ -124,14 +130,13 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder = new NavigFolder("Dashboards", CrmImages.INSTANCE.dashboardsNormal(), CrmImages.INSTANCE.dashboardsHover(),
                 CrmImages.INSTANCE.dashboardsActive());
         folder.addNavigItem(new CrmSiteMap.Dashboard.Management());
-// TODO: this dashboard is populated below (in fillDashboards())... 
-//        so we should decide how muxh we'll have system dashborads and if > 1 
+
+// TODO: this folder is populated below (in fillDashboards())... 
+//        so we should decide how many system dashborads we'll have and if > 1 
 //        - should we show here link to 'most' system one ;)            
 //        folder.addNavigItem(new CrmSiteMap.Dashboard.System());
 
         fillDashboards(folder);
-
-        // fill shared and favourite dashboards:  
         list.add(folder);
 
         return list;
