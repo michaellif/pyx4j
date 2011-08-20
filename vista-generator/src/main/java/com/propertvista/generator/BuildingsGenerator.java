@@ -143,7 +143,7 @@ public class BuildingsGenerator {
         building.info().constructionType().setValue(RandomUtil.random(BuildingInfo.ConstructionType.values()));
         building.info().foundationType().setValue(RandomUtil.random(BuildingInfo.FoundationType.values()));
         building.info().floorType().setValue(RandomUtil.random(BuildingInfo.FloorType.values()));
-        building.info().landArea().setValue(1000 + RandomUtil.randomInt(12000) + "sq Ft.");
+        building.info().landArea().setValue(1000 + RandomUtil.randomInt(12000) + " sq Ft.");
         building.info().waterSupply().setValue(RandomUtil.random(BuildingInfo.WaterSupply.values()));
         building.info().centralAir().setValue(RandomUtil.randomBoolean());
         building.info().centralHeat().setValue(RandomUtil.randomBoolean());
