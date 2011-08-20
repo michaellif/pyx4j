@@ -31,9 +31,9 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 public class PmcGenerator {
 
-    List<ServiceItemType> serviceItemTypes = new ArrayList<ServiceItemType>();
+    private final List<ServiceItemType> serviceItemTypes = new ArrayList<ServiceItemType>();
 
-    List<ServiceItemType> featureItemTypes = new ArrayList<ServiceItemType>();
+    private final List<ServiceItemType> featureItemTypes = new ArrayList<ServiceItemType>();
 
     public PmcGenerator() {
 
@@ -62,7 +62,6 @@ public class PmcGenerator {
         featureItemTypes.add(createChargeItemType("Water", Feature.Type.utility));
         featureItemTypes.add(createChargeItemType("Gas", Feature.Type.utility));
         featureItemTypes.add(createChargeItemType("Hydro", Feature.Type.utility));
-
     }
 
     public List<ServiceItemType> getServiceItemTypes() {
