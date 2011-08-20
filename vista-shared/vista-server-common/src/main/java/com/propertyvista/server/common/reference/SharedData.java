@@ -19,6 +19,10 @@ import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.server.common.generator.LocationsGenerator;
 
+/**
+ * Please remove this class and every usage of one!! VladS
+ */
+@Deprecated
 public class SharedData {
 
     private static List<Province> provinces;
