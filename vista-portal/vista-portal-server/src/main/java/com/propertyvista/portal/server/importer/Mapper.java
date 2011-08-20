@@ -56,18 +56,18 @@ public class Mapper {
 
     public void load(Residential residential, List<AvailableUnit> availableUnits) {
         this.availableUnits = availableUnits;
-        log.info("Mapping residential");
+        log.debug("Mapping residential");
 
         for (Region region : residential.getRegions()) {
             create(region);
         }
 
-        log.info("-------------\n\n");
-        log.info("" + model.getBuildings().get(0));
-        log.info("-------------");
-        log.info("" + model.getUnits().get(0));
-        log.info("-------------");
-        log.info("" + model.getFloorplans().get(0));
+        log.debug("-------------\n\n");
+        log.debug("" + model.getBuildings().get(0));
+        log.debug("-------------");
+        log.debug("" + model.getUnits().get(0));
+        log.debug("-------------");
+        log.debug("" + model.getFloorplans().get(0));
         // for (Building building : buildings) {
         // log.info("\n" + building);
         // }
@@ -76,9 +76,9 @@ public class Mapper {
         // log.info("\n" + unit);
         // }
 
-        log.info(model.getBuildings().size() + " buildings");
-        log.info(model.getUnits().size() + " units");
-        log.info(model.getFloorplans().size() + " floorplans");
+        log.debug(model.getBuildings().size() + " buildings");
+        log.debug(model.getUnits().size() + " units");
+        log.debug(model.getFloorplans().size() + " floorplans");
     }
 
     private void create(Region region) {

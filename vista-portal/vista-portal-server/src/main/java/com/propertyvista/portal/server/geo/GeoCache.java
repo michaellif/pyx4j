@@ -39,7 +39,7 @@ public class GeoCache {
 
     public void load() throws JAXBException, IOException {
         String xml = IOUtils.getTextResource(FILENAME, getClass());
-        log.info("Loading {}", xml);
+        log.debug("Loading {}", xml);
         GeoPairs pairs = XmlUtil.unmarshallGeoPairs(xml);
 
         for (GeoPair pair : pairs.getPairs()) {

@@ -119,7 +119,7 @@ public class DashboardPreloader extends AbstractDataPreloader {
         dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         PersistenceServicesFactory.getPersistenceService().persist(dmd);
 
-        return "Created " + 2 + "demo dashboards";
+        return "Created " + 2 + " demo dashboards";
     }
 
     @SuppressWarnings("unchecked")

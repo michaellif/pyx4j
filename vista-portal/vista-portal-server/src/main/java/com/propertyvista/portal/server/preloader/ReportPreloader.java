@@ -125,7 +125,7 @@ public class ReportPreloader extends AbstractDataPreloader {
         dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         PersistenceServicesFactory.getPersistenceService().persist(dmd);
 
-        return "Created " + 2 + "demo reports";
+        return "Created " + 2 + " demo reports";
     }
 
     @SuppressWarnings("unchecked")

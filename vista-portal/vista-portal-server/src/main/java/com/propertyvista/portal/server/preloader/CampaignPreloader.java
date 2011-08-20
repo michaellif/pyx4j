@@ -39,7 +39,7 @@ public class CampaignPreloader extends BaseVistaDataPreloader {
 
         PersistenceServicesFactory.getPersistenceService().persist(campaign);
 
-        return "Created " + 1 + "PhoneCallCampaign";
+        return "Created " + 1 + " PhoneCallCampaign";
     }
 
     @SuppressWarnings("unchecked")

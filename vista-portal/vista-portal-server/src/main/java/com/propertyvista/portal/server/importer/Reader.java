@@ -65,7 +65,7 @@ public class Reader {
             unit.setAvailable(DATE_FORMAT.parse(values[9].trim()));
 
             units.add(unit);
-            log.info("" + unit);
+            log.debug("{}", unit);
         }
     }
 

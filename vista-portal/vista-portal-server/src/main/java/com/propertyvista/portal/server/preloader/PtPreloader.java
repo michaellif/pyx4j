@@ -152,7 +152,7 @@ public class PtPreloader extends BaseVistaDataPreloader {
         //    persist(generator.createApplicationDocumentData(adoc.filename().getValue(), adoc.id().getValue()));
         //}
         StringBuilder b = new StringBuilder();
-        b.append("Created potential tenant series of data");
+        b.append("Created 1 potential tenant series of data");
         return b.toString();
     }
 

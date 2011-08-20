@@ -33,9 +33,9 @@ public class GeoLocator {
         bypassCache, useCache, updateCache
     };
 
-    private Mode mode;
+    private final Mode mode;
 
-    private GeoCache cache;
+    private final GeoCache cache;
 
     public GeoLocator(Mode mode) throws JAXBException, IOException {
         this.mode = mode;
@@ -48,7 +48,7 @@ public class GeoLocator {
 
     public void populateGeo(List<Building> buildings) {
 
-        log.info("Populating geo data with mode [" + mode + "]");
+        log.debug("Populating geo data with mode [" + mode + "]");
 
         try {
             for (Building building : buildings) {
@@ -67,7 +67,7 @@ public class GeoLocator {
                     cache.update(geoAddress, gp);
                 }
 
-                log.info("[{}] -> [{}]", geoAddress, gp.toString());
+                log.debug("[{}] -> [{}]", geoAddress, gp.toString());
                 address.location().setValue(gp);
             }
 
