@@ -57,7 +57,7 @@ public class BoilerEditorForm extends MechlBaseEditorForm<BoilerDTO> {
 
         main.add(new VistaLineSeparator());
         main.add(new HTML("&nbsp"));
-        main.add(inject(proto().notes()), 40);
+        main.add(inject(proto().notes()), 50);
 
         return new CrmScrollPanel(main);
     }
