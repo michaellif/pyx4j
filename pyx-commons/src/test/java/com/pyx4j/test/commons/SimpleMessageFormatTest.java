@@ -114,7 +114,7 @@ public class SimpleMessageFormatTest extends TestCase {
         int offset = (new Date(0)).getTimezoneOffset();
         Date date = new Date(Consts.MIN2MSEC * (offset + (((3 - 1) * Consts.DAY2HOURS + 4) * Consts.HOURS2MIN) + 10));
         assertMessageFormat("January 1970", "{0,date,MMMM yyyy}", date);
-        assertMessageFormat("Saturday, January 3, 1970", "{0,date,full}", date);
+        assertMessageFormat("Saturday, January 3, 1970", "{0,date,EEEE, MMMM d, yyyy}", date);
     }
 
     /**
