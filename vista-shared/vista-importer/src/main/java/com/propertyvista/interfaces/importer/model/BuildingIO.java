@@ -44,6 +44,10 @@ public interface BuildingIO extends IEntity {
 
     IPrimitive<String> propertyManager();
 
+    IPrimitive<String> complexName();
+
+    IPrimitive<Boolean> complexPrimary();
+
     AddressIO address();
 
     IPrimitive<String> totalStoreys();

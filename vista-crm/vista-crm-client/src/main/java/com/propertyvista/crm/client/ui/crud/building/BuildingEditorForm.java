@@ -21,6 +21,8 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -62,6 +64,7 @@ import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.company.OrganisationContact;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
 
@@ -133,6 +136,14 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         new FutureDateValidation(get(proto().info().structureBuildYear()));
         new FutureDateValidation(get(proto().financial().dateAquired()));
         new FutureDateValidation(get(proto().financial().lastAppraisalDate()));
+
+        get(proto().complex()).addValueChangeHandler(new ValueChangeHandler<Complex>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<Complex> event) {
+                get(proto().complexPrimary()).setEditable(!get(proto().complex()).isValueEmpty());
+            }
+        });
     }
 
     @Override
@@ -159,6 +170,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().info().totalStoreys()), 5);
         split.getRightPanel().add(inject(proto().info().residentialStoreys()), 5);
         split.getRightPanel().add(inject(proto().complex()), 15);
+        split.getRightPanel().add(inject(proto().complexPrimary()), 15);
 
         main.add(new VistaLineSeparator());
         VistaDecoratorsSplitFlowPanel split2 = new VistaDecoratorsSplitFlowPanel(!isEditable());

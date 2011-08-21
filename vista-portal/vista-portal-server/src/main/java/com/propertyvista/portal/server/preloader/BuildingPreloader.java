@@ -13,6 +13,7 @@
 package com.propertyvista.portal.server.preloader;
 
 import java.util.List;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PreloadConfig;
@@ -108,14 +110,11 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         persist(leaseTerms);
 
         // create some complexes:
-        Complex complex = generator.createComplex("Complex #1");
-        persist(complex);
-
-        complex = generator.createComplex("Complex #2");
-        persist(complex);
-
-        complex = generator.createComplex("Complex #3");
-        persist(complex);
+        List<Complex> complexes = new Vector<Complex>();
+        complexes.add(generator.createComplex("Complex #1"));
+        complexes.add(generator.createComplex("Complex #2"));
+        complexes.add(generator.createComplex("Complex #3"));
+        PersistenceServicesFactory.getPersistenceService().persist(complexes);
 
         // create some StarlightPmc:
         PropertyManager pmc = generator.createPmc("PMC #1");
@@ -128,8 +127,22 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         persist(pmc);
 
         int unitCount = 0;
-        List<Building> buildings = generator.createBuildings(config.getNumResidentialBuildings(), complex);
+        List<Building> buildings = generator.createBuildings(config.getNumResidentialBuildings());
+
+        List<Complex> complexesWithBuildins = new Vector<Complex>();
+
         for (Building building : buildings) {
+
+            if (DataGenerator.randomBoolean()) {
+                building.complex().set(DataGenerator.random(complexes));
+                if (!complexesWithBuildins.contains(building.complex())) {
+                    complexesWithBuildins.add(building.complex());
+                    building.complexPrimary().setValue(Boolean.TRUE);
+                } else {
+                    building.complexPrimary().setValue(Boolean.FALSE);
+                }
+            }
+
             // TODO Need to be saving PropertyProfile, PetCharge
 
             building.propertyManager().set(pmc); // temporary for Starlight!..

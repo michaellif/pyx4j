@@ -81,16 +81,16 @@ public class BuildingsGenerator {
         this.seed = seed;
     }
 
-    public List<Building> createBuildings(int numBuildings, Complex complex) {
+    public List<Building> createBuildings(int numBuildings) {
         List<Building> buildings = new ArrayList<Building>();
         for (int b = 0; b < numBuildings; b++) {
-            Building building = createBuilding(complex, b);
+            Building building = createBuilding(b);
             buildings.add(building);
         }
         return buildings;
     }
 
-    public Building createBuilding(Complex complex, int counter) {
+    public Building createBuilding(int counter) {
         // building type
         BuildingInfo.Type buildingType = RandomUtil.random(BuildingInfo.Type.values());
 
@@ -119,17 +119,14 @@ public class BuildingsGenerator {
         // now
         PropertyProfile propertyProfile = createPropertyProfile(counter);
 
-        Building building = createBuilding(propertyCode, buildingType, complex, website, address, phones, email);
+        Building building = createBuilding(propertyCode, buildingType, website, address, phones, email);
         // log.info("Created: " + building);
 
         return building;
     }
 
-    private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, Complex complex, String website, Address address, List<Phone> phones,
-            Email email) {
+    private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, String website, Address address, List<Phone> phones, Email email) {
         Building building = EntityFactory.create(Building.class);
-
-        building.complex().set(complex);
         building.propertyCode().setValue(propertyCode);
 
         building.info().name().setValue(RandomUtil.randomLetters(5));

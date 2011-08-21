@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.property.asset.building;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -30,6 +31,7 @@ import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.PropertyManagerReferenceAdapter;
 import com.propertyvista.domain.property.asset.Complex;
+import com.propertyvista.domain.property.asset.ComplexReferenceAdapter;
 
 //TODO rename to Property?!
 public interface Building extends IEntity {
@@ -56,8 +58,12 @@ public interface Building extends IEntity {
     @EmbeddedEntity
     Marketing marketing();
 
-    // there is a drop-down box with create new complex  
+    @Editor(type = EditorType.suggest)
+    @Reference(adapter = ComplexReferenceAdapter.class)
     Complex complex();
+
+    @Caption(name = "Primary in Complex")
+    IPrimitive<Boolean> complexPrimary();
 
     @Detached
     // should be loaded in service when necessary!..
