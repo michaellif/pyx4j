@@ -64,16 +64,16 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
     @Override
     public void onLeaseConvertionSuccess(Lease result) {
-        MessageDialog.info("Information", "Conversion is succeeded!");
+        MessageDialog.info(i18n.tr("Information"), i18n.tr("Conversion is succeeded!"));
         btnconvert.setVisible(false);
     }
 
     @Override
     public boolean onConvertionFail(Throwable caught) {
         if (caught instanceof Error) {
-            MessageDialog.error("Error", caught.getMessage());
+            MessageDialog.error(i18n.tr("Error"), caught.getMessage());
         } else {
-            MessageDialog.error("Error", "Conversion is failed!");
+            MessageDialog.error(i18n.tr("Error"), i18n.tr("Conversion is failed!"));
         }
         return true;
     }

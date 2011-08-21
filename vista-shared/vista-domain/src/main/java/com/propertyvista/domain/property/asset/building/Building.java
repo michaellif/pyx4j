@@ -25,7 +25,6 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyManager;
@@ -67,9 +66,4 @@ public interface Building extends IEntity {
     @Detached
     // should be loaded in service when necessary!..
     ServiceCatalog serviceCatalog();
-
-    // utlitiies included in price and should be EXCLUDED from ServiceCatalog 
-    @Detached
-    // should be loaded in service when necessary!..
-    IList<ServiceItemType> includedUtilities();
 }

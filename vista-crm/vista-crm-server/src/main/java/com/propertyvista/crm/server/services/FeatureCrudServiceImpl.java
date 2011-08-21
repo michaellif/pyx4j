@@ -13,13 +13,31 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+
 import com.propertyvista.crm.rpc.services.FeatureCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.ServiceCatalog;
 
 public class FeatureCrudServiceImpl extends GenericCrudServiceImpl<Feature> implements FeatureCrudService {
 
     public FeatureCrudServiceImpl() {
         super(Feature.class);
+    }
+
+    @Override
+    protected void enhanceRetrieve(Feature entity, boolean fromList) {
+        if (!fromList) {
+            PersistenceServicesFactory.getPersistenceService().retrieve(entity.catalog());
+        }
+    }
+
+    @Override
+    public void retrieveCatalog(AsyncCallback<ServiceCatalog> callback, Key entityId) {
+        callback.onSuccess(PersistenceServicesFactory.getPersistenceService().retrieve(ServiceCatalog.class, entityId));
     }
 }

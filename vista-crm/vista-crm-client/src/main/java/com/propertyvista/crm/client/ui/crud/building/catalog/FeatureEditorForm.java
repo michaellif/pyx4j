@@ -16,6 +16,8 @@ package com.propertyvista.crm.client.ui.crud.building.catalog;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.CEntityComboBox;
@@ -28,6 +30,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
@@ -35,8 +38,8 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
@@ -110,6 +113,18 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
                                             return entity.featureType().equals(value.type());
                                         }
                                         return false;
+                                    }
+                                });
+                                combo.addValueChangeHandler(new ValueChangeHandler<ServiceItemType>() {
+                                    @Override
+                                    public void onValueChange(ValueChangeEvent<ServiceItemType> event) {
+                                        for (ServiceItemType item : FeatureEditorForm.this.getValue().catalog().includedUtilities()) {
+                                            if (item.equals(event.getValue())) {
+                                                MessageDialog.warn(CrmEntityFolder.i18n.tr("Note"),
+                                                        CrmEntityFolder.i18n.tr("This utility type is selected as included in price!"));
+                                            }
+                                        }
+
                                     }
                                 });
                             }

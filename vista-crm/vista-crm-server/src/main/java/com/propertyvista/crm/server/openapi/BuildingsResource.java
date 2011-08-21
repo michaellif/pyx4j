@@ -127,7 +127,7 @@ public class BuildingsResource {
             }
 
             {
-                for (ServiceItemType utility : building.includedUtilities()) {
+                for (ServiceItemType utility : building.serviceCatalog().includedUtilities()) {
                     buildingRS.includedUtilities.add(Converter.convertBuildingIncludedUtility(utility));
                 }
             }

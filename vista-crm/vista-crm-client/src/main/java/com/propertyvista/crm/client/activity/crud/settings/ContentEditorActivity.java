@@ -37,7 +37,7 @@ public class ContentEditorActivity extends EditorActivityBase<PageDescriptor> im
     }
 
     @Override
-    protected void createNewEntity(AsyncCallback<PageDescriptor> callback) {
+    protected void createNewItem(AsyncCallback<PageDescriptor> callback) {
         PageDescriptor descriptor = EntityFactory.create(PageDescriptor.class);
         descriptor.type().setValue(Type.staticContent);
         callback.onSuccess(descriptor);

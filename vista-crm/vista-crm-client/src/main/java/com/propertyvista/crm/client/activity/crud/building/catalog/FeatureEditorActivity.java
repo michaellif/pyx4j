@@ -27,6 +27,7 @@ import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.FeatureCrudService;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.ServiceCatalog;
 
 public class FeatureEditorActivity extends EditorActivityBase<Feature> {
 
@@ -60,8 +61,35 @@ public class FeatureEditorActivity extends EditorActivityBase<Feature> {
     }
 
     @Override
+    protected void createNewItem(final AsyncCallback<Feature> callback) {
+        super.createNewItem(new AsyncCallback<Feature>() {
+            @Override
+            public void onSuccess(final Feature feature) {
+                ((FeatureCrudService) service).retrieveCatalog(new AsyncCallback<ServiceCatalog>() {
+                    @Override
+                    public void onSuccess(ServiceCatalog catalog) {
+                        feature.catalog().set(catalog);
+                        callback.onSuccess(feature);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        throw new UnrecoverableClientError(caught);
+                    }
+                }, parentID);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+        });
+    }
+
+    @Override
     protected void initNewItem(Feature entity) {
         super.initNewItem(entity);
         entity.type().setValue(itemType);
+
     }
 }

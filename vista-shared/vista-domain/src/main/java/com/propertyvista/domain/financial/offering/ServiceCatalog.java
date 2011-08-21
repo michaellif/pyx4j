@@ -37,5 +37,9 @@ public interface ServiceCatalog extends IEntity {
     IList<Feature> features();
 
     IList<Concession> concessions();
-    // ----------------------------------------------------     
+
+    // ----------------------------------------------------
+
+    // Utilities included in price and should be EXCLUDED from Lease Service Agreement 
+    IList<ServiceItemType> includedUtilities();
 }
