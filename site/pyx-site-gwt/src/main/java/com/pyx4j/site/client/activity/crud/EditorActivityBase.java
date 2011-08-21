@@ -98,7 +98,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     public void populate() {
 
         if (isNewItem()) {
-            createNewEntity(new AsyncCallback<E>() {
+            createNewItem(new AsyncCallback<E>() {
                 @Override
                 public void onSuccess(E entity) {
                     if (parentID != null) {
@@ -133,7 +133,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         }
     }
 
-    protected void createNewEntity(AsyncCallback<E> callback) {
+    protected void createNewItem(AsyncCallback<E> callback) {
         callback.onSuccess(EntityFactory.create(entityClass));
     }
 
