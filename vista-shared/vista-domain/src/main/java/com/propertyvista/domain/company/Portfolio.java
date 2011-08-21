@@ -13,13 +13,11 @@
  */
 package com.propertyvista.domain.company;
 
-import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-
-import com.propertyvista.domain.property.asset.building.Building;
 
 public interface Portfolio extends IEntity {
 
@@ -28,6 +26,6 @@ public interface Portfolio extends IEntity {
 
     IPrimitive<String> description();
 
-    @Detached
-    IList<Building> responsibilities();
+    @Owned
+    IList<AssignedBuilding> buildings();
 }

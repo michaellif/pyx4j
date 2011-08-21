@@ -56,6 +56,9 @@ import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActiv
 import com.propertyvista.crm.client.activity.crud.organisation.EmployeeEditorActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.EmployeeListerActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.EmployeeViewerActivity;
+import com.propertyvista.crm.client.activity.crud.organisation.PortfolioEditorActivity;
+import com.propertyvista.crm.client.activity.crud.organisation.PortfolioListerActivity;
+import com.propertyvista.crm.client.activity.crud.organisation.PortfolioViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ContentActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ContentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ContentViewerActivity;
@@ -382,6 +385,18 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
+                } else if (place instanceof CrmSiteMap.Organisation.Portfolio) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new PortfolioEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new PortfolioViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new PortfolioListerActivity(place);
+                        break;
+                    }
 // Reports:
                 } else if (place instanceof CrmSiteMap.Report) {
                     activity = new ReportViewActivity(place);

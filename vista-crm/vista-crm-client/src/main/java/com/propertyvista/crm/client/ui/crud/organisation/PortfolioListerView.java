@@ -11,15 +11,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.crm.client.ui.crud.organisation;
 
-import com.propertyvista.crm.rpc.services.PortfolioCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
+import com.pyx4j.site.client.ui.crud.IListerView;
+
 import com.propertyvista.domain.company.Portfolio;
 
-public class PortfolioCrudServiceImpl extends GenericCrudServiceImpl<Portfolio> implements PortfolioCrudService {
+public interface PortfolioListerView extends IListerView<Portfolio> {
 
-    public PortfolioCrudServiceImpl() {
-        super(Portfolio.class);
-    }
 }

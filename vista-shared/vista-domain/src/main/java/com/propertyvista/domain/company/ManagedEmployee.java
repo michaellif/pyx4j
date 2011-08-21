@@ -7,19 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on Aug 20, 2011
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.domain.company;
 
-import com.propertyvista.crm.rpc.services.PortfolioCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
-import com.propertyvista.domain.company.Portfolio;
+import com.pyx4j.entity.shared.IEntity;
 
-public class PortfolioCrudServiceImpl extends GenericCrudServiceImpl<Portfolio> implements PortfolioCrudService {
+public interface ManagedEmployee extends IEntity {
 
-    public PortfolioCrudServiceImpl() {
-        super(Portfolio.class);
-    }
+    Employee employee();
 }

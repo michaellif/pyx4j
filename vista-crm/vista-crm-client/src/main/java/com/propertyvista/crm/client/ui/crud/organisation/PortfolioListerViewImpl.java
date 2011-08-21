@@ -11,15 +11,16 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.crm.client.ui.crud.organisation;
 
-import com.propertyvista.crm.rpc.services.PortfolioCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
+import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.company.Portfolio;
 
-public class PortfolioCrudServiceImpl extends GenericCrudServiceImpl<Portfolio> implements PortfolioCrudService {
+public class PortfolioListerViewImpl extends CrmListerViewImplBase<Portfolio> implements PortfolioListerView {
 
-    public PortfolioCrudServiceImpl() {
-        super(Portfolio.class);
+    public PortfolioListerViewImpl() {
+        super(CrmSiteMap.Organisation.Portfolio.class);
+        setLister(new PortfolioLister());
     }
 }
