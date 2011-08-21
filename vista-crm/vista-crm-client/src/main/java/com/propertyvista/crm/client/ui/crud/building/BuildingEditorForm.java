@@ -330,7 +330,15 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable());
 
                         main.add(inject(proto().description()), 35);
-                        main.add(inject(proto().person()), 35);
+                        if (parent.isEditable()) {
+                            main.add(inject(proto().person()), 35);
+                        } else {
+                            main.add(inject(proto().person()), 35);
+                            main.add(inject(proto().person().workPhone()), 10);
+                            main.add(inject(proto().person().mobilePhone()), 10);
+                            main.add(inject(proto().person().homePhone()), 10);
+                            main.add(inject(proto().person().email()), 20);
+                        }
 
                         return main;
                     }
