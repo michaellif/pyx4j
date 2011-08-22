@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.IEntityPersistenceService;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
@@ -63,7 +63,7 @@ public class BuildingsResource {
     private final IEntityPersistenceService service;
 
     public BuildingsResource() {
-        service = PersistenceServicesFactory.getPersistenceService();
+        service = Persistence.service();
 
         // TODO this is only temporary
         SharedData.init();
@@ -119,7 +119,7 @@ public class BuildingsResource {
             // Group buildings by Complex, Exporting as one Building in Complex.
             boolean exportBuildingInfo = false;
             if (building.complex().isNull()) {
-                PersistenceServicesFactory.getPersistenceService().retrieve(building.marketing().adBlurbs());
+                Persistence.service().retrieve(building.marketing().adBlurbs());
                 buildingRS = Converter.convertBuilding(building);
                 buildingRS.unitCount = 0;
                 buildingsRS.buildings.add(buildingRS);
@@ -133,7 +133,7 @@ public class BuildingsResource {
                 }
                 if (building.complexPrimary().isBooleanTrue()) {
                     exportBuildingInfo = true;
-                    PersistenceServicesFactory.getPersistenceService().retrieve(building.marketing().adBlurbs());
+                    Persistence.service().retrieve(building.marketing().adBlurbs());
                     Converter.copyDBOtoRS(building, buildingRS);
                 }
             }
@@ -143,7 +143,7 @@ public class BuildingsResource {
                 {
                     EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
                     criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
-                    for (BuildingAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(criteria)) {
+                    for (BuildingAmenity amenity : Persistence.service().query(criteria)) {
                         buildingRS.amenities.add(Converter.convertBuildingAmenity(amenity));
                     }
                 }
@@ -151,19 +151,19 @@ public class BuildingsResource {
                 {
                     EntityQueryCriteria<Parking> criteria = EntityQueryCriteria.create(Parking.class);
                     criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
-                    for (Parking i : PersistenceServicesFactory.getPersistenceService().query(criteria)) {
+                    for (Parking i : Persistence.service().query(criteria)) {
                         buildingRS.parkings.add(Converter.convertParking(i));
                     }
                 }
                 if (!building.media().isEmpty()) {
-                    PersistenceServicesFactory.getPersistenceService().retrieve(building.media());
+                    Persistence.service().retrieve(building.media());
                     for (Media media : building.media()) {
                         buildingRS.medias.add(Converter.convertMedia(media));
                     }
                 }
 
                 {
-                    PersistenceServicesFactory.getPersistenceService().retrieve(building.serviceCatalog());
+                    Persistence.service().retrieve(building.serviceCatalog());
                     for (ServiceItemType utility : building.serviceCatalog().includedUtilities()) {
                         buildingRS.includedUtilities.add(Converter.convertBuildingIncludedUtility(utility));
                     }
@@ -174,14 +174,20 @@ public class BuildingsResource {
             floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
             List<Floorplan> floorplans = service.query(floorplanCriteria);
             for (Floorplan floorplan : floorplans) {
-                FloorplanRS floorplanRS = Converter.convertFloorplan(floorplan);
+                FloorplanRS floorplanRS = ensureUnique(buildingRS.floorplans, Converter.convertFloorplan(floorplan));
 
                 //Get Amenity
                 {
                     EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
                     criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), floorplan));
-                    for (FloorplanAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(criteria)) {
+                    for (FloorplanAmenity amenity : Persistence.service().query(criteria)) {
                         floorplanRS.amenities.add(Converter.convertFloorplanAmenity(amenity));
+                    }
+                }
+                if (!floorplan.media().isEmpty()) {
+                    Persistence.service().retrieve(floorplan.media());
+                    for (Media media : floorplan.media()) {
+                        floorplanRS.medias.add(Converter.convertMedia(media));
                     }
                 }
 
@@ -189,7 +195,7 @@ public class BuildingsResource {
                 {
                     EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
                     criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
-                    for (AptUnit u : PersistenceServicesFactory.getPersistenceService().query(criteria)) {
+                    for (AptUnit u : Persistence.service().query(criteria)) {
                         buildingRS.unitCount++;
 
                         floorplanRS.rentFrom = min(floorplanRS.rentFrom, u.financial().unitRent().getValue());
@@ -209,20 +215,23 @@ public class BuildingsResource {
                 buildingRS.sqftFrom = min(buildingRS.sqftFrom, floorplanRS.sqftFrom);
                 buildingRS.sqftTo = max(buildingRS.sqftTo, floorplanRS.sqftTo);
 
-                if (!floorplan.media().isEmpty()) {
-                    PersistenceServicesFactory.getPersistenceService().retrieve(floorplan.media());
-                    for (Media media : floorplan.media()) {
-                        floorplanRS.medias.add(Converter.convertMedia(media));
-                    }
-                }
-
-                buildingRS.floorplans.add(floorplanRS);
             }
         }
 
         log.info("BuildingRS Retrive time {} msec", TimeUtils.since(start));
 
         return buildingsRS;
+    }
+
+    private FloorplanRS ensureUnique(List<FloorplanRS> floorplans, FloorplanRS convertedFloorplan) {
+        for (FloorplanRS floorplanRS : floorplans) {
+            if (floorplanRS.name.equals(convertedFloorplan.name)) {
+                return floorplanRS;
+            }
+        }
+        // Not found
+        floorplans.add(convertedFloorplan);
+        return convertedFloorplan;
     }
 
     Double min(Double a, Double b) {
