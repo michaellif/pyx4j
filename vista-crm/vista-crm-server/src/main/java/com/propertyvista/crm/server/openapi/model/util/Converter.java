@@ -59,12 +59,16 @@ public class Converter {
     public static BuildingRS convertBuilding(Building from) {
         BuildingRS to = new BuildingRS();
 
+        copyDBOtoRS(from, to);
+
+        return to;
+    }
+
+    public static void copyDBOtoRS(Building from, BuildingRS to) {
         to.propertyCode = from.propertyCode().getStringView();
 
         to.info = convertBuildingInfo(from.info());
         to.marketing = convertMarketing(from.marketing());
-
-        return to;
     }
 
     public static Building convertBuilding(BuildingRS from) {

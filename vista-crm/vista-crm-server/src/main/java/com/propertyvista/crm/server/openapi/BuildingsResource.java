@@ -16,7 +16,9 @@ package com.propertyvista.crm.server.openapi;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -44,6 +46,7 @@ import com.propertyvista.crm.server.openapi.model.FloorplanRS;
 import com.propertyvista.crm.server.openapi.model.util.Converter;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -107,32 +110,52 @@ public class BuildingsResource {
 
         List<Building> buildings = service.query(buildingCriteria);
 
+        Map<Complex, BuildingRS> complexes = new Hashtable<Complex, BuildingRS>();
+
         for (Building building : buildings) {
-            BuildingRS buildingRS = Converter.convertBuilding(building);
-            buildingsRS.buildings.add(buildingRS);
+            BuildingRS buildingRS;
 
-            //Get Amenity
-            {
-                EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
-                for (BuildingAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(criteria)) {
-                    buildingRS.amenities.add(Converter.convertBuildingAmenity(amenity));
+            // Group buildings by Complex, Exporting as one Building in Complex.
+            boolean exportBuildingInfo = false;
+            if (building.complex().isNull()) {
+                buildingRS = Converter.convertBuilding(building);
+                buildingRS.unitCount = 0;
+                buildingsRS.buildings.add(buildingRS);
+                exportBuildingInfo = true;
+            } else {
+                buildingRS = complexes.get(building.complex());
+                if (buildingRS == null) {
+                    buildingRS = new BuildingRS();
+                    buildingRS.unitCount = 0;
                 }
-            }
-            if (!building.media().isEmpty()) {
-                PersistenceServicesFactory.getPersistenceService().retrieve(building.media());
-                for (Media media : building.media()) {
-                    buildingRS.medias.add(Converter.convertMedia(media));
-                }
-            }
-
-            {
-                for (ServiceItemType utility : building.serviceCatalog().includedUtilities()) {
-                    buildingRS.includedUtilities.add(Converter.convertBuildingIncludedUtility(utility));
+                if (building.complexPrimary().isBooleanTrue()) {
+                    exportBuildingInfo = true;
+                    Converter.copyDBOtoRS(building, buildingRS);
                 }
             }
 
-            buildingRS.unitCount = 0;
+            if (exportBuildingInfo) {
+                //Get Amenity
+                {
+                    EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
+                    criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+                    for (BuildingAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(criteria)) {
+                        buildingRS.amenities.add(Converter.convertBuildingAmenity(amenity));
+                    }
+                }
+                if (!building.media().isEmpty()) {
+                    PersistenceServicesFactory.getPersistenceService().retrieve(building.media());
+                    for (Media media : building.media()) {
+                        buildingRS.medias.add(Converter.convertMedia(media));
+                    }
+                }
+
+                {
+                    for (ServiceItemType utility : building.serviceCatalog().includedUtilities()) {
+                        buildingRS.includedUtilities.add(Converter.convertBuildingIncludedUtility(utility));
+                    }
+                }
+            }
 
             EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
             floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
