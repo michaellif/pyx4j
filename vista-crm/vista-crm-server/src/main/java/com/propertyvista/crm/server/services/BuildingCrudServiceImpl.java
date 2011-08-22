@@ -36,7 +36,7 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
     protected void enhanceRetrieveDTO(Building in, BuildingDTO dto, boolean fromList) {
 
         if (!fromList) {
-            // load detached entities/lists:
+            // load detached entities/lists. Update other places: BuildingsResource and BuildingRetriever
             PersistenceServicesFactory.getPersistenceService().retrieve(in.media());
             PersistenceServicesFactory.getPersistenceService().retrieve(in.serviceCatalog());
             PersistenceServicesFactory.getPersistenceService().retrieve(in.contacts().contacts());

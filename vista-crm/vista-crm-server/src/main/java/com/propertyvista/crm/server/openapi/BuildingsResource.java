@@ -118,6 +118,7 @@ public class BuildingsResource {
             // Group buildings by Complex, Exporting as one Building in Complex.
             boolean exportBuildingInfo = false;
             if (building.complex().isNull()) {
+                PersistenceServicesFactory.getPersistenceService().retrieve(building.marketing().adBlurbs());
                 buildingRS = Converter.convertBuilding(building);
                 buildingRS.unitCount = 0;
                 buildingsRS.buildings.add(buildingRS);
@@ -130,6 +131,7 @@ public class BuildingsResource {
                 }
                 if (building.complexPrimary().isBooleanTrue()) {
                     exportBuildingInfo = true;
+                    PersistenceServicesFactory.getPersistenceService().retrieve(building.marketing().adBlurbs());
                     Converter.copyDBOtoRS(building, buildingRS);
                 }
             }

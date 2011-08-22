@@ -268,12 +268,17 @@ public class Converter {
 
         switch (from.type().getValue()) {
         case file:
-            to.fileId = from.file().blobKey().getStringView();
+            to.fileId = from.id().getStringView();
             to.mediaType = MediaRS.MediaType.file;
             to.mimeType = from.file().contentMimeType().getStringView();
             break;
-        default:
-            throw new Error("TODO");
+        case externalUrl:
+            to.mediaType = MediaRS.MediaType.externalUrl;
+            to.url = from.url().getValue();
+            break;
+        case youTube:
+            to.mediaType = MediaRS.MediaType.youTube;
+            to.youTubeVideoID = from.youTubeVideoID().getValue();
         }
         to.caption = from.file().caption().getStringView();
 
