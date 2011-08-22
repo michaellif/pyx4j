@@ -19,13 +19,14 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 /**
  * Defines Services on a given Building
- * 
- * @author michaellif
- * 
  */
 public interface ServiceCatalog extends IEntity {
 
-    IPrimitive<String> name();
+    /**
+     * This is small hack for no column table SQL update. Do not use.
+     */
+    @Deprecated
+    IPrimitive<String> x();
 
     /**
      * Double links - main dependency in appropriate entity:

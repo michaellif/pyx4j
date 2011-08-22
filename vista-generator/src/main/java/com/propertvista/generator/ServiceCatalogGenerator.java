@@ -30,11 +30,11 @@ import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
-public class PmcGenerator {
+public class ServiceCatalogGenerator {
 
     private final ServiceItemTypes serviceItemTypes;
 
-    public PmcGenerator(ServiceItemTypes serviceItemTypes) {
+    public ServiceCatalogGenerator(ServiceItemTypes serviceItemTypes) {
         this.serviceItemTypes = serviceItemTypes;
     }
 
@@ -46,10 +46,12 @@ public class PmcGenerator {
         return this.serviceItemTypes.featureItemTypes;
     }
 
-    public ServiceCatalog createServiceCatalog() {
-        ServiceCatalog catalog = EntityFactory.create(ServiceCatalog.class);
-        catalog.name().setValue(RandomUtil.randomLetters(4));
-        return catalog;
+    public void createServiceCatalog(ServiceCatalog catalog) {
+        catalog.services().addAll(createServices(catalog));
+        catalog.features().addAll(createFeatures(catalog));
+        catalog.concessions().addAll(createConcessions(catalog));
+        catalog.includedUtilities().addAll(createIncludedUtilities());
+
     }
 
     public List<Service> createServices(ServiceCatalog catalog) {
@@ -184,6 +186,23 @@ public class PmcGenerator {
         concession.description().setValue("Concession description here...");
 
         return concession;
+    }
+
+    public List<ServiceItemType> createIncludedUtilities() {
+        List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
+        for (ServiceItemType itemType : getFeatureItemTypes()) {
+            if (Feature.Type.utility.equals(itemType.featureType().getValue())) {
+                allowedItemTypes.add(itemType);
+            }
+        }
+
+        List<ServiceItemType> items = new ArrayList<ServiceItemType>();
+        int maxItems = DataGenerator.randomInt(allowedItemTypes.size());
+        for (int i = 0; i < maxItems; ++i) {
+            items.add(DataGenerator.random(allowedItemTypes));
+        }
+
+        return items;
     }
 
 }

@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.propertvista.generator.BuildingsGenerator;
 import com.propertvista.generator.MediaGenerator;
-import com.propertvista.generator.PmcGenerator;
+import com.propertvista.generator.ServiceCatalogGenerator;
 import com.propertvista.generator.gdo.ServiceItemTypes;
 import com.propertvista.generator.util.RandomUtil;
 
@@ -37,9 +37,7 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
-import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.marketing.yield.Amenity;
@@ -104,7 +102,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             serviceItemTypes.featureItemTypes.addAll(PersistenceServicesFactory.getPersistenceService().query(criteria));
         }
 
-        PmcGenerator pmcGenerator = new PmcGenerator(serviceItemTypes);
+        ServiceCatalogGenerator pmcGenerator = new ServiceCatalogGenerator(serviceItemTypes);
 
         LeaseTerms leaseTerms = generator.createLeaseTerms();
         persist(leaseTerms);
@@ -148,28 +146,17 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             building.propertyManager().set(pmc); // temporary for Starlight!..
 
             // Service Catalog:
-            ServiceCatalog catalog = pmcGenerator.createServiceCatalog();
+            ServiceCatalog catalog = EntityFactory.create(ServiceCatalog.class);
             persist(catalog);
 
-            List<Service> services = pmcGenerator.createServices(catalog);
-            for (Service item : services) {
-                persist(item);
-                catalog.services().add(item);
-            }
+            pmcGenerator.createServiceCatalog(catalog);
 
-            List<Feature> features = pmcGenerator.createFeatures(catalog);
-            for (Feature item : features) {
-                persist(item);
-                catalog.features().add(item);
-            }
+            PersistenceServicesFactory.getPersistenceService().persist(catalog.services());
+            PersistenceServicesFactory.getPersistenceService().persist(catalog.features());
+            PersistenceServicesFactory.getPersistenceService().persist(catalog.concessions());
 
-            List<Concession> concessions = pmcGenerator.createConcessions(catalog);
-            for (Concession item : concessions) {
-                persist(item);
-                catalog.concessions().add(item);
-            }
+            persist(catalog);
 
-            merge(catalog);
             building.serviceCatalog().set(catalog);
 
             persist(building);
