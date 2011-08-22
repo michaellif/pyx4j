@@ -14,6 +14,8 @@
 package com.propertyvista.crm.server.openapi;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -36,7 +38,7 @@ public class OpenApiModelExample {
 
     private final static Logger log = LoggerFactory.getLogger(OpenApiModelExample.class);
 
-    public static void main(String[] args) throws JAXBException {
+    public static void main(String[] args) throws JAXBException, FileNotFoundException, IOException {
         long start = System.currentTimeMillis();
 
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(true));
@@ -62,6 +64,8 @@ public class OpenApiModelExample {
         } finally {
             IOUtils.closeQuietly(w);
         }
+
+        MarshallUtil.printSchema(BuildingsRS.class, new FileOutputStream(new File("buildings.xsd")), true);
     }
 
 }
