@@ -128,6 +128,7 @@ public class BuildingsResource {
                 buildingRS = complexes.get(building.complex());
                 if (buildingRS == null) {
                     buildingRS = new BuildingRS();
+                    buildingsRS.buildings.add(buildingRS);
                     buildingRS.unitCount = 0;
                 }
                 if (building.complexPrimary().isBooleanTrue()) {
