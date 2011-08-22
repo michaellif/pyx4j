@@ -54,4 +54,8 @@ public class BuildingRS {
     @XmlElements(@XmlElement(name = "utility", type = UtilityRS.class))
     public List<UtilityRS> includedUtilities = new ArrayList<UtilityRS>();
 
+    @XmlElementWrapper
+    @XmlElements(@XmlElement(name = "parking", type = ParkingRS.class))
+    public List<ParkingRS> parkings = new ArrayList<ParkingRS>();
+
 }

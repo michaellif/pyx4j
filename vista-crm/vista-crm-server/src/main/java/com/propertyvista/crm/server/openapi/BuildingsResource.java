@@ -49,6 +49,7 @@ import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
+import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -145,6 +146,14 @@ public class BuildingsResource {
                         buildingRS.amenities.add(Converter.convertBuildingAmenity(amenity));
                     }
                 }
+                //Parking
+                {
+                    EntityQueryCriteria<Parking> criteria = EntityQueryCriteria.create(Parking.class);
+                    criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+                    for (Parking i : PersistenceServicesFactory.getPersistenceService().query(criteria)) {
+                        buildingRS.parkings.add(Converter.convertParking(i));
+                    }
+                }
                 if (!building.media().isEmpty()) {
                     PersistenceServicesFactory.getPersistenceService().retrieve(building.media());
                     for (Media media : building.media()) {
@@ -153,6 +162,7 @@ public class BuildingsResource {
                 }
 
                 {
+                    PersistenceServicesFactory.getPersistenceService().retrieve(building.serviceCatalog());
                     for (ServiceItemType utility : building.serviceCatalog().includedUtilities()) {
                         buildingRS.includedUtilities.add(Converter.convertBuildingIncludedUtility(utility));
                     }
