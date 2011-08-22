@@ -51,6 +51,12 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
+            <artifactId>vista-pmsite-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
             <artifactId>vista-callfire</artifactId>
             <version>${project.version}</version>
         </dependency>
