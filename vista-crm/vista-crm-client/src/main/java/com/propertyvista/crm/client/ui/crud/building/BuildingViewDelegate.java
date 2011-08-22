@@ -26,8 +26,8 @@ import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
+import com.propertyvista.crm.client.ui.dashboard.DashboardPanel;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
-import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
@@ -64,7 +64,7 @@ public class BuildingViewDelegate implements BuildingView {
     private final IListerView<Concession> concessionLister;
 
     public BuildingViewDelegate(boolean readOnly) {
-        dashboardView = new DashboardViewImpl("", true);
+        dashboardView = new DashboardPanel();
 
         floorplanLister = new ListerInternalViewImplBase<FloorplanDTO>(new FloorplanLister(/* readOnly */));
 

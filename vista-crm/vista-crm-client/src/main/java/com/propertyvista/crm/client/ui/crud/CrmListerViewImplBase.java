@@ -19,14 +19,14 @@ import com.pyx4j.site.client.ui.crud.ListerViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 
 public class CrmListerViewImplBase<E extends IEntity> extends ListerViewImplBase<E> {
 
-    protected final CrmHeaderDecorator header;
+    private final CrmTitleBar header;
 
     public CrmListerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        addNorth(header = new CrmHeaderDecorator(AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption()), VistaCrmTheme.defaultHeaderHeight);
+        addNorth(header = new CrmTitleBar(AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption()), VistaCrmTheme.defaultHeaderHeight);
         header.setHeight("100%"); // fill all that defaultHeaderHeight!..
     }
 }

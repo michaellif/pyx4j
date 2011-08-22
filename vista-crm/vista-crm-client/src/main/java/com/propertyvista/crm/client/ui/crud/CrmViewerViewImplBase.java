@@ -28,11 +28,11 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.decorations.CrmActionsBarDecorator;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 
 public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase<E> {
 
-    protected final CrmHeaderDecorator header;
+    protected final CrmTitleBar header;
 
     protected final String defaultCaption;
 
@@ -49,7 +49,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         actionsPanel.add(new HTML()); // just for %-tage cells alignment...
         actionsPanel.setSpacing(4);
 
-        addNorth(header = new CrmHeaderDecorator(defaultCaption), VistaCrmTheme.defaultHeaderHeight);
+        addNorth(header = new CrmTitleBar(defaultCaption), VistaCrmTheme.defaultHeaderHeight);
         addNorth(actionsWidget = new CrmActionsBarDecorator(null, fillActionsPanel()), VistaCrmTheme.defaultActionBarHeight);
 
         header.setHeight("100%"); // fill all that defaultHeaderHeight!..

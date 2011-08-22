@@ -32,12 +32,12 @@ import com.propertyvista.crm.client.ui.SearchBox;
 import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
+import com.propertyvista.crm.client.ui.board.BoardBase;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
-import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
 import com.propertyvista.crm.client.ui.decorations.CrmActionsBarDecorator;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
+import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 
 public abstract class VistaCrmTheme extends VistaTheme {
 
@@ -408,16 +408,21 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
     protected void initHeadersStyle() {
 
-        String prefix = CrmHeaderDecorator.DEFAULT_STYLE_PREFIX;
+        String prefix = CrmTitleBar.DEFAULT_STYLE_PREFIX;
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE60);
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
         style.addProperty("width", "100%");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CrmHeaderDecorator.StyleSuffix.Caption));
+        style = new Style(Selector.valueOf(prefix, CrmTitleBar.StyleSuffix.Caption));
         style.addProperty("padding", "0.3em 1em 0.4em 1em");
         style.addProperty("font-size", "1.3em");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, CrmTitleBar.StyleSuffix.Breadcrumb));
+        style.addProperty("padding", "0.3em 1em 0.4em 1em");
+        style.addProperty("font-size", "1.1em");
         addStyle(style);
 
         prefix = CrmActionsBarDecorator.DEFAULT_STYLE_PREFIX;
@@ -493,15 +498,18 @@ public abstract class VistaCrmTheme extends VistaTheme {
     }
 
     protected void initDashboardView() {
-        String prefix = DashboardViewImpl.DEFAULT_STYLE_PREFIX;
+        String prefix = BoardBase.DEFAULT_STYLE_PREFIX;
 
         Style style = new Style(Selector.valueOf(prefix));
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, DashboardViewImpl.StyleSuffix.actionsPanel));
-        style.addProperty("margin-top", "0.5em");
-        style.addProperty("margin-bottom", "0.5em");
+        style = new Style(Selector.valueOf(prefix, BoardBase.StyleSuffix.actionsPanel));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE40);
+        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        style.addProperty("height", defaultActionBarHeight + "em");
+        style.addProperty("margin-bottom", "0.2em");
         addStyle(style);
+
     }
 
     protected void initDashboardReport() {

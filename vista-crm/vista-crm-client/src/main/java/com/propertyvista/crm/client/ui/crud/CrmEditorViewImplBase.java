@@ -38,11 +38,11 @@ import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
-import com.propertyvista.crm.client.ui.decorations.CrmHeaderDecorator;
+import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 
 public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
 
-    protected final CrmHeaderDecorator header;
+    protected final CrmTitleBar header;
 
     protected String defaultCaption;
 
@@ -55,7 +55,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
     public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
 
-        addNorth(header = new CrmHeaderDecorator(defaultCaption), VistaCrmTheme.defaultHeaderHeight);
+        addNorth(header = new CrmTitleBar(defaultCaption), VistaCrmTheme.defaultHeaderHeight);
         addSouth(createButtons(), VistaCrmTheme.defaultFooterHeight);
 
         header.setHeight("100%"); // fill all that defaultHeaderHeight!..

@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.ui.crud.building.parking;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
+import com.propertyvista.crm.client.ui.dashboard.DashboardPanel;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
-import com.propertyvista.crm.client.ui.dashboard.DashboardViewImpl;
 import com.propertyvista.domain.property.asset.ParkingSpot;
 
 public class ParkingViewDelegate implements ParkingView {
@@ -27,7 +27,7 @@ public class ParkingViewDelegate implements ParkingView {
     private final IListerView<ParkingSpot> spotLister;
 
     public ParkingViewDelegate(boolean readOnly) {
-        dashboardView = new DashboardViewImpl("");
+        dashboardView = new DashboardPanel();
         spotLister = new ListerInternalViewImplBase<ParkingSpot>(new ParkingSpotLister(/* readOnly */));
     }
 
