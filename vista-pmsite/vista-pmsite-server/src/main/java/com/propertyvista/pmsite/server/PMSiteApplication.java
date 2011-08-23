@@ -16,20 +16,21 @@ package com.propertyvista.pmsite.server;
 import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebApplication;
 
-import com.propertyvista.pmsite.server.pages.ContactWebPage;
-import com.propertyvista.pmsite.server.pages.HomeWebPage;
+import com.propertyvista.pmsite.server.pages.LandingPage;
+import com.propertyvista.pmsite.server.pages.StaticPage;
+import com.propertyvista.pmsite.server.pages.TenantPage;
 
 public class PMSiteApplication extends WebApplication {
 
     @Override
     public Class<? extends Page> getHomePage() {
-        return HomeWebPage.class;
+        return LandingPage.class;
     }
 
     @Override
     protected void init() {
-        mountBookmarkablePage("home", HomeWebPage.class);
-        mountBookmarkablePage("contact", ContactWebPage.class);
+        mountBookmarkablePage("tenant", TenantPage.class);
+        mountBookmarkablePage("page", StaticPage.class);
     }
 
 }

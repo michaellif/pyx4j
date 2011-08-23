@@ -14,9 +14,9 @@
 package com.propertyvista.pmsite.server.pages;
 
 
-public class HomeWebPage extends BaseWebPage {
+public class LandingPage extends BasePage {
 
-    public HomeWebPage() {
+    public LandingPage() {
         super();
     }
 

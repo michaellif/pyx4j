@@ -7,24 +7,15 @@
   </head>
   <body>
   <wicket>
- <div id="header" class="borderedBlock">
- <table width="100%">
- Cool Technologies Ltd<br/>
- 356 City Plaza
- </table>
- </div>
+  
+  <a wicket:id="switchStyle" href="#">Switch Style</a>
+
+  <div id="header" class="borderedBlock" wicket:id="header">header panel here</div>
+
   <table width="100%">
   <tr>
-  <td id="left" class="borderedBlock">
- <ul>
-  <ol><a href="#" wicket:id="homeLink">Home</a></ol>
-  <ol><a href="#" wicket:id="servicesLink">Services</a></ol>
-  <ol><a href="#" wicket:id="aboutUsLink">About Us</a></ol>
- <ol><a href="#" wicket:id="contactLink">Contact</a></ol>
-  </ul>
-  </td>
   <td id="content" class="borderedBlock">
- <wicket:child/>
+  <wicket:child/>
   </td>
   </tr>
   </table>

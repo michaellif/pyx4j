@@ -13,9 +13,9 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
-public class ContactWebPage extends BaseWebPage {
+public class TenantPage extends BasePage {
 
-    public ContactWebPage() {
+    public TenantPage() {
         super();
     }
 
