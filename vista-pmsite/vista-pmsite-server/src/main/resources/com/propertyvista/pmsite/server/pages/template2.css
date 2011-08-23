@@ -1,0 +1,36 @@
+a:hover{
+  background:orange;
+  text-decoration:none;
+  font-size:14;
+ }
+.borderedBlock {
+ background: ${color1};
+ color: blue;
+ font-weight: bold;
+ border: solid #E9601A;
+ border-width: thin;
+ padding: 2px 2px 2px 6px;
+ margin: 2px;
+}
+
+#header {
+ text-align: center;
+}
+
+#left {
+ padding: 10px;
+ vertical-align: top;
+ width: 30%;
+ height: 150px;
+
+}
+
+#content {
+ vertical-align: top;
+ width: 80%;
+ height: 100%;
+}
+
+#footer {
+ text-align: center;
+}
