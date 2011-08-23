@@ -13,19 +13,25 @@
  */
 package com.propertyvista.interfaces.importer.model;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.person.Name;
 
+@Transient
 public interface ContactIO extends IEntity {
 
     Name name();
 
-    IList<Phone> phones();
+    IPrimitive<String> title();
 
-    IList<Email> emails();
+    IPrimitive<String> description();
+
+    Phone workPhone();
+
+    Email email();
 
 }

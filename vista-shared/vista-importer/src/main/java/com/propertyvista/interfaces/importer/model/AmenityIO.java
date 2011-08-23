@@ -13,9 +13,11 @@
  */
 package com.propertyvista.interfaces.importer.model;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Transient
 public interface AmenityIO extends IEntity {
 
     IPrimitive<String> name();

@@ -13,12 +13,14 @@
  */
 package com.propertyvista.interfaces.importer.model;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.IAddressFull.StreetDirection;
 import com.propertyvista.domain.contact.IAddressFull.StreetType;
 
+@Transient
 public interface AddressIO extends IEntity {
 
     IPrimitive<String> unitNumber();

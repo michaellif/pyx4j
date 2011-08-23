@@ -13,10 +13,12 @@
  */
 package com.propertyvista.interfaces.importer.model;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Transient
 public interface MarketingIO extends IEntity {
 
     IPrimitive<String> name();
