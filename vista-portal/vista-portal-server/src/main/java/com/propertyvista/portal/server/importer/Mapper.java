@@ -21,11 +21,13 @@ import org.slf4j.LoggerFactory;
 
 import com.propertvista.generator.util.CommonsGenerator;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.contact.Email;
+import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
@@ -112,6 +114,13 @@ public class Mapper {
         building.contacts().phones().add(CommonsGenerator.createPhone(property.getContact().getTel()));
 
         building.contacts().website().setValue(property.getWebsite());
+
+        if (CommonsStringUtils.isStringSet(property.getYoutube())) {
+            Media media = EntityFactory.create(Media.class);
+            media.type().setValue(Media.Type.youTube);
+            media.youTubeVideoID().setValue(property.getYoutube());
+            building.media().add(media);
+        }
 
         model.getBuildings().add(building);
 

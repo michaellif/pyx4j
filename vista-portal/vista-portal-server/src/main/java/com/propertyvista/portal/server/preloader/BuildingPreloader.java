@@ -25,6 +25,7 @@ import com.propertvista.generator.gdo.ServiceItemTypes;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -116,13 +117,13 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
 
         // create some StarlightPmc:
         PropertyManager pmc = generator.createPmc("PMC #1");
-        persist(pmc);
+        Persistence.service().persist(pmc);
 
         pmc = generator.createPmc("PMC #2");
-        persist(pmc);
+        Persistence.service().persist(pmc);
 
         pmc = generator.createPmc("PMC #3");
-        persist(pmc);
+        Persistence.service().persist(pmc);
 
         int unitCount = 0;
         List<Building> buildings = generator.createBuildings(config.getNumResidentialBuildings());
@@ -147,7 +148,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
 
             // Service Catalog:
             ServiceCatalog catalog = EntityFactory.create(ServiceCatalog.class);
-            persist(catalog);
+            Persistence.service().persist(catalog);
 
             pmcGenerator.createServiceCatalog(catalog);
 
@@ -155,18 +156,30 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             PersistenceServicesFactory.getPersistenceService().persist(catalog.features());
             PersistenceServicesFactory.getPersistenceService().persist(catalog.concessions());
 
-            persist(catalog);
+            Persistence.service().persist(catalog);
 
             building.serviceCatalog().set(catalog);
 
-            persist(building);
+            //Media
+            if (this.getParameter(MediaGenerator.ATTACH_MEDIA_PARAMETER) != Boolean.FALSE) {
+                //MediaGenerator.attachGeneratedFloorplanMedia(floorplanDTO);
+                {
+                    Media media = EntityFactory.create(Media.class);
+                    media.type().setValue(Media.Type.youTube);
+                    media.youTubeVideoID().setValue(MediaGenerator.randomYoutubeId());
+                    building.media().add(media);
+                }
+                Persistence.service().persist(building.media());
+            }
+
+            Persistence.service().persist(building);
 
             // Elevators
             List<Elevator> elevators = generator.createElevators(building, config.getNumElevators());
             for (Elevator elevator : elevators) {
                 CmpanyVendorPersistHelper.persistWarranty(elevator.warranty());
                 CmpanyVendorPersistHelper.persistMaintenance(elevator.maintenance());
-                persist(elevator);
+                Persistence.service().persist(elevator);
             }
 
             // Boilers
@@ -174,7 +187,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             for (Boiler boiler : boilers) {
                 CmpanyVendorPersistHelper.persistWarranty(boiler.warranty());
                 CmpanyVendorPersistHelper.persistMaintenance(boiler.maintenance());
-                persist(boiler);
+                Persistence.service().persist(boiler);
             }
 
             // Roofs
@@ -182,35 +195,35 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             for (Roof roof : roofs) {
                 CmpanyVendorPersistHelper.persistWarranty(roof.warranty());
                 CmpanyVendorPersistHelper.persistMaintenance(roof.maintenance());
-                persist(roof);
+                Persistence.service().persist(roof);
             }
 
             // Parking:
             List<Parking> parkings = generator.createParkings(building, config.getNumParkings());
             for (Parking parking : parkings) {
-                persist(parking);
+                Persistence.service().persist(parking);
 
                 List<ParkingSpot> spots = generator.createParkingSpots(parking, config.getNumParkingSpots());
                 for (ParkingSpot spot : spots) {
-                    persist(spot);
+                    Persistence.service().persist(spot);
                 }
             }
 
             // Lockers:
             List<LockerArea> lockerAreas = generator.createLockerAreas(building, config.getNumLockerAreas());
             for (LockerArea item : lockerAreas) {
-                persist(item);
+                Persistence.service().persist(item);
 
                 List<Locker> lockers = generator.createLockers(item, config.getNumLockers());
                 for (Locker locker : lockers) {
-                    persist(locker);
+                    Persistence.service().persist(locker);
                 }
             }
 
             // Amenities:
             List<BuildingAmenity> amenities = generator.createBuildingAmenities(building, 1 + RandomUtil.randomInt(3));
             for (BuildingAmenity item : amenities) {
-                persist(item);
+                Persistence.service().persist(item);
             }
 
             // Floorplans:
@@ -222,11 +235,11 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
                 }
 
                 Floorplan floorplan = down(floorplanDTO, Floorplan.class);
-                persist(floorplan); // persist real unit here, not DTO!..
+                Persistence.service().persist(floorplan); // persist real unit here, not DTO!..
 
                 for (FloorplanAmenity amenity : floorplanDTO.amenities()) {
                     amenity.belongsTo().set(floorplan);
-                    persist(amenity);
+                    Persistence.service().persist(amenity);
                 }
             }
 
@@ -237,16 +250,16 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
                 // persist plain internal lists:
 
                 AptUnit unit = down(unitData, AptUnit.class);
-                persist(unit); // persist real unit here, not DTO!..
+                Persistence.service().persist(unit); // persist real unit here, not DTO!..
 
                 // persist internal lists and with belongness: 
                 for (AptUnitOccupancy occupancy : unitData.occupancies()) {
                     occupancy.unit().set(unit);
-                    persist(occupancy);
+                    Persistence.service().persist(occupancy);
                 }
                 for (AptUnitItem detail : unitData.details()) {
                     detail.belongsTo().set(unit);
-                    persist(detail);
+                    Persistence.service().persist(detail);
                 }
             }
 

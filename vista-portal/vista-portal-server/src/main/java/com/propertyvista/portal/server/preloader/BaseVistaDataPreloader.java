@@ -29,10 +29,18 @@ abstract class BaseVistaDataPreloader extends AbstractDataPreloader {
         DataGenerator.setRandomSeed(100);
     }
 
+    /**
+     * @deprecated Use Persistence.service().persist(..)
+     */
+    @Deprecated
     protected static void persist(IEntity entity) {
         PersistenceServicesFactory.getPersistenceService().persist(entity);
     }
 
+    /**
+     * @deprecated Use Persistence.service().merge(..)
+     */
+    @Deprecated
     protected static void merge(IEntity entity) {
         PersistenceServicesFactory.getPersistenceService().merge(entity);
     }

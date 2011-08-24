@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.propertvista.generator.MediaGenerator;
 import com.propertvista.generator.util.PictureUtil;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -33,7 +34,6 @@ import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
@@ -101,16 +101,15 @@ public class Importer {
         // save
 
         for (Building building : model.getBuildings()) {
+            Persistence.service().persist(building.media());
             if (isAttachMedia()) {
                 loadBuildingMedia(building);
             }
-            persist(building);
+            Persistence.service().persist(building);
             PublicDataUpdater.updateIndexData(building);
         }
 
-        for (BuildingAmenity amenity : model.getBuildingAmenities()) {
-            persist(amenity);
-        }
+        Persistence.service().persist(model.getBuildingAmenities());
 
         for (FloorplanDTO floorplanDTO : model.getFloorplans()) {
 
@@ -127,29 +126,30 @@ public class Importer {
 //            }
 
             Floorplan floorplan = down(floorplanDTO, Floorplan.class);
-            persist(floorplan); // persist real unit here, not DTO!..
+            Persistence.service().persist(floorplan); // persist real unit here, not DTO!..
 
             // persist internal lists and with belongness: 
             for (FloorplanAmenity amenity : floorplanDTO.amenities()) {
                 amenity.belongsTo().set(floorplan);
-                persist(amenity);
             }
+            Persistence.service().persist(floorplanDTO.amenities());
         }
 
         for (UnitRelatedData unitData : model.getUnits()) {
             // persist plain internal lists:
             AptUnit unit = down(unitData, AptUnit.class);
-            persist(unit); // persist real unit here, not DTO!..
+            Persistence.service().persist(unit); // persist real unit here, not DTO!..
 
             // persist internal lists and with belongness: 
             for (AptUnitOccupancy occupancy : unitData.occupancies()) {
                 occupancy.unit().set(unit);
-                persist(occupancy);
             }
+            Persistence.service().persist(unitData.occupancies());
+
             for (AptUnitItem detail : unitData.details()) {
                 detail.belongsTo().set(unit);
-                persist(detail);
             }
+            Persistence.service().persist(unitData.details());
         }
     }
 
@@ -179,6 +179,10 @@ public class Importer {
         save();
     }
 
+    /**
+     * @deprecated Use Persistence.service().persist(..)
+     */
+    @Deprecated
     private static void persist(IEntity entity) {
         PersistenceServicesFactory.getPersistenceService().persist(entity);
     }

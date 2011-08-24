@@ -22,7 +22,10 @@ import com.propertvista.generator.util.RandomUtil;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.download.MimeMap;
+import com.pyx4j.essentials.server.preloader.DataGenerator;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.media.File;
 import com.propertyvista.domain.media.Media;
@@ -39,6 +42,15 @@ public class MediaGenerator {
     static final boolean blob_mimize_Preload_Data_Size = true;
 
     private static Map<String, Map<Media, byte[]>> blob_Shared_GenerateMedia = new HashMap<String, Map<Media, byte[]>>();
+
+    static String[] youtubeIds;
+
+    public static String randomYoutubeId() {
+        if (youtubeIds == null) {
+            youtubeIds = CSVLoad.loadFile(IOUtils.resourceFileName("youtube.csv", MediaGenerator.class), "id");
+        }
+        return youtubeIds[DataGenerator.nextInt(youtubeIds.length, "youtubeIds", 4)];
+    }
 
     /**
      * This is a light-weight method that simply creates a file media with a fictitious filename
