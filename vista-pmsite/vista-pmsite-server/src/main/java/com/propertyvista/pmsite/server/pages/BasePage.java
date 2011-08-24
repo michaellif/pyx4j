@@ -81,6 +81,9 @@ public abstract class BasePage extends WebPage {
     private int getPmsiteStyle() {
         Cookie pmsiteStyleCookie = null;
         Cookie[] cookies = ((WebRequest) getRequestCycle().getRequest()).getCookies();
+        if (cookies == null) {
+            return 0;
+        }
         for (Cookie cookie : cookies) {
             if ("pmsiteStyle".equals(cookie.getName())) {
                 pmsiteStyleCookie = cookie;
