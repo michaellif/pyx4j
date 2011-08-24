@@ -7,22 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-11
+ * Created on Aug 23, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc;
+package com.propertyvista.admin.rpc.services;
 
-public interface DeploymentConsts {
+import com.pyx4j.essentials.rpc.upload.UploadService;
 
-    public static final String PORTAL_URL = "";
-
-    public static final String PTAPP_URL = "ptapp/";
-
-    public static final String CRM_URL = "crm/";
-
-    public static final String ADMIN_URL = "admin/";
-
-    public static final String uploadServletMapping = "upload/";
+public interface ImportUploadService extends UploadService {
 
 }
