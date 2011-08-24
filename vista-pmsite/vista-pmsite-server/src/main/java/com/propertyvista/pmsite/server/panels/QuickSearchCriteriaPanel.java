@@ -17,6 +17,7 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.CompoundPropertyModel;
 
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
 
@@ -28,19 +29,20 @@ public class QuickSearchCriteriaPanel extends Panel {
     public QuickSearchCriteriaPanel() {
         super("quickSearchCriteriaPanel");
 
-        @SuppressWarnings("rawtypes")
-        Form<?> form = new Form("quickSearchCriteriaForm");
+        CompoundPropertyModel<QuickSearchModel> model = new CompoundPropertyModel<QuickSearchModel>(new QuickSearchModel());
 
-        // form.add(new RegistrationInputPanel("registration"));
+        final Form<QuickSearchModel> form = new Form<QuickSearchModel>("quickSearchCriteriaForm", model);
 
-        form.add(new Button("search") {
+        form.add(new QuickSearchCriteriaInputPanel("searchCriteriaInput", model));
+
+        form.add(new Button("searchSubmit") {
 
             private static final long serialVersionUID = 1L;
 
             @Override
             public void onSubmit() {
                 super.onSubmit();
-                executeSearch();
+                executeSearch(form.getModelObject());
             }
 
         });
@@ -49,7 +51,7 @@ public class QuickSearchCriteriaPanel extends Panel {
 
     }
 
-    private void executeSearch() {
+    private void executeSearch(QuickSearchModel model) {
         PageParameters parameters = new PageParameters();
         parameters.put("param", "value");
         setResponsePage(ResidentsPage.class, parameters);
