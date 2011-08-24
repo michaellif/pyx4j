@@ -26,6 +26,8 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.resource.TextTemplateResourceReference;
 
+import templates.TemplateResources;
+
 import com.propertyvista.pmsite.server.panels.HeaderPanel;
 
 //http://www.google.com/codesearch#ah7E8QWg9kg/trunk/src/main/java/com/jianfeiliao/portfolio/panel/content/StuffPanel.java&type=cs
@@ -58,7 +60,7 @@ public abstract class BasePage extends WebPage {
 
         final int style = getPmsiteStyle();
 
-        add(new StyleSheetReference("stylesheet", new TextTemplateResourceReference(BasePage.class, "template" + style + ".css", "text/css",
+        add(new StyleSheetReference("stylesheet", new TextTemplateResourceReference(TemplateResources.class, "template" + style + ".css", "text/css",
                 new LoadableDetachableModel<Map<String, Object>>() {
                     private static final long serialVersionUID = 1L;
 
