@@ -68,8 +68,6 @@ public class IServiceImplMethodCreator extends AbstractMethodCreator {
 
         print("execute(");
         print("\"");
-        print(currentCreator.getTarget().getQualifiedSourceName());
-        print("\", \"");
         print(targetMethod.getName());
         print("\", ");
         print(String.valueOf(signature));

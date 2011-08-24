@@ -24,6 +24,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -43,6 +45,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.essentials.server.deferred.DeferredProcessServicesImpl;
@@ -56,21 +59,25 @@ public abstract class AbstractUploadServlet extends HttpServlet {
 
     private final static Logger log = LoggerFactory.getLogger(AbstractUploadServlet.class);
 
+    private final Map<String, Class<UploadReciver>> mappedUploads = new HashMap<String, Class<UploadReciver>>();
+
     /**
      * Used for development tests
      */
     protected int slowUploadSeconds = 0;
 
-    protected <T extends UploadReciver & UploadService> void bind(Class<T> serviceImpClass, String string) {
-
+    @SuppressWarnings("unchecked")
+    protected <T extends UploadReciver & UploadService> void bind(Class<T> serviceImpClass) {
+        for (Class<?> itf : serviceImpClass.getInterfaces()) {
+            if (UploadService.class.isAssignableFrom(itf)) {
+                //TODO use "pyx.ServicePolicy", @see com.pyx4j.rpc.serve.RemoteServiceServlet
+                String serviceClassId = itf.getName();
+                mappedUploads.put(serviceClassId, (Class<UploadReciver>) serviceImpClass);
+                return;
+            }
+        }
+        throw new Error("Can't find inteface UploadService");
     }
-
-    /**
-     * @return Maximum size of a single uploaded file.
-     */
-    protected abstract long getMaxSize(HttpServletRequest request);
-
-    protected abstract Key onUploadRecived(UploadData data);
 
     private static class UploadCanceled extends RuntimeException {
 
@@ -92,8 +99,18 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 out.println("Invalid request type");
                 return;
             }
+            //TODO use "pyx.ServicePolicy", @see com.pyx4j.rpc.serve.RemoteServiceServlet
+            String serviceClassId = request.getPathInfo().substring(1);
+            Class<UploadReciver> reciverClass = mappedUploads.get(serviceClassId);
+            if (reciverClass == null) {
+                log.error("unmapped upload {}", serviceClassId);
+                out.println("Invalid request");
+                return;
+            }
+            UploadReciver reciver = reciverClass.newInstance();
+
             ServletFileUpload fileUpload = new ServletFileUpload();
-            long maxSize = getMaxSize(request);
+            long maxSize = reciver.getMaxSize(request);
             fileUpload.setFileSizeMax(maxSize);
 
             ProgressListenerImpl progressListener = new ProgressListenerImpl();
@@ -156,7 +173,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
 
             log.debug("Got file {}", fileItem.getName());
 
-            Key id = onUploadRecived(data);
+            Key id = reciver.onUploadRecived(data);
             if (id != null) {
                 //TODO serialize id
                 out.println("OK " + id);
@@ -165,7 +182,11 @@ public abstract class AbstractUploadServlet extends HttpServlet {
             }
         } catch (Throwable t) {
             log.error("upload error", t);
-            out.println("Error " + t.getMessage());
+            if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+                out.println("Error " + t.getMessage());
+            } else {
+                out.println("upload error");
+            }
         } finally {
             out.flush();
             out.close();

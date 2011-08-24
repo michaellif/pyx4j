@@ -31,19 +31,28 @@ import com.google.gwt.user.rebind.SourceWriter;
 
 public class IServiceImplCreator extends AbstractGeneratorClassCreator {
 
-    private final TypeOracle oracle;
-
     IServiceImplMethodCreator methodCreator;
 
     public IServiceImplCreator(SourceWriter sourceWriter, JClassType interfaceType, TypeOracle oracle) throws UnableToCompleteException {
         super(sourceWriter, interfaceType);
-        this.oracle = oracle;
         methodCreator = new IServiceImplMethodCreator(this, oracle);
     }
 
     @Override
-    protected void emitMethodBody(TreeLogger logger, JMethod method, GwtLocale locale) throws UnableToCompleteException {
+    protected void classPrologue() {
+        getWriter().println();
+        this.getWriter().println("public final String getServiceClassId() {");
+        getWriter().indent();
+        this.getWriter().print("return \"");
+        //TODO USe the ServiceNames approach, e.g. see ServiceNamesGenerator.ElideServiceNamesFromRPC
+        this.getWriter().print(getTarget().getQualifiedSourceName());
+        this.getWriter().println("\";");
+        getWriter().outdent();
+        this.getWriter().println("}");
+    }
 
+    @Override
+    protected void emitMethodBody(TreeLogger logger, JMethod method, GwtLocale locale) throws UnableToCompleteException {
         methodCreator.createMethodFor(logger, method, null, null, locale);
     }
 }

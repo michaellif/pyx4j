@@ -26,8 +26,11 @@ import com.pyx4j.commons.Key;
 
 public interface UploadReciver {
 
-    public Key onUploadRecived(UploadData data);
-
+    /**
+     * @return Maximum size of a single uploaded file.
+     */
     long getMaxSize(HttpServletRequest request);
+
+    public Key onUploadRecived(UploadData data);
 
 }

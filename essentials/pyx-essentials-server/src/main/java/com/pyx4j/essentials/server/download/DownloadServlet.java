@@ -37,7 +37,7 @@ import com.pyx4j.gwt.server.IOUtils;
 @SuppressWarnings("serial")
 public class DownloadServlet extends HttpServlet {
 
-    private static final Logger log = LoggerFactory.getLogger(Downloadable.class);
+    private static final Logger log = LoggerFactory.getLogger(DownloadServlet.class);
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

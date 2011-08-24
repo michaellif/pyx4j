@@ -24,23 +24,37 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.Hidden;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.essentials.rpc.upload.UploadService;
+import com.pyx4j.rpc.client.IServiceBase;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class UploadPanel extends FlowPanel implements FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler {
 
+    private final static Logger log = LoggerFactory.getLogger(UploadPanel.class);
+
     private static I18n i18n = I18nFactory.getI18n(UploadPanel.class);
+
+    private final UploadService service;
 
     private final FormPanel uploadForm;
 
@@ -60,9 +74,10 @@ public class UploadPanel extends FlowPanel implements FormPanel.SubmitCompleteHa
 
     }
 
-    public UploadPanel() {
+    public UploadPanel(UploadService service) {
+        this.service = service;
         uploadForm = new FormPanel();
-        uploadForm.setAction("uploado");
+        uploadForm.setAction("upload/" + ((IServiceBase) service).getServiceClassId());
         uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
         uploadForm.setMethod(FormPanel.METHOD_POST);
         uploadForm.addSubmitCompleteHandler(this);
@@ -72,13 +87,43 @@ public class UploadPanel extends FlowPanel implements FormPanel.SubmitCompleteHa
 
         upload = new FileUpload();
         upload.setName("upload");
-        this.add(uploadForm);
 
+        HorizontalPanel line = new HorizontalPanel();
+        line.add(new Label("File:"));
+        line.add(upload);
+        this.add(line);
+
+        Button buttonUpload = new Button("Upload");
+        buttonUpload.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                uploadForm.submit();
+            }
+        });
+        Button buttonCancel = new Button("Cancel");
+        buttonCancel.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                UploadPanel.this.setVisible(false);
+            }
+        });
+
+        HorizontalPanel line2 = new HorizontalPanel();
+        line2.add(buttonUpload);
+        line2.add(buttonCancel);
+        this.add(line2);
+    }
+
+    public IsWidget getForm() {
+        return uploadForm;
     }
 
     public void setServletPath(String path) {
         if (path != null) {
-            uploadForm.setAction(path);
+            if (!path.endsWith("/")) {
+                path = path + "/";
+            }
+            uploadForm.setAction(path + ((IServiceBase) service).getServiceClassId());
         }
     }
 
@@ -129,12 +174,33 @@ public class UploadPanel extends FlowPanel implements FormPanel.SubmitCompleteHa
                 return;
             }
         }
-
     }
 
     @Override
     public void onSubmitComplete(SubmitCompleteEvent event) {
-        // TODO Auto-generated method stub
+        String message = event.getResults();
+        if (message == null) {
+            message = "";
+        }
+        int idx = message.indexOf(UploadService.ResponsePrefix);
+        if (idx >= 0) {
+            message = message.substring(idx + UploadService.ResponsePrefix.length(), message.length());
+            if (message.startsWith("OK")) {
+                String id = message.substring(2, message.indexOf('\n')).trim();
+                onUploadComplete(id);
+                UploadPanel.this.setVisible(false);
+            } else {
+                log.error("Upload server message [{}]", message);
+                MessageDialog.error("Upload error", message);
+            }
+        } else {
+            log.error("Upload server message [{}]", message);
+            MessageDialog.error("Upload error", "Error uploading file");
+        }
+
+    }
+
+    protected void onUploadComplete(String id) {
 
     }
 
