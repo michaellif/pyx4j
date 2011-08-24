@@ -32,7 +32,7 @@ public class ProvinceReferenceAdapter implements ReferenceAdapter<Province> {
 
     @Override
     public Province onEntityCreation(Province newEntity) {
-        throw new Error("Can't create new Province/State " + ((newEntity.code().isNull()) ? newEntity.name().getValue() : newEntity.code().getValue()));
+        throw new Error("Can't create new Province/State '" + ((newEntity.code().isNull()) ? newEntity.name().getValue() : newEntity.code().getValue()) + "'");
     }
 
 }

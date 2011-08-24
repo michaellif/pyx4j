@@ -48,13 +48,14 @@ public class BuildingImport {
 
         //fileName = "all-buildings-example.xml";
         fileName = "buildings.xml";
+        String imagesBaseFolder = "data/export/images/";
 
         XMLEntityParser parser = new XMLEntityParser(new ImportXMLEntityFactory());
 
         ImportIO importIO = parser.parse(ImportIO.class, getDom(new File(fileName)).getDocumentElement());
 
         for (BuildingIO building : importIO.buildings()) {
-            new BuildingImporter().persist(building);
+            new BuildingImporter().persist(building, imagesBaseFolder);
         }
 
         log.info("Total time {} msec", TimeUtils.since(start));

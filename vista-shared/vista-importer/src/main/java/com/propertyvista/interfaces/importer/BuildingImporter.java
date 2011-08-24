@@ -16,8 +16,12 @@ package com.propertyvista.interfaces.importer;
 import java.util.List;
 import java.util.Vector;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.OrganisationContact;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Parking;
@@ -41,17 +45,31 @@ import com.propertyvista.interfaces.importer.model.ParkingIO;
 
 public class BuildingImporter {
 
-    public void persist(BuildingIO buildingIO) {
+    public void persist(BuildingIO buildingIO, String imagesBaseFolder) {
         // Set defaults
         if (buildingIO.type().isNull()) {
             buildingIO.type().setValue(BuildingInfo.Type.residential);
         }
 
-        String imagesBaseFolder = "data/export/images/";
-
         // Save building
         Building building = new BuildingConverter().createDBO(buildingIO);
-        PersistenceServicesFactory.getPersistenceService().persist(building);
+        // Save Employee or find existing one
+        for (OrganisationContact organisationContact : building.contacts().contacts()) {
+            if (!organisationContact.person().isNull()) {
+                // Find existing Employee
+                EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().name().firstName(), organisationContact.person().name().firstName().getValue()));
+                criteria.add(PropertyCriterion.eq(criteria.proto().name().lastName(), organisationContact.person().name().lastName().getValue()));
+                Employee employeeExists = Persistence.service().retrieve(criteria);
+                if (employeeExists != null) {
+                    organisationContact.person().set(employeeExists);
+                } else {
+                    Persistence.service().persist(organisationContact.person());
+                }
+            }
+        }
+
+        Persistence.service().persist(building);
 
         //BuildingAmenity
         {
@@ -61,7 +79,7 @@ public class BuildingImporter {
                 i.belongsTo().set(building);
                 items.add(i);
             }
-            PersistenceServicesFactory.getPersistenceService().persist(items);
+            Persistence.service().persist(items);
         }
 
         //Parking
@@ -72,7 +90,7 @@ public class BuildingImporter {
                 i.belongsTo().set(building);
                 items.add(i);
             }
-            PersistenceServicesFactory.getPersistenceService().persist(items);
+            Persistence.service().persist(items);
         }
 
         // Media
@@ -80,7 +98,7 @@ public class BuildingImporter {
             for (MediaIO iIO : buildingIO.medias()) {
                 building.media().add(new MediaConverter(imagesBaseFolder).createDBO(iIO));
             }
-            PersistenceServicesFactory.getPersistenceService().persist(building.media());
+            Persistence.service().persist(building.media());
         }
 
         //Floorplan
@@ -88,7 +106,7 @@ public class BuildingImporter {
             for (FloorplanIO floorplanIO : buildingIO.floorplans()) {
                 Floorplan floorplan = new FloorplanConverter().createDBO(floorplanIO);
                 floorplan.building().set(building);
-                PersistenceServicesFactory.getPersistenceService().persist(floorplan);
+                Persistence.service().persist(floorplan);
 
                 //FloorplanAmenity
                 {
@@ -98,7 +116,7 @@ public class BuildingImporter {
                         i.belongsTo().set(floorplan);
                         items.add(i);
                     }
-                    PersistenceServicesFactory.getPersistenceService().persist(items);
+                    Persistence.service().persist(items);
                 }
 
                 //Units
@@ -110,7 +128,7 @@ public class BuildingImporter {
                         i.floorplan().set(floorplan);
                         items.add(i);
                     }
-                    PersistenceServicesFactory.getPersistenceService().persist(items);
+                    Persistence.service().persist(items);
                 }
 
                 // Media
@@ -118,7 +136,7 @@ public class BuildingImporter {
                     for (MediaIO iIO : floorplanIO.medias()) {
                         floorplan.media().add(new MediaConverter(imagesBaseFolder).createDBO(iIO));
                     }
-                    PersistenceServicesFactory.getPersistenceService().persist(floorplan.media());
+                    Persistence.service().persist(floorplan.media());
                 }
             }
         }

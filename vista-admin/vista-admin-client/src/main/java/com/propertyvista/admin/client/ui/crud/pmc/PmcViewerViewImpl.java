@@ -13,6 +13,12 @@
  */
 package com.propertyvista.admin.client.ui.crud.pmc;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
+
+import com.pyx4j.forms.client.ui.CHyperlink;
+
 import com.propertyvista.admin.client.ui.components.AdminViewersComponentFactory;
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.rpc.AdminSiteMap;
@@ -22,5 +28,24 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
 
     public PmcViewerViewImpl() {
         super(AdminSiteMap.Properties.PMC.class, new PmcEditorForm(new AdminViewersComponentFactory()));
+
+        CHyperlink upload = new CHyperlink(new Command() {
+            @Override
+            public void execute() {
+                ImportUploadDialog.show(form.getValue());
+            }
+        });
+        upload.setValue("Upload import.xml");
+        addActionButton(upload.asWidget());
+
+        CHyperlink download = new CHyperlink(new Command() {
+            @Override
+            public void execute() {
+                Window.open(GWT.getModuleBaseURL() + "export.xml", null, null);
+            }
+        });
+        download.setValue("Download export.xml");
+        addActionButton(download.asWidget());
+
     }
 }

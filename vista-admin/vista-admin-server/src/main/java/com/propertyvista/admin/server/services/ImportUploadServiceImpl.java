@@ -26,6 +26,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.essentials.rpc.upload.UploadId;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadServiceImpl;
 import com.pyx4j.essentials.server.xml.XMLEntityParser;
@@ -46,16 +49,29 @@ public class ImportUploadServiceImpl extends UploadServiceImpl implements Import
     }
 
     @Override
+    protected void onpPepareUpload(IEntity data, UploadId id) {
+        id.setUploadKey(data.getPrimaryKey());
+    }
+
+    @Override
     public Key onUploadRecived(UploadData data) {
         try {
+            if (data.uploadKey == null) {
+                throw new Error();
+            }
             NamespaceManager.setNamespace(Pmc.adminNamespace);
-            //TODO get PMC
-            NamespaceManager.setNamespace("star");
+            Pmc pmc = PersistenceServicesFactory.getPersistenceService().retrieve(Pmc.class, data.uploadKey);
+            if (pmc == null) {
+                throw new Error("PMC Not found");
+            }
+            NamespaceManager.setNamespace(pmc.dnsName().getValue());
+
+            String imagesBaseFolder = "data/export/images/";
 
             XMLEntityParser parser = new XMLEntityParser(new ImportXMLEntityFactory());
             ImportIO importIO = parser.parse(ImportIO.class, getDom(data.data).getDocumentElement());
             for (BuildingIO building : importIO.buildings()) {
-                new BuildingImporter().persist(building);
+                new BuildingImporter().persist(building, imagesBaseFolder);
             }
 
         } finally {

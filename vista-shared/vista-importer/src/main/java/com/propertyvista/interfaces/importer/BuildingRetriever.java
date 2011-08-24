@@ -38,9 +38,7 @@ import com.propertyvista.interfaces.importer.model.FloorplanIO;
 
 public class BuildingRetriever {
 
-    public BuildingIO getModel(Building building) {
-
-        String imagesBaseFolder = "data/export/images/";
+    public BuildingIO getModel(Building building, String imagesBaseFolder) {
 
         PersistenceServicesFactory.getPersistenceService().retrieve(building.contacts().contacts());
         PersistenceServicesFactory.getPersistenceService().retrieve(building.marketing().adBlurbs());

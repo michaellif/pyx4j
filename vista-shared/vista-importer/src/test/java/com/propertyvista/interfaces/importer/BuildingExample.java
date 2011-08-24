@@ -49,6 +49,7 @@ public class BuildingExample {
 
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(true));
         NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
+        String imagesBaseFolder = "data/export/images/";
 
         ImportIO importIO = EntityFactory.create(ImportIO.class);
 
@@ -57,7 +58,7 @@ public class BuildingExample {
         List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(buildingCriteria);
 
         for (Building building : buildings) {
-            importIO.buildings().add(new BuildingRetriever().getModel(building));
+            importIO.buildings().add(new BuildingRetriever().getModel(building, imagesBaseFolder));
         }
 
         File f = new File("all-buildings-example.xml");

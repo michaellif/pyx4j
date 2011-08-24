@@ -51,10 +51,10 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
         super.copyDBOtoDTO(dbo, dto);
         switch (dbo.type().getValue()) {
         case file:
-            dto.uri().setValue(baseFolder + dbo.file().blobKey().getStringView() + "-" + dbo.file().filename().getStringView());
+            dto.uri().setValue(dbo.file().blobKey().getStringView() + "-" + dbo.file().filename().getStringView());
             dto.mediaType().setValue(MediaIO.MediaType.file);
             try {
-                BlobService.save(dbo.file().blobKey().getValue(), new File(dto.uri().getValue()));
+                BlobService.save(dbo.file().blobKey().getValue(), new File(baseFolder + dto.uri().getValue()));
             } catch (IOException e) {
                 throw new Error(e);
             }

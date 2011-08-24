@@ -55,12 +55,13 @@ public class ExportDownloadServlet extends HttpServlet {
         SecurityController.assertBehavior(VistaBehavior.ADMIN);
 
         log.debug("download export");
+        String imagesBaseFolder = "data/export/images/";
 
         ImportIO importIO = EntityFactory.create(ImportIO.class);
         EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
         List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(buildingCriteria);
         for (Building building : buildings) {
-            importIO.buildings().add(new BuildingRetriever().getModel(building));
+            importIO.buildings().add(new BuildingRetriever().getModel(building, imagesBaseFolder));
         }
         XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
         XMLEntityWriter xmlWriter = new XMLEntityWriter(xml, new ImportXMLEntityName());
