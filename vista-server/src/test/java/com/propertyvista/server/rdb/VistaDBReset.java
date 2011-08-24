@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
@@ -32,6 +33,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.server.config.VistaNamespaceResolver;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
+import com.propertyvista.server.domain.admin.Pmc;
 
 public class VistaDBReset {
 
@@ -59,6 +61,13 @@ public class VistaDBReset {
         log.info("Generating new Data...");
         long start = System.currentTimeMillis();
         log.info(conf.getDataPreloaders().preloadAll());
+
+        NamespaceManager.setNamespace(Pmc.adminNamespace);
+        Pmc pmc = EntityFactory.create(Pmc.class);
+        pmc.name().setValue("Vista Demo");
+        pmc.dnsName().setValue(VistaNamespaceResolver.demoNamespace);
+        Persistence.service().persist(pmc);
+
         log.info("Preload time: " + TimeUtils.secSince(start));
         log.info("Total time: " + TimeUtils.secSince(totalStart));
     }

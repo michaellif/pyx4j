@@ -29,11 +29,14 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.quartz.SchedulerHelper;
@@ -41,6 +44,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.server.config.VistaNamespaceResolver;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
+import com.propertyvista.server.domain.admin.Pmc;
 
 @SuppressWarnings("serial")
 public class DBResetServlet extends HttpServlet {
@@ -93,7 +97,30 @@ public class DBResetServlet extends HttpServlet {
                 buf.append(conf.getDataPreloaders().preloadAll());
                 buf.append("\nTotal time: " + TimeUtils.secSince(start));
 
+                String reqNamespace = NamespaceManager.getNamespace();
+                try {
+                    NamespaceManager.setNamespace(Pmc.adminNamespace);
+                    EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+                    criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), reqNamespace));
+                    Pmc pmc = Persistence.service().retrieve(criteria);
+                    if (pmc == null) {
+                        pmc = EntityFactory.create(Pmc.class);
+                        pmc.name().setValue(reqNamespace + " Demo");
+                        pmc.dnsName().setValue(reqNamespace);
+                        Persistence.service().persist(pmc);
+                    }
+                } finally {
+                    NamespaceManager.setNamespace(reqNamespace);
+                }
+
                 if ((type == ResetType.all) && NamespaceManager.getNamespace().equals(VistaNamespaceResolver.demoNamespace)) {
+                    NamespaceManager.setNamespace(Pmc.adminNamespace);
+                    Pmc pmc = EntityFactory.create(Pmc.class);
+                    pmc.name().setValue("Start Demo");
+                    pmc.dnsName().setValue(VistaNamespaceResolver.demoSLNamespace);
+
+                    Persistence.service().persist(pmc);
+
                     NamespaceManager.setNamespace(VistaNamespaceResolver.demoSLNamespace);
                     buf.append("\n---Preload SL---");
                     buf.append(conf.getDataPreloaders().preloadAll());
