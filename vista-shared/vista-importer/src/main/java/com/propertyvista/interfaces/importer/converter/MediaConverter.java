@@ -24,6 +24,7 @@ import org.apache.commons.io.FilenameUtils;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.interfaces.importer.model.MediaIO;
@@ -90,6 +91,9 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
             dbo.url().setValue(dto.uri().getValue());
             break;
         case youTube:
+            if (!dto.uri().getValue().matches("[a-zA-Z0-9_-]{11}")) {
+                throw new UserRuntimeException("Invalid YouTube VideoID" + dto.uri().getValue());
+            }
             dbo.type().setValue(Media.Type.youTube);
             dbo.youTubeVideoID().setValue(dto.uri().getValue());
             break;
