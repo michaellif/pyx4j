@@ -151,6 +151,11 @@ a:hover {
     background: url("images/template0/content_bg.png") repeat-x scroll 0 0 #37393F;
 }
 
+.landing_content .main {
+    background: url("images/template0/main_bg.png") no-repeat scroll 50% 0 transparent;
+    padding: 0 19px;
+}
+
 .quick_search_criteria {
 	display: block;
     position: absolute;
