@@ -59,7 +59,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
 
     private final static Logger log = LoggerFactory.getLogger(AbstractUploadServlet.class);
 
-    private final Map<String, Class<UploadReciver>> mappedUploads = new HashMap<String, Class<UploadReciver>>();
+    private final Map<Class<UploadService>, Class<? extends UploadReciver>> mappedUploads = new HashMap<Class<UploadService>, Class<? extends UploadReciver>>();
 
     /**
      * Used for development tests
@@ -70,9 +70,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
     protected <T extends UploadReciver & UploadService> void bind(Class<T> serviceImpClass) {
         for (Class<?> itf : serviceImpClass.getInterfaces()) {
             if (UploadService.class.isAssignableFrom(itf)) {
-                //TODO use "pyx.ServicePolicy", @see com.pyx4j.rpc.serve.RemoteServiceServlet
-                String serviceClassId = itf.getName();
-                mappedUploads.put(serviceClassId, (Class<UploadReciver>) serviceImpClass);
+                mappedUploads.put((Class<UploadService>) itf, (Class<? extends UploadReciver>) serviceImpClass);
                 return;
             }
         }
@@ -99,9 +97,11 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 out.println("Invalid request type");
                 return;
             }
-            //TODO use "pyx.ServicePolicy", @see com.pyx4j.rpc.serve.RemoteServiceServlet
             String serviceClassId = request.getPathInfo().substring(1);
-            Class<UploadReciver> reciverClass = mappedUploads.get(serviceClassId);
+            //TODO use "pyx.ServicePolicy", @see com.pyx4j.rpc.serve.RemoteServiceServlet
+            @SuppressWarnings("unchecked")
+            Class<UploadService> serviceClass = (Class<UploadService>) Class.forName(serviceClassId);
+            Class<? extends UploadReciver> reciverClass = mappedUploads.get(serviceClass);
             if (reciverClass == null) {
                 log.error("unmapped upload {}", serviceClassId);
                 out.println("Invalid request");
