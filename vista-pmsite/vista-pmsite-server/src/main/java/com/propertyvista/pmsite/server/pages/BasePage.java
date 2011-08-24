@@ -76,7 +76,7 @@ public abstract class BasePage extends WebPage {
                     }
                 })));
 
-        add(new HeaderPanel("header"));
+        add(new HeaderPanel());
 
     }
 

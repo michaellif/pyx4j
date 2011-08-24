@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 23, 2011
+ * Created on Aug 24, 2011
  * @author michaellif
  * @version $Id$
  */
@@ -18,16 +18,15 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 import com.propertyvista.pmsite.server.pages.LandingPage;
 
-public class HeaderPanel extends Panel {
+public class QuickSearchCriteriaPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
-    public HeaderPanel() {
-        super("header");
+    public QuickSearchCriteriaPanel() {
+        super("quick_search_criteria");
 
         add(new BookmarkablePageLink<Void>("titleLogo", LandingPage.class));
 
-        add(new NavigationPanel("navigation"));
     }
 
 }

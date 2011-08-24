@@ -69,7 +69,7 @@ a:hover {
     width: 100%;
 }
 
-.main .header_wrap {
+.header_wrap .main {
     height: 163px;
 }
 
@@ -146,12 +146,15 @@ a:hover {
     color: #B5E329;
 }
 
-.landing_wrap {
-    height: 375px;
-    position: relative;
-    width: 960px;
-}
 
 .landing_content {
     background: url("images/template0/content_bg.png") repeat-x scroll 0 0 #37393F;
+}
+
+.quick_search_criteria {
+	display: block;
+    position: absolute;
+    top: 48px;
+    right: 0px;
+	width: 244px;
 }
