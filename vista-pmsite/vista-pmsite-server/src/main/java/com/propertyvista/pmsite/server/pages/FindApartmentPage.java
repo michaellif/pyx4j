@@ -13,9 +13,10 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
-public class TenantPage extends BasePage {
 
-    public TenantPage() {
+public class FindApartmentPage extends BasePage {
+
+    public FindApartmentPage() {
         super();
     }
 

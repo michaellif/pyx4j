@@ -21,8 +21,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.pmsite.server.pages.FindApartmentPage;
+import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
-import com.propertyvista.pmsite.server.pages.TenantPage;
 import com.propertyvista.pmsite.server.panels.NavigationItem;
 
 public class PMSiteContentManager {
@@ -53,9 +54,9 @@ public class PMSiteContentManager {
     public static List<NavigationItem> getNavigationItems() {
         List<NavigationItem> list = new ArrayList<NavigationItem>();
 
-        list.add(new NavigationItem(StaticPage.class, "Home", "home"));
-        list.add(new NavigationItem(TenantPage.class, "Tenant"));
-        list.add(new NavigationItem(StaticPage.class, "About", "about"));
+        list.add(new NavigationItem(FindApartmentPage.class, "Find an Apartment"));
+        list.add(new NavigationItem(ResidentsPage.class, "Residents"));
+        list.add(new NavigationItem(StaticPage.class, "About Us", "about"));
         list.add(new NavigationItem(StaticPage.class, "Contact", "contact"));
 
         return list;

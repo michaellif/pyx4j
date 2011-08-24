@@ -16,9 +16,10 @@ package com.propertyvista.pmsite.server;
 import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebApplication;
 
+import com.propertyvista.pmsite.server.pages.FindApartmentPage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
+import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
-import com.propertyvista.pmsite.server.pages.TenantPage;
 
 public class PMSiteApplication extends WebApplication {
 
@@ -29,7 +30,8 @@ public class PMSiteApplication extends WebApplication {
 
     @Override
     protected void init() {
-        mountBookmarkablePage("tenant", TenantPage.class);
+        mountBookmarkablePage("findapt", FindApartmentPage.class);
+        mountBookmarkablePage("residents", ResidentsPage.class);
         mountBookmarkablePage("page", StaticPage.class);
     }
 
