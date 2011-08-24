@@ -69,7 +69,7 @@ a:hover {
     width: 100%;
 }
 
-.header_wrap .main {
+.main .header_wrap {
     height: 163px;
 }
 
@@ -147,9 +147,11 @@ a:hover {
 }
 
 .landing_wrap {
-    background: url("images/template0/landing.png") no-repeat scroll 0 0 transparent;
-    height: 430px;
+    height: 375px;
     position: relative;
     width: 960px;
-    margin-top: -59px;
+}
+
+.landing_content {
+    background: url("images/template0/content_bg.png") repeat-x scroll 0 0 #37393F;
 }
