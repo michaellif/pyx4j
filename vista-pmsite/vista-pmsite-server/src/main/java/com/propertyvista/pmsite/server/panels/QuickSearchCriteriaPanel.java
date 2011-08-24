@@ -13,10 +13,11 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.Response;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.panel.Panel;
-
-import com.propertyvista.pmsite.server.pages.LandingPage;
 
 public class QuickSearchCriteriaPanel extends Panel {
 
@@ -25,8 +26,17 @@ public class QuickSearchCriteriaPanel extends Panel {
     public QuickSearchCriteriaPanel() {
         super("quick_search_criteria");
 
-        add(new BookmarkablePageLink<Void>("titleLogo", LandingPage.class));
+        add(new WebComponent("quickSearchCriteria") {
 
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+                Response response = getRequestCycle().getResponse();
+                response.write("<div style='height: 30px; position: relative;'>");
+                response.write("quick_search_criteria");
+                response.write("</div>");
+            }
+        });
     }
-
 }

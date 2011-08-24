@@ -28,6 +28,7 @@ import org.apache.wicket.resource.TextTemplateResourceReference;
 
 import templates.TemplateResources;
 
+import com.propertyvista.pmsite.server.panels.FooterPanel;
 import com.propertyvista.pmsite.server.panels.HeaderPanel;
 
 //http://www.google.com/codesearch#ah7E8QWg9kg/trunk/src/main/java/com/jianfeiliao/portfolio/panel/content/StuffPanel.java&type=cs
@@ -77,6 +78,7 @@ public abstract class BasePage extends WebPage {
                 })));
 
         add(new HeaderPanel());
+        add(new FooterPanel());
 
     }
 
