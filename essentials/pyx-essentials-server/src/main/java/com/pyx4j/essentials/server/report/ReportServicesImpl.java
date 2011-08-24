@@ -22,7 +22,7 @@ package com.pyx4j.essentials.server.report;
 
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.rpc.report.ReportServices;
-import com.pyx4j.essentials.server.deferred.DeferredProcessServicesImpl;
+import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -32,7 +32,7 @@ public class ReportServicesImpl implements ReportServices {
 
         @Override
         public String execute(ReportRequest request) {
-            return DeferredProcessServicesImpl.register(new SearchReportDeferredProcess(request));
+            return DeferredProcessRegistry.register(new SearchReportDeferredProcess(request));
         }
 
     }

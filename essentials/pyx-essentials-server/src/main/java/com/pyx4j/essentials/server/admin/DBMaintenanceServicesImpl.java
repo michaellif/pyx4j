@@ -22,6 +22,7 @@ package com.pyx4j.essentials.server.admin;
 
 import com.pyx4j.essentials.rpc.admin.DBMaintenanceRequest;
 import com.pyx4j.essentials.rpc.admin.DBMaintenanceServices;
+import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.essentials.server.deferred.DeferredProcessServicesImpl;
 
 public class DBMaintenanceServicesImpl implements DBMaintenanceServices {
@@ -30,7 +31,7 @@ public class DBMaintenanceServicesImpl implements DBMaintenanceServices {
 
         @Override
         public String execute(DBMaintenanceRequest request) {
-            return DeferredProcessServicesImpl.register(new DBMaintenanceDeferredProcess(request));
+            return DeferredProcessRegistry.register(new DBMaintenanceDeferredProcess(request));
         }
 
     }

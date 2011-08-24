@@ -26,7 +26,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.upload.UploadId;
 import com.pyx4j.essentials.rpc.upload.UploadService;
-import com.pyx4j.essentials.server.deferred.DeferredProcessServicesImpl;
+import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public abstract class UploadServiceImpl implements UploadService, UploadReciver {
@@ -39,7 +39,7 @@ public abstract class UploadServiceImpl implements UploadService, UploadReciver 
     public void prepareUpload(AsyncCallback<UploadId> callback, IEntity data) {
         UploadId id = new UploadId();
         onpPepareUpload(data, id);
-        id.setDeferredCorrelationId(DeferredProcessServicesImpl.register(new UploadDeferredProcess()));
+        id.setDeferredCorrelationId(DeferredProcessRegistry.register(new UploadDeferredProcess()));
         callback.onSuccess(id);
     }
 

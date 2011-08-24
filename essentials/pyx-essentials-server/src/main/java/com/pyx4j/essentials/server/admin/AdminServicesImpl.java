@@ -35,7 +35,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.essentials.rpc.admin.AdminServices;
 import com.pyx4j.essentials.rpc.admin.NetworkSimulation;
-import com.pyx4j.essentials.server.deferred.DeferredProcessServicesImpl;
+import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.essentials.server.dev.NetworkSimulationServiceFilter;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
@@ -69,7 +69,7 @@ public class AdminServicesImpl implements AdminServices {
 
         @Override
         public String execute(VoidSerializable request) {
-            return DeferredProcessServicesImpl.register(new SessionsPurgeDeferredProcess(false));
+            return DeferredProcessRegistry.register(new SessionsPurgeDeferredProcess(false));
         }
 
     }
@@ -78,7 +78,7 @@ public class AdminServicesImpl implements AdminServices {
 
         @Override
         public String execute(VoidSerializable request) {
-            return DeferredProcessServicesImpl.register(new SessionsPurgeDeferredProcess(true));
+            return DeferredProcessRegistry.register(new SessionsPurgeDeferredProcess(true));
         }
 
     }

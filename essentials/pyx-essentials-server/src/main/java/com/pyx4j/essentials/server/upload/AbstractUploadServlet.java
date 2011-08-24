@@ -48,9 +48,11 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
-import com.pyx4j.essentials.server.deferred.DeferredProcessServicesImpl;
+import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.rpc.shared.IServiceExecutePermission;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
@@ -101,6 +103,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
             //TODO use "pyx.ServicePolicy", @see com.pyx4j.rpc.serve.RemoteServiceServlet
             @SuppressWarnings("unchecked")
             Class<UploadService> serviceClass = (Class<UploadService>) Class.forName(serviceClassId);
+            SecurityController.assertPermission(new IServiceExecutePermission(serviceClass));
             Class<? extends UploadReciver> reciverClass = mappedUploads.get(serviceClass);
             if (reciverClass == null) {
                 log.error("unmapped upload {}", serviceClassId);
@@ -126,14 +129,19 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                         log.debug(" form field {}", item.getFieldName());
                         if (UploadService.PostCorrelationID.equals(item.getFieldName())) {
                             data.deferredCorrelationId = Streams.asString(item.openStream());
-                            IDeferredProcess process = DeferredProcessServicesImpl.getDeferredProcess(data.deferredCorrelationId);
+                            IDeferredProcess process = DeferredProcessRegistry.get(data.deferredCorrelationId);
                             if (process != null) {
                                 progressListener.processInfo = process.status();
                             }
+                            log.debug("form field {}={}", item.getFieldName(), data.deferredCorrelationId);
                         } else if (UploadService.PostUploadKey.equals(item.getFieldName())) {
                             data.uploadKey = new Key(Streams.asString(item.openStream()));
+                            log.debug("form field {}={}", item.getFieldName(), data.uploadKey);
                         } else if (UploadService.PostUploadDescription.equals(item.getFieldName())) {
                             data.description = Streams.asString(item.openStream());
+                            log.debug("form field {}={}", item.getFieldName(), data.description);
+                        } else {
+                            log.debug("unknown form field {}", item.getFieldName());
                         }
                     } else if (fileItem == null) {
                         fileItem = item;

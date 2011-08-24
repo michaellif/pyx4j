@@ -20,41 +20,22 @@
  */
 package com.pyx4j.essentials.server.deferred;
 
-import java.util.HashMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.server.contexts.Context;
-import com.pyx4j.server.contexts.Lifecycle;
 
 public class DeferredProcessServicesImpl implements DeferredProcessServices {
 
     private final static Logger log = LoggerFactory.getLogger(DeferredProcessServicesImpl.class);
 
-    private static final String DEFERRED_PROCESS_SESSION_ATTRIBUTE = DeferredProcessServicesImpl.class.getName();
-
-    @SuppressWarnings("unchecked")
-    private static synchronized HashMap<String, IDeferredProcess> getMap() {
-        if (Context.getSession() == null) {
-            Lifecycle.beginAnonymousSession();
-        }
-        HashMap<String, IDeferredProcess> m = (HashMap<String, IDeferredProcess>) Context.getSession().getAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE);
-        if (m == null) {
-            m = new HashMap<String, IDeferredProcess>();
-            Context.getSession().setAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE, m);
-        }
-        return m;
-    }
-
     public static class GetStatusImpl implements DeferredProcessServices.GetStatus {
 
         @Override
         public DeferredProcessProgressResponse execute(String deferredCorrelationID) {
-            IDeferredProcess process = getMap().get(deferredCorrelationID);
+            IDeferredProcess process = DeferredProcessRegistry.get(deferredCorrelationID);
             if (process != null) {
                 return process.status();
             } else {
@@ -68,12 +49,11 @@ public class DeferredProcessServicesImpl implements DeferredProcessServices {
 
         @Override
         public VoidSerializable execute(String deferredCorrelationID) {
-            HashMap<String, IDeferredProcess> map = getMap();
-            IDeferredProcess process = map.get(deferredCorrelationID);
+            IDeferredProcess process = DeferredProcessRegistry.get(deferredCorrelationID);
             if (process != null) {
                 process.cancel();
-                map.remove(deferredCorrelationID);
-                saveMap(map);
+                DeferredProcessRegistry.remove(deferredCorrelationID);
+                DeferredProcessRegistry.saveMap();
                 return null;
             } else {
                 throw new RuntimeException("Process " + deferredCorrelationID + " not found");
@@ -86,25 +66,24 @@ public class DeferredProcessServicesImpl implements DeferredProcessServices {
 
         @Override
         public DeferredProcessProgressResponse execute(String deferredCorrelationID) {
-            HashMap<String, IDeferredProcess> map = getMap();
-            IDeferredProcess process = map.get(deferredCorrelationID);
+            IDeferredProcess process = DeferredProcessRegistry.get(deferredCorrelationID);
             if (process != null) {
                 try {
                     log.debug("execute process {}", deferredCorrelationID);
                     process.execute();
                     DeferredProcessProgressResponse r = process.status();
                     if (r.isCompleted()) {
-                        map.remove(deferredCorrelationID);
+                        DeferredProcessRegistry.remove(deferredCorrelationID);
                     }
                     return r;
                 } catch (Throwable e) {
                     log.error("execute error", e);
                     DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
                     r.setError();
-                    map.remove(deferredCorrelationID);
+                    DeferredProcessRegistry.remove(deferredCorrelationID);
                     return r;
                 } finally {
-                    saveMap(map);
+                    DeferredProcessRegistry.saveMap();
                 }
             } else {
                 throw new RuntimeException("Process " + deferredCorrelationID + " not found");
@@ -113,27 +92,4 @@ public class DeferredProcessServicesImpl implements DeferredProcessServices {
 
     };
 
-    /**
-     * This is required on GAE?
-     */
-    private static void saveMap(HashMap<String, IDeferredProcess> map) {
-        Context.getSession().setAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE, map);
-    }
-
-    /**
-     * 
-     * @return DeferredCorrelationID
-     */
-    public static synchronized String register(IDeferredProcess process) {
-        HashMap<String, IDeferredProcess> map = getMap();
-        String deferredCorrelationID = String.valueOf(System.currentTimeMillis());
-        map.put(deferredCorrelationID, process);
-        saveMap(map);
-        log.debug("process created {}", deferredCorrelationID);
-        return deferredCorrelationID;
-    }
-
-    public static synchronized IDeferredProcess getDeferredProcess(String deferredCorrelationID) {
-        return getMap().get(deferredCorrelationID);
-    }
 }

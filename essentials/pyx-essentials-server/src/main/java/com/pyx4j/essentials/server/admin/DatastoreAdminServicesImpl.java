@@ -27,7 +27,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.essentials.rpc.admin.DatastoreAdminServices;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
-import com.pyx4j.essentials.server.deferred.DeferredProcessServicesImpl;
+import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -62,7 +62,7 @@ public class DatastoreAdminServicesImpl implements DatastoreAdminServices {
 
         @Override
         public String execute(VoidSerializable request) {
-            return DeferredProcessServicesImpl.register(new DatastoreAdminRemoveAllDataDeferredProcess());
+            return DeferredProcessRegistry.register(new DatastoreAdminRemoveAllDataDeferredProcess());
         }
 
     }
