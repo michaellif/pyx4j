@@ -15,11 +15,14 @@ package com.propertyvista.pmsite.server;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.target.coding.MixedParamUrlCodingStrategy;
+import org.apache.wicket.request.target.coding.QueryStringUrlCodingStrategy;
 
 import com.propertyvista.pmsite.server.pages.FindApartmentPage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
+import com.propertyvista.pmsite.server.panels.NavigationItem;
 
 public class PMSiteApplication extends WebApplication {
 
@@ -31,8 +34,8 @@ public class PMSiteApplication extends WebApplication {
     @Override
     protected void init() {
         mountBookmarkablePage("findapt", FindApartmentPage.class);
-        mountBookmarkablePage("residents", ResidentsPage.class);
-        mountBookmarkablePage("page", StaticPage.class);
+        mount(new QueryStringUrlCodingStrategy("residents", ResidentsPage.class));
+        mount(new MixedParamUrlCodingStrategy("cnt", StaticPage.class, new String[] { NavigationItem.NAVIG_PARAMETER_NAME }));
     }
 
 }

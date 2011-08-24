@@ -25,7 +25,7 @@ public class StaticPage extends BasePage {
 
     public StaticPage(PageParameters parameters) {
         super(parameters);
-        final String pageId = parameters.get(NavigationItem.NAVIG_PARAMETER_NAME).toString();
+        final String pageId = parameters.getString(NavigationItem.NAVIG_PARAMETER_NAME);
 
         add(new WebComponent("content") {
 

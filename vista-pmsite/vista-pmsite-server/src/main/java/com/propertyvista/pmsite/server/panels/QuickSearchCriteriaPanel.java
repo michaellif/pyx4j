@@ -13,30 +13,46 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
-import org.apache.wicket.Response;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.markup.html.WebComponent;
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 
+import com.propertyvista.pmsite.server.pages.ResidentsPage;
+
+//http://www.google.com/codesearch#o92Uy7_Jjpw/base/openqrm-3.5.2/src/base/java/main/code/com/qlusters/qrm/web/wicket/markup/&type=cs
 public class QuickSearchCriteriaPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
     public QuickSearchCriteriaPanel() {
-        super("quick_search_criteria");
+        super("quickSearchCriteriaPanel");
 
-        add(new WebComponent("quickSearchCriteria") {
+        @SuppressWarnings("rawtypes")
+        Form<?> form = new Form("quickSearchCriteriaForm");
+
+        // form.add(new RegistrationInputPanel("registration"));
+
+        form.add(new Button("search") {
 
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-                Response response = getRequestCycle().getResponse();
-                response.write("<div style='height: 30px; position: relative;'>");
-                response.write("quick_search_criteria");
-                response.write("</div>");
+            public void onSubmit() {
+                super.onSubmit();
+                executeSearch();
             }
+
         });
+
+        add(form);
+
     }
+
+    private void executeSearch() {
+        PageParameters parameters = new PageParameters();
+        parameters.put("param", "value");
+        setResponsePage(ResidentsPage.class, parameters);
+    }
+
 }

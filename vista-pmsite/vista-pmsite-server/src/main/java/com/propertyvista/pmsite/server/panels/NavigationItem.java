@@ -21,7 +21,7 @@ import com.propertyvista.pmsite.server.pages.BasePage;
 
 public class NavigationItem implements Serializable {
 
-    public static final String NAVIG_PARAMETER_NAME = "$";
+    public static final String NAVIG_PARAMETER_NAME = "id";
 
     private static final long serialVersionUID = 1L;
 
