@@ -20,16 +20,24 @@
  */
 package com.pyx4j.essentials.server.upload;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 
 @SuppressWarnings("serial")
-class UploadDeferredProcess implements IDeferredProcess {
+public class UploadDeferredProcess implements IDeferredProcess {
 
     private final DeferredProcessProgressResponse status;
 
-    public UploadDeferredProcess() {
-        status = new DeferredProcessProgressResponse();
+    private final IEntity data;
+
+    protected UploadDeferredProcess() {
+        this(null);
+    }
+
+    public UploadDeferredProcess(IEntity data) {
+        this.status = new DeferredProcessProgressResponse();
+        this.data = data;
     }
 
     @Override
@@ -46,4 +54,7 @@ class UploadDeferredProcess implements IDeferredProcess {
         return status;
     }
 
+    public IEntity getData() {
+        return data;
+    }
 }

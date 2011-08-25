@@ -50,13 +50,13 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.IServiceBase;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class UploadPanel extends SimplePanel implements FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler {
+public class UploadPanel<E extends IEntity> extends SimplePanel implements FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler {
 
     private final static Logger log = LoggerFactory.getLogger(UploadPanel.class);
 
     private static I18n i18n = I18nFactory.getI18n(UploadPanel.class);
 
-    private final UploadService service;
+    private final UploadService<E> service;
 
     private final FormPanel uploadForm;
 
@@ -84,7 +84,7 @@ public class UploadPanel extends SimplePanel implements FormPanel.SubmitComplete
 
     }
 
-    public UploadPanel(UploadService service) {
+    public UploadPanel(UploadService<E> service) {
         this.service = service;
         uploadForm = new FormPanel();
         uploadForm.setAction("upload/" + ((IServiceBase) service).getServiceClassId());
@@ -144,7 +144,7 @@ public class UploadPanel extends SimplePanel implements FormPanel.SubmitComplete
         postDescription.setValue(description);
     }
 
-    protected IEntity getUploadData() {
+    protected E getUploadData() {
         return null;
     }
 
@@ -155,7 +155,9 @@ public class UploadPanel extends SimplePanel implements FormPanel.SubmitComplete
                 public void onSuccess(UploadId result) {
                     uploadId = result;
                     postCorrelationId.setValue(uploadId.getDeferredCorrelationId());
-                    postUploadKey.setValue(uploadId.getUploadKey().toString());
+                    if (uploadId.getUploadKey() != null) {
+                        postUploadKey.setValue(uploadId.getUploadKey().toString());
+                    }
                     uploadForm.submit();
                 }
             }, getUploadData());

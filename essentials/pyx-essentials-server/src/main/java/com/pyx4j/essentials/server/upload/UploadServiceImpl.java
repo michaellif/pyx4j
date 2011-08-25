@@ -29,17 +29,17 @@ import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public abstract class UploadServiceImpl implements UploadService, UploadReciver {
+public abstract class UploadServiceImpl<E extends IEntity> implements UploadService<E>, UploadReciver {
 
-    protected void onpPepareUpload(IEntity data, UploadId id) {
+    protected void onpPepareUpload(E data, UploadId id) {
 
     }
 
     @Override
-    public void prepareUpload(AsyncCallback<UploadId> callback, IEntity data) {
+    public void prepareUpload(AsyncCallback<UploadId> callback, E data) {
         UploadId id = new UploadId();
         onpPepareUpload(data, id);
-        id.setDeferredCorrelationId(DeferredProcessRegistry.register(new UploadDeferredProcess()));
+        id.setDeferredCorrelationId(DeferredProcessRegistry.register(new UploadDeferredProcess(data)));
         callback.onSuccess(id);
     }
 

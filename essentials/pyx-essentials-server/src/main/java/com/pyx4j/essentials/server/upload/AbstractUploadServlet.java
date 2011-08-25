@@ -49,7 +49,6 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
-import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.shared.SecurityController;
@@ -61,7 +60,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
 
     private final static Logger log = LoggerFactory.getLogger(AbstractUploadServlet.class);
 
-    private final Map<Class<UploadService>, Class<? extends UploadReciver>> mappedUploads = new HashMap<Class<UploadService>, Class<? extends UploadReciver>>();
+    private final Map<Class<UploadService<?>>, Class<? extends UploadReciver>> mappedUploads = new HashMap<Class<UploadService<?>>, Class<? extends UploadReciver>>();
 
     /**
      * Used for development tests
@@ -69,10 +68,10 @@ public abstract class AbstractUploadServlet extends HttpServlet {
     protected int slowUploadSeconds = 0;
 
     @SuppressWarnings("unchecked")
-    protected <T extends UploadReciver & UploadService> void bind(Class<T> serviceImpClass) {
+    protected <T extends UploadReciver & UploadService<?>> void bind(Class<T> serviceImpClass) {
         for (Class<?> itf : serviceImpClass.getInterfaces()) {
             if (UploadService.class.isAssignableFrom(itf)) {
-                mappedUploads.put((Class<UploadService>) itf, (Class<? extends UploadReciver>) serviceImpClass);
+                mappedUploads.put((Class<UploadService<?>>) itf, (Class<? extends UploadReciver>) serviceImpClass);
                 return;
             }
         }
@@ -102,7 +101,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
             String serviceClassId = request.getPathInfo().substring(1);
             //TODO use "pyx.ServicePolicy", @see com.pyx4j.rpc.serve.RemoteServiceServlet
             @SuppressWarnings("unchecked")
-            Class<UploadService> serviceClass = (Class<UploadService>) Class.forName(serviceClassId);
+            Class<UploadService<?>> serviceClass = (Class<UploadService<?>>) Class.forName(serviceClassId);
             SecurityController.assertPermission(new IServiceExecutePermission(serviceClass));
             Class<? extends UploadReciver> reciverClass = mappedUploads.get(serviceClass);
             if (reciverClass == null) {
@@ -121,6 +120,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
 
             FileItemStream fileItem = null;
             UploadData data = new UploadData();
+            UploadDeferredProcess process = null;
             try {
                 FileItemIterator iterator = fileUpload.getItemIterator(request);
                 while (iterator.hasNext()) {
@@ -129,7 +129,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                         log.debug(" form field {}", item.getFieldName());
                         if (UploadService.PostCorrelationID.equals(item.getFieldName())) {
                             data.deferredCorrelationId = Streams.asString(item.openStream());
-                            IDeferredProcess process = DeferredProcessRegistry.get(data.deferredCorrelationId);
+                            process = (UploadDeferredProcess) DeferredProcessRegistry.get(data.deferredCorrelationId);
                             if (process != null) {
                                 progressListener.processInfo = process.status();
                             }
@@ -181,7 +181,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
 
             log.debug("Got file {}", fileItem.getName());
 
-            Key id = reciver.onUploadRecived(data);
+            Key id = reciver.onUploadRecived(process, data);
             if (id != null) {
                 //TODO serialize id
                 out.println("OK " + id);

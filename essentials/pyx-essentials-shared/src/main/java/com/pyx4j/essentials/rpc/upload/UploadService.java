@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public interface UploadService extends IService {
+public interface UploadService<E extends IEntity> extends IService {
 
     public static final String PostCorrelationID = "correlationID";
 
@@ -37,7 +37,7 @@ public interface UploadService extends IService {
 
     public static final String ResponsePrefix = "UploadResponse";
 
-    public void prepareUpload(AsyncCallback<UploadId> callback, IEntity data);
+    public void prepareUpload(AsyncCallback<UploadId> callback, E data);
 
     public void cancelUpload(AsyncCallback<VoidSerializable> callback, Key uploadKey);
 
