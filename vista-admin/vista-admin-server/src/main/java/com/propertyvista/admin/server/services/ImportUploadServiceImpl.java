@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.xml.sax.InputSource;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
@@ -30,6 +31,7 @@ import com.propertyvista.admin.rpc.PmcImportDTO;
 import com.propertyvista.admin.rpc.services.ImportUploadService;
 import com.propertyvista.interfaces.importer.BuildingImporter;
 import com.propertyvista.interfaces.importer.BuildingUpdater;
+import com.propertyvista.interfaces.importer.ImportCounters;
 import com.propertyvista.interfaces.importer.ImportUtils;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
@@ -62,14 +64,21 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
             process.status().setProgressMaximum(importIO.buildings().size());
 
             int count = 0;
+            ImportCounters counters = new ImportCounters();
             for (BuildingIO building : importIO.buildings()) {
                 if (importDTO.updateOnly().isBooleanTrue()) {
-                    new BuildingUpdater().update(building, imagesBaseFolder);
+                    counters.add(new BuildingUpdater().update(building, imagesBaseFolder));
                 } else {
-                    new BuildingImporter().persist(building, imagesBaseFolder);
+                    counters.add(new BuildingImporter().persist(building, imagesBaseFolder));
                 }
                 count++;
                 process.status().setProgress(count);
+            }
+            if (importDTO.updateOnly().isBooleanTrue()) {
+                process.status().setMessage(SimpleMessageFormat.format("Updated {0} units in {1} building(s)", counters.units, counters.buildings));
+            } else {
+                process.status().setMessage(
+                        SimpleMessageFormat.format("Imported {0} building(s), {1} floorplan(s), {2} unit(s)", count, counters.floorplans, counters.units));
             }
             process.status().setCompleted();
         } finally {

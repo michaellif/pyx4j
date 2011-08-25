@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.xml.sax.InputSource;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 import com.pyx4j.essentials.server.upload.UploadServiceImpl;
@@ -27,6 +28,7 @@ import com.pyx4j.essentials.server.upload.UploadServiceImpl;
 import com.propertyvista.crm.rpc.dto.UpdateUploadDTO;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
 import com.propertyvista.interfaces.importer.BuildingUpdater;
+import com.propertyvista.interfaces.importer.ImportCounters;
 import com.propertyvista.interfaces.importer.ImportUtils;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
@@ -46,11 +48,13 @@ public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO> 
         process.status().setProgressMaximum(importIO.buildings().size());
 
         int count = 0;
+        ImportCounters counters = new ImportCounters();
         for (BuildingIO building : importIO.buildings()) {
-            new BuildingUpdater().update(building, imagesBaseFolder);
+            counters.add(new BuildingUpdater().update(building, imagesBaseFolder));
             count++;
             process.status().setProgress(count);
         }
+        process.status().setMessage(SimpleMessageFormat.format("Updated {0} units in {1} building(s)", counters.units, counters.buildings));
         process.status().setCompleted();
         return null;
     }

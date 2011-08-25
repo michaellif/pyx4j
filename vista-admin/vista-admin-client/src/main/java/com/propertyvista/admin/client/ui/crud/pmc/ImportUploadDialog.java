@@ -25,6 +25,7 @@ import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.widgets.client.dialog.Dialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
@@ -69,6 +70,11 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
                 super.onUploadError(error, args);
                 dialog.getOkButton().setEnabled(true);
                 uploadPanel.reset();
+            }
+
+            @Override
+            protected void onUploadCompleteMessage(String message) {
+                MessageDialog.info(i18n.tr("Upload Complete"), message);
             }
 
         };

@@ -15,6 +15,7 @@ package com.propertyvista.portal.server.importer;
 
 import com.propertvista.generator.BuildingsGenerator;
 import com.propertvista.generator.util.CommonsGenerator;
+import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
@@ -46,6 +47,9 @@ public class Generator {
         }
 
         for (FloorplanDTO floorplanDTO : model.getFloorplans()) {
+            if (floorplanDTO.name().isNull()) {
+                floorplanDTO.name().setValue("missing:" + RandomUtil.randomLetters(3));
+            }
             if (floorplanDTO.description().isNull()) {
                 floorplanDTO.description().setValue(CommonsGenerator.lipsum());
             }

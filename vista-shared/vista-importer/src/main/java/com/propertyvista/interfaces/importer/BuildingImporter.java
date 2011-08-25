@@ -46,10 +46,17 @@ import com.propertyvista.server.common.reference.PublicDataUpdater;
 
 public class BuildingImporter {
 
-    public void persist(BuildingIO buildingIO, String imagesBaseFolder) {
+    public ImportCounters persist(BuildingIO buildingIO, String imagesBaseFolder) {
+
+        ImportCounters counters = new ImportCounters();
+
         // Set defaults
         if (buildingIO.type().isNull()) {
             buildingIO.type().setValue(BuildingInfo.Type.residential);
+        }
+
+        if (buildingIO.propertyCode().isNull()) {
+            throw new Error("propertyCode can't be empty");
         }
 
         // Save building
@@ -108,7 +115,13 @@ public class BuildingImporter {
             for (FloorplanIO floorplanIO : buildingIO.floorplans()) {
                 Floorplan floorplan = new FloorplanConverter().createDBO(floorplanIO);
                 floorplan.building().set(building);
+
+                if (floorplan.name().isNull()) {
+                    throw new Error("Floorplan name in  building '" + buildingIO.propertyCode().getValue() + "' can't be empty");
+                }
+
                 Persistence.service().persist(floorplan);
+                counters.floorplans += 1;
 
                 //FloorplanAmenity
                 {
@@ -125,12 +138,18 @@ public class BuildingImporter {
                 {
                     List<AptUnit> items = new Vector<AptUnit>();
                     for (AptUnitIO iIO : floorplanIO.units()) {
+                        if (iIO.number().isNull()) {
+                            throw new Error("AptUnit number in '" + floorplanIO.name().getValue() + "' in building '" + buildingIO.propertyCode().getValue()
+                                    + "'can't be empty");
+                        }
+
                         AptUnit i = new AptUnitConverter().createDBO(iIO);
                         i.belongsTo().set(building);
                         i.floorplan().set(floorplan);
                         items.add(i);
                     }
                     Persistence.service().persist(items);
+                    counters.units += items.size();
                 }
 
                 // Media
@@ -142,5 +161,6 @@ public class BuildingImporter {
                 }
             }
         }
+        return counters;
     }
 }
