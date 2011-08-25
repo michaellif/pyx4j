@@ -37,9 +37,11 @@ public class NavigationPanel extends Panel {
             protected void populateItem(ListItem<NavigationItem> item) {
                 NavigationItem navItem = item.getModelObject();
                 BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("destination", navItem.getDestination(), navItem.getPageParameters());
-                Label label = new Label("caption", navItem.getCaption());
-                link.add(label);
+                link.add(new Label("caption", navItem.getCaption()));
                 item.add(link);
+
+                //TODO enhance code to support inner pages, check static pages separately (they can't be located under FindApt or Resident so parent of Static page is another static page).
+                //Use some interface marker to group pages under FindApt and Resident
                 if (NavigationPanel.this.getPage().getClass().equals(navItem.getDestination())) {
 
                     String currentPageId = null;

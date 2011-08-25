@@ -18,7 +18,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.target.coding.MixedParamUrlCodingStrategy;
 import org.apache.wicket.request.target.coding.QueryStringUrlCodingStrategy;
 
-import com.propertyvista.pmsite.server.pages.FindApartmentPage;
+import com.propertyvista.pmsite.server.pages.FindAptPage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
@@ -33,8 +33,8 @@ public class PMSiteApplication extends WebApplication {
 
     @Override
     protected void init() {
-        mountBookmarkablePage("findapt", FindApartmentPage.class);
-        mount(new QueryStringUrlCodingStrategy("residents", ResidentsPage.class));
+        mountBookmarkablePage("residents", ResidentsPage.class);
+        mount(new QueryStringUrlCodingStrategy("findapt", FindAptPage.class));
         mount(new MixedParamUrlCodingStrategy("cnt", StaticPage.class, new String[] { NavigationItem.NAVIG_PARAMETER_NAME }));
     }
 
