@@ -19,7 +19,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 
-import com.propertyvista.pmsite.server.pages.FindAptPage;
+import com.propertyvista.pmsite.server.pages.AptListPage;
 
 //http://www.google.com/codesearch#o92Uy7_Jjpw/base/openqrm-3.5.2/src/base/java/main/code/com/qlusters/qrm/web/wicket/markup/&type=cs
 public class QuickSearchCriteriaPanel extends Panel {
@@ -54,7 +54,7 @@ public class QuickSearchCriteriaPanel extends Panel {
     private void executeSearch(QuickSearchModel model) {
         PageParameters parameters = new PageParameters();
         parameters.put("param", "value");
-        setResponsePage(FindAptPage.class, parameters);
+        setResponsePage(AptListPage.class, parameters);
     }
 
 }
