@@ -7,16 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 23, 2011
+ * Created on Aug 24, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.rpc.services;
+package com.propertyvista.admin.rpc;
 
-import com.pyx4j.essentials.rpc.upload.UploadService;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.admin.rpc.PmcImportDTO;
+@Transient
+public interface PmcImportDTO extends IEntity {
 
-public interface ImportUploadService extends UploadService<PmcImportDTO> {
+    IPrimitive<Boolean> updateOnly();
 
 }

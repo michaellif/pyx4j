@@ -27,13 +27,13 @@ import org.xml.sax.SAXException;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.rpc.upload.UploadId;
 import com.pyx4j.essentials.server.upload.UploadData;
+import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 import com.pyx4j.essentials.server.upload.UploadServiceImpl;
 import com.pyx4j.essentials.server.xml.XMLEntityParser;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.rpc.PmcImportDTO;
 import com.propertyvista.admin.rpc.services.ImportUploadService;
 import com.propertyvista.interfaces.importer.BuildingImporter;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
@@ -41,7 +41,7 @@ import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityFactory;
 import com.propertyvista.server.domain.admin.Pmc;
 
-public class ImportUploadServiceImpl extends UploadServiceImpl implements ImportUploadService {
+public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> implements ImportUploadService {
 
     @Override
     public long getMaxSize(HttpServletRequest request) {
@@ -49,18 +49,14 @@ public class ImportUploadServiceImpl extends UploadServiceImpl implements Import
     }
 
     @Override
-    protected void onpPepareUpload(IEntity data, UploadId id) {
-        id.setUploadKey(data.getPrimaryKey());
-    }
-
-    @Override
-    public Key onUploadRecived(UploadData data) {
+    public Key onUploadRecived(UploadDeferredProcess process, UploadData data) {
         try {
-            if (data.uploadKey == null) {
+            PmcImportDTO importDTO = (PmcImportDTO) process.getData();
+            if (importDTO.id().isNull()) {
                 throw new Error();
             }
             NamespaceManager.setNamespace(Pmc.adminNamespace);
-            Pmc pmc = PersistenceServicesFactory.getPersistenceService().retrieve(Pmc.class, data.uploadKey);
+            Pmc pmc = PersistenceServicesFactory.getPersistenceService().retrieve(Pmc.class, importDTO.id().getValue());
             if (pmc == null) {
                 throw new Error("PMC Not found");
             }
@@ -70,10 +66,15 @@ public class ImportUploadServiceImpl extends UploadServiceImpl implements Import
 
             XMLEntityParser parser = new XMLEntityParser(new ImportXMLEntityFactory());
             ImportIO importIO = parser.parse(ImportIO.class, getDom(data.data).getDocumentElement());
+            process.status().setProgressMaximum(importIO.buildings().size());
+
+            int count = 0;
             for (BuildingIO building : importIO.buildings()) {
                 new BuildingImporter().persist(building, imagesBaseFolder);
+                count++;
+                process.status().setProgress(count);
             }
-
+            process.status().setCompleted();
         } finally {
             NamespaceManager.remove();
         }
