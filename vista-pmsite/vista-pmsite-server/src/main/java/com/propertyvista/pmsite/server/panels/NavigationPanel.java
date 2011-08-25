@@ -21,7 +21,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteSession;
 
 public class NavigationPanel extends Panel {
 
@@ -30,7 +30,7 @@ public class NavigationPanel extends Panel {
     public NavigationPanel(String id) {
         super(id);
 
-        ListView<NavigationItem> listView = new ListView<NavigationItem>("navigationItem", PMSiteContentManager.getNavigationItems()) {
+        ListView<NavigationItem> listView = new ListView<NavigationItem>("navigationItem", ((PMSiteSession) getSession()).getNavigationItems()) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -62,5 +62,4 @@ public class NavigationPanel extends Panel {
         };
         add(listView);
     }
-
 }

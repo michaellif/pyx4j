@@ -14,6 +14,9 @@
 package com.propertyvista.pmsite.server;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.Request;
+import org.apache.wicket.Response;
+import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.target.coding.MixedParamUrlCodingStrategy;
 import org.apache.wicket.request.target.coding.QueryStringUrlCodingStrategy;
@@ -42,4 +45,8 @@ public class PMSiteApplication extends WebApplication {
         mount(new MixedParamUrlCodingStrategy("cnt", StaticPage.class, new String[] { NavigationItem.NAVIG_PARAMETER_NAME }));
     }
 
+    @Override
+    public Session newSession(Request request, Response response) {
+        return new PMSiteSession(request);
+    }
 }

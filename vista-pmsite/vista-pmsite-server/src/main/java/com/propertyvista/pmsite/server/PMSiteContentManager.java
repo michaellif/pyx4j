@@ -51,7 +51,7 @@ public class PMSiteContentManager {
         return landing;
     }
 
-    public static List<NavigationItem> getNavigationItems() {
+    static List<NavigationItem> getNavigationItems() {
         List<NavigationItem> list = new ArrayList<NavigationItem>();
 
         list.add(new NavigationItem(FindAptPage.class, "Find an Apartment"));
