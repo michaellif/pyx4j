@@ -146,18 +146,28 @@ select {
     color: #bbb;
 }
 
-.navigation .selected span {
-    color: #B5E329;
-}
-
-.navigation ul li a {
+.navigation a {
     text-decoration: none;
+    float: left;
 }
 
-.navigation ul li span:hover {
+.navigation .active a {
+    background-color: #6fb700;
+    color: #191B22;
+    line-height: 64px;
+}
+
+.navigation .active span {
+    color: #111;
+}
+
+.navigation span:hover {
     color: #B5E329;
 }
 
+.navigation .active span:hover {
+	color: #191B22;
+}
 
 .landing_content {
     background: url("images/template0/content_bg.png") repeat-x scroll 0 0 #37393F;

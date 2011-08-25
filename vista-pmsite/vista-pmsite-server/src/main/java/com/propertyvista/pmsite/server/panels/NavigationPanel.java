@@ -55,7 +55,7 @@ public class NavigationPanel extends Panel {
                     }
 
                     if ((currentPageId == null && navigItemPageId == null) || currentPageId.equals(navigItemPageId)) {
-                        link.getParent().add(new AttributeAppender("class", new Model<String>("selected"), " "));
+                        link.getParent().add(new AttributeAppender("class", new Model<String>("active"), " "));
                     }
                 }
             }
