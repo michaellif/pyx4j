@@ -13,11 +13,13 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 
@@ -35,8 +37,25 @@ public class NavigationPanel extends Panel {
             protected void populateItem(ListItem<NavigationItem> item) {
                 NavigationItem navItem = item.getModelObject();
                 BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("destination", navItem.getDestination(), navItem.getPageParameters());
-                link.add(new Label("caption", navItem.getCaption()));
+                Label label = new Label("caption", navItem.getCaption());
+                link.add(label);
                 item.add(link);
+                if (NavigationPanel.this.getPage().getClass().equals(navItem.getDestination())) {
+
+                    String currentPageId = null;
+                    if (NavigationPanel.this.getPage().getPageParameters() != null) {
+                        currentPageId = NavigationPanel.this.getPage().getPageParameters().getString(NavigationItem.NAVIG_PARAMETER_NAME);
+                    }
+
+                    String navigItemPageId = null;
+                    if (navItem.getPageParameters() != null) {
+                        navigItemPageId = navItem.getPageParameters().getString(NavigationItem.NAVIG_PARAMETER_NAME);
+                    }
+
+                    if ((currentPageId == null && navigItemPageId == null) || currentPageId.equals(navigItemPageId)) {
+                        link.getParent().add(new AttributeAppender("class", new Model<String>("selected"), " "));
+                    }
+                }
             }
         };
         add(listView);

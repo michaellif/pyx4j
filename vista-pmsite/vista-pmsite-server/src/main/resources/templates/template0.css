@@ -138,6 +138,10 @@ a:hover {
     color: #bbb;
 }
 
+.navigation .selected span {
+    color: #B5E329;
+}
+
 .navigation ul li a {
     text-decoration: none;
 }
