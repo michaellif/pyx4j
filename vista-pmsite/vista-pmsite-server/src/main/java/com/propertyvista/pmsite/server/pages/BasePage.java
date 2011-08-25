@@ -56,6 +56,7 @@ public abstract class BasePage extends WebPage {
                 }
                 getWebRequestCycle().getWebResponse().addCookie(new Cookie("pmsiteStyle", String.valueOf(style)));
 
+                setResponsePage(getPageClass(), getPageParameters());
             }
         });
 
