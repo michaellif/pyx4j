@@ -28,6 +28,14 @@ public class BuildingRS {
 
     public MarketingRS marketing;
 
+    public String propertyManager;
+
+    public String contactEmail;
+
+    @XmlElementWrapper
+    @XmlElements(@XmlElement(name = "phone"))
+    public List<String> contactPhones = new ArrayList<String>();
+
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "amenity", type = AmenityRS.class))
     public List<AmenityRS> amenities = new ArrayList<AmenityRS>();

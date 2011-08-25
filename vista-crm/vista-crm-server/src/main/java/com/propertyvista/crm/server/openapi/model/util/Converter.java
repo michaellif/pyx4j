@@ -34,6 +34,7 @@ import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.contact.Address.AddressType;
 import com.propertyvista.domain.contact.IAddressFull.StreetDirection;
 import com.propertyvista.domain.contact.IAddressFull.StreetType;
+import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
@@ -68,6 +69,12 @@ public class Converter {
 
     public static void copyDBOtoRS(Building from, BuildingRS to) {
         to.propertyCode = from.propertyCode().getStringView();
+
+        to.propertyManager = from.propertyManager().name().getStringView();
+        to.contactEmail = from.contacts().email().getStringView();
+        for (Phone phone : from.contacts().phones()) {
+            to.contactPhones.add(phone.getStringView());
+        }
 
         to.info = convertBuildingInfo(from.info());
         to.marketing = convertMarketing(from.marketing());
@@ -183,7 +190,9 @@ public class Converter {
     public static AddressRS convertAddress(Address from) {
         AddressRS to = new AddressRS();
 
-        to.addressType = from.addressType().getValue().name();
+        if (!from.addressType().isNull()) {
+            to.addressType = from.addressType().getValue().name();
+        }
         to.streetName = from.streetName().getStringView();
         to.streetNumber = from.streetNumber().getStringView();
         to.streetNumberSuffix = from.streetNumberSuffix().getStringView();
