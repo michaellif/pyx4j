@@ -25,6 +25,7 @@ import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
+import com.propertyvista.server.common.reference.PublicDataUpdater;
 
 public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building, BuildingDTO> implements BuildingCrudService {
 
@@ -67,5 +68,6 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
 
         // save detached entities:
         PersistenceServicesFactory.getPersistenceService().merge(dbo.serviceCatalog());
+        PublicDataUpdater.updateIndexData(dbo);
     }
 }

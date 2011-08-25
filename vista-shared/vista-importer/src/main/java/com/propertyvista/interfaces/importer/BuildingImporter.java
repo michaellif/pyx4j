@@ -42,6 +42,7 @@ import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.interfaces.importer.model.ParkingIO;
+import com.propertyvista.server.common.reference.PublicDataUpdater;
 
 public class BuildingImporter {
 
@@ -70,6 +71,7 @@ public class BuildingImporter {
         }
 
         Persistence.service().persist(building);
+        PublicDataUpdater.updateIndexData(building);
 
         //BuildingAmenity
         {

@@ -63,8 +63,8 @@ import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.server.importer.Importer;
-import com.propertyvista.portal.server.portal.PublicDataUpdater;
 import com.propertyvista.server.common.generator.UnitRelatedData;
+import com.propertyvista.server.common.reference.PublicDataUpdater;
 import com.propertyvista.server.domain.FileBlob;
 import com.propertyvista.server.domain.ThumbnailBlob;
 

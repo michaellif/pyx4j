@@ -41,11 +41,11 @@ import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.server.geo.GeoLocator;
 import com.propertyvista.portal.server.geo.GeoLocator.Mode;
-import com.propertyvista.portal.server.portal.PublicDataUpdater;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
 import com.propertyvista.server.common.generator.Model;
 import com.propertyvista.server.common.generator.UnitRelatedData;
+import com.propertyvista.server.common.reference.PublicDataUpdater;
 
 public class Importer {
 
