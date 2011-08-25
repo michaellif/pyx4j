@@ -16,23 +16,17 @@ package com.propertyvista.interfaces.importer;
 import java.io.File;
 import java.io.FileReader;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.essentials.server.xml.XMLEntityParser;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
-import com.propertyvista.interfaces.importer.xml.ImportXMLEntityFactory;
 
 public class BuildingImport {
 
@@ -50,9 +44,7 @@ public class BuildingImport {
         fileName = "buildings.xml";
         String imagesBaseFolder = "data/export/images/";
 
-        XMLEntityParser parser = new XMLEntityParser(new ImportXMLEntityFactory());
-
-        ImportIO importIO = parser.parse(ImportIO.class, getDom(new File(fileName)).getDocumentElement());
+        ImportIO importIO = ImportUtils.parse(ImportIO.class, new InputSource(new FileReader(new File(fileName))));
 
         for (BuildingIO building : importIO.buildings()) {
             new BuildingImporter().persist(building, imagesBaseFolder);
@@ -61,12 +53,4 @@ public class BuildingImport {
         log.info("Total time {} msec", TimeUtils.since(start));
     }
 
-    private static Document getDom(File xmlFile) throws Exception {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setIgnoringComments(true);
-        factory.setValidating(false);
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        builder.setErrorHandler(null);
-        return builder.parse(new InputSource(new FileReader(xmlFile)));
-    }
 }

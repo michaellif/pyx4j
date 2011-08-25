@@ -47,6 +47,7 @@ import com.propertyvista.crm.rpc.services.TenantScreeningCrudService;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.crm.rpc.services.UnitItemCrudService;
 import com.propertyvista.crm.rpc.services.UnitOccupancyCrudService;
+import com.propertyvista.crm.rpc.services.UpdateUploadService;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataCrudService;
@@ -138,6 +139,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Floorplan.class, EntityPermission.ALL));
         grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(FloorplanCrudService.class));
+
+        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(UpdateUploadService.class));
 
 // - Unit-related:
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(AptUnit.class, EntityPermission.ALL));

@@ -13,14 +13,38 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
+import java.util.List;
+
+import com.google.gwt.user.client.Command;
+
+import com.pyx4j.forms.client.ui.CHyperlink;
+
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.UpdateUploadDialog;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> implements BuildingListerView {
 
+    private final CHyperlink upload;
+
     public BuildingListerViewImpl() {
         super(CrmSiteMap.Properties.Building.class);
         setLister(new BuildingLister());
+
+        upload = new CHyperlink(new Command() {
+            @Override
+            public void execute() {
+                UpdateUploadDialog.show();
+            }
+        });
+        upload.setValue("Upload update.xml");
+        lister.addActionButton(upload.asWidget());
+    }
+
+    @Override
+    public void populate(List<BuildingDTO> entityes, int pageNumber, boolean hasMoreData) {
+        super.populate(entityes, pageNumber, hasMoreData);
+        upload.setEnabled(true);
     }
 }

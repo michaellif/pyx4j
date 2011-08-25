@@ -7,22 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 23, 2011
+ * Created on Aug 25, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server;
+package com.propertyvista.crm.rpc.dto;
 
-import com.pyx4j.essentials.server.upload.AbstractUploadServlet;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.admin.server.services.ImportUploadServiceImpl;
-import com.propertyvista.crm.server.services.UpdateUploadServiceImpl;
+@Transient
+public interface UpdateUploadDTO extends IEntity {
 
-@SuppressWarnings("serial")
-public class VistaUploadServlet extends AbstractUploadServlet {
-
-    public VistaUploadServlet() {
-        bind(ImportUploadServiceImpl.class);
-        bind(UpdateUploadServiceImpl.class);
-    }
 }

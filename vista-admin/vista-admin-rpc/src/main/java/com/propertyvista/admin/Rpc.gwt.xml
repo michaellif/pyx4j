@@ -6,6 +6,7 @@
     <inherits name='com.pyx4j.site.SiteShared'/>
     
     <inherits name='com.propertyvista.Domain' />
+    <inherits name='com.propertyvista.portal.Rpc' />
 
     <source path="rpc"/>
 </module>
