@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services;
 
 import java.io.ByteArrayInputStream;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,6 +22,7 @@ import org.xml.sax.InputSource;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 import com.pyx4j.essentials.server.upload.UploadServiceImpl;
@@ -38,6 +40,11 @@ public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO> 
     @Override
     public long getMaxSize(HttpServletRequest request) {
         return 5 * 1024 * 1024;
+    }
+
+    @Override
+    public Collection<String> getSupportedExtensions() {
+        return DownloadFormat.getExtensions(supportedFormats);
     }
 
     @Override

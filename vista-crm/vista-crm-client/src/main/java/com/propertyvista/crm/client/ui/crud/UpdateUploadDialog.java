@@ -68,7 +68,7 @@ public class UpdateUploadDialog extends VerticalPanel implements OkCancelOption,
             }
 
         };
-        uploadPanel.setSupportedExtensions("xml");
+        uploadPanel.setSupportedExtensions(UpdateUploadService.supportedFormats);
         uploadPanel.setServletPath(GWT.getModuleBaseURL() + DeploymentConsts.uploadServletMapping);
         uploadPanel.setSize("400px", "60px");
         uploadPanel.getElement().getStyle().setMarginTop(50, Style.Unit.PX);

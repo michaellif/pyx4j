@@ -13,10 +13,16 @@
  */
 package com.propertyvista.admin.rpc.services;
 
+import java.util.Collection;
+import java.util.EnumSet;
+
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 
 import com.propertyvista.admin.rpc.PmcImportDTO;
 
 public interface ImportUploadService extends UploadService<PmcImportDTO> {
+
+    public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.XML);
 
 }
