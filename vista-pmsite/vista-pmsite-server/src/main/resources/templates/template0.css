@@ -64,6 +64,14 @@ a:hover {
     text-decoration: underline;
 }
 
+select {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+	
+  background-color: #eee;
+  color: #333;
+}
+
 .header_wrap {
     background: url("images/template0/header_right.jpg") no-repeat scroll 100% 0 transparent;
     width: 100%;
@@ -163,7 +171,48 @@ a:hover {
 .quickSearchCriteria {
 	display: block;
     position: absolute;
-    top: 48px;
-    right: 0px;
-	width: 244px;
+    top: 0;
+    right: 0;
+	width: 200px;
+	margin-right: 50px;
+}
+
+.quickSearchCriteria h3 {
+    color: #FFFFFF;
+    font-size: 16px;
+    padding: 20px 0;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.quickSearchCriteria label {
+    color: #CCCCCC;
+    display: block;
+    font-size: 13px;
+    padding: 0 0 3px;
+}
+
+.quickSearchCriteria select {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.quickSearchCriteria input {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    color: #000000;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px 0;
+    text-shadow: 0 1px 0 #CCCCCC;
+    text-transform: uppercase;
+    width: 128px;
+}
+
+.quickSearchCriteria .submit {
+    background: url("images/template0/btn.png") no-repeat scroll 0 0 transparent;
+    height: 32px;
+    margin: 15px auto 0;
+    overflow: hidden;
+    width: 128px;
 }

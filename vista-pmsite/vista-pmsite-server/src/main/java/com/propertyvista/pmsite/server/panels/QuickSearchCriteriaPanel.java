@@ -53,7 +53,18 @@ public class QuickSearchCriteriaPanel extends Panel {
 
     private void executeSearch(QuickSearchModel model) {
         PageParameters parameters = new PageParameters();
-        parameters.put("param", "value");
+        if (model.getProvince() != null) {
+            parameters.put("province", model.getProvince().getCode());
+        }
+        if (model.getCity() != null) {
+            parameters.put("city", model.getCity());
+        }
+        if (model.getBedrooms() != null) {
+            parameters.put("type", model.getBedrooms().name());
+        }
+        if (model.getPrice() != null) {
+            parameters.put("price", model.getPrice().name());
+        }
         setResponsePage(AptListPage.class, parameters);
     }
 
