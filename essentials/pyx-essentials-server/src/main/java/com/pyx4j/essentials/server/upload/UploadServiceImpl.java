@@ -20,6 +20,12 @@
  */
 package com.pyx4j.essentials.server.upload;
 
+import java.util.Collection;
+import java.util.Locale;
+
+import org.apache.commons.io.FilenameUtils;
+import org.xnap.commons.i18n.I18n;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -27,9 +33,13 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.upload.UploadId;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
+import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public abstract class UploadServiceImpl<E extends IEntity> implements UploadService<E>, UploadReciver {
+
+    private static I18n i18n = I18nFactory.getI18n();
 
     protected void onpPepareUpload(E data, UploadId id) {
 
@@ -48,4 +58,24 @@ public abstract class UploadServiceImpl<E extends IEntity> implements UploadServ
         callback.onSuccess(null);
     }
 
+    /**
+     * Must return LowerCase strings, no dot in front
+     */
+    public Collection<String> getSupportedExtensions() {
+        return null;
+    }
+
+    @Override
+    public void onUploadStart(String fileName) {
+        Collection<String> extensions = getSupportedExtensions();
+        if (extensions != null) {
+            String extension = FilenameUtils.getExtension(fileName);
+            if (extension != null) {
+                extension = extension.toLowerCase(Locale.ENGLISH);
+            }
+            if (!extensions.contains(extension)) {
+                throw new UserRuntimeException(i18n.tr("Unsupported file type {0}", extension));
+            }
+        }
+    }
 }

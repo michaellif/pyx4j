@@ -31,6 +31,8 @@ public interface UploadReciver {
      */
     long getMaxSize(HttpServletRequest request);
 
+    public void onUploadStart(String fileName);
+
     public Key onUploadRecived(UploadDeferredProcess process, UploadData data);
 
 }

@@ -34,13 +34,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
@@ -50,13 +51,17 @@ import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
 @SuppressWarnings("serial")
 public abstract class AbstractUploadServlet extends HttpServlet {
+
+    private static I18n i18n = I18nFactory.getI18n();
 
     private final static Logger log = LoggerFactory.getLogger(AbstractUploadServlet.class);
 
@@ -90,12 +95,12 @@ public abstract class AbstractUploadServlet extends HttpServlet {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn())) {
             log.trace("no session");
-            out.println("no session");
+            out.println(i18n.tr("no session"));
             return;
         }
         try {
             if (!ServletFileUpload.isMultipartContent(request)) {
-                out.println("Invalid request type");
+                out.println(i18n.tr("Invalid request type"));
                 return;
             }
             String serviceClassId = request.getPathInfo().substring(1);
@@ -118,7 +123,6 @@ public abstract class AbstractUploadServlet extends HttpServlet {
             ProgressListenerImpl progressListener = new ProgressListenerImpl();
             fileUpload.setProgressListener(progressListener);
 
-            FileItemStream fileItem = null;
             UploadData data = new UploadData();
             UploadDeferredProcess process = null;
             try {
@@ -143,20 +147,28 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                         } else {
                             log.debug("unknown form field {}", item.getFieldName());
                         }
-                    } else if (fileItem == null) {
-                        fileItem = item;
-                        InputStream in = fileItem.openStream();
+                    } else if (data.data == null) {
+                        data.fileName = item.getName();
+                        if (data.fileName != null) {
+                            data.fileName = FilenameUtils.getName(data.fileName);
+                        }
+                        reciver.onUploadStart(data.fileName);
+                        InputStream in = item.openStream();
                         ByteArrayOutputStream os = new ByteArrayOutputStream();
                         try {
                             IOUtils.copyStream(in, os, 1024);
                             data.data = os.toByteArray();
                             if (data.data.length >= maxSize) {
-                                out.println("Upload size exceed " + (maxSize / (1024 * 1024)) + " megabyte");
+                                out.println(i18n.tr("File upload size exceed {0} megabyte maximum", (maxSize / (1024 * 1024))));
                                 return;
                             }
                         } catch (Throwable e) {
                             log.error("Upload error", e);
-                            out.println("Failed to receive upload " + CommonsStringUtils.nvl(e.getMessage()));
+                            if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+                                out.println("Failed to receive upload " + CommonsStringUtils.nvl(e.getMessage()));
+                            } else {
+                                out.println(i18n.tr("Failed to receive upload"));
+                            }
                             return;
                         } finally {
                             IOUtils.closeQuietly(in);
@@ -164,22 +176,33 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                         }
                     }
                 }
-            } catch (FileUploadException e) {
+            } catch (UploadCanceled e) {
+                out.println(i18n.tr("File Upload canceled"));
+                return;
+            } catch (UserRuntimeException e) {
+                out.println(e.getMessage());
+                return;
+            } catch (Throwable e) {
                 log.error("File Upload error", e);
-                out.println("File Upload error " + CommonsStringUtils.nvl(e.getMessage()));
+                if (process != null) {
+                    process.status().setError();
+                }
+                if (e.getCause() instanceof FileUploadBase.FileSizeLimitExceededException) {
+                    out.println(i18n.tr("File upload size exceed {0} megabyte maximum", (maxSize / (1024 * 1024))));
+                } else {
+                    if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+                        out.println("Error " + e.getMessage());
+                    } else {
+                        out.println(i18n.tr("File upload error"));
+                    }
+                }
                 return;
             }
-            if ((fileItem == null) || (data == null)) {
-                out.println("File not uploaded");
+            if (data.data == null) {
+                out.println(i18n.tr("File not uploaded"));
                 return;
             }
-
-            data.fileName = fileItem.getName();
-            if (data.fileName != null) {
-                data.fileName = FilenameUtils.getName(data.fileName);
-            }
-
-            log.debug("Got file {}", fileItem.getName());
+            log.debug("Got file {}", data.fileName);
 
             Key id = reciver.onUploadRecived(process, data);
             if (id != null) {
@@ -193,7 +216,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
             if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
                 out.println("Error " + t.getMessage());
             } else {
-                out.println("upload error");
+                out.println(i18n.tr("File upload error"));
             }
         } finally {
             out.flush();

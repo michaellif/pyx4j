@@ -20,7 +20,8 @@
  */
 package com.pyx4j.essentials.rpc.report;
 
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.Vector;
 
 public enum DownloadFormat {
 
@@ -100,11 +101,24 @@ public enum DownloadFormat {
         return getName();
     }
 
+    public static Collection<String> getExtensions(Collection<DownloadFormat> formats) {
+        Collection<String> extensions = new Vector<String>();
+        for (DownloadFormat f : formats) {
+            for (String extension : f.getExtensions()) {
+                extensions.add(extension);
+            }
+        }
+        return extensions;
+    }
+
     public static DownloadFormat valueByExtension(String ext) {
         ext = ext.toLowerCase();
         for (DownloadFormat df : DownloadFormat.values()) {
-            if (Arrays.asList(df.getExtensions()).contains(ext))
-                return df;
+            for (String extension : df.getExtensions()) {
+                if (extension.equals(ext)) {
+                    return df;
+                }
+            }
         }
         throw new IllegalArgumentException();
     }

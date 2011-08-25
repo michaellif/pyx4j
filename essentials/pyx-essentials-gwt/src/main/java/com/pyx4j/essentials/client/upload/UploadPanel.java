@@ -136,11 +136,7 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
     }
 
     public void setSupportedExtensions(Collection<DownloadFormat> formats) {
-        for (DownloadFormat f : formats) {
-            for (String ext : f.getExtensions()) {
-                supportedExtensions.add(ext.toLowerCase());
-            }
-        }
+        supportedExtensions.addAll(DownloadFormat.getExtensions(formats));
     }
 
     public void setDescription(String description) {
