@@ -13,6 +13,10 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
-public class QuickSearchModel {
+import java.io.Serializable;
+
+public class QuickSearchModel implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
 }
