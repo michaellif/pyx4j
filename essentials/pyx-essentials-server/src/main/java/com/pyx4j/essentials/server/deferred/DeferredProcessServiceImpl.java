@@ -29,14 +29,17 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 public class DeferredProcessServiceImpl implements DeferredProcessService {
 
     @Override
-    public void getStatus(AsyncCallback<DeferredProcessProgressResponse> callback, String deferredCorrelationId) {
+    public void getStatus(AsyncCallback<DeferredProcessProgressResponse> callback, String deferredCorrelationId, boolean finalize) {
         IDeferredProcess process = DeferredProcessRegistry.get(deferredCorrelationId);
         if (process != null) {
-            callback.onSuccess(process.status());
+            DeferredProcessProgressResponse response = process.status();
+            if (response.isCompleted()) {
+                DeferredProcessRegistry.remove(deferredCorrelationId);
+            }
+            callback.onSuccess(response);
         } else {
             throw new RuntimeException("Process " + deferredCorrelationId + " not found");
         }
-
     }
 
     @Override

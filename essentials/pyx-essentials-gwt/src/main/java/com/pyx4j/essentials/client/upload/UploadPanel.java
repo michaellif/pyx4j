@@ -42,6 +42,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.DeferredProgressPanel;
+import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadId;
 import com.pyx4j.essentials.rpc.upload.UploadService;
@@ -107,7 +108,14 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
         content.add(line);
 
         line.add(upload);
-        line.add(deferredProgressPanel = new DeferredProgressPanel("70px", "20px"));
+        line.add(deferredProgressPanel = new DeferredProgressPanel("70px", "20px") {
+            @Override
+            protected void onDeferredSuccess(DeferredProcessProgressResponse result) {
+                if (CommonsStringUtils.isStringSet(result.getMessage())) {
+                    onUploadCompleteMessage(result.getMessage());
+                }
+            }
+        });
         deferredProgressPanel.getElement().getStyle().setPaddingLeft(25, Style.Unit.PX);
         deferredProgressPanel.setVisible(false);
     }
@@ -231,6 +239,7 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
         if (idx >= 0) {
             message = message.substring(idx + UploadService.ResponsePrefix.length(), message.length());
             if (message.startsWith("OK")) {
+                deferredProgressPanel.complete();
                 String id = message.substring(2, message.indexOf('\n')).trim();
                 onUploadComplete(id);
                 UploadPanel.this.setVisible(false);
@@ -254,6 +263,9 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
 
     protected void onUploadComplete(String id) {
 
+    }
+
+    protected void onUploadCompleteMessage(String message) {
     }
 
 }

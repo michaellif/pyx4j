@@ -27,7 +27,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface DeferredProcessService extends IService {
 
-    public void getStatus(AsyncCallback<DeferredProcessProgressResponse> callback, String deferredCorrelationId);
+    public void getStatus(AsyncCallback<DeferredProcessProgressResponse> callback, String deferredCorrelationId, boolean finalize);
 
     public void cancel(AsyncCallback<VoidSerializable> callback, String deferredCorrelationId);
 

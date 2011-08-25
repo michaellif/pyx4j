@@ -50,6 +50,8 @@ public class DeferredProgressPanel extends FlowPanel {
 
     protected final ProgressBar progressBar;
 
+    private boolean completed;
+
     public DeferredProgressPanel(String width, String height) {
         service = GWT.create(DeferredProcessService.class);
         this.add(progressBar = new ProgressBar());
@@ -59,12 +61,13 @@ public class DeferredProgressPanel extends FlowPanel {
 
     public void startProgress(final String deferredCorrelationId) {
         this.deferredCorrelationId = deferredCorrelationId;
+        completed = false;
         deferredProcessStartTime = System.currentTimeMillis();
 
         progressTimer = new Timer() {
             @Override
             public void run() {
-                checkProgressStatus();
+                checkProgressStatus(false);
             }
         };
         progressTimer.schedule(checkProgressStatusSeconds * 1000);
@@ -94,13 +97,23 @@ public class DeferredProgressPanel extends FlowPanel {
         }
     }
 
+    public void complete() {
+        checkProgressStatus(true);
+        progressBar.setProgress(0);
+        if (progressTimer != null) {
+            progressTimer.cancel();
+            progressTimer = null;
+        }
+        deferredCorrelationId = null;
+    }
+
     protected void onDeferredSuccess(DeferredProcessProgressResponse result) {
     }
 
     protected void onDeferredError(DeferredProcessProgressResponse result) {
     }
 
-    private void checkProgressStatus() {
+    private void checkProgressStatus(boolean finalize) {
         AsyncCallback<DeferredProcessProgressResponse> progressHandlingCallback = new AsyncCallback<DeferredProcessProgressResponse>() {
 
             @Override
@@ -114,13 +127,19 @@ public class DeferredProgressPanel extends FlowPanel {
             public void onSuccess(DeferredProcessProgressResponse result) {
                 if (result.isError()) {
                     log.info("Deferred completed in " + TimeUtils.secSince(deferredProcessStartTime));
-                    onDeferredError(result);
+                    if (!completed) {
+                        onDeferredError(result);
+                        completed = true;
+                    }
                     deferredCorrelationId = null;
                     progressTimer = null;
                 } else if (result.isCompleted()) {
                     progressBar.setProgress(progressBar.getMaxProgress());
                     log.info("Deferred completed in " + TimeUtils.secSince(deferredProcessStartTime));
-                    onDeferredSuccess(result);
+                    if (!completed) {
+                        onDeferredSuccess(result);
+                        completed = true;
+                    }
                     deferredCorrelationId = null;
                     progressTimer = null;
                 } else {
@@ -134,7 +153,7 @@ public class DeferredProgressPanel extends FlowPanel {
 
         };
 
-        service.getStatus(progressHandlingCallback, deferredCorrelationId);
+        service.getStatus(progressHandlingCallback, deferredCorrelationId, finalize);
 
     }
 }
