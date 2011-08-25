@@ -152,9 +152,13 @@ select {
 }
 
 .navigation .active a {
-    background-color: #6fb700;
+/*	background-color: #6fb700; */
     color: #191B22;
+    height:84px;
     line-height: 64px;
+	background-image: url("images/template0/top_menu_bg.png");
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
 }
 
 .navigation .active span {
