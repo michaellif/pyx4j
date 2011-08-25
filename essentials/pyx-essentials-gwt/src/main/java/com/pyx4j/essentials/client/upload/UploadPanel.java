@@ -37,7 +37,6 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -111,10 +110,6 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
         line.add(deferredProgressPanel = new DeferredProgressPanel("70px", "20px"));
         deferredProgressPanel.getElement().getStyle().setPaddingLeft(25, Style.Unit.PX);
         deferredProgressPanel.setVisible(false);
-    }
-
-    public IsWidget getForm() {
-        return uploadForm;
     }
 
     public void setServletPath(String path) {

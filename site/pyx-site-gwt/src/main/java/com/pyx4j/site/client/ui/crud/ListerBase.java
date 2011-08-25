@@ -234,7 +234,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         }
     }
 
-    protected void addActionButton(Button action) {
+    public void addActionButton(Widget action) {
         actionsPanel.setVisible(true);
         actionsPanel.insert(action, 1);
         actionsPanel.setCellWidth(action, "1%");
