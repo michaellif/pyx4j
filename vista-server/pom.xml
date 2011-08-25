@@ -299,6 +299,14 @@
         </profile>
 
         <profile>
+            <id>deploy-target-st22</id>
+            <properties>
+                <deployContext>vistast22</deployContext>
+                <vista-app-ping-url>http://star.st22.birchwoodsoftwaregroup.com</vista-app-ping-url>
+            </properties>
+        </profile>
+
+        <profile>
             <id>deploy-target-local</id>
             <properties>
                 <!-- Add to settings.xml,  Don't forget to add role 'manager-script' to this user
