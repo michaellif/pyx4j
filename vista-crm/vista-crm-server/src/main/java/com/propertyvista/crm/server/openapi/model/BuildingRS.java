@@ -26,8 +26,6 @@ public class BuildingRS {
 
     public BuildingInfoRS info;
 
-    public MarketingRS marketing;
-
     public String propertyManager;
 
     public String contactEmail;
@@ -35,6 +33,8 @@ public class BuildingRS {
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "phone"))
     public List<String> contactPhones = new ArrayList<String>();
+
+    public MarketingRS marketing;
 
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "amenity", type = AmenityRS.class))

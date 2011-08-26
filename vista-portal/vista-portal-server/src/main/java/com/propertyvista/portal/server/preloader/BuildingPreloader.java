@@ -106,24 +106,22 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         ServiceCatalogGenerator pmcGenerator = new ServiceCatalogGenerator(serviceItemTypes);
 
         LeaseTerms leaseTerms = generator.createLeaseTerms();
-        persist(leaseTerms);
+        Persistence.service().persist(leaseTerms);
 
         // create some complexes:
         List<Complex> complexes = new Vector<Complex>();
         complexes.add(generator.createComplex("Complex #1"));
         complexes.add(generator.createComplex("Complex #2"));
         complexes.add(generator.createComplex("Complex #3"));
-        PersistenceServicesFactory.getPersistenceService().persist(complexes);
+        Persistence.service().persist(complexes);
 
         // create some StarlightPmc:
-        PropertyManager pmc = generator.createPmc("PMC #1");
-        Persistence.service().persist(pmc);
-
-        pmc = generator.createPmc("PMC #2");
-        Persistence.service().persist(pmc);
-
-        pmc = generator.createPmc("PMC #3");
-        Persistence.service().persist(pmc);
+        List<PropertyManager> pmcs = new Vector<PropertyManager>();
+        pmcs.add(generator.createPmc("PMC #1"));
+        pmcs.add(generator.createPmc("PMC #2"));
+        pmcs.add(generator.createPmc("PMC #3"));
+        pmcs.add(generator.createPmc("Blue Ridge"));
+        Persistence.service().persist(pmcs);
 
         int unitCount = 0;
         List<Building> buildings = generator.createBuildings(config.getNumResidentialBuildings());
@@ -143,8 +141,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             }
 
             // TODO Need to be saving PropertyProfile, PetCharge
-
-            building.propertyManager().set(pmc); // temporary for Starlight!..
+            building.propertyManager().set(DataGenerator.random(pmcs)); // temporary for Starlight!..
 
             // Service Catalog:
             ServiceCatalog catalog = EntityFactory.create(ServiceCatalog.class);

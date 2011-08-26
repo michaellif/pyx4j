@@ -44,7 +44,7 @@ public class OpenApiModelExample {
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(true));
         NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
 
-        BuildingsRS buildingsRS = new BuildingsResource().listBuildings();
+        BuildingsRS buildingsRS = new BuildingsResource().listBuildings(null);
 
         log.info("buildings {} ", buildingsRS.buildings.size());
         log.info("Retrive time {} msec", TimeUtils.since(start));

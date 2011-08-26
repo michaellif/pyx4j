@@ -25,6 +25,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBException;
@@ -33,6 +34,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.Persistence;
@@ -46,6 +48,7 @@ import com.propertyvista.crm.server.openapi.model.FloorplanRS;
 import com.propertyvista.crm.server.openapi.model.util.Converter;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
@@ -53,7 +56,6 @@ import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.server.common.reference.SharedData;
 
 @Path("/buildings")
 public class BuildingsResource {
@@ -64,9 +66,6 @@ public class BuildingsResource {
 
     public BuildingsResource() {
         service = Persistence.service();
-
-        // TODO this is only temporary
-        SharedData.init();
     }
 
     @POST
@@ -101,14 +100,21 @@ public class BuildingsResource {
 
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public BuildingsRS listBuildings() {
+    public BuildingsRS listBuildings(@QueryParam("pm") String propertyManagerName) {
 
         long start = System.currentTimeMillis();
-
-        EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
-
         BuildingsRS buildingsRS = new BuildingsRS();
 
+        EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
+        if (CommonsStringUtils.isStringSet(propertyManagerName)) {
+            EntityQueryCriteria<PropertyManager> criteria = EntityQueryCriteria.create(PropertyManager.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().name(), propertyManagerName));
+            PropertyManager propertyManager = service.retrieve(criteria);
+            if (propertyManager == null) {
+                throw new Error("PropertyManager '" + propertyManagerName + "' not found");
+            }
+            buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyManager(), propertyManager));
+        }
         List<Building> buildings = service.query(buildingCriteria);
 
         Map<Complex, BuildingRS> complexes = new Hashtable<Complex, BuildingRS>();
