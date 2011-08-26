@@ -20,8 +20,10 @@
  */
 package com.pyx4j.essentials.server.upload;
 
-import com.pyx4j.entity.shared.IEntity;
+import java.io.Serializable;
+
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 
 @SuppressWarnings("serial")
@@ -29,13 +31,15 @@ public class UploadDeferredProcess implements IDeferredProcess {
 
     private final DeferredProcessProgressResponse status;
 
-    private final IEntity data;
+    private final Serializable data;
+
+    private UploadResponse response;
 
     protected UploadDeferredProcess() {
         this(null);
     }
 
-    public UploadDeferredProcess(IEntity data) {
+    public UploadDeferredProcess(Serializable data) {
         this.status = new DeferredProcessProgressResponse();
         this.data = data;
     }
@@ -54,7 +58,15 @@ public class UploadDeferredProcess implements IDeferredProcess {
         return status;
     }
 
-    public IEntity getData() {
+    public Serializable getData() {
         return data;
+    }
+
+    public UploadResponse getResponse() {
+        return response;
+    }
+
+    public void setResponse(UploadResponse response) {
+        this.response = response;
     }
 }

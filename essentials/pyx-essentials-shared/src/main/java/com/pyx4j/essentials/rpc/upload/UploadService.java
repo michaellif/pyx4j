@@ -22,7 +22,6 @@ package com.pyx4j.essentials.rpc.upload;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -39,6 +38,8 @@ public interface UploadService<E extends IEntity> extends IService {
 
     public void prepareUpload(AsyncCallback<UploadId> callback, E data);
 
-    public void cancelUpload(AsyncCallback<VoidSerializable> callback, Key uploadKey);
+    public void cancelUpload(AsyncCallback<VoidSerializable> callback, UploadId uploadId);
+
+    public void getUploadResponse(AsyncCallback<UploadResponse> callback, UploadId uploadId);
 
 }

@@ -22,8 +22,6 @@ package com.pyx4j.essentials.server.upload;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.pyx4j.commons.Key;
-
 public interface UploadReciver {
 
     /**
@@ -33,6 +31,6 @@ public interface UploadReciver {
 
     public void onUploadStart(String fileName);
 
-    public Key onUploadRecived(UploadDeferredProcess process, UploadData data);
+    public void onUploadRecived(UploadDeferredProcess process, UploadData data);
 
 }

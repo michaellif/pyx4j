@@ -48,6 +48,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.gwt.server.IOUtils;
@@ -124,6 +125,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
             fileUpload.setProgressListener(progressListener);
 
             UploadData data = new UploadData();
+            data.response = new UploadResponse();
             UploadDeferredProcess process = null;
             try {
                 FileItemIterator iterator = fileUpload.getItemIterator(request);
@@ -136,6 +138,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                             process = (UploadDeferredProcess) DeferredProcessRegistry.get(data.deferredCorrelationId);
                             if (process != null) {
                                 progressListener.processInfo = process.status();
+                                process.setResponse(data.response);
                             }
                             log.debug("form field {}={}", item.getFieldName(), data.deferredCorrelationId);
                         } else if (UploadService.PostUploadKey.equals(item.getFieldName())) {
@@ -148,11 +151,11 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                             log.debug("unknown form field {}", item.getFieldName());
                         }
                     } else if (data.data == null) {
-                        data.fileName = item.getName();
-                        if (data.fileName != null) {
-                            data.fileName = FilenameUtils.getName(data.fileName);
+                        data.response.fileName = item.getName();
+                        if (data.response.fileName != null) {
+                            data.response.fileName = FilenameUtils.getName(data.response.fileName);
                         }
-                        reciver.onUploadStart(data.fileName);
+                        reciver.onUploadStart(data.response.fileName);
                         InputStream in = item.openStream();
                         ByteArrayOutputStream os = new ByteArrayOutputStream();
                         try {
@@ -180,6 +183,9 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 out.println(i18n.tr("File Upload canceled"));
                 return;
             } catch (UserRuntimeException e) {
+                if (process != null) {
+                    process.status().setError();
+                }
                 out.println(e.getMessage());
                 return;
             } catch (Throwable e) {
@@ -202,15 +208,12 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 out.println(i18n.tr("File not uploaded"));
                 return;
             }
-            log.debug("Got file {}", data.fileName);
-
-            Key id = reciver.onUploadRecived(process, data);
-            if (id != null) {
-                //TODO serialize id
-                out.println("OK " + id);
-            } else {
-                out.println("OK ");
+            log.debug("Got file {}", data.response.fileName);
+            reciver.onUploadRecived(process, data);
+            if (process != null) {
+                process.status().setCompleted();
             }
+            out.println("OK");
         } catch (Throwable t) {
             log.error("upload error", t);
             if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {

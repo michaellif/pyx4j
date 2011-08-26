@@ -14,25 +14,44 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Aug 12, 2011
+ * Created on Aug 26, 2011
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server.upload;
+package com.pyx4j.essentials.rpc.upload;
+
+import java.io.Serializable;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.essentials.rpc.upload.UploadResponse;
 
-public class UploadData {
+@SuppressWarnings("serial")
+public class UploadResponse implements Serializable {
 
-    public String deferredCorrelationId;
+    public String fileName;
 
+    /**
+     * Size in bytes
+     */
+    public int fileSize;
+
+    /**
+     * Optional, If new process is started to handle the data received
+     */
+    public String processingDeferredCorrelationId;
+
+    /**
+     * Optional
+     */
+    public String fileContentType;
+
+    /**
+     * Optional Id if created by server. Can be null;
+     */
     public Key uploadKey;
 
-    public String description;
-
-    public byte[] data;
-
-    public UploadResponse response;
+    /**
+     * Optional message sent by the server. Can be null;
+     */
+    public String message;
 
 }

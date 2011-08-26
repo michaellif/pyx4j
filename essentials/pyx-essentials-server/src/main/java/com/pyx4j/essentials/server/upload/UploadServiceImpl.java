@@ -28,9 +28,10 @@ import org.xnap.commons.i18n.I18n;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.upload.UploadId;
+import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18nFactory;
@@ -54,8 +55,24 @@ public abstract class UploadServiceImpl<E extends IEntity> implements UploadServ
     }
 
     @Override
-    public void cancelUpload(AsyncCallback<VoidSerializable> callback, Key uploadKey) {
+    public void cancelUpload(AsyncCallback<VoidSerializable> callback, UploadId uploadId) {
         callback.onSuccess(null);
+    }
+
+    @Override
+    public void getUploadResponse(AsyncCallback<UploadResponse> callback, UploadId uploadId) {
+        UploadDeferredProcess process = (UploadDeferredProcess) DeferredProcessRegistry.get(uploadId.getDeferredCorrelationId());
+        if (process != null) {
+            DeferredProcessProgressResponse response = process.status();
+            if (response.isCompleted()) {
+                DeferredProcessRegistry.remove(uploadId.getDeferredCorrelationId());
+                callback.onSuccess(process.getResponse());
+            } else {
+                throw new RuntimeException("Process not finished");
+            }
+        } else {
+            throw new RuntimeException("Process " + uploadId.getDeferredCorrelationId() + " not found");
+        }
     }
 
     /**
