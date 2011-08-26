@@ -13,22 +13,23 @@
  */
 package com.propertyvista.pmsite.server;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.site.PageDescriptor;
-import com.propertyvista.pmsite.server.pages.FindAptPage;
-import com.propertyvista.pmsite.server.pages.ResidentsPage;
-import com.propertyvista.pmsite.server.pages.StaticPage;
-import com.propertyvista.pmsite.server.panels.NavigationItem;
 
 public class PMSiteContentManager {
 
-    public static PageDescriptor retrieveMainNavig() {
+    public static final String PAGE_ID_PARAM_NAME = "id";
+
+    private final PageDescriptor landing;
+
+    public PMSiteContentManager() {
+        landing = retrieveLandingPageDescriptor();
+    }
+
+    public PageDescriptor retrieveLandingPageDescriptor() {
         EntityQueryCriteria<PageDescriptor> criteria = EntityQueryCriteria.create(PageDescriptor.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().type(), PageDescriptor.Type.landing));
 
@@ -51,14 +52,7 @@ public class PMSiteContentManager {
         return landing;
     }
 
-    static List<NavigationItem> getNavigationItems() {
-        List<NavigationItem> list = new ArrayList<NavigationItem>();
-
-        list.add(new NavigationItem(FindAptPage.class, "Find an Apartment"));
-        list.add(new NavigationItem(ResidentsPage.class, "Residents"));
-        list.add(new NavigationItem(StaticPage.class, "About Us", "about"));
-        list.add(new NavigationItem(StaticPage.class, "Contact", "contact"));
-
-        return list;
+    public PageDescriptor getLandingPage() {
+        return landing;
     }
 }

@@ -21,6 +21,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteSession;
 
 public class NavigationPanel extends Panel {
@@ -30,7 +31,7 @@ public class NavigationPanel extends Panel {
     public NavigationPanel(String id) {
         super(id);
 
-        ListView<NavigationItem> listView = new ListView<NavigationItem>("navigationItem", ((PMSiteSession) getSession()).getNavigationItems()) {
+        ListView<NavigationItem> listView = new ListView<NavigationItem>("navigationItem", ((PMSiteSession) getSession()).getMainNavigationItems()) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -46,12 +47,12 @@ public class NavigationPanel extends Panel {
 
                     String currentPageId = null;
                     if (NavigationPanel.this.getPage().getPageParameters() != null) {
-                        currentPageId = NavigationPanel.this.getPage().getPageParameters().getString(NavigationItem.NAVIG_PARAMETER_NAME);
+                        currentPageId = NavigationPanel.this.getPage().getPageParameters().getString(PMSiteContentManager.PAGE_ID_PARAM_NAME);
                     }
 
                     String navigItemPageId = null;
                     if (navItem.getPageParameters() != null) {
-                        navigItemPageId = navItem.getPageParameters().getString(NavigationItem.NAVIG_PARAMETER_NAME);
+                        navigItemPageId = navItem.getPageParameters().getString(PMSiteContentManager.PAGE_ID_PARAM_NAME);
                     }
 
                     if ((currentPageId == null && navigItemPageId == null) || currentPageId.equals(navigItemPageId)) {

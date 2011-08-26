@@ -19,13 +19,13 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebComponent;
 
-import com.propertyvista.pmsite.server.panels.NavigationItem;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 
 public class StaticPage extends BasePage {
 
     public StaticPage(PageParameters parameters) {
         super(parameters);
-        final String pageId = parameters.getString(NavigationItem.NAVIG_PARAMETER_NAME);
+        final String pageId = parameters.getString(PMSiteContentManager.PAGE_ID_PARAM_NAME);
 
         add(new WebComponent("content") {
 

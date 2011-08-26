@@ -13,22 +13,33 @@
  */
 package com.propertyvista.pmsite.server;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.Request;
 import org.apache.wicket.protocol.http.WebSession;
 
+import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.pmsite.server.panels.NavigationItem;
 
 public class PMSiteSession extends WebSession {
 
     private static final long serialVersionUID = 1L;
 
+    private final PMSiteContentManager contentManager;
+
     public PMSiteSession(Request request) {
         super(request);
+
+        contentManager = new PMSiteContentManager();
+
     }
 
-    public List<NavigationItem> getNavigationItems() {
-        return PMSiteContentManager.getNavigationItems();
+    public List<NavigationItem> getMainNavigationItems() {
+        List<NavigationItem> list = new ArrayList<NavigationItem>();
+        for (PageDescriptor descriptor : contentManager.getLandingPage().childPages()) {
+            list.add(new NavigationItem(descriptor));
+        }
+        return list;
     }
 }

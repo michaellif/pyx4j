@@ -76,7 +76,7 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
 
                         if (place != null && place.equals(ResidentsPlace))
                             if (ClientContext.isAuthenticated()) {
-                                view.setSecondaryNavig(item.getPlace(), getSecondaryNavig(PageDescriptor.Type.residence));
+                                view.setSecondaryNavig(item.getPlace(), getSecondaryNavig(PageDescriptor.Type.residents));
                             } else {
                                 view.setSecondaryNavig(place, null);
                             }
@@ -132,7 +132,7 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
 
     private List<NavigItem> getSecondaryNavig(PageDescriptor.Type pagetype) {
         List<NavigItem> secondaryNavig = new LinkedList<NavigItem>();
-        if (PageDescriptor.Type.residence.equals(pagetype)) {
+        if (PageDescriptor.Type.residents.equals(pagetype)) {
             secondaryNavig.add(new NavigItem(new Residents.PersonalInfo(), i18n.tr("Personal Info")));
             secondaryNavig.add(new NavigItem(new Residents.CurrentBill(), i18n.tr("Current Bill")));
             secondaryNavig.add(new NavigItem(new Residents.PaymentMethods(), i18n.tr("Payment Methods")));

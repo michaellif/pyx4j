@@ -26,7 +26,6 @@ import com.propertyvista.pmsite.server.pages.FindAptPage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
-import com.propertyvista.pmsite.server.panels.NavigationItem;
 
 public class PMSiteApplication extends WebApplication {
 
@@ -42,7 +41,7 @@ public class PMSiteApplication extends WebApplication {
 
         mountBookmarkablePage("residents", ResidentsPage.class);
 
-        mount(new MixedParamUrlCodingStrategy("cnt", StaticPage.class, new String[] { NavigationItem.NAVIG_PARAMETER_NAME }));
+        mount(new MixedParamUrlCodingStrategy("cnt", StaticPage.class, new String[] { PMSiteContentManager.PAGE_ID_PARAM_NAME, "p2" }));
     }
 
     @Override

@@ -17,30 +17,42 @@ import java.io.Serializable;
 
 import org.apache.wicket.PageParameters;
 
+import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.pages.BasePage;
+import com.propertyvista.pmsite.server.pages.FindAptPage;
+import com.propertyvista.pmsite.server.pages.LandingPage;
+import com.propertyvista.pmsite.server.pages.ResidentsPage;
+import com.propertyvista.pmsite.server.pages.StaticPage;
 
 public class NavigationItem implements Serializable {
-
-    public static final String NAVIG_PARAMETER_NAME = "id";
 
     private static final long serialVersionUID = 1L;
 
     private final Class<? extends BasePage> destination;
 
-    private final PageParameters params;
+    private final PageDescriptor descriptor;
 
-    private final String caption;
+    private PageParameters params;
 
-    public NavigationItem(Class<? extends BasePage> destination, String caption) {
-        this(destination, caption, null);
-    }
-
-    public NavigationItem(Class<? extends BasePage> destination, String caption, String pageId) {
-        this.destination = destination;
-        this.caption = caption;
-
-        params = new PageParameters();
-        params.add(NAVIG_PARAMETER_NAME, pageId);
+    public NavigationItem(PageDescriptor descriptor) {
+        this.descriptor = descriptor;
+        switch (descriptor.type().getValue()) {
+        case staticContent:
+            this.destination = StaticPage.class;
+            params = new PageParameters();
+            params.add(PMSiteContentManager.PAGE_ID_PARAM_NAME, toPageId(getCaption()));
+            break;
+        case findApartment:
+            this.destination = FindAptPage.class;
+            break;
+        case residents:
+            this.destination = ResidentsPage.class;
+            break;
+        default:
+            this.destination = LandingPage.class;
+            break;
+        }
 
     }
 
@@ -53,6 +65,11 @@ public class NavigationItem implements Serializable {
     }
 
     public String getCaption() {
-        return caption;
+        return descriptor.caption().getValue();
     }
+
+    private String toPageId(String caption) {
+        return caption.toLowerCase().replaceAll("\\s+", "_").trim();
+    }
+
 }

@@ -50,22 +50,14 @@ public class PortalSitePreloader extends AbstractDataPreloader {
             {
                 PageDescriptor page = EntityFactory.create(PageDescriptor.class);
                 page.type().setValue(PageDescriptor.Type.findApartment);
-                page.caption().setValue("Child #1");
+                page.caption().setValue("Find an Apartment");
                 page.content().content().setValue(CommonsGenerator.lipsum());
                 landingPage.childPages().add(page);
             }
             {
                 PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-                page.type().setValue(PageDescriptor.Type.potentialTenants);
-                page.caption().setValue("Child #2");
-                page.content().content().setValue(CommonsGenerator.lipsum());
-                landingPage.childPages().add(page);
-            }
-
-            {
-                PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-                page.type().setValue(PageDescriptor.Type.residence);
-                page.caption().setValue("Child #3");
+                page.type().setValue(PageDescriptor.Type.residents);
+                page.caption().setValue("Residents");
                 landingPage.childPages().add(page);
             }
 

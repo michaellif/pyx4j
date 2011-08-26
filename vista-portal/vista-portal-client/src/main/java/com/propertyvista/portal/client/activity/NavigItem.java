@@ -56,7 +56,7 @@ public class NavigItem {
             return new PortalSiteMap.Page();
         case findApartment:
             return new PortalSiteMap.FindApartment();
-        case residence:
+        case residents:
             return new PortalSiteMap.Residents();
         case potentialTenants:
             return new PortalSiteMap.PotentialTenants();
