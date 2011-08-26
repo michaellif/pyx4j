@@ -300,7 +300,7 @@ public class Converter {
             to.mediaType = MediaRS.MediaType.youTube;
             to.youTubeVideoID = from.youTubeVideoID().getValue();
         }
-        to.caption = from.file().caption().getStringView();
+        to.caption = from.caption().getStringView();
 
         return to;
     }

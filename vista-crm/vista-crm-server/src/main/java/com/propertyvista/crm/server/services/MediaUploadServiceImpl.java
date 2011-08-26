@@ -45,10 +45,10 @@ public class MediaUploadServiceImpl extends UploadServiceImpl<IEntity> implement
     }
 
     @Override
-    public Key onUploadRecived(UploadDeferredProcess process, UploadData data) {
-        String mime = MimeMap.getContentType(FilenameUtils.getExtension(data.fileName));
-        Key blobKey = BlobService.persist(data.data, data.fileName, mime);
+    public void onUploadRecived(UploadDeferredProcess process, UploadData data) {
+        data.response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(data.response.fileName));
+        Key blobKey = BlobService.persist(data.data, data.response.fileName, data.response.fileContentType);
         ThumbnailService.persist(blobKey, data.data, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
-        return blobKey;
+        data.response.uploadKey = blobKey;
     }
 }

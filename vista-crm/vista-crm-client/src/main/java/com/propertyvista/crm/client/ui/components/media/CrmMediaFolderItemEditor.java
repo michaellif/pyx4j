@@ -64,7 +64,7 @@ class CrmMediaFolderItemEditor extends CEntityFolderItemEditor<Media> {
         split.getLeftPanel().add(inject(proto().url()), 15);
         split.getLeftPanel().add(inject(proto().file(), new FileUploadHyperlink(editable)), 15);
 
-        split.getRightPanel().add(inject(proto().file().caption()), 15);
+        split.getRightPanel().add(inject(proto().caption()), 15);
         //Link to view
         viewLink = new CHyperlink(new Command() {
             @Override
@@ -131,7 +131,7 @@ class CrmMediaFolderItemEditor extends CEntityFolderItemEditor<Media> {
             break;
         case youTube:
             YouTubePlayVideoDialog dialog = new YouTubePlayVideoDialog();
-            dialog.title = getValue().file().caption().getValue();
+            dialog.title = getValue().caption().getValue();
             dialog.videoId = getValue().youTubeVideoID().getValue();
             dialog.show();
             break;

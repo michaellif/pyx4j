@@ -18,6 +18,7 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.forms.client.ui.CAbstractHyperlink;
 import com.pyx4j.forms.client.ui.IFormat;
 
@@ -29,11 +30,22 @@ public class FileUploadHyperlink extends CAbstractHyperlink<File> {
 
     public FileUploadHyperlink(final boolean editable) {
         super((String) null);
+
         setCommand(new Command() {
             @Override
             public void execute() {
-                //TODO
+
                 new MediaUploadDialog() {
+
+                    @Override
+                    protected void onUploadComplete(UploadResponse serverUploadResponse) {
+                        getValue().blobKey().setValue(serverUploadResponse.uploadKey);
+                        getValue().filename().setValue(serverUploadResponse.fileName);
+                        getValue().fileSize().setValue(serverUploadResponse.fileSize);
+                        getValue().contentMimeType().setValue(serverUploadResponse.fileContentType);
+                        setNativeValue(getValue());
+                    }
+
                 }.show();
             }
         });

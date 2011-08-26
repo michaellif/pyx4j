@@ -154,7 +154,7 @@ public class Converter {
     public static MediaDTO convert(Media from) {
         MediaDTO to = EntityFactory.create(MediaDTO.class);
         to.id().set(from.id());
-        to.caption().setValue(from.file().caption().getValue());
+        to.caption().setValue(from.caption().getValue());
         return to;
     }
 }

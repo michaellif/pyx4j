@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.xml.sax.InputSource;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -52,7 +51,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
     }
 
     @Override
-    public Key onUploadRecived(UploadDeferredProcess process, UploadData data) {
+    public void onUploadRecived(UploadDeferredProcess process, UploadData data) {
         try {
             PmcImportDTO importDTO = (PmcImportDTO) process.getData();
             if (importDTO.id().isNull()) {
@@ -82,16 +81,14 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
                 process.status().setProgress(count);
             }
             if (importDTO.updateOnly().isBooleanTrue()) {
-                process.status().setMessage(SimpleMessageFormat.format("Updated {0} units in {1} building(s)", counters.units, counters.buildings));
+                data.response.message = SimpleMessageFormat.format("Updated {0} units in {1} building(s)", counters.units, counters.buildings);
             } else {
-                process.status().setMessage(
-                        SimpleMessageFormat.format("Imported {0} building(s), {1} floorplan(s), {2} unit(s)", count, counters.floorplans, counters.units));
+                data.response.message = SimpleMessageFormat.format("Imported {0} building(s), {1} floorplan(s), {2} unit(s)", count, counters.floorplans,
+                        counters.units);
             }
-            process.status().setCompleted();
         } finally {
             NamespaceManager.remove();
         }
-        return null;
     }
 
 }

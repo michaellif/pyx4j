@@ -22,16 +22,16 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.upload.UploadPanel;
+import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.widgets.client.dialog.Dialog;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
 import com.propertyvista.crm.rpc.services.MediaUploadService;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class MediaUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText {
+public abstract class MediaUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText {
 
     private static I18n i18n = I18nFactory.getI18n(MediaUploadDialog.class);
 
@@ -46,11 +46,6 @@ public class MediaUploadDialog extends VerticalPanel implements OkCancelOption, 
         uploadPanel = new UploadPanel<IEntity>((UploadService<IEntity>) GWT.create(MediaUploadService.class)) {
 
             @Override
-            protected void onUploadComplete(String id) {
-                dialog.hide();
-            }
-
-            @Override
             protected void onUploadSubmit() {
                 dialog.getOkButton().setEnabled(false);
             }
@@ -63,8 +58,9 @@ public class MediaUploadDialog extends VerticalPanel implements OkCancelOption, 
             }
 
             @Override
-            protected void onUploadCompleteMessage(String message) {
-                MessageDialog.info(i18n.tr("Upload Complete"), message);
+            protected void onUploadComplete(UploadResponse serverUploadResponse) {
+                dialog.hide();
+                MediaUploadDialog.this.onUploadComplete(serverUploadResponse);
             }
 
         };
@@ -81,6 +77,8 @@ public class MediaUploadDialog extends VerticalPanel implements OkCancelOption, 
     public void show() {
         dialog.show();
     }
+
+    protected abstract void onUploadComplete(UploadResponse serverUploadResponse);
 
     @Override
     public boolean onClickOk() {

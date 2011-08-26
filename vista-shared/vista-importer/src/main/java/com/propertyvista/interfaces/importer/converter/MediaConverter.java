@@ -43,7 +43,7 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
 
     @Override
     protected void bind() {
-        bind(dtoProto.caption(), dboProto.file().caption());
+        bind(dtoProto.caption(), dboProto.caption());
     }
 
     @Override

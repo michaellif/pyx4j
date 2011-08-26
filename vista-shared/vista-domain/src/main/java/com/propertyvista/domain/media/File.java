@@ -20,19 +20,16 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface File extends IEntity {
 
-    @ToString(index = 0)
-    IPrimitive<String> caption();
-
     IPrimitive<String> accessKey();
 
     IPrimitive<Key> blobKey();
 
     IPrimitive<Integer> cacheVersion();
 
-    @ToString(index = 1)
+    @ToString(index = 0)
     IPrimitive<String> filename();
 
-    @ToString(index = 2)
+    @ToString(index = 1)
     IPrimitive<Integer> fileSize();
 
     IPrimitive<String> contentMimeType();

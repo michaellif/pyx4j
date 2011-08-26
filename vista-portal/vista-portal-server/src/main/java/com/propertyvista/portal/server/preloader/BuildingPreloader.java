@@ -163,7 +163,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
                 {
                     Media media = EntityFactory.create(Media.class);
                     media.type().setValue(Media.Type.youTube);
-                    media.file().caption().setValue("A " + building.info().name().getValue() + " video");
+                    media.caption().setValue("A " + building.info().name().getValue() + " video");
                     media.youTubeVideoID().setValue(MediaGenerator.randomYoutubeId());
                     building.media().add(media);
                 }

@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.xml.sax.InputSource;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.upload.UploadData;
@@ -48,7 +47,7 @@ public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO> 
     }
 
     @Override
-    public Key onUploadRecived(UploadDeferredProcess process, UploadData data) {
+    public void onUploadRecived(UploadDeferredProcess process, UploadData data) {
         String imagesBaseFolder = "data/export/images/";
 
         ImportIO importIO = ImportUtils.parse(ImportIO.class, new InputSource(new ByteArrayInputStream(data.data)));
@@ -61,8 +60,6 @@ public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO> 
             count++;
             process.status().setProgress(count);
         }
-        process.status().setMessage(SimpleMessageFormat.format("Updated {0} units in {1} building(s)", counters.units, counters.buildings));
-        process.status().setCompleted();
-        return null;
+        data.response.message = SimpleMessageFormat.format("Updated {0} units in {1} building(s)", counters.units, counters.buildings);
     }
 }

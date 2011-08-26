@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.essentials.client.upload.UploadPanel;
+import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -56,11 +57,6 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
             }
 
             @Override
-            protected void onUploadComplete(String id) {
-                dialog.hide();
-            }
-
-            @Override
             protected void onUploadSubmit() {
                 dialog.getOkButton().setEnabled(false);
             }
@@ -73,8 +69,9 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
             }
 
             @Override
-            protected void onUploadCompleteMessage(String message) {
-                MessageDialog.info(i18n.tr("Upload Complete"), message);
+            protected void onUploadComplete(UploadResponse serverUploadResponse) {
+                dialog.hide();
+                MessageDialog.info(i18n.tr("Upload Complete"), serverUploadResponse.message);
             }
 
         };

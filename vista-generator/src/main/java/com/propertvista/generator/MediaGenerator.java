@@ -64,7 +64,7 @@ public class MediaGenerator {
         File file = EntityFactory.create(File.class);
 
         file.filename().setValue("file102.jpg");
-        file.caption().setValue("file102");
+        media.caption().setValue("file102");
         file.contentMimeType().setValue(MimeMap.getContentType(DownloadFormat.JPEG));
         media.file().set(file);
 
