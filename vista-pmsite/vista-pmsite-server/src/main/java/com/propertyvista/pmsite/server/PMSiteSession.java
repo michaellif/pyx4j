@@ -38,8 +38,13 @@ public class PMSiteSession extends WebSession {
     public List<NavigationItem> getMainNavigationItems() {
         List<NavigationItem> list = new ArrayList<NavigationItem>();
         for (PageDescriptor descriptor : contentManager.getLandingPage().childPages()) {
-            list.add(new NavigationItem(descriptor));
+            list.add(new NavigationItem(descriptor, contentManager));
         }
         return list;
     }
+
+    public PMSiteContentManager getContentManager() {
+        return contentManager;
+    }
+
 }

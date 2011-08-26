@@ -13,6 +13,11 @@
  */
 package com.propertyvista.pmsite.server;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.wicket.PageParameters;
+
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -21,7 +26,14 @@ import com.propertyvista.domain.site.PageDescriptor;
 
 public class PMSiteContentManager {
 
-    public static final String PAGE_ID_PARAM_NAME = "id";
+    public static final String PAGE_ID_PARAM_NAME = "pageId";
+
+    public static String[] PARAMETER_NAMES = new String[10];
+    static {
+        for (int i = 0; i < PARAMETER_NAMES.length; i++) {
+            PARAMETER_NAMES[i] = PMSiteContentManager.PAGE_ID_PARAM_NAME + i;
+        }
+    }
 
     private final PageDescriptor landing;
 
@@ -54,5 +66,46 @@ public class PMSiteContentManager {
 
     public PageDescriptor getLandingPage() {
         return landing;
+    }
+
+    public PageDescriptor getStaticPageDescriptor(PageParameters parameters) {
+        PageDescriptor descriptor = landing;
+        for (String paramName : PARAMETER_NAMES) {
+            if (parameters.containsKey(paramName)) {
+                descriptor = getChild(descriptor, parameters.getString(paramName));
+            } else {
+                return landing.equals(descriptor) ? null : descriptor;
+            }
+        }
+        return descriptor;
+    }
+
+    private PageDescriptor getChild(PageDescriptor parent, String pageId) {
+        for (PageDescriptor descriptor : parent.childPages()) {
+            if (pageId != null && pageId.equals(toPageId(descriptor.caption().getValue()))) {
+                return descriptor;
+            }
+        }
+        return null;
+    }
+
+    public PageParameters getStaticPageParams(PageDescriptor descriptor) {
+        PageDescriptor parent = descriptor;
+        List<PageDescriptor> path = new ArrayList<PageDescriptor>();
+        while (!landing.equals(parent)) {
+            path.add(parent);
+            parent = parent.parent();
+        }
+
+        PageParameters params = new PageParameters();
+        for (int i = path.size() - 1; i >= 0; i--) {
+            params.add(PARAMETER_NAMES[i], toPageId(path.get(i).caption().getValue()));
+        }
+
+        return params;
+    }
+
+    private static String toPageId(String caption) {
+        return caption.toLowerCase().replaceAll("\\s+", "_").trim();
     }
 }

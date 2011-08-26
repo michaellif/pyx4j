@@ -21,8 +21,14 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.pages.AptDetailsPage;
+import com.propertyvista.pmsite.server.pages.AptListPage;
+import com.propertyvista.pmsite.server.pages.FindAptPage;
+import com.propertyvista.pmsite.server.pages.InquiryPage;
+import com.propertyvista.pmsite.server.pages.ResidentsPage;
+import com.propertyvista.pmsite.server.pages.StaticPage;
 
 public class NavigationPanel extends Panel {
 
@@ -41,24 +47,43 @@ public class NavigationPanel extends Panel {
                 link.add(new Label("caption", navItem.getCaption()));
                 item.add(link);
 
-                //TODO enhance code to support inner pages, check static pages separately (they can't be located under FindApt or Resident so parent of Static page is another static page).
-                //Use some interface marker to group pages under FindApt and Resident
-                if (NavigationPanel.this.getPage().getClass().equals(navItem.getDestination())) {
+                boolean active = false;
 
-                    String currentPageId = null;
-                    if (NavigationPanel.this.getPage().getPageParameters() != null) {
-                        currentPageId = NavigationPanel.this.getPage().getPageParameters().getString(PMSiteContentManager.PAGE_ID_PARAM_NAME);
+                if (NavigationPanel.this.getPage() instanceof StaticPage) {
+                    PageDescriptor currentPage = ((PMSiteSession) getSession()).getContentManager().getStaticPageDescriptor(
+                            NavigationPanel.this.getPage().getPageParameters());
+                    while (!currentPage.isNull()) {
+                        if (currentPage.equals(navItem.getPageDescriptor())) {
+                            active = true;
+                            break;
+                        } else {
+                            currentPage = currentPage.parent();
+                        }
                     }
+                } else if (FindAptPage.class.equals(navItem.getDestination())
 
-                    String navigItemPageId = null;
-                    if (navItem.getPageParameters() != null) {
-                        navigItemPageId = navItem.getPageParameters().getString(PMSiteContentManager.PAGE_ID_PARAM_NAME);
-                    }
+                && ((NavigationPanel.this.getPage() instanceof FindAptPage)
 
-                    if ((currentPageId == null && navigItemPageId == null) || currentPageId.equals(navigItemPageId)) {
-                        link.getParent().add(new AttributeAppender("class", new Model<String>("active"), " "));
-                    }
+                || (NavigationPanel.this.getPage() instanceof InquiryPage)
+
+                || (NavigationPanel.this.getPage() instanceof AptDetailsPage)
+
+                || (NavigationPanel.this.getPage() instanceof AptListPage))) {
+
+                    active = true;
+
+                } else if (ResidentsPage.class.equals(navItem.getDestination())
+
+                && ((NavigationPanel.this.getPage() instanceof ResidentsPage))) {
+
+                    active = true;
+
                 }
+
+                if (active) {
+                    link.getParent().add(new AttributeAppender("class", new Model<String>("active"), " "));
+                }
+
             }
         };
         add(listView);

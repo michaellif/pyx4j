@@ -41,7 +41,7 @@ public class PMSiteApplication extends WebApplication {
 
         mountBookmarkablePage("residents", ResidentsPage.class);
 
-        mount(new MixedParamUrlCodingStrategy("cnt", StaticPage.class, new String[] { PMSiteContentManager.PAGE_ID_PARAM_NAME, "p2" }));
+        mount(new MixedParamUrlCodingStrategy("cnt", StaticPage.class, PMSiteContentManager.PARAMETER_NAMES));
     }
 
     @Override

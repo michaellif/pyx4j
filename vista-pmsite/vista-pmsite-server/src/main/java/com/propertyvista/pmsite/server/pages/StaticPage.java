@@ -19,13 +19,15 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebComponent;
 
-import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+
+import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.pmsite.server.PMSiteSession;
 
 public class StaticPage extends BasePage {
 
-    public StaticPage(PageParameters parameters) {
+    public StaticPage(final PageParameters parameters) {
         super(parameters);
-        final String pageId = parameters.getString(PMSiteContentManager.PAGE_ID_PARAM_NAME);
 
         add(new WebComponent("content") {
 
@@ -34,10 +36,10 @@ public class StaticPage extends BasePage {
             @Override
             protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
                 Response response = getRequestCycle().getResponse();
-                response.write("<ul>");
-                for (int i = 0; i < 5; i++)
-                    response.write("<li>" + pageId + "</li>");
-                response.write("</ul>");
+
+                PageDescriptor descriptor = ((PMSiteSession) getSession()).getContentManager().getStaticPageDescriptor(parameters);
+                PersistenceServicesFactory.getPersistenceService().retrieve(descriptor.content());
+                response.write(descriptor.content().content().getStringView());
             }
         });
 
