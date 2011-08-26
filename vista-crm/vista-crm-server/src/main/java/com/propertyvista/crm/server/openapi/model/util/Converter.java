@@ -71,7 +71,7 @@ public class Converter {
         to.propertyCode = from.propertyCode().getStringView();
 
         to.propertyManager = from.propertyManager().name().getStringView();
-        to.contactEmail = from.contacts().email().getStringView();
+        to.contactEmail = from.contacts().email().address().getStringView();
         for (Phone phone : from.contacts().phones()) {
             to.contactPhones.add(phone.getStringView());
         }
