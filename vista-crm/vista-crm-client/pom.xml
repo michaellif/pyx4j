@@ -58,6 +58,12 @@
         	<artifactId>pyx-site-gwt</artifactId>
         	<version>${pyxVersion}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>pl.rmalinowski.gwt2swf</groupId>
+            <artifactId>gwt2swf</artifactId>
+        </dependency>
+        
     </dependencies>
 
     <properties>

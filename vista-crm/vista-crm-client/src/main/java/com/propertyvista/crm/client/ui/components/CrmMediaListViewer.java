@@ -66,6 +66,7 @@ import com.propertyvista.domain.media.Media;
 import com.propertyvista.misc.ApplicationDocumentServletParameters;
 import com.propertyvista.misc.ServletMapping;
 
+@Deprecated
 public class CrmMediaListViewer extends CrmEntityFolder<Media> {
 
     private final CrmEntityFolder<Media> parent = this;

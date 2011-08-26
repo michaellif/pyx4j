@@ -11,6 +11,7 @@
     <inherits name='com.propertyvista.crm.Rpc' />
     <inherits name='com.propertyvista.Domain' />
     <inherits name='com.pyx4j.SVG' />
+    <inherits name='com.pyx4j.essentials.EssentialsSwf' />
     
 
 	<inherits name='com.propertyvista.common.VistaCommon' />
