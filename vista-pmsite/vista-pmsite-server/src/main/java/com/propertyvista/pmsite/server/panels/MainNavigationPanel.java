@@ -30,11 +30,11 @@ import com.propertyvista.pmsite.server.pages.InquiryPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
 
-public class NavigationPanel extends Panel {
+public class MainNavigationPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
-    public NavigationPanel(String id) {
+    public MainNavigationPanel(String id) {
         super(id);
 
         ListView<NavigationItem> listView = new ListView<NavigationItem>("navigationItem", ((PMSiteSession) getSession()).getMainNavigationItems()) {
@@ -49,9 +49,9 @@ public class NavigationPanel extends Panel {
 
                 boolean active = false;
 
-                if (NavigationPanel.this.getPage() instanceof StaticPage) {
+                if (MainNavigationPanel.this.getPage() instanceof StaticPage) {
                     PageDescriptor currentPage = ((PMSiteSession) getSession()).getContentManager().getStaticPageDescriptor(
-                            NavigationPanel.this.getPage().getPageParameters());
+                            MainNavigationPanel.this.getPage().getPageParameters());
                     while (!currentPage.isNull()) {
                         if (currentPage.equals(navItem.getPageDescriptor())) {
                             active = true;
@@ -62,19 +62,19 @@ public class NavigationPanel extends Panel {
                     }
                 } else if (FindAptPage.class.equals(navItem.getDestination())
 
-                && ((NavigationPanel.this.getPage() instanceof FindAptPage)
+                && ((MainNavigationPanel.this.getPage() instanceof FindAptPage)
 
-                || (NavigationPanel.this.getPage() instanceof InquiryPage)
+                || (MainNavigationPanel.this.getPage() instanceof InquiryPage)
 
-                || (NavigationPanel.this.getPage() instanceof AptDetailsPage)
+                || (MainNavigationPanel.this.getPage() instanceof AptDetailsPage)
 
-                || (NavigationPanel.this.getPage() instanceof AptListPage))) {
+                || (MainNavigationPanel.this.getPage() instanceof AptListPage))) {
 
                     active = true;
 
                 } else if (ResidentsPage.class.equals(navItem.getDestination())
 
-                && ((NavigationPanel.this.getPage() instanceof ResidentsPage))) {
+                && ((MainNavigationPanel.this.getPage() instanceof ResidentsPage))) {
 
                     active = true;
 
