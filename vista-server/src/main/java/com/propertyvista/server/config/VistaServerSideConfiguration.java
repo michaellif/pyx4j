@@ -137,6 +137,10 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
         return true;
     }
 
+    public boolean openDBReset() {
+        return true;
+    }
+
     @Override
     public AbstractAntiBot getAntiBot() {
         return new VistaAntiBot();

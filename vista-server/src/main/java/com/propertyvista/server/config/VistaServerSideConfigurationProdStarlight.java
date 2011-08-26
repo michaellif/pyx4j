@@ -41,6 +41,11 @@ public class VistaServerSideConfigurationProdStarlight extends VistaServerSideCo
     }
 
     @Override
+    public boolean openDBReset() {
+        return false;
+    }
+
+    @Override
     public boolean isContextLessDeployment() {
         return true;
     }

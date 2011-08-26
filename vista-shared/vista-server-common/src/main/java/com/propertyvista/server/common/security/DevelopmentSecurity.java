@@ -25,9 +25,16 @@ public class DevelopmentSecurity {
 
     public static String OPENID_USER_EMAIL_ATTRIBUTE = "com.pyx4j.keep." + "openId.email";
 
+    public static String OPENID_ACCESS_GRANTED_ATTRIBUTE = "access-granted";
+
     private static boolean hostQueryDone = false;
 
     private static DevelopmentUser developmentUserHostBased;
+
+    public static boolean isDevelopmentAccessGranted() {
+        DevSession devSession = DevSession.getSession();
+        return (devSession.getAttribute(OPENID_ACCESS_GRANTED_ATTRIBUTE) == Boolean.TRUE);
+    }
 
     public static String callNumberFilter(String number) {
         DevelopmentUser developmentUser = findDevelopmentUser();

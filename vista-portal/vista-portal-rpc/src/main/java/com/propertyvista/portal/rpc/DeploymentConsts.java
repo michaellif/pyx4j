@@ -25,4 +25,6 @@ public interface DeploymentConsts {
 
     public static final String uploadServletMapping = "upload/";
 
+    public static final String mediaImagesServletMapping = "media/";
+
 }

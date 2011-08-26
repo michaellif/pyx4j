@@ -40,7 +40,7 @@ public class OpenIdFilter implements Filter {
 
     private final static Logger log = LoggerFactory.getLogger(OpenIdFilter.class);
 
-    static String ACCESS_GRANTED_ATTRIBUTE = "access-granted";
+    static String ACCESS_GRANTED_ATTRIBUTE = DevelopmentSecurity.OPENID_ACCESS_GRANTED_ATTRIBUTE;
 
     static String REQUESTED_URL_ATTRIBUTE = "access-requested";
 
@@ -65,7 +65,7 @@ public class OpenIdFilter implements Filter {
             } else {
                 HttpServletRequest httprequest = (HttpServletRequest) request;
                 String servletPath = httprequest.getServletPath();
-                if (servletPath.startsWith("/o/") || servletPath.equals("/favicon.ico")) {
+                if (servletPath.startsWith("/o/") || servletPath.startsWith("/public/") || servletPath.equals("/favicon.ico")) {
                     chain.doFilter(request, response);
                 } else if (httprequest.getRequestURI().endsWith(".js") || httprequest.getRequestURI().contains("/srv/")) {
                     ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);

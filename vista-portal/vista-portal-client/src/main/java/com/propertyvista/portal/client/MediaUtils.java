@@ -20,17 +20,17 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.portal.client.resources.PortalImages;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class MediaUtils {
-
-    public static final String mediaImagesServletMapping = "media/";
 
     public static Image createPublicMediaImage(IPrimitive<Key> mediaPk, ThumbnailSize size) {
         if (mediaPk.isNull()) {
             return new Image(PortalImages.INSTANCE.noImage());
         } else {
-            return new Image(ClentNavigUtils.getDeploymentBaseURL() + mediaImagesServletMapping + mediaPk.getValue().toString() + "/" + size.name() + ".jpg");
+            return new Image(ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaPk.getValue().toString() + "/"
+                    + size.name() + ".jpg");
         }
     }
 

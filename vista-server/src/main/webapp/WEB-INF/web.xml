@@ -52,7 +52,7 @@
 
     <login-config>
         <auth-method>BASIC</auth-method>
-        <realm-name>MCO Manager Application</realm-name>
+        <realm-name>Vista Manager Application</realm-name>
     </login-config>
 
     <security-role>
@@ -289,6 +289,11 @@
         <url-pattern>/media/*</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>PublicMediaServlet</servlet-name>
+        <url-pattern>/public/media/*</url-pattern>
+    </servlet-mapping>    
+
     <servlet>
         <servlet-name>ExportDownloadServlet</servlet-name>
         <servlet-class>com.propertyvista.admin.server.services.ExportDownloadServlet</servlet-class>
@@ -316,10 +321,8 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>Jersey REST Service</servlet-name>
-        <servlet-class>
-            com.sun.jersey.spi.container.servlet.ServletContainer
-        </servlet-class>
+        <servlet-name>JerseyRESTService</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
             <param-value>com.propertyvista.crm.server.openapi</param-value>
@@ -328,16 +331,21 @@
     </servlet>
     
     <servlet-mapping>
-        <servlet-name>Jersey REST Service</servlet-name>
+        <servlet-name>JerseyRESTService</servlet-name>
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>        
 
+    <servlet-mapping>
+        <servlet-name>JerseyRESTService</servlet-name>
+        <url-pattern>/public/rest/*</url-pattern>
+    </servlet-mapping>   
+    
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
     <session-config>
-            <session-timeout>240</session-timeout>
+        <session-timeout>240</session-timeout>
     </session-config>
 
 </web-app>

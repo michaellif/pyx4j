@@ -15,6 +15,7 @@ package com.propertyvista.server.ci;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -42,6 +43,7 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.config.VistaNamespaceResolver;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 import com.propertyvista.server.domain.admin.Pmc;
@@ -55,6 +57,8 @@ public class DBResetServlet extends HttpServlet {
 
         all,
 
+        clear,
+
         // Use http://localhost:8888/vista/o/db-reset?type=preload
         preload,
     }
@@ -66,6 +70,12 @@ public class DBResetServlet extends HttpServlet {
             StringBuilder buf = new StringBuilder();
             try {
                 VistaServerSideConfiguration conf = (VistaServerSideConfiguration) ServerSideConfiguration.instance();
+                if (!conf.openDBReset()) {
+                    if (!DevelopmentSecurity.isDevelopmentAccessGranted()) {
+                        throw new Error("permission denied");
+                    }
+                }
+
                 EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) PersistenceServicesFactory.getPersistenceService();
 
                 ResetType type = ResetType.all;
@@ -74,7 +84,7 @@ public class DBResetServlet extends HttpServlet {
                     type = ResetType.valueOf(tp);
                 }
 
-                if (type == ResetType.all) {
+                if (EnumSet.of(ResetType.all, ResetType.clear).contains(type)) {
                     List<String> allClasses = EntityClassFinder.findEntityClasses();
                     for (String className : allClasses) {
                         Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
@@ -94,23 +104,27 @@ public class DBResetServlet extends HttpServlet {
                 SchedulerHelper.dbReset();
                 SchedulerHelper.init();
 
-                buf.append(conf.getDataPreloaders().preloadAll());
+                if (type != ResetType.clear) {
+                    buf.append(conf.getDataPreloaders().preloadAll());
+                }
                 buf.append("\nTotal time: " + TimeUtils.secSince(start));
 
-                String reqNamespace = NamespaceManager.getNamespace();
-                try {
-                    NamespaceManager.setNamespace(Pmc.adminNamespace);
-                    EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-                    criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), reqNamespace));
-                    Pmc pmc = Persistence.service().retrieve(criteria);
-                    if (pmc == null) {
-                        pmc = EntityFactory.create(Pmc.class);
-                        pmc.name().setValue(reqNamespace + " Demo");
-                        pmc.dnsName().setValue(reqNamespace);
-                        Persistence.service().persist(pmc);
+                if (type != ResetType.clear) {
+                    String reqNamespace = NamespaceManager.getNamespace();
+                    try {
+                        NamespaceManager.setNamespace(Pmc.adminNamespace);
+                        EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+                        criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), reqNamespace));
+                        Pmc pmc = Persistence.service().retrieve(criteria);
+                        if (pmc == null) {
+                            pmc = EntityFactory.create(Pmc.class);
+                            pmc.name().setValue(reqNamespace + " Demo");
+                            pmc.dnsName().setValue(reqNamespace);
+                            Persistence.service().persist(pmc);
+                        }
+                    } finally {
+                        NamespaceManager.setNamespace(reqNamespace);
                     }
-                } finally {
-                    NamespaceManager.setNamespace(reqNamespace);
                 }
 
                 if ((type == ResetType.all) && NamespaceManager.getNamespace().equals(VistaNamespaceResolver.demoNamespace)) {
