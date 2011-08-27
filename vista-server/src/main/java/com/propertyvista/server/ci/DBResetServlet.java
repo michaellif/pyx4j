@@ -61,6 +61,8 @@ public class DBResetServlet extends HttpServlet {
 
         // Use http://localhost:8888/vista/o/db-reset?type=preload
         preload,
+
+        pmc,
     }
 
     @Override
@@ -104,12 +106,18 @@ public class DBResetServlet extends HttpServlet {
                 SchedulerHelper.dbReset();
                 SchedulerHelper.init();
 
-                if (type != ResetType.clear) {
+                switch (type) {
+                case all:
+                case preload:
                     buf.append(conf.getDataPreloaders().preloadAll());
+                    break;
+                case pmc:
+                    buf.append(conf.getDataPreloaders().delete());
+                    break;
                 }
                 buf.append("\nTotal time: " + TimeUtils.secSince(start));
 
-                if (type != ResetType.clear) {
+                if (EnumSet.of(ResetType.all, ResetType.preload).contains(type)) {
                     String reqNamespace = NamespaceManager.getNamespace();
                     try {
                         NamespaceManager.setNamespace(Pmc.adminNamespace);
