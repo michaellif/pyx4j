@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server.geo;
+package com.propertyvista.server.common.reference.geo;
 
 import java.io.IOException;
 import java.util.List;

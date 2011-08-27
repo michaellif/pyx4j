@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server.geo;
+package com.propertyvista.server.common.reference.geo;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,12 +22,12 @@ import javax.xml.bind.JAXBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.portal.server.geo.bean.GeoPair;
-import com.propertyvista.portal.server.geo.bean.GeoPairs;
-import com.propertyvista.portal.server.importer.XmlUtil;
+import com.propertyvista.server.common.reference.geo.bean.GeoPair;
+import com.propertyvista.server.common.reference.geo.bean.GeoPairs;
 
 public class GeoCache {
 
@@ -40,7 +40,7 @@ public class GeoCache {
     public void load() throws JAXBException, IOException {
         String xml = IOUtils.getTextResource(FILENAME, getClass());
         log.debug("Loading {}", xml);
-        GeoPairs pairs = XmlUtil.unmarshallGeoPairs(xml);
+        GeoPairs pairs = MarshallUtil.unmarshal(GeoPairs.class, xml);
 
         for (GeoPair pair : pairs.getPairs()) {
             GeoPoint gp = GeoPoint.valueOf(pair.getGeoPoint());
@@ -64,7 +64,6 @@ public class GeoCache {
             GeoPoint gp = map.get(address);
             pairs.getPairs().add(new GeoPair(address, gp.toString()));
         }
-
-        XmlUtil.marshallGeoPairs(pairs);
+        MarshallUtil.marshal(pairs, System.out);
     }
 }

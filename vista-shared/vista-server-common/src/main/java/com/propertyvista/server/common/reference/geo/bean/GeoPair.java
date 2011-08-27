@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server.geo.bean;
+package com.propertyvista.server.common.reference.geo.bean;
 
 public class GeoPair {
     private String address;

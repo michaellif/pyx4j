@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server.geo;
+package com.propertyvista.server.common.reference.geo;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

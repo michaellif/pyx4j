@@ -25,6 +25,7 @@ import javax.xml.bind.JAXBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.portal.server.importer.bean.Residential;
@@ -41,7 +42,7 @@ public class Reader {
     private final List<AvailableUnit> units = new ArrayList<AvailableUnit>();
 
     public void readCsv() throws IOException, ParseException {
-        String csv = IOUtils.getTextResource(IOUtils.resourceFileName("units.csv", XmlUtil.class));
+        String csv = IOUtils.getTextResource(IOUtils.resourceFileName("units.csv", Reader.class));
 
         StringTokenizer lines = new StringTokenizer(csv, "\n");
         lines.nextToken(); // skip the headings
@@ -71,10 +72,9 @@ public class Reader {
 
     public void readXml() throws IOException, JAXBException {
         // read
-        String xml = IOUtils.getTextResource(IOUtils.resourceFileName("data.xml", XmlUtil.class));
+        String xml = IOUtils.getTextResource(IOUtils.resourceFileName("data.xml", Reader.class));
         log.debug("Loaded " + xml);
-
-        residential = XmlUtil.unmarshallResidential(xml);
+        residential = MarshallUtil.unmarshal(Residential.class, xml);
         log.debug("Residential\n " + residential + "\n");
     }
 
