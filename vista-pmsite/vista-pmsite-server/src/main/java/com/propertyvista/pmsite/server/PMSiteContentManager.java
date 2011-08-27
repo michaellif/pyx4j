@@ -19,9 +19,11 @@ import java.util.List;
 import org.apache.wicket.PageParameters;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public class PMSiteContentManager {
@@ -108,4 +110,19 @@ public class PMSiteContentManager {
     private static String toPageId(String caption) {
         return caption.toLowerCase().replaceAll("\\s+", "_").trim();
     }
+
+    public static List<City> getCities() {
+
+        City city = EntityFactory.create(City.class);
+
+        city.province().name().setValue("Ontario");
+        city.province().code().setValue("Ontario");
+        city.name().setValue("Toronto");
+
+        city.province().name().getValue();
+        city.name().getValue();
+
+        return null;
+    }
+
 }
