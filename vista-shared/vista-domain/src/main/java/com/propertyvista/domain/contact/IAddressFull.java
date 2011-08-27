@@ -60,6 +60,10 @@ public interface IAddressFull extends IEntity {
 
         highway,
 
+        drive,
+
+        place,
+
         other;
 
         @Override
