@@ -14,6 +14,7 @@
 package com.propertyvista.server.common.reference;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -38,7 +39,13 @@ public class PublicDataUpdater {
                 city.hasProperties().setValue(Boolean.TRUE);
                 PersistenceServicesFactory.getPersistenceService().persist(city);
             }
+        } else {
+            city = EntityFactory.create(City.class);
+            city.name().setValue(building.info().address().city().getValue());
+            city.province().set(building.info().address().province());
+            city.location().setValue(building.info().address().location().getValue());
+            city.hasProperties().setValue(Boolean.TRUE);
+            PersistenceServicesFactory.getPersistenceService().persist(city);
         }
     }
-
 }
