@@ -78,6 +78,14 @@ public class BuildingImporter {
             }
         }
 
+        // Media
+        {
+            for (MediaIO iIO : buildingIO.medias()) {
+                building.media().add(new MediaConverter(imagesBaseFolder).createDBO(iIO));
+            }
+            Persistence.service().persist(building.media());
+        }
+
         Persistence.service().persist(building);
         PublicDataUpdater.updateIndexData(building);
 
@@ -103,14 +111,6 @@ public class BuildingImporter {
             Persistence.service().persist(items);
         }
 
-        // Media
-        {
-            for (MediaIO iIO : buildingIO.medias()) {
-                building.media().add(new MediaConverter(imagesBaseFolder).createDBO(iIO));
-            }
-            Persistence.service().persist(building.media());
-        }
-
         //Floorplan
         {
             for (FloorplanIO floorplanIO : buildingIO.floorplans()) {
@@ -119,6 +119,14 @@ public class BuildingImporter {
 
                 if (floorplan.name().isNull()) {
                     throw new UserRuntimeException("Floorplan name in  building '" + buildingIO.propertyCode().getValue() + "' can't be empty");
+                }
+
+                // Media
+                {
+                    for (MediaIO iIO : floorplanIO.medias()) {
+                        floorplan.media().add(new MediaConverter(imagesBaseFolder).createDBO(iIO));
+                    }
+                    Persistence.service().persist(floorplan.media());
                 }
 
                 Persistence.service().persist(floorplan);
@@ -153,13 +161,6 @@ public class BuildingImporter {
                     counters.units += items.size();
                 }
 
-                // Media
-                {
-                    for (MediaIO iIO : floorplanIO.medias()) {
-                        floorplan.media().add(new MediaConverter(imagesBaseFolder).createDBO(iIO));
-                    }
-                    Persistence.service().persist(floorplan.media());
-                }
             }
         }
         return counters;

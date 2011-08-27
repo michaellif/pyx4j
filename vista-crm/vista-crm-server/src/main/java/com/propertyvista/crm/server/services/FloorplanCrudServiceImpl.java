@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -36,6 +37,10 @@ public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorpla
         amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), in));
         for (FloorplanAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(amenitysCriteria)) {
             dto.amenities().add(amenity);
+        }
+
+        if (!fromList) {
+            Persistence.service().retrieve(in.media());
         }
     }
 }

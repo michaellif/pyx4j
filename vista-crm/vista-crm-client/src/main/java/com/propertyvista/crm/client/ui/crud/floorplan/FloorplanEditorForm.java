@@ -31,10 +31,10 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPa
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
-import com.propertyvista.crm.client.ui.components.CrmMediaListViewer;
+import com.propertyvista.crm.client.ui.components.media.CrmMediaListFolderEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.dto.FloorplanDTO;
 
@@ -89,7 +89,7 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
         main.add(inject(proto().amenities(), createAmenitiesListEditor()));
 
         main.add(new CrmSectionSeparator(i18n.tr("Media:")));
-        main.add(inject(proto().media(), new CrmMediaListViewer(isEditable())));
+        main.add(inject(proto().media(), new CrmMediaListFolderEditor(isEditable())));
 
         return new CrmScrollPanel(main);
     }
