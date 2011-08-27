@@ -177,7 +177,7 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
             message = i18n.tr("The file name must not be empty");
             break;
         case UnSupportedExtension:
-            message = i18n.tr("Unsupported Extension '{0}'", args);
+            message = i18n.tr("Unsupported Extension ''{0}''", args);
             break;
         case ServerMessage:
             message = args;
