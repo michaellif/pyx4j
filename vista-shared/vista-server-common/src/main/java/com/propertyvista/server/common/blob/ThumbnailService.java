@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
 
 import com.mortennobel.imagescaling.AdvancedResizeOp;
 import com.mortennobel.imagescaling.ThumpnailRescaleOp;
@@ -32,6 +33,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.shared.Dimension;
 
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
@@ -45,23 +48,25 @@ public class ThumbnailService {
 
     private final static Logger log = LoggerFactory.getLogger(ThumbnailService.class);
 
-    public static void persist(Key key, byte[] originalContent, Dimension small, Dimension medum, Dimension large) {
+    private static I18n i18n = I18nFactory.getI18n();
+
+    public static void persist(Key key, String fileName, byte[] originalContent, Dimension small, Dimension medum, Dimension large) {
         ThumbnailBlob blob = EntityFactory.create(ThumbnailBlob.class);
         blob.setPrimaryKey(key);
 
         try {
             BufferedImage inputImage = ImageIO.read(new ByteArrayInputStream(originalContent));
+            if (inputImage == null) {
+                throw new UserRuntimeException(i18n.tr("Unable to read the image ''{0}''", fileName));
+            }
             blob.small().setValue(resample(inputImage, small));
             blob.medium().setValue(resample(inputImage, medum));
             blob.large().setValue(resample(inputImage, large));
         } catch (IOException e) {
             log.error("Error", e);
-            return;
+            throw new UserRuntimeException(i18n.tr("Unable to resample the image ''{0}''", fileName));
         }
 
-//        entity.name().setValue(name);
-//        entity.content().setValue(content);
-//        entity.contentType().setValue(contentType);
         PersistenceServicesFactory.getPersistenceService().persist(blob);
     }
 

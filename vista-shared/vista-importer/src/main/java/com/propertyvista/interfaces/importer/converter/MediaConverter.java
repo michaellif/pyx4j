@@ -18,14 +18,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.Locale;
 
 import org.apache.commons.io.FilenameUtils;
+import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.crm.rpc.services.MediaUploadService;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
@@ -34,7 +40,11 @@ import com.propertyvista.server.common.blob.ThumbnailService;
 
 public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
 
+    private static I18n i18n = I18nFactory.getI18n();
+
     private final String baseFolder;
+
+    private static Collection<String> extensions = DownloadFormat.getExtensions(MediaUploadService.supportedFormats);
 
     public MediaConverter(String baseFolder) {
         super(Media.class, MediaIO.class, false);
@@ -73,17 +83,31 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
     @Override
     public void copyDTOtoDBO(MediaIO dto, Media dbo) {
         super.copyDTOtoDBO(dto, dbo);
+        if (dto.mediaType().isNull()) {
+            throw new UserRuntimeException(i18n.tr("Media type is empty"));
+        }
         switch (dto.mediaType().getValue()) {
         case file:
             dbo.type().setValue(Media.Type.file);
             File file = new File(new File(baseFolder), dto.uri().getValue());
+            if (!file.exists()) {
+                throw new UserRuntimeException(i18n.tr("Media file not found ''{0}''", dto.uri().getValue()));
+            }
+            String extension = FilenameUtils.getExtension(file.getName());
+            if (extension != null) {
+                extension = extension.toLowerCase(Locale.ENGLISH);
+            }
+            if (!extensions.contains(extension)) {
+                throw new UserRuntimeException(i18n.tr("Unsupported Media file ''{0}'' extension ''{1}''", dto.uri().getValue(), extension));
+            }
             dbo.file().filename().setValue(file.getName());
-            dbo.file().contentMimeType().setValue(MimeMap.getContentType(FilenameUtils.getExtension(file.getName())));
+            dbo.file().contentMimeType().setValue(MimeMap.getContentType(extension));
             byte raw[] = getBinary(file);
             dbo.file().fileSize().setValue(raw.length);
 
             dbo.file().blobKey().setValue(BlobService.persist(raw, dbo.file().filename().getValue(), dbo.file().contentMimeType().getValue()));
-            ThumbnailService.persist(dbo.file().blobKey().getValue(), raw, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
+            ThumbnailService.persist(dbo.file().blobKey().getValue(), file.getName(), raw, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM,
+                    ImageConsts.BUILDING_LARGE);
 
             break;
         case externalUrl:
@@ -92,7 +116,7 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
             break;
         case youTube:
             if (!dto.uri().getValue().matches("[a-zA-Z0-9_-]{11}")) {
-                throw new UserRuntimeException("Invalid YouTube VideoID" + dto.uri().getValue());
+                throw new UserRuntimeException(i18n.tr("Invalid YouTube VideoID ''{0}''", dto.uri().getValue()));
             }
             dbo.type().setValue(Media.Type.youTube);
             dbo.youTubeVideoID().setValue(dto.uri().getValue());

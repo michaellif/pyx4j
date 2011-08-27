@@ -19,6 +19,7 @@ import java.util.Vector;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.OrganisationContact;
@@ -56,7 +57,7 @@ public class BuildingImporter {
         }
 
         if (buildingIO.propertyCode().isNull()) {
-            throw new Error("propertyCode can't be empty");
+            throw new UserRuntimeException("propertyCode can't be empty");
         }
 
         // Save building
@@ -117,7 +118,7 @@ public class BuildingImporter {
                 floorplan.building().set(building);
 
                 if (floorplan.name().isNull()) {
-                    throw new Error("Floorplan name in  building '" + buildingIO.propertyCode().getValue() + "' can't be empty");
+                    throw new UserRuntimeException("Floorplan name in  building '" + buildingIO.propertyCode().getValue() + "' can't be empty");
                 }
 
                 Persistence.service().persist(floorplan);
@@ -139,8 +140,8 @@ public class BuildingImporter {
                     List<AptUnit> items = new Vector<AptUnit>();
                     for (AptUnitIO iIO : floorplanIO.units()) {
                         if (iIO.number().isNull()) {
-                            throw new Error("AptUnit number in '" + floorplanIO.name().getValue() + "' in building '" + buildingIO.propertyCode().getValue()
-                                    + "'can't be empty");
+                            throw new UserRuntimeException("AptUnit number in '" + floorplanIO.name().getValue() + "' in building '"
+                                    + buildingIO.propertyCode().getValue() + "'can't be empty");
                         }
 
                         AptUnit i = new AptUnitConverter().createDBO(iIO);

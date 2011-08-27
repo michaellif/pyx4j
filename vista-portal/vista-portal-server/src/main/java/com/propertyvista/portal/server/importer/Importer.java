@@ -163,8 +163,8 @@ public class Importer {
             m.type().setValue(Media.Type.file);
             m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentMimeType().getValue()));
 
-            ThumbnailService.persist(m.file().blobKey().getValue(), me.getValue(), ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM,
-                    ImageConsts.BUILDING_LARGE);
+            ThumbnailService.persist(m.file().blobKey().getValue(), m.file().filename().getValue(), me.getValue(), ImageConsts.BUILDING_SMALL,
+                    ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
 
             persist(m);
             building.media().add(m);

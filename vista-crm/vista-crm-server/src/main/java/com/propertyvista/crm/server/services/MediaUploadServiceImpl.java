@@ -48,7 +48,8 @@ public class MediaUploadServiceImpl extends UploadServiceImpl<IEntity> implement
     public void onUploadRecived(UploadDeferredProcess process, UploadData data) {
         data.response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(data.response.fileName));
         Key blobKey = BlobService.persist(data.data, data.response.fileName, data.response.fileContentType);
-        ThumbnailService.persist(blobKey, data.data, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
+        ThumbnailService.persist(blobKey, data.response.fileName, data.data, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM,
+                ImageConsts.BUILDING_LARGE);
         data.response.uploadKey = blobKey;
     }
 }

@@ -100,7 +100,7 @@ public class MediaGenerator {
             m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentMimeType().getValue()));
 
             //TODO what sizes to use for Floorplan images?
-            ThumbnailService.persist(m.file().blobKey().getValue(), me.getValue(), ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM,
+            ThumbnailService.persist(m.file().blobKey().getValue(), filename, me.getValue(), ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM,
                     ImageConsts.BUILDING_LARGE);
         }
         return data;
