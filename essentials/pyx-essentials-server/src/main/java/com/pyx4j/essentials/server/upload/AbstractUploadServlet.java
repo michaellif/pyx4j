@@ -208,6 +208,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 out.println(i18n.tr("File not uploaded"));
                 return;
             }
+            data.response.fileSize = data.data.length;
             log.debug("Got file {}", data.response.fileName);
             reciver.onUploadRecived(process, data);
             if (process != null) {
