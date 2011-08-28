@@ -127,7 +127,7 @@ public class DataDump {
 
             w.write(xml.toString());
             w.flush();
-            log.debug("dumped value to file", f.getAbsolutePath());
+            log.debug("dumped value to file {}", f.getAbsolutePath());
         } catch (IOException e) {
             log.error("debug write", e);
         } finally {
