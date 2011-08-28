@@ -31,35 +31,30 @@ textarea:focus {
 select:focus {
     outline: medium none;
 }
-#skipNav {
-    left: -9999px;
-    position: absolute;
-}
+
 html, body, #splash {
     height: 100%;
     width: 100%;
 }
-#splash {
-    position: relative;
-}
+
 body {
     background: url("images/template0/bg_body.gif") repeat-x scroll 0 0 #202226;
     color: #C9CAC8;
     font: 13px/16px Arial,Helvetica,sans-serif;
 }
-body.splash {
-    background: none repeat scroll 0 0 #202226;
-}
+
 input, select, textarea {
     color: #333333;
     font-family: Arial,Helvetica,sans-serif;
     font-size: 13px;
 }
+
 a {
     color: #B5E329;
     outline: medium none;
     text-decoration: none;
 }
+
 a:hover {
     text-decoration: underline;
 }
@@ -243,10 +238,34 @@ select {
 }
 
 .secondaryNavig {
-	padding: 0;
+	padding: 35px 0;
     width: 211px;
     float: left;
     min-height: 400px;
+}
+
+.secondaryNavig ul {
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+}
+
+.secondaryNavig ul li {
+    color: #CCCCCC;
+    font-size: 17px;
+    height: 38px;
+    line-height: 38px;
+    overflow: hidden;
+    padding: 0 10px 0 35px;
+}
+
+.secondaryNavig ul li a {
+    color: #CCCCCC;
+}
+
+.secondaryNavig ul li a:hover {
+    color: #B5E329;
+    text-decoration: none;
 }
 
 .staticMain .captiont {

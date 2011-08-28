@@ -43,9 +43,10 @@ public class PMSiteSession extends WebSession {
         return list;
     }
 
-    public List<NavigationItem> getSecondaryNavigItems() {
+    public List<NavigationItem> getSecondaryNavigItems(PageDescriptor parent) {
+
         List<NavigationItem> list = new ArrayList<NavigationItem>();
-        for (PageDescriptor descriptor : contentManager.getLandingPage().childPages()) {
+        for (PageDescriptor descriptor : parent.childPages()) {
             list.add(new NavigationItem(descriptor, contentManager));
         }
         return list;

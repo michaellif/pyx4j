@@ -13,6 +13,8 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import java.util.List;
+
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -23,15 +25,20 @@ import org.apache.wicket.model.Model;
 
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.pages.StaticPage;
 
 public class SecondaryNavigationPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
-    public SecondaryNavigationPanel(String id) {
+    public SecondaryNavigationPanel(String id, StaticPage page) {
         super(id);
 
-        ListView<NavigationItem> listView = new ListView<NavigationItem>("secondaryNavigItem", ((PMSiteSession) getSession()).getSecondaryNavigItems()) {
+        PageDescriptor descriptor = ((PMSiteSession) getSession()).getContentManager().getStaticPageDescriptor(page.getPageParameters());
+
+        List<NavigationItem> items = ((PMSiteSession) getSession()).getMainNavigItems();
+
+        ListView<NavigationItem> listView = new ListView<NavigationItem>("secondaryNavigItem", items) {
             private static final long serialVersionUID = 1L;
 
             @Override

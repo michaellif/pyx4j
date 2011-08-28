@@ -30,7 +30,7 @@ public class StaticPage extends BasePage {
     public StaticPage(final PageParameters parameters) {
         super(parameters);
 
-        add(new SecondaryNavigationPanel("secondaryNavig"));
+        add(new SecondaryNavigationPanel("secondaryNavig", this));
 
         add(new WebComponent("content") {
 
