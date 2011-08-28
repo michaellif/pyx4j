@@ -20,6 +20,7 @@
  */
 package com.pyx4j.essentials.j2se.util;
 
+import java.io.File;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
@@ -66,11 +67,26 @@ public class MarshallUtil {
         return result;
     }
 
+    public static <T> T unmarshal(Class<T> clazz, File xmlFile) throws JAXBException {
+        JAXBContext context = JAXBContext.newInstance(clazz);
+        Unmarshaller um = context.createUnmarshaller();
+        @SuppressWarnings("unchecked")
+        T result = (T) um.unmarshal(xmlFile);
+        return result;
+    }
+
     public static <T> void marshal(T data, java.io.OutputStream os) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(data.getClass());
         Marshaller m = context.createMarshaller();
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         m.marshal(data, os);
+    }
+
+    public static <T> void marshal(T data, File xmlFile) throws JAXBException {
+        JAXBContext context = JAXBContext.newInstance(data.getClass());
+        Marshaller m = context.createMarshaller();
+        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        m.marshal(data, xmlFile);
     }
 
     public static <T> String marshall(T data) throws JAXBException {
