@@ -18,6 +18,7 @@ import org.apache.wicket.Response;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebComponent;
+import org.apache.wicket.markup.html.basic.Label;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 
@@ -29,8 +30,11 @@ public class StaticPage extends BasePage {
 
     public StaticPage(final PageParameters parameters) {
         super(parameters);
+        final PageDescriptor descriptor = ((PMSiteSession) getSession()).getContentManager().getStaticPageDescriptor(parameters);
 
         add(new SecondaryNavigationPanel("secondaryNavig", this));
+
+        add(new Label("caption", descriptor.caption().getValue()));
 
         add(new WebComponent("content") {
 
@@ -40,7 +44,6 @@ public class StaticPage extends BasePage {
             protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
                 Response response = getRequestCycle().getResponse();
 
-                PageDescriptor descriptor = ((PMSiteSession) getSession()).getContentManager().getStaticPageDescriptor(parameters);
                 PersistenceServicesFactory.getPersistenceService().retrieve(descriptor.content());
                 response.write(descriptor.content().content().getStringView());
             }

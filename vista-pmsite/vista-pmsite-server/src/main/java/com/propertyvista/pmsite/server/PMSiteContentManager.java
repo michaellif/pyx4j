@@ -92,16 +92,17 @@ public class PMSiteContentManager {
     }
 
     public PageParameters getStaticPageParams(PageDescriptor descriptor) {
-        PageDescriptor parent = descriptor;
         List<PageDescriptor> path = new ArrayList<PageDescriptor>();
-        while (!landing.equals(parent)) {
+
+        PageDescriptor parent = descriptor;
+        while (!landing.equals(parent) && !parent.isNull()) {
             path.add(parent);
             parent = parent.parent();
         }
 
         PageParameters params = new PageParameters();
-        for (int i = path.size() - 1; i >= 0; i--) {
-            params.add(PARAMETER_NAMES[i], toPageId(path.get(i).caption().getValue()));
+        for (int i = 0; i < path.size(); i++) {
+            params.add(PARAMETER_NAMES[i], toPageId(path.get(path.size() - i - 1).caption().getValue()));
         }
 
         return params;

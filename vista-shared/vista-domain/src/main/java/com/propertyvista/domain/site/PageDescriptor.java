@@ -49,7 +49,6 @@ public interface PageDescriptor extends IEntity {
     IPrimitive<String> caption();
 
     @Owner
-    @Detached
     PageDescriptor parent();
 
     @Transient

@@ -15,6 +15,7 @@ package com.propertyvista.pmsite.server.panels;
 
 import java.util.List;
 
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -24,6 +25,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.pages.StaticPage;
 
@@ -34,9 +36,12 @@ public class SecondaryNavigationPanel extends Panel {
     public SecondaryNavigationPanel(String id, StaticPage page) {
         super(id);
 
-        PageDescriptor descriptor = ((PMSiteSession) getSession()).getContentManager().getStaticPageDescriptor(page.getPageParameters());
+        PageParameters mainNavigParams = new PageParameters();
+        mainNavigParams.add(PMSiteContentManager.PARAMETER_NAMES[0], page.getPageParameters().getString(PMSiteContentManager.PARAMETER_NAMES[0]));
 
-        List<NavigationItem> items = ((PMSiteSession) getSession()).getMainNavigItems();
+        PageDescriptor descriptor = ((PMSiteSession) getSession()).getContentManager().getStaticPageDescriptor(mainNavigParams);
+
+        List<NavigationItem> items = ((PMSiteSession) getSession()).getNavigItems(descriptor);
 
         ListView<NavigationItem> listView = new ListView<NavigationItem>("secondaryNavigItem", items) {
             private static final long serialVersionUID = 1L;
@@ -67,6 +72,10 @@ public class SecondaryNavigationPanel extends Panel {
 
             }
         };
-        add(listView);
+        if (listView.getViewSize() == 0) {
+            setVisible(false);
+        } else {
+            add(listView);
+        }
     }
 }

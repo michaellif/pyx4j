@@ -73,7 +73,7 @@ select {
 }
 
 .header .main {
-    height: 163px;
+    height: 164px;
 }
 
 .main {
@@ -259,6 +259,10 @@ select {
     padding: 0 10px 0 35px;
 }
 
+.secondaryNavig ul li.active {
+    background: url("images/template0/menu_active.png") no-repeat scroll 0 50% transparent;
+}
+
 .secondaryNavig ul li a {
     color: #CCCCCC;
 }
@@ -268,15 +272,15 @@ select {
     text-decoration: none;
 }
 
-.staticMain .captiont {
-	background: url("images/template0/title_bg.gif") repeat-y scroll 0 0 transparent;
-	margin-top:7px;
+.staticMain .caption {
+	background: url("images/template0/title_bg.gif") repeat-y scroll 0 -40px transparent;
+	background-size: 100% 100%;
 	height:80px;
 	overflow: hidden;
     padding: 40px 0 0 30px;
 }
 
-.staticMain .captiont h1 {
+.staticMain .caption h1 {
     font-size: 36px;
     font-weight: normal;
     line-height: 38px;
@@ -284,12 +288,11 @@ select {
 }
 
 .staticConten {
-    float: right;
-    width: 749px;
+
 }
 
 .staticMain .content {
-	min-height: 389px;
+	min-height: 396px;
 	color: #333333;
 	background-color: white;
 	line-height: 20px;
