@@ -27,7 +27,7 @@ public class HeaderPanel extends Panel {
 
         add(new BookmarkablePageLink<Void>("titleLogo", LandingPage.class));
 
-        add(new MainNavigationPanel("navigation"));
+        add(new MainNavigationPanel("mainNavig"));
     }
 
 }

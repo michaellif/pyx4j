@@ -72,12 +72,12 @@ select {
   color: #333;
 }
 
-.header_wrap {
+.header {
     background: url("images/template0/header_right.jpg") no-repeat scroll 100% 0 transparent;
     width: 100%;
 }
 
-.header_wrap .main {
+.header .main {
     height: 163px;
 }
 
@@ -230,3 +230,90 @@ select {
     overflow: hidden;
     width: 128px;
 }
+
+
+.staticMain {
+	background: url("images/template0/inner_content_bg.png") repeat-x scroll 0 0 #37393F;
+}
+
+.staticMain .main {
+	min-height: 546px;
+    padding: 0 19px;
+	background: url("images/template0/inner_bg.png") no-repeat scroll 0 0 transparent;
+}
+
+.secondaryNavig {
+	padding: 0;
+    width: 211px;
+    float: left;
+    min-height: 400px;
+}
+
+.staticMain .captiont {
+	background: url("images/template0/title_bg.gif") repeat-y scroll 0 0 transparent;
+	margin-top:7px;
+	height:80px;
+	overflow: hidden;
+    padding: 40px 0 0 30px;
+}
+
+.staticMain .captiont h1 {
+    font-size: 36px;
+    font-weight: normal;
+    line-height: 38px;
+    padding: 0 0 20px;
+}
+
+.staticConten {
+    float: right;
+    width: 749px;
+}
+
+.staticMain .content {
+	min-height: 389px;
+	color: #333333;
+	background-color: white;
+	line-height: 20px;
+    overflow: hidden;
+    padding: 30px 30px 0;
+}
+
+.staticMain .content  a {
+    color: #339900;
+}
+
+.staticMain .content  p {
+    padding: 0 0 25px;
+}
+
+.staticMain .content h1 {
+
+}
+
+.staticMain .content  h2 {
+    font-size: 18px;
+    line-height: 20px;
+    padding: 0 0 25px;
+}
+
+.staticMain .content  h3 {
+    font-size: 16px;
+    line-height: 20px;
+    padding: 0 0 25px;
+}
+
+.staticMain .content  h4 {
+    font-size: 14px;
+    line-height: 20px;
+    padding: 0 0 25px;
+}
+
+.staticMain .content  address {
+    padding: 0 0 25px;
+}
+
+.staticMain .content ul, .staticMain .content ol {
+    margin: 0;
+    padding: 0 0 25px 25px;
+}
+

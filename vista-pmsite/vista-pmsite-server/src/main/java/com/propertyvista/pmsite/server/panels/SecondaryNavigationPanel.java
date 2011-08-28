@@ -23,21 +23,15 @@ import org.apache.wicket.model.Model;
 
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.pmsite.server.PMSiteSession;
-import com.propertyvista.pmsite.server.pages.AptDetailsPage;
-import com.propertyvista.pmsite.server.pages.AptListPage;
-import com.propertyvista.pmsite.server.pages.FindAptPage;
-import com.propertyvista.pmsite.server.pages.InquiryPage;
-import com.propertyvista.pmsite.server.pages.ResidentsPage;
-import com.propertyvista.pmsite.server.pages.StaticPage;
 
-public class MainNavigationPanel extends Panel {
+public class SecondaryNavigationPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
-    public MainNavigationPanel(String id) {
+    public SecondaryNavigationPanel(String id) {
         super(id);
 
-        ListView<NavigationItem> listView = new ListView<NavigationItem>("navigationItem", ((PMSiteSession) getSession()).getMainNavigItems()) {
+        ListView<NavigationItem> listView = new ListView<NavigationItem>("secondaryNavigItem", ((PMSiteSession) getSession()).getSecondaryNavigItems()) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -49,35 +43,15 @@ public class MainNavigationPanel extends Panel {
 
                 boolean active = false;
 
-                if (MainNavigationPanel.this.getPage() instanceof StaticPage) {
-                    PageDescriptor currentPage = ((PMSiteSession) getSession()).getContentManager().getStaticPageDescriptor(
-                            MainNavigationPanel.this.getPage().getPageParameters());
-                    while (!currentPage.isNull()) {
-                        if (currentPage.equals(navItem.getPageDescriptor())) {
-                            active = true;
-                            break;
-                        } else {
-                            currentPage = currentPage.parent();
-                        }
+                PageDescriptor currentPage = ((PMSiteSession) getSession()).getContentManager().getStaticPageDescriptor(
+                        SecondaryNavigationPanel.this.getPage().getPageParameters());
+                while (!currentPage.isNull()) {
+                    if (currentPage.equals(navItem.getPageDescriptor())) {
+                        active = true;
+                        break;
+                    } else {
+                        currentPage = currentPage.parent();
                     }
-                } else if (FindAptPage.class.equals(navItem.getDestination())
-
-                && ((MainNavigationPanel.this.getPage() instanceof FindAptPage)
-
-                || (MainNavigationPanel.this.getPage() instanceof InquiryPage)
-
-                || (MainNavigationPanel.this.getPage() instanceof AptDetailsPage)
-
-                || (MainNavigationPanel.this.getPage() instanceof AptListPage))) {
-
-                    active = true;
-
-                } else if (ResidentsPage.class.equals(navItem.getDestination())
-
-                && ((MainNavigationPanel.this.getPage() instanceof ResidentsPage))) {
-
-                    active = true;
-
                 }
 
                 if (active) {

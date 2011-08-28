@@ -23,11 +23,14 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.panels.SecondaryNavigationPanel;
 
 public class StaticPage extends BasePage {
 
     public StaticPage(final PageParameters parameters) {
         super(parameters);
+
+        add(new SecondaryNavigationPanel("secondaryNavig"));
 
         add(new WebComponent("content") {
 
