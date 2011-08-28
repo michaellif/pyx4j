@@ -120,7 +120,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         pmcs.add(generator.createPmc("PMC #1"));
         pmcs.add(generator.createPmc("PMC #2"));
         pmcs.add(generator.createPmc("PMC #3"));
-        pmcs.add(generator.createPmc("Blue Ridge"));
+        pmcs.add(generator.createPmc("Blue Ridge Realty Inc."));
         Persistence.service().persist(pmcs);
 
         int unitCount = 0;
