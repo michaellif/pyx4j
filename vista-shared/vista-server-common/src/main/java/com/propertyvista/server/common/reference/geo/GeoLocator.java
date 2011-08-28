@@ -13,10 +13,8 @@
  */
 package com.propertyvista.server.common.reference.geo;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.List;
-
-import javax.xml.bind.JAXBException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,73 +25,96 @@ import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class GeoLocator {
+
     private static final Logger log = LoggerFactory.getLogger(GeoLocator.class);
 
     public enum Mode {
-        bypassCache, useCache, updateCache
+        bypassCache, useCacheOnly, updateCache
     };
 
     private final Mode mode;
 
     private final GeoCache cache;
 
-    public GeoLocator(Mode mode) throws JAXBException, IOException {
+    public GeoLocator(Mode mode) {
         this.mode = mode;
-
         cache = new GeoCache();
-        if (mode == Mode.useCache) {
-            cache.load();
+        if (mode != Mode.bypassCache) {
+            cache.loadResource();
         }
+        this.cache.load(new File(GeoCache.FILENAME));
+    }
+
+    public GeoCache getCache() {
+        return cache;
     }
 
     public void populateGeo(List<Building> buildings) {
-
-        log.debug("Populating geo data with mode [" + mode + "]");
-
+        log.debug("Populating geo data with mode [{}]", mode);
         try {
+            int missed = 0;
             for (Building building : buildings) {
-
-                Address address = building.info().address();
-                String geoAddress = constructGeo(address);
-
-                GeoPoint gp = null;
-
-                if (mode == Mode.useCache) {
-                    gp = cache.findPoint(geoAddress);
-                } else if (mode == Mode.bypassCache) {
-                    gp = GeoDataEnhancer.getLatLng(geoAddress);
-                } else if (mode == Mode.updateCache) {
-                    gp = GeoDataEnhancer.getLatLng(geoAddress);
-                    cache.update(geoAddress, gp);
+                if (!populateGeo(building.info().address())) {
+                    missed++;
                 }
-
-                log.debug("[{}] -> [{}]", geoAddress, gp.toString());
-                address.location().setValue(gp);
             }
-
             // print this to System.out
-            if (mode == Mode.updateCache) {
-                cache.print();
+            if (mode != Mode.useCacheOnly) {
+                cache.save();
+            }
+            if (missed != 0) {
+                log.info("Not found geo for {} locations, cache missed {}", missed, cache.getMissedCount());
             }
         } catch (Exception e) {
             log.error("Failed to retrieve geo info", e);
         }
     }
 
+    public boolean populateGeo(Address address) {
+        String geoAddress = constructGeo(address);
+        GeoPoint gp = null;
+        switch (mode) {
+        case useCacheOnly:
+            gp = cache.findPoint(geoAddress);
+            break;
+        case bypassCache:
+            gp = GeoDataEnhancer.getLatLng(geoAddress);
+            break;
+        case updateCache:
+            gp = cache.findPoint(geoAddress);
+            if (gp == null) {
+                gp = GeoDataEnhancer.getLatLng(geoAddress);
+                if (gp != null) {
+                    cache.update(geoAddress, gp);
+                }
+            }
+            break;
+        }
+        if (gp != null) {
+            address.location().setValue(gp);
+            return true;
+        } else {
+            log.debug("Location not fround for: {}", geoAddress);
+            return false;
+        }
+    }
+
     public static String constructGeo(Address address) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(address.streetNumber().getValue());
+        sb.append(address.streetNumber().getStringView());
         sb.append(" ");
-        sb.append(address.streetName().getValue());
+        sb.append(address.streetName().getStringView());
         sb.append(", ");
-        sb.append(address.city().getValue());
+        sb.append(address.city().getStringView());
         sb.append(", ");
-        sb.append(address.province().code().getValue());
+        sb.append(address.province().code().getStringView());
         sb.append(" ");
-        sb.append(address.postalCode().getValue());
-        sb.append(", ");
-        sb.append(address.province().country().name().getValue());
+        sb.append(address.postalCode().getStringView());
+        if (!address.province().country().name().isNull()) {
+            sb.append(", ");
+            sb.append(address.province().country().name().getStringView());
+        }
 
         return sb.toString();
     }

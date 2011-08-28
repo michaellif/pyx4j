@@ -16,7 +16,6 @@ package com.propertyvista.crm.server.openapi;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
@@ -26,8 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.essentials.j2se.util.FileIOUtils;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
-import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
@@ -53,18 +52,7 @@ public class OpenApiModelExample {
 
         log.info("Total time {} msec", TimeUtils.since(start));
 
-        File f = new File("all-buildings-example.xml");
-        FileWriter w = null;
-        try {
-            w = new FileWriter(f);
-            w.write(xml);
-            w.flush();
-        } catch (IOException e) {
-            log.error("debug write", e);
-        } finally {
-            IOUtils.closeQuietly(w);
-        }
-
+        FileIOUtils.writeToFile(new File("all-buildings-example.xml"), xml);
         MarshallUtil.printSchema(BuildingsRS.class, new FileOutputStream(new File("buildings.xsd")), true);
     }
 

@@ -2,31 +2,31 @@
 <geoPairs>
     <pair>
         <address>6020 Bathurst Street, Toronto, ON M2R 1Z8, Canada</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>43.7870826/-79.4472285</geoPoint>
     </pair>
     <pair>
         <address>756 Kipps Lane, London, ON N5Y 4X9, Canada</address>
-        <geoPoint>43.0178573/-81.2450677</geoPoint>
+        <geoPoint>43.0178569/-81.2450675</geoPoint>
     </pair>
     <pair>
         <address>33333 Twelfth Avenue, Mission, BC V2V 5W2, Canada</address>
-        <geoPoint>49.1456539/-122.3022112</geoPoint>
+        <geoPoint>49.1456535/-122.3022112</geoPoint>
     </pair>
     <pair>
         <address>675 Richmond Street, London, ON N6A 5X4, Canada</address>
-        <geoPoint>42.9927926/-81.2518056</geoPoint>
+        <geoPoint>42.9927928/-81.2518049</geoPoint>
     </pair>
     <pair>
         <address>752 Kipps Lane, London, ON N5Y 4V4, Canada</address>
-        <geoPoint>43.0178476/-81.2451014</geoPoint>
+        <geoPoint>43.0178472/-81.2451011</geoPoint>
     </pair>
     <pair>
         <address>270 Parkside Drive, Fredericton, NB E3B 5V7, Canada</address>
-        <geoPoint>45.9461778/-66.6735432</geoPoint>
+        <geoPoint>45.9461777/-66.6735426</geoPoint>
     </pair>
     <pair>
         <address>155 Wellesley Street East, Toronto, ON M4Y 1J4, Canada</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>43.6664883/-79.375486</geoPoint>
     </pair>
     <pair>
         <address>320 Avenue Road, Toronto, ON M4V 2H3, Canada</address>
@@ -34,11 +34,11 @@
     </pair>
     <pair>
         <address>5214 Gerrish Street, Halifax, NS B3K 5K3, Canada</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>44.6558276/-63.5851996</geoPoint>
     </pair>
     <pair>
         <address>5300 Rundlehorn Drive NE, Calgary, AB T1Y 3V5, Canada</address>
-        <geoPoint>51.0716489/-113.9567828</geoPoint>
+        <geoPoint>51.0716485/-113.9567828</geoPoint>
     </pair>
     <pair>
         <address>425 Simcoe Street, Victoria, BC V8V 4T3, Canada</address>
@@ -46,15 +46,15 @@
     </pair>
     <pair>
         <address>2327 Brunswick Street, Halifax, NS B3k 2Z2, Canada</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>44.6550673/-63.5846852</geoPoint>
     </pair>
     <pair>
         <address>300 Regina Street North, Waterloo, ON N2J 3B8, Canada</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>43.4783975/-80.5233532</geoPoint>
     </pair>
     <pair>
         <address>2319 Brunswick Street, Halifax, NS B3K 2Y9, Canada</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>44.6548624/-63.5843781</geoPoint>
     </pair>
     <pair>
         <address>2130 Cambridge, Vancouver, BC V5L 1E3, Canada</address>
@@ -62,39 +62,35 @@
     </pair>
     <pair>
         <address>14 Jackson Road, Dartmouth, NS B3A 4A3, Canada</address>
-        <geoPoint>44.6810283/-63.5847535</geoPoint>
-    </pair>
-    <pair>
-        <address>1212 des Pins Avenue W, Montreal, null H3G 1A9, null</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>44.6810286/-63.584754</geoPoint>
     </pair>
     <pair>
         <address>5 Alpha Place, Saint John, NB E2K 4K9, Canada</address>
-        <geoPoint>45.2972316/-66.0887088</geoPoint>
+        <geoPoint>45.2972312/-66.0887084</geoPoint>
     </pair>
     <pair>
         <address>6030 Bathurst Street, Toronto, ON M2R 1Z9, Canada</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>43.78764/-79.4474173</geoPoint>
     </pair>
     <pair>
         <address>654 Kipps Lane, London, ON N5Y 6M2, Canada</address>
-        <geoPoint>43.0176099/-81.2459266</geoPoint>
+        <geoPoint>43.0176095/-81.2459264</geoPoint>
     </pair>
     <pair>
         <address>2201 32ND, Lethbridge, AB T1K 3A7, Canada</address>
-        <geoPoint>49.6727271/-112.7944858</geoPoint>
+        <geoPoint>49.6727271/-112.7944865</geoPoint>
     </pair>
     <pair>
-        <address>495 - 509 Delmar Avenue, Pointe-Claire, null H9R 4A5, null</address>
-        <geoPoint>45.4672856/-73.8034697</geoPoint>
+        <address>495 - 509 Delmar Avenue, Pointe-Claire,  H9R 4A5</address>
+        <geoPoint>45.4667025/-73.8031151</geoPoint>
     </pair>
     <pair>
         <address>340 Avenue Road, Toronto, ON M4V 2H4, Canada</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>43.6808927/-79.3993083</geoPoint>
     </pair>
     <pair>
         <address>2309 Brunswick Street, Halifax, NS B3K 2Z1, Canada</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>44.6547798/-63.5842606</geoPoint>
     </pair>
     <pair>
         <address>1968 McCallum Road, Abbotsford, BC V2S 3M6, Canada</address>
@@ -102,31 +98,31 @@
     </pair>
     <pair>
         <address>326 Avenue Road, Toronto, ON M4V 2H3, Canada</address>
-        <geoPoint>43.6805532/-79.3989753</geoPoint>
+        <geoPoint>43.6805533/-79.3989746</geoPoint>
     </pair>
     <pair>
         <address>1219 Centre Street, Brooks, AB T1R 1M7, Canada</address>
-        <geoPoint>50.583471/-111.8942625</geoPoint>
-    </pair>
-    <pair>
-        <address>55 Rue Laframboise, Saint Laurent, null H4N 3B7, null</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>50.583471/-111.8942618</geoPoint>
     </pair>
     <pair>
         <address>200 Shakespeare Drive, Waterloo, ON N2L 6C1, Canada</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>43.4626679/-80.5428056</geoPoint>
     </pair>
     <pair>
         <address>754 Kipps Lane, London, ON N5Y 4V3, Canada</address>
-        <geoPoint>43.0178525/-81.2450845</geoPoint>
+        <geoPoint>43.017852/-81.2450843</geoPoint>
+    </pair>
+    <pair>
+        <address>1212 des Pins Avenue W, Montreal,  H3G 1A9</address>
+        <geoPoint>45.502672/-73.583609</geoPoint>
     </pair>
     <pair>
         <address>1 Alpha Place, Saint John, NB E2K 4K9, Canada</address>
-        <geoPoint>45.2971169/-66.0890025</geoPoint>
+        <geoPoint>45.2971165/-66.0890022</geoPoint>
     </pair>
     <pair>
         <address>342 Avenue Road, Toronto, ON M4V 2H4, Canada</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>43.6808787/-79.3991033</geoPoint>
     </pair>
     <pair>
         <address>758 Kipps Lane, London, ON N5Y 4Y1, Canada</address>
@@ -134,23 +130,23 @@
     </pair>
     <pair>
         <address>3210 23rd Avenue South, Lethbridge, AB T1K 4K4, Canada</address>
-        <geoPoint>49.6701797/-112.7945272</geoPoint>
+        <geoPoint>49.6701798/-112.7945265</geoPoint>
     </pair>
     <pair>
         <address>60 Centreville Street, Kitchener, ON N2A 1R9, Canada</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>43.4297581/-80.43334</geoPoint>
     </pair>
     <pair>
         <address>740 Kipps Lane, London, ON N5Y 4R8, Canada</address>
-        <geoPoint>43.0178185/-81.2452024</geoPoint>
+        <geoPoint>43.0178181/-81.2452022</geoPoint>
     </pair>
     <pair>
         <address>330 Avenue Road, Toronto, ON M4V 2H3, Canada</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>43.6807399/-79.3990478</geoPoint>
     </pair>
     <pair>
         <address>565 Belmont Ave W., Kitchener, ON N2M 5E7, Canada</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>43.4509823/-80.5164271</geoPoint>
     </pair>
     <pair>
         <address>1948 McCallum Road, Abbotsford, BC V2S 3M9, Canada</address>
@@ -158,19 +154,23 @@
     </pair>
     <pair>
         <address>7 Jackson Road, Dartmouth, NS B3A 4A4, Canada</address>
-        <geoPoint>44.6803211/-63.5856396</geoPoint>
+        <geoPoint>44.6803208/-63.5856391</geoPoint>
     </pair>
     <pair>
         <address>750 Kipps Lane, London, ON N5Y 4R9, Canada</address>
-        <geoPoint>43.0178428/-81.2451182</geoPoint>
+        <geoPoint>43.0178423/-81.245118</geoPoint>
     </pair>
     <pair>
         <address>545 &amp; 547 Belmont Ave W., Kitchener, ON N2M 5G7, Canada</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>43.45098/-80.516535</geoPoint>
     </pair>
     <pair>
         <address>2334 Brunswick Street, Halifax, NS B3K 5K6, Canada</address>
-        <geoPoint>0.0/0.0</geoPoint>
+        <geoPoint>44.6547609/-63.5842872</geoPoint>
+    </pair>
+    <pair>
+        <address>55 Rue Laframboise, Saint Laurent,  H4N 3B7</address>
+        <geoPoint>45.5308031/-73.6774141</geoPoint>
     </pair>
     <pair>
         <address>33690 Marshall Road, Abbotsford, BC V2S 1L2, Canada</address>
@@ -182,6 +182,6 @@
     </pair>
     <pair>
         <address>15 Kennedy Drive, Dartmouth, NS B2X 1N7, Canada</address>
-        <geoPoint>44.6914623/-63.5306205</geoPoint>
+        <geoPoint>44.6914618/-63.5306203</geoPoint>
     </pair>
 </geoPairs>

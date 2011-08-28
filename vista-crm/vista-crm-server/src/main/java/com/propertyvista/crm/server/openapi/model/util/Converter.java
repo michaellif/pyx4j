@@ -26,6 +26,7 @@ import com.propertyvista.crm.server.openapi.model.BuildingInfoRS.BuildingType;
 import com.propertyvista.crm.server.openapi.model.BuildingRS;
 import com.propertyvista.crm.server.openapi.model.BuildingsRS;
 import com.propertyvista.crm.server.openapi.model.FloorplanRS;
+import com.propertyvista.crm.server.openapi.model.GeoLocation;
 import com.propertyvista.crm.server.openapi.model.MarketingRS;
 import com.propertyvista.crm.server.openapi.model.MediaRS;
 import com.propertyvista.crm.server.openapi.model.ParkingRS;
@@ -212,6 +213,12 @@ public class Converter {
         to.country = from.country().getStringView();
         if (!from.county().isNull()) {
             to.county = from.county().getStringView();
+        }
+
+        if (!from.location().isNull()) {
+            to.location = new GeoLocation();
+            to.location.latitude = from.location().getValue().getLat();
+            to.location.longitude = from.location().getValue().getLng();
         }
 
         return to;

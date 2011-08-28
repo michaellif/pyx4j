@@ -7,39 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 27, 2011
- * @author michaellif
+ * Created on Aug 27, 2011
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.crm.server.openapi.model;
 
-public class AddressRS {
+public class GeoLocation {
 
-    public String addressType;
+    public double latitude;
 
-    public String streetNumber;
+    public double longitude;
 
-    public String streetName;
-
-    public String streetNumberSuffix;
-
-    public String streetDirection;
-
-    public String streetType;
-
-    public String unitNumber;
-
-    public String city;
-
-    public String province;
-
-    public String provinceCode;
-
-    public String postalCode;
-
-    public String country;
-
-    public String county;
-
-    public GeoLocation location;
 }

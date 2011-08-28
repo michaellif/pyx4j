@@ -44,6 +44,7 @@ import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.interfaces.importer.model.ParkingIO;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
+import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 
 public class BuildingImporter {
 
@@ -76,6 +77,10 @@ public class BuildingImporter {
                     Persistence.service().persist(organisationContact.person());
                 }
             }
+        }
+
+        if (building.info().address().location().isNull()) {
+            SharedGeoLocator.populateGeo(building.info().address());
         }
 
         // Media

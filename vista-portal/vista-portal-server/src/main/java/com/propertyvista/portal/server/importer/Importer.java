@@ -85,7 +85,7 @@ public class Importer {
     }
 
     public void geo() throws JAXBException, IOException {
-        GeoLocator geoCache = new GeoLocator(Mode.useCache);
+        GeoLocator geoCache = new GeoLocator(Mode.useCacheOnly);
         geoCache.populateGeo(model.getBuildings());
     }
 
@@ -99,7 +99,6 @@ public class Importer {
 
     public void save() {
         // save
-
         for (Building building : model.getBuildings()) {
             Persistence.service().persist(building.media());
             if (isAttachMedia()) {

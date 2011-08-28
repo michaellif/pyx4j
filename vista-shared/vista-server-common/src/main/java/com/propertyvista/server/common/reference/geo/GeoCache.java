@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.common.reference.geo;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,33 +38,90 @@ public class GeoCache {
 
     private final Map<String, GeoPoint> map = new HashMap<String, GeoPoint>();
 
-    public void load() throws JAXBException, IOException {
-        String xml = IOUtils.getTextResource(FILENAME, getClass());
-        log.debug("Loading {}", xml);
-        GeoPairs pairs = MarshallUtil.unmarshal(GeoPairs.class, xml);
+    private int updateCount = 0;
 
-        for (GeoPair pair : pairs.getPairs()) {
-            GeoPoint gp = GeoPoint.valueOf(pair.getGeoPoint());
-            map.put(pair.getAddress(), gp);
+    private int missedCount = 0;
+
+    private File cacheFile;
+
+    public void loadResource() {
+        try {
+            String xml = IOUtils.getTextResource(FILENAME, getClass());
+            log.debug("Loading {}", xml);
+            GeoPairs pairs = MarshallUtil.unmarshal(GeoPairs.class, xml);
+            for (GeoPair pair : pairs.getPairs()) {
+                GeoPoint gp = GeoPoint.valueOf(pair.getGeoPoint());
+                map.put(pair.getAddress(), gp);
+            }
+        } catch (JAXBException e) {
+            log.error("GeoCache resource pars error", e);
+        } catch (IOException e) {
+            log.error("GeoCache resource read error", e);
         }
-        log.info("Loaded " + map.size() + " geo points");
+        log.info("Loaded {} geo points", map.size());
+        updateCount = 0;
+    }
+
+    public void load(File cacheFile) {
+        this.cacheFile = cacheFile;
+        if (cacheFile.canRead()) {
+            int b4 = map.size();
+            try {
+                GeoPairs pairs = MarshallUtil.unmarshal(GeoPairs.class, cacheFile);
+                for (GeoPair pair : pairs.getPairs()) {
+                    GeoPoint gp = GeoPoint.valueOf(pair.getGeoPoint());
+                    map.put(pair.getAddress(), gp);
+                }
+            } catch (JAXBException e) {
+                log.error("GeoCache file read error", e);
+            }
+            if (b4 != map.size()) {
+                log.info("Loaded {} geo points", map.size());
+            }
+            updateCount = 0;
+        }
     }
 
     public GeoPoint findPoint(String address) {
-        return map.get(address);
+        GeoPoint gp = map.get(address);
+        if (gp == null) {
+            missedCount++;
+        }
+        return gp;
     }
 
     public void update(String address, GeoPoint gp) {
         map.put(address, gp);
+        updateCount++;
     }
 
-    public void print() throws JAXBException {
-        GeoPairs pairs = new GeoPairs();
+    public int getUpdateCount() {
+        return updateCount;
+    }
 
-        for (String address : map.keySet()) {
-            GeoPoint gp = map.get(address);
-            pairs.getPairs().add(new GeoPair(address, gp.toString()));
+    public int getMissedCount() {
+        return missedCount;
+    }
+
+    public void save() {
+        if (updateCount != 0) {
+            log.info("Updated {} geo points", updateCount);
+            GeoPairs pairs = new GeoPairs();
+            for (String address : map.keySet()) {
+                GeoPoint gp = map.get(address);
+                pairs.getPairs().add(new GeoPair(address, gp.toString()));
+            }
+            try {
+                if (cacheFile == null) {
+                    MarshallUtil.marshal(pairs, System.out);
+                } else {
+                    MarshallUtil.marshal(pairs, cacheFile);
+                }
+                updateCount = 0;
+            } catch (JAXBException e) {
+                log.error("GeoCache xml creatiuon error", e);
+            }
         }
-        MarshallUtil.marshal(pairs, System.out);
     }
+
 }

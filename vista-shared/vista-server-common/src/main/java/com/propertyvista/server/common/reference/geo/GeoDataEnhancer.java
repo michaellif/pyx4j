@@ -14,30 +14,65 @@
 package com.propertyvista.server.common.reference.geo;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.commons.Consts;
 import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.gwt.server.IOUtils;
 
 public class GeoDataEnhancer {
+
+    private static final Logger log = LoggerFactory.getLogger(GeoDataEnhancer.class);
 
     //How to find panoid - http://diddling.blogspot.com/2008/01/hacking-google-street-view.html
     //http://maps.google.com/cbk?output=xml&ll=37.4451,-122.125577 - see xml
 
     // Address to LatLng - http://maps.google.com/maps/geo?q={address}&output=csv
 
-    public static GeoPoint getLatLng(String address) throws Exception {
-        GeoPoint point = null;
-        URL url = new URL("http://maps.google.com/maps/geo?q=" + URLEncoder.encode(String.valueOf(address), "utf8") + "&output=csv");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-        String line = reader.readLine();
-        String[] s = line.split(",");
-        point = new GeoPoint(Double.parseDouble(s[2]), Double.parseDouble(s[3]));
-        reader.close();
-        return point;
+    public static GeoPoint getLatLng(String address) {
+        BufferedReader reader = null;
+        try {
+            URL url = new URL("http://maps.google.com/maps/geo?q=" + URLEncoder.encode(address, "utf8") + "&output=csv");
+            String line = null;
+            for (int retry = 0; retry < 3; retry++) {
+                reader = new BufferedReader(new InputStreamReader(url.openStream()));
+                line = reader.readLine();
+                String[] s = line.split(",");
+                if ("200".equals(s[0])) {
+                    GeoPoint gp = new GeoPoint(Double.parseDouble(s[2]), Double.parseDouble(s[3]));
+                    if (gp.getLat() == 0) {
+                        return null;
+                    } else {
+                        return gp;
+                    }
+                } else if ("620".equals(s[0])) {
+                    // retry, google do not allow more then 10 QPS
+                    IOUtils.closeQuietly(reader);
+                    try {
+                        Thread.sleep(Consts.SEC2MILLISECONDS);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    log.warn("Unexpected GEO responce '{}'", line);
+                    return null;
+                }
+            }
+            log.warn("Failed to retry, last responce '{}'", line);
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException("Communication error", e);
+        } finally {
+            IOUtils.closeQuietly(reader);
+        }
     }
 
     public static String getPanoId(GeoPoint point) throws Exception {
