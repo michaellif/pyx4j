@@ -21,12 +21,14 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.client.ui.CEntityHyperlink;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
@@ -62,7 +64,16 @@ class CrmMediaFolderItemEditor extends CEntityFolderItemEditor<Media> {
         split.getLeftPanel().add(inject(proto().type()), 15);
         split.getLeftPanel().add(inject(proto().youTubeVideoID()), 15);
         split.getLeftPanel().add(inject(proto().url()), 15);
-        split.getLeftPanel().add(inject(proto().file(), new FileUploadHyperlink(editable)), 15);
+        if (editable) {
+            split.getLeftPanel().add(inject(proto().file(), new FileUploadHyperlink(editable)), 15);
+        } else {
+            split.getLeftPanel().add(inject(proto().file(), new CEntityHyperlink(new Command() {
+                @Override
+                public void execute() {
+                    showMedia();
+                }
+            })), 15);
+        }
 
         split.getRightPanel().add(inject(proto().caption()), 15);
         //Link to view
@@ -107,7 +118,7 @@ class CrmMediaFolderItemEditor extends CEntityFolderItemEditor<Media> {
         get(proto().file()).setVisible(false);
         viewLink.setVisible(false);
         if (type != null) {
-            viewLink.setVisible(true);
+            viewLink.setVisible(!getValue().id().isNull());
             switch (type) {
             case file:
                 get(proto().file()).setVisible(true);
@@ -126,6 +137,14 @@ class CrmMediaFolderItemEditor extends CEntityFolderItemEditor<Media> {
         Media.Type type = getValue().type().getValue();
         switch (type) {
         case file:
+            if (getValue().id().isNull()) {
+                MessageDialog.error(i18n.tr("Upload error"), i18n.tr("Plase save this first"));
+            } else {
+                MediaFileViewDialog dialog = new MediaFileViewDialog();
+                dialog.title = getValue().caption().getValue();
+                dialog.mediaId = getValue().id().getValue();
+                dialog.show();
+            }
             break;
         case externalUrl:
             break;

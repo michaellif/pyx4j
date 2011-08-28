@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.FloorplanCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
+import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.dto.FloorplanDTO;
@@ -41,6 +42,13 @@ public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorpla
 
         if (!fromList) {
             Persistence.service().retrieve(in.media());
+        }
+    }
+
+    @Override
+    protected void enhanceSaveDBO(Floorplan dbo, FloorplanDTO dto) {
+        for (Media item : dbo.media()) {
+            PersistenceServicesFactory.getPersistenceService().merge(item);
         }
     }
 }
