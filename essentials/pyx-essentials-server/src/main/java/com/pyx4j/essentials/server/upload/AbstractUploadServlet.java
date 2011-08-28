@@ -209,11 +209,12 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 return;
             }
             data.response.fileSize = data.data.length;
-            log.debug("Got file {}", data.response.fileName);
+            log.debug("Got uploaded file {}", data.response.fileName);
             reciver.onUploadRecived(process, data);
             if (process != null) {
                 process.status().setCompleted();
             }
+            log.debug("Upload processing compleated");
             out.println("OK");
         } catch (Throwable t) {
             log.error("upload error", t);
