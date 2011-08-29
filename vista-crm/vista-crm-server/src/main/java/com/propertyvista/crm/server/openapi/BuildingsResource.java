@@ -216,7 +216,9 @@ public class BuildingsResource {
                         // Ignore this floorplanRS
                         continue nextFloorplan;
                     }
+                    buildingRS.floorplans.remove(floorplanSameRS);
                 }
+                buildingRS.floorplans.add(floorplanRS);
 
                 //Get Amenity
                 {
