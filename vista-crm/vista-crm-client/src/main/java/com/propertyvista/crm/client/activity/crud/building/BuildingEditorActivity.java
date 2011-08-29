@@ -17,80 +17,19 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
-import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.building.BuildingEditorView;
-import com.propertyvista.crm.client.ui.crud.building.BuildingView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
-import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingEditorActivity extends EditorActivityBase<BuildingDTO> implements BuildingEditorView.Presenter {
 
-    private final BuildingActivityDelegate delegate;
-
     @SuppressWarnings("unchecked")
     public BuildingEditorActivity(Place place) {
         super((BuildingEditorView) BuildingViewFactory.instance(BuildingEditorView.class), (AbstractCrudService<BuildingDTO>) GWT
                 .create(BuildingCrudService.class), BuildingDTO.class);
-        delegate = new BuildingActivityDelegate((BuildingView) view);
         withPlace(place);
-    }
-
-    @Override
-    public DashboardView.Presenter getDashboardPresenter() {
-        return delegate.getDashboardPresenter();
-    }
-
-    @Override
-    public Presenter getFloorplanPresenter() {
-        return delegate.getFloorplanPresenter();
-    }
-
-    @Override
-    public Presenter getUnitPresenter() {
-        return delegate.getUnitPresenter();
-    }
-
-    @Override
-    public Presenter getElevatorPresenter() {
-        return delegate.getElevatorPresenter();
-    }
-
-    @Override
-    public Presenter getBoilerPresenter() {
-        return delegate.getBoilerPresenter();
-    }
-
-    @Override
-    public Presenter getRoofPresenter() {
-        return delegate.getRoofPresenter();
-    }
-
-    @Override
-    public Presenter getParkingPresenter() {
-        return delegate.getParkingPresenter();
-    }
-
-    @Override
-    public Presenter getLockerAreaPresenter() {
-        return delegate.getLockerAreaPresenter();
-    }
-
-    @Override
-    public Presenter getServicePresenter() {
-        return delegate.getServicePresenter();
-    }
-
-    @Override
-    public Presenter getFeaturePresenter() {
-        return delegate.getFeaturePresenter();
-    }
-
-    @Override
-    public Presenter getConcessionPresenter() {
-        return delegate.getConcessionPresenter();
     }
 }

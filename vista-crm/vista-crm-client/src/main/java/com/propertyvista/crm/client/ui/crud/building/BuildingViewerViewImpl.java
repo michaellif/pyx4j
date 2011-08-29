@@ -14,10 +14,22 @@
 package com.propertyvista.crm.client.ui.crud.building;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionLister;
+import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureLister;
+import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceLister;
+import com.propertyvista.crm.client.ui.crud.building.lockers.LockerAreaLister;
+import com.propertyvista.crm.client.ui.crud.building.mech.BoilerLister;
+import com.propertyvista.crm.client.ui.crud.building.mech.ElevatorLister;
+import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
+import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
+import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
+import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
+import com.propertyvista.crm.client.ui.dashboard.DashboardPanel;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -34,12 +46,47 @@ import com.propertyvista.dto.RoofDTO;
 
 public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> implements BuildingViewerView {
 
-    private final BuildingViewDelegate delegate;
+    private final DashboardView dashboardView;
+
+    private final IListerView<FloorplanDTO> floorplanLister;
+
+    private final IListerView<AptUnitDTO> unitLister;
+
+    private final IListerView<ElevatorDTO> elevatorLister;
+
+    private final IListerView<BoilerDTO> boilerLister;
+
+    private final IListerView<RoofDTO> roofLister;
+
+    private final IListerView<ParkingDTO> parkingLister;
+
+    private final IListerView<LockerAreaDTO> lockerAreaLister;
+
+    private final IListerView<Service> serviceLister;
+
+    private final IListerView<Feature> featureLister;
+
+    private final IListerView<Concession> concessionLister;
 
     public BuildingViewerViewImpl() {
         super(CrmSiteMap.Properties.Building.class);
 
-        delegate = new BuildingViewDelegate(true);
+        dashboardView = new DashboardPanel();
+
+        floorplanLister = new ListerInternalViewImplBase<FloorplanDTO>(new FloorplanLister(/* readOnly */));
+
+        unitLister = new ListerInternalViewImplBase<AptUnitDTO>(new UnitLister(/* readOnly */));
+
+        elevatorLister = new ListerInternalViewImplBase<ElevatorDTO>(new ElevatorLister(/* readOnly */));
+        boilerLister = new ListerInternalViewImplBase<BoilerDTO>(new BoilerLister(/* readOnly */));
+        roofLister = new ListerInternalViewImplBase<RoofDTO>(new RoofLister(/* readOnly */));
+
+        parkingLister = new ListerInternalViewImplBase<ParkingDTO>(new ParkingLister(/* readOnly */));
+        lockerAreaLister = new ListerInternalViewImplBase<LockerAreaDTO>(new LockerAreaLister(/* readOnly */));
+
+        serviceLister = new ListerInternalViewImplBase<Service>(new ServiceLister(/* readOnly */));
+        featureLister = new ListerInternalViewImplBase<Feature>(new FeatureLister(/* readOnly */));
+        concessionLister = new ListerInternalViewImplBase<Concession>(new ConcessionLister(/* readOnly */));
 
         // create/init/set main form here: 
         CrmEntityForm<BuildingDTO> form = new BuildingEditorForm(new CrmViewersComponentFactory(), this);
@@ -49,56 +96,56 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     @Override
     public DashboardView getDashboardView() {
-        return delegate.getDashboardView();
+        return dashboardView;
     }
 
     @Override
     public IListerView<FloorplanDTO> getFloorplanListerView() {
-        return delegate.getFloorplanListerView();
+        return floorplanLister;
     }
 
     @Override
     public IListerView<AptUnitDTO> getUnitListerView() {
-        return delegate.getUnitListerView();
+        return unitLister;
     }
 
     @Override
     public IListerView<ElevatorDTO> getElevatorListerView() {
-        return delegate.getElevatorListerView();
+        return elevatorLister;
     }
 
     @Override
     public IListerView<BoilerDTO> getBoilerListerView() {
-        return delegate.getBoilerListerView();
+        return boilerLister;
     }
 
     @Override
     public IListerView<RoofDTO> getRoofListerView() {
-        return delegate.getRoofListerView();
+        return roofLister;
     }
 
     @Override
     public IListerView<ParkingDTO> getParkingListerView() {
-        return delegate.getParkingListerView();
+        return parkingLister;
     }
 
     @Override
     public IListerView<LockerAreaDTO> getLockerAreaListerView() {
-        return delegate.getLockerAreaListerView();
+        return lockerAreaLister;
     }
 
     @Override
     public IListerView<Service> getServiceListerView() {
-        return delegate.getServiceListerView();
+        return serviceLister;
     }
 
     @Override
     public IListerView<Feature> getFeatureListerView() {
-        return delegate.getFeatureListerView();
+        return featureLister;
     }
 
     @Override
     public IListerView<Concession> getConcessionListerView() {
-        return delegate.getConcessionListerView();
+        return concessionLister;
     }
 }

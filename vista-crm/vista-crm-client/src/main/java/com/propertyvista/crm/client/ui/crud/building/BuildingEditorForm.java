@@ -87,28 +87,30 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         // TODO - add this data processing later! :
         //  main.add(inject(proto().media()), 15);
 
-        tabPanel.addDisable(((BuildingView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
+        tabPanel.addDisable(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
 
         tabPanel.add(createGeneralTab(), i18n.tr("General"));
         tabPanel.add(createDetailsTab(), i18n.tr("Details"));
 
-        tabPanel.addDisable(new ScrollPanel(((BuildingView) getParentView()).getFloorplanListerView().asWidget()), i18n.tr("Floorplans"));
-        tabPanel.addDisable(new ScrollPanel(((BuildingView) getParentView()).getUnitListerView().asWidget()), i18n.tr("Units"));
+        tabPanel.addDisable(isEditable() ? new HTML() : new ScrollPanel(((BuildingViewerView) getParentView()).getFloorplanListerView().asWidget()),
+                i18n.tr("Floorplans"));
+        tabPanel.addDisable(isEditable() ? new HTML() : new ScrollPanel(((BuildingViewerView) getParentView()).getUnitListerView().asWidget()),
+                i18n.tr("Units"));
 
         FlowPanel combinedtab = new FlowPanel();
         combinedtab.add(new CrmSectionSeparator(i18n.tr("Elevators:")));
-        combinedtab.add(((BuildingView) getParentView()).getElevatorListerView().asWidget());
+        combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
         combinedtab.add(new CrmSectionSeparator(i18n.tr("Boilers:")));
-        combinedtab.add(((BuildingView) getParentView()).getBoilerListerView().asWidget());
+        combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBoilerListerView().asWidget());
         combinedtab.add(new CrmSectionSeparator(i18n.tr("Roofs:")));
-        combinedtab.add(((BuildingView) getParentView()).getRoofListerView().asWidget());
+        combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getRoofListerView().asWidget());
         tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Mechanicals"));
 
         combinedtab = new FlowPanel();
         combinedtab.add(new CrmSectionSeparator(i18n.tr("Parkings:")));
-        combinedtab.add(((BuildingView) getParentView()).getParkingListerView().asWidget());
+        combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
         combinedtab.add(new CrmSectionSeparator(i18n.tr("Locker Areas:")));
-        combinedtab.add(((BuildingView) getParentView()).getLockerAreaListerView().asWidget());
+        combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
         tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Add-ons"));
 
         tabPanel.add(createFinancialTab(), i18n.tr("Financial"));
@@ -116,11 +118,11 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         combinedtab = new FlowPanel();
         combinedtab.add(new CrmSectionSeparator(i18n.tr("Services:")));
-        combinedtab.add(((BuildingView) getParentView()).getServiceListerView().asWidget());
+        combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
         combinedtab.add(new CrmSectionSeparator(i18n.tr("Features:")));
-        combinedtab.add(((BuildingView) getParentView()).getFeatureListerView().asWidget());
+        combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
         combinedtab.add(new CrmSectionSeparator(i18n.tr("Concessions:")));
-        combinedtab.add(((BuildingView) getParentView()).getConcessionListerView().asWidget());
+        combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
         tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Service Catalog"));
 
         tabPanel.add(createContactTab(), i18n.tr("Contact Information"));

@@ -16,87 +16,199 @@ package com.propertyvista.crm.client.activity.crud.building;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.building.BuildingView;
+import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.building.BuildingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
+import com.propertyvista.crm.rpc.services.ConcessionCrudService;
+import com.propertyvista.crm.rpc.services.ElevatorCrudService;
+import com.propertyvista.crm.rpc.services.FeatureCrudService;
+import com.propertyvista.crm.rpc.services.FloorplanCrudService;
+import com.propertyvista.crm.rpc.services.LockerAreaCrudService;
+import com.propertyvista.crm.rpc.services.ParkingCrudService;
+import com.propertyvista.crm.rpc.services.RoofCrudService;
+import com.propertyvista.crm.rpc.services.ServiceCrudService;
+import com.propertyvista.crm.rpc.services.UnitCrudService;
+import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.BuildingDTO;
+import com.propertyvista.dto.ElevatorDTO;
+import com.propertyvista.dto.FloorplanDTO;
+import com.propertyvista.dto.LockerAreaDTO;
+import com.propertyvista.dto.ParkingDTO;
+import com.propertyvista.dto.RoofDTO;
 
 public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> implements BuildingViewerView.Presenter {
 
-    private final BuildingActivityDelegate delegate;
+    private final DashboardView.Presenter dashboard;
+
+    private final IListerView.Presenter floorplanLister;
+
+    private final IListerView.Presenter unitLister;
+
+    private final IListerView.Presenter elevatorLister;
+
+    private final IListerView.Presenter boilerLister;
+
+    private final IListerView.Presenter roofLister;
+
+    private final IListerView.Presenter parkingLister;
+
+    private final IListerView.Presenter lockerAreaLister;
+
+    private final IListerView.Presenter serviceLister;
+
+    private final IListerView.Presenter featureLister;
+
+    private final IListerView.Presenter concessionLister;
 
     @SuppressWarnings("unchecked")
     public BuildingViewerActivity(Place place) {
         super((BuildingViewerView) BuildingViewFactory.instance(BuildingViewerView.class), (AbstractCrudService<BuildingDTO>) GWT
                 .create(BuildingCrudService.class));
-        delegate = new BuildingActivityDelegate((BuildingView) view);
+
+        dashboard = new DashboardViewActivity(((BuildingViewerView) view).getDashboardView(), new CrmSiteMap.Dashboard.Building());
+
+        floorplanLister = new ListerActivityBase<FloorplanDTO>(((BuildingViewerView) view).getFloorplanListerView(),
+                (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class), FloorplanDTO.class);
+
+        unitLister = new ListerActivityBase<AptUnitDTO>(((BuildingViewerView) view).getUnitListerView(),
+                (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class), AptUnitDTO.class);
+
+        elevatorLister = new ListerActivityBase<ElevatorDTO>(((BuildingViewerView) view).getElevatorListerView(),
+                (AbstractCrudService<ElevatorDTO>) GWT.create(ElevatorCrudService.class), ElevatorDTO.class);
+
+        boilerLister = new ListerActivityBase<BoilerDTO>(((BuildingViewerView) view).getBoilerListerView(),
+                (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class), BoilerDTO.class);
+
+        roofLister = new ListerActivityBase<RoofDTO>(((BuildingViewerView) view).getRoofListerView(),
+                (AbstractCrudService<RoofDTO>) GWT.create(RoofCrudService.class), RoofDTO.class);
+
+        parkingLister = new ListerActivityBase<ParkingDTO>(((BuildingViewerView) view).getParkingListerView(),
+                (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class), ParkingDTO.class);
+
+        lockerAreaLister = new ListerActivityBase<LockerAreaDTO>(((BuildingViewerView) view).getLockerAreaListerView(),
+                (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class), LockerAreaDTO.class);
+
+        serviceLister = new ListerActivityBase<Service>(((BuildingViewerView) view).getServiceListerView(),
+                (AbstractCrudService<Service>) GWT.create(ServiceCrudService.class), Service.class);
+        featureLister = new ListerActivityBase<Feature>(((BuildingViewerView) view).getFeatureListerView(),
+                (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class), Feature.class);
+        concessionLister = new ListerActivityBase<Concession>(((BuildingViewerView) view).getConcessionListerView(),
+                (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class);
+
         withPlace(place);
     }
 
     @Override
     public DashboardView.Presenter getDashboardPresenter() {
-        return delegate.getDashboardPresenter();
+        return dashboard;
     }
 
     @Override
     public Presenter getFloorplanPresenter() {
-        return delegate.getFloorplanPresenter();
+        return floorplanLister;
     }
 
     @Override
     public Presenter getUnitPresenter() {
-        return delegate.getUnitPresenter();
+        return unitLister;
     }
 
     @Override
     public Presenter getElevatorPresenter() {
-        return delegate.getElevatorPresenter();
+        return elevatorLister;
     }
 
     @Override
     public Presenter getBoilerPresenter() {
-        return delegate.getBoilerPresenter();
+        return boilerLister;
     }
 
     @Override
     public Presenter getRoofPresenter() {
-        return delegate.getRoofPresenter();
+        return roofLister;
     }
 
     @Override
     public Presenter getParkingPresenter() {
-        return delegate.getParkingPresenter();
+        return parkingLister;
     }
 
     @Override
     public Presenter getLockerAreaPresenter() {
-        return delegate.getLockerAreaPresenter();
+        return lockerAreaLister;
     }
 
     @Override
     public Presenter getServicePresenter() {
-        return delegate.getServicePresenter();
+        return serviceLister;
     }
 
     @Override
     public Presenter getFeaturePresenter() {
-        return delegate.getFeaturePresenter();
+        return featureLister;
     }
 
     @Override
     public Presenter getConcessionPresenter() {
-        return delegate.getConcessionPresenter();
+        return concessionLister;
     }
 
     @Override
     public void onPopulateSuccess(BuildingDTO result) {
         super.onPopulateSuccess(result);
-        delegate.populate(result);
+
+        dashboard.populate();
+
+        // -------------------------------------------------------
+
+        floorplanLister.setParentFiltering(result.getPrimaryKey());
+        floorplanLister.populate(0);
+
+        unitLister.setParentFiltering(result.getPrimaryKey());
+        unitLister.populate(0);
+
+        // -------------------------------------------------------
+
+        elevatorLister.setParentFiltering(result.getPrimaryKey());
+        elevatorLister.populate(0);
+
+        boilerLister.setParentFiltering(result.getPrimaryKey());
+        boilerLister.populate(0);
+
+        roofLister.setParentFiltering(result.getPrimaryKey());
+        roofLister.populate(0);
+
+        // -------------------------------------------------------
+
+        parkingLister.setParentFiltering(result.getPrimaryKey());
+        parkingLister.populate(0);
+
+        lockerAreaLister.setParentFiltering(result.getPrimaryKey());
+        lockerAreaLister.populate(0);
+
+        // -----------------------------------------------------------------------
+
+        serviceLister.setParentFiltering(result.serviceCatalog().getPrimaryKey());
+        serviceLister.populate(0);
+
+        featureLister.setParentFiltering(result.serviceCatalog().getPrimaryKey());
+        featureLister.populate(0);
+
+        concessionLister.setParentFiltering(result.serviceCatalog().getPrimaryKey());
+        concessionLister.populate(0);
     }
 }
