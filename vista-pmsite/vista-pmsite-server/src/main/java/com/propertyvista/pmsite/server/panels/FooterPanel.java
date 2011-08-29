@@ -23,7 +23,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteSession;
-import com.propertyvista.pmsite.server.pages.LandingPage;
+import com.propertyvista.pmsite.server.pages.AptListPage;
 
 public class FooterPanel extends Panel {
 
@@ -41,7 +41,7 @@ public class FooterPanel extends Panel {
                 PageParameters params = new PageParameters();
                 params.add("city", city.name().getValue());
                 params.add("province", city.province().code().getValue());
-                BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", LandingPage.class, params);
+                BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", AptListPage.class, params);
                 link.add(new Label("city", city.name().getValue() + "(" + city.province().code().getValue() + ")"));
                 item.add(link);
             }
