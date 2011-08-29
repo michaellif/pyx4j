@@ -14,6 +14,8 @@
 package com.propertyvista.crm.client.ui.crud.unit;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -23,6 +25,7 @@ import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -89,13 +92,13 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         split.getLeftPanel().add(inject(proto().info().economicStatus()), 15);
         split.getLeftPanel().add(inject(proto().info().economicStatusDescription()), 15);
-        split.getLeftPanel().add(inject(proto().floorplan()), 15);
+        split.getLeftPanel().add(inject(proto().floorplan()), 20);
         split.getLeftPanel().add(inject(proto().availableForRent()), 8.2);
 
         split.getRightPanel().add(inject(proto().info().floor()), 5);
         split.getRightPanel().add(inject(proto().info().number()), 5);
-        split.getRightPanel().add(inject(proto().info()._bedrooms()), 5);
-        split.getRightPanel().add(inject(proto().info()._bathrooms()), 5);
+        split.getRightPanel().add(inject(proto().info()._bedrooms(), new CNumberLabel()), 5);
+        split.getRightPanel().add(inject(proto().info()._bathrooms(), new CNumberLabel()), 5);
         split.getRightPanel().add(inject(proto().info().area()), 8);
         split.getRightPanel().add(inject(proto().info().areaUnits()), 8);
 
@@ -111,6 +114,13 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
                         return entity.building().equals(getValue().belongsTo());
                     }
                     return false;
+                }
+            });
+            floorplanCompbo.addValueChangeHandler(new ValueChangeHandler<Floorplan>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Floorplan> event) {
+                    get(proto().info()._bedrooms()).setValue(event.getValue().bedrooms().getValue());
+                    get(proto().info()._bathrooms()).setValue(event.getValue().bathrooms().getValue());
                 }
             });
         }
