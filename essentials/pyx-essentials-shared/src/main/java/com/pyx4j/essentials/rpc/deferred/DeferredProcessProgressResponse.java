@@ -98,6 +98,11 @@ public class DeferredProcessProgressResponse implements Serializable {
         status = ProcessStatus.ERROR;
     }
 
+    public void setErrorStatusMessage(String message) {
+        setMessage(message);
+        status = ProcessStatus.ERROR;
+    }
+
     public void setWarnStatusMessage(String message) {
         setMessage(message);
         status = ProcessStatus.COMPLETED_WARN;

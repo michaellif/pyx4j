@@ -20,6 +20,9 @@
  */
 package com.pyx4j.essentials.server.deferred;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
@@ -28,12 +31,15 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 public class DeferredProcessServiceImpl implements DeferredProcessService {
 
+    private final static Logger log = LoggerFactory.getLogger(DeferredProcessServiceImpl.class);
+
     @Override
     public void getStatus(AsyncCallback<DeferredProcessProgressResponse> callback, String deferredCorrelationId, boolean finalize) {
         IDeferredProcess process = DeferredProcessRegistry.get(deferredCorrelationId);
         if (process != null) {
             DeferredProcessProgressResponse response = process.status();
-            if (response.isCompleted()) {
+            if (response.isCompleted() && finalize) {
+                log.debug("process {} is completed and finalized", deferredCorrelationId);
                 DeferredProcessRegistry.remove(deferredCorrelationId);
             }
             callback.onSuccess(response);
@@ -47,6 +53,7 @@ public class DeferredProcessServiceImpl implements DeferredProcessService {
         IDeferredProcess process = DeferredProcessRegistry.get(deferredCorrelationId);
         if (process != null) {
             process.cancel();
+            log.debug("process {} is canceled", deferredCorrelationId);
             DeferredProcessRegistry.remove(deferredCorrelationId);
             DeferredProcessRegistry.saveMap();
             callback.onSuccess(null);

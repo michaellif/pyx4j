@@ -22,6 +22,8 @@ package com.pyx4j.essentials.server.upload;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.pyx4j.essentials.rpc.upload.UploadResponse;
+
 public interface UploadReciver {
 
     /**
@@ -31,6 +33,13 @@ public interface UploadReciver {
 
     public void onUploadStart(String fileName);
 
-    public void onUploadRecived(UploadDeferredProcess process, UploadData data);
+    public enum ProcessingStatus {
+
+        completed,
+
+        processWillContinue
+    }
+
+    public ProcessingStatus onUploadRecived(UploadData data, UploadDeferredProcess process, UploadResponse response);
 
 }

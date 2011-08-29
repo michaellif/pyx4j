@@ -21,7 +21,6 @@
 package com.pyx4j.essentials.server.upload;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.essentials.rpc.upload.UploadResponse;
 
 public class UploadData {
 
@@ -32,7 +31,5 @@ public class UploadData {
     public String description;
 
     public byte[] data;
-
-    public UploadResponse response;
 
 }

@@ -51,6 +51,7 @@ import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
+import com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
@@ -99,6 +100,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
             out.println(i18n.tr("no session"));
             return;
         }
+        UploadDeferredProcess process = null;
         try {
             if (!ServletFileUpload.isMultipartContent(request)) {
                 out.println(i18n.tr("Invalid request type"));
@@ -124,9 +126,8 @@ public abstract class AbstractUploadServlet extends HttpServlet {
             ProgressListenerImpl progressListener = new ProgressListenerImpl();
             fileUpload.setProgressListener(progressListener);
 
-            UploadData data = new UploadData();
-            data.response = new UploadResponse();
-            UploadDeferredProcess process = null;
+            UploadData uploadData = new UploadData();
+            UploadResponse uploadResponse = new UploadResponse();
             try {
                 FileItemIterator iterator = fileUpload.getItemIterator(request);
                 while (iterator.hasNext()) {
@@ -134,34 +135,34 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                     if (item.isFormField()) {
                         log.debug(" form field {}", item.getFieldName());
                         if (UploadService.PostCorrelationID.equals(item.getFieldName())) {
-                            data.deferredCorrelationId = Streams.asString(item.openStream());
-                            process = (UploadDeferredProcess) DeferredProcessRegistry.get(data.deferredCorrelationId);
+                            uploadData.deferredCorrelationId = Streams.asString(item.openStream());
+                            process = (UploadDeferredProcess) DeferredProcessRegistry.get(uploadData.deferredCorrelationId);
                             if (process != null) {
                                 progressListener.processInfo = process.status();
-                                process.setResponse(data.response);
+                                process.setResponse(uploadResponse);
                             }
-                            log.debug("form field {}={}", item.getFieldName(), data.deferredCorrelationId);
+                            log.debug("form field {}={}", item.getFieldName(), uploadData.deferredCorrelationId);
                         } else if (UploadService.PostUploadKey.equals(item.getFieldName())) {
-                            data.uploadKey = new Key(Streams.asString(item.openStream()));
-                            log.debug("form field {}={}", item.getFieldName(), data.uploadKey);
+                            uploadData.uploadKey = new Key(Streams.asString(item.openStream()));
+                            log.debug("form field {}={}", item.getFieldName(), uploadData.uploadKey);
                         } else if (UploadService.PostUploadDescription.equals(item.getFieldName())) {
-                            data.description = Streams.asString(item.openStream());
-                            log.debug("form field {}={}", item.getFieldName(), data.description);
+                            uploadData.description = Streams.asString(item.openStream());
+                            log.debug("form field {}={}", item.getFieldName(), uploadData.description);
                         } else {
                             log.debug("unknown form field {}", item.getFieldName());
                         }
-                    } else if (data.data == null) {
-                        data.response.fileName = item.getName();
-                        if (data.response.fileName != null) {
-                            data.response.fileName = FilenameUtils.getName(data.response.fileName);
+                    } else if (uploadData.data == null) {
+                        uploadResponse.fileName = item.getName();
+                        if (uploadResponse.fileName != null) {
+                            uploadResponse.fileName = FilenameUtils.getName(uploadResponse.fileName);
                         }
-                        reciver.onUploadStart(data.response.fileName);
+                        reciver.onUploadStart(uploadResponse.fileName);
                         InputStream in = item.openStream();
                         ByteArrayOutputStream os = new ByteArrayOutputStream();
                         try {
                             IOUtils.copyStream(in, os, 1024);
-                            data.data = os.toByteArray();
-                            if (data.data.length >= maxSize) {
+                            uploadData.data = os.toByteArray();
+                            if (uploadData.data.length >= maxSize) {
                                 out.println(i18n.tr("File upload size exceed {0} megabyte maximum", (maxSize / (1024 * 1024))));
                                 return;
                             }
@@ -184,7 +185,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 return;
             } catch (UserRuntimeException e) {
                 if (process != null) {
-                    process.status().setError();
+                    process.status().setErrorStatusMessage(e.getMessage());
                 }
                 out.println(e.getMessage());
                 return;
@@ -204,20 +205,31 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 }
                 return;
             }
-            if (data.data == null) {
+            if (uploadData.data == null) {
                 out.println(i18n.tr("File not uploaded"));
                 return;
             }
-            data.response.fileSize = data.data.length;
-            log.debug("Got uploaded file {}", data.response.fileName);
-            reciver.onUploadRecived(process, data);
-            if (process != null) {
-                process.status().setCompleted();
+            uploadResponse.fileSize = uploadData.data.length;
+            log.debug("Got uploaded file {}", uploadResponse.fileName);
+            ProcessingStatus status = reciver.onUploadRecived(uploadData, process, uploadResponse);
+            switch (status) {
+            case completed:
+                if (process != null) {
+                    process.status().setCompleted();
+                }
+                log.debug("Upload processing compleated");
+                out.println(UploadService.ResponseOk);
+                break;
+            case processWillContinue:
+                log.debug("Upload processing will continue");
+                out.println(UploadService.ResponseProcessWillContinue);
+                break;
             }
-            log.debug("Upload processing compleated");
-            out.println("OK");
         } catch (Throwable t) {
             log.error("upload error", t);
+            if (process != null) {
+                process.status().setError();
+            }
             if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
                 out.println("Error " + t.getMessage());
             } else {

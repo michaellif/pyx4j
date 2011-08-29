@@ -36,6 +36,10 @@ public interface UploadService<E extends IEntity> extends IService {
 
     public static final String ResponsePrefix = "UploadResponse";
 
+    public static final String ResponseOk = "_OK_";
+
+    public static final String ResponseProcessWillContinue = "_CONTINUE_";
+
     public void prepareUpload(AsyncCallback<UploadId> callback, E data);
 
     public void cancelUpload(AsyncCallback<VoidSerializable> callback, UploadId uploadId);

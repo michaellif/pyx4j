@@ -42,6 +42,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.DeferredProgressPanel;
+import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadId;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
@@ -108,7 +109,19 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
         content.add(line);
 
         line.add(upload);
-        line.add(deferredProgressPanel = new DeferredProgressPanel("70px", "20px"));
+        line.add(deferredProgressPanel = new DeferredProgressPanel("70px", "20px") {
+
+            @Override
+            protected void onDeferredSuccess(DeferredProcessProgressResponse result) {
+                UploadPanel.this.onDeferredSuccess(result);
+            }
+
+            @Override
+            protected void onDeferredError(DeferredProcessProgressResponse result) {
+                UploadPanel.this.onDeferredError(result);
+            }
+
+        });
         deferredProgressPanel.getElement().getStyle().setPaddingLeft(25, Style.Unit.PX);
         deferredProgressPanel.setVisible(false);
     }
@@ -226,9 +239,11 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
         int idx = message.indexOf(UploadService.ResponsePrefix);
         if (idx >= 0) {
             message = message.substring(idx + UploadService.ResponsePrefix.length(), message.length());
-            if (message.startsWith("OK")) {
+            if (message.startsWith(UploadService.ResponseOk)) {
                 onSubmitUploadComplete();
                 reset();
+            } else if (message.startsWith(UploadService.ResponseProcessWillContinue)) {
+                //Continue using deferredProgressPanel
             } else {
                 log.error("Upload server message [{}]", message);
                 onUploadError(UploadError.ServerMessage, message);
@@ -246,13 +261,24 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
         uploadId = null;
     }
 
+    private void onDeferredSuccess(DeferredProcessProgressResponse result) {
+        onSubmitUploadComplete();
+        reset();
+    }
+
+    private void onDeferredError(DeferredProcessProgressResponse result) {
+        onUploadError(UploadError.ServerMessage, result.getMessage());
+    }
+
     private final void onSubmitUploadComplete() {
-        service.getUploadResponse(new DefaultAsyncCallback<UploadResponse>() {
-            @Override
-            public void onSuccess(UploadResponse result) {
-                onUploadComplete(result);
-            }
-        }, uploadId);
+        if (uploadId != null) {
+            service.getUploadResponse(new DefaultAsyncCallback<UploadResponse>() {
+                @Override
+                public void onSuccess(UploadResponse result) {
+                    onUploadComplete(result);
+                }
+            }, uploadId);
+        }
     }
 
     protected void onUploadComplete(UploadResponse serverUploadResponse) {
