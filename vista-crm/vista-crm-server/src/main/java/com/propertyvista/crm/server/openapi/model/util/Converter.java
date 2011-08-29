@@ -14,9 +14,13 @@ package com.propertyvista.crm.server.openapi.model.util;
 
 import java.util.List;
 
+import org.xnap.commons.i18n.I18n;
+
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18nFactory;
 
 import com.propertyvista.crm.server.openapi.model.AddressRS;
 import com.propertyvista.crm.server.openapi.model.AdvertisingBlurbRS;
@@ -50,6 +54,9 @@ import com.propertyvista.domain.property.asset.building.BuildingInfo.Shape;
 import com.propertyvista.server.common.reference.SharedData;
 
 public class Converter {
+
+    private static I18n i18n = I18nFactory.getI18n();
+
     public static final String DATE_PATTERN = "yyyy-MM-dd";
 
     public static BuildingsRS convertBuildings(List<Building> from) {
@@ -281,7 +288,15 @@ public class Converter {
     public static FloorplanRS convertFloorplan(Floorplan from) {
         FloorplanRS to = new FloorplanRS();
 
+        to.type = from.type().getValue();
         to.name = from.marketingName().getStringView();
+        if (CommonsStringUtils.isEmpty(to.name)) {
+            if (to.type != null) {
+                to.name = from.type().getStringView();
+            } else {
+                to.name = i18n.tr("{0} Bedroom", from.bedrooms().getStringView());
+            }
+        }
         to.description = from.description().getStringView();
         to.floorCount = from.floorCount().getValue();
         to.bedrooms = from.bedrooms().getValue();

@@ -25,12 +25,15 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.crm.server.openapi.model.util.LogicalDateXmlAdapter;
+import com.propertyvista.domain.property.asset.unit.AptUnitType;
 
 public class FloorplanRS {
 
     public String name;
 
     public String description;
+
+    public AptUnitType type;
 
     public Integer floorCount;
 

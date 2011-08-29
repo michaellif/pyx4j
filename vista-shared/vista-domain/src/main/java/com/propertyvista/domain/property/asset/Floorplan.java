@@ -16,6 +16,7 @@ package com.propertyvista.domain.property.asset;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -24,6 +25,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnitType;
 
 public interface Floorplan extends IEntity {
 
@@ -37,6 +39,9 @@ public interface Floorplan extends IEntity {
     IPrimitive<String> marketingName();
 
     IPrimitive<String> description();
+
+    @MemberColumn(name = "unitType")
+    IPrimitive<AptUnitType> type();
 
     IPrimitive<Integer> floorCount();
 

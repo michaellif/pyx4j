@@ -18,6 +18,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.property.asset.unit.AptUnitType;
+
 @Transient
 public interface FloorplanIO extends IEntity {
 
@@ -26,6 +28,8 @@ public interface FloorplanIO extends IEntity {
     IPrimitive<String> marketingName();
 
     IPrimitive<String> description();
+
+    IPrimitive<AptUnitType> type();
 
     IPrimitive<Integer> floorCount();
 
