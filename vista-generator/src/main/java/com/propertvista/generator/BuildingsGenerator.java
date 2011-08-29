@@ -394,7 +394,9 @@ public class BuildingsGenerator {
 
         floorplan.floorCount().setValue(1 + DataGenerator.randomInt(2));
         floorplan.bedrooms().setValue(1 + DataGenerator.randomInt(6));
+        floorplan.dens().setValue(DataGenerator.randomInt(1));
         floorplan.bathrooms().setValue(1 + DataGenerator.randomInt(3));
+        floorplan.halfBath().setValue(DataGenerator.randomInt(1));
         floorplan.marketingName().setValue(floorplan.bedrooms().getStringView() + " Bedroom");
 
         for (int i = 0; i < 2 + DataGenerator.randomInt(6); i++) {
