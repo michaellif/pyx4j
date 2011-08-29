@@ -51,7 +51,7 @@ public class Generator {
                 floorplanDTO.name().setValue("missing:" + RandomUtil.randomLetters(3));
             }
             if (floorplanDTO.marketingName().isNull()) {
-                floorplanDTO.marketingName().set(floorplanDTO.name());
+                floorplanDTO.marketingName().setValue(floorplanDTO.bedrooms().getStringView() + " Bedroom");
             }
             if (floorplanDTO.description().isNull()) {
                 floorplanDTO.description().setValue(CommonsGenerator.lipsum());
