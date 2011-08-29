@@ -17,8 +17,8 @@ import com.pyx4j.site.client.ui.crud.IViewerView;
 
 import com.propertyvista.dto.FloorplanDTO;
 
-public interface FloorplanViewerView extends IViewerView<FloorplanDTO>, FloorplanView {
+public interface FloorplanViewerView extends IViewerView<FloorplanDTO> {
 
-    interface Presenter extends IViewerView.Presenter, FloorplanView.Presenter {
+    interface Presenter extends IViewerView.Presenter {
     }
 }
