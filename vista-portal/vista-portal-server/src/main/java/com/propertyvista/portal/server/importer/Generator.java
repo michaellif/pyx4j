@@ -50,6 +50,9 @@ public class Generator {
             if (floorplanDTO.name().isNull()) {
                 floorplanDTO.name().setValue("missing:" + RandomUtil.randomLetters(3));
             }
+            if (floorplanDTO.marketingName().isNull()) {
+                floorplanDTO.marketingName().set(floorplanDTO.name());
+            }
             if (floorplanDTO.description().isNull()) {
                 floorplanDTO.description().setValue(CommonsGenerator.lipsum());
             }

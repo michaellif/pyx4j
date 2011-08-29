@@ -78,6 +78,7 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
 
         main.add(split);
         split.getLeftPanel().add(inject(proto().name()), 15);
+        split.getLeftPanel().add(inject(proto().marketingName()), 15);
         split.getLeftPanel().add(inject(proto().description()), 20);
 
         split.getRightPanel().add(inject(proto().floorCount()), 5);

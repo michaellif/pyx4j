@@ -281,7 +281,7 @@ public class Converter {
     public static FloorplanRS convertFloorplan(Floorplan from) {
         FloorplanRS to = new FloorplanRS();
 
-        to.name = from.name().getStringView();
+        to.name = from.marketingName().getStringView();
         to.description = from.description().getStringView();
         to.floorCount = from.floorCount().getValue();
         to.bedrooms = from.bedrooms().getValue();

@@ -37,6 +37,7 @@ public class FloorplanLister extends ListerBase<FloorplanDTO> {
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<FloorplanDTO>> columnDescriptors, FloorplanDTO proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketingName()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.description()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorCount()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.bedrooms()));

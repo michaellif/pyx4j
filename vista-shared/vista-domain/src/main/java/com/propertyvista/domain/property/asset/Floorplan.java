@@ -34,6 +34,8 @@ public interface Floorplan extends IEntity {
     @ToString(index = 0)
     IPrimitive<String> name();
 
+    IPrimitive<String> marketingName();
+
     IPrimitive<String> description();
 
     IPrimitive<Integer> floorCount();

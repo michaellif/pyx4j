@@ -23,6 +23,8 @@ public interface FloorplanIO extends IEntity {
 
     IPrimitive<String> name();
 
+    IPrimitive<String> marketingName();
+
     IPrimitive<String> description();
 
     IPrimitive<Integer> floorCount();

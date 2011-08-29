@@ -27,6 +27,7 @@ public class FloorplanConverter extends EntityDtoBinder<Floorplan, FloorplanIO> 
     @Override
     protected void bind() {
         bind(dtoProto.name(), dboProto.name());
+        bind(dtoProto.marketingName(), dboProto.marketingName());
         bind(dtoProto.description(), dboProto.description());
         bind(dtoProto.floorCount(), dboProto.floorCount());
         bind(dtoProto.bedrooms(), dboProto.bedrooms());
