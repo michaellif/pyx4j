@@ -87,8 +87,6 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
         main.add(split);
 
-        split.getLeftPanel().add(inject(proto().info().name()), 15);
-        split.getLeftPanel().add(inject(proto().info().type()), 15);
         split.getLeftPanel().add(inject(proto().info().economicStatus()), 15);
         split.getLeftPanel().add(inject(proto().info().economicStatusDescription()), 15);
         split.getLeftPanel().add(inject(proto().floorplan()), 15);
@@ -96,8 +94,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         split.getRightPanel().add(inject(proto().info().floor()), 5);
         split.getRightPanel().add(inject(proto().info().number()), 5);
-        split.getRightPanel().add(inject(proto().info().bedrooms()), 5);
-        split.getRightPanel().add(inject(proto().info().bathrooms()), 5);
+        split.getRightPanel().add(inject(proto().info()._bedrooms()), 5);
+        split.getRightPanel().add(inject(proto().info()._bathrooms()), 5);
         split.getRightPanel().add(inject(proto().info().area()), 8);
         split.getRightPanel().add(inject(proto().info().areaUnits()), 8);
 

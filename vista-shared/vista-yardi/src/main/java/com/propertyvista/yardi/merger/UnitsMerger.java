@@ -72,7 +72,7 @@ public class UnitsMerger {
 
             // try finding the same unit in existing list
             AptUnit existing = null;
-            String importedName = imported.info().name().getValue();
+            String importedName = imported.info().number().getValue();
             String importedPropertyCode = imported.belongsTo().propertyCode().getValue();
             Building building = buildingsByCode.get(importedPropertyCode);
             if (building == null) {
@@ -90,7 +90,7 @@ public class UnitsMerger {
                     log.debug("Found proper building {}", importedPropertyCode);
 
                     // for now this code is not yet implemented
-                    String existingName = unit.info().name().getValue();
+                    String existingName = unit.info().number().getValue();
                     if (importedName.equals(existingName)) {
                         existing = unit;
                         break;
@@ -124,11 +124,9 @@ public class UnitsMerger {
     }
 
     private void merge(AptUnitInfo imported, AptUnitInfo existing) {
-        existing.name().setValue(imported.name().getValue());
         existing.number().setValue(imported.number().getValue());
-        existing.type().setValue(imported.type().getValue());
-        existing.bedrooms().setValue(imported.bedrooms().getValue());
-        existing.bathrooms().setValue(imported.bathrooms().getValue());
+        existing._bedrooms().setValue(imported._bedrooms().getValue());
+        existing._bathrooms().setValue(imported._bathrooms().getValue());
         existing.area().setValue(imported.area().getValue());
         existing.areaUnits().setValue(imported.areaUnits().getValue());
         existing.economicStatus().setValue(imported.economicStatus().getValue());

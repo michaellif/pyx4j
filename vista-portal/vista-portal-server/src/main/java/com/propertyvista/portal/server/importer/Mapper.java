@@ -33,7 +33,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.StructureType;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
-import com.propertyvista.domain.property.asset.unit.AptUnitType;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.server.importer.bean.City;
 import com.propertyvista.portal.server.importer.bean.Property;
@@ -155,8 +154,6 @@ public class Mapper {
         unit.availableForRent().setValue(occupancy.dateFrom().getValue()); // for consistency
 
         unit.belongsTo().set(building);
-        unit.info().type().setValue(mapUnitType(availableUnit.getType()));
-        unit.info().typeDescription().setValue(availableUnit.getDescription());
         unit.info().number().setValue(availableUnit.getUnitNumber());
         unit.info().area().setValue(availableUnit.getArea());
         unit.info().areaUnits().setValue(AreaMeasurementUnit.sqFeet);
@@ -176,16 +173,16 @@ public class Mapper {
 
         String filenamePart = "";
         if (room.getName().equals("1bdrm")) {
-            floorplan.bedrooms().setValue(1d);
+            floorplan.bedrooms().setValue(1);
             filenamePart = "0101";
         } else if (room.getName().equals("2bdrm")) {
-            floorplan.bedrooms().setValue(2d);
+            floorplan.bedrooms().setValue(2);
             filenamePart = "0102";
         } else {
-            floorplan.bedrooms().setValue(3d);
+            floorplan.bedrooms().setValue(3);
         }
 
-        floorplan.bathrooms().setValue(1d);
+        floorplan.bathrooms().setValue(1);
 
         // Removed, now we use only generated images for preloader
 //        String filename = property.getCode() + "-" + filenamePart + ".jpg";
@@ -196,24 +193,6 @@ public class Mapper {
 //        }
 
         model.getFloorplans().add(floorplan);
-    }
-
-    private static AptUnitType mapUnitType(String type) {
-        if (type == null || type.trim().isEmpty()) {
-            return null;
-        }
-        // for now map bathrooms to bedrooms
-        if (type.equals("1bdrm")) {
-            return AptUnitType.oneBedroom;
-        } else if (type.equals("2bdrm")) {
-            return AptUnitType.twoBedroom;
-        } else if (type.equals("3bdrm")) {
-            return AptUnitType.threeBedroom;
-        } else if (type.equals("1.den")) {
-            return AptUnitType.oneBedroomAndDen;
-        }
-        log.info("Unknown value [" + type + "]");
-        return null;
     }
 
     private static Address mapAddress(com.propertyvista.portal.server.importer.bean.Address from) {

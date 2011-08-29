@@ -14,7 +14,6 @@
 package com.propertyvista.domain.property.asset.unit;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -45,15 +44,6 @@ public interface AptUnitInfo extends IEntity {
         }
     }
 
-    @ToString(index = 2)
-    IPrimitive<String> name();
-
-    @ToString(index = 1)
-    @MemberColumn(name = "unitType")
-    IPrimitive<AptUnitType> type();
-
-    IPrimitive<String> typeDescription();
-
     IPrimitive<EconomicStatus> economicStatus();
 
     IPrimitive<String> economicStatusDescription();
@@ -70,11 +60,11 @@ public interface AptUnitInfo extends IEntity {
 
     IPrimitive<AreaMeasurementUnit> areaUnits();
 
-    @Format("#0.#")
+    // This values are populated from floorplan and should not be editable
     @Caption(name = "Beds")
-    IPrimitive<Double> bedrooms();
+    IPrimitive<Integer> _bedrooms();
 
-    @Format("#0.#")
+    // This values are populated from floorplan and should not be editable
     @Caption(name = "Baths")
-    IPrimitive<Double> bathrooms();
+    IPrimitive<Integer> _bathrooms();
 }

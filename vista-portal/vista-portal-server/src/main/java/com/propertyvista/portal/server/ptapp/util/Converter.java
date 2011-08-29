@@ -85,10 +85,9 @@ public class Converter {
         //to.status().set(from.status());
 
         // primitives
-        to.unitType().setValue(from.info().type().getStringView());
         to.area().setValue(from.info().area().getValue());
-        to.bathrooms().setValue(from.info().bathrooms().getValue());
-        to.bedrooms().set(from.info().bedrooms());
+        to.bathrooms().setValue(from.info()._bathrooms().getValue());
+        to.bedrooms().set(from.info()._bedrooms());
 
         to.unitRent().set(from.financial().unitRent());
 

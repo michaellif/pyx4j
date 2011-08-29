@@ -53,9 +53,8 @@ public interface AptUnitDTO extends IEntity {
      * 
      * TODO Artur: Can we move this to floorplan?
      */
-    @Format("#0.#")
     @Caption(name = "Beds")
-    IPrimitive<Double> bedrooms();
+    IPrimitive<Integer> bedrooms();
 
     /**
      * Number of bathrooms in unit
@@ -64,9 +63,8 @@ public interface AptUnitDTO extends IEntity {
      * 
      * TODO Are the units with the same number of b*rooms have the same plan.
      */
-    @Format("#0.#")
     @Caption(name = "Baths")
-    IPrimitive<Double> bathrooms();
+    IPrimitive<Integer> bathrooms();
 
 //
 //    /**

@@ -15,8 +15,6 @@ package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -25,7 +23,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnitType;
 
 public interface Floorplan extends IEntity {
 
@@ -42,16 +39,13 @@ public interface Floorplan extends IEntity {
 
     IPrimitive<Integer> floorCount();
 
-    @MemberColumn(name = "unitType")
-    IPrimitive<AptUnitType> type();
-
-    @Format("#0.#")
     @Caption(name = "Beds")
-    IPrimitive<Double> bedrooms();
+    IPrimitive<Integer> bedrooms();
 
-    @Format("#0.#")
+    IPrimitive<Integer> dens();
+
     @Caption(name = "Baths")
-    IPrimitive<Double> bathrooms();
+    IPrimitive<Integer> bathrooms();
 
     @Detached
     // should be loaded in service when necessary!..

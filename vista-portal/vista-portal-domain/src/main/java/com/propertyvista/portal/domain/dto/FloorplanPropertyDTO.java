@@ -26,7 +26,7 @@ public interface FloorplanPropertyDTO extends IEntity {
 
     RangeGroup price();
 
-    IPrimitive<Double> bedrooms();
+    IPrimitive<Integer> bedrooms();
 
-    IPrimitive<Double> bathrooms();
+    IPrimitive<Integer> bathrooms();
 }

@@ -60,7 +60,6 @@ import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
-import com.propertyvista.domain.property.asset.unit.AptUnitType;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.PropertyProfile;
@@ -394,10 +393,8 @@ public class BuildingsGenerator {
         floorplan.description().setValue(CommonsGenerator.lipsum());
 
         floorplan.floorCount().setValue(1 + DataGenerator.randomInt(2));
-        floorplan.bedrooms().setValue(1 + (double) DataGenerator.randomInt(6));
-        floorplan.bathrooms().setValue(1 + (double) DataGenerator.randomInt(3));
-        //TODO Match the plan with bedrooms
-        floorplan.type().setValue(RandomUtil.random(AptUnitType.values()));
+        floorplan.bedrooms().setValue(1 + DataGenerator.randomInt(6));
+        floorplan.bathrooms().setValue(1 + DataGenerator.randomInt(3));
         floorplan.marketingName().setValue(floorplan.bedrooms().getStringView() + " Bedroom");
 
         for (int i = 0; i < 2 + DataGenerator.randomInt(6); i++) {
@@ -429,36 +426,30 @@ public class BuildingsGenerator {
             for (int j = 1; j < numUnitsPerFloor + 1; j++) {
 
                 String suiteNumber = "#" + (floor * 100 + j);
-                float bedrooms = 2.0f;
-                float bathrooms = 2.0f;
-
                 Floorplan floorplan = floorplans.get(j % floorplans.size());
                 if (floorplan == null) {
                     throw new IllegalStateException("No floorplan");
                 }
-
                 double uarea = CommonsGenerator.randomFromRange(CommonsGenerator.createRange(1200d, 2600d));
-                UnitRelatedData unit = createUnit(building, suiteNumber, floor, uarea, bedrooms, bathrooms, floorplan);
+                UnitRelatedData unit = createUnit(building, suiteNumber, floor, uarea, floorplan);
                 units.add(unit);
             }
         }
         return units;
     }
 
-    private UnitRelatedData createUnit(Building building, String suiteNumber, int floor, double area, double bedrooms, double bathrooms, Floorplan floorplan) {
+    private UnitRelatedData createUnit(Building building, String suiteNumber, int floor, double area, Floorplan floorplan) {
         UnitRelatedData unit = EntityFactory.create(UnitRelatedData.class);
         unit.belongsTo().set(building);
 
-        unit.info().name().setValue(RandomUtil.randomLetters(4));
-        unit.info().type().setValue(RandomUtil.random(AptUnitType.values()));
         unit.info().economicStatus().setValue(RandomUtil.random(AptUnitInfo.EconomicStatus.values()));
         unit.info().economicStatusDescription().setValue(RandomUtil.randomLetters(35).toLowerCase());
 
         unit.info().floor().setValue(floor);
         unit.info().number().setValue(suiteNumber);
 
-        unit.info().bedrooms().setValue(bedrooms);
-        unit.info().bathrooms().setValue(bathrooms);
+        unit.info()._bedrooms().setValue(floorplan.bedrooms().getValue());
+        unit.info()._bathrooms().setValue(floorplan.bathrooms().getValue());
 
         unit.info().area().setValue(area);
         unit.info().areaUnits().setValue(AreaMeasurementUnit.sqFeet);

@@ -29,9 +29,9 @@ public class FloorplanConverter extends EntityDtoBinder<Floorplan, FloorplanIO> 
         bind(dtoProto.name(), dboProto.name());
         bind(dtoProto.marketingName(), dboProto.marketingName());
         bind(dtoProto.description(), dboProto.description());
-        bind(dtoProto.type(), dboProto.type());
         bind(dtoProto.floorCount(), dboProto.floorCount());
         bind(dtoProto.bedrooms(), dboProto.bedrooms());
+        bind(dtoProto.dens(), dboProto.dens());
         bind(dtoProto.bathrooms(), dboProto.bathrooms());
     }
 

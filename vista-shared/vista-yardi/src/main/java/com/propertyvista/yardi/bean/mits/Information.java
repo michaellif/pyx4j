@@ -39,9 +39,9 @@ public class Information {
 
     private String unitType; // TODO prv11b1 - not sure how to decipher this (b1 - 1 bedroom?)
 
-    private Double unitBedrooms; // unit.info.bedrooms
+    private Integer unitBedrooms; // unit.info.bedrooms
 
-    private Double unitBathrooms; // unit.info.bathrooms
+    private Integer unitBathrooms; // unit.info.bathrooms
 
     private Integer minSquareFeet; // TODO not found yet 
 
@@ -61,6 +61,7 @@ public class Information {
 
     private String floorplanName; // TODO bind it to floorplans
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
@@ -121,20 +122,20 @@ public class Information {
     }
 
     @XmlElement(name = "UnitBedrooms")
-    public Double getUnitBedrooms() {
+    public Integer getUnitBedrooms() {
         return unitBedrooms;
     }
 
-    public void setUnitBedrooms(Double unitBedrooms) {
+    public void setUnitBedrooms(Integer unitBedrooms) {
         this.unitBedrooms = unitBedrooms;
     }
 
     @XmlElement(name = "UnitBathrooms")
-    public Double getUnitBathrooms() {
+    public Integer getUnitBathrooms() {
         return unitBathrooms;
     }
 
-    public void setUnitBathrooms(Double unitBathrooms) {
+    public void setUnitBathrooms(Integer unitBathrooms) {
         this.unitBathrooms = unitBathrooms;
     }
 

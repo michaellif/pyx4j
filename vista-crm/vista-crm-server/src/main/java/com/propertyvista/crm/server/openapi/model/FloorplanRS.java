@@ -38,9 +38,11 @@ public class FloorplanRS {
 
     public Integer unitCount;
 
-    public Double bedrooms;
+    public Integer bedrooms;
 
-    public Double bathrooms;
+    public Integer dens;
+
+    public Integer bathrooms;
 
     public Double rentFrom;
 

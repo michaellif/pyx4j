@@ -26,7 +26,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EconomicStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
-import com.propertyvista.domain.property.asset.unit.AptUnitType;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.server.common.generator.Model;
 import com.propertyvista.yardi.bean.mits.Customer;
@@ -89,18 +88,10 @@ public class GetResidentTransactionsMapper {
 
         // info
         Information info = unitFrom.getUnit().getInformation();
-        unitTo.info().name().setValue(unitFrom.getUnitId());
         unitTo.info().number().setValue(info.getUnitId());
 
-        // unit type: prv11b1
-        if (info.getFloorplanId().equals("prv11b1")) {
-            unitTo.info().type().setValue(AptUnitType.oneBedroom);
-        } else {
-            log.warn("Unknown unit type {}, need to handle this in code mapping", info.getFloorplanId());
-            unitTo.info().type().setValue(AptUnitType.oneBedroom);
-        }
-        unitTo.info().bedrooms().setValue(info.getUnitBedrooms());
-        unitTo.info().bathrooms().setValue(info.getUnitBathrooms());
+        unitTo.info()._bedrooms().setValue(info.getUnitBedrooms());
+        unitTo.info()._bathrooms().setValue(info.getUnitBathrooms());
         unitTo.info().area().setValue(info.getMaxSquareFeet().doubleValue());
         unitTo.info().areaUnits().setValue(AreaMeasurementUnit.sqFeet);
 

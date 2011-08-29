@@ -165,11 +165,9 @@ public class XmlBeanTest {
 
             // info
             AptUnitInfo info = unit.info();
-            Assert.assertFalse(info.name().isNull());
             Assert.assertFalse(info.number().isNull());
-            Assert.assertFalse(info.type().isNull());
-            Assert.assertFalse(info.bedrooms().isNull());
-            Assert.assertFalse(info.bathrooms().isNull());
+            Assert.assertFalse(info._bedrooms().isNull());
+            Assert.assertFalse(info._bathrooms().isNull());
             Assert.assertFalse(info.area().isNull());
             Assert.assertFalse(info.areaUnits().isNull());
             Assert.assertFalse(info.economicStatus().isNull());
