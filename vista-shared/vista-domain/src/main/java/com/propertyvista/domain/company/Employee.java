@@ -23,7 +23,7 @@ import com.propertyvista.domain.person.Person;
 
 public interface Employee extends Person {
 
-    @ToString(index = 0)
+    @ToString(index = -1)
     IPrimitive<String> title();
 
     IPrimitive<String> description();

@@ -38,9 +38,10 @@ public class BoardViewImpl extends DockLayoutPanel implements BoardView {
     public BoardViewImpl(BoardBase board) {
         super(Unit.EM);
         this.board = board;
-        header = new CrmTitleBar("");
 
-        addNorth(header, VistaCrmTheme.defaultHeaderHeight);
+        addNorth(header = new CrmTitleBar(""), VistaCrmTheme.defaultHeaderHeight);
+        header.setHeight("100%"); // fill all that defaultHeaderHeight!..
+
         add(board);
         setSize("100%", "100%");
     }

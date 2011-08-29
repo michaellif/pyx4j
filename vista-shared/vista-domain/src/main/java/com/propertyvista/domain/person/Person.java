@@ -28,7 +28,7 @@ import com.propertyvista.domain.contact.Phone;
 
 public interface Person extends IEntity {
 
-    @ToString
+    @ToString(index = 1)
     @BusinessEqualValue
     @EmbeddedEntity
     Name name();

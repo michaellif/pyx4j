@@ -17,6 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -24,8 +25,10 @@ import com.propertyvista.domain.media.Document;
 
 public interface Contract extends IEntity {
 
+    @ToString(index = 1)
     IPrimitive<String> contractID();
 
+    @ToString(index = 2)
     Vendor contractor();
 
     @MemberColumn(name = "vendorCost")

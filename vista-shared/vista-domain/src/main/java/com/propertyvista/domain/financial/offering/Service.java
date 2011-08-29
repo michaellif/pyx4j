@@ -17,12 +17,16 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
+@ToStringFormat("Type: {0}, Name: {1}}")
 public interface Service extends IEntity {
 
     @Translatable
@@ -54,11 +58,15 @@ public interface Service extends IEntity {
 
 // ----------------------------------------------
 
+    @NotNull
+    @ToString(index = 0)
     @MemberColumn(name = "serviceType")
     IPrimitive<Type> type();
 
+    @ToString(index = 1)
     IPrimitive<String> name();
 
+    @ToString(index = 2)
     IPrimitive<String> description();
 
     @Owned

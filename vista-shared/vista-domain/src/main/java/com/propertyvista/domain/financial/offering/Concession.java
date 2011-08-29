@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-@ToStringFormat("Type: {0}, Value: {1}, Description: {2}")
+@ToStringFormat("Type: {0}, Value: {1}}")
 public interface Concession extends IEntity {
 
     @Translatable

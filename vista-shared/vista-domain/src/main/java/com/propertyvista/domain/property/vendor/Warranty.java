@@ -16,6 +16,7 @@ package com.propertyvista.domain.property.vendor;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -48,8 +49,10 @@ public interface Warranty extends Contract {
 
     // ----------- Infromation -------------
 
+    @ToString(index = 1)
     IPrimitive<String> title();
 
+    @ToString(index = 2)
     @MemberColumn(name = "warrantyType")
     IPrimitive<Type> type();
 

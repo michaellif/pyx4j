@@ -13,10 +13,12 @@
  */
 package com.propertyvista.domain.property.vendor;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface WarrantyItem extends IEntity {
 
+    @ToString
     IPrimitive<String> name();
 }

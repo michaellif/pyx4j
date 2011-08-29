@@ -21,21 +21,24 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Name extends IEntity {
 
+    @ToString(index = 1)
     IPrimitive<String> namePrefix();
 
     @NotNull
-    @ToString(index = 1)
+    @ToString(index = 2)
     @BusinessEqualValue
     IPrimitive<String> firstName();
 
+    @ToString(index = 3)
     IPrimitive<String> middleName();
 
     @NotNull
-    @ToString(index = 2)
+    @ToString(index = 4)
     @BusinessEqualValue
     IPrimitive<String> lastName();
 
     IPrimitive<String> maidenName();
 
+    @ToString(index = 5)
     IPrimitive<String> nameSuffix();
 }
