@@ -5,9 +5,13 @@
 
 		<div class="main">
 
-			<div class="footer_locations" wicket:id="footer_locations" />
-			<div class="footer_links" wicket:id="footer_links" />
-			<div class="footer_legal" wicket:id="footer_legal" />
+			<ul class="footer_locations">
+				<li wicket:id="footer_locations_city"><a wicket:id="link"><span wicket:id="city"></span></a></li>
+			</ul>
+			<div class="footer_links">
+				<span wicket:id="footer_link" class="footer_link"><a wicket:id="link"><span wicket:id="caption"></span></a></span>
+			</div>
+			<div class="footer_legal" wicket:id="footer_legal"/>
 
 		</div>
 

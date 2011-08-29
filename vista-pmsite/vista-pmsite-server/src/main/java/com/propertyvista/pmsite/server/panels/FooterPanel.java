@@ -13,11 +13,17 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
-import org.apache.wicket.Response;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.markup.html.WebComponent;
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+
+import com.propertyvista.domain.ref.City;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.pages.LandingPage;
 
 public class FooterPanel extends Panel {
 
@@ -26,45 +32,33 @@ public class FooterPanel extends Panel {
     public FooterPanel() {
         super("footer");
 
-        add(new WebComponent("footer_locations") {
-
+        add(new ListView<City>("footer_locations_city", PMSiteContentManager.getCities()) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-                Response response = getRequestCycle().getResponse();
-                response.write("<div style='height: 30px; position: relative; width: 960px;'>");
-                response.write("footer_locations");
-                response.write("</div>");
+            protected void populateItem(ListItem<City> item) {
+                City city = item.getModelObject();
+                PageParameters params = new PageParameters();
+                params.add("city", city.name().getValue());
+                params.add("province", city.province().code().getValue());
+                BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", LandingPage.class, params);
+                link.add(new Label("city", city.name().getValue() + "(" + city.province().code().getValue() + ")"));
+                item.add(link);
             }
         });
 
-        add(new WebComponent("footer_links") {
-
+        add(new ListView<NavigationItem>("footer_link", ((PMSiteSession) getSession()).getFooterNavigItems()) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-                Response response = getRequestCycle().getResponse();
-                response.write("<div style='height: 30px; position: relative; width: 960px;'>");
-                response.write("footer_links");
-                response.write("</div>");
+            protected void populateItem(ListItem<NavigationItem> item) {
+                NavigationItem navItem = item.getModelObject();
+                BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", navItem.getDestination(), navItem.getPageParameters());
+                link.add(new Label("caption", navItem.getCaption()));
+                item.add(link);
             }
         });
 
-        add(new WebComponent("footer_legal") {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-                Response response = getRequestCycle().getResponse();
-                response.write("<div style='height: 30px; position: relative; width: 960px;'>");
-                response.write("footer_legal");
-                response.write("</div>");
-            }
-        });
-
+        add(new Label("footer_legal", "© Starlight Apartments 2011"));
     }
-
 }

@@ -113,17 +113,24 @@ public class PMSiteContentManager {
     }
 
     public static List<City> getCities() {
+        String[][] Cities = { { "Napanee", "Ontario", "ON" }, { "Kingston", "Ontario", "ON" }, { "Ottawa", "Ontario", "ON" },
+                { "North York", "Ontario", "ON" }, { "Toronto", "Ontario", "ON" }, { "Mississauga", "Ontario", "ON" }, { "Etobicoke", "Ontario", "ON" },
+                { "Oshawa", "Ontario", "ON" }, { "Kitchener", "Ontario", "ON" }, { "St. Catherines", "Ontario", "ON" }, { "Niagara Falls", "Ontario", "ON" },
+                { "Dundas", "Ontario", "ON" }, { "Guelph", "Ontario", "ON" }, { "Waterloo", "Ontario", "ON" }, { "London", "Ontario", "ON" },
+                { "Trenton", "Ontario", "ON" }, { "Listowel", "Ontario", "ON" }, { "Halifax", "Nova Scotia", "NS" }, { "Dartmouth", "Nova Scotia", "NS" },
+                { "St. Johns", "New Brunswick", "NB" }, { "Mission", "British Columbia", "BC" }, { "Abbotsford", "British Columbia", "BC" },
+                { "Coquitlam", "British Columbia", "BC" }, { "New Westminster", "British Columbia", "BC" }, { "Port Moody", "British Columbia", "BC" },
+                { "Victoria", "British Columbia", "BC" }, { "Montreal", "Quebec", "QB" }, { "Pointe-Claire", "Quebec", "QB" }, { "Longueuil", "Quebec", "QB" },
+                { "Sainte-Laurent", "Quebec", "QB" }, { "Calgary", "Alberta", "AB" }, };
+        List<City> cityList = new ArrayList<City>();
+        for (String[] _city : Cities) {
+            City city = EntityFactory.create(City.class);
+            city.name().setValue(_city[0]);
+            city.province().name().setValue(_city[1]);
+            city.province().code().setValue(_city[2]);
+            cityList.add(city);
+        }
 
-        City city = EntityFactory.create(City.class);
-
-        city.province().name().setValue("Ontario");
-        city.province().code().setValue("Ontario");
-        city.name().setValue("Toronto");
-
-        city.province().name().getValue();
-        city.name().getValue();
-
-        return null;
+        return cityList;
     }
-
 }
