@@ -35,17 +35,6 @@ public class PortalSitePreloader extends AbstractDataPreloader {
             landingPage.caption().setValue("Landing Page");
             landingPage.content().content().setValue(IOUtils.getUTF8TextResource("site-landing.html", this.getClass()));
             landingPage.content().path().setValue(PageContent.PATH_SEPARATOR);
-//TODO looks like this is obsolete
-/*
- * {
- * PageDescriptor page = EntityFactory.create(PageDescriptor.class);
- * page.type().setValue(PageDescriptor.Type.staticContent);
- * page.caption().setValue("Home");
- * page.content().content().setValue(IOUtils.getUTF8TextResource("site-home.html",
- * this.getClass()));
- * landingPage.childPages().add(page);
- * }
- */
 
             {
                 PageDescriptor page = EntityFactory.create(PageDescriptor.class);
