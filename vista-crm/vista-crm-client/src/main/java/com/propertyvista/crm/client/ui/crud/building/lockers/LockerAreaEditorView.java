@@ -17,8 +17,8 @@ import com.pyx4j.site.client.ui.crud.IEditorView;
 
 import com.propertyvista.dto.LockerAreaDTO;
 
-public interface LockerAreaEditorView extends IEditorView<LockerAreaDTO>, LockerAreaView {
+public interface LockerAreaEditorView extends IEditorView<LockerAreaDTO> {
 
-    interface Presenter extends IEditorView.Presenter, LockerAreaView.Presenter {
+    interface Presenter extends IEditorView.Presenter {
     }
 }

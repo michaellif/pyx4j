@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.building.lockers;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -47,9 +48,10 @@ public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
     @Override
     public IsWidget createContent() {
 
-//        tabPanel.addDisable(((LockerAreaView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
+//        tabPanel.addDisable(isEditable() ? new HTML() : ((LockerAreaView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
         tabPanel.add(createDetailsTab(), i18n.tr("Details"));
-        tabPanel.addDisable(new ScrollPanel(((LockerAreaView) getParentView()).getLockerView().asWidget()), i18n.tr("Lockers"));
+        tabPanel.addDisable(isEditable() ? new HTML() : new ScrollPanel(((LockerAreaViewerView) getParentView()).getLockerView().asWidget()),
+                i18n.tr("Lockers"));
         tabPanel.addDisable(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
 
         tabPanel.setDisableMode(isEditable());
