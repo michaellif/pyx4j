@@ -18,10 +18,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.Pet.WeightUnit;
 import com.propertyvista.domain.charges.ChargeLine;
-import com.propertyvista.domain.charges.ChargeLineSelectable;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
+import com.propertyvista.domain.charges.ChargeLineSelectable;
 import com.propertyvista.domain.financial.Currency;
 import com.propertyvista.domain.financial.Money;
+import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 
 public class DomainUtil {
 
@@ -103,5 +104,17 @@ public class DomainUtil {
             return 0;
         }
         return getWeightKg(weight.getValue(), weightUnit.getValue());
+    }
+
+    public static Integer getAreaInSqFeet(IPrimitive<Double> area, IPrimitive<AreaMeasurementUnit> areaUnits) {
+        if (area.isNull() || areaUnits.isNull()) {
+            return null;
+        }
+        switch (areaUnits.getValue()) {
+        case sqFeet:
+            return Double.valueOf(Math.floor(area.getValue())).intValue();
+        default:
+            return Double.valueOf(Math.floor(area.getValue() * 10.763911)).intValue();
+        }
     }
 }

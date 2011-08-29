@@ -14,12 +14,17 @@
 package com.propertyvista.crm.server.openapi.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.pyx4j.commons.LogicalDate;
+
+import com.propertyvista.crm.server.openapi.model.util.LogicalDateXmlAdapter;
 
 public class FloorplanRS {
 
@@ -37,11 +42,13 @@ public class FloorplanRS {
 
     public Double rentTo;
 
-    public Double sqftFrom;
+    public Integer sqftFrom;
 
-    public Double sqftTo;
+    public Integer sqftTo;
 
-    public Date availableFrom;
+    @XmlSchemaType(name = "date")
+    @XmlJavaTypeAdapter(LogicalDateXmlAdapter.class)
+    public LogicalDate availableFrom;
 
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "amenity", type = AmenityRS.class))

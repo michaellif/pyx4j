@@ -44,9 +44,9 @@ public class BuildingRS {
 
     public Double rentTo;
 
-    public Double sqftFrom;
+    public Integer sqftFrom;
 
-    public Double sqftTo;
+    public Integer sqftTo;
 
     public Integer unitCount;
 

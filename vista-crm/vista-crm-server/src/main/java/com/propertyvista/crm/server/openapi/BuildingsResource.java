@@ -56,6 +56,7 @@ import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.util.DomainUtil;
 
 @Path("/buildings")
 public class BuildingsResource {
@@ -206,8 +207,8 @@ public class BuildingsResource {
 
                         floorplanRS.rentFrom = min(floorplanRS.rentFrom, u.financial().unitRent().getValue());
                         floorplanRS.rentTo = max(floorplanRS.rentTo, u.financial().unitRent().getValue());
-                        floorplanRS.sqftFrom = min(floorplanRS.sqftFrom, u.info().area().getValue());
-                        floorplanRS.sqftTo = max(floorplanRS.sqftTo, u.info().area().getValue());
+                        floorplanRS.sqftFrom = min(floorplanRS.sqftFrom, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
+                        floorplanRS.sqftTo = max(floorplanRS.sqftTo, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
 
                         if (!u.availableForRent().isNull()) {
                             if ((floorplanRS.availableFrom == null) || (floorplanRS.availableFrom.after(u.availableForRent().getValue()))) {
@@ -251,6 +252,26 @@ public class BuildingsResource {
     }
 
     Double max(Double a, Double b) {
+        if (a == null) {
+            return b;
+        } else if (b == null) {
+            return a;
+        } else {
+            return Math.max(a, b);
+        }
+    }
+
+    Integer min(Integer a, Integer b) {
+        if (a == null) {
+            return b;
+        } else if (b == null) {
+            return a;
+        } else {
+            return Math.min(a, b);
+        }
+    }
+
+    Integer max(Integer a, Integer b) {
         if (a == null) {
             return b;
         } else if (b == null) {
