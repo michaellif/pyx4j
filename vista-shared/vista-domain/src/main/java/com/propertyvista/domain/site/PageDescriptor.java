@@ -58,4 +58,8 @@ public interface PageDescriptor extends IEntity {
     @Owned
     @Detached
     PageContent content();
+
+    //Image for landing page and for static
+    //IPrimitive<String> image();
+
 }
