@@ -288,14 +288,10 @@ public class Converter {
     public static FloorplanRS convertFloorplan(Floorplan from) {
         FloorplanRS to = new FloorplanRS();
 
-        to.type = from.type().getValue();
-        to.name = from.marketingName().getStringView();
-        if (CommonsStringUtils.isEmpty(to.name)) {
-            if (to.type != null) {
-                to.name = from.type().getStringView();
-            } else {
-                to.name = i18n.tr("{0} Bedroom", from.bedrooms().getStringView());
-            }
+        to.name = from.name().getStringView();
+        to.marketingName = from.marketingName().getStringView();
+        if (CommonsStringUtils.isEmpty(to.marketingName)) {
+            to.marketingName = i18n.tr("{0} Bedroom", from.bedrooms().getStringView());
         }
         to.description = from.description().getStringView();
         to.floorCount = from.floorCount().getValue();

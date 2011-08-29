@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.Persistence;
@@ -180,8 +181,42 @@ public class BuildingsResource {
             EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
             floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
             List<Floorplan> floorplans = service.query(floorplanCriteria);
-            for (Floorplan floorplan : floorplans) {
-                FloorplanRS floorplanRS = ensureUnique(buildingRS.floorplans, Converter.convertFloorplan(floorplan));
+            nextFloorplan: for (Floorplan floorplan : floorplans) {
+                FloorplanRS floorplanRS = Converter.convertFloorplan(floorplan);
+                floorplanRS.unitCount = 0;
+
+                // Count Units and find earliest availableFrom
+                {
+                    EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+                    criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
+                    for (AptUnit u : Persistence.service().query(criteria)) {
+                        floorplanRS.unitCount++;
+
+                        floorplanRS.rentFrom = min(floorplanRS.rentFrom, u.financial().unitRent().getValue());
+                        floorplanRS.rentTo = max(floorplanRS.rentTo, u.financial().unitRent().getValue());
+                        floorplanRS.sqftFrom = min(floorplanRS.sqftFrom, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
+                        floorplanRS.sqftTo = max(floorplanRS.sqftTo, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
+
+                        if (!u.availableForRent().isNull()) {
+                            if ((floorplanRS.availableFrom == null) || (floorplanRS.availableFrom.after(u.availableForRent().getValue()))) {
+                                floorplanRS.availableFrom = u.availableForRent().getValue();
+                            }
+                        }
+                    }
+                }
+
+                //From all floorplans matched by beds/baths, We select 1 with closest availability and we show it on the site
+                FloorplanRS floorplanSameRS = findSameFloorplan(buildingRS.floorplans, Converter.convertFloorplan(floorplan));
+                if (floorplanSameRS != null) {
+                    if (floorplanRS.availableFrom == null) {
+                        // Ignore this floorplanRS
+                        continue nextFloorplan;
+                    }
+                    if ((floorplanSameRS.availableFrom == null) || floorplanRS.availableFrom.after(floorplanSameRS.availableFrom)) {
+                        // Ignore this floorplanRS
+                        continue nextFloorplan;
+                    }
+                }
 
                 //Get Amenity
                 {
@@ -198,30 +233,16 @@ public class BuildingsResource {
                     }
                 }
 
-                // Count Units and get stats
-                {
-                    EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-                    criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
-                    for (AptUnit u : Persistence.service().query(criteria)) {
-                        buildingRS.unitCount++;
+            }
+        }
 
-                        floorplanRS.rentFrom = min(floorplanRS.rentFrom, u.financial().unitRent().getValue());
-                        floorplanRS.rentTo = max(floorplanRS.rentTo, u.financial().unitRent().getValue());
-                        floorplanRS.sqftFrom = min(floorplanRS.sqftFrom, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
-                        floorplanRS.sqftTo = max(floorplanRS.sqftTo, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
-
-                        if (!u.availableForRent().isNull()) {
-                            if ((floorplanRS.availableFrom == null) || (floorplanRS.availableFrom.after(u.availableForRent().getValue()))) {
-                                floorplanRS.availableFrom = u.availableForRent().getValue();
-                            }
-                        }
-                    }
-                }
+        for (BuildingRS buildingRS : buildingsRS.buildings) {
+            for (FloorplanRS floorplanRS : buildingRS.floorplans) {
+                buildingRS.unitCount += floorplanRS.unitCount;
                 buildingRS.rentFrom = min(buildingRS.rentFrom, floorplanRS.rentFrom);
                 buildingRS.rentTo = max(buildingRS.rentTo, floorplanRS.rentTo);
                 buildingRS.sqftFrom = min(buildingRS.sqftFrom, floorplanRS.sqftFrom);
                 buildingRS.sqftTo = max(buildingRS.sqftTo, floorplanRS.sqftTo);
-
             }
         }
 
@@ -230,15 +251,15 @@ public class BuildingsResource {
         return buildingsRS;
     }
 
-    private FloorplanRS ensureUnique(List<FloorplanRS> floorplans, FloorplanRS convertedFloorplan) {
+    private FloorplanRS findSameFloorplan(List<FloorplanRS> floorplans, FloorplanRS convertedFloorplan) {
         for (FloorplanRS floorplanRS : floorplans) {
-            if (floorplanRS.name.equals(convertedFloorplan.name)) {
+            if (EqualsHelper.equals(floorplanRS.bedrooms, convertedFloorplan.bedrooms)
+                    && EqualsHelper.equals(floorplanRS.bathrooms, convertedFloorplan.bathrooms)) {
                 return floorplanRS;
             }
         }
         // Not found
-        floorplans.add(convertedFloorplan);
-        return convertedFloorplan;
+        return null;
     }
 
     Double min(Double a, Double b) {

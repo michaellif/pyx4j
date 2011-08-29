@@ -40,10 +40,10 @@ public interface Floorplan extends IEntity {
 
     IPrimitive<String> description();
 
+    IPrimitive<Integer> floorCount();
+
     @MemberColumn(name = "unitType")
     IPrimitive<AptUnitType> type();
-
-    IPrimitive<Integer> floorCount();
 
     @Format("#0.#")
     @Caption(name = "Beds")
