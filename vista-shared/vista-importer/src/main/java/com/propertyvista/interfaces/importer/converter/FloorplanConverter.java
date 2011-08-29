@@ -33,6 +33,7 @@ public class FloorplanConverter extends EntityDtoBinder<Floorplan, FloorplanIO> 
         bind(dtoProto.bedrooms(), dboProto.bedrooms());
         bind(dtoProto.dens(), dboProto.dens());
         bind(dtoProto.bathrooms(), dboProto.bathrooms());
+        bind(dtoProto.halfBath(), dboProto.halfBath());
     }
 
 }

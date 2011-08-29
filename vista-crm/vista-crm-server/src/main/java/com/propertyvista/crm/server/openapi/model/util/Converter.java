@@ -296,7 +296,9 @@ public class Converter {
         to.description = from.description().getStringView();
         to.floorCount = from.floorCount().getValue();
         to.bedrooms = from.bedrooms().getValue();
+        to.dens = from.dens().getValue();
         to.bathrooms = from.bathrooms().getValue();
+        to.halfBath = from.halfBath().getValue();
 
         return to;
     }

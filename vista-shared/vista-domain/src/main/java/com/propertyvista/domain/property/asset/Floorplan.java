@@ -15,6 +15,7 @@ package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -38,6 +39,7 @@ public interface Floorplan extends IEntity {
 
     IPrimitive<String> marketingName();
 
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
     IPrimitive<Integer> floorCount();
@@ -53,6 +55,9 @@ public interface Floorplan extends IEntity {
     @ToString(index = 2)
     @Caption(name = "Baths")
     IPrimitive<Integer> bathrooms();
+
+    //Separate WC
+    IPrimitive<Integer> halfBath();
 
     @Detached
     // should be loaded in service when necessary!..

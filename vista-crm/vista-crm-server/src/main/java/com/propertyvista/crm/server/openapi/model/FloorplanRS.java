@@ -44,6 +44,8 @@ public class FloorplanRS {
 
     public Integer bathrooms;
 
+    public Integer halfBath;
+
     public Double rentFrom;
 
     public Double rentTo;

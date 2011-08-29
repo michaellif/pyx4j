@@ -35,6 +35,8 @@ public interface FloorplanIO extends IEntity {
 
     IPrimitive<Integer> bathrooms();
 
+    IPrimitive<Integer> halfBath();
+
     IList<AmenityIO> amenities();
 
     IList<MediaIO> medias();

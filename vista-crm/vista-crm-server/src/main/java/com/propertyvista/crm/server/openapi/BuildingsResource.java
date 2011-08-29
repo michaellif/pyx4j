@@ -253,7 +253,7 @@ public class BuildingsResource {
 
     private FloorplanRS findSameFloorplan(List<FloorplanRS> floorplans, FloorplanRS convertedFloorplan) {
         for (FloorplanRS floorplanRS : floorplans) {
-            if (EqualsHelper.equals(floorplanRS.bedrooms, convertedFloorplan.bedrooms)
+            if (EqualsHelper.equals(floorplanRS.bedrooms, convertedFloorplan.bedrooms) && EqualsHelper.equals(floorplanRS.dens, convertedFloorplan.dens)
                     && EqualsHelper.equals(floorplanRS.bathrooms, convertedFloorplan.bathrooms)) {
                 return floorplanRS;
             }
