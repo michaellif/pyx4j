@@ -40,4 +40,8 @@ public class SharedGeoLocator {
 
         return found;
     }
+
+    public static void save() {
+        geoLocator.getCache().save();
+    }
 }

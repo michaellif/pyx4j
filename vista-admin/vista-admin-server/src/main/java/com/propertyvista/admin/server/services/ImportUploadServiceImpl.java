@@ -38,6 +38,7 @@ import com.propertyvista.interfaces.importer.ImportCounters;
 import com.propertyvista.interfaces.importer.ImportUtils;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
+import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 import com.propertyvista.server.domain.admin.Pmc;
 
 public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> implements ImportUploadService {
@@ -104,6 +105,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
                         counters.units);
             }
         } finally {
+            SharedGeoLocator.save();
             NamespaceManager.remove();
         }
     }

@@ -42,6 +42,8 @@ public class GeoCache {
 
     private int missedCount = 0;
 
+    private long cacheFileLastModified;
+
     private File cacheFile;
 
     public void loadResource() {
@@ -72,6 +74,7 @@ public class GeoCache {
                     GeoPoint gp = GeoPoint.valueOf(pair.getGeoPoint());
                     map.put(pair.getAddress(), gp);
                 }
+                cacheFileLastModified = cacheFile.lastModified();
             } catch (JAXBException e) {
                 log.error("GeoCache file read error", e);
             }
@@ -106,6 +109,12 @@ public class GeoCache {
     public void save() {
         if (updateCount != 0) {
             log.info("Updated {} geo points", updateCount);
+
+            // Load/merge data from externally modified file
+            if ((cacheFile != null) && (cacheFileLastModified != cacheFile.lastModified())) {
+                load(cacheFile);
+            }
+
             GeoPairs pairs = new GeoPairs();
             for (String address : map.keySet()) {
                 GeoPoint gp = map.get(address);
@@ -116,6 +125,7 @@ public class GeoCache {
                     MarshallUtil.marshal(pairs, System.out);
                 } else {
                     MarshallUtil.marshal(pairs, cacheFile);
+                    cacheFileLastModified = cacheFile.lastModified();
                 }
                 updateCount = 0;
             } catch (JAXBException e) {
