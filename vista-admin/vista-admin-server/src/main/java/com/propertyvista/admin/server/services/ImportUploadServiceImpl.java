@@ -23,6 +23,8 @@ import org.xml.sax.InputSource;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.essentials.rpc.upload.UploadResponse;
+import com.pyx4j.essentials.server.deferred.DeferredProcessorThread;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 import com.pyx4j.essentials.server.upload.UploadServiceImpl;
@@ -51,7 +53,21 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
     }
 
     @Override
-    public void onUploadRecived(UploadDeferredProcess process, UploadData data) {
+    public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess process, final UploadResponse response) {
+
+        Thread t = new DeferredProcessorThread("Import", process, new Runnable() {
+            @Override
+            public void run() {
+                runImport(data, process, response);
+            }
+        });
+        t.setDaemon(true);
+        t.start();
+
+        return ProcessingStatus.processWillContinue;
+    }
+
+    private static void runImport(UploadData data, UploadDeferredProcess process, UploadResponse response) {
         try {
             PmcImportDTO importDTO = (PmcImportDTO) process.getData();
             if (importDTO.id().isNull()) {
@@ -67,6 +83,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
             String imagesBaseFolder = "data/export/images/";
 
             ImportIO importIO = ImportUtils.parse(ImportIO.class, new InputSource(new ByteArrayInputStream(data.data)));
+            process.status().setProgress(0);
             process.status().setProgressMaximum(importIO.buildings().size());
 
             int count = 0;
@@ -81,14 +98,13 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
                 process.status().setProgress(count);
             }
             if (importDTO.updateOnly().isBooleanTrue()) {
-                data.response.message = SimpleMessageFormat.format("Updated {0} units in {1} building(s)", counters.units, counters.buildings);
+                response.message = SimpleMessageFormat.format("Updated {0} units in {1} building(s)", counters.units, counters.buildings);
             } else {
-                data.response.message = SimpleMessageFormat.format("Imported {0} building(s), {1} floorplan(s), {2} unit(s)", count, counters.floorplans,
+                response.message = SimpleMessageFormat.format("Imported {0} building(s), {1} floorplan(s), {2} unit(s)", count, counters.floorplans,
                         counters.units);
             }
         } finally {
             NamespaceManager.remove();
         }
     }
-
 }
