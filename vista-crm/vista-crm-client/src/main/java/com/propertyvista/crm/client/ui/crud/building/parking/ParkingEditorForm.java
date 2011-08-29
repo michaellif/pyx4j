@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.building.parking;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -47,14 +48,24 @@ public class ParkingEditorForm extends CrmEntityForm<ParkingDTO> {
     @Override
     public IsWidget createContent() {
 
-//        tabPanel.addDisable(((ParkingView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
+//        tabPanel.addDisable(isEditable() ? new HTML() : new ScrollPanel(((ParkingViewerView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
         tabPanel.add(createDetailsTab(), i18n.tr("Details"));
-        tabPanel.addDisable(new ScrollPanel(((ParkingView) getParentView()).getSpotView().asWidget()), i18n.tr("Spots"));
+        tabPanel.addDisable(isEditable() ? new HTML() : new ScrollPanel(((ParkingViewerView) getParentView()).getSpotView().asWidget()), i18n.tr("Spots"));
         tabPanel.addDisable(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
 
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
+    }
+
+    @Override
+    public void setActiveTab(int index) {
+        tabPanel.selectTab(index);
+    }
+
+    @Override
+    public int getActiveTab() {
+        return tabPanel.getSelectedIndex();
     }
 
     private Widget createDetailsTab() {
@@ -73,15 +84,5 @@ public class ParkingEditorForm extends CrmEntityForm<ParkingDTO> {
         split.getRightPanel().add(inject(proto().narrowSpaces()), 7);
 
         return new CrmScrollPanel(main);
-    }
-
-    @Override
-    public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
-    }
-
-    @Override
-    public int getActiveTab() {
-        return tabPanel.getSelectedIndex();
     }
 }

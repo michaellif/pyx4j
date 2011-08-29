@@ -14,9 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.building.parking;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.client.ui.dashboard.DashboardPanel;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.ParkingSpot;
@@ -24,12 +26,15 @@ import com.propertyvista.dto.ParkingDTO;
 
 public class ParkingViewerViewImpl extends CrmViewerViewImplBase<ParkingDTO> implements ParkingViewerView {
 
-    private final ParkingViewDelegate delegate;
+    private final DashboardView dashboardView;
+
+    private final IListerView<ParkingSpot> spotLister;
 
     public ParkingViewerViewImpl() {
         super(CrmSiteMap.Properties.Parking.class);
 
-        delegate = new ParkingViewDelegate(true);
+        dashboardView = new DashboardPanel();
+        spotLister = new ListerInternalViewImplBase<ParkingSpot>(new ParkingSpotLister(/* readOnly */));
 
         // create/init/set main form here: 
         ParkingEditorForm form = new ParkingEditorForm(new CrmViewersComponentFactory(), this);
@@ -39,11 +44,11 @@ public class ParkingViewerViewImpl extends CrmViewerViewImplBase<ParkingDTO> imp
 
     @Override
     public DashboardView getDashboardView() {
-        return delegate.getDashboardView();
+        return dashboardView;
     }
 
     @Override
     public IListerView<ParkingSpot> getSpotView() {
-        return delegate.getSpotView();
+        return spotLister;
     }
 }

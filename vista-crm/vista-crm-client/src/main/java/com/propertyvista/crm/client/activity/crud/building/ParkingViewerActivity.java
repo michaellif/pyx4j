@@ -16,42 +16,55 @@ package com.propertyvista.crm.client.activity.crud.building;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.building.parking.ParkingView;
+import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
-import com.propertyvista.crm.client.ui.dashboard.DashboardView.Presenter;
+import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.rpc.services.ParkingCrudService;
+import com.propertyvista.crm.rpc.services.ParkingSpotCrudService;
+import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.dto.ParkingDTO;
 
-public class ParkingViewerActivity extends ViewerActivityBase<ParkingDTO> implements ParkingView.Presenter {
+public class ParkingViewerActivity extends ViewerActivityBase<ParkingDTO> implements ParkingViewerView.Presenter {
 
-    private final ParkingActivityDelegate delegate;
+    private final DashboardView.Presenter dashboard;
+
+    private final IListerView.Presenter spotLister;
 
     @SuppressWarnings("unchecked")
     public ParkingViewerActivity(Place place) {
         super((ParkingViewerView) BuildingViewFactory.instance(ParkingViewerView.class), (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class));
-        withPlace(place);
 
-        delegate = new ParkingActivityDelegate((ParkingView) view, place);
+        dashboard = new DashboardViewActivity(((ParkingViewerView) view).getDashboardView(), place);
+
+        spotLister = new ListerActivityBase<ParkingSpot>(((ParkingViewerView) view).getSpotView(),
+                (AbstractCrudService<ParkingSpot>) GWT.create(ParkingSpotCrudService.class), ParkingSpot.class);
+
+        withPlace(place);
     }
 
     @Override
-    public Presenter getDashboardPresenter() {
-        return delegate.getDashboardPresenter();
+    public DashboardView.Presenter getDashboardPresenter() {
+        return dashboard;
     }
 
     @Override
     public IListerView.Presenter getSpotPresenter() {
-        return delegate.getSpotPresenter();
+        return spotLister;
     }
 
     @Override
     public void onPopulateSuccess(ParkingDTO result) {
         super.onPopulateSuccess(result);
-        delegate.populate(result.getPrimaryKey());
+
+        dashboard.populate();
+
+        spotLister.setParentFiltering(result.getPrimaryKey());
+        spotLister.populate(0);
     }
 }
