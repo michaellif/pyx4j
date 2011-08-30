@@ -21,11 +21,9 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
-import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.tenant.TenantEditorView;
-import com.propertyvista.crm.client.ui.crud.tenant.TenantView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.TenantCrudService;
 import com.propertyvista.domain.tenant.Tenant;
@@ -33,21 +31,13 @@ import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implements TenantEditorView.Presenter {
 
-    private final TenantActivityDelegate delegate;
-
     private Tenant.Type tenantType;
 
     @SuppressWarnings("unchecked")
     public TenantEditorActivity(Place place) {
         super((TenantEditorView) TenantViewFactory.instance(TenantEditorView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class),
                 TenantDTO.class);
-        delegate = new TenantActivityDelegate((TenantView) view);
         withPlace(place);
-    }
-
-    @Override
-    public Presenter getScreeningPresenter() {
-        return delegate.getScreeningPresenter();
     }
 
     @Override

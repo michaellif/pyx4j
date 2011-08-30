@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.tenant;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -24,12 +25,12 @@ import com.propertyvista.dto.TenantDTO;
 
 public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> implements TenantViewerView {
 
-    private final TenantViewDelegate delegate;
+    private final IListerView<TenantScreening> screeningLister;
 
     public TenantViewerViewImpl() {
         super(CrmSiteMap.Tenants.Tenant.class);
 
-        delegate = new TenantViewDelegate(true);
+        screeningLister = new ListerInternalViewImplBase<TenantScreening>(new TenantScreeningLister());
 
         // create/init/set main form here: 
         CrmEntityForm<TenantDTO> form = new TenantEditorForm(new CrmViewersComponentFactory(), this);
@@ -39,6 +40,6 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
     @Override
     public IListerView<TenantScreening> getScreeningListerView() {
-        return delegate.getScreeningListerView();
+        return screeningLister;
     }
 }

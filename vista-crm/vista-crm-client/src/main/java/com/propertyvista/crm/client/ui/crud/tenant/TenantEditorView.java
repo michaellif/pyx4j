@@ -20,9 +20,9 @@ import com.pyx4j.site.client.ui.crud.IEditorView;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
 
-public interface TenantEditorView extends IEditorView<TenantDTO>, TenantView {
+public interface TenantEditorView extends IEditorView<TenantDTO> {
 
-    interface Presenter extends IEditorView.Presenter, TenantView.Presenter {
+    interface Presenter extends IEditorView.Presenter {
     }
 
     void showSelectTypePopUp(AsyncCallback<Tenant.Type> callback);

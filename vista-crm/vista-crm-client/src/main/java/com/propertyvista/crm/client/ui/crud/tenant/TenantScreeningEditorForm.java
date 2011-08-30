@@ -21,13 +21,13 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
@@ -49,7 +49,6 @@ import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
-import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
@@ -62,16 +61,16 @@ import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
-import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
+import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.misc.BusinessRules;
 
@@ -425,15 +424,17 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
                     public IsWidget createContent() {
                         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!TenantScreeningEditorForm.this.isEditable());
                         if (!TenantScreeningEditorForm.this.isEditable()) {
-                            FlowPanel person = DecorationUtils.formFullName(this, proto());
-                            person.getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-                            person.getElement().getStyle().setFontSize(1.1, Unit.EM);
-                            person.getElement().getStyle().setMarginBottom(0.3, Unit.EM);
-                            main.add(person);
+                            Widget name = inject(proto().name(), new CEntityLabel()).asWidget();
+                            name.getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+                            name.getElement().getStyle().setFontSize(1.1, Unit.EM);
+                            name.getElement().getStyle().setMarginBottom(0.3, Unit.EM);
+                            main.add(name);
                         } else {
+                            main.add(inject(proto().name().namePrefix()), 4);
                             main.add(inject(proto().name().firstName()), 12);
                             main.add(inject(proto().name().middleName()), 12);
                             main.add(inject(proto().name().lastName()), 20);
+                            main.add(inject(proto().name().nameSuffix()), 4);
                         }
                         main.add(inject(proto().homePhone()), 15);
                         main.add(inject(proto().mobilePhone()), 15);

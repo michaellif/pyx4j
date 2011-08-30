@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
@@ -132,7 +133,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         switch (tenant.type().getValue()) {
         case person:
             tabPanel.add(new CrmScrollPanel(person), i18n.tr("Details"));
-            tabPanel.addDisable(((TenantView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
+            tabPanel.addDisable(isEditable() ? new HTML() : ((TenantViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
             break;
         case company:
             tabPanel.add(new CrmScrollPanel(company), proto().company().getMeta().getCaption());

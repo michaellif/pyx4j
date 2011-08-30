@@ -65,11 +65,15 @@ public class DecorationUtils {
     public static FlowPanel formFullName(CEntityEditor<?> entityComp, final Person person) {
 
         FlowPanel fullname = new FlowPanel();
+        fullname.add(inline(entityComp.inject(person.name().namePrefix()), "auto"));
+        fullname.add(inline(new HTML("&nbsp;")));
         fullname.add(inline(entityComp.inject(person.name().firstName()), "auto"));
         fullname.add(inline(new HTML("&nbsp;")));
         fullname.add(inline(entityComp.inject(person.name().middleName()), "auto"));
         fullname.add(inline(new HTML("&nbsp;")));
         fullname.add(inline(entityComp.inject(person.name().lastName()), "auto"));
+        fullname.add(inline(new HTML("&nbsp;")));
+        fullname.add(inline(entityComp.inject(person.name().nameSuffix()), "auto"));
         return fullname;
     }
 }
