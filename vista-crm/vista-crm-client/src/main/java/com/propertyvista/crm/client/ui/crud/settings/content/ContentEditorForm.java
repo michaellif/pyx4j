@@ -65,10 +65,15 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
     @Override
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-//        main.setShowMandatory(false);
 
         main.add(inject(proto().caption()), 15);
-        main.add(inject(proto().content().content()), 60);
+        if (isEditable()) {
+            main.add(inject(proto().content().content()), 60);
+        } else {
+            CLabel content = new CLabel();
+            content.setAllowHtml(true);
+            main.add(inject(proto().content().content(), content), 60);
+        }
 
         main.add(new CrmSectionSeparator(proto().childPages().getMeta().getCaption()));
         main.add(inject(proto().childPages(), createChildPagesList()));
