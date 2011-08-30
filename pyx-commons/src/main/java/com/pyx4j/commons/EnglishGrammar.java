@@ -94,4 +94,15 @@ public class EnglishGrammar {
 
         return b.toString();
     }
+
+    public static String deCapitalize(String word) {
+        if (Character.isUpperCase(word.charAt(0))) {
+            StringBuilder b = new StringBuilder(word);
+            b.setCharAt(0, Character.toLowerCase(word.charAt(0)));
+            return b.toString();
+        } else {
+            return word;
+        }
+    }
+
 }

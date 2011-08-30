@@ -38,6 +38,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.server.report.XMLStringWriter;
+import com.pyx4j.geo.GeoPoint;
 
 public class XMLEntityWriter {
 
@@ -126,7 +127,14 @@ public class XMLEntityWriter {
                 break;
             case Primitive:
                 if (!memberName.equals(IEntity.PRIMARY_KEY)) {
-                    xml.write(memberName, getValueAsString(entity.getMemberValue(memberName)));
+                    if (GeoPoint.class == memberMeta.getValueClass()) {
+                        xml.startIdented(memberName);
+                        xml.write("lat", getValueAsString(((GeoPoint) entity.getMemberValue(memberName)).getLat()));
+                        xml.write("lng", getValueAsString(((GeoPoint) entity.getMemberValue(memberName)).getLng()));
+                        xml.endIdented(memberName);
+                    } else {
+                        xml.write(memberName, getValueAsString(entity.getMemberValue(memberName)));
+                    }
                 }
                 break;
             }

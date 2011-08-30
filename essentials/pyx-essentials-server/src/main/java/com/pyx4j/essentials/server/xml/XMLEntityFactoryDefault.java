@@ -27,6 +27,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -44,7 +45,7 @@ public class XMLEntityFactoryDefault implements XMLEntityFactory {
         for (String className : allClasses) {
             // strip the package name
             String simpleName = className.substring(className.lastIndexOf(".") + 1);
-            names.put(XMLEntityNameDefault.deCapitalize(simpleName), className);
+            names.put(EnglishGrammar.deCapitalize(simpleName), className);
         }
     }
 

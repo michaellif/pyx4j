@@ -20,23 +20,14 @@
  */
 package com.pyx4j.essentials.server.xml;
 
+import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.shared.IObject;
 
 public class XMLEntityNameDefault implements XMLEntityName {
 
-    public static String deCapitalize(String word) {
-        if (Character.isUpperCase(word.charAt(0))) {
-            StringBuilder b = new StringBuilder(word);
-            b.setCharAt(0, Character.toLowerCase(word.charAt(0)));
-            return b.toString();
-        } else {
-            return word;
-        }
-    }
-
     @Override
     public String getXMLName(@SuppressWarnings("rawtypes") Class<? extends IObject> memberClass) {
-        return deCapitalize(memberClass.getSimpleName());
+        return EnglishGrammar.deCapitalize(memberClass.getSimpleName());
     }
 
 }
