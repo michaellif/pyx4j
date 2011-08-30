@@ -50,7 +50,7 @@ public class OpenApiModelTest {
 
     @Test
     public void testXsdSchema() throws Exception {
-        MarshallUtil.printSchema(BuildingsRS.class, System.out, true);
+        MarshallUtil.printSchema(BuildingsRS.class, System.out, false);
     }
 
     public static void assertEqual(String name, IEntity expected, IEntity actual) {

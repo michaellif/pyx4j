@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.report.XMLStringWriter;
 import com.pyx4j.essentials.server.xml.XMLEntityModelWriter;
+import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
 
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityName;
 
@@ -35,6 +36,8 @@ public class CreateModelXML {
 
         ImportIO ent = EntityFactory.create(ImportIO.class);
 
+        XMLEntitySchemaWriter.printSchema(BuildingIO.class, System.out, false);
+
         File f = new File("import-mode.xml");
         FileWriter w = null;
         try {
@@ -42,7 +45,7 @@ public class CreateModelXML {
             XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
             XMLEntityModelWriter xmlWriter = new XMLEntityModelWriter(xml, new ImportXMLEntityName());
             xmlWriter.setEmitId(false);
-            xmlWriter.write(ent);
+            //xmlWriter.write(ent);
             w.write(xml.toString());
             w.flush();
         } catch (IOException e) {
