@@ -7,29 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-07
+ * Created on Aug 30, 2011
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.domain.site;
 
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface PageContent extends IEntity {
+public interface News extends IEntity {
 
-    public static final String PATH_SEPARATOR = "/";
+    IPrimitive<String> caption();
 
-    @Indexed
-    IPrimitive<String> path();
-
-    @Owned
-    @Length(20845)
-    @Editor(type = Editor.EditorType.richtextarea)
-    //TODO Blob
     IPrimitive<String> content();
+
+    @Format("MM/dd/yyyy")
+    @MemberColumn(name = "newsDate")
+    IPrimitive<LogicalDate> date();
 }

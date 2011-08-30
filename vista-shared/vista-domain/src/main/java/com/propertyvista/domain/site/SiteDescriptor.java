@@ -13,27 +13,45 @@
  */
 package com.propertyvista.domain.site;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
+
+import com.propertyvista.domain.media.File;
 
 public interface SiteDescriptor extends IEntity {
 
-    //drop-down
-    IPrimitive<String> skin();
+    @Translatable
+    public enum Skin {
+
+        skin1,
+
+        skin2,
+
+        skin3;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    @ToString(index = 0)
+    IPrimitive<Skin> skin();
 
     //color picker
-    //IPrimitive<String> baseColor();
+    IPrimitive<String> baseColor();
 
-    //image upload
-    //IPrimitive<String> logo();
+    File logo();
 
-    //image upload
-    //IPrimitive<String> slogan();
+    File slogan();
 
-    //IPrimitive<String> copyright();
+    IPrimitive<String> copyright();
 
-    //Testimonials
+    IList<Testimonial> testimonials();
 
-    //News
-
+    IList<News> news();
 }

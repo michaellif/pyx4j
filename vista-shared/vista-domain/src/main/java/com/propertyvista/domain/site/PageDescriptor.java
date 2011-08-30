@@ -25,6 +25,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.media.File;
+
 public interface PageDescriptor extends IEntity {
 
     public enum Type {
@@ -59,7 +61,6 @@ public interface PageDescriptor extends IEntity {
     @Detached
     PageContent content();
 
-    //Image for landing page and for static
-    //IPrimitive<String> image();
-
+    // Image for landing page and for static
+    File image();
 }
