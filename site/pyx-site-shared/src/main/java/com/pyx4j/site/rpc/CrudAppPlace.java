@@ -40,14 +40,6 @@ public abstract class CrudAppPlace extends AppPlace {
 
     private String name;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public CrudAppPlace() {
         setType(Type.lister);
     }
@@ -62,6 +54,14 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public Type getType() {
         return Type.valueOf(getArg(ARG_NAME_CRUD_TYPE));
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void formViewerPlace(Key itemID) {
