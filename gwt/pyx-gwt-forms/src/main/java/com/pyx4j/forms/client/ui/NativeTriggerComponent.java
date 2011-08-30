@@ -34,6 +34,7 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusWidget;
@@ -63,10 +64,10 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
     }
 
     public void construct(FocusWidget focusWidget) {
-        construct(null, focusWidget);
+        construct(null, focusWidget, ImageFactory.getImages().triggerBlueUp(), ImageFactory.getImages().triggerBlueDown());
     }
 
-    public void construct(Composite composite, FocusWidget focusWidget) {
+    public void construct(Composite composite, FocusWidget focusWidget, ImageResource upImage, ImageResource downImage) {
         if (composite == null) {
             this.focusWidget = focusWidget;
             focusWidget.setWidth("100%");
@@ -86,7 +87,7 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
         focusWidget.addFocusHandler(focusHandlerManager);
         focusWidget.addBlurHandler(focusHandlerManager);
 
-        triggerButton = new NativeTriggerButton(ImageFactory.getImages().triggerBlueUp(), ImageFactory.getImages().triggerBlueDown());
+        triggerButton = new NativeTriggerButton(upImage, downImage);
         triggerButton.setWidth("1%");
         Cursor.setHand(triggerButton);
         triggerButton.addFocusHandler(focusHandlerManager);
