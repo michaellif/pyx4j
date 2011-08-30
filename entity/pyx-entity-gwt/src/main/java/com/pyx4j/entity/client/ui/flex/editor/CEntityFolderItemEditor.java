@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
 public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntityEditor<E> {
 
-    private final SimplePanel contentainer;
+    private final SimplePanel container;
 
     private boolean first;
 
@@ -40,7 +40,7 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
 
     public CEntityFolderItemEditor(Class<E> clazz) {
         super(clazz);
-        contentainer = new SimplePanel();
+        container = new SimplePanel();
         handlerRegistrations = new ArrayList<HandlerRegistration>();
     }
 
@@ -60,7 +60,7 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
     }
 
     public SimplePanel getContainer() {
-        return contentainer;
+        return container;
     }
 
     @Override

@@ -255,19 +255,22 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
 
         boolean first = true;
         for (E item : value) {
-            CEntityFolderItemEditor<E> comp = null;
-            if (oldMap.containsKey(item)) {
-                comp = oldMap.remove(item);
-                comp.setFirst(first);
-            } else {
-                comp = createItemPrivate();
-                //Call setFirst before onBound()
-                comp.setFirst(first);
-                comp.onBound(this);
+            if (isFolderItemAllowed(item)) {
+                CEntityFolderItemEditor<E> comp = null;
+                if (oldMap.containsKey(item)) {
+                    comp = oldMap.remove(item);
+                    comp.setFirst(first);
+                } else {
+                    comp = createItemPrivate();
+                    //Call setFirst before onBound()
+                    comp.setFirst(first);
+                    comp.onBound(this);
+                }
+
+                comp.populate(item);
+                adoptFolderItem(comp);
+                first = false;
             }
-            first = false;
-            comp.populate(item);
-            adoptFolderItem(comp);
         }
 
         for (CEntityFolderItemEditor<E> item : oldMap.values()) {
@@ -277,7 +280,17 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
         if (folderDecorator instanceof TableFolderEditorDecorator) {
             ((TableFolderEditorDecorator<E>) folderDecorator).setHeaderVisible(container.getWidgetCount() > 0);
         }
+    }
 
+    /**
+     * Controls folder population with entity items.
+     * 
+     * @param item
+     *            - processed entity item.
+     * @return true if item is allowed, false - otherwise.
+     */
+    protected boolean isFolderItemAllowed(E item) {
+        return true; // by default - all items are allowed!..
     }
 
     private void abandonFolderItem(final CEntityFolderItemEditor<E> component) {
