@@ -40,10 +40,11 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.settings.content.ContentEditor.Presenter;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageDescriptor.Type;
 
 public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
 
@@ -139,6 +140,11 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
                 });
                 decor.setShowHeader(false);
                 return decor;
+            }
+
+            @Override
+            protected boolean isFolderItemAllowed(PageDescriptor item) {
+                return !(Type.findApartment.equals(item.type().getValue()) || Type.residents.equals(item.type().getValue()));
             }
         };
     }
