@@ -13,13 +13,23 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
+import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.IViewerView;
 
+import com.propertyvista.domain.property.asset.unit.AptUnitItem;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.AptUnitDTO;
 
-public interface UnitViewerView extends IViewerView<AptUnitDTO>, UnitView {
+public interface UnitViewerView extends IViewerView<AptUnitDTO> {
 
-    interface Presenter extends IViewerView.Presenter, UnitView.Presenter {
+    interface Presenter extends IViewerView.Presenter {
+
+        IListerView.Presenter getUnitItemsPresenter();
+
+        IListerView.Presenter getOccupanciesPresenter();
     }
 
+    IListerView<AptUnitItem> getUnitItemsListerView();
+
+    IListerView<AptUnitOccupancy> getOccupanciesListerView();
 }

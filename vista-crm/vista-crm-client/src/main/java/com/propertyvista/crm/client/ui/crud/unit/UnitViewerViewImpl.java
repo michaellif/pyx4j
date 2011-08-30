@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.unit;
 
 import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -25,12 +26,15 @@ import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implements UnitViewerView {
 
-    private final UnitViewDelegate delegate;
+    private final IListerView<AptUnitItem> unitItemsLister;
+
+    private final IListerView<AptUnitOccupancy> OccupanciesLister;
 
     public UnitViewerViewImpl() {
         super(CrmSiteMap.Properties.Unit.class);
 
-        delegate = new UnitViewDelegate(true);
+        unitItemsLister = new ListerInternalViewImplBase<AptUnitItem>(new UnitItemLister());
+        OccupanciesLister = new ListerInternalViewImplBase<AptUnitOccupancy>(new UnitOccupancyLister());
 
         CrmEntityForm<AptUnitDTO> form = new UnitEditorForm(new CrmViewersComponentFactory(), this);
         form.initialize();
@@ -39,11 +43,11 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
     @Override
     public IListerView<AptUnitItem> getUnitItemsListerView() {
-        return delegate.getUnitItemsListerView();
+        return unitItemsLister;
     }
 
     @Override
     public IListerView<AptUnitOccupancy> getOccupanciesListerView() {
-        return delegate.getOccupanciesListerView();
+        return OccupanciesLister;
     }
 }

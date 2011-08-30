@@ -17,9 +17,8 @@ import com.pyx4j.site.client.ui.crud.IEditorView;
 
 import com.propertyvista.dto.AptUnitDTO;
 
-public interface UnitEditorView extends IEditorView<AptUnitDTO>, UnitView {
+public interface UnitEditorView extends IEditorView<AptUnitDTO> {
 
-    interface Presenter extends IEditorView.Presenter, UnitView.Presenter {
+    interface Presenter extends IEditorView.Presenter {
     }
-
 }

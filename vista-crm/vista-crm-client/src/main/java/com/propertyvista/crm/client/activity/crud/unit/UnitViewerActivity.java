@@ -16,40 +16,57 @@ package com.propertyvista.crm.client.activity.crud.unit;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.IListerView.Presenter;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.unit.UnitView;
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
+import com.propertyvista.crm.rpc.services.UnitItemCrudService;
+import com.propertyvista.crm.rpc.services.UnitOccupancyCrudService;
+import com.propertyvista.domain.property.asset.unit.AptUnitItem;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitViewerActivity extends ViewerActivityBase<AptUnitDTO> implements UnitViewerView.Presenter {
 
-    private final UnitActivityDelegate delegate;
+    private final IListerView.Presenter unitItemsLister;
+
+    private final IListerView.Presenter OccupanciesLister;
 
     @SuppressWarnings("unchecked")
     public UnitViewerActivity(Place place) {
         super((UnitViewerView) UnitViewFactory.instance(UnitViewerView.class), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class));
-        delegate = new UnitActivityDelegate((UnitView) view);
+
+        unitItemsLister = new ListerActivityBase<AptUnitItem>(((UnitViewerView) view).getUnitItemsListerView(),
+                (AbstractCrudService<AptUnitItem>) GWT.create(UnitItemCrudService.class), AptUnitItem.class);
+
+        OccupanciesLister = new ListerActivityBase<AptUnitOccupancy>(((UnitViewerView) view).getOccupanciesListerView(),
+                (AbstractCrudService<AptUnitOccupancy>) GWT.create(UnitOccupancyCrudService.class), AptUnitOccupancy.class);
         withPlace(place);
     }
 
     @Override
     public Presenter getUnitItemsPresenter() {
-        return delegate.getUnitItemsPresenter();
+        return unitItemsLister;
     }
 
     @Override
     public Presenter getOccupanciesPresenter() {
-        return delegate.getOccupanciesPresenter();
+        return OccupanciesLister;
     }
 
     @Override
     public void onPopulateSuccess(AptUnitDTO result) {
         super.onPopulateSuccess(result);
-        delegate.populate(result.getPrimaryKey());
+
+        unitItemsLister.setParentFiltering(result.getPrimaryKey());
+        unitItemsLister.populate(0);
+
+        OccupanciesLister.setParentFiltering(result.getPrimaryKey());
+        OccupanciesLister.populate(0);
     }
 }

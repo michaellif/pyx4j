@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.unit;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -58,8 +59,10 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         tabPanel.add(createGeneralTab(), i18n.tr("General"));
 
-        tabPanel.addDisable(new ScrollPanel(((UnitView) getParentView()).getUnitItemsListerView().asWidget()), i18n.tr("Details"));
-        tabPanel.addDisable(new ScrollPanel(((UnitView) getParentView()).getOccupanciesListerView().asWidget()), i18n.tr("Occupancies"));
+        tabPanel.addDisable(isEditable() ? new HTML() : new ScrollPanel(((UnitViewerView) getParentView()).getUnitItemsListerView().asWidget()),
+                i18n.tr("Details"));
+        tabPanel.addDisable(isEditable() ? new HTML() : new ScrollPanel(((UnitViewerView) getParentView()).getOccupanciesListerView().asWidget()),
+                i18n.tr("Occupancies"));
 
         tabPanel.add(createFinancialsTab(), i18n.tr("Financial"));
         tabPanel.add(createMarketingTab(), i18n.tr("Marketing"));
