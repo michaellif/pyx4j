@@ -50,7 +50,7 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
         return new CEntityFolderRowEditor<E>(clazz, columns()) {
             @Override
             public IFolderItemEditorDecorator<E> createFolderItemDecorator() {
-                return new CrmFolderItemDecorator<E>(i18n.tr("Remove ") + itemName, editable);
+                return new CrmTableFolderItemDecorator<E>(i18n.tr("Remove ") + itemName, editable);
             }
         };
     }

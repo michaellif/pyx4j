@@ -154,7 +154,7 @@ public class CrmMediaListViewer extends CrmEntityFolder<Media> {
 
             @Override
             public IFolderItemEditorDecorator<Media> createFolderItemDecorator() {
-                return new CrmFolderItemDecorator<Media>(parent);
+                return new CrmTableFolderItemDecorator<Media>(parent);
             }
         };
     }

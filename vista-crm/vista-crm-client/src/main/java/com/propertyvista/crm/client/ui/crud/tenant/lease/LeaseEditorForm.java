@@ -75,7 +75,7 @@ import com.propertyvista.crm.client.ui.components.CrmBoxFolderDecorator;
 import com.propertyvista.crm.client.ui.components.CrmBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
-import com.propertyvista.crm.client.ui.components.CrmFolderItemDecorator;
+import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
@@ -422,7 +422,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                     @Override
                     public IFolderItemEditorDecorator<TenantInLease> createFolderItemDecorator() {
-                        return new CrmFolderItemDecorator<TenantInLease>(parent, parent.isEditable() && !isFirst());
+                        return new CrmTableFolderItemDecorator<TenantInLease>(parent, parent.isEditable() && !isFirst());
                     }
 
                     private void setMandatoryDependant() {
@@ -474,7 +474,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 return new CEntityFolderRowEditor<Pet>(Pet.class, columns()) {
                     @Override
                     public IFolderItemEditorDecorator<Pet> createFolderItemDecorator() {
-                        return new CrmFolderItemDecorator<Pet>(parent);
+                        return new CrmTableFolderItemDecorator<Pet>(parent);
                     }
 
                     @Override
@@ -543,7 +543,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                     @Override
                     public IFolderItemEditorDecorator<Vehicle> createFolderItemDecorator() {
-                        return new CrmFolderItemDecorator<Vehicle>(parent);
+                        return new CrmTableFolderItemDecorator<Vehicle>(parent);
                     }
 
                     @Override
@@ -698,7 +698,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 return new CEntityFolderRowEditor<ServiceConcession>(ServiceConcession.class, columns()) {
                     @Override
                     public IFolderItemEditorDecorator<ServiceConcession> createFolderItemDecorator() {
-                        return new CrmFolderItemDecorator<ServiceConcession>(parent);
+                        return new CrmTableFolderItemDecorator<ServiceConcession>(parent);
                     }
 
                     @Override

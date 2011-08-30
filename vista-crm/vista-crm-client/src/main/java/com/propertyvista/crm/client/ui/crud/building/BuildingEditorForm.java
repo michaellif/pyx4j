@@ -53,7 +53,7 @@ import com.propertyvista.crm.client.ui.components.CrmBoxFolderDecorator;
 import com.propertyvista.crm.client.ui.components.CrmBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
-import com.propertyvista.crm.client.ui.components.CrmFolderItemDecorator;
+import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
@@ -302,7 +302,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                 return new CEntityFolderRowEditor<ServiceItemType>(ServiceItemType.class, columns()) {
                     @Override
                     public IFolderItemEditorDecorator<ServiceItemType> createFolderItemDecorator() {
-                        return new CrmFolderItemDecorator<ServiceItemType>(parent);
+                        return new CrmTableFolderItemDecorator<ServiceItemType>(parent);
                     }
 
                     @Override

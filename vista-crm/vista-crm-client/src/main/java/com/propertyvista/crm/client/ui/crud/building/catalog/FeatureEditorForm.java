@@ -36,7 +36,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
-import com.propertyvista.crm.client.ui.components.CrmFolderItemDecorator;
+import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
@@ -95,7 +95,7 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
                 return new CEntityFolderRowEditor<ServiceItem>(ServiceItem.class, columns()) {
                     @Override
                     public IFolderItemEditorDecorator<ServiceItem> createFolderItemDecorator() {
-                        return new CrmFolderItemDecorator<ServiceItem>(thisRef);
+                        return new CrmTableFolderItemDecorator<ServiceItem>(thisRef);
                     }
 
                     @Override

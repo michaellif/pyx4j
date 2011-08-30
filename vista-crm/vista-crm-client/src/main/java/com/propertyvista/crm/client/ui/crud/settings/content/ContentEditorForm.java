@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.settings.content;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -27,7 +28,6 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -35,9 +35,10 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
+import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
+import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.settings.content.ContentEditor.Presenter;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -82,7 +83,8 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
     }
 
     private CEntityFolderEditor<PageDescriptor> createChildPagesList() {
-        return new CEntityFolderEditor<PageDescriptor>(PageDescriptor.class) {
+        return new CrmEntityFolder<PageDescriptor>(PageDescriptor.class, i18n.tr("Page"), !isEditable()) {
+            private final CrmEntityFolder<PageDescriptor> parent = this;
 
             private final ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
             {
@@ -90,13 +92,18 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
             }
 
             @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                return columns;
+            }
+
+            @Override
             protected CEntityFolderItemEditor<PageDescriptor> createItem() {
-                return new CEntityFolderRowEditor<PageDescriptor>(PageDescriptor.class, columns) {
+                return new CEntityFolderRowEditor<PageDescriptor>(PageDescriptor.class, columns()) {
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
                         if (column.getObject().equals(proto().caption())) {
                             CComponent<?> comp = null;
-                            if (ContentEditorForm.this.isEditable()) {
+                            if (parent.isEditable()) {
                                 comp = inject(column.getObject(), new CLabel());
                             } else {
                                 comp = inject(column.getObject(), new CHyperlink(new Command() {
@@ -115,8 +122,7 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
 
                     @Override
                     public IFolderItemEditorDecorator<PageDescriptor> createFolderItemDecorator() {
-                        IFolderItemEditorDecorator<PageDescriptor> decor = new TableFolderItemEditorDecorator<PageDescriptor>(CrmImages.INSTANCE.del(),
-                                CrmImages.INSTANCE.delHover(), i18n.tr("Remove Page"), ContentEditorForm.this.isEditable());
+                        IFolderItemEditorDecorator<PageDescriptor> decor = new CrmTableFolderItemDecorator<PageDescriptor>(parent, !parent.isEditable());
                         decor.addItemRemoveClickHandler(new ClickHandler() {
                             @Override
                             public void onClick(ClickEvent event) {
@@ -131,8 +137,7 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
 
             @Override
             protected IFolderEditorDecorator<PageDescriptor> createFolderDecorator() {
-                CrmTableFolderDecorator<PageDescriptor> decor = new CrmTableFolderDecorator<PageDescriptor>(columns, i18n.tr("Add new Page"),
-                        !ContentEditorForm.this.isEditable());
+                CrmTableFolderDecorator<PageDescriptor> decor = new CrmTableFolderDecorator<PageDescriptor>(columns(), parent);
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {

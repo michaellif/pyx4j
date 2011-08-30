@@ -21,18 +21,18 @@ import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 
-public class CrmFolderItemDecorator<E extends IEntity> extends TableFolderItemEditorDecorator<E> {
-    protected static I18n i18n = I18nFactory.getI18n(CrmFolderItemDecorator.class);
+public class CrmTableFolderItemDecorator<E extends IEntity> extends TableFolderItemEditorDecorator<E> {
+    protected static I18n i18n = I18nFactory.getI18n(CrmTableFolderItemDecorator.class);
 
-    public CrmFolderItemDecorator(String title, boolean editable) {
+    public CrmTableFolderItemDecorator(String title, boolean editable) {
         super(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), title, editable);
     }
 
-    public CrmFolderItemDecorator(CrmEntityFolder<E> parent, boolean editable) {
+    public CrmTableFolderItemDecorator(CrmEntityFolder<E> parent, boolean editable) {
         this(i18n.tr("Remove ") + parent.getItemName(), editable);
     }
 
-    public CrmFolderItemDecorator(CrmEntityFolder<E> parent) {
+    public CrmTableFolderItemDecorator(CrmEntityFolder<E> parent) {
         this(parent, parent.isEditable());
     }
 

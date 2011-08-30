@@ -45,7 +45,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPa
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
-import com.propertyvista.crm.client.ui.components.CrmFolderItemDecorator;
+import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
@@ -144,7 +144,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
                 return new CEntityFolderRowEditor<ServiceItem>(ServiceItem.class, columns()) {
                     @Override
                     public IFolderItemEditorDecorator<ServiceItem> createFolderItemDecorator() {
-                        return new CrmFolderItemDecorator<ServiceItem>(parent);
+                        return new CrmTableFolderItemDecorator<ServiceItem>(parent);
                     }
 
                     @Override
@@ -214,7 +214,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
                 return new CEntityFolderRowEditor<ServiceFeature>(ServiceFeature.class, columns()) {
                     @Override
                     public IFolderItemEditorDecorator<ServiceFeature> createFolderItemDecorator() {
-                        return new CrmFolderItemDecorator<ServiceFeature>(parent);
+                        return new CrmTableFolderItemDecorator<ServiceFeature>(parent);
                     }
 
                     @Override
@@ -270,7 +270,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
                 return new CEntityFolderRowEditor<ServiceConcession>(ServiceConcession.class, columns()) {
                     @Override
                     public IFolderItemEditorDecorator<ServiceConcession> createFolderItemDecorator() {
-                        return new CrmFolderItemDecorator<ServiceConcession>(parent);
+                        return new CrmTableFolderItemDecorator<ServiceConcession>(parent);
                     }
 
                     @Override
