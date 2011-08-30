@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.asset.building;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -32,6 +34,7 @@ import com.propertyvista.domain.contact.Address;
 public interface BuildingInfo extends IEntity {
 
     @Translatable
+    @XmlType(name = "BuildingInfoType")
     public enum Type {
 
         agricultural,

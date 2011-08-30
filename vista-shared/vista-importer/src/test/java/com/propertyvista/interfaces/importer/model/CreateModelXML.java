@@ -14,6 +14,8 @@
 package com.propertyvista.interfaces.importer.model;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -32,20 +34,20 @@ public class CreateModelXML {
 
     private final static Logger log = LoggerFactory.getLogger(CreateModelXML.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
 
         ImportIO ent = EntityFactory.create(ImportIO.class);
 
-        XMLEntitySchemaWriter.printSchema(BuildingIO.class, System.out, false);
+        XMLEntitySchemaWriter.printSchema(ImportIO.class, new FileOutputStream(new File("import-model.xsd")), true);
 
-        File f = new File("import-mode.xml");
+        File f = new File("import-model.xml");
         FileWriter w = null;
         try {
             w = new FileWriter(f);
             XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
             XMLEntityModelWriter xmlWriter = new XMLEntityModelWriter(xml, new ImportXMLEntityName());
             xmlWriter.setEmitId(false);
-            //xmlWriter.write(ent);
+            xmlWriter.write(ent);
             w.write(xml.toString());
             w.flush();
         } catch (IOException e) {

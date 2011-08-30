@@ -13,11 +13,14 @@
  */
 package com.propertyvista.interfaces.importer.model;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
 @Transient
+@XmlRootElement(name = "import")
 public interface ImportIO extends IEntity {
 
     IList<BuildingIO> buildings();

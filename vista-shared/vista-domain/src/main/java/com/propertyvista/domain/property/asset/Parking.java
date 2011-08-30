@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -30,6 +32,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 public interface Parking extends IEntity {
 
     @Translatable
+    @XmlType(name = "ParkingType")
     public enum Type {
 
         surfaceLot,
