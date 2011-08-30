@@ -14,6 +14,7 @@
 package com.propertyvista.domain.site;
 
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -39,6 +40,7 @@ public interface SiteDescriptor extends IEntity {
         }
     }
 
+    @NotNull
     @ToString(index = 0)
     IPrimitive<Skin> skin();
 

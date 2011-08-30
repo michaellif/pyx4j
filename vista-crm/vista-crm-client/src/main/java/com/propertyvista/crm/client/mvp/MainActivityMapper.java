@@ -20,7 +20,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.activity.AppActivityMapper;
-import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.AccountActivity;
@@ -67,6 +66,9 @@ import com.propertyvista.crm.client.activity.crud.settings.FeatureItemTypeViewer
 import com.propertyvista.crm.client.activity.crud.settings.ServiceDictionaryViewActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ServiceItemTypeEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ServiceItemTypeViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.ThemeActivity;
+import com.propertyvista.crm.client.activity.crud.settings.ThemeEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.ThemeViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.InquiryEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.InquiryListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.InquiryViewerActivity;
@@ -426,18 +428,29 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new MessageActivity(place);
 
 // - Settings:
+                } else if (place instanceof CrmSiteMap.Settings.General) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new ThemeEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new ThemeViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new ThemeActivity(place);
+                        break;
+                    }
                 } else if (place instanceof CrmSiteMap.Settings.Content) {
-                    if (((AppPlace) place).getArg(CrudAppPlace.ARG_NAME_ITEM_ID) == null) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new ContentEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new ContentViewerActivity(place);
+                        break;
+                    case lister:
                         activity = new ContentActivity(place);
-                    } else {
-                        switch (((CrudAppPlace) place).getType()) {
-                        case editor:
-                            activity = new ContentEditorActivity(place);
-                            break;
-                        case viewer:
-                            activity = new ContentViewerActivity(place);
-                            break;
-                        }
+                        break;
                     }
                 } else if (place instanceof CrmSiteMap.Settings.ServiceDictionary) {
                     activity = new ServiceDictionaryViewActivity(place);

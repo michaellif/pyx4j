@@ -140,7 +140,6 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(caption = "Lead")
         @NavigationItem(navigLabel = "Leads")
         public static class Lead extends CrudAppPlace {
-
         }
 
         @PlaceProperties(caption = "Appointment")
@@ -151,7 +150,6 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(caption = "Showing")
         @NavigationItem(navigLabel = "Showings")
         public static class Showing extends CrudAppPlace {
-
         }
 
         @PlaceProperties(caption = "Tenant")
@@ -272,7 +270,7 @@ public class CrmSiteMap implements SiteMap {
 
         @PlaceProperties(caption = "General")
         @NavigationItem(navigLabel = "General")
-        public static class General extends AppPlace {
+        public static class General extends CrudAppPlace {
         }
 
         @PlaceProperties(caption = "Content")

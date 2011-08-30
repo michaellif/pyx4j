@@ -20,6 +20,10 @@ import com.propertyvista.crm.client.ui.crud.settings.content.ContentEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.ContentEditorImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.ContentViewer;
 import com.propertyvista.crm.client.ui.crud.settings.content.ContentViewerImpl;
+import com.propertyvista.crm.client.ui.crud.settings.content.ThemeEditor;
+import com.propertyvista.crm.client.ui.crud.settings.content.ThemeEditorImpl;
+import com.propertyvista.crm.client.ui.crud.settings.content.ThemeViewer;
+import com.propertyvista.crm.client.ui.crud.settings.content.ThemeViewerImpl;
 import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceDictionaryView;
 import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceDictionaryViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeEditorView;
@@ -35,6 +39,11 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new ContentViewerImpl());
             } else if (ContentEditor.class.equals(type)) {
                 map.put(type, new ContentEditorImpl());
+
+            } else if (ThemeViewer.class.equals(type)) {
+                map.put(type, new ThemeViewerImpl());
+            } else if (ThemeEditor.class.equals(type)) {
+                map.put(type, new ThemeEditorImpl());
 
             } else if (ServiceDictionaryView.class.equals(type)) {
                 map.put(type, new ServiceDictionaryViewImpl());

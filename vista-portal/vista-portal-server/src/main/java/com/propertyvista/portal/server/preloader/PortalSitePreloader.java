@@ -16,19 +16,46 @@ package com.propertyvista.portal.server.preloader;
 import java.io.IOException;
 
 import com.propertvista.generator.util.CommonsGenerator;
+import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.SiteDescriptor.Skin;
+import com.propertyvista.domain.site.Testimonial;
 
 public class PortalSitePreloader extends AbstractDataPreloader {
 
     @Override
     public String create() {
+
+        Testimonial testimonial = EntityFactory.create(Testimonial.class);
+        testimonial.content().setValue(
+                "You know... I was simply abscessed with that picture: stars everywhere and you are so small in the entire Universe... "
+                        + "But why she's starring at me constantly!!!");
+        testimonial.author().setValue("Uncle Vasya Sr.");
+        PersistenceServicesFactory.getPersistenceService().persist(testimonial);
+
+        News news = EntityFactory.create(News.class);
+        news.caption().setValue("Incredible offer!..");
+        news.content().setValue("Just by one star and get another two for free! Absolutely free! Just do not forget to pay property tax.");
+        news.date().setValue(RandomUtil.randomLogicalDate());
+        PersistenceServicesFactory.getPersistenceService().persist(news);
+
+        SiteDescriptor site = EntityFactory.create(SiteDescriptor.class);
+        site.skin().setValue(Skin.skin1);
+        site.baseColor().setValue("#fff");
+        site.copyright().setValue("Vista Property");
+        site.testimonials().add(testimonial);
+        site.news().add(news);
+        PersistenceServicesFactory.getPersistenceService().persist(site);
+
         PageDescriptor landingPage = EntityFactory.create(PageDescriptor.class);
         try {
             landingPage.type().setValue(PageDescriptor.Type.landing);

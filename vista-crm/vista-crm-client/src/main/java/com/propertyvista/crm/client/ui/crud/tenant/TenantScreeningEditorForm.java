@@ -31,7 +31,6 @@ import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
@@ -59,7 +58,10 @@ import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.ui.components.CrmBoxFolderDecorator;
+import com.propertyvista.crm.client.ui.components.CrmBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
+import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
@@ -404,12 +406,18 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     }
 
     private CEntityFolderEditor<TenantGuarantor> createGuarantorFolderEditorColumns() {
-        return new CEntityFolderEditor<TenantGuarantor>(TenantGuarantor.class) {
+        return new CrmEntityFolder<TenantGuarantor>(TenantGuarantor.class, i18n.tr("Guarantor"), isEditable()) {
+            private final CrmEntityFolder<TenantGuarantor> parent = this;
+
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                // TODO Auto-generated method stub
+                return null;
+            }
 
             @Override
             protected IFolderEditorDecorator<TenantGuarantor> createFolderDecorator() {
-                return new BoxFolderEditorDecorator<TenantGuarantor>(CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add guarantor"),
-                        TenantScreeningEditorForm.this.isEditable());
+                return new CrmBoxFolderDecorator<TenantGuarantor>(parent);
             }
 
             @Override
@@ -422,7 +430,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
                     @Override
                     public IsWidget createContent() {
-                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!TenantScreeningEditorForm.this.isEditable());
+                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable());
                         if (!TenantScreeningEditorForm.this.isEditable()) {
                             Widget name = inject(proto().name(), new CEntityLabel()).asWidget();
                             name.getElement().getStyle().setFontWeight(FontWeight.BOLDER);
@@ -446,8 +454,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
                     @Override
                     public IFolderItemEditorDecorator<TenantGuarantor> createFolderItemDecorator() {
-                        return new BoxFolderItemEditorDecorator<TenantGuarantor>(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(),
-                                i18n.tr("Remove guarantor"), TenantScreeningEditorForm.this.isEditable());
+                        return new CrmBoxFolderItemDecorator<TenantGuarantor>(parent);
                     }
 
                     @Override
@@ -464,13 +471,12 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
                             @Override
                             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                                return i18n.tr("Guarantor should be at least 18 years old");
+                                return CrmEntityFolder.i18n.tr("Guarantor should be at least 18 years old");
                             }
                         });
                     }
                 };
             }
-
         };
     }
 }
