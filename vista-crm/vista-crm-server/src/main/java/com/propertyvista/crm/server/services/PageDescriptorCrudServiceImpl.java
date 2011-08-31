@@ -89,15 +89,13 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
     public void create(AsyncCallback<PageDescriptor> callback, PageDescriptor entity) {
         buildPath(entity);
         entity.lang().setValue(lang);
-        PersistenceServicesFactory.getPersistenceService().persist(entity);
-        callback.onSuccess(entity);
+        super.create(callback, entity);
     }
 
     @Override
     public void save(AsyncCallback<PageDescriptor> callback, PageDescriptor entity) {
         buildPath(entity);
-        PersistenceServicesFactory.getPersistenceService().merge(entity);
-        callback.onSuccess(entity);
+        super.save(callback, entity);
     }
 
     @Override

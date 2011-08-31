@@ -32,6 +32,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -40,7 +41,6 @@ import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.settings.content.ContentEditor.Presenter;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.site.PageDescriptor;
@@ -48,18 +48,13 @@ import com.propertyvista.domain.site.PageDescriptor.Type;
 
 public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
 
-    Presenter presenter;
-
-    public ContentEditorForm() {
-        super(PageDescriptor.class, new CrmEditorsComponentFactory());
+    public ContentEditorForm(IFormView<PageDescriptor> parentView) {
+        this(parentView, new CrmEditorsComponentFactory());
     }
 
-    public ContentEditorForm(IEditableComponentFactory factory) {
+    public ContentEditorForm(IFormView<PageDescriptor> parentView, IEditableComponentFactory factory) {
         super(PageDescriptor.class, factory);
-    }
-
-    void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
+        setParentView(parentView);
     }
 
     @Override
@@ -108,8 +103,7 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
                                 comp = inject(column.getObject(), new CHyperlink(new Command() {
                                     @Override
                                     public void execute() {
-                                        assert (presenter != null);
-                                        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(presenter.getPlace().getClass());
+                                        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(((ContentEditor) getParentView()).getPlace().getClass());
                                         place.formViewerPlace(getValue().getPrimaryKey());
                                         AppSite.getPlaceController().goTo(place);
                                     }
@@ -126,8 +120,7 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
                         decor.addItemRemoveClickHandler(new ClickHandler() {
                             @Override
                             public void onClick(ClickEvent event) {
-                                assert (presenter != null);
-                                presenter.deleteChildPage(getValue());
+                                ((ContentEditor.Presenter) ((ContentEditor) getParentView()).getPresenter()).deleteChildPage(getValue());
                             }
                         });
                         return decor;
@@ -142,8 +135,7 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
                     @Override
                     public void onClick(ClickEvent event) {
                         if (ContentEditorForm.this.getValue().getPrimaryKey() != null) { // parent shouldn't be new unsaved value!..
-                            assert (presenter != null);
-                            CrudAppPlace place = AppSite.getHistoryMapper().createPlace(presenter.getPlace().getClass());
+                            CrudAppPlace place = AppSite.getHistoryMapper().createPlace(((ContentViewer) getParentView()).getPlace().getClass());
                             place.formNewItemPlace(ContentEditorForm.this.getValue().getPrimaryKey());
                             AppSite.getPlaceController().goTo(place);
                         }

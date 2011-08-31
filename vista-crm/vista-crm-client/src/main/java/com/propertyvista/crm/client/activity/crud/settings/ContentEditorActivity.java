@@ -17,34 +17,41 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.settings.content.ContentEditor;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
+import com.propertyvista.domain.site.Locale.Lang;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageDescriptor.Type;
 
 public class ContentEditorActivity extends EditorActivityBase<PageDescriptor> implements ContentEditor.Presenter {
 
-    private final CrudAppPlace place;
-
     @SuppressWarnings("unchecked")
     public ContentEditorActivity(Place place) {
         super((ContentEditor) SettingsViewFactory.instance(ContentEditor.class), (AbstractCrudService<PageDescriptor>) GWT
                 .create(PageDescriptorCrudService.class), PageDescriptor.class);
-        this.place = (CrudAppPlace) place;
         withPlace(place);
     }
 
     @Override
-    protected void createNewItem(AsyncCallback<PageDescriptor> callback) {
-        PageDescriptor descriptor = EntityFactory.create(PageDescriptor.class);
-        descriptor.type().setValue(Type.staticContent);
-        callback.onSuccess(descriptor);
+    protected void initNewItem(PageDescriptor entity) {
+        entity.type().setValue(Type.staticContent);
+
+        if (placeClass.equals(CrmSiteMap.Settings.English.Content.class)) {
+            entity.lang().setValue(Lang.english);
+        } else if (placeClass.equals(CrmSiteMap.Settings.French.Content.class)) {
+            entity.lang().setValue(Lang.french);
+        } else if (placeClass.equals(CrmSiteMap.Settings.Spanish.Content.class)) {
+            entity.lang().setValue(Lang.spanish);
+        } else {
+            entity.lang().setValue(Lang.english);
+        }
     }
 
     @Override
@@ -62,6 +69,6 @@ public class ContentEditorActivity extends EditorActivityBase<PageDescriptor> im
 
     @Override
     public CrudAppPlace getPlace() {
-        return place;
+        return AppSite.getHistoryMapper().createPlace(placeClass);
     }
 }

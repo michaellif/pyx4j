@@ -25,7 +25,9 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.crm.rpc.services.SiteDescriptorCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.site.Locale;
+import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.Testimonial;
 
 public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceImpl<SiteDescriptor> implements SiteDescriptorCrudService {
 
@@ -51,5 +53,18 @@ public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceImpl<SiteDe
         } else {
             callback.onSuccess(list.get(0));
         }
+    }
+
+    @Override
+    public void save(AsyncCallback<SiteDescriptor> callback, SiteDescriptor entity) {
+
+        for (Testimonial item : entity.testimonials()) {
+            PersistenceServicesFactory.getPersistenceService().merge(item);
+        }
+        for (News item : entity.news()) {
+            PersistenceServicesFactory.getPersistenceService().merge(item);
+        }
+
+        super.save(callback, entity);
     }
 }

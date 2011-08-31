@@ -14,9 +14,16 @@
 package com.propertyvista.crm.client.ui.crud.settings.content;
 
 import com.pyx4j.site.client.ui.crud.IViewerView;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.domain.site.PageDescriptor;
 
 public interface ContentViewer extends IViewerView<PageDescriptor> {
 
+    interface Presenter extends IViewerView.Presenter {
+
+        CrudAppPlace getPlace();
+    }
+
+    CrudAppPlace getPlace();
 }

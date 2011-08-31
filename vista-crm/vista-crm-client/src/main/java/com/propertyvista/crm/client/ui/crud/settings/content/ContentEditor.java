@@ -39,4 +39,6 @@ public interface ContentEditor extends IEditorView<PageDescriptor> {
 
         CrudAppPlace getPlace();
     }
+
+    CrudAppPlace getPlace();
 }
