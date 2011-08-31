@@ -11,15 +11,13 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.site;
+package com.propertyvista.crm.rpc.services;
 
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface Testimonial extends Locale {
+import com.propertyvista.domain.site.Locale;
 
-    @Editor(type = Editor.EditorType.textarea)
-    IPrimitive<String> content();
+public interface LocaleService {
 
-    IPrimitive<String> author();
+    void setLang(AsyncCallback<Boolean> callback, Locale.Lang lang);
 }

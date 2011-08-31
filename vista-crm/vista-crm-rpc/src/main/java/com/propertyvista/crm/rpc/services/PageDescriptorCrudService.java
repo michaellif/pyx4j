@@ -20,7 +20,7 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.domain.site.PageDescriptor;
 
-public interface PageDescriptorCrudService extends AbstractCrudService<PageDescriptor> {
+public interface PageDescriptorCrudService extends AbstractCrudService<PageDescriptor>, LocaleService {
 
     void retrieveLandingPage(AsyncCallback<Key> callback);
 

@@ -13,22 +13,43 @@
  */
 package com.propertyvista.crm.server.services;
 
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.SiteDescriptorCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
+import com.propertyvista.domain.site.Locale;
 import com.propertyvista.domain.site.SiteDescriptor;
 
 public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceImpl<SiteDescriptor> implements SiteDescriptorCrudService {
+
+    private Locale.Lang lang = Locale.Lang.english;
 
     public SiteDescriptorCrudServiceImpl() {
         super(SiteDescriptor.class);
     }
 
     @Override
+    public void setLang(AsyncCallback<Boolean> callback, Locale.Lang lang) {
+        this.lang = lang;
+        callback.onSuccess(true);
+    }
+
+    @Override
     public void retrieveHomeItem(AsyncCallback<Key> callback) {
-        callback.onSuccess(new Key(1));
+        EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().lang(), lang));
+        List<Key> list = PersistenceServicesFactory.getPersistenceService().queryKeys(criteria);
+        if (list.isEmpty()) {
+            throw new Error("Home item not found");
+        } else {
+            callback.onSuccess(list.get(0));
+        }
     }
 }

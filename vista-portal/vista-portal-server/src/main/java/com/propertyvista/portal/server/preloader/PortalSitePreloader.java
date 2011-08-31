@@ -23,6 +23,7 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.domain.site.Locale.Lang;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
@@ -36,19 +37,22 @@ public class PortalSitePreloader extends AbstractDataPreloader {
     public String create() {
 
         Testimonial testimonial = EntityFactory.create(Testimonial.class);
+        testimonial.lang().setValue(Lang.english);
         testimonial.content().setValue(
                 "You know... I was simply abscessed with that picture: stars everywhere and you are so small in the entire Universe... "
-                        + "But why she's starring at me constantly!!!");
+                        + "But men, why she's starring at me constantly!!!");
         testimonial.author().setValue("Uncle Vasya Sr.");
         PersistenceServicesFactory.getPersistenceService().persist(testimonial);
 
         News news = EntityFactory.create(News.class);
+        news.lang().setValue(Lang.english);
         news.caption().setValue("Incredible offer!..");
         news.content().setValue("Just by one star and get another two for free! Absolutely free! Just do not forget to pay property tax.");
         news.date().setValue(RandomUtil.randomLogicalDate());
         PersistenceServicesFactory.getPersistenceService().persist(news);
 
         SiteDescriptor site = EntityFactory.create(SiteDescriptor.class);
+        site.lang().setValue(Lang.english);
         site.skin().setValue(Skin.skin1);
         site.baseColor().setValue("#fff");
         site.copyright().setValue("Vista Property");
@@ -58,6 +62,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
 
         PageDescriptor landingPage = EntityFactory.create(PageDescriptor.class);
         try {
+            landingPage.lang().setValue(Lang.english);
             landingPage.type().setValue(PageDescriptor.Type.landing);
             landingPage.caption().setValue("Landing Page");
             landingPage.content().content().setValue(IOUtils.getUTF8TextResource("site-landing.html", this.getClass()));
@@ -65,6 +70,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
 
             {
                 PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                page.lang().setValue(Lang.english);
                 page.type().setValue(PageDescriptor.Type.findApartment);
                 page.caption().setValue("Find an Apartment");
                 page.content().content().setValue(CommonsGenerator.lipsum());
@@ -72,6 +78,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
             }
             {
                 PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                page.lang().setValue(Lang.english);
                 page.type().setValue(PageDescriptor.Type.residents);
                 page.caption().setValue("Residents");
                 landingPage.childPages().add(page);
@@ -79,11 +86,13 @@ public class PortalSitePreloader extends AbstractDataPreloader {
 
             {
                 PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                page.lang().setValue(Lang.english);
                 page.type().setValue(PageDescriptor.Type.staticContent);
                 page.caption().setValue("About Us");
                 page.content().content().setValue(IOUtils.getUTF8TextResource("site-about.html", this.getClass()));
                 {
                     PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
+                    page2.lang().setValue(Lang.english);
                     page2.type().setValue(PageDescriptor.Type.staticContent);
                     page2.caption().setValue("Overview");
                     page2.content().content().setValue(IOUtils.getUTF8TextResource("site-overview.html", this.getClass()));
@@ -91,6 +100,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
                 }
                 {
                     PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
+                    page2.lang().setValue(Lang.english);
                     page2.type().setValue(PageDescriptor.Type.staticContent);
                     page2.caption().setValue("Team");
                     page2.content().content().setValue(IOUtils.getUTF8TextResource("site-team.html", this.getClass()));
@@ -101,6 +111,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
 
             {
                 PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                page.lang().setValue(Lang.english);
                 page.type().setValue(PageDescriptor.Type.staticContent);
                 page.caption().setValue("Customer Care");
                 page.content().content().setValue(IOUtils.getUTF8TextResource("site-customer-care.html", this.getClass()));

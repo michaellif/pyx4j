@@ -7,28 +7,39 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-07
+ * Created on Aug 30, 2011
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.domain.site;
 
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
-public interface PageContent extends Locale {
+@AbstractEntity
+public interface Locale extends IEntity {
 
-    public static final String PATH_SEPARATOR = "/";
+    @Translatable
+    public enum Lang {
 
-    @Indexed
-    IPrimitive<String> path();
+        english,
 
-    @Owned
-    @Length(20845)
-    @Editor(type = Editor.EditorType.richtextarea)
-    //TODO Blob
-    IPrimitive<String> content();
+        french,
+
+        spanish,
+
+        urdu;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    @ToString(index = 0)
+    IPrimitive<Lang> lang();
 }

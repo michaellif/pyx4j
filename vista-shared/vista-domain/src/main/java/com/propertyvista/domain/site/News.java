@@ -14,15 +14,16 @@
 package com.propertyvista.domain.site;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface News extends IEntity {
+public interface News extends Locale {
 
     IPrimitive<String> caption();
 
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> content();
 
     @Format("MM/dd/yyyy")

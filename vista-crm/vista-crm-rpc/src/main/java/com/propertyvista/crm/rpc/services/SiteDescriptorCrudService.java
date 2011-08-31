@@ -20,7 +20,7 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.domain.site.SiteDescriptor;
 
-public interface SiteDescriptorCrudService extends AbstractCrudService<SiteDescriptor> {
+public interface SiteDescriptorCrudService extends AbstractCrudService<SiteDescriptor>, LocaleService {
 
     void retrieveHomeItem(AsyncCallback<Key> asyncCallback);
 }
