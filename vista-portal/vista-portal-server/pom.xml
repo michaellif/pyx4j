@@ -128,11 +128,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.openid4java</groupId>
-            <artifactId>openid4java-consumer</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
         </dependency>
@@ -168,7 +163,6 @@
 
 		<dependency>
             <groupId>org.hsqldb</groupId>
-            
             <artifactId>hsqldb</artifactId>
             <scope>test</scope>
         </dependency>
