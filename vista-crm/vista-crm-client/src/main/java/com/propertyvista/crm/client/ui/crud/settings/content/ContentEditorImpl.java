@@ -21,7 +21,7 @@ import com.propertyvista.domain.site.PageDescriptor;
 
 public class ContentEditorImpl extends CrmEditorViewImplBase<PageDescriptor> implements ContentEditor {
     public ContentEditorImpl() {
-        super(CrmSiteMap.Settings.Content.class, new ContentEditorForm());
+        super(CrmSiteMap.Settings.CaptionContent.class, new ContentEditorForm());
     }
 
     @Override

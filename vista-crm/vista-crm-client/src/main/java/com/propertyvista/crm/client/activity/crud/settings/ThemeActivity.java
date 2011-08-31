@@ -33,6 +33,7 @@ public class ThemeActivity extends AbstractActivity {
     private final CrudAppPlace place;
 
     public ThemeActivity(Place place) {
+        assert (place instanceof CrudAppPlace);
         this.place = (CrudAppPlace) place;
         withPlace(place);
     }

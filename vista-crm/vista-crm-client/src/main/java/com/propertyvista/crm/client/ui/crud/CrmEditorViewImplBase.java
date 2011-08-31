@@ -32,7 +32,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 import com.pyx4j.site.client.ui.crud.EditorViewImplBase;
-import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
@@ -52,7 +52,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
 
     protected EditMode mode;
 
-    public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
+    public CrmEditorViewImplBase(Class<? extends AppPlace> placeClass) {
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
 
         addNorth(header = new CrmTitleBar(defaultCaption), VistaCrmTheme.defaultHeaderHeight);
@@ -61,7 +61,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         header.setHeight("100%"); // fill all that defaultHeaderHeight!..
     }
 
-    public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass, CrudEntityForm<E> form) {
+    public CrmEditorViewImplBase(Class<? extends AppPlace> placeClass, CrudEntityForm<E> form) {
         this(placeClass);
         form.initialize();
         setForm(form);

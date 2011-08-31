@@ -19,6 +19,6 @@ import com.propertyvista.domain.site.SiteDescriptor;
 
 public class ThemeEditorImpl extends CrmEditorViewImplBase<SiteDescriptor> implements ThemeEditor {
     public ThemeEditorImpl() {
-        super(CrmSiteMap.Settings.General.class, new ThemeEditorForm());
+        super(CrmSiteMap.Settings.CaptionGeneral.class, new ThemeEditorForm());
     }
 }

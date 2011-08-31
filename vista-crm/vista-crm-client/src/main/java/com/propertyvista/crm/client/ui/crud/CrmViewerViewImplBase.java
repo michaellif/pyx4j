@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.ViewerViewImplBase;
-import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.decorations.CrmActionsBarDecorator;
@@ -40,7 +40,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     protected final Widget actionsWidget;
 
-    public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
+    public CrmViewerViewImplBase(Class<? extends AppPlace> placeClass) {
         defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
 
         actionsPanel = new HorizontalPanel();
@@ -55,7 +55,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         header.setHeight("100%"); // fill all that defaultHeaderHeight!..
     }
 
-    public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form) {
+    public CrmViewerViewImplBase(Class<? extends AppPlace> placeClass, CrmEntityForm<E> form) {
         this(placeClass);
         form.initialize();
         setForm(form);

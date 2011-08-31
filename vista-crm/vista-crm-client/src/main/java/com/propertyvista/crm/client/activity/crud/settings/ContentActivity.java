@@ -33,6 +33,7 @@ public class ContentActivity extends AbstractActivity {
     private final CrudAppPlace place;
 
     public ContentActivity(Place place) {
+        assert (place instanceof CrudAppPlace);
         this.place = (CrudAppPlace) place;
         withPlace(place);
     }

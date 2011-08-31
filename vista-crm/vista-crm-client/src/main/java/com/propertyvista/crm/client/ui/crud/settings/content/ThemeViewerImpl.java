@@ -20,6 +20,6 @@ import com.propertyvista.domain.site.SiteDescriptor;
 
 public class ThemeViewerImpl extends CrmViewerViewImplBase<SiteDescriptor> implements ThemeViewer {
     public ThemeViewerImpl() {
-        super(CrmSiteMap.Settings.General.class, new ThemeEditorForm(new CrmViewersComponentFactory()));
+        super(CrmSiteMap.Settings.CaptionGeneral.class, new ThemeEditorForm(new CrmViewersComponentFactory()));
     }
 }

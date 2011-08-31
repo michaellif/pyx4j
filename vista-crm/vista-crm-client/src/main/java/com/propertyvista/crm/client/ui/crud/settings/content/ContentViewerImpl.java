@@ -20,6 +20,6 @@ import com.propertyvista.domain.site.PageDescriptor;
 
 public class ContentViewerImpl extends CrmViewerViewImplBase<PageDescriptor> implements ContentViewer {
     public ContentViewerImpl() {
-        super(CrmSiteMap.Settings.Content.class, new ContentEditorForm(new CrmViewersComponentFactory()));
+        super(CrmSiteMap.Settings.CaptionContent.class, new ContentEditorForm(new CrmViewersComponentFactory()));
     }
 }
