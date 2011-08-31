@@ -125,7 +125,7 @@ public class XMLEntityParser {
                     for (int ci = 0; ci < collectionNodeList.getLength(); ci++) {
                         Node itemNode = collectionNodeList.item(ci);
                         if ((itemNode instanceof Element) && ("item".equals(itemNode.getNodeName()))) {
-                            ((IPrimitiveSet) member).add(parsePrimitive((Element) itemNode, memberMeta.getValueClass()));
+                            ((IPrimitiveSet) member).add(parsePrimitive((Element) itemNode, memberMeta.getValueClass(), memberMeta, member));
                         }
                     }
                 } else {
@@ -137,16 +137,38 @@ public class XMLEntityParser {
         return entity;
     }
 
-    private Object parsePrimitive(Element valueNode, Class<?> valueClass) {
+    private Object parsePrimitive(Element valueNode, Class<?> valueClass, MemberMeta memberMeta, IObject<?> member) {
         String str = valueNode.getTextContent();
         if (valueClass.isAssignableFrom(byte[].class)) {
             return new Base64().decode(str);
         } else if (valueClass.isAssignableFrom(Date.class)) {
             return DateUtils.detectDateformat(str);
         } else if (valueClass.equals(GeoPoint.class)) {
-            return GeoPoint.valueOf(str);
+            return parsGeoPoint(valueNode, memberMeta, member);
         } else {
             return PrimitiveHandler.parsString(valueClass, str);
+        }
+    }
+
+    private GeoPoint parsGeoPoint(Element node, MemberMeta memberMeta, IObject<?> member) {
+        Double lat = null;
+        Double lng = null;
+        NodeList nodeList = node.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node valueNode = nodeList.item(i);
+            if (valueNode instanceof Element) {
+                String name = valueNode.getNodeName();
+                if ("lat".equals(name)) {
+                    lat = Double.valueOf(valueNode.getTextContent());
+                } else if ("lng".equals(name)) {
+                    lng = Double.valueOf(valueNode.getTextContent());
+                }
+            }
+        }
+        if ((lat != null) && (lng != null)) {
+            return new GeoPoint(lat, lng);
+        } else {
+            throw new Error("Error parsing " + member.getFieldName() + " (" + memberMeta.getValueClass() + ") '");
         }
     }
 
@@ -169,7 +191,7 @@ public class XMLEntityParser {
                     return date;
                 }
             } else if (valueClass.equals(GeoPoint.class)) {
-                return GeoPoint.valueOf(str);
+                return parsGeoPoint(valueNode, memberMeta, member);
             } else {
                 return ((IPrimitive<?>) member).parse(str);
             }

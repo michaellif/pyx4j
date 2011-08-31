@@ -52,7 +52,7 @@ public class DeferredProcessorThread extends Thread {
         } catch (Throwable e) {
             log.error("processor error", e);
             if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
-                process.status().setErrorStatusMessage(e.getMessage());
+                process.status().setErrorStatusMessage(e.getClass().getName() + " " + e.getMessage());
             } else {
                 process.status().setError();
             }
