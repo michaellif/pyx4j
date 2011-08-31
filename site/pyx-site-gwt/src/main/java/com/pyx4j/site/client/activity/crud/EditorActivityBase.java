@@ -51,7 +51,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected int tabIndex;
 
-    Class<? extends CrudAppPlace> placeClass;
+    protected Class<? extends CrudAppPlace> placeClass;
 
     public EditorActivityBase(IEditorView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
         // development correctness checks:
