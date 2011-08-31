@@ -21,7 +21,9 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.settings.content.ThemeEditor;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.SiteDescriptorCrudService;
+import com.propertyvista.domain.site.Locale.Lang;
 import com.propertyvista.domain.site.SiteDescriptor;
 
 public class ThemeEditorActivity extends EditorActivityBase<SiteDescriptor> implements ThemeEditor.Presenter {
@@ -31,5 +33,19 @@ public class ThemeEditorActivity extends EditorActivityBase<SiteDescriptor> impl
         super((ThemeEditor) SettingsViewFactory.instance(ThemeEditor.class), (AbstractCrudService<SiteDescriptor>) GWT.create(SiteDescriptorCrudService.class),
                 SiteDescriptor.class);
         withPlace(place);
+    }
+
+    @Override
+    protected void initNewItem(SiteDescriptor entity) {
+
+        if (placeClass.equals(CrmSiteMap.Settings.English.General.class)) {
+            entity.lang().setValue(Lang.english);
+        } else if (placeClass.equals(CrmSiteMap.Settings.French.General.class)) {
+            entity.lang().setValue(Lang.french);
+        } else if (placeClass.equals(CrmSiteMap.Settings.Spanish.General.class)) {
+            entity.lang().setValue(Lang.spanish);
+        } else {
+            entity.lang().setValue(Lang.english);
+        }
     }
 }
