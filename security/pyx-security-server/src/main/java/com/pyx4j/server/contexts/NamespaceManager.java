@@ -20,6 +20,8 @@
  */
 package com.pyx4j.server.contexts;
 
+import com.pyx4j.log4j.LoggerConfig;
+
 public class NamespaceManager {
 
     private static final ThreadLocal<String> requestLocal = new ThreadLocal<String>() {
@@ -29,28 +31,18 @@ public class NamespaceManager {
         }
     };
 
-    private static class NamespaceMDC {
-
-        @Override
-        public String toString() {
-            return getNamespace();
-        }
-
-    }
-
     public static String getNamespace() {
         return requestLocal.get();
     }
 
     public static void setNamespace(String newNamespace) {
         requestLocal.set(newNamespace);
+        LoggerConfig.mdcPut(LoggerConfig.MDC_namespace, newNamespace);
     }
 
     public static void remove() {
         requestLocal.remove();
+        LoggerConfig.mdcRemove(LoggerConfig.MDC_namespace);
     }
 
-    public static Object getNamespaceMDC() {
-        return new NamespaceMDC();
-    }
 }

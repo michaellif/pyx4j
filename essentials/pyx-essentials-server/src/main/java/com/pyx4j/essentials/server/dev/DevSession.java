@@ -105,6 +105,10 @@ public class DevSession {
         }
     }
 
+    public static void cleanup() {
+        sessions.clear();
+    }
+
     public String getId() {
         return id;
     }

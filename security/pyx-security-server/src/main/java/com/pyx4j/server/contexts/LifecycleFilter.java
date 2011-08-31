@@ -81,7 +81,6 @@ public class LifecycleFilter implements Filter {
                 }
                 try {
                     NamespaceManager.setNamespace(ServerSideConfiguration.instance().getNamespaceResolver().getNamespace(httprequest));
-                    LoggerConfig.mdcPut(LoggerConfig.MDC_namespace, NamespaceManager.getNamespaceMDC());
 
                     Lifecycle.beginRequest(httprequest, httpresponse);
 
@@ -103,7 +102,6 @@ public class LifecycleFilter implements Filter {
                     }
                 } finally {
                     Lifecycle.endRequest();
-                    Context.cleanup();
                     LoggerConfig.mdcRemove(LoggerConfig.MDC_userID);
                     LoggerConfig.mdcRemove(LoggerConfig.MDC_sessionNum);
                 }

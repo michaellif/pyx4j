@@ -28,7 +28,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.pyx4j.gwt.server.ServletUtils;
-import com.pyx4j.log4j.LoggerConfig;
 
 /**
  * 
@@ -163,8 +162,4 @@ public class Context {
         rc.sessionEnd = true;
     }
 
-    // See used in logger InheritableThreadLocal
-    public static void cleanup() {
-        LoggerConfig.mdcRemove(LoggerConfig.MDC_namespace);
-    }
 }

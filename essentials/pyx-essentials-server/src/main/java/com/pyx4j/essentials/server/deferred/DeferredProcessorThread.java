@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.rpc.shared.UserRuntimeException;
-import com.pyx4j.server.contexts.Context;
 
 public class DeferredProcessorThread extends Thread {
 
@@ -57,8 +56,6 @@ public class DeferredProcessorThread extends Thread {
             } else {
                 process.status().setError();
             }
-        } finally {
-            Context.cleanup();
         }
     }
 }
