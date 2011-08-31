@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -36,22 +37,25 @@ public class ContentEditorActivity extends EditorActivityBase<PageDescriptor> im
     public ContentEditorActivity(Place place) {
         super((ContentEditor) SettingsViewFactory.instance(ContentEditor.class), (AbstractCrudService<PageDescriptor>) GWT
                 .create(PageDescriptorCrudService.class), PageDescriptor.class);
+
+        ((PageDescriptorCrudService) service).setLang(new AsyncCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+        }, getLangByPlace());
+
         withPlace(place);
     }
 
     @Override
     protected void initNewItem(PageDescriptor entity) {
+        entity.lang().setValue(getLangByPlace());
         entity.type().setValue(Type.staticContent);
-
-        if (placeClass.equals(CrmSiteMap.Settings.English.Content.class)) {
-            entity.lang().setValue(Lang.english);
-        } else if (placeClass.equals(CrmSiteMap.Settings.French.Content.class)) {
-            entity.lang().setValue(Lang.french);
-        } else if (placeClass.equals(CrmSiteMap.Settings.Spanish.Content.class)) {
-            entity.lang().setValue(Lang.spanish);
-        } else {
-            entity.lang().setValue(Lang.english);
-        }
     }
 
     @Override
@@ -63,6 +67,7 @@ public class ContentEditorActivity extends EditorActivityBase<PageDescriptor> im
 
             @Override
             public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
             }
         }, page);
     }
@@ -70,5 +75,19 @@ public class ContentEditorActivity extends EditorActivityBase<PageDescriptor> im
     @Override
     public CrudAppPlace getPlace() {
         return AppSite.getHistoryMapper().createPlace(placeClass);
+    }
+
+    private Lang getLangByPlace() {
+
+        Lang lang = Lang.english;
+
+        if (placeClass.getEnclosingClass().equals(CrmSiteMap.Settings.English.class)) {
+            lang = Lang.english;
+        } else if (placeClass.getEnclosingClass().equals(CrmSiteMap.Settings.French.class)) {
+            lang = Lang.french;
+        } else if (placeClass.getEnclosingClass().equals(CrmSiteMap.Settings.Spanish.class)) {
+            lang = Lang.spanish;
+        }
+        return lang;
     }
 }

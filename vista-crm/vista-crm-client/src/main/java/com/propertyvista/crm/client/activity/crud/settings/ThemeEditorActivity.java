@@ -38,14 +38,20 @@ public class ThemeEditorActivity extends EditorActivityBase<SiteDescriptor> impl
     @Override
     protected void initNewItem(SiteDescriptor entity) {
 
-        if (placeClass.equals(CrmSiteMap.Settings.English.General.class)) {
-            entity.lang().setValue(Lang.english);
-        } else if (placeClass.equals(CrmSiteMap.Settings.French.General.class)) {
-            entity.lang().setValue(Lang.french);
-        } else if (placeClass.equals(CrmSiteMap.Settings.Spanish.General.class)) {
-            entity.lang().setValue(Lang.spanish);
-        } else {
-            entity.lang().setValue(Lang.english);
+        entity.lang().setValue(getLangByPlace());
+    }
+
+    private Lang getLangByPlace() {
+
+        Lang lang = Lang.english;
+
+        if (placeClass.getEnclosingClass().equals(CrmSiteMap.Settings.English.class)) {
+            lang = Lang.english;
+        } else if (placeClass.getEnclosingClass().equals(CrmSiteMap.Settings.French.class)) {
+            lang = Lang.french;
+        } else if (placeClass.getEnclosingClass().equals(CrmSiteMap.Settings.Spanish.class)) {
+            lang = Lang.spanish;
         }
+        return lang;
     }
 }

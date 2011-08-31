@@ -55,6 +55,8 @@ public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceImpl<SiteDe
         }
     }
 
+    // base class overrides:
+
     @Override
     public void save(AsyncCallback<SiteDescriptor> callback, SiteDescriptor entity) {
 

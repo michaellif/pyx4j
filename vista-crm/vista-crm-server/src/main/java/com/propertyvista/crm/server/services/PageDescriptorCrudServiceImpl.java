@@ -58,13 +58,9 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
     }
 
     @Override
-    public void retrieve(AsyncCallback<PageDescriptor> callback, Key entityId) {
-        PageDescriptor page = PersistenceServicesFactory.getPersistenceService().retrieve(dboClass, entityId);
-        PersistenceServicesFactory.getPersistenceService().retrieve(page.content());
-        EntityQueryCriteria<PageDescriptor> childPagesCriteria = EntityQueryCriteria.create(PageDescriptor.class);
-        childPagesCriteria.add(PropertyCriterion.eq(childPagesCriteria.proto().parent(), page));
-        page.childPages().addAll(PersistenceServicesFactory.getPersistenceService().query(childPagesCriteria));
-        callback.onSuccess(page);
+    public void deleteChildPage(AsyncCallback<Boolean> callback, PageDescriptor page) {
+        PersistenceServicesFactory.getPersistenceService().delete(page);
+        callback.onSuccess(true);
     }
 
     private void buildPath(PageDescriptor page) {
@@ -85,6 +81,18 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
         page.content().path().setValue(path.toString());
     }
 
+    // base class overrides:
+
+    @Override
+    public void retrieve(AsyncCallback<PageDescriptor> callback, Key entityId) {
+        PageDescriptor page = PersistenceServicesFactory.getPersistenceService().retrieve(dboClass, entityId);
+        PersistenceServicesFactory.getPersistenceService().retrieve(page.content());
+        EntityQueryCriteria<PageDescriptor> childPagesCriteria = EntityQueryCriteria.create(PageDescriptor.class);
+        childPagesCriteria.add(PropertyCriterion.eq(childPagesCriteria.proto().parent(), page));
+        page.childPages().addAll(PersistenceServicesFactory.getPersistenceService().query(childPagesCriteria));
+        callback.onSuccess(page);
+    }
+
     @Override
     public void create(AsyncCallback<PageDescriptor> callback, PageDescriptor entity) {
         buildPath(entity);
@@ -96,11 +104,5 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
     public void save(AsyncCallback<PageDescriptor> callback, PageDescriptor entity) {
         buildPath(entity);
         super.save(callback, entity);
-    }
-
-    @Override
-    public void deleteChildPage(AsyncCallback<Boolean> callback, PageDescriptor page) {
-        PersistenceServicesFactory.getPersistenceService().delete(page);
-        callback.onSuccess(true);
     }
 }
