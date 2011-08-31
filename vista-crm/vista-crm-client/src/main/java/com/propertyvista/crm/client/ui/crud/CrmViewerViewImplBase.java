@@ -41,7 +41,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     protected final Widget actionsWidget;
 
     public CrmViewerViewImplBase(Class<? extends AppPlace> placeClass) {
-        defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
+        defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
 
         actionsPanel = new HorizontalPanel();
         actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);

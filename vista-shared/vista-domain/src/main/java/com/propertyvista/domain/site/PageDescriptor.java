@@ -23,11 +23,14 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.media.File;
 
 public interface PageDescriptor extends Locale {
 
+    @Translatable
     public enum Type {
 
         staticContent,
@@ -39,6 +42,11 @@ public interface PageDescriptor extends Locale {
         residents,
 
         landing;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
 
     @ToString(index = 0)

@@ -108,6 +108,7 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
                                 comp = inject(column.getObject(), new CHyperlink(new Command() {
                                     @Override
                                     public void execute() {
+                                        assert (presenter != null);
                                         CrudAppPlace place = AppSite.getHistoryMapper().createPlace(presenter.getPlace().getClass());
                                         place.formViewerPlace(getValue().getPrimaryKey());
                                         AppSite.getPlaceController().goTo(place);
@@ -141,6 +142,7 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
                     @Override
                     public void onClick(ClickEvent event) {
                         if (ContentEditorForm.this.getValue().getPrimaryKey() != null) { // parent shouldn't be new unsaved value!..
+                            assert (presenter != null);
                             CrudAppPlace place = AppSite.getHistoryMapper().createPlace(presenter.getPlace().getClass());
                             place.formNewItemPlace(ContentEditorForm.this.getValue().getPrimaryKey());
                             AppSite.getPlaceController().goTo(place);

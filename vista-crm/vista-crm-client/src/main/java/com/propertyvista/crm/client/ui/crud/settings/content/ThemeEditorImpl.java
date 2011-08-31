@@ -14,11 +14,10 @@
 package com.propertyvista.crm.client.ui.crud.settings.content;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.site.SiteDescriptor;
 
 public class ThemeEditorImpl extends CrmEditorViewImplBase<SiteDescriptor> implements ThemeEditor {
     public ThemeEditorImpl() {
-        super(CrmSiteMap.Settings.CaptionGeneral.class, new ThemeEditorForm());
+        super(null, new ThemeEditorForm());
     }
 }

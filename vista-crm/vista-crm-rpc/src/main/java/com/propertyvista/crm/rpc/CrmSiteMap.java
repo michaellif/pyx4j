@@ -283,14 +283,6 @@ public class CrmSiteMap implements SiteMap {
         public static class FeatureItemType extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "General")
-        public static class CaptionGeneral extends AppPlace {
-        }
-
-        @PlaceProperties(caption = "Content")
-        public static class CaptionContent extends AppPlace {
-        }
-
         @PlaceProperties(caption = "English")
         @NavigationItem(navigLabel = "English")
         public static class English extends AppPlace {
