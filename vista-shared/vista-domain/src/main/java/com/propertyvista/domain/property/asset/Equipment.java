@@ -37,6 +37,7 @@ public interface Equipment extends LicencedWarrantedMaintained {
     @MemberColumn(name = "equipmentType")
     IPrimitive<String> type();
 
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
     IPrimitive<String> make();

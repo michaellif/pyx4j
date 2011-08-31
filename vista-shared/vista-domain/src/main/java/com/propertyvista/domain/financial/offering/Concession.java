@@ -16,6 +16,7 @@ package com.propertyvista.domain.financial.offering;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -88,7 +89,7 @@ public interface Concession extends IEntity {
 
     IPrimitive<Term> term();
 
-    @ToString(index = 2)
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
     /**

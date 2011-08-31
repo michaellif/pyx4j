@@ -88,7 +88,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         main.add(split);
 
         split.getLeftPanel().add(inject(proto().info().economicStatus()), 15);
-        split.getLeftPanel().add(inject(proto().info().economicStatusDescription()), 15);
+        split.getLeftPanel().add(inject(proto().info().economicStatusDescription()), 25);
         split.getLeftPanel().add(inject(proto().floorplan()), 20);
         split.getLeftPanel().add(inject(proto().availableForRent()), 8.2);
 

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.dashboard;
 
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
@@ -68,6 +69,7 @@ public interface DashboardMetadata extends ISharedUserEntity {
     @ToString(index = 0)
     IPrimitive<String> name();
 
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
     IPrimitive<LayoutType> layoutType();

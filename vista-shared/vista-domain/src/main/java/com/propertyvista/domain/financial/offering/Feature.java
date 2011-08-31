@@ -14,6 +14,7 @@
 package com.propertyvista.domain.financial.offering;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -86,7 +87,7 @@ public interface Feature extends IEntity {
     @ToString(index = 1)
     IPrimitive<String> name();
 
-    @ToString(index = 2)
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
     @Owned

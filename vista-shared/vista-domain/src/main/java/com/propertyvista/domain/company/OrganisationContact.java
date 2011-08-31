@@ -13,11 +13,13 @@
  */
 package com.propertyvista.domain.company;
 
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface OrganisationContact extends IEntity {
 
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
     Employee person();

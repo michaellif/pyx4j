@@ -15,6 +15,7 @@ package com.propertyvista.domain.property.asset.unit;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -140,8 +141,10 @@ public interface AptUnitItem extends IEntity {
     IPrimitive<Type> type();
 
     @ToString(index = 1)
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> conditionNotes();
 
     // ----------- Details -----------------------

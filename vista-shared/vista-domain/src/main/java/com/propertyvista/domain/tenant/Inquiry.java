@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.tenant;
 
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -35,6 +36,7 @@ public interface Inquiry extends IEntity {
     @EmbeddedEntity
     Email email();
 
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
     Building building();

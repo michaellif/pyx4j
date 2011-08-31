@@ -60,6 +60,7 @@ public interface Parking extends IEntity {
     @ToString(index = 0)
     IPrimitive<String> name();
 
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
     @ToString(index = 1)

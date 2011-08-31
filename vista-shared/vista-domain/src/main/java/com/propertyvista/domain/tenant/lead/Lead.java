@@ -15,6 +15,7 @@ package com.propertyvista.domain.tenant.lead;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
@@ -130,6 +131,7 @@ public interface Lead extends IEntity {
     Floorplan floorplan();
 
     @Caption(name = "Questions/Comments")
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> comments();
 
     // === Internals:
