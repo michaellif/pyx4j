@@ -17,6 +17,7 @@ import com.pyx4j.essentials.server.upload.AbstractUploadServlet;
 
 import com.propertyvista.admin.server.services.ImportUploadServiceImpl;
 import com.propertyvista.crm.server.services.MediaUploadServiceImpl;
+import com.propertyvista.crm.server.services.SiteResourcesUploadServiceImpl;
 import com.propertyvista.crm.server.services.UpdateUploadServiceImpl;
 
 @SuppressWarnings("serial")
@@ -26,5 +27,6 @@ public class VistaUploadServlet extends AbstractUploadServlet {
         bind(ImportUploadServiceImpl.class);
         bind(UpdateUploadServiceImpl.class);
         bind(MediaUploadServiceImpl.class);
+        bind(SiteResourcesUploadServiceImpl.class);
     }
 }
