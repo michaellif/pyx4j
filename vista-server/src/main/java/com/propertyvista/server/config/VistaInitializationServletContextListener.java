@@ -15,6 +15,7 @@ package com.propertyvista.server.config;
 
 import javax.servlet.ServletContextEvent;
 
+import com.pyx4j.essentials.server.dev.DevSession;
 import com.pyx4j.quartz.SchedulerHelper;
 
 public class VistaInitializationServletContextListener extends com.pyx4j.entity.server.servlet.InitializationServletContextListener {
@@ -28,6 +29,7 @@ public class VistaInitializationServletContextListener extends com.pyx4j.entity.
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         SchedulerHelper.shutdown();
+        DevSession.cleanup();
         try {
             // Avoid Tomcat redeploy warnings
             Thread.sleep(1000);
