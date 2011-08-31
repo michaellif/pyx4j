@@ -45,7 +45,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected int tabIndex;
 
-    Class<? extends CrudAppPlace> placeClass;
+    protected Class<? extends CrudAppPlace> placeClass;
 
     public ViewerActivityBase(IViewerView<E> view, AbstractCrudService<E> service) {
 // development correctness checks:
@@ -61,6 +61,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
         entityId = null;
         tabIndex = -1;
 
+        assert (place instanceof CrudAppPlace);
         placeClass = ((CrudAppPlace) place).getClass();
 
         String val;

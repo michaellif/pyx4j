@@ -71,6 +71,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         parentID = null;
         tabIndex = -1;
 
+        assert (place instanceof CrudAppPlace);
         placeClass = ((CrudAppPlace) place).getClass();
 
         String val;
