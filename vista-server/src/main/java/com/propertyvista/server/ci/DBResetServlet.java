@@ -39,6 +39,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -154,6 +155,8 @@ public class DBResetServlet extends HttpServlet {
                 buf.append("\nError:");
                 buf.append(t.getMessage());
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } finally {
+                DataGenerator.cleanup();
             }
             response.setDateHeader("Expires", System.currentTimeMillis());
             response.setHeader("Pragma", "no-cache");
