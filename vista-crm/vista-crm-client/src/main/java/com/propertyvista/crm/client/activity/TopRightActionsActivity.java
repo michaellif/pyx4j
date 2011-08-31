@@ -23,7 +23,6 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.style.StyleManger;
 
 import com.propertyvista.crm.client.themes.BlueColdTheme;
@@ -125,8 +124,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void showSettings() {
-        CrudAppPlace place = new CrmSiteMap.Settings.Content();
-        AppSite.getPlaceController().goTo(place);
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Settings.ServiceDictionary());
     }
 
     @Override

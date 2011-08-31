@@ -268,6 +268,11 @@ public class CrmSiteMap implements SiteMap {
         public static class UserRole extends AppPlace {
         }
 
+        @PlaceProperties(caption = "Service Dictionary")
+        @NavigationItem(navigLabel = "Service Dictionary")
+        public static class ServiceDictionary extends CrudAppPlace {
+        }
+
         @PlaceProperties(caption = "General")
         @NavigationItem(navigLabel = "General")
         public static class General extends CrudAppPlace {
@@ -278,9 +283,49 @@ public class CrmSiteMap implements SiteMap {
         public static class Content extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Service Dictionary")
-        @NavigationItem(navigLabel = "Service Dictionary")
-        public static class ServiceDictionary extends CrudAppPlace {
+        @PlaceProperties(caption = "English")
+        @NavigationItem(navigLabel = "English")
+        public static class English extends AppPlace {
+
+            @PlaceProperties(caption = "General")
+            @NavigationItem(navigLabel = "General")
+            public static class General extends CrudAppPlace {
+            }
+
+            @PlaceProperties(caption = "Content")
+            @NavigationItem(navigLabel = "Content")
+            public static class Content extends CrudAppPlace {
+            }
+        }
+
+        @PlaceProperties(caption = "French")
+        @NavigationItem(navigLabel = "French")
+        public static class French extends AppPlace {
+
+            @PlaceProperties(caption = "General")
+            @NavigationItem(navigLabel = "General")
+            public static class General extends CrudAppPlace {
+            }
+
+            @PlaceProperties(caption = "Content")
+            @NavigationItem(navigLabel = "Content")
+            public static class Content extends CrudAppPlace {
+            }
+        }
+
+        @PlaceProperties(caption = "Spanish")
+        @NavigationItem(navigLabel = "Spanish")
+        public static class Spanish extends AppPlace {
+
+            @PlaceProperties(caption = "General")
+            @NavigationItem(navigLabel = "General")
+            public static class General extends CrudAppPlace {
+            }
+
+            @PlaceProperties(caption = "Content")
+            @NavigationItem(navigLabel = "Content")
+            public static class Content extends CrudAppPlace {
+            }
         }
 
         @PlaceProperties(caption = "Service Item Type")

@@ -43,7 +43,6 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.settings.content.ContentEditor.Presenter;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageDescriptor.Type;
 
@@ -109,7 +108,7 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
                                 comp = inject(column.getObject(), new CHyperlink(new Command() {
                                     @Override
                                     public void execute() {
-                                        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Content.class);
+                                        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(presenter.getPlace().getClass());
                                         place.formViewerPlace(getValue().getPrimaryKey());
                                         AppSite.getPlaceController().goTo(place);
                                     }
@@ -142,7 +141,7 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
                     @Override
                     public void onClick(ClickEvent event) {
                         if (ContentEditorForm.this.getValue().getPrimaryKey() != null) { // parent shouldn't be new unsaved value!..
-                            CrudAppPlace place = AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Content.class);
+                            CrudAppPlace place = AppSite.getHistoryMapper().createPlace(presenter.getPlace().getClass());
                             place.formNewItemPlace(ContentEditorForm.this.getValue().getPrimaryKey());
                             AppSite.getPlaceController().goTo(place);
                         }

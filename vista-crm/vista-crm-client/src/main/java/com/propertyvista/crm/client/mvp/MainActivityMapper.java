@@ -428,7 +428,8 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new MessageActivity(place);
 
 // - Settings:
-                } else if (place instanceof CrmSiteMap.Settings.General) {
+                } else if (place instanceof CrmSiteMap.Settings.English.General || place instanceof CrmSiteMap.Settings.French.General
+                        || place instanceof CrmSiteMap.Settings.Spanish.General) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         activity = new ThemeEditorActivity(place);
@@ -440,7 +441,8 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new ThemeActivity(place);
                         break;
                     }
-                } else if (place instanceof CrmSiteMap.Settings.Content) {
+                } else if (place instanceof CrmSiteMap.Settings.English.Content || place instanceof CrmSiteMap.Settings.French.Content
+                        || place instanceof CrmSiteMap.Settings.Spanish.Content) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         activity = new ContentEditorActivity(place);

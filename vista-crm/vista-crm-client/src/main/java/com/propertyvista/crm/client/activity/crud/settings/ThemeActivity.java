@@ -26,12 +26,14 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.SiteDescriptorCrudService;
 
 public class ThemeActivity extends AbstractActivity {
 
+    private final CrudAppPlace place;
+
     public ThemeActivity(Place place) {
+        this.place = (CrudAppPlace) place;
         withPlace(place);
     }
 
@@ -42,9 +44,9 @@ public class ThemeActivity extends AbstractActivity {
         sds.retrieveHomeItem(new AsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
-                CrudAppPlace place = new CrmSiteMap.Settings.General();
-                place.formViewerPlace(result);
-                AppSite.getPlaceController().goTo(place);
+                CrudAppPlace gotoPlace = AppSite.getHistoryMapper().createPlace(place.getClass());
+                gotoPlace.formViewerPlace(result);
+                AppSite.getPlaceController().goTo(gotoPlace);
             }
 
             @Override

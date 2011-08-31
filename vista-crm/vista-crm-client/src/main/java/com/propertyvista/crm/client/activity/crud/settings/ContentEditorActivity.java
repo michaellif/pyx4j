@@ -19,6 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.settings.content.ContentEditor;
@@ -29,10 +30,13 @@ import com.propertyvista.domain.site.PageDescriptor.Type;
 
 public class ContentEditorActivity extends EditorActivityBase<PageDescriptor> implements ContentEditor.Presenter {
 
+    private final CrudAppPlace place;
+
     @SuppressWarnings("unchecked")
     public ContentEditorActivity(Place place) {
         super((ContentEditor) SettingsViewFactory.instance(ContentEditor.class), (AbstractCrudService<PageDescriptor>) GWT
                 .create(PageDescriptorCrudService.class), PageDescriptor.class);
+        this.place = (CrudAppPlace) place;
         withPlace(place);
     }
 
@@ -54,5 +58,10 @@ public class ContentEditorActivity extends EditorActivityBase<PageDescriptor> im
             public void onFailure(Throwable caught) {
             }
         }, page);
+    }
+
+    @Override
+    public CrudAppPlace getPlace() {
+        return place;
     }
 }
