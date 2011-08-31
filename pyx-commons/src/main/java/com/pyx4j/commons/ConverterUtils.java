@@ -34,6 +34,7 @@ public abstract class ConverterUtils {
 
     public static class StringConverter implements ToStringConverter<String> {
 
+        @Override
         public String toString(String value) {
             return value;
         }
@@ -57,11 +58,19 @@ public abstract class ConverterUtils {
         }
     }
 
-    public static String convertStringCollection(Collection<String> entityCollection) {
-        return convertCollection(entityCollection, new StringConverter());
+    public static String convertStringCollection(Collection<String> stringCollection) {
+        return convertCollection(stringCollection, new StringConverter());
+    }
+
+    public static String convertStringCollection(Collection<String> stringCollection, String separator) {
+        return convertCollection(stringCollection, new StringConverter(), separator);
     }
 
     public static <T> String convertCollection(Collection<T> collection, ToStringConverter<T> converter) {
+        return convertCollection(collection, converter, ", ");
+    }
+
+    public static <T> String convertCollection(Collection<T> collection, ToStringConverter<T> converter, String separator) {
         if (collection == null) {
             return "";
         }
@@ -71,7 +80,7 @@ public abstract class ConverterUtils {
             switch (c.next()) {
             case FIRST:
             case ITEM:
-                messagesBuffer.append(converter.toString(m)).append(", ");
+                messagesBuffer.append(converter.toString(m)).append(separator);
                 break;
             case SINGLE:
             case LAST:
