@@ -15,6 +15,7 @@ package com.propertyvista.domain.site;
 
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -22,7 +23,7 @@ import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.media.File;
 
-public interface SiteDescriptor extends Locale {
+public interface SiteDescriptor extends IEntity {
 
     @Translatable
     public enum Skin {
@@ -52,7 +53,12 @@ public interface SiteDescriptor extends Locale {
 
     IPrimitive<String> copyright();
 
+    @Deprecated
     IList<Testimonial> testimonials();
 
+    @Deprecated
     IList<News> news();
+
+    IList<ContentDescriptor> contentDescriptors();
+
 }

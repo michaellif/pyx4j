@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -28,7 +29,7 @@ import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.media.File;
 
-public interface PageDescriptor extends Locale {
+public interface PageDescriptor extends IEntity {
 
     @Translatable
     public enum Type {
@@ -41,6 +42,7 @@ public interface PageDescriptor extends Locale {
 
         residents,
 
+        //TODO to be removed
         landing;
 
         @Override

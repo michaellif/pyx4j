@@ -21,8 +21,8 @@ public class CFileUploader extends CEditableComponent<File, NativeFileUploader> 
 
     @Override
     protected NativeFileUploader createWidget() {
-        // TODO Auto-generated method stub
-        return null;
+        NativeFileUploader nativeFileUploader = new NativeFileUploader(this);
+        return nativeFileUploader;
     }
 
 }

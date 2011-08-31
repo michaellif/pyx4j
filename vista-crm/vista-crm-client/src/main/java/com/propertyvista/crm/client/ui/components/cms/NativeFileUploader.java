@@ -18,15 +18,25 @@ import java.text.ParseException;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.forms.client.ui.NativeTriggerComponent;
 
 import com.propertyvista.domain.media.File;
 
-public class NativeFileUploader extends HorizontalPanel implements INativeEditableComponent<File> {
+public class NativeFileUploader extends NativeTriggerComponent<File> implements INativeEditableComponent<File> {
+
+    private final Anchor hyperlink;
+
+    public NativeFileUploader(final CFileUploader fileUploader) {
+        super();
+        hyperlink = new Anchor();
+        construct(hyperlink);
+        hyperlink.setHref("TestTest");
+    }
 
     @Override
     public void setTabIndex(int tabIndex) {
@@ -132,6 +142,12 @@ public class NativeFileUploader extends HorizontalPanel implements INativeEditab
 
     @Override
     public void setValid(boolean valid) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected void onTrigger(boolean show) {
         // TODO Auto-generated method stub
 
     }

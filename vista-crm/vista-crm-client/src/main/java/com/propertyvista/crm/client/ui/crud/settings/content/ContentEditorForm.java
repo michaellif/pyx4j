@@ -40,6 +40,7 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
+import com.propertyvista.crm.client.ui.components.cms.CFileUploader;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
@@ -69,6 +70,8 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
             content.setAllowHtml(true);
             main.add(inject(proto().content().content(), content), 60);
         }
+
+        main.add(inject(proto().image(), new CFileUploader()), 60);
 
         main.add(new CrmSectionSeparator(proto().childPages().getMeta().getCaption()));
         main.add(inject(proto().childPages(), createChildPagesList()));

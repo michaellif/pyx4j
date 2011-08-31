@@ -26,28 +26,18 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
-import com.propertyvista.domain.site.Locale;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDescriptor> implements PageDescriptorCrudService {
-
-    private Locale.Lang lang = Locale.Lang.english;
 
     public PageDescriptorCrudServiceImpl() {
         super(PageDescriptor.class);
     }
 
     @Override
-    public void setLang(AsyncCallback<Boolean> callback, Locale.Lang lang) {
-        this.lang = lang;
-        callback.onSuccess(true);
-    }
-
-    @Override
     public void retrieveLandingPage(AsyncCallback<Key> callback) {
         EntityQueryCriteria<PageDescriptor> criteria = EntityQueryCriteria.create(PageDescriptor.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().lang(), lang));
         criteria.add(PropertyCriterion.eq(criteria.proto().type(), PageDescriptor.Type.landing));
         List<Key> list = PersistenceServicesFactory.getPersistenceService().queryKeys(criteria);
         if (list.isEmpty()) {
@@ -96,7 +86,6 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
     @Override
     public void create(AsyncCallback<PageDescriptor> callback, PageDescriptor entity) {
         buildPath(entity);
-        entity.lang().setValue(lang);
         super.create(callback, entity);
     }
 
