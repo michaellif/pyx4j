@@ -31,6 +31,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.Locale;
 
 import com.pyx4j.gwt.server.IOUtils;
 
@@ -81,7 +82,17 @@ public class FileIOUtils {
         }
     }
 
-//    public static String getUTF8TextResource(String fileName, Class<?> clazz) throws IOException {
-//        return getTextResource(resourceFileName(fileName, clazz), Charset.forName("UTF-8"));
-//    }
+    public static File findFileIgnoreCase(File file) {
+        File dir = file.getParentFile();
+        if (!dir.isDirectory() || !dir.exists()) {
+            return file;
+        }
+        String name = file.getName().toLowerCase(Locale.ENGLISH);
+        for (File f : dir.listFiles()) {
+            if (name.equals(f.getName().toLowerCase(Locale.ENGLISH))) {
+                return f;
+            }
+        }
+        return file;
+    }
 }
