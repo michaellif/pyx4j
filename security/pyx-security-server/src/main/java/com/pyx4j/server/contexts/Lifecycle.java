@@ -60,7 +60,7 @@ public class Lifecycle {
             Context.setVisit(visit);
             String clientAclTimeStamp = httprequest.getHeader(RemoteService.SESSION_ACL_TIMESTAMP_HEADER);
             if ((visit != null) && visit.isUserLoggedIn()) {
-                LoggerConfig.mdcPut(LoggerConfig.MDC_userID, visit.getUserVisit());
+                LoggerConfig.mdcPut(LoggerConfig.MDC_userID, visit.getUserVisit().toString());
                 if (visit.isAclRevalidationRequired(clientAclTimeStamp)) {
                     AclRevalidator acv = ServerSideConfiguration.instance().getAclRevalidator();
                     if (acv != null) {
