@@ -94,6 +94,10 @@ public class DataGenerator {
         }
     };
 
+    public static void cleanup() {
+        generatorLocal.remove();
+    }
+
     public static void setRandomSeed(long seed) {
         generatorLocal.get().setRandomSeed(seed);
     }

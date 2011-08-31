@@ -79,30 +79,31 @@ public class LifecycleFilter implements Filter {
                 if (!allowRequest(httprequest, httpresponse)) {
                     return;
                 }
-                NamespaceManager.setNamespace(ServerSideConfiguration.instance().getNamespaceResolver().getNamespace(httprequest));
-                // TODO MDC
-                LoggerConfig.mdcPut(LoggerConfig.MDC_namespace, NamespaceManager.getNamespaceMDC());
-
-                Lifecycle.beginRequest(httprequest, httpresponse);
-
-                HttpSession session = httprequest.getSession(false);
-                if (session != null) {
-                    LoggerConfig.mdcPut(LoggerConfig.MDC_sessionNum, session.getId());
-                }
-
                 try {
-                    chain.doFilter(request, response);
-                } catch (Throwable t) {
-                    log.error("return http error {}", t);
-                    if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
-                        RequestDebug.debug(request);
-                        httpresponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ApplicationMode.DEV + t.getMessage());
-                    } else {
-                        httpresponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    NamespaceManager.setNamespace(ServerSideConfiguration.instance().getNamespaceResolver().getNamespace(httprequest));
+                    LoggerConfig.mdcPut(LoggerConfig.MDC_namespace, NamespaceManager.getNamespaceMDC());
+
+                    Lifecycle.beginRequest(httprequest, httpresponse);
+
+                    HttpSession session = httprequest.getSession(false);
+                    if (session != null) {
+                        LoggerConfig.mdcPut(LoggerConfig.MDC_sessionNum, session.getId());
+                    }
+
+                    try {
+                        chain.doFilter(request, response);
+                    } catch (Throwable t) {
+                        log.error("return http error {}", t);
+                        if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+                            RequestDebug.debug(request);
+                            httpresponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ApplicationMode.DEV + t.getMessage());
+                        } else {
+                            httpresponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                        }
                     }
                 } finally {
                     Lifecycle.endRequest();
-                    LoggerConfig.mdcRemove(LoggerConfig.MDC_namespace);
+                    Context.cleanup();
                     LoggerConfig.mdcRemove(LoggerConfig.MDC_userID);
                     LoggerConfig.mdcRemove(LoggerConfig.MDC_sessionNum);
                 }
