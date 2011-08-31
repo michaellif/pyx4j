@@ -14,30 +14,48 @@
 package com.propertyvista.domain.site;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.domain.media.File;
+public interface ContentDescriptor extends IEntity {
 
-public interface ContentDescriptor extends Locale {
+    @Translatable
+    public enum Lang {
 
-    Locale locale();
+        english,
 
-    @Transient
+        french,
+
+        spanish,
+
+        urdu;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
+    @ToString(index = 0)
+    IPrimitive<Lang> lang();
+
     @Caption(name = "Child Pages:")
+    @Owned
     IList<PageDescriptor> childPages();
 
-    @Owned
-    @Detached
-    PageContent content();
-
     // Image for landing page
-    IList<File> images();
+    @Owned
+    IList<Resource> images();
 
+    @Owned
     IList<Testimonial> testimonials();
 
+    @Owned
     IList<News> news();
 
 }

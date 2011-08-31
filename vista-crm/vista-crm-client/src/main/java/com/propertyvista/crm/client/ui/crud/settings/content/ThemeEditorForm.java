@@ -87,13 +87,13 @@ public class ThemeEditorForm extends CrmEntityForm<SiteDescriptor> {
 
     private Widget createTestimonialsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        main.add(inject(proto().testimonials(), createTestimonialsList()));
+        // main.add(inject(proto().testimonials(), createTestimonialsList()));
         return new ScrollPanel(main);
     }
 
     private Widget createNewsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        main.add(inject(proto().news(), createNewsList()));
+        // main.add(inject(proto().news(), createNewsList()));
         return new ScrollPanel(main);
     }
 

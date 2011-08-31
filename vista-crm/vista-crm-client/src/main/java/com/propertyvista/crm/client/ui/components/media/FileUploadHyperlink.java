@@ -22,7 +22,7 @@ import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.forms.client.ui.CAbstractHyperlink;
 import com.pyx4j.forms.client.ui.IFormat;
 
-import com.propertyvista.domain.media.File;
+import com.propertyvista.domain.File;
 
 public class FileUploadHyperlink extends CAbstractHyperlink<File> {
 

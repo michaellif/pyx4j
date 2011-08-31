@@ -71,7 +71,7 @@ public class ContentEditorForm extends CrmEntityForm<PageDescriptor> {
             main.add(inject(proto().content().content(), content), 60);
         }
 
-        main.add(inject(proto().image(), new CFileUploader()), 60);
+        main.add(inject(proto().content().image(), new CFileUploader()), 60);
 
         main.add(new CrmSectionSeparator(proto().childPages().getMeta().getCaption()));
         main.add(inject(proto().childPages(), createChildPagesList()));

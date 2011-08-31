@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.site;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -20,8 +21,6 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
-
-import com.propertyvista.domain.media.File;
 
 public interface SiteDescriptor extends IEntity {
 
@@ -47,18 +46,13 @@ public interface SiteDescriptor extends IEntity {
     //color picker
     IPrimitive<String> baseColor();
 
-    File logo();
+    Resource logo();
 
-    File slogan();
+    Resource slogan();
 
     IPrimitive<String> copyright();
 
-    @Deprecated
-    IList<Testimonial> testimonials();
-
-    @Deprecated
-    IList<News> news();
-
+    @Detached
     IList<ContentDescriptor> contentDescriptors();
 
 }

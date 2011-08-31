@@ -14,9 +14,10 @@
 package com.propertyvista.domain.site;
 
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Testimonial extends Locale {
+public interface Testimonial extends IEntity {
 
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> content();

@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.forms.client.ui.NativeTriggerComponent;
 
-import com.propertyvista.domain.media.File;
+import com.propertyvista.domain.File;
 
 public class NativeFileUploader extends NativeTriggerComponent<File> implements INativeEditableComponent<File> {
 

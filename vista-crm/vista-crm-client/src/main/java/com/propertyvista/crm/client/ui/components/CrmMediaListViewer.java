@@ -61,7 +61,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTextField;
 
 import com.propertyvista.common.client.resources.FormImageBundle;
-import com.propertyvista.domain.media.File;
+import com.propertyvista.domain.File;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.misc.ApplicationDocumentServletParameters;
 import com.propertyvista.misc.ServletMapping;

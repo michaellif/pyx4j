@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.portal.services;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -31,8 +32,8 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.ref.City;
+import com.propertyvista.domain.site.ContentDescriptor;
 import com.propertyvista.domain.site.PageContent;
-import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
@@ -138,35 +139,35 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
     }
 
     @Override
-    public void retrieveMainNavig(AsyncCallback<PageDescriptor> callback) {
-        EntityQueryCriteria<PageDescriptor> criteria = EntityQueryCriteria.create(PageDescriptor.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().type(), PageDescriptor.Type.landing));
+    public void retrieveContentDescriptor(AsyncCallback<ContentDescriptor> callback, Locale locale) {
+//        EntityQueryCriteria<PageDescriptor> criteria = EntityQueryCriteria.create(PageDescriptor.class);
+//        criteria.add(PropertyCriterion.eq(criteria.proto().type(), PageDescriptor.Type.landing));
+//
+//        PageDescriptor landing = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+//        if ((landing == null) || (landing.isNull())) {
+//            throw new Error("Landing page not found");
+//        }
+//
+//        EntityQueryCriteria<PageDescriptor> childPagesCriteria = EntityQueryCriteria.create(PageDescriptor.class);
+//        childPagesCriteria.add(PropertyCriterion.eq(childPagesCriteria.proto().parent(), landing));
+//        landing.childPages().addAll(PersistenceServicesFactory.getPersistenceService().query(childPagesCriteria));
+//
+//        // Return level 2 children
+//        for (PageDescriptor c : landing.childPages()) {
+//            EntityQueryCriteria<PageDescriptor> c2 = EntityQueryCriteria.create(PageDescriptor.class);
+//            c2.add(PropertyCriterion.eq(c2.proto().parent(), c));
+//            c.childPages().addAll(PersistenceServicesFactory.getPersistenceService().query(c2));
+//        }
 
-        PageDescriptor landing = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-        if ((landing == null) || (landing.isNull())) {
-            throw new Error("Landing page not found");
-        }
-
-        EntityQueryCriteria<PageDescriptor> childPagesCriteria = EntityQueryCriteria.create(PageDescriptor.class);
-        childPagesCriteria.add(PropertyCriterion.eq(childPagesCriteria.proto().parent(), landing));
-        landing.childPages().addAll(PersistenceServicesFactory.getPersistenceService().query(childPagesCriteria));
-
-        // Return level 2 children
-        for (PageDescriptor c : landing.childPages()) {
-            EntityQueryCriteria<PageDescriptor> c2 = EntityQueryCriteria.create(PageDescriptor.class);
-            c2.add(PropertyCriterion.eq(c2.proto().parent(), c));
-            c.childPages().addAll(PersistenceServicesFactory.getPersistenceService().query(c2));
-        }
-
-        callback.onSuccess(landing);
+        callback.onSuccess(null);
     }
 
     @Override
-    public void retrieveStaticContent(AsyncCallback<PageContent> callback, String path) {
-        EntityQueryCriteria<PageContent> criteria = EntityQueryCriteria.create(PageContent.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().path(), path));
-        PageContent c = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-        callback.onSuccess(c);
+    public void retrieveStaticContent(AsyncCallback<PageContent> callback, Key pageContentId) {
+//        EntityQueryCriteria<PageContent> criteria = EntityQueryCriteria.create(PageContent.class);
+//        criteria.add(PropertyCriterion.eq(criteria.proto().path(), path));
+//        PageContent c = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        callback.onSuccess(null);
     }
 
 }

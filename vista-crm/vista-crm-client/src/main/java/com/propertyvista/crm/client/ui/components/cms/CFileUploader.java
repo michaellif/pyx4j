@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.components.cms;
 
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
-import com.propertyvista.domain.media.File;
+import com.propertyvista.domain.File;
 
 public class CFileUploader extends CEditableComponent<File, NativeFileUploader> {
 

@@ -60,8 +60,6 @@ public class NavigItem {
             return new PortalSiteMap.Residents();
         case potentialTenants:
             return new PortalSiteMap.PotentialTenants();
-        case landing:
-            return new PortalSiteMap.Landing();
         default:
             return new PortalSiteMap.Landing();
         }

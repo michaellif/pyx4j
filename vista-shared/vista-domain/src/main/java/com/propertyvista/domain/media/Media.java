@@ -21,6 +21,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
+import com.propertyvista.domain.File;
+
 public interface Media extends IEntity {
 
     static final String YOU_TUBE_URL = "http://www.youtube.com/watch?v=";

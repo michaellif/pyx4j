@@ -31,7 +31,6 @@ import com.propertyvista.portal.client.mvp.BottomActivityMapper;
 import com.propertyvista.portal.client.mvp.ContentActivityMapper;
 import com.propertyvista.portal.client.mvp.LogoActivityMapper;
 import com.propertyvista.portal.client.mvp.MainNavigActivityMapper;
-import com.propertyvista.portal.client.mvp.StaticContentActivityMapper;
 import com.propertyvista.portal.client.themes.BlueColdTheme;
 
 public class PortalScreen extends FlowPanel {
@@ -87,10 +86,6 @@ public class PortalScreen extends FlowPanel {
         contentDisplayPanel.setStyleName(prefix + StyleSuffix.Content);
         mainWrapper.add(contentDisplayPanel);
 
-        DisplayPanel statictDisplayPanel = new DisplayPanel();
-        statictDisplayPanel.setStyleName(prefix + StyleSuffix.StaticContent);
-        mainWrapper.add(statictDisplayPanel);
-
         //================== Footer ========================
         FlowPanel footerWrapper = new FlowPanel();
         footerWrapper.setStyleName(prefix + StyleSuffix.Footer);
@@ -105,7 +100,6 @@ public class PortalScreen extends FlowPanel {
         bind(new MainNavigActivityMapper(), mainNavigDisplayPanel, eventBus);
         bind(new ContentActivityMapper(), contentDisplayPanel, eventBus);
         bind(new BottomActivityMapper(), bottomDisplayPanel, eventBus);
-        bind(new StaticContentActivityMapper(), statictDisplayPanel, eventBus);
 
     }
 

@@ -14,21 +14,19 @@
 package com.propertyvista.domain.site;
 
 import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface PageContent extends Locale {
-
-    public static final String PATH_SEPARATOR = "/";
-
-    @Indexed
-    IPrimitive<String> path();
+public interface PageContent extends IEntity {
 
     @Owned
     @Length(20845)
     @Editor(type = Editor.EditorType.richtextarea)
     //TODO Blob
     IPrimitive<String> content();
+
+    // Image for landing page and for static
+    Resource image();
 }

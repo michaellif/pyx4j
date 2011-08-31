@@ -19,15 +19,12 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
-
-import com.propertyvista.domain.media.File;
 
 public interface PageDescriptor extends IEntity {
 
@@ -40,10 +37,7 @@ public interface PageDescriptor extends IEntity {
 
         potentialTenants,
 
-        residents,
-
-        //TODO to be removed
-        landing;
+        residents;
 
         @Override
         public String toString() {
@@ -62,14 +56,12 @@ public interface PageDescriptor extends IEntity {
     @Owner
     PageDescriptor parent();
 
-    @Transient
     @Caption(name = "Child Pages:")
+    @Owned
     IList<PageDescriptor> childPages();
 
     @Owned
     @Detached
     PageContent content();
 
-    // Image for landing page and for static
-    File image();
 }

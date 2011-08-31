@@ -23,7 +23,7 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.domain.site.Locale.Lang;
+import com.propertyvista.domain.site.ContentDescriptor;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
@@ -33,119 +33,174 @@ import com.propertyvista.domain.site.Testimonial;
 
 public class PortalSitePreloader extends AbstractDataPreloader {
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public String delete() {
+        return deleteAll(SiteDescriptor.class, ContentDescriptor.class, PageDescriptor.class, PageContent.class);
+    }
+
     @Override
     public String create() {
 
-        Testimonial testimonial = EntityFactory.create(Testimonial.class);
-        testimonial.lang().setValue(Lang.english);
-        testimonial.content().setValue(
-                "You know... I was simply abscessed with that picture: stars everywhere and you are so small in the entire Universe... "
-                        + "But men, why she's starring at me constantly!!!");
-        testimonial.author().setValue("Uncle Vasya Sr.");
-        PersistenceServicesFactory.getPersistenceService().persist(testimonial);
-
-        News news = EntityFactory.create(News.class);
-        news.lang().setValue(Lang.english);
-        news.caption().setValue("Incredible offer!..");
-        news.content().setValue("Just by one star and get another two for free! Absolutely free! Just do not forget to pay property tax.");
-        news.date().setValue(RandomUtil.randomLogicalDate());
-        PersistenceServicesFactory.getPersistenceService().persist(news);
-
-        SiteDescriptor site = EntityFactory.create(SiteDescriptor.class);
-        site.skin().setValue(Skin.skin1);
-        site.baseColor().setValue("#fff");
-        site.copyright().setValue("Vista Property");
-        site.testimonials().add(testimonial);
-        site.news().add(news);
-        PersistenceServicesFactory.getPersistenceService().persist(site);
-
-        PageDescriptor landingPage = EntityFactory.create(PageDescriptor.class);
         try {
-            landingPage.type().setValue(PageDescriptor.Type.landing);
-            landingPage.caption().setValue("Landing Page");
-            landingPage.content().content().setValue(IOUtils.getUTF8TextResource("site-landing.html", this.getClass()));
-            landingPage.content().path().setValue(PageContent.PATH_SEPARATOR);
 
+            ContentDescriptor enContent = EntityFactory.create(ContentDescriptor.class);
             {
-                PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-                page.type().setValue(PageDescriptor.Type.findApartment);
-                page.caption().setValue("Find an Apartment");
-                page.content().content().setValue(CommonsGenerator.lipsum());
-                landingPage.childPages().add(page);
-            }
-            {
-                PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-                page.type().setValue(PageDescriptor.Type.residents);
-                page.caption().setValue("Residents");
-                landingPage.childPages().add(page);
-            }
+                enContent.lang().setValue(ContentDescriptor.Lang.english);
 
-            {
-                PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-                page.type().setValue(PageDescriptor.Type.staticContent);
-                page.caption().setValue("About Us");
-                page.content().content().setValue(IOUtils.getUTF8TextResource("site-about.html", this.getClass()));
                 {
-                    PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
-                    page2.type().setValue(PageDescriptor.Type.staticContent);
-                    page2.caption().setValue("Overview");
-                    page2.content().content().setValue(IOUtils.getUTF8TextResource("site-overview.html", this.getClass()));
-                    page.childPages().add(page2);
+                    Testimonial testimonial = EntityFactory.create(Testimonial.class);
+                    testimonial.content().setValue(
+                            "You know... I was simply abscessed with that picture: stars everywhere and you are so small in the entire Universe... "
+                                    + "But men, why she's starring at me constantly!!!");
+                    testimonial.author().setValue("Uncle Vasya Sr.");
+                    enContent.testimonials().add(testimonial);
+                }
+
+                {
+                    News news = EntityFactory.create(News.class);
+                    news.caption().setValue("Incredible offer!..");
+                    news.content().setValue("Just by one star and get another two for free! Absolutely free! Just do not forget to pay property tax.");
+                    news.date().setValue(RandomUtil.randomLogicalDate());
+                    enContent.news().add(news);
+                }
+
+                {
+                    PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                    page.type().setValue(PageDescriptor.Type.findApartment);
+                    page.caption().setValue("Find an Apartment");
+                    page.content().content().setValue(CommonsGenerator.lipsum());
+                    enContent.childPages().add(page);
                 }
                 {
-                    PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
-                    page2.type().setValue(PageDescriptor.Type.staticContent);
-                    page2.caption().setValue("Team");
-                    page2.content().content().setValue(IOUtils.getUTF8TextResource("site-team.html", this.getClass()));
-                    page.childPages().add(page2);
+                    PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                    page.type().setValue(PageDescriptor.Type.residents);
+                    page.caption().setValue("Residents");
+                    enContent.childPages().add(page);
                 }
-                landingPage.childPages().add(page);
+
+                {
+                    PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                    page.type().setValue(PageDescriptor.Type.staticContent);
+                    page.caption().setValue("About Us");
+                    page.content().content().setValue(IOUtils.getUTF8TextResource("site-about.html", this.getClass()));
+                    {
+                        PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
+                        page2.type().setValue(PageDescriptor.Type.staticContent);
+                        page2.caption().setValue("Overview");
+                        page2.content().content().setValue(IOUtils.getUTF8TextResource("site-overview.html", this.getClass()));
+                        page.childPages().add(page2);
+                    }
+                    {
+                        PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
+                        page2.type().setValue(PageDescriptor.Type.staticContent);
+                        page2.caption().setValue("Team");
+                        page2.content().content().setValue(IOUtils.getUTF8TextResource("site-team.html", this.getClass()));
+                        page.childPages().add(page2);
+                    }
+                    enContent.childPages().add(page);
+                }
+
+                {
+                    PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                    page.type().setValue(PageDescriptor.Type.staticContent);
+                    page.caption().setValue("Customer Care");
+                    page.content().content().setValue(IOUtils.getUTF8TextResource("site-customer-care.html", this.getClass()));
+                    enContent.childPages().add(page);
+                }
+
+                PersistenceServicesFactory.getPersistenceService().persist(enContent);
+
             }
 
+            ContentDescriptor frContent = EntityFactory.create(ContentDescriptor.class);
             {
-                PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-                page.type().setValue(PageDescriptor.Type.staticContent);
-                page.caption().setValue("Customer Care");
-                page.content().content().setValue(IOUtils.getUTF8TextResource("site-customer-care.html", this.getClass()));
-                landingPage.childPages().add(page);
+                frContent.lang().setValue(ContentDescriptor.Lang.french);
+
+                {
+                    Testimonial testimonial = EntityFactory.create(Testimonial.class);
+                    testimonial.content().setValue(
+                            "You know... I was simply abscessed with that picture: stars everywhere and you are so small in the entire Universe... "
+                                    + "But men, why she's starring at me constantly!!!");
+                    testimonial.author().setValue("Uncle Vasya Sr.");
+                    PersistenceServicesFactory.getPersistenceService().persist(testimonial);
+                    frContent.testimonials().add(testimonial);
+                }
+
+                {
+                    News news = EntityFactory.create(News.class);
+                    news.caption().setValue("Incredible offer!..");
+                    news.content().setValue("Just by one star and get another two for free! Absolutely free! Just do not forget to pay property tax.");
+                    news.date().setValue(RandomUtil.randomLogicalDate());
+                    PersistenceServicesFactory.getPersistenceService().persist(news);
+                    frContent.news().add(news);
+                }
+
+                {
+                    PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                    page.type().setValue(PageDescriptor.Type.findApartment);
+                    page.caption().setValue("Find an Apartment");
+                    page.content().content().setValue(CommonsGenerator.lipsum());
+                    frContent.childPages().add(page);
+                }
+                {
+                    PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                    page.type().setValue(PageDescriptor.Type.residents);
+                    page.caption().setValue("Residents");
+                    frContent.childPages().add(page);
+                }
+
+                {
+                    PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                    page.type().setValue(PageDescriptor.Type.staticContent);
+                    page.caption().setValue("A propos de nous");
+                    page.content().content().setValue(IOUtils.getUTF8TextResource("site-about.html", this.getClass()));
+                    {
+                        PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
+                        page2.type().setValue(PageDescriptor.Type.staticContent);
+                        page2.caption().setValue("Overview");
+                        page2.content().content().setValue(IOUtils.getUTF8TextResource("site-overview.html", this.getClass()));
+                        page.childPages().add(page2);
+                    }
+                    {
+                        PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
+                        page2.type().setValue(PageDescriptor.Type.staticContent);
+                        page2.caption().setValue("Team");
+                        page2.content().content().setValue(IOUtils.getUTF8TextResource("site-team.html", this.getClass()));
+                        page.childPages().add(page2);
+                    }
+                    frContent.childPages().add(page);
+                }
+
+                {
+                    PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+                    page.type().setValue(PageDescriptor.Type.staticContent);
+                    page.caption().setValue("Customer Care");
+                    page.content().content().setValue(IOUtils.getUTF8TextResource("site-customer-care.html", this.getClass()));
+                    frContent.childPages().add(page);
+                }
+
+                PersistenceServicesFactory.getPersistenceService().persist(frContent);
+
             }
+
+            SiteDescriptor site = EntityFactory.create(SiteDescriptor.class);
+            site.skin().setValue(Skin.skin1);
+            site.baseColor().setValue("#fff");
+            site.copyright().setValue("© Starlight Apartments 2011");
+            site.contentDescriptors().add(enContent);
+            site.contentDescriptors().add(frContent);
+
+            PersistenceServicesFactory.getPersistenceService().persist(site);
+
+            StringBuilder b = new StringBuilder();
+            b.append("Created Pages");
+            return b.toString();
 
         } catch (IOException e) {
             throw new Error(e);
         }
 
-        int pagesCount = saveCascade(landingPage);
-
-        StringBuilder b = new StringBuilder();
-        b.append("Created " + pagesCount + " Pages");
-        return b.toString();
-    }
-
-    private int saveCascade(PageDescriptor page) {
-        PersistenceServicesFactory.getPersistenceService().persist(page);
-        int pagesCount = 1;
-        for (PageDescriptor c : page.childPages()) {
-            String path = page.content().path().getValue();
-            if (!path.endsWith(PageContent.PATH_SEPARATOR)) {
-                path += PageContent.PATH_SEPARATOR;
-            }
-            if (c.caption().isNull()) {
-                path += c.type().getStringView();
-            } else {
-                path += c.caption().getStringView();
-            }
-            c.content().path().setValue(path);
-            c.parent().set(page);
-            pagesCount += saveCascade(c);
-            pagesCount++;
-        }
-        return pagesCount;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public String delete() {
-        return deleteAll(PageDescriptor.class, PageContent.class);
     }
 
 }

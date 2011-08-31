@@ -27,7 +27,7 @@ import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.domain.media.File;
+import com.propertyvista.domain.File;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.portal.rpc.portal.ImageConsts;

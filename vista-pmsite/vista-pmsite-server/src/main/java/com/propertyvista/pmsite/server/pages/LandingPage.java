@@ -18,17 +18,12 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebComponent;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-
-import com.propertyvista.domain.site.PageDescriptor;
-import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.panels.QuickSearchCriteriaPanel;
 
 public class LandingPage extends BasePage {
 
     public LandingPage() {
         super();
-        final PageDescriptor descriptor = ((PMSiteSession) getSession()).getContentManager().getLandingPage();
 
         add(new QuickSearchCriteriaPanel());
 
@@ -46,8 +41,6 @@ public class LandingPage extends BasePage {
                 response.write("<img style='position: absolute; bottom:0; left:0' src='resources/templates.TemplateResources/images/template0/landing.png' alt=''>");
                 response.write("</div>");
 
-                PersistenceServicesFactory.getPersistenceService().retrieve(descriptor.content());
-                response.write(descriptor.content().content().getStringView());
             }
         });
 

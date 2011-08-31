@@ -27,7 +27,7 @@ import com.propertyvista.crm.client.ui.crud.settings.content.ContentEditor;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
-import com.propertyvista.domain.site.Locale.Lang;
+import com.propertyvista.domain.site.ContentDescriptor.Lang;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageDescriptor.Type;
 

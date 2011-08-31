@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.rpc.portal.services;
 
+import java.util.Locale;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -21,17 +22,17 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.ref.City;
+import com.propertyvista.domain.site.ContentDescriptor;
 import com.propertyvista.domain.site.PageContent;
-import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
 public interface PortalSiteServices extends IService {
 
-    public void retrieveMainNavig(AsyncCallback<PageDescriptor> callback);
+    public void retrieveContentDescriptor(AsyncCallback<ContentDescriptor> callback, Locale locale);
 
-    public void retrieveStaticContent(AsyncCallback<PageContent> callback, String path);
+    public void retrieveStaticContent(AsyncCallback<PageContent> callback, Key pageContentId);
 
     /**
      * get List<City> with available units.

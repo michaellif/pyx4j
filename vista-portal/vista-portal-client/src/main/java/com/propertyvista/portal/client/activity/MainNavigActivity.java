@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.activity;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,7 +24,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
@@ -33,7 +31,6 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.site.PageDescriptor;
-import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.MainNavigView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -88,34 +85,34 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
             view.changePlace(place);
 
         } else {
-            PortalSite.getPortalSiteServices().retrieveMainNavig(new DefaultAsyncCallback<PageDescriptor>() {
-                @Override
-                public void onSuccess(PageDescriptor navig) {
-                    items = new ArrayList<NavigItem>();
-                    for (PageDescriptor descriptor : navig.childPages()) {
-                        if (PageDescriptor.Type.staticContent.equals(descriptor.type().getValue())) {
-                            NavigItem mainNavig = new NavigItem(descriptor.caption().getStringView(), descriptor.caption().getStringView());
-
-                            if (!descriptor.childPages().isNull() && !descriptor.childPages().isEmpty()) {
-                                for (PageDescriptor secondaryPage : descriptor.childPages()) {
-                                    NavigItem secondaryNavig = new NavigItem(secondaryPage.caption().getStringView(), secondaryPage.caption().getStringView());
-                                    mainNavig.addSecondaryNavigItem(secondaryNavig);
-                                }
-                            }
-                            items.add(mainNavig);
-
-                        } else {
-                            AppPlace place = NavigItem.convertTypeToPlace(descriptor.type().getValue());
-                            NavigItem mainNavig = new NavigItem(place, AppSite.getHistoryMapper().getPlaceInfo(place).getCaption());
-                            if (ClientContext.isAuthenticated()) {
-                                mainNavig.setSecondaryNavigation(getSecondaryNavig(descriptor.type().getValue()));
-                            }
-                            items.add(mainNavig);
-                        }
-                    }
-                    view.setMainNavig(items);
-                }
-            });
+//            PortalSite.getPortalSiteServices().retrieveMainNavig(new DefaultAsyncCallback<PageDescriptor>() {
+//                @Override
+//                public void onSuccess(PageDescriptor navig) {
+//                    items = new ArrayList<NavigItem>();
+//                    for (PageDescriptor descriptor : navig.childPages()) {
+//                        if (PageDescriptor.Type.staticContent.equals(descriptor.type().getValue())) {
+//                            NavigItem mainNavig = new NavigItem(descriptor.caption().getStringView(), descriptor.caption().getStringView());
+//
+//                            if (!descriptor.childPages().isNull() && !descriptor.childPages().isEmpty()) {
+//                                for (PageDescriptor secondaryPage : descriptor.childPages()) {
+//                                    NavigItem secondaryNavig = new NavigItem(secondaryPage.caption().getStringView(), secondaryPage.caption().getStringView());
+//                                    mainNavig.addSecondaryNavigItem(secondaryNavig);
+//                                }
+//                            }
+//                            items.add(mainNavig);
+//
+//                        } else {
+//                            AppPlace place = NavigItem.convertTypeToPlace(descriptor.type().getValue());
+//                            NavigItem mainNavig = new NavigItem(place, AppSite.getHistoryMapper().getPlaceInfo(place).getCaption());
+//                            if (ClientContext.isAuthenticated()) {
+//                                mainNavig.setSecondaryNavigation(getSecondaryNavig(descriptor.type().getValue()));
+//                            }
+//                            items.add(mainNavig);
+//                        }
+//                    }
+//                    view.setMainNavig(items);
+//                }
+//            });
             started = true;
         }
     }

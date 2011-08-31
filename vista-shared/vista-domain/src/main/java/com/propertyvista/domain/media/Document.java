@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.media;
 
+import com.propertyvista.domain.File;
+
 public interface Document extends File {
 
 }

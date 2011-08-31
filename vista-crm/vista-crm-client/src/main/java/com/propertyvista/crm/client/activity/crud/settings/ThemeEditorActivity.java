@@ -23,7 +23,7 @@ import com.propertyvista.crm.client.ui.crud.settings.content.ThemeEditor;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.SiteDescriptorCrudService;
-import com.propertyvista.domain.site.Locale.Lang;
+import com.propertyvista.domain.site.ContentDescriptor.Lang;
 import com.propertyvista.domain.site.SiteDescriptor;
 
 public class ThemeEditorActivity extends EditorActivityBase<SiteDescriptor> implements ThemeEditor.Presenter {

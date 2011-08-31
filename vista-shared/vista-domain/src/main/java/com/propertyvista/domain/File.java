@@ -11,7 +11,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.domain.media;
+package com.propertyvista.domain;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.ToString;

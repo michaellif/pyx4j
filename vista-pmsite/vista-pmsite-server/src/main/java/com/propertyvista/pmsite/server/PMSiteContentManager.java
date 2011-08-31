@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.ref.City;
+import com.propertyvista.domain.site.ContentDescriptor;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public class PMSiteContentManager {
@@ -37,53 +38,41 @@ public class PMSiteContentManager {
         }
     }
 
-    private final PageDescriptor landing;
+    private final ContentDescriptor content;
 
     public PMSiteContentManager() {
-        landing = retrieveLandingPageDescriptor();
+        content = retrieveContentDescriptor();
     }
 
-    public PageDescriptor retrieveLandingPageDescriptor() {
-        EntityQueryCriteria<PageDescriptor> criteria = EntityQueryCriteria.create(PageDescriptor.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().type(), PageDescriptor.Type.landing));
+    public ContentDescriptor retrieveContentDescriptor() {
+        EntityQueryCriteria<ContentDescriptor> criteria = EntityQueryCriteria.create(ContentDescriptor.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().lang(), ContentDescriptor.Lang.english));
 
-        PageDescriptor landing = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-        if ((landing == null) || (landing.isNull())) {
-            throw new Error("Landing page not found");
+        ContentDescriptor content = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        if ((content == null) || (content.isNull())) {
+            throw new Error("Content for locale " + ContentDescriptor.Lang.english + " not found");
         }
-
-        EntityQueryCriteria<PageDescriptor> childPagesCriteria = EntityQueryCriteria.create(PageDescriptor.class);
-        childPagesCriteria.add(PropertyCriterion.eq(childPagesCriteria.proto().parent(), landing));
-        landing.childPages().addAll(PersistenceServicesFactory.getPersistenceService().query(childPagesCriteria));
-
-        // Return level 2 children
-        for (PageDescriptor c : landing.childPages()) {
-            EntityQueryCriteria<PageDescriptor> c2 = EntityQueryCriteria.create(PageDescriptor.class);
-            c2.add(PropertyCriterion.eq(c2.proto().parent(), c));
-            c.childPages().addAll(PersistenceServicesFactory.getPersistenceService().query(c2));
-        }
-
-        return landing;
+        return content;
     }
 
-    public PageDescriptor getLandingPage() {
-        return landing;
+    public ContentDescriptor getContentDescriptor() {
+        return content;
     }
 
     public PageDescriptor getStaticPageDescriptor(PageParameters parameters) {
-        PageDescriptor descriptor = landing;
+        List<PageDescriptor> pages = content.childPages();
+        PageDescriptor current = null;
         for (String paramName : PARAMETER_NAMES) {
             if (parameters.containsKey(paramName)) {
-                descriptor = getChild(descriptor, parameters.getString(paramName));
-            } else {
-                return landing.equals(descriptor) ? null : descriptor;
+                current = getPageDescriptor(pages, parameters.getString(paramName));
+                pages = current.childPages();
             }
         }
-        return descriptor;
+        return current;
     }
 
-    private PageDescriptor getChild(PageDescriptor parent, String pageId) {
-        for (PageDescriptor descriptor : parent.childPages()) {
+    private PageDescriptor getPageDescriptor(List<PageDescriptor> pages, String pageId) {
+        for (PageDescriptor descriptor : pages) {
             if (pageId != null && pageId.equals(toPageId(descriptor.caption().getValue()))) {
                 return descriptor;
             }
@@ -95,14 +84,14 @@ public class PMSiteContentManager {
         List<PageDescriptor> path = new ArrayList<PageDescriptor>();
 
         PageDescriptor parent = descriptor;
-        while (!landing.equals(parent) && !parent.isNull()) {
+        while (!parent.isNull()) {
             path.add(parent);
             parent = parent.parent();
         }
 
         PageParameters params = new PageParameters();
-        for (int i = 0; i < path.size(); i++) {
-            params.add(PARAMETER_NAMES[i], toPageId(path.get(path.size() - i - 1).caption().getValue()));
+        for (int i = 0; i < path.size() - 1; i++) {
+            params.add(PARAMETER_NAMES[i], toPageId(path.get(path.size() - 2 - i).caption().getValue()));
         }
 
         return params;

@@ -7,39 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 30, 2011
+ * Created on 2011-05-13
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.domain.site;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
-@AbstractEntity
-public interface Locale extends IEntity {
+import com.propertyvista.domain.File;
 
-    @Translatable
-    public enum Lang {
+public interface Resource extends IEntity {
 
-        english,
+    @EmbeddedEntity
+    @MemberColumn(name = "resourceFile")
+    File file();
 
-        french,
-
-        spanish,
-
-        urdu;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
-
-    @ToString(index = 0)
-    IPrimitive<Lang> lang();
 }
