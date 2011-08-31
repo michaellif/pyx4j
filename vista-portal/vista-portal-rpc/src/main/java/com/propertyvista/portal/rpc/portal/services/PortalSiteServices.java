@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.rpc.portal.services;
 
-import java.util.Locale;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -23,6 +22,7 @@ import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.ContentDescriptor;
+import com.propertyvista.domain.site.ContentDescriptor.Lang;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;
@@ -30,7 +30,7 @@ import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
 public interface PortalSiteServices extends IService {
 
-    public void retrieveContentDescriptor(AsyncCallback<ContentDescriptor> callback, Locale locale);
+    public void retrieveContentDescriptor(AsyncCallback<ContentDescriptor> callback, Lang lang);
 
     public void retrieveStaticContent(AsyncCallback<PageContent> callback, Key pageContentId);
 

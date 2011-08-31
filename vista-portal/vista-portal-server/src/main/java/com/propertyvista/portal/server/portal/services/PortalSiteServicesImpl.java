@@ -14,7 +14,6 @@
 package com.propertyvista.portal.server.portal.services;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -33,6 +32,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.ContentDescriptor;
+import com.propertyvista.domain.site.ContentDescriptor.Lang;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
@@ -139,7 +139,7 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
     }
 
     @Override
-    public void retrieveContentDescriptor(AsyncCallback<ContentDescriptor> callback, Locale locale) {
+    public void retrieveContentDescriptor(AsyncCallback<ContentDescriptor> callback, Lang lang) {
 //        EntityQueryCriteria<PageDescriptor> criteria = EntityQueryCriteria.create(PageDescriptor.class);
 //        criteria.add(PropertyCriterion.eq(criteria.proto().type(), PageDescriptor.Type.landing));
 //
