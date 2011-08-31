@@ -25,6 +25,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.essentials.j2se.util.FileIOUtils;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.gwt.server.IOUtils;
@@ -91,7 +92,10 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
             dbo.type().setValue(Media.Type.file);
             File file = new File(new File(baseFolder), dto.uri().getValue());
             if (!file.exists()) {
-                throw new UserRuntimeException(i18n.tr("Media file not found ''{0}''", dto.uri().getValue()));
+                file = FileIOUtils.findFileIgnoreCase(file);
+                if (!file.exists()) {
+                    throw new UserRuntimeException(i18n.tr("Media file not found ''{0}''", dto.uri().getValue()));
+                }
             }
             String extension = FilenameUtils.getExtension(file.getName());
             if (extension != null) {
