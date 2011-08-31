@@ -50,11 +50,9 @@ public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceImpl<SiteDe
     public void save(AsyncCallback<SiteDescriptor> callback, SiteDescriptor entity) {
 
         for (Testimonial item : entity.testimonials()) {
-            item.lang().setValue(entity.lang().getValue());
             PersistenceServicesFactory.getPersistenceService().merge(item);
         }
         for (News item : entity.news()) {
-            item.lang().setValue(entity.lang().getValue());
             PersistenceServicesFactory.getPersistenceService().merge(item);
         }
 

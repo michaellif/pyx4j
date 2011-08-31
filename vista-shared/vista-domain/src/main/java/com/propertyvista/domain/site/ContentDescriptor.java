@@ -27,7 +27,7 @@ public interface ContentDescriptor extends Locale {
 
     @Transient
     @Caption(name = "Child Pages:")
-    IList<ContentDescriptor> childPages();
+    IList<PageDescriptor> childPages();
 
     @Owned
     @Detached

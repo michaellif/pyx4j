@@ -38,7 +38,6 @@ public class ThemeEditorActivity extends EditorActivityBase<SiteDescriptor> impl
     @Override
     protected void initNewItem(SiteDescriptor entity) {
 
-        entity.lang().setValue(getLangByPlace());
     }
 
     private Lang getLangByPlace() {

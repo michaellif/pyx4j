@@ -38,23 +38,10 @@ public class ContentEditorActivity extends EditorActivityBase<PageDescriptor> im
         super((ContentEditor) SettingsViewFactory.instance(ContentEditor.class), (AbstractCrudService<PageDescriptor>) GWT
                 .create(PageDescriptorCrudService.class), PageDescriptor.class);
 
-        ((PageDescriptorCrudService) service).setLang(new AsyncCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean result) {
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
-            }
-        }, getLangByPlace());
-
-        withPlace(place);
     }
 
     @Override
     protected void initNewItem(PageDescriptor entity) {
-        entity.lang().setValue(getLangByPlace());
         entity.type().setValue(Type.staticContent);
     }
 
