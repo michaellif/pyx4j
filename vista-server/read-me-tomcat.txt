@@ -4,3 +4,12 @@ Make local tomcat run on 9000
 Add -Dcom.pyx4j.appConfig=DevTomcat
 
 Create mail-credentials.properties  in tomcat home.
+
+-------
+    Q: When uploading a WAR file larger than 50 MB,
+     Get error: the request was rejected because its size (XXX) exceeds the configured maximum (52428800)
+
+    Solution:
+        Go to the web.xml of the manager application (for instance it could be under /tomcat7/webapps/manager/WEB-INF/web.xml
+        Increase the max-file-size and max-request-size
+
