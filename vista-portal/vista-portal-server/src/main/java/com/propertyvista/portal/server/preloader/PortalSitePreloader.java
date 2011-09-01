@@ -15,7 +15,6 @@ package com.propertyvista.portal.server.preloader;
 
 import java.io.IOException;
 
-import com.propertvista.generator.util.CommonsGenerator;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -65,50 +64,17 @@ public class PortalSitePreloader extends AbstractDataPreloader {
                     enContent.news().add(news);
                 }
 
+                enContent.childPages().add(createDynamicPage("Find an Apartment", PageDescriptor.Type.findApartment));
+                enContent.childPages().add(createDynamicPage("Residents", PageDescriptor.Type.residents));
                 {
-                    PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-                    page.type().setValue(PageDescriptor.Type.findApartment);
-                    page.caption().setValue("Find an Apartment");
-                    page.content().content().setValue(CommonsGenerator.lipsum());
+                    PageDescriptor page = createStaticPage("About us", "site-about.html");
+                    page.childPages().add(createStaticPage("Overview", "site-overview.html"));
+                    page.childPages().add(createStaticPage("Team", "site-team.html"));
                     enContent.childPages().add(page);
                 }
-                {
-                    PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-                    page.type().setValue(PageDescriptor.Type.residents);
-                    page.caption().setValue("Residents");
-                    enContent.childPages().add(page);
-                }
-
-                {
-                    PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-                    page.type().setValue(PageDescriptor.Type.staticContent);
-                    page.caption().setValue("About Us");
-                    page.content().content().setValue(IOUtils.getUTF8TextResource("site-about.html", this.getClass()));
-                    {
-                        PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
-                        page2.type().setValue(PageDescriptor.Type.staticContent);
-                        page2.caption().setValue("Overview");
-                        page2.content().content().setValue(IOUtils.getUTF8TextResource("site-overview.html", this.getClass()));
-                        page.childPages().add(page2);
-                    }
-                    {
-                        PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
-                        page2.type().setValue(PageDescriptor.Type.staticContent);
-                        page2.caption().setValue("Team");
-                        page2.content().content().setValue(IOUtils.getUTF8TextResource("site-team.html", this.getClass()));
-                        page.childPages().add(page2);
-                    }
-                    enContent.childPages().add(page);
-                }
-
-                {
-                    PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-                    page.type().setValue(PageDescriptor.Type.staticContent);
-                    page.caption().setValue("Customer Care");
-                    page.content().content().setValue(IOUtils.getUTF8TextResource("site-customer-care.html", this.getClass()));
-                    enContent.childPages().add(page);
-                }
-
+                enContent.childPages().add(createStaticPage("Customer Care", "site-customer-care.html"));
+                enContent.childPages().add(createStaticPage("Terms Of Use", "site-customer-care.html"));
+                enContent.childPages().add(createStaticPage("Privacy", "site-customer-care.html"));
                 PersistenceServicesFactory.getPersistenceService().persist(enContent);
 
             }
@@ -136,50 +102,17 @@ public class PortalSitePreloader extends AbstractDataPreloader {
                     frContent.news().add(news);
                 }
 
+                frContent.childPages().add(createDynamicPage("Find an Apartment", PageDescriptor.Type.findApartment));
+                frContent.childPages().add(createDynamicPage("Residents", PageDescriptor.Type.residents));
                 {
-                    PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-                    page.type().setValue(PageDescriptor.Type.findApartment);
-                    page.caption().setValue("Find an Apartment");
-                    page.content().content().setValue(CommonsGenerator.lipsum());
+                    PageDescriptor page = createStaticPage("A propos de nous", "site-about.html");
+                    page.childPages().add(createStaticPage("Overview", "site-overview.html"));
+                    page.childPages().add(createStaticPage("Team", "site-team.html"));
                     frContent.childPages().add(page);
                 }
-                {
-                    PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-                    page.type().setValue(PageDescriptor.Type.residents);
-                    page.caption().setValue("Residents");
-                    frContent.childPages().add(page);
-                }
-
-                {
-                    PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-                    page.type().setValue(PageDescriptor.Type.staticContent);
-                    page.caption().setValue("A propos de nous");
-                    page.content().content().setValue(IOUtils.getUTF8TextResource("site-about.html", this.getClass()));
-                    {
-                        PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
-                        page2.type().setValue(PageDescriptor.Type.staticContent);
-                        page2.caption().setValue("Overview");
-                        page2.content().content().setValue(IOUtils.getUTF8TextResource("site-overview.html", this.getClass()));
-                        page.childPages().add(page2);
-                    }
-                    {
-                        PageDescriptor page2 = EntityFactory.create(PageDescriptor.class);
-                        page2.type().setValue(PageDescriptor.Type.staticContent);
-                        page2.caption().setValue("Team");
-                        page2.content().content().setValue(IOUtils.getUTF8TextResource("site-team.html", this.getClass()));
-                        page.childPages().add(page2);
-                    }
-                    frContent.childPages().add(page);
-                }
-
-                {
-                    PageDescriptor page = EntityFactory.create(PageDescriptor.class);
-                    page.type().setValue(PageDescriptor.Type.staticContent);
-                    page.caption().setValue("Customer Care");
-                    page.content().content().setValue(IOUtils.getUTF8TextResource("site-customer-care.html", this.getClass()));
-                    frContent.childPages().add(page);
-                }
-
+                frContent.childPages().add(createStaticPage("Customer Care", "site-customer-care.html"));
+                frContent.childPages().add(createStaticPage("Terms Of Use", "site-customer-care.html"));
+                frContent.childPages().add(createStaticPage("Privacy", "site-customer-care.html"));
                 PersistenceServicesFactory.getPersistenceService().persist(frContent);
 
             }
@@ -201,6 +134,24 @@ public class PortalSitePreloader extends AbstractDataPreloader {
             throw new Error(e);
         }
 
+    }
+
+    private PageDescriptor createDynamicPage(String captione, PageDescriptor.Type type) throws ClassCastException, IOException {
+        return createPage(captione, null, type);
+    }
+
+    private PageDescriptor createStaticPage(String captione, String resourceName) throws ClassCastException, IOException {
+        return createPage(captione, resourceName, PageDescriptor.Type.staticContent);
+    }
+
+    private PageDescriptor createPage(String caption, String resourceName, PageDescriptor.Type type) throws ClassCastException, IOException {
+        PageDescriptor page = EntityFactory.create(PageDescriptor.class);
+        page.type().setValue(type);
+        page.caption().setValue(caption);
+        if (resourceName != null) {
+            page.content().content().setValue(IOUtils.getUTF8TextResource(resourceName, this.getClass()));
+        }
+        return page;
     }
 
 }

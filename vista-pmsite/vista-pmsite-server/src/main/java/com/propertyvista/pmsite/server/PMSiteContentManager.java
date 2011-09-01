@@ -13,7 +13,6 @@
  */
 package com.propertyvista.pmsite.server;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.PageParameters;
@@ -56,7 +55,19 @@ public class PMSiteContentManager {
         if ((content == null) || (content.isNull())) {
             throw new Error("Content for locale " + ContentDescriptor.Lang.english + " not found");
         }
+
+        for (PageDescriptor descriptor : content.childPages()) {
+            createPath(descriptor);
+        }
         return content;
+    }
+
+    private void createPath(PageDescriptor parent) {
+        System.out.println(parent);
+        for (PageDescriptor descriptor : parent.childPages()) {
+            descriptor.path().add(parent);
+            createPath(descriptor);
+        }
     }
 
     public ContentDescriptor getContentDescriptor() {
@@ -85,18 +96,13 @@ public class PMSiteContentManager {
     }
 
     public PageParameters getStaticPageParams(PageDescriptor descriptor) {
-        List<PageDescriptor> path = new ArrayList<PageDescriptor>();
-
-        PageDescriptor parent = descriptor;
-        while (!parent.isNull()) {
-            path.add(parent);
-            parent = parent.parent();
-        }
 
         PageParameters params = new PageParameters();
-        for (int i = 0; i < path.size() - 1; i++) {
-            params.add(PARAMETER_NAMES[i], toPageId(path.get(path.size() - 2 - i).caption().getValue()));
+        for (int i = 0; i < descriptor.path().size(); i++) {
+            params.add(PARAMETER_NAMES[i], toPageId(descriptor.path().get(descriptor.path().size() - 1 - i).caption().getValue()));
         }
+
+        params.add(PARAMETER_NAMES[descriptor.path().size()], toPageId(descriptor.caption().getValue()));
 
         return params;
     }

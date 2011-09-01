@@ -57,15 +57,16 @@ public class SecondaryNavigationPanel extends Panel {
 
                 PageDescriptor currentPage = ((PMSiteSession) getSession()).getContentManager().getStaticPageDescriptor(
                         SecondaryNavigationPanel.this.getPage().getPageParameters());
-                while (!currentPage.isNull()) {
-                    if (currentPage.equals(navItem.getPageDescriptor())) {
-                        active = true;
-                        break;
-                    } else {
-                        currentPage = currentPage.parent();
+                if (currentPage.equals(navItem.getPageDescriptor())) {
+                    active = true;
+                } else if (!currentPage.path().isNull() && !currentPage.path().isEmpty()) {
+                    for (PageDescriptor descriptor : currentPage.path()) {
+                        if (!descriptor.isNull() && descriptor.equals(navItem.getPageDescriptor())) {
+                            active = true;
+                            break;
+                        }
                     }
                 }
-
                 if (active) {
                     link.getParent().add(new AttributeAppender("class", new Model<String>("active"), " "));
                 }

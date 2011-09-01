@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -60,7 +61,7 @@ public interface PageDescriptor extends IEntity {
     @Caption(name = "Child Pages:")
     IList<PageDescriptor> childPages();
 
-// This annotation causes stack overflow on retrieve!!?     
-//    @Owner
-    PageDescriptor parent();
+    @Transient
+    IList<PageDescriptor> path();
+
 }

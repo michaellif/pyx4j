@@ -52,14 +52,15 @@ public class MainNavigationPanel extends Panel {
                 if (MainNavigationPanel.this.getPage() instanceof StaticPage) {
                     PageDescriptor currentPage = ((PMSiteSession) getSession()).getContentManager().getStaticPageDescriptor(
                             MainNavigationPanel.this.getPage().getPageParameters());
-                    while (!currentPage.isNull()) {
-                        if (currentPage.equals(navItem.getPageDescriptor())) {
+                    if (currentPage.equals(navItem.getPageDescriptor())) {
+                        active = true;
+                    } else if (!currentPage.path().isNull() && !currentPage.path().isEmpty()) {
+                        PageDescriptor mainNavigParent = currentPage.path().get(0);
+                        if (!mainNavigParent.isNull() && mainNavigParent.equals(navItem.getPageDescriptor())) {
                             active = true;
-                            break;
-                        } else {
-                            currentPage = currentPage.parent();
                         }
                     }
+
                 } else if (FindAptPage.class.equals(navItem.getDestination())
 
                 && ((MainNavigationPanel.this.getPage() instanceof FindAptPage)
