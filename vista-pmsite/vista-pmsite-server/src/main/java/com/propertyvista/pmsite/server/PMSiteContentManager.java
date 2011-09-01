@@ -18,14 +18,18 @@ import java.util.List;
 
 import org.apache.wicket.PageParameters;
 
+import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.ContentDescriptor;
 import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
 public class PMSiteContentManager {
 
@@ -102,24 +106,32 @@ public class PMSiteContentManager {
     }
 
     public static List<City> getCities() {
-        String[][] Cities = { { "Napanee", "Ontario", "ON" }, { "Kingston", "Ontario", "ON" }, { "Ottawa", "Ontario", "ON" },
-                { "North York", "Ontario", "ON" }, { "Toronto", "Ontario", "ON" }, { "Mississauga", "Ontario", "ON" }, { "Etobicoke", "Ontario", "ON" },
-                { "Oshawa", "Ontario", "ON" }, { "Kitchener", "Ontario", "ON" }, { "St. Catherines", "Ontario", "ON" }, { "Niagara Falls", "Ontario", "ON" },
-                { "Dundas", "Ontario", "ON" }, { "Guelph", "Ontario", "ON" }, { "Waterloo", "Ontario", "ON" }, { "London", "Ontario", "ON" },
-                { "Trenton", "Ontario", "ON" }, { "Listowel", "Ontario", "ON" }, { "Halifax", "Nova Scotia", "NS" }, { "Dartmouth", "Nova Scotia", "NS" },
-                { "St. Johns", "New Brunswick", "NB" }, { "Mission", "British Columbia", "BC" }, { "Abbotsford", "British Columbia", "BC" },
-                { "Coquitlam", "British Columbia", "BC" }, { "New Westminster", "British Columbia", "BC" }, { "Port Moody", "British Columbia", "BC" },
-                { "Victoria", "British Columbia", "BC" }, { "Montreal", "Quebec", "QB" }, { "Pointe-Claire", "Quebec", "QB" }, { "Longueuil", "Quebec", "QB" },
-                { "Sainte-Laurent", "Quebec", "QB" }, { "Calgary", "Alberta", "AB" }, };
-        List<City> cityList = new ArrayList<City>();
-        for (String[] _city : Cities) {
-            City city = EntityFactory.create(City.class);
-            city.name().setValue(_city[0]);
-            city.province().name().setValue(_city[1]);
-            city.province().code().setValue(_city[2]);
-            cityList.add(city);
-        }
+        EntityQueryCriteria<City> criteria = EntityQueryCriteria.create(City.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().hasProperties(), Boolean.TRUE));
+        return EntityServicesImpl.secureQuery(criteria);
 
-        return cityList;
+    }
+
+    public static PropertyListDTO getPropertyList() {
+
+        EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
+
+        List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(dbCriteria);
+
+        PropertyListDTO ret = EntityFactory.create(PropertyListDTO.class);
+        for (Building building : buildings) {
+
+            if (building.info().address().location().isNull() || building.info().address().location().getValue().getLat() == 0) {
+                continue;
+            }
+
+            //In memory filters
+            EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
+            floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
+            List<Floorplan> floorplans = PersistenceServicesFactory.getPersistenceService().query(floorplanCriteria);
+
+            ret.properties().add(Converter.convert(building, floorplans));
+        }
+        return ret;
     }
 }
