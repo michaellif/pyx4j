@@ -16,9 +16,14 @@ package com.propertyvista.interfaces.importer;
 import java.util.List;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.company.Employee;
@@ -48,6 +53,10 @@ import com.propertyvista.server.common.reference.PublicDataUpdater;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 
 public class BuildingImporter {
+
+    private static I18n i18n = I18nFactory.getI18n();
+
+    private final static Logger log = LoggerFactory.getLogger(BuildingImporter.class);
 
     public List<String> verify(BuildingIO buildingIO, String imagesBaseFolder) {
         List<String> messages = new Vector<String>();
@@ -140,7 +149,12 @@ public class BuildingImporter {
         // Media
         {
             for (MediaIO iIO : buildingIO.medias()) {
-                building.media().add(new MediaConverter(imagesBaseFolder, ignoreMissingMedia, ImageTarget.Building).createDBO(iIO));
+                try {
+                    building.media().add(new MediaConverter(imagesBaseFolder, ignoreMissingMedia, ImageTarget.Building).createDBO(iIO));
+                } catch (Throwable e) {
+                    log.error("Building '" + buildingIO.propertyCode().getValue() + "' media error", e);
+                    throw new UserRuntimeException(i18n.tr("Building ''{}'' media error {}", buildingIO.propertyCode().getValue(), e.getMessage()));
+                }
             }
             Persistence.service().persist(building.media());
         }
@@ -183,7 +197,14 @@ public class BuildingImporter {
                 // Media
                 {
                     for (MediaIO iIO : floorplanIO.medias()) {
-                        floorplan.media().add(new MediaConverter(imagesBaseFolder, ignoreMissingMedia, ImageTarget.Floorplan).createDBO(iIO));
+                        try {
+                            floorplan.media().add(new MediaConverter(imagesBaseFolder, ignoreMissingMedia, ImageTarget.Floorplan).createDBO(iIO));
+                        } catch (Throwable e) {
+                            log.error("Building '" + buildingIO.propertyCode().getValue() + "' floorplan '" + floorplanIO.name().getValue() + "' media error",
+                                    e);
+                            throw new UserRuntimeException(i18n.tr("Building ''{}'' floorplan ''{}'' media error {}", buildingIO.propertyCode().getValue(),
+                                    floorplanIO.name().getValue(), e.getMessage()));
+                        }
                     }
                     Persistence.service().persist(floorplan.media());
                 }
