@@ -101,4 +101,5 @@ public abstract class BasePage extends WebPage {
             return 0;
         }
     }
+
 }

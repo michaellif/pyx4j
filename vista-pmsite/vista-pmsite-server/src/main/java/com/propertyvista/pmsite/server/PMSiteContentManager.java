@@ -15,7 +15,12 @@ package com.propertyvista.pmsite.server;
 
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.RequestCycle;
+import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.protocol.http.WebRequestCycle;
 
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -27,6 +32,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.ContentDescriptor;
+import com.propertyvista.domain.site.ContentDescriptor.Lang;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
@@ -41,25 +47,55 @@ public class PMSiteContentManager {
         }
     }
 
-    private final ContentDescriptor content;
+    private ContentDescriptor content;
 
     public PMSiteContentManager() {
-        content = retrieveContentDescriptor();
+        retrieveContentDescriptor(getLocale());
     }
 
-    public ContentDescriptor retrieveContentDescriptor() {
+    public void setLocale(Lang lang) {
+        ((WebRequestCycle) RequestCycle.get()).getWebResponse().addCookie(new Cookie("locale", lang.name()));
+        retrieveContentDescriptor(lang);
+    }
+
+    public Lang getLocale() {
+        Cookie localeCookie = null;
+        Cookie[] cookies = ((WebRequest) ((WebRequestCycle) RequestCycle.get()).getRequest()).getCookies();
+        if (cookies == null) {
+            return Lang.english;
+        }
+        for (Cookie cookie : cookies) {
+            if ("locale".equals(cookie.getName())) {
+                localeCookie = cookie;
+                break;
+            }
+        }
+        if (localeCookie != null) {
+            try {
+                return Lang.valueOf(localeCookie.getValue());
+            } catch (Exception e) {
+                return Lang.english;
+            }
+
+        } else {
+            return Lang.english;
+        }
+
+    }
+
+    private void retrieveContentDescriptor(ContentDescriptor.Lang lang) {
         EntityQueryCriteria<ContentDescriptor> criteria = EntityQueryCriteria.create(ContentDescriptor.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().lang(), ContentDescriptor.Lang.english));
+        criteria.add(PropertyCriterion.eq(criteria.proto().lang(), lang));
 
         ContentDescriptor content = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
         if ((content == null) || (content.isNull())) {
-            throw new Error("Content for locale " + ContentDescriptor.Lang.english + " not found");
+            throw new Error("Content for locale " + lang + " not found");
         }
 
         for (PageDescriptor descriptor : content.childPages()) {
             createPath(descriptor);
         }
-        return content;
+        this.content = content;
     }
 
     private void createPath(PageDescriptor parent) {

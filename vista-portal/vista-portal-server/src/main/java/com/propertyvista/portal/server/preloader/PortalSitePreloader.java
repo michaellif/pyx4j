@@ -102,17 +102,17 @@ public class PortalSitePreloader extends AbstractDataPreloader {
                     frContent.news().add(news);
                 }
 
-                frContent.childPages().add(createDynamicPage("Find an Apartment", PageDescriptor.Type.findApartment));
-                frContent.childPages().add(createDynamicPage("Residents", PageDescriptor.Type.residents));
+                frContent.childPages().add(createDynamicPage("Trouver un appartement", PageDescriptor.Type.findApartment));
+                frContent.childPages().add(createDynamicPage("Les résidents", PageDescriptor.Type.residents));
                 {
                     PageDescriptor page = createStaticPage("A propos de nous", "site-about.html");
-                    page.childPages().add(createStaticPage("Overview", "site-overview.html"));
+                    page.childPages().add(createStaticPage("Vue d'ensemble", "site-overview.html"));
                     page.childPages().add(createStaticPage("Team", "site-team.html"));
                     frContent.childPages().add(page);
                 }
-                frContent.childPages().add(createStaticPage("Customer Care", "site-customer-care.html"));
-                frContent.childPages().add(createStaticPage("Terms Of Use", "site-customer-care.html"));
-                frContent.childPages().add(createStaticPage("Privacy", "site-customer-care.html"));
+                frContent.childPages().add(createStaticPage("Assistance Clientèle", "site-customer-care.html"));
+                frContent.childPages().add(createStaticPage("Mentions légales", "site-customer-care.html"));
+                frContent.childPages().add(createStaticPage("Politique de confidentialité", "site-customer-care.html"));
                 PersistenceServicesFactory.getPersistenceService().persist(frContent);
 
             }
