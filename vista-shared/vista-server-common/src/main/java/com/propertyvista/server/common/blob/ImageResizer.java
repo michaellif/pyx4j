@@ -56,10 +56,12 @@ public class ImageResizer {
 
     public final static int clipThumpnailBorders = 1;
 
+    public static boolean verifImageOnly = true;
+
     public static void main(String[] args) {
 
-        String srcFolderName = "M:\\stuff\\vista\\fp\\buildings";
-        String dstFolderName = "M:\\stuff\\vista\\fp\\buildings-small";
+        String srcFolderName = "E:\\Vista\\sl\\test";
+        String dstFolderName = "E:\\Vista\\sl\\buildings-small";
 
         processDirectory(new File(srcFolderName), new File(dstFolderName));
     }
@@ -79,11 +81,17 @@ public class ImageResizer {
     }
 
     public static void processDirectory(File srcDir, File dstDir) {
+        if (!srcDir.isDirectory()) {
+            throw new Error("Direcroty " + srcDir.getAbsolutePath() + " not found");
+        }
         File[] dirs = srcDir.listFiles(new DirFileFilter());
         for (File d : dirs) {
             processDirectory(d, new File(dstDir, d.getName()));
         }
         File[] files = srcDir.listFiles(new MediaFileFilter());
+        if (files.length > 0) {
+            log.info("processing {}", srcDir.getAbsolutePath());
+        }
         for (File f : files) {
             resizeFile(f, dstDir);
         }
@@ -99,12 +107,20 @@ public class ImageResizer {
 
             BufferedImage inputImage = ImageIO.read(in = new FileInputStream(file));
             if (inputImage == null) {
-                throw new UserRuntimeException(i18n.tr("Unable to read the image ''{0}''", file.getName()));
+                if (verifImageOnly) {
+                    log.error("Unable to read the image ''{}''", file.getAbsolutePath());
+                } else {
+                    throw new UserRuntimeException(i18n.tr("Unable to read the image ''{0}''", file.getAbsolutePath()));
+                }
             }
-            resample(inputImage, targetDimension, new FileOutputStream(new File(dstDir, file.getName())));
+            if (!verifImageOnly) {
+                resample(inputImage, targetDimension, new FileOutputStream(new File(dstDir, file.getName())));
+            }
         } catch (IOException e) {
-            log.error("Error", e);
-            throw new UserRuntimeException(i18n.tr("Unable to resample the image ''{0}''", file.getName()));
+            log.error("Unable to read the image ''{}''", file.getAbsolutePath(), e);
+            if (!verifImageOnly) {
+                throw new UserRuntimeException(i18n.tr("Unable to resample the image ''{0}''", file.getAbsolutePath()));
+            }
         } finally {
             IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(out);

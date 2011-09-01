@@ -115,6 +115,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
             count = 0;
             ImportCounters counters = new ImportCounters();
             for (BuildingIO building : importIO.buildings()) {
+                log.debug("processing building {} {}", count + "/" + importIO.buildings().size(), building.propertyCode().getValue());
                 if (importDTO.updateOnly().isBooleanTrue()) {
                     counters.add(new BuildingUpdater().update(building, imagesBaseFolder));
                 } else {
