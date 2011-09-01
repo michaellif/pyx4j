@@ -26,6 +26,8 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -72,10 +74,16 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel implements 
             return; // already!?.
         }
 
+        this.form = (CrudEntityForm<E>) form;
+
         LayoutPanel center = (LayoutPanel) getCenter();
         center.clear(); // remove current form...
-        center.add((this.form = (CrudEntityForm<E>) form).asWidget());
-        setSize("100%", "100%");
+
+        if (form.asWidget().getWidget() instanceof TabLayoutPanel) {
+            center.add(this.form.asWidget());
+        } else {
+            center.add(new ScrollPanel(this.form.asWidget()));
+        }
     }
 
     @Override
