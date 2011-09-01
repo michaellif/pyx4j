@@ -124,7 +124,7 @@ public class PMSiteContentManager {
 
     private PageDescriptor getPageDescriptor(List<PageDescriptor> pages, String pageId) {
         for (PageDescriptor descriptor : pages) {
-            if (pageId != null && pageId.equals(toPageId(descriptor.caption().getValue()))) {
+            if (pageId != null && pageId.equals(toPageId(descriptor.name().getValue()))) {
                 return descriptor;
             }
         }
@@ -135,10 +135,10 @@ public class PMSiteContentManager {
 
         PageParameters params = new PageParameters();
         for (int i = 0; i < descriptor.path().size(); i++) {
-            params.add(PARAMETER_NAMES[i], toPageId(descriptor.path().get(descriptor.path().size() - 1 - i).caption().getValue()));
+            params.add(PARAMETER_NAMES[i], toPageId(descriptor.path().get(descriptor.path().size() - 1 - i).name().getValue()));
         }
 
-        params.add(PARAMETER_NAMES[descriptor.path().size()], toPageId(descriptor.caption().getValue()));
+        params.add(PARAMETER_NAMES[descriptor.path().size()], toPageId(descriptor.name().getValue()));
 
         return params;
     }

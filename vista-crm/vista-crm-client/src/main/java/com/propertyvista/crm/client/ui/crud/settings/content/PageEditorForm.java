@@ -58,7 +58,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(inject(proto().caption()), 15);
+        main.add(inject(proto().name()), 15);
         if (isEditable()) {
             main.add(inject(proto().content().content()), 60);
         } else {
@@ -82,7 +82,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
 
             private final ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
             {
-                columns.add(new EntityFolderColumnDescriptor(proto().caption(), "25em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().name(), "25em"));
             }
 
             @Override
@@ -95,7 +95,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
                 return new CEntityFolderRowEditor<PageDescriptor>(PageDescriptor.class, columns()) {
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-                        if (column.getObject().equals(proto().caption())) {
+                        if (column.getObject().equals(proto().name())) {
                             CComponent<?> comp = null;
                             if (parent.isEditable()) {
                                 comp = inject(column.getObject(), new CLabel());

@@ -51,7 +51,7 @@ public interface PageDescriptor extends IEntity {
 
     @NotNull
     @ToString(index = 1)
-    IPrimitive<String> caption();
+    IPrimitive<String> name();
 
     @Owned
     @Detached

@@ -147,7 +147,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
     private PageDescriptor createPage(String caption, String resourceName, PageDescriptor.Type type) throws ClassCastException, IOException {
         PageDescriptor page = EntityFactory.create(PageDescriptor.class);
         page.type().setValue(type);
-        page.caption().setValue(caption);
+        page.name().setValue(caption);
         if (resourceName != null) {
             page.content().content().setValue(IOUtils.getUTF8TextResource(resourceName, this.getClass()));
         }

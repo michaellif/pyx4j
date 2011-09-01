@@ -34,7 +34,7 @@ public class StaticPage extends BasePage {
 
         add(new SecondaryNavigationPanel("secondaryNavig", this));
 
-        add(new Label("caption", descriptor.caption().getValue()));
+        add(new Label("caption", descriptor.name().getValue()));
 
         add(new WebComponent("content") {
 

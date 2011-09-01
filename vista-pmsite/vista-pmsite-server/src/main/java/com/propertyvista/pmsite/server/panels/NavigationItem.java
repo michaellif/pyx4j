@@ -68,7 +68,7 @@ public class NavigationItem implements Serializable {
     }
 
     public String getCaption() {
-        return descriptor.caption().getValue();
+        return descriptor.name().getValue();
     }
 
 }
