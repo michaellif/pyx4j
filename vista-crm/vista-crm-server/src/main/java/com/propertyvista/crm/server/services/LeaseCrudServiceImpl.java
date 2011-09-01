@@ -20,6 +20,7 @@ import org.xnap.commons.i18n.I18n;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -79,17 +80,18 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     }
 
     @Override
-    protected void enhanceSaveDBO(Lease dbo, LeaseDTO dto) {
+    protected void persistDBO(Lease dbo, LeaseDTO dto) {
         // persist non-owned lists items:
         for (Pet item : dbo.pets()) {
-            PersistenceServicesFactory.getPersistenceService().merge(item);
+            Persistence.service().merge(item);
         }
         for (Vehicle item : dbo.vehicles()) {
-            PersistenceServicesFactory.getPersistenceService().merge(item);
+            Persistence.service().merge(item);
         }
         for (TenantInLease item : dbo.tenants()) {
-            PersistenceServicesFactory.getPersistenceService().merge(item);
+            Persistence.service().merge(item);
         }
+        Persistence.service().merge(dbo);
     }
 
     @Override

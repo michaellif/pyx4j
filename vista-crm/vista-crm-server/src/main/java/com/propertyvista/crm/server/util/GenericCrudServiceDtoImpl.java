@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.IEntity;
@@ -44,19 +45,20 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
         this.dtoClass = dtoClass;
     }
 
-    protected void enhanceCreateDTO(DBO in, DTO dto) {
+    protected void persistDBO(DBO dbo, DTO dto) {
+        Persistence.service().merge(dbo);
+    }
+
+    protected void enhanceRetrieveDTO(DBO in, DTO dto, boolean fromList) {
     }
 
     @Override
     public void create(AsyncCallback<DTO> callback, DTO dto) {
         DBO entity = GenericConverter.convertDTO2DBO(dto, dboClass);
-        PersistenceServicesFactory.getPersistenceService().persist(entity);
+        persistDBO(entity, dto);
         dto = GenericConverter.convertDBO2DTO(entity, dtoClass);
-        enhanceCreateDTO(entity, dto);
+        enhanceRetrieveDTO(entity, dto, false);
         callback.onSuccess(dto);
-    }
-
-    protected void enhanceRetrieveDTO(DBO in, DTO dto, boolean fromList) {
     }
 
     @Override
@@ -67,18 +69,11 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
         callback.onSuccess(dto);
     }
 
-    protected void enhanceSaveDBO(DBO dbo, DTO dto) {
-    }
-
-    protected void enhanceSaveDTO(DBO dbo, DTO dto) {
-    }
-
     @Override
     public void save(AsyncCallback<DTO> callback, DTO dto) {
         DBO entity = GenericConverter.convertDTO2DBO(dto, dboClass);
-        enhanceSaveDBO(entity, dto);
-        PersistenceServicesFactory.getPersistenceService().merge(entity);
-        enhanceSaveDTO(entity, dto);
+        persistDBO(entity, dto);
+        enhanceRetrieveDTO(entity, dto, false);
         callback.onSuccess(GenericConverter.convertDBO2DTO(entity, dtoClass));
     }
 

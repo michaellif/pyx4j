@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.server.services;
 
+import java.util.List;
+
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -61,13 +64,30 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
     }
 
     @Override
-    protected void enhanceSaveDBO(Building dbo, BuildingDTO dto) {
+    protected void persistDBO(Building dbo, BuildingDTO dto) {
         for (Media item : dbo.media()) {
-            PersistenceServicesFactory.getPersistenceService().merge(item);
+            Persistence.service().merge(item);
         }
-
         // save detached entities:
-        PersistenceServicesFactory.getPersistenceService().merge(dbo.serviceCatalog());
+        Persistence.service().merge(dbo.serviceCatalog());
         PublicDataUpdater.updateIndexData(dbo);
+
+        boolean isCreate = dbo.id().isNull();
+        Persistence.service().merge(dbo);
+
+        if (!isCreate) {
+            EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
+            amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), dbo));
+            List<BuildingAmenity> existingAmenities = Persistence.service().query(amenitysCriteria);
+            for (BuildingAmenity amenity : existingAmenities) {
+                if (!dto.amenities().contains(amenity)) {
+                    Persistence.service().delete(amenity);
+                }
+            }
+        }
+        for (BuildingAmenity amenity : dto.amenities()) {
+            amenity.belongsTo().set(dbo);
+        }
+        Persistence.service().merge(dto.amenities());
     }
 }
