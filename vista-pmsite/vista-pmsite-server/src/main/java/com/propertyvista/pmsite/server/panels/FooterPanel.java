@@ -42,7 +42,7 @@ public class FooterPanel extends Panel {
                 params.add("city", city.name().getValue());
                 params.add("province", city.province().code().getValue());
                 BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", AptListPage.class, params);
-                link.add(new Label("city", city.name().getValue() + "(" + city.province().code().getValue() + ")"));
+                link.add(new Label("city", city.name().getValue() + " (" + city.province().code().getValue() + ")"));
                 item.add(link);
             }
         });

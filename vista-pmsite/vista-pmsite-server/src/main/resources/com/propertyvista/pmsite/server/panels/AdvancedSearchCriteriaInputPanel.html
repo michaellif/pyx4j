@@ -1,0 +1,113 @@
+<wicket:panel
+	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<style>
+.search_wrap {
+	float:left;
+	clear:left;
+	margin-top:50px;
+	margin-left:0px;
+}
+.input_frame {
+	border:1px solid white;
+	padding:10px;
+	margin:5px;
+}
+.search_type_box {
+	float:left;
+	width:300px;
+}
+.search_type_box label {
+	width:100px;
+	white-space:nowrap;
+}
+.search_bytype_box {
+	clear:left;
+}
+.search_byprox_box {
+}
+.search_common_box {
+	float:left;
+	clear:both;
+	width:570px;
+}
+label {
+	display:inline-block;
+}
+.search_common_box label {
+	display:block;
+}
+.input_frame select {
+	width:150px;
+	margin:1px;
+}
+.input_frame input[type=text] {
+	width:150px;
+	margin:1px;
+}
+.amenities label {
+	display:inline;
+}
+.amenities br {
+	display:none;
+}
+</style>
+<div class="search_wrap">
+	<h3>FIND AN APARTMENT</h3>
+
+	<div wicket:id="form_messages"/>
+	<div wicket:id="searchType">
+	    <div class="search_type_box search_bytype_box">
+	    	<input wicket:id="searchByType" type="radio"/>
+	    	<label>Search By Type</label>
+	    </div>
+    	<div class="search_type_box search_byprox_box">
+	    	<input wicket:id="searchByProx" type="radio"/>
+	    	<label>Search By Proximity</label>
+		</div>	  
+	</div>
+    <div class="search_type_box search_bytype_box">
+	    <div class="input_frame">
+	    	<div class="search_field">
+				<label>Province</label>
+				<select wicket:id="province"></select>
+			</div>
+	    	<div class="search_field">
+				<label>City</label>
+				<select wicket:id="city"></select>
+			</div>
+		</div>
+    </div>
+
+    <div class="search_type_box search_byprox_box">
+	    <div class="input_frame">
+	    	<div class="search_field">
+				<label>Location</label>
+				<input wicket:id="location" type="text"/>
+			</div>
+	    	<div class="search_field">
+				<label>Distance</label>
+				<input wicket:id="distance" type="text"/>
+			</div>
+		</div>
+    </div>
+
+	<div class="search_common_box input_frame">
+	    <div class="search_field">
+			<label>Bedrooms</label>
+			<select wicket:id="bedsMin"></select> to <select wicket:id="bedsMax"></select>
+		</div>
+	    <div class="search_field">
+			<label>Bathrooms</label>
+			<select wicket:id="bathsMin"></select> to <select wicket:id="bathsMax"></select>
+		</div>
+	    <div class="search_field">
+			<label>Price</label>
+			<input wicket:id="priceMin"/> to <input wicket:id="priceMax"/>
+		</div>
+	    <div class="search_field">
+			<label>Amenities</label>
+			<div wicket:id="amenities" class="amenities"><input type="checkbox"/></div>
+		</div>
+	</div>
+</div>
+</wicket:panel>

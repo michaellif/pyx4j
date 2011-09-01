@@ -339,7 +339,16 @@ select {
     padding: 0 0 25px 25px;
 }
 
-
+.advanced_search_wrap {
+	float:left;
+	clear:left;
+	margin-left:100px;
+}
+.footer_wrap {
+	float:left;
+	clear:left;
+	margin-left:60px;
+}
 ul.footer_locations {
 	list-style-type: none;
 	height:140px;

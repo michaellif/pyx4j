@@ -13,11 +13,13 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
+import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaPanel;
 
 public class FindAptPage extends BasePage {
 
     public FindAptPage() {
         super();
+        add(new AdvancedSearchCriteriaPanel());
     }
 
 }
