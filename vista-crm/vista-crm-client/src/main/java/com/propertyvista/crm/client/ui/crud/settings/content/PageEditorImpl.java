@@ -17,13 +17,14 @@ import com.pyx4j.commons.Key;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.site.ContentDescriptor;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.site.PageDescriptor;
 
-public class ContentEditorImpl extends CrmEditorViewImplBase<ContentDescriptor> implements ContentEditor {
-    public ContentEditorImpl() {
-        super(null);
+public class PageEditorImpl extends CrmEditorViewImplBase<PageDescriptor> implements PageEditor {
+    public PageEditorImpl() {
+        super(CrmSiteMap.Settings.Page.class);
         // create/init/set main form here: 
-        CrmEntityForm<ContentDescriptor> form = new ContentEditorForm(this);
+        CrmEntityForm<PageDescriptor> form = new PageEditorForm(this);
         form.initialize();
         setForm(form);
     }

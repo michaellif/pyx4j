@@ -26,12 +26,17 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.content;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.ui.crud.IEditorView;
 
-import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.PageDescriptor;
 
-public interface ThemeEditor extends IEditorView<SiteDescriptor> {
+public interface PageEditor extends IEditorView<PageDescriptor> {
 
     interface Presenter extends IEditorView.Presenter {
+
+        void viewChild(Key id);
     }
+
+    void viewChild(Key id);
 }

@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.activity.crud.settings;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -23,20 +24,23 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.settings.content.ContentViewer;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
-import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.ContentDescriptorCrudService;
+import com.propertyvista.domain.site.ContentDescriptor;
 
-public class ContentViewerActivity extends ViewerActivityBase<PageDescriptor> implements ContentViewer.Presenter {
+public class ContentViewerActivity extends ViewerActivityBase<ContentDescriptor> implements ContentViewer.Presenter {
 
     @SuppressWarnings("unchecked")
     public ContentViewerActivity(Place place) {
-        super((ContentViewer) SettingsViewFactory.instance(ContentViewer.class), (AbstractCrudService<PageDescriptor>) GWT
-                .create(PageDescriptorCrudService.class));
+        super((ContentViewer) SettingsViewFactory.instance(ContentViewer.class), (AbstractCrudService<ContentDescriptor>) GWT
+                .create(ContentDescriptorCrudService.class));
         withPlace(place);
     }
 
     @Override
-    public CrudAppPlace getPlace() {
-        return AppSite.getHistoryMapper().createPlace(placeClass);
+    public void editNew(Key parentid) {
+        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Page.class);
+        place.formNewItemPlace(parentid);
+        AppSite.getPlaceController().goTo(place);
     }
 }

@@ -13,16 +13,9 @@
  */
 package com.propertyvista.crm.rpc.services;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.domain.site.PageDescriptor;
 
 public interface PageDescriptorCrudService extends AbstractCrudService<PageDescriptor> {
-
-    void retrieveLandingPage(AsyncCallback<Key> callback);
-
-    void deleteChildPage(AsyncCallback<Boolean> callback, PageDescriptor page);
 }

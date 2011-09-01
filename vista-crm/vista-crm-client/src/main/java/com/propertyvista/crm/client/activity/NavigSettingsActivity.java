@@ -73,19 +73,9 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         folder.addNavigItem(new CrmSiteMap.Settings.ServiceDictionary());
         list.add(folder);
 
-        folder = new NavigFolder("Portal (English)");
-        folder.addNavigItem(new CrmSiteMap.Settings.English.General());
-        folder.addNavigItem(new CrmSiteMap.Settings.English.Content());
-        list.add(folder);
-
-        folder = new NavigFolder("Portal (French)");
-        folder.addNavigItem(new CrmSiteMap.Settings.French.General());
-        folder.addNavigItem(new CrmSiteMap.Settings.French.Content());
-        list.add(folder);
-
-        folder = new NavigFolder("Portal (Spanish)");
-        folder.addNavigItem(new CrmSiteMap.Settings.Spanish.General());
-        folder.addNavigItem(new CrmSiteMap.Settings.Spanish.Content());
+        folder = new NavigFolder("Portal");
+        folder.addNavigItem(new CrmSiteMap.Settings.General());
+        folder.addNavigItem(new CrmSiteMap.Settings.Content());
         list.add(folder);
 
         return list;

@@ -7,17 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 9, 2011
- * @author vadims
+ * Created on 2011-06-06
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.content;
+package com.propertyvista.crm.rpc.services;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.domain.site.SiteDescriptor;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class ThemeEditorImpl extends CrmEditorViewImplBase<SiteDescriptor> implements ThemeEditor {
-    public ThemeEditorImpl() {
-        super(null, new ThemeEditorForm());
-    }
+import com.pyx4j.commons.Key;
+import com.pyx4j.site.rpc.services.AbstractCrudService;
+
+import com.propertyvista.domain.site.ContentDescriptor;
+
+public interface ContentDescriptorCrudService extends AbstractCrudService<ContentDescriptor> {
+
+    void retrieveHomeItem(AsyncCallback<Key> callback);
 }

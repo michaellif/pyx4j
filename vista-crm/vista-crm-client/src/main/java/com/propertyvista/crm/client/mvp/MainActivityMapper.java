@@ -63,12 +63,14 @@ import com.propertyvista.crm.client.activity.crud.settings.ContentEditorActivity
 import com.propertyvista.crm.client.activity.crud.settings.ContentViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.FeatureItemTypeEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.FeatureItemTypeViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.PageEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.PageViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ServiceDictionaryViewActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ServiceItemTypeEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ServiceItemTypeViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.ThemeActivity;
-import com.propertyvista.crm.client.activity.crud.settings.ThemeEditorActivity;
-import com.propertyvista.crm.client.activity.crud.settings.ThemeViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.SiteActivity;
+import com.propertyvista.crm.client.activity.crud.settings.SiteEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.SiteViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.InquiryEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.InquiryListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.InquiryViewerActivity;
@@ -428,21 +430,19 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new MessageActivity(place);
 
 // - Settings:
-                } else if (place instanceof CrmSiteMap.Settings.English.General || place instanceof CrmSiteMap.Settings.French.General
-                        || place instanceof CrmSiteMap.Settings.Spanish.General) {
+                } else if (place instanceof CrmSiteMap.Settings.General) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
-                        activity = new ThemeEditorActivity(place);
+                        activity = new SiteEditorActivity(place);
                         break;
                     case viewer:
-                        activity = new ThemeViewerActivity(place);
+                        activity = new SiteViewerActivity(place);
                         break;
                     case lister:
-                        activity = new ThemeActivity(place);
+                        activity = new SiteActivity(place);
                         break;
                     }
-                } else if (place instanceof CrmSiteMap.Settings.English.Content || place instanceof CrmSiteMap.Settings.French.Content
-                        || place instanceof CrmSiteMap.Settings.Spanish.Content) {
+                } else if (place instanceof CrmSiteMap.Settings.Content) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         activity = new ContentEditorActivity(place);
@@ -452,6 +452,15 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     case lister:
                         activity = new ContentActivity(place);
+                        break;
+                    }
+                } else if (place instanceof CrmSiteMap.Settings.Page) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new PageEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new PageViewerActivity(place);
                         break;
                     }
                 } else if (place instanceof CrmSiteMap.Settings.ServiceDictionary) {

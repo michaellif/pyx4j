@@ -25,7 +25,7 @@ import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 
 public class ApartmentActivity extends WizardStepActivity<UnitInfoDTO, ApartmentViewPresenter> implements ApartmentViewPresenter {
 
-    static ApartmentService srv = GWT.create(ApartmentService.class);
+    private static ApartmentService srv = GWT.create(ApartmentService.class);
 
     public ApartmentActivity(AppPlace place) {
         super((ApartmentView) WizardStepsViewFactory.instance(ApartmentView.class), UnitInfoDTO.class, srv);

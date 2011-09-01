@@ -40,15 +40,15 @@ import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.Testimonial;
 
-public class ThemeEditorForm extends CrmEntityForm<SiteDescriptor> {
+public class SiteEditorForm extends CrmEntityForm<SiteDescriptor> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
-    public ThemeEditorForm() {
+    public SiteEditorForm() {
         super(SiteDescriptor.class, new CrmEditorsComponentFactory());
     }
 
-    public ThemeEditorForm(IEditableComponentFactory factory) {
+    public SiteEditorForm(IEditableComponentFactory factory) {
         super(SiteDescriptor.class, factory);
     }
 

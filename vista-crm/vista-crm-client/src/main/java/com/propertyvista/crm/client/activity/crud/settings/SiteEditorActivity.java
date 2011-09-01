@@ -19,18 +19,16 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.settings.content.ThemeEditor;
+import com.propertyvista.crm.client.ui.crud.settings.content.SiteEditor;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.SiteDescriptorCrudService;
-import com.propertyvista.domain.site.ContentDescriptor.Lang;
 import com.propertyvista.domain.site.SiteDescriptor;
 
-public class ThemeEditorActivity extends EditorActivityBase<SiteDescriptor> implements ThemeEditor.Presenter {
+public class SiteEditorActivity extends EditorActivityBase<SiteDescriptor> implements SiteEditor.Presenter {
 
     @SuppressWarnings("unchecked")
-    public ThemeEditorActivity(Place place) {
-        super((ThemeEditor) SettingsViewFactory.instance(ThemeEditor.class), (AbstractCrudService<SiteDescriptor>) GWT.create(SiteDescriptorCrudService.class),
+    public SiteEditorActivity(Place place) {
+        super((SiteEditor) SettingsViewFactory.instance(SiteEditor.class), (AbstractCrudService<SiteDescriptor>) GWT.create(SiteDescriptorCrudService.class),
                 SiteDescriptor.class);
         withPlace(place);
     }
@@ -38,19 +36,5 @@ public class ThemeEditorActivity extends EditorActivityBase<SiteDescriptor> impl
     @Override
     protected void initNewItem(SiteDescriptor entity) {
 
-    }
-
-    private Lang getLangByPlace() {
-
-        Lang lang = Lang.english;
-
-        if (placeClass.getEnclosingClass().equals(CrmSiteMap.Settings.English.class)) {
-            lang = Lang.english;
-        } else if (placeClass.getEnclosingClass().equals(CrmSiteMap.Settings.French.class)) {
-            lang = Lang.french;
-        } else if (placeClass.getEnclosingClass().equals(CrmSiteMap.Settings.Spanish.class)) {
-            lang = Lang.spanish;
-        }
-        return lang;
     }
 }

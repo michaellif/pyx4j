@@ -26,7 +26,7 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
+import com.propertyvista.crm.rpc.services.ContentDescriptorCrudService;
 
 public class ContentActivity extends AbstractActivity {
 
@@ -41,8 +41,8 @@ public class ContentActivity extends AbstractActivity {
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
 
-        PageDescriptorCrudService pds = GWT.create(PageDescriptorCrudService.class);
-        pds.retrieveLandingPage(new AsyncCallback<Key>() {
+        ContentDescriptorCrudService pds = GWT.create(ContentDescriptorCrudService.class);
+        pds.retrieveHomeItem(new AsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
                 CrudAppPlace gotoPlace = AppSite.getHistoryMapper().createPlace(place.getClass());

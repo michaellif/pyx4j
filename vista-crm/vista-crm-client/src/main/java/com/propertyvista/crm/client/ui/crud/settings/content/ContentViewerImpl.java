@@ -13,24 +13,24 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.content;
 
-import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.commons.Key;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.ContentDescriptor;
 
-public class ContentViewerImpl extends CrmViewerViewImplBase<PageDescriptor> implements ContentViewer {
+public class ContentViewerImpl extends CrmViewerViewImplBase<ContentDescriptor> implements ContentViewer {
     public ContentViewerImpl() {
         super(null);
         // create/init/set main form here: 
-        CrmEntityForm<PageDescriptor> form = new ContentEditorForm(this, new CrmViewersComponentFactory());
+        CrmEntityForm<ContentDescriptor> form = new ContentEditorForm(this, new CrmViewersComponentFactory());
         form.initialize();
         setForm(form);
     }
 
     @Override
-    public CrudAppPlace getPlace() {
-        return ((ContentViewer.Presenter) getPresenter()).getPlace();
+    public void editNew(Key parentid) {
+        ((PageViewer.Presenter) getPresenter()).editNew(parentid);
     }
 }

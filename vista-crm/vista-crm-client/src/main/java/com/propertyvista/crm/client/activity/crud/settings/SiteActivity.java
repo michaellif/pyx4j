@@ -28,11 +28,11 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.rpc.services.SiteDescriptorCrudService;
 
-public class ThemeActivity extends AbstractActivity {
+public class SiteActivity extends AbstractActivity {
 
     private final CrudAppPlace place;
 
-    public ThemeActivity(Place place) {
+    public SiteActivity(Place place) {
         assert (place instanceof CrudAppPlace);
         this.place = (CrudAppPlace) place;
         withPlace(place);

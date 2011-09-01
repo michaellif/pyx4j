@@ -7,19 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
- * @author Vlad
+ * Created on May 9, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.crm.client.ui.crud.settings.content;
 
-import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
-import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.domain.site.SiteDescriptor;
 
-public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDescriptor> implements PageDescriptorCrudService {
-
-    public PageDescriptorCrudServiceImpl() {
-        super(PageDescriptor.class);
+public class SiteViewerImpl extends CrmViewerViewImplBase<SiteDescriptor> implements SiteViewer {
+    public SiteViewerImpl() {
+        super(null, new SiteEditorForm(new CrmViewersComponentFactory()));
     }
 }

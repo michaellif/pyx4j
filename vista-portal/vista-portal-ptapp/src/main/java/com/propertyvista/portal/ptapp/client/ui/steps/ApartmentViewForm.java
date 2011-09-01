@@ -51,5 +51,4 @@ public class ApartmentViewForm extends CEntityForm<UnitInfoDTO> {
     public void populate(UnitInfoDTO value) {
         super.populate(value);
     }
-
 }

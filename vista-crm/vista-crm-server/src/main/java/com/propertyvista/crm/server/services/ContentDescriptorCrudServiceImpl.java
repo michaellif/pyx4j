@@ -21,19 +21,19 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.crm.rpc.services.SiteDescriptorCrudService;
+import com.propertyvista.crm.rpc.services.ContentDescriptorCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
-import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.ContentDescriptor;
 
-public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceImpl<SiteDescriptor> implements SiteDescriptorCrudService {
+public class ContentDescriptorCrudServiceImpl extends GenericCrudServiceImpl<ContentDescriptor> implements ContentDescriptorCrudService {
 
-    public SiteDescriptorCrudServiceImpl() {
-        super(SiteDescriptor.class);
+    public ContentDescriptorCrudServiceImpl() {
+        super(ContentDescriptor.class);
     }
 
     @Override
     public void retrieveHomeItem(AsyncCallback<Key> callback) {
-        EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
+        EntityQueryCriteria<ContentDescriptor> criteria = EntityQueryCriteria.create(ContentDescriptor.class);
         List<Key> list = PersistenceServicesFactory.getPersistenceService().queryKeys(criteria);
         if (list.isEmpty()) {
             throw new Error("Home item not found");

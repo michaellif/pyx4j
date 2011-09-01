@@ -53,15 +53,14 @@ public interface PageDescriptor extends IEntity {
     @ToString(index = 1)
     IPrimitive<String> caption();
 
-    @Owner
-    PageDescriptor parent();
-
-    @Caption(name = "Child Pages:")
-    @Owned
-    IList<PageDescriptor> childPages();
-
     @Owned
     @Detached
     PageContent content();
 
+    @Owned
+    @Caption(name = "Child Pages:")
+    IList<PageDescriptor> childPages();
+
+    @Owner
+    PageDescriptor parent();
 }

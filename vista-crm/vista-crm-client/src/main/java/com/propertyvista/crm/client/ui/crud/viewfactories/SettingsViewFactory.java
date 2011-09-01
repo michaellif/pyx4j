@@ -20,10 +20,14 @@ import com.propertyvista.crm.client.ui.crud.settings.content.ContentEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.ContentEditorImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.ContentViewer;
 import com.propertyvista.crm.client.ui.crud.settings.content.ContentViewerImpl;
-import com.propertyvista.crm.client.ui.crud.settings.content.ThemeEditor;
-import com.propertyvista.crm.client.ui.crud.settings.content.ThemeEditorImpl;
-import com.propertyvista.crm.client.ui.crud.settings.content.ThemeViewer;
-import com.propertyvista.crm.client.ui.crud.settings.content.ThemeViewerImpl;
+import com.propertyvista.crm.client.ui.crud.settings.content.PageEditor;
+import com.propertyvista.crm.client.ui.crud.settings.content.PageEditorImpl;
+import com.propertyvista.crm.client.ui.crud.settings.content.PageViewer;
+import com.propertyvista.crm.client.ui.crud.settings.content.PageViewerImpl;
+import com.propertyvista.crm.client.ui.crud.settings.content.SiteEditor;
+import com.propertyvista.crm.client.ui.crud.settings.content.SiteEditorImpl;
+import com.propertyvista.crm.client.ui.crud.settings.content.SiteViewer;
+import com.propertyvista.crm.client.ui.crud.settings.content.SiteViewerImpl;
 import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceDictionaryView;
 import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceDictionaryViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeEditorView;
@@ -35,15 +39,20 @@ public class SettingsViewFactory extends ViewFactoryBase {
 
     public static IView<? extends IEntity> instance(Class<? extends IView<? extends IEntity>> type) {
         if (!map.containsKey(type)) {
-            if (ContentViewer.class.equals(type)) {
+            if (SiteViewer.class.equals(type)) {
+                map.put(type, new SiteViewerImpl());
+            } else if (SiteEditor.class.equals(type)) {
+                map.put(type, new SiteEditorImpl());
+
+            } else if (ContentViewer.class.equals(type)) {
                 map.put(type, new ContentViewerImpl());
             } else if (ContentEditor.class.equals(type)) {
                 map.put(type, new ContentEditorImpl());
 
-            } else if (ThemeViewer.class.equals(type)) {
-                map.put(type, new ThemeViewerImpl());
-            } else if (ThemeEditor.class.equals(type)) {
-                map.put(type, new ThemeEditorImpl());
+            } else if (PageViewer.class.equals(type)) {
+                map.put(type, new PageViewerImpl());
+            } else if (PageEditor.class.equals(type)) {
+                map.put(type, new PageEditorImpl());
 
             } else if (ServiceDictionaryView.class.equals(type)) {
                 map.put(type, new ServiceDictionaryViewImpl());

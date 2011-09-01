@@ -44,8 +44,8 @@ public interface ContentDescriptor extends IEntity {
     @ToString(index = 0)
     IPrimitive<Lang> lang();
 
-    @Caption(name = "Child Pages:")
     @Owned
+    @Caption(name = "Child Pages:")
     IList<PageDescriptor> childPages();
 
     // Image for landing page

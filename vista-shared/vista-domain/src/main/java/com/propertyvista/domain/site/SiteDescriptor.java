@@ -54,5 +54,4 @@ public interface SiteDescriptor extends IEntity {
 
     @Detached
     IList<ContentDescriptor> contentDescriptors();
-
 }

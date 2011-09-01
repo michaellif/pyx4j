@@ -22,24 +22,29 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.settings.content.ContentEditor;
+import com.propertyvista.crm.client.ui.crud.settings.content.PageEditor;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.ContentDescriptorCrudService;
-import com.propertyvista.domain.site.ContentDescriptor;
+import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
+import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageDescriptor.Type;
 
-public class ContentEditorActivity extends EditorActivityBase<ContentDescriptor> implements ContentEditor.Presenter {
+public class PageEditorActivity extends EditorActivityBase<PageDescriptor> implements PageEditor.Presenter {
 
     @SuppressWarnings("unchecked")
-    public ContentEditorActivity(Place place) {
-        super((ContentEditor) SettingsViewFactory.instance(ContentEditor.class), (AbstractCrudService<ContentDescriptor>) GWT
-                .create(ContentDescriptorCrudService.class), ContentDescriptor.class);
+    public PageEditorActivity(Place place) {
+        super((PageEditor) SettingsViewFactory.instance(PageEditor.class), (AbstractCrudService<PageDescriptor>) GWT.create(PageDescriptorCrudService.class),
+                PageDescriptor.class);
 
     }
 
     @Override
+    protected void initNewItem(PageDescriptor entity) {
+        entity.type().setValue(Type.staticContent);
+    }
+
+    @Override
     public void viewChild(Key id) {
-        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Page.class);
+        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
         place.formViewerPlace(id);
         AppSite.getPlaceController().goTo(place);
     }
