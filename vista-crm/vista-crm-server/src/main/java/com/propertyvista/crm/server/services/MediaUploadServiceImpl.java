@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FilenameUtils;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.download.MimeMap;
@@ -28,12 +27,12 @@ import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 import com.pyx4j.essentials.server.upload.UploadServiceImpl;
 
+import com.propertyvista.crm.rpc.dto.MediaUploadDTO;
 import com.propertyvista.crm.rpc.services.MediaUploadService;
-import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
 
-public class MediaUploadServiceImpl extends UploadServiceImpl<IEntity> implements MediaUploadService {
+public class MediaUploadServiceImpl extends UploadServiceImpl<MediaUploadDTO> implements MediaUploadService {
 
     @Override
     public long getMaxSize(HttpServletRequest request) {
@@ -49,7 +48,9 @@ public class MediaUploadServiceImpl extends UploadServiceImpl<IEntity> implement
     public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess process, final UploadResponse response) {
         response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
         Key blobKey = BlobService.persist(data.data, response.fileName, response.fileContentType);
-        ThumbnailService.persist(blobKey, response.fileName, data.data, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
+
+        MediaUploadDTO mediaUploadDTO = (MediaUploadDTO) process.getData();
+        ThumbnailService.persist(blobKey, response.fileName, data.data, mediaUploadDTO.target().getValue());
         response.uploadKey = blobKey;
         return ProcessingStatus.completed;
     }

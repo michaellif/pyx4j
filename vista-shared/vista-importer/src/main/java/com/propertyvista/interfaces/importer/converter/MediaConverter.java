@@ -35,7 +35,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.crm.rpc.services.MediaUploadService;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.interfaces.importer.model.MediaIO;
-import com.propertyvista.portal.rpc.portal.ImageConsts;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
 
@@ -49,14 +49,17 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
 
     private final boolean ignoreMissingMedia;
 
-    public MediaConverter(String baseFolder, boolean ignoreMissingMedia) {
+    private final ImageTarget imageTarget;
+
+    public MediaConverter(String baseFolder, boolean ignoreMissingMedia, ImageTarget imageTarget) {
         super(Media.class, MediaIO.class, false);
         this.baseFolder = baseFolder;
         this.ignoreMissingMedia = ignoreMissingMedia;
+        this.imageTarget = imageTarget;
     }
 
     public MediaConverter(String baseFolder) {
-        this(baseFolder, false);
+        this(baseFolder, false, ImageTarget.Building);
     }
 
     @Override
@@ -153,8 +156,7 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
             dbo.file().fileSize().setValue(raw.length);
 
             dbo.file().blobKey().setValue(BlobService.persist(raw, dbo.file().filename().getValue(), dbo.file().contentMimeType().getValue()));
-            ThumbnailService.persist(dbo.file().blobKey().getValue(), file.getName(), raw, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM,
-                    ImageConsts.BUILDING_LARGE);
+            ThumbnailService.persist(dbo.file().blobKey().getValue(), file.getName(), raw, imageTarget);
 
             break;
         case externalUrl:

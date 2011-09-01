@@ -16,11 +16,12 @@ package com.propertyvista.crm.rpc.services;
 import java.util.Collection;
 import java.util.EnumSet;
 
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 
-public interface MediaUploadService extends UploadService<IEntity> {
+import com.propertyvista.crm.rpc.dto.MediaUploadDTO;
+
+public interface MediaUploadService extends UploadService<MediaUploadDTO> {
 
     public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
             DownloadFormat.BMP);

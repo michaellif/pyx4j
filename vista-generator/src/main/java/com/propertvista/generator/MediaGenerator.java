@@ -30,7 +30,7 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.propertyvista.domain.File;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.portal.rpc.portal.ImageConsts;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
 
@@ -100,8 +100,7 @@ public class MediaGenerator {
             m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentMimeType().getValue()));
 
             //TODO what sizes to use for Floorplan images?
-            ThumbnailService.persist(m.file().blobKey().getValue(), filename, me.getValue(), ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM,
-                    ImageConsts.BUILDING_LARGE);
+            ThumbnailService.persist(m.file().blobKey().getValue(), filename, me.getValue(), ImageTarget.Floorplan);
         }
         return data;
     }

@@ -23,12 +23,13 @@ import com.pyx4j.forms.client.ui.CAbstractHyperlink;
 import com.pyx4j.forms.client.ui.IFormat;
 
 import com.propertyvista.domain.File;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
 public class FileUploadHyperlink extends CAbstractHyperlink<File> {
 
     protected static I18n i18n = I18nFactory.getI18n(FileUploadHyperlink.class);
 
-    public FileUploadHyperlink(final boolean editable) {
+    public FileUploadHyperlink(final boolean editable, final ImageTarget imageTarget) {
         super((String) null);
 
         setCommand(new Command() {
@@ -44,6 +45,11 @@ public class FileUploadHyperlink extends CAbstractHyperlink<File> {
                         getValue().fileSize().setValue(serverUploadResponse.fileSize);
                         getValue().contentMimeType().setValue(serverUploadResponse.fileContentType);
                         setNativeValue(getValue());
+                    }
+
+                    @Override
+                    protected ImageTarget getImageTarget() {
+                        return imageTarget;
                     }
 
                 }.show();

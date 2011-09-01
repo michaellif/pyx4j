@@ -43,6 +43,7 @@ import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.interfaces.importer.model.ParkingIO;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 
@@ -139,7 +140,7 @@ public class BuildingImporter {
         // Media
         {
             for (MediaIO iIO : buildingIO.medias()) {
-                building.media().add(new MediaConverter(imagesBaseFolder, ignoreMissingMedia).createDBO(iIO));
+                building.media().add(new MediaConverter(imagesBaseFolder, ignoreMissingMedia, ImageTarget.Building).createDBO(iIO));
             }
             Persistence.service().persist(building.media());
         }
@@ -182,7 +183,7 @@ public class BuildingImporter {
                 // Media
                 {
                     for (MediaIO iIO : floorplanIO.medias()) {
-                        floorplan.media().add(new MediaConverter(imagesBaseFolder, ignoreMissingMedia).createDBO(iIO));
+                        floorplan.media().add(new MediaConverter(imagesBaseFolder, ignoreMissingMedia, ImageTarget.Floorplan).createDBO(iIO));
                     }
                     Persistence.service().persist(floorplan.media());
                 }

@@ -53,8 +53,8 @@ import com.propertyvista.crm.client.ui.components.CrmBoxFolderDecorator;
 import com.propertyvista.crm.client.ui.components.CrmBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
-import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
+import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
@@ -67,6 +67,7 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
 public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
@@ -203,7 +204,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         main.add(new CrmSectionSeparator(i18n.tr("Media:")));
         //main.add(inject(proto().media(), new CrmMediaListViewer(isEditable())));
-        main.add(inject(proto().media(), new CrmMediaListFolderEditor(isEditable())));
+        main.add(inject(proto().media(), new CrmMediaListFolderEditor(isEditable(), ImageTarget.Building)));
 
         return new CrmScrollPanel(main);
     }

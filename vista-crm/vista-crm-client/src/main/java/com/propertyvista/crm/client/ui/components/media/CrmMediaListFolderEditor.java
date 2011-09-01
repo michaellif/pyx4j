@@ -23,6 +23,7 @@ import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
 public class CrmMediaListFolderEditor extends CEntityFolderEditor<Media> {
 
@@ -30,9 +31,12 @@ public class CrmMediaListFolderEditor extends CEntityFolderEditor<Media> {
 
     private final boolean editable;
 
-    public CrmMediaListFolderEditor(boolean editable) {
+    private final ImageTarget imageTarget;
+
+    public CrmMediaListFolderEditor(boolean editable, ImageTarget imageTarget) {
         super(Media.class);
         this.editable = editable;
+        this.imageTarget = imageTarget;
     }
 
     @Override
@@ -42,7 +46,7 @@ public class CrmMediaListFolderEditor extends CEntityFolderEditor<Media> {
 
     @Override
     protected CEntityFolderItemEditor<Media> createItem() {
-        return new CrmMediaFolderItemEditor(editable);
+        return new CrmMediaFolderItemEditor(editable, imageTarget);
     }
 
 }

@@ -36,6 +36,7 @@ import com.propertyvista.common.client.ui.validators.YouTubeVideoIdFormat;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdValidator;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
 class CrmMediaFolderItemEditor extends CEntityFolderItemEditor<Media> {
 
@@ -45,9 +46,12 @@ class CrmMediaFolderItemEditor extends CEntityFolderItemEditor<Media> {
 
     private CHyperlink viewLink;
 
-    public CrmMediaFolderItemEditor(boolean editable) {
+    private final ImageTarget imageTarget;
+
+    public CrmMediaFolderItemEditor(boolean editable, ImageTarget imageTarget) {
         super(Media.class);
         this.editable = editable;
+        this.imageTarget = imageTarget;
     }
 
     @Override
@@ -65,7 +69,7 @@ class CrmMediaFolderItemEditor extends CEntityFolderItemEditor<Media> {
         split.getLeftPanel().add(inject(proto().youTubeVideoID()), 15);
         split.getLeftPanel().add(inject(proto().url()), 15);
         if (editable) {
-            split.getLeftPanel().add(inject(proto().file(), new FileUploadHyperlink(editable)), 15);
+            split.getLeftPanel().add(inject(proto().file(), new FileUploadHyperlink(editable, imageTarget)), 15);
         } else {
             split.getLeftPanel().add(inject(proto().file(), new CEntityHyperlink(new Command() {
                 @Override

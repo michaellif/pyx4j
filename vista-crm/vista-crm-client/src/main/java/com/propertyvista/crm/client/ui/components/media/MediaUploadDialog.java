@@ -20,7 +20,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
@@ -28,14 +28,16 @@ import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
+import com.propertyvista.crm.rpc.dto.MediaUploadDTO;
 import com.propertyvista.crm.rpc.services.MediaUploadService;
 import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
 public abstract class MediaUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText {
 
     private static I18n i18n = I18nFactory.getI18n(MediaUploadDialog.class);
 
-    private final UploadPanel<IEntity> uploadPanel;
+    private final UploadPanel<MediaUploadDTO> uploadPanel;
 
     private final Dialog dialog;
 
@@ -43,7 +45,7 @@ public abstract class MediaUploadDialog extends VerticalPanel implements OkCance
     public MediaUploadDialog() {
         dialog = new Dialog(i18n.tr("Upload Image file"), this);
 
-        uploadPanel = new UploadPanel<IEntity>((UploadService<IEntity>) GWT.create(MediaUploadService.class)) {
+        uploadPanel = new UploadPanel<MediaUploadDTO>((UploadService<MediaUploadDTO>) GWT.create(MediaUploadService.class)) {
 
             @Override
             protected void onUploadSubmit() {
@@ -63,6 +65,13 @@ public abstract class MediaUploadDialog extends VerticalPanel implements OkCance
                 MediaUploadDialog.this.onUploadComplete(serverUploadResponse);
             }
 
+            @Override
+            protected MediaUploadDTO getUploadData() {
+                MediaUploadDTO dto = EntityFactory.create(MediaUploadDTO.class);
+                dto.target().setValue(getImageTarget());
+                return dto;
+            }
+
         };
         uploadPanel.setSupportedExtensions(MediaUploadService.supportedFormats);
         uploadPanel.setServletPath(GWT.getModuleBaseURL() + DeploymentConsts.uploadServletMapping);
@@ -79,6 +88,8 @@ public abstract class MediaUploadDialog extends VerticalPanel implements OkCance
     }
 
     protected abstract void onUploadComplete(UploadResponse serverUploadResponse);
+
+    protected abstract ImageTarget getImageTarget();
 
     @Override
     public boolean onClickOk() {

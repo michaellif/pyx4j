@@ -37,6 +37,8 @@ import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.shared.Dimension;
 
+import com.propertyvista.portal.rpc.portal.ImageConsts;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.server.domain.ThumbnailBlob;
 
@@ -49,6 +51,17 @@ public class ThumbnailService {
     private final static Logger log = LoggerFactory.getLogger(ThumbnailService.class);
 
     private static I18n i18n = I18nFactory.getI18n();
+
+    public static void persist(Key key, String fileName, byte[] originalContent, ImageTarget imageTarget) {
+        switch (imageTarget) {
+        case Building:
+            ThumbnailService.persist(key, fileName, originalContent, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
+            break;
+        case Floorplan:
+            ThumbnailService.persist(key, fileName, originalContent, ImageConsts.FLOORPLAN_SMALL, ImageConsts.FLOORPLAN_MEDIUM, ImageConsts.FLOORPLAN_LARGE);
+            break;
+        }
+    }
 
     public static void persist(Key key, String fileName, byte[] originalContent, Dimension small, Dimension medum, Dimension large) {
         ThumbnailBlob blob = EntityFactory.create(ThumbnailBlob.class);

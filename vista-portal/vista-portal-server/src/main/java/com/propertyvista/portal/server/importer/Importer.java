@@ -38,7 +38,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.FloorplanDTO;
-import com.propertyvista.portal.rpc.portal.ImageConsts;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
 import com.propertyvista.server.common.generator.Model;
@@ -162,8 +162,7 @@ public class Importer {
             m.type().setValue(Media.Type.file);
             m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentMimeType().getValue()));
 
-            ThumbnailService.persist(m.file().blobKey().getValue(), m.file().filename().getValue(), me.getValue(), ImageConsts.BUILDING_SMALL,
-                    ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
+            ThumbnailService.persist(m.file().blobKey().getValue(), m.file().filename().getValue(), me.getValue(), ImageTarget.Building);
 
             persist(m);
             building.media().add(m);
