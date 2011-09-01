@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.panels.SecondaryNavigationPanel;
 
@@ -37,9 +38,11 @@ public class StaticPage extends BasePage {
         super(parameters);
         final PageDescriptor descriptor = ((PMSiteSession) getSession()).getContentManager().getStaticPageDescriptor(parameters);
 
+        final PMSiteContentManager contentManager = ((PMSiteSession) getSession()).getContentManager();
+
         add(new SecondaryNavigationPanel("secondaryNavig", this));
 
-        add(new Label("caption", descriptor.name().getValue()));
+        add(new Label("caption", PMSiteContentManager.getCaption(descriptor, contentManager.getLocale())));
 
         add(new WebComponent("content") {
 

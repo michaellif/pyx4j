@@ -33,6 +33,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.Locale;
 import com.propertyvista.domain.site.Locale.Lang;
+import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
@@ -188,5 +189,14 @@ public class PMSiteContentManager {
             ret.properties().add(Converter.convert(building, floorplans));
         }
         return ret;
+    }
+
+    public static String getCaption(PageDescriptor descriptor, Locale locale) {
+        for (PageCaption caption : descriptor.childCaptions()) {
+            if (locale.lang().getValue().equals(caption.locale().lang().getValue())) {
+                return caption.caption().getValue();
+            }
+        }
+        return descriptor.name().getValue();
     }
 }

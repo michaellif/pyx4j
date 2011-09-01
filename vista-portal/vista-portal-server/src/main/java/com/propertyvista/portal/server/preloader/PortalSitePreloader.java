@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.site.Locale;
 import com.propertyvista.domain.site.Locale.Lang;
 import com.propertyvista.domain.site.News;
+import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
@@ -31,6 +32,10 @@ import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.Testimonial;
 
 public class PortalSitePreloader extends AbstractDataPreloader {
+
+    private Locale enLocale;
+
+    private Locale frLocale;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -43,11 +48,11 @@ public class PortalSitePreloader extends AbstractDataPreloader {
 
         try {
 
-            Locale enLocale = EntityFactory.create(Locale.class);
+            enLocale = EntityFactory.create(Locale.class);
             enLocale.lang().setValue(Lang.en);
             PersistenceServicesFactory.getPersistenceService().persist(enLocale);
 
-            Locale frLocale = EntityFactory.create(Locale.class);
+            frLocale = EntityFactory.create(Locale.class);
             frLocale.lang().setValue(Lang.fr);
             PersistenceServicesFactory.getPersistenceService().persist(frLocale);
 
@@ -77,40 +82,21 @@ public class PortalSitePreloader extends AbstractDataPreloader {
                 news.locale().set(enLocale);
             }
 
-            site.childPages().add(createDynamicPage("Find an Apartment", PageDescriptor.Type.findApartment));
-            site.childPages().add(createDynamicPage("Residents", PageDescriptor.Type.residents));
+            site.childPages().add(createDynamicPage("Find an Apartment", "Trouver un appartement", PageDescriptor.Type.findApartment));
+            site.childPages().add(createDynamicPage("Residents", "Les résidents", PageDescriptor.Type.residents));
             {
-                PageDescriptor page = createStaticPage("About us");
-                page.childPages().add(createStaticPage("Overview"));
-                page.childPages().add(createStaticPage("Team"));
+                PageDescriptor page = createStaticPage("About us", "A propos de nous");
+                page.childPages().add(createStaticPage("Overview", "Vue d'ensemble"));
+                page.childPages().add(createStaticPage("Team", "Team"));
                 site.childPages().add(page);
             }
-            site.childPages().add(createStaticPage("Customer Care"));
-            site.childPages().add(createStaticPage("Terms Of Use"));
-            site.childPages().add(createStaticPage("Privacy"));
+            site.childPages().add(createStaticPage("Customer Care", "Assistance Clientèle"));
+            site.childPages().add(createStaticPage("Terms Of Use", "Mentions légales"));
+            site.childPages().add(createStaticPage("Privacy", "Politique de confidentialité"));
 
 //            ContentDescriptor frContent = EntityFactory.create(ContentDescriptor.class);
 //            {
-//                frContent.lang().setValue(ContentDescriptor.Lang.fr);
-//
-//                {
-//                    Testimonial testimonial = EntityFactory.create(Testimonial.class);
-//                    testimonial.content().setValue(
-//                            "You know... I was simply abscessed with that picture: stars everywhere and you are so small in the entire Universe... "
-//                                    + "But men, why she's starring at me constantly!!!");
-//                    testimonial.author().setValue("Uncle Vasya Sr.");
-//                    PersistenceServicesFactory.getPersistenceService().persist(testimonial);
-//                    frContent.testimonials().add(testimonial);
-//                }
-//
-//                {
-//                    News news = EntityFactory.create(News.class);
-//                    news.caption().setValue("Incredible offer!..");
-//                    news.content().setValue("Just by one star and get another two for free! Absolutely free! Just do not forget to pay property tax.");
-//                    news.date().setValue(RandomUtil.randomLogicalDate());
-//                    PersistenceServicesFactory.getPersistenceService().persist(news);
-//                    frContent.news().add(news);
-//                }
+
 //
 //                frContent.childPages().add(createDynamicPage("Trouver un appartement", PageDescriptor.Type.findApartment));
 //                frContent.childPages().add(createDynamicPage("Les résidents", PageDescriptor.Type.residents));
@@ -139,21 +125,32 @@ public class PortalSitePreloader extends AbstractDataPreloader {
 
     }
 
-    private PageDescriptor createDynamicPage(String captione, PageDescriptor.Type type) throws ClassCastException, IOException {
-        return createPage(captione, type);
+    private PageDescriptor createDynamicPage(String enCaption, String frCaption, PageDescriptor.Type type) throws ClassCastException, IOException {
+        return createPage(enCaption, frCaption, type);
     }
 
-    private PageDescriptor createStaticPage(String captione) throws ClassCastException, IOException {
-        return createPage(captione, PageDescriptor.Type.staticContent);
+    private PageDescriptor createStaticPage(String enCaption, String frCaption) throws ClassCastException, IOException {
+        return createPage(enCaption, frCaption, PageDescriptor.Type.staticContent);
     }
 
-    private PageDescriptor createPage(String caption, PageDescriptor.Type type) throws ClassCastException, IOException {
+    private PageDescriptor createPage(String enCaption, String frCaption, PageDescriptor.Type type) throws ClassCastException, IOException {
         PageDescriptor page = EntityFactory.create(PageDescriptor.class);
         page.type().setValue(type);
-        page.name().setValue(caption);
+        page.name().setValue(enCaption);
 //        if (resourceName != null) {
 //            page.content().content().setValue(IOUtils.getUTF8TextResource(resourceName, this.getClass()));
 //        }
+
+        PageCaption pageCaption = EntityFactory.create(PageCaption.class);
+        pageCaption.caption().setValue(enCaption);
+        pageCaption.locale().set(enLocale);
+        page.childCaptions().add(pageCaption);
+
+        pageCaption = EntityFactory.create(PageCaption.class);
+        pageCaption.caption().setValue(frCaption);
+        pageCaption.locale().set(frLocale);
+        page.childCaptions().add(pageCaption);
+
         return page;
     }
 
