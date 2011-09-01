@@ -57,5 +57,4 @@ public interface ContentDescriptor extends IEntity {
 
     @Owned
     IList<News> news();
-
 }

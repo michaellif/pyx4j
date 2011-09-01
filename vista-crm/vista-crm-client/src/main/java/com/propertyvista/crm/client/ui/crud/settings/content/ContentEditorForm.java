@@ -92,6 +92,7 @@ public class ContentEditorForm extends CrmEntityForm<ContentDescriptor> {
     public IsWidget createGeneralTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
+// TODO list of images here:
 //        main.add(inject(proto().content().image(), new CFileUploader()), 60);
 
         main.add(new CrmSectionSeparator(proto().childPages().getMeta().getCaption()));

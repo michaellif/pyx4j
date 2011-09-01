@@ -34,7 +34,7 @@ public class ContentEditorActivity extends EditorActivityBase<ContentDescriptor>
     public ContentEditorActivity(Place place) {
         super((ContentEditor) SettingsViewFactory.instance(ContentEditor.class), (AbstractCrudService<ContentDescriptor>) GWT
                 .create(ContentDescriptorCrudService.class), ContentDescriptor.class);
-
+        withPlace(place);
     }
 
     @Override

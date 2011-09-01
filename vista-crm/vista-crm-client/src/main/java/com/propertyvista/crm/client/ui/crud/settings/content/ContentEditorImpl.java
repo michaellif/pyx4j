@@ -17,11 +17,12 @@ import com.pyx4j.commons.Key;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.site.ContentDescriptor;
 
 public class ContentEditorImpl extends CrmEditorViewImplBase<ContentDescriptor> implements ContentEditor {
     public ContentEditorImpl() {
-        super(null);
+        super(CrmSiteMap.Settings.Content.class);
         // create/init/set main form here: 
         CrmEntityForm<ContentDescriptor> form = new ContentEditorForm(this);
         form.initialize();
@@ -30,6 +31,6 @@ public class ContentEditorImpl extends CrmEditorViewImplBase<ContentDescriptor> 
 
     @Override
     public void viewChild(Key id) {
-        ((PageEditor.Presenter) getPresenter()).viewChild(id);
+        ((ContentEditor.Presenter) getPresenter()).viewChild(id);
     }
 }

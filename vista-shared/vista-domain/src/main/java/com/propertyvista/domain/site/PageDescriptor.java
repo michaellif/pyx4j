@@ -17,7 +17,6 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -54,13 +53,13 @@ public interface PageDescriptor extends IEntity {
     IPrimitive<String> caption();
 
     @Owned
-    @Detached
+//    @Detached
     PageContent content();
 
     @Owned
     @Caption(name = "Child Pages:")
     IList<PageDescriptor> childPages();
 
-    @Owner
+//    @Owner
     PageDescriptor parent();
 }

@@ -38,7 +38,6 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
-import com.propertyvista.crm.client.ui.components.cms.CFileUploader;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
@@ -68,7 +67,8 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
             main.add(inject(proto().content().content(), content), 60);
         }
 
-        main.add(inject(proto().content().image(), new CFileUploader()), 60);
+// TODO
+//        main.add(inject(proto().content().image(), new CFileUploader()), 60);
 
         main.add(new CrmSectionSeparator(proto().childPages().getMeta().getCaption()));
         main.add(inject(proto().childPages(), createChildPagesList()));
@@ -122,6 +122,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
             @Override
             protected IFolderEditorDecorator<PageDescriptor> createFolderDecorator() {
                 CrmTableFolderDecorator<PageDescriptor> decor = new CrmTableFolderDecorator<PageDescriptor>(columns(), parent);
+                setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {

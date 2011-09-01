@@ -41,8 +41,8 @@ public class ContentActivity extends AbstractActivity {
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
 
-        ContentDescriptorCrudService pds = GWT.create(ContentDescriptorCrudService.class);
-        pds.retrieveHomeItem(new AsyncCallback<Key>() {
+        ContentDescriptorCrudService srv = GWT.create(ContentDescriptorCrudService.class);
+        srv.retrieveHomeItem(new AsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
                 CrudAppPlace gotoPlace = AppSite.getHistoryMapper().createPlace(place.getClass());
