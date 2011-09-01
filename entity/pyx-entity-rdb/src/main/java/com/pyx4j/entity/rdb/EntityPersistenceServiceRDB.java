@@ -289,6 +289,21 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
+    @Override
+    public <T extends IEntity> void merge(Iterable<T> entityIterable) {
+        Connection connection = null;
+        try {
+            if (entityIterable.iterator().hasNext()) {
+                connection = connectionProvider.getConnection();
+                for (T entity : entityIterable) {
+                    merge(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
+                }
+            }
+        } finally {
+            SQLUtils.closeQuietly(connection);
+        }
+    }
+
     private <T extends IEntity> void persist(Connection connection, TableModel tm, Iterable<T> entityIterable, Date now) {
         //TODO  //for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) { ... }
         /*
@@ -313,10 +328,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Vector<T> updEntities = new Vector<T>();
 
         for (T e : entityIterable) {
-            if (e.getPrimaryKey() != null)
+            if (e.getPrimaryKey() != null) {
                 updEntities.add(e);
-            else
+            } else {
                 newEntities.add(e);
+            }
         }
         if (newEntities.size() > 0) {
             tm.insert(connection, newEntities);

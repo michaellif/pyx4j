@@ -50,6 +50,8 @@ public interface IEntityPersistenceService {
 
     public void merge(IEntity entity);
 
+    public <T extends IEntity> void merge(Iterable<T> entityIterable);
+
     public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey);
 
     /**

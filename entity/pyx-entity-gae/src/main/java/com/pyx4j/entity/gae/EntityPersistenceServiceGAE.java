@@ -861,6 +861,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
+    @Override
+    public <T extends IEntity> void merge(Iterable<T> entityIterable) {
+        for (T entity : entityIterable) {
+            merge(entity);
+        }
+    }
+
     private Object deserializeValue(IEntity iEntity, String keyName, Object value, RetrieveRequestsAggregator aggregator) {
         if (value instanceof Text) {
             return ((Text) value).getValue();
