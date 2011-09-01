@@ -17,6 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -30,4 +31,9 @@ public interface News extends IEntity {
     @Format("MM/dd/yyyy")
     @MemberColumn(name = "newsDate")
     IPrimitive<LogicalDate> date();
+
+    @NotNull
+    Locale locale();
+
+    PageDescriptor descriptor();
 }

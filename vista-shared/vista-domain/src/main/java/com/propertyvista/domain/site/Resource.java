@@ -15,6 +15,7 @@ package com.propertyvista.domain.site;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.File;
@@ -24,5 +25,8 @@ public interface Resource extends IEntity {
     @EmbeddedEntity
     @MemberColumn(name = "resourceFile")
     File file();
+
+    @NotNull
+    Locale locale();
 
 }

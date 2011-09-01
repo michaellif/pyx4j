@@ -47,7 +47,6 @@ import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.site.ContentDescriptor;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageDescriptor;
@@ -95,21 +94,21 @@ public class ContentEditorForm extends CrmEntityForm<ContentDescriptor> {
 // TODO list of images here:
 //        main.add(inject(proto().content().image(), new CFileUploader()), 60);
 
-        main.add(new CrmSectionSeparator(proto().childPages().getMeta().getCaption()));
-        main.add(inject(proto().childPages(), createChildPagesList()));
+//        main.add(new CrmSectionSeparator(proto().childPages().getMeta().getCaption()));
+//        main.add(inject(proto().childPages(), createChildPagesList()));
 
         return new CrmScrollPanel(main);
     }
 
     private Widget createTestimonialsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        main.add(inject(proto().testimonials(), createTestimonialsList()));
+//        main.add(inject(proto().testimonials(), createTestimonialsList()));
         return new ScrollPanel(main);
     }
 
     private Widget createNewsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        main.add(inject(proto().news(), createNewsList()));
+//        main.add(inject(proto().news(), createNewsList()));
         return new ScrollPanel(main);
     }
 

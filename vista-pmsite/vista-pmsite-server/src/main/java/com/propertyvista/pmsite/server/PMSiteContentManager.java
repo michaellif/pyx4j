@@ -31,9 +31,10 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
-import com.propertyvista.domain.site.ContentDescriptor;
-import com.propertyvista.domain.site.ContentDescriptor.Lang;
+import com.propertyvista.domain.site.Locale;
+import com.propertyvista.domain.site.Locale.Lang;
 import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
 public class PMSiteContentManager {
@@ -47,22 +48,36 @@ public class PMSiteContentManager {
         }
     }
 
-    private ContentDescriptor content;
+    private final SiteDescriptor site;
+
+    private Locale locale;
 
     public PMSiteContentManager() {
-        retrieveContentDescriptor(getLocale());
+        site = retrieveSiteDescriptor();
+        locale = readLocaleFromCookie();
+        if (locale == null) {
+            if (site.locales().size() > 0) {
+                locale = site.locales().get(0);
+            } else {
+                throw new Error("No locales found");
+            }
+        }
     }
 
-    public void setLocale(Lang lang) {
-        ((WebRequestCycle) RequestCycle.get()).getWebResponse().addCookie(new Cookie("locale", lang.name()));
-        retrieveContentDescriptor(lang);
+    public Locale getLocale() {
+        return locale;
     }
 
-    public Lang getLocale() {
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+        ((WebRequestCycle) RequestCycle.get()).getWebResponse().addCookie(new Cookie("locale", locale.lang().getValue().name()));
+    }
+
+    private Locale readLocaleFromCookie() {
         Cookie localeCookie = null;
         Cookie[] cookies = ((WebRequest) ((WebRequestCycle) RequestCycle.get()).getRequest()).getCookies();
         if (cookies == null) {
-            return Lang.en;
+            return null;
         }
         for (Cookie cookie : cookies) {
             if ("locale".equals(cookie.getName())) {
@@ -72,46 +87,44 @@ public class PMSiteContentManager {
         }
         if (localeCookie != null) {
             try {
-                return Lang.valueOf(localeCookie.getValue());
+                Lang lang = Lang.valueOf(localeCookie.getValue());
+                for (Locale locale : site.locales()) {
+                    if (lang.equals(locale.lang().getValue())) {
+                        return locale;
+                    }
+                }
+
             } catch (Exception e) {
-                return Lang.en;
+                return null;
             }
-
-        } else {
-            return Lang.en;
         }
-
+        return null;
     }
 
-    private void retrieveContentDescriptor(ContentDescriptor.Lang lang) {
-        EntityQueryCriteria<ContentDescriptor> criteria = EntityQueryCriteria.create(ContentDescriptor.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().lang(), lang));
+    private SiteDescriptor retrieveSiteDescriptor() {
+        EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
 
-        ContentDescriptor content = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-        if ((content == null) || (content.isNull())) {
-            throw new Error("Content for locale " + lang + " not found");
-        }
-
-        for (PageDescriptor descriptor : content.childPages()) {
+        SiteDescriptor site = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        for (PageDescriptor descriptor : site.childPages()) {
             createPath(descriptor);
         }
-        this.content = content;
+        return site;
     }
 
     private void createPath(PageDescriptor parent) {
         System.out.println(parent);
         for (PageDescriptor descriptor : parent.childPages()) {
-            descriptor.path().add(parent);
+            descriptor._path().add(parent);
             createPath(descriptor);
         }
     }
 
-    public ContentDescriptor getContentDescriptor() {
-        return content;
+    public SiteDescriptor getSiteDescriptor() {
+        return site;
     }
 
     public PageDescriptor getStaticPageDescriptor(PageParameters parameters) {
-        List<PageDescriptor> pages = content.childPages();
+        List<PageDescriptor> pages = site.childPages();
         PageDescriptor current = null;
         for (String paramName : PARAMETER_NAMES) {
             if (parameters.containsKey(paramName)) {
@@ -134,11 +147,11 @@ public class PMSiteContentManager {
     public PageParameters getStaticPageParams(PageDescriptor descriptor) {
 
         PageParameters params = new PageParameters();
-        for (int i = 0; i < descriptor.path().size(); i++) {
-            params.add(PARAMETER_NAMES[i], toPageId(descriptor.path().get(descriptor.path().size() - 1 - i).name().getValue()));
+        for (int i = 0; i < descriptor._path().size(); i++) {
+            params.add(PARAMETER_NAMES[i], toPageId(descriptor._path().get(descriptor._path().size() - 1 - i).name().getValue()));
         }
 
-        params.add(PARAMETER_NAMES[descriptor.path().size()], toPageId(descriptor.name().getValue()));
+        params.add(PARAMETER_NAMES[descriptor._path().size()], toPageId(descriptor.name().getValue()));
 
         return params;
     }

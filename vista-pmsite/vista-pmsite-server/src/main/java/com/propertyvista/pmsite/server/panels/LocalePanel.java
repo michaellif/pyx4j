@@ -13,16 +13,13 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
-import java.util.Arrays;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import com.propertyvista.domain.site.ContentDescriptor;
-import com.propertyvista.domain.site.ContentDescriptor.Lang;
+import com.propertyvista.domain.site.Locale;
 import com.propertyvista.pmsite.server.PMSiteSession;
 
 public class LocalePanel extends Panel {
@@ -32,25 +29,25 @@ public class LocalePanel extends Panel {
     public LocalePanel(String id) {
         super(id);
 
-        ListView<Lang> listView = new ListView<Lang>("langItem", Arrays.asList(ContentDescriptor.Lang.values())) {
+        ListView<Locale> listView = new ListView<Locale>("langItem", ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().locales()) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void populateItem(ListItem<Lang> item) {
+            protected void populateItem(ListItem<Locale> item) {
 
-                final Lang lang = item.getModelObject();
+                final Locale locale = item.getModelObject();
 
                 Link<Void> link = new Link<Void>("langSelector") {
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     public void onClick() {
-                        ((PMSiteSession) getSession()).getContentManager().setLocale(lang);
+                        ((PMSiteSession) getSession()).getContentManager().setLocale(locale);
                         setResponsePage(getPage().getPageClass(), getPage().getPageParameters());
                     }
                 };
                 item.add(link);
-                link.add(new Label("caption", lang.name()));
+                link.add(new Label("caption", locale.lang().getValue().name()));
 
             }
         };

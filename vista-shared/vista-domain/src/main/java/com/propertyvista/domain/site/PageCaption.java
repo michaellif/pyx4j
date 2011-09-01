@@ -7,26 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 30, 2011
- * @author Vlad
+ * Created on Sep 1, 2011
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.domain.site;
 
-import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Testimonial extends IEntity {
+public interface PageCaption extends IEntity {
 
-    @Editor(type = Editor.EditorType.textarea)
-    IPrimitive<String> content();
-
-    IPrimitive<String> author();
+    @NotNull
+    IPrimitive<String> caption();
 
     @NotNull
     Locale locale();
 
-    PageDescriptor descriptor();
 }

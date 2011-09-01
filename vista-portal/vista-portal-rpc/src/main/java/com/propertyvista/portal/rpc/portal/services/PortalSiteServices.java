@@ -22,7 +22,7 @@ import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.ContentDescriptor;
-import com.propertyvista.domain.site.ContentDescriptor.Lang;
+import com.propertyvista.domain.site.Locale.Lang;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.portal.domain.dto.FloorplanDetailsDTO;
 import com.propertyvista.portal.domain.dto.PropertyDetailsDTO;

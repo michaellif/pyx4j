@@ -13,6 +13,8 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
+import java.util.List;
+
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.Response;
 import org.apache.wicket.markup.ComponentTag;
@@ -21,7 +23,10 @@ import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.basic.Label;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.panels.SecondaryNavigationPanel;
@@ -44,8 +49,14 @@ public class StaticPage extends BasePage {
             protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
                 Response response = getRequestCycle().getResponse();
 
-                PersistenceServicesFactory.getPersistenceService().retrieve(descriptor.content());
-                response.write(descriptor.content().content().getStringView());
+                EntityQueryCriteria<PageContent> pageContentCriteria = EntityQueryCriteria.create(PageContent.class);
+                pageContentCriteria.add(PropertyCriterion.eq(pageContentCriteria.proto().locale(), ((PMSiteSession) getSession()).getContentManager()
+                        .getLocale()));
+
+                List<PageContent> pages = PersistenceServicesFactory.getPersistenceService().query(pageContentCriteria);
+                if (pages.size() == 1) {
+                    response.write(pages.get(0).content().getStringView());
+                }
             }
         });
 

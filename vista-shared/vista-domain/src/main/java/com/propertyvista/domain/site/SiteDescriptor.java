@@ -13,7 +13,8 @@
  */
 package com.propertyvista.domain.site;
 
-import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -39,6 +40,8 @@ public interface SiteDescriptor extends IEntity {
         }
     }
 
+    IList<Locale> locales();
+
     @NotNull
     @ToString(index = 0)
     IPrimitive<Skin> skin();
@@ -46,12 +49,18 @@ public interface SiteDescriptor extends IEntity {
     //color picker
     IPrimitive<String> baseColor();
 
-    Resource logo();
-
-    Resource slogan();
-
     IPrimitive<String> copyright();
 
-    @Detached
-    IList<ContentDescriptor> contentDescriptors();
+    IList<Resource> logo();
+
+    IList<Resource> slogan();
+
+    @Owned
+    @Caption(name = "Child Pages:")
+    IList<PageDescriptor> childPages();
+
+    // Image for landing page
+    @Owned
+    IList<Resource> images();
+
 }

@@ -59,8 +59,8 @@ public class SecondaryNavigationPanel extends Panel {
                         SecondaryNavigationPanel.this.getPage().getPageParameters());
                 if (currentPage.equals(navItem.getPageDescriptor())) {
                     active = true;
-                } else if (!currentPage.path().isNull() && !currentPage.path().isEmpty()) {
-                    for (PageDescriptor descriptor : currentPage.path()) {
+                } else if (!currentPage._path().isNull() && !currentPage._path().isEmpty()) {
+                    for (PageDescriptor descriptor : currentPage._path()) {
                         if (!descriptor.isNull() && descriptor.equals(navItem.getPageDescriptor())) {
                             active = true;
                             break;

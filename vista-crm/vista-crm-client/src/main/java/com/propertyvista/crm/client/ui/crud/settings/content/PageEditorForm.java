@@ -60,11 +60,11 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
 
         main.add(inject(proto().name()), 15);
         if (isEditable()) {
-            main.add(inject(proto().content().content()), 60);
+//            main.add(inject(proto().content().content()), 60);
         } else {
             CLabel content = new CLabel();
             content.setAllowHtml(true);
-            main.add(inject(proto().content().content(), content), 60);
+//            main.add(inject(proto().content().content(), content), 60);
         }
 
 // TODO

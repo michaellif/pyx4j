@@ -16,7 +16,6 @@ package com.propertyvista.domain.site;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -29,10 +28,12 @@ public interface PageContent extends IEntity {
     //TODO Blob
     IPrimitive<String> content();
 
-    @NotNull
-    @ToString(index = 1)
-    IPrimitive<String> caption();
-
     // Image for landing page and for static
     Resource image();
+
+    @NotNull
+    Locale locale();
+
+    PageDescriptor descriptor();
+
 }

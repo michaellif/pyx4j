@@ -55,7 +55,7 @@ public class MainNavigationPanel extends Panel {
                     @Override
                     protected void onComponentTag(final ComponentTag tag) {
                         super.onComponentTag(tag);
-                        tag.put("lang", contentManager.getLocale().name());
+                        tag.put("lang", contentManager.getLocale().lang().getValue().name());
                     }
                 });
                 item.add(link);
@@ -66,8 +66,8 @@ public class MainNavigationPanel extends Panel {
                     PageDescriptor currentPage = contentManager.getStaticPageDescriptor(MainNavigationPanel.this.getPage().getPageParameters());
                     if (currentPage.equals(navItem.getPageDescriptor())) {
                         active = true;
-                    } else if (!currentPage.path().isNull() && !currentPage.path().isEmpty()) {
-                        PageDescriptor mainNavigParent = currentPage.path().get(0);
+                    } else if (!currentPage._path().isNull() && !currentPage._path().isEmpty()) {
+                        PageDescriptor mainNavigParent = currentPage._path().get(0);
                         if (!mainNavigParent.isNull() && mainNavigParent.equals(navItem.getPageDescriptor())) {
                             active = true;
                         }

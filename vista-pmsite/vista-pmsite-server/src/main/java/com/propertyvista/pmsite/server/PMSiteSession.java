@@ -38,7 +38,7 @@ public class PMSiteSession extends WebSession {
     public List<NavigationItem> getMainNavigItems() {
         List<NavigationItem> list = new ArrayList<NavigationItem>();
         for (int i = 0; i < 4; i++) {
-            PageDescriptor descriptor = contentManager.getContentDescriptor().childPages().get(i);
+            PageDescriptor descriptor = contentManager.getSiteDescriptor().childPages().get(i);
             if (descriptor != null) {
                 list.add(new NavigationItem(descriptor, contentManager));
             } else {
@@ -50,8 +50,8 @@ public class PMSiteSession extends WebSession {
 
     public List<NavigationItem> getFooterNavigItems() {
         List<NavigationItem> list = new ArrayList<NavigationItem>();
-        for (int i = 4; i < contentManager.getContentDescriptor().childPages().size(); i++) {
-            PageDescriptor descriptor = contentManager.getContentDescriptor().childPages().get(i);
+        for (int i = 4; i < contentManager.getSiteDescriptor().childPages().size(); i++) {
+            PageDescriptor descriptor = contentManager.getSiteDescriptor().childPages().get(i);
             if (descriptor != null) {
                 list.add(new NavigationItem(descriptor, contentManager));
             } else {
