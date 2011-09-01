@@ -48,6 +48,8 @@ public class DeferredProgressPanel extends FlowPanel {
 
     private int checkProgressStatusSeconds = 3;
 
+    private int checkProgressErrorCount = 0;
+
     protected final ProgressBar progressBar;
 
     private boolean completed;
@@ -62,6 +64,7 @@ public class DeferredProgressPanel extends FlowPanel {
     public void startProgress(final String deferredCorrelationId) {
         this.deferredCorrelationId = deferredCorrelationId;
         completed = false;
+        checkProgressErrorCount = 0;
         deferredProcessStartTime = System.currentTimeMillis();
 
         progressTimer = new Timer() {
@@ -84,6 +87,7 @@ public class DeferredProgressPanel extends FlowPanel {
             progressTimer = null;
         }
         deferredCorrelationId = null;
+        checkProgressErrorCount = 0;
     }
 
     public void cancelProgress() {
@@ -119,12 +123,20 @@ public class DeferredProgressPanel extends FlowPanel {
             @Override
             public void onFailure(Throwable caught) {
                 if (deferredCorrelationId != null) {
-                    throw new UnrecoverableClientError(caught);
+                    checkProgressErrorCount++;
+                    if (checkProgressErrorCount > 3) {
+                        throw new UnrecoverableClientError(caught);
+                    } else {
+                        if (progressTimer != null) {
+                            progressTimer.schedule(checkProgressStatusSeconds * 1000);
+                        }
+                    }
                 }
             }
 
             @Override
             public void onSuccess(DeferredProcessProgressResponse result) {
+                checkProgressErrorCount = 0;
                 if (result.isError()) {
                     log.info("Deferred completed in " + TimeUtils.secSince(deferredProcessStartTime));
                     if (!completed) {
