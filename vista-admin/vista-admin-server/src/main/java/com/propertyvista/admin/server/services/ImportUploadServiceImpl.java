@@ -129,6 +129,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
                 response.message = SimpleMessageFormat.format("Imported {0} building(s), {1} floorplan(s), {2} unit(s)", count, counters.floorplans,
                         counters.units);
             }
+            log.info("import upload completed {}", response.message);
         } finally {
             SharedGeoLocator.save();
             NamespaceManager.remove();

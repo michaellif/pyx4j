@@ -18,6 +18,8 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -38,6 +40,8 @@ import com.propertyvista.interfaces.importer.model.ImportIO;
 
 public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO> implements UpdateUploadService {
 
+    private final static Logger log = LoggerFactory.getLogger(UpdateUploadServiceImpl.class);
+
     @Override
     public long getMaxSize(HttpServletRequest request) {
         return 5 * 1024 * 1024;
@@ -51,7 +55,7 @@ public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO> 
     @Override
     public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess process, final UploadResponse response) {
 
-        Thread t = new DeferredProcessorThread("Import", process, new Runnable() {
+        Thread t = new DeferredProcessorThread("Update", process, new Runnable() {
             @Override
             public void run() {
                 runImport(data, process, response);
@@ -78,5 +82,6 @@ public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO> 
             process.status().setProgress(count);
         }
         response.message = SimpleMessageFormat.format("Updated {0} units in {1} building(s)", counters.units, counters.buildings);
+        log.info(" Update upload completed {}", response.message);
     }
 }

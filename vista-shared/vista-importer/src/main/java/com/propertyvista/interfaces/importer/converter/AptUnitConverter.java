@@ -15,6 +15,7 @@ package com.propertyvista.interfaces.importer.converter;
 
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
+import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 
@@ -29,8 +30,16 @@ public class AptUnitConverter extends EntityDtoBinder<AptUnit, AptUnitIO> {
     protected void bind() {
         bind(dtoProto.number(), dboProto.info().number());
         bind(dtoProto.area(), dboProto.info().area());
+        bind(dtoProto.areaUnits(), dboProto.info().areaUnits());
         bind(dtoProto.unitRent(), dboProto.financial().unitRent());
         bind(dtoProto.availableForRent(), dboProto.availableForRent());
     }
 
+    @Override
+    public void copyDTOtoDBO(AptUnitIO dto, AptUnit dbo) {
+        super.copyDTOtoDBO(dto, dbo);
+        if (!dbo.info().area().isNull() && dbo.info().areaUnits().isNull()) {
+            dbo.info().areaUnits().setValue(AreaMeasurementUnit.sqFeet);
+        }
+    }
 }
