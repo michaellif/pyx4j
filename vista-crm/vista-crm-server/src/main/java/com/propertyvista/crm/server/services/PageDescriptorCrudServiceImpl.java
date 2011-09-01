@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.site.PageDescriptor;
@@ -21,5 +23,16 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
 
     public PageDescriptorCrudServiceImpl() {
         super(PageDescriptor.class);
+    }
+
+    @Override
+    protected void enhanceRetrieve(PageDescriptor entity, boolean fromList) {
+        if (!fromList) {
+            PersistenceServicesFactory.getPersistenceService().retrieve(entity.content());
+
+//            EntityQueryCriteria<PageDescriptor> childPagesCriteria = EntityQueryCriteria.create(PageDescriptor.class);
+//            childPagesCriteria.add(PropertyCriterion.eq(childPagesCriteria.proto().parent(), entity));
+//            entity.childPages().addAll(PersistenceServicesFactory.getPersistenceService().query(childPagesCriteria));
+        }
     }
 }

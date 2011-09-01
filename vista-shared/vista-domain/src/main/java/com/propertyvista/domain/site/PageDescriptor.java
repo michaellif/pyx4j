@@ -14,6 +14,7 @@
 package com.propertyvista.domain.site;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
@@ -52,7 +53,7 @@ public interface PageDescriptor extends IEntity {
     IPrimitive<String> caption();
 
     @Owned
-//    @Detached
+    @Detached
     PageContent content();
 
     @Owned
