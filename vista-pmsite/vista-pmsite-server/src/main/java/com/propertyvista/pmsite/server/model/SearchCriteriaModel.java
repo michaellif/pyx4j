@@ -150,7 +150,13 @@ public class SearchCriteriaModel implements Serializable {
         List<City> cities = PMSiteContentManager.getCities();
         for (City city : cities) {
             String cityName = city.name().getValue();
+            if (cityName == null) {
+                continue;
+            }
             String provName = city.province().name().getValue();
+            if (provName == null) {
+                continue;
+            }
             List<String> cityList = provCityMap.get(provName);
             if (cityList == null) {
                 cityList = new ArrayList<String>();

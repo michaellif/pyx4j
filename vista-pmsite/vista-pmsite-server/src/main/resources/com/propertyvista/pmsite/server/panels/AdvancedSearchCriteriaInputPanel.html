@@ -1,57 +1,6 @@
 <wicket:panel
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-<style>
-.search_wrap {
-	float:left;
-	clear:left;
-	margin-top:10px;
-	margin-left:0px;
-}
-.input_frame {
-	border:1px solid #333;
-	border-radius:6px;
-	padding:10px;
-	margin:5px;
-}
-.search_type_box {
-	float:left;
-	width:300px;
-}
-.search_type_box label {
-	width:100px;
-	white-space:nowrap;
-}
-.search_bytype_box {
-	clear:left;
-}
-.search_byprox_box {
-}
-.search_common_box {
-	float:left;
-	clear:both;
-	width:570px;
-}
-label {
-	display:inline-block;
-}
-.search_common_box label {
-	display:block;
-}
-.input_frame select {
-	width:150px;
-	margin:1px;
-}
-.input_frame input[type=text] {
-	width:150px;
-	margin:1px;
-}
-.amenities label {
-	display:inline;
-}
-.amenities br {
-	display:none;
-}
-</style>
+
 <div class="search_wrap">
 	<div wicket:id="form_messages"/>
 	<div wicket:id="searchType">
@@ -65,7 +14,7 @@ label {
 		</div>	  
 	</div>
     <div class="search_type_box search_bytype_box">
-	    <div class="input_frame">
+	    <div class="input_block_frame">
 	    	<div class="search_field">
 				<label>Province</label>
 				<select wicket:id="province"></select>
@@ -78,7 +27,7 @@ label {
     </div>
 
     <div class="search_type_box search_byprox_box">
-	    <div class="input_frame">
+	    <div class="input_block_frame">
 	    	<div class="search_field">
 				<label>Location</label>
 				<input wicket:id="location" type="text"/>
@@ -90,7 +39,7 @@ label {
 		</div>
     </div>
 
-	<div class="search_common_box input_frame">
+	<div class="search_common_box input_block_frame">
 	    <div class="search_field">
 			<label>Bedrooms</label>
 			<select wicket:id="bedsMin"></select> to <select wicket:id="bedsMax"></select>

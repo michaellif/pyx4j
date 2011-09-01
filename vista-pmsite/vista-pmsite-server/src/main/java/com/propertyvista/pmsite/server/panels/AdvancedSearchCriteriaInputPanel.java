@@ -61,6 +61,7 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
             @Override
             protected void onSelectionChanged(String newProv) {
                 // get city component
+                @SuppressWarnings("unchecked")
                 DropDownChoice<String> city = (DropDownChoice<String>) getParent().get("city");
                 if (city != null)
                     city.setChoices(provCityMap.get(newProv));
