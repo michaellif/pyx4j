@@ -48,7 +48,60 @@ import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 
 public class BuildingImporter {
 
-    public ImportCounters persist(BuildingIO buildingIO, String imagesBaseFolder) {
+    public List<String> verify(BuildingIO buildingIO, String imagesBaseFolder) {
+        List<String> messages = new Vector<String>();
+        // Set defaults
+        if (buildingIO.type().isNull()) {
+            buildingIO.type().setValue(BuildingInfo.Type.residential);
+        }
+
+        if (buildingIO.propertyCode().isNull()) {
+            messages.add("propertyCode can't be empty");
+        }
+
+        // Media
+        {
+            for (MediaIO iIO : buildingIO.medias()) {
+                String m = new MediaConverter(imagesBaseFolder).verify(iIO);
+                if (m != null) {
+                    messages.add("Building '" + buildingIO.propertyCode().getValue() + "' " + m);
+                }
+            }
+        }
+
+        //    Floorplan
+        {
+            for (FloorplanIO floorplanIO : buildingIO.floorplans()) {
+                if (floorplanIO.name().isNull()) {
+                    messages.add("Floorplan name in building '" + buildingIO.propertyCode().getValue() + "' can't be empty");
+                }
+
+                // Media
+                {
+                    for (MediaIO iIO : floorplanIO.medias()) {
+                        String m = new MediaConverter(imagesBaseFolder).verify(iIO);
+                        if (m != null) {
+                            messages.add("Floorplan '" + floorplanIO.name().getValue() + "' in building '" + buildingIO.propertyCode().getValue() + "' " + m);
+                        }
+                    }
+                }
+                //Units
+                {
+                    List<AptUnit> items = new Vector<AptUnit>();
+                    for (AptUnitIO iIO : floorplanIO.units()) {
+                        if (iIO.number().isNull()) {
+                            messages.add("AptUnit number in '" + floorplanIO.name().getValue() + "' in building '" + buildingIO.propertyCode().getValue()
+                                    + "' can't be empty");
+                        }
+                    }
+                }
+
+            }
+        }
+        return messages;
+    }
+
+    public ImportCounters persist(BuildingIO buildingIO, String imagesBaseFolder, boolean ignoreMissingMedia) {
 
         ImportCounters counters = new ImportCounters();
 
@@ -86,7 +139,7 @@ public class BuildingImporter {
         // Media
         {
             for (MediaIO iIO : buildingIO.medias()) {
-                building.media().add(new MediaConverter(imagesBaseFolder).createDBO(iIO));
+                building.media().add(new MediaConverter(imagesBaseFolder, ignoreMissingMedia).createDBO(iIO));
             }
             Persistence.service().persist(building.media());
         }
@@ -129,7 +182,7 @@ public class BuildingImporter {
                 // Media
                 {
                     for (MediaIO iIO : floorplanIO.medias()) {
-                        floorplan.media().add(new MediaConverter(imagesBaseFolder).createDBO(iIO));
+                        floorplan.media().add(new MediaConverter(imagesBaseFolder, ignoreMissingMedia).createDBO(iIO));
                     }
                     Persistence.service().persist(floorplan.media());
                 }
@@ -154,7 +207,7 @@ public class BuildingImporter {
                     for (AptUnitIO iIO : floorplanIO.units()) {
                         if (iIO.number().isNull()) {
                             throw new UserRuntimeException("AptUnit number in '" + floorplanIO.name().getValue() + "' in building '"
-                                    + buildingIO.propertyCode().getValue() + "'can't be empty");
+                                    + buildingIO.propertyCode().getValue() + "' can't be empty");
                         }
 
                         AptUnit i = new AptUnitConverter().createDBO(iIO);

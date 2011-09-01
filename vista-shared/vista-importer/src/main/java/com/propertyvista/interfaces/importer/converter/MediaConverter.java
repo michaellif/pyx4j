@@ -47,9 +47,16 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
 
     private static Collection<String> extensions = DownloadFormat.getExtensions(MediaUploadService.supportedFormats);
 
-    public MediaConverter(String baseFolder) {
+    private final boolean ignoreMissingMedia;
+
+    public MediaConverter(String baseFolder, boolean ignoreMissingMedia) {
         super(Media.class, MediaIO.class, false);
         this.baseFolder = baseFolder;
+        this.ignoreMissingMedia = ignoreMissingMedia;
+    }
+
+    public MediaConverter(String baseFolder) {
+        this(baseFolder, false);
     }
 
     @Override
@@ -81,11 +88,39 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
         }
     }
 
+    public String verify(MediaIO dto) {
+        if (dto.mediaType().isNull()) {
+            return i18n.tr("Media type is empty");
+        }
+        switch (dto.mediaType().getValue()) {
+        case file:
+            File file = new File(new File(baseFolder), dto.uri().getValue());
+            if (!file.exists()) {
+                file = FileIOUtils.findFileIgnoreCase(file);
+                if (!file.exists()) {
+                    return i18n.tr("Media file not found ''{0}''", dto.uri().getValue());
+                }
+            }
+            String extension = FilenameUtils.getExtension(file.getName());
+            if (extension != null) {
+                extension = extension.toLowerCase(Locale.ENGLISH);
+            }
+            if (!extensions.contains(extension)) {
+                return i18n.tr("Unsupported Media file ''{0}'' extension ''{1}''", dto.uri().getValue(), extension);
+            }
+        }
+        return null;
+    }
+
     @Override
     public void copyDTOtoDBO(MediaIO dto, Media dbo) {
         super.copyDTOtoDBO(dto, dbo);
         if (dto.mediaType().isNull()) {
-            throw new UserRuntimeException(i18n.tr("Media type is empty"));
+            if (ignoreMissingMedia) {
+                return;
+            } else {
+                throw new UserRuntimeException(i18n.tr("Media type is empty"));
+            }
         }
         switch (dto.mediaType().getValue()) {
         case file:
@@ -94,7 +129,11 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
             if (!file.exists()) {
                 file = FileIOUtils.findFileIgnoreCase(file);
                 if (!file.exists()) {
-                    throw new UserRuntimeException(i18n.tr("Media file not found ''{0}''", dto.uri().getValue()));
+                    if (ignoreMissingMedia) {
+                        return;
+                    } else {
+                        throw new UserRuntimeException(i18n.tr("Media file not found ''{0}''", dto.uri().getValue()));
+                    }
                 }
             }
             String extension = FilenameUtils.getExtension(file.getName());
@@ -102,7 +141,11 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
                 extension = extension.toLowerCase(Locale.ENGLISH);
             }
             if (!extensions.contains(extension)) {
-                throw new UserRuntimeException(i18n.tr("Unsupported Media file ''{0}'' extension ''{1}''", dto.uri().getValue(), extension));
+                if (ignoreMissingMedia) {
+                    return;
+                } else {
+                    throw new UserRuntimeException(i18n.tr("Unsupported Media file ''{0}'' extension ''{1}''", dto.uri().getValue(), extension));
+                }
             }
             dbo.file().filename().setValue(file.getName());
             dbo.file().contentMimeType().setValue(MimeMap.getContentType(extension));

@@ -87,6 +87,7 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
                 main.add(uploadPanel);
                 main.add(inject(proto().updateOnly()), 10);
+                main.add(inject(proto().ignoreMissingMedia()), 10);
                 return main;
             }
         };

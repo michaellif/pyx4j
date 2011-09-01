@@ -47,7 +47,7 @@ public class BuildingImport {
         ImportIO importIO = ImportUtils.parse(ImportIO.class, new InputSource(new FileReader(new File(fileName))));
 
         for (BuildingIO building : importIO.buildings()) {
-            new BuildingImporter().persist(building, imagesBaseFolder);
+            new BuildingImporter().persist(building, imagesBaseFolder, true);
         }
 
         log.info("Total time {} msec", TimeUtils.since(start));

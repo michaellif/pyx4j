@@ -15,11 +15,16 @@ package com.propertyvista.admin.server.services;
 
 import java.io.ByteArrayInputStream;
 import java.util.Collection;
+import java.util.List;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
+import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -42,6 +47,8 @@ import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 import com.propertyvista.server.domain.admin.Pmc;
 
 public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> implements ImportUploadService {
+
+    private final static Logger log = LoggerFactory.getLogger(ImportUploadServiceImpl.class);
 
     @Override
     public long getMaxSize(HttpServletRequest request) {
@@ -82,18 +89,36 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
             NamespaceManager.setNamespace(pmc.dnsName().getValue());
 
             String imagesBaseFolder = "data/export/images/";
+            //imagesBaseFolder = "M:\\stuff\\vista\\prod";
 
             ImportIO importIO = ImportUtils.parse(ImportIO.class, new InputSource(new ByteArrayInputStream(data.data)));
             process.status().setProgress(0);
             process.status().setProgressMaximum(importIO.buildings().size());
 
             int count = 0;
+            if (!importDTO.updateOnly().isBooleanTrue()) {
+                List<String> messages = new Vector<String>();
+                for (BuildingIO building : importIO.buildings()) {
+                    messages.addAll(new BuildingImporter().verify(building, imagesBaseFolder));
+                    count++;
+                    process.status().setProgress(count);
+                }
+                if (messages.size() > 0) {
+                    log.error("validation failed {}; {}", messages.size(), ConverterUtils.convertStringCollection(messages, "\n"));
+                    if (!importDTO.ignoreMissingMedia().isBooleanTrue()) {
+                        throw new Error("Validation error count:" + messages.size() + "; messages:" + ConverterUtils.convertStringCollection(messages, "\n"));
+                    }
+                }
+                process.status().setProgress(0);
+            }
+
+            count = 0;
             ImportCounters counters = new ImportCounters();
             for (BuildingIO building : importIO.buildings()) {
                 if (importDTO.updateOnly().isBooleanTrue()) {
                     counters.add(new BuildingUpdater().update(building, imagesBaseFolder));
                 } else {
-                    counters.add(new BuildingImporter().persist(building, imagesBaseFolder));
+                    counters.add(new BuildingImporter().persist(building, imagesBaseFolder, importDTO.ignoreMissingMedia().isBooleanTrue()));
                 }
                 count++;
                 process.status().setProgress(count);

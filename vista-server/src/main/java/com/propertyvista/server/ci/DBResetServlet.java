@@ -78,76 +78,86 @@ public class DBResetServlet extends HttpServlet {
                         throw new Error("permission denied");
                     }
                 }
+                if (req.getParameter("help") != null) {
+                    buf.append("\nUsage:\n");
+                    for (ResetType t : EnumSet.allOf(ResetType.class)) {
+                        buf.append("?type=").append(t.name()).append("\n");
+                    }
+                } else {
+                    if (req.getParameter("param") != null) {
+                        throw new Error("Invalid request param");
+                    }
 
-                EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) PersistenceServicesFactory.getPersistenceService();
+                    EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) PersistenceServicesFactory.getPersistenceService();
 
-                ResetType type = ResetType.all;
-                String tp = req.getParameter("type");
-                if (CommonsStringUtils.isStringSet(tp)) {
-                    type = ResetType.valueOf(tp);
-                }
+                    ResetType type = ResetType.all;
+                    String tp = req.getParameter("type");
+                    if (CommonsStringUtils.isStringSet(tp)) {
+                        type = ResetType.valueOf(tp);
+                    }
 
-                if (EnumSet.of(ResetType.all, ResetType.clear).contains(type)) {
-                    List<String> allClasses = EntityClassFinder.findEntityClasses();
-                    for (String className : allClasses) {
-                        Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
-                        EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-                        if (meta.isTransient()) {
-                            continue;
-                        }
-                        if (srv.isTableExists(meta.getEntityClass())) {
-                            log.warn("drop table {}", meta.getEntityClass());
-                            buf.append("drop table " + meta.getEntityClass() + "\n");
-                            srv.dropTable(meta.getEntityClass());
+                    if (EnumSet.of(ResetType.all, ResetType.clear).contains(type)) {
+                        List<String> allClasses = EntityClassFinder.findEntityClasses();
+                        for (String className : allClasses) {
+                            Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
+                            EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
+                            if (meta.isTransient()) {
+                                continue;
+                            }
+                            if (srv.isTableExists(meta.getEntityClass())) {
+                                log.warn("drop table {}", meta.getEntityClass());
+                                buf.append("drop table " + meta.getEntityClass() + "\n");
+                                srv.dropTable(meta.getEntityClass());
+                            }
                         }
                     }
-                }
 
-                SchedulerHelper.shutdown();
-                SchedulerHelper.dbReset();
-                SchedulerHelper.init();
+                    SchedulerHelper.shutdown();
+                    SchedulerHelper.dbReset();
+                    SchedulerHelper.init();
 
-                switch (type) {
-                case all:
-                case preload:
-                    buf.append(conf.getDataPreloaders().preloadAll());
-                    break;
-                case pmc:
-                    buf.append(conf.getDataPreloaders().delete());
-                    break;
-                }
-                buf.append("\nTotal time: " + TimeUtils.secSince(start));
-
-                if (EnumSet.of(ResetType.all, ResetType.preload).contains(type)) {
-                    String reqNamespace = NamespaceManager.getNamespace();
-                    try {
-                        NamespaceManager.setNamespace(Pmc.adminNamespace);
-                        EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-                        criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), reqNamespace));
-                        Pmc pmc = Persistence.service().retrieve(criteria);
-                        if (pmc == null) {
-                            pmc = EntityFactory.create(Pmc.class);
-                            pmc.name().setValue(reqNamespace + " Demo");
-                            pmc.dnsName().setValue(reqNamespace);
-                            Persistence.service().persist(pmc);
-                        }
-                    } finally {
-                        NamespaceManager.setNamespace(reqNamespace);
+                    switch (type) {
+                    case all:
+                    case preload:
+                        buf.append(conf.getDataPreloaders().preloadAll());
+                        break;
+                    case pmc:
+                        buf.append(conf.getDataPreloaders().delete());
+                        break;
                     }
-                }
-
-                if ((type == ResetType.all) && NamespaceManager.getNamespace().equals(VistaNamespaceResolver.demoNamespace)) {
-                    NamespaceManager.setNamespace(Pmc.adminNamespace);
-                    Pmc pmc = EntityFactory.create(Pmc.class);
-                    pmc.name().setValue("Start Demo");
-                    pmc.dnsName().setValue(VistaNamespaceResolver.demoSLNamespace);
-
-                    Persistence.service().persist(pmc);
-
-                    NamespaceManager.setNamespace(VistaNamespaceResolver.demoSLNamespace);
-                    buf.append("\n---Preload SL---");
-                    buf.append(conf.getDataPreloaders().preloadAll());
                     buf.append("\nTotal time: " + TimeUtils.secSince(start));
+
+                    if (EnumSet.of(ResetType.all, ResetType.preload).contains(type)) {
+                        String reqNamespace = NamespaceManager.getNamespace();
+                        try {
+                            NamespaceManager.setNamespace(Pmc.adminNamespace);
+                            EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+                            criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), reqNamespace));
+                            Pmc pmc = Persistence.service().retrieve(criteria);
+                            if (pmc == null) {
+                                pmc = EntityFactory.create(Pmc.class);
+                                pmc.name().setValue(reqNamespace + " Demo");
+                                pmc.dnsName().setValue(reqNamespace);
+                                Persistence.service().persist(pmc);
+                            }
+                        } finally {
+                            NamespaceManager.setNamespace(reqNamespace);
+                        }
+                    }
+
+                    if ((type == ResetType.all) && NamespaceManager.getNamespace().equals(VistaNamespaceResolver.demoNamespace)) {
+                        NamespaceManager.setNamespace(Pmc.adminNamespace);
+                        Pmc pmc = EntityFactory.create(Pmc.class);
+                        pmc.name().setValue("Start Demo");
+                        pmc.dnsName().setValue(VistaNamespaceResolver.demoSLNamespace);
+
+                        Persistence.service().persist(pmc);
+
+                        NamespaceManager.setNamespace(VistaNamespaceResolver.demoSLNamespace);
+                        buf.append("\n---Preload SL---");
+                        buf.append(conf.getDataPreloaders().preloadAll());
+                        buf.append("\nTotal time: " + TimeUtils.secSince(start));
+                    }
                 }
 
             } catch (Throwable t) {

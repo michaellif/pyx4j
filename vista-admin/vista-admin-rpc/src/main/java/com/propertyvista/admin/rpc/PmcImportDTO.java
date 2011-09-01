@@ -24,4 +24,5 @@ public interface PmcImportDTO extends IEntity {
     @Caption(name = "Update Unit availability")
     IPrimitive<Boolean> updateOnly();
 
+    IPrimitive<Boolean> ignoreMissingMedia();
 }
