@@ -1,15 +1,38 @@
 <wicket:panel
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-
-<div class="advanced_search_wrap">
-	<form class="advancedSearchCriteria" wicket:id="advancedSearchCriteriaForm">
-
-		<div wicket:id="searchCriteriaInput" />
-
-		<div id="advancedSearchSubmit" class="submit">
-			<input type="submit" wicket:id="searchSubmit" value=Search />
+<style>
+.submit {
+    background: url("resources/templates.TemplateResources/images/template0/btn.png") no-repeat;
+    width: 128px;
+    height: 32px;
+    float:left;
+    clear:left;
+}
+.submit input[type=submit] {
+	background: none;
+    border: none;
+    color: #000000;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px 0;
+    text-shadow: 0 1px 0 #CCCCCC;
+    text-transform: uppercase;
+    width: 128px;
+}
+</style>
+<div class="main">
+	<div class="caption">
+		<h1>Find Apartment</h1>
+	</div>
+	<div class="content">
+		<div class="advanced_search_wrap">
+			<form class="advancedSearchCriteria" wicket:id="advancedSearchCriteriaForm">
+				<div wicket:id="searchCriteriaInput" />
+				<div class="submit">
+					<input type="submit" wicket:id="searchSubmit" value="Search" />
+				</div>
+			</form>
 		</div>
-
-	</form>
+	</div>
 </div>
 </wicket:panel>
