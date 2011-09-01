@@ -45,7 +45,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
 
             ContentDescriptor enContent = EntityFactory.create(ContentDescriptor.class);
             {
-                enContent.lang().setValue(ContentDescriptor.Lang.english);
+                enContent.lang().setValue(ContentDescriptor.Lang.en);
 
                 {
                     Testimonial testimonial = EntityFactory.create(Testimonial.class);
@@ -81,7 +81,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
 
             ContentDescriptor frContent = EntityFactory.create(ContentDescriptor.class);
             {
-                frContent.lang().setValue(ContentDescriptor.Lang.french);
+                frContent.lang().setValue(ContentDescriptor.Lang.fr);
 
                 {
                     Testimonial testimonial = EntityFactory.create(Testimonial.class);

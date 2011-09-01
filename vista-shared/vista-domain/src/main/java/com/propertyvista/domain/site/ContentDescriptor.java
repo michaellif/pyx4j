@@ -27,13 +27,9 @@ public interface ContentDescriptor extends IEntity {
     @Translatable
     public enum Lang {
 
-        english,
+        en,
 
-        french,
-
-        spanish,
-
-        urdu;
+        fr;
 
         @Override
         public String toString() {

@@ -62,7 +62,7 @@ public class PMSiteContentManager {
         Cookie localeCookie = null;
         Cookie[] cookies = ((WebRequest) ((WebRequestCycle) RequestCycle.get()).getRequest()).getCookies();
         if (cookies == null) {
-            return Lang.english;
+            return Lang.en;
         }
         for (Cookie cookie : cookies) {
             if ("locale".equals(cookie.getName())) {
@@ -74,11 +74,11 @@ public class PMSiteContentManager {
             try {
                 return Lang.valueOf(localeCookie.getValue());
             } catch (Exception e) {
-                return Lang.english;
+                return Lang.en;
             }
 
         } else {
-            return Lang.english;
+            return Lang.en;
         }
 
     }
