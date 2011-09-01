@@ -122,7 +122,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
             @Override
             protected IFolderEditorDecorator<PageDescriptor> createFolderDecorator() {
                 CrmTableFolderDecorator<PageDescriptor> decor = new CrmTableFolderDecorator<PageDescriptor>(columns(), parent);
-                setExternalAddItemProcessing(true);
+//                setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
