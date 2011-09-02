@@ -20,6 +20,7 @@ import com.propertvista.generator.util.RandomUtil;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.site.Locale;
 import com.propertyvista.domain.site.Locale.Lang;
@@ -85,33 +86,14 @@ public class PortalSitePreloader extends AbstractDataPreloader {
             site.childPages().add(createDynamicPage("Find an Apartment", "Trouver un appartement", PageDescriptor.Type.findApartment));
             site.childPages().add(createDynamicPage("Residents", "Les résidents", PageDescriptor.Type.residents));
             {
-                PageDescriptor page = createStaticPage("About us", "A propos de nous");
-                page.childPages().add(createStaticPage("Overview", "Vue d'ensemble"));
-                page.childPages().add(createStaticPage("Team", "Team"));
+                PageDescriptor page = createStaticPage("About us", "site-about.html", "A propos de nous", "site-about-fr.html");
+                page.childPages().add(createStaticPage("Overview", "site-overview.html", "Vue d'ensemble", "site-overview-fr.html"));
+                page.childPages().add(createStaticPage("Team", "site-team.html", "Team", "site-team.html"));
                 site.childPages().add(page);
             }
-            site.childPages().add(createStaticPage("Customer Care", "Assistance Clientèle"));
-            site.childPages().add(createStaticPage("Terms Of Use", "Mentions légales"));
-            site.childPages().add(createStaticPage("Privacy", "Politique de confidentialité"));
-
-//            ContentDescriptor frContent = EntityFactory.create(ContentDescriptor.class);
-//            {
-
-//
-//                frContent.childPages().add(createDynamicPage("Trouver un appartement", PageDescriptor.Type.findApartment));
-//                frContent.childPages().add(createDynamicPage("Les résidents", PageDescriptor.Type.residents));
-//                {
-//                    PageDescriptor page = createStaticPage("A propos de nous", "site-about.html");
-//                    page.childPages().add(createStaticPage("Vue d'ensemble", "site-overview.html"));
-//                    page.childPages().add(createStaticPage("Team", "site-team.html"));
-//                    frContent.childPages().add(page);
-//                }
-//                frContent.childPages().add(createStaticPage("Assistance Clientèle", "site-customer-care.html"));
-//                frContent.childPages().add(createStaticPage("Mentions légales", "site-customer-care.html"));
-//                frContent.childPages().add(createStaticPage("Politique de confidentialité", "site-customer-care.html"));
-//                PersistenceServicesFactory.getPersistenceService().persist(frContent);
-//
-//            }
+            site.childPages().add(createStaticPage("Customer Care", "site-customer-care.html", "Assistance Clientèle", "site-customer-care.html"));
+            site.childPages().add(createStaticPage("Terms Of Use", "site-customer-care.html", "Mentions légales", "site-customer-care.html"));
+            site.childPages().add(createStaticPage("Privacy", "site-customer-care.html", "Politique de confidentialité", "site-customer-care.html"));
 
             PersistenceServicesFactory.getPersistenceService().persist(site);
 
@@ -129,17 +111,33 @@ public class PortalSitePreloader extends AbstractDataPreloader {
         return createPage(enCaption, frCaption, type);
     }
 
-    private PageDescriptor createStaticPage(String enCaption, String frCaption) throws ClassCastException, IOException {
-        return createPage(enCaption, frCaption, PageDescriptor.Type.staticContent);
+    private PageDescriptor createStaticPage(String enCaption, String enResource, String frCaption, String frResource) throws ClassCastException, IOException {
+        PageDescriptor page = createPage(enCaption, frCaption, PageDescriptor.Type.staticContent);
+        PersistenceServicesFactory.getPersistenceService().persist(page);
+
+        if (enResource != null) {
+            PageContent pageContent = EntityFactory.create(PageContent.class);
+            pageContent.descriptor().set(page);
+            pageContent.locale().set(enLocale);
+            pageContent.content().setValue(IOUtils.getUTF8TextResource(enResource, this.getClass()));
+            PersistenceServicesFactory.getPersistenceService().persist(pageContent);
+        }
+
+        if (frResource != null) {
+            PageContent pageContent = EntityFactory.create(PageContent.class);
+            pageContent.descriptor().set(page);
+            pageContent.locale().set(frLocale);
+            pageContent.content().setValue(IOUtils.getUTF8TextResource(frResource, this.getClass()));
+            PersistenceServicesFactory.getPersistenceService().persist(pageContent);
+        }
+
+        return page;
     }
 
     private PageDescriptor createPage(String enCaption, String frCaption, PageDescriptor.Type type) throws ClassCastException, IOException {
         PageDescriptor page = EntityFactory.create(PageDescriptor.class);
         page.type().setValue(type);
         page.name().setValue(enCaption);
-//        if (resourceName != null) {
-//            page.content().content().setValue(IOUtils.getUTF8TextResource(resourceName, this.getClass()));
-//        }
 
         PageCaption pageCaption = EntityFactory.create(PageCaption.class);
         pageCaption.caption().setValue(enCaption);

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.pmsite.server;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -38,7 +39,9 @@ import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
-public class PMSiteContentManager {
+public class PMSiteContentManager implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public static final String PAGE_ID_PARAM_NAME = "pageId";
 

@@ -55,6 +55,7 @@ public class StaticPage extends BasePage {
                 EntityQueryCriteria<PageContent> pageContentCriteria = EntityQueryCriteria.create(PageContent.class);
                 pageContentCriteria.add(PropertyCriterion.eq(pageContentCriteria.proto().locale(), ((PMSiteSession) getSession()).getContentManager()
                         .getLocale()));
+                pageContentCriteria.add(PropertyCriterion.eq(pageContentCriteria.proto().descriptor(), descriptor));
 
                 List<PageContent> pages = PersistenceServicesFactory.getPersistenceService().query(pageContentCriteria);
                 if (pages.size() == 1) {
