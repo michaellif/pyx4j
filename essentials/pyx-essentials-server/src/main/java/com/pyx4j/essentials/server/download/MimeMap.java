@@ -20,9 +20,10 @@
  */
 package com.pyx4j.essentials.server.download;
 
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
 
 public class MimeMap {
 
@@ -46,9 +47,13 @@ public class MimeMap {
         map.put("bin", "application/octet-stream");
         map.put("odt", "application/vnd.oasis.opendocument.text");
         map.put("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        map.put("doc", "application/msword");
         map.put("pdf", "application/pdf");
         map.put("rtf", "application/rtf");
         map.put("xls", "application/xls");
+        map.put("xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        map.put("ppt", "application/vnd.ms-powerpoint");
+        map.put("pps", "application/vnd.ms-powerpoint");
         map.put("exe", "application/octet-stream");
         map.put("gz", "application/x-gzip");
         map.put("tiff", "image/tiff");
