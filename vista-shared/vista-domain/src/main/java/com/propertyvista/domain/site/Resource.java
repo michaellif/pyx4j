@@ -22,11 +22,10 @@ import com.propertyvista.domain.File;
 
 public interface Resource extends IEntity {
 
-    @EmbeddedEntity
-    @MemberColumn(name = "resourceFile")
-    File file();
-
     @NotNull
     Locale locale();
 
+    @EmbeddedEntity
+    @MemberColumn(name = "resourceFile")
+    File file();
 }

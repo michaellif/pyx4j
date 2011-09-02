@@ -25,7 +25,7 @@ public class TenantCrudServiceImpl extends GenericCrudServiceDtoImpl<Tenant, Ten
     }
 
     @Override
-    protected void enhanceRetrieveDTO(Tenant in, TenantDTO dto, boolean fromList) {
+    protected void enhanceDTO(Tenant in, TenantDTO dto, boolean fromList) {
         dto.displayName().setValue(in.getStringView());
     }
 }

@@ -40,7 +40,8 @@ public interface SiteDescriptor extends IEntity {
         }
     }
 
-    IList<Locale> locales();
+    @Owned
+    IList<SiteLocale> locales();
 
     @NotNull
     @ToString(index = 0)
@@ -55,12 +56,11 @@ public interface SiteDescriptor extends IEntity {
 
     IList<Resource> slogan();
 
-    @Owned
-    @Caption(name = "Child Pages:")
-    IList<PageDescriptor> childPages();
-
     // Image for landing page
     @Owned
     IList<Resource> images();
 
+    @Owned
+    @Caption(name = "Child Pages:")
+    IList<PageDescriptor> childPages();
 }

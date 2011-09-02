@@ -23,6 +23,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface News extends IEntity {
 
+    @NotNull
+    Locale locale();
+
+    // -------------------------
+
     IPrimitive<String> caption();
 
     @Editor(type = Editor.EditorType.textarea)
@@ -31,9 +36,4 @@ public interface News extends IEntity {
     @Format("MM/dd/yyyy")
     @MemberColumn(name = "newsDate")
     IPrimitive<LogicalDate> date();
-
-    @NotNull
-    Locale locale();
-
-    PageDescriptor descriptor();
 }

@@ -7,20 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-06
+ * Created on Sep 1, 2011
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.dto;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IList;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.site.rpc.services.AbstractCrudService;
+import com.propertyvista.domain.site.News;
+import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.Testimonial;
 
-import com.propertyvista.domain.site.ContentDescriptor;
+@Transient
+public interface SiteDescriptorDTO extends SiteDescriptor {
 
-public interface ContentDescriptorCrudService extends AbstractCrudService<ContentDescriptor> {
+    IList<News> news();
 
-    void retrieveHomeItem(AsyncCallback<Key> callback);
+    IList<Testimonial> testimonials();
 }

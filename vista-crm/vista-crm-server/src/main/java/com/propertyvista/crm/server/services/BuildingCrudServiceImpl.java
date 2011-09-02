@@ -37,7 +37,7 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
     }
 
     @Override
-    protected void enhanceRetrieveDTO(Building in, BuildingDTO dto, boolean fromList) {
+    protected void enhanceDTO(Building in, BuildingDTO dto, boolean fromList) {
 
         if (!fromList) {
             // load detached entities/lists. Update other places: BuildingsResource and BuildingRetriever

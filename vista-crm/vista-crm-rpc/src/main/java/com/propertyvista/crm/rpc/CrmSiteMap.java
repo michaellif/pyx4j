@@ -284,11 +284,6 @@ public class CrmSiteMap implements SiteMap {
 
         }
 
-        @PlaceProperties(caption = "General")
-        @NavigationItem(navigLabel = "General")
-        public static class General extends CrudAppPlace {
-        }
-
         @PlaceProperties(caption = "Content")
         @NavigationItem(navigLabel = "Content")
         public static class Content extends CrudAppPlace {

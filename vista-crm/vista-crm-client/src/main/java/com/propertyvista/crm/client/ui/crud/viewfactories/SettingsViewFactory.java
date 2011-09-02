@@ -16,10 +16,6 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
-import com.propertyvista.crm.client.ui.crud.settings.content.ContentEditor;
-import com.propertyvista.crm.client.ui.crud.settings.content.ContentEditorImpl;
-import com.propertyvista.crm.client.ui.crud.settings.content.ContentViewer;
-import com.propertyvista.crm.client.ui.crud.settings.content.ContentViewerImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.PageEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.PageEditorImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.PageViewer;
@@ -43,11 +39,6 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new SiteViewerImpl());
             } else if (SiteEditor.class.equals(type)) {
                 map.put(type, new SiteEditorImpl());
-
-            } else if (ContentViewer.class.equals(type)) {
-                map.put(type, new ContentViewerImpl());
-            } else if (ContentEditor.class.equals(type)) {
-                map.put(type, new ContentEditorImpl());
 
             } else if (PageViewer.class.equals(type)) {
                 map.put(type, new PageViewerImpl());

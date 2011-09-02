@@ -16,25 +16,31 @@ package com.propertyvista.crm.client.activity.crud.settings;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.settings.content.SiteEditor;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.SiteDescriptorCrudService;
-import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.dto.SiteDescriptorDTO;
 
-public class SiteEditorActivity extends EditorActivityBase<SiteDescriptor> implements SiteEditor.Presenter {
+public class SiteEditorActivity extends EditorActivityBase<SiteDescriptorDTO> implements SiteEditor.Presenter {
 
     @SuppressWarnings("unchecked")
     public SiteEditorActivity(Place place) {
-        super((SiteEditor) SettingsViewFactory.instance(SiteEditor.class), (AbstractCrudService<SiteDescriptor>) GWT.create(SiteDescriptorCrudService.class),
-                SiteDescriptor.class);
+        super((SiteEditor) SettingsViewFactory.instance(SiteEditor.class),
+                (AbstractCrudService<SiteDescriptorDTO>) GWT.create(SiteDescriptorCrudService.class), SiteDescriptorDTO.class);
         withPlace(place);
     }
 
     @Override
-    protected void initNewItem(SiteDescriptor entity) {
-
+    public void viewChild(Key id) {
+        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Page.class);
+        place.formViewerPlace(id);
+        AppSite.getPlaceController().goTo(place);
     }
 }

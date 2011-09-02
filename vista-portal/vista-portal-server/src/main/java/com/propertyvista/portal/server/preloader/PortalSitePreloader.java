@@ -30,6 +30,7 @@ import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
+import com.propertyvista.domain.site.SiteLocale;
 import com.propertyvista.domain.site.Testimonial;
 
 public class PortalSitePreloader extends AbstractDataPreloader {
@@ -62,25 +63,35 @@ public class PortalSitePreloader extends AbstractDataPreloader {
             site.baseColor().setValue("#fff");
             site.copyright().setValue("© Starlight Apartments 2011");
 
-            site.locales().add(enLocale);
-            site.locales().add(frLocale);
+            SiteLocale enSiteLocale = EntityFactory.create(SiteLocale.class);
+            enSiteLocale.locale().set(enLocale);
+            site.locales().add(enSiteLocale);
+
+            SiteLocale frSiteLocale = EntityFactory.create(SiteLocale.class);
+            frSiteLocale.locale().set(frLocale);
+            site.locales().add(frSiteLocale);
 
             {
                 Testimonial testimonial = EntityFactory.create(Testimonial.class);
+                testimonial.locale().set(enLocale);
+
                 testimonial.content().setValue(
                         "You know... I was simply abscessed with that picture: stars everywhere and you are so small in the entire Universe... "
                                 + "But men, why she's starring at me constantly!!!");
                 testimonial.author().setValue("Uncle Vasya Sr.");
-                testimonial.locale().set(enLocale);
 
+                PersistenceServicesFactory.getPersistenceService().persist(testimonial);
             }
 
             {
                 News news = EntityFactory.create(News.class);
+                news.locale().set(enLocale);
+
                 news.caption().setValue("Incredible offer!..");
                 news.content().setValue("Just by one star and get another two for free! Absolutely free! Just do not forget to pay property tax.");
                 news.date().setValue(RandomUtil.randomLogicalDate());
-                news.locale().set(enLocale);
+
+                PersistenceServicesFactory.getPersistenceService().persist(news);
             }
 
             site.childPages().add(createDynamicPage("Find an Apartment", "Trouver un appartement", PageDescriptor.Type.findApartment));

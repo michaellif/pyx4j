@@ -37,6 +37,7 @@ import com.propertyvista.domain.site.Locale.Lang;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.SiteLocale;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
 public class PMSiteContentManager implements Serializable {
@@ -61,7 +62,7 @@ public class PMSiteContentManager implements Serializable {
         locale = readLocaleFromCookie();
         if (locale == null) {
             if (site.locales().size() > 0) {
-                locale = site.locales().get(0);
+                locale = site.locales().get(0).locale();
             } else {
                 throw new Error("No locales found");
             }
@@ -92,9 +93,9 @@ public class PMSiteContentManager implements Serializable {
         if (localeCookie != null) {
             try {
                 Lang lang = Lang.valueOf(localeCookie.getValue());
-                for (Locale locale : site.locales()) {
-                    if (lang.equals(locale.lang().getValue())) {
-                        return locale;
+                for (SiteLocale locale : site.locales()) {
+                    if (lang.equals(locale.locale().lang().getValue())) {
+                        return locale.locale();
                     }
                 }
 

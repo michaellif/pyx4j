@@ -13,11 +13,24 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.content;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.domain.site.SiteDescriptor;
+import com.pyx4j.commons.Key;
 
-public class SiteEditorImpl extends CrmEditorViewImplBase<SiteDescriptor> implements SiteEditor {
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.dto.SiteDescriptorDTO;
+
+public class SiteEditorImpl extends CrmEditorViewImplBase<SiteDescriptorDTO> implements SiteEditor {
     public SiteEditorImpl() {
-        super(null, new SiteEditorForm());
+        super(CrmSiteMap.Settings.Content.class);
+        // create/init/set main form here: 
+        CrmEntityForm<SiteDescriptorDTO> form = new SiteEditorForm(this);
+        form.initialize();
+        setForm(form);
+    }
+
+    @Override
+    public void viewChild(Key id) {
+        ((SiteEditor.Presenter) getPresenter()).viewChild(id);
     }
 }

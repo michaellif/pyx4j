@@ -59,7 +59,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     }
 
     @Override
-    protected void enhanceRetrieveDTO(Lease in, LeaseDTO dto, boolean fromList) {
+    protected void enhanceDTO(Lease in, LeaseDTO dto, boolean fromList) {
         if (!fromList) {
             // load detached entities:
             PersistenceServicesFactory.getPersistenceService().retrieve(in.unit());

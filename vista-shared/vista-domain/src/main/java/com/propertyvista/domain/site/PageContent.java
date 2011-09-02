@@ -13,14 +13,26 @@
  */
 package com.propertyvista.domain.site;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface PageContent extends IEntity {
+
+    @NotNull
+    Locale locale();
+
+    @Owner
+    @Detached
+    PageDescriptor descriptor();
+
+    // -------------------------
 
     @Owned
     @Length(20845)
@@ -31,9 +43,8 @@ public interface PageContent extends IEntity {
     // Image for landing page and for static
     Resource image();
 
-    @NotNull
-    Locale locale();
+    // =========================
 
-    PageDescriptor descriptor();
-
+    @Transient
+    PageCaption _caption();
 }

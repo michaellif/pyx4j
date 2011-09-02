@@ -58,9 +58,6 @@ import com.propertyvista.crm.client.activity.crud.organisation.EmployeeViewerAct
 import com.propertyvista.crm.client.activity.crud.organisation.PortfolioEditorActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.PortfolioListerActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.PortfolioViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.ContentActivity;
-import com.propertyvista.crm.client.activity.crud.settings.ContentEditorActivity;
-import com.propertyvista.crm.client.activity.crud.settings.ContentViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.FeatureItemTypeEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.FeatureItemTypeViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.PageEditorActivity;
@@ -430,7 +427,7 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new MessageActivity(place);
 
 // - Settings:
-                } else if (place instanceof CrmSiteMap.Settings.General) {
+                } else if (place instanceof CrmSiteMap.Settings.Content) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         activity = new SiteEditorActivity(place);
@@ -440,18 +437,6 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     case lister:
                         activity = new SiteActivity(place);
-                        break;
-                    }
-                } else if (place instanceof CrmSiteMap.Settings.Content) {
-                    switch (((CrudAppPlace) place).getType()) {
-                    case editor:
-                        activity = new ContentEditorActivity(place);
-                        break;
-                    case viewer:
-                        activity = new ContentViewerActivity(place);
-                        break;
-                    case lister:
-                        activity = new ContentActivity(place);
                         break;
                     }
                 } else if (place instanceof CrmSiteMap.Settings.Page) {

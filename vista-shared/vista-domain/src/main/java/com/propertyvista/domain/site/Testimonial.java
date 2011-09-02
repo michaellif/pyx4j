@@ -20,13 +20,13 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Testimonial extends IEntity {
 
+    @NotNull
+    Locale locale();
+
+    // -------------------------
+
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> content();
 
     IPrimitive<String> author();
-
-    @NotNull
-    Locale locale();
-
-    PageDescriptor descriptor();
 }

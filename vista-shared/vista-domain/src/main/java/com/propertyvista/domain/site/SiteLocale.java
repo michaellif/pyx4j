@@ -8,14 +8,16 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Sep 1, 2011
- * @author michaellif
+ * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.domain.site;
 
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 
-@Deprecated
-public interface ContentDescriptor extends IEntity {
+public interface SiteLocale extends IEntity {
 
+    @NotNull
+    Locale locale();
 }

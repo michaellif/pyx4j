@@ -20,9 +20,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface PageCaption extends IEntity {
 
     @NotNull
-    IPrimitive<String> caption();
-
-    @NotNull
     Locale locale();
 
+    @NotNull
+    IPrimitive<String> caption();
 }

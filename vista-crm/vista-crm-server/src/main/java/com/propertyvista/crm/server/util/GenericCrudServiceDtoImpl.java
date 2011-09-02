@@ -49,7 +49,7 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
         Persistence.service().merge(dbo);
     }
 
-    protected void enhanceRetrieveDTO(DBO in, DTO dto, boolean fromList) {
+    protected void enhanceDTO(DBO dbo, DTO dto, boolean fromList) {
     }
 
     @Override
@@ -57,7 +57,7 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
         DBO entity = GenericConverter.convertDTO2DBO(dto, dboClass);
         persistDBO(entity, dto);
         dto = GenericConverter.convertDBO2DTO(entity, dtoClass);
-        enhanceRetrieveDTO(entity, dto, false);
+        enhanceDTO(entity, dto, false);
         callback.onSuccess(dto);
     }
 
@@ -65,7 +65,7 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
     public void retrieve(AsyncCallback<DTO> callback, Key entityId) {
         DBO entity = PersistenceServicesFactory.getPersistenceService().retrieve(dboClass, entityId);
         DTO dto = GenericConverter.convertDBO2DTO(entity, dtoClass);
-        enhanceRetrieveDTO(entity, dto, false);
+        enhanceDTO(entity, dto, false);
         callback.onSuccess(dto);
     }
 
@@ -73,7 +73,7 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
     public void save(AsyncCallback<DTO> callback, DTO dto) {
         DBO entity = GenericConverter.convertDTO2DBO(dto, dboClass);
         persistDBO(entity, dto);
-        enhanceRetrieveDTO(entity, dto, false);
+        enhanceDTO(entity, dto, false);
         callback.onSuccess(GenericConverter.convertDBO2DTO(entity, dtoClass));
     }
 
@@ -111,10 +111,9 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
         c.setPageSize(criteria.getPageSize());
         enhanceListCriteria(c, criteria);
         EntitySearchResult<DTO> r = GenericConverter.convertDBO2DTO(EntityLister.secureQuery(c), dtoClass, new GenericConverter.EnhanceDTO<DBO, DTO>() {
-
             @Override
             public void enhanceDTO(DBO in, DTO dto) {
-                enhanceRetrieveDTO(in, dto, true);
+                GenericCrudServiceDtoImpl.this.enhanceDTO(in, dto, true);
             }
         });
         callback.onSuccess(r);

@@ -422,10 +422,6 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
             @Override
             protected CEntityFolderItemEditor<TenantGuarantor> createItem() {
-                return createGuarantorRowEditor();
-            }
-
-            private CEntityFolderItemEditor<TenantGuarantor> createGuarantorRowEditor() {
                 return new CEntityFolderItemEditor<TenantGuarantor>(TenantGuarantor.class) {
 
                     @Override

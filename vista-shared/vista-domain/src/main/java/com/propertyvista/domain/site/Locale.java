@@ -14,18 +14,22 @@
 package com.propertyvista.domain.site;
 
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
+import com.pyx4j.i18n.shared.Translation;
 
 public interface Locale extends IEntity {
 
     @Translatable
     public enum Lang {
 
+        @Translation(value = "English")
         en,
 
+        @Translation(value = "French")
         fr;
 
         @Override
@@ -34,6 +38,7 @@ public interface Locale extends IEntity {
         }
     }
 
+    @NotNull
     @ToString(index = 0)
     IPrimitive<Lang> lang();
 }

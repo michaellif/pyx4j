@@ -33,7 +33,7 @@ public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorpla
     }
 
     @Override
-    protected void enhanceRetrieveDTO(Floorplan in, FloorplanDTO dto, boolean fromList) {
+    protected void enhanceDTO(Floorplan in, FloorplanDTO dto, boolean fromList) {
 
         EntityQueryCriteria<FloorplanAmenity> amenitysCriteria = EntityQueryCriteria.create(FloorplanAmenity.class);
         amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), in));

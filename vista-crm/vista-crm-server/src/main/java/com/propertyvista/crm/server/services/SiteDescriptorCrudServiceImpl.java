@@ -22,13 +22,17 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.crm.rpc.services.SiteDescriptorCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
+import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
+import com.propertyvista.crm.server.util.TransientListHelpers;
+import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.Testimonial;
+import com.propertyvista.dto.SiteDescriptorDTO;
 
-public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceImpl<SiteDescriptor> implements SiteDescriptorCrudService {
+public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceDtoImpl<SiteDescriptor, SiteDescriptorDTO> implements SiteDescriptorCrudService {
 
     public SiteDescriptorCrudServiceImpl() {
-        super(SiteDescriptor.class);
+        super(SiteDescriptor.class, SiteDescriptorDTO.class);
     }
 
     @Override
@@ -39,6 +43,24 @@ public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceImpl<SiteDe
             throw new Error("Home item not found");
         } else {
             callback.onSuccess(list.get(0));
+        }
+    }
+
+    @Override
+    protected void persistDBO(SiteDescriptor dbo, SiteDescriptorDTO dto) {
+        // save transient data:
+        TransientListHelpers.save(dto.news(), News.class);
+        TransientListHelpers.save(dto.testimonials(), Testimonial.class);
+
+        super.persistDBO(dbo, dto);
+    }
+
+    @Override
+    protected void enhanceDTO(SiteDescriptor dbo, SiteDescriptorDTO dto, boolean fromList) {
+        if (!fromList) {
+            // load transient data:
+            dto.news().addAll(TransientListHelpers.loadTransientList(News.class));
+            dto.testimonials().addAll(TransientListHelpers.loadTransientList(Testimonial.class));
         }
     }
 }

@@ -48,19 +48,25 @@ public interface PageDescriptor extends IEntity {
     @MemberColumn(name = "pageType")
     IPrimitive<Type> type();
 
+    // -------------------------------
+
     @NotNull
     @ToString(index = 1)
     IPrimitive<String> name();
 
     @Owned
-    @Caption(name = "Captions:")
-    IList<PageCaption> childCaptions();
+    IList<PageCaption> caption();
 
     @Owned
     @Caption(name = "Child Pages:")
     IList<PageDescriptor> childPages();
 
+    // ================================
+
+    @Transient
+    @Caption(name = "Page Content:")
+    IList<PageContent> _content();
+
     @Transient
     IList<PageDescriptor> _path();
-
 }

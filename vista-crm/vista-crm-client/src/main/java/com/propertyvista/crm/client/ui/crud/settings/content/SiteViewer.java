@@ -13,10 +13,17 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.content;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.ui.crud.IViewerView;
 
-import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.dto.SiteDescriptorDTO;
 
-public interface SiteViewer extends IViewerView<SiteDescriptor> {
+public interface SiteViewer extends IViewerView<SiteDescriptorDTO> {
 
+    interface Presenter extends IViewerView.Presenter {
+
+        void editNew(Key parentid);
+    }
+
+    void editNew(Key parentid);
 }

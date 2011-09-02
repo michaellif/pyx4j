@@ -19,7 +19,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import com.propertyvista.domain.site.Locale;
+import com.propertyvista.domain.site.SiteLocale;
 import com.propertyvista.pmsite.server.PMSiteSession;
 
 public class LocalePanel extends Panel {
@@ -29,25 +29,25 @@ public class LocalePanel extends Panel {
     public LocalePanel(String id) {
         super(id);
 
-        ListView<Locale> listView = new ListView<Locale>("langItem", ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().locales()) {
+        ListView<SiteLocale> listView = new ListView<SiteLocale>("langItem", ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().locales()) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void populateItem(ListItem<Locale> item) {
+            protected void populateItem(ListItem<SiteLocale> item) {
 
-                final Locale locale = item.getModelObject();
+                final SiteLocale locale = item.getModelObject();
 
                 Link<Void> link = new Link<Void>("langSelector") {
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     public void onClick() {
-                        ((PMSiteSession) getSession()).getContentManager().setLocale(locale);
+                        ((PMSiteSession) getSession()).getContentManager().setLocale(locale.locale());
                         setResponsePage(getPage().getPageClass(), getPage().getPageParameters());
                     }
                 };
                 item.add(link);
-                link.add(new Label("caption", locale.lang().getValue().name()));
+                link.add(new Label("caption", locale.locale().lang().getValue().name()));
 
             }
         };

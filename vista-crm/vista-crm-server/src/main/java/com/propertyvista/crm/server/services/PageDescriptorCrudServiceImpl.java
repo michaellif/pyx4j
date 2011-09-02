@@ -13,8 +13,16 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
+import com.propertyvista.crm.server.util.TransientListHelpers;
+import com.propertyvista.domain.site.PageCaption;
+import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDescriptor> implements PageDescriptorCrudService {
@@ -26,11 +34,39 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
     @Override
     protected void enhanceRetrieve(PageDescriptor entity, boolean fromList) {
         if (!fromList) {
-//            PersistenceServicesFactory.getPersistenceService().retrieve(entity.content());
 
-//            EntityQueryCriteria<PageDescriptor> childPagesCriteria = EntityQueryCriteria.create(PageDescriptor.class);
-//            childPagesCriteria.add(PropertyCriterion.eq(childPagesCriteria.proto().parent(), entity));
-//            entity.childPages().addAll(PersistenceServicesFactory.getPersistenceService().query(childPagesCriteria));
+            // load transient content:
+            EntityQueryCriteria<PageContent> criteria = EntityQueryCriteria.create(PageContent.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().descriptor(), entity));
+            entity._content().addAll(TransientListHelpers.load(PageContent.class, criteria));
+
+            // load content caption:
+            for (PageContent content : entity._content()) {
+                for (PageCaption caption : entity.caption()) {
+                    if (content.locale().equals(caption.locale())) {
+                        content._caption().set(caption);
+                        break;
+                    }
+                }
+            }
         }
+    }
+
+    @Override
+    public void save(AsyncCallback<PageDescriptor> callback, PageDescriptor entity) {
+
+        // save transient content:
+        EntityQueryCriteria<PageContent> criteria = EntityQueryCriteria.create(PageContent.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().descriptor(), entity));
+        TransientListHelpers.save(entity._content(), PageContent.class, criteria);
+
+        // update caption:
+        entity.caption().clear();
+        for (PageContent content : entity._content()) {
+            content._caption().locale().set(content.locale());
+            entity.caption().add(content._caption());
+        }
+
+        super.save(callback, entity);
     }
 }

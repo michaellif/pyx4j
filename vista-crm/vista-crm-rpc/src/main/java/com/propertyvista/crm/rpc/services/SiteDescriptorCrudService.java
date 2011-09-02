@@ -18,9 +18,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.dto.SiteDescriptorDTO;
 
-public interface SiteDescriptorCrudService extends AbstractCrudService<SiteDescriptor> {
+public interface SiteDescriptorCrudService extends AbstractCrudService<SiteDescriptorDTO> {
 
     void retrieveHomeItem(AsyncCallback<Key> asyncCallback);
 }
