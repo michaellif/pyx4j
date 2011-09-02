@@ -46,7 +46,25 @@ public class XMLEntityWriter {
 
     private boolean emitId = true;
 
+    private boolean emitOnlyOwnedReferences = false;
+
     private final XMLEntityName entityName;
+
+    private static class GrapthInfo {
+
+        Set<IEntity> processed = new HashSet<IEntity>();
+
+        Set<IEntity> references = new HashSet<IEntity>();
+
+        boolean isEmitted(IEntity entity) {
+            return processed.contains(entity);
+        }
+
+        void emitting(IEntity entity) {
+            processed.add(entity);
+            references.remove(entity);
+        }
+    }
 
     public XMLEntityWriter(XMLStringWriter xml) {
         this(xml, new XMLEntityNameDefault());
@@ -57,8 +75,28 @@ public class XMLEntityWriter {
         this.entityName = entityName;
     }
 
+    public boolean isEmitId() {
+        return emitId;
+    }
+
+    public void setEmitId(boolean emitId) {
+        this.emitId = emitId;
+    }
+
+    public void setEmitOnlyOwnedReferences(boolean emitOnlyOwnedReferences) {
+        this.emitOnlyOwnedReferences = emitOnlyOwnedReferences;
+    }
+
+    public boolean isEmitOnlyOwnedReferences() {
+        return emitOnlyOwnedReferences;
+    }
+
     public void writeRoot(IEntity entity, Map<String, String> attributes) {
-        write(entity, entityName.getXMLName(entity.getObjectClass()), attributes, null, new HashSet<IEntity>());
+        GrapthInfo grapth = new GrapthInfo();
+        write(entity, entityName.getXMLName(entity.getObjectClass()), attributes, null, grapth);
+        if (isEmitOnlyOwnedReferences() && grapth.references.size() > 0) {
+            throw new Error("UnOwnedReferences references detected " + grapth.references);
+        }
     }
 
     public void write(IEntity entity) {
@@ -66,17 +104,29 @@ public class XMLEntityWriter {
     }
 
     public void write(IEntity entity, String name) {
-        write(entity, name, null, null, new HashSet<IEntity>());
+        write(entity, name, null, null, new GrapthInfo());
     }
 
     private void write(IEntity entity, String name, Map<String, String> attributes, @SuppressWarnings("rawtypes") Class<? extends IObject> declaredObjectClass,
-            Set<IEntity> processed) {
+            GrapthInfo grapth) {
         Map<String, String> entityAttributes = new LinkedHashMap<String, String>();
         if (attributes != null) {
             entityAttributes.putAll(attributes);
         }
+        boolean emitted = grapth.isEmitted(entity);
+
         if (isEmitId() && (entity.getPrimaryKey() != null)) {
-            entityAttributes.put("id", String.valueOf(entity.getPrimaryKey()));
+            if (emitted) {
+                entityAttributes.put("reference", String.valueOf(entity.getPrimaryKey()));
+            } else {
+                if (isEmitOnlyOwnedReferences() && (entity.getOwner() != null) && !entity.getMeta().isOwnedRelationships()) {
+                    entityAttributes.put("reference", String.valueOf(entity.getPrimaryKey()));
+                    grapth.references.add(entity);
+                    emitted = true;
+                } else {
+                    entityAttributes.put("id", String.valueOf(entity.getPrimaryKey()));
+                }
+            }
         }
         if ((declaredObjectClass != null) && (!entity.getObjectClass().equals(declaredObjectClass))) {
             String typeName = entityName.getXMLName(entity.getObjectClass());
@@ -86,11 +136,11 @@ public class XMLEntityWriter {
         }
         xml.startIdented(name, entityAttributes);
 
-        if (processed.contains(entity)) {
+        if (emitted) {
             xml.endIdented(name);
             return;
         }
-        processed.add(entity);
+        grapth.emitting(entity);
 
         EntityMeta em = entity.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
@@ -104,14 +154,14 @@ public class XMLEntityWriter {
                 if (!member.isObjectClassSameAsDef()) {
                     member = member.cast();
                 }
-                write(member, memberName, null, memberMeta.getObjectClass(), processed);
+                write(member, memberName, null, memberMeta.getObjectClass(), grapth);
                 break;
             case EntitySet:
             case EntityList:
                 if (!((ICollection<?, ?>) entity.getMember(memberName)).isEmpty()) {
                     xml.startIdented(memberName);
                     for (Object item : (ICollection<?, ?>) entity.getMember(memberName)) {
-                        write((IEntity) item, entityName.getXMLName(((IEntity) item).getObjectClass()), null, memberMeta.getObjectClass(), processed);
+                        write((IEntity) item, entityName.getXMLName(((IEntity) item).getObjectClass()), null, memberMeta.getObjectClass(), grapth);
                     }
                     xml.endIdented(memberName);
                 }
@@ -160,14 +210,6 @@ public class XMLEntityWriter {
         } else {
             return value.toString();
         }
-    }
-
-    public boolean isEmitId() {
-        return emitId;
-    }
-
-    public void setEmitId(boolean emitId) {
-        this.emitId = emitId;
     }
 
 }

@@ -38,12 +38,9 @@ import com.pyx4j.essentials.server.report.XMLStringWriter;
 public class XMLEntityConverter {
 
     public static void write(XMLStringWriter xml, IEntity entity) {
-        new XMLEntityWriter(xml).write(entity);
-    }
-
-    @Deprecated
-    public static IEntity pars(Element node) {
-        return new XMLEntityParser().parse(node);
+        XMLEntityWriter writer = new XMLEntityWriter(xml);
+        writer.setEmitOnlyOwnedReferences(true);
+        writer.writeRoot(entity, null);
     }
 
     public static IEntity parse(Element node) {

@@ -102,7 +102,7 @@ public class XMLEntityConverterTest extends TestCase {
 
     private static String getXML(IEntity entity) {
         XMLStringWriter xml = new XMLStringWriter();
-        XMLEntityConverter.write(xml, entity);
+        new XMLEntityWriter(xml).write(entity);
         return xml.toString();
     }
 

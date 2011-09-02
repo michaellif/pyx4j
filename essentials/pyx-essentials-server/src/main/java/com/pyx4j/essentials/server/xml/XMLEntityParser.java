@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -44,9 +46,39 @@ import com.pyx4j.gwt.server.DateUtils;
 
 public class XMLEntityParser {
 
+    private final static Logger log = LoggerFactory.getLogger(XMLEntityParser.class);
+
     private final XMLEntityFactory factory;
 
-    private final Map<String, IEntity> processed = new HashMap<String, IEntity>();
+    private static class EntityRefferences {
+
+        Map<String, IEntity> map = new HashMap<String, IEntity>();
+
+        public IEntity get(Class<?> entityClass, String id) {
+            return map.get(entityClass.getName() + "-" + id);
+        }
+
+        public void put(IEntity entity, String id) {
+            map.put(entity.getObjectClass().getName() + "-" + id, entity);
+        }
+
+        public void remove(Class<?> entityClass, String id) {
+            map.remove(entityClass.getName() + "-" + id);
+        }
+
+        @Override
+        public String toString() {
+            return map.keySet().toString();
+        }
+
+        public int size() {
+            return map.size();
+        }
+    }
+
+    private final EntityRefferences processed = new EntityRefferences();
+
+    private final EntityRefferences references = new EntityRefferences();
 
     public XMLEntityParser() {
         this(new XMLEntityFactoryDefault());
@@ -61,6 +93,14 @@ public class XMLEntityParser {
     }
 
     public <T extends IEntity> T parse(Class<T> entityClass, Element node) {
+        T r = createAndParse(entityClass, node);
+        if (references.size() > 0) {
+            throw new Error("Unresolved references detected " + references);
+        }
+        return r;
+    }
+
+    private <T extends IEntity> T createAndParse(Class<T> entityClass, Element node) {
         String xmlName = node.getAttribute("type");
         if (!CommonsStringUtils.isStringSet(xmlName)) {
             xmlName = node.getNodeName();
@@ -79,23 +119,63 @@ public class XMLEntityParser {
     }
 
     protected void onEntityParsed(IEntity entity) {
-        if (entity.getPrimaryKey() != null) {
-            processed.put(entity.getObjectClass() + "-" + entity.getPrimaryKey(), entity);
-        }
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private <T extends IEntity> T parse(T entity, Element node) {
-        String id = node.getAttribute("id");
-        if (CommonsStringUtils.isStringSet(id)) {
-            T exists = (T) processed.get(entity.getObjectClass() + "-" + id);
-            if (exists != null) {
-                entity.set(exists);
+        {
+            String reference = node.getAttribute("reference");
+            if (CommonsStringUtils.isStringSet(reference)) {
+                T exists = (T) processed.get(entity.getObjectClass(), reference);
+                if (exists != null) {
+                    if (entity.getObjectClass() != exists.getObjectClass()) {
+                        throw new Error("Type corruption " + entity.getObjectClass() + "!=" + exists.getObjectClass());
+                    }
+                    entity.set(exists);
+                    return entity;
+                } else {
+                    exists = (T) references.get(entity.getObjectClass(), reference);
+                    if (exists != null) {
+                        if (entity.getObjectClass() != exists.getObjectClass()) {
+                            throw new Error("Type corruption " + entity.getObjectClass() + "!=" + exists.getObjectClass());
+                        }
+                        entity.setValue(exists.getValue());
+                        return entity;
+                    } else {
+                        entity.setPrimaryKey(new Key(reference));
+                        references.put(entity, reference);
+                    }
+                }
                 return entity;
             }
-            entity.setPrimaryKey(new Key(id));
         }
 
+        {
+            String id = node.getAttribute("id");
+            if (CommonsStringUtils.isStringSet(id)) {
+                T exists = (T) processed.get(entity.getObjectClass(), id);
+                if (exists != null) {
+                    if (entity.getObjectClass() != exists.getObjectClass()) {
+                        throw new Error("Type corruption " + entity.getObjectClass() + "!=" + exists.getObjectClass());
+                    }
+                    entity.set(exists);
+                    return entity;
+                }
+
+                // Merge references data if reading complete entity
+                exists = (T) references.get(entity.getObjectClass(), id);
+                if (exists != null) {
+                    if (entity.getObjectClass() != exists.getObjectClass()) {
+                        throw new Error("Type corruption " + entity.getObjectClass() + "!=" + exists.getObjectClass());
+                    }
+                    entity.setValue(exists.getValue());
+                    references.remove(entity.getObjectClass(), id);
+                } else {
+                    entity.setPrimaryKey(new Key(id));
+                }
+                processed.put(entity, id);
+            }
+        }
         NodeList nodeList = node.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node valueNode = nodeList.item(i);
@@ -116,7 +196,7 @@ public class XMLEntityParser {
                     for (int ci = 0; ci < collectionNodeList.getLength(); ci++) {
                         Node itemNode = collectionNodeList.item(ci);
                         if (itemNode instanceof Element) {
-                            IEntity item = parse(((ICollection<?, ?>) member).getValueClass(), (Element) itemNode);
+                            IEntity item = createAndParse(((ICollection<?, ?>) member).getValueClass(), (Element) itemNode);
                             ((ICollection) member).add(item);
                         }
                     }
