@@ -74,12 +74,18 @@ public abstract class ConfigurationMySQL implements Configuration {
     }
 
     @Override
+    public int maxPoolPreparedStatements() {
+        return 1000;
+    }
+
+    @Override
+    public int unreturnedConnectionTimeout() {
+        return 60;
+    }
+
+    @Override
     public NamingConvention namingConvention() {
         return null;
     }
 
-    @Override
-    public int maxPoolPreparedStatements() {
-        return 1000;
-    }
 }

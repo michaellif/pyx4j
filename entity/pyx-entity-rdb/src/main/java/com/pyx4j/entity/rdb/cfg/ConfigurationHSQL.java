@@ -90,6 +90,11 @@ public abstract class ConfigurationHSQL implements Configuration {
     }
 
     @Override
+    public int unreturnedConnectionTimeout() {
+        return 60;
+    }
+
+    @Override
     public NamingConvention namingConvention() {
         return null;
     }
