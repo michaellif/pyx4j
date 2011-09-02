@@ -56,7 +56,7 @@ public interface Floorplan extends IEntity {
     @Caption(name = "Baths")
     IPrimitive<Integer> bathrooms();
 
-    //Separate WC
+    // Separate WC
     IPrimitive<Integer> halfBath();
 
     @Detached

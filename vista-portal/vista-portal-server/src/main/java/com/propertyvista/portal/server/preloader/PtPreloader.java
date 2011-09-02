@@ -20,6 +20,7 @@ import com.propertvista.generator.PTGenerator;
 import com.propertvista.generator.gdo.ApplicationSummaryGDO;
 import com.propertvista.generator.gdo.TenantSummaryGDO;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -36,6 +37,7 @@ import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineList;
 import com.propertyvista.domain.contact.IAddress;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.portal.domain.ptapp.Charges;
@@ -143,8 +145,7 @@ public class PtPreloader extends BaseVistaDataPreloader {
 
         PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, PreloadConfig.createTest());
 
-        // TODO retrieve some unit
-        ApplicationSummaryGDO summary = generator.createSummary(user, null);
+        ApplicationSummaryGDO summary = generator.createSummary(user, PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, new Key(1)));
 
         persistFullApplication(summary, generator);
         //List<ApplicationDocument> adocs = PersistenceServicesFactory.getPersistenceService().query(EntityQueryCriteria.create(ApplicationDocument.class));

@@ -15,6 +15,7 @@ package com.propertyvista.portal.rpc.ptapp.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 /**
  * For primary - Unit for lease info + price + term
@@ -24,4 +25,15 @@ import com.pyx4j.entity.shared.IEntity;
 @Transient
 public interface UnitInfoDTO extends IEntity {
 
+    // Floorplan data:
+    IPrimitive<String> name();
+
+    IPrimitive<String> beds();
+
+    IPrimitive<String> baths();
+
+    // Unit data:
+    IPrimitive<String> number();
+
+    IPrimitive<String> area();
 }

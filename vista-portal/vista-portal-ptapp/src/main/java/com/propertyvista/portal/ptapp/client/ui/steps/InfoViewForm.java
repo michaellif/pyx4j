@@ -86,7 +86,7 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
 
         DecorationData decorData = new DecorationData(14d, 12);
         main.add(new VistaWidgetDecorator(inject(proto().person().name().firstName(), new CLabel()), decorData));
-        main.add(new VistaWidgetDecorator(inject(proto().person().name().middleName()), new DecorationData(14d, 12)));
+        main.add(new VistaWidgetDecorator(inject(proto().person().name().middleName()), new DecorationData(14d, 6)));
 
         decorData = new DecorationData(14d, 20);
         main.add(new VistaWidgetDecorator(inject(proto().person().name().lastName(), new CLabel()), decorData));
