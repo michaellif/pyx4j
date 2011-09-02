@@ -36,6 +36,13 @@ public class PageViewerActivity extends ViewerActivityBase<PageDescriptor> imple
     }
 
     @Override
+    public void viewChild(Key id) {
+        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
+        place.formViewerPlace(id);
+        AppSite.getPlaceController().goTo(place);
+    }
+
+    @Override
     public void editNew(Key parentid) {
         CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
         place.formNewItemPlace(parentid);

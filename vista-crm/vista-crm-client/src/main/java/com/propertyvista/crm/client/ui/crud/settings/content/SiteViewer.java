@@ -22,8 +22,13 @@ public interface SiteViewer extends IViewerView<SiteDescriptorDTO> {
 
     interface Presenter extends IViewerView.Presenter {
 
+        void viewChild(Key id);
+
         void editNew(Key parentid);
+
     }
 
-    void editNew(Key parentid);
+    void viewChild(Key id);
+
+    void newChild(Key parentid);
 }

@@ -396,13 +396,9 @@ public abstract class VistaCrmTheme extends VistaTheme {
         // Back2CRM link:
         buttonEx = Selector.valueOf(TopRightActionsViewImpl.BACK_TO_CRM);
         style = new Style(buttonEx);
-        style.addProperty("color", "red");
-        style.addProperty("background-color", "red");
-        style.addProperty("border", "1px solid yellow");
         style.addProperty("font-weight", "bolder");
-        style.addProperty("text-shadow", "2px -1px 0 #333");
-//        style.addProperty("text-transform", "uppercase");
-        style.addProperty("padding", "0.3em");
+        style.addProperty("padding-bottom", "0.2em");
+        style.addProperty("border-bottom", "2px dotted " + getThemeColorString(ThemeColor.OBJECT_TONE15));
         addStyle(style);
     }
 

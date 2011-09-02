@@ -31,7 +31,12 @@ public class PageViewerImpl extends CrmViewerViewImplBase<PageDescriptor> implem
     }
 
     @Override
-    public void editNew(Key parentid) {
+    public void viewChild(Key id) {
+        ((PageViewer.Presenter) getPresenter()).viewChild(id);
+    }
+
+    @Override
+    public void newChild(Key parentid) {
         ((PageViewer.Presenter) getPresenter()).editNew(parentid);
     }
 }

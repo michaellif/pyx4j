@@ -31,7 +31,12 @@ public class SiteViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> imp
     }
 
     @Override
-    public void editNew(Key parentid) {
+    public void viewChild(Key id) {
+        ((SiteViewer.Presenter) getPresenter()).viewChild(id);
+    }
+
+    @Override
+    public void newChild(Key parentid) {
         ((SiteViewer.Presenter) getPresenter()).editNew(parentid);
     }
 }

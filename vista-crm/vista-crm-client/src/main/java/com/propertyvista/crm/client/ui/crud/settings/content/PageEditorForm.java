@@ -148,13 +148,13 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
                         if (column.getObject().equals(proto().name())) {
                             CComponent<?> comp = null;
-                            if (parent.isEditable()) {
+                            if (!parent.isEditable()) {
                                 comp = inject(column.getObject(), new CLabel());
                             } else {
                                 comp = inject(column.getObject(), new CHyperlink(new Command() {
                                     @Override
                                     public void execute() {
-                                        ((PageEditor) getParentView()).viewChild(getValue().getPrimaryKey());
+                                        ((PageViewer) getParentView()).viewChild(getValue().getPrimaryKey());
                                     }
                                 }));
                             }
@@ -177,7 +177,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
                     @Override
                     public void onClick(ClickEvent event) {
                         if (PageEditorForm.this.getValue().getPrimaryKey() != null) { // parent shouldn't be new unsaved value!..
-                            ((PageViewer) getParentView()).editNew(PageEditorForm.this.getValue().getPrimaryKey());
+                            ((PageViewer) getParentView()).newChild(PageEditorForm.this.getValue().getPrimaryKey());
                         }
                     }
                 });

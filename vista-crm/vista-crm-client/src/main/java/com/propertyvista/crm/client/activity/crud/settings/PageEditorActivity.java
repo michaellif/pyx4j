@@ -16,10 +16,7 @@ package com.propertyvista.crm.client.activity.crud.settings;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
-import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.settings.content.PageEditor;
@@ -40,12 +37,5 @@ public class PageEditorActivity extends EditorActivityBase<PageDescriptor> imple
     @Override
     protected void initNewItem(PageDescriptor entity) {
         entity.type().setValue(Type.staticContent);
-    }
-
-    @Override
-    public void viewChild(Key id) {
-        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
-        place.formViewerPlace(id);
-        AppSite.getPlaceController().goTo(place);
     }
 }

@@ -37,6 +37,13 @@ public class SiteViewerActivity extends ViewerActivityBase<SiteDescriptorDTO> im
     }
 
     @Override
+    public void viewChild(Key id) {
+        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Page.class);
+        place.formViewerPlace(id);
+        AppSite.getPlaceController().goTo(place);
+    }
+
+    @Override
     public void editNew(Key parentid) {
         CrudAppPlace place = AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Page.class);
         place.formNewItemPlace(parentid);

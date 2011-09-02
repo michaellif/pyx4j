@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.content;
 
-import com.pyx4j.commons.Key;
-
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -27,10 +25,5 @@ public class PageEditorImpl extends CrmEditorViewImplBase<PageDescriptor> implem
         CrmEntityForm<PageDescriptor> form = new PageEditorForm(this);
         form.initialize();
         setForm(form);
-    }
-
-    @Override
-    public void viewChild(Key id) {
-        ((PageEditor.Presenter) getPresenter()).viewChild(id);
     }
 }

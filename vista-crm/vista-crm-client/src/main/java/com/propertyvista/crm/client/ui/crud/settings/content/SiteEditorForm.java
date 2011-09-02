@@ -146,13 +146,13 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
                         if (column.getObject().equals(proto().name())) {
                             CComponent<?> comp = null;
-                            if (parent.isEditable()) {
+                            if (!parent.isEditable()) {
                                 comp = inject(column.getObject(), new CLabel());
                             } else {
                                 comp = inject(column.getObject(), new CHyperlink(new Command() {
                                     @Override
                                     public void execute() {
-                                        ((SiteEditor) getParentView()).viewChild(getValue().getPrimaryKey());
+                                        ((SiteViewer) getParentView()).viewChild(getValue().getPrimaryKey());
                                     }
                                 }));
                             }
@@ -175,7 +175,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
                     @Override
                     public void onClick(ClickEvent event) {
                         if (SiteEditorForm.this.getValue().getPrimaryKey() != null) { // parent shouldn't be new unsaved value!..
-                            ((SiteViewer) getParentView()).editNew(SiteEditorForm.this.getValue().getPrimaryKey());
+                            ((SiteViewer) getParentView()).newChild(SiteEditorForm.this.getValue().getPrimaryKey());
                         }
                     }
                 });
@@ -224,6 +224,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
                     @Override
                     public IsWidget createContent() {
                         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable());
+                        main.add(inject(proto().locale()), 10);
                         main.add(inject(proto().content()), 50);
                         main.add(inject(proto().author()), 20);
                         return main;
@@ -260,6 +261,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
                     @Override
                     public IsWidget createContent() {
                         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable());
+                        main.add(inject(proto().locale()), 10);
                         main.add(inject(proto().caption()), 20);
                         main.add(inject(proto().content()), 50);
                         main.add(inject(proto().date()), 8.2);
