@@ -28,7 +28,6 @@ import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.Vehicle;
-import com.propertyvista.domain.financial.ServiceAgreement;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.media.Document;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
