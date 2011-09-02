@@ -276,4 +276,76 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
         };
     }
+
+//    private class ColorPickerDialog extends DialogBox {
+//
+//        private final ColorPicker picker;
+//
+//        private Integer colorselected;
+//
+//        public ColorPickerDialog() {
+//            setText("Choose a color");
+//
+//            // Define the panels
+//            VerticalPanel panel = new VerticalPanel();
+//            FlowPanel okcancel = new FlowPanel();
+//            picker = new ColorPicker();
+//
+//            // Define the buttons
+//            Button preview = new Button("Preview");
+//            preview.addClickHandler(new ClickHandler() {
+//                @Override
+//                public void onClick(ClickEvent sender) {
+//                    colorPreview(picker.getHexColor());
+//                }
+//            });
+//
+//            Button ok = new Button("Ok"); // ok button
+//            ok.addClickHandler(new ClickHandler() {
+//                @Override
+//                public void onClick(ClickEvent sender) {
+//                    colorSelected(picker.getHexColor());
+//                    ColorPickerDialog.this.hide();
+//                }
+//            });
+//
+//            Button cancel = new Button("Cancel"); // cancel button
+//            cancel.addClickHandler(new ClickHandler() {
+//                @Override
+//                public void onClick(ClickEvent sender) {
+//                    cancel();
+//                    ColorPickerDialog.this.hide();
+//                }
+//            });
+//            okcancel.add(preview);
+//            okcancel.add(ok);
+//            okcancel.add(cancel);
+//
+//            // Put it together
+//            panel.add(picker);
+//            panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+//            panel.add(okcancel);
+//
+//            setWidget(panel);
+//        }
+//
+//        public void showNear(Widget sender) {
+//            int left = sender.getAbsoluteLeft() + 30;
+//            int top = sender.getAbsoluteTop() + 10;
+//            this.setPopupPosition(left, top);
+//            this.show();
+//        }
+//
+//        public Integer colorSelected() {
+//            return colorselected;
+//        }
+//
+//        private void colorSelected(Integer color) {
+//            colorselected = color;
+//        }
+//
+//        private void cancel() {
+//            colorselected = -1;
+//        }
+//    }
 }
