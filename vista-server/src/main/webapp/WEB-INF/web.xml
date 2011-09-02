@@ -100,11 +100,15 @@
             <param-name>applicationClassName</param-name>
             <param-value>com.propertyvista.pmsite.server.PMSiteApplication</param-value>
         </init-param>
+        <init-param>
+            <param-name>ignorePaths</param-name>
+            <param-value>/o/,/public/,/media/,/admin/,/crm/,/portal/,/ptapp/,/tester/,/corp/,/rest/,</param-value>
+        </init-param>
     </filter>
 
     <filter-mapping>
         <filter-name>wicket.site</filter-name>
-        <url-pattern>/pmsite/*</url-pattern>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
     
 
