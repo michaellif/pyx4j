@@ -18,7 +18,9 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 
+import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
+import com.propertyvista.pmsite.server.pages.AptListPage;
 
 public class AdvancedSearchCriteriaPanel extends Panel {
     private static final long serialVersionUID = 1L;
@@ -26,27 +28,14 @@ public class AdvancedSearchCriteriaPanel extends Panel {
     public AdvancedSearchCriteriaPanel() {
         super("advancedSearchCriteriaPanel");
 
-        CompoundPropertyModel<SearchCriteriaModel> model = new CompoundPropertyModel<SearchCriteriaModel>(new SearchCriteriaModel());
+        CompoundPropertyModel<SearchCriteriaModel> model = new CompoundPropertyModel<SearchCriteriaModel>(PMSiteApplication.get().getSearchModel());
 
         final Form<SearchCriteriaModel> form = new Form<SearchCriteriaModel>("advancedSearchCriteriaForm", model) {
             private static final long serialVersionUID = 1L;
 
             @Override
             public void onSubmit() {
-                info("Form Submitted:");
-                info("searchType = " + getModelObject().getSearchType());
-                info("province = " + getModelObject().getProvince());
-                info("city = " + getModelObject().getCity());
-                info("location = " + getModelObject().getLocation());
-                info("distance = " + getModelObject().getDistance());
-                info("bedsMin = " + getModelObject().getBedsMin());
-                info("bedsMax = " + getModelObject().getBedsMax());
-                info("bathsMin = " + getModelObject().getBathsMin());
-                info("bathsMax = " + getModelObject().getBathsMax());
-                info("priceMin = " + getModelObject().getPriceMin());
-                info("priceMax = " + getModelObject().getPriceMax());
-                info("amenities = " + getModelObject().getAmenities());
-                //setResponsePage(FindAptPage.class);
+                setResponsePage(AptListPage.class);
             }
         };
 

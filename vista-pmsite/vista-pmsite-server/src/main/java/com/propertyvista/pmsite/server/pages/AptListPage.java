@@ -13,10 +13,43 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.model.CompoundPropertyModel;
+
+import com.propertyvista.pmsite.server.PMSiteApplication;
+import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
+import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaInputPanel;
+
 public class AptListPage extends BasePage {
 
     public AptListPage() {
         super();
+
+        CompoundPropertyModel<SearchCriteriaModel> model = new CompoundPropertyModel<SearchCriteriaModel>(PMSiteApplication.get().getSearchModel());
+
+        final Form<SearchCriteriaModel> form = new Form<SearchCriteriaModel>("advancedSearchCriteriaForm", model) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onSubmit() {
+                setResponsePage(AptListPage.class);
+            }
+        };
+
+        form.add(new AdvancedSearchCriteriaInputPanel("searchCriteriaInput", model));
+        form.add(new Button("searchSubmit"));
+
+        add(form);
+
+        SearchCriteriaModel data = model.getObject();
+        String model_dump = "Search Criteria:\n" + "searchType = " + data.getSearchType() + "; province = " + data.getProvince() + "; city = " + data.getCity()
+                + "; location = " + data.getLocation() + "; distance = " + data.getDistance() + "; bedsMin = " + data.getBedsMin() + "; bedsMax = "
+                + data.getBedsMax() + "; bathsMin = " + data.getBathsMin() + "; bathsMax = " + data.getBathsMax() + "; priceMin = " + data.getPriceMin()
+                + "; priceMax = " + data.getPriceMax() + "; amenities = " + data.getAmenities();
+
+        add(new Label("model_dump", model_dump));
     }
 
 }

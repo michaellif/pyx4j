@@ -5,8 +5,94 @@
 </head>
 <body>
 	<wicket:extend>
+<style>
+.advanced_search_v_wrap {
+	float:left;
+	clear:left;
+	width:200px;
+	margin:10px;
+}
+.advanced_search_v_wrap input[type=submit] {
+    background: url("resources/templates.TemplateResources/images/template0/btn.png") no-repeat;
+    border: none;
+    width: 128px;
+    height: 32px;
+    padding: 5px 0;
+    float:left;
+    clear:left;
+    color: #000000;
+    font-size: 16px;
+    text-shadow: 0 1px 0 #CCCCCC;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+.advanced_search_v_wrap label {
+	display: block;
+}
+.advanced_search_v_wrap .input_block_frame {
+	padding:5px;
+	margin:5px;
+}
+.advanced_search_v_wrap .search_bytype_box select,
+.advanced_search_v_wrap .search_byprox_box input[type=text] {
+	width:150px;
+	margin:1px;
+}
+.advanced_search_v_wrap .search_type_box {
+	float:left;
+}
+.advanced_search_v_wrap .search_bytype_box {
+	float:left;
+	clear:both;
+}
+.advanced_search_v_wrap .search_byprox_box {
+	float:left;
+	clear:both;
+}
+.advanced_search_v_wrap .search_common_box {
+	float:left;
+	clear:both;
+}
+.advanced_search_v_wrap .search_common_box select,
+.advanced_search_v_wrap .search_common_box input[type=text] {
+	width:70px;
+	margin:1px;
+}
+.advanced_search_v_wrap .search_typesel_box label {
+	display:inline;
+}
+.advanced_search_v_wrap .search_common_box .amenities label {
+	display:inline;
+}
 
-        Apartment List
+
+.apartment_listing_wrap {
+	float:left;
+	width:600px;
+	border:1px solid #333;
+	margin:10px;
+}
+</style>
+<div class="staticMain">
+<div class="main">
+	<div class="secondaryNavig">
+		<div class="advanced_search_v_wrap">
+			<form class="advancedSearchCriteria" wicket:id="advancedSearchCriteriaForm">
+				<div wicket:id="searchCriteriaInput" />
+				<input type="submit" wicket:id="searchSubmit" value="Search" />
+			</form>
+		</div>
+	</div>
+	<div class="caption">
+		<h1>Apartment List</h1>
+	</div>
+	<div class="content">
+		<div class="apartment_listing_wrap">
+	        <div wicket:id="model_dump"/>
+		</div>
+	</div>
+</div>
+</div>
 
       </wicket:extend>
 </body>

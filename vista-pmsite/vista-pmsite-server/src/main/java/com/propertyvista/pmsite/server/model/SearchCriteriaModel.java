@@ -145,6 +145,66 @@ public class SearchCriteriaModel implements Serializable {
         return amenities;
     }
 
+    public void setsearchType(SearchType searchType) {
+        this.searchType = searchType;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setDistance(Integer distance) {
+        this.distance = distance;
+    }
+
+    public void setBedsMin(BedroomChoice bedsMin) {
+        this.bedsMin = bedsMin;
+    }
+
+    public void setBedsMax(BedroomChoice bedsMax) {
+        this.bedsMax = bedsMax;
+    }
+
+    public void setBathsMin(BathroomChoice bathsMin) {
+        this.bathsMin = bathsMin;
+    }
+
+    public void setBathsMax(BathroomChoice bathsMax) {
+        this.bathsMax = bathsMax;
+    }
+
+    public void setPriceMin(Integer priceMin) {
+        this.priceMin = priceMin;
+    }
+
+    public void setPriceMax(Integer priceMax) {
+        this.priceMax = priceMax;
+    }
+
+    public void setAmenities(List<AmenitySet> amenities) {
+        this.amenities = amenities;
+    }
+
+    public void addAmenity(AmenitySet amenity) {
+        if (!amenities.contains(amenity)) {
+            amenities.add(amenity);
+        }
+    }
+
+    public void removeAmenity(AmenitySet amenity) {
+        if (amenities.contains(amenity)) {
+            amenities.remove(amenity);
+        }
+    }
+
     public Map<String, List<String>> getProvinceCityMap() {
         Map<String, List<String>> provCityMap = new HashMap<String, List<String>>();
         List<City> cities = PMSiteContentManager.getCities();

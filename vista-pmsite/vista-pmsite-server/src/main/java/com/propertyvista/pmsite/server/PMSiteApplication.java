@@ -21,6 +21,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.target.coding.MixedParamUrlCodingStrategy;
 import org.apache.wicket.request.target.coding.QueryStringUrlCodingStrategy;
 
+import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.pmsite.server.pages.FindAptPage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
@@ -28,6 +29,8 @@ import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
 
 public class PMSiteApplication extends WebApplication {
+
+    private SearchCriteriaModel searchModel;
 
     @Override
     public Class<? extends Page> getHomePage() {
@@ -42,10 +45,21 @@ public class PMSiteApplication extends WebApplication {
         mountBookmarkablePage("residents", ResidentsPage.class);
 
         mount(new MixedParamUrlCodingStrategy("cnt", StaticPage.class, PMSiteContentManager.PARAMETER_NAMES));
+
+        // create search model
+        this.searchModel = new SearchCriteriaModel();
     }
 
     @Override
     public Session newSession(Request request, Response response) {
         return new PMSiteSession(request);
+    }
+
+    public static PMSiteApplication get() {
+        return (PMSiteApplication) WebApplication.get();
+    }
+
+    public SearchCriteriaModel getSearchModel() {
+        return searchModel;
     }
 }

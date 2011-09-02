@@ -1,14 +1,13 @@
 <wicket:panel
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 
-<div class="search_wrap">
 	<div wicket:id="form_messages"/>
 	<div wicket:id="searchType">
-	    <div class="search_type_box search_bytype_box">
+	    <div class="search_typesel_box search_bytype_box">
 	    	<input wicket:id="searchByType" type="radio"/>
 	    	<label>Search By Type</label>
 	    </div>
-    	<div class="search_type_box search_byprox_box">
+    	<div class="search_typesel_box search_byprox_box">
 	    	<input wicket:id="searchByProx" type="radio"/>
 	    	<label>Search By Proximity</label>
 		</div>	  
@@ -50,12 +49,11 @@
 		</div>
 	    <div class="search_field">
 			<label>Price</label>
-			<input wicket:id="priceMin"/> to <input wicket:id="priceMax"/>
+			<input wicket:id="priceMin" type="text"/> to <input wicket:id="priceMax" type="text"/>
 		</div>
 	    <div class="search_field">
 			<label>Amenities</label>
 			<div wicket:id="amenities" class="amenities"><input type="checkbox"/></div>
 		</div>
 	</div>
-</div>
 </wicket:panel>
