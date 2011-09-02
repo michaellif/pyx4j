@@ -37,8 +37,8 @@ public class VistaDecoratorsSplitFlowPanel extends HorizontalPanel {
         left.getElement().getStyle().setPadding(0, Unit.EM);
         right.getElement().getStyle().setPadding(0, Unit.EM);
 
-        left.setWidth("35em");
-        right.setWidth("35em");
+        left.setWidth("40em");
+        right.setWidth("40em");
     }
 
     public VistaDecoratorsFlowPanel getRightPanel() {
