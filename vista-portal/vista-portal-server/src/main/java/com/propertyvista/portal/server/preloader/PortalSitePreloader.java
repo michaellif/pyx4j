@@ -153,12 +153,12 @@ public class PortalSitePreloader extends AbstractDataPreloader {
         PageCaption pageCaption = EntityFactory.create(PageCaption.class);
         pageCaption.caption().setValue(enCaption);
         pageCaption.locale().set(enLocale);
-        page.childCaptions().add(pageCaption);
+        page.caption().add(pageCaption);
 
         pageCaption = EntityFactory.create(PageCaption.class);
         pageCaption.caption().setValue(frCaption);
         pageCaption.locale().set(frLocale);
-        page.childCaptions().add(pageCaption);
+        page.caption().add(pageCaption);
 
         return page;
     }

@@ -196,7 +196,7 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public static String getCaption(PageDescriptor descriptor, Locale locale) {
-        for (PageCaption caption : descriptor.childCaptions()) {
+        for (PageCaption caption : descriptor.caption()) {
             if (locale.lang().getValue().equals(caption.locale().lang().getValue())) {
                 return caption.caption().getValue();
             }
