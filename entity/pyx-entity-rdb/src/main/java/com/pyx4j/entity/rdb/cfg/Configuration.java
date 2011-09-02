@@ -61,6 +61,8 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public int maxPoolPreparedStatements();
 
+    public int unreturnedConnectionTimeout();
+
     /**
      * 
      * @return return null to use framework default

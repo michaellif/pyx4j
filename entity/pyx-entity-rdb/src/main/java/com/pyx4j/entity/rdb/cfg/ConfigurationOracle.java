@@ -80,6 +80,11 @@ public abstract class ConfigurationOracle implements Configuration {
     }
 
     @Override
+    public int unreturnedConnectionTimeout() {
+        return 60;
+    }
+
+    @Override
     public NamingConvention namingConvention() {
         return new NamingConventionOracle(32, null);
     }

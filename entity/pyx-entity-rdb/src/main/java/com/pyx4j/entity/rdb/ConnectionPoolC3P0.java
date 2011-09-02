@@ -55,7 +55,7 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
         dataSource.setMaxStatements(cfg.maxPoolPreparedStatements());
 
-        dataSource.setUnreturnedConnectionTimeout(60);
+        dataSource.setUnreturnedConnectionTimeout(cfg.unreturnedConnectionTimeout());
         dataSource.setDebugUnreturnedConnectionStackTraces(true);
 
         log.debug("Pool size is {} min and {} max", dataSource.getMinPoolSize(), dataSource.getMaxPoolSize());
