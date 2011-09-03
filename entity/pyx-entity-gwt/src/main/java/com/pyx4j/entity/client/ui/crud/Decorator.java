@@ -52,7 +52,7 @@ public class Decorator implements IPrimitive<String> {
     }
 
     @Override
-    public Class<? extends IObject> getObjectClass() {
+    public Class<? extends IObject<?>> getObjectClass() {
         return null;
     }
 

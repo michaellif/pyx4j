@@ -40,19 +40,30 @@ public interface IObject<VALUE_TYPE> {
     /**
      * @return IList, ISet, IPrimitive, or extends IEntity
      */
-    public Class<? extends IObject> getObjectClass();
+    public Class<? extends IObject<?>> getObjectClass();
 
-    //Owned by parent
+    /**
+     * This is IEntity in the Entity Graph that holds the value of this Entity. This is not business parent
+     */
     public IEntity getOwner();
 
     /**
-     * This may be ICollection or IEntity
+     * This may be ICollection or IEntity in the Entity Graph. This is not business parent
      */
     public IObject<?> getParent();
 
-    //In parent's map
+    /**
+     * Name of this Object in parent's object map
+     * 
+     * @return null for root Entity in Graph
+     */
     public String getFieldName();
 
+    /**
+     * Meta of this Entity in parent's object map
+     * 
+     * @return null for root Entity in Graph
+     */
     public MemberMeta getMeta();
 
     public boolean metaEquals(IObject<?> other);

@@ -40,8 +40,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
 
     private final Class<TYPE> valueClass;
 
-    @SuppressWarnings("rawtypes")
-    protected AbstractCollectionHandler(Class<? extends IObject> clazz, Class<TYPE> valueClass, IEntity parent, String fieldName) {
+    protected AbstractCollectionHandler(@SuppressWarnings("rawtypes") Class<? extends IObject> clazz, Class<TYPE> valueClass, IEntity parent, String fieldName) {
         super(clazz, parent, fieldName);
         this.valueClass = valueClass;
     }
@@ -75,7 +74,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         }
         Map<String, Object> value = ((SharedEntityHandler) entity).ensureValue();
         if (!this.getValueClass().equals(entity.getObjectClass())) {
-            value.put(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype((Class<IEntity>) entity.getObjectClass()));
+            value.put(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(entity.getObjectClass()));
         }
         ((SharedEntityHandler) entity).attachToOwner(this, this.getFieldName());
 
@@ -99,6 +98,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         return array;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T[] toArray(T[] a) {
         int size = size();
@@ -138,6 +138,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();

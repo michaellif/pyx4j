@@ -41,7 +41,7 @@ public abstract class ObjectHandler<VALUE_TYPE> implements IObject<VALUE_TYPE>, 
     private transient String fieldName;
 
     @SuppressWarnings("unchecked")
-    public ObjectHandler(Class<? extends IObject> clazz, IObject<?> parent, String fieldName) {
+    public ObjectHandler(@SuppressWarnings("rawtypes") Class<? extends IObject> clazz, IObject<?> parent, String fieldName) {
         this.clazz = (Class<? extends IObject<VALUE_TYPE>>) clazz;
         attachToOwner(parent, fieldName);
     }

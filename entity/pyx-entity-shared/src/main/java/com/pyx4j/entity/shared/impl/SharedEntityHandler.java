@@ -73,8 +73,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
      * @param parent
      * @param fieldName
      */
-    @SuppressWarnings("rawtypes")
-    public SharedEntityHandler(Class<? extends IObject> clazz, IObject<?> parent, String fieldName) {
+    public SharedEntityHandler(Class<? extends IObject<?>> clazz, IObject<?> parent, String fieldName) {
         super(clazz, parent, fieldName);
         delegateValue = (parent != null) && (getOwner() == parent);
         isTemplateEntity = ".".equals(fieldName);
@@ -88,18 +87,23 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @SuppressWarnings("unchecked")
     @Override
-    public Class<? extends IEntity> getValueClass() {
-        return (Class<? extends IEntity>) getObjectClass();
+    public Class<? extends IEntity> getObjectClass() {
+        return (Class<? extends IEntity>) super.getObjectClass();
     }
 
     @SuppressWarnings("unchecked")
     @Override
+    public Class<? extends IEntity> getValueClass() {
+        return (Class<? extends IEntity>) super.getObjectClass();
+    }
+
+    @Override
     public Class<? extends IEntity> getInstanceValueClass() {
         Map<String, Object> entityValue = getValue();
         if ((entityValue == null) || (!entityValue.containsKey(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR))) {
-            return (Class<? extends IEntity>) getObjectClass();
+            return getObjectClass();
         } else {
-            return (Class<? extends IEntity>) ((IEntity) entityValue.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR)).getObjectClass();
+            return ((IEntity) entityValue.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR)).getObjectClass();
         }
     }
 
@@ -213,7 +217,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             //TODO Test type safety at runtime.
             if (!this.getObjectClass().equals(entity.getObjectClass())) {
                 // allow AbstractMember
-                value.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype((Class<IEntity>) entity.getObjectClass()));
+                value.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(entity.getObjectClass()));
             }
             if ((getOwner() != null) && getMeta().isOwnedRelationships() && (((SharedEntityHandler) entity).getOwner() != this.getOwner())) {
                 // attach incoming entity to new owner
@@ -295,11 +299,10 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         return ((EntityValueMap) thisValue).isNull();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public EntityMeta getEntityMeta() {
         // Cache EntityMeta is done in Entity implementations using static member.
-        return EntityFactory.getEntityMeta((Class<IEntity>) getObjectClass());
+        return EntityFactory.getEntityMeta(getObjectClass());
     }
 
     /**
@@ -381,6 +384,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         return obj;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Object getValue(Path path) {
         //assertPath(path);
@@ -398,6 +402,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         return value;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void setValue(Path path, Object value) {
         //assertPath(path);
@@ -580,6 +585,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             cloneMap((Map<String, Object>) value, m);
             return m;
         } else if (value instanceof List<?>) {
+            @SuppressWarnings("rawtypes")
             List l = new Vector();
             for (Object lm : (List<?>) value) {
                 l.add(cloneValue(lm));
@@ -587,12 +593,14 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             return l;
         } else if (value instanceof HashSet<?>) {
             //IPrimitiveSet
+            @SuppressWarnings("rawtypes")
             Set s = new HashSet<Object>();
             for (Object lm : (Set<?>) value) {
                 s.add(cloneValue(lm));
             }
             return s;
         } else if (value instanceof TreeSet<?>) {
+            @SuppressWarnings("rawtypes")
             Set s = new TreeSet<Map<String, Object>>(new ElementsComparator());
             for (Object lm : (Set<?>) value) {
                 s.add(cloneValue(lm));
