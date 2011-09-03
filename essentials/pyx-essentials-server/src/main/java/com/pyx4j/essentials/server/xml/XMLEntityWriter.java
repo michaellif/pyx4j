@@ -49,7 +49,7 @@ public class XMLEntityWriter {
 
     private final XMLEntityName entityName;
 
-    private static class GrapthInfo {
+    private static class GlobalGraph {
 
         Set<IEntity> processed = new HashSet<IEntity>();
 
@@ -62,6 +62,43 @@ public class XMLEntityWriter {
         void emitting(IEntity entity) {
             processed.add(entity);
             references.remove(entity);
+        }
+    }
+
+    private static class VerticalGraph {
+
+        GlobalGraph global;
+
+        Set<IEntity> processedVerticaly = new HashSet<IEntity>();
+
+        VerticalGraph() {
+            global = new GlobalGraph();
+        }
+
+        VerticalGraph(VerticalGraph previous) {
+            global = previous.global;
+            processedVerticaly.addAll(previous.processedVerticaly);
+        }
+
+        boolean isEmitted(IEntity entity) {
+            return processedVerticaly.contains(entity) || global.isEmitted(entity);
+        }
+
+        boolean isEmittedVerticaly(IEntity entity) {
+            return processedVerticaly.contains(entity);
+        }
+
+        void emitting(IEntity entity) {
+            processedVerticaly.add(entity);
+            global.emitting(entity);
+        }
+
+        Set<IEntity> getReferences() {
+            return global.references;
+        }
+
+        void addReference(IEntity entity) {
+            global.references.add(entity);
         }
     }
 
@@ -91,10 +128,10 @@ public class XMLEntityWriter {
     }
 
     public void writeRoot(IEntity entity, Map<String, String> attributes) {
-        GrapthInfo grapth = new GrapthInfo();
+        VerticalGraph grapth = new VerticalGraph();
         write(entity, entityName.getXMLName(entity.getObjectClass()), attributes, null, grapth);
-        if (isEmitOnlyOwnedReferences() && grapth.references.size() > 0) {
-            throw new Error("UnOwnedReferences references detected " + grapth.references);
+        if (isEmitOnlyOwnedReferences() && grapth.getReferences().size() > 0) {
+            throw new Error("UnOwnedReferences references detected " + grapth.getReferences());
         }
     }
 
@@ -103,17 +140,17 @@ public class XMLEntityWriter {
     }
 
     public void write(IEntity entity, String name) {
-        write(entity, name, null, null, new GrapthInfo());
+        write(entity, name, null, null, new VerticalGraph());
     }
 
     private void write(IEntity entity, String name, Map<String, String> attributes, @SuppressWarnings("rawtypes") Class<? extends IObject> declaredObjectClass,
-            GrapthInfo grapth) {
+            VerticalGraph graph) {
         Map<String, String> entityAttributes = new LinkedHashMap<String, String>();
         if (attributes != null) {
             entityAttributes.putAll(attributes);
         }
 
-        boolean emitted = grapth.isEmitted(entity);
+        boolean emitted = graph.isEmitted(entity);
 
         if (isEmitId() && (entity.getPrimaryKey() != null)) {
             if (emitted) {
@@ -121,12 +158,15 @@ public class XMLEntityWriter {
             } else {
                 if (isEmitOnlyOwnedReferences() && (entity.getOwner() != null) && !entity.getMeta().isOwnedRelationships()) {
                     entityAttributes.put("reference", String.valueOf(entity.getPrimaryKey()));
-                    grapth.references.add(entity);
+                    graph.addReference(entity);
                     emitted = true;
                 } else {
                     entityAttributes.put("id", String.valueOf(entity.getPrimaryKey()));
                 }
             }
+        } else if (emitted && graph.isEmittedVerticaly(entity)) {
+            // Avoid cyclic references even if not writing id
+            return;
         }
 
         if ((declaredObjectClass != null) && (!entity.getObjectClass().equals(declaredObjectClass))) {
@@ -140,7 +180,7 @@ public class XMLEntityWriter {
             xml.writeEmpty(name, entityAttributes);
             return;
         }
-        grapth.emitting(entity);
+        graph.emitting(entity);
         xml.startIdented(name, entityAttributes);
 
         EntityMeta em = entity.getEntityMeta();
@@ -155,14 +195,15 @@ public class XMLEntityWriter {
                 if (!member.isObjectClassSameAsDef()) {
                     member = member.cast();
                 }
-                write(member, memberName, null, memberMeta.getObjectClass(), grapth);
+                write(member, memberName, null, memberMeta.getObjectClass(), new VerticalGraph(graph));
                 break;
             case EntitySet:
             case EntityList:
                 if (!((ICollection<?, ?>) entity.getMember(memberName)).isEmpty()) {
                     xml.startIdented(memberName);
                     for (Object item : (ICollection<?, ?>) entity.getMember(memberName)) {
-                        write((IEntity) item, entityName.getXMLName(((IEntity) item).getObjectClass()), null, memberMeta.getObjectClass(), grapth);
+                        write((IEntity) item, entityName.getXMLName(((IEntity) item).getObjectClass()), null, memberMeta.getObjectClass(), new VerticalGraph(
+                                graph));
                     }
                     xml.endIdented(memberName);
                 }
