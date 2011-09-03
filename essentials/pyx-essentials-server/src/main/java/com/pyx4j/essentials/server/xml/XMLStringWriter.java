@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server.report;
+package com.pyx4j.essentials.server.xml;
 
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -60,7 +60,7 @@ public class XMLStringWriter {
         out.append("<").append(name).append(">");
     }
 
-    public void start(String name, Map<String, String> attributes) {
+    private void beggining(String name, Map<String, String> attributes) {
         out.append("<").append(name);
         if (attributes != null) {
             for (Map.Entry<String, String> me : attributes.entrySet()) {
@@ -69,7 +69,17 @@ public class XMLStringWriter {
                 }
             }
         }
+    }
+
+    public void start(String name, Map<String, String> attributes) {
+        beggining(name, attributes);
         out.append(">");
+    }
+
+    public void writeEmpty(String name, Map<String, String> attributes) {
+        idented();
+        beggining(name, attributes);
+        out.append("/>\n");
     }
 
     public void startIdented(String name) {

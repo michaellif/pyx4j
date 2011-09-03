@@ -43,7 +43,7 @@ import com.google.appengine.api.datastore.Entity;
 
 import com.pyx4j.essentials.rpc.admin.BackupEntityProperty;
 import com.pyx4j.essentials.rpc.admin.BackupKey;
-import com.pyx4j.essentials.server.report.XMLStringWriter;
+import com.pyx4j.essentials.server.xml.XMLStringWriter;
 import com.pyx4j.gwt.server.IOUtils;
 
 public class LocalXMLBackupConsumer implements BackupConsumer {

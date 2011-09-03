@@ -33,7 +33,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.server.report.XMLStringWriter;
 
 public class XMLEntityConverter {
 

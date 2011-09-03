@@ -34,8 +34,8 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.server.report.XMLStringWriter;
 import com.pyx4j.essentials.server.xml.XMLEntityWriter;
+import com.pyx4j.essentials.server.xml.XMLStringWriter;
 import com.pyx4j.log4j.LoggerConfig;
 
 public class DataDump {

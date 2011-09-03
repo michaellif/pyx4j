@@ -38,7 +38,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.essentials.server.report.XMLStringWriter;
 import com.pyx4j.geo.GeoPoint;
 
 public class XMLEntityModelWriter {

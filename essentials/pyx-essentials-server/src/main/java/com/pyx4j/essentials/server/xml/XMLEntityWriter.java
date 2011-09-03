@@ -37,7 +37,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.essentials.server.report.XMLStringWriter;
 import com.pyx4j.geo.GeoPoint;
 
 public class XMLEntityWriter {
@@ -113,6 +112,7 @@ public class XMLEntityWriter {
         if (attributes != null) {
             entityAttributes.putAll(attributes);
         }
+
         boolean emitted = grapth.isEmitted(entity);
 
         if (isEmitId() && (entity.getPrimaryKey() != null)) {
@@ -128,19 +128,20 @@ public class XMLEntityWriter {
                 }
             }
         }
+
         if ((declaredObjectClass != null) && (!entity.getObjectClass().equals(declaredObjectClass))) {
             String typeName = entityName.getXMLName(entity.getObjectClass());
             if (!typeName.equals(name)) {
                 entityAttributes.put("type", typeName);
             }
         }
-        xml.startIdented(name, entityAttributes);
 
         if (emitted) {
-            xml.endIdented(name);
+            xml.writeEmpty(name, entityAttributes);
             return;
         }
         grapth.emitting(entity);
+        xml.startIdented(name, entityAttributes);
 
         EntityMeta em = entity.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
