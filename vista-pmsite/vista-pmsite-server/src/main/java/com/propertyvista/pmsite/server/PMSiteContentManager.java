@@ -38,6 +38,7 @@ import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteLocale;
+import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
 public class PMSiteContentManager implements Serializable {
@@ -172,10 +173,17 @@ public class PMSiteContentManager implements Serializable {
 
     }
 
-    public static PropertyListDTO getPropertyList() {
+    public static PropertyListDTO getPropertyList(SearchCriteriaModel searchCriteria) {
 
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
 
+        // add search criteria
+        if (searchCriteria.getSearchType() == SearchCriteriaModel.SearchType.City) {
+            String city = searchCriteria.getCity();
+            if (city != null) {
+                dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), city));
+            }
+        }
         List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(dbCriteria);
 
         PropertyListDTO ret = EntityFactory.create(PropertyListDTO.class);

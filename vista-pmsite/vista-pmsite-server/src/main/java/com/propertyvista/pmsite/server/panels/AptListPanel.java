@@ -17,19 +17,21 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.CompoundPropertyModel;
+
+import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.contact.IAddress;
-import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 
 public class AptListPanel extends Panel {
     private static final long serialVersionUID = 1L;
 
-    public AptListPanel() {
-        super("aptListPanel");
+    public AptListPanel(String id, CompoundPropertyModel<IList<PropertyDTO>> model) {
+        super(id, model);
 
-        add(new ListView<PropertyDTO>("aptListInfo", PMSiteContentManager.getPropertyList().properties()) {
+        add(new ListView<PropertyDTO>("aptListInfo", model) {
             private static final long serialVersionUID = 1L;
 
             @Override

@@ -19,10 +19,14 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 
+import com.pyx4j.entity.shared.IList;
+
 import com.propertyvista.pmsite.server.PMSiteApplication;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaInputPanel;
 import com.propertyvista.pmsite.server.panels.AptListPanel;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
 
 public class AptListPage extends BasePage {
 
@@ -61,6 +65,6 @@ public class AptListPage extends BasePage {
                 + "; priceMax = " + data.getPriceMax() + "; amenities = " + data.getAmenities();
 
         add(new Label("model_dump", model_dump));
-        add(new AptListPanel());
+        add(new AptListPanel("aptListPanel", new CompoundPropertyModel<IList<PropertyDTO>>(PMSiteContentManager.getPropertyList(searchCrit).properties())));
     }
 }
