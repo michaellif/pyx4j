@@ -145,16 +145,23 @@ public class SearchCriteriaModel implements Serializable {
         return amenities;
     }
 
-    public void setsearchType(SearchType searchType) {
+    public void setSearchType(SearchType searchType) {
         this.searchType = searchType;
     }
 
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
+    public void setProvinceCity(String prov, String city) {
+        if (prov == null) {
+            return;
+        }
+        Map<String, List<String>> provCityMap = getProvinceCityMap();
+        List<String> cities = provCityMap.get(prov);
+        if (cities != null) {
+            setSearchType(SearchType.City);
+            this.province = prov;
+            if (city != null && cities.contains(city)) {
+                this.city = city;
+            }
+        }
     }
 
     public void setLocation(String location) {

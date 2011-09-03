@@ -42,7 +42,7 @@ public class FooterPanel extends Panel {
                 City city = item.getModelObject();
                 PageParameters params = new PageParameters();
                 params.add("city", city.name().getValue());
-                params.add("province", city.province().code().getValue());
+                params.add("province", city.province().name().getValue());
                 BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", AptListPage.class, params);
                 link.add(new Label("city", city.name().getValue() + " (" + city.province().code().getValue() + ")"));
                 item.add(link);

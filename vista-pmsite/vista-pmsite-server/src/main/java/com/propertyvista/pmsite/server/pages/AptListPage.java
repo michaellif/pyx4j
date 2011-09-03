@@ -13,6 +13,7 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -21,13 +22,23 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaInputPanel;
+import com.propertyvista.pmsite.server.panels.AptListPanel;
 
 public class AptListPage extends BasePage {
 
     public AptListPage() {
         super();
 
-        CompoundPropertyModel<SearchCriteriaModel> model = new CompoundPropertyModel<SearchCriteriaModel>(PMSiteApplication.get().getSearchModel());
+        SearchCriteriaModel searchCrit = PMSiteApplication.get().getSearchModel();
+        PageParameters params = getRequestCycle().getPageParameters();
+        if (params != null) {
+            String prov = params.getString("province");
+            String city = params.getString("city");
+            if (prov != null) {
+                searchCrit.setProvinceCity(prov, city);
+            }
+        }
+        CompoundPropertyModel<SearchCriteriaModel> model = new CompoundPropertyModel<SearchCriteriaModel>(searchCrit);
 
         final Form<SearchCriteriaModel> form = new Form<SearchCriteriaModel>("advancedSearchCriteriaForm", model) {
             private static final long serialVersionUID = 1L;
@@ -50,6 +61,6 @@ public class AptListPage extends BasePage {
                 + "; priceMax = " + data.getPriceMax() + "; amenities = " + data.getAmenities();
 
         add(new Label("model_dump", model_dump));
+        add(new AptListPanel());
     }
-
 }
