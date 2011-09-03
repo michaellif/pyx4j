@@ -173,7 +173,7 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
                         }
                     };
                 } else {
-                    return new TableFolderEditorDecorator<Pet>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
+                    return new TableFolderEditorDecorator<Pet>(columns, PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
                             i18n.tr("Add a pet"));
                 }
 
@@ -197,7 +197,7 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator<Pet>(false);
                         } else {
-                            return new TableFolderItemEditorDecorator<Pet>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+                            return new TableFolderItemEditorDecorator<Pet>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover(),
                                     i18n.tr("Remove pet"));
                         }
                     }
@@ -268,7 +268,7 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
                         }
                     };
                 } else {
-                    return new TableFolderEditorDecorator<Vehicle>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
+                    return new TableFolderEditorDecorator<Vehicle>(columns, PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
                             i18n.tr("Add a vehicle"));
                 }
             }
@@ -286,7 +286,7 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator<Vehicle>(false);
                         } else {
-                            return new TableFolderItemEditorDecorator<Vehicle>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+                            return new TableFolderItemEditorDecorator<Vehicle>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover(),
                                     i18n.tr("Remove vehicle"));
                         }
                     }

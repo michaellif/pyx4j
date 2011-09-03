@@ -353,7 +353,7 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
 
             @Override
             protected IFolderEditorDecorator<EmergencyContact> createFolderDecorator() {
-                return new BoxFolderEditorDecorator<EmergencyContact>(PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
+                return new BoxFolderEditorDecorator<EmergencyContact>(PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
                         i18n.tr("Add one more contact"));
             }
 
@@ -391,7 +391,7 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
 
             @Override
             public IFolderItemEditorDecorator<EmergencyContact> createFolderItemDecorator() {
-                return new BoxFolderItemEditorDecorator<EmergencyContact>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
+                return new BoxFolderItemEditorDecorator<EmergencyContact>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover(),
                         i18n.tr("Remove contact"), !isFirst());
             }
         };

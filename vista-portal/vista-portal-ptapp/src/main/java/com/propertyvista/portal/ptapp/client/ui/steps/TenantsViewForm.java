@@ -104,7 +104,7 @@ public class TenantsViewForm extends CEntityForm<TenantListDTO> {
 
             @Override
             protected IFolderEditorDecorator<TenantListItemDTO> createFolderDecorator() {
-                return new TableFolderEditorDecorator<TenantListItemDTO>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
+                return new TableFolderEditorDecorator<TenantListItemDTO>(columns, PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
                         i18n.tr("Add a person"));
             }
 

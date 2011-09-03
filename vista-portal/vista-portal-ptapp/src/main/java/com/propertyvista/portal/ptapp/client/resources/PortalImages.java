@@ -25,19 +25,19 @@ public interface PortalImages extends ClientBundle {
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("add.png")
-    ImageResource addRow();
+    ImageResource add();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("add_hover.png")
-    ImageResource addRowHover();
+    ImageResource addHover();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("del.png")
-    ImageResource delRow();
+    ImageResource del();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("del_hover.png")
-    ImageResource delRowHover();
+    ImageResource delHover();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("empty.png")

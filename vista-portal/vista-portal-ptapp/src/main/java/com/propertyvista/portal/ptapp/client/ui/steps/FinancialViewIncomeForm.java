@@ -105,7 +105,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItemEditor<PersonalInc
         if (summaryViewMode) {
             return new BoxReadOnlyFolderItemDecorator<PersonalIncome>(!isFirst());
         } else {
-            return new BoxFolderItemEditorDecorator<PersonalIncome>(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover());
+            return new BoxFolderItemEditorDecorator<PersonalIncome>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover());
         }
     }
 

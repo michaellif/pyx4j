@@ -23,7 +23,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -33,8 +32,6 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ServiceConcession;
 import com.propertyvista.domain.financial.offering.ServiceFeature;
-import com.propertyvista.domain.financial.offering.ServiceItem;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.ptapp.dto.UnitInfoDTO;
@@ -84,6 +81,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         // Lease data:
         unitInfo.leaseFrom().setValue(lease.leaseFrom().getValue());
         unitInfo.leaseTo().setValue(lease.leaseTo().getValue());
+        unitInfo.unitRent().setValue(lease.unit().financial().unitRent().getValue());
 
         callback.onSuccess(unitInfo);
     }
@@ -121,55 +119,32 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     private void fillserviceItems(UnitInfoDTO entity, Building building, Lease lease) {
-        entity.selectedServiceItems().clear();
+
+        entity.utilities().clear();
+        entity.addOns().clear();
+        entity.concessions().clear();
+
         for (Service service : building.serviceCatalog().services()) {
             if (service.type().equals(lease.type())) {
-                entity.selectedServiceItems().addAll(service.items());
+                fillServiceEligibilityData(entity, service, building);
             }
         }
     }
 
-    private boolean fillServiceEligibilityData(UnitInfoDTO currentValue, ServiceItem serviceItem, Building building) {
-        if (serviceItem == null) {
-            return false;
-        }
-
-        // find the service by Service item:
-        Service selecteService = null;
-        for (Service service : building.serviceCatalog().services()) {
-            for (ServiceItem item : service.items()) {
-                if (item.equals(serviceItem)) {
-                    selecteService = service;
-                    break;
-                }
-            }
-            if (selecteService != null) {
-                break; // found!..
-            }
-        }
+    private boolean fillServiceEligibilityData(UnitInfoDTO entity, Service service, Building building) {
 
         // fill related features and concession:
-        currentValue.selectedFeatureItems().clear();
-        currentValue.selectedConcesions().clear();
-        if (selecteService != null) {
-            IList<ServiceItemType> includedUtilities = building.serviceCatalog().includedUtilities();
-            for (ServiceFeature feature : selecteService.features()) {
-                for (ServiceItem item : feature.feature().items()) {
-                    // filter out utilities included in price for selected building:
-                    if (includedUtilities != null && !includedUtilities.isEmpty()) {
-                        if (!includedUtilities.contains(item.type())) {
-                            currentValue.selectedFeatureItems().add(item);
-                        }
-                    } else {
-                        currentValue.selectedFeatureItems().addAll(feature.feature().items());
-                    }
-                }
-            }
-            for (ServiceConcession consession : selecteService.concessions()) {
-                currentValue.selectedConcesions().add(consession.concession());
+        for (ServiceFeature feature : service.features()) {
+            if (Feature.Type.addOn.equals(feature.feature().type().getValue())) {
+                entity.addOns().addAll(feature.feature().items());
+            } else {
+                entity.utilities().addAll(feature.feature().items());
             }
         }
+        for (ServiceConcession consession : service.concessions()) {
+            entity.concessions().add(consession.concession());
+        }
 
-        return (selecteService != null);
+        return (service != null);
     }
 }

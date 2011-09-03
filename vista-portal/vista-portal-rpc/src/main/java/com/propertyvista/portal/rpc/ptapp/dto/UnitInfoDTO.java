@@ -14,6 +14,7 @@
 package com.propertyvista.portal.rpc.ptapp.dto;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -43,15 +44,17 @@ public interface UnitInfoDTO extends IEntity {
     IPrimitive<String> area();
 
     // ServiceCatalog stuff:
-    IList<ServiceItem> selectedServiceItems();
+    IList<ServiceItem> utilities();
 
-    IList<ServiceItem> selectedFeatureItems();
+    IList<ServiceItem> addOns();
 
-    IList<Concession> selectedConcesions();
+    IList<Concession> concessions();
 
     // Lease:
     IPrimitive<LogicalDate> leaseFrom();
 
     IPrimitive<LogicalDate> leaseTo();
 
+    @Format("#0.00")
+    IPrimitive<Double> unitRent();
 }
