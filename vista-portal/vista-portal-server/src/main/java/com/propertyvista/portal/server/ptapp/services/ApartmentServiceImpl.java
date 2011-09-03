@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.ptapp.services;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +23,19 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ServiceConcession;
+import com.propertyvista.domain.financial.offering.ServiceFeature;
+import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.ptapp.dto.UnitInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
@@ -39,10 +53,13 @@ public class ApartmentServiceImpl implements ApartmentService {
             throw new Error("There is no current Lease set!");
         }
         if (!PersistenceServicesFactory.getPersistenceService().retrieve(lease.unit())) {
-            throw new Error("There is no Unit selected!");
+            throw new Error("There is no Unit selected!?.");
         }
         if (!PersistenceServicesFactory.getPersistenceService().retrieve(lease.unit().floorplan())) {
-            throw new Error("There is no unit Floorplan data!");
+            throw new Error("There is no unit Floorplan data!?.");
+        }
+        if (!PersistenceServicesFactory.getPersistenceService().retrieve(lease.unit().belongsTo())) {
+            throw new Error("There is no unit building data!?.");
         }
 
         // fill DTO:
@@ -60,11 +77,99 @@ public class ApartmentServiceImpl implements ApartmentService {
         unitInfo.number().setValue(lease.unit().info().number().getValue());
         unitInfo.area().setValue(lease.unit().info().area().getStringView() + " " + lease.unit().info().areaUnits().getStringView());
 
+        // serviceCatalog processing:
+        syncBuildingServiceCatalog(lease.unit().belongsTo());
+        fillserviceItems(unitInfo, lease.unit().belongsTo(), lease);
+
+        // Lease data:
+        unitInfo.leaseFrom().setValue(lease.leaseFrom().getValue());
+        unitInfo.leaseTo().setValue(lease.leaseTo().getValue());
+
         callback.onSuccess(unitInfo);
     }
 
     @Override
     public void save(AsyncCallback<UnitInfoDTO> callback, UnitInfoDTO editableEntity) {
-        callback.onSuccess(null);
+        callback.onSuccess(null); // this PT App. step is read-only!..
+    }
+
+    private ServiceCatalog syncBuildingServiceCatalog(Building building) {
+
+        // load detached entities:
+        PersistenceServicesFactory.getPersistenceService().retrieve(building.serviceCatalog());
+
+        // update service catalogue double-reference lists:
+        EntityQueryCriteria<Service> serviceCriteria = EntityQueryCriteria.create(Service.class);
+        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), building.serviceCatalog()));
+        List<Service> services = PersistenceServicesFactory.getPersistenceService().query(serviceCriteria);
+        building.serviceCatalog().services().clear();
+        building.serviceCatalog().services().addAll(services);
+
+        EntityQueryCriteria<Feature> featureCriteria = EntityQueryCriteria.create(Feature.class);
+        featureCriteria.add(PropertyCriterion.eq(featureCriteria.proto().catalog(), building.serviceCatalog()));
+        List<Feature> features = PersistenceServicesFactory.getPersistenceService().query(featureCriteria);
+        building.serviceCatalog().features().clear();
+        building.serviceCatalog().features().addAll(features);
+
+        EntityQueryCriteria<Concession> concessionCriteria = EntityQueryCriteria.create(Concession.class);
+        concessionCriteria.add(PropertyCriterion.eq(concessionCriteria.proto().catalog(), building.serviceCatalog()));
+        List<Concession> concessions = PersistenceServicesFactory.getPersistenceService().query(concessionCriteria);
+        building.serviceCatalog().concessions().clear();
+        building.serviceCatalog().concessions().addAll(concessions);
+
+        return building.serviceCatalog();
+    }
+
+    private void fillserviceItems(UnitInfoDTO entity, Building building, Lease lease) {
+        entity.selectedServiceItems().clear();
+        for (Service service : building.serviceCatalog().services()) {
+            if (service.type().equals(lease.type())) {
+                entity.selectedServiceItems().addAll(service.items());
+            }
+        }
+    }
+
+    private boolean fillServiceEligibilityData(UnitInfoDTO currentValue, ServiceItem serviceItem, Building building) {
+        if (serviceItem == null) {
+            return false;
+        }
+
+        // find the service by Service item:
+        Service selecteService = null;
+        for (Service service : building.serviceCatalog().services()) {
+            for (ServiceItem item : service.items()) {
+                if (item.equals(serviceItem)) {
+                    selecteService = service;
+                    break;
+                }
+            }
+            if (selecteService != null) {
+                break; // found!..
+            }
+        }
+
+        // fill related features and concession:
+        currentValue.selectedFeatureItems().clear();
+        currentValue.selectedConcesions().clear();
+        if (selecteService != null) {
+            IList<ServiceItemType> includedUtilities = building.serviceCatalog().includedUtilities();
+            for (ServiceFeature feature : selecteService.features()) {
+                for (ServiceItem item : feature.feature().items()) {
+                    // filter out utilities included in price for selected building:
+                    if (includedUtilities != null && !includedUtilities.isEmpty()) {
+                        if (!includedUtilities.contains(item.type())) {
+                            currentValue.selectedFeatureItems().add(item);
+                        }
+                    } else {
+                        currentValue.selectedFeatureItems().addAll(feature.feature().items());
+                    }
+                }
+            }
+            for (ServiceConcession consession : selecteService.concessions()) {
+                currentValue.selectedConcesions().add(consession.concession());
+            }
+        }
+
+        return (selecteService != null);
     }
 }

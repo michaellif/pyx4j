@@ -68,7 +68,8 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             PersistenceServicesFactory.getPersistenceService().retrieve(in.documents());
 
             // fill selected building by unit:
-            dto.selectedBuilding().set(PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, dto.unit().belongsTo().getPrimaryKey()));
+            PersistenceServicesFactory.getPersistenceService().retrieve(dto.unit().belongsTo());
+            dto.selectedBuilding().set(dto.unit().belongsTo());
             syncBuildingServiceCatalog(dto.selectedBuilding());
 
             // update Tenants double links:

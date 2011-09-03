@@ -45,16 +45,26 @@ public class ApartmentViewForm extends CEntityForm<UnitInfoDTO> {
         main.add(new VistaHeaderBar(i18n.tr("General Info")));
         main.add(inject(proto().name()), 20);
 
-        main.add(new VistaLineSeparator(50, Unit.EM));
+        main.add(new VistaLineSeparator(100, Unit.PCT));
 
         VistaDecoratorsSplitFlowPanel split;
-        main.add(split = new VistaDecoratorsSplitFlowPanel(!isEditable(), 12, 35));
+        main.add(split = new VistaDecoratorsSplitFlowPanel(!isEditable(), 12, 30));
 
         split.getLeftPanel().add(inject(proto().number()), 15);
         split.getLeftPanel().add(inject(proto().area()), 15);
 
         split.getRightPanel().add(inject(proto().beds()), 15);
         split.getRightPanel().add(inject(proto().baths()), 15);
+
+        main.add(new VistaHeaderBar(i18n.tr("Utilities")));
+
+        main.add(new VistaHeaderBar(i18n.tr("Available Add-ons")));
+
+        main.add(new VistaHeaderBar(i18n.tr("Concession")));
+
+        main.add(new VistaHeaderBar(i18n.tr("Lease Terms")));
+        main.add(inject(proto().leaseFrom()), 8);
+        main.add(inject(proto().leaseTo()), 8);
 
         // last step - add building picture on the right:
         HorizontalPanel content = new HorizontalPanel();
