@@ -33,8 +33,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.essentials.server.download.MimeMap;
-import com.pyx4j.essentials.server.report.XMLStringWriter;
 import com.pyx4j.essentials.server.xml.XMLEntityWriter;
+import com.pyx4j.essentials.server.xml.XMLStringWriter;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.security.shared.SecurityController;
 

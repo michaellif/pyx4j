@@ -24,9 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.essentials.server.report.XMLStringWriter;
 import com.pyx4j.essentials.server.xml.XMLEntityModelWriter;
 import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
+import com.pyx4j.essentials.server.xml.XMLStringWriter;
 
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityName;
 
