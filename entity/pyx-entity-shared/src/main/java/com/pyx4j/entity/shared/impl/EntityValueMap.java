@@ -106,21 +106,43 @@ public class EntityValueMap extends HashMap<String, Object> {
 
     @SuppressWarnings("unchecked")
     public static void dumpMap(StringBuilder b, Map<String, Object> map, Set<Map<String, Object>> processed, String ident) {
+
+        if (ToStringStyle.fieldMultiLine) {
+            b.append(ident);
+        }
+        b.append("_i=").append(((EntityValueMap) map).identityHashCode);
+        if (ToStringStyle.fieldMultiLine) {
+            b.append('\n');
+        }
+
         if (processed.contains(map)) {
+            Object pk = map.get(IEntity.PRIMARY_KEY);
+            if (pk != null) {
+                if (ToStringStyle.fieldMultiLine) {
+                    b.append(ident);
+                }
+                b.append(IEntity.PRIMARY_KEY).append("=").append(pk);
+                if (ToStringStyle.fieldMultiLine) {
+                    b.append('\n');
+                }
+            }
+
+            if (ToStringStyle.fieldMultiLine) {
+                b.append(ident);
+            }
             b.append("...");
+            if (ToStringStyle.fieldMultiLine) {
+                b.append('\n');
+            }
             return;
         }
-        boolean first = true;
+
         processed.add(map);
         for (Map.Entry<String, Object> me : map.entrySet()) {
             if (ToStringStyle.fieldMultiLine) {
                 b.append(ident);
             } else {
-                if (!first) {
-                    b.append(' ');
-                } else {
-                    first = false;
-                }
+                b.append(' ');
             }
             b.append(me.getKey()).append("=");
             if (me.getValue() instanceof Map<?, ?>) {
