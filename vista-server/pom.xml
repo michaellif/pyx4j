@@ -353,7 +353,7 @@
                     <plugin>
                         <groupId>org.codehaus.cargo</groupId>
                         <artifactId>cargo-maven2-plugin</artifactId>
-                        <version>1.0.6</version>
+                        <version>1.1.2</version>
                         <executions>
                             <execution>
                                 <id>verify-deploy</id>
@@ -379,7 +379,7 @@
                             <configuration>
                                 <type>runtime</type>
                                 <properties>
-                                    <cargo.tomcat.manager.url>${vista-tomcat-url}/manager/text</cargo.tomcat.manager.url>
+                                    <cargo.remote.uri>${vista-tomcat-url}/manager/text</cargo.remote.uri>
                                     <cargo.remote.username>${vista-tomcat-username}</cargo.remote.username>
                                     <cargo.remote.password>${vista-tomcat-pwd}</cargo.remote.password>
                                 </properties>
