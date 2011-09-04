@@ -20,14 +20,18 @@
  */
 package com.pyx4j.entity.rdb;
 
+import java.lang.management.ManagementFactory;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
@@ -129,9 +133,28 @@ public class ConnectionProvider {
             try {
                 DriverManager.deregisterDriver(d);
                 log.info("deregistered driver {}", d.getClass().getName());
+                if ("oracle.jdbc.OracleDriver".equals(d.getClass().getName())) {
+                    deregisterOracleDiagnosabilityMBean();
+                }
             } catch (Throwable e) {
                 log.error("deregister error", e);
             }
+        }
+    }
+
+    public void deregisterOracleDiagnosabilityMBean() {
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        try {
+            MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+            Hashtable<String, String> keys = new Hashtable<String, String>();
+            keys.put("type", "diagnosability");
+            keys.put("name", cl.getClass().getName() + "@" + Integer.toHexString(cl.hashCode()).toLowerCase());
+            mbs.unregisterMBean(new ObjectName("com.oracle.jdbc", keys));
+            log.info("deregistered OracleDiagnosabilityMBean");
+        } catch (javax.management.InstanceNotFoundException nf) {
+            log.debug("Oracle OracleDiagnosabilityMBean not found ", nf);
+        } catch (Throwable e) {
+            log.error("Oracle  JMX unregister error", e);
         }
     }
 
