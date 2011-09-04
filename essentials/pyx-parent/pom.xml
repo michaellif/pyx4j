@@ -106,18 +106,6 @@
             </releases>
         </repository>
 
-        <repository>
-            <id>itextpdf.com</id>
-            <name>Maven Repository for iText</name>
-            <url>http://maven.itextpdf.com/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-
     </repositories>
 
     <pluginRepositories>
@@ -432,7 +420,7 @@
             <dependency>
                 <groupId>com.itextpdf</groupId>
                 <artifactId>itextpdf</artifactId>
-                <version>5.0.2</version>
+                <version>5.1.2</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.bouncycastle</groupId>

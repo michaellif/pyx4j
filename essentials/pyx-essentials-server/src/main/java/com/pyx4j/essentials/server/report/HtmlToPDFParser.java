@@ -60,7 +60,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.ZapfDingbatsList;
 import com.itextpdf.text.html.HtmlTags;
-import com.itextpdf.text.html.Markup;
+import com.itextpdf.text.html.HtmlUtilities;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class HtmlToPDFParser extends DefaultHandler {
@@ -90,7 +90,7 @@ public class HtmlToPDFParser extends DefaultHandler {
         public static final String LIST_STYLE_TYPE = "list-style-type";
 
         public static final String LIST_STYLE_TYPE_NONE = "none";
-        
+
         public static final String LIST_STYLE_TYPE_CIRCLE = "circle";
 
         public static final String LIST_STYLE_TYPE_DISC = "disc";
@@ -156,7 +156,7 @@ public class HtmlToPDFParser extends DefaultHandler {
             String textDecor = get(StyleTags.TEXT_DECORATION);
             String textColor = get(StyleTags.COLOR);
 
-            float size = Markup.parseLength(fontSize);
+            float size = HtmlUtilities.parseLength(fontSize);
             if (size == 0) {
                 size = -1;
             }
@@ -172,16 +172,16 @@ public class HtmlToPDFParser extends DefaultHandler {
                 style |= Font.getStyleValue(textDecor);
             }
 
-            BaseColor color = Markup.decodeColor(textColor);
+            BaseColor color = HtmlUtilities.decodeColor(textColor);
 
             return FontFactory.getFont(fontFamily, size, style, color);
         }
 
         public Rectangle getMargin() {
-            float top = Markup.parseLength(get(StyleTags.MARGIN_TOP));
-            float bottom = Markup.parseLength(get(StyleTags.MARGIN_BOTTOM));
-            float left = Markup.parseLength(get(StyleTags.MARGIN_LEFT));
-            float right = Markup.parseLength(get(StyleTags.MARGIN_RIGHT));
+            float top = HtmlUtilities.parseLength(get(StyleTags.MARGIN_TOP));
+            float bottom = HtmlUtilities.parseLength(get(StyleTags.MARGIN_BOTTOM));
+            float left = HtmlUtilities.parseLength(get(StyleTags.MARGIN_LEFT));
+            float right = HtmlUtilities.parseLength(get(StyleTags.MARGIN_RIGHT));
 
             return new Rectangle(left, bottom, right, top);
         }
@@ -271,31 +271,31 @@ public class HtmlToPDFParser extends DefaultHandler {
     private HashMap<String, Integer> getDefaultTags() {
         HashMap<String, Integer> tags = new HashMap<String, Integer>();
 
-        tags.put(HtmlTags.TITLE, Element.TITLE);
-        tags.put(HtmlTags.META, Element.MARKED);
+        tags.put("title", Element.TITLE);
+        tags.put("meta", Element.MARKED);
 
-        for (String header : HtmlTags.H) {
+        for (String header : new String[] { HtmlTags.H1, HtmlTags.H2, HtmlTags.H3, HtmlTags.H4, HtmlTags.H5 }) {
             tags.put(header, Element.PARAGRAPH);
         }
-        tags.put(HtmlTags.PARAGRAPH, Element.PARAGRAPH);
+        tags.put(HtmlTags.P, Element.PARAGRAPH);
         tags.put(HtmlTags.DIV, Element.PARAGRAPH);
         tags.put(HtmlTags.SPAN, Element.PHRASE);
-        tags.put(HtmlTags.ORDEREDLIST, Element.LIST);
-        tags.put(HtmlTags.UNORDEREDLIST, Element.LIST);
-        tags.put(HtmlTags.LISTITEM, Element.LISTITEM);
+        tags.put(HtmlTags.OL, Element.LIST);
+        tags.put(HtmlTags.UL, Element.LIST);
+        tags.put(HtmlTags.LI, Element.LISTITEM);
 
-        tags.put(HtmlTags.CHUNK, Element.PHRASE);
+        tags.put(HtmlTags.FONT, Element.PHRASE);
         tags.put(HtmlTags.B, Element.PHRASE);
         tags.put(HtmlTags.I, Element.PHRASE);
         tags.put(HtmlTags.S, Element.PHRASE);
-        tags.put(HtmlTags.NEWLINE, Element.CHUNK);
+        tags.put(HtmlTags.BR, Element.CHUNK);
 
         // remove script and style content from output
-        tags.put(HtmlTags.SCRIPT, -1);
+        tags.put("script", -1);
         tags.put(HtmlTags.STYLE, -1);
 
-        tags.put(HtmlTags.ANCHOR, Element.ANCHOR);
-        tags.put(HtmlTags.IMAGE, Element.IMGTEMPLATE);
+        tags.put(HtmlTags.A, Element.ANCHOR);
+        tags.put(HtmlTags.IMG, Element.IMGTEMPLATE);
 
         return tags;
     }
@@ -308,10 +308,10 @@ public class HtmlToPDFParser extends DefaultHandler {
         styles.put("h3", new Style("font-size: 1.17em; margin-top: 0.5em"));
         styles.put("h4", new Style("font-size: 1.12em; margin-top: 0.5em"));
 
-        styles.put(HtmlTags.ORDEREDLIST, new Style("list-style-type: decimal"));
-        styles.put(HtmlTags.UNORDEREDLIST, new Style("list-style-type: disc"));
+        styles.put(HtmlTags.OL, new Style("list-style-type: decimal"));
+        styles.put(HtmlTags.UL, new Style("list-style-type: disc"));
 
-        styles.put(HtmlTags.ANCHOR, new Style("color: blue; text-decoration: underline"));
+        styles.put(HtmlTags.A, new Style("color: blue; text-decoration: underline"));
 
         styles.put(HtmlTags.B, new Style("font-weight: bold"));
         styles.put(HtmlTags.I, new Style("font-style: italic"));
@@ -331,7 +331,7 @@ public class HtmlToPDFParser extends DefaultHandler {
             Style style = new Style(styleString);
             for (String tag : tags.split(",")) {
                 tag = tag.trim();
-                if(!styles.containsKey(tag)) {
+                if (!styles.containsKey(tag)) {
                     styles.put(tag, style);
                 } else {
                     Style newStyle = new Style(styles.get(tag));
@@ -357,7 +357,7 @@ public class HtmlToPDFParser extends DefaultHandler {
         if (qName.equals(HtmlTags.BODY)) {
             document.open();
         }
-        
+
         if (!tagMap.containsKey(qName)) {
             return;
         }
@@ -366,7 +366,7 @@ public class HtmlToPDFParser extends DefaultHandler {
         if (characterBuffer.length() != 0) {
             String content = characterBuffer.toString();
             characterBuffer = new StringBuilder();
-            
+
             content = content.replaceAll("\\s+", " ");
 
             if (!content.isEmpty() && document.isOpen()) {
@@ -499,7 +499,8 @@ public class HtmlToPDFParser extends DefaultHandler {
 
             String align = attributes.getValue(HtmlTags.ALIGN);
             if (align != null) {
-                paragraph.setAlignment(align);
+                //TODO
+                //paragraph.setAlignment(align);
             }
 
             Rectangle margin = style.getMargin();
@@ -593,12 +594,12 @@ public class HtmlToPDFParser extends DefaultHandler {
                 }
             }
 
-            String anchorRef = attributes.getValue(HtmlTags.REFERENCE);
+            String anchorRef = attributes.getValue(HtmlTags.HREF);
             if (anchorRef != null) {
                 anchor.setReference(anchorRef);
             }
 
-            String anchorName = attributes.getValue(HtmlTags.NAME);
+            String anchorName = attributes.getValue("name");
             if (anchorName != null) {
                 anchor.setName(anchorName);
             }
@@ -608,7 +609,7 @@ public class HtmlToPDFParser extends DefaultHandler {
 
         case Element.CHUNK:
             Chunk chunk;
-            if (qName.equals(HtmlTags.NEWLINE)) {
+            if (qName.equals(HtmlTags.BR)) {
                 chunk = Chunk.NEWLINE;
             } else {
                 chunk = new Chunk(content, font);
@@ -618,7 +619,7 @@ public class HtmlToPDFParser extends DefaultHandler {
 
         case Element.IMGTEMPLATE:
             try {
-                String imageSrc = attributes.getValue(HtmlTags.URL);
+                String imageSrc = attributes.getValue(HtmlTags.SRC);
 
                 Image image;
                 if (baseUrl != null) {
@@ -630,15 +631,15 @@ public class HtmlToPDFParser extends DefaultHandler {
                 String imageWidth = style.get(StyleTags.WIDTH);
                 String imageHeight = style.get(StyleTags.HEIGHT);
                 if (imageWidth != null) {
-                    float width = Markup.parseLength(imageWidth, image.getWidth());
+                    float width = HtmlUtilities.parseLength(imageWidth, image.getWidth());
                     image.scaleAbsoluteWidth(width);
                 }
                 if (imageHeight != null) {
-                    float height = Markup.parseLength(imageHeight, image.getHeight());
+                    float height = HtmlUtilities.parseLength(imageHeight, image.getHeight());
                     image.scaleAbsoluteHeight(height);
                 }
 
-                String imageAlt = attributes.getValue(HtmlTags.ALT);
+                String imageAlt = attributes.getValue("alt");
                 if (imageAlt != null) {
                     image.setAlt(imageAlt);
                 }
