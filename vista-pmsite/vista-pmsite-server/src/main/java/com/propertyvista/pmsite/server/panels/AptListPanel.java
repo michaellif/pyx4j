@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.contact.IAddress;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
+import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 
 public class AptListPanel extends Panel {
@@ -37,16 +38,32 @@ public class AptListPanel extends Panel {
             @Override
             protected void populateItem(ListItem<PropertyDTO> item) {
                 PropertyDTO propInfo = item.getModelObject();
-                String price = "Not Available";
-                if (propInfo.price() != null && propInfo.price().min() != null && propInfo.price().min().getValue() != null) {
-                    price = "From $" + String.valueOf(Math.round(propInfo.price().min().getValue()));
-                }
-                item.add(new Label("price", price));
                 IAddress addr = propInfo.address();
                 String addrFmt = addr.street1().getValue() + " " + addr.street2().getValue() + ", " + addr.city().getValue() + ", "
                         + addr.province().name().getValue() + ", " + addr.postalCode().getValue();
                 item.add(new Label("address", addrFmt));
                 item.add(new Label("description", propInfo.description().getValue()));
+
+                item.add(new ListView<FloorplanPropertyDTO>("types", propInfo.floorplansProperty()) {
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    protected void populateItem(ListItem<FloorplanPropertyDTO> item) {
+                        FloorplanPropertyDTO floorPlan = item.getModelObject();
+                        String type = floorPlan.name().getValue();
+                        if (type != null && type.length() > 0) {
+                            type += " - ";
+                        }
+                        type += floorPlan.bedrooms().getValue() + " Bedroom, " + floorPlan.bathrooms().getValue() + " Bathroom";
+                        String price = "price not available";
+                        Double numPrice = null;
+                        if ((numPrice = floorPlan.price().min().getValue()) != null) {
+                            price = "from $" + String.valueOf(Math.round(numPrice));
+                        }
+                        item.add(new Label("type", type + ", " + price));
+                    }
+                });
+
                 item.add(new ListView<AmenityDTO>("amenities", propInfo.amenities()) {
                     private static final long serialVersionUID = 1L;
 

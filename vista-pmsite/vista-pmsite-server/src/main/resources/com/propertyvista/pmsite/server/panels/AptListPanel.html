@@ -1,10 +1,41 @@
 <wicket:panel
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-
+<style>
+.listing_entry .picture_box {
+	float:left;
+	clear:left;
+	width:100px;
+} 
+.listing_entry .picture_box .picture {
+	width:80px;
+	height:60px;
+	background:#999;
+}
+.listing_entry .picture_box .controls {
+	padding:10px;
+	visibility:hidden;
+}
+.listing_entry:hover {
+	background:#ddd;
+}
+.listing_entry:hover .picture_box .controls {
+	visibility:visible;
+}
+.listing_entry .info_box {
+	float:left;
+	width:450px;
+} 
+</style>
 	<div class="listing_entry" wicket:id="aptListInfo">
-		<div><Label>Price:</label><span wicket:id="price"/></div>
-		<div><Label>Address:</label><span wicket:id="address"/></div>
-		<div><label>Description:</label><span wicket:id="description"/></div>
-		<div><label>Amenities:</label><ul><li wicket:id="amenities"><span wicket:id="amenity"/></li></ul></div>
+		<div class="picture_box">
+			<div class="picture"></div>
+			<div class="controls"><a wicket_id="aptDetails" href="">Details</a></div>
+		</div>
+		<div class="info_box">
+			<div class="address"><Label>Address:</label><span wicket:id="address"/></div>
+			<div class="description"><label>Description:</label><span wicket:id="description"/></div>
+			<div class="types"><Label>Types:</label><ul><li wicket:id="types"><span wicket:id="type"/></li></ul></div>
+			<div class="amenities"><label>Amenities:</label><ul><li wicket:id="amenities"><span wicket:id="amenity"/></li></ul></div>
+		</div>
 	</div>
 </wicket:panel>
