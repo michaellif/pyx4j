@@ -14,6 +14,7 @@
 package com.propertvista.generator;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.propertvista.generator.gdo.ServiceItemTypes;
@@ -49,6 +50,7 @@ public class ServiceCatalogGenerator {
     }
 
     public void createServiceCatalog(ServiceCatalog catalog) {
+        DataGenerator.setRandomSeed(RandomUtil.randomInt(1024));
 
         catalog.services().addAll(createServices(catalog));
         catalog.features().addAll(createFeatures(catalog));
@@ -58,34 +60,19 @@ public class ServiceCatalogGenerator {
         buildEligibilityMatrix(catalog);
     }
 
-    private void buildEligibilityMatrix(ServiceCatalog catalog) {
-        for (Service srv : catalog.services()) {
-            for (int i = 0; i < 2; ++i) {
-                ServiceFeature srvFeature = EntityFactory.create(ServiceFeature.class);
-                srvFeature.feature().set(RandomUtil.random(catalog.features()));
-                srv.features().add(srvFeature);
-            }
-
-            for (int i = 0; i < 2; ++i) {
-                ServiceConcession srvConcession = EntityFactory.create(ServiceConcession.class);
-                srvConcession.concession().set(RandomUtil.random(catalog.concessions()));
-                srv.concessions().add(srvConcession);
-            }
-        }
-    }
-
     public List<Service> createServices(ServiceCatalog catalog) {
-        List<Service> items = new ArrayList<Service>();
-        for (ServiceItemType type : getServiceItemTypes()) {
-            items.add(createService(catalog, type.serviceType().getValue()));
+        List<Service> items = new ArrayList<Service>(Service.Type.values().length);
+        for (Service.Type type : EnumSet.allOf(Service.Type.class)) {
+            items.add(createService(catalog, type));
         }
         return items;
     }
 
     public List<Feature> createFeatures(ServiceCatalog catalog) {
-        List<Feature> items = new ArrayList<Feature>(3);
-        for (int i = 0; i < 3; ++i) {
-            items.add(createFeature(catalog, RandomUtil.random(getFeatureItemTypes()).featureType().getValue()));
+        int count = Math.min(5, Feature.Type.values().length);
+        List<Feature> items = new ArrayList<Feature>(count);
+        for (int i = 0; i < count; ++i) {
+            items.add(createFeature(catalog, RandomUtil.randomEnum(Feature.Type.class)));
         }
         return items;
     }
@@ -96,6 +83,24 @@ public class ServiceCatalogGenerator {
             items.add(createConcession(catalog));
         }
         return items;
+    }
+
+    public void buildEligibilityMatrix(ServiceCatalog catalog) {
+        for (Service srv : catalog.services()) {
+            int count = Math.min(2, catalog.features().size());
+            for (int i = 0; i < count; ++i) {
+                ServiceFeature srvFeature = EntityFactory.create(ServiceFeature.class);
+                srvFeature.feature().set(RandomUtil.random(catalog.features(), "features", count));
+                srv.features().add(srvFeature);
+            }
+
+            count = Math.min(2, catalog.concessions().size());
+            for (int i = 0; i < count; ++i) {
+                ServiceConcession srvConcession = EntityFactory.create(ServiceConcession.class);
+                srvConcession.concession().set(RandomUtil.random(catalog.concessions(), "concessions", count));
+                srv.concessions().add(srvConcession);
+            }
+        }
     }
 
 // internals:    
@@ -109,13 +114,15 @@ public class ServiceCatalogGenerator {
 
         item.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
-        item.items().add(createServiceItem(type));
+        ServiceItem sitem = createServiceItem(type);
+        if (sitem != null) {
+            item.items().add(sitem);
+        }
 
         return item;
     }
 
     private ServiceItem createServiceItem(Service.Type type) {
-        ServiceItem item = EntityFactory.create(ServiceItem.class);
 
         List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
         for (ServiceItemType itemType : getServiceItemTypes()) {
@@ -123,14 +130,19 @@ public class ServiceCatalogGenerator {
                 allowedItemTypes.add(itemType);
             }
         }
-        ServiceItemType selectedItem = RandomUtil.random(allowedItemTypes);
 
-        item.type().set(selectedItem);
-        item.type().name().setValue(selectedItem.getStringView());
-        item.type().serviceType().setValue(selectedItem.serviceType().getValue());
+        ServiceItem item = null;
+        if (allowedItemTypes.size() > 0) {
+            ServiceItemType selectedItem = RandomUtil.random(allowedItemTypes);
 
-        item.price().setValue(500d + RandomUtil.randomInt(500));
-        item.description().setValue(type.toString() + " description here...");
+            item = EntityFactory.create(ServiceItem.class);
+            item.type().set(selectedItem);
+            item.type().name().setValue(selectedItem.getStringView());
+            item.type().serviceType().setValue(selectedItem.serviceType().getValue());
+
+            item.price().setValue(500d + RandomUtil.randomInt(500));
+            item.description().setValue(type.toString() + " description here...");
+        }
 
         return item;
     }
@@ -162,8 +174,9 @@ public class ServiceCatalogGenerator {
             }
         }
 
-        List<ServiceItem> items = new ArrayList<ServiceItem>(4);
-        for (int i = 0; i < 4; ++i) {
+        int count = Math.min(3, allowedItemTypes.size());
+        List<ServiceItem> items = new ArrayList<ServiceItem>(count);
+        for (int i = 0; i < count; ++i) {
             ServiceItem item = EntityFactory.create(ServiceItem.class);
 
             item.type().set(RandomUtil.random(allowedItemTypes));
@@ -183,7 +196,7 @@ public class ServiceCatalogGenerator {
         Concession concession = EntityFactory.create(Concession.class);
         concession.catalog().set(catalog);
 
-        concession.type().setValue(RandomUtil.random(Concession.Type.values()));
+        concession.type().setValue(RandomUtil.random(Concession.Type.values(), "Concession.Type", Concession.Type.values().length));
 
         if (concession.type().getValue() == Concession.Type.percentageOff) {
             concession.value().setValue(10d + RandomUtil.randomInt(90));

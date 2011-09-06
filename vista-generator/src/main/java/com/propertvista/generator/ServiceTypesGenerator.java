@@ -33,6 +33,7 @@ public class ServiceTypesGenerator extends ServiceItemTypes {
         serviceItemTypes.add(createChargeItemType("Regular Short Term Residential Unit", Service.Type.residentialShortTermUnit));
         serviceItemTypes.add(createChargeItemType("Roof Spot", Service.Type.roof));
         serviceItemTypes.add(createChargeItemType("Billboard", Service.Type.sundry));
+        serviceItemTypes.add(createChargeItemType("Garage Spot", Service.Type.garage));
 
         featureItemTypes.add(createChargeItemType("Regular Parking", Feature.Type.parking));
         featureItemTypes.add(createChargeItemType("Wide Parking", Feature.Type.parking));
@@ -52,6 +53,7 @@ public class ServiceTypesGenerator extends ServiceItemTypes {
         featureItemTypes.add(createChargeItemType("Water", Feature.Type.utility));
         featureItemTypes.add(createChargeItemType("Gas", Feature.Type.utility));
         featureItemTypes.add(createChargeItemType("Hydro", Feature.Type.utility));
+        featureItemTypes.add(createChargeItemType("Booking", Feature.Type.booking));
     }
 
     public List<ServiceItemType> getServiceItemTypes() {
