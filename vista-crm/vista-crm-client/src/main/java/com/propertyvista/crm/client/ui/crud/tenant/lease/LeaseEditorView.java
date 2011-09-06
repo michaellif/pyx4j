@@ -35,6 +35,8 @@ public interface LeaseEditorView extends IEditorView<LeaseDTO> {
 
         void setSelectedBuilding(Building selected);
 
+        void setSelectedUnit(AptUnit selected);
+
         void setSelectedService(ServiceItem serviceItem);
 
         void removeTenat(TenantInLease tenant);

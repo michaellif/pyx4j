@@ -21,7 +21,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -62,13 +61,13 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     protected void enhanceDTO(Lease in, LeaseDTO dto, boolean fromList) {
         if (!fromList) {
             // load detached entities:
-            PersistenceServicesFactory.getPersistenceService().retrieve(in.unit());
-            PersistenceServicesFactory.getPersistenceService().retrieve(in.vehicles());
-            PersistenceServicesFactory.getPersistenceService().retrieve(in.pets());
-            PersistenceServicesFactory.getPersistenceService().retrieve(in.documents());
+            Persistence.service().retrieve(in.unit());
+            Persistence.service().retrieve(in.vehicles());
+            Persistence.service().retrieve(in.pets());
+            Persistence.service().retrieve(in.documents());
 
             // fill selected building by unit:
-            PersistenceServicesFactory.getPersistenceService().retrieve(dto.unit().belongsTo());
+            Persistence.service().retrieve(dto.unit().belongsTo());
             dto.selectedBuilding().set(dto.unit().belongsTo());
             syncBuildingServiceCatalog(dto.selectedBuilding());
 
@@ -76,7 +75,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
             dto.tenants().clear();
-            dto.tenants().addAll(PersistenceServicesFactory.getPersistenceService().query(criteria));
+            dto.tenants().addAll(Persistence.service().query(criteria));
         }
     }
 
@@ -96,18 +95,14 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     }
 
     @Override
-    public void syncBuildingServiceCatalog(AsyncCallback<Building> callback, Building building) {
-        callback.onSuccess(syncBuildingServiceCatalog(building));
+    public void syncBuildingServiceCatalog(AsyncCallback<Building> callback, Key entityId) {
+        Building entity = Persistence.service().retrieve(Building.class, entityId);
+        callback.onSuccess(syncBuildingServiceCatalog(entity));
     }
 
     @Override
-    public void removeTenat(AsyncCallback<Boolean> callback, TenantInLease tenant) {
-        // TODO it's possible just nullify lease reference and 
-        // leave it as is for further reusing of garbage collector:
-        tenant.lease().set(null);
-        PersistenceServicesFactory.getPersistenceService().merge(tenant);
-        // or delete entity entirely:
-        PersistenceServicesFactory.getPersistenceService().delete(tenant);
+    public void removeTenat(AsyncCallback<Boolean> callback, Key entityId) {
+        Persistence.service().delete(Persistence.service().retrieve(TenantInLease.class, entityId));
         callback.onSuccess(true);
     }
 
@@ -117,24 +112,24 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         }
 
         // load detached entities:
-        PersistenceServicesFactory.getPersistenceService().retrieve(building.serviceCatalog());
+        Persistence.service().retrieve(building.serviceCatalog());
 
         // update service catalogue double-reference lists:
         EntityQueryCriteria<Service> serviceCriteria = EntityQueryCriteria.create(Service.class);
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), building.serviceCatalog()));
-        List<Service> services = PersistenceServicesFactory.getPersistenceService().query(serviceCriteria);
+        List<Service> services = Persistence.service().query(serviceCriteria);
         building.serviceCatalog().services().clear();
         building.serviceCatalog().services().addAll(services);
 
         EntityQueryCriteria<Feature> featureCriteria = EntityQueryCriteria.create(Feature.class);
         featureCriteria.add(PropertyCriterion.eq(featureCriteria.proto().catalog(), building.serviceCatalog()));
-        List<Feature> features = PersistenceServicesFactory.getPersistenceService().query(featureCriteria);
+        List<Feature> features = Persistence.service().query(featureCriteria);
         building.serviceCatalog().features().clear();
         building.serviceCatalog().features().addAll(features);
 
         EntityQueryCriteria<Concession> concessionCriteria = EntityQueryCriteria.create(Concession.class);
         concessionCriteria.add(PropertyCriterion.eq(concessionCriteria.proto().catalog(), building.serviceCatalog()));
-        List<Concession> concessions = PersistenceServicesFactory.getPersistenceService().query(concessionCriteria);
+        List<Concession> concessions = Persistence.service().query(concessionCriteria);
         building.serviceCatalog().concessions().clear();
         building.serviceCatalog().concessions().addAll(concessions);
 
@@ -143,7 +138,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 
     @Override
     public void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        Lease lease = PersistenceServicesFactory.getPersistenceService().retrieve(dboClass, entityId);
+        Lease lease = Persistence.service().retrieve(dboClass, entityId);
         lease.status().setValue(Lease.Status.ApplicationInProgress);
 
         MasterApplication ma = EntityFactory.create(MasterApplication.class);
@@ -160,11 +155,11 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
                 break;
             }
         }
-        PersistenceServicesFactory.getPersistenceService().merge(ma);
-        PersistenceServicesFactory.getPersistenceService().merge(lease);
+        Persistence.service().merge(ma);
+        Persistence.service().merge(lease);
 
         if (user != null) {
-            PersistenceServicesFactory.getPersistenceService().retrieve(user);
+            Persistence.service().retrieve(user);
             String token = UserAccessUtils.createAccessToken(user, 5);
 
             MailMessage m = new MailMessage();

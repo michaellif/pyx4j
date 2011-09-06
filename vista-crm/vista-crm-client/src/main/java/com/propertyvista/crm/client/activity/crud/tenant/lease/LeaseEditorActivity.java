@@ -114,7 +114,31 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             public void onFailure(Throwable caught) {
                 throw new UnrecoverableClientError(caught);
             }
-        }, selected);
+        }, selected.getPrimaryKey());
+    }
+
+    @Override
+    public void setSelectedUnit(AptUnit selected) {
+        LeaseDTO currentValue = view.getValue();
+        if (currentValue.selectedBuilding().isNull()) {
+            ((LeaseCrudService) service).syncBuildingServiceCatalog(new AsyncCallback<Building>() {
+
+                @Override
+                public void onSuccess(Building building) {
+                    LeaseDTO currentValue = view.getValue();
+                    currentValue.selectedBuilding().set(building);
+
+                    fillserviceItems(currentValue);
+
+                    view.populate(currentValue);
+                }
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    throw new UnrecoverableClientError(caught);
+                }
+            }, selected.belongsTo().getPrimaryKey());
+        }
     }
 
     @Override
@@ -141,7 +165,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             public void onFailure(Throwable caught) {
                 throw new UnrecoverableClientError(caught);
             }
-        }, tenant);
+        }, tenant.getPrimaryKey());
     }
 
     public void populateUnitLister(Building selected) {

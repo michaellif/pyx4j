@@ -40,9 +40,6 @@ public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> impleme
         super(CrmSiteMap.Tenants.Lease.class);
 
         buildingLister = new ListerInternalViewImplBase<Building>(new SelectedBuildingLister(/* readOnly */));
-        unitLister = new ListerInternalViewImplBase<AptUnit>(new SelectedUnitLister(/* readOnly */));
-        tenantLister = new ListerInternalViewImplBase<Tenant>(new SelectTenantLister(/* readOnly */));
-
         buildingLister.getLister().addItemSelectionHandler(new ItemSelectionHandler<Building>() {
             @Override
             public void onSelect(Building selectedItem) {
@@ -50,6 +47,17 @@ public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> impleme
                 enableButtons(true);
             }
         });
+
+        unitLister = new ListerInternalViewImplBase<AptUnit>(new SelectedUnitLister(/* readOnly */));
+        unitLister.getLister().addItemSelectionHandler(new ItemSelectionHandler<AptUnit>() {
+            @Override
+            public void onSelect(AptUnit selectedItem) {
+                ((LeaseEditorView.Presenter) presenter).setSelectedUnit(selectedItem);
+                enableButtons(true);
+            }
+        });
+
+        tenantLister = new ListerInternalViewImplBase<Tenant>(new SelectTenantLister(/* readOnly */));
 
         // create/init/set main form here: 
         CrmEntityForm<LeaseDTO> form = new LeaseEditorForm(this);
