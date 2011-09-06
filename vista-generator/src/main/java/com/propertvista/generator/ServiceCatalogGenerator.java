@@ -27,6 +27,8 @@ import com.propertyvista.domain.financial.offering.DepositType;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ServiceConcession;
+import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
@@ -51,6 +53,26 @@ public class ServiceCatalogGenerator {
         catalog.features().addAll(createFeatures(catalog));
         catalog.concessions().addAll(createConcessions(catalog));
         catalog.includedUtilities().addAll(createIncludedUtilities());
+
+        buildEligibilityMatrix(catalog);
+    }
+
+    private void buildEligibilityMatrix(ServiceCatalog catalog) {
+        for (Service srv : catalog.services()) {
+            ServiceFeature srvFeature = EntityFactory.create(ServiceFeature.class);
+            srvFeature.feature().set(RandomUtil.random(catalog.features()));
+            srv.features().add(srvFeature);
+            srvFeature = EntityFactory.create(ServiceFeature.class);
+            srvFeature.feature().set(RandomUtil.random(catalog.features()));
+            srv.features().add(srvFeature);
+
+            ServiceConcession srvConcession = EntityFactory.create(ServiceConcession.class);
+            srvConcession.concession().set(RandomUtil.random(catalog.concessions()));
+            srv.concessions().add(srvConcession);
+            srvConcession = EntityFactory.create(ServiceConcession.class);
+            srvConcession.concession().set(RandomUtil.random(catalog.concessions()));
+            srv.concessions().add(srvConcession);
+        }
     }
 
     public List<Service> createServices(ServiceCatalog catalog) {

@@ -22,6 +22,7 @@ import com.propertvista.generator.TenantsGenerator;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
@@ -65,17 +66,17 @@ public class PreloadTenants extends BaseVistaDataPreloader {
         // Leads:
         List<Lead> leads = generator.createLeads(config.getNumLeads());
         for (Lead lead : leads) {
-            persist(lead);
+            Persistence.service().persist(lead);
 
             List<Appointment> apps = generator.createAppointments(1 + RandomUtil.randomInt(3));
             for (Appointment app : apps) {
                 app.lead().set(lead);
-                persist(app);
+                Persistence.service().persist(app);
 
                 List<Showing> shws = generator.createShowings(1 + RandomUtil.randomInt(3));
                 for (Showing shw : shws) {
                     shw.appointment().set(app);
-                    persist(shw);
+                    Persistence.service().persist(shw);
                 }
             }
         }
@@ -106,14 +107,14 @@ public class PreloadTenants extends BaseVistaDataPreloader {
         switch (tenant.type().getValue()) {
         case person:
             log.debug("Persisting tenant {}", tenant.person().name());
-            persist(tenant.person());
+            Persistence.service().persist(tenant.person());
             break;
         case company:
             log.debug("Persisting tenant {}", tenant.company().name());
             CmpanyVendorPersistHelper.persistCompany(tenant.company());
             break;
         }
-        persist(tenant);
+        Persistence.service().persist(tenant);
     }
 
 }

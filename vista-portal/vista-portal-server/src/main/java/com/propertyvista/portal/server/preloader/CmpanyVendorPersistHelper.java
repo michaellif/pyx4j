@@ -17,13 +17,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.company.OrganisationContact;
 import com.propertyvista.domain.company.OrganisationContacts;
-import com.propertyvista.domain.contact.Email;
-import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.property.vendor.Maintenance;
 import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.domain.property.vendor.Warranty;
@@ -53,38 +52,36 @@ public class CmpanyVendorPersistHelper extends BaseVistaDataPreloader {
 
     public static void persistCompany(Company company) {
         log.debug("Persisting company");
-        for (Phone phone : company.phones()) {
-            persist(phone);
-        }
-        for (Email email : company.emails()) {
-            persist(email);
-        }
+
+        Persistence.service().persist(company.phones());
+        Persistence.service().persist(company.emails());
+
         for (OrganisationContacts contacts : company.contacts()) {
-            persist(contacts.companyRole());
             for (OrganisationContact contact : contacts.contactList()) {
-                persist(contact.person());
-                persist(contact);
+                Persistence.service().persist(contact.person());
             }
-            persist(contacts);
+            Persistence.service().persist(contacts.companyRole());
+            Persistence.service().persist(contacts.contactList());
         }
-        persist(company);
+        Persistence.service().persist(company.contacts());
+        Persistence.service().persist(company);
     }
 
     public static void persistVendor(Vendor vendor) {
         log.debug("Persisting vendor");
         persistCompany(vendor);
-        persist(vendor);
+        Persistence.service().persist(vendor);
     }
 
     public static void persistWarranty(Warranty warranty) {
         log.debug("Persisting warranty");
         persistVendor(warranty.contractor());
-        persist(warranty);
+        Persistence.service().persist(warranty);
     }
 
     public static void persistMaintenance(Maintenance maintenance) {
         log.debug("Persisting maintenance");
         persistVendor(maintenance.contractor());
-        persist(maintenance);
+        Persistence.service().persist(maintenance);
     }
 }

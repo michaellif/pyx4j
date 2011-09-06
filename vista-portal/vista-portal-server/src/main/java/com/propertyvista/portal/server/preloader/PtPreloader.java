@@ -22,6 +22,7 @@ import com.propertvista.generator.gdo.TenantSummaryGDO;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -150,7 +151,7 @@ public class PtPreloader extends BaseVistaDataPreloader {
         persistFullApplication(summary, generator);
         //List<ApplicationDocument> adocs = PersistenceServicesFactory.getPersistenceService().query(EntityQueryCriteria.create(ApplicationDocument.class));
         //for(ApplicationDocument adoc : adocs) {
-        //    persist(generator.createApplicationDocumentData(adoc.filename().getValue(), adoc.id().getValue()));
+        //    Persistence.service().persist(generator.createApplicationDocumentData(adoc.filename().getValue(), adoc.id().getValue()));
         //}
         StringBuilder b = new StringBuilder();
         b.append("Created 1 potential tenant series of data");
@@ -159,28 +160,28 @@ public class PtPreloader extends BaseVistaDataPreloader {
 
     private void persistFullApplication(ApplicationSummaryGDO summary, PTGenerator generator) {
 
-        PersistenceServicesFactory.getPersistenceService().persist(summary.lease().pets());
+        Persistence.service().persist(summary.lease().pets());
 
         for (Vehicle vh : summary.lease().vehicles()) {
-            persist(vh.province());
-            persist(vh.country());
-            persist(vh.parkingSpot());
-            persist(vh);
+            Persistence.service().persist(vh.province());
+            Persistence.service().persist(vh.country());
+            Persistence.service().persist(vh.parkingSpot());
+            Persistence.service().persist(vh);
         }
 
-        persist(summary.lease());
+        Persistence.service().persist(summary.lease());
 
         for (TenantSummaryGDO tenantSummary : summary.tenants()) {
-            persist(tenantSummary.tenant());
+            Persistence.service().persist(tenantSummary.tenant());
 
             tenantSummary.tenantInLease().lease().set(summary.lease());
-            persist(tenantSummary.tenantInLease());
-            persist(tenantSummary.tenantScreening());
+            Persistence.service().persist(tenantSummary.tenantInLease());
+            Persistence.service().persist(tenantSummary.tenantScreening());
 
             summary.lease().tenants().add(tenantSummary.tenantInLease());
         }
 
-        persist(summary.lease());
+        Persistence.service().persist(summary.lease());
 
         MasterApplication ma = EntityFactory.create(MasterApplication.class);
         ma.lease().set(summary.lease());
@@ -190,14 +191,14 @@ public class PtPreloader extends BaseVistaDataPreloader {
         a.user().set(user);
         ma.applications().add(a);
 
-        persist(ma);
+        Persistence.service().persist(ma);
 
         summary.unitSelection().lease().set(summary.lease());
-        persist(summary.unitSelection());
+        Persistence.service().persist(summary.unitSelection());
 
         //TODO
 //        log.debug("Charges: " + VistaDataPrinter.print(summary.charges()));
-//        persist(summary.charges());
+//        Persistence.service().persist(summary.charges());
 
 //        for (int i = 0; i < summary.tenantFinancials().size(); i++) {
 //            SummaryPotentialTenantFinancial financial = summary.tenantFinancials().get(i);
@@ -209,21 +210,21 @@ public class PtPreloader extends BaseVistaDataPreloader {
 //                for (ApplicationDocument applicationDocument : income.documents()) {
 //                    ApplicationDocumentData applicationDocumentData = generator
 //                            .createApplicationDocumentData(tenant, applicationDocument.filename().getValue());
-//                    persist(applicationDocumentData);
+//                    Persistence.service().persist(applicationDocumentData);
 //                    applicationDocument.dataId().set(applicationDocumentData.id());
-//                    persist(applicationDocument);
+//                    Persistence.service().persist(applicationDocument);
 //                }
 //            }
 //
-//            persist(financial.tenantFinancial());
+//            Persistence.service().persist(financial.tenantFinancial());
 //
 //            if (tenant.notCanadianCitizen().isBooleanTrue()) {
 //                for (ApplicationDocument applicationDocument : tenant.documents()) {
 //                    ApplicationDocumentData applicationDocumentData = generator
 //                            .createApplicationDocumentData(tenant, applicationDocument.filename().getValue());
-//                    persist(applicationDocumentData);
+//                    Persistence.service().persist(applicationDocumentData);
 //                    applicationDocument.dataId().set(applicationDocumentData.id());
-//                    persist(applicationDocument);
+//                    Persistence.service().persist(applicationDocument);
 //                }
 //            }
 //        }

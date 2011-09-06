@@ -38,7 +38,6 @@ import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.marketing.yield.Amenity;
@@ -149,17 +148,9 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
 
             pmcGenerator.createServiceCatalog(catalog);
 
-            for (Service parent : catalog.services()) {
-                Persistence.service().persist(parent.items());
-            }
-            Persistence.service().persist(catalog.services());
-
-            for (Feature parent : catalog.features()) {
-                Persistence.service().persist(parent.items());
-            }
             Persistence.service().persist(catalog.features());
-
             Persistence.service().persist(catalog.concessions());
+            Persistence.service().persist(catalog.services());
 
             Persistence.service().merge(catalog);
             building.serviceCatalog().set(catalog);
