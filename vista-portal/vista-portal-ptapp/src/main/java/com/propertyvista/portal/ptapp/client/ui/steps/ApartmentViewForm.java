@@ -70,11 +70,11 @@ public class ApartmentViewForm extends CEntityForm<UnitInfoDTO> {
         split.getRightPanel().add(inject(proto().beds()), 15);
         split.getRightPanel().add(inject(proto().baths()), 15);
 
-        main.add(new VistaHeaderBar(i18n.tr("Utilities")));
-        main.add(inject(proto().utilities(), createFeaturesFolderEditor()));
+        main.add(new VistaHeaderBar(i18n.tr("Agreed Add-ons")));
+        main.add(inject(proto().agreedAddOns(), createFeaturesFolderEditor()));
 
         main.add(new VistaHeaderBar(i18n.tr("Available Add-ons")));
-        main.add(inject(proto().addOns(), createFeaturesFolderEditor()));
+        main.add(inject(proto().availableAddOns(), createFeaturesFolderEditor()));
 
         main.add(new VistaHeaderBar(i18n.tr("Concession")));
         main.add(inject(proto().concessions(), createConcessionsFolderEditor()));
@@ -101,7 +101,7 @@ public class ApartmentViewForm extends CEntityForm<UnitInfoDTO> {
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().price(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().price(), "7em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().description(), "30em"));
                 return columns;
             }
@@ -123,8 +123,8 @@ public class ApartmentViewForm extends CEntityForm<UnitInfoDTO> {
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().value(), "7em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().term(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().value(), "10em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().condition(), "10em"));
                 return columns;
             }

@@ -44,9 +44,9 @@ public interface UnitInfoDTO extends IEntity {
     IPrimitive<String> area();
 
     // ServiceCatalog stuff:
-    IList<ServiceItem> utilities();
+    IList<ServiceItem> agreedAddOns();
 
-    IList<ServiceItem> addOns();
+    IList<ServiceItem> availableAddOns();
 
     IList<Concession> concessions();
 

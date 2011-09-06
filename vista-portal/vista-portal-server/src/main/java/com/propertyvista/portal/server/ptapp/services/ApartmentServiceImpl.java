@@ -26,12 +26,14 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ServiceConcession;
 import com.propertyvista.domain.financial.offering.ServiceFeature;
+import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.ptapp.dto.UnitInfoDTO;
@@ -75,13 +77,12 @@ public class ApartmentServiceImpl implements ApartmentService {
         unitInfo.area().setValue(lease.unit().info().area().getStringView() + " " + lease.unit().info().areaUnits().getStringView());
 
         // serviceCatalog processing:
-        syncBuildingServiceCatalog(lease.unit().belongsTo());
-        fillserviceItems(unitInfo, lease.unit().belongsTo(), lease);
+        fillServiceItems(unitInfo, lease.unit().belongsTo(), lease);
 
         // Lease data:
         unitInfo.leaseFrom().setValue(lease.leaseFrom().getValue());
         unitInfo.leaseTo().setValue(lease.leaseTo().getValue());
-        unitInfo.unitRent().setValue(lease.unit().financial().unitRent().getValue());
+        unitInfo.unitRent().setValue(lease.serviceAgreement().serviceItem().item().price().getValue());
 
         callback.onSuccess(unitInfo);
     }
@@ -118,33 +119,31 @@ public class ApartmentServiceImpl implements ApartmentService {
         return building.serviceCatalog();
     }
 
-    private void fillserviceItems(UnitInfoDTO entity, Building building, Lease lease) {
+    private void fillServiceItems(UnitInfoDTO entity, Building building, Lease lease) {
 
-        entity.utilities().clear();
-        entity.addOns().clear();
+        entity.agreedAddOns().clear();
+        entity.availableAddOns().clear();
         entity.concessions().clear();
 
-        for (Service service : building.serviceCatalog().services()) {
-            if (service.type().equals(lease.type())) {
-                fillServiceEligibilityData(entity, service, building);
-            }
+        for (ChargeItem utility : lease.serviceAgreement().featureItems()) {
+            entity.agreedAddOns().add(utility.item());
         }
-    }
 
-    private boolean fillServiceEligibilityData(UnitInfoDTO entity, Service service, Building building) {
-
-        // fill related features and concession:
-        for (ServiceFeature feature : service.features()) {
-            if (Feature.Type.addOn.equals(feature.feature().type().getValue())) {
-                entity.addOns().addAll(feature.feature().items());
-            } else {
-                entity.utilities().addAll(feature.feature().items());
-            }
-        }
-        for (ServiceConcession consession : service.concessions()) {
+        for (ServiceConcession consession : lease.serviceAgreement().concessions()) {
             entity.concessions().add(consession.concession());
         }
 
-        return (service != null);
+        syncBuildingServiceCatalog(lease.unit().belongsTo());
+        for (Service service : building.serviceCatalog().services()) {
+            if (service.type().equals(lease.type())) {
+                for (ServiceFeature feature : service.features()) {
+                    for (ServiceItem item : feature.feature().items()) {
+                        if (!entity.agreedAddOns().contains(item)) {
+                            entity.availableAddOns().add(item);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

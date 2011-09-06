@@ -69,10 +69,9 @@ public class ServiceCatalogGenerator {
     }
 
     public List<Feature> createFeatures(ServiceCatalog catalog) {
-        int count = Math.min(5, Feature.Type.values().length);
-        List<Feature> items = new ArrayList<Feature>(count);
-        for (int i = 0; i < count; ++i) {
-            items.add(createFeature(catalog, RandomUtil.randomEnum(Feature.Type.class)));
+        List<Feature> items = new ArrayList<Feature>(Feature.Type.values().length);
+        for (Feature.Type type : EnumSet.allOf(Feature.Type.class)) {
+            items.add(createFeature(catalog, type));
         }
         return items;
     }
