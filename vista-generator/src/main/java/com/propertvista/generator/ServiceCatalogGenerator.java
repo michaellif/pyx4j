@@ -49,6 +49,7 @@ public class ServiceCatalogGenerator {
     }
 
     public void createServiceCatalog(ServiceCatalog catalog) {
+
         catalog.services().addAll(createServices(catalog));
         catalog.features().addAll(createFeatures(catalog));
         catalog.concessions().addAll(createConcessions(catalog));
@@ -59,43 +60,41 @@ public class ServiceCatalogGenerator {
 
     private void buildEligibilityMatrix(ServiceCatalog catalog) {
         for (Service srv : catalog.services()) {
-            ServiceFeature srvFeature = EntityFactory.create(ServiceFeature.class);
-            srvFeature.feature().set(RandomUtil.random(catalog.features()));
-            srv.features().add(srvFeature);
-            srvFeature = EntityFactory.create(ServiceFeature.class);
-            srvFeature.feature().set(RandomUtil.random(catalog.features()));
-            srv.features().add(srvFeature);
+            for (int i = 0; i < 2; ++i) {
+                ServiceFeature srvFeature = EntityFactory.create(ServiceFeature.class);
+                srvFeature.feature().set(RandomUtil.random(catalog.features()));
+                srv.features().add(srvFeature);
+            }
 
-            ServiceConcession srvConcession = EntityFactory.create(ServiceConcession.class);
-            srvConcession.concession().set(RandomUtil.random(catalog.concessions()));
-            srv.concessions().add(srvConcession);
-            srvConcession = EntityFactory.create(ServiceConcession.class);
-            srvConcession.concession().set(RandomUtil.random(catalog.concessions()));
-            srv.concessions().add(srvConcession);
+            for (int i = 0; i < 2; ++i) {
+                ServiceConcession srvConcession = EntityFactory.create(ServiceConcession.class);
+                srvConcession.concession().set(RandomUtil.random(catalog.concessions()));
+                srv.concessions().add(srvConcession);
+            }
         }
     }
 
     public List<Service> createServices(ServiceCatalog catalog) {
-        List<Service> items = new ArrayList<Service>(3);
-        items.add(createService(catalog, RandomUtil.random(getServiceItemTypes()).serviceType().getValue()));
-        items.add(createService(catalog, RandomUtil.random(getServiceItemTypes()).serviceType().getValue()));
-        items.add(createService(catalog, RandomUtil.random(getServiceItemTypes()).serviceType().getValue()));
+        List<Service> items = new ArrayList<Service>();
+        for (ServiceItemType type : getServiceItemTypes()) {
+            items.add(createService(catalog, type.serviceType().getValue()));
+        }
         return items;
     }
 
     public List<Feature> createFeatures(ServiceCatalog catalog) {
         List<Feature> items = new ArrayList<Feature>(3);
-        items.add(createFeature(catalog, RandomUtil.random(getFeatureItemTypes()).featureType().getValue()));
-        items.add(createFeature(catalog, RandomUtil.random(getFeatureItemTypes()).featureType().getValue()));
-        items.add(createFeature(catalog, RandomUtil.random(getFeatureItemTypes()).featureType().getValue()));
+        for (int i = 0; i < 3; ++i) {
+            items.add(createFeature(catalog, RandomUtil.random(getFeatureItemTypes()).featureType().getValue()));
+        }
         return items;
     }
 
     public List<Concession> createConcessions(ServiceCatalog catalog) {
         List<Concession> items = new ArrayList<Concession>(3);
-        items.add(createConcession(catalog));
-        items.add(createConcession(catalog));
-        items.add(createConcession(catalog));
+        for (int i = 0; i < 3; ++i) {
+            items.add(createConcession(catalog));
+        }
         return items;
     }
 
