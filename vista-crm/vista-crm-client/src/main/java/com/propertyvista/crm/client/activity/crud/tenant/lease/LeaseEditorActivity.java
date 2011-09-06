@@ -166,15 +166,15 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         }
 
         // find the service by Service item:
-        Service selecteService = null;
+        Service selectedService = null;
         for (Service service : currentValue.selectedBuilding().serviceCatalog().services()) {
             for (ServiceItem item : service.items()) {
                 if (item.equals(serviceItem)) {
-                    selecteService = service;
+                    selectedService = service;
                     break;
                 }
             }
-            if (selecteService != null) {
+            if (selectedService != null) {
                 break; // found!..
             }
         }
@@ -182,25 +182,27 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         // fill related features and concession:
         currentValue.selectedFeatureItems().clear();
         currentValue.selectedConcesions().clear();
-        if (selecteService != null) {
+        if (selectedService != null) {
             IList<ServiceItemType> includedUtilities = currentValue.selectedBuilding().serviceCatalog().includedUtilities();
-            for (ServiceFeature feature : selecteService.features()) {
-                for (ServiceItem item : feature.feature().items()) {
-                    // filter out utilities included in price for selected building:
-                    if (includedUtilities != null && !includedUtilities.isEmpty()) {
+            boolean hasIncludedUtilities = (includedUtilities != null && !includedUtilities.isEmpty());
+            for (ServiceFeature feature : selectedService.features()) {
+                if (hasIncludedUtilities) {
+                    for (ServiceItem item : feature.feature().items()) {
+                        // filter out utilities included in price for selected building:
                         if (!includedUtilities.contains(item.type())) {
                             currentValue.selectedFeatureItems().add(item);
                         }
-                    } else {
-                        currentValue.selectedFeatureItems().addAll(feature.feature().items());
                     }
+                } else {
+                    currentValue.selectedFeatureItems().addAll(feature.feature().items());
                 }
             }
-            for (ServiceConcession consession : selecteService.concessions()) {
+            // fill concessions:
+            for (ServiceConcession consession : selectedService.concessions()) {
                 currentValue.selectedConcesions().add(consession.concession());
             }
         }
 
-        return (selecteService != null);
+        return (selectedService != null);
     }
 }
