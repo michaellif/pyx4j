@@ -75,7 +75,7 @@ public class DataGenerator {
             }
 
             // Avoid infinite loop
-            for (int i = 0; i <= 10; i++) {
+            for (int i = 0; i <= 1024; i++) {
                 int val = random.nextInt(n);
                 if (!fifo.contains(val)) {
                     fifo.push(val);
@@ -227,6 +227,14 @@ public class DataGenerator {
             return null;
         }
         int index = random().nextInt(list.size());
+        return list.get(index);
+    }
+
+    public static <T> T random(List<T> list, String duplicatesId, int resultsToRemeber) {
+        if (list.size() == 0) {
+            return null;
+        }
+        int index = nextInt(list.size(), duplicatesId, resultsToRemeber);
         return list.get(index);
     }
 
