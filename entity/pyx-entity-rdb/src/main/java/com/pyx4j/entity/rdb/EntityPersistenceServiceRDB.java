@@ -275,8 +275,25 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
+    //TODO remove this function, see proper implementation below
     @Override
     public <T extends IEntity> void persist(Iterable<T> entityIterable) {
+        Connection connection = null;
+        try {
+            if (entityIterable.iterator().hasNext()) {
+                connection = connectionProvider.getConnection();
+                for (T entity : entityIterable) {
+                    persist(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
+                }
+            }
+        } finally {
+            SQLUtils.closeQuietly(connection);
+        }
+    }
+
+    //@Override
+    //TODO Fix this to save collection
+    public <T extends IEntity> void persist_TODO_FIX(Iterable<T> entityIterable) {
         Connection connection = null;
         try {
             if (entityIterable.iterator().hasNext()) {
