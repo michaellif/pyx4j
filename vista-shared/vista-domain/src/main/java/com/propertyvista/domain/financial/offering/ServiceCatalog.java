@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -29,14 +30,18 @@ public interface ServiceCatalog extends IEntity {
     IPrimitive<String> x();
 
     /**
-     * Double links - main dependency in appropriate entity:
+     * Double links - main dependency in appropriate entity:\
+     * 
      * Note: Is not maintained! Should be synchronised if necessary in service!!!
      * (see @link LeaseCrudServiceImpl.syncBuildingServiceCatalog(Building building)).
      */
+    @Transient
     IList<Service> services();
 
+    @Transient
     IList<Feature> features();
 
+    @Transient
     IList<Concession> concessions();
 
     // ----------------------------------------------------

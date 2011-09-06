@@ -51,30 +51,29 @@ public class ServiceCatalogGenerator {
         catalog.features().addAll(createFeatures(catalog));
         catalog.concessions().addAll(createConcessions(catalog));
         catalog.includedUtilities().addAll(createIncludedUtilities());
-
     }
 
     public List<Service> createServices(ServiceCatalog catalog) {
-        List<Service> items = new ArrayList<Service>(4);
-        for (ServiceItemType item : getServiceItemTypes()) {
-            items.add(createService(catalog, item.serviceType().getValue()));
-        }
+        List<Service> items = new ArrayList<Service>(3);
+        items.add(createService(catalog, RandomUtil.random(getServiceItemTypes()).serviceType().getValue()));
+        items.add(createService(catalog, RandomUtil.random(getServiceItemTypes()).serviceType().getValue()));
+        items.add(createService(catalog, RandomUtil.random(getServiceItemTypes()).serviceType().getValue()));
         return items;
     }
 
     public List<Feature> createFeatures(ServiceCatalog catalog) {
-        List<Feature> items = new ArrayList<Feature>(4);
-        for (ServiceItemType item : getFeatureItemTypes()) {
-            items.add(createFeature(catalog, item.featureType().getValue()));
-        }
+        List<Feature> items = new ArrayList<Feature>(3);
+        items.add(createFeature(catalog, RandomUtil.random(getFeatureItemTypes()).featureType().getValue()));
+        items.add(createFeature(catalog, RandomUtil.random(getFeatureItemTypes()).featureType().getValue()));
+        items.add(createFeature(catalog, RandomUtil.random(getFeatureItemTypes()).featureType().getValue()));
         return items;
     }
 
     public List<Concession> createConcessions(ServiceCatalog catalog) {
-        List<Concession> items = new ArrayList<Concession>(4);
-        for (int i = 0; i < 4; ++i) {
-            items.add(createConcession(catalog));
-        }
+        List<Concession> items = new ArrayList<Concession>(3);
+        items.add(createConcession(catalog));
+        items.add(createConcession(catalog));
+        items.add(createConcession(catalog));
         return items;
     }
 
@@ -129,32 +128,34 @@ public class ServiceCatalogGenerator {
         item.isRecurring().setValue(RandomUtil.randomBoolean());
         item.isMandatory().setValue(RandomUtil.randomBoolean());
 
-        for (int i = 0; i < 3; ++i) {
-            item.items().add(createFeatureItem(type));
-        }
+        item.items().addAll(createFeatureItems(type));
 
         return item;
     }
 
-    private ServiceItem createFeatureItem(Feature.Type type) {
-        ServiceItem item = EntityFactory.create(ServiceItem.class);
-
+    private List<ServiceItem> createFeatureItems(Feature.Type type) {
         List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
         for (ServiceItemType itemType : getFeatureItemTypes()) {
             if (type.equals(itemType.featureType().getValue())) {
                 allowedItemTypes.add(itemType);
             }
         }
-        ServiceItemType selectedItem = RandomUtil.random(allowedItemTypes);
 
-        item.type().set(selectedItem);
-        item.type().name().setValue(selectedItem.getStringView());
-        item.type().featureType().setValue(selectedItem.featureType().getValue());
+        List<ServiceItem> items = new ArrayList<ServiceItem>(4);
+        for (int i = 0; i < 4; ++i) {
+            ServiceItem item = EntityFactory.create(ServiceItem.class);
 
-        item.price().setValue(100d + RandomUtil.randomInt(100));
-        item.description().setValue(type.toString() + " description here...");
+            item.type().set(RandomUtil.random(allowedItemTypes));
+            item.type().name().setValue(item.type().getStringView());
+            item.type().featureType().setValue(item.type().featureType().getValue());
 
-        return item;
+            item.price().setValue(100d + RandomUtil.randomInt(100));
+            item.description().setValue(type.toString() + " description here...");
+
+            items.add(item);
+        }
+
+        return items;
     }
 
     private Concession createConcession(ServiceCatalog catalog) {
