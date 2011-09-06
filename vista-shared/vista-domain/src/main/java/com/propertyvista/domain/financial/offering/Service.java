@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-@ToStringFormat("Type: {0}, Name: {1}}")
+@ToStringFormat("Type: {0}, Name: {1}")
 public interface Service extends IEntity {
 
     @Translatable
