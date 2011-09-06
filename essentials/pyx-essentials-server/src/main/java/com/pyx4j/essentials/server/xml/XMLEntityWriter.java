@@ -30,6 +30,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.apache.commons.codec.binary.Base64;
 
 import com.pyx4j.entity.shared.ICollection;
@@ -145,6 +147,9 @@ public class XMLEntityWriter {
 
     private void write(IEntity entity, String name, Map<String, String> attributes, @SuppressWarnings("rawtypes") Class<? extends IObject> declaredObjectClass,
             VerticalGraph graph) {
+        if (entity.getEntityMeta().getAnnotation(XmlTransient.class) != null) {
+            return;
+        }
         Map<String, String> entityAttributes = new LinkedHashMap<String, String>();
         if (attributes != null) {
             entityAttributes.putAll(attributes);
@@ -189,6 +194,9 @@ public class XMLEntityWriter {
                 continue;
             }
             MemberMeta memberMeta = em.getMemberMeta(memberName);
+            if (memberMeta.getAnnotation(XmlTransient.class) != null) {
+                continue;
+            }
             switch (memberMeta.getObjectClassType()) {
             case Entity:
                 IEntity member = (IEntity) entity.getMember(memberName);
