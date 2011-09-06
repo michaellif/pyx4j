@@ -24,6 +24,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -183,11 +185,19 @@ public class XMLEntityParser {
                 String memberName = valueNode.getNodeName();
                 IObject<?> member = entity.getMember(memberName);
                 MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(memberName);
+                if (memberMeta.getAnnotation(XmlTransient.class) != null) {
+                    log.warn("ignore XmlTransient element {}", memberName);
+                    continue;
+                }
                 if (memberMeta.isEntity()) {
                     IEntity concreteInctance = createInstance((Class<IEntity>) memberMeta.getObjectClass(), (Element) valueNode);
                     if (concreteInctance == null) {
                         parse((IEntity) member, (Element) valueNode);
                     } else {
+                        if (concreteInctance.getEntityMeta().getAnnotation(XmlTransient.class) != null) {
+                            log.warn("ignore XmlTransient entoty {}", concreteInctance.getObjectClass().getName());
+                            continue;
+                        }
                         parse(concreteInctance, (Element) valueNode);
                         ((IEntity) member).set(concreteInctance);
                     }
