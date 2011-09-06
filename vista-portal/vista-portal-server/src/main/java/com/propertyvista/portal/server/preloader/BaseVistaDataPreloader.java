@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
@@ -34,7 +34,7 @@ abstract class BaseVistaDataPreloader extends AbstractDataPreloader {
      */
     @Deprecated
     protected static void persist(IEntity entity) {
-        PersistenceServicesFactory.getPersistenceService().persist(entity);
+        Persistence.service().persist(entity);
     }
 
     /**
@@ -42,6 +42,6 @@ abstract class BaseVistaDataPreloader extends AbstractDataPreloader {
      */
     @Deprecated
     protected static void merge(IEntity entity) {
-        PersistenceServicesFactory.getPersistenceService().merge(entity);
+        Persistence.service().merge(entity);
     }
 }

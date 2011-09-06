@@ -26,7 +26,6 @@ import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -96,12 +95,12 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         {
             EntityQueryCriteria<ServiceItemType> criteria = EntityQueryCriteria.create(ServiceItemType.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().type(), ServiceItemType.Type.service));
-            serviceItemTypes.serviceItemTypes.addAll(PersistenceServicesFactory.getPersistenceService().query(criteria));
+            serviceItemTypes.serviceItemTypes.addAll(Persistence.service().query(criteria));
         }
         {
             EntityQueryCriteria<ServiceItemType> criteria = EntityQueryCriteria.create(ServiceItemType.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().type(), ServiceItemType.Type.feature));
-            serviceItemTypes.featureItemTypes.addAll(PersistenceServicesFactory.getPersistenceService().query(criteria));
+            serviceItemTypes.featureItemTypes.addAll(Persistence.service().query(criteria));
         }
 
         ServiceCatalogGenerator pmcGenerator = new ServiceCatalogGenerator(serviceItemTypes);
@@ -151,16 +150,16 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             pmcGenerator.createServiceCatalog(catalog);
 
             for (Service parent : catalog.services()) {
-                PersistenceServicesFactory.getPersistenceService().persist(parent.items());
+                Persistence.service().persist(parent.items());
             }
-            PersistenceServicesFactory.getPersistenceService().persist(catalog.services());
+            Persistence.service().persist(catalog.services());
 
             for (Feature parent : catalog.features()) {
-                PersistenceServicesFactory.getPersistenceService().persist(parent.items());
+                Persistence.service().persist(parent.items());
             }
-            PersistenceServicesFactory.getPersistenceService().persist(catalog.features());
+            Persistence.service().persist(catalog.features());
 
-            PersistenceServicesFactory.getPersistenceService().persist(catalog.concessions());
+            Persistence.service().persist(catalog.concessions());
 
             Persistence.service().merge(catalog);
             building.serviceCatalog().set(catalog);
@@ -320,7 +319,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         StringBuilder sb = new StringBuilder();
         sb.append("\n\n");
 
-        List<Parking> parkings = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Parking>(Parking.class));
+        List<Parking> parkings = Persistence.service().query(new EntityQueryCriteria<Parking>(Parking.class));
         sb.append(parkings.size()).append(" parkings\n");
         for (Parking parking : parkings) {
             sb.append("\t");
@@ -328,7 +327,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             sb.append("\n");
         }
 
-        List<Locker> lockers = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Locker>(Locker.class));
+        List<Locker> lockers = Persistence.service().query(new EntityQueryCriteria<Locker>(Locker.class));
         sb.append(lockers.size()).append(" lockers\n");
         for (Locker locker : lockers) {
             sb.append("\t");
@@ -336,7 +335,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             sb.append("\n");
         }
 
-        List<Floorplan> floorplans = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Floorplan>(Floorplan.class));
+        List<Floorplan> floorplans = Persistence.service().query(new EntityQueryCriteria<Floorplan>(Floorplan.class));
         sb.append(floorplans.size()).append(" floorplans\n");
         for (Floorplan floorplan : floorplans) {
             sb.append("\t");
@@ -351,10 +350,10 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         // floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().propertyCode(),
         // DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE));
         // Floorplan floorplan =
-        // PersistenceServicesFactory.getPersistenceService().retrieve(floorplanCriteria);
+        // Persistence.service().retrieve(floorplanCriteria);
         // sb.append("Floorplan: ").append(floorplan);
 
-        List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Building>(Building.class));
+        List<Building> buildings = Persistence.service().query(new EntityQueryCriteria<Building>(Building.class));
         sb.append("\n\nLoaded ").append(buildings.size()).append(" buildings\n\n");
         for (Building building : buildings) {
             // b.append(building.getStringView());
@@ -383,7 +382,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             // get the units
             EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
             criteria.add(new PropertyCriterion(criteria.proto().belongsTo(), Restriction.EQUAL, building.getPrimaryKey()));
-            List<AptUnit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
+            List<AptUnit> units = Persistence.service().query(criteria);
             sb.append("\tBuilding has ").append(units.size()).append(" units\n");
 
             for (AptUnit unit : units) {
