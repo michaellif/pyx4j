@@ -56,12 +56,10 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CTextField;
-import com.pyx4j.forms.client.ui.ListSelectionPopup;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.ListerBase.ItemSelectionHandler;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.common.client.ui.components.CEmailLabel;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -75,8 +73,8 @@ import com.propertyvista.crm.client.ui.components.CrmBoxFolderDecorator;
 import com.propertyvista.crm.client.ui.components.CrmBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
-import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
+import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -899,15 +897,27 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
                 });
 
-                for (ServiceItem item : getValue().selectedFeatureItems()) {
-                    list.addItem(item.getStringView());
-                    list.setValue(list.getItemCount() - 1, item.id().toString());
+                List<ServiceItem> alreadySelected = new ArrayList<ServiceItem>();
+                for (ChargeItem item : getValue().serviceAgreement().featureItems()) {
+                    alreadySelected.add(item.item());
                 }
-                list.setVisibleItemCount(8);
-                list.setWidth("100%");
-                return list.asWidget();
+
+                for (ServiceItem item : getValue().selectedFeatureItems()) {
+                    if (!alreadySelected.contains(item)) {
+                        list.addItem(item.getStringView());
+                        list.setValue(list.getItemCount() - 1, item.id().toString());
+                    }
+                }
+
+                if (list.getItemCount() > 0) {
+                    list.setVisibleItemCount(8);
+                    list.setWidth("100%");
+                    return list.asWidget();
+                } else {
+                    return new HTML(i18n.tr("All features have been selected already!.."));
+                }
             } else {
-                return new HTML(i18n.tr("There are no features!.."));
+                return new HTML(i18n.tr("There are no features for this service!.."));
             }
         }
 
@@ -964,15 +974,27 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
                 });
 
-                for (Concession item : getValue().selectedConcesions()) {
-                    list.addItem(item.getStringView());
-                    list.setValue(list.getItemCount() - 1, item.id().toString());
+                List<Concession> alreadySelected = new ArrayList<Concession>();
+                for (ServiceConcession item : getValue().serviceAgreement().concessions()) {
+                    alreadySelected.add(item.concession());
                 }
-                list.setVisibleItemCount(8);
-                list.setWidth("100%");
-                return list.asWidget();
+
+                for (Concession item : getValue().selectedConcesions()) {
+                    if (!alreadySelected.contains(item)) {
+                        list.addItem(item.getStringView());
+                        list.setValue(list.getItemCount() - 1, item.id().toString());
+                    }
+                }
+
+                if (list.getItemCount() > 0) {
+                    list.setVisibleItemCount(8);
+                    list.setWidth("100%");
+                    return list.asWidget();
+                } else {
+                    return new HTML(i18n.tr("All concessions have been selected already!.."));
+                }
             } else {
-                return new HTML(i18n.tr("There are no concessions!.."));
+                return new HTML(i18n.tr("There are no concessions for this service!.."));
             }
         }
 
@@ -1003,35 +1025,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         protected List<Concession> getSelectedItems() {
             return selectedItems;
-        }
-    }
-
-    private class SelectConcessionBox2 extends ListSelectionPopup<Concession> {
-
-        public SelectConcessionBox2() {
-            super("Select Concessions", new OkCancelOption() {
-                @Override
-                public boolean onClickOk() {
-                    return true;
-                }
-
-                @Override
-                public boolean onClickCancel() {
-                    return true;
-                }
-            });
-
-            setOptionalItems(getValue().selectedConcesions());
-            setSize("500px", "100px");
-        }
-
-        @Override
-        public String getItemName(Concession item) {
-            if (item == null) {
-                return "- NULL -";
-            } else {
-                return item.getStringView();
-            }
         }
     }
 }
