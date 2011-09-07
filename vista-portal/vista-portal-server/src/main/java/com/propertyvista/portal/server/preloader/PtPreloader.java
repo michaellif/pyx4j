@@ -42,10 +42,10 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.portal.domain.ptapp.Charges;
+import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.TenantChargeList;
 import com.propertyvista.portal.rpc.ptapp.VistaDataPrinter;
-import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.server.ptapp.services.ApplicationDebug;
 import com.propertyvista.server.common.ptapp.ApplicationMgr;
 import com.propertyvista.server.domain.ApplicationDocumentData;
@@ -88,7 +88,7 @@ public class PtPreloader extends BaseVistaDataPreloader {
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Charges.class, ChargeLineList.class, ChargeLine.class, TenantChargeList.class, TenantCharge.class, Application.class, Pet.class,
-                    EmergencyContact.class, SummaryDTO.class, PriorAddress.class, ApplicationDocumentData.class);
+                    EmergencyContact.class, Summary.class, PriorAddress.class, ApplicationDocumentData.class);
         } else {
             return "This is production";
         }
