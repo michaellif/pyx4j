@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -43,18 +43,17 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
         User currentUser = PtAppContext.getCurrentUser();
         log.debug("Asking for current application for current user {}", currentUser);
 
-        Lease lease;
         Tenant tenant;
         {
             EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
-            tenant = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+            tenant = Persistence.service().retrieve(criteria);
             if (tenant == null) {
                 tenant = EntityFactory.create(Tenant.class);
                 tenant.user().set(currentUser);
                 tenant.type().setValue(Tenant.Type.person);
                 tenant.person().email().address().set(currentUser.email());
-                PersistenceServicesFactory.getPersistenceService().persist(tenant);
+                Persistence.service().persist(tenant);
             }
         }
 
@@ -62,21 +61,22 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
         {
             EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
-            tenantInLease = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+            tenantInLease = Persistence.service().retrieve(criteria);
             if (tenantInLease == null) {
                 throw new Error("Invalid application");
             }
         }
-        lease = PersistenceServicesFactory.getPersistenceService().retrieve(Lease.class, tenantInLease.lease().getPrimaryKey());
 
         Application application;
         {
             EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
-            application = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+            application = Persistence.service().retrieve(criteria);
         }
 
         PtAppContext.setCurrentUserApplication(application);
+
+        Lease lease = Persistence.service().retrieve(Lease.class, tenantInLease.lease().getPrimaryKey());
         PtAppContext.setCurrentLease(lease);
 
         log.debug("Application {}", application);
@@ -85,8 +85,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
 
     @Override
     public void getApplicationProgress(AsyncCallback<Application> callback, ApplicationWizardStep currentStep, ApplicationWizardSubstep currentSubstep) {
-        Application progress = PersistenceServicesFactory.getPersistenceService().retrieve(Application.class,
-                PtAppContext.getCurrentUserApplicationPrimaryKey());
+        Application progress = Persistence.service().retrieve(Application.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
 
         if (currentStep != null) {
             int idx = progress.steps().indexOf(currentStep);
@@ -103,14 +102,14 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
                 }
                 currentSubstep = currentStep.substeps().get(idxSub);
                 currentSubstep.status().setValue(ApplicationWizardStep.Status.complete);
-                PersistenceServicesFactory.getPersistenceService().persist(currentSubstep);
+                Persistence.service().persist(currentSubstep);
                 // navigate to next invalid or notVisited step
                 idxSub++;
                 selectSubStep(currentStep, idxSub);
             }
 
             currentStep.status().setValue(getStepAggeratedStatus(currentStep));
-            PersistenceServicesFactory.getPersistenceService().persist(currentStep);
+            Persistence.service().persist(currentStep);
             boolean currentStepCompleated = (currentStep.status().getValue() == ApplicationWizardStep.Status.complete);
 
             if (currentStepCompleated) {
@@ -123,7 +122,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
                     case latest:
                     case notVisited:
                         nextStep.status().setValue(ApplicationWizardStep.Status.latest);
-                        PersistenceServicesFactory.getPersistenceService().persist(nextStep);
+                        Persistence.service().persist(nextStep);
                         currentStep = nextStep;
                         break iterOverSteps;
                     case invalid:
@@ -149,7 +148,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
             case latest:
             case notVisited:
                 nextSubstep.status().setValue(ApplicationWizardStep.Status.latest);
-                PersistenceServicesFactory.getPersistenceService().persist(nextSubstep);
+                Persistence.service().persist(nextSubstep);
                 return true;
             case invalid:
                 return true;

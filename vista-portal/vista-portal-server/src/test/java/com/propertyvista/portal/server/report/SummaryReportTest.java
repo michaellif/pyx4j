@@ -38,7 +38,7 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.tenant.ptapp.Application;
-import com.propertyvista.portal.domain.ptapp.Summary;
+import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.portal.server.ptapp.services.SummaryServiceImpl;
 
@@ -70,7 +70,7 @@ public class SummaryReportTest extends ReportsTestBase {
         TestLifecycle.tearDown();
     }
 
-    private static Summary retreiveSummary() {
+    private static SummaryDTO retreiveSummary() {
         EntityQueryCriteria<User> userCriteria = EntityQueryCriteria.create(User.class);
         userCriteria.add(PropertyCriterion.eq(userCriteria.proto().name(), DemoData.PRELOADED_USERNAME));
         User devUser = PersistenceServicesFactory.getPersistenceService().retrieve(userCriteria);
@@ -81,11 +81,11 @@ public class SummaryReportTest extends ReportsTestBase {
         Application application = PersistenceServicesFactory.getPersistenceService().retrieve(applicationCriteria);
         Assert.assertNotNull("devUser application", application);
 
-        EntityQueryCriteria<Summary> criteria = EntityQueryCriteria.create(Summary.class);
+        EntityQueryCriteria<SummaryDTO> criteria = EntityQueryCriteria.create(SummaryDTO.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-        Summary summary = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        SummaryDTO summary = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
         if (summary == null) {
-            summary = EntityFactory.create(Summary.class);
+            summary = EntityFactory.create(SummaryDTO.class);
             summary.application().set(application);
         }
         new SummaryServiceImpl().loadTransientData(summary);
@@ -94,10 +94,10 @@ public class SummaryReportTest extends ReportsTestBase {
 
     }
 
-    private static Summary retreiveSummaryTodo() throws IOException {
+    private static SummaryDTO retreiveSummaryTodo() throws IOException {
         PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, PreloadConfig.createTest());
         // Application application = generator.createApplication(PTGenerator.createUser());
-        Summary summary = null;//TODOgenerator.createSummary(application, null);
+        SummaryDTO summary = null;//TODOgenerator.createSummary(application, null);
         return summary;
     }
 

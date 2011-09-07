@@ -40,12 +40,12 @@ import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantInfoDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantListDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantInApplicationDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantListDTO;
 import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 

@@ -49,10 +49,10 @@ import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.tenant.TenantIn;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.util.ValidationUtils;
-import com.propertyvista.portal.domain.ptapp.dto.TenantInApplicationDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantListDTO;
 import com.propertyvista.portal.ptapp.client.ui.components.PtAppEntityFolder;
 import com.propertyvista.portal.ptapp.client.ui.components.PtAppTableFolderItemDecorator;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantListDTO;
 
 public class TenantsViewForm extends CEntityForm<TenantListDTO> {
 

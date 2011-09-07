@@ -14,8 +14,8 @@
 package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepView;
-import com.propertyvista.portal.rpc.ptapp.dto.UnitInfoDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
-public interface ApartmentView extends WizardStepView<UnitInfoDTO, ApartmentViewPresenter> {
+public interface ApartmentView extends WizardStepView<ApartmentInfoDTO, ApartmentViewPresenter> {
 
 }

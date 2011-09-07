@@ -28,9 +28,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
-import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
 import com.propertyvista.portal.domain.dto.MediaDTO;
@@ -61,38 +59,6 @@ public class Converter {
             amntDTO.name().setValue(amenity.getStringView());
             to.amenities().add(amntDTO);
         }
-
-        return to;
-    }
-
-    public static AptUnitDTO convert(AptUnit from) {
-        AptUnitDTO to = EntityFactory.create(AptUnitDTO.class);
-
-        to.id().set(from.id());
-
-        // iEntity
-        to.floorplan().set(convert(from.floorplan()));
-// TODO get consession from list of Features here:        
-//        to.concessions().setValue(from.marketing().floorplan().concessions().getStringView());
-
-        //TODO is it necessary to pull out all unit details here (IList<AptUnitItem>)?
-        // it seems that it should be different details or somehow converted... 
-        to.infoDetails().setValue("Unit details here...");
-
-        //TODO VS
-        //to.status().set(from.status());
-
-        // primitives
-        to.area().setValue(from.info().area().getValue());
-        to.bathrooms().setValue(from.info()._bathrooms().getValue());
-        to.bedrooms().set(from.info()._bedrooms());
-
-        to.unitRent().set(from.financial().unitRent());
-
-// TODO calculate somehow (!?) from current Unit data those values:          
-        to.requiredDeposit().setValue(-77.0);
-
-        to.availableForRent().set(from.availableForRent());
 
         return to;
     }

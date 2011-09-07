@@ -38,14 +38,14 @@ import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.ptapp.client.ui.components.PtAppEntityFolder;
 import com.propertyvista.portal.ptapp.client.ui.components.PtAppTableFolderDecorator;
-import com.propertyvista.portal.rpc.ptapp.dto.UnitInfoDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
-public class ApartmentViewForm extends CEntityForm<UnitInfoDTO> {
+public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(ApartmentViewForm.class);
 
     public ApartmentViewForm() {
-        super(UnitInfoDTO.class, new VistaViewersComponentFactory());
+        super(ApartmentInfoDTO.class, new VistaViewersComponentFactory());
     }
 
     @Override

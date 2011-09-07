@@ -17,9 +17,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.portal.domain.ptapp.Summary;
+import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 
-public interface SummaryService extends AbstractWizardService<Summary> {
+public interface SummaryService extends AbstractWizardService<SummaryDTO> {
 
     public void downloadSummary(AsyncCallback<String> callback, VoidSerializable none);
 

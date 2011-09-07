@@ -21,25 +21,24 @@ import com.pyx4j.essentials.server.dev.DataDump;
 
 import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.tenant.ptapp.Application;
-import com.propertyvista.portal.domain.ptapp.Summary;
-import com.propertyvista.portal.domain.util.VistaDataPrinter;
+import com.propertyvista.portal.rpc.ptapp.VistaDataPrinter;
+import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 
 public class ApplicationDebug {
 
     public static void dumpApplicationSummary(Application application) {
-        Summary summary = retrieveApplicationSummary(application);
+        SummaryDTO summary = retrieveApplicationSummary(application);
         DataDump.dump("app-summary", summary);
     }
 
     public static String printApplicationSummary(Application application) {
-        Summary summary = retrieveApplicationSummary(application);
+        SummaryDTO summary = retrieveApplicationSummary(application);
         return VistaDataPrinter.print(summary).toString();
     }
 
-    public static Summary retrieveApplicationSummary(Application application) {
-        Summary summary = EntityFactory.create(Summary.class);
+    public static SummaryDTO retrieveApplicationSummary(Application application) {
+        SummaryDTO summary = EntityFactory.create(SummaryDTO.class);
         summary.application().set(application);
-        retrieveApplicationEntity(summary.unitSelection(), application);
         retrieveApplicationEntity(summary.tenantList(), application);
         //retrieveApplicationEntity(summary.pets(), application);
         retrieveApplicationEntity(summary.charges(), application);

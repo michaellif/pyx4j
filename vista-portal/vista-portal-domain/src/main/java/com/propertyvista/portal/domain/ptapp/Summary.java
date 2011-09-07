@@ -7,49 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-21
- * @author jim
+ * Created on Sep 7, 2011
+ * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.portal.domain.ptapp;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.IBoundToApplication;
-import com.propertyvista.portal.domain.dto.AptUnitDTO;
-import com.propertyvista.portal.domain.ptapp.dto.AddOnsDTO;
 
 public interface Summary extends IEntity, IBoundToApplication {
-
-    @Transient
-    UnitSelection unitSelection();
-
-    @Transient
-    AptUnitDTO selectedUnit();
-
-    @Transient
-    Tenant tenantList();
-
-    @Transient
-    Tenant tenantsWithInfo();
-
-    @Transient
-    @EmbeddedEntity
-    IList<SummaryPotentialTenantFinancial> tenantFinancials();
-
-    @Transient
-    @EmbeddedEntity
-    AddOnsDTO addons();
-
-    @Transient
-    @EmbeddedEntity
-    Charges charges();
 
     LeaseTerms leaseTerms();
 

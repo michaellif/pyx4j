@@ -29,8 +29,8 @@ import com.propertyvista.portal.ptapp.client.ui.CaptionViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.MainNavigViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.PtAppSiteView;
 import com.propertyvista.portal.ptapp.client.ui.SecondNavigViewImpl;
-import com.propertyvista.portal.ptapp.client.ui.steps.PaymentViewForm;
-import com.propertyvista.portal.ptapp.client.ui.steps.SummaryViewForm;
+import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentViewForm;
+import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryViewForm;
 
 public abstract class VistaTheme extends com.propertyvista.common.client.theme.VistaTheme {
 

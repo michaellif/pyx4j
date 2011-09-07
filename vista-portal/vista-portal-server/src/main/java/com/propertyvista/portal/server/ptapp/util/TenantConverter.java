@@ -18,9 +18,9 @@ import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
-import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantInfoDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantInApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 
 public class TenantConverter {
 

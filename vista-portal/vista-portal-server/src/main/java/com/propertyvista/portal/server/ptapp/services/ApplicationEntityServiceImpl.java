@@ -48,7 +48,7 @@ public class ApplicationEntityServiceImpl extends EntityServicesImpl {
         secureSave(entity);
     }
 
-    protected <T extends IBoundToApplication> T findApplicationEntity(Class<T> clazz) {
+    protected <T extends IBoundToApplication> T retrieveApplicationEntity(Class<T> clazz) {
         EntityQueryCriteria<T> criteria = EntityQueryCriteria.create(clazz);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
         return secureRetrieve(criteria);
@@ -64,5 +64,4 @@ public class ApplicationEntityServiceImpl extends EntityServicesImpl {
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
         entity.set(secureRetrieve(criteria));
     }
-
 }

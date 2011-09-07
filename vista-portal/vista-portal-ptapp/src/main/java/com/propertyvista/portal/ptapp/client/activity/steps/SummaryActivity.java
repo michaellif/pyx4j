@@ -18,16 +18,16 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.domain.ptapp.Summary;
-import com.propertyvista.portal.ptapp.client.ui.steps.SummaryView;
-import com.propertyvista.portal.ptapp.client.ui.steps.SummaryViewPresenter;
+import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryView;
+import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryViewPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
+import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 
-public class SummaryActivity extends WizardStepActivity<Summary, SummaryViewPresenter> implements SummaryViewPresenter {
+public class SummaryActivity extends WizardStepActivity<SummaryDTO, SummaryViewPresenter> implements SummaryViewPresenter {
 
     public SummaryActivity(AppPlace place) {
-        super((SummaryView) WizardStepsViewFactory.instance(SummaryView.class), Summary.class, (SummaryService) GWT.create(SummaryService.class));
+        super((SummaryView) WizardStepsViewFactory.instance(SummaryView.class), SummaryDTO.class, (SummaryService) GWT.create(SummaryService.class));
         getView().setPresenter(this);
         withPlace(place);
     }

@@ -17,10 +17,10 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.domain.ptapp.dto.AddOnsDTO;
-import com.propertyvista.portal.ptapp.client.ui.steps.AddonsView;
-import com.propertyvista.portal.ptapp.client.ui.steps.AddonsViewPresenter;
+import com.propertyvista.portal.ptapp.client.ui.steps.addons.AddonsView;
+import com.propertyvista.portal.ptapp.client.ui.steps.addons.AddonsViewPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
+import com.propertyvista.portal.rpc.ptapp.dto.AddOnsDTO;
 import com.propertyvista.portal.rpc.ptapp.services.AddonsService;
 
 public class AddonsActivity extends WizardStepActivity<AddOnsDTO, AddonsViewPresenter> implements AddonsViewPresenter {

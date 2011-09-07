@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.rpc.ptapp.services;
 
-import com.propertyvista.portal.rpc.ptapp.dto.UnitInfoDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
-public interface ApartmentService extends AbstractWizardService<UnitInfoDTO> {
+public interface ApartmentService extends AbstractWizardService<ApartmentInfoDTO> {
 
 }

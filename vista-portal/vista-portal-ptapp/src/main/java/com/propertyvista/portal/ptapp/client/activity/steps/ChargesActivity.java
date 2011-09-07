@@ -18,8 +18,8 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.ptapp.client.ui.steps.ChargesView;
-import com.propertyvista.portal.ptapp.client.ui.steps.ChargesViewPresenter;
+import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesView;
+import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesViewPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
 import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
 

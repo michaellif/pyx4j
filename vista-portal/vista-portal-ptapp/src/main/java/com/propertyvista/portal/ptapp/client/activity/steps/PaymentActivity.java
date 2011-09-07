@@ -18,8 +18,8 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.domain.ptapp.PaymentInfo;
-import com.propertyvista.portal.ptapp.client.ui.steps.PaymentView;
-import com.propertyvista.portal.ptapp.client.ui.steps.PaymentView.PaymentPresenter;
+import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentView;
+import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentView.PaymentPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
 

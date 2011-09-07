@@ -17,10 +17,10 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.domain.ptapp.dto.TenantListDTO;
 import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsView;
 import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsViewPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 
 public class TenantsActivity extends WizardStepActivity<TenantListDTO, TenantsViewPresenter> implements TenantsViewPresenter {

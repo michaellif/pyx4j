@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.ptapp.client.ui.steps.CompletionView;
+import com.propertyvista.portal.ptapp.client.ui.steps.completion.CompletionView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
 
 public class CompletionActivity extends AbstractActivity implements CompletionView.Presenter {

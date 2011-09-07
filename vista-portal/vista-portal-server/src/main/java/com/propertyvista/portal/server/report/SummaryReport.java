@@ -19,18 +19,18 @@ import java.util.Map;
 
 import com.pyx4j.entity.report.JasperReportModel;
 
-import com.propertyvista.portal.domain.ptapp.Summary;
+import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 
 public class SummaryReport {
 
     public static final String title = "Summary Report";
 
-    public static JasperReportModel createModel(Summary summary) {
+    public static JasperReportModel createModel(SummaryDTO summary) {
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("ReportTitle", title);
         parameters.put("LEASE_PRICE", "Pricing and Availability...");
         parameters.put("LEASE_TERMS", "Lease Terms text...");
         parameters.put("DIGITAL_SIG", "Digital Signature...");
-        return new JasperReportModel(SummaryReport.class.getPackage().getName() + ".Summary", Arrays.asList(new Summary[] { summary }), parameters);
+        return new JasperReportModel(SummaryReport.class.getPackage().getName() + ".Summary", Arrays.asList(new SummaryDTO[] { summary }), parameters);
     }
 }

@@ -26,5 +26,4 @@ public interface Application extends IEntity, IUserEntity {
     IList<ApplicationWizardStep> steps();
 
     IPrimitive<Boolean> submited();
-
 }

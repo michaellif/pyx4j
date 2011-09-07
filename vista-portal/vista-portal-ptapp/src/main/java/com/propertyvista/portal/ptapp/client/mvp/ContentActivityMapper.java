@@ -53,14 +53,14 @@ public class ContentActivityMapper implements ActivityMapper {
 // WizardSteps:
         } else if (place instanceof PtSiteMap.Apartment) {
             return new ApartmentActivity((AppPlace) place);
+        } else if (place instanceof PtSiteMap.Addons) {
+            return new AddonsActivity((AppPlace) place);
         } else if (place instanceof PtSiteMap.Tenants) {
             return new TenantsActivity((AppPlace) place);
         } else if (place instanceof PtSiteMap.Info) {
             return new InfoActivity((AppPlace) place);
         } else if (place instanceof PtSiteMap.Financial) {
             return new FinancialActivity((AppPlace) place);
-        } else if (place instanceof PtSiteMap.Addons) {
-            return new AddonsActivity((AppPlace) place);
         } else if (place instanceof PtSiteMap.Charges) {
             return new ChargesActivity((AppPlace) place);
         } else if (place instanceof PtSiteMap.Summary) {

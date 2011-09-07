@@ -36,7 +36,7 @@ import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.rpc.ptapp.dto.UnitInfoDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
@@ -45,7 +45,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     private final static Logger log = LoggerFactory.getLogger(ApartmentServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<UnitInfoDTO> callback, Key tenantId) {
+    public void retrieve(AsyncCallback<ApartmentInfoDTO> callback, Key tenantId) {
 
         Lease lease = PtAppContext.getCurrentLease();
         if (!PersistenceServicesFactory.getPersistenceService().retrieve(lease)) {
@@ -62,7 +62,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
 
         // fill DTO:
-        UnitInfoDTO unitInfo = EntityFactory.create(UnitInfoDTO.class);
+        ApartmentInfoDTO unitInfo = EntityFactory.create(ApartmentInfoDTO.class);
         unitInfo.name().setValue(lease.unit().floorplan().name().getValue());
         unitInfo.beds().setValue(lease.unit().floorplan().bedrooms().getStringView());
         if (lease.unit().floorplan().dens().getValue() > 0) {
@@ -88,7 +88,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
-    public void save(AsyncCallback<UnitInfoDTO> callback, UnitInfoDTO editableEntity) {
+    public void save(AsyncCallback<ApartmentInfoDTO> callback, ApartmentInfoDTO editableEntity) {
         callback.onSuccess(null); // this PT App. step is read-only!..
     }
 
@@ -119,7 +119,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         return building.serviceCatalog();
     }
 
-    private void fillServiceItems(UnitInfoDTO entity, Building building, Lease lease) {
+    private void fillServiceItems(ApartmentInfoDTO entity, Building building, Lease lease) {
 
         entity.agreedAddOns().clear();
         entity.availableAddOns().clear();

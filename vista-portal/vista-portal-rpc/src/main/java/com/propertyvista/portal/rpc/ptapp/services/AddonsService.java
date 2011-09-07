@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.rpc.ptapp.services;
 
-import com.propertyvista.portal.domain.ptapp.dto.AddOnsDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.AddOnsDTO;
 
 public interface AddonsService extends AbstractWizardService<AddOnsDTO> {
 

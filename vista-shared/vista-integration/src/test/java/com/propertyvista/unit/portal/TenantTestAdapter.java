@@ -19,7 +19,7 @@ import com.propertvista.generator.gdo.TenantSummaryGDO;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.portal.domain.ptapp.dto.TenantListDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantListDTO;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter.TenantEditorConverter;
 

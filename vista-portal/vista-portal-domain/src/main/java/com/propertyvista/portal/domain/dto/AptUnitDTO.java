@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.domain.dto;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
@@ -26,20 +27,13 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 
 @Transient
+@Deprecated
 public interface AptUnitDTO extends IEntity {
 
-//    IPrimitive<Integer> floor();
+    IPrimitive<Key> selectedUnitId();
 
     @Caption(name = "Type")
     IPrimitive<String> unitType();
-
-//
-//    /**
-//     * Number of the unit
-//     */
-//    IPrimitive<String> suiteNumber();
-
-    //Building building();
 
     /**
      * Square ft. size of unit
@@ -66,12 +60,6 @@ public interface AptUnitDTO extends IEntity {
     @Caption(name = "Baths")
     IPrimitive<Integer> bathrooms();
 
-//
-//    /**
-//     * Used for DB Denormalization
-//     */
-//    Lease currentLease();
-//
     @Owned
     @Format("#0.00")
     IPrimitive<Double> unitRent();
@@ -79,9 +67,6 @@ public interface AptUnitDTO extends IEntity {
     @Caption(name = "Deposit")
     IPrimitive<Double> requiredDeposit();
 
-//
-//    IPrimitive<LogicalDate> moveOut();
-//
     @Format("MM/dd/yyyy")
     @Caption(name = "Available")
     IPrimitive<LogicalDate> availableForRent();
@@ -95,17 +80,6 @@ public interface AptUnitDTO extends IEntity {
      */
     @Detached
     FloorplanDTO floorplan();
-
-//    // need a lease-terms object
-//    //IPrimitive<String> unitLeaseStatus();
-//
-//    //IPrimitive<String> unitOccpStatus();
-//
-//    public static enum Status {
-//        available, reserved, leased, notice;
-//    }
-
-    //IPrimitive<AptUnitStatusType> status();
 
     IPrimitiveSet<String> amenities();
 
