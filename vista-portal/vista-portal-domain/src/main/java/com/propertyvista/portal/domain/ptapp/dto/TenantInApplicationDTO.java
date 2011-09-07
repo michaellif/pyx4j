@@ -13,41 +13,24 @@
  */
 package com.propertyvista.portal.domain.ptapp.dto;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.TenantIn;
 
 @Transient
-public interface TenantListItemDTO extends IEntity {
+public interface TenantInApplicationDTO extends TenantIn {
+
+    public static enum ChangeStatus {
+        New, Updated;
+    }
+
+    // ------------------------------------
 
     @EmbeddedEntity
     Person person();
 
-    public static enum ChangeStatus {
-
-        New,
-
-        Updated;
-
-    }
-
     IPrimitive<ChangeStatus> changeStatus();
-
-    @ToString(index = 0)
-    @NotNull
-    IPrimitive<TenantInLease.Relationship> relationship();
-
-    @ToString(index = 1)
-    @NotNull
-    IPrimitive<TenantInLease.Status> status();
-
-    @Caption(name = "Take Ownership", description = "Main Applicant fills this application.")
-    IPrimitive<Boolean> takeOwnership();
 }

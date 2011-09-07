@@ -22,15 +22,15 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.portal.domain.ptapp.dto.TenantInApplicationDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantListDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantListItemDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
@@ -41,15 +41,11 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
 
     @Override
     public void retrieve(AsyncCallback<TenantListDTO> callback, Key tenantId) {
-        log.info("Retrieving tenant list");
+        Lease lease = Persistence.service().retrieve(Lease.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
+
         TenantListDTO tenants = EntityFactory.create(TenantListDTO.class);
-
-        Lease lease = PersistenceServicesFactory.getPersistenceService().retrieve(Lease.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
-        List<TenantInLease> tenantsInLease = lease.tenants();
-
-        for (TenantInLease tenantInLease : tenantsInLease) {
-            PersistenceServicesFactory.getPersistenceService().retrieve(tenantInLease);
-
+        for (TenantInLease tenantInLease : lease.tenants()) {
+            Persistence.service().retrieve(tenantInLease);
             tenants.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
         }
 
@@ -61,12 +57,13 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
 
     @Override
     public void save(AsyncCallback<TenantListDTO> callback, TenantListDTO tenants) {
-        Lease lease = PersistenceServicesFactory.getPersistenceService().retrieve(Lease.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
+
         List<TenantInLease> existingTenants = new Vector<TenantInLease>();
         existingTenants.addAll(lease.tenants());
         lease.tenants().clear();
         TenantListDTO ret = EntityFactory.create(TenantListDTO.class);
-        for (TenantListItemDTO dto : tenants.tenants()) {
+        for (TenantInApplicationDTO dto : tenants.tenants()) {
             // Find existing record
             TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
             tenantInLease.setPrimaryKey(dto.getPrimaryKey());
@@ -75,30 +72,30 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
                 if (!dto.id().isNull()) {
                     throw new SecurityViolationException("Invalid data access");
                 }
-                dto.changeStatus().setValue(TenantListItemDTO.ChangeStatus.New);
+                dto.changeStatus().setValue(TenantInApplicationDTO.ChangeStatus.New);
             } else {
                 existingTenants.remove(idx);
-                PersistenceServicesFactory.getPersistenceService().retrieve(tenantInLease);
+                Persistence.service().retrieve(tenantInLease);
 
                 if (!EntityGraph.memebersEquals(dto.person().name(), tenantInLease.tenant().person().name(), dto.person().name().firstName(), dto.person()
                         .name().middleName(), dto.person().name().lastName())) {
-                    dto.changeStatus().setValue(TenantListItemDTO.ChangeStatus.Updated);
+                    dto.changeStatus().setValue(TenantInApplicationDTO.ChangeStatus.Updated);
                 }
             }
 
             new TenantConverter.TenantEditorConverter().copyDTOtoDBO(dto, tenantInLease);
 
-            PersistenceServicesFactory.getPersistenceService().persist(tenantInLease.tenant());
-            PersistenceServicesFactory.getPersistenceService().persist(tenantInLease);
+            Persistence.service().persist(tenantInLease.tenant());
+            Persistence.service().persist(tenantInLease);
             dto.setPrimaryKey(tenantInLease.getPrimaryKey());
             lease.tenants().add(tenantInLease);
             ret.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
         }
 
-        PersistenceServicesFactory.getPersistenceService().persist(lease);
+        Persistence.service().persist(lease);
 
         for (TenantInLease orphant : existingTenants) {
-            PersistenceServicesFactory.getPersistenceService().delete(orphant);
+            Persistence.service().delete(orphant);
         }
 
         ApplicationProgressMgr.syncroizeApplicationProgress(tenants.tenants());

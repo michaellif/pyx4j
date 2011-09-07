@@ -20,14 +20,14 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.portal.domain.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantInfoDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantListItemDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantInApplicationDTO;
 
 public class TenantConverter {
 
-    public static class TenantEditorConverter extends EntityDtoBinder<TenantInLease, TenantListItemDTO> {
+    public static class TenantEditorConverter extends EntityDtoBinder<TenantInLease, TenantInApplicationDTO> {
 
         public TenantEditorConverter() {
-            super(TenantInLease.class, TenantListItemDTO.class);
+            super(TenantInLease.class, TenantInApplicationDTO.class);
         }
 
         @Override
@@ -37,7 +37,6 @@ public class TenantConverter {
             bind(dtoProto.status(), dboProto.status());
             bind(dtoProto.takeOwnership(), dboProto.takeOwnership());
         }
-
     }
 
     public static class Tenant2TenantInfo extends EntityDtoBinder<Tenant, TenantInfoDTO> {

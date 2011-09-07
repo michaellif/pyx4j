@@ -14,28 +14,45 @@
 package com.propertyvista.portal.ptapp.client.ui.steps.tenants;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
+import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
+import com.propertyvista.common.client.ui.validators.OldAgeValidator;
+import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
+import com.propertyvista.domain.tenant.TenantIn;
+import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.util.ValidationUtils;
+import com.propertyvista.portal.domain.ptapp.dto.TenantInApplicationDTO;
 import com.propertyvista.portal.domain.ptapp.dto.TenantListDTO;
-import com.propertyvista.portal.domain.ptapp.dto.TenantListItemDTO;
-import com.propertyvista.portal.ptapp.client.resources.PortalImages;
+import com.propertyvista.portal.ptapp.client.ui.components.PtAppEntityFolder;
+import com.propertyvista.portal.ptapp.client.ui.components.PtAppTableFolderItemDecorator;
 
 public class TenantsViewForm extends CEntityForm<TenantListDTO> {
 
@@ -85,9 +102,10 @@ public class TenantsViewForm extends CEntityForm<TenantListDTO> {
         });
     }
 
-    private CEntityFolderEditor<TenantListItemDTO> createTenantsEditorColumns() {
+    private CEntityFolderEditor<TenantInApplicationDTO> createTenantsEditorColumns() {
 
-        return new CEntityFolderEditor<TenantListItemDTO>(TenantListItemDTO.class) {
+        return new PtAppEntityFolder<TenantInApplicationDTO>(TenantInApplicationDTO.class, i18n.tr("Person"), isEditable()) {
+            private final PtAppEntityFolder<TenantInApplicationDTO> parent = this;
 
             private List<EntityFolderColumnDescriptor> columns;
             {
@@ -103,14 +121,133 @@ public class TenantsViewForm extends CEntityForm<TenantListDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<TenantListItemDTO> createFolderDecorator() {
-                return new TableFolderEditorDecorator<TenantListItemDTO>(columns, PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
-                        i18n.tr("Add a person"));
+            protected List<EntityFolderColumnDescriptor> columns() {
+                return columns;
             }
 
             @Override
-            protected CEntityFolderItemEditor<TenantListItemDTO> createItem() {
-                return new TenantsViewFolderRow(columns);
+            protected CEntityFolderItemEditor<TenantInApplicationDTO> createItem() {
+                return new CEntityFolderRowEditor<TenantInApplicationDTO>(TenantInApplicationDTO.class, columns()) {
+
+                    @SuppressWarnings("rawtypes")
+                    @Override
+                    public IsWidget createContent() {
+                        if (isFirst()) {
+                            HorizontalPanel main = new HorizontalPanel();
+                            for (EntityFolderColumnDescriptor column : columns) {
+                                CComponent<?> component = createCell(column);
+                                // Don't show relation and takeOwnership 
+                                if (column.getObject() == proto().relationship() || column.getObject() == proto().takeOwnership()) {
+                                    component.setVisible(false);
+                                } else if (column.getObject() == proto().person().email()) {
+                                    ((CEditableComponent) component).setEditable(false);
+                                }
+                                main.add(createCellDecorator(column, component, column.getWidth()));
+                            }
+                            main.setWidth("100%");
+                            return main;
+                        } else {
+                            return super.createContent();
+                        }
+                    }
+
+                    @Override
+                    public void addValidations() {
+
+                        get(proto().person().birthDate()).addValueValidator(new OldAgeValidator());
+                        get(proto().person().birthDate()).addValueValidator(new BirthdayDateValidator());
+                        get(proto().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
+                            @Override
+                            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                                TenantInLease.Status status = getValue().status().getValue();
+                                if ((status == TenantInLease.Status.Applicant) || (status == TenantInLease.Status.CoApplicant)) {
+                                    // TODO I Believe that this is not correct, this logic has to be applied to Dependents as well, as per VISTA-273
+                                    return ValidationUtils.isOlderThen18(value);
+                                } else {
+                                    return true;
+                                }
+                            }
+
+                            @Override
+                            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                                return TenantsViewForm.i18n.tr("Applicant and co-applicant should be at least 18 years old");
+                            }
+                        });
+
+                        if (!isFirst()) { // all this stuff isn't for primary applicant:  
+                            get(proto().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+                                @Override
+                                public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                                    TenantIn.Status status = getValue().status().getValue();
+                                    if ((status == null) || (status == TenantInLease.Status.Dependant)) {
+                                        if (ValidationUtils.isOlderThen18(event.getValue())) {
+                                            boolean currentEditableState = get(proto().status()).isEditable();
+                                            enableStatusAndOwnership();
+                                            if (!currentEditableState) {
+                                                get(proto().status()).setValue(null);
+                                            }
+                                        } else {
+                                            setMandatoryDependant();
+                                        }
+                                    }
+                                }
+                            });
+
+                            get(proto().status()).addValueChangeHandler(new RevalidationTrigger<TenantInLease.Status>(get(proto().person().birthDate())));
+                        }
+                    }
+
+                    @Override
+                    public void populate(TenantInApplicationDTO value) {
+                        super.populate(value);
+
+                        if (!isFirst() && !value.person().birthDate().isNull()) {
+                            if (ValidationUtils.isOlderThen18(value.person().birthDate().getValue())) {
+                                enableStatusAndOwnership();
+                            } else {
+                                setMandatoryDependant();
+                            }
+                        }
+                    }
+
+                    @SuppressWarnings({ "unchecked", "rawtypes" })
+                    @Override
+                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                        CComponent<?> comp = null;
+                        if (isFirst() && proto().status() == column.getObject()) {
+                            CTextField textComp = new CTextField();
+                            textComp.setEditable(false);
+                            textComp.setValue(TenantInLease.Status.Applicant.name());
+                            comp = textComp;
+                        } else {
+                            comp = super.createCell(column);
+                            if (proto().status() == column.getObject()) {
+                                Collection<TenantInLease.Status> status = EnumSet.allOf(TenantInLease.Status.class);
+                                status.remove(TenantInLease.Status.Applicant);
+                                ((CComboBox) comp).setOptions(status);
+                            }
+                        }
+                        return comp;
+                    }
+
+                    @Override
+                    public IFolderItemEditorDecorator<TenantInApplicationDTO> createFolderItemDecorator() {
+                        return new PtAppTableFolderItemDecorator<TenantInApplicationDTO>(parent, parent.isEditable() && !isFirst());
+                    }
+
+                    private void setMandatoryDependant() {
+                        get(proto().status()).setValue(TenantInLease.Status.Dependant);
+                        get(proto().status()).setEditable(false);
+
+                        get(proto().takeOwnership()).setValue(true);
+                        get(proto().takeOwnership()).setEnabled(false);
+                    }
+
+                    private void enableStatusAndOwnership() {
+                        get(proto().status()).setEditable(true);
+                        get(proto().takeOwnership()).setEnabled(true);
+                    }
+                };
             }
         };
     }

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.domain;
 
-import com.propertyvista.domain.tenant.TenantInLease.Relationship;
+import com.propertyvista.domain.tenant.TenantIn.Relationship;
 
 public class DemoData {
 
