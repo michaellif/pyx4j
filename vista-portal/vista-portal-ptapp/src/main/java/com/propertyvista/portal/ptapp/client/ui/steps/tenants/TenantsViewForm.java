@@ -11,7 +11,7 @@
  * @author antonk
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps;
+package com.propertyvista.portal.ptapp.client.ui.steps.tenants;
 
 import java.util.ArrayList;
 import java.util.List;

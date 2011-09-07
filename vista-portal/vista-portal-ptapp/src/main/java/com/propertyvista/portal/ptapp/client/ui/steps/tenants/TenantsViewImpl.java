@@ -7,14 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 8, 2011
+ * Created on Feb 1, 2011
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps;
+package com.propertyvista.portal.ptapp.client.ui.steps.tenants;
 
 import com.propertyvista.portal.domain.ptapp.dto.TenantListDTO;
+import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepViewImpl;
 
-public interface TenantsView extends WizardStepView<TenantListDTO, TenantsViewPresenter> {
+public class TenantsViewImpl extends WizardStepViewImpl<TenantListDTO, TenantsViewPresenter> implements TenantsView {
 
+    public TenantsViewImpl() {
+        super(new TenantsViewForm());
+    }
 }

@@ -7,17 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on Feb 16, 2011
+ * @author antonk
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps;
+package com.propertyvista.portal.ptapp.client.ui.steps.tenants;
 
-import com.propertyvista.portal.rpc.ptapp.dto.UnitInfoDTO;
+import com.propertyvista.portal.domain.ptapp.dto.TenantListDTO;
+import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepPresenter;
 
-public class ApartmentViewImpl extends WizardStepViewImpl<UnitInfoDTO, ApartmentViewPresenter> implements ApartmentView {
+public interface TenantsViewPresenter extends WizardStepPresenter<TenantListDTO> {
 
-    public ApartmentViewImpl() {
-        super(new ApartmentViewForm());
-    }
 }

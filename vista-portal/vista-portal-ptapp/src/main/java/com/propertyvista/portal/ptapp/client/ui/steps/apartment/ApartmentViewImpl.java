@@ -11,13 +11,14 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps;
+package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
-import com.propertyvista.portal.domain.ptapp.dto.TenantListDTO;
+import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepViewImpl;
+import com.propertyvista.portal.rpc.ptapp.dto.UnitInfoDTO;
 
-public class TenantsViewImpl extends WizardStepViewImpl<TenantListDTO, TenantsViewPresenter> implements TenantsView {
+public class ApartmentViewImpl extends WizardStepViewImpl<UnitInfoDTO, ApartmentViewPresenter> implements ApartmentView {
 
-    public TenantsViewImpl() {
-        super(new TenantsViewForm());
+    public ApartmentViewImpl() {
+        super(new ApartmentViewForm());
     }
 }

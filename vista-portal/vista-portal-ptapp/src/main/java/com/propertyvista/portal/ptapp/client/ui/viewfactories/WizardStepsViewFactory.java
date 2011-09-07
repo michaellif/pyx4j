@@ -16,8 +16,6 @@ package com.propertyvista.portal.ptapp.client.ui.viewfactories;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
-import com.propertyvista.portal.ptapp.client.ui.steps.ApartmentView;
-import com.propertyvista.portal.ptapp.client.ui.steps.ApartmentViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.ChargesView;
 import com.propertyvista.portal.ptapp.client.ui.steps.ChargesViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.CompletionView;
@@ -32,8 +30,10 @@ import com.propertyvista.portal.ptapp.client.ui.steps.AddonsView;
 import com.propertyvista.portal.ptapp.client.ui.steps.AddonsViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.SummaryView;
 import com.propertyvista.portal.ptapp.client.ui.steps.SummaryViewImpl;
-import com.propertyvista.portal.ptapp.client.ui.steps.TenantsView;
-import com.propertyvista.portal.ptapp.client.ui.steps.TenantsViewImpl;
+import com.propertyvista.portal.ptapp.client.ui.steps.apartment.ApartmentView;
+import com.propertyvista.portal.ptapp.client.ui.steps.apartment.ApartmentViewImpl;
+import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsView;
+import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsViewImpl;
 
 public class WizardStepsViewFactory extends ViewFactoryBase {
 

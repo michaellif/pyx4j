@@ -86,7 +86,7 @@ public class ServiceCatalogGenerator {
 
     public void buildEligibilityMatrix(ServiceCatalog catalog) {
         for (Service srv : catalog.services()) {
-            int count = Math.min(2, catalog.features().size());
+            int count = Math.min(3, catalog.features().size());
             for (int i = 0; i < count; ++i) {
                 ServiceFeature srvFeature = EntityFactory.create(ServiceFeature.class);
                 srvFeature.feature().set(RandomUtil.random(catalog.features(), "features", count));

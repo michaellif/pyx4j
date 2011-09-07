@@ -11,8 +11,9 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps;
+package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
+import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepPresenter;
 import com.propertyvista.portal.rpc.ptapp.dto.UnitInfoDTO;
 
 public interface ApartmentViewPresenter extends WizardStepPresenter<UnitInfoDTO> {
