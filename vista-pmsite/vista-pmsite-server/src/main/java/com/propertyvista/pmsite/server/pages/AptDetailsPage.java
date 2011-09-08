@@ -13,10 +13,20 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
+import org.apache.wicket.PageParameters;
+
 public class AptDetailsPage extends BasePage {
 
     public AptDetailsPage() {
         super();
+        PageParameters params = getRequestCycle().getPageParameters();
+        Integer propId = null;
+        if (params == null || (propId = params.getInt("propId")) == null) {
+            setResponsePage(AptListPage.class);
+            return;
+        }
+
+//        add(new AptListPanel("aptDetailsPanel", new CompoundPropertyModel<PropertyDTO>(PMSiteContentManager.getPropertyById(propId).properties())));
     }
 
 }

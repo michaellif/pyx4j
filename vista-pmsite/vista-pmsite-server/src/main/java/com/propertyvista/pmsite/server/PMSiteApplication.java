@@ -22,6 +22,7 @@ import org.apache.wicket.request.target.coding.MixedParamUrlCodingStrategy;
 import org.apache.wicket.request.target.coding.QueryStringUrlCodingStrategy;
 
 import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
+import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.pmsite.server.pages.FindAptPage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
@@ -41,6 +42,7 @@ public class PMSiteApplication extends WebApplication {
     protected void init() {
         mountBookmarkablePage("findapt", FindAptPage.class);
         mount(new QueryStringUrlCodingStrategy("aptlist", AptListPage.class));
+        mount(new QueryStringUrlCodingStrategy("aptinfo", AptDetailsPage.class));
 
         mountBookmarkablePage("residents", ResidentsPage.class);
 
