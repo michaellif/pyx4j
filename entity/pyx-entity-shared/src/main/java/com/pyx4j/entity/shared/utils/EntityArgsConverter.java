@@ -79,24 +79,29 @@ public class EntityArgsConverter {
         if (args != null) {
             for (String memberName : args.keySet()) {
                 Path path = convertDotNotationToPath(clazz, memberName);
-                MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(path);
-
-                if (memberMeta != null) {
-                    if (ObjectClassType.Primitive.equals(memberMeta.getObjectClassType())) {
-                        IPrimitive<?> member = (IPrimitive<?>) entity.getMember(path);
-                        String value = "";
-                        List<String> values = args.get(memberName);
-                        if (values != null && values.size() > 0) {
-                            value = values.get(0);
-                        }
-                        if (memberMeta.getValueClass().equals(Date.class)) {
-                            entity.setValue(path, TimeUtils.simpleParse(value, DATE_TIME_FORMAT));
-                        } else if (memberMeta.getValueClass().equals(LogicalDate.class)) {
-                            entity.setValue(path, new LogicalDate(TimeUtils.simpleParse(value, DATE_FORMAT)));
-                        } else {
-                            entity.setValue(path, member.parse(value));
+                MemberMeta memberMeta = null;
+                try {
+                    memberMeta = entity.getEntityMeta().getMemberMeta(path);
+                    if (memberMeta != null) {
+                        if (ObjectClassType.Primitive.equals(memberMeta.getObjectClassType())) {
+                            IPrimitive<?> member = (IPrimitive<?>) entity.getMember(path);
+                            String value = "";
+                            List<String> values = args.get(memberName);
+                            if (values != null && values.size() > 0) {
+                                value = values.get(0);
+                            }
+                            if (memberMeta.getValueClass().equals(Date.class)) {
+                                entity.setValue(path, TimeUtils.simpleParse(value, DATE_TIME_FORMAT));
+                            } else if (memberMeta.getValueClass().equals(LogicalDate.class)) {
+                                entity.setValue(path, new LogicalDate(TimeUtils.simpleParse(value, DATE_FORMAT)));
+                            } else {
+                                entity.setValue(path, member.parse(value));
+                            }
                         }
                     }
+                } catch (Exception e) {
+                    //do nothing
+                    continue;
                 }
 
             }
