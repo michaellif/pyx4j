@@ -43,7 +43,7 @@ public class ApartmentDetailsActivity extends AbstractActivity implements Apartm
     }
 
     public ApartmentDetailsActivity withPlace(Place place) {
-        propertyId = ((AppPlace) place).getArg(PortalSiteMap.ARG_PROPERTY_ID);
+        propertyId = ((AppPlace) place).getFirstArg(PortalSiteMap.ARG_PROPERTY_ID);
         return this;
     }
 

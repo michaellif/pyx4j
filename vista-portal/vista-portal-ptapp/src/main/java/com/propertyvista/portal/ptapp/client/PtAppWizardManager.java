@@ -71,7 +71,7 @@ public class PtAppWizardManager {
         if ((place == null) || (currentStep == null)) {
             return null;
         }
-        String stepArg = place.getArg(PtSiteMap.STEP_ARG_NAME);
+        String stepArg = place.getFirstArg(PtSiteMap.STEP_ARG_NAME);
         // Find current Substep
         if (stepArg == null) {
             return null;

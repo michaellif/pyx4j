@@ -18,7 +18,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.essentials.client.SessionInactiveDialog;
-import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
@@ -44,9 +43,6 @@ public class PortalSite extends VistaSite {
     @Override
     public void onSiteLoad() {
         super.onSiteLoad();
-
-        // Key for .birchwoodsoftwaregroup.com
-        GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hQNAqXoqeDSmjSd0LqmyIBhhU5npBSrKP1emJkpH44tWO17lL5gHAI_vg");
 
         if (RootPanel.get(APT_SEARCH_INSERTION_ID) != null) {
             getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.FindApartment.PropertyMap());

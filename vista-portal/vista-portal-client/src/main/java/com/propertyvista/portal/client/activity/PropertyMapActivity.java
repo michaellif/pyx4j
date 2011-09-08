@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.activity;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -68,7 +69,7 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
     }
 
     public PropertyMapActivity withPlace(Place place) {
-        Map<String, String> args = ((AppPlace) place).getArgs();
+        Map<String, List<String>> args = ((AppPlace) place).getArgs();
         criteria = EntityArgsConverter.createFromArgs(PropertySearchCriteria.class, args);
         return this;
     }
@@ -173,7 +174,7 @@ public class PropertyMapActivity extends AbstractActivity implements PropertyMap
     public void refineSearch() {
         criteria = view.getValue();
         obtainGeopoint();
-        Map<String, String> args = EntityArgsConverter.convertToArgs(criteria);
+        Map<String, List<String>> args = EntityArgsConverter.convertToArgs(criteria);
         AppPlace place = new PortalSiteMap.FindApartment.PropertyMap();
         place.putAllArgs(args);
         History.newItem(place.getToken(), false);

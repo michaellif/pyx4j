@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.activity;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -47,7 +48,7 @@ public class SearchApartmentActivity extends AbstractActivity implements SearchA
     @Override
     public void search() {
         PropertySearchCriteria criteria = view.getValue();
-        Map<String, String> args = EntityArgsConverter.convertToArgs(criteria);
+        Map<String, List<String>> args = EntityArgsConverter.convertToArgs(criteria);
         AppPlace place = new PortalSiteMap.FindApartment.PropertyMap();
         place.putAllArgs(args);
         AppSite.getPlaceController().goTo(place);

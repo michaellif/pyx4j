@@ -31,7 +31,7 @@ abstract class WizardStepWithSubstepsActivity<E extends IEntity, T extends Wizar
     protected Key getCurrentTenantId() {
         // get secondary step argument (should be tenant ID for Info and Financial views):
         if (currentPlace != null) {
-            return new Key(currentPlace.getArg(PtSiteMap.STEP_ARG_NAME));
+            return new Key(currentPlace.getFirstArg(PtSiteMap.STEP_ARG_NAME));
         } else {
             return null;
         }
