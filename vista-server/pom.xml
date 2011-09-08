@@ -404,6 +404,18 @@
                         </configuration>
                     </plugin>
 
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>deploy-db-reset</id>
+            <properties>
+                <ciSiteDirectory>${scp-apache-site-snapshot-base}/vista</ciSiteDirectory>
+            </properties>
+            <build>
+                <plugins>
+
                     <plugin>
                         <artifactId>maven-antrun-plugin</artifactId>
                         <executions>
