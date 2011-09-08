@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.Pet;
@@ -43,10 +43,11 @@ public class AddonsServiceImpl extends ApplicationEntityServiceImpl implements A
 
     @Override
     public void retrieve(AsyncCallback<AddOnsDTO> callback, Key tenantId) {
-        log.info("Retrieving pets");
-        Lease lease = PersistenceServicesFactory.getPersistenceService().retrieve(Lease.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
-        PersistenceServicesFactory.getPersistenceService().retrieve(lease.pets());
-        PersistenceServicesFactory.getPersistenceService().retrieve(lease.vehicles());
+        log.info("Retrieving addons");
+
+        Lease lease = PtAppContext.getCurrentUserLease();
+        Persistence.service().retrieve(lease.pets());
+        Persistence.service().retrieve(lease.vehicles());
 
         AddOnsDTO addOns = EntityFactory.create(AddOnsDTO.class);
         addOns.pets().list().addAll(lease.pets());
@@ -60,11 +61,11 @@ public class AddonsServiceImpl extends ApplicationEntityServiceImpl implements A
 
     @Override
     public void save(AsyncCallback<AddOnsDTO> callback, AddOnsDTO addOns) {
-        log.info("Saving pets {}", addOns);
+        log.info("Saving addons {}", addOns);
 
-        Lease lease = PersistenceServicesFactory.getPersistenceService().retrieve(Lease.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
-        PersistenceServicesFactory.getPersistenceService().retrieve(lease.pets());
-        PersistenceServicesFactory.getPersistenceService().retrieve(lease.vehicles());
+        Lease lease = PtAppContext.getCurrentUserLease();
+        Persistence.service().retrieve(lease.pets());
+        Persistence.service().retrieve(lease.vehicles());
 
         // This value will never be null, since we are always creating it at retrieve
         List<Pet> existingPets = new Vector<Pet>();
@@ -76,21 +77,23 @@ public class AddonsServiceImpl extends ApplicationEntityServiceImpl implements A
             ChargesSharedCalculation.calculatePetCharges(petChargeRule, pet);
         }
 
+        // update lists:
         lease.pets().clear();
         lease.pets().addAll(addOns.pets().list());
 
         lease.vehicles().clear();
         lease.vehicles().addAll(addOns.vehicles().list());
 
-        //TODO use merge
-        PersistenceServicesFactory.getPersistenceService().persist(lease.pets());
-        PersistenceServicesFactory.getPersistenceService().persist(lease.vehicles());
-        PersistenceServicesFactory.getPersistenceService().persist(lease);
+        // actual save:
+        Persistence.service().merge(lease.vehicles());
+        Persistence.service().merge(lease.pets());
+        Persistence.service().merge(lease);
 
         if (ChargesServerCalculation.needToUpdateChargesForPets(lease.pets(), existingPets)) {
             ApplicationProgressMgr.invalidateChargesStep();
         }
 
+        // update current addons:
         loadTransientData(addOns.pets());
         loadTransientData(addOns.vehicles());
 
@@ -117,6 +120,7 @@ public class AddonsServiceImpl extends ApplicationEntityServiceImpl implements A
     }
 
     private static PetChargeRule loadPetChargeRule() {
+        // TODO get it from building
         PetChargeRule petChargeRule = EntityFactory.create(PetChargeRule.class);
         petChargeRule.chargeType().setValue(ChargeType.monthly);
         petChargeRule.value().setValue(20);

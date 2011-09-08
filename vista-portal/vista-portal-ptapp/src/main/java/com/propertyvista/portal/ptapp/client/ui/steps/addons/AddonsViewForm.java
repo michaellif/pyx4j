@@ -173,8 +173,7 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
                         }
                     };
                 } else {
-                    return new TableFolderEditorDecorator<Pet>(columns, PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
-                            i18n.tr("Add a pet"));
+                    return new TableFolderEditorDecorator<Pet>(columns, PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(), i18n.tr("Add a pet"));
                 }
 
             }
@@ -197,8 +196,7 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator<Pet>(false);
                         } else {
-                            return new TableFolderItemEditorDecorator<Pet>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover(),
-                                    i18n.tr("Remove pet"));
+                            return new TableFolderItemEditorDecorator<Pet>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover(), i18n.tr("Remove pet"));
                         }
                     }
 
@@ -253,7 +251,8 @@ public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
                 columns.add(new EntityFolderColumnDescriptor(proto().model(), "8em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().country(), "9em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().province(), "16em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().parkingSpot(), "13em"));
+// TOSO not sure parking should be selected here !?                
+//                columns.add(new EntityFolderColumnDescriptor(proto().parkingSpot(), "13em"));
                 //  TODO : filter that parking spot on available spots only and from current building!..                  
             }
 

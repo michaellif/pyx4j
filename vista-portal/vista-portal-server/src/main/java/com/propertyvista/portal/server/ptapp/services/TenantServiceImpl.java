@@ -24,6 +24,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.security.shared.SecurityViolationException;
 
@@ -41,7 +43,8 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
 
     @Override
     public void retrieve(AsyncCallback<TenantInApplicationListDTO> callback, Key tenantId) {
-        Lease lease = Persistence.service().retrieve(Lease.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
+        Lease lease = PtAppContext.getCurrentUserLease();
+        UpdateLeaseTenants(lease);
 
         TenantInApplicationListDTO tenants = EntityFactory.create(TenantInApplicationListDTO.class);
         for (TenantInLease tenantInLease : lease.tenants()) {
@@ -57,54 +60,53 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
 
     @Override
     public void save(AsyncCallback<TenantInApplicationListDTO> callback, TenantInApplicationListDTO tenants) {
-        Lease lease = Persistence.service().retrieve(Lease.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
+        Lease lease = PtAppContext.getCurrentUserLease();
+        UpdateLeaseTenants(lease);
 
-        List<TenantInLease> existingTenants = new Vector<TenantInLease>();
-        existingTenants.addAll(lease.tenants());
+        List<TenantInLease> existingTenants = new Vector<TenantInLease>(lease.tenants());
         lease.tenants().clear();
-        TenantInApplicationListDTO ret = EntityFactory.create(TenantInApplicationListDTO.class);
-        for (TenantInApplicationDTO dto : tenants.tenants()) {
+
+        TenantInApplicationListDTO currentTenants = EntityFactory.create(TenantInApplicationListDTO.class);
+        for (TenantInApplicationDTO tenantInApplication : tenants.tenants()) {
             // Find existing record
             TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
-            tenantInLease.setPrimaryKey(dto.getPrimaryKey());
+            tenantInLease.setPrimaryKey(tenantInApplication.getPrimaryKey());
             int idx = existingTenants.indexOf(tenantInLease);
             if (idx == -1) {
-                if (!dto.id().isNull()) {
+                if (!tenantInApplication.id().isNull()) {
                     throw new SecurityViolationException("Invalid data access");
                 }
-                dto.changeStatus().setValue(TenantInApplicationDTO.ChangeStatus.New);
+                tenantInApplication.changeStatus().setValue(TenantInApplicationDTO.ChangeStatus.New);
             } else {
                 existingTenants.remove(idx);
                 Persistence.service().retrieve(tenantInLease);
-
-                if (!EntityGraph.memebersEquals(dto.person().name(), tenantInLease.tenant().person().name(), dto.person().name().firstName(), dto.person()
-                        .name().middleName(), dto.person().name().lastName())) {
-                    dto.changeStatus().setValue(TenantInApplicationDTO.ChangeStatus.Updated);
+                if (!EntityGraph.memebersEquals(tenantInApplication.person().name(), tenantInLease.tenant().person().name(), tenantInApplication.person()
+                        .name().firstName(), tenantInApplication.person().name().middleName(), tenantInApplication.person().name().lastName())) {
+                    tenantInApplication.changeStatus().setValue(TenantInApplicationDTO.ChangeStatus.Updated);
                 }
             }
 
-            new TenantConverter.TenantEditorConverter().copyDTOtoDBO(dto, tenantInLease);
-
-            Persistence.service().persist(tenantInLease.tenant());
-            Persistence.service().persist(tenantInLease);
-            dto.setPrimaryKey(tenantInLease.getPrimaryKey());
+            // save Tenant in Lease: 
+            tenantInLease.lease().set(lease);
+            new TenantConverter.TenantEditorConverter().copyDTOtoDBO(tenantInApplication, tenantInLease);
+            Persistence.service().merge(tenantInLease.tenant());
+            Persistence.service().merge(tenantInLease);
             lease.tenants().add(tenantInLease);
-            ret.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
+
+            // update current tenants:
+            tenantInApplication.setPrimaryKey(tenantInLease.getPrimaryKey());
+            currentTenants.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
         }
 
         Persistence.service().persist(lease);
 
-        for (TenantInLease orphant : existingTenants) {
-            Persistence.service().delete(orphant);
+        for (TenantInLease orphan : existingTenants) {
+            Persistence.service().delete(orphan);
         }
 
         ApplicationProgressMgr.syncroizeApplicationProgress(tenants.tenants());
 
-        //TODO use policy
-        ret.tenantsMaximum().setValue(6);
-
-        //TODO
-
+//TODO
 //        // we need to load charges and re-calculate them
 //        log.info("Load charges and re-calculate them");
 //        EntityQueryCriteria<Charges> criteria = EntityQueryCriteria.create(Charges.class);
@@ -119,6 +121,14 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
 //
 //        CampaignManager.fireEvent(CampaignTriger.Registration, tenants);
 
-        callback.onSuccess(ret);
+        callback.onSuccess(currentTenants);
+    }
+
+    private void UpdateLeaseTenants(Lease lease) {
+        // update Tenants double links:
+        EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
+        lease.tenants().clear();
+        lease.tenants().addAll(Persistence.service().query(criteria));
     }
 }

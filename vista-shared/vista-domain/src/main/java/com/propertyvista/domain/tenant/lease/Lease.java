@@ -82,6 +82,7 @@ public interface Lease extends IEntity {
      * @link LeaseCrudService re-fills this list every time on Lease retrieve with current tenants which has referenced the Lease.
      *       Every other service retrieved the lease supposed to do the same!!!
      */
+    @Detached
     IList<TenantInLease> tenants();
 
     @Detached

@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -47,7 +48,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public void retrieve(AsyncCallback<ApartmentInfoDTO> callback, Key tenantId) {
 
-        Lease lease = PtAppContext.getCurrentLease();
+        Lease lease = PtAppContext.getCurrentUserLease();
         if (!PersistenceServicesFactory.getPersistenceService().retrieve(lease)) {
             throw new Error("There is no current Lease set!");
         }

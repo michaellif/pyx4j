@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -35,6 +35,15 @@ public class PtAppContext extends VistaContext {
     private final static Logger log = LoggerFactory.getLogger(PtAppContext.class);
 
     private static I18n i18n = I18nFactory.getI18n();
+
+    public static void setCurrentUserApplication(Application application) {
+        Visit v = Context.getVisit();
+        if ((v == null) || (!v.isUserLoggedIn())) {
+            log.trace("no session");
+            throw new UnRecoverableRuntimeException(i18n.tr("no session"));
+        }
+        ((PtUserVisit) v.getUserVisit()).setApplicationPrimaryKey(application.getPrimaryKey());
+    }
 
     public static Key getCurrentUserApplicationPrimaryKey() {
         Visit v = Context.getVisit();
@@ -59,42 +68,14 @@ public class PtAppContext extends VistaContext {
             log.trace("no application selected");
             throw new UserRuntimeException(i18n.tr("no application selected"));
         }
-        Application application = EntityFactory.create(Application.class);
-        application.setPrimaryKey(((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey());
-        return application;
+        return Persistence.service().retrieve(Application.class, ((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey());
     }
 
-    public static void setCurrentUserApplication(Application application) {
-        Visit v = Context.getVisit();
-        if ((v == null) || (!v.isUserLoggedIn())) {
-            log.trace("no session");
-            throw new UnRecoverableRuntimeException(i18n.tr("no session"));
-        }
-        ((PtUserVisit) v.getUserVisit()).setApplicationPrimaryKey(application.getPrimaryKey());
+    public static Key getCurrentUserLeasePrimaryKey() {
+        return PtAppContext.getCurrentUserApplication().lease().getPrimaryKey();
     }
 
-    public static Lease getCurrentLease() {
-        Visit v = Context.getVisit();
-        if ((v == null) || (!v.isUserLoggedIn())) {
-            log.trace("no session");
-            throw new UnRecoverableRuntimeException(i18n.tr("no session"));
-        }
-        if (((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey() == null) {
-            log.trace("no application selected");
-            throw new UserRuntimeException(i18n.tr("no application selected"));
-        }
-        Lease application = EntityFactory.create(Lease.class);
-        application.setPrimaryKey(((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey());
-        return application;
+    public static Lease getCurrentUserLease() {
+        return Persistence.service().retrieve(Lease.class, PtAppContext.getCurrentUserApplication().lease().getPrimaryKey());
     }
-
-    public static void setCurrentLease(Lease application) {
-        Visit v = Context.getVisit();
-        if ((v == null) || (!v.isUserLoggedIn())) {
-            log.trace("no session");
-            throw new UnRecoverableRuntimeException(i18n.tr("no session"));
-        }
-        ((PtUserVisit) v.getUserVisit()).setApplicationPrimaryKey(application.getPrimaryKey());
-    }
-
 }

@@ -35,7 +35,7 @@ public class TenantRetriever {
 
     void retrieve(Key tenantId) {
         tenantInLease = PersistenceServicesFactory.getPersistenceService().retrieve(TenantInLease.class, tenantId);
-        if ((tenantInLease == null) || (!tenantInLease.lease().id().equals(PtAppContext.getCurrentLease().id()))) {
+        if ((tenantInLease == null) || (!tenantInLease.lease().id().equals(PtAppContext.getCurrentUserLeasePrimaryKey()))) {
             throw new SecurityViolationException("Invalid data access");
         }
 
