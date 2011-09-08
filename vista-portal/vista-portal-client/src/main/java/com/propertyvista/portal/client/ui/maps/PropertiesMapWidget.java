@@ -117,8 +117,8 @@ public class PropertiesMapWidget extends AbstractMapWidget {
             }
             getMap().setCenter(bounds.getCenter());
             int zoomLevel = getMap().getBoundsZoomLevel(bounds) - 1;
-            if (zoomLevel > 10) {
-                zoomLevel = 10;
+            if (zoomLevel > 12) {
+                zoomLevel = 12;
             }
             getMap().setZoomLevel(zoomLevel);
             callback.onSuccess(getMap().getBounds());

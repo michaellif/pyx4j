@@ -16,17 +16,58 @@ package com.propertyvista.portal.client.ui.maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.maps.client.geocode.LatLngCallback;
+import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.geom.LatLngBounds;
 import com.google.gwt.user.client.Window;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.utils.EntityArgsConverter;
+import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.geo.GeoUtils;
+import com.pyx4j.gwt.geo.MapUtils;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+
+import com.propertyvista.portal.client.PortalSite;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.domain.dto.PropertyListDTO;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
+
+//http://localhost:8888/vista/portal/aptmap.html?gwt.codesvr=127.0.0.1:9997&city.name=Halifax&city.province.name=Nova+Scotia&searchType=city
+//
 public class PropertyMapController {
 
     private static Logger log = LoggerFactory.getLogger(PropertyMapController.class);
 
     private final PropertiesMapWidget map;
 
+    private static PropertyListDTO allProperties;
+
+    private final PropertySearchCriteria criteria;
+
+    private PropertyListDTO inboundProperties;
+
+    private PropertyListDTO shownProperties;
+
+    private GeoPoint proximityCenter;
+
     public PropertyMapController() {
 
-        System.out.println("+++++" + Window.Location.getParameterMap());
+        criteria = EntityArgsConverter.createFromArgs(PropertySearchCriteria.class, Window.Location.getParameterMap());
+
+        if (allProperties == null) {
+            PortalSite.getPortalSiteServices().retrievePropertyList(new DefaultAsyncCallback<PropertyListDTO>() {
+                @Override
+                public void onSuccess(PropertyListDTO properties) {
+                    System.out.println(properties);
+                    allProperties = properties;
+                    obtainGeopoint();
+                }
+            });
+        } else {
+            obtainGeopoint();
+        }
 
         map = new PropertiesMapWidget();
     }
@@ -35,4 +76,86 @@ public class PropertyMapController {
         return map;
     }
 
+    private void obtainGeopoint() {
+        if (PropertySearchCriteria.SearchType.proximity.equals(criteria.searchType().getValue())) {
+            MapUtils.obtainLatLang(criteria.location().getValue(), new LatLngCallback() {
+
+                @Override
+                public void onSuccess(LatLng fromCoordinates) {
+
+                    proximityCenter = MapUtils.newGeoPointInstance(fromCoordinates);
+                    populateView();
+
+                }
+
+                @Override
+                public void onFailure() {
+                    log.warn("Can't find LatLng for distanceOverlay");
+                }
+            });
+        } else {
+            populateView();
+        }
+
+    }
+
+    private PropertyListDTO filterInboundProperties() {
+        PropertyListDTO filteredProperties = EntityFactory.create(PropertyListDTO.class);
+        if (SearchType.city.equals(criteria.searchType().getValue()) && !criteria.city().isNull()) {
+            for (PropertyDTO property : allProperties.properties()) {
+                if (!criteria.city().name().equals(property.address().city())
+                        || !criteria.city().province().name().equals(property.address().province().name())) {
+                    continue;
+                }
+                filteredProperties.properties().add(property);
+            }
+        } else if (SearchType.proximity.equals(criteria.searchType().getValue()) && (proximityCenter != null) && (criteria.distance().getValue() > 0)) {
+            for (PropertyDTO property : allProperties.properties()) {
+                GeoPoint location = property.location().getValue();
+                if (GeoUtils.distance(location, proximityCenter) > criteria.distance().getValue()) {
+                    continue;
+                }
+                filteredProperties.properties().add(property);
+            }
+        }
+        return filteredProperties;
+    }
+
+    private void populateView() {
+        inboundProperties = filterInboundProperties();
+
+        DefaultAsyncCallback<LatLngBounds> callback = new DefaultAsyncCallback<LatLngBounds>() {
+            @Override
+            public void onSuccess(LatLngBounds result) {
+                updateMap(result);
+            }
+        };
+        if (SearchType.proximity.equals(criteria.searchType().getValue()) && proximityCenter != null && !criteria.distance().isNull()
+                && criteria.distance().getValue() > 0) {
+            map.setDistanceOverlay(proximityCenter, criteria.distance().getValue(), callback);
+        } else {
+            map.removeDistanceOverlay();
+            map.setBounds(inboundProperties, callback);
+        }
+
+    }
+
+    public void updateMap(LatLngBounds latLngBounds) {
+        if (inboundProperties == null) {
+            return;
+        }
+        shownProperties = filterByBounds(latLngBounds);
+        PropertyListDTO outboundProperties = EntityFactory.create(PropertyListDTO.class);
+        for (PropertyDTO property : shownProperties.properties()) {
+            if (!inboundProperties.properties().contains(property)) {
+                outboundProperties.properties().add(property);
+            }
+        }
+        map.populateMarkers(inboundProperties, outboundProperties);
+    }
+
+    private PropertyListDTO filterByBounds(LatLngBounds latLngBounds) {
+        //TODO load only the properties that fit into map (optimisation may not be needed at all)
+        return allProperties;
+    }
 }
