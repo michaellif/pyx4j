@@ -53,7 +53,7 @@ public abstract class CrudAppPlace extends AppPlace {
     }
 
     public Type getType() {
-        return Type.valueOf(getArg(ARG_NAME_CRUD_TYPE));
+        return Type.valueOf(getFirstArg(ARG_NAME_CRUD_TYPE));
     }
 
     public String getName() {

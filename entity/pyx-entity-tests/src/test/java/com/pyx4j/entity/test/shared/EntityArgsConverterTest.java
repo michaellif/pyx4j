@@ -20,8 +20,10 @@
  */
 package com.pyx4j.entity.test.shared;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import junit.framework.TestCase;
@@ -62,43 +64,43 @@ public class EntityArgsConverterTest extends TestCase {
 
         employee.department().name().setValue(DEPARTMENT_NAME);
 
-        Map<String, String> args = EntityArgsConverter.convertToArgs(employee);
+        Map<String, List<String>> args = EntityArgsConverter.convertToArgs(employee);
 
         log.debug(args.toString());
 
         assertEquals(employee.getValue().size(), args.size());
-        assertEquals(employee.firstName().getValue(), args.get(employee.firstName().getFieldName()));
-        assertEquals(TimeUtils.simpleFormat(employee.from().getValue(), EntityArgsConverter.DATE_TIME_FORMAT), args.get(employee.from().getFieldName()));
-        assertEquals(employee.reliable().getValue().toString(), args.get(employee.reliable().getFieldName()));
-        assertEquals(employee.holidays().getValue().toString(), args.get(employee.holidays().getFieldName()));
-        assertEquals(employee.rating().getValue().toString(), args.get(employee.rating().getFieldName()));
-        assertEquals(employee.salary().getValue().toString(), args.get(employee.salary().getFieldName()));
+        assertEquals(employee.firstName().getValue(), args.get(employee.firstName().getFieldName()).get(0));
+        assertEquals(TimeUtils.simpleFormat(employee.from().getValue(), EntityArgsConverter.DATE_TIME_FORMAT), args.get(employee.from().getFieldName()).get(0));
+        assertEquals(employee.reliable().getValue().toString(), args.get(employee.reliable().getFieldName()).get(0));
+        assertEquals(employee.holidays().getValue().toString(), args.get(employee.holidays().getFieldName()).get(0));
+        assertEquals(employee.rating().getValue().toString(), args.get(employee.rating().getFieldName()).get(0));
+        assertEquals(employee.salary().getValue().toString(), args.get(employee.salary().getFieldName()).get(0));
 
-        assertEquals(employee.employmentStatus().getValue().name(), args.get(employee.employmentStatus().getFieldName()));
-        assertEquals(employee.accessStatus().getValue().name(), args.get(employee.accessStatus().getFieldName()));
+        assertEquals(employee.employmentStatus().getValue().name(), args.get(employee.employmentStatus().getFieldName()).get(0));
+        assertEquals(employee.accessStatus().getValue().name(), args.get(employee.accessStatus().getFieldName()).get(0));
 
         assertEquals(employee.department().name().getValue().toString(),
-                args.get(EntityArgsConverter.convertPathToDotNotation(employee.department().name().getPath())));
+                args.get(EntityArgsConverter.convertPathToDotNotation(employee.department().name().getPath())).get(0));
 
     }
 
     public void testCreateFromArgs() {
 
-        Map<String, String> args = new HashMap<String, String>();
+        Map<String, List<String>> args = new HashMap<String, List<String>>();
 
         Employee proto = EntityFactory.getEntityPrototype(Employee.class);
 
-        args.put(proto.firstName().getFieldName(), FIRST_NAME);
-        args.put(proto.from().getFieldName(), TimeUtils.simpleFormat(FROM, EntityArgsConverter.DATE_TIME_FORMAT));
-        args.put(proto.reliable().getFieldName(), "true");
-        args.put(proto.holidays().getFieldName(), "22");
-        args.put(proto.rating().getFieldName(), "5");
-        args.put(proto.salary().getFieldName(), "22.5");
+        args.put(proto.firstName().getFieldName(), Arrays.asList(new String[] { FIRST_NAME }));
+        args.put(proto.from().getFieldName(), Arrays.asList(new String[] { TimeUtils.simpleFormat(FROM, EntityArgsConverter.DATE_TIME_FORMAT) }));
+        args.put(proto.reliable().getFieldName(), Arrays.asList(new String[] { "true" }));
+        args.put(proto.holidays().getFieldName(), Arrays.asList(new String[] { "22" }));
+        args.put(proto.rating().getFieldName(), Arrays.asList(new String[] { "5" }));
+        args.put(proto.salary().getFieldName(), Arrays.asList(new String[] { "22.5" }));
 
-        args.put(proto.employmentStatus().getFieldName(), EmploymentStatus.PART_TIME.name());
-        args.put(proto.accessStatus().getFieldName(), Status.SUSPENDED.name());
+        args.put(proto.employmentStatus().getFieldName(), Arrays.asList(new String[] { EmploymentStatus.PART_TIME.name() }));
+        args.put(proto.accessStatus().getFieldName(), Arrays.asList(new String[] { Status.SUSPENDED.name() }));
 
-        args.put(EntityArgsConverter.convertPathToDotNotation(proto.department().name().getPath()), DEPARTMENT_NAME);
+        args.put(EntityArgsConverter.convertPathToDotNotation(proto.department().name().getPath()), Arrays.asList(new String[] { DEPARTMENT_NAME }));
 
         Employee employee = EntityArgsConverter.createFromArgs(Employee.class, args);
 

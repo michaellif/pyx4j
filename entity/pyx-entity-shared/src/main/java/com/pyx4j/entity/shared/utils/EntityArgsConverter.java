@@ -20,8 +20,10 @@
  */
 package com.pyx4j.entity.shared.utils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.pyx4j.commons.GWTJava5Helper;
@@ -41,26 +43,27 @@ public class EntityArgsConverter {
 
     public static final String DATE_FORMAT = "yyyyMMdd";
 
-    public static Map<String, String> convertToArgs(IEntity entity) {
-        Map<String, String> map = new HashMap<String, String>();
+    public static Map<String, List<String>> convertToArgs(IEntity entity) {
+        Map<String, List<String>> map = new HashMap<String, List<String>>();
 
         for (String memberName : entity.getEntityMeta().getMemberNames()) {
             IObject<?> member = entity.getMember(memberName);
             MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(memberName);
             if (!member.isNull()) {
                 if (ObjectClassType.Primitive.equals(memberMeta.getObjectClassType())) {
+                    map.put(memberName, new ArrayList<String>());
                     if (memberMeta.getValueClass().equals(Date.class)) {
-                        map.put(memberName, TimeUtils.simpleFormat((Date) entity.getMember(memberName).getValue(), DATE_TIME_FORMAT));
+                        map.get(memberName).add(TimeUtils.simpleFormat((Date) entity.getMember(memberName).getValue(), DATE_TIME_FORMAT));
                     } else if (memberMeta.getValueClass().equals(LogicalDate.class)) {
-                        map.put(memberName, TimeUtils.simpleFormat((Date) entity.getMember(memberName).getValue(), DATE_FORMAT));
+                        map.get(memberName).add(TimeUtils.simpleFormat((Date) entity.getMember(memberName).getValue(), DATE_FORMAT));
                     } else if (memberMeta.getValueClass().isEnum()) {
-                        map.put(memberName, ((Enum<?>) entity.getMember(memberName).getValue()).name());
+                        map.get(memberName).add(((Enum<?>) entity.getMember(memberName).getValue()).name());
                     } else {
-                        map.put(memberName, entity.getMember(memberName).getValue().toString());
+                        map.get(memberName).add(entity.getMember(memberName).getValue().toString());
                     }
                 } else if (ObjectClassType.Entity.equals(memberMeta.getObjectClassType())) {
                     IEntity nested = (IEntity) entity.getMember(memberName);
-                    Map<String, String> nestedMap = convertToArgs(nested);
+                    Map<String, List<String>> nestedMap = convertToArgs(nested);
                     for (String nestedKey : nestedMap.keySet()) {
                         map.put(memberMeta.getFieldName() + "." + nestedKey, nestedMap.get(nestedKey));
                     }
@@ -70,7 +73,7 @@ public class EntityArgsConverter {
         return map;
     }
 
-    public static <E extends IEntity> E createFromArgs(Class<E> clazz, Map<String, String> args) {
+    public static <E extends IEntity> E createFromArgs(Class<E> clazz, Map<String, List<String>> args) {
 
         E entity = EntityFactory.create(clazz);
         if (args != null) {
@@ -81,12 +84,17 @@ public class EntityArgsConverter {
                 if (memberMeta != null) {
                     if (ObjectClassType.Primitive.equals(memberMeta.getObjectClassType())) {
                         IPrimitive<?> member = (IPrimitive<?>) entity.getMember(path);
+                        String value = "";
+                        List<String> values = args.get(memberName);
+                        if (values != null && values.size() > 0) {
+                            value = values.get(0);
+                        }
                         if (memberMeta.getValueClass().equals(Date.class)) {
-                            entity.setValue(path, TimeUtils.simpleParse(args.get(memberName), DATE_TIME_FORMAT));
+                            entity.setValue(path, TimeUtils.simpleParse(value, DATE_TIME_FORMAT));
                         } else if (memberMeta.getValueClass().equals(LogicalDate.class)) {
-                            entity.setValue(path, new LogicalDate(TimeUtils.simpleParse(args.get(memberName), DATE_FORMAT)));
+                            entity.setValue(path, new LogicalDate(TimeUtils.simpleParse(value, DATE_FORMAT)));
                         } else {
-                            entity.setValue(path, member.parse(args.get(memberName)));
+                            entity.setValue(path, member.parse(value));
                         }
                     }
                 }

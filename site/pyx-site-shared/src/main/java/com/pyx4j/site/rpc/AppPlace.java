@@ -24,8 +24,10 @@ import static com.pyx4j.site.shared.meta.NavigNode.ARGS_GROUP_SEPARATOR;
 import static com.pyx4j.site.shared.meta.NavigNode.ARGS_SEPARATOR;
 import static com.pyx4j.site.shared.meta.NavigNode.NAME_VALUE_SEPARATOR;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -38,7 +40,7 @@ public class AppPlace extends Place {
 
     private static final Logger log = LoggerFactory.getLogger(AppPlace.class);
 
-    private Map<String, String> args;
+    private Map<String, List<String>> args;
 
     public static final AppPlace NOWHERE = new AppPlace() {
     };
@@ -48,26 +50,37 @@ public class AppPlace extends Place {
 
     public void putArg(String key, String value) {
         if (args == null) {
-            args = new HashMap<String, String>();
+            args = new HashMap<String, List<String>>();
         }
-        this.args.put(key, value);
+        args.put(key, new ArrayList<String>());
+        args.get(key).add(value);
     }
 
-    public void putAllArgs(Map<String, String> map) {
+    public void addArg(String key, String value) {
         if (args == null) {
-            args = new HashMap<String, String>();
+            args = new HashMap<String, List<String>>();
+        }
+        if (!args.containsKey(key)) {
+            args.put(key, new ArrayList<String>());
+        }
+        args.get(key).add(value);
+    }
+
+    public void putAllArgs(Map<String, List<String>> map) {
+        if (args == null) {
+            args = new HashMap<String, List<String>>();
         }
         this.args.putAll(map);
     }
 
     public void parseArgs(String queryString) {
         if (args == null) {
-            args = new HashMap<String, String>();
+            args = new HashMap<String, List<String>>();
         }
         args.putAll(parseQueryString(queryString));
     }
 
-    public Map<String, String> getArgs() {
+    public Map<String, List<String>> getArgs() {
         if (args != null) {
             return Collections.unmodifiableMap(args);
         } else {
@@ -75,12 +88,22 @@ public class AppPlace extends Place {
         }
     }
 
-    public String getArg(String key) {
+    public List<String> getArg(String key) {
         if (args != null) {
             return args.get(key);
         } else {
             return null;
         }
+    }
+
+    public String getFirstArg(String key) {
+        if (args != null) {
+            List<String> values = args.get(key);
+            if (values != null && values.size() > 0) {
+                return values.get(0);
+            }
+        }
+        return null;
     }
 
     public String getToken() {
@@ -118,25 +141,32 @@ public class AppPlace extends Place {
         }
         StringBuilder queryString = new StringBuilder();
         boolean first = true;
-        for (Map.Entry<String, String> me : args.entrySet()) {
+        for (Map.Entry<String, List<String>> me : args.entrySet()) {
             if (first) {
                 queryString.append(ARGS_GROUP_SEPARATOR);
                 first = false;
             } else {
                 queryString.append(ARGS_SEPARATOR);
             }
-            queryString.append(me.getKey());
-            queryString.append(NAME_VALUE_SEPARATOR);
-            queryString.append(URL.encodeQueryString(me.getValue()));
+
+            List<String> values = me.getValue();
+            for (int i = 0; i < values.size(); i++) {
+                queryString.append(me.getKey());
+                queryString.append(NAME_VALUE_SEPARATOR);
+                queryString.append(URL.encodeQueryString(values.get(i)));
+                if (i < values.size() - 1) {
+                    queryString.append(ARGS_SEPARATOR);
+                }
+            }
         }
         return queryString.toString();
     }
 
-    protected static Map<String, String> parseQueryString(String queryString) {
+    protected static Map<String, List<String>> parseQueryString(String queryString) {
         if (queryString.startsWith(ARGS_GROUP_SEPARATOR)) {
             queryString = queryString.substring(1);
         }
-        Map<String, String> args = new HashMap<String, String>();
+        Map<String, List<String>> args = new HashMap<String, List<String>>();
         if (queryString.length() == 0) {
             return args;
         }
@@ -145,7 +175,10 @@ public class AppPlace extends Place {
             for (int i = 0; i < nameValues.length; i++) {
                 String[] nameAndValue = nameValues[i].split(NAME_VALUE_SEPARATOR);
                 if (nameAndValue.length == 2) {
-                    args.put(nameAndValue[0], URL.decodeQueryString(nameAndValue[1]));
+                    if (!args.containsKey(nameAndValue[0])) {
+                        args.put(nameAndValue[0], new ArrayList<String>());
+                    }
+                    args.get(nameAndValue[0]).add(URL.decodeQueryString(nameAndValue[1]));
                 } else {
                     log.warn("Can't pars argument {}", nameValues[i]);
                 }
