@@ -7,34 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-09
- * @author vlads
+ * Created on Feb 12, 2011
+ * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.domain.ptapp;
+package com.propertyvista.portal.rpc.ptapp.dto;
 
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.IBoundToApplication;
+import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.TenantIn;
+import com.propertyvista.domain.tenant.TenantScreening;
 
-//TODO  Move to DTO and use data from Lease
-@Deprecated
-@Table(prefix = "old")
-public interface Tenant extends IEntity, IBoundToApplication {
+@Transient
+public interface TenantInLeaseDTO extends Tenant, TenantIn, TenantScreening, IBoundToApplication {
 
-    //TODO This would be TenantInLease
-    @Owned
-    @Length(6)
-    IList<PotentialTenantInfo> tenants();
-
-    //TODO this should be AptUnit property
-    @Transient
-    IPrimitive<Integer> tenantsMaximum();
-
+    IPrimitive<Double> payment();
 }

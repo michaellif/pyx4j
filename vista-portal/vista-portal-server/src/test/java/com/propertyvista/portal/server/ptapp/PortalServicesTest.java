@@ -24,7 +24,7 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.tenant.ptapp.Application;
-import com.propertyvista.portal.domain.ptapp.Tenant;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 public class PortalServicesTest extends VistaDBTestBase {
@@ -33,7 +33,7 @@ public class PortalServicesTest extends VistaDBTestBase {
 
     private Application application;
 
-    private Tenant tenantList;
+    private TenantInLeaseListDTO tenantList;
 
     @Override
     protected void tearDown() throws Exception {

@@ -24,9 +24,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 
 import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.VistaDataPrinter;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
 import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
@@ -68,8 +68,8 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
     @SuppressWarnings("unchecked")
     private void loadTransientData(Charges charges) {
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
-            PotentialTenantInfo tenant = PersistenceServicesFactory.getPersistenceService()
-                    .retrieve(PotentialTenantInfo.class, charge.tenant().getPrimaryKey());
+            TenantInLeaseDTO tenant = PersistenceServicesFactory.getPersistenceService()
+                    .retrieve(TenantInLeaseDTO.class, charge.tenant().getPrimaryKey());
             charge.tenantFullName().setValue(
                     EntityFromatUtils.nvl_concat(" ", tenant.person().name().firstName(), tenant.person().name().middleName(), tenant.person().name()
                             .lastName()));

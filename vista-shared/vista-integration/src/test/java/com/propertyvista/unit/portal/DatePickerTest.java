@@ -24,17 +24,17 @@ import com.pyx4j.forms.client.ui.CCompDebugId;
 import com.pyx4j.selenium.D;
 import com.pyx4j.widgets.client.datepicker.DatePickerIDs;
 
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.Tenant;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 
 public class DatePickerTest extends DatePickerTestBase {
 
-    private final IDebugId datePickerTextBoxId = D.id(D.id(proto(Tenant.class).tenants(), 0),
-            D.id(proto(PotentialTenantInfo.class).person().birthDate()));
+    private final IDebugId datePickerTextBoxId = D.id(D.id(proto(TenantInLeaseListDTO.class).tenants(), 0),
+            D.id(proto(TenantInLeaseDTO.class).person().birthDate()));
 
     private final IDebugId datePickerId = D.id(datePickerTextBoxId, CCompDebugId.trigger);
 
-    private final IDebugId validation = new CompositeDebugId(D.id(proto(Tenant.class).tenants(), 0), IFolderEditorDecorator.DecoratorsIds.Label);
+    private final IDebugId validation = new CompositeDebugId(D.id(proto(TenantInLeaseListDTO.class).tenants(), 0), IFolderEditorDecorator.DecoratorsIds.Label);
 
     public void testDatePicker() throws Exception {
         login();

@@ -29,13 +29,14 @@ import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
 import com.propertyvista.domain.tenant.TenantIn.Status;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 
 public class ChargesServerCalculation extends ChargesSharedCalculation {
 
@@ -46,9 +47,9 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             throw new Error("Data error, charges are not associated with an application");
         }
 
-        EntityQueryCriteria<Tenant> tenantCriteria = EntityQueryCriteria.create(Tenant.class);
+        EntityQueryCriteria<TenantInLeaseListDTO> tenantCriteria = EntityQueryCriteria.create(TenantInLeaseListDTO.class);
         tenantCriteria.add(PropertyCriterion.eq(tenantCriteria.proto().application(), charges.application()));
-        Tenant tenantList = Persistence.service().retrieve(tenantCriteria);
+        TenantInLeaseListDTO tenantList = Persistence.service().retrieve(tenantCriteria);
 
         // find appropriate pet charges
         EntityQueryCriteria<PetsDTO> petCriteria = EntityQueryCriteria.create(PetsDTO.class);
@@ -60,7 +61,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         updateChargesFromObjects(charges, tenantList, pets, vehicles);
     }
 
-    public static void updateChargesFromObjects(Charges charges, Tenant tenantList, PetsDTO pets, IList<Vehicle> vehicles) {
+    public static void updateChargesFromObjects(Charges charges, TenantInLeaseListDTO tenantList, PetsDTO pets, IList<Vehicle> vehicles) {
         double rentAmount = 0;
         double depositAmount = 0;
 
@@ -139,7 +140,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         return false;
     }
 
-    public static boolean isEligibleForPaymentSplit(PotentialTenantInfo tenant) {
+    public static boolean isEligibleForPaymentSplit(TenantInLeaseDTO tenant) {
         if (tenant.isNull()) {
             log.info("Received a null tenant when checking for eligibility");
             return false;
@@ -149,11 +150,11 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         if (tenant.status().getValue() == Status.Applicant) {
             return true;
         } else {
-            return TimeUtils.isOlderThen(tenant.person().birthDate().getValue(), 18);
+            return TimeUtils.isOlderThen(tenant.tenant().person().birthDate().getValue(), 18);
         }
     }
 
-    public static void updatePaymentSplitCharges(Charges charges, Tenant tenantList) {
+    public static void updatePaymentSplitCharges(Charges charges, TenantInLeaseListDTO tenantList) {
         //        // find all potential tenants 
         //        EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
         //        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
@@ -162,14 +163,14 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 
         // compare current tenant list with what we have on the form
         boolean dirty = charges.paymentSplitCharges().charges().isEmpty(); // if there a no charges let's create them
-        List<PotentialTenantInfo> chargedTenants = new ArrayList<PotentialTenantInfo>();
+        List<TenantInLease> chargedTenants = new ArrayList<TenantInLease>();
         for (TenantCharge tenantCharge : charges.paymentSplitCharges().charges()) {
-            PotentialTenantInfo tenant = tenantCharge.tenant();
+            TenantInLease tenant = tenantCharge.tenant();
             log.info("Tenant from charge: {}", tenant);
             chargedTenants.add(tenant);
         }
 
-        for (PotentialTenantInfo tenant : tenantList.tenants()) {
+        for (TenantInLeaseDTO tenant : tenantList.tenants()) {
             log.debug("Tenant from master tenant list: {}", tenant);
             if (!isEligibleForPaymentSplit(tenant)) {
                 log.info("Charges contained tenant {} who should be removed", tenant);
@@ -177,14 +178,14 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
                 break;
             }
         }
-
-        // go through both lists and make sure that they match
-        if (!dirty) {
-            dirty = !areTwoTenantListsTheSame(chargedTenants, tenantList.tenants());
-        }
-        if (!dirty) {
-            dirty = !areTwoTenantListsTheSame(tenantList.tenants(), chargedTenants);
-        }
+// TODO update the algorithm:
+//        // go through both lists and make sure that they match
+//        if (!dirty) {
+//            dirty = !areTwoTenantListsTheSame(chargedTenants, tenantList.tenants());
+//        }
+//        if (!dirty) {
+//            dirty = !areTwoTenantListsTheSame(tenantList.tenants(), chargedTenants);
+//        }
 
         if (dirty) {
             log.info("Tenants have changed, we need to reset payment split charges");
@@ -194,13 +195,13 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         }
     }
 
-    private static boolean areTwoTenantListsTheSame(List<PotentialTenantInfo> tenants1, List<PotentialTenantInfo> tenants2) {
+    private static boolean areTwoTenantListsTheSame(List<TenantInLease> tenants1, List<TenantInLease> tenants2) {
 
         log.info("Exam");
-        for (PotentialTenantInfo tenant1 : tenants1) {
+        for (TenantInLease tenant1 : tenants1) {
             // first, find the tenant (matching by first name and last name)
-            PotentialTenantInfo tenant2 = null;
-            for (PotentialTenantInfo currTenant : tenants2) {
+            TenantInLease tenant2 = null;
+            for (TenantInLease currTenant : tenants2) {
                 if (currTenant.id().equals(tenant1.id())) {
                     tenant2 = currTenant;
                     continue;
@@ -222,9 +223,9 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         return true;
     }
 
-    private static void resetPaymentSplitCharges(Charges charges, Tenant tenantList) {
+    private static void resetPaymentSplitCharges(Charges charges, TenantInLeaseListDTO tenantList) {
         charges.paymentSplitCharges().charges().clear();
-        for (PotentialTenantInfo tenant : tenantList.tenants()) {
+        for (TenantInLeaseDTO tenant : tenantList.tenants()) {
             Status status = tenant.status().getValue();
             log.debug("Going to reset payment splits for tenant {} of age {}", tenant.relationship().getValue(), tenant.person().birthDate().getValue());
 

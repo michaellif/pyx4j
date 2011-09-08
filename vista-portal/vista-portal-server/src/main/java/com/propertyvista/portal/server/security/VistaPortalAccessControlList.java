@@ -32,12 +32,12 @@ import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.MaintenanceRequestCrudService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 import com.propertyvista.portal.rpc.ptapp.services.AddonsService;
@@ -96,8 +96,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(ApplicationDocument.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(ApplicationDocumentData.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(Tenant.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(PotentialTenantInfo.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(TenantInLeaseListDTO.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(TenantInLeaseDTO.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(PetsDTO.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(TenantFinancialDTO.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(Charges.class, applicationEntityAccess, CRUD));

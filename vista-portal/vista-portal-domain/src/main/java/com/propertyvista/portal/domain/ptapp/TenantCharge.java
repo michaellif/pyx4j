@@ -18,11 +18,12 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.charges.Charge;
+import com.propertyvista.domain.tenant.TenantInLease;
 
 public interface TenantCharge extends Charge {
 
     @Detached
-    PotentialTenantInfo tenant();
+    TenantInLease tenant();
 
     @Transient
     IPrimitive<String> tenantFullName();

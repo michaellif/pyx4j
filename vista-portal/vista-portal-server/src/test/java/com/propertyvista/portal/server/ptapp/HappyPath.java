@@ -21,8 +21,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
 import com.propertyvista.domain.tenant.ptapp.Application;
-import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.server.TestUtil;
 import com.propertyvista.portal.server.sync.ActivationServiceSync;
 import com.propertyvista.portal.server.sync.ApplicationServiceSync;
@@ -91,7 +91,7 @@ public class HappyPath {
         //        log.debug("Successfully loaded unit {}", unitSelection.selectedUnitId());
     }
 
-    public static Tenant step4createTenants() {
+    public static TenantInLeaseListDTO step4createTenants() {
         //        PotentialTenantList tenantList = generator.createPotentialTenantList(application);
         //        tenantList.tenants().get(0).email().setValue(email);
 
@@ -109,7 +109,7 @@ public class HappyPath {
         //        }, null);
 
         TenantServiceSync service = new TenantServiceSync();
-        Tenant tenantList = service.retrieve();
+        TenantInLeaseListDTO tenantList = service.retrieve();
 
         //        Assert.assertEquals("prepopulated email", tenantList.tenants().get(0).email(), result.tenants().get(0).email());
         return tenantList;

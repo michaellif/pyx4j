@@ -27,8 +27,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.callfire.CallFire;
 import com.propertyvista.domain.tenant.TenantIn.Status;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.Tenant;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.domain.CampaignHistory;
 import com.propertyvista.server.domain.CampaignTriger;
@@ -38,8 +38,8 @@ public class CampaignManager {
 
     private final static Logger log = LoggerFactory.getLogger(CampaignManager.class);
 
-    public static void fireEvent(CampaignTriger trigger, Tenant tenants) {
-        for (PotentialTenantInfo tenantInfo : tenants.tenants()) {
+    public static void fireEvent(CampaignTriger trigger, TenantInLeaseListDTO tenants) {
+        for (TenantInLeaseDTO tenantInfo : tenants.tenants()) {
             Status status = tenantInfo.status().getValue();
 
             switch (trigger) {
@@ -56,7 +56,7 @@ public class CampaignManager {
         }
     }
 
-    public static void fireEvent(CampaignTriger trigger, PotentialTenantInfo tenant) {
+    public static void fireEvent(CampaignTriger trigger, TenantInLeaseDTO tenant) {
         EntityQueryCriteria<CampaignHistory> criteria = EntityQueryCriteria.create(CampaignHistory.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
         criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), trigger));
@@ -76,7 +76,7 @@ public class CampaignManager {
         PersistenceServicesFactory.getPersistenceService().persist(history);
     }
 
-    private static void execute(PhoneCallCampaign phoneCallCampaign, PotentialTenantInfo tenant) {
+    private static void execute(PhoneCallCampaign phoneCallCampaign, TenantInLeaseDTO tenant) {
         List<String> numbers = new ArrayList<String>();
         String name = tenant.person().name().firstName().getValue() + " " + tenant.person().name().lastName().getValue();
         String number = tenant.person().homePhone().number().getValue();

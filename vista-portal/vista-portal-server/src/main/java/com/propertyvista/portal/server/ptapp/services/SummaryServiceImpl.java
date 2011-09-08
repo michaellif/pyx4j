@@ -34,8 +34,8 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.charges.ChargeLineSelectable;
 import com.propertyvista.misc.ServletMapping;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryTenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
@@ -78,7 +78,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 
         // We do not remove the info from DB if Tenant status changes
         summary.tenantsWithInfo().tenants().clear();
-        for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
+        for (TenantInLeaseDTO tenant : summary.tenantList().tenants()) {
             if (ApplicationProgressMgr.shouldEnterInformation(tenant)) {
                 summary.tenantsWithInfo().tenants().add(tenant);
             }
@@ -89,7 +89,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         summary.tenantFinancials().clear();
         for (TenantFinancialDTO fin : PersistenceServicesFactory.getPersistenceService().query(financialCriteria)) {
             // Update Transient values and see if we need to show this Tenant
-            findTenenat: for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
+            findTenenat: for (TenantInLeaseDTO tenant : summary.tenantList().tenants()) {
                 if (fin.id().equals(tenant.id())) {
                     if (ApplicationProgressMgr.shouldEnterInformation(tenant)) {
                         SummaryTenantFinancialDTO sf = summary.tenantFinancials().$();
@@ -116,7 +116,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         }
         summary.charges().monthlyCharges().upgradeCharges().clear();
         loopOverTenantCharge: for (TenantCharge charge : summary.charges().paymentSplitCharges().charges()) {
-            for (PotentialTenantInfo tenant : summary.tenantList().tenants()) {
+            for (TenantInLeaseDTO tenant : summary.tenantList().tenants()) {
                 if (tenant.equals(charge.tenant())) {
                     charge.tenantFullName().setValue(
                             EntityFromatUtils.nvl_concat(" ", tenant.person().name().firstName(), tenant.person().name().middleName(), tenant.person().name()

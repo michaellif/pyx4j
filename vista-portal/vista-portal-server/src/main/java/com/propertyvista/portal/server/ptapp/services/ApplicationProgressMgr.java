@@ -29,8 +29,8 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.common.ptapp.ApplicationMgr;
@@ -46,7 +46,7 @@ public class ApplicationProgressMgr extends ApplicationMgr {
         throw new Error("Step '" + place.getName() + "' not found");
     }
 
-    public static boolean shouldEnterInformation(PotentialTenantInfo tenant) {
+    public static boolean shouldEnterInformation(TenantInLeaseDTO tenant) {
         //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
         if (tenant.status().getValue() == Status.Applicant) {
             return true;

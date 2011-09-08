@@ -19,16 +19,15 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.Summary;
-import com.propertyvista.portal.domain.ptapp.Tenant;
 
 @Transient
 public interface SummaryDTO extends Summary {
 
     ApartmentInfoDTO selectedUnit();
 
-    Tenant tenantList();
+    TenantInLeaseListDTO tenantList();
 
-    Tenant tenantsWithInfo();
+    TenantInLeaseListDTO tenantsWithInfo();
 
     @EmbeddedEntity
     IList<SummaryTenantFinancialDTO> tenantFinancials();

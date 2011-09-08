@@ -31,9 +31,9 @@ import com.propertyvista.domain.tenant.TenantIn.Status;
 import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInfo;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
 import com.propertyvista.portal.server.campaign.CampaignManager;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
@@ -70,7 +70,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
 
         boolean callFireDemo = false;
         if (callFireDemo) {
-            EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+            EntityQueryCriteria<TenantInLeaseListDTO> criteria = EntityQueryCriteria.create(TenantInLeaseListDTO.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
             CampaignManager.fireEvent(CampaignTriger.ApplicationCompleated, secureRetrieve(criteria));
         }
@@ -98,9 +98,9 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
             }
         }
         // Get the currentAddress
-        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+        EntityQueryCriteria<TenantInLeaseListDTO> criteria = EntityQueryCriteria.create(TenantInLeaseListDTO.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
-        for (PotentialTenantInfo tenantInfo : secureRetrieve(criteria).tenants()) {
+        for (TenantInLeaseDTO tenantInfo : secureRetrieve(criteria).tenants()) {
             if (tenantInfo.status().getValue().equals(Status.Applicant)) {
                 paymentInfo.currentAddress().set(tenantInfo.currentAddress());
                 paymentInfo.currentPhone().set(tenantInfo.person().homePhone());

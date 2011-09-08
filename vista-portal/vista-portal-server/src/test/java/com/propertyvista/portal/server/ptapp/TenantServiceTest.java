@@ -26,8 +26,8 @@ import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.tenant.TenantIn.Status;
 import com.propertyvista.domain.tenant.ptapp.Application;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.Tenant;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 public class TenantServiceTest extends VistaDBTestBase {
@@ -61,11 +61,11 @@ public class TenantServiceTest extends VistaDBTestBase {
 
     public void testHappyPath() {
         happyPath();
-        Tenant tenantList = HappyPath.step4createTenants();
+        TenantInLeaseListDTO tenantList = HappyPath.step4createTenants();
         log.info(tenantList.toString());
         Assert.assertEquals("One tenant", 1, tenantList.tenants().size());
 
-        PotentialTenantInfo tenant = tenantList.tenants().get(0);
+        TenantInLeaseDTO tenant = tenantList.tenants().get(0);
 
         Assert.assertEquals("Applicant status", Status.Applicant, tenant.status().getValue());
         Assert.assertEquals("Email", email, tenant.person().email().getValue());
@@ -76,7 +76,7 @@ public class TenantServiceTest extends VistaDBTestBase {
 
         PTGenerator generator = new PTGenerator(10l, PreloadConfig.createTest());
 
-        Tenant tenantList = HappyPath.step4createTenants();
+        TenantInLeaseListDTO tenantList = HappyPath.step4createTenants();
         // PotentialTenantList tenantList2 = generator.createPotentialTenantList(application);
 
         //        tenantService.save(new UnitTestsAsyncCallback<PotentialTenantList>() {

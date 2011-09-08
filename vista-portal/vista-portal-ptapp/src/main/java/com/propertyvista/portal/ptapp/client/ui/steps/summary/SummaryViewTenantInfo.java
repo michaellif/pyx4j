@@ -42,12 +42,12 @@ import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.Vehicle;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.VistaReadOnlyDecorator;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 
-public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTenantInfo> {
+public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLeaseDTO> {
 
     private final String LEFT_COLUMN_WIDTH = "40%";
 
@@ -56,7 +56,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<PotentialTe
     private final String RIGHT_COLUMN_WIDTH = "40%";
 
     public SummaryViewTenantInfo() {
-        super(PotentialTenantInfo.class);
+        super(TenantInLeaseDTO.class);
     }
 
     @Override

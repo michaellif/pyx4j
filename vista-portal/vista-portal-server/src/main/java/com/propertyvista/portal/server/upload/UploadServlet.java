@@ -34,7 +34,7 @@ import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.MimeMap;
 
 import com.propertyvista.misc.ApplicationDocumentServletParameters;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceImpl;
 import com.propertyvista.server.domain.ApplicationDocumentData;
@@ -109,7 +109,7 @@ public class UploadServlet extends UploadAction {
                 throw new UploadActionException("Content type resolved by file name extension (" + contentType
                         + ") does not match to one passed with the upload request (" + fileItem.getContentType() + ")");
             }
-            PotentialTenantInfo tenant = PersistenceServicesFactory.getPersistenceService().retrieve(PotentialTenantInfo.class, tenantId);
+            TenantInLeaseDTO tenant = PersistenceServicesFactory.getPersistenceService().retrieve(TenantInLeaseDTO.class, tenantId);
             if (tenant == null) {
                 throw new UploadActionException("Unknown tenantId: " + tenantId);
             }
@@ -129,7 +129,7 @@ public class UploadServlet extends UploadAction {
         }
     }
 
-    private ApplicationDocumentData createApplicationDocumentData(byte[] data, String contentType, PotentialTenantInfo tenant) {
+    private ApplicationDocumentData createApplicationDocumentData(byte[] data, String contentType, TenantInLeaseDTO tenant) {
         ApplicationDocumentData applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
         applicationDocumentData.data().setValue(data);
         applicationDocumentData.tenant().set(tenant);

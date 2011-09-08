@@ -28,12 +28,12 @@ import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.dto.VehiclesDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
-import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryTenantFinancialDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 
 public class VistaDataPrinter {
@@ -70,13 +70,13 @@ public class VistaDataPrinter {
         return sb.toString();
     }
 
-    public static String print(Tenant tenantList) {
+    public static String print(TenantInLeaseListDTO tenantList) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(tenantList.tenants().size()).append(" potential tenants");
         sb.append("\n");
 
-        for (PotentialTenantInfo tenant : tenantList.tenants()) {
+        for (TenantInLeaseDTO tenant : tenantList.tenants()) {
 
             sb.append("\n--- tenant ---\n");
             sb.append(print(tenant));
@@ -86,7 +86,7 @@ public class VistaDataPrinter {
         return sb.toString();
     }
 
-    public static String print(PotentialTenantInfo tenant) {
+    public static String print(TenantInLeaseDTO tenant) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(tenant.status().getStringView());

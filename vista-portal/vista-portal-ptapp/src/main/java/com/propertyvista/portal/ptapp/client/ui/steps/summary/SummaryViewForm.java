@@ -64,7 +64,6 @@ import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.domain.tenant.TenantIn.Status;
-import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
@@ -72,6 +71,7 @@ import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderIte
 import com.propertyvista.portal.ptapp.client.ui.steps.addons.AddonsViewForm;
 import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesViewForm;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryTenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
@@ -344,14 +344,14 @@ public class SummaryViewForm extends CEntityForm<SummaryDTO> {
             content.add(cellContent);
         }
 
-        public CEntityFolderEditor<PotentialTenantInfo> createTenantTable() {
+        public CEntityFolderEditor<TenantInLeaseDTO> createTenantTable() {
 
-            return new CEntityFolderEditor<PotentialTenantInfo>(PotentialTenantInfo.class) {
+            return new CEntityFolderEditor<TenantInLeaseDTO>(TenantInLeaseDTO.class) {
 
                 @Override
-                protected CEntityFolderItemEditor<PotentialTenantInfo> createItem() {
+                protected CEntityFolderItemEditor<TenantInLeaseDTO> createItem() {
 
-                    return new CEntityFolderItemEditor<PotentialTenantInfo>(PotentialTenantInfo.class) {
+                    return new CEntityFolderItemEditor<TenantInLeaseDTO>(TenantInLeaseDTO.class) {
 
                         @Override
                         public IsWidget createContent() {
@@ -371,15 +371,15 @@ public class SummaryViewForm extends CEntityForm<SummaryDTO> {
                         }
 
                         @Override
-                        public IFolderItemEditorDecorator<PotentialTenantInfo> createFolderItemDecorator() {
-                            return new BoxReadOnlyFolderItemDecorator<PotentialTenantInfo>(false);
+                        public IFolderItemEditorDecorator<TenantInLeaseDTO> createFolderItemDecorator() {
+                            return new BoxReadOnlyFolderItemDecorator<TenantInLeaseDTO>(false);
                         }
                     };
                 }
 
                 @Override
-                protected IFolderEditorDecorator<PotentialTenantInfo> createFolderDecorator() {
-                    return new BoxReadOnlyFolderDecorator<PotentialTenantInfo>();
+                protected IFolderEditorDecorator<TenantInLeaseDTO> createFolderDecorator() {
+                    return new BoxReadOnlyFolderDecorator<TenantInLeaseDTO>();
                 }
             };
         }
@@ -388,18 +388,18 @@ public class SummaryViewForm extends CEntityForm<SummaryDTO> {
     /*
      * Tenants detailed information view implementation
      */
-    public CEntityFolderEditor<PotentialTenantInfo> createTenantView() {
+    public CEntityFolderEditor<TenantInLeaseDTO> createTenantView() {
 
-        return new CEntityFolderEditor<PotentialTenantInfo>(PotentialTenantInfo.class) {
+        return new CEntityFolderEditor<TenantInLeaseDTO>(TenantInLeaseDTO.class) {
 
             @Override
-            protected CEntityFolderItemEditor<PotentialTenantInfo> createItem() {
+            protected CEntityFolderItemEditor<TenantInLeaseDTO> createItem() {
                 return new SummaryViewTenantInfo();
             }
 
             @Override
-            protected IFolderEditorDecorator<PotentialTenantInfo> createFolderDecorator() {
-                return new BoxReadOnlyFolderDecorator<PotentialTenantInfo>();
+            protected IFolderEditorDecorator<TenantInLeaseDTO> createFolderDecorator() {
+                return new BoxReadOnlyFolderDecorator<TenantInLeaseDTO>();
             }
         };
     }
@@ -522,7 +522,7 @@ public class SummaryViewForm extends CEntityForm<SummaryDTO> {
         if (CommonsStringUtils.isEmpty(signature)) {
             return false;
         }
-        for (PotentialTenantInfo pti : getValue().tenantList().tenants()) {
+        for (TenantInLeaseDTO pti : getValue().tenantList().tenants()) {
             if (pti.status().getValue() == Status.Applicant) {
                 return isCombinationMatch(signature, pti.person().name().firstName(), pti.person().name().lastName(), pti.person().name().middleName());
             }
