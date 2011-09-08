@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.callfire.CallFire;
 import com.propertyvista.domain.tenant.TenantIn.Status;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.domain.CampaignHistory;
@@ -39,7 +39,7 @@ public class CampaignManager {
     private final static Logger log = LoggerFactory.getLogger(CampaignManager.class);
 
     public static void fireEvent(CampaignTriger trigger, TenantInLeaseListDTO tenants) {
-        for (TenantInLeaseDTO tenantInfo : tenants.tenants()) {
+        for (TenantInLease tenantInfo : tenants.tenants()) {
             Status status = tenantInfo.status().getValue();
 
             switch (trigger) {
@@ -56,7 +56,7 @@ public class CampaignManager {
         }
     }
 
-    public static void fireEvent(CampaignTriger trigger, TenantInLeaseDTO tenant) {
+    public static void fireEvent(CampaignTriger trigger, TenantInLease tenant) {
         EntityQueryCriteria<CampaignHistory> criteria = EntityQueryCriteria.create(CampaignHistory.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
         criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), trigger));
@@ -76,10 +76,10 @@ public class CampaignManager {
         PersistenceServicesFactory.getPersistenceService().persist(history);
     }
 
-    private static void execute(PhoneCallCampaign phoneCallCampaign, TenantInLeaseDTO tenant) {
+    private static void execute(PhoneCallCampaign phoneCallCampaign, TenantInLease tenant) {
         List<String> numbers = new ArrayList<String>();
-        String name = tenant.person().name().firstName().getValue() + " " + tenant.person().name().lastName().getValue();
-        String number = tenant.person().homePhone().number().getValue();
+        String name = tenant.tenant().person().name().firstName().getValue() + " " + tenant.tenant().person().name().lastName().getValue();
+        String number = tenant.tenant().person().homePhone().number().getValue();
         if (ApplicationMode.isDevelopment()) {
             String allowedNumber = DevelopmentSecurity.callNumberFilter(number);
             log.info("We will call {} instead of {}", allowedNumber, number);

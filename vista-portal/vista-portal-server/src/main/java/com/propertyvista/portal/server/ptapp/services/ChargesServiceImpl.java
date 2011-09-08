@@ -19,14 +19,15 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 
+import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.VistaDataPrinter;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
 import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
@@ -68,11 +69,10 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
     @SuppressWarnings("unchecked")
     private void loadTransientData(Charges charges) {
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
-            TenantInLeaseDTO tenant = PersistenceServicesFactory.getPersistenceService()
-                    .retrieve(TenantInLeaseDTO.class, charge.tenant().getPrimaryKey());
-            charge.tenantFullName().setValue(
-                    EntityFromatUtils.nvl_concat(" ", tenant.person().name().firstName(), tenant.person().name().middleName(), tenant.person().name()
-                            .lastName()));
+            TenantInLease tenant = Persistence.service().retrieve(TenantInLease.class, charge.tenant().getPrimaryKey());
+
+            Name name = tenant.tenant().person().name().detach();
+            charge.tenantFullName().setValue(EntityFromatUtils.nvl_concat(" ", name.firstName(), name.middleName(), name.lastName()));
         }
     }
 }

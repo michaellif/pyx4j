@@ -21,6 +21,7 @@ import com.propertyvista.domain.User;
 import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineSelectable;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
@@ -30,11 +31,10 @@ import com.propertyvista.dto.VehiclesDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryTenantFinancialDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 
 public class VistaDataPrinter {
 
@@ -76,7 +76,7 @@ public class VistaDataPrinter {
         sb.append(tenantList.tenants().size()).append(" potential tenants");
         sb.append("\n");
 
-        for (TenantInLeaseDTO tenant : tenantList.tenants()) {
+        for (TenantInLease tenant : tenantList.tenants()) {
 
             sb.append("\n--- tenant ---\n");
             sb.append(print(tenant));
@@ -86,43 +86,39 @@ public class VistaDataPrinter {
         return sb.toString();
     }
 
-    public static String print(TenantInLeaseDTO tenant) {
+    public static String print(TenantInLease tenant) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(tenant.status().getStringView());
         sb.append(", ");
 
-        sb.append(tenant.person().name().firstName().getStringView());
+        sb.append(tenant.tenant().person().name().firstName().getStringView());
         sb.append(" ");
-        if (tenant.person().name().middleName().getStringView().length() > 0) {
-            sb.append(tenant.person().name().middleName().getStringView());
+        if (tenant.tenant().person().name().middleName().getStringView().length() > 0) {
+            sb.append(tenant.tenant().person().name().middleName().getStringView());
             sb.append(" ");
         }
-        sb.append(tenant.person().name().lastName().getStringView());
+        sb.append(tenant.tenant().person().name().lastName().getStringView());
 
         sb.append("\t\t Born on ");
-        sb.append(tenant.person().birthDate().getValue());
+        sb.append(tenant.tenant().person().birthDate().getValue());
 
         sb.append("\t");
-        sb.append(tenant.person().homePhone().getStringView()).append(" | ").append(tenant.person().mobilePhone().getStringView());
+        sb.append(tenant.tenant().person().homePhone().getStringView()).append(" | ").append(tenant.tenant().person().mobilePhone().getStringView());
 
         sb.append("\t");
-        sb.append(tenant.person().email().getStringView());
-
-        sb.append("\t");
-
-        sb.append("\t Payment $").append(tenant.payment().getStringView());
+        sb.append(tenant.tenant().person().email().getStringView());
 
         sb.append("\n\t");
 
-        sb.append(tenant.driversLicense().getStringView()).append(" ").append(tenant.driversLicenseState().getStringView());
-
-        sb.append("\t").append(tenant.secureIdentifier().getStringView());
-
-        sb.append("Current address");
-        sb.append(VistaDataPrinter.print(tenant.currentAddress()));
-        sb.append("Previous address");
-        sb.append(VistaDataPrinter.print(tenant.previousAddress()));
+//        sb.append(tenant.driversLicense().getStringView()).append(" ").append(tenant.driversLicenseState().getStringView());
+//
+//        sb.append("\t").append(tenant.secureIdentifier().getStringView());
+//
+//        sb.append("Current address");
+//        sb.append(VistaDataPrinter.print(tenant.currentAddress()));
+//        sb.append("Previous address");
+//        sb.append(VistaDataPrinter.print(tenant.previousAddress()));
 
         sb.append("\nVehicles\n");
 

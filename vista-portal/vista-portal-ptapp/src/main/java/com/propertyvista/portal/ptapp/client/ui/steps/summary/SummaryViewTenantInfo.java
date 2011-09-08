@@ -42,12 +42,12 @@ import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.Vehicle;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.VistaReadOnlyDecorator;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 
-public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLeaseDTO> {
+public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLease> {
 
     private final String LEFT_COLUMN_WIDTH = "40%";
 
@@ -56,12 +56,12 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
     private final String RIGHT_COLUMN_WIDTH = "40%";
 
     public SummaryViewTenantInfo() {
-        super(TenantInLeaseDTO.class);
+        super(TenantInLease.class);
     }
 
     @Override
     public IsWidget getTenantFullName() {
-        return DecorationUtils.formFullName(this, proto().person());
+        return DecorationUtils.formFullName(this, proto().tenant().person());
     }
 
     @Override
@@ -78,10 +78,10 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
         subviewPanel.getElement().getStyle().setMarginTop(0.3, Unit.EM);
 
         FlowPanel panel = new FlowPanel();
-        panel.add(new VistaReadOnlyDecorator(inject(proto().person().homePhone()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().person().mobilePhone()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().person().workPhone()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().person().email()), dd2ColumnsTable));
+        panel.add(new VistaReadOnlyDecorator(inject(proto().tenant().person().homePhone()), dd2ColumnsTable));
+        panel.add(new VistaReadOnlyDecorator(inject(proto().tenant().person().mobilePhone()), dd2ColumnsTable));
+        panel.add(new VistaReadOnlyDecorator(inject(proto().tenant().person().workPhone()), dd2ColumnsTable));
+        panel.add(new VistaReadOnlyDecorator(inject(proto().tenant().person().email()), dd2ColumnsTable));
         subviewPanel.add(panel);
         subviewPanel.setCellWidth(panel, LEFT_COLUMN_WIDTH);
 
@@ -90,9 +90,9 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
         subviewPanel.setCellWidth(panel, GAP_COLUMN_WIDTH);
 
         panel = new FlowPanel();
-        panel.add(new VistaReadOnlyDecorator(inject(proto().driversLicense()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().driversLicenseState()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().secureIdentifier()), dd2ColumnsTable));
+//        panel.add(new VistaReadOnlyDecorator(inject(proto().driversLicense()), dd2ColumnsTable));
+//        panel.add(new VistaReadOnlyDecorator(inject(proto().driversLicenseState()), dd2ColumnsTable));
+//        panel.add(new VistaReadOnlyDecorator(inject(proto().secureIdentifier()), dd2ColumnsTable));
         subviewPanel.add(panel);
         subviewPanel.setCellWidth(panel, RIGHT_COLUMN_WIDTH);
 
@@ -109,14 +109,14 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
 
         subviewPanel = new HorizontalPanel();
 
-        subviewPanel.add(panel = bindAddress(proto().currentAddress(), dd2ColumnsTable));
+//        subviewPanel.add(panel = bindAddress(proto().currentAddress(), dd2ColumnsTable));
         subviewPanel.setCellWidth(panel, LEFT_COLUMN_WIDTH);
 
         panel = new FlowPanel();
         subviewPanel.add(panel);
         subviewPanel.setCellWidth(panel, GAP_COLUMN_WIDTH);
 
-        subviewPanel.add(panel = bindAddress(proto().previousAddress(), dd2ColumnsTable));
+//        subviewPanel.add(panel = bindAddress(proto().previousAddress(), dd2ColumnsTable));
         subviewPanel.setCellWidth(panel, RIGHT_COLUMN_WIDTH);
 
         subviewPanel.add(new FlowPanel()); // add empty cell just for proper resizing of the previous two ;)
@@ -138,14 +138,14 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
         panel = new FlowPanel();
         panel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-        panel.add(new HTML(h3(proto().legalQuestions().getMeta().getCaption())));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().suedForRent()), ddQuestionay));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().suedForDamages()), ddQuestionay));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().everEvicted()), ddQuestionay));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().defaultedOnLease()), ddQuestionay));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().convictedOfFelony()), ddQuestionay));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().legalTroubles()), ddQuestionay));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().filedBankruptcy()), ddQuestionay));
+//        panel.add(new HTML(h3(proto().legalQuestions().getMeta().getCaption())));
+//        panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().suedForRent()), ddQuestionay));
+//        panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().suedForDamages()), ddQuestionay));
+//        panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().everEvicted()), ddQuestionay));
+//        panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().defaultedOnLease()), ddQuestionay));
+//        panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().convictedOfFelony()), ddQuestionay));
+//        panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().legalTroubles()), ddQuestionay));
+//        panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().filedBankruptcy()), ddQuestionay));
         panel.setWidth("100%");
         fullViewPanel.add(panel);
 
@@ -156,10 +156,10 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
         // ----------------------------------------------------------------------
         // Emergency:
 
-        fullViewPanel.add(new HTML(h3(proto().emergencyContacts().getMeta().getCaption())));
+        fullViewPanel.add(new HTML(h3(proto().tenant().emergencyContacts().getMeta().getCaption())));
 
-        bind(createEmergencyContactsFolder(), proto().emergencyContacts());
-        fullViewPanel.add(get(proto().emergencyContacts()));
+        bind(createEmergencyContactsFolder(), proto().tenant().emergencyContacts());
+        fullViewPanel.add(get(proto().tenant().emergencyContacts()));
         return fullViewPanel;
     }
 

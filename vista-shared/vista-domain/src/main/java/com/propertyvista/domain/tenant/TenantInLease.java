@@ -19,9 +19,10 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface TenantInLease extends TenantIn /* TODO IBoundToApplication ? */{
+public interface TenantInLease extends TenantIn, IBoundToApplication {
 
     @Detached
     @NotNull

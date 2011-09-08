@@ -28,13 +28,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.MimeMap;
 
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.misc.ApplicationDocumentServletParameters;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceImpl;
 import com.propertyvista.server.domain.ApplicationDocumentData;
@@ -109,7 +109,7 @@ public class UploadServlet extends UploadAction {
                 throw new UploadActionException("Content type resolved by file name extension (" + contentType
                         + ") does not match to one passed with the upload request (" + fileItem.getContentType() + ")");
             }
-            TenantInLeaseDTO tenant = PersistenceServicesFactory.getPersistenceService().retrieve(TenantInLeaseDTO.class, tenantId);
+            TenantInLease tenant = Persistence.service().retrieve(TenantInLease.class, tenantId);
             if (tenant == null) {
                 throw new UploadActionException("Unknown tenantId: " + tenantId);
             }
@@ -129,10 +129,10 @@ public class UploadServlet extends UploadAction {
         }
     }
 
-    private ApplicationDocumentData createApplicationDocumentData(byte[] data, String contentType, TenantInLeaseDTO tenant) {
+    private ApplicationDocumentData createApplicationDocumentData(byte[] data, String contentType, TenantInLease tenant) {
         ApplicationDocumentData applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
         applicationDocumentData.data().setValue(data);
-        applicationDocumentData.tenant().set(tenant);
+        applicationDocumentData.tenant().set(tenant.tenant());
         applicationDocumentData.contentType().setValue(contentType);
         applicationDocumentData.application().set(tenant.application());
         ApplicationEntityServiceImpl.saveApplicationEntity(applicationDocumentData);

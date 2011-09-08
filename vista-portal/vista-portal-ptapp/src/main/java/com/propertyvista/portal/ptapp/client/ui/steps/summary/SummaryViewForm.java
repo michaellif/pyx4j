@@ -64,6 +64,7 @@ import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.domain.tenant.TenantIn.Status;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
@@ -71,7 +72,6 @@ import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderIte
 import com.propertyvista.portal.ptapp.client.ui.steps.addons.AddonsViewForm;
 import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesViewForm;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryTenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
@@ -344,23 +344,23 @@ public class SummaryViewForm extends CEntityForm<SummaryDTO> {
             content.add(cellContent);
         }
 
-        public CEntityFolderEditor<TenantInLeaseDTO> createTenantTable() {
+        public CEntityFolderEditor<TenantInLease> createTenantTable() {
 
-            return new CEntityFolderEditor<TenantInLeaseDTO>(TenantInLeaseDTO.class) {
+            return new CEntityFolderEditor<TenantInLease>(TenantInLease.class) {
 
                 @Override
-                protected CEntityFolderItemEditor<TenantInLeaseDTO> createItem() {
+                protected CEntityFolderItemEditor<TenantInLease> createItem() {
 
-                    return new CEntityFolderItemEditor<TenantInLeaseDTO>(TenantInLeaseDTO.class) {
+                    return new CEntityFolderItemEditor<TenantInLease>(TenantInLease.class) {
 
                         @Override
                         public IsWidget createContent() {
                             FlowPanel content = new FlowPanel();
                             content.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                             content.getElement().getStyle().setPaddingRight(1, Unit.EM);
-                            addCell(tableLayout, content, "Name", DecorationUtils.formFullName(this, proto().person()));
-                            addCell(tableLayout, content, "Date of Birht", inject(proto().person().birthDate()).asWidget());
-                            addCell(tableLayout, content, "Email", inject(proto().person().email()).asWidget());
+                            addCell(tableLayout, content, "Name", DecorationUtils.formFullName(this, proto().tenant().person()));
+                            addCell(tableLayout, content, "Date of Birht", inject(proto().tenant().person().birthDate()).asWidget());
+                            addCell(tableLayout, content, "Email", inject(proto().tenant().person().email()).asWidget());
                             if (isFirst()) {
                                 addCell(tableLayout, content, "Relationship", new HTML("&nbsp;"));
                             } else {
@@ -371,15 +371,15 @@ public class SummaryViewForm extends CEntityForm<SummaryDTO> {
                         }
 
                         @Override
-                        public IFolderItemEditorDecorator<TenantInLeaseDTO> createFolderItemDecorator() {
-                            return new BoxReadOnlyFolderItemDecorator<TenantInLeaseDTO>(false);
+                        public IFolderItemEditorDecorator<TenantInLease> createFolderItemDecorator() {
+                            return new BoxReadOnlyFolderItemDecorator<TenantInLease>(false);
                         }
                     };
                 }
 
                 @Override
-                protected IFolderEditorDecorator<TenantInLeaseDTO> createFolderDecorator() {
-                    return new BoxReadOnlyFolderDecorator<TenantInLeaseDTO>();
+                protected IFolderEditorDecorator<TenantInLease> createFolderDecorator() {
+                    return new BoxReadOnlyFolderDecorator<TenantInLease>();
                 }
             };
         }
@@ -388,18 +388,18 @@ public class SummaryViewForm extends CEntityForm<SummaryDTO> {
     /*
      * Tenants detailed information view implementation
      */
-    public CEntityFolderEditor<TenantInLeaseDTO> createTenantView() {
+    public CEntityFolderEditor<TenantInLease> createTenantView() {
 
-        return new CEntityFolderEditor<TenantInLeaseDTO>(TenantInLeaseDTO.class) {
+        return new CEntityFolderEditor<TenantInLease>(TenantInLease.class) {
 
             @Override
-            protected CEntityFolderItemEditor<TenantInLeaseDTO> createItem() {
+            protected CEntityFolderItemEditor<TenantInLease> createItem() {
                 return new SummaryViewTenantInfo();
             }
 
             @Override
-            protected IFolderEditorDecorator<TenantInLeaseDTO> createFolderDecorator() {
-                return new BoxReadOnlyFolderDecorator<TenantInLeaseDTO>();
+            protected IFolderEditorDecorator<TenantInLease> createFolderDecorator() {
+                return new BoxReadOnlyFolderDecorator<TenantInLease>();
             }
         };
     }
@@ -522,9 +522,10 @@ public class SummaryViewForm extends CEntityForm<SummaryDTO> {
         if (CommonsStringUtils.isEmpty(signature)) {
             return false;
         }
-        for (TenantInLeaseDTO pti : getValue().tenantList().tenants()) {
+        for (TenantInLease pti : getValue().tenantList().tenants()) {
             if (pti.status().getValue() == Status.Applicant) {
-                return isCombinationMatch(signature, pti.person().name().firstName(), pti.person().name().lastName(), pti.person().name().middleName());
+                return isCombinationMatch(signature, pti.tenant().person().name().firstName(), pti.tenant().person().name().lastName(), pti.tenant().person()
+                        .name().middleName());
             }
         }
         return false;

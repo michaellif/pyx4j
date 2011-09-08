@@ -69,7 +69,6 @@ import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.misc.ApplicationDocumentServletParameters;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.ApplicationDocumentData;
@@ -174,7 +173,7 @@ public class PTGenerator {
         return employer;
     }
 
-    public ApplicationDocument createApplicationDocument(TenantInLeaseDTO tenantInfo, String fileName, ApplicationDocument.DocumentType documentType) {
+    public ApplicationDocument createApplicationDocument(TenantInLease tenantInfo, String fileName, ApplicationDocument.DocumentType documentType) {
         assert (tenantInfo.application() != null);
 
         ApplicationDocument applicationDocument = EntityFactory.create(ApplicationDocument.class);
@@ -199,7 +198,7 @@ public class PTGenerator {
         }
     }
 
-    public ApplicationDocumentData createApplicationDocumentData(TenantInLeaseDTO tenantInfo, String fileName) {
+    public ApplicationDocumentData createApplicationDocumentData(TenantInLease tenantInfo, String fileName) {
         String filename = IOUtils.resourceFileName(fileName, PTGenerator.class);
         try {
             byte[] data = IOUtils.getResource(filename);

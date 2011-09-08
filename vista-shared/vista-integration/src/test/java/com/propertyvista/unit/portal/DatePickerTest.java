@@ -24,13 +24,13 @@ import com.pyx4j.forms.client.ui.CCompDebugId;
 import com.pyx4j.selenium.D;
 import com.pyx4j.widgets.client.datepicker.DatePickerIDs;
 
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 
 public class DatePickerTest extends DatePickerTestBase {
 
     private final IDebugId datePickerTextBoxId = D.id(D.id(proto(TenantInLeaseListDTO.class).tenants(), 0),
-            D.id(proto(TenantInLeaseDTO.class).person().birthDate()));
+            D.id(proto(TenantInLease.class).tenant().person().birthDate()));
 
     private final IDebugId datePickerId = D.id(datePickerTextBoxId, CCompDebugId.trigger);
 

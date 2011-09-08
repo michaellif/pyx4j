@@ -28,11 +28,11 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.tenant.TenantIn.Status;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInfo;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
 import com.propertyvista.portal.server.campaign.CampaignManager;
@@ -100,10 +100,11 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
         // Get the currentAddress
         EntityQueryCriteria<TenantInLeaseListDTO> criteria = EntityQueryCriteria.create(TenantInLeaseListDTO.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
-        for (TenantInLeaseDTO tenantInfo : secureRetrieve(criteria).tenants()) {
+        for (TenantInLease tenantInfo : secureRetrieve(criteria).tenants()) {
             if (tenantInfo.status().getValue().equals(Status.Applicant)) {
-                paymentInfo.currentAddress().set(tenantInfo.currentAddress());
-                paymentInfo.currentPhone().set(tenantInfo.person().homePhone());
+                TenantRetriever r = new TenantRetriever(tenantInfo.tenant().getPrimaryKey());
+                paymentInfo.currentAddress().set(r.tenantScreening.currentAddress());
+                paymentInfo.currentPhone().set(tenantInfo.tenant().person().homePhone());
                 break;
             }
         }

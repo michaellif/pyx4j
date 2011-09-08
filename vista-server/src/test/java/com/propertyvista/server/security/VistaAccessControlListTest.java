@@ -37,15 +37,15 @@ import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInfo;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 import com.propertyvista.portal.rpc.ptapp.services.AddonsService;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
@@ -146,7 +146,7 @@ public class VistaAccessControlListTest {
 
         assertEntityPermission(false, ApplicationDocument.class, null);
         assertEntityPermission(false, TenantInLeaseListDTO.class, null);
-        assertEntityPermission(false, TenantInLeaseDTO.class, null);
+        assertEntityPermission(false, TenantInLease.class, null);
         assertEntityPermission(false, PetsDTO.class, null);
         assertEntityPermission(false, TenantFinancialDTO.class, null);
         assertEntityPermission(false, Charges.class, null);
@@ -166,7 +166,7 @@ public class VistaAccessControlListTest {
 
         assertEntityPermission(true, ApplicationDocument.class, application);
         assertEntityPermission(true, TenantInLeaseListDTO.class, application);
-        assertEntityPermission(true, TenantInLeaseDTO.class, application);
+        assertEntityPermission(true, TenantInLease.class, application);
         assertEntityPermission(true, PetsDTO.class, application);
         assertEntityPermission(true, TenantFinancialDTO.class, application);
         assertEntityPermission(true, Charges.class, application);
@@ -177,7 +177,7 @@ public class VistaAccessControlListTest {
         application2.setPrimaryKey(new Key(-252));
         assertEntityPermission(false, ApplicationDocument.class, application2);
         assertEntityPermission(false, TenantInLeaseListDTO.class, application2);
-        assertEntityPermission(false, TenantInLeaseDTO.class, application2);
+        assertEntityPermission(false, TenantInLease.class, application2);
         assertEntityPermission(false, PetsDTO.class, application2);
         assertEntityPermission(false, TenantFinancialDTO.class, application2);
         assertEntityPermission(false, Charges.class, application2);

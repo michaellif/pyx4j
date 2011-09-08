@@ -23,7 +23,7 @@ import com.pyx4j.selenium.D;
 
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.domain.tenant.TenantIn.Status;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 
 public class DatePickerValidationTest extends DatePickerTestBase {
@@ -169,19 +169,19 @@ public class DatePickerValidationTest extends DatePickerTestBase {
     }
 
     private IDebugId ownershipId(int index) {
-        return D.id(baseID(index), D.id(proto(TenantInLeaseDTO.class).takeOwnership()));
+        return D.id(baseID(index), D.id(proto(TenantInLease.class).takeOwnership()));
     }
 
     private IDebugId statusId(int index) {
-        return D.id(baseID(index), D.id(proto(TenantInLeaseDTO.class).status()));
+        return D.id(baseID(index), D.id(proto(TenantInLease.class).status()));
     }
 
     private IDebugId lastNameId(int index) {
-        return D.id(baseID(index), D.id(proto(TenantInLeaseDTO.class).person().name().lastName()));
+        return D.id(baseID(index), D.id(proto(TenantInLease.class).tenant().person().name().lastName()));
     }
 
     private IDebugId datePickerTextBoxId(int index) {
-        return D.id(baseID(index), D.id(proto(TenantInLeaseDTO.class).person().birthDate()));
+        return D.id(baseID(index), D.id(proto(TenantInLease.class).tenant().person().birthDate()));
     }
 
     private IDebugId datePickerId(int index) {
