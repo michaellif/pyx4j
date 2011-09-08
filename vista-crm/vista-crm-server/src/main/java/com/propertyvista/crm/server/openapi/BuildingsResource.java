@@ -208,14 +208,22 @@ public class BuildingsResource {
                 //From all floorplans matched by beds/baths, We select 1 with closest availability and we show it on the site
                 FloorplanRS floorplanSameRS = findSameFloorplan(buildingRS.floorplans, Converter.convertFloorplan(floorplan));
                 if (floorplanSameRS != null) {
-                    if (floorplanRS.availableFrom == null) {
+                    if ((floorplanRS.availableFrom == null) || (floorplanSameRS.availableFrom == null)
+                            || floorplanRS.availableFrom.after(floorplanSameRS.availableFrom)) {
                         // Ignore this floorplanRS
+                        floorplanSameRS.unitCount += floorplanRS.unitCount;
+                        floorplanSameRS.rentFrom = min(floorplanSameRS.rentFrom, floorplanRS.rentFrom);
+                        floorplanSameRS.rentTo = max(floorplanSameRS.rentTo, floorplanRS.rentTo);
+                        floorplanSameRS.sqftFrom = min(floorplanSameRS.sqftFrom, floorplanRS.sqftFrom);
+                        floorplanSameRS.sqftTo = max(floorplanSameRS.sqftTo, floorplanRS.sqftTo);
                         continue nextFloorplan;
                     }
-                    if ((floorplanSameRS.availableFrom == null) || floorplanRS.availableFrom.after(floorplanSameRS.availableFrom)) {
-                        // Ignore this floorplanRS
-                        continue nextFloorplan;
-                    }
+                    floorplanRS.unitCount += floorplanSameRS.unitCount;
+                    floorplanRS.rentFrom = min(floorplanSameRS.rentFrom, floorplanRS.rentFrom);
+                    floorplanRS.rentTo = max(floorplanSameRS.rentTo, floorplanRS.rentTo);
+                    floorplanRS.sqftFrom = min(floorplanSameRS.sqftFrom, floorplanRS.sqftFrom);
+                    floorplanRS.sqftTo = max(floorplanSameRS.sqftTo, floorplanRS.sqftTo);
+
                     buildingRS.floorplans.remove(floorplanSameRS);
                 }
                 buildingRS.floorplans.add(floorplanRS);
