@@ -30,7 +30,7 @@ import com.pyx4j.security.shared.SecurityViolationException;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantListDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
@@ -40,10 +40,10 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
     private final static Logger log = LoggerFactory.getLogger(TenantServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<TenantListDTO> callback, Key tenantId) {
+    public void retrieve(AsyncCallback<TenantInApplicationListDTO> callback, Key tenantId) {
         Lease lease = Persistence.service().retrieve(Lease.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
 
-        TenantListDTO tenants = EntityFactory.create(TenantListDTO.class);
+        TenantInApplicationListDTO tenants = EntityFactory.create(TenantInApplicationListDTO.class);
         for (TenantInLease tenantInLease : lease.tenants()) {
             Persistence.service().retrieve(tenantInLease);
             tenants.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
@@ -56,13 +56,13 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
     }
 
     @Override
-    public void save(AsyncCallback<TenantListDTO> callback, TenantListDTO tenants) {
+    public void save(AsyncCallback<TenantInApplicationListDTO> callback, TenantInApplicationListDTO tenants) {
         Lease lease = Persistence.service().retrieve(Lease.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
 
         List<TenantInLease> existingTenants = new Vector<TenantInLease>();
         existingTenants.addAll(lease.tenants());
         lease.tenants().clear();
-        TenantListDTO ret = EntityFactory.create(TenantListDTO.class);
+        TenantInApplicationListDTO ret = EntityFactory.create(TenantInApplicationListDTO.class);
         for (TenantInApplicationDTO dto : tenants.tenants()) {
             // Find existing record
             TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);

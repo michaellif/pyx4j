@@ -14,8 +14,8 @@
 package com.propertyvista.portal.ptapp.client.ui.steps.tenants;
 
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepView;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantListDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 
-public interface TenantsView extends WizardStepView<TenantListDTO, TenantsViewPresenter> {
+public interface TenantsView extends WizardStepView<TenantInApplicationListDTO, TenantsViewPresenter> {
 
 }

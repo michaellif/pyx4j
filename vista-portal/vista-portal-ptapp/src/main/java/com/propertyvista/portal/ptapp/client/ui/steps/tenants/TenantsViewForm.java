@@ -52,16 +52,16 @@ import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.portal.ptapp.client.ui.components.PtAppEntityFolder;
 import com.propertyvista.portal.ptapp.client.ui.components.PtAppTableFolderItemDecorator;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantListDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 
-public class TenantsViewForm extends CEntityForm<TenantListDTO> {
+public class TenantsViewForm extends CEntityForm<TenantInApplicationListDTO> {
 
     static I18n i18n = I18nFactory.getI18n(TenantsViewForm.class);
 
     private int maxTenants;
 
     public TenantsViewForm() {
-        super(TenantListDTO.class, new VistaEditorsComponentFactory());
+        super(TenantInApplicationListDTO.class, new VistaEditorsComponentFactory());
     }
 
     @Override
@@ -73,30 +73,30 @@ public class TenantsViewForm extends CEntityForm<TenantListDTO> {
 
     @Override
     public void addValidations() {
-        super.addValueValidator(new EditableValueValidator<TenantListDTO>() {
+        super.addValueValidator(new EditableValueValidator<TenantInApplicationListDTO>() {
 
             @Override
-            public boolean isValid(CEditableComponent<TenantListDTO, ?> component, TenantListDTO value) {
+            public boolean isValid(CEditableComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
                 return !EntityGraph.hasBusinessDuplicates(getValue().tenants());
             }
 
             @Override
-            public String getValidationMessage(CEditableComponent<TenantListDTO, ?> component, TenantListDTO value) {
+            public String getValidationMessage(CEditableComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
                 return i18n.tr("Duplicate tenants specified");
             }
         });
 
         maxTenants = proto().tenants().getMeta().getLength();
-        super.addValueValidator(new EditableValueValidator<TenantListDTO>() {
+        super.addValueValidator(new EditableValueValidator<TenantInApplicationListDTO>() {
 
             @Override
-            public boolean isValid(CEditableComponent<TenantListDTO, ?> component, TenantListDTO value) {
+            public boolean isValid(CEditableComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
                 int size = getValue().tenants().size();
                 return (size <= maxTenants) && ((value.tenantsMaximum().isNull() || (size <= value.tenantsMaximum().getValue())));
             }
 
             @Override
-            public String getValidationMessage(CEditableComponent<TenantListDTO, ?> component, TenantListDTO value) {
+            public String getValidationMessage(CEditableComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
                 return i18n.tr("Exceeded number of allowed tenants");
             }
         });

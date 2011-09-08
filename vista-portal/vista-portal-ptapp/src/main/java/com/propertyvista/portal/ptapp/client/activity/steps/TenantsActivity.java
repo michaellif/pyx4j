@@ -20,13 +20,13 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsView;
 import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsViewPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantListDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 
-public class TenantsActivity extends WizardStepActivity<TenantListDTO, TenantsViewPresenter> implements TenantsViewPresenter {
+public class TenantsActivity extends WizardStepActivity<TenantInApplicationListDTO, TenantsViewPresenter> implements TenantsViewPresenter {
 
     public TenantsActivity(AppPlace place) {
-        super((TenantsView) WizardStepsViewFactory.instance(TenantsView.class), TenantListDTO.class, (TenantService) GWT.create(TenantService.class));
+        super((TenantsView) WizardStepsViewFactory.instance(TenantsView.class), TenantInApplicationListDTO.class, (TenantService) GWT.create(TenantService.class));
         withPlace(place);
     }
 }

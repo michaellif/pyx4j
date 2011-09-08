@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface TenantListDTO extends IEntity {
+public interface TenantInApplicationListDTO extends IEntity {
 
     @Owned
     @Length(6)

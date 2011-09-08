@@ -57,7 +57,7 @@ import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantListDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 import com.propertyvista.server.common.reference.SharedData;
 
@@ -141,12 +141,12 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
 
     private void enterTenantsPage(List<TenantSummaryGDO> tenantsSummaryList) {
         int num = 0;
-        TenantListDTO tenants = TenantTestAdapter.getTenantListEditorDTO(tenantsSummaryList);
+        TenantInApplicationListDTO tenants = TenantTestAdapter.getTenantListEditorDTO(tenantsSummaryList);
         for (TenantInApplicationDTO tenant : tenants.tenants()) {
             if (num != 0) {
-                selenium.click(D.id(proto(TenantListDTO.class).tenants(), FormNavigationDebugId.Form_Add));
+                selenium.click(D.id(proto(TenantInApplicationListDTO.class).tenants(), FormNavigationDebugId.Form_Add));
             }
-            enterTenantRow(D.id(proto(TenantListDTO.class).tenants(), num), detach(tenant), (num != 0));
+            enterTenantRow(D.id(proto(TenantInApplicationListDTO.class).tenants(), num), detach(tenant), (num != 0));
             num++;
         }
         saveAndContinue();

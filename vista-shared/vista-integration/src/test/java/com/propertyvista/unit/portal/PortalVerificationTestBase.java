@@ -45,7 +45,7 @@ import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantListDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 
@@ -69,14 +69,14 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertVisible(CompositeDebugId.debugId(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Tenants.class)));
         selenium.click(VistaFormsDebugId.MainNavigation_Prefix, AppPlaceInfo.getPlaceIDebugId(PtSiteMap.Tenants.class));
 
-        TenantListDTO tenants = TenantTestAdapter.getTenantListEditorDTO(tenantsSummaryList);
+        TenantInApplicationListDTO tenants = TenantTestAdapter.getTenantListEditorDTO(tenantsSummaryList);
         int num = 0;
         for (TenantInApplicationDTO tenant : tenants.tenants()) {
-            assertTenantRow(D.id(proto(TenantListDTO.class).tenants(), num), detach(tenant), (num != 0));
+            assertTenantRow(D.id(proto(TenantInApplicationListDTO.class).tenants(), num), detach(tenant), (num != 0));
             num++;
         }
 
-        assertNotPresent(D.id(proto(TenantListDTO.class).tenants(), num, proto(TenantInApplicationDTO.class).person().name().firstName()));
+        assertNotPresent(D.id(proto(TenantInApplicationListDTO.class).tenants(), num, proto(TenantInApplicationDTO.class).person().name().firstName()));
 
         if (doSave) {
             saveAndContinue();
