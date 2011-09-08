@@ -106,7 +106,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         service.list(new AsyncCallback<EntitySearchResult<E>>() {
             @Override
             public void onSuccess(EntitySearchResult<E> result) {
-                view.populate(result.getData(), pageNumber, result.hasMoreData());
+                view.populate(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
             }
 
             @Override

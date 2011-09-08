@@ -51,6 +51,8 @@ public class DataTableModel<E extends IEntity> {
 
     private boolean hasMoreData;
 
+    private int totalRows;
+
     private final EntityMeta entityMeta;
 
     public DataTableModel(EntityMeta entityMeta, List<ColumnDescriptor<E>> columnDescriptors) {
@@ -157,7 +159,7 @@ public class DataTableModel<E extends IEntity> {
         return data;
     }
 
-    public void populateData(List<DataItem<E>> dataItems, int pageNumber, boolean hasMoreData) {
+    public void populateData(List<DataItem<E>> dataItems, int pageNumber, boolean hasMoreData, int totalRows) {
         data.clear();
         if (dataItems != null) {
             for (DataItem<E> dataItem : dataItems) {
@@ -166,6 +168,7 @@ public class DataTableModel<E extends IEntity> {
         }
         this.pageNumber = pageNumber;
         this.hasMoreData = hasMoreData;
+        this.totalRows = totalRows;
         fireTableChanged(new DataTableModelEvent());
     }
 
@@ -194,6 +197,10 @@ public class DataTableModel<E extends IEntity> {
 
     public boolean hasMoreData() {
         return hasMoreData;
+    }
+
+    public int getTotalRows() {
+        return totalRows;
     }
 
     public void setRowChecked(boolean checked, int rowIndex) {

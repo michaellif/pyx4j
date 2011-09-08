@@ -23,7 +23,7 @@ package com.pyx4j.entity.server.lister;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.security.shared.SecurityController;
@@ -33,7 +33,7 @@ public class EntityLister {
     public static <T extends IEntity> EntitySearchResult<T> secureQuery(EntityListCriteria<T> criteria) {
         SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
         EntitySearchResult<T> r = new EntitySearchResult<T>();
-        final ICursorIterator<T> unfiltered = PersistenceServicesFactory.getPersistenceService().query(null, criteria);
+        final ICursorIterator<T> unfiltered = Persistence.service().query(null, criteria);
         try {
             while (unfiltered.hasNext()) {
                 T ent = unfiltered.next();
@@ -46,6 +46,7 @@ public class EntityLister {
             // The position is important, hasNext may retrieve one more row. 
             r.setEncodedCursorReference(unfiltered.encodedCursorReference());
             r.hasMoreData(unfiltered.hasNext());
+            r.setTotalRows(Persistence.service().count(criteria));
         } finally {
             unfiltered.completeRetrieval();
         }

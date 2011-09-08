@@ -58,7 +58,7 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
     int getPageNumber();
 
-    void populate(List<E> entityes, int pageNumber, boolean hasMoreData);
+    void populate(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows);
 
     List<FilterData> getFiltering();
 

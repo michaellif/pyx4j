@@ -362,9 +362,9 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     }
 
     @Override
-    public void populate(List<E> entityes, int pageNumber, boolean hasMoreData) {
+    public void populate(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows) {
         setActionsActive(false);
-        getListPanel().populateData(entityes, pageNumber, hasMoreData);
+        getListPanel().populateData(entityes, pageNumber, hasMoreData, totalRows);
     }
 
     @Override

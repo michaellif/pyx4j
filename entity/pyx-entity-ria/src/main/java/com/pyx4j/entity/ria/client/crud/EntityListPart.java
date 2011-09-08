@@ -69,12 +69,12 @@ public abstract class EntityListPart<E extends IEntity> extends SimplePanel {
         return dataTable;
     }
 
-    public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData) {
+    public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows) {
         List<DataItem<E>> dataItems = new ArrayList<DataItem<E>>();
         for (E entity : entityes) {
             dataItems.add(new DataItem<E>(entity));
         }
-        dataTableModel.populateData(dataItems, pageNumber, hasMoreData);
+        dataTableModel.populateData(dataItems, pageNumber, hasMoreData, totalRows);
     }
 
     public void clearData() {

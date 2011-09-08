@@ -37,6 +37,8 @@ public class EntitySearchResult<E extends IEntity> implements Serializable {
 
     private String encodedCursorReference;
 
+    private int totalRows = -1;
+
     public EntitySearchResult() {
         data = new Vector<E>();
     }
@@ -59,6 +61,14 @@ public class EntitySearchResult<E extends IEntity> implements Serializable {
 
     public void hasMoreData(boolean hasMoreData) {
         this.hasMoreData = hasMoreData;
+    }
+
+    public int getTotalRows() {
+        return totalRows;
+    }
+
+    public void setTotalRows(int totalRows) {
+        this.totalRows = totalRows;
     }
 
     public boolean isQuotaExceeded() {

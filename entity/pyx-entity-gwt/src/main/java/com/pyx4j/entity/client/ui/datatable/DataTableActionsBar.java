@@ -156,7 +156,7 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         } else if (from == to) {
             countLabel.setText(String.valueOf(from));
         } else {
-            countLabel.setText(from + "-" + to);
+            countLabel.setText(from + "-" + to + " of " + model.getTotalRows());
         }
 
         nextAnchor.setVisible(nextActionHandlerRegistration != null && model.hasMoreData());

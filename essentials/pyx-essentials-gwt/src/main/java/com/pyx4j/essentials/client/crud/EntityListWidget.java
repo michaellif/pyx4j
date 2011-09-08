@@ -171,7 +171,7 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
                     entities.add((E) entity);
                 }
                 long startPopulate = System.currentTimeMillis();
-                populateData(entities, criteria.getPageNumber(), result.hasMoreData());
+                populateData(entities, criteria.getPageNumber(), result.hasMoreData(), result.getTotalRows());
                 log.debug("Populated table in {} msec ", System.currentTimeMillis() - startPopulate);
             }
 
@@ -189,8 +189,8 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
         return EntityServices.Search.class;
     }
 
-    protected void populateData(List<E> entities, int pageNumber, boolean hasMoreData) {
-        searchResultsPanel.populateData(entities, pageNumber, hasMoreData);
+    protected void populateData(List<E> entities, int pageNumber, boolean hasMoreData, int totalRows) {
+        searchResultsPanel.populateData(entities, pageNumber, hasMoreData, totalRows);
     }
 
     public EntityListPanel<E> getSearchResultsPanel() {
