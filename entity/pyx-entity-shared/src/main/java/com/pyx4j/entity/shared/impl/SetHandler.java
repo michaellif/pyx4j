@@ -205,21 +205,6 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
     }
 
     @Override
-    public boolean remove(Object o) {
-        if ((o instanceof IEntity) && (((IEntity) o).isInstanceOf(getValueClass()))) {
-            Set<?> set = getValue();
-            if (set != null) {
-                return set.remove(((IEntity) o).getValue());
-            } else {
-                return false;
-            }
-        } else {
-            throw new ClassCastException("Set member type expected " + getValueClass());
-        }
-
-    }
-
-    @Override
     public boolean removeAll(Collection<?> c) {
         // TODO implement this
         throw new UnsupportedOperationException();

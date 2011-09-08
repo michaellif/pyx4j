@@ -31,6 +31,9 @@ import com.pyx4j.entity.test.shared.domain.Province;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.bidir.Child;
 import com.pyx4j.entity.test.shared.domain.bidir.Master;
+import com.pyx4j.entity.test.shared.domain.ownership.LeafReference;
+import com.pyx4j.entity.test.shared.domain.ownership.OwnedLeaf;
+import com.pyx4j.entity.test.shared.domain.ownership.RootEnity;
 
 public class EntityGraphTest extends InitializerTestCase {
 
@@ -162,4 +165,86 @@ public class EntityGraphTest extends InitializerTestCase {
         assertEquals("Iteration over Master and Child by Identity", 2, counter.number().getValue().intValue());
     }
 
+    public void testRemoveOwnedEntityFromGrapth() {
+        RootEnity root = EntityFactory.create(RootEnity.class);
+
+        OwnedLeaf ol = EntityFactory.create(OwnedLeaf.class);
+        ol.setPrimaryKey(new Key(55));
+        ol.name().setValue("To be removed");
+
+        final OwnedLeaf olBase = (OwnedLeaf) ol.cloneEntity();
+
+        root.ownedLeaf().set(ol);
+        assertTrue(ol.equals(root.ownedLeaf()));
+
+        root.leafReference().leaf().set(ol);
+
+        LeafReference leafReference1 = EntityFactory.create(LeafReference.class);
+        leafReference1.name().setValue("leafReference1");
+        leafReference1.leaf().set(ol);
+        root.leafReferences().add(leafReference1);
+
+        LeafReference leafReference2 = EntityFactory.create(LeafReference.class);
+        leafReference2.name().setValue("leafReference2");
+        leafReference2.leafs().add(ol);
+        root.leafReferences().add(leafReference2);
+
+        assertTrue(ol.equals(root.leafReference().leaf()));
+
+        //System.out.println("root : " + root);
+        //Remove from root
+        root.ownedLeaf().set(null);
+        //System.out.println("root : " + root);
+
+        EntityGraph.applyRecursively(root, new EntityGraph.ApplyMethod() {
+            @Override
+            public void apply(IEntity entity) {
+                //System.out.println("verify : " + entity.getPath() + " " + entity);
+                assertFalse("OwnedLeaf found in Graph" + entity.getPath(), olBase.equals(entity));
+            }
+        });
+    }
+
+    public void testRemoveOwnedEntityFromGrapthLists() {
+        RootEnity root = EntityFactory.create(RootEnity.class);
+
+        OwnedLeaf ol = EntityFactory.create(OwnedLeaf.class);
+        ol.setPrimaryKey(new Key(55));
+        ol.name().setValue("To be removed");
+
+        final OwnedLeaf olBase = (OwnedLeaf) ol.cloneEntity();
+
+        // Add to root
+        root.ownedLeafs().add(ol);
+
+        root.leafReference().leaf().set(ol);
+
+        LeafReference leafReference1 = EntityFactory.create(LeafReference.class);
+        leafReference1.name().setValue("leafReference1");
+        leafReference1.leaf().set(ol);
+        root.leafReferences().add(leafReference1);
+
+        LeafReference leafReference2 = EntityFactory.create(LeafReference.class);
+        leafReference2.name().setValue("leafReference2");
+        leafReference2.leafs().add(ol);
+        root.leafReferences().add(leafReference2);
+
+        assertTrue(ol.equals(root.leafReference().leaf()));
+
+        //System.out.println("root : " + root);
+        // Remove ol from position where it is owned and see if it disappear from Reference
+        root.ownedLeafs().remove(ol);
+        //root.ownedLeafs().remove(0);
+
+        //System.out.println("root : " + root);
+
+        EntityGraph.applyRecursively(root, new EntityGraph.ApplyMethod() {
+            @Override
+            public void apply(IEntity entity) {
+                //System.out.println("verify : " + entity.getPath() + " " + entity);
+                assertFalse("OwnedLeaf found in Graph" + entity.getPath(), olBase.equals(entity));
+            }
+        });
+
+    }
 }

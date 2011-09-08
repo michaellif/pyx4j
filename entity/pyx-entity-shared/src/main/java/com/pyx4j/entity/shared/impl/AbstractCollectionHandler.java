@@ -88,6 +88,25 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
     }
 
     @Override
+    public boolean remove(Object o) {
+        if ((o instanceof IEntity) && (((IEntity) o).isInstanceOf(getValueClass()))) {
+            Collection<?> collectionValue = (Collection<?>) getValue();
+            if (collectionValue != null) {
+                Map<String, Object> enitytValue = ((IEntity) o).getValue();
+                boolean rc = collectionValue.remove(enitytValue);
+                if (rc && getMeta().isOwnedRelationships()) {
+                    ((SharedEntityHandler) getOwner()).removeValueFromGraph(enitytValue);
+                }
+                return rc;
+            } else {
+                return false;
+            }
+        } else {
+            throw new ClassCastException("Collection member type expected " + getValueClass());
+        }
+    }
+
+    @Override
     public Object[] toArray() {
         Object[] array = new Object[this.size()];
         int i = 0;

@@ -105,7 +105,7 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public List<Validator> getValidators(Path memberPath);
 
-    public IEntity cloneEntity();
+    public <T extends IEntity> T cloneEntity();
 
     /**
      * Copy all existing members to new Entity

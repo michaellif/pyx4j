@@ -230,23 +230,13 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
     }
 
     @Override
-    public boolean remove(Object o) {
-        if ((o instanceof IEntity) && (((IEntity) o).isInstanceOf(getValueClass()))) {
-            List<?> value = getValue();
-            if (value != null) {
-                return value.remove(((IEntity) o).getValue());
-            } else {
-                return false;
-            }
-        } else {
-            throw new ClassCastException("List member type expected " + getValueClass());
-        }
-    }
-
-    @Override
     public TYPE remove(int index) {
         TYPE entity = get(index);
+        Map<String, Object> enitytValue = entity.getValue();
         getValue().remove(index);
+        if (getMeta().isOwnedRelationships()) {
+            ((SharedEntityHandler) getOwner()).removeValueFromGraph(enitytValue);
+        }
         return entity;
     }
 

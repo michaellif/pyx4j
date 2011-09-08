@@ -110,7 +110,8 @@ public class EntityValueMap extends HashMap<String, Object> {
         if (ToStringStyle.fieldMultiLine) {
             b.append(ident);
         }
-        b.append("_i=").append(Integer.toHexString(((EntityValueMap) map).identityHashCode));
+        b.append("@").append(Integer.toHexString(((EntityValueMap) map).identityHashCode));
+        b.append('(').append(Integer.toHexString(System.identityHashCode(map))).append(')');
         if (ToStringStyle.fieldMultiLine) {
             b.append('\n');
         }

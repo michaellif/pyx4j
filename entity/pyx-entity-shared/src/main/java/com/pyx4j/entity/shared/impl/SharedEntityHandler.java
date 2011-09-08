@@ -20,10 +20,13 @@
  */
 package com.pyx4j.entity.shared.impl;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -208,9 +211,56 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         }
     }
 
+    void removeValueFromGraph(Map<String, Object> v) {
+        IEntity ent = this;
+        while (ent.getOwner() != null) {
+            ent = ent.getOwner();
+        }
+        Map<String, Object> root = ent.getValue();
+        removeValueFromGraph(root, v, new HashSet<Map<String, Object>>());
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void removeValueFromGraph(Map<String, Object> map, Map<String, Object> v, Set<Map<String, Object>> processed) {
+        if (processed.contains(map)) {
+            return;
+        }
+        processed.add(map);
+        Iterator<Entry<String, Object>> it = map.entrySet().iterator();
+        while (it.hasNext()) {
+            Entry<String, Object> me = it.next();
+            if (me.getValue() instanceof Map<?, ?>) {
+                if (me.getValue().equals(v)) {
+                    it.remove();
+                } else {
+                    removeValueFromGraph((Map<String, Object>) me.getValue(), v, processed);
+                }
+            } else if (me.getValue() instanceof Collection<?>) {
+                @SuppressWarnings("rawtypes")
+                Iterator<Object> lit = ((Collection) me.getValue()).iterator();
+                while (lit.hasNext()) {
+                    Object listMameber = lit.next();
+                    if (listMameber instanceof Map<?, ?>) {
+                        if (listMameber.equals(v)) {
+                            lit.remove();
+                        } else {
+                            removeValueFromGraph((Map<String, Object>) listMameber, v, processed);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void set(IEntity entity) {
         if (entity == null) {
+            if ((getOwner() != null) && getMeta().isOwnedRelationships()) {
+                Map<String, Object> v = getValue();
+                if (v != null) {
+                    removeValueFromGraph(v);
+                }
+            }
             setValue(null);
         } else {
             Map<String, Object> value = ((SharedEntityHandler) entity).ensureValue();
