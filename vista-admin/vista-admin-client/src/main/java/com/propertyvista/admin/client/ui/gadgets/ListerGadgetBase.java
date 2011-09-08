@@ -148,7 +148,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
             @Override
             public void onSuccess(EntitySearchResult<E> result) {
-                ListerGadgetBase.this.getListPanel().populateData(result.getData(), pageNumber, result.hasMoreData());
+                ListerGadgetBase.this.getListPanel().populateData(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
             }
         }, criteria);
     }

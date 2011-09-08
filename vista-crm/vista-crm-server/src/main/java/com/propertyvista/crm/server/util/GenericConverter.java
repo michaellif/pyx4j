@@ -59,6 +59,7 @@ public class GenericConverter {
         EntitySearchResult<DTO> result = new EntitySearchResult<DTO>();
         result.setEncodedCursorReference(resultE.getEncodedCursorReference());
         result.hasMoreData(resultE.hasMoreData());
+        result.setTotalRows(resultE.getTotalRows());
         Vector<DTO> data = new Vector<DTO>();
         for (DBO entity : resultE.getData()) {
             DTO dto = convertDBO2DTO(entity, dstClass);

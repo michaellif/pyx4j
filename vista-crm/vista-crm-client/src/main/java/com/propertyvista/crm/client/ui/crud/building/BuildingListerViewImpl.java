@@ -43,8 +43,8 @@ public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> i
     }
 
     @Override
-    public void populate(List<BuildingDTO> entityes, int pageNumber, boolean hasMoreData) {
-        super.populate(entityes, pageNumber, hasMoreData);
+    public void populate(List<BuildingDTO> entityes, int pageNumber, boolean hasMoreData, int totalRows) {
+        super.populate(entityes, pageNumber, hasMoreData, totalRows);
         upload.setEnabled(true);
     }
 }
