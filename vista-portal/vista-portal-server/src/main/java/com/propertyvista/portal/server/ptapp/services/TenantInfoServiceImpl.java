@@ -45,6 +45,8 @@ public class TenantInfoServiceImpl implements TenantInfoService {
 
     @Override
     public void save(AsyncCallback<TenantInfoDTO> callback, TenantInfoDTO dto) {
+        log.debug("Saving Info for tenant {}", dto.getPrimaryKey());
+
         TenantRetriever r = new TenantRetriever();
         r.retrieve(dto.getPrimaryKey());
 

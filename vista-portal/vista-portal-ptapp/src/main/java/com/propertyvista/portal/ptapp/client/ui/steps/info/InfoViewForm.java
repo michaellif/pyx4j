@@ -31,8 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
@@ -63,7 +62,9 @@ import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.misc.BusinessRules;
-import com.propertyvista.portal.ptapp.client.resources.PortalImages;
+import com.propertyvista.portal.ptapp.client.ui.components.PtAppBoxFolderDecorator;
+import com.propertyvista.portal.ptapp.client.ui.components.PtAppBoxFolderItemDecorator;
+import com.propertyvista.portal.ptapp.client.ui.components.PtAppEntityFolder;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 
 public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
@@ -349,17 +350,41 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
 
     private CEntityFolderEditor<EmergencyContact> createEmergencyContactFolderEditor() {
 
-        return new CEntityFolderEditor<EmergencyContact>(EmergencyContact.class) {
+        return new PtAppEntityFolder<EmergencyContact>(EmergencyContact.class, i18n.tr("Contact")) {
+            private final PtAppEntityFolder<EmergencyContact> parent = this;
+
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                return null;
+            }
 
             @Override
             protected IFolderEditorDecorator<EmergencyContact> createFolderDecorator() {
-                return new BoxFolderEditorDecorator<EmergencyContact>(PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
-                        i18n.tr("Add one more contact"));
+                return new PtAppBoxFolderDecorator<EmergencyContact>(parent);
             }
 
             @Override
             protected CEntityFolderItemEditor<EmergencyContact> createItem() {
-                return createEmergencyContactItem();
+                return new CEntityFolderItemEditor<EmergencyContact>(EmergencyContact.class) {
+                    @Override
+                    public IsWidget createContent() {
+                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+                        main.add(inject(proto().name().firstName()), 12);
+                        main.add(inject(proto().name().middleName()), 12);
+                        main.add(inject(proto().name().lastName()), 20);
+                        main.add(inject(proto().homePhone()), 15);
+                        main.add(inject(proto().mobilePhone()), 15);
+                        main.add(inject(proto().workPhone()), 15);
+                        AddressUtils.injectIAddress(main, proto().address(), this);
+                        main.add(new HTML());
+                        return main;
+                    }
+
+                    @Override
+                    public IFolderItemEditorDecorator<EmergencyContact> createFolderItemDecorator() {
+                        return new PtAppBoxFolderItemDecorator<EmergencyContact>(parent, !isFirst());
+                    }
+                };
             }
 
             @Override
@@ -368,31 +393,6 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
                 if (value.isEmpty()) {
                     addItem(); // at least one Emergency Contact should be present!..
                 }
-            }
-        };
-    }
-
-    private CEntityFolderItemEditor<EmergencyContact> createEmergencyContactItem() {
-
-        return new CEntityFolderItemEditor<EmergencyContact>(EmergencyContact.class) {
-            @Override
-            public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-                main.add(inject(proto().name().firstName()), 12);
-                main.add(inject(proto().name().middleName()), 12);
-                main.add(inject(proto().name().lastName()), 20);
-                main.add(inject(proto().homePhone()), 15);
-                main.add(inject(proto().mobilePhone()), 15);
-                main.add(inject(proto().workPhone()), 15);
-                AddressUtils.injectIAddress(main, proto().address(), this);
-                main.add(new HTML());
-                return main;
-            }
-
-            @Override
-            public IFolderItemEditorDecorator<EmergencyContact> createFolderItemDecorator() {
-                return new BoxFolderItemEditorDecorator<EmergencyContact>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover(),
-                        i18n.tr("Remove contact"), !isFirst());
             }
         };
     }

@@ -14,8 +14,7 @@
 package com.propertyvista.portal.server.ptapp.services;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.SecurityViolationException;
@@ -27,27 +26,22 @@ import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class TenantRetriever {
 
-    TenantInLease tenantInLease;
-
     Tenant tenant;
 
     TenantScreening tenantScreening;
 
+    TenantInLease tenantInLease;
+
     void retrieve(Key tenantId) {
-        tenantInLease = PersistenceServicesFactory.getPersistenceService().retrieve(TenantInLease.class, tenantId);
-        if ((tenantInLease == null) || (!tenantInLease.lease().id().equals(PtAppContext.getCurrentUserLeasePrimaryKey()))) {
+        tenantInLease = Persistence.service().retrieve(TenantInLease.class, tenantId);
+        if ((tenantInLease == null) || (!tenantInLease.lease().getPrimaryKey().equals(PtAppContext.getCurrentUserLeasePrimaryKey()))) {
             throw new SecurityViolationException("Invalid data access");
         }
 
-        tenant = EntityFactory.create(Tenant.class);
-        tenant.set(tenantInLease.tenant());
-        {
-            EntityQueryCriteria<TenantScreening> criteria = EntityQueryCriteria.create(TenantScreening.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenantInLease.tenant()));
-            tenantScreening = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-            if (tenantScreening != null) {
-                tenantScreening.tenant().set(tenant);
-            }
-        }
+        EntityQueryCriteria<TenantScreening> criteria = EntityQueryCriteria.create(TenantScreening.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenantInLease.tenant()));
+        tenantScreening = Persistence.service().retrieve(criteria);
+
+        tenant = Persistence.service().retrieve(Tenant.class, tenantInLease.tenant().getPrimaryKey());
     }
 }

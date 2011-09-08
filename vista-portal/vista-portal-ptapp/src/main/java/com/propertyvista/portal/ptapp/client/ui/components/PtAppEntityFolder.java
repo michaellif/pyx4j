@@ -18,7 +18,6 @@ import java.util.List;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
@@ -35,6 +34,10 @@ public abstract class PtAppEntityFolder<E extends IEntity> extends CEntityFolder
     private final String itemName;
 
     private final boolean editable;
+
+    public PtAppEntityFolder(Class<E> clazz, String itemName) {
+        this(clazz, itemName, true);
+    }
 
     public PtAppEntityFolder(Class<E> clazz, String itemName, boolean editable) {
         super(clazz);
