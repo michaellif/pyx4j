@@ -24,8 +24,8 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.PreloadConfig;
+import com.propertyvista.domain.tenant.TenantIn.Status;
 import com.propertyvista.domain.tenant.ptapp.Application;
-import com.propertyvista.portal.domain.ptapp.PotentialTenant;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
@@ -67,7 +67,7 @@ public class TenantServiceTest extends VistaDBTestBase {
 
         PotentialTenantInfo tenant = tenantList.tenants().get(0);
 
-        Assert.assertEquals("Applicant status", PotentialTenant.Status.Applicant, tenant.status().getValue());
+        Assert.assertEquals("Applicant status", Status.Applicant, tenant.status().getValue());
         Assert.assertEquals("Email", email, tenant.person().email().getValue());
     }
 

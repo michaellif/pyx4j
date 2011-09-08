@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.CCompDebugId;
 import com.pyx4j.selenium.D;
 
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
-import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
+import com.propertyvista.domain.tenant.TenantIn.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Tenant;
 

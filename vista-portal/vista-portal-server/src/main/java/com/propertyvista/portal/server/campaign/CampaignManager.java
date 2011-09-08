@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.callfire.CallFire;
-import com.propertyvista.portal.domain.ptapp.PotentialTenant.Status;
+import com.propertyvista.domain.tenant.TenantIn.Status;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.server.common.security.DevelopmentSecurity;

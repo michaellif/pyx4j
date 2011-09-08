@@ -13,31 +13,15 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.EmergencyContact;
-import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.IBoundToApplication;
+import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.TenantIn;
 import com.propertyvista.domain.tenant.TenantScreening;
 
 @Deprecated
-public interface PotentialTenantInfo extends PotentialTenant, TenantScreening {
+public interface PotentialTenantInfo extends Tenant, TenantIn, TenantScreening, IBoundToApplication {
 
-    /**
-     * TODO I think that it is better to have a list here since some forms may ask for
-     * more than one previous address
-     */
-    @Override
-    @Owned
-    PriorAddress currentAddress();
-
-    @Override
-    @Owned
-    PriorAddress previousAddress();
-
-    @Override
-    @Owned
-    @Length(3)
-    IList<EmergencyContact> emergencyContacts();
+    IPrimitive<Double> payment();
 }

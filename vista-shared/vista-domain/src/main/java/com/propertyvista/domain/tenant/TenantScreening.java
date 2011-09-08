@@ -44,6 +44,10 @@ public interface TenantScreening extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> screeningDate();
 
+    /**
+     * TODO I think that it is better to have a list here since some forms may ask for
+     * more than one previous address
+     */
     @EmbeddedEntity
     PriorAddress currentAddress();
 
