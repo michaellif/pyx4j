@@ -44,7 +44,6 @@ import com.propertyvista.portal.domain.ptapp.PaymentInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.Tenant;
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
@@ -165,7 +164,6 @@ public class VistaAccessControlListTest {
         application.setPrimaryKey(new Key(-251));
         PtAppContext.setCurrentUserApplication(application);
 
-        assertEntityPermission(true, UnitSelection.class, application);
         assertEntityPermission(true, ApplicationDocument.class, application);
         assertEntityPermission(true, Tenant.class, application);
         assertEntityPermission(true, PotentialTenantInfo.class, application);
@@ -177,7 +175,6 @@ public class VistaAccessControlListTest {
 
         Application application2 = EntityFactory.create(Application.class);
         application2.setPrimaryKey(new Key(-252));
-        assertEntityPermission(false, UnitSelection.class, application2);
         assertEntityPermission(false, ApplicationDocument.class, application2);
         assertEntityPermission(false, Tenant.class, application2);
         assertEntityPermission(false, PotentialTenantInfo.class, application2);

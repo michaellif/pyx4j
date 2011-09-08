@@ -13,12 +13,14 @@
  */
 package com.propertyvista.domain.tenant.ptapp;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.IUserEntity;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface Application extends IEntity, IUserEntity {
 
@@ -26,4 +28,7 @@ public interface Application extends IEntity, IUserEntity {
     IList<ApplicationWizardStep> steps();
 
     IPrimitive<Boolean> submited();
+
+    @Detached
+    Lease lease();
 }

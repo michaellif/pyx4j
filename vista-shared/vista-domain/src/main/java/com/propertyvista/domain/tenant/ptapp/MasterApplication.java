@@ -27,5 +27,4 @@ public interface MasterApplication extends IEntity {
 
     @Detached
     Lease lease();
-
 }

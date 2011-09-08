@@ -22,11 +22,9 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.portal.domain.ptapp.Tenant;
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.server.TestUtil;
 import com.propertyvista.portal.server.sync.ActivationServiceSync;
-import com.propertyvista.portal.server.sync.ApartmentServiceSync;
 import com.propertyvista.portal.server.sync.ApplicationServiceSync;
 import com.propertyvista.portal.server.sync.TenantServiceSync;
 
@@ -64,12 +62,12 @@ public class HappyPath {
         return service.getCurrentApplication();
     }
 
-    public static UnitSelection step3loadUnitSelection() {
+    public static void step3loadUnitSelection() {
         // now let's load unit selection
-        ApartmentServiceSync service = new ApartmentServiceSync();
-        UnitSelection unitSelection = service.retrieve();
-
-        Assert.assertNotNull("Unit selection", unitSelection);
+//        ApartmentServiceSync service = new ApartmentServiceSync();
+//        UnitSelection unitSelection = service.retrieve();
+//
+//        Assert.assertNotNull("Unit selection", unitSelection);
 
         //        for (ApartmentUnit unit : unitSelection.availableUnits().units()) {
         //            log.debug("Found unit {}", unit);
@@ -91,8 +89,6 @@ public class HappyPath {
         //
         //        Assert.assertFalse("Selected unit", unitSelection.selectedUnitId().isNull());
         //        log.debug("Successfully loaded unit {}", unitSelection.selectedUnitId());
-
-        return unitSelection;
     }
 
     public static Tenant step4createTenants() {

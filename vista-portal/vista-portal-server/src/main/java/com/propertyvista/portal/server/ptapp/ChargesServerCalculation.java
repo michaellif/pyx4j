@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -28,7 +28,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantIn.Status;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.dto.PetsDTO;
@@ -36,7 +35,6 @@ import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Tenant;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
 public class ChargesServerCalculation extends ChargesSharedCalculation {
@@ -47,43 +45,27 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         if (charges.application().isNull()) {
             throw new Error("Data error, charges are not associated with an application");
         }
-        // find unit selection
-        EntityQueryCriteria<UnitSelection> aptUnitCriteria = EntityQueryCriteria.create(UnitSelection.class);
-        aptUnitCriteria.add(PropertyCriterion.eq(aptUnitCriteria.proto().application(), charges.application()));
-        UnitSelection unitSelection = PersistenceServicesFactory.getPersistenceService().retrieve(aptUnitCriteria);
-        if (unitSelection == null) {
-            log.warn("Could not find unit selection for charges {}", charges);
-            return;
-        }
-        AptUnit selectedUnit = null;
-        if (!unitSelection.selectedUnitId().isNull()) {
-            selectedUnit = PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, unitSelection.selectedUnitId().getValue());
-        }
 
         EntityQueryCriteria<Tenant> tenantCriteria = EntityQueryCriteria.create(Tenant.class);
         tenantCriteria.add(PropertyCriterion.eq(tenantCriteria.proto().application(), charges.application()));
-        Tenant tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(tenantCriteria);
+        Tenant tenantList = Persistence.service().retrieve(tenantCriteria);
 
         // find appropriate pet charges
         EntityQueryCriteria<PetsDTO> petCriteria = EntityQueryCriteria.create(PetsDTO.class);
         //TODO petCriteria.add(PropertyCriterion.eq(petCriteria.proto().application(), charges.application()));
-        PetsDTO pets = null;//PersistenceServicesFactory.getPersistenceService().retrieve(petCriteria);
+        PetsDTO pets = null;//Persistence.service().retrieve(petCriteria);
         // TODO retrieve vehicles list here from lease:
         IList<Vehicle> vehicles = null;
 
-        updateChargesFromObjects(charges, unitSelection, selectedUnit, tenantList, pets, vehicles);
+        updateChargesFromObjects(charges, tenantList, pets, vehicles);
     }
 
-    public static void updateChargesFromObjects(Charges charges, UnitSelection unitSelection, AptUnit selectedUnit, Tenant tenantList, PetsDTO pets,
-            IList<Vehicle> vehicles) {
+    public static void updateChargesFromObjects(Charges charges, Tenant tenantList, PetsDTO pets, IList<Vehicle> vehicles) {
         double rentAmount = 0;
         double depositAmount = 0;
 
-        if (selectedUnit != null) {
-            rentAmount = selectedUnit.financial().unitRent().getValue();
-// TODO: there is no requiredDeposit in Unit now!?
-//            depositAmount = selectedUnit.requiredDeposit().amount().getValue();
-        }
+        Persistence.service().retrieve(charges.application().lease());
+        rentAmount = charges.application().lease().serviceAgreement().serviceItem().price().getValue();
 
         charges.monthlyCharges().charges().clear();
         charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.monthlyRent, rentAmount));
@@ -175,7 +157,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         //        // find all potential tenants 
         //        EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
         //        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-        //        PotentialTenantList tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        //        PotentialTenantList tenantList = Persistence.service().retrieve(criteria);
         //        log.info("Found {} tenants", tenantList.tenants().size());
 
         // compare current tenant list with what we have on the form
@@ -257,7 +239,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             }
             TenantCharge tenantCharge = com.propertyvista.portal.domain.util.DomainUtil.createTenantCharge(percentage, 0);
             tenantCharge.tenant().set(tenant);
-            //            PersistenceServicesFactory.getPersistenceService().persist(tenant);
+            //            Persistence.service().persist(tenant);
             charges.paymentSplitCharges().charges().add(tenantCharge);
         }
     }

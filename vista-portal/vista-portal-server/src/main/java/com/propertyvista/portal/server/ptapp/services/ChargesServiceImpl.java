@@ -21,8 +21,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 
 import com.propertyvista.portal.domain.ptapp.Charges;
@@ -40,9 +38,8 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
     @Override
     public void retrieve(AsyncCallback<Charges> callback, Key tenantId) {
         log.debug("Retrieving charges for tenant {}", tenantId);
-        EntityQueryCriteria<Charges> criteria = EntityQueryCriteria.create(Charges.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
-        Charges charges = secureRetrieve(criteria);
+
+        Charges charges = retrieveApplicationEntity(Charges.class);
         if (charges == null) {
             log.debug("Creating new charges");
             charges = EntityFactory.create(Charges.class);

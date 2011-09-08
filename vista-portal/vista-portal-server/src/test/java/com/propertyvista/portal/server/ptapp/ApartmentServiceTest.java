@@ -22,14 +22,13 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.tenant.ptapp.Application;
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 public class ApartmentServiceTest extends VistaDBTestBase {
     private final static Logger log = LoggerFactory.getLogger(ApartmentServiceTest.class);
 
-    private UnitSelection unitSelection;
+//    private UnitSelection unitSelection;
 
     private Application application;
 

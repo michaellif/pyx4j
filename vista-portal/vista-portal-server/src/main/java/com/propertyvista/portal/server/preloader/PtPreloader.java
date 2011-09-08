@@ -189,13 +189,12 @@ public class PtPreloader extends BaseVistaDataPreloader {
         Application a = EntityFactory.create(Application.class);
         a.steps().addAll(ApplicationMgr.createApplicationProgress());
         a.user().set(user);
+        a.lease().set(ma.lease());
         ma.applications().add(a);
 
         Persistence.service().persist(ma);
 
-        Persistence.service().persist(summary.unitSelection());
-
-        //TODO
+//TODO
 //        log.debug("Charges: " + VistaDataPrinter.print(summary.charges()));
 //        Persistence.service().persist(summary.charges());
 

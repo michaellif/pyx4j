@@ -31,7 +31,6 @@ import com.pyx4j.widgets.client.datepicker.DatePickerIDs;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.User;
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.server.common.reference.SharedData;
@@ -45,8 +44,6 @@ public class DatePickerTestBase extends WizardSeleniumTestBase {
     private final IDebugId backYear = DatePickerIDs.MonthSelectorButton_BackwardsYear;
 
     private final IDebugId forwardYear = DatePickerIDs.MonthSelectorButton_ForwardYear;
-
-    protected UnitSelection unitSelection;
 
     @Override
     protected void setUp() throws Exception {

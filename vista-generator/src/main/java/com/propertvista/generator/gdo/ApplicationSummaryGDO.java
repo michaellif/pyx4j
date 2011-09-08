@@ -18,13 +18,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
 
 @Transient
 //Generator/Preloader Data OBject only!
 public interface ApplicationSummaryGDO extends IEntity {
-
-    UnitSelection unitSelection();
 
     Lease lease();
 

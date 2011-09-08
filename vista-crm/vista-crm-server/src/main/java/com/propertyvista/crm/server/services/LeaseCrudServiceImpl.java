@@ -150,6 +150,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
                 Application a = EntityFactory.create(Application.class);
                 a.steps().addAll(ApplicationMgr.createApplicationProgress());
                 a.user().set(tenantInLease.tenant().user());
+                a.lease().set(ma.lease());
                 user = tenantInLease.tenant().user();
                 ma.applications().add(a);
                 break;

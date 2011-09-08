@@ -13,14 +13,11 @@
  */
 package com.propertyvista.portal.server.sync;
 
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class ApartmentServiceSync {
 
-    private UnitSelection unitSelection;
-
-    public UnitSelection retrieve() {
-        unitSelection = null;
+    public AptUnit retrieve() {
 //
 //        ApartmentService apartmentService = TestServiceFactory.create(ApartmentService.class);
 //        apartmentService.retrieve(new UnitTestsAsyncCallback<UnitSelection>() {
@@ -30,6 +27,6 @@ public class ApartmentServiceSync {
 //                unitSelection = result;
 //            }
 //        }, null);
-        return unitSelection;
+        return null;
     }
 }

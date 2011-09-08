@@ -34,7 +34,6 @@ import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInfo;
 import com.propertyvista.portal.domain.ptapp.PotentialTenantInfo;
 import com.propertyvista.portal.domain.ptapp.Tenant;
-import com.propertyvista.portal.domain.ptapp.UnitSelection;
 import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.MaintenanceRequestCrudService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
@@ -95,7 +94,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         //TODO Fix ME
         grant(VistaBehavior.PROSPECTIVE_TENANT, new AllPermissions());
 
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(UnitSelection.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(ApplicationDocument.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(ApplicationDocumentData.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(Tenant.class, applicationEntityAccess, CRUD));
