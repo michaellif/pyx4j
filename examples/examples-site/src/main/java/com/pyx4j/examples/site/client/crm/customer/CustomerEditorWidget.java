@@ -181,7 +181,7 @@ public class CustomerEditorWidget extends EntityEditorWidget<Customer> {
             @Override
             @SuppressWarnings("unchecked")
             public void onSuccess(EntitySearchResult<?> result) {
-                ordersPanel.populateData((List<Order>) result.getData(), pageNumber, result.hasMoreData());
+                ordersPanel.populateData((List<Order>) result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
             }
 
             @Override

@@ -47,8 +47,8 @@ public class CustomerSearchResultsPanel extends EntityListPanel<Customer> {
     }
 
     @Override
-    public void populateData(List<Customer> entities, int pageNumber, boolean hasMoreData) {
-        super.populateData(entities, pageNumber, hasMoreData);
+    public void populateData(List<Customer> entities, int pageNumber, boolean hasMoreData, int totalRows) {
+        super.populateData(entities, pageNumber, hasMoreData, totalRows);
         customerListMapPanel.populateData(entities);
     }
 

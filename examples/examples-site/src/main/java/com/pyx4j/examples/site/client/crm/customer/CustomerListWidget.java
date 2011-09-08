@@ -38,8 +38,8 @@ public class CustomerListWidget extends EntityListWithCriteriaWidget<Customer> {
     }
 
     @Override
-    protected void populateData(List<Customer> entities, EntitySearchCriteria<Customer> criteria, int pageNumber, boolean hasMoreData) {
-        super.populateData(entities, criteria, pageNumber, hasMoreData);
+    protected void populateData(List<Customer> entities, EntitySearchCriteria<Customer> criteria, int pageNumber, boolean hasMoreData, int totalRows) {
+        super.populateData(entities, criteria, pageNumber, hasMoreData, totalRows);
 
         GeoCriteria geoCriteria = (GeoCriteria) criteria.getValue(new PathSearch(criteria.proto().locationCriteria()));
         Integer areaRadius = (Integer) criteria.getValue(new PathSearch(criteria.proto().locationCriteria().radius()));
