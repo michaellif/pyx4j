@@ -60,6 +60,7 @@ public interface TenantScreening extends IEntity {
 
     @Owned
     @Detached
+    // should be loaded in service when necessary!..
     IList<ApplicationDocument> documents();
 
     //=============== Financial =============//
@@ -67,16 +68,19 @@ public interface TenantScreening extends IEntity {
     @Owned
     @Detached
     @Length(3)
+    // should be loaded in service when necessary!..
     IList<PersonalIncome> incomes();
 
     @Owned
     @Detached
     @Length(3)
+    // should be loaded in service when necessary!..
     IList<PersonalAsset> assets();
 
     @Owned
     @Detached
     @Length(2)
+    // should be loaded in service when necessary!..
     IList<TenantGuarantor> guarantors();
 
     //=============== Security Info =============//

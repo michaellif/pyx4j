@@ -32,7 +32,22 @@ public class TenantRetriever {
 
     TenantInLease tenantInLease;
 
+    public TenantRetriever() {
+    }
+
+    public TenantRetriever(Key tenantId) {
+        retrieve(tenantId, false);
+    }
+
+    public TenantRetriever(Key tenantId, boolean financial) {
+        retrieve(tenantId, financial);
+    }
+
     void retrieve(Key tenantId) {
+        retrieve(tenantId, false);
+    }
+
+    void retrieve(Key tenantId, boolean financial) {
         tenantInLease = Persistence.service().retrieve(TenantInLease.class, tenantId);
         if ((tenantInLease == null) || (!tenantInLease.lease().getPrimaryKey().equals(PtAppContext.getCurrentUserLeasePrimaryKey()))) {
             throw new SecurityViolationException("Invalid data access");
@@ -41,6 +56,13 @@ public class TenantRetriever {
         EntityQueryCriteria<TenantScreening> criteria = EntityQueryCriteria.create(TenantScreening.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenantInLease.tenant()));
         tenantScreening = Persistence.service().retrieve(criteria);
+
+        if (financial) {
+            Persistence.service().retrieve(tenantScreening.documents());
+            Persistence.service().retrieve(tenantScreening.incomes());
+            Persistence.service().retrieve(tenantScreening.assets());
+            Persistence.service().retrieve(tenantScreening.guarantors());
+        }
 
         tenant = Persistence.service().retrieve(Tenant.class, tenantInLease.tenant().getPrimaryKey());
     }

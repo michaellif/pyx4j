@@ -33,8 +33,7 @@ public class TenantInfoServiceImpl implements TenantInfoService {
     public void retrieve(AsyncCallback<TenantInfoDTO> callback, Key tenantId) {
         log.debug("Retrieving Info for tenant {}", tenantId);
 
-        TenantRetriever r = new TenantRetriever();
-        r.retrieve(tenantId);
+        TenantRetriever r = new TenantRetriever(tenantId);
 
         TenantInfoDTO dto = new TenantConverter.Tenant2TenantInfo().createDTO(r.tenant);
         new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(r.tenantScreening, dto);
@@ -45,10 +44,9 @@ public class TenantInfoServiceImpl implements TenantInfoService {
 
     @Override
     public void save(AsyncCallback<TenantInfoDTO> callback, TenantInfoDTO dto) {
-        log.debug("Saving Info for tenant {}", dto.getPrimaryKey());
+        log.debug("Saving Tenant Info {}", dto);
 
-        TenantRetriever r = new TenantRetriever();
-        r.retrieve(dto.getPrimaryKey());
+        TenantRetriever r = new TenantRetriever(dto.getPrimaryKey());
 
         new TenantConverter.Tenant2TenantInfo().copyDTOtoDBO(dto, r.tenant);
         new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(dto, r.tenantScreening);

@@ -32,11 +32,12 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
     @Override
     public void retrieve(AsyncCallback<TenantFinancialDTO> callback, Key tenantId) {
         log.debug("Retrieving financials for tenant {}", tenantId);
-        TenantRetriever r = new TenantRetriever();
-        r.retrieve(tenantId);
+
+        TenantRetriever r = new TenantRetriever(tenantId, true);
 
         TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(r.tenantScreening);
         dto.setPrimaryKey(r.tenantInLease.getPrimaryKey());
+
         callback.onSuccess(dto);
     }
 
@@ -44,8 +45,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
     public void save(AsyncCallback<TenantFinancialDTO> callback, TenantFinancialDTO dto) {
         log.debug("Saving tenantFinancial {}", dto);
 
-        TenantRetriever r = new TenantRetriever();
-        r.retrieve(dto.getPrimaryKey());
+        TenantRetriever r = new TenantRetriever(dto.getPrimaryKey(), true);
 
         new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(dto, r.tenantScreening);
 
@@ -53,7 +53,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
 
         dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(r.tenantScreening);
         dto.setPrimaryKey(r.tenantInLease.getPrimaryKey());
+
         callback.onSuccess(dto);
     }
-
 }
