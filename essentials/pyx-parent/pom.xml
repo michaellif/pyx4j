@@ -140,10 +140,10 @@
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
         <timestamp>${maven.build.timestamp}</timestamp>
 
-        <gwtVersion>2.3.0</gwtVersion>
-        <gaeVersion>1.5.1</gaeVersion>
+        <gwtVersion>2.4.0</gwtVersion>
+        <gaeVersion>1.5.3</gaeVersion>
         <gae.version>${gaeVersion}</gae.version>
-        <pyx4jGwtVersion>0.5.6-SNAPSHOT</pyx4jGwtVersion>
+        <pyx4jGwtVersion>0.5.7-SNAPSHOT</pyx4jGwtVersion>
 
 
         <jettyVersion>7.2.2.v20101205</jettyVersion>
@@ -621,7 +621,7 @@
                  <plugin>
                     <groupId>net.kindleit</groupId>
                     <artifactId>maven-gae-plugin</artifactId>
-                    <version>0.8.4</version>
+                    <version>0.9.0</version>
                     <configuration>
                         <serverId>${gaeDeployServerId}</serverId>
                         <sdkDir>${appengine.sdk.root}</sdkDir>
@@ -631,7 +631,8 @@
                         <dependency>
                             <groupId>net.kindleit</groupId>
                             <artifactId>gae-runtime</artifactId>
-                            <version>${gaeVersion}</version>
+                            <!--version>${gaeVersion}</version-->
+                            <version>1.5.2</version>
                             <type>pom</type>
                         </dependency>
                     </dependencies>
