@@ -59,26 +59,26 @@ public interface TenantScreening extends IEntity {
     LegalQuestions legalQuestions();
 
     @Owned
-    @Detached
+//    @Detached
     // should be loaded in service when necessary!..
     IList<ApplicationDocument> documents();
 
     //=============== Financial =============//
 
     @Owned
-    @Detached
+//    @Detached
     @Length(3)
     // should be loaded in service when necessary!..
     IList<PersonalIncome> incomes();
 
     @Owned
-    @Detached
+//    @Detached
     @Length(3)
     // should be loaded in service when necessary!..
     IList<PersonalAsset> assets();
 
     @Owned
-    @Detached
+//    @Detached
     @Length(2)
     // should be loaded in service when necessary!..
     IList<TenantGuarantor> guarantors();
