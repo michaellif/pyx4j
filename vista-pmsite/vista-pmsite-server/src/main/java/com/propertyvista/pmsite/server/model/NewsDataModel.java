@@ -13,9 +13,12 @@
  */
 package com.propertyvista.pmsite.server.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class NewsDataModel {
+public class NewsDataModel implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private Date date;
 
     private String headline;

@@ -260,6 +260,12 @@ public class PMSiteContentManager implements Serializable {
                 .setText(
                         "Private hosts can communicate with all other hostsinside the enterprise, both public and private.  While nothaving external (outside of the enterprise) IP connectivity privatehosts can still have access to external services via mediatinggateways. Such hosts will use the private address spacedefined above.");
         news.add(item);
+        item = new NewsDataModel();
+        item.setDate(null)
+                .setHeadline(" However, they cannothave IP connectivity to any host outside of the enterprise.")
+                .setText(
+                        "While nothaving external (outside of the enterprise) IP connectivity privatehosts can still have access to external services via mediatinggateways.  In particular, Internet service providers should takemeasures to prevent such leakage.");
+        news.add(item);
 
         return news;
     }

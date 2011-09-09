@@ -36,7 +36,7 @@ public class NewsPanel extends Panel {
                 item.add(new Label("date", news.getDate().toString()));
                 item.add(new Label("headline", news.getHeadline()));
                 item.add(new Label("text", news.getText()));
-                item.add(new Label("more", ""));
+                item.add(new Label("more", "&raquo;").setEscapeModelStrings(false));
             }
         });
     }

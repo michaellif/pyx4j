@@ -44,7 +44,7 @@ public class LandingPage extends BasePage {
             }
         });
 
-        add(new NewsPanel("newsBox"));
+        add(new NewsPanel("newsPanel"));
     }
 
 }
