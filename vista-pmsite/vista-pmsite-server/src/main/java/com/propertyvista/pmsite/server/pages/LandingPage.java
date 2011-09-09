@@ -19,7 +19,9 @@ import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebComponent;
 
 import com.propertyvista.pmsite.server.panels.NewsPanel;
+import com.propertyvista.pmsite.server.panels.PromoPanel;
 import com.propertyvista.pmsite.server.panels.QuickSearchCriteriaPanel;
+import com.propertyvista.pmsite.server.panels.TestimPanel;
 
 public class LandingPage extends BasePage {
 
@@ -45,6 +47,8 @@ public class LandingPage extends BasePage {
         });
 
         add(new NewsPanel("newsPanel"));
+        add(new PromoPanel("promoPanel"));
+        add(new TestimPanel("testimPanel"));
     }
 
 }

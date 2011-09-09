@@ -41,7 +41,9 @@ import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteLocale;
 import com.propertyvista.pmsite.server.model.ApartmentModel;
 import com.propertyvista.pmsite.server.model.NewsDataModel;
+import com.propertyvista.pmsite.server.model.PromoDataModel;
 import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
+import com.propertyvista.pmsite.server.model.TestimDataModel;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
 public class PMSiteContentManager implements Serializable {
@@ -268,5 +270,40 @@ public class PMSiteContentManager implements Serializable {
         news.add(item);
 
         return news;
+    }
+
+    public static List<PromoDataModel> getPromotions() {
+        ArrayList<PromoDataModel> promo = new ArrayList<PromoDataModel>();
+
+        // do promo building lookup
+        EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
+        List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(dbCriteria);
+        for (Building bld : buildings) {
+            PromoDataModel item = new PromoDataModel();
+            if (bld.media().isEmpty() || bld.info().address().isEmpty()) {
+                continue;
+            }
+            item.setImg(getMediaImgUrl(bld.media().get(0).getPrimaryKey().asLong(), "medium"));
+            item.setAddress(bld.info().address().streetNumber().getValue() + " " + bld.info().address().streetName().getValue() + ", "
+                    + bld.info().address().city().getValue());
+            promo.add(item);
+            if (promo.size() >= 4) {
+                break;
+            }
+        }
+
+        return promo;
+    }
+
+    public static List<TestimDataModel> getTestimonials() {
+        ArrayList<TestimDataModel> testim = new ArrayList<TestimDataModel>();
+        TestimDataModel item = new TestimDataModel();
+        item.setName("Pinoccio").setQuote("Indirect references to such addresses should be contained within theenterprise.");
+        testim.add(item);
+        item = new TestimDataModel();
+        item.setName("Seven Dwarfs").setQuote(" However, they cannothave IP connectivity to any host outside of the enterprise.");
+        testim.add(item);
+
+        return testim;
     }
 }

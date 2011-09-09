@@ -1,0 +1,41 @@
+<wicket:panel
+	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<style>
+.testim_box {
+	width:610px;
+	padding:20px 30px;
+	float:left;
+}
+.testim_box .infobox_content {
+	width:250px;
+	height:80px;
+	overflow:hidden;
+	float:left;
+	background:#181818;
+	padding:10px 20px;
+	margin-left:20px;
+}
+.testim_box .infobox_content:first-child {
+	margin-left:0px;
+}
+.testim_box .name {
+	color:#B5E329;
+	padding:20px 0 0 0;
+}
+.testim_box .read_more {
+	color:#B5E329;
+	font-size:16px;
+	padding-left:10px;
+}
+</style>
+	<div>
+		<span class="infobox_heading">Testimonials</span>
+		<a href="" class="read_more">More &raquo;</a>
+	</div>
+	<div class="infobox_body">
+		<div wicket:id="testimItem" class="infobox_content">
+			<div wicket:id="quote" class="quote"></div>
+			<div wicket:id="name" class="name"></div>
+		</div>
+	</div>
+</wicket:panel>

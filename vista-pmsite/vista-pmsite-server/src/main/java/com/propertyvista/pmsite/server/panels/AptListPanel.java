@@ -15,6 +15,7 @@ package com.propertyvista.pmsite.server.panels;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Radio;
@@ -99,7 +100,7 @@ public class AptListPanel extends Panel {
                 if (propInfo.mainMedia().getValue() != null) {
                     mediaId = propInfo.mainMedia().getValue().asLong();
                 }
-                item.add(new Image("picture", PMSiteContentManager.getMediaImgUrl(mediaId, "small")));
+                item.add(new Image("picture").add(new SimpleAttributeModifier("src", PMSiteContentManager.getMediaImgUrl(mediaId, "small"))));
                 item.add(new BookmarkablePageLink<Void>("aptDetails", AptDetailsPage.class, new PageParameters("propid=" + propInfo.id().getValue())));
                 IAddress addr = propInfo.address();
                 String addrFmt = addr.street1().getValue() + " " + addr.street2().getValue() + ", " + addr.city().getValue() + ", "
