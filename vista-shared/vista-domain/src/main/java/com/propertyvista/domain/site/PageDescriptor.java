@@ -58,6 +58,10 @@ public interface PageDescriptor extends IEntity {
     IList<PageCaption> caption();
 
     @Owned
+    @Caption(name = "Page Content:")
+    IList<PageContent> content();
+
+    @Owned
     @Caption(name = "Child Pages:")
     IList<PageDescriptor> childPages();
 

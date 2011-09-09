@@ -128,18 +128,20 @@ public class PortalSitePreloader extends AbstractDataPreloader {
 
         if (enResource != null) {
             PageContent pageContent = EntityFactory.create(PageContent.class);
-            pageContent.descriptor().set(page);
+//            pageContent.descriptor().set(page);
             pageContent.locale().set(enLocale);
             pageContent.content().setValue(IOUtils.getUTF8TextResource(enResource, this.getClass()));
-            PersistenceServicesFactory.getPersistenceService().persist(pageContent);
+//            PersistenceServicesFactory.getPersistenceService().persist(pageContent);
+            page.content().add(pageContent);
         }
 
         if (frResource != null) {
             PageContent pageContent = EntityFactory.create(PageContent.class);
-            pageContent.descriptor().set(page);
+//            pageContent.descriptor().set(page);
             pageContent.locale().set(frLocale);
             pageContent.content().setValue(IOUtils.getUTF8TextResource(frResource, this.getClass()));
-            PersistenceServicesFactory.getPersistenceService().persist(pageContent);
+//            PersistenceServicesFactory.getPersistenceService().persist(pageContent);
+            page.content().add(pageContent);
         }
 
         return page;
