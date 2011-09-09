@@ -47,9 +47,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
 
     @Override
     public String create() {
-
         try {
-
             enLocale = EntityFactory.create(Locale.class);
             enLocale.lang().setValue(Lang.en);
             PersistenceServicesFactory.getPersistenceService().persist(enLocale);
@@ -115,7 +113,6 @@ public class PortalSitePreloader extends AbstractDataPreloader {
         } catch (IOException e) {
             throw new Error(e);
         }
-
     }
 
     private PageDescriptor createDynamicPage(String enCaption, String frCaption, PageDescriptor.Type type) throws ClassCastException, IOException {
@@ -123,24 +120,21 @@ public class PortalSitePreloader extends AbstractDataPreloader {
     }
 
     private PageDescriptor createStaticPage(String enCaption, String enResource, String frCaption, String frResource) throws ClassCastException, IOException {
+
         PageDescriptor page = createPage(enCaption, frCaption, PageDescriptor.Type.staticContent);
         PersistenceServicesFactory.getPersistenceService().persist(page);
 
         if (enResource != null) {
             PageContent pageContent = EntityFactory.create(PageContent.class);
-//            pageContent.descriptor().set(page);
             pageContent.locale().set(enLocale);
             pageContent.content().setValue(IOUtils.getUTF8TextResource(enResource, this.getClass()));
-//            PersistenceServicesFactory.getPersistenceService().persist(pageContent);
             page.content().add(pageContent);
         }
 
         if (frResource != null) {
             PageContent pageContent = EntityFactory.create(PageContent.class);
-//            pageContent.descriptor().set(page);
             pageContent.locale().set(frLocale);
             pageContent.content().setValue(IOUtils.getUTF8TextResource(frResource, this.getClass()));
-//            PersistenceServicesFactory.getPersistenceService().persist(pageContent);
             page.content().add(pageContent);
         }
 
@@ -148,6 +142,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
     }
 
     private PageDescriptor createPage(String enCaption, String frCaption, PageDescriptor.Type type) throws ClassCastException, IOException {
+
         PageDescriptor page = EntityFactory.create(PageDescriptor.class);
         page.type().setValue(type);
         page.name().setValue(enCaption);

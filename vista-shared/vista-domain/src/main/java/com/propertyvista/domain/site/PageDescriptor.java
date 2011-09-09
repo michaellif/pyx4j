@@ -68,9 +68,5 @@ public interface PageDescriptor extends IEntity {
     // ================================
 
     @Transient
-    @Caption(name = "Page Content:")
-    IList<PageContent> _content();
-
-    @Transient
     IList<PageDescriptor> _path();
 }

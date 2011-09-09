@@ -64,8 +64,8 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
 
         main.add(inject(proto().name()), 15);
 
-        main.add(new CrmSectionSeparator(proto()._content().getMeta().getCaption()));
-        main.add(inject(proto()._content(), createPageContentsList()));
+        main.add(new CrmSectionSeparator(proto().content().getMeta().getCaption()));
+        main.add(inject(proto().content(), createPageContentsList()));
 
         main.add(new CrmSectionSeparator(proto().childPages().getMeta().getCaption()));
         main.add(inject(proto().childPages(), createChildPagesList()));

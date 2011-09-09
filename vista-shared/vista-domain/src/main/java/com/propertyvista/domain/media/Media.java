@@ -56,4 +56,5 @@ public interface Media extends IEntity {
 
     IPrimitive<String> url();
 
+    IPrimitive<Boolean> showOnWeb();
 }
