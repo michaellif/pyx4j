@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.server.services;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
@@ -31,12 +31,17 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
     protected void enhanceDTO(AptUnit in, AptUnitDTO dto, boolean fromList) {
         //TODO: calculate value here:
         dto.numberOfOccupants().setValue(0.0);
-        dto.buildingCode().set(PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, dto.belongsTo().getPrimaryKey()).propertyCode());
+        dto.buildingCode().set(Persistence.service().retrieve(Building.class, dto.belongsTo().getPrimaryKey()).propertyCode());
 
         if (!fromList) {
             // load detached entities:
-            PersistenceServicesFactory.getPersistenceService().retrieve(in.marketing().adBlurbs());
+            Persistence.service().retrieve(in.marketing().adBlurbs());
         } else {
+            // load detached entities (temporary):
+            Persistence.service().retrieve(in.floorplan());
+            // TODO actually just this is necessary, but it' doesn't implemented still:
+            //Persistence.service().retrieve(in.floorplan().name());
+
             // just clear unnecessary data before serialisation: 
             in.marketing().description().setValue(null);
             in.info().economicStatusDescription().setValue(null);
