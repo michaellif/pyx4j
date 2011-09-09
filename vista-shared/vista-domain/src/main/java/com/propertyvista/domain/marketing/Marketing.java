@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.marketing;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
@@ -30,7 +29,7 @@ public interface Marketing extends IEntity {
     IPrimitive<String> description();
 
     @Owned
-    @Detached
+//    @Detached
     // should be loaded in service when necessary!..
     IList<AdvertisingBlurb> adBlurbs();
 }
