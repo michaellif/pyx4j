@@ -13,10 +13,14 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
+import com.propertyvista.pmsite.server.panels.GwtInclude;
+
 public class ResidentsPage extends BasePage {
 
     public ResidentsPage() {
         super();
+
+        add(new GwtInclude("gwtInclude"));
     }
 
 }

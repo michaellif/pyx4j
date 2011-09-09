@@ -53,7 +53,7 @@ public class PropertiesMapWidget extends AbstractMapWidget {
     }
 
     public PropertiesMapWidget() {
-        super("100%", "500px");
+        super("100%", "100%");
     }
 
     @Override

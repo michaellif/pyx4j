@@ -7,20 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 22, 2011
- * @author vlads
+ * Created on Sep 8, 2011
+ * @author stanp
  * @version $Id$
  */
-package com.propertyvista.pmsite.server.pages;
+package com.propertyvista.pmsite.server.panels;
 
-import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaPanel;
+import org.apache.wicket.markup.html.panel.Panel;
 
-public class FindAptPage extends BasePage {
+public class GwtInclude extends Panel {
+    private static final long serialVersionUID = 1L;
 
-    public FindAptPage() {
-        super();
-        add(new AdvancedSearchCriteriaPanel());
-
+    public GwtInclude(String id) {
+        super(id);
     }
 
 }

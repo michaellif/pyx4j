@@ -6,21 +6,10 @@
 <body>
 	<wicket:extend>
 
-<!-- VISTA-START -->
+		<div id="vista.aptsearch"></div>
 
-    <!-- TODO USe the div ID and define value to identify widget type. -->
-    <div id="vista.aptsearch"></div>
-    
-    <!-- TODO move this to common template file -->
-    <noscript><div style="margin-left:auto;margin-right:auto;width:80%;text-align:center;font-size:20px;background-color:#fad163;color: black">You need to have JavaScript enabled to use this site.</div></noscript>
-    <script type="text/javascript" language="javascript" src="portal/portal.nocache.js"></script>
-    <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
-    <!--[if lt IE 7]><script type="text/javascript">var ieVersion6=6;</script><p>Please upgrade to Internet Explorer version 7 or later.</p><![endif]-->
+		<div wicket:id="gwtInclude" />
 
-
-<!-- VISTA-END -->
-
-
-      </wicket:extend>
+	</wicket:extend>
 </body>
 </html>

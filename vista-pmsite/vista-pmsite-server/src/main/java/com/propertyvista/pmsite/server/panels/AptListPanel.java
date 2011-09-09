@@ -85,7 +85,6 @@ public class AptListPanel extends Panel {
         displayModeRadio.add(new Radio<SearchCriteriaModel.DisplayMode>("displayList", new Model<SearchCriteriaModel.DisplayMode>(
                 SearchCriteriaModel.DisplayMode.List)));
         add(displayModeRadio.setRequired(true));
-        add(new Label("aptResultMap", "Location Map"));
 
         WebMarkupContainer aptList = new WebMarkupContainer("aptResultList");
         add(aptList.add(new AttributeClassModifier(null, "display_none")));

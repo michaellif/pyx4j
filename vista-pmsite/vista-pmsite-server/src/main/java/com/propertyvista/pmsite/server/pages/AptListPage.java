@@ -26,6 +26,7 @@ import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaInputPanel;
 import com.propertyvista.pmsite.server.panels.AptListPanel;
+import com.propertyvista.pmsite.server.panels.GwtInclude;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 
 public class AptListPage extends BasePage {
@@ -66,5 +67,7 @@ public class AptListPage extends BasePage {
 
         add(new Label("model_dump", model_dump));
         add(new AptListPanel("aptListPanel", new CompoundPropertyModel<IList<PropertyDTO>>(PMSiteContentManager.getPropertyList(searchCrit).properties())));
+
+        add(new GwtInclude("gwtInclude"));
     }
 }
