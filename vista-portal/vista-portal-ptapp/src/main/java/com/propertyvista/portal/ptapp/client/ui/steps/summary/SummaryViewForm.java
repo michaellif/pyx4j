@@ -69,7 +69,6 @@ import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
-import com.propertyvista.portal.ptapp.client.ui.steps.addons.AddonsViewForm;
 import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesViewForm;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
@@ -127,8 +126,8 @@ public class SummaryViewForm extends CEntityForm<SummaryDTO> {
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Financial"), new PtSiteMap.Financial())));
         main.add(inject(proto().tenantFinancials(), createFinancialView()));
 
-        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Addons"), new PtSiteMap.Addons())));
-        main.add(inject(proto().addons(), new AddonsViewForm(this)));
+//        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Addons"), new PtSiteMap.Addons())));
+//        main.add(inject(proto().addons(), new AddonsViewForm(this)));
 
         main.add(alignWidth(new VistaHeaderBar(i18n.tr("Lease Terms"))));
         main.add(new LeaseTermsCheck());

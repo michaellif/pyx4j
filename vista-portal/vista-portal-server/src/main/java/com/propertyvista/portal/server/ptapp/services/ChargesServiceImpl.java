@@ -29,7 +29,6 @@ import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.VistaDataPrinter;
 import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
-import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements ChargesService {
@@ -47,7 +46,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             charges.application().set(PtAppContext.getCurrentUserApplication());
         }
 
-        ChargesServerCalculation.updateChargesFromApplication(charges);
+//        ChargesServerCalculation.updateChargesFromApplication(charges);
 
         loadTransientData(charges);
 

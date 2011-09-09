@@ -22,5 +22,4 @@ public interface ChargeLineListWithUpgrades extends ChargeLineList {
     @Owned
     @Caption(name = "Available Upgrades")
     IList<ChargeLineSelectable> upgradeCharges();
-
 }

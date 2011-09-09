@@ -35,8 +35,8 @@ public interface Charges extends IEntity, IBoundToApplication {
      */
 
     // When changed the ChargesSharedCalculation.calculateCharges should be called on UI.
-    @Caption(name = "Rent-Related Charges")
     @Owned
+    @Caption(name = "Rent-Related Charges")
     ChargeLineListWithUpgrades monthlyCharges();
 
     // TODO add Pro-Rated duration,fraction information for calulation to be posible 

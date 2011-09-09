@@ -38,6 +38,7 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.portal.server.ptapp.services.SummaryServiceImpl;
@@ -81,16 +82,16 @@ public class SummaryReportTest extends ReportsTestBase {
         Application application = PersistenceServicesFactory.getPersistenceService().retrieve(applicationCriteria);
         Assert.assertNotNull("devUser application", application);
 
-        EntityQueryCriteria<SummaryDTO> criteria = EntityQueryCriteria.create(SummaryDTO.class);
+        EntityQueryCriteria<Summary> criteria = EntityQueryCriteria.create(Summary.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-        SummaryDTO summary = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        Summary summary = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
         if (summary == null) {
             summary = EntityFactory.create(SummaryDTO.class);
             summary.application().set(application);
         }
-        new SummaryServiceImpl().loadTransientData(summary);
+        SummaryDTO dto = new SummaryServiceImpl().createSummaryDTO(summary);
         DataDump.dump("test-summary", summary);
-        return summary;
+        return dto;
 
     }
 

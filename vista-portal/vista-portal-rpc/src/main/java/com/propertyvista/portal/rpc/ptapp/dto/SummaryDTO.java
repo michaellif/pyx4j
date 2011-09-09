@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.rpc.ptapp.dto;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
@@ -29,12 +28,9 @@ public interface SummaryDTO extends Summary {
 
     TenantInLeaseListDTO tenantsWithInfo();
 
-    @EmbeddedEntity
     IList<SummaryTenantFinancialDTO> tenantFinancials();
 
-    @EmbeddedEntity
     AddOnsDTO addons();
 
-    @EmbeddedEntity
     Charges charges();
 }
