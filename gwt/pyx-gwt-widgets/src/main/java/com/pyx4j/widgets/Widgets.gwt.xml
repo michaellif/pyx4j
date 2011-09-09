@@ -29,4 +29,5 @@
     </replace-with  -->
   
     <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.widgets.client.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.allen_sauer.gwt.dnd.*" />
 </module>

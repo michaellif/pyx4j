@@ -29,10 +29,14 @@
 
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.core.client.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.canvas.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.cell.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.http.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.safehtml.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.safecss.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.event.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.cellview.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.view.client.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.validation.client.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.ui.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.dom.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.i18n.*" />

@@ -13,7 +13,7 @@
     <extend-configuration-property name="rpc.blacklist" value="java.lang.AssertionError" />
     <extend-configuration-property name="rpc.blacklist" value="java.util.*Exception" />
     
-	<extend-configuration-property name="rpc.blacklist" value="java.math.*" />
+    <extend-configuration-property name="rpc.blacklist" value="java.math.*" />
     <extend-configuration-property name="rpc.blacklist" value="java.util.Collections.*" />
     
     <extend-configuration-property name="rpc.blacklist" value="java.util.Array.*" />
@@ -21,6 +21,7 @@
     
     <extend-configuration-property name="rpc.blacklist" value="java.util.IdentityHashMap" />
     <extend-configuration-property name="rpc.blacklist" value="java.util.Linked.*" />
+    <extend-configuration-property name="rpc.blacklist" value="javax.validation.*" />
     <!--
       java.util.Vector  used in IList
       java.util.TreeSet used in ISet
