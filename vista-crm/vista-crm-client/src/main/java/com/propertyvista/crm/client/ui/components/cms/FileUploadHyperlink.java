@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.components.media;
+package com.propertyvista.crm.client.ui.components.cms;
 
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
@@ -22,6 +22,7 @@ import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.forms.client.ui.CAbstractHyperlink;
 import com.pyx4j.forms.client.ui.IFormat;
 
+import com.propertyvista.crm.client.ui.components.media.MediaUploadDialog;
 import com.propertyvista.domain.File;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 

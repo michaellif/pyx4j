@@ -14,7 +14,6 @@
 package com.propertyvista.common.client.ui.decorations;
 
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 import com.pyx4j.forms.client.ui.CComponent;
@@ -65,9 +64,6 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
 
     public void add(final CComponent<?> component, double labelWidth, double componentWidth, String componentCaption) {
         super.add(createDecorator(component, labelWidth, componentWidth, componentCaption));
-        if (!readOnlyMode) {
-            super.add(new HTML());
-        }
     }
 
     public VistaWidgetDecorator createDecorator(final CComponent<?> component, double componentWidth) {

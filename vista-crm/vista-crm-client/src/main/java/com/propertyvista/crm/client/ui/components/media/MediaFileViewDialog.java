@@ -42,5 +42,4 @@ public class MediaFileViewDialog extends VerticalPanel implements OkOption {
     public boolean onClickOk() {
         return true;
     }
-
 }

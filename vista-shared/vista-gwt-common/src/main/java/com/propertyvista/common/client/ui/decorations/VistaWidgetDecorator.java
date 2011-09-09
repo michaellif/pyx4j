@@ -178,14 +178,14 @@ public class VistaWidgetDecorator extends VerticalPanel {
 
         add(firstLine);
 
+        setVisible(component.isVisible());
+
         if (!decorData.readOnlyMode) {
             FlowPanel secondLine = new FlowPanel();
             secondLine.add(validationLabel);
             add(secondLine);
 
             renderMandatoryMessage();
-
-            setVisible(component.isVisible());
 
             component.addPropertyChangeHandler(new PropertyChangeHandler() {
                 @Override
@@ -202,8 +202,18 @@ public class VistaWidgetDecorator extends VerticalPanel {
 
             getElement().getStyle().setPaddingTop(2, Unit.PX);
             getElement().getStyle().setPaddingBottom(13, Unit.PX);
-        }
 
+        } else {
+
+            component.addPropertyChangeHandler(new PropertyChangeHandler() {
+                @Override
+                public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
+                    if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
+                        setVisible(component.isVisible());
+                    }
+                }
+            });
+        }
     }
 
     private void renderMandatoryMessage() {

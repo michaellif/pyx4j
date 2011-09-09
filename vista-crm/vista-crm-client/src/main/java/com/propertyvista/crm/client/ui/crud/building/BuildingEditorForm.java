@@ -202,9 +202,8 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().info().centralAir()), 15);
         split.getRightPanel().add(inject(proto().info().centralHeat()), 15);
 
-        main.add(new CrmSectionSeparator(i18n.tr("Media:")));
-        //main.add(inject(proto().media(), new CrmMediaListViewer(isEditable())));
-        main.add(inject(proto().media(), new CrmMediaListFolderEditor(isEditable(), ImageTarget.Building)));
+        main.add(new VistaLineSeparator());
+        main.add(inject(proto().contacts().website()), 50);
 
         return new CrmScrollPanel(main);
     }
@@ -233,17 +232,20 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         SubtypeInjectors.injectMarketing(main, proto().marketing(), this);
 
+        main.add(new VistaLineSeparator());
+
+        main.add(inject(proto().contacts().email().address()), main.getDefaultLabelWidth(), 30, i18n.tr("Email Address"));
+        SubtypeInjectors.injectPhones(main, proto().contacts().phones(), this, false, true);
+
+        main.add(new CrmSectionSeparator(i18n.tr("Media:")));
+        main.add(inject(proto().media(), new CrmMediaListFolderEditor(isEditable(), ImageTarget.Building)));
+
         return new CrmScrollPanel(main);
     }
 
     private Widget createContactTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
-        main.add(inject(proto().contacts().website()), 30);
-        main.add(inject(proto().contacts().email().address()), main.getDefaultLabelWidth(), 30, i18n.tr("Email Address"));
-        SubtypeInjectors.injectPhones(main, proto().contacts().phones(), this, false, true);
-
-        main.add(new CrmSectionSeparator(i18n.tr("Contacts:")));
         main.add(inject(proto().contacts().contacts(), createContactsListEditor()));
 
         return new CrmScrollPanel(main);
@@ -282,9 +284,9 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
-                        new ShowPopUpBox<SelectConcessionBox>(new SelectConcessionBox()) {
+                        new ShowPopUpBox<SelectUtilityBox>(new SelectUtilityBox()) {
                             @Override
-                            protected void onClose(SelectConcessionBox box) {
+                            protected void onClose(SelectUtilityBox box) {
                                 if (box.getSelectedItems() != null) {
                                     for (ServiceItemType item : box.getSelectedItems()) {
                                         addItem(item);
@@ -366,13 +368,13 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 //
 // Selection Boxes:
 
-    private class SelectConcessionBox extends OkCancelBox {
+    private class SelectUtilityBox extends OkCancelBox {
 
         private ListBox list;
 
         private List<ServiceItemType> selectedItems;
 
-        public SelectConcessionBox() {
+        public SelectUtilityBox() {
             super("Select Utilities");
         }
 
@@ -389,9 +391,16 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                     }
                 });
 
+                List<ServiceItemType> alreadySelected = new ArrayList<ServiceItemType>();
+                for (ServiceItemType item : getValue().serviceCatalog().includedUtilities()) {
+                    alreadySelected.add(item);
+                }
+
                 for (ServiceItemType item : getValue().availableUtilities()) {
-                    list.addItem(item.getStringView());
-                    list.setValue(list.getItemCount() - 1, item.id().toString());
+                    if (!alreadySelected.contains(item)) {
+                        list.addItem(item.getStringView());
+                        list.setValue(list.getItemCount() - 1, item.id().toString());
+                    }
                 }
                 list.setVisibleItemCount(8);
                 list.setWidth("100%");
