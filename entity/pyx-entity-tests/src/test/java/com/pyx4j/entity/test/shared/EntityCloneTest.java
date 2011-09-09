@@ -22,7 +22,9 @@ package com.pyx4j.entity.test.shared;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
+import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.Organization;
 
 public class EntityCloneTest extends InitializerTestCase {
 
@@ -66,5 +68,20 @@ public class EntityCloneTest extends InitializerTestCase {
         //System.out.println("set address name");
         address.streetName().setValue("Home Street");
         assertEquals("Level 2 value Not Updated", "Home Street", employee.homeAddress().streetName().getValue());
+    }
+
+    public void testCircularReferences() {
+        Organization org = EntityFactory.create(Organization.class);
+        org.name().setValue("org");
+
+        Department department = EntityFactory.create(Department.class);
+        department.name().setValue("dept1");
+
+        org.departments().add(department);
+
+        Organization orgClone = org.cloneEntity();
+
+        assertEquals("Level 1 name", org.name().getValue(), orgClone.name().getValue());
+        assertEquals("Level 2 name", org.departments().iterator().next().name().getValue(), orgClone.departments().iterator().next().name().getValue());
     }
 }

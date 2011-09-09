@@ -23,6 +23,7 @@ package com.pyx4j.entity.shared.impl;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -567,7 +568,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         Map<String, Object> v = getValue();
         if (v != null) {
             Map<String, Object> data2 = new EntityValueMap();
-            cloneMap(v, data2);
+            cloneMap(v, data2, new IdentityHashMap<Object, Object>());
             entity.setValue(data2);
         }
         return entity;
@@ -604,9 +605,10 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             throw new ClassCastException(entity.getEntityMeta().getCaption() + " is not assignable from " + this.getEntityMeta().getCaption());
         }
         entity.setPrimaryKey(this.getPrimaryKey());
+        Map<Object, Object> processed = new IdentityHashMap<Object, Object>();
         for (String memberName : entity.getEntityMeta().getMemberNames()) {
             if (entityValue.containsKey(memberName)) {
-                entity.setMemberValue(memberName, entityValue.get(memberName));
+                entity.setMemberValue(memberName, cloneValue(entityValue.get(memberName), processed));
             }
         }
         return entity;
@@ -622,23 +624,33 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         }
     }
 
-    private void cloneMap(Map<String, Object> src, Map<String, Object> dst) {
+    private void cloneMap(Map<String, Object> src, Map<String, Object> dst, Map<Object, Object> processed) {
         for (Map.Entry<String, Object> me : src.entrySet()) {
-            dst.put(me.getKey(), cloneValue(me.getValue()));
+            dst.put(me.getKey(), cloneValue(me.getValue(), processed));
         }
     }
 
     @SuppressWarnings("unchecked")
-    private Object cloneValue(Object value) {
+    private Object cloneValue(Object value, Map<Object, Object> processed) {
         if (value instanceof Map<?, ?>) {
+            Object existingClone = processed.get(value);
+            if (existingClone != null) {
+                return existingClone;
+            }
             Map<String, Object> m = new EntityValueMap();
-            cloneMap((Map<String, Object>) value, m);
+            processed.put(value, m);
+            cloneMap((Map<String, Object>) value, m, processed);
             return m;
         } else if (value instanceof List<?>) {
+            Object existingClone = processed.get(value);
+            if (existingClone != null) {
+                return existingClone;
+            }
             @SuppressWarnings("rawtypes")
             List l = new Vector();
+            processed.put(value, l);
             for (Object lm : (List<?>) value) {
-                l.add(cloneValue(lm));
+                l.add(cloneValue(lm, processed));
             }
             return l;
         } else if (value instanceof HashSet<?>) {
@@ -646,14 +658,19 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             @SuppressWarnings("rawtypes")
             Set s = new HashSet<Object>();
             for (Object lm : (Set<?>) value) {
-                s.add(cloneValue(lm));
+                s.add(cloneValue(lm, processed));
             }
             return s;
         } else if (value instanceof TreeSet<?>) {
+            Object existingClone = processed.get(value);
+            if (existingClone != null) {
+                return existingClone;
+            }
             @SuppressWarnings("rawtypes")
             Set s = new TreeSet<Map<String, Object>>(new ElementsComparator());
+            processed.put(value, s);
             for (Object lm : (Set<?>) value) {
-                s.add(cloneValue(lm));
+                s.add(cloneValue(lm, processed));
             }
             return s;
         } else {
