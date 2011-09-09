@@ -46,10 +46,11 @@ public class EntityLister {
             // The position is important, hasNext may retrieve one more row. 
             r.setEncodedCursorReference(unfiltered.encodedCursorReference());
             r.hasMoreData(unfiltered.hasNext());
-            r.setTotalRows(Persistence.service().count(criteria));
         } finally {
             unfiltered.completeRetrieval();
         }
+
+        r.setTotalRows(Persistence.service().count(criteria));
 
         return r;
     }
