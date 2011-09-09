@@ -68,7 +68,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         Summary summary = retrieveApplicationEntity(Summary.class);
         if (summary == null) {
             log.info("Creating new Summary for appl {}", PtAppContext.getCurrentUserApplicationPrimaryKey());
-            summary = EntityFactory.create(SummaryDTO.class);
+            summary = EntityFactory.create(Summary.class);
             summary.application().set(PtAppContext.getCurrentUserApplication());
         }
 
@@ -78,7 +78,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
     @SuppressWarnings("unchecked")
     public SummaryDTO createSummaryDTO(Summary dbo) {
 
-        SummaryDTO summary = dbo.cast();
+        SummaryDTO summary = dbo.clone(SummaryDTO.class);
 
         summary.selectedUnit().set(new ApartmentServiceImpl().retrieveData());
 
