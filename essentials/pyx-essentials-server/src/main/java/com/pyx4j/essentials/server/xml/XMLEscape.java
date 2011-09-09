@@ -35,13 +35,9 @@ public class XMLEscape {
 
     "\"", "&quot;",
 
-    "'", "&apos;",
+    "'", "&apos;"
 
-    "\u20AC", "&euro;",
-
-    "\u00A3", "&pound;",
-
-    "\u00A9", "&copy;" };
+    };
 
     private static Map<Character, String> xmlEntityTableEncode;
 

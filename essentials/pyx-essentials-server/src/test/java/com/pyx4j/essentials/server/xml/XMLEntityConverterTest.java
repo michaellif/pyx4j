@@ -57,9 +57,9 @@ public class XMLEntityConverterTest extends TestCase {
 
         Task t1 = EntityFactory.create(Task.class);
         t1.setPrimaryKey(new Key(23));
-        t1.description().setValue("Task1");
-        t1.notes().add("Note 1");
-        t1.notes().add("Note 2");
+        t1.description().setValue("Task1 &copy; <do-this>");
+        t1.notes().add("© Note 1");
+        t1.notes().add("&copy; Note 2");
         t1.oldStatus().add(Status.SUSPENDED);
 
         employee.tasks().add(t1);
