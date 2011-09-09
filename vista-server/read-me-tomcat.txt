@@ -13,3 +13,15 @@ Create mail-credentials.properties  in tomcat home.
         Go to the web.xml of the manager application (for instance it could be under /tomcat7/webapps/manager/WEB-INF/web.xml
         Increase the max-file-size and max-request-size
 
+
+---
+ Test deployment to local tomcat:
+
+  Add to .m2/settings.xml,  Don't forget to add role 'manager-script' in tomcat-users.xml to this user
+                <server>
+                    <id>tomcat.localhost</id>
+                    <username>admin</username>
+                    <password>123456</password>
+                </server>
+
+  mvn -P deploy,deploy-target-local,deploy-db-reset

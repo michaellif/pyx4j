@@ -161,7 +161,7 @@
     <profiles>
 
         <profile>
-            <id>deploy</id>
+            <id>deploy-paypad</id>
             <build>
                 <plugins>
 
@@ -189,20 +189,19 @@
                     <plugin>
                         <groupId>org.codehaus.cargo</groupId>
                         <artifactId>cargo-maven2-plugin</artifactId>
-                        <version>1.1.2</version>
                         <executions>
                             <execution>
-                                <id>verify-deploy</id>
-                                <phase>install</phase>
+                                <id>deploy.deployer-undeploy</id>
+                                <phase>pre-integration-test</phase>
                                 <goals>
-                                    <goal>deployer-deploy</goal>
+                                    <goal>deployer-undeploy</goal>
                                 </goals>
                             </execution>
                             <execution>
-                                <id>clean-undeploy</id>
-                                <phase>package</phase>
+                                <id>deploy.verify-deploy</id>
+                                <phase>pre-integration-test</phase>
                                 <goals>
-                                    <goal>deployer-undeploy</goal>
+                                    <goal>deployer-deploy</goal>
                                 </goals>
                             </execution>
                         </executions>
