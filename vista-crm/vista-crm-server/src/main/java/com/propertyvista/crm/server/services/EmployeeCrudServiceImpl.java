@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.pyx4j.entity.server.Persistence;
+
 import com.propertyvista.crm.rpc.services.EmployeeCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.company.Employee;
@@ -21,5 +23,14 @@ public class EmployeeCrudServiceImpl extends GenericCrudServiceImpl<Employee> im
 
     public EmployeeCrudServiceImpl() {
         super(Employee.class);
+    }
+
+    @Override
+    protected void enhanceRetrieve(Employee entity, boolean fromList) {
+        if (!fromList) {
+            // Load detached data:
+            Persistence.service().retrieve(entity.portfolios());
+            Persistence.service().retrieve(entity.employees());
+        }
     }
 }

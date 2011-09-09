@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -55,6 +56,7 @@ public interface Service extends IEntity {
 
     @Owner
     @Detached
+    @ReadOnly
     ServiceCatalog catalog();
 
 // ----------------------------------------------
@@ -71,13 +73,16 @@ public interface Service extends IEntity {
     IPrimitive<String> description();
 
     @Owned
+    @Detached
     IList<ServiceItem> items();
 
     IPrimitive<DepositType> depositType();
 
     @Owned
+    @Detached
     IList<ServiceFeature> features();
 
     @Owned
+    @Detached
     IList<ServiceConcession> concessions();
 }

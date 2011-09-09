@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -39,6 +40,7 @@ public interface TenantScreening extends IEntity {
 
     @Owner
     @Detached
+    @ReadOnly
     Tenant tenant();
 
     @Format("MM/dd/yyyy")
@@ -59,28 +61,24 @@ public interface TenantScreening extends IEntity {
     LegalQuestions legalQuestions();
 
     @Owned
-//    @Detached
-    // should be loaded in service when necessary!..
+    @Detached
     IList<ApplicationDocument> documents();
 
     //=============== Financial =============//
 
     @Owned
-//    @Detached
+    @Detached
     @Length(3)
-    // should be loaded in service when necessary!..
     IList<PersonalIncome> incomes();
 
     @Owned
-//    @Detached
+    @Detached
     @Length(3)
-    // should be loaded in service when necessary!..
     IList<PersonalAsset> assets();
 
     @Owned
-//    @Detached
+    @Detached
     @Length(2)
-    // should be loaded in service when necessary!..
     IList<TenantGuarantor> guarantors();
 
     //=============== Security Info =============//

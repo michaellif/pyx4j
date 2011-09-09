@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.property.asset.building;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
@@ -33,8 +34,10 @@ public interface BuildingContactInfo extends IEntity {
     Email email(); // email business is not clear at the moment, we need a bit more detail on this
 
     @Owned
+    @Detached
     IList<Phone> phones();
 
     @Owned
+    @Detached
     IList<OrganisationContact> contacts();
 }

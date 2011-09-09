@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -30,6 +31,7 @@ public interface PageContent extends IEntity {
 
     @Owner
     @Detached
+    @ReadOnly
     PageDescriptor descriptor();
 
     // -------------------------

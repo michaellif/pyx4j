@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -32,6 +33,7 @@ public interface Floorplan extends IEntity {
 
     @Owner
     @Detached
+    @ReadOnly
     Building building();
 
     @ToString(index = 0)
@@ -60,6 +62,5 @@ public interface Floorplan extends IEntity {
     IPrimitive<Integer> halfBath();
 
     @Detached
-    // should be loaded in service when necessary!..
     IList<Media> media();
 }

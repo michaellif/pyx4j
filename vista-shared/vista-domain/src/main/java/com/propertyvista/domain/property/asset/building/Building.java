@@ -67,10 +67,8 @@ public interface Building extends IEntity {
     IPrimitive<Boolean> complexPrimary();
 
     @Detached
-    // should be loaded in service when necessary!..
     IList<Media> media();
 
     @Detached
-    // should be loaded in service when necessary!..
     ServiceCatalog serviceCatalog();
 }

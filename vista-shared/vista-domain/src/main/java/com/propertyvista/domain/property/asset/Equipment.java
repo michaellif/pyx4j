@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -31,6 +32,7 @@ public interface Equipment extends LicencedWarrantedMaintained {
 
     @Owner
     @Detached
+    @ReadOnly
     Building belongsTo();
 
     @ToString(index = 0)

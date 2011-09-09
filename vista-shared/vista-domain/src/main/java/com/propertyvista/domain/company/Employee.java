@@ -16,6 +16,7 @@ package com.propertyvista.domain.company;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -31,11 +32,14 @@ public interface Employee extends Person {
     IPrimitive<String> description();
 
     @Owned
+    @Detached
     IList<AssignedPortfolio> portfolios();
 
     @Owned
+    @Detached
     IList<ManagedEmployee> employees();
 
+    @Owner
     @Detached
-    Employee manager(); // double link!..
+    Employee manager();
 }

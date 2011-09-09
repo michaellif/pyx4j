@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.pyx4j.entity.server.Persistence;
+
 import com.propertyvista.crm.rpc.services.TenantCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.tenant.Tenant;
@@ -27,5 +29,7 @@ public class TenantCrudServiceImpl extends GenericCrudServiceDtoImpl<Tenant, Ten
     @Override
     protected void enhanceDTO(Tenant in, TenantDTO dto, boolean fromList) {
         dto.displayName().setValue(in.getStringView());
+        // load detached data:
+        Persistence.service().retrieve(in.emergencyContacts());
     }
 }

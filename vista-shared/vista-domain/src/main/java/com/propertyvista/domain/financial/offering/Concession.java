@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
@@ -79,6 +80,7 @@ public interface Concession extends IEntity {
 
     @Owner
     @Detached
+    @ReadOnly
     ServiceCatalog catalog();
 
 // ----------------------------------------------

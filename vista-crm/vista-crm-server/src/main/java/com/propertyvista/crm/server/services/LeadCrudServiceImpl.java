@@ -19,6 +19,7 @@ import com.propertvista.generator.util.RandomUtil;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.crm.rpc.services.LeadCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
@@ -47,7 +48,7 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
 
         Lead lead = PersistenceServicesFactory.getPersistenceService().retrieve(dboClass, entityId);
         if (lead.convertedToLease().isBooleanTrue()) {
-            callback.onFailure(new Error("The Lead is converted to Lease already!"));
+            callback.onFailure(new UserRuntimeException("The Lead is converted to Lease already!"));
         } else {
             Tenant tenant = EntityFactory.create(Tenant.class);
             tenant.type().setValue(Tenant.Type.person);
@@ -79,5 +80,4 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
             callback.onSuccess(lease);
         }
     }
-
 }

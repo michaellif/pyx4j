@@ -16,7 +16,7 @@ package com.propertyvista.crm.server.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.FeatureCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
@@ -32,12 +32,14 @@ public class FeatureCrudServiceImpl extends GenericCrudServiceImpl<Feature> impl
     @Override
     protected void enhanceRetrieve(Feature entity, boolean fromList) {
         if (!fromList) {
-            PersistenceServicesFactory.getPersistenceService().retrieve(entity.catalog());
+            // Load detached data:
+            Persistence.service().retrieve(entity.catalog());
+            Persistence.service().retrieve(entity.items());
         }
     }
 
     @Override
     public void retrieveCatalog(AsyncCallback<ServiceCatalog> callback, Key entityId) {
-        callback.onSuccess(PersistenceServicesFactory.getPersistenceService().retrieve(ServiceCatalog.class, entityId));
+        callback.onSuccess(Persistence.service().retrieve(ServiceCatalog.class, entityId));
     }
 }

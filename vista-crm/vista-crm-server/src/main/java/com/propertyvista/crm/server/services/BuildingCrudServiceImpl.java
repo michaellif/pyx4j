@@ -43,6 +43,7 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
             // load detached entities/lists. Update other places: BuildingsResource and BuildingRetriever
             PersistenceServicesFactory.getPersistenceService().retrieve(in.media());
             PersistenceServicesFactory.getPersistenceService().retrieve(in.serviceCatalog());
+            PersistenceServicesFactory.getPersistenceService().retrieve(in.contacts().phones());
             PersistenceServicesFactory.getPersistenceService().retrieve(in.contacts().contacts());
             PersistenceServicesFactory.getPersistenceService().retrieve(in.marketing().adBlurbs());
 

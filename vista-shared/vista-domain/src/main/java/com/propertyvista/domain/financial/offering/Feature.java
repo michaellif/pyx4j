@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -75,6 +76,7 @@ public interface Feature extends IEntity {
 
     @Owner
     @Detached
+    @ReadOnly
     ServiceCatalog catalog();
 
 // ----------------------------------------------
@@ -91,6 +93,7 @@ public interface Feature extends IEntity {
     IPrimitive<String> description();
 
     @Owned
+    @Detached
     IList<ServiceItem> items();
 
     IPrimitive<PriceType> priceType();

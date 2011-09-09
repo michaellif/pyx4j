@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -55,6 +56,7 @@ public interface Parking extends IEntity {
 
     @Owner
     @Detached
+    @ReadOnly
     Building belongsTo();
 
     @ToString(index = 0)

@@ -65,6 +65,7 @@ public interface Tenant extends IEntity {
     Company company();
 
     @Owned
+    @Detached
     @Length(3)
     IList<EmergencyContact> emergencyContacts();
 }
