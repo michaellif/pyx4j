@@ -14,7 +14,6 @@
 package com.propertyvista.portal.rpc.ptapp.dto;
 
 import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -26,11 +25,9 @@ import com.propertyvista.domain.tenant.TenantInLease;
 @Transient
 public interface TenantInLeaseListDTO extends IEntity, IBoundToApplication {
 
-    @Owned
     @Length(6)
     IList<TenantInLease> tenants();
 
     //TODO this should be AptUnit property
-    @Transient
     IPrimitive<Integer> tenantsMaximum();
 }
