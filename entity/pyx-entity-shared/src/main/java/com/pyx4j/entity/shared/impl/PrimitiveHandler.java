@@ -119,16 +119,13 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
         if (other == this) {
             return true;
         }
-        if (isNull()) {
-            return false;
-        }
-        TYPE thisValue = this.getValue();
         if ((other == null) || (!(other instanceof IPrimitive<?>)) || (!this.getValueClass().equals(((IPrimitive<?>) other).getValueClass()))) {
             return false;
-        } else if (thisValue == null) {
-            return (((IPrimitive<?>) other).getValue() == null);
+        } else if (isNull()) {
+            return (((IPrimitive<?>) other).isNull());
+        } else {
+            return this.getValue().equals(((IPrimitive<?>) other).getValue());
         }
-        return thisValue.equals(((IPrimitive<?>) other).getValue());
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
