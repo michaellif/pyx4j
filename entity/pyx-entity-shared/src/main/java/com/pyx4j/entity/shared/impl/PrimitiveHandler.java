@@ -101,7 +101,11 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
 
     @Override
     public boolean isNull() {
-        return (!getOwner().containsMemberValue(getFieldName()));
+        if (!getOwner().containsMemberValue(getFieldName())) {
+            return true;
+        } else {
+            return (getValue() == null);
+        }
     }
 
     @Override
