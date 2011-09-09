@@ -32,8 +32,12 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.commons.IdentityHashSet;
@@ -54,6 +58,8 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
 public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Object>> implements IEntity, IFullDebug, IHaveServiceCallMarker {
+
+    private static final Logger log = LoggerFactory.getLogger(SharedEntityHandler.class);
 
     private static final long serialVersionUID = -7590484996971406115L;
 
@@ -143,23 +149,29 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         return new ListHandler<T>(this, memberName, setValueClass);
     }
 
-    /**
-     * Guarantee that data is created before setting the value of member
-     */
-    protected Map<String, Object> ensureValue() {
-        Map<String, Object> v = getValue();
-        if (v == null) {
-            if (trace) {
-                System.out.println("Value created for " + getObjectClass().getName());
+    private String exceptionInfo(Map<String, Object> v) {
+        StringBuilder b = new StringBuilder();
+        b.append(GWTJava5Helper.getSimpleName(getObjectClass()));
+        if (v != null) {
+            Object pk = v.get(IEntity.PRIMARY_KEY);
+            if (pk != null) {
+                b.append(" id=").append(pk);
             }
-            setValue(v = new EntityValueMap(super.hashCode()));
         }
-        return v;
+        if (getOwner() != null) {
+            b.append(" ").append(this.getFieldName()).append(" of ").append(GWTJava5Helper.getSimpleName(getOwner().getObjectClass()));
+        }
+        return b.toString();
+    }
+
+    @Override
+    public String getDebugExceptionInfoString() {
+        return exceptionInfo(getValue(false));
     }
 
     @Override
     public Key getPrimaryKey() {
-        Map<String, Object> v = getValue();
+        Map<String, Object> v = getValue(false);
         if (v == null) {
             return null;
         } else {
@@ -178,20 +190,51 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         return (IPrimitive<Key>) getMember(PRIMARY_KEY);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Map<String, Object> getValue() {
+        return getValue(false);
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> getValue(boolean assertDetached) {
         assert !isTemplateEntity : "Template Entity data manipulations disabled";
         if (delegateValue) {
             Map<String, Object> v = getOwner().getValue();
             if (v == null) {
                 return null;
             } else {
-                return (Map<String, Object>) v.get(getFieldName());
+                v = (Map<String, Object>) v.get(getFieldName());
+                if (assertDetached && (v != null) && v.containsKey(DETACHED_ATTR)) {
+                    log.error("Access to detached entity {}", exceptionInfo(v), new Throwable());
+                    //throw new RuntimeException("Access to detached entity " + exceptionInfo(v));
+                }
+                return v;
             }
         } else {
+            if (assertDetached && (data != null) && data.containsKey(DETACHED_ATTR)) {
+                log.error("Access to detached entity {}", exceptionInfo(data), new Throwable());
+                //throw new RuntimeException("Access to detached entity " + exceptionInfo(data));
+            }
             return data;
         }
+    }
+
+    /**
+     * Guarantee that data is created before setting the value of member
+     */
+    protected Map<String, Object> ensureValue() {
+        return ensureValue(false);
+    }
+
+    private Map<String, Object> ensureValue(boolean assertDetached) {
+        Map<String, Object> v = getValue(assertDetached);
+        if (v == null) {
+            if (trace) {
+                System.out.println("Value created for " + getObjectClass().getName());
+            }
+            setValue(v = new EntityValueMap(super.hashCode()));
+        }
+        return v;
     }
 
     @Override
@@ -287,12 +330,12 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         if (other == this) {
             return true;
         }
-        Map<String, Object> thisValue = this.getValue();
+        Map<String, Object> thisValue = this.getValue(false);
         if ((other == null) || (thisValue == null) || (!(other instanceof IEntity))
                 || (!this.getInstanceValueClass().equals(((IEntity) other).getInstanceValueClass()))) {
             return false;
         }
-        return thisValue.equals(((IEntity) other).getValue());
+        return thisValue.equals(((SharedEntityHandler) other).getValue(false));
     }
 
     @Override
@@ -316,7 +359,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public int hashCode() {
-        Map<String, Object> thisValue = this.getValue();
+        Map<String, Object> thisValue = this.getValue(false);
         if (thisValue == null) {
             return super.hashCode();
         } else {
@@ -326,7 +369,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public boolean isNull() {
-        Map<String, Object> thisValue = this.getValue();
+        Map<String, Object> thisValue = this.getValue(false);
         if ((thisValue == null) || (thisValue.isEmpty())) {
             return true;
         }
@@ -335,7 +378,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public boolean isEmpty() {
-        Map<String, Object> thisValue = this.getValue();
+        Map<String, Object> thisValue = this.getValue(false);
         if ((thisValue == null) || (thisValue.isEmpty())) {
             return true;
         }
@@ -348,6 +391,27 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             }
         }
         return ((EntityValueMap) thisValue).isNull();
+    }
+
+    @Override
+    public boolean isValuesDetached() {
+        Map<String, Object> thisValue = this.getValue(false);
+        if ((thisValue == null) || (thisValue.isEmpty())) {
+            return false;
+        }
+        return thisValue.containsKey(DETACHED_ATTR);
+    }
+
+    @Override
+    public void setValuesPopulated() {
+        ensureValue(false).remove(DETACHED_ATTR);
+    }
+
+    @Override
+    public void setValuesDetached() {
+        if (___DETACHED_ATTR_ENABLED___) {
+            ensureValue(false).put(DETACHED_ATTR, Boolean.TRUE);
+        }
     }
 
     @Override
@@ -387,7 +451,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     @Override
     public Object getMemberValue(String memberName) {
         // Like Elvis operator
-        Map<String, Object> v = getValue();
+        Map<String, Object> v = getValue(true);
         if (v == null) {
             return null;
         } else {
@@ -457,7 +521,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     @Override
     public void setValue(Path path, Object value) {
         //assertPath(path);
-        Map<String, Object> ownerValueMap = ensureValue();
+        Map<String, Object> ownerValueMap = ensureValue(true);
         LoopCounter c = new LoopCounter(path.getPathMembers());
         for (String memberName : path.getPathMembers()) {
             switch (c.next()) {
@@ -484,12 +548,12 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
      */
     @Override
     public void setMemberValue(String memberName, Object value) {
-        ensureValue().put(memberName, value);
+        ensureValue(true).put(memberName, value);
     }
 
     @Override
     public <T extends IObject<?>> void set(T member, T value) {
-        ensureValue().put(member.getFieldName(), value.getValue());
+        ensureValue(true).put(member.getFieldName(), value.getValue());
     }
 
     private Object getMemberStringView(String memberName, boolean forMessageFormatFormat) {

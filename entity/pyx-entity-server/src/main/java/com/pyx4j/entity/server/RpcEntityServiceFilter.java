@@ -94,6 +94,7 @@ public class RpcEntityServiceFilter implements IServiceFilter {
         }
         processed.add(entity);
         processed.add((Serializable) entity.getValue());
+
         nextValue: for (Map.Entry<String, Object> me : entity.getValue().entrySet()) {
             String memberName = me.getKey();
             if (memberName.equals(IEntity.PRIMARY_KEY)) {
@@ -106,7 +107,10 @@ public class RpcEntityServiceFilter implements IServiceFilter {
                     throw new Error("Data type corruption");
                 }
                 continue nextValue;
+            } else if (memberName.startsWith("$")) {
+                continue;
             }
+
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             if (memberMeta.isRpcTransient()) {
                 me.setValue(null);

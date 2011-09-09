@@ -441,6 +441,7 @@ public class TableModel {
     }
 
     private void retrieveValues(ResultSet rs, IEntity entity) throws SQLException {
+        entity.setValuesPopulated();
         for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
             member.getValueAdapter().retrieveValue(rs, entity, member);
         }
@@ -473,7 +474,9 @@ public class TableModel {
                 if ((dialect.isMultitenant()) && !rs.getString("ns").equals(NamespaceManager.getNamespace())) {
                     throw new RuntimeException("namespace acess error");
                 }
-                entity.setPrimaryKey(key);
+                if (!key.equals(entity.getPrimaryKey())) {
+                    entity.setPrimaryKey(key);
+                }
                 retrieveValues(rs, entity);
 
                 for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
@@ -862,7 +865,6 @@ public class TableModel {
                 T entity = entities.get(key);
                 entity.setPrimaryKey(key);
                 retrieveValues(rs, entity);
-
             }
 
             /*

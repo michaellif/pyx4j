@@ -39,6 +39,10 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public static String CONCRETE_TYPE_DATA_ATTR = "$concrete";
 
+    public static final boolean ___DETACHED_ATTR_ENABLED___ = true;
+
+    public static String DETACHED_ATTR = "$detached";
+
     public Key getPrimaryKey();
 
     public void setPrimaryKey(Key pk);
@@ -50,6 +54,12 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
      * @return true if only PrimaryKey present and other properties are empty or null
      */
     public boolean isEmpty();
+
+    public boolean isValuesDetached();
+
+    public void setValuesPopulated();
+
+    public void setValuesDetached();
 
     public IObject<?> getMember(String memberName);
 
@@ -137,4 +147,6 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     @Override
     public String getStringView();
+
+    public String getDebugExceptionInfoString();
 }

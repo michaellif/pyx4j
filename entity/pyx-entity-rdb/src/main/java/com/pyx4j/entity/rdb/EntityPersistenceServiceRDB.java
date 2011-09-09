@@ -184,11 +184,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     private void persist(Connection connection, TableModel tm, IEntity entity, Date now) {
+        if (entity.isValuesDetached()) {
+            throw new RuntimeException("Saving detached entity " + entity.getDebugExceptionInfoString());
+        }
         for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();
             IEntity childEntity = (IEntity) member.getMember(entity);
             if (memberMeta.isOwnedRelationships()) {
-                persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                if (!childEntity.isValuesDetached()) {
+                    persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                }
             } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
                 mergeReference(connection, memberMeta, childEntity, now);
             }
@@ -228,7 +233,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
                     for (IEntity childEntity : iCollectionMember) {
                         if (memberMeta.isOwnedRelationships()) {
-                            persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                            if (!childEntity.isValuesDetached()) {
+                                persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                            }
                         } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
                             mergeReference(connection, memberMeta, childEntity, now);
                         }
@@ -256,10 +263,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
                     for (IEntity childEntity : iCollectionMember) {
                         if (memberMeta.isOwnedRelationships()) {
-                            if (doMerge) {
-                                merge(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
-                            } else {
-                                persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                            if (!childEntity.isValuesDetached()) {
+                                if (doMerge) {
+                                    merge(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                                } else {
+                                    persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                                }
                             }
                         } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
                             mergeReference(connection, memberMeta, childEntity, now);
@@ -479,6 +488,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     private void merge(Connection connection, TableModel tm, IEntity entity, Date now) {
+        if (entity.isValuesDetached()) {
+            throw new RuntimeException("Saving detached entity " + entity.getDebugExceptionInfoString());
+        }
         final IEntity baseEntity = EntityFactory.create(tm.entityMeta().getEntityClass());
         String updatedTs = tm.entityMeta().getUpdatedTimestampMember();
         boolean updated;

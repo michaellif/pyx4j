@@ -74,6 +74,9 @@ public class DataDump {
         if ((item == null) || (!ServerSideConfiguration.instance().isDevelopmentBehavior())) {
             return;
         }
+        if (true) {
+            return;
+        }
         long id = ++debugCount;
         NumberFormat nf = new DecimalFormat("0000");
         StringBuffer name = new StringBuffer(nf.format(id));

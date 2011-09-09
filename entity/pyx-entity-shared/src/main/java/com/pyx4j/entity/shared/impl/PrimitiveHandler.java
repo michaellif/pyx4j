@@ -52,7 +52,7 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
 
     @Override
     public void setValue(TYPE value) {
-        ((SharedEntityHandler) getOwner()).ensureValue().put(getFieldName(), value);
+        ((SharedEntityHandler) getOwner()).setMemberValue(getFieldName(), value);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
 
     @Override
     public boolean isNull() {
-        return (getValue() == null);
+        return (!getOwner().containsMemberValue(getFieldName()));
     }
 
     @Override
@@ -114,6 +114,9 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
     public boolean equals(Object other) {
         if (other == this) {
             return true;
+        }
+        if (isNull()) {
+            return false;
         }
         TYPE thisValue = this.getValue();
         if ((other == null) || (!(other instanceof IPrimitive<?>)) || (!this.getValueClass().equals(((IPrimitive<?>) other).getValueClass()))) {

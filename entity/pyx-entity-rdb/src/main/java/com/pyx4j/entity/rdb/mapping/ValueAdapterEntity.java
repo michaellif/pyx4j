@@ -87,6 +87,11 @@ class ValueAdapterEntity implements ValueAdapter {
         } else {
             pk = new Key(value);
         }
-        ((IEntity) member.getMember(entity)).setPrimaryKey(pk);
+        IEntity memberEntity = (IEntity) member.getMember(entity);
+        memberEntity.setValue(null);
+        memberEntity.setPrimaryKey(pk);
+        if (pk != null) {
+            memberEntity.setValuesDetached();
+        }
     }
 }
