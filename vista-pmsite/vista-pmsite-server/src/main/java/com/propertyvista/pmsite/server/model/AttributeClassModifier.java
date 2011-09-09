@@ -30,6 +30,8 @@ public class AttributeClassModifier extends AttributeModifier {
     protected String newValue(final String curVal, final String repVal) {
         if (curVal == null || curVal.equals("")) {
             return repVal;
+        } else if (find == null || find.equals("")) {
+            return curVal + " " + repVal;
         }
         StringBuffer newVal = new StringBuffer();
         String[] valArr = curVal.split(" ");

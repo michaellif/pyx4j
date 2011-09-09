@@ -13,19 +13,26 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.contact.IAddress;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.model.AttributeClassModifier;
+import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
@@ -37,7 +44,52 @@ public class AptListPanel extends Panel {
     public AptListPanel(String id, CompoundPropertyModel<IList<PropertyDTO>> model) {
         super(id, model);
 
-        add(new ListView<PropertyDTO>("aptListInfo", model) {
+        // TODO - the model object has to be replaced by the SearchCriteriaModel.displayMode component 
+        SearchCriteriaModel.DisplayMode displayModeModel = SearchCriteriaModel.DisplayMode.Map;
+        RadioGroup<SearchCriteriaModel.DisplayMode> displayModeRadio = new RadioGroup<SearchCriteriaModel.DisplayMode>("displayMode",
+                new Model<SearchCriteriaModel.DisplayMode>(displayModeModel)) {
+            // TODO replace this BS (server round trip) with JS (onclick handler)
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected boolean wantOnSelectionChangedNotifications() {
+                return true;
+            }
+
+            @Override
+            protected void onSelectionChanged(Object newMode) {
+                // get components
+                Component map = getParent().get("aptResultMap");
+                Component list = getParent().get("aptResultList");
+
+                // TODO replace this BS with JS
+                if (newMode == SearchCriteriaModel.DisplayMode.Map) {
+                    if (map != null) {
+                        map.add(new AttributeClassModifier("display_none", null));
+                    }
+                    if (list != null) {
+                        list.add(new AttributeClassModifier(null, "display_none"));
+                    }
+                } else if (newMode == SearchCriteriaModel.DisplayMode.List) {
+                    if (list != null) {
+                        list.add(new AttributeClassModifier("display_none", null));
+                    }
+                    if (map != null) {
+                        map.add(new AttributeClassModifier(null, "display_none"));
+                    }
+                }
+            }
+        };
+        displayModeRadio.add(new Radio<SearchCriteriaModel.DisplayMode>("displayMap", new Model<SearchCriteriaModel.DisplayMode>(
+                SearchCriteriaModel.DisplayMode.Map)));
+        displayModeRadio.add(new Radio<SearchCriteriaModel.DisplayMode>("displayList", new Model<SearchCriteriaModel.DisplayMode>(
+                SearchCriteriaModel.DisplayMode.List)));
+        add(displayModeRadio.setRequired(true));
+        add(new Label("aptResultMap", "Location Map"));
+
+        WebMarkupContainer aptList = new WebMarkupContainer("aptResultList");
+        add(aptList.add(new AttributeClassModifier(null, "display_none")));
+        aptList.add(new ListView<PropertyDTO>("aptListItem", model) {
             private static final long serialVersionUID = 1L;
 
             @Override

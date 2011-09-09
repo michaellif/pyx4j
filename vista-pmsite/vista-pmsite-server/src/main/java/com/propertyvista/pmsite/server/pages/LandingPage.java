@@ -18,6 +18,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebComponent;
 
+import com.propertyvista.pmsite.server.panels.NewsPanel;
 import com.propertyvista.pmsite.server.panels.QuickSearchCriteriaPanel;
 
 public class LandingPage extends BasePage {
@@ -40,10 +41,10 @@ public class LandingPage extends BasePage {
                 response.write("<div style='height: 375px; position: relative; width: 960px;'>");
                 response.write("<img style='position: absolute; bottom:0; left:0' src='resources/templates.TemplateResources/images/template0/landing.png' alt=''>");
                 response.write("</div>");
-
             }
         });
 
+        add(new NewsPanel("newsBox"));
     }
 
 }

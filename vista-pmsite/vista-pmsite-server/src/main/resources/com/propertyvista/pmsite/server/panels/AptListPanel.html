@@ -26,17 +26,38 @@
 	float:left;
 	width:450px;
 } 
+.listing_mapview {
+	width:600px;
+	height:600px;
+	background:#ddd;
+}
+.display_none {
+	display:none;
+}
 </style>
-	<div class="listing_entry" wicket:id="aptListInfo">
-		<div class="picture_box">
-			<img class="picture" wicket:id="picture"/>
-			<div class="controls"><a wicket:id="aptDetails" href="">Details</a></div>
-		</div>
-		<div class="info_box">
-			<div class="address"><Label>Address:</label><span wicket:id="address"/></div>
-			<div class="description"><label>Description:</label><span wicket:id="description"/></div>
-			<div class="types"><Label>Types:</label><ul><li wicket:id="types"><span wicket:id="type"/></li></ul></div>
-			<div class="amenities"><label>Amenities:</label><ul><li wicket:id="amenities"><span wicket:id="amenity"/></li></ul></div>
+	<div wicket:id="displayMode">
+	    <div class="search_displaysel">
+	    	<input wicket:id="displayMap" type="radio"/>
+	    	<label>Map View</label>
+	    </div>
+	    <div class="search_displaysel">
+	    	<input wicket:id="displayList" type="radio"/>
+	    	<label>List View</label>
+		</div>	  
+	</div>
+	<div class="listing_mapview" wicket:id="aptResultMap">Location Map goes here</div>
+	<div class="listing_listview" wicket:id="aptResultList">
+		<div class="listing_entry" wicket:id="aptListItem">
+			<div class="picture_box">
+				<img class="picture" wicket:id="picture"/>
+				<div class="controls"><a wicket:id="aptDetails" href="">Details</a></div>
+			</div>
+			<div class="info_box">
+				<div class="address"><Label>Address:</label><span wicket:id="address"/></div>
+				<div class="description"><label>Description:</label><span wicket:id="description"/></div>
+				<div class="types"><Label>Types:</label><ul><li wicket:id="types"><span wicket:id="type"/></li></ul></div>
+				<div class="amenities"><label>Amenities:</label><ul><li wicket:id="amenities"><span wicket:id="amenity"/></li></ul></div>
+			</div>
 		</div>
 	</div>
 </wicket:panel>

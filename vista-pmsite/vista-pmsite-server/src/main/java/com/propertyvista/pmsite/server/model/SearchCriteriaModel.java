@@ -40,6 +40,8 @@ public class SearchCriteriaModel implements Serializable {
 
     private SearchType searchType;
 
+    private final DisplayMode displayMode = DisplayMode.Map;
+
     private String province;
 
     private String city;
@@ -65,6 +67,10 @@ public class SearchCriteriaModel implements Serializable {
 
     public enum SearchType {
         City, Proximity
+    }
+
+    public enum DisplayMode {
+        Map, List
     }
 
     public enum BedroomChoice {
@@ -99,6 +105,10 @@ public class SearchCriteriaModel implements Serializable {
 
     public SearchType getSearchType() {
         return searchType;
+    }
+
+    public DisplayMode getDisplayMode() {
+        return displayMode;
     }
 
     public String getProvince() {

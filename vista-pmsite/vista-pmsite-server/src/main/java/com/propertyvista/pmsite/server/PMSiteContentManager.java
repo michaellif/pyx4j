@@ -14,6 +14,7 @@
 package com.propertyvista.pmsite.server;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -39,6 +40,7 @@ import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteLocale;
 import com.propertyvista.pmsite.server.model.ApartmentModel;
+import com.propertyvista.pmsite.server.model.NewsDataModel;
 import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
@@ -248,5 +250,17 @@ public class PMSiteContentManager implements Serializable {
 
     public static String getMediaImgUrl(long mediaId, String size) {
         return "/vista/media/" + mediaId + "/" + size + ".png";
+    }
+
+    public static List<NewsDataModel> getNews() {
+        ArrayList<NewsDataModel> news = new ArrayList<NewsDataModel>();
+        NewsDataModel item = new NewsDataModel();
+        item.setDate(null)
+                .setHeadline("Indirect references to such addresses should be contained within theenterprise.")
+                .setText(
+                        "Private hosts can communicate with all other hostsinside the enterprise, both public and private.  While nothaving external (outside of the enterprise) IP connectivity privatehosts can still have access to external services via mediatinggateways. Such hosts will use the private address spacedefined above.");
+        news.add(item);
+
+        return news;
     }
 }
