@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.pyx4j.entity.server.Persistence;
+
 import com.propertyvista.crm.rpc.services.SelectUnitCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -21,5 +23,11 @@ public class SelectUnitCrudServiceImpl extends GenericCrudServiceImpl<AptUnit> i
 
     public SelectUnitCrudServiceImpl() {
         super(AptUnit.class);
+    }
+
+    @Override
+    protected void enhanceRetrieve(AptUnit entity, boolean fromList) {
+        Persistence.service().retrieve(entity.floorplan());
+        super.enhanceRetrieve(entity, fromList);
     }
 }

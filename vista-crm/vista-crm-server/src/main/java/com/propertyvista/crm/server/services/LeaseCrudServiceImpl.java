@@ -36,9 +36,8 @@ import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.Vehicle;
-import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -121,17 +120,30 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         building.serviceCatalog().services().clear();
         building.serviceCatalog().services().addAll(services);
 
-        EntityQueryCriteria<Feature> featureCriteria = EntityQueryCriteria.create(Feature.class);
-        featureCriteria.add(PropertyCriterion.eq(featureCriteria.proto().catalog(), building.serviceCatalog()));
-        List<Feature> features = Persistence.service().query(featureCriteria);
-        building.serviceCatalog().features().clear();
-        building.serviceCatalog().features().addAll(features);
-
-        EntityQueryCriteria<Concession> concessionCriteria = EntityQueryCriteria.create(Concession.class);
-        concessionCriteria.add(PropertyCriterion.eq(concessionCriteria.proto().catalog(), building.serviceCatalog()));
-        List<Concession> concessions = Persistence.service().query(concessionCriteria);
-        building.serviceCatalog().concessions().clear();
-        building.serviceCatalog().concessions().addAll(concessions);
+        // load detached data:
+        for (Service item : services) {
+            Persistence.service().retrieve(item.items());
+            Persistence.service().retrieve(item.features());
+            for (ServiceFeature fi : item.features()) {
+                Persistence.service().retrieve(fi.feature().items());
+            }
+            Persistence.service().retrieve(item.concessions());
+        }
+//
+//        EntityQueryCriteria<Feature> featureCriteria = EntityQueryCriteria.create(Feature.class);
+//        featureCriteria.add(PropertyCriterion.eq(featureCriteria.proto().catalog(), building.serviceCatalog()));
+//        List<Feature> features = Persistence.service().query(featureCriteria);
+//        building.serviceCatalog().features().clear();
+//        building.serviceCatalog().features().addAll(features);
+//        for (Feature item : features) {
+//            Persistence.service().retrieve(item.items());
+//        }
+//
+//        EntityQueryCriteria<Concession> concessionCriteria = EntityQueryCriteria.create(Concession.class);
+//        concessionCriteria.add(PropertyCriterion.eq(concessionCriteria.proto().catalog(), building.serviceCatalog()));
+//        List<Concession> concessions = Persistence.service().query(concessionCriteria);
+//        building.serviceCatalog().concessions().clear();
+//        building.serviceCatalog().concessions().addAll(concessions);
 
         return building;
     }
