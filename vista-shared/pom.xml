@@ -27,6 +27,8 @@
         <module>vista-importer</module>
         <module>vista-yardi-wsdl</module>
         <module>vista-yardi</module>
+        <module>vista-equifax-gen</module>
+        <module>vista-equifax</module>
         <module>vista-payment</module>
         <module>vista-integration</module>
     </modules>

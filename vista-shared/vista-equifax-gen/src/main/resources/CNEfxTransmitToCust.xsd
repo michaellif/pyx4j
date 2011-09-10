@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2011 rel. 2 (http://www.altova.com) by TeaM DJiNN (TeaM DJiNN) -->
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by PM (SHI) -->
+<!-- edited with XML Spy v5.4 U (http://www.xmlspy.com) by Patrice Magnan (Equifax Canada) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.equifax.ca/XMLSchemas/EfxToCust" targetNamespace="http://www.equifax.ca/XMLSchemas/EfxToCust" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation>
+Using this schema, the users agree to the following rules related to the “Unknown elements and attributes vs Namespace Schema Location”. Please refer to the user manual for the details. 
+(1) Elements and attributes could be added or deleted to the schema without any advanced warning.  
+(2) New elements or attributes could be added between existing ones.  However, Equifax will not change existing name of the elements or the attributes, and will not change existing relative location and sequence of the elements or the attributes in a XML schema without giving prior notice to the users.  
+(3) The users will dynamically use the schema declared with the Namespace Schema Location instructions received into the XML document or simply ignore the unknown elements and attributes as suggested in the user manuals.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:include schemaLocation="CNConsCreditType.xsd"/>
+	<xs:include schemaLocation="CNEfxCommon.xsd"/>
+	<xs:include schemaLocation="CNConsCreditSegTypes.xsd"/>
+	<xs:include schemaLocation="CNEfxReportType.xsd"/>
+	<xs:include schemaLocation="CNCommCreditSegTypes.xsd"/>
+	<xs:include schemaLocation="CNCommCreditType.xsd"/>
+	<xs:include schemaLocation="CNCommCreditSegTypesReport2.0.xsd"/>
+	<xs:include schemaLocation="CNCommCreditTypeReport2.0.xsd"/>
+	<xs:element name="EfxTransmit">
+		<xs:annotation>
+			<xs:documentation>Standard Canadian data transmission from Equifax to the customers.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice>
+				<xs:element name="EfxReport" type="EfxReportType" maxOccurs="unbounded"/>
+				<xs:element name="CNErrorReport" type="CNErrorReportType"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

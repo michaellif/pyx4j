@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date: 2011-05-12
+        14:25:23 -0400 (Thu, 12 May 2011) $ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.propertyvista</groupId>
+        <artifactId>vista-shared</artifactId>
+        <version>1.0.0-SNAPSHOT</version><!--vista-version -->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>vista-equifax-gen</artifactId>
+    <name>vista-equifax-gen</name>
+
+    <dependencies>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <!-- Avoid extra warnings in build output -->
+                <artifactId>maven-clean-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>removet-generated-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals><goal>clean</goal></goals>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>${project.build.directory}/generated-sources</directory>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>1.3.1</version>
+                <executions>
+                    <execution>
+                        <id>xjc</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                    </execution>
+               </executions>
+               <configuration>
+                    <schemaDirectory>${basedir}/src/main/resources</schemaDirectory>
+                    <packageName>ca.equifax</packageName>
+               </configuration>
+           </plugin>
+           -->
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+</project>

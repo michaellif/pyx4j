@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2011 rel. 2 (http://www.altova.com) by TeaM DJiNN (TeaM DJiNN) -->
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Louis (SHI) -->
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Daniel Aubé (Equifax Canada) -->
+<xs:schema targetNamespace="http://www.equifax.ca/XMLSchemas/CustToEfx" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.equifax.ca/XMLSchemas/CustToEfx" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="CNEfxCommon.xsd"/>
+	<xs:include schemaLocation="CNConsAndCommRequestType.xsd"/>
+	<xs:include schemaLocation="CNConsAndCommRequestSegTypes.xsd"/>
+	<xs:element name="CNCustTransmitToEfx" type="CNConsAndCommRequestType">
+		<xs:annotation>
+			<xs:documentation>Standard Canadian data transmission from the customers to Equifax.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+</xs:schema>
