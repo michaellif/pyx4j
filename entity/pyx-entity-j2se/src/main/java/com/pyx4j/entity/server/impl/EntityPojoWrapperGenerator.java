@@ -47,6 +47,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.pojo.IPojo;
+import com.pyx4j.entity.server.pojo.IPojoImpl;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
@@ -75,13 +77,14 @@ public class EntityPojoWrapperGenerator {
         }
     }
 
-    public static <T extends IEntity> Class<?> getPojoClass(Class<T> clazz) {
+    public static <T extends IEntity> Class<IPojo<T>> getPojoClass(Class<T> clazz) {
         return instance().createPojo(EntityFactory.getEntityMeta(clazz));
     }
 
-    private Class<?> createPojo(EntityMeta entityMeta) {
+    @SuppressWarnings("unchecked")
+    private <T extends IEntity> Class<IPojo<T>> createPojo(EntityMeta entityMeta) {
         try {
-            return Class.forName(getPojoCtClass(entityMeta).getName());
+            return (Class<IPojo<T>>) Class.forName(getPojoCtClass(entityMeta).getName());
         } catch (ClassNotFoundException e) {
             throw new Error("Can't create POJO class for " + entityMeta.getEntityClass(), e);
         }
@@ -113,7 +116,8 @@ public class EntityPojoWrapperGenerator {
 
     @SuppressWarnings("unchecked")
     private <T extends IEntity> CtClass getPojoCtClass(EntityMeta entityMeta) {
-        String name = entityMeta.getEntityClass().getName() + "Pojo";
+        String entityClassName = entityMeta.getEntityClass().getName();
+        String name = entityClassName + "Pojo";
         try {
             return pool.get(name);
         } catch (NotFoundException e) {
@@ -128,6 +132,8 @@ public class EntityPojoWrapperGenerator {
             }
             //addAnnotationValue(implClass, XmlType.class, "name", entityMeta.getEntityClass().getSimpleName());
             addXmlTypeAnnotationValue(implClass, "name", getXMLName(entityMeta.getEntityClass()), entityMeta.getMemberNames());
+
+            implClass.setSuperclass(pool.get(IPojoImpl.class.getName()));
 
             for (String memberName : entityMeta.getMemberNames()) {
                 MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
@@ -151,7 +157,7 @@ public class EntityPojoWrapperGenerator {
                 String beanMemberName = getBeanName(memberName);
 
                 CtMethod memberGet = new CtMethod(ctValueClass, "get" + beanMemberName, null, implClass);
-                memberGet.setBody("return null;");
+                memberGet.setBody(createGetBody(ctValueClass, memberMeta, entityClassName));
                 implClass.addMethod(memberGet);
 
                 if (LogicalDate.class.getName().equals(ctValueClass.getName())) {
@@ -165,7 +171,7 @@ public class EntityPojoWrapperGenerator {
                 }
 
                 CtMethod memberSet = new CtMethod(CtClass.voidType, "set" + beanMemberName, new CtClass[] { ctValueClass }, implClass);
-                memberSet.setBody(";");
+                memberSet.setBody(createSetBody(memberMeta, entityClassName));
                 implClass.addMethod(memberSet);
             }
 
@@ -181,6 +187,27 @@ public class EntityPojoWrapperGenerator {
             throw new Error("Can't create class " + name, e);
         } catch (NotFoundException e) {
             throw new Error("Can't create class " + name, e);
+        }
+    }
+
+    private String createGetBody(CtClass ctValueClass, MemberMeta memberMeta, String entityClassName) {
+        switch (memberMeta.getObjectClassType()) {
+        case Primitive:
+            // Need 
+            return "return (" + ctValueClass.getName() + ") ((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "().getValue();";
+        default:
+            //TODO
+            return "return null;";
+        }
+    }
+
+    private String createSetBody(MemberMeta memberMeta, String entityClassName) {
+        switch (memberMeta.getObjectClassType()) {
+        case Primitive:
+            return "((" + entityClassName + ") super.entity)." + memberMeta.getFieldName() + "().setValue($1);";
+        default:
+            //TODO
+            return ";";
         }
     }
 
