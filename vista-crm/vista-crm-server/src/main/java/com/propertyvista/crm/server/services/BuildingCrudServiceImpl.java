@@ -16,7 +16,6 @@ package com.propertyvista.crm.server.services;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -41,21 +40,21 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
 
         if (!fromList) {
             // load detached entities/lists. Update other places: BuildingsResource and BuildingRetriever
-            PersistenceServicesFactory.getPersistenceService().retrieve(in.media());
-            PersistenceServicesFactory.getPersistenceService().retrieve(in.serviceCatalog());
-            PersistenceServicesFactory.getPersistenceService().retrieve(in.contacts().phones());
-            PersistenceServicesFactory.getPersistenceService().retrieve(in.contacts().contacts());
-            PersistenceServicesFactory.getPersistenceService().retrieve(in.marketing().adBlurbs());
+            Persistence.service().retrieve(in.media());
+            Persistence.service().retrieve(in.serviceCatalog());
+            Persistence.service().retrieve(in.contacts().phones());
+            Persistence.service().retrieve(in.contacts().contacts());
+            Persistence.service().retrieve(in.marketing().adBlurbs());
 
             EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
             amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), in));
-            for (BuildingAmenity item : PersistenceServicesFactory.getPersistenceService().query(amenitysCriteria)) {
+            for (BuildingAmenity item : Persistence.service().query(amenitysCriteria)) {
                 dto.amenities().add(item);
             }
 
             EntityQueryCriteria<ServiceItemType> serviceItemCriteria = EntityQueryCriteria.create(ServiceItemType.class);
             serviceItemCriteria.add(PropertyCriterion.eq(serviceItemCriteria.proto().featureType(), Feature.Type.utility));
-            for (ServiceItemType item : PersistenceServicesFactory.getPersistenceService().query(serviceItemCriteria)) {
+            for (ServiceItemType item : Persistence.service().query(serviceItemCriteria)) {
                 dto.availableUtilities().add(item);
             }
         } else {

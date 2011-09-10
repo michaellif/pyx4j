@@ -32,11 +32,9 @@ public interface Employee extends Person {
     IPrimitive<String> description();
 
     @Owned
-    @Detached
     IList<AssignedPortfolio> portfolios();
 
     @Owned
-    @Detached
     IList<ManagedEmployee> employees();
 
     @Owner
