@@ -411,7 +411,6 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
-                // TODO Auto-generated method stub
                 return null;
             }
 
@@ -427,18 +426,15 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
                     @Override
                     public IsWidget createContent() {
                         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable());
-                        if (!TenantScreeningEditorForm.this.isEditable()) {
-                            Widget name = inject(proto().name(), new CEntityLabel()).asWidget();
-                            name.getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-                            name.getElement().getStyle().setFontSize(1.1, Unit.EM);
-                            name.getElement().getStyle().setMarginBottom(0.3, Unit.EM);
-                            main.add(name);
-                        } else {
+                        if (parent.isEditable()) {
                             main.add(inject(proto().name().namePrefix()), 4);
                             main.add(inject(proto().name().firstName()), 12);
                             main.add(inject(proto().name().middleName()), 12);
                             main.add(inject(proto().name().lastName()), 20);
                             main.add(inject(proto().name().nameSuffix()), 4);
+                        } else {
+                            main.add(inject(proto().name(), new CEntityLabel()), 25, "Guarantor");
+                            get(proto().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
                         }
                         main.add(inject(proto().homePhone()), 15);
                         main.add(inject(proto().mobilePhone()), 15);

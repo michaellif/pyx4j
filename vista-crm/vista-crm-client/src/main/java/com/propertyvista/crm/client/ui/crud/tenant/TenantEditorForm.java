@@ -16,14 +16,15 @@ package com.propertyvista.crm.client.ui.crud.tenant;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
+import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
@@ -39,9 +40,11 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.ui.components.CrmBoxFolderDecorator;
+import com.propertyvista.crm.client.ui.components.CrmBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
+import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -71,12 +74,17 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
     public IsWidget createContent() {
 
         //Person
-        person.add(inject(proto().person().name().namePrefix()), 6);
-        person.add(inject(proto().person().name().firstName()), 15);
-        person.add(inject(proto().person().name().middleName()), 15);
-        person.add(inject(proto().person().name().lastName()), 15);
-        person.add(inject(proto().person().name().maidenName()), 15);
-        person.add(inject(proto().person().name().nameSuffix()), 6);
+        if (isEditable()) {
+            person.add(inject(proto().person().name().namePrefix()), 6);
+            person.add(inject(proto().person().name().firstName()), 15);
+            person.add(inject(proto().person().name().middleName()), 15);
+            person.add(inject(proto().person().name().lastName()), 15);
+            person.add(inject(proto().person().name().maidenName()), 15);
+            person.add(inject(proto().person().name().nameSuffix()), 6);
+        } else {
+            person.add(inject(proto().person().name(), new CEntityLabel()), 25, "Tenant");
+            get(proto().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+        }
         person.add(inject(proto().person().birthDate()), 8.2);
 
         person.add(inject(proto().person().homePhone()), 15);
@@ -145,12 +153,12 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
     }
 
     private CEntityFolderEditor<EmergencyContact> createEmergencyContactFolderEditor() {
-        return new CEntityFolderEditor<EmergencyContact>(EmergencyContact.class) {
+        return new CrmEntityFolder<EmergencyContact>(EmergencyContact.class, i18n.tr("Contact"), isEditable()) {
+            private final CrmEntityFolder<EmergencyContact> parent = this;
 
             @Override
             protected IFolderEditorDecorator<EmergencyContact> createFolderDecorator() {
-                return new BoxFolderEditorDecorator<EmergencyContact>(CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add one more Contact"),
-                        TenantEditorForm.this.isEditable());
+                return new CrmBoxFolderDecorator<EmergencyContact>(parent);
             }
 
             @Override
@@ -158,19 +166,25 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
                 return new CEntityFolderItemEditor<EmergencyContact>(EmergencyContact.class) {
                     @Override
                     public IsWidget createContent() {
-                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!TenantEditorForm.this.isEditable());
-                        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!TenantEditorForm.this.isEditable());
+                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable());
+                        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable());
                         main.add(split);
 
-                        split.getLeftPanel().add(inject(proto().name().firstName()), 12);
-                        split.getLeftPanel().add(inject(proto().name().middleName()), 12);
-                        split.getLeftPanel().add(inject(proto().name().lastName()), 20);
+                        if (parent.isEditable()) {
+                            split.getLeftPanel().add(inject(proto().name().namePrefix()), 6);
+                            split.getLeftPanel().add(inject(proto().name().firstName()), 12);
+                            split.getLeftPanel().add(inject(proto().name().middleName()), 12);
+                            split.getLeftPanel().add(inject(proto().name().lastName()), 20);
+                        } else {
+                            split.getLeftPanel().add(inject(proto().name(), new CEntityLabel()), 20, "Contactee");
+                            get(proto().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+                        }
 
                         split.getRightPanel().add(inject(proto().homePhone()), 15);
                         split.getRightPanel().add(inject(proto().mobilePhone()), 15);
                         split.getRightPanel().add(inject(proto().workPhone()), 15);
 
-                        VistaDecoratorsSplitFlowPanel split2 = new VistaDecoratorsSplitFlowPanel(!TenantEditorForm.this.isEditable());
+                        VistaDecoratorsSplitFlowPanel split2 = new VistaDecoratorsSplitFlowPanel(!parent.isEditable());
                         main.add(new VistaLineSeparator());
                         main.add(split2);
 
@@ -181,8 +195,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
                     @Override
                     public IFolderItemEditorDecorator<EmergencyContact> createFolderItemDecorator() {
-                        return new BoxFolderItemEditorDecorator<EmergencyContact>(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(),
-                                i18n.tr("Remove Contact"), !isFirst() && TenantEditorForm.this.isEditable());
+                        return new CrmBoxFolderItemDecorator<EmergencyContact>(parent, !isFirst() && parent.isEditable());
                     }
                 };
             }
@@ -190,9 +203,14 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
             @Override
             public void populate(IList<EmergencyContact> value) {
                 super.populate(value);
-                if (TenantEditorForm.this.isEditable() && value.isEmpty()) {
+                if (parent.isEditable() && value.isEmpty()) {
                     addItem(); // at least one Emergency Contact should be present!..
                 }
+            }
+
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                return null;
             }
         };
     }
