@@ -25,12 +25,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface PojoTestEntity extends IEntity {
+public interface PojoMemberTestEntity extends IEntity {
 
-    IPrimitive<String> name();
+    IPrimitive<String> description();
 
-    IPrimitive<Integer> rating();
-
-    PojoMemberTestEntity entMemeber1();
+    IPrimitive<Double> caount();
 
 }

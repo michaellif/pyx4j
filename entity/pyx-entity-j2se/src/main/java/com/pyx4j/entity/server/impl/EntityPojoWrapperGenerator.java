@@ -206,8 +206,19 @@ public class EntityPojoWrapperGenerator {
 
     private String createGetBody(CtClass ctValueClass, MemberMeta memberMeta, String entityClassName) {
         switch (memberMeta.getObjectClassType()) {
+        case Entity:
+            StringBuilder b = new StringBuilder("{\n");
+
+            b.append(memberMeta.getValueClass().getName()).append(" memberEntity = ");
+            b.append(" (" + memberMeta.getValueClass().getName() + ") ((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "();\n");
+
+            b.append(IPojo.class.getName()).append(" pojo = ");
+            b.append(EntityPojoWrapperGenerator.class.getName()).append(".getPojo(memberEntity);\n");
+
+            b.append("return (" + ctValueClass.getName() + ")pojo;\n}");
+            return b.toString();
         case Primitive:
-            // Need 
+            // Need cast to return type to avoid class loading problems
             return "return (" + ctValueClass.getName() + ") ((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "().getValue();";
         default:
             //TODO
