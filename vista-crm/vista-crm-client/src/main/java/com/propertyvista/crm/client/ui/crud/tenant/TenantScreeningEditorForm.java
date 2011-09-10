@@ -30,15 +30,12 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -56,12 +53,12 @@ import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
-import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmBoxFolderDecorator;
 import com.propertyvista.crm.client.ui.components.CrmBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
+import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
@@ -330,13 +327,16 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     }
 
     private CEntityFolderEditor<PersonalIncome> createIncomeFolderEditor() {
+        return new CrmEntityFolder<PersonalIncome>(PersonalIncome.class, i18n.tr("Income source"), isEditable()) {
 
-        return new CEntityFolderEditor<PersonalIncome>(PersonalIncome.class) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                return null;
+            }
 
             @Override
             protected IFolderEditorDecorator<PersonalIncome> createFolderDecorator() {
-                return new BoxFolderEditorDecorator<PersonalIncome>(CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add an income source"),
-                        TenantScreeningEditorForm.this.isEditable());
+                return new CrmBoxFolderDecorator<PersonalIncome>(this);
             }
 
             @Override
@@ -347,7 +347,8 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     }
 
     private CEntityFolderEditor<PersonalAsset> createAssetFolderEditorColumns() {
-        return new CEntityFolderEditor<PersonalAsset>(PersonalAsset.class) {
+        return new CrmEntityFolder<PersonalAsset>(PersonalAsset.class, i18n.tr("Asset"), isEditable()) {
+            private final CrmEntityFolder<PersonalAsset> parent = this;
 
             private List<EntityFolderColumnDescriptor> columns;
             {
@@ -358,9 +359,8 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             }
 
             @Override
-            protected IFolderEditorDecorator<PersonalAsset> createFolderDecorator() {
-                return new TableFolderEditorDecorator<PersonalAsset>(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), i18n.tr("Add an asset"),
-                        TenantScreeningEditorForm.this.isEditable());
+            protected List<EntityFolderColumnDescriptor> columns() {
+                return columns;
             }
 
             @Override
@@ -369,8 +369,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
                     @Override
                     public IFolderItemEditorDecorator<PersonalAsset> createFolderItemDecorator() {
-                        return new TableFolderItemEditorDecorator<PersonalAsset>(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(),
-                                i18n.tr("Remove asset"), TenantScreeningEditorForm.this.isEditable());
+                        return new CrmTableFolderItemDecorator<PersonalAsset>(parent);
                     }
 
                     @Override
@@ -384,7 +383,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
                             @Override
                             public String getValidationMessage(CEditableComponent<Double, ?> component, Double value) {
-                                return i18n.tr("Value can not increase 100%");
+                                return parent.i18n.tr("Value can not increase 100%");
                             }
 
                         });
@@ -396,7 +395,6 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
                                 if (get(proto().percent()).getValue() == null) {
                                     get(proto().percent()).setValue(100d);
                                 }
-
                             }
                         });
                     }
