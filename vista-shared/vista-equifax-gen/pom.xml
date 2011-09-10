@@ -34,7 +34,7 @@
                         <configuration>
                             <filesets>
                                 <fileset>
-                                    <directory>${project.build.directory}/generated-sources</directory>
+                                    <directory>${project.build.directory}/generated-sources/jaxb</directory>
                                 </fileset>
                             </filesets>
                         </configuration>
@@ -42,25 +42,41 @@
                 </executions>
             </plugin>
 
-            <!--
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
                 <version>1.3.1</version>
                 <executions>
                     <execution>
-                        <id>xjc</id>
+                        <id>xjc1</id>
                         <goals>
                             <goal>xjc</goal>
                         </goals>
+                        <configuration>
+                            <staleFile>${project.build.directory}/jaxb2/.xjcStaleFlag1</staleFile>
+                            <schemaDirectory>${basedir}/src/main/resources</schemaDirectory>
+                            <schemaFiles>CNCustTransmitToEfx.xsd</schemaFiles>
+                            <packageName>ca.equifax.uat</packageName>
+                            <nv>true</nv>
+                            <readOnly>true</readOnly>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>xjc2</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <staleFile>${project.build.directory}/jaxb2/.xjcStaleFlag2</staleFile>
+                            <schemaDirectory>${basedir}/src/main/resources</schemaDirectory>
+                            <schemaFiles>CNEfxTransmitToCust.xsd</schemaFiles>
+                            <packageName>ca.equifax.uat</packageName>
+                            <nv>true</nv>
+                            <readOnly>true</readOnly>
+                        </configuration>
                     </execution>
                </executions>
-               <configuration>
-                    <schemaDirectory>${basedir}/src/main/resources</schemaDirectory>
-                    <packageName>ca.equifax</packageName>
-               </configuration>
            </plugin>
-           -->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
