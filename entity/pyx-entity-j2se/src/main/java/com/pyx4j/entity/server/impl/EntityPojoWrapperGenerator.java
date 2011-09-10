@@ -81,6 +81,20 @@ public class EntityPojoWrapperGenerator {
         return instance().createPojo(EntityFactory.getEntityMeta(clazz));
     }
 
+    public static <T extends IEntity> IPojo<T> getPojo(T entity) {
+        Class<IPojo<T>> pojoClass = instance().createPojo(entity.getEntityMeta());
+        IPojo<T> pojo;
+        try {
+            pojo = pojoClass.newInstance();
+        } catch (InstantiationException e) {
+            throw new Error("Can't create POJO for " + entity.getEntityMeta().getEntityClass(), e);
+        } catch (IllegalAccessException e) {
+            throw new Error("Can't create POJO for " + entity.getEntityMeta().getEntityClass(), e);
+        }
+        pojo.setEntityValue(entity);
+        return pojo;
+    }
+
     @SuppressWarnings("unchecked")
     private <T extends IEntity> Class<IPojo<T>> createPojo(EntityMeta entityMeta) {
         try {

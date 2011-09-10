@@ -35,10 +35,7 @@ public class IPojoTest extends TestCase {
         PojoTestEntity entity = EntityFactory.create(PojoTestEntity.class);
         entity.name().setValue("Bob 25");
 
-        Class<IPojo<PojoTestEntity>> pojoClass = EntityPojoWrapperGenerator.getPojoClass(PojoTestEntity.class);
-
-        IPojo<PojoTestEntity> pojo = pojoClass.newInstance();
-        pojo.setEntityValue(entity);
+        IPojo<PojoTestEntity> pojo = EntityPojoWrapperGenerator.getPojo(entity);
 
         assertEquals("Access to entity value via Pjo", BeanUtils.getProperty(pojo, entity.name().getFieldName()), "Bob 25");
 
