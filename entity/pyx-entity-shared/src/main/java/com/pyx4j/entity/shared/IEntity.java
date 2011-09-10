@@ -37,11 +37,11 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public static String SERIALIZABLE_IMPL_CLASS_SUFIX = "_Impl";
 
-    public static String CONCRETE_TYPE_DATA_ATTR = "$concrete";
+    public static String ATTR_PREFIX = "$";
 
-    public static final boolean ___DETACHED_ATTR_ENABLED___ = true;
+    public static String CONCRETE_TYPE_DATA_ATTR = ATTR_PREFIX + "concrete";
 
-    public static String DETACHED_ATTR = "$detached";
+    public static String DETACHED_ATTR = ATTR_PREFIX + "detached";
 
     public Key getPrimaryKey();
 

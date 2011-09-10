@@ -59,7 +59,7 @@ import com.pyx4j.entity.shared.validator.Validator;
 
 public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Object>> implements IEntity, IFullDebug, IHaveServiceCallMarker {
 
-    private static final Logger log = LoggerFactory.getLogger(SharedEntityHandler.class);
+    protected static final Logger log = LoggerFactory.getLogger(SharedEntityHandler.class);
 
     private static final long serialVersionUID = -7590484996971406115L;
 
@@ -205,15 +205,15 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             } else {
                 v = (Map<String, Object>) v.get(getFieldName());
                 if (assertDetached && (v != null) && v.containsKey(DETACHED_ATTR)) {
-                    log.error("Access to detached entity {}", exceptionInfo(v), new Throwable());
-                    //throw new RuntimeException("Access to detached entity " + exceptionInfo(v));
+                    //log.error("Access to detached entity {}", exceptionInfo(v), new Throwable());
+                    throw new RuntimeException("Access to detached entity " + exceptionInfo(v));
                 }
                 return v;
             }
         } else {
             if (assertDetached && (data != null) && data.containsKey(DETACHED_ATTR)) {
-                log.error("Access to detached entity {}", exceptionInfo(data), new Throwable());
-                //throw new RuntimeException("Access to detached entity " + exceptionInfo(data));
+                //log.error("Access to detached entity {}", exceptionInfo(data), new Throwable());
+                throw new RuntimeException("Access to detached entity " + exceptionInfo(data));
             }
             return data;
         }
@@ -382,15 +382,12 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         if ((thisValue == null) || (thisValue.isEmpty())) {
             return true;
         }
-        if (thisValue.size() == 1) {
-            // Some other field is present other then PK
-            if (thisValue.get(PRIMARY_KEY) == null) {
-                return ((EntityValueMap) thisValue).isNull();
-            } else {
-                return true;
-            }
+        // Just one field is present and is PK
+        if ((1 == thisValue.size()) && (thisValue.containsKey(PRIMARY_KEY))) {
+            return true;
+        } else {
+            return ((EntityValueMap) thisValue).isNull(new HashSet<Map<String, Object>>(), true);
         }
-        return ((EntityValueMap) thisValue).isNull();
     }
 
     @Override
@@ -409,9 +406,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public void setValuesDetached() {
-        if (___DETACHED_ATTR_ENABLED___) {
-            ensureValue(false).put(DETACHED_ATTR, Boolean.TRUE);
-        }
+        ensureValue(false).put(DETACHED_ATTR, Boolean.TRUE);
     }
 
     @Override

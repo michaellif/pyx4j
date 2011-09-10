@@ -31,6 +31,8 @@ import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
+import com.pyx4j.entity.test.shared.domain.inherit.ConcreteEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
 
 public class EntityEqualsTest extends InitializerTestCase {
 
@@ -132,5 +134,30 @@ public class EntityEqualsTest extends InitializerTestCase {
 
         t2.deadLine().setValue(new Date());
         assertFalse("Same business data\n" + t1.toString() + "\n!=\n" + t2.toString(), t1.businessEquals(t2));
+    }
+
+    public void testIsEmpty() {
+        Task t1 = EntityFactory.create(Task.class);
+        assertTrue("Initialy Empty", t1.isEmpty());
+
+        t1.setPrimaryKey(new Key(22));
+        assertTrue("still Empty when just PK is set", t1.isEmpty());
+
+        t1.description().setValue(null);
+        assertTrue("still Empty when value set but it is null", t1.isEmpty());
+    }
+
+    public void testIsEmptyAbstractSetMember() {
+        RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
+        ConcreteEntity ent1 = EntityFactory.create(ConcreteEntity.class);
+        ent.refferences().add(ent1);
+
+        assertTrue("should be Empty", ent1.isEmpty());
+        assertFalse("Collection -> should NOT be Empty", ent.isEmpty());
+
+        ConcreteEntity ent2 = EntityFactory.create(ConcreteEntity.class);
+        ent2.setPrimaryKey(new Key(22));
+        ent1.refference().set(ent2);
+        assertTrue("should be still Empty", ent1.isEmpty());
     }
 }

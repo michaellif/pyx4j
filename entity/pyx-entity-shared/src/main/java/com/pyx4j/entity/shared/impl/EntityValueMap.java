@@ -70,23 +70,29 @@ public class EntityValueMap extends HashMap<String, Object> {
     }
 
     public boolean isNull() {
-        return isNull(new HashSet<Map<String, Object>>());
+        return isNull(new HashSet<Map<String, Object>>(), false);
     }
 
-    private boolean isNull(Set<Map<String, Object>> processed) {
+    boolean isNull(Set<Map<String, Object>> processed, boolean ignorePk) {
         processed.add(this);
         if (this.isEmpty()) {
             return true;
         }
         for (Map.Entry<String, Object> me : this.entrySet()) {
+            if (me.getKey().startsWith(IEntity.ATTR_PREFIX) || (ignorePk && (me.getKey().equals(IEntity.PRIMARY_KEY)))) {
+                continue;
+            }
             if (me.getValue() instanceof EntityValueMap) {
                 if (processed.contains(me.getValue())) {
                     // Owner/Owned binding is not empty!
                     return false;
                 }
-                if (!((EntityValueMap) me.getValue()).isNull(processed)) {
+                if (!((EntityValueMap) me.getValue()).isNull(processed, ignorePk)) {
                     return false;
                 }
+            } else if (me.getValue() instanceof Collection<?>) {
+                // Not empty collection
+                return ((Collection<?>) me.getValue()).isEmpty();
             } else if (me.getValue() != null) {
                 return false;
             }

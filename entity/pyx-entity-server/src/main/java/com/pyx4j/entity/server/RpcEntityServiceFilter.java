@@ -107,7 +107,7 @@ public class RpcEntityServiceFilter implements IServiceFilter {
                     throw new Error("Data type corruption");
                 }
                 continue nextValue;
-            } else if (memberName.startsWith("$")) {
+            } else if (memberName.startsWith(IEntity.ATTR_PREFIX)) {
                 continue;
             }
 
