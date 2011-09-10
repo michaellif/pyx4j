@@ -1,0 +1,1087 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by KAREN PILKINGTON (EQUIFAX, INC) -->
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Guy Plourde (SHI) -->
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Daniel Aubé (Equifax Canada) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!--Declaration of Common Elements - U.S. and Canada - CVS-->
+	<xs:element name="AccountDesignator" type="CodeType"/>
+	<xs:element name="AccountNumber" type="AccountNumberType"/>
+	<xs:element name="AccountNumberAndOrName" type="xs:string"/>
+	<xs:element name="AddressLine1" type="xs:string"/>
+	<xs:element name="AddressLine2" type="xs:string"/>
+	<xs:element name="AddressLine3" type="xs:string"/>
+	<xs:element name="Age" type="xs:short"/>
+	<xs:element name="AgencyId" type="CustomerIdType"/>
+	<xs:element name="Amount" type="MoneyType" nillable="true"/>
+	<xs:element name="AssetAmount" type="MoneyType" nillable="true"/>
+	<xs:element name="AssignedDate" type="xs:gYearMonth"/>
+	<xs:element name="BalanceAmount" type="MoneyType" nillable="true"/>
+	<xs:element name="CaseNumber" type="xs:string"/>
+	<xs:element name="CaseNumberAndTrustee" type="xs:string"/>
+	<xs:element name="City" type="CityType"/>
+	<xs:element name="Count30DayPastDue" type="xs:short"/>
+	<xs:element name="Count60DayPastDue" type="xs:short"/>
+	<xs:element name="Count90DayPastDue" type="xs:short"/>
+	<xs:element name="Count120DayPastDue" type="xs:short"/>
+	<xs:element name="CountOver120DayPastDue" type="xs:short"/>
+	<xs:element name="CourtId" type="CustomerIdType"/>
+	<xs:element name="CreditorClass" type="CodeType"/>
+	<xs:element name="CustomerNumber" type="xs:string"/>
+	<xs:element name="CustomerReferenceNumber" type="xs:string"/>
+	<xs:element name="DataAttribute" type="IdAndValueType"/>
+	<xs:element name="DateChecked" type="xs:gYearMonth"/>
+	<xs:element name="DateEmployed" type="xs:gYearMonth"/>
+	<xs:element name="DateEffective" type="xs:date"/>
+	<xs:element name="DateFiled" type="xs:gYearMonth"/>
+	<xs:element name="DateLastActivityOrPayment" type="xs:gYearMonth"/>
+	<xs:element name="DateLeft" type="xs:gYearMonth"/>
+	<xs:element name="DateOfBirth">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="type" type="xs:string" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DateOfDeath" type="xs:gYearMonth"/>
+	<xs:element name="DateOfInquiry" type="xs:date"/>
+	<xs:element name="DateOfLastActivity" type="xs:date"/>
+	<xs:element name="DateOfRequest" type="xs:date"/>
+	<xs:element name="DateOpened" type="xs:gYearMonth"/>
+	<xs:element name="DateReported" type="xs:gYearMonth"/>
+	<xs:element name="DateSatisfied" type="xs:gYearMonth"/>
+	<xs:element name="DateToBePurged" type="xs:gYearMonth"/>
+	<xs:element name="Defendant" type="xs:string"/>
+	<xs:element name="Disposition" type="CodeDateType"/>
+	<xs:element name="ECOAInquiryType" type="xs:NMTOKEN">
+		<xs:annotation>
+			<xs:documentation>enumeration value: I</xs:documentation>
+			<xs:documentation>enumeration value: J</xs:documentation>
+			<xs:documentation>enumeration value: P</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Employer" type="xs:string"/>
+	<xs:element name="Filer" type="CodeType"/>
+	<xs:element name="FileSinceDate" type="xs:date"/>
+	<xs:element name="FirstName" type="xs:string"/>
+	<xs:element name="ForeignBureauFlag" type="xs:string"/>
+	<xs:element name="Garnishee" type="xs:string"/>
+	<xs:element name="HighCreditAmount" type="MoneyType" nillable="true"/>
+	<xs:element name="HitCode" type="CodeType"/>
+	<xs:element name="IncomeSource" type="xs:string"/>
+	<xs:element name="Indicator" type="CodeType"/>
+	<xs:element name="Industry" type="CodeType"/>
+	<xs:element name="IntentOrDisposition" type="CodeDateType"/>
+	<xs:element name="LastName" type="xs:string"/>
+	<xs:element name="LiabilityAmount" type="MoneyType" nillable="true"/>
+	<xs:element name="MiddleName" type="xs:string"/>
+	<xs:element name="MaturityDate" type="xs:gYearMonth"/>
+	<xs:element name="MonthsReviewed" type="xs:short"/>
+	<xs:element name="Name" type="xs:string"/>
+	<xs:element name="NameSuffix" type="xs:string"/>
+	<xs:element name="Narrative" type="CodeType"/>
+	<xs:element name="Narratives" type="NarrativeType"/>
+	<xs:element name="NumberOfMonthsToCountDelinquencies" type="xs:string"/>
+	<xs:element name="NumberOfMonthsToCountInquiries" type="xs:string"/>
+	<xs:element name="Occupation" type="xs:string"/>
+	<xs:element name="OriginalAmount" type="MoneyType" nillable="true"/>
+	<xs:element name="ParsedTelephone">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ParsedTelephoneType">
+					<xs:attribute name="telephoneType" type="xs:string" use="optional">
+						<xs:annotation>
+							<xs:documentation>enumeration value: BUS</xs:documentation>
+							<xs:documentation>enumeration value: RES</xs:documentation>
+							<xs:documentation>enumeration value: MOB</xs:documentation>
+							<xs:documentation>enumeration value: OTHER</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PastDueAmount" nillable="true">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="MoneyType">
+					<xs:attribute name="pastDuePeriodNumber" type="xs:short" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PaymentRate" type="CodeType"/>
+	<xs:element name="PaymentTerms" type="xs:long"/>
+	<xs:element name="Plaintiff">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string"/>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PortfolioType" type="CodeType"/>
+	<xs:element name="PostalCode" type="xs:string"/>
+	<xs:element name="PreviousHighPaymentRate" type="CodeDateType"/>
+	<xs:element name="Reason" type="CodeType"/>
+	<xs:element name="RejectCode" type="CodeType"/>
+	<xs:element name="SecurityCode" type="xs:string"/>
+	<xs:element name="ScoreReason" type="ScoreReasonType"/>
+	<xs:element name="SpouseName" type="xs:string"/>
+	<xs:element name="State" type="xs:string"/>
+	<xs:element name="Statement" type="xs:string"/>
+	<xs:element name="Status" type="CodeType"/>
+	<xs:element name="TelephoneNumber" type="xs:string"/>
+	<xs:element name="Telephone" type="TelephoneType"/>
+	<xs:element name="Type" type="CodeType"/>
+	<xs:element name="USSubjectName" type="USSubjectNameType">
+		<xs:annotation>
+			<xs:documentation>Alias SubjectName</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Verification" type="CodeDateType"/>
+	<xs:element name="VerificationDate" type="xs:gYearMonth"/>
+	<xs:element name="VersionNumber" type="xs:string"/>
+	<!--Declaration of Common Elements - Canada Only-->
+	<xs:element name="AccountClosedDate" type="xs:date"/>
+	<xs:element name="AccountOpenedDate" type="xs:date"/>
+	<xs:element name="AccountBalance" type="AmountDecimal"/>
+	<xs:element name="AccountSecured" type="YNFlagType"/>
+	<xs:element name="AccountTypes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="AccountType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AccountType" type="CodeType"/>
+	<xs:element name="Address" type="AddressType"/>
+	<xs:element name="AgencyName" type="xs:string"/>
+	<xs:element name="AmountRange">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="LowAmount" minOccurs="0"/>
+				<xs:element ref="HighAmount" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AmountPaid" type="AmountDecimal"/>
+	<xs:element name="AssetValue" type="AmountDecimal"/>
+	<xs:element name="BankruptcyIndicator" type="YNFlagType"/>
+	<xs:element name="BalancePeriodAmount">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="AmountDecimal">
+					<xs:attribute name="periodNumber" type="xs:short" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="BranchDomicil" type="xs:string"/>
+	<xs:element name="CautionFiling" type="xs:string"/>
+	<xs:element name="ChargeOffAmount" type="AmountDecimal"/>
+	<xs:element name="ChequeAmount" type="AmountDecimal"/>
+	<xs:element name="ChequeDate" type="xs:date"/>
+	<xs:element name="ClaimAmount" type="AmountDecimal"/>
+	<xs:element name="ClaimDate" type="xs:date"/>
+	<xs:element name="ClosedDate" type="xs:date"/>
+	<xs:element name="ConsumerOnlyDisplayIndicator" type="xs:string"/>
+	<xs:element name="CommAddress" type="CommAddressType"/>
+	<xs:element name="Comment" type="CommentType"/>
+	<xs:element name="CompanyId" type="CompanyIdType"/>
+	<xs:element name="CompanyName" type="xs:string"/>
+	<xs:element name="CompanyNumber" type="xs:long"/>
+	<xs:element name="CompositeIndex" type="xs:string"/>
+	<xs:element name="Comments">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Comment" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CommCourtId" type="CommCourtIdType"/>
+	<xs:element name="CommDefendant" type="CommLegalPartyType"/>
+	<xs:element name="CommPlaintiff" type="CommLegalPartyType"/>
+	<xs:element name="CourtFileNumber" type="xs:string"/>
+	<xs:element name="CourtLocation" type="CodeDescriptionType"/>
+	<xs:element name="CourtProvince" type="CodeType"/>
+	<xs:element name="CI90Day" type="xs:string"/>
+	<xs:element name="CIScorePaymentIndex">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="factor" type="xs:decimal" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CreditorMeetingDate" type="xs:date"/>
+	<xs:element name="CreditLimitDate" type="xs:date"/>
+	<xs:element name="CreditLimitAmount" type="MoneyType"/>
+	<xs:element name="CreditorName" type="xs:string"/>
+	<xs:element name="CorporateLicense" type="xs:long"/>
+	<xs:element name="CourtName" type="xs:string"/>
+	<xs:element name="Country" type="CodeType"/>
+	<xs:element name="Count" type="xs:short"/>
+	<xs:element name="Current" type="xs:short"/>
+	<xs:element name="CurrentBalanceAmount" type="MoneyType"/>
+	<xs:element name="CustomizationCode" type="xs:string"/>
+	<xs:element name="Date" type="xs:date"/>
+	<xs:element name="DataControls">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="DataControl" type="DataControlType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DataManagements">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="DataManagement" type="DataManagementType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DateAmendment" type="xs:date"/>
+	<xs:element name="DateOfExpiry" type="xs:date"/>
+	<xs:element name="DateMatured" type="xs:date"/>
+	<xs:element name="DatePaid" type="xs:date"/>
+	<xs:element name="DateRegistered" type="xs:date"/>
+	<xs:element name="DateType" type="xs:string"/>
+	<xs:element name="DelinquencyAmount" type="AmountDecimal"/>
+	<xs:element name="DebtorName" type="xs:string"/>
+	<xs:element name="DebtorComment" type="CodeDescriptionType"/>
+	<xs:element name="DischargeDate" type="xs:date"/>
+	<xs:element name="DischargeType" type="CodeDescriptionType"/>
+	<xs:element name="District" type="CodeDescriptionType"/>
+	<xs:element name="Dividends" type="AmountDecimal"/>
+	<xs:element name="DivisionNumber" type="xs:short"/>
+	<xs:element name="EmployeeDetail" type="CodeDescriptionType"/>
+	<xs:element name="EmployeeSize" type="xs:string"/>
+	<xs:element name="EstateType" type="CodeDescriptionType"/>
+	<xs:element name="ETDateReported" type="xs:date"/>
+	<xs:element name="EvaluationDate" type="xs:date"/>
+	<xs:element name="Fax" type="TelephoneType"/>
+	<xs:element name="FiguresRange">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="LowFigures" minOccurs="0"/>
+				<xs:element ref="HighFigures" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FiledDate" type="xs:date"/>
+	<xs:element name="FileNumber" type="xs:long"/>
+	<xs:element name="FreezeFlag" type="CodeType"/>
+	<xs:element name="FutureAmount" type="MoneyType"/>
+	<xs:element name="HearingDate" type="xs:date"/>
+	<xs:element name="HighAmount" type="AmountDecimal"/>
+	<xs:element name="HighFigures" type="CodeDescriptionType"/>
+	<xs:element name="HighRange" type="xs:string"/>
+	<xs:element name="HoldbackAmount" type="MoneyType"/>
+	<xs:element name="IndividualLicense" type="xs:long"/>
+	<xs:element name="InformationDate">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:date">
+					<xs:attributeGroup ref="CodeAndDescription"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="InstitutionName" type="xs:string"/>
+	<xs:element name="InstitutionNumber" type="xs:string"/>
+	<xs:element name="Item" type="CodeType"/>
+	<xs:element name="LastCorporateSearchDate" type="xs:date"/>
+	<xs:element name="LastChangedDate" type="xs:date"/>
+	<xs:element name="LastDateOfBankruptcy" type="xs:date"/>
+	<xs:element name="LastNegativeOccurrence">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:short">
+					<xs:attribute name="factor" type="xs:decimal" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="LargestWriteOffAmount" type="AmountDecimal"/>
+	<xs:element name="LegalAmount" type="MoneyType"/>
+	<xs:element name="LegalName" type="xs:string"/>
+	<xs:element name="LegalNature" type="CodeType"/>
+	<xs:element name="LevelOfRisk" type="xs:string"/>
+	<xs:element name="LiabilityValue" type="AmountDecimal"/>
+	<xs:element name="LicenseNumbers">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="LicenseNumber" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:int">
+								<xs:attribute name="type" type="LicenseType" use="optional"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="LienPeriod" type="xs:short"/>
+	<xs:element name="LienNumber" type="xs:string"/>
+	<xs:element name="Lines">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Line" type="xs:string" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="LowAmount" type="AmountDecimal"/>
+	<xs:element name="LowFigures" type="CodeDescriptionType"/>
+	<xs:element name="LowRange" type="xs:string"/>
+	<xs:element name="Message" type="xs:string"/>
+	<xs:element name="MotorVehicleBodyStyle" type="xs:string"/>
+	<xs:element name="MotorVehicleMake" type="xs:string"/>
+	<xs:element name="MotorVehicleYear" type="xs:gYear"/>
+	<xs:element name="MortgageAddress" type="xs:string"/>
+	<xs:element name="Municipality" type="xs:string"/>
+	<xs:element name="MultipleLines">
+		<xs:complexType/>
+	</xs:element>
+	<xs:element name="Nametitle" type="xs:string"/>
+	<xs:element name="NegativeOccurrencePercentage">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:short">
+					<xs:attribute name="factor" type="xs:decimal" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Number" type="xs:hexBinary"/>
+	<xs:element name="NumberOfAccounts" type="xs:short"/>
+	<xs:element name="NumberOfChargeOffAccount" type="xs:short"/>
+	<xs:element name="NumberOfCreditReferences" type="xs:short"/>
+	<xs:element name="NumberOfDeliquencies" type="xs:short"/>
+	<xs:element name="NumberOfInquiries" type="xs:short"/>
+	<xs:element name="NumberOfNegativeOccurrences">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:short">
+					<xs:attribute name="factor" type="xs:decimal" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="NumberOfReturnedCheques" type="xs:short"/>
+	<xs:element name="OpenDate" type="xs:date"/>
+	<xs:element name="OpenedDate">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="type" type="xs:string" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="OpenedPeriod" type="CodeType"/>
+	<xs:element name="PartyAssignor" type="xs:string"/>
+	<xs:element name="PastDueAmounts">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="PastDueAmount" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PastDuePeriodAmounts">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="PastDueAmount" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="CurrencyType">
+								<xs:attribute name="periodNumber" type="xs:short" use="required"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PaymentIndex" type="xs:string"/>
+	<xs:element name="Phone" type="TelephoneType"/>
+	<xs:element name="PI90Day" type="xs:string"/>
+	<xs:element name="PlacedDate" type="xs:date"/>
+	<xs:element name="PrincipalAmount" type="AmountDecimal"/>
+	<xs:element name="PropertyValue" type="AmountDecimal"/>
+	<xs:element name="Province" type="CodeType"/>
+	<xs:element name="Quantity" type="xs:short"/>
+	<xs:element name="Rating" type="CodeType"/>
+	<xs:element name="ReasonCode" type="CodeDescriptionType"/>
+	<xs:element name="ReasonNotToHaveInfo" type="CodeType"/>
+	<xs:element name="ReferenceNumber" type="xs:string"/>
+	<xs:element name="RegionalOfficeNumber" type="CodeType"/>
+	<xs:element name="RegionalOffice" type="CodeDescriptionType"/>
+	<xs:element name="RegistrationNumber" type="xs:string"/>
+	<xs:element name="Reject" type="CodeDescriptionType"/>
+	<xs:element name="RenewalPeriod" type="xs:short"/>
+	<xs:element name="ReportedDate" type="xs:date"/>
+	<xs:element name="ReportDate" type="xs:dateTime"/>
+	<xs:element name="Requestor" type="xs:string"/>
+	<xs:element name="ReturnChequeComment" type="CodeDescriptionType"/>
+	<xs:element name="RunDate" type="xs:date"/>
+	<xs:element name="SalesDetail" type="CodeDescriptionType"/>
+	<xs:element name="SalesVolume" type="xs:string"/>
+	<xs:element name="SecuredLines">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SecuredLine" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attributeGroup ref="CodeAndDescription"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SecuredItem" type="xs:string"/>
+	<xs:element name="SecuredPartyName" type="xs:string"/>
+	<xs:element name="SecurityType" type="CodeDescriptionType"/>
+	<xs:element name="ScoreValue" type="xs:string"/>
+	<xs:element name="SharesOwned" type="xs:short"/>
+	<xs:element name="Sic" type="CodeDescriptionType"/>
+	<xs:element name="SICs">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SIC" type="CodeType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SocialInsuranceNumber" type="xs:string"/>
+	<xs:element name="SpecialComment" type="xs:string"/>
+	<xs:element name="StatusCode" type="CodeDescriptionType"/>
+	<xs:element name="StatusDate" type="xs:date"/>
+	<xs:element name="SubjectNumber" type="xs:string"/>
+	<xs:element name="SubmittingCompanyNumber" type="xs:long"/>
+	<xs:element name="Suffix" type="CodeType"/>
+	<xs:element name="Supplier" type="xs:string"/>
+	<xs:element name="SuppressIndicator" type="xs:string"/>
+	<xs:element name="SystemDate" type="xs:date"/>
+	<xs:element name="Title" type="xs:string"/>
+	<xs:element name="TotalBalanceAmount" type="MoneyType"/>
+	<xs:element name="TotalCurrentCreditExposure" type="AmountDecimal"/>
+	<xs:element name="TotalCurrentBalance" type="AmountDecimal"/>
+	<xs:element name="TotalOwed" type="xs:short"/>
+	<xs:element name="TotalOutstanding" type="AmountDecimal"/>
+	<xs:element name="TotalPastDueAmount" type="AmountDecimal"/>
+	<xs:element name="TradeLines">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="factor" type="xs:decimal" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="TradeStyles">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="TradeStyle" type="xs:string" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="TransitNumber" type="xs:string"/>
+	<xs:element name="UnstructuredAddress" type="UnparsedStreetAddressType"/>
+	<xs:element name="UpdateSource" type="CodeType"/>
+	<xs:element name="UtilizationPercentage" type="xs:short"/>
+	<xs:element name="USFullName" type="USSubjectNameType">
+		<xs:annotation>
+			<xs:documentation>Alias FullName</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Value" type="xs:string"/>
+	<xs:element name="VinNumber" type="xs:string"/>
+	<xs:element name="YearDifferencePI">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:short">
+					<xs:attribute name="factor" type="xs:decimal" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="YearsOnFile">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:integer">
+					<xs:attribute name="factor" type="xs:decimal" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<!--Declaration of Complex Types - U.S. and Canada-->
+	<xs:complexType name="AccountNumberType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="mnemonic" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="AccountRangeType">
+		<xs:choice>
+			<xs:element name="AmountRange">
+				<xs:complexType>
+					<xs:sequence minOccurs="0">
+						<xs:element name="LowAmount" type="MoneyType" minOccurs="0"/>
+						<xs:element name="HighAmount" type="MoneyType" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="FiguresRange">
+				<xs:complexType>
+					<xs:sequence minOccurs="0">
+						<xs:element name="LowFigures" type="CodeType" minOccurs="0"/>
+						<xs:element name="HighFigures" type="CodeType" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element ref="ReasonNotToHaveInfo"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="AddressType">
+		<xs:sequence>
+			<xs:element ref="AddressLine1" minOccurs="0"/>
+			<xs:element ref="Municipality" minOccurs="0"/>
+			<xs:element name="Province" type="CodeDescriptionType" minOccurs="0"/>
+			<xs:element ref="PostalCode" minOccurs="0"/>
+			<xs:element name="CountryInfo" minOccurs="0">
+				<xs:complexType>
+					<xs:attributeGroup ref="CodeDescription"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CIPIScoreType">
+		<xs:sequence>
+			<xs:element name="CIScore">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="CI90Day"/>
+						<xs:element ref="YearsOnFile"/>
+						<xs:element ref="CIScorePaymentIndex"/>
+						<xs:element ref="TradeLines"/>
+						<xs:element ref="YearDifferencePI"/>
+						<xs:element ref="NumberOfNegativeOccurrences"/>
+						<xs:element ref="LastNegativeOccurrence"/>
+						<xs:element ref="NegativeOccurrencePercentage"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element ref="PaymentIndex"/>
+			<xs:element name="CIPIQuarters" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CIPIQuarter" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element ref="CompositeIndex"/>
+									<xs:element ref="PaymentIndex"/>
+								</xs:sequence>
+								<xs:attribute name="trendYear" type="xs:gYear" use="required"/>
+								<xs:attribute name="number" type="xs:short" use="required"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CityType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="code" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="CNErrorReportType">
+		<xs:sequence>
+			<xs:element name="SegmentId" type="xs:string"/>
+			<xs:element ref="VersionNumber"/>
+			<xs:element name="CustomerCode" type="xs:string"/>
+			<xs:element ref="CustomerNumber"/>
+			<xs:element name="TransactionReferenceNumber" type="xs:string"/>
+			<xs:element name="Errors">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Error" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="SourceCode" type="xs:string"/>
+									<xs:element name="SubsetCode" type="xs:string" minOccurs="0"/>
+									<xs:element name="ErrorCode" type="xs:string"/>
+									<xs:element name="AdditionalInformation" type="xs:string" minOccurs="0"/>
+									<xs:element name="Description" type="xs:string"/>
+									<xs:element name="ActionDescription" type="xs:string" minOccurs="0"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CNFormatedAddressType">
+		<xs:sequence>
+			<xs:element name="CivicNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="StreetName" type="xs:string" minOccurs="0"/>
+			<xs:element name="Suite" type="xs:string" minOccurs="0"/>
+			<xs:element ref="City" minOccurs="0"/>
+			<xs:element ref="Province"/>
+			<xs:element ref="PostalCode" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CNScoreADType">
+		<xs:sequence>
+			<xs:element name="Decisions" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Decision" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="DecisionCode" type="xs:string"/>
+									<xs:element name="ReturnValues">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="ReturnValue" type="IdAndValueType" maxOccurs="unbounded"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="DecisionNarrative" type="xs:string" minOccurs="0"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Variables" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Variable" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Node" type="xs:string"/>
+									<xs:element ref="Name"/>
+									<xs:element name="VariableValues">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="VariableValue" type="xs:string" maxOccurs="unbounded"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="type" type="xs:string" use="required">
+									<xs:annotation>
+										<xs:documentation>enumeration value: NUMERIC</xs:documentation>
+										<xs:documentation>enumeration value: STRING</xs:documentation>
+										<xs:documentation>enumeration value: DATE"</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Paths" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Path" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Node" type="xs:string"/>
+									<xs:element ref="Name"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="productType" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>enumeration value: SCAD"</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="productId" type="xs:string" use="required"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="CNScoresType">
+		<xs:sequence>
+			<xs:element name="CNScore" type="CNScoreType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="CNScoreAD" type="CNScoreADType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CNScoreType">
+		<xs:sequence>
+			<xs:element ref="VersionNumber"/>
+			<xs:element name="ModelId" type="xs:string"/>
+			<xs:element name="ModelIdDescription" minOccurs="0"/>
+			<xs:element name="ScoreNumber" type="xs:short" minOccurs="0"/>
+			<xs:element name="ScoreIndicator" type="xs:string" minOccurs="0"/>
+			<xs:element name="Result" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence minOccurs="0">
+						<xs:element name="SignIndicator" type="xs:string" minOccurs="0"/>
+						<xs:element name="Value" type="xs:string" minOccurs="0"/>
+						<xs:element name="ScoreNarratives" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="ScoreNarrative" type="xs:string" maxOccurs="unbounded"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ScoreAttributes" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ScoreAttribute" type="IdAndValueType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Reasons" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="Reason" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RejectCodes" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="RejectCode" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="productType" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>enumeration value: SCOR</xs:documentation>
+				<xs:documentation>enumeration value: SCBS</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="productId" type="xs:string" use="required"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="CNSubjectNameType">
+		<xs:sequence>
+			<xs:element ref="LastName"/>
+			<xs:element ref="FirstName"/>
+			<xs:element ref="MiddleName" minOccurs="0"/>
+			<xs:element name="Suffix" type="CodeType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CodeDescriptionType">
+		<xs:attributeGroup ref="CodeDescription"/>
+	</xs:complexType>
+	<xs:complexType name="CodeType">
+		<xs:attributeGroup ref="CodeAndDescription"/>
+	</xs:complexType>
+	<xs:complexType name="CodeDateType">
+		<xs:complexContent>
+			<xs:extension base="CodeType">
+				<xs:sequence minOccurs="0">
+					<xs:element name="Date" type="xs:gYearMonth" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CodedErrorType">
+		<xs:complexContent>
+			<xs:extension base="CodeType">
+				<xs:attribute name="errorNumber" type="xs:short" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CodedErrorReportType">
+		<xs:sequence>
+			<xs:element ref="CustomerReferenceNumber" minOccurs="0"/>
+			<xs:element ref="CustomerNumber"/>
+			<xs:element ref="ECOAInquiryType" minOccurs="0"/>
+			<xs:element ref="NumberOfMonthsToCountInquiries" minOccurs="0"/>
+			<xs:element ref="NumberOfMonthsToCountDelinquencies" minOccurs="0"/>
+			<xs:element name="FormatError" type="CodedErrorType" minOccurs="0" maxOccurs="9"/>
+			<xs:element name="ValidityError" type="CodedErrorType" minOccurs="0" maxOccurs="9"/>
+			<xs:element name="ProcessingError" type="CodedErrorType" minOccurs="0" maxOccurs="9"/>
+			<xs:element name="MessageText" type="xs:string"/>
+		</xs:sequence>
+		<xs:attributeGroup ref="SubjectAndMultiple"/>
+	</xs:complexType>
+	<xs:complexType name="CommAddressType">
+		<xs:sequence minOccurs="0">
+			<xs:element ref="Lines" minOccurs="0"/>
+			<xs:element ref="City" minOccurs="0"/>
+			<xs:element ref="Province" minOccurs="0"/>
+			<xs:element ref="PostalCode" minOccurs="0"/>
+			<xs:element name="MetroCode" type="xs:string" minOccurs="0"/>
+			<xs:element ref="Country" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CommCourtIdType">
+		<xs:sequence minOccurs="0">
+			<xs:element ref="Province" minOccurs="0"/>
+			<xs:element name="CourtLevel" type="CodeType" minOccurs="0"/>
+			<xs:element name="CourtFileNumber" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attributeGroup ref="CodeAndDescription"/>
+	</xs:complexType>
+	<xs:complexType name="CommentType">
+		<xs:sequence>
+			<xs:element name="Source" minOccurs="0">
+				<xs:complexType>
+					<xs:attribute name="code" type="xs:string" use="optional"/>
+					<xs:attribute name="description" type="xs:string" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="DebtorCommentIndicator" type="YNFlagType"/>
+			<xs:element ref="Lines" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:long" use="required"/>
+		<xs:attribute name="timeStamp" type="xs:dateTime" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="CommLegalPartyType">
+		<xs:sequence minOccurs="0">
+			<xs:element ref="Name" minOccurs="0"/>
+			<xs:element ref="CommAddress" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="titleOrRole" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="CompanyIdType">
+		<xs:sequence minOccurs="0">
+			<xs:element ref="CompanyNumber" minOccurs="0"/>
+			<xs:element ref="SubjectNumber" minOccurs="0"/>
+			<xs:element ref="CustomerNumber" minOccurs="0"/>
+			<xs:element ref="Name" minOccurs="0"/>
+			<xs:element ref="Telephone" minOccurs="0"/>
+			<xs:element ref="Fax" minOccurs="0"/>
+			<xs:element ref="SICs" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CompanyType">
+		<xs:sequence>
+			<xs:element ref="CompanyName" minOccurs="0"/>
+			<xs:element ref="LegalName" minOccurs="0"/>
+			<xs:element ref="Address"/>
+			<xs:element ref="Phone" minOccurs="0"/>
+			<xs:element ref="Fax" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerIdType">
+		<xs:sequence>
+			<xs:element ref="CustomerNumber"/>
+			<xs:element ref="Name" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerIdAndPhoneType">
+		<xs:complexContent>
+			<xs:extension base="CustomerIdType">
+				<xs:sequence minOccurs="0">
+					<xs:element ref="Telephone" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="DataControlType">
+		<xs:sequence>
+			<xs:element name="Value">
+				<xs:complexType>
+					<xs:attributeGroup ref="CodeAndDescription"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="CodeAndDescription"/>
+	</xs:complexType>
+	<xs:complexType name="DataManagementType">
+		<xs:sequence>
+			<xs:element ref="Date" minOccurs="0"/>
+			<xs:element name="SourceIdentifier" type="xs:string" minOccurs="0"/>
+			<xs:element name="ModeOfAccess">
+				<xs:complexType>
+					<xs:attributeGroup ref="CodeAndDescription"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="CodeAndDescription"/>
+	</xs:complexType>
+	<xs:complexType name="FileInformationType">
+		<xs:sequence>
+			<xs:element ref="FileNumber"/>
+			<xs:element ref="SubjectNumber"/>
+			<xs:element ref="Requestor" minOccurs="0"/>
+			<xs:element ref="ReferenceNumber" minOccurs="0"/>
+			<xs:element ref="ReportDate"/>
+			<xs:element ref="LastChangedDate" minOccurs="0"/>
+			<xs:element ref="FileSinceDate"/>
+			<xs:element ref="CustomizationCode"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="IdAndValueType">
+		<xs:attributeGroup ref="IdAndValue"/>
+	</xs:complexType>
+	<xs:complexType name="IdAndDateType">
+		<xs:attribute name="identifier" type="xs:string" use="required"/>
+		<xs:attribute name="date" type="xs:date"/>
+	</xs:complexType>
+	<xs:complexType name="MoneyType">
+		<xs:simpleContent>
+			<xs:extension base="AmountDecimal">
+				<xs:attribute name="currency" type="CurrencyType" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="NarrativeType">
+		<xs:sequence>
+			<xs:element ref="Narrative" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="NameType">
+		<xs:sequence>
+			<xs:element ref="LastName" minOccurs="0"/>
+			<xs:element ref="FirstName" minOccurs="0"/>
+			<xs:element ref="MiddleName" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ParsedStreetAddressType">
+		<xs:sequence>
+			<xs:element name="StreetPreDirection" type="xs:string" minOccurs="0"/>
+			<xs:element name="StreetNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="StreetName" type="xs:string" minOccurs="0"/>
+			<xs:element name="StreetType" type="xs:string" minOccurs="0"/>
+			<xs:element name="StreetPostDirection" type="xs:string" minOccurs="0"/>
+			<xs:element name="UnitDesignator" type="xs:string" minOccurs="0"/>
+			<xs:element name="UnitNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="UrbanizationCondo" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ParsedTelephoneType">
+		<xs:sequence>
+			<xs:element name="AreaCode" type="xs:short" minOccurs="0"/>
+			<xs:element name="Number" type="xs:string"/>
+			<xs:element name="Extension" type="xs:short" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PaymentProfileType">
+		<xs:sequence>
+			<xs:element ref="ETDateReported"/>
+			<xs:element ref="PortfolioType" minOccurs="0"/>
+			<xs:element ref="PaymentRate" minOccurs="0"/>
+			<xs:element name="ConditionCode" type="CodeType" minOccurs="0"/>
+			<xs:element name="PaymentFrequency" type="CodeType"/>
+			<xs:element name="ReportingFrequency" type="CodeType"/>
+			<xs:element ref="FreezeFlag" minOccurs="0"/>
+			<xs:element ref="DataManagements" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PaymentRateType">
+		<xs:sequence>
+			<xs:element ref="PaymentRate"/>
+			<xs:element name="PaymentDate" type="xs:gYearMonth"/>
+		</xs:sequence>
+		<xs:attribute name="rateNumber" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ScoreReasonType">
+		<xs:complexContent>
+			<xs:extension base="CodeType">
+				<xs:attribute name="number" type="xs:short" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TelephoneType">
+		<xs:choice>
+			<xs:element ref="ParsedTelephone"/>
+			<xs:element name="UnparsedTelephone" type="xs:string"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="USSubjectNameType">
+		<xs:annotation>
+			<xs:documentation>Alias SubjectNametype</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="LastName"/>
+			<xs:element ref="FirstName"/>
+			<xs:element ref="MiddleName" minOccurs="0"/>
+			<xs:element ref="NameSuffix" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="UnparsedStreetAddressType">
+		<xs:sequence>
+			<xs:element ref="AddressLine1"/>
+			<xs:element ref="AddressLine2" minOccurs="0"/>
+			<xs:element ref="AddressLine3" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="AmountDecimal">
+		<xs:restriction base="xs:decimal">
+			<xs:totalDigits value="16"/>
+			<xs:fractionDigits value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CurrencyType">
+		<xs:annotation>
+			<xs:documentation>enumeration value: CAD</xs:documentation>
+			<xs:documentation>enumeration value: EUR</xs:documentation>
+			<xs:documentation>enumeration value: GPB</xs:documentation>
+			<xs:documentation>enumeration value: USD</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="LicenseType">
+		<xs:annotation>
+			<xs:documentation>enumeration value: CORPORATE</xs:documentation>
+			<xs:documentation>enumeration value: INDIVIDUAL</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="YNFlagType">
+		<xs:annotation>
+			<xs:documentation>enumeration value: Y</xs:documentation>
+			<xs:documentation>enumeration value: N</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:NMTOKEN"/>
+	</xs:simpleType>
+	<!--Declaration of all Attribute Groups -->
+	<!--Reference Attributes code and description, code is required - ING 05/04/03-->
+	<xs:attributeGroup name="AmountAndDate">
+		<xs:attribute name="amount" type="AmountDecimal" use="required"/>
+		<xs:attribute name="date" type="xs:date" use="optional"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="CodeAndDescription">
+		<xs:attribute name="code" type="xs:string"/>
+		<xs:attribute name="description" type="xs:string"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="CodeDescription">
+		<xs:attribute name="code" type="xs:string" use="required"/>
+		<xs:attribute name="description" type="xs:string" use="required"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="NumberAndAmount">
+		<xs:attribute name="number" type="xs:short" use="required"/>
+		<xs:attribute name="amount" type="AmountDecimal" use="required"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="IdAndValue">
+		<xs:attribute name="identifier" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="required"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="RequestAndReportId">
+		<xs:attribute name="requestNumber" type="xs:short" use="required"/>
+		<xs:attribute name="reportId" type="xs:string" use="required"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="SubjectAndMultiple">
+		<xs:attribute name="subjectType" type="xs:string"/>
+		<xs:attribute name="multipleNumber" type="xs:short" default="1"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="ValidationInfo">
+		<xs:attribute name="tranID" type="xs:string" use="required"/>
+		<xs:attribute name="customerNumber" type="xs:string" use="required"/>
+		<xs:attribute name="securityCode" type="xs:string" use="required"/>
+	</xs:attributeGroup>
+</xs:schema>

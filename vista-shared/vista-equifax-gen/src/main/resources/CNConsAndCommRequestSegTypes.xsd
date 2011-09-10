@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Louis (SHI) -->
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Daniel Aubé (Equifax Canada) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="CNEfxCommon.xsd"/>
+	<!--Declaration of All Standard Canadian requests for Consumer, Commercial and related products-->
+	<xs:complexType name="AddressesType">
+		<xs:sequence>
+			<xs:element name="Address" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="CNFormatedAddressType">
+							<xs:attribute name="addressType" use="optional" default="CURR">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="CURR"/>
+										<xs:enumeration value="FORM"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:attribute>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CNCommercialRequestType">
+		<xs:sequence>
+			<xs:element name="CustomerInfo" type="CustomerInfoType" minOccurs="0"/>
+			<xs:element ref="CustomerReferenceNumber" minOccurs="0"/>
+			<xs:element name="SearchType" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="GENERAL"/>
+						<xs:enumeration value="PHONE"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="FirmName" type="xs:string"/>
+			<xs:element name="Addresses" type="AddressesType"/>
+			<xs:element name="ParsedTelephones" type="ParsedTelephonesType" minOccurs="0"/>
+			<xs:element name="FileNumber" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CNScoringProductsType">
+		<xs:sequence>
+			<xs:element name="ScoringProduct" type="ScoringProductType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CNEIDRequestsType">
+		<xs:annotation>
+			<xs:documentation> </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CNEIDRequest" type="CNEIDRequestType" maxOccurs="3"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CNServiceCodesType">
+		<xs:sequence>
+			<xs:element name="ServiceCode" type="xs:string" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CNOutputParametersType">
+		<xs:sequence minOccurs="0">
+			<xs:element name="Language" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="EN"/>
+						<xs:enumeration value="FR"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="OutputParameter" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:choice>
+							<xs:element name="GenericOutputCode">
+								<xs:complexType>
+									<xs:simpleContent>
+										<xs:extension base="xs:string"/>
+									</xs:simpleContent>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="CustomReportCode" type="xs:string"/>
+						</xs:choice>
+						<xs:choice minOccurs="0">
+							<xs:element name="CustomizationCode" type="xs:string" minOccurs="0"/>
+							<xs:element name="Selections" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Selection" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:attribute name="selectionId" type="xs:string" use="required"/>
+												<xs:attribute name="selectionValue" type="xs:string" use="required"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="selectionsType">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="INCL"/>
+												<xs:enumeration value="EXCL"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+					</xs:sequence>
+					<xs:attribute name="outputParameterType" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="CONS"/>
+								<xs:enumeration value="COMM"/>
+								<xs:enumeration value="COMB"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CNConsumerRequestType">
+		<xs:sequence>
+			<xs:element name="Subjects" type="SubjectsType"/>
+			<xs:element name="CustomerInfo" type="CustomerInfoType" minOccurs="0"/>
+			<xs:element ref="CustomerReferenceNumber" minOccurs="0"/>
+			<xs:element ref="ECOAInquiryType" minOccurs="0"/>
+			<xs:element name="JointAccessIndicator" type="YNFlagType" minOccurs="0"/>
+			<xs:element name="ProfileIndicator" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CNCustomerInfoType">
+		<xs:sequence>
+			<xs:element name="CustomerCode" type="xs:string"/>
+			<xs:element name="CustomerInfo" type="CustomerInfoType"/>
+			<xs:element name="CustomerId" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CNRequestsType">
+		<xs:sequence minOccurs="0">
+			<xs:element name="CNConsumerRequests" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CNConsumerRequest" type="CNConsumerRequestType" maxOccurs="8"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CNCommercialRequest" type="CNCommercialRequestType" minOccurs="0"/>
+			<xs:element name="CNOutputParameters" type="CNOutputParametersType" minOccurs="0"/>
+			<xs:element name="CNServiceCodes" type="CNServiceCodesType" minOccurs="0"/>
+			<xs:element name="CNScoringProducts" type="CNScoringProductsType" minOccurs="0"/>
+			<xs:element name="CNEIDRequests" type="CNEIDRequestsType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerInfoType">
+		<xs:sequence>
+			<xs:element ref="CustomerNumber"/>
+			<xs:element ref="SecurityCode"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ParameterType">
+		<xs:sequence>
+			<xs:element name="Id" type="xs:string" minOccurs="0"/>
+			<xs:element name="Value">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string"/>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ParsedTelephonesType">
+		<xs:sequence>
+			<xs:element ref="ParsedTelephone" maxOccurs="3"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ScoringProductType">
+		<xs:sequence>
+			<xs:element name="ScoringNumber" type="xs:string"/>
+			<xs:element name="ReportAttribute" type="xs:string" minOccurs="0"/>
+			<xs:element name="Parameters" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Parameter" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:complexContent>
+									<xs:extension base="ParameterType">
+										<xs:attribute name="type" use="optional">
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="STRING"/>
+													<xs:enumeration value="DATE"/>
+													<xs:enumeration value="NUMERIC"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:attribute>
+									</xs:extension>
+								</xs:complexContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="productType" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="MODL"/>
+					<xs:enumeration value="RISK"/>
+					<xs:enumeration value="CARD"/>
+					<xs:enumeration value="MDAD"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="CNEIDRequestType">
+		<xs:sequence>
+			<xs:element name="EIDCustomerInfo">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="EIDCustomerInfoType">
+							<xs:sequence>
+								<xs:element name="ExecuteOnlyEID" type="xs:string"/>
+								<xs:element name="EIDCustomerCode" type="xs:string"/>
+								<xs:element name="EIDSecurityCode" type="xs:string"/>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="EIDSubjects" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="EIDSubjectsType">
+							<xs:sequence>
+								<xs:element name="EIDSubject" maxOccurs="2">
+									<xs:complexType>
+										<xs:complexContent>
+											<xs:extension base="EIDSubjectType">
+												<xs:sequence>
+													<xs:element name="EIDDriverLicenseFlag" type="xs:string" minOccurs="0"/>
+													<xs:element name="EIDDriverLicenseNumber" type="xs:string" minOccurs="0"/>
+													<xs:element name="EIDDriverLicenseProvOfIssue" type="xs:string" minOccurs="0"/>
+													<xs:element name="EIDTimeAtAddress" type="xs:string" minOccurs="0"/>
+												</xs:sequence>
+												<xs:attribute name="EIDSubjectType" type="xs:string"/>
+											</xs:extension>
+										</xs:complexContent>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SubjectType">
+		<xs:sequence>
+			<xs:element name="SubjectName" type="CNSubjectNameType"/>
+			<xs:element name="SocialInsuranceNumber" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:maxInclusive value="999999999"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element ref="DateOfBirth" minOccurs="0"/>
+			<xs:element ref="Occupation" minOccurs="0"/>
+			<xs:element ref="Employer" minOccurs="0"/>
+			<xs:element ref="AccountNumber" minOccurs="0"/>
+			<xs:element name="ParsedTelephones" type="ParsedTelephonesType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SubjectsType">
+		<xs:sequence>
+			<xs:element name="Subject" maxOccurs="2">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="SubjectType">
+							<xs:attribute name="subjectType">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="SUBJ"/>
+										<xs:enumeration value="SPOU"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:attribute>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Addresses" type="AddressesType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="EIDCustomerInfoType"/>
+	<xs:complexType name="EIDSubjectsType"/>
+	<xs:complexType name="EIDSubjectType"/>
+</xs:schema>

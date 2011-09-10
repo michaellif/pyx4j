@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Louis (SHI) -->
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Daniel Aubé (Equifax Canada) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="CNEfxCommon.xsd"/>
+	<xs:include schemaLocation="CNConsAndCommRequestSegTypes.xsd"/>
+	<!-- Standard Canadian request for Consumer, Commercial and all related products -->
+	<xs:complexType name="CNConsAndCommRequestType">
+		<xs:sequence>
+			<xs:element name="CNCustomerInfo" type="CNCustomerInfoType"/>
+			<xs:element name="CNRequests" type="CNRequestsType"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
