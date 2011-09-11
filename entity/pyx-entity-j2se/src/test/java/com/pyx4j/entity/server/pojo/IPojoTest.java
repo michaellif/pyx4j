@@ -24,7 +24,7 @@ import junit.framework.TestCase;
 
 import org.apache.commons.beanutils.BeanUtils;
 
-import com.pyx4j.entity.server.impl.EntityPojoWrapperGenerator;
+import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.pojo.model.PojoTestEntity;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -35,7 +35,7 @@ public class IPojoTest extends TestCase {
         PojoTestEntity entity = EntityFactory.create(PojoTestEntity.class);
         entity.name().setValue("Bob 25");
 
-        IPojo<PojoTestEntity> pojo = EntityPojoWrapperGenerator.getPojo(entity);
+        IPojo<PojoTestEntity> pojo = ServerEntityFactory.getPojo(entity);
 
         assertEquals("Access to entity value via Pjo", "Bob 25", BeanUtils.getProperty(pojo, entity.name().getFieldName()));
 

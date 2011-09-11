@@ -105,6 +105,11 @@ public class EntityImplGenerator {
         }
     }
 
+    ClassPool getClassPool() throws NotFoundException {
+        initClassPool();
+        return pool;
+    }
+
     public static void release() {
         if (instance != null) {
             for (ClassPath classPath : instance.pathToClose) {

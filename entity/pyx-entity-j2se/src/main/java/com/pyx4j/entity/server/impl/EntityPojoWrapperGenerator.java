@@ -47,6 +47,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.server.pojo.IPojoImpl;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -65,8 +66,12 @@ public class EntityPojoWrapperGenerator {
     private final ClassPool pool;
 
     private EntityPojoWrapperGenerator() {
-        classLoader = Thread.currentThread().getContextClassLoader();
-        pool = ClassPool.getDefault();
+        classLoader = EntityImplGenerator.instance().getContextClassLoader();
+        try {
+            pool = EntityImplGenerator.instance().getClassPool();
+        } catch (NotFoundException e) {
+            throw new Error("Can't ininitate ClassPool", e);
+        }
     }
 
     public static synchronized EntityPojoWrapperGenerator instance() {
@@ -78,27 +83,13 @@ public class EntityPojoWrapperGenerator {
     }
 
     public static <T extends IEntity> Class<IPojo<T>> getPojoClass(Class<T> clazz) {
-        return instance().createPojo(EntityFactory.getEntityMeta(clazz));
-    }
-
-    public static <T extends IEntity> IPojo<T> getPojo(T entity) {
-        Class<IPojo<T>> pojoClass = instance().createPojo(entity.getEntityMeta());
-        IPojo<T> pojo;
-        try {
-            pojo = pojoClass.newInstance();
-        } catch (InstantiationException e) {
-            throw new Error("Can't create POJO for " + entity.getEntityMeta().getEntityClass(), e);
-        } catch (IllegalAccessException e) {
-            throw new Error("Can't create POJO for " + entity.getEntityMeta().getEntityClass(), e);
-        }
-        pojo.setEntityValue(entity);
-        return pojo;
+        return getPojoClass(EntityFactory.getEntityMeta(clazz));
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends IEntity> Class<IPojo<T>> createPojo(EntityMeta entityMeta) {
+    public static <T extends IEntity> Class<IPojo<T>> getPojoClass(EntityMeta entityMeta) {
         try {
-            return (Class<IPojo<T>>) Class.forName(getPojoCtClass(entityMeta).getName());
+            return (Class<IPojo<T>>) Class.forName(instance().getPojoCtClass(entityMeta).getName(), true, instance().classLoader);
         } catch (ClassNotFoundException e) {
             throw new Error("Can't create POJO class for " + entityMeta.getEntityClass(), e);
         }
@@ -213,7 +204,7 @@ public class EntityPojoWrapperGenerator {
             b.append(" (" + memberMeta.getValueClass().getName() + ") ((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "();\n");
 
             b.append(IPojo.class.getName()).append(" pojo = ");
-            b.append(EntityPojoWrapperGenerator.class.getName()).append(".getPojo(memberEntity);\n");
+            b.append(ServerEntityFactory.class.getName()).append(".getPojo(memberEntity);\n");
 
             b.append("return (" + ctValueClass.getName() + ")pojo;\n}");
             return b.toString();

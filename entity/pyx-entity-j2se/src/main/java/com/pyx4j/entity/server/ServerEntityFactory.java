@@ -29,6 +29,9 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
 import com.pyx4j.entity.server.impl.EntityMetaImpl;
+import com.pyx4j.entity.server.impl.EntityPojoWrapperGenerator;
+import com.pyx4j.entity.server.pojo.IPojo;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IEntityFactory;
 import com.pyx4j.entity.shared.IObject;
@@ -39,6 +42,8 @@ public class ServerEntityFactory implements IEntityFactory {
     private static final Logger log = LoggerFactory.getLogger(ServerEntityFactory.class);
 
     private static final Map<Class<?>, Class<?>> impClasses = new HashMap<Class<?>, Class<?>>();
+
+    private static final Map<EntityMeta, Class<?>> pojoImpClasses = new HashMap<EntityMeta, Class<?>>();
 
     @Override
     @SuppressWarnings("unchecked")
@@ -118,6 +123,44 @@ public class ServerEntityFactory implements IEntityFactory {
     @Override
     public EntityMeta createEntityMeta(Class<? extends IEntity> clazz) {
         return new EntityMetaImpl(clazz);
+    }
+
+    public static <T extends IEntity> IPojo<T> getPojo(Class<T> entityClass) {
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+        @SuppressWarnings("unchecked")
+        Class<IPojo<T>> pojoClass = (Class<IPojo<T>>) pojoImpClasses.get(entityMeta);
+        if (pojoClass == null) {
+            pojoClass = EntityPojoWrapperGenerator.getPojoClass(entityMeta);
+            pojoImpClasses.put(entityMeta, pojoClass);
+        }
+        IPojo<T> pojo;
+        try {
+            pojo = pojoClass.newInstance();
+        } catch (InstantiationException e) {
+            throw new Error("Can't create POJO for " + entityMeta.getEntityClass(), e);
+        } catch (IllegalAccessException e) {
+            throw new Error("Can't create POJO for " + entityMeta.getEntityClass(), e);
+        }
+        return pojo;
+    }
+
+    public static <T extends IEntity> IPojo<T> getPojo(T entity) {
+        @SuppressWarnings("unchecked")
+        Class<IPojo<T>> pojoClass = (Class<IPojo<T>>) pojoImpClasses.get(entity.getEntityMeta());
+        if (pojoClass == null) {
+            pojoClass = EntityPojoWrapperGenerator.getPojoClass(entity.getEntityMeta());
+            pojoImpClasses.put(entity.getEntityMeta(), pojoClass);
+        }
+        IPojo<T> pojo;
+        try {
+            pojo = pojoClass.newInstance();
+        } catch (InstantiationException e) {
+            throw new Error("Can't create POJO for " + entity.getEntityMeta().getEntityClass(), e);
+        } catch (IllegalAccessException e) {
+            throw new Error("Can't create POJO for " + entity.getEntityMeta().getEntityClass(), e);
+        }
+        pojo.setEntityValue(entity);
+        return pojo;
     }
 
 }
