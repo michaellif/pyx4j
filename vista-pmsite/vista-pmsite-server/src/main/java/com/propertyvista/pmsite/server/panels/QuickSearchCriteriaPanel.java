@@ -19,6 +19,8 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 
+import com.propertyvista.pmsite.server.PMSiteApplication;
+import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 
 //http://www.google.com/codesearch#o92Uy7_Jjpw/base/openqrm-3.5.2/src/base/java/main/code/com/qlusters/qrm/web/wicket/markup/&type=cs
@@ -29,26 +31,22 @@ public class QuickSearchCriteriaPanel extends Panel {
     public QuickSearchCriteriaPanel() {
         super("quickSearchCriteriaPanel");
 
-        CompoundPropertyModel<QuickSearchModel> model = new CompoundPropertyModel<QuickSearchModel>(new QuickSearchModel());
+        final CompoundPropertyModel<SearchCriteriaModel> model = new CompoundPropertyModel<SearchCriteriaModel>(PMSiteApplication.get().getSearchModel());
 
-        final Form<QuickSearchModel> form = new Form<QuickSearchModel>("quickSearchCriteriaForm", model);
-
-        form.add(new QuickSearchCriteriaInputPanel("searchCriteriaInput", model));
-
-        form.add(new Button("searchSubmit") {
-
+        final Form<SearchCriteriaModel> form = new Form<SearchCriteriaModel>("quickSearchCriteriaForm", model) {
             private static final long serialVersionUID = 1L;
 
             @Override
             public void onSubmit() {
-                super.onSubmit();
-                executeSearch(form.getModelObject());
+                model.getObject().setSearchType(SearchCriteriaModel.SearchType.City);
+                setResponsePage(AptListPage.class);
             }
+        };
 
-        });
+        form.add(new QuickSearchCriteriaInputPanel("searchCriteriaInput", model));
+        form.add(new Button("searchSubmit"));
 
         add(form);
-
     }
 
     private void executeSearch(QuickSearchModel model) {

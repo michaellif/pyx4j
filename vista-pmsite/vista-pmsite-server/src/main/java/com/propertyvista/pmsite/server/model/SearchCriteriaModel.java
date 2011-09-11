@@ -38,7 +38,7 @@ public class SearchCriteriaModel implements Serializable {
      * Amenities
      */
 
-    private SearchType searchType;
+    private SearchType searchType = SearchType.City;
 
     private final DisplayMode displayMode = DisplayMode.Map;
 
@@ -58,6 +58,8 @@ public class SearchCriteriaModel implements Serializable {
     private BathroomChoice bathsMin;
 
     private BathroomChoice bathsMax;
+
+    private PriceChoice priceRange;
 
     private Integer priceMin;
 
@@ -99,6 +101,48 @@ public class SearchCriteriaModel implements Serializable {
         }
     }
 
+    public enum PriceChoice {
+        Any(null), lt600(0), gt600(600), gt800(800), gt1000(1000), gt1200(1200);
+        private final Integer minPrice;
+
+        private PriceChoice(Integer price) {
+            this.minPrice = price;
+        }
+
+        public Integer[] getPriceRange() {
+            Integer[] range = new Integer[2];
+            range[0] = minPrice;
+            PriceChoice[] valArr = values();
+            int idx = ordinal();
+            if (idx < valArr.length - 1) {
+                range[1] = valArr[idx + 1].minPrice;
+            } else {
+                range[1] = null;
+            }
+            return range;
+        }
+
+        @Override
+        public String toString() {
+            String result = "";
+            Integer[] range = getPriceRange();
+            if (range[0] == null || range[0] == 0) {
+                if (range[1] == null || range[1] == 0) {
+                    result = "Any";
+                } else {
+                    result = "Less than $" + range[1];
+                }
+            } else {
+                if (range[1] == null) {
+                    result = "Over $" + range[0];
+                } else {
+                    result = "$" + range[0] + " - $" + range[1];
+                }
+            }
+            return result;
+        }
+    }
+
     public enum AmenitySet {
         Elevator, Fitness, Parking, Pool
     }
@@ -135,12 +179,24 @@ public class SearchCriteriaModel implements Serializable {
         return bedsMax;
     }
 
+    public BedroomChoice getBedrooms() {
+        return bedsMin;
+    }
+
     public BathroomChoice getBathsMin() {
         return bathsMin;
     }
 
     public BathroomChoice getBathsMax() {
         return bathsMax;
+    }
+
+    public BathroomChoice getBathrooms() {
+        return bathsMin;
+    }
+
+    public PriceChoice getPriceRange() {
+        return priceRange;
     }
 
     public Integer getPriceMin() {
@@ -190,12 +246,24 @@ public class SearchCriteriaModel implements Serializable {
         this.bedsMax = bedsMax;
     }
 
+    public void setBedrooms(BedroomChoice beds) {
+        this.bedsMin = this.bedsMax = beds;
+    }
+
     public void setBathsMin(BathroomChoice bathsMin) {
         this.bathsMin = bathsMin;
     }
 
     public void setBathsMax(BathroomChoice bathsMax) {
         this.bathsMax = bathsMax;
+    }
+
+    public void setBathrooms(BathroomChoice baths) {
+        this.bathsMin = this.bathsMax = baths;
+    }
+
+    public void setPriceRange(PriceChoice priceRange) {
+        this.priceRange = priceRange;
     }
 
     public void setPriceMin(Integer priceMin) {

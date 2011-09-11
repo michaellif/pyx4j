@@ -16,100 +16,89 @@ package com.propertyvista.pmsite.server.panels;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.CompoundPropertyModel;
 
-import com.propertyvista.pmsite.server.model.Province;
-import com.propertyvista.pmsite.server.panels.QuickSearchModel.BedroomChoice;
-import com.propertyvista.pmsite.server.panels.QuickSearchModel.PriceChoice;
+import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 
 public class QuickSearchCriteriaInputPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
-    public QuickSearchCriteriaInputPanel(String id, IModel<QuickSearchModel> model) {
+    public QuickSearchCriteriaInputPanel(String id, CompoundPropertyModel<SearchCriteriaModel> model) {
         super(id, model);
 
-        {
-            List<Province> provinces = new ArrayList<Province>();
-            provinces.add(new Province("ON", "Ontario"));
-            provinces.add(new Province("QC", "Quebec"));
-            provinces.add(new Province("BC", "British Columbia"));
+        // add Province drop-down
+        final Map<String, List<String>> provCityMap = model.getObject().getProvinceCityMap();
+        List<String> provinces = new ArrayList<String>(provCityMap.keySet());
+        DropDownChoice<String> provChoice = new DropDownChoice<String>("province", provinces) {
+            private static final long serialVersionUID = 1L;
 
-            IChoiceRenderer<Province> renderer = new IChoiceRenderer<Province>() {
+            @Override
+            protected boolean wantOnSelectionChangedNotifications() {
+                return true;
+            }
 
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public Object getDisplayValue(Province paramT) {
-                    return paramT.getName();
-                }
-
-                @Override
-                public String getIdValue(Province paramT, int paramInt) {
-                    return paramT.getCode();
-                }
-
-            };
-            DropDownChoice<Province> provincesChoice = new DropDownChoice<Province>("province", provinces, renderer);
-            add(provincesChoice);
+            @Override
+            protected void onSelectionChanged(String newProv) {
+                // get city component
+                @SuppressWarnings("unchecked")
+                DropDownChoice<String> city = (DropDownChoice<String>) getParent().get("city");
+                if (city != null)
+                    city.setChoices(provCityMap.get(newProv));
+            }
+        };
+        add(provChoice);
+        // add City drop-down
+        List<String> cities;
+        String selProv = model.getObject().getProvince();
+        if (selProv != null) {
+            cities = provCityMap.get(selProv);
+        } else {
+            cities = Arrays.asList("- Select Province -");
         }
+        DropDownChoice<String> cityChoice = new DropDownChoice<String>("city", cities);
+        add(cityChoice);
 
-        {
-            List<String> cities = new ArrayList<String>();
-            cities.add("Toronto");
-            cities.add("Montreal");
-            cities.add("Vancouver");
-            DropDownChoice<String> citiesChoice = new DropDownChoice<String>("city", cities);
-            add(citiesChoice);
-        }
+        // bedrooms
+        add(new DropDownChoice<SearchCriteriaModel.BedroomChoice>("bedrooms", Arrays.asList(SearchCriteriaModel.BedroomChoice.values())) {
+            private static final long serialVersionUID = 1L;
 
-        {
-            IChoiceRenderer<BedroomChoice> renderer = new IChoiceRenderer<BedroomChoice>() {
+            @Override
+            protected CharSequence getDefaultChoice(final Object selected) {
+                return "";
+            }
+        });
 
-                private static final long serialVersionUID = 1L;
+        IChoiceRenderer<SearchCriteriaModel.PriceChoice> renderer = new IChoiceRenderer<SearchCriteriaModel.PriceChoice>() {
+            private static final long serialVersionUID = 1L;
 
-                @Override
-                public Object getDisplayValue(BedroomChoice paramT) {
-                    return paramT.getDisplay();
-                }
+            @Override
+            public String getDisplayValue(SearchCriteriaModel.PriceChoice paramT) {
+                return paramT.toString();
+            }
 
-                @Override
-                public String getIdValue(BedroomChoice paramT, int paramInt) {
-                    return String.valueOf(paramInt);
-                }
+            @Override
+            public String getIdValue(SearchCriteriaModel.PriceChoice paramT, int paramInt) {
+                return String.valueOf(paramInt);
+            }
 
-            };
+        };
 
-            DropDownChoice<BedroomChoice> bedroomsChoice = new DropDownChoice<BedroomChoice>("bedrooms",
-                    Arrays.asList(QuickSearchModel.BedroomChoice.values()), renderer);
-            add(bedroomsChoice);
-        }
+        DropDownChoice<SearchCriteriaModel.PriceChoice> priceChoice = new DropDownChoice<SearchCriteriaModel.PriceChoice>("priceRange",
+                Arrays.asList(SearchCriteriaModel.PriceChoice.values()), renderer) {
+            private static final long serialVersionUID = 1L;
 
-        {
-
-            IChoiceRenderer<PriceChoice> renderer = new IChoiceRenderer<PriceChoice>() {
-
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public Object getDisplayValue(PriceChoice paramT) {
-                    return paramT.getDisplay();
-                }
-
-                @Override
-                public String getIdValue(PriceChoice paramT, int paramInt) {
-                    return String.valueOf(paramInt);
-                }
-
-            };
-
-            DropDownChoice<PriceChoice> priceChoice = new DropDownChoice<PriceChoice>("price", Arrays.asList(QuickSearchModel.PriceChoice.values()), renderer);
-            add(priceChoice);
-        }
+            @Override
+            protected CharSequence getDefaultChoice(final Object selected) {
+                return "";
+            }
+        };
+        add(priceChoice);
 
     }
 }
