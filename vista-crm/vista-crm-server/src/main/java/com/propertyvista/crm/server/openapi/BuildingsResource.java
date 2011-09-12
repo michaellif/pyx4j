@@ -127,7 +127,12 @@ public class BuildingsResource {
             // Group buildings by Complex, Exporting as one Building in Complex.
             boolean exportBuildingInfo = false;
             if (building.complex().isNull()) {
-                Persistence.service().retrieve(building.marketing().adBlurbs());
+                if (building.marketing().adBlurbs().getMeta().isDetached()) {
+                    Persistence.service().retrieve(building.marketing().adBlurbs());
+                }
+                if (building.contacts().phones().getMeta().isDetached()) {
+                    Persistence.service().retrieve(building.contacts().phones());
+                }
                 buildingRS = Converter.convertBuilding(building);
                 buildingRS.unitCount = 0;
                 buildingsRS.buildings.add(buildingRS);
@@ -141,7 +146,12 @@ public class BuildingsResource {
                 }
                 if (building.complexPrimary().isBooleanTrue()) {
                     exportBuildingInfo = true;
-                    Persistence.service().retrieve(building.marketing().adBlurbs());
+                    if (building.marketing().adBlurbs().getMeta().isDetached()) {
+                        Persistence.service().retrieve(building.marketing().adBlurbs());
+                    }
+                    if (building.contacts().phones().getMeta().isDetached()) {
+                        Persistence.service().retrieve(building.contacts().phones());
+                    }
                     Converter.copyDBOtoRS(building, buildingRS);
                 }
             }

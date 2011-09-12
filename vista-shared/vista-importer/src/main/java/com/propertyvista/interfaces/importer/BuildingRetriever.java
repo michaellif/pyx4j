@@ -15,7 +15,7 @@ package com.propertyvista.interfaces.importer;
 
 import java.util.List;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -40,8 +40,12 @@ public class BuildingRetriever {
 
     public BuildingIO getModel(Building building, String imagesBaseFolder) {
 
-        PersistenceServicesFactory.getPersistenceService().retrieve(building.contacts().contacts());
-        PersistenceServicesFactory.getPersistenceService().retrieve(building.marketing().adBlurbs());
+        if (building.contacts().contacts().getMeta().isDetached()) {
+            Persistence.service().retrieve(building.contacts().contacts());
+        }
+        if (building.marketing().adBlurbs().getMeta().isDetached()) {
+            Persistence.service().retrieve(building.marketing().adBlurbs());
+        }
 
         BuildingIO buildingIO = new BuildingConverter().createDTO(building);
 
@@ -49,7 +53,7 @@ public class BuildingRetriever {
         {
             EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
-            for (BuildingAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(criteria)) {
+            for (BuildingAmenity amenity : Persistence.service().query(criteria)) {
                 buildingIO.amenities().add(new BuildingAmenityConverter().createDTO(amenity));
             }
         }
@@ -57,12 +61,12 @@ public class BuildingRetriever {
         {
             EntityQueryCriteria<Parking> criteria = EntityQueryCriteria.create(Parking.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
-            for (Parking i : PersistenceServicesFactory.getPersistenceService().query(criteria)) {
+            for (Parking i : Persistence.service().query(criteria)) {
                 buildingIO.parkings().add(new ParkingConverter().createDTO(i));
             }
         }
 
-        PersistenceServicesFactory.getPersistenceService().retrieve(building.media());
+        Persistence.service().retrieve(building.media());
         for (Media media : building.media()) {
             buildingIO.medias().add(new MediaConverter(imagesBaseFolder).createDTO(media));
         }
@@ -72,7 +76,7 @@ public class BuildingRetriever {
 
         EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
         floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
-        List<Floorplan> floorplans = PersistenceServicesFactory.getPersistenceService().query(floorplanCriteria);
+        List<Floorplan> floorplans = Persistence.service().query(floorplanCriteria);
         for (Floorplan floorplan : floorplans) {
             FloorplanIO floorplanIO = new FloorplanConverter().createDTO(floorplan);
             buildingIO.floorplans().add(floorplanIO);
@@ -81,7 +85,7 @@ public class BuildingRetriever {
             {
                 EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), floorplan));
-                for (FloorplanAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(criteria)) {
+                for (FloorplanAmenity amenity : Persistence.service().query(criteria)) {
                     floorplanIO.amenities().add(new FloorplanAmenityConverter().createDTO(amenity));
                 }
             }
@@ -90,12 +94,12 @@ public class BuildingRetriever {
             {
                 EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
-                for (AptUnit u : PersistenceServicesFactory.getPersistenceService().query(criteria)) {
+                for (AptUnit u : Persistence.service().query(criteria)) {
                     floorplanIO.units().add(new AptUnitConverter().createDTO(u));
                 }
             }
 
-            PersistenceServicesFactory.getPersistenceService().retrieve(floorplan.media());
+            Persistence.service().retrieve(floorplan.media());
             for (Media media : floorplan.media()) {
                 floorplanIO.medias().add(new MediaConverter(imagesBaseFolder).createDTO(media));
             }
