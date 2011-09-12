@@ -72,13 +72,20 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     public ListerActivityBase<E> withPlace(Place place) {
+        view.getMemento().setCurrentPlace(place);
         return this;
     }
 
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         containerWidget.setWidget(view);
-        populate(0);
+        populate(view.getMemento().mayRestore() ? view.getLister().restoreState() : 0);
+    }
+
+    @Override
+    public void onStop() {
+        view.getLister().storeState();
+        super.onStop();
     }
 
     @Override

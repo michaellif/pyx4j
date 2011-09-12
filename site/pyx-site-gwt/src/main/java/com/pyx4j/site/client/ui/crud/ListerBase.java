@@ -85,6 +85,12 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         actionsPanel, filtersPanel, listPanel, newItemButton, actionButton
     }
 
+    public static enum MementoKeys {
+        page, primarySortColumn, secondarySortColumn
+    };
+
+    private IMemento memento;
+
 // Events:
     public interface ItemSelectionHandler<E> {
         void onSelect(E selectedItem);
@@ -149,9 +155,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         listPanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
             public void onChange(ColumnDescriptor<E> column) {
-                sorting = new ArrayList<Sort>(1);
-                sorting.add(new Sort(column.getColumnName(), !column.isSortAscending()));
-                presenter.populate(getListPanel().getDataTable().getDataTableModel().getPageNumber());
+                presenter.populate(getPageNumber());
             }
         });
 
@@ -296,6 +300,41 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         });
     }
 
+    // Memento:
+    public void storeState() {
+        getMemento().clear();
+
+        getMemento().putInteger(MementoKeys.page.name(), getLister().getPageNumber());
+        boolean primarySet = false;
+        for (Sort sort : getLister().getSorting()) {
+            if (!primarySet) {
+                getMemento().putObject(MementoKeys.primarySortColumn.name(), sort);
+            } else {
+                getMemento().putObject(MementoKeys.secondarySortColumn.name(), sort);
+            }
+        }
+    }
+
+    public int restoreState() {
+        int pageNumber = 0;
+        if (!getMemento().isEmpty()) {
+            pageNumber = getMemento().getInteger(MementoKeys.page.name());
+
+            List<Sort> sorts = new ArrayList<Sort>(2);
+            Sort sort = (Sort) getMemento().getObject(MementoKeys.primarySortColumn.name());
+            if (sort != null) {
+                sorts.add(sort);
+            }
+            sort = (Sort) getMemento().getObject(MementoKeys.secondarySortColumn.name());
+            if (sort != null) {
+                sorts.add(sort);
+            }
+            getLister().setSorting(sorts);
+        }
+
+        return pageNumber;
+    }
+
     // EntityListPanel access:
     protected EntityListPanel<E> getListPanel() {
         return listPanel;
@@ -374,7 +413,43 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     @Override
     public List<Sort> getSorting() {
+
+        sorting = new ArrayList<Sort>(2);
+        ColumnDescriptor<E> primarySortColumn = getListPanel().getDataTable().getDataTableModel().getSortColumn();
+        if (primarySortColumn != null) {
+            sorting.add(new Sort(primarySortColumn.getColumnName(), !primarySortColumn.isSortAscending()));
+        }
+        ColumnDescriptor<E> secondarySortColumn = getListPanel().getDataTable().getDataTableModel().getSecondarySortColumn();
+        if (secondarySortColumn != null) {
+            sorting.add(new Sort(secondarySortColumn.getColumnName(), !secondarySortColumn.isSortAscending()));
+        }
         return sorting;
+    }
+
+    @Override
+    public void setSorting(List<Sort> sorts) {
+        boolean primarySet = false;
+        for (Sort sort : sorts) {
+            for (ColumnDescriptor<E> column : getListPanel().getDataTable().getDataTableModel().getColumnDescriptors()) {
+                if (column.getColumnName().compareTo(sort.getPropertyName()) == 0) {
+                    column.setSortAscending(!sort.isDescending());
+                    if (!primarySet) {
+                        getListPanel().getDataTable().getDataTableModel().setSortColumn(column);
+                        primarySet = true;
+                    } else {
+                        getListPanel().getDataTable().getDataTableModel().setSecondarySortColumn(column);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public IMemento getMemento() {
+        if (memento == null) {
+            memento = new MementoImpl();
+        }
+        return memento;
     }
 
     /**

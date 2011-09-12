@@ -61,6 +61,8 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
         entityId = null;
         tabIndex = -1;
 
+        view.getMemento().setCurrentPlace(place);
+
         assert (place instanceof CrudAppPlace);
         placeClass = ((CrudAppPlace) place).getClass();
 

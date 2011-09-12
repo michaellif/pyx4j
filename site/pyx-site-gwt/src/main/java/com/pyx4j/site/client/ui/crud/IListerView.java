@@ -63,4 +63,6 @@ public interface IListerView<E extends IEntity> extends IView<E> {
     List<FilterData> getFiltering();
 
     List<Sort> getSorting();
+
+    void setSorting(List<Sort> sorts);
 }

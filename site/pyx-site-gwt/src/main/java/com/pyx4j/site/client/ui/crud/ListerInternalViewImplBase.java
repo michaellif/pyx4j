@@ -57,46 +57,52 @@ public class ListerInternalViewImplBase<E extends IEntity> extends ScrollPanel i
 
     @Override
     public ListerBase<E> getLister() {
+        assert (lister != null);
         return lister;
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
-        assert (lister != null);
-        lister.setPresenter(presenter);
+        getLister().setPresenter(presenter);
     }
 
     @Override
     public Presenter getPresenter() {
-        assert (lister != null);
-        return lister.getPresenter();
+        return getLister().getPresenter();
     }
 
     @Override
     public int getPageSize() {
-        assert (lister != null);
-        return lister.getPageSize();
+        return getLister().getPageSize();
     }
 
     @Override
     public int getPageNumber() {
-        assert (lister != null);
-        return lister.getPageNumber();
+        return getLister().getPageNumber();
     }
 
     @Override
     public void populate(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows) {
-        assert (lister != null);
-        lister.populate(entityes, pageNumber, hasMoreData, totalRows);
+        getLister().populate(entityes, pageNumber, hasMoreData, totalRows);
     }
 
     @Override
     public List<FilterData> getFiltering() {
-        return lister.getFiltering();
+        return getLister().getFiltering();
     }
 
     @Override
     public List<Sort> getSorting() {
-        return lister.getSorting();
+        return getLister().getSorting();
+    }
+
+    @Override
+    public void setSorting(List<Sort> sorts) {
+        getLister().setSorting(sorts);
+    }
+
+    @Override
+    public IMemento getMemento() {
+        return getLister().getMemento();
     }
 }

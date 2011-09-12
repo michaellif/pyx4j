@@ -71,6 +71,8 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         parentID = null;
         tabIndex = -1;
 
+        view.getMemento().setCurrentPlace(place);
+
         assert (place instanceof CrudAppPlace);
         placeClass = ((CrudAppPlace) place).getClass();
 

@@ -38,6 +38,8 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel implements 
 
     protected CrudEntityForm<E> form;
 
+    private IMemento memento;
+
     public ViewImplBase() {
         super(Unit.EM);
     }
@@ -104,5 +106,13 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel implements 
     public int getActiveTab() {
         assert (form != null);
         return form.getActiveTab();
+    }
+
+    @Override
+    public IMemento getMemento() {
+        if (memento == null) {
+            memento = new MementoImpl();
+        }
+        return memento;
     }
 }
