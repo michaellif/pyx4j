@@ -664,10 +664,14 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             throw new ClassCastException(entity.getEntityMeta().getCaption() + " is not assignable from " + this.getEntityMeta().getCaption());
         }
         entity.setPrimaryKey(this.getPrimaryKey());
-        Map<Object, Object> processed = new IdentityHashMap<Object, Object>();
-        for (String memberName : entity.getEntityMeta().getMemberNames()) {
-            if (entityValue.containsKey(memberName)) {
-                entity.setMemberValue(memberName, cloneValue(entityValue.get(memberName), processed));
+        if (this.isValuesDetached()) {
+            entity.setValuesDetached();
+        } else {
+            Map<Object, Object> processed = new IdentityHashMap<Object, Object>();
+            for (String memberName : entity.getEntityMeta().getMemberNames()) {
+                if (entityValue.containsKey(memberName)) {
+                    entity.setMemberValue(memberName, cloneValue(entityValue.get(memberName), processed));
+                }
             }
         }
         return entity;

@@ -90,4 +90,25 @@ public class DetachedValuesTest extends InitializerTestCase {
             }
         });
     }
+
+    public void testEntityMethods() {
+        final Employee emp = EntityFactory.create(Employee.class);
+        emp.department().setPrimaryKey(new Key(1));
+        emp.department().setValuesDetached();
+
+        assertTrue("isValuesDetached", emp.department().isValuesDetached());
+
+        Department dptc = emp.department().cloneEntity();
+        assertTrue("cloneEntity isValuesDetached", dptc.isValuesDetached());
+
+        Employee empc = emp.cloneEntity();
+        assertTrue("parent.cloneEntity isValuesDetached", empc.department().isValuesDetached());
+
+        dptc = emp.department().clone(Department.class);
+        assertTrue("cloneEntity isValuesDetached", dptc.isValuesDetached());
+
+        empc = emp.clone(Employee.class);
+        assertTrue("parent.cloneEntity isValuesDetached", empc.department().isValuesDetached());
+
+    }
 }
