@@ -310,6 +310,7 @@ public class CollectionsTableModel {
                     long ck = rs.getLong("value");
                     if (!rs.wasNull()) {
                         childIEntity.setPrimaryKey(new Key(ck));
+                        childIEntity.setValuesDetached();
                     }
                     dataSet.add(childIEntity);
                 }

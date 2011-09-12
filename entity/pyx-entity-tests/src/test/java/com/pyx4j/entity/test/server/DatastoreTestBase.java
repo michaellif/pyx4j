@@ -23,7 +23,9 @@ package com.pyx4j.entity.test.server;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 
 import junit.framework.TestCase;
 
@@ -43,6 +45,15 @@ public abstract class DatastoreTestBase extends TestCase {
     protected IEntityPersistenceService srv;
 
     private static int uniqueCount = 0;
+
+    protected enum TestCaseMethod {
+
+        Persist,
+
+        Merge,
+
+        PersistCollection
+    }
 
     protected abstract PersistenceEnvironment getPersistenceEnvironment();
 
@@ -89,5 +100,21 @@ public abstract class DatastoreTestBase extends TestCase {
 
     protected java.sql.Date randomSqlDate() {
         return new java.sql.Date(TimeUtils.dayStart(randomDate()).getTime());
+    }
+
+    protected <T extends IEntity> void srvSave(T ent, TestCaseMethod testCaseMethod) {
+        switch (testCaseMethod) {
+        case Persist:
+            srv.persist(ent);
+            break;
+        case Merge:
+            srv.merge(ent);
+            break;
+        case PersistCollection:
+            List<T> collection = new Vector<T>();
+            collection.add(ent);
+            srv.persist(collection);
+            break;
+        }
     }
 }

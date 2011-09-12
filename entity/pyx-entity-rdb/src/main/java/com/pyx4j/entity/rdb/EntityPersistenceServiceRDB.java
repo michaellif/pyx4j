@@ -455,8 +455,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 TableModel childTM = tableModel(connection, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getValueClass()));
                 for (; iterator.hasNext() && baseIterator.hasNext();) {
                     IEntity childEntity = iterator.next();
-                    IEntity childBaseEntity = baseIterator.next();
-                    updated |= retrieveAndApplyModifications(connection, childTM, childBaseEntity, childEntity);
+                    if (!childEntity.isValuesDetached()) {
+                        IEntity childBaseEntity = baseIterator.next();
+                        updated |= retrieveAndApplyModifications(connection, childTM, childBaseEntity, childEntity);
+                    }
                 }
                 updated = true;
             }
@@ -513,7 +515,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         delete(baseChildEntity);
                     }
                 }
-                merge(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                if (!childEntity.isValuesDetached()) {
+                    merge(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                }
             } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
                 mergeReference(connection, memberMeta, childEntity, now);
             }

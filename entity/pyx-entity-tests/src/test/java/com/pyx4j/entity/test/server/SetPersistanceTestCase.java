@@ -20,9 +20,6 @@
  */
 package com.pyx4j.entity.test.server;
 
-import java.util.List;
-import java.util.Vector;
-
 import junit.framework.Assert;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -113,31 +110,6 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         Assert.assertEquals("salary no update", origSalary, employee1r.salary().getValue());
     }
 
-    private enum TestCaseMethod {
-
-        Persist,
-
-        Merge,
-
-        PersistCollection
-    }
-
-    private void soSave(Employee emp, TestCaseMethod testCaseMethod) {
-        switch (testCaseMethod) {
-        case Persist:
-            srv.persist(emp);
-            break;
-        case Merge:
-            srv.merge(emp);
-            break;
-        case PersistCollection:
-            List<Employee> collection = new Vector<Employee>();
-            collection.add(emp);
-            srv.persist(collection);
-            break;
-        }
-    }
-
     public void testOwnedSetUpdate(TestCaseMethod testCaseMethod) {
         Employee emp = EntityFactory.create(Employee.class);
         emp.firstName().setValue("Bob" + uniqueString());
@@ -152,11 +124,12 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Retr. Set size", 1, emp2.tasks().size());
         Task task2 = emp2.tasks().iterator().next();
         Assert.assertEquals("Owned value Pk", task.getPrimaryKey(), task2.getPrimaryKey());
+        Assert.assertFalse("Values retrived", task2.isValuesDetached());
 
         String description = "Work " + uniqueString();
         task2.description().setValue(description);
 
-        soSave(emp2, testCaseMethod);
+        srvSave(emp2, testCaseMethod);
 
         Employee emp3 = srv.retrieve(Employee.class, emp.getPrimaryKey());
         Assert.assertEquals("Retr. Set size", 1, emp3.tasks().size());
@@ -192,11 +165,12 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Retr. Set size", 1, emp2.tasksSorted().size());
         Task task2 = emp2.tasksSorted().iterator().next();
         Assert.assertEquals("Owned value Pk", task.getPrimaryKey(), task2.getPrimaryKey());
+        Assert.assertFalse("Values retrived", task2.isValuesDetached());
 
         String description = "Work1 " + uniqueString();
         task2.description().setValue(description);
 
-        soSave(emp2, testCaseMethod);
+        srvSave(emp2, testCaseMethod);
 
         Employee emp3 = srv.retrieve(Employee.class, emp.getPrimaryKey());
         Assert.assertEquals("Retr. Set size", 1, emp3.tasksSorted().size());
@@ -212,7 +186,7 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         emp3.tasksSorted().add(0, task22);
         Assert.assertEquals("Owned value 0", task22, emp3.tasksSorted().get(0));
 
-        soSave(emp3, testCaseMethod);
+        srvSave(emp3, testCaseMethod);
 
         Employee emp4 = srv.retrieve(Employee.class, emp.getPrimaryKey());
         Assert.assertEquals("Retr. Set size", 2, emp4.tasksSorted().size());
@@ -227,7 +201,7 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         task44.description().setValue(description44);
         emp4.tasksSorted().add(task44);
 
-        soSave(emp4, testCaseMethod);
+        srvSave(emp4, testCaseMethod);
 
         Employee emp5 = srv.retrieve(Employee.class, emp.getPrimaryKey());
         Assert.assertEquals("Retr. Set size", 3, emp5.tasksSorted().size());
