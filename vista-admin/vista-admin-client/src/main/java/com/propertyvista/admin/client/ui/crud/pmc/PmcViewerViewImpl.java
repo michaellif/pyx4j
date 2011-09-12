@@ -38,14 +38,23 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
         upload.setValue("Upload import.xml");
         addActionButton(upload.asWidget());
 
-        CHyperlink download = new CHyperlink(new Command() {
+        CHyperlink downloadFull = new CHyperlink(new Command() {
             @Override
             public void execute() {
                 Window.open(GWT.getModuleBaseURL() + "export.xml", null, null);
             }
         });
-        download.setValue("Download export.xml");
-        addActionButton(download.asWidget());
+        downloadFull.setValue("Download export.xml");
+        addActionButton(downloadFull.asWidget());
+
+        CHyperlink downloadNoImages = new CHyperlink(new Command() {
+            @Override
+            public void execute() {
+                Window.open(GWT.getModuleBaseURL() + "export.xml?images=false", null, null);
+            }
+        });
+        downloadNoImages.setValue("Download export.xml (no images)");
+        addActionButton(downloadNoImages.asWidget());
 
     }
 }

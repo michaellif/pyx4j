@@ -56,6 +56,9 @@ public class ExportDownloadServlet extends HttpServlet {
 
         log.debug("download export");
         String imagesBaseFolder = "data/export/images/";
+        if ("false".equals(request.getParameter("images"))) {
+            imagesBaseFolder = null;
+        }
 
         ImportIO importIO = EntityFactory.create(ImportIO.class);
         EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
