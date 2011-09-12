@@ -700,37 +700,48 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             log.info("Received encodedCursorReference:" + encodedCursorRefference + ", will use it");
             // TODO   
         }
-        final ResultSetIterator<T> iterable = tm.queryIterable(connection, criteria);
+        try {
+            final ResultSetIterator<T> iterable = tm.queryIterable(connection, criteria);
 
-        return new ICursorIterator<T>() {
+            return new ICursorIterator<T>() {
 
-            @Override
-            public boolean hasNext() {
-                return iterable.hasNext();
+                @Override
+                public boolean hasNext() {
+                    return iterable.hasNext();
+                }
+
+                @Override
+                public T next() {
+                    return cascadeRetrieveMembers(connection, tm, iterable.next());
+                }
+
+                @Override
+                public void remove() {
+                    iterable.remove();
+                }
+
+                @Override
+                public String encodedCursorReference() {
+                    // TODO proper encoded cursor reference has to be passed, this is just temporary
+                    return "" + encodedCursorRefference + "a";
+                }
+
+                @Override
+                public void completeRetrieval() {
+                    iterable.close();
+                    SQLUtils.closeQuietly(connection);
+                }
+            };
+
+        } catch (Throwable e) {
+            SQLUtils.closeQuietly(connection);
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException) e;
+            } else {
+                throw new Error(e);
             }
+        }
 
-            @Override
-            public T next() {
-                return cascadeRetrieveMembers(connection, tm, iterable.next());
-            }
-
-            @Override
-            public void remove() {
-                iterable.remove();
-            }
-
-            @Override
-            public String encodedCursorReference() {
-                // TODO proper encoded cursor reference has to be passed, this is just temporary
-                return "" + encodedCursorRefference + "a";
-            }
-
-            @Override
-            public void completeRetrieval() {
-                iterable.close();
-                SQLUtils.closeQuietly(connection);
-            }
-        };
     }
 
     @Override
