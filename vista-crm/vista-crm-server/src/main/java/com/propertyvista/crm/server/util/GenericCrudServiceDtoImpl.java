@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
@@ -87,17 +88,31 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
         throw new Error("Unsupported property");
     }
 
-    protected void enhanceListCriteria(EntityListCriteria<DBO> dbCriteria, EntityListCriteria<DTO> in) {
-        if ((in.getFilters() != null) && (!in.getFilters().isEmpty())) {
-            for (Criterion cr : in.getFilters()) {
+    protected void enhanceListCriteria(EntityListCriteria<DBO> dbCriteria, EntityListCriteria<DTO> dtoCriteria) {
+        if ((dtoCriteria.getFilters() != null) && (!dtoCriteria.getFilters().isEmpty())) {
+            for (Criterion cr : dtoCriteria.getFilters()) {
                 if (cr instanceof PropertyCriterion) {
                     PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
                     String path = propertyCriterion.getPropertyName();
-                    if (path.startsWith(in.proto().getObjectClass().getSimpleName())) {
+                    if (path.startsWith(dtoCriteria.proto().getObjectClass().getSimpleName())) {
                         String dbObjectPath = dbCriteria.proto().getObjectClass().getSimpleName() + path.substring(path.indexOf(Path.PATH_SEPARATOR));
                         dbCriteria.add(new PropertyCriterion(dbObjectPath, propertyCriterion.getRestriction(), propertyCriterion.getValue()));
                     } else {
                         enhancePropertyCriterion(dbCriteria, propertyCriterion);
+                    }
+                }
+            }
+        }
+        if ((dtoCriteria.getSorts() != null) && (!dtoCriteria.getSorts().isEmpty())) {
+            // Just copy all Sorts for now. Change to non sortable one that are failing
+            for (Sort s : dtoCriteria.getSorts()) {
+                String path = s.getPropertyName();
+                if (path.startsWith(dtoCriteria.proto().getObjectClass().getSimpleName())) {
+                    String propertyName = path.substring(path.indexOf(Path.PATH_SEPARATOR) + 1, path.length() - 1).replace('/', '_');
+                    if (s.isDescending()) {
+                        dbCriteria.desc(propertyName);
+                    } else {
+                        dbCriteria.asc(propertyName);
                     }
                 }
             }
