@@ -576,15 +576,28 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
             @SuppressWarnings({ "unchecked", "rawtypes" })
             private void setValueHolder(String valuePath) {
+                operandsList.setOptions(EnumSet.allOf(Operands.class));
+                operandsList.setValue(Operands.is);
+
                 Class<?> valueClass = getListPanel().proto().getMember(new Path(valuePath)).getValueClass();
                 if (valueClass.isEnum()) {
                     CComboBox valuesList = new CComboBox(true);
                     valuesList.setOptions(EnumSet.allOf((Class<Enum>) valueClass));
                     valueHolder.setWidget(valuesList);
+
+                    // correct operands list:
+                    operandsList.removeOption(Operands.greaterThen);
+                    operandsList.removeOption(Operands.lessThen);
+
                 } else if (valueClass.equals(LogicalDate.class)) {
                     valueHolder.setWidget(new CDatePicker());
                 } else if (valueClass.equals(Boolean.class)) {
                     valueHolder.setWidget(new CRadioGroupBoolean(CRadioGroup.Layout.HORISONTAL));
+
+                    // correct operands list:
+                    operandsList.removeOption(Operands.greaterThen);
+                    operandsList.removeOption(Operands.lessThen);
+
                 } else if (valueClass.equals(Double.class)) {
                     valueHolder.setWidget(new CDoubleField());
                 } else if (valueClass.equals(Integer.class)) {
@@ -593,6 +606,10 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                     valueHolder.setWidget(new CIntegerField());
                 } else {
                     valueHolder.setWidget(new CTextField());
+
+                    // correct operands list:
+                    operandsList.removeOption(Operands.greaterThen);
+                    operandsList.removeOption(Operands.lessThen);
                 }
             }
         }
