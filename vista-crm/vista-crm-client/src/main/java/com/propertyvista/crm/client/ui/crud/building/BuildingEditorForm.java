@@ -23,6 +23,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -39,6 +41,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
@@ -203,7 +206,16 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().info().centralHeat()), 15);
 
         main.add(new VistaLineSeparator());
-        main.add(inject(proto().contacts().website()), 50);
+        if (isEditable()) {
+            main.add(inject(proto().contacts().website()), 50);
+        } else {
+            main.add(inject(proto().contacts().website(), new CHyperlink(new Command() {
+                @Override
+                public void execute() {
+                    Window.open(getValue().contacts().website().getValue(), proto().contacts().website().getMeta().getCaption(), null);
+                }
+            })), 50);
+        }
 
         return new CrmScrollPanel(main);
     }
