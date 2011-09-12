@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.ui.crud.FilterData;
 import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.IMemento;
 import com.pyx4j.site.client.ui.crud.ListerBase;
 
 public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implements IListerView<E> {
@@ -65,46 +66,52 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
 
     @Override
     public ListerBase<E> getLister() {
+        assert (lister != null);
         return lister;
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
-        assert (lister != null);
-        lister.setPresenter(presenter);
+        getLister().setPresenter(presenter);
     }
 
     @Override
     public Presenter getPresenter() {
-        assert (lister != null);
-        return lister.getPresenter();
+        return getLister().getPresenter();
     }
 
     @Override
     public int getPageSize() {
-        assert (lister != null);
-        return lister.getPageSize();
+        return getLister().getPageSize();
     }
 
     @Override
     public int getPageNumber() {
-        assert (lister != null);
-        return lister.getPageNumber();
+        return getLister().getPageNumber();
     }
 
     @Override
     public void populate(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows) {
-        assert (lister != null);
-        lister.populate(entityes, pageNumber, hasMoreData, totalRows);
+        getLister().populate(entityes, pageNumber, hasMoreData, totalRows);
     }
 
     @Override
     public List<FilterData> getFiltering() {
-        return lister.getFiltering();
+        return getLister().getFiltering();
     }
 
     @Override
     public List<Sort> getSorting() {
-        return lister.getSorting();
+        return getLister().getSorting();
+    }
+
+    @Override
+    public void setSorting(List<Sort> sorts) {
+        getLister().setSorting(sorts);
+    }
+
+    @Override
+    public IMemento getMemento() {
+        return getLister().getMemento();
     }
 }

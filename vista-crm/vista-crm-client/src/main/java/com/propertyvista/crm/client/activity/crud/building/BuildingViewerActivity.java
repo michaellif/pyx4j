@@ -176,39 +176,61 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
         // -------------------------------------------------------
 
         floorplanLister.setParentFiltering(result.getPrimaryKey());
-        floorplanLister.populate(0);
+        floorplanLister.populate(view.getMemento().mayRestore() ? ((BuildingViewerView) view).getFloorplanListerView().getLister()
+                .restoreState() : 0);
 
         unitLister.setParentFiltering(result.getPrimaryKey());
-        unitLister.populate(0);
+        unitLister.populate(view.getMemento().mayRestore() ? ((BuildingViewerView) view).getUnitListerView().getLister().restoreState() : 0);
 
         // -------------------------------------------------------
 
         elevatorLister.setParentFiltering(result.getPrimaryKey());
-        elevatorLister.populate(0);
+        elevatorLister.populate(view.getMemento().mayRestore() ? ((BuildingViewerView) view).getElevatorListerView().getLister().restoreState()
+                : 0);
 
         boilerLister.setParentFiltering(result.getPrimaryKey());
-        boilerLister.populate(0);
+        boilerLister.populate(view.getMemento().mayRestore() ? ((BuildingViewerView) view).getBoilerListerView().getLister().restoreState() : 0);
 
         roofLister.setParentFiltering(result.getPrimaryKey());
-        roofLister.populate(0);
+        roofLister.populate(view.getMemento().mayRestore() ? ((BuildingViewerView) view).getRoofListerView().getLister().restoreState() : 0);
 
         // -------------------------------------------------------
 
         parkingLister.setParentFiltering(result.getPrimaryKey());
-        parkingLister.populate(0);
+        parkingLister.populate(view.getMemento().mayRestore() ? ((BuildingViewerView) view).getParkingListerView().getLister().restoreState()
+                : 0);
 
         lockerAreaLister.setParentFiltering(result.getPrimaryKey());
-        lockerAreaLister.populate(0);
+        lockerAreaLister.populate(view.getMemento().mayRestore() ? ((BuildingViewerView) view).getLockerAreaListerView().getLister()
+                .restoreState() : 0);
 
         // -----------------------------------------------------------------------
 
         serviceLister.setParentFiltering(result.serviceCatalog().getPrimaryKey());
-        serviceLister.populate(0);
+        serviceLister.populate(view.getMemento().mayRestore() ? ((BuildingViewerView) view).getServiceListerView().getLister().restoreState()
+                : 0);
 
         featureLister.setParentFiltering(result.serviceCatalog().getPrimaryKey());
-        featureLister.populate(0);
+        featureLister.populate(view.getMemento().mayRestore() ? ((BuildingViewerView) view).getFeatureListerView().getLister().restoreState()
+                : 0);
 
         concessionLister.setParentFiltering(result.serviceCatalog().getPrimaryKey());
-        concessionLister.populate(0);
+        concessionLister.populate(view.getMemento().mayRestore() ? ((BuildingViewerView) view).getConcessionListerView().getLister()
+                .restoreState() : 0);
+    }
+
+    @Override
+    public void onStop() {
+        ((BuildingViewerView) view).getFloorplanListerView().getLister().storeState();
+        ((BuildingViewerView) view).getUnitListerView().getLister().storeState();
+        ((BuildingViewerView) view).getElevatorListerView().getLister().storeState();
+        ((BuildingViewerView) view).getBoilerListerView().getLister().storeState();
+        ((BuildingViewerView) view).getRoofListerView().getLister().storeState();
+        ((BuildingViewerView) view).getParkingListerView().getLister().storeState();
+        ((BuildingViewerView) view).getLockerAreaListerView().getLister().storeState();
+        ((BuildingViewerView) view).getServiceListerView().getLister().storeState();
+        ((BuildingViewerView) view).getFeatureListerView().getLister().storeState();
+        ((BuildingViewerView) view).getConcessionListerView().getLister().storeState();
+        super.onStop();
     }
 }
