@@ -52,12 +52,14 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.crud.CriteriaEditableComponentFactory;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
@@ -114,6 +116,8 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     private boolean openEditor;
 
     private List<Sort> sorting;
+
+    private IEditableComponentFactory compFactory = new CriteriaEditableComponentFactory();
 
     public ListerBase(Class<E> clazz) {
         setStyleName(DEFAULT_STYLE_PREFIX);
@@ -237,6 +241,10 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         actionsPanel.setVisible(true);
         actionsPanel.insert(action, 1);
         actionsPanel.setCellWidth(action, "1%");
+    }
+
+    public void setComFactory(IEditableComponentFactory comFactory) {
+        this.compFactory = comFactory;
     }
 
     public void setFiltersVisible(boolean visible) {
@@ -669,12 +677,21 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
             @SuppressWarnings({ "unchecked", "rawtypes" })
             private void setValueHolder(String valuePath, Serializable value) {
+
+                IObject<?> member = getListPanel().proto().getMember(new Path(valuePath));
+                CEditableComponent comp = compFactory.create(member);
+                comp.setValue(value);
+                valueHolder.setWidget(comp);
+
                 operandsList.setOptions(EnumSet.allOf(Operands.class));
                 operandsList.setValue(Operands.is);
 
-                CEditableComponent comp = new CriteriaEditableComponentFactory().create(getListPanel().proto().getMember(new Path(valuePath)));
-                comp.setValue(value);
-                valueHolder.setWidget(comp);
+                // correct operands list:
+                Class<?> valueClass = member.getValueClass();
+                if (valueClass.isEnum() || valueClass.equals(Boolean.class) || valueClass.equals(String.class)) {
+                    operandsList.removeOption(Operands.greaterThen);
+                    operandsList.removeOption(Operands.lessThen);
+                }
             }
         }
     }
