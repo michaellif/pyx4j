@@ -179,10 +179,16 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().complexPrimary()), 15);
 
         main.add(new VistaLineSeparator());
-        VistaDecoratorsSplitFlowPanel split2 = new VistaDecoratorsSplitFlowPanel(!isEditable());
-        main.add(split2);
-        AddressUtils.injectIAddress(split2, proto().info().address(), this, false);
+
+        main.add(split = new VistaDecoratorsSplitFlowPanel(!isEditable()));
+        AddressUtils.injectIAddress(split, proto().info().address(), this, false);
+
         main.add(new HTML("&nbsp"));
+
+        main.add(inject(proto().info().geoLocation()), 28);
+
+        main.add(new HTML("&nbsp"));
+
         main.add(new CrmSectionSeparator(i18n.tr("Amenities:")));
         main.add(inject(proto().amenities(), createAmenitiesListEditor()));
 

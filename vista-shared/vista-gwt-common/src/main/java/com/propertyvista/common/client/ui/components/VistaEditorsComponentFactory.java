@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.IFormat;
 
+import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.financial.Money;
@@ -58,6 +59,8 @@ public class VistaEditorsComponentFactory extends EntityFormComponentFactory {
             return new CPhone();
         } else if (member.getValueClass().equals(Email.class)) {
             return new CEmail();
+        } else if (member.getValueClass().equals(GeoLocation.class)) {
+            return new CGeoLocation();
         }
         return super.create(member);
     }

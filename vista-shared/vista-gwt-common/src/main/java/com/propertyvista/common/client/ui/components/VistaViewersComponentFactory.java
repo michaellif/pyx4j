@@ -30,6 +30,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 
+import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.financial.Money;
@@ -79,6 +80,8 @@ public class VistaViewersComponentFactory extends EntityFormComponentFactory {
             return new CPhoneLabel();
         } else if (member.getValueClass().equals(Email.class)) {
             return new CEmailLabel();
+        } else if (member.getValueClass().equals(GeoLocation.class)) {
+            return new CGeoLocationLabel();
         }
         return super.create(member);
     }
