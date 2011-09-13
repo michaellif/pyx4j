@@ -130,4 +130,10 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     public void restoreState() {
         getLister().restoreState();
     }
+
+    @Override
+    public void setFiltering(List<FilterData> filters) {
+        // TODO Auto-generated method stub
+
+    }
 }

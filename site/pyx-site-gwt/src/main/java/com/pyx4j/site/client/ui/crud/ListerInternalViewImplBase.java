@@ -116,4 +116,10 @@ public class ListerInternalViewImplBase<E extends IEntity> extends ScrollPanel i
     public void restoreState() {
         getLister().restoreState();
     }
+
+    @Override
+    public void setFiltering(List<FilterData> filters) {
+        // TODO Auto-generated method stub
+
+    }
 }
