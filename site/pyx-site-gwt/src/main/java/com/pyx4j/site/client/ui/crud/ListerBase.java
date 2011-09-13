@@ -65,6 +65,7 @@ import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CDoubleField;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CLongField;
 import com.pyx4j.forms.client.ui.CRadioGroup;
@@ -418,6 +419,11 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     }
 
     @Override
+    public void setFiltering(List<FilterData> filterData) {
+        filters.setFiltersData(filterData);
+    }
+
+    @Override
     public List<Sort> getSorting() {
 
         sorting = new ArrayList<Sort>(2);
@@ -545,6 +551,16 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             return filters;
         }
 
+        public void setFiltersData(List<FilterData> filterData) {
+            clear();
+
+            Filter filter;
+            for (FilterData item : filterData) {
+                add(filter = new Filter());
+                filter.setFilterData(item);
+            }
+        }
+
         private class Filter extends HorizontalPanel {
 
             protected final CComboBox<FieldData> fieldsList = new CComboBox<FieldData>(true);
@@ -651,48 +667,67 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 return new FilterData(path, operand, value);
             }
 
+            public void setFilterData(FilterData filterData) {
+                Collection<FieldData> fds = fieldsList.getOptions();
+                for (FieldData fd : fds) {
+                    if (fd.getPath().compareTo(filterData.getMemberPath()) == 0) {
+                        fieldsList.setValue(fd);
+                        operandsList.setValue(filterData.getOperand());
+                        setValueHolder(filterData.getMemberPath(), filterData.getValue());
+                        break;
+                    }
+                }
+            }
+
             private void formatCell(Widget w) {
                 Element cell = DOM.getParent(w.getElement());
                 cell.getStyle().setPaddingRight(1.5, Unit.EM);
             }
 
-            @SuppressWarnings({ "unchecked", "rawtypes" })
             private void setValueHolder(String valuePath) {
+                setValueHolder(valuePath, null);
+            }
+
+            @SuppressWarnings({ "unchecked", "rawtypes" })
+            private void setValueHolder(String valuePath, Serializable value) {
                 operandsList.setOptions(EnumSet.allOf(Operands.class));
                 operandsList.setValue(Operands.is);
 
+                CEditableComponent<?, ?> comp;
                 Class<?> valueClass = getListPanel().proto().getMember(new Path(valuePath)).getValueClass();
                 if (valueClass.isEnum()) {
                     CComboBox valuesList = new CComboBox(true);
                     valuesList.setOptions(EnumSet.allOf((Class<Enum>) valueClass));
-                    valueHolder.setWidget(valuesList);
+                    valueHolder.setWidget(comp = valuesList);
 
                     // correct operands list:
                     operandsList.removeOption(Operands.greaterThen);
                     operandsList.removeOption(Operands.lessThen);
 
                 } else if (valueClass.equals(LogicalDate.class)) {
-                    valueHolder.setWidget(new CDatePicker());
+                    valueHolder.setWidget(comp = new CDatePicker());
                 } else if (valueClass.equals(Boolean.class)) {
-                    valueHolder.setWidget(new CRadioGroupBoolean(CRadioGroup.Layout.HORISONTAL));
+                    valueHolder.setWidget(comp = new CRadioGroupBoolean(CRadioGroup.Layout.HORISONTAL));
 
                     // correct operands list:
                     operandsList.removeOption(Operands.greaterThen);
                     operandsList.removeOption(Operands.lessThen);
 
                 } else if (valueClass.equals(Double.class)) {
-                    valueHolder.setWidget(new CDoubleField());
+                    valueHolder.setWidget(comp = new CDoubleField());
                 } else if (valueClass.equals(Integer.class)) {
-                    valueHolder.setWidget(new CLongField());
+                    valueHolder.setWidget(comp = new CLongField());
                 } else if (valueClass.equals(Integer.class)) {
-                    valueHolder.setWidget(new CIntegerField());
+                    valueHolder.setWidget(comp = new CIntegerField());
                 } else {
-                    valueHolder.setWidget(new CTextField());
+                    valueHolder.setWidget(comp = new CTextField());
 
                     // correct operands list:
                     operandsList.removeOption(Operands.greaterThen);
                     operandsList.removeOption(Operands.lessThen);
                 }
+
+//                comp.setValue(valueClass.cast(value));
             }
         }
     }
