@@ -57,7 +57,8 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
         view.setPresenter(this);
     }
 
-    public ViewerActivityBase<E> withPlace(Place place) {
+    @Override
+    public void setPlace(Place place) {
         entityId = null;
         tabIndex = -1;
 
@@ -75,13 +76,18 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
         }
 
         assert (entityId != null);
-        return this;
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         populate();
+    }
+
+    @Override
+    public void onStop() {
+        view.storeState(view.getMemento().getCurrentPlace());
+        super.onStop();
     }
 
     @Override

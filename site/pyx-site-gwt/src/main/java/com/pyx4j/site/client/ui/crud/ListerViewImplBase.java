@@ -26,6 +26,7 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -118,5 +119,15 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     @Override
     public IMemento getMemento() {
         return getLister().getMemento();
+    }
+
+    @Override
+    public void storeState(Place place) {
+        getLister().storeState(place);
+    }
+
+    @Override
+    public void restoreState() {
+        getLister().restoreState();
     }
 }

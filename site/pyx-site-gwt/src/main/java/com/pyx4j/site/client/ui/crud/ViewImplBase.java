@@ -24,6 +24,7 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -38,7 +39,7 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel implements 
 
     protected CrudEntityForm<E> form;
 
-    private IMemento memento;
+    private final IMemento memento = new MementoImpl();
 
     public ViewImplBase() {
         super(Unit.EM);
@@ -110,9 +111,15 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel implements 
 
     @Override
     public IMemento getMemento() {
-        if (memento == null) {
-            memento = new MementoImpl();
-        }
         return memento;
+    }
+
+    @Override
+    public void storeState(Place place) {
+        getMemento().setCurrentPlace(place);
+    }
+
+    @Override
+    public void restoreState() {
     }
 }

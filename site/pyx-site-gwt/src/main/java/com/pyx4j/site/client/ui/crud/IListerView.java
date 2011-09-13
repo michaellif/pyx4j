@@ -29,15 +29,15 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 public interface IListerView<E extends IEntity> extends IView<E> {
 
-    public interface Presenter {
+    public interface Presenter extends IView.Presenter {
 
         void setParentFiltering(Key parentID);
 
-        public List<FilterData> getPreDefinedFilters();
+        List<FilterData> getPreDefinedFilters();
 
         void setPreDefinedFilters(List<FilterData> filters);
 
-        void populate(final int pageNumber);
+        void populate(int pageNumber);
 
         void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID);
 

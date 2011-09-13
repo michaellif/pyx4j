@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IEntity;
 
 public class EditorViewImplBase<E extends IEntity> extends ViewImplBase<E> implements IEditorView<E> {
 
-    protected Presenter presenter;
+    protected IEditorView.Presenter presenter;
 
     public EditorViewImplBase() {
         super();
@@ -45,12 +45,12 @@ public class EditorViewImplBase<E extends IEntity> extends ViewImplBase<E> imple
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
+    public void setPresenter(IEditorView.Presenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public Presenter getPresenter() {
+    public IEditorView.Presenter getPresenter() {
         return presenter;
     }
 

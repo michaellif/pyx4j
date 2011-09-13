@@ -27,6 +27,8 @@ public interface IMemento {
     // Control:
     void setCurrentPlace(Place place);
 
+    Place getCurrentPlace();
+
     boolean mayRestore();
 
     // Data manipulation:

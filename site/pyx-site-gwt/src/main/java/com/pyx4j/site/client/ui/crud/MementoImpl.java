@@ -42,9 +42,14 @@ public class MementoImpl implements IMemento {
     }
 
     @Override
+    public Place getCurrentPlace() {
+        return currentPlace;
+    }
+
+    @Override
     public boolean mayRestore() {
         if (currentPlace != null && previousPlace != null) {
-            return currentPlace.equals(previousPlace);
+            return (!isEmpty() && currentPlace.equals(previousPlace));
         }
         return false;
     }
@@ -128,4 +133,5 @@ public class MementoImpl implements IMemento {
     public void putObject(String key, Object value) {
         values.put(key, value);
     }
+
 }

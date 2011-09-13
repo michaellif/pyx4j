@@ -24,15 +24,13 @@ import com.pyx4j.entity.shared.IEntity;
 
 public interface IEditorView<E extends IEntity> extends IFormView<E> {
 
-    public interface Presenter {
+    public interface Presenter extends IView.Presenter {
 
-        public void populate();
+        void apply();
 
-        public void apply();
+        void save();
 
-        public void save();
-
-        public void cancel();
+        void cancel();
     }
 
     enum EditMode {

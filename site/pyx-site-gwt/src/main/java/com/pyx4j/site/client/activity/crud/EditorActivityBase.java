@@ -65,8 +65,8 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         view.setPresenter(this);
     }
 
-    @SuppressWarnings("unchecked")
-    public EditorActivityBase<E> withPlace(Place place) {
+    @Override
+    public void setPlace(Place place) {
         entityID = null;
         parentID = null;
         tabIndex = -1;
@@ -86,8 +86,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_TAB_IDX)) != null) {
             tabIndex = Integer.parseInt(val);
         }
-
-        return this;
     }
 
     @Override

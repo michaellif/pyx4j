@@ -71,20 +71,20 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         view.setPresenter(this);
     }
 
-    public ListerActivityBase<E> withPlace(Place place) {
+    @Override
+    public void setPlace(Place place) {
         view.getMemento().setCurrentPlace(place);
-        return this;
     }
 
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         containerWidget.setWidget(view);
-        populate(view.getMemento().mayRestore() ? view.getLister().restoreState() : 0);
+        populate();
     }
 
     @Override
     public void onStop() {
-        view.getLister().storeState();
+        view.getLister().storeState(view.getMemento().getCurrentPlace());
         super.onStop();
     }
 
@@ -102,6 +102,11 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     @Override
     public void setPreDefinedFilters(List<FilterData> preDefinedFilters) {
         this.preDefinedFilters = preDefinedFilters;
+    }
+
+    @Override
+    public void populate() {
+        view.getLister().restoreState();
     }
 
     @Override

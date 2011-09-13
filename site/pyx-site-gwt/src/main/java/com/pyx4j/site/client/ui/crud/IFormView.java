@@ -24,9 +24,9 @@ import com.pyx4j.entity.shared.IEntity;
 
 public interface IFormView<E extends IEntity> extends IView<E> {
 
-    public void populate(E value);
+    void populate(E value);
 
-    public void setActiveTab(int index);
+    void setActiveTab(int index);
 
-    public int getActiveTab();
+    int getActiveTab();
 }

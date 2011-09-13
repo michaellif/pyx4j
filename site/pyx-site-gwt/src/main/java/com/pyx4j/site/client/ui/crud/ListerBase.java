@@ -37,6 +37,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -89,7 +90,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         page, primarySortColumn, secondarySortColumn
     };
 
-    private IMemento memento;
+    private final IMemento memento = new MementoImpl();
 
 // Events:
     public interface ItemSelectionHandler<E> {
@@ -155,7 +156,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         listPanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
             public void onChange(ColumnDescriptor<E> column) {
-                presenter.populate(getPageNumber());
+                getPresenter().populate(getPageNumber());
             }
         });
 
@@ -301,7 +302,9 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     }
 
     // Memento:
-    public void storeState() {
+    @Override
+    public void storeState(Place place) {
+        getMemento().setCurrentPlace(place);
         getMemento().clear();
 
         getMemento().putInteger(MementoKeys.page.name(), getLister().getPageNumber());
@@ -315,12 +318,14 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         }
     }
 
-    public int restoreState() {
+    @Override
+    public void restoreState() {
         int pageNumber = 0;
-        if (!getMemento().isEmpty()) {
+        List<Sort> sorts = new ArrayList<Sort>(2);
+
+        if (getMemento().mayRestore()) {
             pageNumber = getMemento().getInteger(MementoKeys.page.name());
 
-            List<Sort> sorts = new ArrayList<Sort>(2);
             Sort sort = (Sort) getMemento().getObject(MementoKeys.primarySortColumn.name());
             if (sort != null) {
                 sorts.add(sort);
@@ -332,7 +337,8 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             getLister().setSorting(sorts);
         }
 
-        return pageNumber;
+        getLister().setSorting(sorts);
+        getPresenter().populate(pageNumber);
     }
 
     // EntityListPanel access:
@@ -360,9 +366,9 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
      */
     protected void onItemSelect(E item) {
         if (itemOpenPlaceClass != null && openEditor) {
-            presenter.edit(itemOpenPlaceClass, item.getPrimaryKey());
+            getPresenter().edit(itemOpenPlaceClass, item.getPrimaryKey());
         } else {
-            presenter.view(itemOpenPlaceClass, item.getPrimaryKey());
+            getPresenter().view(itemOpenPlaceClass, item.getPrimaryKey());
         }
     }
 
@@ -370,7 +376,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
      * Override in derived class for your own new item creation procedure.
      */
     protected void onItemNew() {
-        presenter.editNew(itemOpenPlaceClass, null);
+        getPresenter().editNew(itemOpenPlaceClass, null);
     }
 
 // IListerView implementation:
@@ -428,6 +434,10 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     @Override
     public void setSorting(List<Sort> sorts) {
+
+        getListPanel().getDataTable().getDataTableModel().setSortColumn(null);
+        getListPanel().getDataTable().getDataTableModel().setSecondarySortColumn(null);
+
         boolean primarySet = false;
         for (Sort sort : sorts) {
             for (ColumnDescriptor<E> column : getListPanel().getDataTable().getDataTableModel().getColumnDescriptors()) {
@@ -446,9 +456,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     @Override
     public IMemento getMemento() {
-        if (memento == null) {
-            memento = new MementoImpl();
-        }
         return memento;
     }
 
@@ -456,11 +463,11 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
      * Override in derived class to fill pages with data.
      */
     protected void onPrevPage() {
-        presenter.populate(getListPanel().getDataTable().getDataTableModel().getPageNumber() - 1);
+        getPresenter().populate(getListPanel().getDataTable().getDataTableModel().getPageNumber() - 1);
     }
 
     protected void onNextPage() {
-        presenter.populate(getListPanel().getDataTable().getDataTableModel().getPageNumber() + 1);
+        getPresenter().populate(getListPanel().getDataTable().getDataTableModel().getPageNumber() + 1);
     }
 
     private void setActionsActive(boolean active) {
@@ -488,7 +495,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.populate(0);
+                getPresenter().populate(0);
             }
         });
         btnApply.setEnabled(false);
@@ -571,7 +578,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                         Filters.this.remove(Filter.this);
                         if (filters.getFilterCount() == 0) {
                             btnApply.setEnabled(false);
-                            presenter.populate(0);
+                            getPresenter().populate(0);
                         }
                     }
                 });

@@ -24,13 +24,11 @@ import com.pyx4j.entity.shared.IEntity;
 
 public interface IViewerView<E extends IEntity> extends IFormView<E> {
 
-    public interface Presenter {
+    public interface Presenter extends IView.Presenter {
 
-        public void populate();
+        void edit();
 
-        public void edit();
-
-        public void cancel();
+        void cancel();
     }
 
     void setPresenter(Presenter presenter);
