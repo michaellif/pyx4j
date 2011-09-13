@@ -107,6 +107,11 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     }
 
     @Override
+    public void setFiltering(List<FilterData> filterData) {
+        getLister().setFiltering(filterData);
+    }
+
+    @Override
     public List<Sort> getSorting() {
         return getLister().getSorting();
     }
@@ -129,11 +134,5 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     @Override
     public void restoreState() {
         getLister().restoreState();
-    }
-
-    @Override
-    public void setFiltering(List<FilterData> filters) {
-        // TODO Auto-generated method stub
-
     }
 }
