@@ -21,7 +21,6 @@
 package com.pyx4j.site.client.ui.crud;
 
 import java.io.Serializable;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -52,8 +51,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.client.ui.crud.CriteriaEditableComponentFactory;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
@@ -63,13 +62,7 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CDatePicker;
-import com.pyx4j.forms.client.ui.CDoubleField;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.CIntegerField;
-import com.pyx4j.forms.client.ui.CLongField;
-import com.pyx4j.forms.client.ui.CRadioGroup;
-import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.site.client.NavigationIDs;
@@ -88,7 +81,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     }
 
     public static enum MementoKeys {
-        page, primarySortColumn, secondarySortColumn
+        page, filterData, sortingData
     };
 
     private final IMemento memento = new MementoImpl();
@@ -309,36 +302,26 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         getMemento().clear();
 
         getMemento().putInteger(MementoKeys.page.name(), getLister().getPageNumber());
-        boolean primarySet = false;
-        for (Sort sort : getLister().getSorting()) {
-            if (!primarySet) {
-                getMemento().putObject(MementoKeys.primarySortColumn.name(), sort);
-            } else {
-                getMemento().putObject(MementoKeys.secondarySortColumn.name(), sort);
-            }
-        }
+        getMemento().putObject(MementoKeys.filterData.name(), getLister().getFiltering());
+        getMemento().putObject(MementoKeys.sortingData.name(), getLister().getSorting());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void restoreState() {
         int pageNumber = 0;
-        List<Sort> sorts = new ArrayList<Sort>(2);
+        List<FilterData> filters = null;
+        List<Sort> sorts = null;
 
         if (getMemento().mayRestore()) {
             pageNumber = getMemento().getInteger(MementoKeys.page.name());
-
-            Sort sort = (Sort) getMemento().getObject(MementoKeys.primarySortColumn.name());
-            if (sort != null) {
-                sorts.add(sort);
-            }
-            sort = (Sort) getMemento().getObject(MementoKeys.secondarySortColumn.name());
-            if (sort != null) {
-                sorts.add(sort);
-            }
-            getLister().setSorting(sorts);
+            filters = (List<FilterData>) getMemento().getObject(MementoKeys.filterData.name());
+            sorts = (List<Sort>) getMemento().getObject(MementoKeys.sortingData.name());
         }
 
+        getLister().setFiltering(filters);
         getLister().setSorting(sorts);
+        // should be called last:
         getPresenter().populate(pageNumber);
     }
 
@@ -444,16 +427,18 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         getListPanel().getDataTable().getDataTableModel().setSortColumn(null);
         getListPanel().getDataTable().getDataTableModel().setSecondarySortColumn(null);
 
-        boolean primarySet = false;
-        for (Sort sort : sorts) {
-            for (ColumnDescriptor<E> column : getListPanel().getDataTable().getDataTableModel().getColumnDescriptors()) {
-                if (column.getColumnName().compareTo(sort.getPropertyName()) == 0) {
-                    column.setSortAscending(!sort.isDescending());
-                    if (!primarySet) {
-                        getListPanel().getDataTable().getDataTableModel().setSortColumn(column);
-                        primarySet = true;
-                    } else {
-                        getListPanel().getDataTable().getDataTableModel().setSecondarySortColumn(column);
+        if (sorts != null) {
+            boolean primarySet = false;
+            for (Sort sort : sorts) {
+                for (ColumnDescriptor<E> column : getListPanel().getDataTable().getDataTableModel().getColumnDescriptors()) {
+                    if (column.getColumnName().compareTo(sort.getPropertyName()) == 0) {
+                        column.setSortAscending(!sort.isDescending());
+                        if (!primarySet) {
+                            getListPanel().getDataTable().getDataTableModel().setSortColumn(column);
+                            primarySet = true;
+                        } else {
+                            getListPanel().getDataTable().getDataTableModel().setSecondarySortColumn(column);
+                        }
                     }
                 }
             }
@@ -554,10 +539,12 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         public void setFiltersData(List<FilterData> filterData) {
             clear();
 
-            Filter filter;
-            for (FilterData item : filterData) {
-                add(filter = new Filter());
-                filter.setFilterData(item);
+            if (filterData != null) {
+                Filter filter;
+                for (FilterData item : filterData) {
+                    add(filter = new Filter());
+                    filter.setFilterData(item);
+                }
             }
         }
 
@@ -647,22 +634,14 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 setWidth("100%");
             }
 
+            @SuppressWarnings("rawtypes")
             public FilterData getFilterData() {
                 String path = null;
                 if (fieldsList.getValue() != null) {
                     path = fieldsList.getValue().getPath();
                 }
-
                 Operands operand = operandsList.getValue();
-
-                Serializable value = null;
-                try {
-                    if (((INativeEditableComponent<?>) valueHolder.getWidget()).getNativeValue() != null) {
-                        value = (Serializable) ((INativeEditableComponent<?>) valueHolder.getWidget()).getNativeValue();
-                    }
-                } catch (ParseException e) {
-                    // Do nothing here..
-                }
+                Serializable value = (Serializable) ((CEditableComponent) ((INativeEditableComponent<?>) valueHolder.getWidget()).getCComponent()).getValue();
 
                 return new FilterData(path, operand, value);
             }
@@ -693,41 +672,9 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 operandsList.setOptions(EnumSet.allOf(Operands.class));
                 operandsList.setValue(Operands.is);
 
-                CEditableComponent<?, ?> comp;
-                Class<?> valueClass = getListPanel().proto().getMember(new Path(valuePath)).getValueClass();
-                if (valueClass.isEnum()) {
-                    CComboBox valuesList = new CComboBox(true);
-                    valuesList.setOptions(EnumSet.allOf((Class<Enum>) valueClass));
-                    valueHolder.setWidget(comp = valuesList);
-
-                    // correct operands list:
-                    operandsList.removeOption(Operands.greaterThen);
-                    operandsList.removeOption(Operands.lessThen);
-
-                } else if (valueClass.equals(LogicalDate.class)) {
-                    valueHolder.setWidget(comp = new CDatePicker());
-                } else if (valueClass.equals(Boolean.class)) {
-                    valueHolder.setWidget(comp = new CRadioGroupBoolean(CRadioGroup.Layout.HORISONTAL));
-
-                    // correct operands list:
-                    operandsList.removeOption(Operands.greaterThen);
-                    operandsList.removeOption(Operands.lessThen);
-
-                } else if (valueClass.equals(Double.class)) {
-                    valueHolder.setWidget(comp = new CDoubleField());
-                } else if (valueClass.equals(Integer.class)) {
-                    valueHolder.setWidget(comp = new CLongField());
-                } else if (valueClass.equals(Integer.class)) {
-                    valueHolder.setWidget(comp = new CIntegerField());
-                } else {
-                    valueHolder.setWidget(comp = new CTextField());
-
-                    // correct operands list:
-                    operandsList.removeOption(Operands.greaterThen);
-                    operandsList.removeOption(Operands.lessThen);
-                }
-
-//                comp.setValue(valueClass.cast(value));
+                CEditableComponent comp = new CriteriaEditableComponentFactory().create(getListPanel().proto().getMember(new Path(valuePath)));
+                comp.setValue(value);
+                valueHolder.setWidget(comp);
             }
         }
     }
