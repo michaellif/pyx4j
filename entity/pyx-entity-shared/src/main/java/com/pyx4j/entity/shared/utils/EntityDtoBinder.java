@@ -127,8 +127,23 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
         for (Binding b : binding) {
             IObject dtoM = dto.getMember(b.dtoMemberPath);
             IObject dboM = dbo.getMember(b.dboMemberPath);
+
+            // Assert that all data has been retrieved
+            if ((dboM instanceof IEntity) && ((IEntity) dboM).isValuesDetached() && !dtoM.getMeta().isDetached()) {
+                throw new Error("Copying detached entity " + ((IEntity) dboM).getDebugExceptionInfoString());
+            }
+
             if (b.binder == null) {
-                dtoM.setValue(dboM.getValue());
+                if (dboM instanceof ICollection) {
+                    for (IEntity dboMi : (ICollection<IEntity, ?>) dboM) {
+                        if (dboMi.isValuesDetached() && !dtoM.getMeta().isDetached()) {
+                            throw new Error("Copying detached entity " + dboMi.getDebugExceptionInfoString());
+                        }
+                        ((ICollection<IEntity, ?>) dtoM).add(dboMi);
+                    }
+                } else {
+                    dtoM.setValue(dboM.getValue());
+                }
             } else if (dtoM instanceof IEntity) {
                 b.binder.copyDBOtoDTO((IEntity) dboM, (IEntity) dtoM);
             } else if (dboM instanceof ICollection) {
@@ -155,7 +170,13 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
             IObject dtoM = dto.getMember(b.dtoMemberPath);
             IObject dboM = dbo.getMember(b.dboMemberPath);
             if (b.binder == null) {
-                dboM.setValue(dtoM.getValue());
+                if (dtoM instanceof ICollection) {
+                    for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
+                        ((ICollection<IEntity, ?>) dboM).add(dtoMi);
+                    }
+                } else {
+                    dboM.setValue(dtoM.getValue());
+                }
             } else if (dtoM instanceof IEntity) {
                 b.binder.copyDTOtoDBO((IEntity) dtoM, (IEntity) dboM);
             } else if (dtoM instanceof ICollection) {
