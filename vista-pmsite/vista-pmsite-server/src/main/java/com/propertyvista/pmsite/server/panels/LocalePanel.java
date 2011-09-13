@@ -13,6 +13,8 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import java.util.ArrayList;
+
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -29,7 +31,8 @@ public class LocalePanel extends Panel {
     public LocalePanel(String id) {
         super(id);
 
-        ListView<SiteLocale> listView = new ListView<SiteLocale>("langItem", ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().locales()) {
+        ListView<SiteLocale> listView = new ListView<SiteLocale>("langItem", new ArrayList<SiteLocale>(((PMSiteSession) getSession()).getContentManager()
+                .getSiteDescriptor().locales())) {
             private static final long serialVersionUID = 1L;
 
             @Override

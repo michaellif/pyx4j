@@ -45,7 +45,7 @@ public class PortalSite extends VistaSite {
         super.onSiteLoad();
 
         if (RootPanel.get(APT_SEARCH_INSERTION_ID) != null) {
-            getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.FindApartment.PropertyMap());
+            getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.Residents());
             RootPanel.get(APT_SEARCH_INSERTION_ID).add(new FindApartmentScreen());
         } else {
             getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.Landing());

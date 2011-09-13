@@ -54,8 +54,6 @@ public class NavigItem {
         switch (type) {
         case staticContent:
             return new PortalSiteMap.Page();
-        case findApartment:
-            return new PortalSiteMap.FindApartment();
         case residents:
             return new PortalSiteMap.Residents();
         case potentialTenants:

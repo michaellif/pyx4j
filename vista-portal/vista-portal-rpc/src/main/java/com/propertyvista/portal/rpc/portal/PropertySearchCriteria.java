@@ -20,8 +20,6 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.ref.City;
-
 @Transient
 public interface PropertySearchCriteria extends IEntity {
 
@@ -29,11 +27,100 @@ public interface PropertySearchCriteria extends IEntity {
         city, proximity;
     }
 
+    public static enum PriceChoice {
+
+        Any(null), lt600(0), gt600(600), gt800(800), gt1000(1000), gt1200(1200);
+
+        private final Integer minPrice;
+
+        private PriceChoice(Integer minPrice) {
+            this.minPrice = minPrice;
+        }
+
+        public Integer getMinPrice() {
+            return minPrice;
+        }
+
+        public Integer getMaxPrice() {
+            if (minPrice == null) {
+                return null;
+            }
+            int idx = ordinal();
+            if (idx < values().length - 1) {
+                return values()[idx + 1].minPrice - 1;
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public String toString() {
+            String result = "";
+            Integer maxPrice = getMaxPrice();
+            if (minPrice == null) {
+                result = "Any";
+            } else if (minPrice == 0) {
+                result = "Less than $" + maxPrice;
+            } else {
+                if (maxPrice == null) {
+                    result = "Over $" + minPrice;
+                } else {
+                    result = "$" + minPrice + " - $" + maxPrice;
+                }
+            }
+            return result;
+        }
+    }
+
+    public static enum BedroomChoice {
+        Any(null, null), One(1, 1), OneOrMore(1, null), Two(2, 2), TwoOrMore(2, null), Three(3, 3), ThreeOrMore(3, null), Four(4, 4), FourOrMore(4, null);
+
+        private final Integer minBeds;
+
+        private final Integer maxBeds;
+
+        private BedroomChoice(Integer minBeds, Integer maxBeds) {
+            this.minBeds = minBeds;
+            this.maxBeds = maxBeds;
+        }
+
+        public Integer getMinBeds() {
+            return minBeds;
+        }
+
+        public Integer getMaxBeds() {
+            return maxBeds;
+        }
+
+        @Override
+        public String toString() {
+            if (minBeds == null) {
+                return super.toString();
+            }
+            return minBeds + (maxBeds == null ? " or more" : "");
+        }
+    }
+
+    public static enum BathroomChoice {
+        Any(null), One(1), Two(2), Three(3), Four(4);
+        private final Integer rooms;
+
+        private BathroomChoice(Integer rooms) {
+            this.rooms = rooms;
+        }
+
+        public int getRooms() {
+            return rooms;
+        }
+    }
+
     @NotNull
     @Caption(name = "SEARCH BY")
     IPrimitive<SearchType> searchType();
 
-    City city();
+    IPrimitive<String> city();
+
+    IPrimitive<String> province();
 
     IPrimitive<String> location();
 
@@ -41,13 +128,19 @@ public interface PropertySearchCriteria extends IEntity {
 
     IPrimitive<LogicalDate> startingFrom();
 
+    IPrimitive<BedroomChoice> bedsChoice();
+
     IPrimitive<Integer> minBeds();
 
     IPrimitive<Integer> maxBeds();
 
+    IPrimitive<BathroomChoice> bathChoice();
+
     IPrimitive<Integer> minBath();
 
     IPrimitive<Integer> maxBath();
+
+    IPrimitive<PriceChoice> priceRange();
 
     IPrimitive<Integer> minPrice();
 

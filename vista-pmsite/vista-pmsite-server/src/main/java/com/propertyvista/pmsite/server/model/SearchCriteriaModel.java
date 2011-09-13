@@ -72,32 +72,6 @@ public class SearchCriteriaModel implements Serializable {
         Map, List
     }
 
-    public enum BedroomChoice {
-        Any(null), One(1), Two(2), Three(3), Four(4);
-        private final Integer rooms;
-
-        private BedroomChoice(Integer rooms) {
-            this.rooms = rooms;
-        }
-
-        public int getRooms() {
-            return rooms;
-        }
-    }
-
-    public enum BathroomChoice {
-        Any(null), One(1), Two(2), Three(3), Four(4);
-        private final Integer rooms;
-
-        private BathroomChoice(Integer rooms) {
-            this.rooms = rooms;
-        }
-
-        public int getRooms() {
-            return rooms;
-        }
-    }
-
     public enum PriceChoice {
         Any(null), lt600(0), gt600(600), gt800(800), gt1000(1000), gt1200(1200);
         private final Integer minPrice;
@@ -137,6 +111,32 @@ public class SearchCriteriaModel implements Serializable {
                 }
             }
             return result;
+        }
+    }
+
+    public enum BedroomChoice {
+        Any(null), One(1), Two(2), Three(3), Four(4);
+        private final Integer rooms;
+
+        private BedroomChoice(Integer rooms) {
+            this.rooms = rooms;
+        }
+
+        public int getRooms() {
+            return rooms;
+        }
+    }
+
+    public enum BathroomChoice {
+        Any(null), One(1), Two(2), Three(3), Four(4);
+        private final Integer rooms;
+
+        private BathroomChoice(Integer rooms) {
+            this.rooms = rooms;
+        }
+
+        public int getRooms() {
+            return rooms;
         }
     }
 

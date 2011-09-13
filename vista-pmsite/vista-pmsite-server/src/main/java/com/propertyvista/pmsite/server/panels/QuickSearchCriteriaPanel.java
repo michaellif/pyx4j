@@ -13,15 +13,23 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 
-import com.propertyvista.pmsite.server.PMSiteApplication;
-import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
+import com.pyx4j.entity.server.ServerEntityFactory;
+import com.pyx4j.entity.server.pojo.IPojo;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.utils.EntityArgsConverter;
+
 import com.propertyvista.pmsite.server.pages.AptListPage;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 //http://www.google.com/codesearch#o92Uy7_Jjpw/base/openqrm-3.5.2/src/base/java/main/code/com/qlusters/qrm/web/wicket/markup/&type=cs
 public class QuickSearchCriteriaPanel extends Panel {
@@ -31,15 +39,18 @@ public class QuickSearchCriteriaPanel extends Panel {
     public QuickSearchCriteriaPanel() {
         super("quickSearchCriteriaPanel");
 
-        final CompoundPropertyModel<SearchCriteriaModel> model = new CompoundPropertyModel<SearchCriteriaModel>(PMSiteApplication.get().getSearchModel());
+        PropertySearchCriteria entity = EntityFactory.create(PropertySearchCriteria.class);
+        IPojo<PropertySearchCriteria> pojo = ServerEntityFactory.getPojo(entity);
 
-        final Form<SearchCriteriaModel> form = new Form<SearchCriteriaModel>("quickSearchCriteriaForm", model) {
+        final CompoundPropertyModel<IPojo<PropertySearchCriteria>> model = new CompoundPropertyModel<IPojo<PropertySearchCriteria>>(pojo);
+
+        final Form<IPojo<PropertySearchCriteria>> form = new Form<IPojo<PropertySearchCriteria>>("quickSearchCriteriaForm", model) {
             private static final long serialVersionUID = 1L;
 
             @Override
             public void onSubmit() {
-                model.getObject().setSearchType(SearchCriteriaModel.SearchType.City);
-                setResponsePage(AptListPage.class);
+                model.getObject().getEntityValue().searchType().setValue(PropertySearchCriteria.SearchType.city);
+                executeSearch(model.getObject());
             }
         };
 
@@ -49,21 +60,29 @@ public class QuickSearchCriteriaPanel extends Panel {
         add(form);
     }
 
-    private void executeSearch(QuickSearchModel model) {
-        PageParameters parameters = new PageParameters();
-        if (model.getProvince() != null) {
-            parameters.put("province", model.getProvince().getCode());
+    private void executeSearch(IPojo<PropertySearchCriteria> model) {
+        PropertySearchCriteria criteria = model.getEntityValue();
+        if (!criteria.priceRange().isNull()) {
+            criteria.minPrice().setValue(criteria.priceRange().getValue().getMinPrice());
+            criteria.maxPrice().setValue(criteria.priceRange().getValue().getMaxPrice());
+            criteria.priceRange().setValue(null);
         }
-        if (model.getCity() != null) {
-            parameters.put("city", model.getCity());
+
+        if (!criteria.bedsChoice().isNull()) {
+            criteria.minBeds().setValue(criteria.bedsChoice().getValue().getMinBeds());
+            criteria.maxBeds().setValue(criteria.bedsChoice().getValue().getMaxBeds());
+            criteria.bedsChoice().setValue(null);
         }
-        if (model.getBedrooms() != null) {
-            parameters.put("type", model.getBedrooms().name());
+
+        Map<String, List<String>> args = EntityArgsConverter.convertToArgs(criteria);
+
+        Map<String, String[]> argsW = new HashMap<String, String[]>();
+        for (String key : args.keySet()) {
+            argsW.put(key, new String[] { args.get(key).get(0) });
         }
-        if (model.getPrice() != null) {
-            parameters.put("price", model.getPrice().name());
-        }
+
+        PageParameters parameters = new PageParameters(argsW);
+
         setResponsePage(AptListPage.class, parameters);
     }
-
 }

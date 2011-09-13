@@ -41,22 +41,6 @@ public class PortalSiteMap implements SiteMap {
     public static class PotentialTenants extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Find an Apartment")
-    @NavigationItem(navigLabel = "FindApartment")
-    public static class FindApartment extends AppPlace {
-
-        @PlaceProperties(caption = "Found Properties")
-        @NavigationItem(navigLabel = "propertyMap")
-        public static class PropertyMap extends AppPlace {
-        }
-
-        public static class ApartmentDetails extends AppPlace {
-        }
-
-        public static class FloorplanDetails extends AppPlace {
-        }
-    }
-
     @PlaceProperties(caption = "Residents")
     @NavigationItem(navigLabel = "Residents")
     public static class Residents extends AppPlace {

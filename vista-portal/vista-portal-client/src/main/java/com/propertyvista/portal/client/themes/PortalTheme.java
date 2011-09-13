@@ -40,12 +40,6 @@ import com.propertyvista.portal.client.ui.decorations.TableFolderDecorator;
 import com.propertyvista.portal.client.ui.decorations.TableItemDecorator;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.client.ui.residents.NewPaymentMethodForm;
-import com.propertyvista.portal.client.ui.searchapt.ApartmentDetailsViewImpl;
-import com.propertyvista.portal.client.ui.searchapt.CardPanel;
-import com.propertyvista.portal.client.ui.searchapt.FloorplanDetailsViewImpl;
-import com.propertyvista.portal.client.ui.searchapt.PropertyMapViewImpl;
-import com.propertyvista.portal.client.ui.searchapt.RefineApartmentSearchForm;
-import com.propertyvista.portal.client.ui.searchapt.SearchApartmentForm;
 
 public abstract class PortalTheme extends VistaTheme {
 
@@ -66,15 +60,9 @@ public abstract class PortalTheme extends VistaTheme {
         initTopActionStyles();
         initVistaMainNavigViewStyles();
         initTableDecorators();
-        initSearchPanelStyles();
-        initPropertyMapStyles();
-        initRefineSearchStyles();
-        initApartmentDetailsStyles();
         initCriteriaWidgetDecoratorStyles();
         initBaseFolderItemViewerDecoratorStyles();
-        initCardPanelDecoratorStyle();
         initPropertyMarkerStyle();
-        initFloorplanDetailsStyles();
         initPaymentRadioButtonGroupStyles();
     }
 
@@ -435,77 +423,6 @@ public abstract class PortalTheme extends VistaTheme {
         addStyle(style);
     }
 
-    private void initSearchPanelStyles() {
-        String prefix = SearchApartmentForm.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("padding", "10px");
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColor.SEPARATOR);
-        addStyle(style);
-
-    }
-
-    private void initRefineSearchStyles() {
-        String prefix = RefineApartmentSearchForm.DEFAULT_STYLE_PREFIX;
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("width", "100%");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Title));
-        style.addProperty("font-weight", "bold");
-        style.addProperty("font-size", "14px");
-        style.addProperty("padding-bottom", "10px");
-        style.addProperty("color", "#888");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Header));
-        style.addProperty("font-weight", "bold");
-        style.addProperty("font-size", "12px");
-        style.addProperty("margin-top", "10px");
-        style.addProperty("margin-bottom", "10px");
-        style.addProperty("color", ThemeColor.OBJECT_TONE85);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.ButtonPanel));
-        style.addProperty("padding-top", "30px");
-        style.addProperty("padding-bottom", "10px");
-        style.addProperty("margin-right", "10px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, RefineApartmentSearchForm.StyleSuffix.Label));
-        style.addProperty("font-style", "normal");
-        style.addProperty("padding-top", "10px");
-        style.addProperty("padding-bottom", "4px");
-        addStyle(style);
-
-    }
-
-    private void initApartmentDetailsStyles() {
-        String prefix = ApartmentDetailsViewImpl.DEFAULT_STYLE_PREFIX;
-        Style style = new Style(Selector.valueOf(prefix));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.Left));
-        style.addProperty("margin-right", "20px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.Center));
-        style.addProperty("font-size", "12px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.Button));
-        style.addProperty("font-size", "20px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ApartmentDetailsViewImpl.StyleSuffix.PageHeader));
-        style.addProperty("margin-top", "10px");
-        style.addProperty("margin-bottom", "10px");
-        style.addProperty("font-size", "20px");
-        addStyle(style);
-
-    }
-
     private void initTableDecorators() {
 
         String prefix = TableFolderDecorator.DEFAULT_STYLE_PREFIX;
@@ -528,30 +445,6 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("border-bottom", "solid 1px");
         style.addProperty("border-color", ThemeColor.SEPARATOR);
         addStyle(style);
-    }
-
-    private void initFloorplanDetailsStyles() {
-        String prefix = FloorplanDetailsViewImpl.DEFAULT_STYLE_PREFIX;
-        Style style = new Style(Selector.valueOf(prefix));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, FloorplanDetailsViewImpl.StyleSuffix.Left));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, FloorplanDetailsViewImpl.StyleSuffix.Center));
-        style.addProperty("font-size", "14px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, FloorplanDetailsViewImpl.StyleSuffix.Button));
-        style.addProperty("font-size", "20px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, FloorplanDetailsViewImpl.StyleSuffix.PageHeader));
-        style.addProperty("margin-top", "10px");
-        style.addProperty("margin-bottom", "10px");
-        style.addProperty("font-size", "20px");
-        addStyle(style);
-
     }
 
     private void initBaseFolderItemViewerDecoratorStyles() {
@@ -590,54 +483,6 @@ public abstract class PortalTheme extends VistaTheme {
         style = new Style("." + prefix + "-" + BasicCardDecorator.StyleDependent.hover);
         //TODO Not sure how to combine ThemeColor.OBJECT_TONE with !important declaration
         style.addProperty("background-color", "#eeeeee!important");
-        addStyle(style);
-
-    }
-
-    private void initCardPanelDecoratorStyle() {
-        String prefix = CardPanel.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("font-size", "12px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.Image));
-        style.addProperty("border-color", "#cccccc!important");
-        style.addProperty("border", "solid 1px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.Image) + " img");
-        style.addProperty("max-width", "100%!important");
-        style.addProperty("width", "100%!important");
-        style.addProperty("height", "100%!important");
-        style.addProperty("-moz-background-size", "100% 100%!important");
-        style.addProperty("-webkit-background-size", "100% 100%!important");
-        style.addProperty("-khtml-background-size", "100% 100%!important");
-        style.addProperty("background-size", "100% 100%!important");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.MinorContent));
-        style.addProperty("width", "6em");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CardPanel.StyleSuffix.Content));
-        addStyle(style);
-
-    }
-
-    private void initPropertyMapStyles() {
-        String prefix = PropertyMapViewImpl.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        addStyle(style);
-        //TODO not very reliable
-        style = new Style(Selector.valueOf(prefix) + " td[rowspan=\"2\"]");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE35);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PropertyMapViewImpl.StyleSuffix.Header));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE25);
-        style.addProperty("height", "3em");
         addStyle(style);
 
     }

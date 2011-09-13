@@ -37,19 +37,17 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.gwt.geo.MapUtils;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.MediaUtils;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget.MarkerType;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget.StyleSuffix;
-import com.propertyvista.portal.client.ui.searchapt.PropertyListForm;
 import com.propertyvista.portal.client.ui.util.Formatter;
+import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class PropertyMarker extends Marker {
 
@@ -130,7 +128,7 @@ public class PropertyMarker extends Marker {
             content.add(item);
 
             //unit(floor plan) types
-            String floorString = PropertyListForm.formatFloorplanList(property.floorplansProperty());
+            String floorString = formatFloorplanList(property.floorplansProperty());
             if (floorString != null && !floorString.isEmpty()) {
                 item = new Label(floorString);
                 item.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardContentItem);
@@ -155,9 +153,9 @@ public class PropertyMarker extends Marker {
                 @Override
                 public void onClick(ClickEvent event) {
                     //TODO navigation done bypassing activities. Not sure if this is correct
-                    AppPlace place = new PortalSiteMap.FindApartment.ApartmentDetails();
-                    place.putArg(PortalSiteMap.ARG_PROPERTY_ID, property.id().getValue().toString());
-                    AppSite.getPlaceController().goTo(place);
+//                    AppPlace place = new PortalSiteMap.FindApartment.ApartmentDetails();
+//                    place.putArg(PortalSiteMap.ARG_PROPERTY_ID, property.id().getValue().toString());
+//                    AppSite.getPlaceController().goTo(place);
                 }
             });
             content.add(viewDetailsItem);
@@ -197,5 +195,24 @@ public class PropertyMarker extends Marker {
             return viewDetailsItem.addClickHandler(h);
         }
 
+    }
+
+    public static String formatFloorplanList(IList<FloorplanPropertyDTO> floorplansProperty) {
+        if (floorplansProperty.isNull() || floorplansProperty.isEmpty())
+            return "";
+
+        StringBuffer strbuffer = new StringBuffer();
+
+        for (FloorplanPropertyDTO plan : floorplansProperty) {
+            if (!plan.name().isNull() && !plan.name().getValue().isEmpty()) {
+                strbuffer.append(Formatter.formatListItem(plan.name().getStringView()));
+            }
+        }
+        String finalString = strbuffer.toString();
+        int idx = finalString.lastIndexOf(Formatter.POSTFIX);
+        if (idx > -1) {
+            finalString = finalString.substring(0, idx);
+        }
+        return finalString;
     }
 }

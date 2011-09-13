@@ -23,14 +23,16 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 
+import com.pyx4j.entity.server.pojo.IPojo;
+
 import com.propertyvista.pmsite.server.PMSiteContentManager;
-import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class QuickSearchCriteriaInputPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
-    public QuickSearchCriteriaInputPanel(String id, CompoundPropertyModel<SearchCriteriaModel> model) {
+    public QuickSearchCriteriaInputPanel(String id, CompoundPropertyModel<IPojo<PropertySearchCriteria>> model) {
         super(id, model);
 
         // add Province drop-down
@@ -55,18 +57,17 @@ public class QuickSearchCriteriaInputPanel extends Panel {
         };
         add(provChoice);
         // add City drop-down
-        List<String> cities;
-        String selProv = model.getObject().getProvince();
-        if (selProv != null) {
-            cities = provCityMap.get(selProv);
+        List<String> cities = null;
+        if (!model.getObject().getEntityValue().province().isNull()) {
+            cities = provCityMap.get(model.getObject().getEntityValue().province().getValue());
         } else {
-            cities = Arrays.asList("- Select Province -");
+            cities = Arrays.asList("- Select Province First -");
         }
         DropDownChoice<String> cityChoice = new DropDownChoice<String>("city", cities);
         add(cityChoice);
 
         // bedrooms
-        add(new DropDownChoice<SearchCriteriaModel.BedroomChoice>("bedrooms", Arrays.asList(SearchCriteriaModel.BedroomChoice.values())) {
+        add(new DropDownChoice<PropertySearchCriteria.BedroomChoice>("bedsChoice", Arrays.asList(PropertySearchCriteria.BedroomChoice.values())) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -75,29 +76,30 @@ public class QuickSearchCriteriaInputPanel extends Panel {
             }
         });
 
-        IChoiceRenderer<SearchCriteriaModel.PriceChoice> renderer = new IChoiceRenderer<SearchCriteriaModel.PriceChoice>() {
+        IChoiceRenderer<PropertySearchCriteria.PriceChoice> priceChoiceRenderer = new IChoiceRenderer<PropertySearchCriteria.PriceChoice>() {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public String getDisplayValue(SearchCriteriaModel.PriceChoice paramT) {
+            public String getDisplayValue(PropertySearchCriteria.PriceChoice paramT) {
                 return paramT.toString();
             }
 
             @Override
-            public String getIdValue(SearchCriteriaModel.PriceChoice paramT, int paramInt) {
+            public String getIdValue(PropertySearchCriteria.PriceChoice paramT, int paramInt) {
                 return String.valueOf(paramInt);
             }
 
         };
 
-        DropDownChoice<SearchCriteriaModel.PriceChoice> priceChoice = new DropDownChoice<SearchCriteriaModel.PriceChoice>("priceRange",
-                Arrays.asList(SearchCriteriaModel.PriceChoice.values()), renderer) {
+        DropDownChoice<PropertySearchCriteria.PriceChoice> priceChoice = new DropDownChoice<PropertySearchCriteria.PriceChoice>("priceRange",
+                Arrays.asList(PropertySearchCriteria.PriceChoice.values()), priceChoiceRenderer) {
             private static final long serialVersionUID = 1L;
 
             @Override
             protected CharSequence getDefaultChoice(final Object selected) {
                 return "";
             }
+
         };
         add(priceChoice);
 

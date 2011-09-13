@@ -22,12 +22,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
-import com.propertyvista.portal.client.activity.ApartmentDetailsActivity;
 import com.propertyvista.portal.client.activity.BillingHistoryActivity;
 import com.propertyvista.portal.client.activity.CreateAccountActivity;
 import com.propertyvista.portal.client.activity.CurrentBillActivity;
 import com.propertyvista.portal.client.activity.EditPaymentMethodActivity;
-import com.propertyvista.portal.client.activity.FloorplanDetailsActivity;
 import com.propertyvista.portal.client.activity.LoginActivity;
 import com.propertyvista.portal.client.activity.LoginInvitationActivity;
 import com.propertyvista.portal.client.activity.MaintenanceAcitvity;
@@ -36,9 +34,7 @@ import com.propertyvista.portal.client.activity.NewPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.PaymentMethodsActivity;
 import com.propertyvista.portal.client.activity.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
-import com.propertyvista.portal.client.activity.PropertyMapActivity;
 import com.propertyvista.portal.client.activity.RetrievePasswordActivity;
-import com.propertyvista.portal.client.activity.SearchApartmentActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Maintenance;
@@ -57,17 +53,8 @@ public class ContentActivityMapper implements AppActivityMapper {
             @Override
             public void onSuccess() {
                 Activity activity = null;
-                if (place instanceof PortalSiteMap.FindApartment) {
-                    activity = new SearchApartmentActivity(place);
-                } else if (place instanceof PortalSiteMap.Residents && !ClientContext.isAuthenticated()
-                        || place instanceof PortalSiteMap.Residents.LoginInvitation) {
+                if (place instanceof PortalSiteMap.Residents && !ClientContext.isAuthenticated() || place instanceof PortalSiteMap.Residents.LoginInvitation) {
                     activity = new LoginInvitationActivity(place);
-                } else if (place instanceof PortalSiteMap.FindApartment.PropertyMap) {
-                    activity = new PropertyMapActivity(place);
-                } else if (place instanceof PortalSiteMap.FindApartment.ApartmentDetails) {
-                    activity = new ApartmentDetailsActivity(place);
-                } else if (place instanceof PortalSiteMap.FindApartment.FloorplanDetails) {
-                    activity = new FloorplanDetailsActivity(place);
                 } else if (place instanceof Residents.PersonalInfo) {
                     activity = new PersonalInfoActivity(place);
                 } else if (place instanceof Residents.Maintenance) {
@@ -76,8 +63,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new MaintenanceListerActivity(place);
                 } else if (place instanceof Residents.BillingHistory) {
                     activity = new BillingHistoryActivity(place);
-                } else if (place instanceof PortalSiteMap.FindApartment.FloorplanDetails) {
-                    activity = new FloorplanDetailsActivity(place);
                 } else if (place instanceof PortalSiteMap.Residents.Login) {
                     activity = new LoginActivity(place);
                 } else if (place instanceof PortalSiteMap.Residents.RetirevePassword) {
