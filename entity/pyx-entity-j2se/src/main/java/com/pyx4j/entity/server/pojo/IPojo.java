@@ -20,9 +20,11 @@
  */
 package com.pyx4j.entity.server.pojo;
 
+import java.io.Serializable;
+
 import com.pyx4j.entity.shared.IEntity;
 
-public interface IPojo<E extends IEntity> {
+public interface IPojo<E extends IEntity> extends Serializable {
 
     public void setEntityValue(E entity);
 
