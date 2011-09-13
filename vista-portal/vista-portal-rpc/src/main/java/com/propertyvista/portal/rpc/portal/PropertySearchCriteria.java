@@ -73,7 +73,7 @@ public interface PropertySearchCriteria extends IEntity {
     }
 
     public static enum BedroomChoice {
-        Any(null, null), One(1, 1), OneOrMore(1, null), Two(2, 2), TwoOrMore(2, null), Three(3, 3), ThreeOrMore(3, null), Four(4, 4), FourOrMore(4, null);
+        Any(null, null), One(1, 1), OneOrMore(1), Two(2, 2), TwoOrMore(2), Three(3, 3), ThreeOrMore(3), Four(4, 4), FourOrMore(4);
 
         private final Integer minBeds;
 
@@ -82,6 +82,10 @@ public interface PropertySearchCriteria extends IEntity {
         private BedroomChoice(Integer minBeds, Integer maxBeds) {
             this.minBeds = minBeds;
             this.maxBeds = maxBeds;
+        }
+
+        private BedroomChoice(Integer minBeds) {
+            this(minBeds, null);
         }
 
         public Integer getMinBeds() {
@@ -98,19 +102,6 @@ public interface PropertySearchCriteria extends IEntity {
                 return super.toString();
             }
             return minBeds + (maxBeds == null ? " or more" : "");
-        }
-    }
-
-    public static enum BathroomChoice {
-        Any(null), One(1), Two(2), Three(3), Four(4);
-        private final Integer rooms;
-
-        private BathroomChoice(Integer rooms) {
-            this.rooms = rooms;
-        }
-
-        public int getRooms() {
-            return rooms;
         }
     }
 
@@ -133,8 +124,6 @@ public interface PropertySearchCriteria extends IEntity {
     IPrimitive<Integer> minBeds();
 
     IPrimitive<Integer> maxBeds();
-
-    IPrimitive<BathroomChoice> bathChoice();
 
     IPrimitive<Integer> minBath();
 
