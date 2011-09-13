@@ -30,6 +30,6 @@ public class BuildingListerActivity extends ListerActivityBase<BuildingDTO> {
     public BuildingListerActivity(Place place) {
         super((BuildingListerView) BuildingViewFactory.instance(BuildingListerView.class), (AbstractCrudService<BuildingDTO>) GWT
                 .create(BuildingCrudService.class), BuildingDTO.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

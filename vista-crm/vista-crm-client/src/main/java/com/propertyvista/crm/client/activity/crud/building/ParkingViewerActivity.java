@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.activity.crud.building;
 
+import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
@@ -45,7 +46,8 @@ public class ParkingViewerActivity extends ViewerActivityBase<ParkingDTO> implem
         spotLister = new ListerActivityBase<ParkingSpot>(((ParkingViewerView) view).getSpotView(),
                 (AbstractCrudService<ParkingSpot>) GWT.create(ParkingSpotCrudService.class), ParkingSpot.class);
 
-        withPlace(place);
+        setPlace(place);
+        spotLister.setPlace(place);
     }
 
     @Override
@@ -65,6 +67,12 @@ public class ParkingViewerActivity extends ViewerActivityBase<ParkingDTO> implem
         dashboard.populate();
 
         spotLister.setParentFiltering(result.getPrimaryKey());
-        spotLister.populate(0);
+        spotLister.populate();
+    }
+
+    @Override
+    public void onStop() {
+        ((AbstractActivity) spotLister).onStop();
+        super.onStop();
     }
 }

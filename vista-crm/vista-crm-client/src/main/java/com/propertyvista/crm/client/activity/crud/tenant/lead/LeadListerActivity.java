@@ -29,6 +29,6 @@ public class LeadListerActivity extends ListerActivityBase<Lead> {
     @SuppressWarnings("unchecked")
     public LeadListerActivity(Place place) {
         super((LeadListerView) TenantViewFactory.instance(LeadListerView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class), Lead.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

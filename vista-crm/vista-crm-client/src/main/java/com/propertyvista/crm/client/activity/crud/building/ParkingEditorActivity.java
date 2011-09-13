@@ -30,6 +30,6 @@ public class ParkingEditorActivity extends EditorActivityBase<ParkingDTO> implem
     public ParkingEditorActivity(Place place) {
         super((ParkingEditorView) BuildingViewFactory.instance(ParkingEditorView.class),
                 (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class), ParkingDTO.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

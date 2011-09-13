@@ -29,6 +29,6 @@ public class PmcEditorActivity extends EditorActivityBase<PmcDTO> {
     @SuppressWarnings("unchecked")
     public PmcEditorActivity(Place place) {
         super((PmcEditorView) PmcCrudVeiwFactory.instance(PmcEditorView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class), PmcDTO.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

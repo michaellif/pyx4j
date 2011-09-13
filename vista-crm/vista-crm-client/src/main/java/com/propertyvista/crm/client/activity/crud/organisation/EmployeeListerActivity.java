@@ -30,6 +30,6 @@ public class EmployeeListerActivity extends ListerActivityBase<Employee> {
     public EmployeeListerActivity(Place place) {
         super((EmployeeListerView) OrganisationViewFactory.instance(EmployeeListerView.class), (AbstractCrudService<Employee>) GWT
                 .create(EmployeeCrudService.class), Employee.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

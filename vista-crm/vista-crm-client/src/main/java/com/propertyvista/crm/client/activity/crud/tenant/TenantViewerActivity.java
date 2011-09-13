@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.activity.crud.tenant;
 
+import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
@@ -41,7 +42,8 @@ public class TenantViewerActivity extends ViewerActivityBase<TenantDTO> implemen
         screeningLister = new ListerActivityBase<TenantScreening>(((TenantViewerView) view).getScreeningListerView(),
                 (AbstractCrudService<TenantScreening>) GWT.create(TenantScreeningCrudService.class), TenantScreening.class);
 
-        withPlace(place);
+        setPlace(place);
+        screeningLister.setPlace(place);
     }
 
     @Override
@@ -52,9 +54,16 @@ public class TenantViewerActivity extends ViewerActivityBase<TenantDTO> implemen
     @Override
     public void onPopulateSuccess(TenantDTO result) {
         super.onPopulateSuccess(result);
+
         if (Tenant.Type.person.equals(result.type().getValue())) {
             screeningLister.setParentFiltering(result.getPrimaryKey());
-            screeningLister.populate(0);
+            screeningLister.populate();
         }
+    }
+
+    @Override
+    public void onStop() {
+        ((AbstractActivity) screeningLister).onStop();
+        super.onStop();
     }
 }

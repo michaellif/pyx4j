@@ -30,6 +30,6 @@ public class ConcessionEditorActivity extends EditorActivityBase<Concession> {
     public ConcessionEditorActivity(Place place) {
         super((ConcessionEditorView) UnitViewFactory.instance(ConcessionEditorView.class), (AbstractCrudService<Concession>) GWT
                 .create(ConcessionCrudService.class), Concession.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

@@ -30,6 +30,6 @@ public class ConcessionViewerActivity extends ViewerActivityBase<Concession> {
     public ConcessionViewerActivity(Place place) {
         super((ConcessionViewerView) UnitViewFactory.instance(ConcessionViewerView.class), (AbstractCrudService<Concession>) GWT
                 .create(ConcessionCrudService.class));
-        withPlace(place);
+        setPlace(place);
     }
 }

@@ -30,6 +30,6 @@ public class UnitListerActivity extends ListerActivityBase<AptUnitDTO> {
     public UnitListerActivity(Place place) {
         super((UnitListerView) UnitViewFactory.instance(UnitListerView.class), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class),
                 AptUnitDTO.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

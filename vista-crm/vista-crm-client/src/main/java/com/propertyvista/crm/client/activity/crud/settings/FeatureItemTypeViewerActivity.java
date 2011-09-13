@@ -30,6 +30,6 @@ public class FeatureItemTypeViewerActivity extends ViewerActivityBase<ServiceIte
     public FeatureItemTypeViewerActivity(Place place) {
         super((ServiceTypeViewerView) SettingsViewFactory.instance(ServiceTypeViewerView.class), (AbstractCrudService<ServiceItemType>) GWT
                 .create(FeatureItemTypeCrudService.class));
-        withPlace(place);
+        setPlace(place);
     }
 }

@@ -30,6 +30,6 @@ public class ShowingListerActivity extends ListerActivityBase<Showing> {
     public ShowingListerActivity(Place place) {
         super((ShowingListerView) TenantViewFactory.instance(ShowingListerView.class), (AbstractCrudService<Showing>) GWT.create(ShowingCrudService.class),
                 Showing.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

@@ -29,6 +29,6 @@ public class ServiceViewerActivity extends ViewerActivityBase<Service> {
     @SuppressWarnings("unchecked")
     public ServiceViewerActivity(Place place) {
         super((ServiceViewerView) MarketingViewFactory.instance(ServiceViewerView.class), (AbstractCrudService<Service>) GWT.create(ServiceCrudService.class));
-        withPlace(place);
+        setPlace(place);
     }
 }

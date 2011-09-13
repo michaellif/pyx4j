@@ -33,7 +33,7 @@ public class SiteViewerActivity extends ViewerActivityBase<SiteDescriptorDTO> im
     @SuppressWarnings("unchecked")
     public SiteViewerActivity(Place place) {
         super((SiteViewer) SettingsViewFactory.instance(SiteViewer.class), (AbstractCrudService<SiteDescriptorDTO>) GWT.create(SiteDescriptorCrudService.class));
-        withPlace(place);
+        setPlace(place);
     }
 
     @Override

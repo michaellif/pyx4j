@@ -30,6 +30,6 @@ public class EmployeeViewerActivity extends ViewerActivityBase<Employee> {
     public EmployeeViewerActivity(Place place) {
         super((EmployeeViewerView) OrganisationViewFactory.instance(EmployeeViewerView.class), (AbstractCrudService<Employee>) GWT
                 .create(EmployeeCrudService.class));
-        withPlace(place);
+        setPlace(place);
     }
 }

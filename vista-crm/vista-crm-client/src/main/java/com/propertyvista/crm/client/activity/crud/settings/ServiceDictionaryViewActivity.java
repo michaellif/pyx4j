@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.activity.crud.settings;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -48,7 +47,7 @@ public class ServiceDictionaryViewActivity extends AbstractActivity implements S
         featureLister = new ListerActivityBase<ServiceItemType>(view.getFeatureListerView(),
                 (AbstractCrudService<ServiceItemType>) GWT.create(FeatureItemTypeCrudService.class), ServiceItemType.class);
 
-        withPlace(place);
+        setPlace(place);
     }
 
     @Override
@@ -57,14 +56,23 @@ public class ServiceDictionaryViewActivity extends AbstractActivity implements S
         populate();
     }
 
-    public Activity withPlace(Place place) {
-        return this;
+    @Override
+    public void onStop() {
+        ((AbstractActivity) serviceLister).onStop();
+        ((AbstractActivity) featureLister).onStop();
+        super.onStop();
+    }
+
+    @Override
+    public void setPlace(Place place) {
+        serviceLister.setPlace(place);
+        serviceLister.setPlace(place);
     }
 
     @Override
     public void populate() {
-        serviceLister.populate(0);
-        featureLister.populate(0);
+        serviceLister.populate();
+        featureLister.populate();
     }
 
     @Override
@@ -86,4 +94,5 @@ public class ServiceDictionaryViewActivity extends AbstractActivity implements S
     public Presenter getFeatureListerPresenter() {
         return featureLister;
     }
+
 }

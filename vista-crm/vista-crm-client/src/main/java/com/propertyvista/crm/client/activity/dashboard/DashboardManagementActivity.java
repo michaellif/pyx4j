@@ -30,6 +30,6 @@ public class DashboardManagementActivity extends ListerActivityBase<DashboardMet
     public DashboardManagementActivity(Place place) {
         super((DashboardManagement) DashboardViewFactory.instance(DashboardManagement.class), (AbstractCrudService<DashboardMetadata>) GWT
                 .create(DashboardMetadataCrudService.class), DashboardMetadata.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

@@ -30,7 +30,7 @@ public class LockerListerActivity extends ListerActivityBase<Locker> {
     public LockerListerActivity(Place place) {
         super((LockerListerView) BuildingViewFactory.instance(LockerListerView.class), (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class),
                 Locker.class);
-        withPlace(place);
+        setPlace(place);
     }
 
 }

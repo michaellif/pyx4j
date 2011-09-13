@@ -29,6 +29,6 @@ public class FeatureViewerActivity extends ViewerActivityBase<Feature> {
     @SuppressWarnings("unchecked")
     public FeatureViewerActivity(Place place) {
         super((FeatureViewerView) MarketingViewFactory.instance(FeatureViewerView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class));
-        withPlace(place);
+        setPlace(place);
     }
 }

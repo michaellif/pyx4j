@@ -54,7 +54,7 @@ public class ServiceEditorActivity extends EditorActivityBase<Service> implement
         concessionLister = new ListerActivityBase<Concession>(((ServiceEditorView) view).getConcessionListerView(),
                 (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class);
 
-        withPlace(place);
+        setPlace(place);
     }
 
     @Override

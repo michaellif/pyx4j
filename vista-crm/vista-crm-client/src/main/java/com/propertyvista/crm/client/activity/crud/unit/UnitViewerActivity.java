@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.activity.crud.unit;
 
+import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
@@ -46,7 +47,10 @@ public class UnitViewerActivity extends ViewerActivityBase<AptUnitDTO> implement
 
         OccupanciesLister = new ListerActivityBase<AptUnitOccupancy>(((UnitViewerView) view).getOccupanciesListerView(),
                 (AbstractCrudService<AptUnitOccupancy>) GWT.create(UnitOccupancyCrudService.class), AptUnitOccupancy.class);
-        withPlace(place);
+
+        setPlace(place);
+        unitItemsLister.setPlace(place);
+        OccupanciesLister.setPlace(place);
     }
 
     @Override
@@ -64,9 +68,16 @@ public class UnitViewerActivity extends ViewerActivityBase<AptUnitDTO> implement
         super.onPopulateSuccess(result);
 
         unitItemsLister.setParentFiltering(result.getPrimaryKey());
-        unitItemsLister.populate(0);
+        unitItemsLister.populate();
 
         OccupanciesLister.setParentFiltering(result.getPrimaryKey());
-        OccupanciesLister.populate(0);
+        OccupanciesLister.populate();
+    }
+
+    @Override
+    public void onStop() {
+        ((AbstractActivity) unitItemsLister).onStop();
+        ((AbstractActivity) OccupanciesLister).onStop();
+        super.onStop();
     }
 }

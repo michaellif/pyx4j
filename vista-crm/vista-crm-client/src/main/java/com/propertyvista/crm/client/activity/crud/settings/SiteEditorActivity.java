@@ -30,6 +30,6 @@ public class SiteEditorActivity extends EditorActivityBase<SiteDescriptorDTO> im
     public SiteEditorActivity(Place place) {
         super((SiteEditor) SettingsViewFactory.instance(SiteEditor.class),
                 (AbstractCrudService<SiteDescriptorDTO>) GWT.create(SiteDescriptorCrudService.class), SiteDescriptorDTO.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

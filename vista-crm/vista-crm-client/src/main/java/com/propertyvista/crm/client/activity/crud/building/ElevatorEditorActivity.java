@@ -30,6 +30,6 @@ public class ElevatorEditorActivity extends EditorActivityBase<ElevatorDTO> {
     public ElevatorEditorActivity(Place place) {
         super((ElevatorEditorView) BuildingViewFactory.instance(ElevatorEditorView.class), (AbstractCrudService<ElevatorDTO>) GWT
                 .create(ElevatorCrudService.class), ElevatorDTO.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

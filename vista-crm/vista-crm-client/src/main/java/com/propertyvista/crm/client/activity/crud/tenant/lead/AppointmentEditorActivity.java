@@ -30,6 +30,6 @@ public class AppointmentEditorActivity extends EditorActivityBase<Appointment> {
     public AppointmentEditorActivity(Place place) {
         super((AppointmentEditorView) TenantViewFactory.instance(AppointmentEditorView.class), (AbstractCrudService<Appointment>) GWT
                 .create(AppointmentCrudService.class), Appointment.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

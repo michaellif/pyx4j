@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.activity.crud.building;
 
+import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
@@ -46,7 +47,8 @@ public class LockerAreaViewerActivity extends ViewerActivityBase<LockerAreaDTO> 
         lockerLister = new ListerActivityBase<Locker>(((LockerAreaViewerView) view).getLockerView(),
                 (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class), Locker.class);
 
-        withPlace(place);
+        setPlace(place);
+        lockerLister.setPlace(place);
     }
 
     @Override
@@ -64,6 +66,12 @@ public class LockerAreaViewerActivity extends ViewerActivityBase<LockerAreaDTO> 
         super.onPopulateSuccess(result);
 
         lockerLister.setParentFiltering(result.getPrimaryKey());
-        lockerLister.populate(0);
+        lockerLister.populate();
+    }
+
+    @Override
+    public void onStop() {
+        ((AbstractActivity) lockerLister).onStop();
+        super.onStop();
     }
 }

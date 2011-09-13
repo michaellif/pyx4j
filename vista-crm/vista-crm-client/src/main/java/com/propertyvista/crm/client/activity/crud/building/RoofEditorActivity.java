@@ -30,6 +30,6 @@ public class RoofEditorActivity extends EditorActivityBase<RoofDTO> {
     public RoofEditorActivity(Place place) {
         super((RoofEditorView) BuildingViewFactory.instance(RoofEditorView.class), (AbstractCrudService<RoofDTO>) GWT.create(RoofCrudService.class),
                 RoofDTO.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

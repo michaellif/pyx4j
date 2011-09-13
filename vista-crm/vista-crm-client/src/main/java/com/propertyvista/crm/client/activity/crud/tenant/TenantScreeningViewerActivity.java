@@ -30,6 +30,6 @@ public class TenantScreeningViewerActivity extends ViewerActivityBase<TenantScre
     public TenantScreeningViewerActivity(Place place) {
         super((TenantScreeningViewerView) TenantViewFactory.instance(TenantScreeningViewerView.class), (AbstractCrudService<TenantScreening>) GWT
                 .create(TenantScreeningCrudService.class));
-        withPlace(place);
+        setPlace(place);
     }
 }

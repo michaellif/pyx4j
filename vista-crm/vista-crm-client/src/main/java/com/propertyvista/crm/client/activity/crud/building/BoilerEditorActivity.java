@@ -30,6 +30,6 @@ public class BoilerEditorActivity extends EditorActivityBase<BoilerDTO> {
     public BoilerEditorActivity(Place place) {
         super((BoilerEditorView) BuildingViewFactory.instance(BoilerEditorView.class), (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class),
                 BoilerDTO.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

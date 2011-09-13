@@ -30,6 +30,6 @@ public class PortfolioListerActivity extends ListerActivityBase<Portfolio> {
     public PortfolioListerActivity(Place place) {
         super((PortfolioListerView) OrganisationViewFactory.instance(PortfolioListerView.class), (AbstractCrudService<Portfolio>) GWT
                 .create(PortfolioCrudService.class), Portfolio.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

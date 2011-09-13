@@ -34,7 +34,7 @@ public class ReportEditorActivity extends EditorActivityBase<DashboardMetadata> 
     public ReportEditorActivity(Place place) {
         super((ReportEditor) DashboardViewFactory.instance(ReportEditor.class), (AbstractCrudService<DashboardMetadata>) GWT
                 .create(ReportMetadataCrudService.class), DashboardMetadata.class);
-        withPlace(place);
+        setPlace(place);
     }
 
     @Override

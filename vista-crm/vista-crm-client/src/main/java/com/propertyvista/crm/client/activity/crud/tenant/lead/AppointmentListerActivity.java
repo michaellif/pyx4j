@@ -30,6 +30,6 @@ public class AppointmentListerActivity extends ListerActivityBase<Appointment> {
     public AppointmentListerActivity(Place place) {
         super((AppointmentListerView) TenantViewFactory.instance(AppointmentListerView.class), (AbstractCrudService<Appointment>) GWT
                 .create(AppointmentCrudService.class), Appointment.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

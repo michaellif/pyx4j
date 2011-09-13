@@ -30,6 +30,6 @@ public class FloorplanViewerActivity extends ViewerActivityBase<FloorplanDTO> im
     public FloorplanViewerActivity(Place place) {
         super((FloorplanViewerView) BuildingViewFactory.instance(FloorplanViewerView.class), (AbstractCrudService<FloorplanDTO>) GWT
                 .create(FloorplanCrudService.class));
-        withPlace(place);
+        setPlace(place);
     }
 }

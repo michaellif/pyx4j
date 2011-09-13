@@ -30,7 +30,7 @@ public class InquiryListerActivity extends ListerActivityBase<Inquiry> {
     public InquiryListerActivity(Place place) {
         super((InquiryListerView) TenantViewFactory.instance(InquiryListerView.class), (AbstractCrudService<Inquiry>) GWT.create(InquiryCrudService.class),
                 Inquiry.class);
-        withPlace(place);
+        setPlace(place);
     }
 
 }

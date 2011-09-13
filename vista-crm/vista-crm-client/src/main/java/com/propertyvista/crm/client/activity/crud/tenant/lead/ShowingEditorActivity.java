@@ -48,7 +48,7 @@ public class ShowingEditorActivity extends EditorActivityBase<Showing> implement
         unitsLister = new ListerActivityBase<AptUnit>(((ShowingEditorView) view).getUnitListerView(),
                 (AbstractCrudService<AptUnit>) GWT.create(SelectUnitCrudService.class), AptUnit.class);
 
-        withPlace(place);
+        setPlace(place);
     }
 
     @Override

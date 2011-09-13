@@ -30,6 +30,6 @@ public class PortfolioViewerActivity extends ViewerActivityBase<Portfolio> {
     public PortfolioViewerActivity(Place place) {
         super((PortfolioViewerView) OrganisationViewFactory.instance(PortfolioViewerView.class), (AbstractCrudService<Portfolio>) GWT
                 .create(PortfolioCrudService.class));
-        withPlace(place);
+        setPlace(place);
     }
 }

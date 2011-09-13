@@ -29,6 +29,6 @@ public class PmcListerActivity extends ListerActivityBase<PmcDTO> {
     @SuppressWarnings("unchecked")
     public PmcListerActivity(Place place) {
         super((PmcListerView) PmcCrudVeiwFactory.instance(PmcListerView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class), PmcDTO.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

@@ -29,6 +29,6 @@ public class LockerViewerActivity extends ViewerActivityBase<Locker> {
     @SuppressWarnings("unchecked")
     public LockerViewerActivity(Place place) {
         super((LockerViewerView) BuildingViewFactory.instance(LockerViewerView.class), (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class));
-        withPlace(place);
+        setPlace(place);
     }
 }

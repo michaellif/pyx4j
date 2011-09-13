@@ -30,7 +30,7 @@ public class TenantListerActivity extends ListerActivityBase<TenantDTO> {
     public TenantListerActivity(Place place) {
         super((TenantListerView) TenantViewFactory.instance(TenantListerView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class),
                 TenantDTO.class);
-        withPlace(place);
+        setPlace(place);
     }
 
 }

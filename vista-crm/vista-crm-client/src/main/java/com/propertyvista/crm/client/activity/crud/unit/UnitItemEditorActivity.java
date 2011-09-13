@@ -30,6 +30,6 @@ public class UnitItemEditorActivity extends EditorActivityBase<AptUnitItem> {
     public UnitItemEditorActivity(Place place) {
         super((UnitItemEditorView) UnitViewFactory.instance(UnitItemEditorView.class),
                 (AbstractCrudService<AptUnitItem>) GWT.create(UnitItemCrudService.class), AptUnitItem.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

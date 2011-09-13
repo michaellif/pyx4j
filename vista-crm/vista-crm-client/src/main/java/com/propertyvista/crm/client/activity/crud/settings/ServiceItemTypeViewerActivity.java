@@ -30,6 +30,6 @@ public class ServiceItemTypeViewerActivity extends ViewerActivityBase<ServiceIte
     public ServiceItemTypeViewerActivity(Place place) {
         super((ServiceTypeViewerView) SettingsViewFactory.instance(ServiceTypeViewerView.class), (AbstractCrudService<ServiceItemType>) GWT
                 .create(ServiceItemTypeCrudService.class));
-        withPlace(place);
+        setPlace(place);
     }
 }

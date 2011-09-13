@@ -30,7 +30,7 @@ public class ServiceItemTypeEditorActivity extends EditorActivityBase<ServiceIte
     public ServiceItemTypeEditorActivity(Place place) {
         super((ServiceTypeEditorView) SettingsViewFactory.instance(ServiceTypeEditorView.class), (AbstractCrudService<ServiceItemType>) GWT
                 .create(ServiceItemTypeCrudService.class), ServiceItemType.class);
-        withPlace(place);
+        setPlace(place);
     }
 
     @Override

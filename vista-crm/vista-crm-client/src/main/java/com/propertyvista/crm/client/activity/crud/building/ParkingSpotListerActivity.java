@@ -30,6 +30,6 @@ public class ParkingSpotListerActivity extends ListerActivityBase<ParkingSpot> {
     public ParkingSpotListerActivity(Place place) {
         super((ParkingSpotListerView) BuildingViewFactory.instance(ParkingSpotListerView.class), (AbstractCrudService<ParkingSpot>) GWT
                 .create(ParkingSpotCrudService.class), ParkingSpot.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

@@ -37,7 +37,7 @@ public class FeatureEditorActivity extends EditorActivityBase<Feature> {
     public FeatureEditorActivity(Place place) {
         super((FeatureEditorView) MarketingViewFactory.instance(FeatureEditorView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class),
                 Feature.class);
-        withPlace(place);
+        setPlace(place);
     }
 
     @Override

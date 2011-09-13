@@ -30,6 +30,6 @@ public class LeaseListerActivity extends ListerActivityBase<LeaseDTO> {
     public LeaseListerActivity(Place place) {
         super((LeaseListerView) TenantViewFactory.instance(LeaseListerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class),
                 LeaseDTO.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

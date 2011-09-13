@@ -35,7 +35,7 @@ public class MaintenanceListerActivity extends ListerActivityBase<MaintenanceReq
     public MaintenanceListerActivity(Place place) {
         super((MaintenanceListerView) PortalViewFactory.instance(MaintenanceListerView.class), (AbstractCrudService<MaintenanceRequestDTO>) GWT
                 .create(MaintenanceRequestCrudService.class), MaintenanceRequestDTO.class);
-        withPlace(place);
+        setPlace(place);
     }
 
     @Override

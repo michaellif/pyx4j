@@ -30,6 +30,6 @@ public class InquiryEditorActivity extends EditorActivityBase<InquiryDTO> {
     public InquiryEditorActivity(Place place) {
         super((InquiryEditorView) TenantViewFactory.instance(InquiryEditorView.class), (AbstractCrudService<InquiryDTO>) GWT.create(InquiryCrudService.class),
                 InquiryDTO.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

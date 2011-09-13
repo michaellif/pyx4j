@@ -37,7 +37,7 @@ public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implemen
     public TenantEditorActivity(Place place) {
         super((TenantEditorView) TenantViewFactory.instance(TenantEditorView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class),
                 TenantDTO.class);
-        withPlace(place);
+        setPlace(place);
     }
 
     @Override

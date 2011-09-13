@@ -30,6 +30,6 @@ public class LockerAreaEditorActivity extends EditorActivityBase<LockerAreaDTO> 
     public LockerAreaEditorActivity(Place place) {
         super((LockerAreaEditorView) BuildingViewFactory.instance(LockerAreaEditorView.class), (AbstractCrudService<LockerAreaDTO>) GWT
                 .create(LockerAreaCrudService.class), LockerAreaDTO.class);
-        withPlace(place);
+        setPlace(place);
     }
 }

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.activity.crud.tenant.lead;
 
+import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
@@ -40,7 +41,9 @@ public class AppointmentViewerActivity extends ViewerActivityBase<Appointment> i
 
         showingsLister = new ListerActivityBase<Showing>(((AppointmentViewerView) view).getShowingsListerView(),
                 (AbstractCrudService<Showing>) GWT.create(ShowingCrudService.class), Showing.class);
-        withPlace(place);
+
+        setPlace(place);
+        showingsLister.setPlace(place);
     }
 
     @Override
@@ -53,6 +56,12 @@ public class AppointmentViewerActivity extends ViewerActivityBase<Appointment> i
         super.onPopulateSuccess(result);
 
         showingsLister.setParentFiltering(result.getPrimaryKey());
-        showingsLister.populate(0);
+        showingsLister.populate();
+    }
+
+    @Override
+    public void onStop() {
+        ((AbstractActivity) showingsLister).onStop();
+        super.onStop();
     }
 }

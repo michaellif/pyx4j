@@ -31,7 +31,7 @@ public class PageEditorActivity extends EditorActivityBase<PageDescriptor> imple
     public PageEditorActivity(Place place) {
         super((PageEditor) SettingsViewFactory.instance(PageEditor.class), (AbstractCrudService<PageDescriptor>) GWT.create(PageDescriptorCrudService.class),
                 PageDescriptor.class);
-        withPlace(place);
+        setPlace(place);
     }
 
     @Override

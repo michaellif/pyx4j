@@ -29,6 +29,6 @@ public class PmcViewerActivity extends ViewerActivityBase<PmcDTO> {
     @SuppressWarnings("unchecked")
     public PmcViewerActivity(Place place) {
         super((PmcViewerView) PmcCrudVeiwFactory.instance(PmcViewerView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class));
-        withPlace(place);
+        setPlace(place);
     }
 }

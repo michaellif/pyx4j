@@ -29,6 +29,6 @@ public class InquiryViewerActivity extends ViewerActivityBase<InquiryDTO> {
     @SuppressWarnings("unchecked")
     public InquiryViewerActivity(Place place) {
         super((InquiryViewerView) TenantViewFactory.instance(InquiryViewerView.class), (AbstractCrudService<InquiryDTO>) GWT.create(InquiryCrudService.class));
-        withPlace(place);
+        setPlace(place);
     }
 }

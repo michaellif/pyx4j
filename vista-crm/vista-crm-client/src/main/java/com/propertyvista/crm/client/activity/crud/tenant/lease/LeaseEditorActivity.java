@@ -64,7 +64,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         tenantsLister = new ListerActivityBase<Tenant>(((LeaseEditorView) view).getTenantListerView(),
                 (AbstractCrudService<Tenant>) GWT.create(SelectTenantCrudService.class), Tenant.class);
 
-        withPlace(place);
+        setPlace(place);
     }
 
     @Override

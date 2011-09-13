@@ -30,6 +30,6 @@ public class UnitOccupancyViewerActivity extends ViewerActivityBase<AptUnitOccup
     public UnitOccupancyViewerActivity(Place place) {
         super((UnitOccupancyViewerView) UnitViewFactory.instance(UnitOccupancyViewerView.class), (AbstractCrudService<AptUnitOccupancy>) GWT
                 .create(UnitOccupancyCrudService.class));
-        withPlace(place);
+        setPlace(place);
     }
 }

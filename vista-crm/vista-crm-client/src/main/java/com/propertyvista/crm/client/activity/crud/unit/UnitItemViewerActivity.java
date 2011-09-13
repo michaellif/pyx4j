@@ -29,6 +29,6 @@ public class UnitItemViewerActivity extends ViewerActivityBase<AptUnitItem> {
     @SuppressWarnings("unchecked")
     public UnitItemViewerActivity(Place place) {
         super((UnitItemViewerView) UnitViewFactory.instance(UnitItemViewerView.class), (AbstractCrudService<AptUnitItem>) GWT.create(UnitItemCrudService.class));
-        withPlace(place);
+        setPlace(place);
     }
 }
