@@ -15,7 +15,9 @@ package com.propertyvista.pmsite.server;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 
@@ -176,6 +178,28 @@ public class PMSiteContentManager implements Serializable {
         criteria.add(PropertyCriterion.eq(criteria.proto().hasProperties(), Boolean.TRUE));
         return EntityServicesImpl.secureQuery(criteria);
 
+    }
+
+    public static Map<String, List<String>> getProvinceCityMap() {
+        Map<String, List<String>> provCityMap = new HashMap<String, List<String>>();
+        List<City> cities = PMSiteContentManager.getCities();
+        for (City city : cities) {
+            String cityName = city.name().getValue();
+            if (cityName == null) {
+                continue;
+            }
+            String provName = city.province().name().getValue();
+            if (provName == null) {
+                continue;
+            }
+            List<String> cityList = provCityMap.get(provName);
+            if (cityList == null) {
+                cityList = new ArrayList<String>();
+                provCityMap.put(provName, cityList);
+            }
+            cityList.add(cityName);
+        }
+        return provCityMap;
     }
 
     public static PropertyListDTO getPropertyList(SearchCriteriaModel searchCriteria) {

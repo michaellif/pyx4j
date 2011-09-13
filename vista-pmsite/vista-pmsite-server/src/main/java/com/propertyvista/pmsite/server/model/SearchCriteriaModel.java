@@ -14,12 +14,9 @@
 package com.propertyvista.pmsite.server.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.propertyvista.domain.ref.City;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 
 //Beds 1 - Enum (Any, 1+, 2+ ... 5+)
@@ -219,7 +216,7 @@ public class SearchCriteriaModel implements Serializable {
         if (prov == null) {
             return;
         }
-        Map<String, List<String>> provCityMap = getProvinceCityMap();
+        Map<String, List<String>> provCityMap = PMSiteContentManager.getProvinceCityMap();
         List<String> cities = provCityMap.get(prov);
         if (cities != null) {
             setSearchType(SearchType.City);
@@ -290,25 +287,4 @@ public class SearchCriteriaModel implements Serializable {
         }
     }
 
-    public Map<String, List<String>> getProvinceCityMap() {
-        Map<String, List<String>> provCityMap = new HashMap<String, List<String>>();
-        List<City> cities = PMSiteContentManager.getCities();
-        for (City city : cities) {
-            String cityName = city.name().getValue();
-            if (cityName == null) {
-                continue;
-            }
-            String provName = city.province().name().getValue();
-            if (provName == null) {
-                continue;
-            }
-            List<String> cityList = provCityMap.get(provName);
-            if (cityList == null) {
-                cityList = new ArrayList<String>();
-                provCityMap.put(provName, cityList);
-            }
-            cityList.add(cityName);
-        }
-        return provCityMap;
-    }
 }

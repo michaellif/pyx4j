@@ -31,6 +31,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.MinimumValidator;
 
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.model.AttributeClassModifier;
 import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 
@@ -109,7 +110,7 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
                 SearchCriteriaModel.SearchType.Proximity)));
         add(searchTypeRadio.setRequired(true));
         // add Province drop-down
-        final Map<String, List<String>> provCityMap = model.getObject().getProvinceCityMap();
+        final Map<String, List<String>> provCityMap = PMSiteContentManager.getProvinceCityMap();
         List<String> provinces = new ArrayList<String>(provCityMap.keySet());
         DropDownChoice<String> provChoice = new DropDownChoice<String>("province", provinces) {
             private static final long serialVersionUID = 1L;

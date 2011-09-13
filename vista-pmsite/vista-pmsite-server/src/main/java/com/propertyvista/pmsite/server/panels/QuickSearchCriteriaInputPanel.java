@@ -23,6 +23,7 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 
 public class QuickSearchCriteriaInputPanel extends Panel {
@@ -33,7 +34,7 @@ public class QuickSearchCriteriaInputPanel extends Panel {
         super(id, model);
 
         // add Province drop-down
-        final Map<String, List<String>> provCityMap = model.getObject().getProvinceCityMap();
+        final Map<String, List<String>> provCityMap = PMSiteContentManager.getProvinceCityMap();
         List<String> provinces = new ArrayList<String>(provCityMap.keySet());
         DropDownChoice<String> provChoice = new DropDownChoice<String>("province", provinces) {
             private static final long serialVersionUID = 1L;
