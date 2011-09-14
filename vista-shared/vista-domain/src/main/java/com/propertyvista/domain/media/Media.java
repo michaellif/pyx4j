@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.media;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
@@ -54,5 +55,6 @@ public interface Media extends IEntity {
 
     IPrimitive<String> url();
 
-    IPrimitive<Boolean> showOnWeb();
+    @Caption(name = "Public")
+    IPrimitive<Boolean> visibleToPublic();
 }
