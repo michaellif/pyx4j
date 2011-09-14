@@ -159,6 +159,7 @@ public class Importer {
         Map<Media, byte[]> data = PictureUtil.loadbuildingMedia(building.propertyCode().getValue());
         for (Map.Entry<Media, byte[]> me : data.entrySet()) {
             Media m = me.getKey();
+            m.visibleToPublic().setValue(Boolean.TRUE);
             m.type().setValue(Media.Type.file);
             m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentMimeType().getValue()));
 

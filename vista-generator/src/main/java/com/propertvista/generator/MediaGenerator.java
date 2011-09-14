@@ -67,6 +67,7 @@ public class MediaGenerator {
         media.caption().setValue("file102");
         file.contentMimeType().setValue(MimeMap.getContentType(DownloadFormat.JPEG));
         media.file().set(file);
+        media.visibleToPublic().setValue(Boolean.TRUE);
 
         return media;
     }
@@ -96,6 +97,7 @@ public class MediaGenerator {
         Map<Media, byte[]> data = PictureUtil.loadResourceMedia(filename, BuildingsGenerator.class);
         for (Map.Entry<Media, byte[]> me : data.entrySet()) {
             Media m = me.getKey();
+            m.visibleToPublic().setValue(Boolean.TRUE);
             m.type().setValue(Media.Type.file);
             m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentMimeType().getValue()));
 

@@ -163,6 +163,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
                     media.type().setValue(Media.Type.youTube);
                     media.caption().setValue("A " + building.info().name().getValue() + " video");
                     media.youTubeVideoID().setValue(MediaGenerator.randomYoutubeId());
+                    media.visibleToPublic().setValue(Boolean.TRUE);
                     building.media().add(media);
                 }
                 Persistence.service().persist(building.media());

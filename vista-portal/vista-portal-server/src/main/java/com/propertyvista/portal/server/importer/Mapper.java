@@ -116,6 +116,7 @@ public class Mapper {
 
         if (CommonsStringUtils.isStringSet(property.getYoutube())) {
             Media media = EntityFactory.create(Media.class);
+            media.visibleToPublic().setValue(Boolean.TRUE);
             media.type().setValue(Media.Type.youTube);
             media.caption().setValue("A " + building.info().name().getValue() + " video");
             media.youTubeVideoID().setValue(property.getYoutube());

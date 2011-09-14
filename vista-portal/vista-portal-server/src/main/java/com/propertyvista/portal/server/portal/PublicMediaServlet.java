@@ -27,7 +27,9 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.server.common.blob.BlobService;
@@ -56,19 +58,26 @@ public class PublicMediaServlet extends HttpServlet {
         }
 
         //TODO deserialize key
-        Media medium = PersistenceServicesFactory.getPersistenceService().retrieve(Media.class, new Key(id));
-        if ((medium == null) || (medium.file().blobKey().isNull())) {
+        Media media = PersistenceServicesFactory.getPersistenceService().retrieve(Media.class, new Key(id));
+        if (!media.visibleToPublic().isBooleanTrue()) {
+            if (!SecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+        }
+
+        if ((media == null) || (media.file().blobKey().isNull())) {
             log.trace("no image");
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         } else {
             if (thumbnailSize == null) {
-                if (!medium.file().contentMimeType().isNull()) {
-                    response.setContentType(medium.file().contentMimeType().getValue());
+                if (!media.file().contentMimeType().isNull()) {
+                    response.setContentType(media.file().contentMimeType().getValue());
                 }
-                BlobService.serve(medium.file().blobKey().getValue(), response);
+                BlobService.serve(media.file().blobKey().getValue(), response);
             } else {
-                ThumbnailService.serve(medium.file().blobKey().getValue(), thumbnailSize, response);
+                ThumbnailService.serve(media.file().blobKey().getValue(), thumbnailSize, response);
             }
         }
     }

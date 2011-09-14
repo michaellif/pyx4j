@@ -35,4 +35,6 @@ public interface MediaIO extends IEntity {
     IPrimitive<String> caption();
 
     IPrimitive<String> uri();
+
+    IPrimitive<Boolean> visibleToPublic();
 }
