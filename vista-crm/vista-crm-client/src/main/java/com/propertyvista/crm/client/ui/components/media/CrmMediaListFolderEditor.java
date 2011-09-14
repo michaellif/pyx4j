@@ -18,11 +18,11 @@ import java.util.List;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -87,7 +87,7 @@ public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable());
-                VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable());
+                VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 35);
                 main.add(split);
 
                 split.getLeftPanel().add(inject(proto().type()), 15);
@@ -120,10 +120,10 @@ public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
                 split.getRightPanel().add(inject(proto().caption()), 15);
                 split.getRightPanel().add(inject(proto().showOnWeb()), 5);
 
-                main.add(thumbnail = new Image());
-                thumbnail.getElement().getStyle().setFloat(Float.RIGHT);
-
-                return main;
+                HorizontalPanel wrap = new HorizontalPanel();
+                wrap.add(main);
+                wrap.add(thumbnail = new Image());
+                return wrap;
             }
 
             @Override
