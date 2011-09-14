@@ -22,12 +22,15 @@ package com.pyx4j.entity.server.pojo;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.pyx4j.entity.shared.IEntity;
 
 public interface IPojo<E extends IEntity> extends Serializable {
 
     public void setEntityValue(E entity);
 
+    @XmlTransient
     public E getEntityValue();
 
 }

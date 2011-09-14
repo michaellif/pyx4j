@@ -20,9 +20,13 @@
  */
 package com.pyx4j.entity.server.pojo;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.pyx4j.entity.shared.IEntity;
 
 public class IPojoImpl<E extends IEntity> implements IPojo<E> {
+
+    private static final long serialVersionUID = 4465417396453810949L;
 
     protected E entity;
 
@@ -32,6 +36,7 @@ public class IPojoImpl<E extends IEntity> implements IPojo<E> {
     }
 
     @Override
+    @XmlTransient
     public E getEntityValue() {
         return entity;
     }
