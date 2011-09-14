@@ -13,8 +13,29 @@
  */
 package com.propertyvista.crm.client.ui.components;
 
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.site.client.ui.crud.CEntityCrudHyperlink;
+import com.pyx4j.site.rpc.CrudAppPlace;
+
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
+import com.propertyvista.crm.client.mvp.MainActivityMapper;
 
 public class CrmViewersComponentFactory extends VistaViewersComponentFactory {
 
+    @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        MemberMeta mm = member.getMeta();
+        if (mm.isEntity() && !mm.isOwnedRelationships()) {
+            @SuppressWarnings("unchecked")
+            CrudAppPlace place = MainActivityMapper.getCrudAppPlace((Class<IEntity>) mm.getObjectClass());
+            if (place != null) {
+                return new CEntityCrudHyperlink(place);
+            }
+        }
+        return super.create(member);
+
+    }
 }

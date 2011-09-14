@@ -19,6 +19,8 @@ import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -103,10 +105,20 @@ import com.propertyvista.crm.client.activity.report.ReportEditorActivity;
 import com.propertyvista.crm.client.activity.report.ReportManagementActivity;
 import com.propertyvista.crm.client.activity.report.ReportViewActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.property.asset.Floorplan;
 
 public class MainActivityMapper implements AppActivityMapper {
 
     public MainActivityMapper() {
+    }
+
+    //TODO create a better two directional mapping
+    public static CrudAppPlace getCrudAppPlace(Class<? extends IEntity> entityClass) {
+        if (entityClass.equals(Floorplan.class)) {
+            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Floorplan.class);
+        } else {
+            return null;
+        }
     }
 
     @Override
