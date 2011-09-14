@@ -9,7 +9,7 @@
 .advanced_search_v_wrap {
 	float: left;
 	clear: left;
-	width: 200px;
+	width: 190px;
 	margin: 10px;
 }
 
@@ -32,50 +32,91 @@
 
 .advanced_search_v_wrap label {
 	display: block;
+	padding:4px 0;
+	white-space:nowrap;
 }
 
 .advanced_search_v_wrap .input_block_frame {
-	padding: 5px;
-	margin: 5px;
+	float:left;
+	width:100%;
+	margin-top: 20px;
 }
-
-.advanced_search_v_wrap .search_bytype_box select,.advanced_search_v_wrap .search_byprox_box input[type=text]
-	{
-	width: 150px;
-	margin: 1px;
+.advanced_search_v_wrap .search_typesel_box .by {
+	display:none;
+}
+.advanced_search_v_wrap .search_typesel_box {
+	float:left;
+	font-size:14px;
+	letter-spacing:0px;
+	border:1px outset #111;
+	margin-left:8px;
+	padding:3px 18px 3px 5px;
+	background-color:#242424;
+}
+.advanced_search_v_wrap .search_typesel_box:first-child {
+	margin-left:0px;
+}
+.advanced_search_v_wrap .search_typesel_box label {
+	display: inline-block;
 }
 
 .advanced_search_v_wrap .search_type_box {
 	float: left;
 }
 
-.advanced_search_v_wrap .search_bytype_box {
-	float: left;
-	clear: both;
-}
-
-.advanced_search_v_wrap .search_byprox_box {
-	float: left;
-	clear: both;
+.advanced_search_v_wrap .search_type_box select,
+.advanced_search_v_wrap .search_type_box input[type=text] {
+	width: 95%;
+	margin: 1px;
 }
 
 .advanced_search_v_wrap .search_common_box {
 	float: left;
 	clear: both;
+	width:100%;
 }
 
-.advanced_search_v_wrap .search_common_box select,.advanced_search_v_wrap .search_common_box input[type=text]
-	{
-	width: 70px;
+.advanced_search_v_wrap .search_common_box select {
+	width: 42%;
+	margin: 1px;
+}
+.advanced_search_v_wrap .search_common_box input[type=text] {
+	width: 40%;
 	margin: 1px;
 }
 
-.advanced_search_v_wrap .search_typesel_box label {
-	display: inline;
+.advanced_search_v_wrap .search_amenity_box {
+	float:left;
+	clear:both;
+	width:100%;
+	border-top:3px ridge #111;
+	padding-top:10px;
+	margin-bottom:30px;
 }
-
-.advanced_search_v_wrap .search_common_box .amenities label {
-	display: inline;
+.advanced_search_v_wrap .search_amenity_box .search_field > label {
+	float:left;
+	width:100%;
+}
+.advanced_search_v_wrap .search_amenity_box br {
+	display:none;
+}
+.advanced_search_v_wrap .search_amenity_box .amenity_list {
+	float:left;
+	clear:left;
+	width:100%;
+}
+.advanced_search_v_wrap .search_amenity_box .amenity_list label {
+	display:inline-block;
+	width:34%;
+}
+.advanced_search_v_wrap .typesel_active_hover {
+	background-color:#111 !important;
+}
+.advanced_search_v_wrap .typesel_active {
+	background-color:#111 !important;
+	border-style:inset !important;
+	padding-top:2px !important;
+	padding-bottom:4px !important;
 }
 
 .apartment_listing_wrap {

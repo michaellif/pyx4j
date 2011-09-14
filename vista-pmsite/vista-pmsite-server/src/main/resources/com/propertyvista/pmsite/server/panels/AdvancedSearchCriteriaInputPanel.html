@@ -1,42 +1,207 @@
+<wicket:head>
+	<script wicket_id="jquery" src="resources/js/jquery-1.6.3.min.js"></script>
+</wicket:head>
 <wicket:panel
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <style>
-
+/*
+ * Advanced Search
+ */
+.advanced_search_wrap {
+	font-size:16px;
+//	float:left;
+	clear:left;
+	margin:50px 100px;
+	min-height:500px;
+}
+.advanced_search_wrap input[type=submit] {
+    background: url("resources/templates.TemplateResources/images/template0/btn.png") no-repeat;
+    border: none;
+    width: 128px;
+    height: 32px;
+    padding: 5px 0;
+    float:left;
+    clear:left;
+    color: #000000;
+    font-size: 16px;
+    text-shadow: 0 1px 0 #CCCCCC;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+.advanced_search_wrap label {
+	display:block;
+	padding:6px 0;
+	white-space:nowrap;
+}
+.advanced_search_wrap .input_block_frame {
+}
+.advanced_search_wrap .search_typesel_box {
+	float:left;
+	width:40%;
+	font-size:20px;
+	letter-spacing:3px;
+	border:1px outset #111;
+	margin-left:30px;
+	padding:6px 20px;
+	background-color:#242424;
+}
+.advanced_search_wrap .search_typesel_box:first-child {
+	margin-left:0px;
+}
+.advanced_search_wrap .search_typesel_box label {
+	display:inline-block;
+}
+.advanced_search_wrap .search_type_box select,
+.advanced_search_wrap .search_type_box input[type=text] {
+	width:100%;
+	margin:1px;
+}
+.advanced_search_wrap .search_type_box {
+	float:left;
+	clear:both;
+	width:100%;
+	margin-top:30px;
+}
+.advanced_search_wrap .search_type_box .search_field {
+	float:left;
+	width:45%;
+	margin-left:5%;
+}
+.advanced_search_wrap .search_type_box .search_field:first-child {
+	margin-left:0;
+}
+.advanced_search_wrap .search_common_box {
+	float:left;
+	clear:both;
+	width:100%;
+	margin-top:30px;
+}
+.advanced_search_wrap .search_common_box .search_field {
+	float:left;
+	width:30%;
+	margin-left:5%;
+}
+.advanced_search_wrap .search_common_box .search_field:first-child {
+	margin-left:0px;
+}
+.advanced_search_wrap .search_common_box select,
+.advanced_search_wrap .search_common_box input[type=text] {
+	width:35%;
+	margin:1px;
+}
+.advanced_search_wrap .search_amenity_box {
+	float:left;
+	clear:both;
+	width:100%;
+	border-top:3px ridge #111;
+	padding-top:20px;
+	margin-top:30px;
+	margin-bottom:40px;
+}
+.advanced_search_wrap .search_amenity_box .search_field > label {
+	float:left;
+	width:20%;
+}
+.advanced_search_wrap .search_amenity_box br {
+	display:none;
+}
+.advanced_search_wrap .search_amenity_box .amenity_list {
+	float:left;
+	width:80%;
+}
+.advanced_search_wrap .search_amenity_box .amenity_list label {
+	display:inline-block;
+	width:20%;
+}
+.advanced_search_wrap .typesel_active_hover {
+	background-color:#111 !important;
+}
+.advanced_search_wrap .typesel_active {
+	background-color:#111 !important;
+	border-style:inset !important;
+	padding-top:4px !important;
+	padding-bottom:8px !important;
+}
 </style>
+<script>
+$(function(){
+	var mySet = $(".search_typesel_box");
+	mySet
+		.hover(
+			function() {
+				$(this).addClass('typesel_active_hover');
+			},
+			function() {
+				$(this).removeClass('typesel_active_hover');
+			}
+		)
+		.click(function() {
+			$(this).children('input[type="radio"]').prop('checked', 1);
+			mySet.each(function() {
+				var self = $(this);
+				var isActive = (self.children('input[type="radio"]').prop('checked') == 1);
+				self.toggleClass('typesel_active', isActive);
+				$('[name="'+self.attr('name')+'_input"]').css('display', isActive ? 'block' : 'none');
+			});
+		});
+		mySet.children('input[type="radio"]').each(function() {
+			if (this.checked) {
+				$(this).click();
+				return  false;
+			}
+		});
+});
+// set City for selected province
+$(function(){
+	var sel = document.getElementById('provSelect');
+	if (! sel) return;
+	setSelectionOptions('citySelect', provCity[sel.options[sel.selectedIndex].text], 'Choose One');
+});
+function setSelectionOptions(selId, optArr, defOpt) {
+	var sel = document.getElementById(selId);
+	if (! sel) return;
+	sel.options.length = 0;
+	if (defOpt) {
+		sel.options[0] = new Option(defOpt,'');
+	}
+	for (var i = 0; i < optArr.length; i++) {
+		sel.options[sel.options.length] = new Option(optArr[i],i);
+	}
+}
+</script>
+<script wicket:id="jsCityList"/>
 	<div wicket:id="form_messages"/>
-	<div wicket:id="searchType">
-	    <div class="search_typesel_box search_bytype_box">
-	    	<input wicket:id="searchByType" type="radio"/>
-	    	<label>Search By City</label>
+	<div>
+		<div wicket:id="searchType">
+	    <div class="search_typesel_box" name="search_bycity_box">
+	    	<input wicket:id="searchByCity" type="radio"/>
+			<label><span class="by">By </span>City</label>
 	    </div>
-    	<div class="search_typesel_box search_byprox_box">
+    	<div class="search_typesel_box" name="search_byprox_box">
 	    	<input wicket:id="searchByProx" type="radio"/>
-	    	<label>Search By Proximity</label>
+    		<label><span class="by">By </span>Proximity</label>
 		</div>	  
+		</div>
 	</div>
-    <div class="search_type_box search_bytype_box">
-	    <div class="input_block_frame">
-	    	<div class="search_field">
-				<label>Province</label>
-				<select wicket:id="province"></select>
-			</div>
-	    	<div class="search_field">
-				<label>City</label>
-				<select wicket:id="city"></select>
-			</div>
+    <div class="search_type_box input_block_frame" name="search_bycity_box_input">
+	    <div class="search_field">
+			<label>Province</label>
+			<select wicket:id="province" id="provSelect"></select>
+		</div>
+	   	<div class="search_field">
+			<label>City</label>
+			<select wicket:id="city" id="citySelect"></select>
 		</div>
     </div>
 
-    <div class="search_type_box search_byprox_box">
-	    <div class="input_block_frame">
-	    	<div class="search_field">
-				<label>Location</label>
-				<input wicket:id="location" type="text"/>
-			</div>
-	    	<div class="search_field">
-				<label>Distance</label>
-				<input wicket:id="distance" type="text"/>
-			</div>
+    <div class="search_type_box input_block_frame" name="search_byprox_box_input">
+		<div class="search_field">
+			<label>Address / Postal Code</label>
+			<input wicket:id="location" type="text"/>
+		</div>
+		<div class="search_field">
+			<label>Distance</label>
+			<input wicket:id="distance" type="text"/>
 		</div>
     </div>
 
@@ -53,9 +218,11 @@
 			<label>Price</label>
 			<input wicket:id="priceMin" type="text"/> to <input wicket:id="priceMax" type="text"/>
 		</div>
+	</div>
+	<div class="search_amenity_box input_block_frame">
 	    <div class="search_field">
 			<label>Amenities</label>
-			<div wicket:id="amenities" class="amenities"><input type="checkbox"/></div>
+			<div wicket:id="amenities" class="amenity_list"><input type="checkbox"/></div>
 		</div>
 	</div>
 </wicket:panel>
