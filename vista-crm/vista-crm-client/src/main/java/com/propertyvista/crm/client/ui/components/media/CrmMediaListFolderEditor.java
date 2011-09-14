@@ -18,10 +18,12 @@ import java.util.List;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.CEntityHyperlink;
@@ -34,6 +36,7 @@ import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdFormat;
@@ -43,7 +46,9 @@ import com.propertyvista.crm.client.ui.components.CrmBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.cms.FileUploadHyperlink;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
 
@@ -71,6 +76,8 @@ public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
     @Override
     protected CEntityFolderItemEditor<Media> createItem() {
         return new CEntityFolderItemEditor<Media>(Media.class) {
+
+            Image thumbnail;
 
             @Override
             public IFolderItemEditorDecorator<Media> createFolderItemDecorator() {
@@ -113,6 +120,9 @@ public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
                 split.getRightPanel().add(inject(proto().caption()), 15);
                 split.getRightPanel().add(inject(proto().showOnWeb()), 5);
 
+                main.add(thumbnail = new Image());
+                thumbnail.getElement().getStyle().setFloat(Float.RIGHT);
+
                 return main;
             }
 
@@ -144,11 +154,16 @@ public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
                 get(proto().youTubeVideoID()).setVisible(false);
                 get(proto().url()).setVisible(false);
                 get(proto().file()).setVisible(false);
-
+                thumbnail.setVisible(false);
                 if (type != null) {
                     switch (type) {
                     case file:
                         get(proto().file()).setVisible(true);
+                        if (!getValue().file().blobKey().isNull()) {
+                            thumbnail.setVisible(true);
+                            thumbnail.setUrl(ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping
+                                    + getValue().getPrimaryKey().toString() + "/" + ThumbnailSize.small.name() + ".jpg");
+                        }
                         break;
                     case externalUrl:
                         get(proto().url()).setVisible(true);

@@ -25,8 +25,6 @@ import com.propertyvista.domain.File;
 
 public interface Media extends IEntity {
 
-    static final String YOU_TUBE_URL = "http://www.youtube.com/watch?v=";
-
     @Translatable
     public enum Type {
 
