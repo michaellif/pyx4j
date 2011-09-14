@@ -31,6 +31,8 @@ public interface AptUnitIO extends IEntity {
 
     IPrimitive<Double> unitRent();
 
+    IPrimitive<Double> marketRent();
+
     IPrimitive<LogicalDate> availableForRent();
 
 }
