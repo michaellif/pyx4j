@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.rpc.portal;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -117,10 +116,6 @@ public interface PropertySearchCriteria extends IEntity {
 
     IPrimitive<Integer> distance();
 
-    IPrimitive<LogicalDate> startingFrom();
-
-    IPrimitive<BedroomChoice> bedsChoice();
-
     IPrimitive<Integer> minBeds();
 
     IPrimitive<Integer> maxBeds();
@@ -128,8 +123,6 @@ public interface PropertySearchCriteria extends IEntity {
     IPrimitive<Integer> minBath();
 
     IPrimitive<Integer> maxBath();
-
-    IPrimitive<PriceChoice> priceRange();
 
     IPrimitive<Integer> minPrice();
 
@@ -142,5 +135,19 @@ public interface PropertySearchCriteria extends IEntity {
     IPrimitive<Boolean> parking();
 
     IPrimitive<Boolean> pool();
+
+    /**
+     * don't use in criteria
+     * 
+     * @return
+     */
+    IPrimitive<BedroomChoice> bedsChoice();
+
+    /**
+     * don't use in criteria
+     * 
+     * @return
+     */
+    IPrimitive<PriceChoice> priceRange();
 
 }

@@ -47,6 +47,7 @@ import com.propertyvista.pmsite.server.model.PromoDataModel;
 import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 import com.propertyvista.pmsite.server.model.TestimDataModel;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class PMSiteContentManager implements Serializable {
 
@@ -202,6 +203,7 @@ public class PMSiteContentManager implements Serializable {
         return provCityMap;
     }
 
+    @Deprecated
     public static PropertyListDTO getPropertyList(SearchCriteriaModel searchCriteria) {
 
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
@@ -230,6 +232,11 @@ public class PMSiteContentManager implements Serializable {
             ret.properties().add(Converter.convert(building, floorplans));
         }
         return ret;
+    }
+
+    public static PropertyListDTO getPropertyList(PropertySearchCriteria searchCriteria) {
+
+        return null;
     }
 
     public static ApartmentModel getPropertyModel(SearchCriteriaModel searchCriteria) {
