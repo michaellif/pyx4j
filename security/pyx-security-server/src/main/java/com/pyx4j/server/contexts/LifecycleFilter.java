@@ -65,7 +65,11 @@ public class LifecycleFilter implements Filter {
         AccessCounter counter = antiDoS.beginRequest(request, requestStart);
         if (counter == null) {
             if (response instanceof HttpServletResponse) {
-                ((HttpServletResponse) response).sendError(HttpServletResponse.SC_PRECONDITION_FAILED);
+                if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+                    ((HttpServletResponse) response).sendError(HttpServletResponse.SC_PRECONDITION_FAILED, ApplicationMode.DEV + antiDoS.debugRequest(request));
+                } else {
+                    ((HttpServletResponse) response).sendError(HttpServletResponse.SC_PRECONDITION_FAILED);
+                }
             }
             return;
         }

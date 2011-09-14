@@ -20,6 +20,7 @@
  */
 package com.pyx4j.server.contexts;
 
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -90,11 +91,23 @@ public class AntiDoS {
                 if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
                     RequestDebug.debug(request);
                 }
-                log.error("possible denial-of-service attack from {}", remoteAddr);
+                log.error("possible denial-of-service attack from {} requests {}", remoteAddr, counter.requests);
                 return null;
             }
         }
         return counter;
+    }
+
+    public String debugRequest(ServletRequest request) {
+        String remoteAddr = ServletUtils.getActualRequestRemoteAddr(request);
+        AccessCounter counter = accessByIP.get(remoteAddr);
+        StringBuilder b = new StringBuilder();
+        b.append(remoteAddr);
+        if (counter != null) {
+            b.append(" ").append(counter.requests).append(" of ").append(throttleConfig.getMaxRequests()).append(" reset at ")
+                    .append(new Date(nextIntervalResetTime));
+        }
+        return b.toString();
     }
 
     public void endRequest(AccessCounter counter, long requestStart) {
