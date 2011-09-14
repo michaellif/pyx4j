@@ -16,11 +16,16 @@ package com.propertyvista.crm.server.services;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
+import com.propertyvista.domain.GeoLocation;
+import com.propertyvista.domain.GeoLocation.LatitudeType;
+import com.propertyvista.domain.GeoLocation.LongitudeType;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.media.Media;
@@ -57,6 +62,27 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
             for (ServiceItemType item : Persistence.service().query(serviceItemCriteria)) {
                 dto.availableUtilities().add(item);
             }
+
+            // Geotagging:
+            dto.geoLocation().set(EntityFactory.create(GeoLocation.class));
+            if (!in.info().address().location().isNull()) {
+                double lat = in.info().address().location().getValue().getLat();
+                if (lat < 0) {
+                    dto.geoLocation().latitudeType().setValue(LatitudeType.South);
+                    dto.geoLocation().latitude().setValue(-lat);
+                } else {
+                    dto.geoLocation().latitudeType().setValue(LatitudeType.North);
+                    dto.geoLocation().latitude().setValue(lat);
+                }
+                double lng = in.info().address().location().getValue().getLng();
+                if (lng < 0) {
+                    dto.geoLocation().longitudeType().setValue(LongitudeType.West);
+                    dto.geoLocation().longitude().setValue(-lng);
+                } else {
+                    dto.geoLocation().longitudeType().setValue(LongitudeType.East);
+                    dto.geoLocation().longitude().setValue(lng);
+                }
+            }
         } else {
             // just clear unnecessary data before serialisation: 
             in.marketing().description().setValue(null);
@@ -71,6 +97,22 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
         // save detached entities:
         Persistence.service().merge(dbo.serviceCatalog());
         PublicDataUpdater.updateIndexData(dbo);
+
+        // Geotagging:
+        if (!dto.geoLocation().isNull()) {
+            double lat = dto.geoLocation().latitude().getValue();
+            if (LatitudeType.South.equals(dto.geoLocation().latitudeType().getValue())) {
+                lat = -lat;
+            }
+            double lng = dto.geoLocation().longitude().getValue();
+            if (LongitudeType.West.equals(dto.geoLocation().longitudeType().getValue())) {
+                lng = -lng;
+            }
+
+            dbo.info().address().location().setValue(new GeoPoint(lat, lng));
+        } else {
+            dbo.info().address().location().set(null);
+        }
 
         boolean isCreate = dbo.id().isNull();
         Persistence.service().merge(dbo);

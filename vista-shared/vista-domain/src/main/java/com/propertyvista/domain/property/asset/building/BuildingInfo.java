@@ -18,7 +18,6 @@ import javax.xml.bind.annotation.XmlType;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
@@ -29,7 +28,6 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 import com.pyx4j.i18n.shared.Translation;
 
-import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.contact.Address;
 
 @ToStringFormat("{0} {1}")
@@ -225,8 +223,4 @@ public interface BuildingInfo extends IEntity {
     IPrimitive<Boolean> centralAir();
 
     IPrimitive<Boolean> centralHeat();
-
-    // ---- Geo Taggin: ----------------
-    @EmbeddedEntity
-    GeoLocation geoLocation();
 }

@@ -185,7 +185,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         main.add(new HTML("&nbsp"));
 
-        main.add(inject(proto().info().geoLocation()), 28);
+        main.add(inject(proto().geoLocation()), 28);
 
         main.add(new HTML("&nbsp"));
 

@@ -74,14 +74,14 @@ public class VistaViewersComponentFactory extends EntityFormComponentFactory {
             return new CEntityLabel();
         } else if (member.getValueClass().equals(Money.class)) {
             return new CMoneyLabel();
-        } else if (mm.isEntity() && !mm.isDetached() && !mm.isOwnedRelationships()) {
-            return new CEntityLabel();
         } else if (member.getValueClass().equals(Phone.class)) {
             return new CPhoneLabel();
         } else if (member.getValueClass().equals(Email.class)) {
             return new CEmailLabel();
         } else if (member.getValueClass().equals(GeoLocation.class)) {
             return new CGeoLocationLabel();
+        } else if (mm.isEntity() && !mm.isDetached() && !mm.isOwnedRelationships()) {
+            return new CEntityLabel();
         }
         return super.create(member);
     }

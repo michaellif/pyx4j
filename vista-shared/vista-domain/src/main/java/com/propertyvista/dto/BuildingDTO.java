@@ -16,6 +16,7 @@ package com.propertyvista.dto;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -26,4 +27,6 @@ public interface BuildingDTO extends Building {
     IList<BuildingAmenity> amenities();
 
     IList<ServiceItemType> availableUtilities();
+
+    GeoLocation geoLocation();
 }

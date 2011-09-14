@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-@ToStringFormat("{0}{1}, {2}{3}")
+@ToStringFormat("{0} {1} & {2} {3}")
 public interface GeoLocation extends IEntity {
 
     @Translatable
