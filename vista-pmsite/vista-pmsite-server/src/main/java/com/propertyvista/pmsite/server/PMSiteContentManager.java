@@ -204,37 +204,6 @@ public class PMSiteContentManager implements Serializable {
         return provCityMap;
     }
 
-    @Deprecated
-    public static PropertyListDTO getPropertyList(SearchCriteriaModel searchCriteria) {
-
-        EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
-
-        // add search criteria
-        if (searchCriteria.getSearchType() == SearchCriteriaModel.SearchType.City) {
-            String city = searchCriteria.getCity();
-            if (city != null) {
-                dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), city));
-            }
-        }
-        List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(dbCriteria);
-
-        PropertyListDTO ret = EntityFactory.create(PropertyListDTO.class);
-        for (Building building : buildings) {
-
-            if (building.info().address().location().isNull() || building.info().address().location().getValue().getLat() == 0) {
-                continue;
-            }
-
-            //In memory filters
-            EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
-            floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
-            List<Floorplan> floorplans = PersistenceServicesFactory.getPersistenceService().query(floorplanCriteria);
-
-            ret.properties().add(Converter.convert(building, floorplans));
-        }
-        return ret;
-    }
-
     public static PropertyListDTO getPropertyList(PropertySearchCriteria searchCriteria) {
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
 
