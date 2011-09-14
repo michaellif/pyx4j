@@ -176,7 +176,9 @@ public class BuildingsResource {
                 if (!building.media().isEmpty()) {
                     Persistence.service().retrieve(building.media());
                     for (Media media : building.media()) {
-                        buildingRS.medias.add(Converter.convertMedia(media));
+                        if (media.visibleToPublic().isBooleanTrue()) {
+                            buildingRS.medias.add(Converter.convertMedia(media));
+                        }
                     }
                 }
 
@@ -249,7 +251,9 @@ public class BuildingsResource {
                 if (!floorplan.media().isEmpty()) {
                     Persistence.service().retrieve(floorplan.media());
                     for (Media media : floorplan.media()) {
-                        floorplanRS.medias.add(Converter.convertMedia(media));
+                        if (media.visibleToPublic().isBooleanTrue()) {
+                            floorplanRS.medias.add(Converter.convertMedia(media));
+                        }
                     }
                 }
 
