@@ -18,6 +18,7 @@ import java.util.List;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
@@ -25,6 +26,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.ui.CEntityHyperlink;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
@@ -47,6 +49,7 @@ import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.cms.FileUploadHyperlink;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
@@ -121,8 +124,19 @@ public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
                 split.getRightPanel().add(inject(proto().showOnWeb()), 5);
 
                 HorizontalPanel wrap = new HorizontalPanel();
+                SimplePanel thumbnailWrap = new SimplePanel();
+                thumbnailWrap.setWidget(thumbnail = new Image());
+                int width = 0;
+                switch (imageTarget) {
+                case Building:
+                    width = ImageConsts.BUILDING_SMALL.width;
+                case Floorplan:
+                    width = ImageConsts.FLOORPLAN_SMALL.width;
+                }
+                thumbnailWrap.getElement().getStyle().setWidth(width, Style.Unit.PX);
+
                 wrap.add(main);
-                wrap.add(thumbnail = new Image());
+                wrap.add(thumbnailWrap);
                 return wrap;
             }
 
