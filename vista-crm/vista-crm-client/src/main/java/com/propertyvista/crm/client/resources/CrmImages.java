@@ -193,4 +193,13 @@ public interface CrmImages extends ClientBundle {
 
     @Source("Tenants_normal.png")
     ImageResource tenantsNormal();
+
+    @Source("Company_active.png")
+    ImageResource companyActive();
+
+    @Source("Company_hover.png")
+    ImageResource companyHover();
+
+    @Source("Company_normal.png")
+    ImageResource companyNormal();
 }

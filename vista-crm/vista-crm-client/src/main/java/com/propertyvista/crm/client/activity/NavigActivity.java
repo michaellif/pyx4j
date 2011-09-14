@@ -114,7 +114,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         list.add(folder);
 
         //Organisation
-        folder = new NavigFolder("Organisation", CrmImages.INSTANCE.tenantsNormal(), CrmImages.INSTANCE.tenantsHover(), CrmImages.INSTANCE.tenantsActive());
+        folder = new NavigFolder("Organisation", CrmImages.INSTANCE.companyNormal(), CrmImages.INSTANCE.companyHover(), CrmImages.INSTANCE.companyActive());
         folder.addNavigItem(new CrmSiteMap.Organisation.Employee());
         folder.addNavigItem(new CrmSiteMap.Organisation.Portfolio());
         list.add(folder);
