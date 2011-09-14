@@ -14,22 +14,24 @@
 package com.propertyvista.common.client.ui.components;
 
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.domain.GeoLocation;
 
 public class CGeoLocation extends CEditableComponent<GeoLocation, NativeGeoLocation> {
 
     public CGeoLocation() {
+        addValueValidator(new GeoLocationValidator());
     }
 
     public CGeoLocation(String title) {
         super(title);
+        addValueValidator(new GeoLocationValidator());
     }
 
     @Override
     protected NativeGeoLocation createWidget() {
-        NativeGeoLocation w = new NativeGeoLocation(this);
-        return w;
+        return new NativeGeoLocation(this);
     }
 
     @Override
@@ -37,6 +39,40 @@ public class CGeoLocation extends CEditableComponent<GeoLocation, NativeGeoLocat
         super.onEditingStop();
         if (isValid()) {
             setNativeValue(getValue());
+        }
+    }
+
+    // ==========================================================================
+
+    public class GeoLocationValidator implements EditableValueValidator<GeoLocation> {
+
+        private String validationMessage = "";
+
+        @Override
+        public String getValidationMessage(CEditableComponent<GeoLocation, ?> component, GeoLocation value) {
+            return validationMessage;
+        }
+
+        @Override
+        public boolean isValid(CEditableComponent<GeoLocation, ?> component, GeoLocation value) {
+            validationMessage = "";
+
+            if (value != null && !value.isEmpty()) {
+                if (!value.latitude().isNull()) {
+                    if (value.latitude().getValue() < 0 || value.latitude().getValue() > 90) {
+                        validationMessage = "Latitude may be in range [0-90] degree";
+                        return false;
+                    }
+                }
+                if (!value.longitude().isNull()) {
+                    if (value.longitude().getValue() < 0 || value.longitude().getValue() > 180) {
+                        validationMessage = "Longitude may be in range [0-180] degree";
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
     }
 }

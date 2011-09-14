@@ -306,22 +306,8 @@ public class NativeGeoLocation extends HorizontalPanel implements INativeEditabl
                 return null; // empty value case
             }
             try {
-                double val = Math.abs(Double.valueOf(string));
+                return Math.abs(Double.valueOf(string));
 
-                switch (type) {
-                case latitude:
-                    if (val < 0 || val > 90) {
-                        throw new ParseException("Latitude may be in range [0-90] degree", 0);
-                    }
-                    break;
-                case longitute:
-                    if (val < 0 || val > 180) {
-                        throw new ParseException("Longitude may be in range [0-180] degree", 0);
-                    }
-                    break;
-                }
-
-                return val;
             } catch (NumberFormatException e) {
                 throw new ParseException("GeoNumber Format error", 0);
             }
