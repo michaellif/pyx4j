@@ -48,6 +48,7 @@ import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 import com.propertyvista.pmsite.server.model.TestimDataModel;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
 
 public class PMSiteContentManager implements Serializable {
 
@@ -235,8 +236,32 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public static PropertyListDTO getPropertyList(PropertySearchCriteria searchCriteria) {
+        EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
 
-        return null;
+        // add search criteria
+        if (SearchType.city.equals(searchCriteria.searchType().getValue())) {
+            String city = searchCriteria.city().getValue();
+            if (city != null) {
+                dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), city));
+            }
+        }
+        List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(dbCriteria);
+
+        PropertyListDTO ret = EntityFactory.create(PropertyListDTO.class);
+        for (Building building : buildings) {
+
+            if (building.info().address().location().isNull() || building.info().address().location().getValue().getLat() == 0) {
+                continue;
+            }
+
+            //In memory filters
+            EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
+            floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
+            List<Floorplan> floorplans = PersistenceServicesFactory.getPersistenceService().query(floorplanCriteria);
+
+            ret.properties().add(Converter.convert(building, floorplans));
+        }
+        return ret;
     }
 
     public static ApartmentModel getPropertyModel(SearchCriteriaModel searchCriteria) {

@@ -13,13 +13,18 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
@@ -28,14 +33,24 @@ import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaInputPanel;
 import com.propertyvista.pmsite.server.panels.AptListPanel;
 import com.propertyvista.pmsite.server.panels.GwtInclude;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class AptListPage extends BasePage {
 
-    public AptListPage() {
-        super();
+    public AptListPage(PageParameters params) {
+        super(params);
+
+        Map<String, String[]> argsW = params.toRequestParameters();
+
+        Map<String, List<String>> argsE = new HashMap<String, List<String>>();
+        for (String key : argsW.keySet()) {
+            argsE.put(key, Arrays.asList(argsW.get(key)[0]));
+        }
+
+        PropertySearchCriteria criteria = EntityArgsConverter.createFromArgs(PropertySearchCriteria.class, argsE);
 
         SearchCriteriaModel searchCrit = PMSiteApplication.get().getSearchModel();
-        PageParameters params = getRequestCycle().getPageParameters();
+
         if (params != null) {
             String prov = params.getString("province");
             String city = params.getString("city");
@@ -54,19 +69,13 @@ public class AptListPage extends BasePage {
             }
         };
 
+        //TODO use PropertySearchCriteria instead
         form.add(new AdvancedSearchCriteriaInputPanel("searchCriteriaInput", model));
         form.add(new Button("searchSubmit"));
 
         add(form);
 
-        SearchCriteriaModel data = model.getObject();
-        String model_dump = "Search Criteria:\n" + "searchType = " + data.getSearchType() + "; province = " + data.getProvince() + "; city = " + data.getCity()
-                + "; location = " + data.getLocation() + "; distance = " + data.getDistance() + "; bedsMin = " + data.getBedsMin() + "; bedsMax = "
-                + data.getBedsMax() + "; bathsMin = " + data.getBathsMin() + "; bathsMax = " + data.getBathsMax() + "; priceMin = " + data.getPriceMin()
-                + "; priceMax = " + data.getPriceMax() + "; amenities = " + data.getAmenities();
-
-        add(new Label("model_dump", model_dump));
-        add(new AptListPanel("aptListPanel", new CompoundPropertyModel<IList<PropertyDTO>>(PMSiteContentManager.getPropertyList(searchCrit).properties())));
+        add(new AptListPanel("aptListPanel", new CompoundPropertyModel<IList<PropertyDTO>>(PMSiteContentManager.getPropertyList(criteria).properties())));
 
         add(new GwtInclude("gwtInclude"));
     }
