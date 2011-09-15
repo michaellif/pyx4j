@@ -101,15 +101,14 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
         // Geotagging:
         if (!dto.geoLocation().isNull()) {
             Double lat = dto.geoLocation().latitude().getValue();
-            if (lat != null && LatitudeType.South.equals(dto.geoLocation().latitudeType().getValue())) {
-                lat = -lat;
-            }
             Double lng = dto.geoLocation().longitude().getValue();
-            if (lng != null && LongitudeType.West.equals(dto.geoLocation().longitudeType().getValue())) {
-                lng = -lng;
-            }
-
             if ((lng != null) && (lat != null)) {
+                if (LatitudeType.South.equals(dto.geoLocation().latitudeType().getValue())) {
+                    lat = -lat;
+                }
+                if (LongitudeType.West.equals(dto.geoLocation().longitudeType().getValue())) {
+                    lng = -lng;
+                }
                 dbo.info().address().location().setValue(new GeoPoint(lat, lng));
             }
         } else {
