@@ -21,6 +21,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.Radio;
@@ -157,6 +158,6 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         add(new TextField<Integer>("minPrice").add(new MinimumValidator<Integer>(100)));
         add(new TextField<Integer>("maxPrice").add(new MinimumValidator<Integer>(100)));
         // amenities
-        //add(new CheckBoxMultipleChoice<PropertySearchCriteria.AmenitySet>("amenities", Arrays.asList(PropertySearchCriteria.AmenitySet.values())));
+        add(new CheckBoxMultipleChoice<PropertySearchCriteria.AmenityType>("amenities", Arrays.asList(PropertySearchCriteria.AmenityType.values())));
     }
 }

@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 
 @Transient
 public interface PropertySearchCriteria extends IEntity {
@@ -108,7 +109,7 @@ public interface PropertySearchCriteria extends IEntity {
         }
     }
 
-    public static enum AmenitySet {
+    public static enum AmenityType {
         Elevator, Fitness, Parking, Pool
     }
 
@@ -136,7 +137,7 @@ public interface PropertySearchCriteria extends IEntity {
 
     IPrimitive<Integer> maxPrice();
 
-    IPrimitive<AmenitySet> amenities();
+    IPrimitiveSet<AmenityType> amenities();
 
     IPrimitive<Boolean> elevator();
 
