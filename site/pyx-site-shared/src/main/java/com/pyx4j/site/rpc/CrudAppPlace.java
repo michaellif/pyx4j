@@ -26,11 +26,11 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public static final String ARG_NAME_CRUD_TYPE = "crud";
 
-    public static final String ARG_NAME_ITEM_ID = "itemID";
+    public static final String ARG_NAME_ID = "Id";
 
-    public static final String ARG_NAME_PARENT_ID = "parentID";
+    public static final String ARG_VALUE_NEW = "new";
 
-    public static final String ARG_VALUE_NEW_ITEM = "new";
+    public static final String ARG_NAME_PARENT_ID = "parentId";
 
     public static final String ARG_NAME_TAB_IDX = "tabIdx";
 
@@ -66,7 +66,7 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public void formViewerPlace(Key itemID) {
         setType(Type.viewer);
-        putArg(ARG_NAME_ITEM_ID, itemID.toString());
+        putArg(ARG_NAME_ID, itemID.toString());
     }
 
     public void formViewerPlace(Key itemID, int tabIndex) {
@@ -78,7 +78,7 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public void formEditorPlace(Key itemID) {
         setType(Type.editor);
-        putArg(ARG_NAME_ITEM_ID, itemID.toString());
+        putArg(ARG_NAME_ID, itemID.toString());
     }
 
     public void formEditorPlace(Key itemID, int tabIndex) {
@@ -90,7 +90,7 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public void formNewItemPlace(Key parentID) {
         setType(Type.editor);
-        putArg(ARG_NAME_ITEM_ID, ARG_VALUE_NEW_ITEM);
+        putArg(ARG_NAME_ID, ARG_VALUE_NEW);
         if (parentID != null) {
             putArg(ARG_NAME_PARENT_ID, parentID.toString());
         }
@@ -98,12 +98,12 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public void formDashboardPlace(Key itemID) {
         setType(Type.dashboard);
-        putArg(ARG_NAME_ITEM_ID, itemID.toString());
+        putArg(ARG_NAME_ID, itemID.toString());
     }
 
     public void formDashboardPlace(Key itemID, String name) {
         setType(Type.dashboard);
-        putArg(ARG_NAME_ITEM_ID, itemID.toString());
+        putArg(ARG_NAME_ID, itemID.toString());
         setName(name);
     }
 }

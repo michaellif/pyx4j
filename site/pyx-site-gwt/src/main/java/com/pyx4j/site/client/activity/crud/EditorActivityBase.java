@@ -77,7 +77,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         placeClass = ((CrudAppPlace) place).getClass();
 
         String val;
-        if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_ITEM_ID)) != null) {
+        if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
             entityID = new Key(val);
         }
         if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_PARENT_ID)) != null) {
@@ -90,7 +90,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.setEditMode(isNewItem() ? EditMode.newItem : EditMode.existingItem);
+        view.setEditMode(isNewEntity() ? EditMode.newItem : EditMode.existingItem);
         panel.setWidget(view);
         populate();
     }
@@ -98,8 +98,8 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     @Override
     public void populate() {
 
-        if (isNewItem()) {
-            createNewItem(new AsyncCallback<E>() {
+        if (isNewEntity()) {
+            createNewEntity(new AsyncCallback<E>() {
                 @Override
                 public void onSuccess(E entity) {
                     if (parentID != null) {
@@ -108,8 +108,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
                             ((IEntity) entity.getMember(ownerName)).setPrimaryKey(parentID);
                         }
                     }
-
-                    initNewItem(entity); // let descendant to initialise item... 
                     onPopulateSuccess(entity);
                 }
 
@@ -118,7 +116,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
                     throw new UnrecoverableClientError(caught);
                 }
             });
-
         } else {
             service.retrieve(new AsyncCallback<E>() {
                 @Override
@@ -134,8 +131,17 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         }
     }
 
-    protected void createNewItem(AsyncCallback<E> callback) {
+    /**
+     * Descendants may override this method to perform some initialisation.
+     * 
+     * @param callback
+     */
+    protected void createNewEntity(AsyncCallback<E> callback) {
         callback.onSuccess(EntityFactory.create(entityClass));
+    }
+
+    protected boolean isNewEntity() {
+        return (entityID.toString().equals(CrudAppPlace.ARG_VALUE_NEW));
     }
 
     public void onPopulateSuccess(E result) {
@@ -155,7 +161,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void cancel() {
-        if (isNewItem()) {
+        if (isNewEntity()) {
             History.back();
         } else {
             goToViewer(entityID);
@@ -164,7 +170,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     public void trySave(final boolean apply) {
 
-        if (isNewItem()) {
+        if (isNewEntity()) {
             service.create(new AsyncCallback<E>() {
                 @Override
                 public void onSuccess(E result) {
@@ -202,9 +208,9 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     protected void onApplySuccess(E result) {
         view.onApplySuccess();
 
-        if (isNewItem()) { // switch new item to regular editing after successful apply!..
+        if (isNewEntity()) { // switch new item to regular editing after successful apply!..
             entityID = result.getPrimaryKey();
-            view.setEditMode(isNewItem() ? EditMode.newItem : EditMode.existingItem);
+            view.setEditMode(isNewEntity() ? EditMode.newItem : EditMode.existingItem);
             populate();
         }
     }
@@ -218,13 +224,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         if (!view.onSaveFail(caught)) {
             throw new UnrecoverableClientError(caught);
         }
-    }
-
-    protected boolean isNewItem() {
-        return (entityID.toString().equals(CrudAppPlace.ARG_VALUE_NEW_ITEM));
-    }
-
-    protected void initNewItem(E entity) {
     }
 
     protected void goToViewer(Key entityID) {

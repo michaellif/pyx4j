@@ -68,7 +68,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
         placeClass = ((CrudAppPlace) place).getClass();
 
         String val;
-        if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_ITEM_ID)) != null) {
+        if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
             entityId = new Key(val);
         }
         if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_TAB_IDX)) != null) {
