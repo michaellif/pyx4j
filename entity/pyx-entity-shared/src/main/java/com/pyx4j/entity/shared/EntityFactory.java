@@ -49,31 +49,31 @@ public class EntityFactory {
         }
     }
 
-    public static <T extends IEntity> T create(Class<T> clazz) {
-        return impl.create(clazz, null, null);
+    public static <T extends IEntity> T create(Class<T> entityClass) {
+        return impl.create(entityClass, null, null);
     }
 
-    public static <T extends IEntity> T create(Class<T> clazz, IObject<?> parent, String fieldName) {
-        return impl.create(clazz, parent, fieldName);
+    public static <T extends IEntity> T create(Class<T> entityClass, IObject<?> parent, String fieldName) {
+        return impl.create(entityClass, parent, fieldName);
     }
 
-    public static synchronized EntityMeta getEntityMeta(Class<? extends IEntity> clazz) {
-        assert (clazz != null) : "Get EntityMeta for null";
-        EntityMeta meta = entityMetaCache.get(clazz);
+    public static synchronized EntityMeta getEntityMeta(Class<? extends IEntity> entityClass) {
+        assert (entityClass != null) : "Get EntityMeta for null";
+        EntityMeta meta = entityMetaCache.get(entityClass);
         if (meta == null) {
-            meta = impl.createEntityMeta(clazz);
-            entityMetaCache.put(clazz, meta);
+            meta = impl.createEntityMeta(entityClass);
+            entityMetaCache.put(entityClass, meta);
         }
         return meta;
     }
 
     @SuppressWarnings("unchecked")
-    public static synchronized <T extends IEntity> T getEntityPrototype(Class<T> clazz) {
-        assert (clazz != null) : "Get EntityPrototype for null";
-        T meta = (T) entityPrototypeCache.get(clazz);
+    public static synchronized <T extends IEntity> T getEntityPrototype(Class<T> entityClass) {
+        assert (entityClass != null) : "Get EntityPrototype for null";
+        T meta = (T) entityPrototypeCache.get(entityClass);
         if (meta == null) {
-            meta = create(clazz, null, ".");
-            entityPrototypeCache.put(clazz, meta);
+            meta = create(entityClass, null, ".");
+            entityPrototypeCache.put(entityClass, meta);
         }
         return meta;
     }

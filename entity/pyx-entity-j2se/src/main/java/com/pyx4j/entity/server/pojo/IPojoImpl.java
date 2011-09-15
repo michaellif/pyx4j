@@ -20,9 +20,14 @@
  */
 package com.pyx4j.entity.server.pojo;
 
+import java.util.ArrayList;
+
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.pyx4j.entity.server.ServerEntityFactory;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 
 public class IPojoImpl<E extends IEntity> implements IPojo<E> {
 
@@ -30,8 +35,11 @@ public class IPojoImpl<E extends IEntity> implements IPojo<E> {
 
     protected E entity;
 
-    @Override
-    public void setEntityValue(E entity) {
+    protected IPojoImpl(Class<E> entityClass) {
+        entity = EntityFactory.create(entityClass);
+    }
+
+    protected IPojoImpl(E entity) {
         this.entity = entity;
     }
 
@@ -41,4 +49,25 @@ public class IPojoImpl<E extends IEntity> implements IPojo<E> {
         return entity;
     }
 
+    @Override
+    public void setEntityValue(E entity) {
+        this.entity = entity;
+    }
+
+    protected static final <T extends IEntity> IPojo<T>[] toArray(IPojo<T>[] pojoArray, IList<T> entityList) {
+        ArrayList<IPojo<T>> a = new ArrayList<IPojo<T>>();
+        for (T ent : entityList) {
+            a.add(ServerEntityFactory.getPojo(ent));
+        }
+        return a.toArray(pojoArray);
+    }
+
+    protected static final <T extends IEntity> void fromArray(IPojo<T>[] pojoArray, IList<T> entityList) {
+        entityList.clear();
+        if (pojoArray != null) {
+            for (IPojo<T> p : pojoArray) {
+                entityList.add(p.getEntityValue());
+            }
+        }
+    }
 }

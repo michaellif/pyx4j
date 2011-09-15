@@ -25,12 +25,13 @@ import junit.framework.TestCase;
 import org.apache.commons.beanutils.BeanUtils;
 
 import com.pyx4j.entity.server.ServerEntityFactory;
+import com.pyx4j.entity.server.pojo.model.PojoMemberTestEntity;
 import com.pyx4j.entity.server.pojo.model.PojoTestEntity;
 import com.pyx4j.entity.shared.EntityFactory;
 
 public class IPojoTest extends TestCase {
 
-    public void testPojoCreation() throws Exception {
+    public void testPojoPrimitives() throws Exception {
 
         PojoTestEntity entity = EntityFactory.create(PojoTestEntity.class);
         entity.name().setValue("Bob 25");
@@ -42,9 +43,20 @@ public class IPojoTest extends TestCase {
         BeanUtils.setProperty(pojo, entity.name().getFieldName(), "Petia 10");
         assertEquals("Modify Entit value via Pojo", "Petia 10", entity.name().getValue());
 
-        assertNull(BeanUtils.getProperty(pojo, entity.entMemeber1().getFieldName() + "." + entity.entMemeber1().description().getFieldName()));
-        entity.entMemeber1().description().setValue("Kolia 7");
-        assertEquals("Kolia 7", BeanUtils.getProperty(pojo, entity.entMemeber1().getFieldName() + "." + entity.entMemeber1().description().getFieldName()));
+        assertNull(BeanUtils.getProperty(pojo, entity.entMemeber().getFieldName() + "." + entity.entMemeber().description().getFieldName()));
+        entity.entMemeber().description().setValue("Kolia 7");
+        assertEquals("Kolia 7", BeanUtils.getProperty(pojo, entity.entMemeber().getFieldName() + "." + entity.entMemeber().description().getFieldName()));
 
+    }
+
+    public void testPojoArrays() throws Exception {
+        PojoTestEntity entity = EntityFactory.create(PojoTestEntity.class);
+        PojoMemberTestEntity arrayItem = EntityFactory.create(PojoMemberTestEntity.class);
+        arrayItem.description().setValue("Me Item");
+        entity.entList().add(arrayItem);
+        IPojo<PojoTestEntity> pojo = ServerEntityFactory.getPojo(entity);
+
+        Object pojoItemInArrayValue = BeanUtils.getProperty(pojo, entity.entList().getFieldName() + "[0]" + arrayItem.description().getFieldName());
+        assertEquals("Should get value", pojoItemInArrayValue, arrayItem.description().getValue());
     }
 }

@@ -28,7 +28,10 @@ import java.util.Vector;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
+import javassist.CtConstructor;
+import javassist.CtField;
 import javassist.CtMethod;
+import javassist.Modifier;
 import javassist.NotFoundException;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ConstPool;
@@ -47,6 +50,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.server.pojo.IPojoImpl;
@@ -140,6 +144,19 @@ public class EntityPojoWrapperGenerator {
 
             implClass.setSuperclass(pool.get(IPojoImpl.class.getName()));
 
+            CtConstructor defaultConstructor = new CtConstructor(null, implClass);
+            defaultConstructor.setBody("super(" + entityClassName + ".class);");
+            implClass.addConstructor(defaultConstructor);
+
+            CtConstructor fromEntityConstructor = new CtConstructor(new CtClass[] { pool.get(entityClassName) }, implClass);
+            fromEntityConstructor.setBody("super($1);");
+            implClass.addConstructor(fromEntityConstructor);
+
+            // add field with default 1L value.
+            CtField field = new CtField(CtClass.longType, "serialVersionUID", implClass);
+            field.setModifiers(Modifier.PRIVATE | Modifier.STATIC | Modifier.FINAL);
+            implClass.addField(field, "1L");
+
             for (String memberName : entityMeta.getMemberNames()) {
                 MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
                 CtClass ctValueClass;
@@ -182,9 +199,11 @@ public class EntityPojoWrapperGenerator {
 
             implClass.toClass(classLoader, null);
 
-            try {
-                implClass.writeFile("target/entity-pojo-gen-classes");
-            } catch (IOException e) {
+            if (ServerSideConfiguration.isStartedUnderEclipse()) {
+                try {
+                    implClass.writeFile("target/entity-pojo-gen-classes");
+                } catch (IOException e) {
+                }
             }
 
             return implClass;
@@ -197,23 +216,28 @@ public class EntityPojoWrapperGenerator {
 
     private String createGetBody(CtClass ctValueClass, MemberMeta memberMeta, String entityClassName) {
         switch (memberMeta.getObjectClassType()) {
-        case Entity:
-            StringBuilder b = new StringBuilder("{\n");
-
-            b.append(memberMeta.getValueClass().getName()).append(" memberEntity = ");
-            b.append(" (" + memberMeta.getValueClass().getName() + ") ((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "();\n");
-
-            b.append(IPojo.class.getName()).append(" pojo = ");
-            b.append(ServerEntityFactory.class.getName()).append(".getPojo(memberEntity);\n");
-
-            b.append("return (" + ctValueClass.getName() + ")pojo;\n}");
-            return b.toString();
         case Primitive:
             // Need cast to return type to avoid class loading problems
             return "return (" + ctValueClass.getName() + ") ((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "().getValue();";
+        case Entity: {
+            StringBuilder b = new StringBuilder("{");
+            b.append("return (" + ctValueClass.getName() + ")");
+            b.append(ServerEntityFactory.class.getName()).append(".getPojo(");
+            b.append("((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "()");
+            b.append(");}");
+            return b.toString();
+        }
+        case EntityList: {
+            StringBuilder b = new StringBuilder("{");
+            b.append("return (" + ctValueClass.getName() + ") toArray(");
+            b.append(" new ").append(ctValueClass.getName().replace("[]", "[0]")).append(", ");
+            b.append("((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "()");
+            b.append(");}");
+            return b.toString();
+        }
         default:
             //TODO
-            return "return null;";
+            return " throw new Error(\"Getter for " + memberMeta.getObjectClassType() + " Not implmented yet\");";
         }
     }
 
@@ -221,9 +245,15 @@ public class EntityPojoWrapperGenerator {
         switch (memberMeta.getObjectClassType()) {
         case Primitive:
             return "((" + entityClassName + ") super.entity)." + memberMeta.getFieldName() + "().setValue($1);";
+        case EntityList: {
+            StringBuilder b = new StringBuilder("{");
+            b.append("fromArray($1, ");
+            b.append("((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "()");
+            b.append(");}");
+            return b.toString();
+        }
         default:
-            //TODO
-            return ";";
+            return " throw new Error(\"Seter for " + memberMeta.getObjectClassType() + " Not implmented yet\");";
         }
     }
 

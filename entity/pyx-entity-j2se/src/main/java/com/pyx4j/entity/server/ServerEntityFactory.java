@@ -21,6 +21,7 @@
 package com.pyx4j.entity.server;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -141,13 +142,18 @@ public class ServerEntityFactory implements IEntityFactory {
         Class<IPojo<T>> pojoClass = getPojoClass((Class<T>) entity.getObjectClass());
         IPojo<T> pojo;
         try {
-            pojo = pojoClass.newInstance();
+            pojo = pojoClass.getConstructor(entity.getObjectClass()).newInstance(entity);
         } catch (InstantiationException e) {
             throw new Error("Can't create POJO for " + entity.getEntityMeta().getEntityClass(), e);
         } catch (IllegalAccessException e) {
             throw new Error("Can't create POJO for " + entity.getEntityMeta().getEntityClass(), e);
+        } catch (IllegalArgumentException e) {
+            throw new Error("Can't create POJO for " + entity.getEntityMeta().getEntityClass(), e);
+        } catch (InvocationTargetException e) {
+            throw new Error("Can't create POJO for " + entity.getEntityMeta().getEntityClass(), e);
+        } catch (NoSuchMethodException e) {
+            throw new Error("Can't create POJO for " + entity.getEntityMeta().getEntityClass(), e);
         }
-        pojo.setEntityValue(entity);
         return pojo;
     }
 }

@@ -28,9 +28,9 @@ import com.pyx4j.entity.shared.IEntity;
 
 public interface IPojo<E extends IEntity> extends Serializable {
 
-    public void setEntityValue(E entity);
-
     @XmlTransient
     public E getEntityValue();
+
+    public void setEntityValue(E entity);
 
 }

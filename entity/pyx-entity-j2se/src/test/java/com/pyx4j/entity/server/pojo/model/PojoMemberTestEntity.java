@@ -29,6 +29,6 @@ public interface PojoMemberTestEntity extends IEntity {
 
     IPrimitive<String> description();
 
-    IPrimitive<Double> caount();
+    IPrimitive<Double> count();
 
 }
