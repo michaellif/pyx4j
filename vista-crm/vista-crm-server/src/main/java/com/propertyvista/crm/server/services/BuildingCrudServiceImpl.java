@@ -109,7 +109,7 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
                 lng = -lng;
             }
 
-            if ((lng != null) && (lng != null)) {
+            if ((lng != null) && (lat != null)) {
                 dbo.info().address().location().setValue(new GeoPoint(lat, lng));
             }
         } else {
