@@ -33,6 +33,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -67,6 +68,12 @@ public class EntityArgsConverter {
                     for (String nestedKey : nestedMap.keySet()) {
                         map.put(memberMeta.getFieldName() + "." + nestedKey, nestedMap.get(nestedKey));
                     }
+                } else if (ObjectClassType.PrimitiveSet.equals(memberMeta.getObjectClassType())) {
+                    map.put(memberName, new ArrayList<String>());
+                    for (Object elem : ((IPrimitiveSet<?>) entity.getMember(memberName))) {
+                        map.get(memberName).add(elem.toString());
+                    }
+
                 }
             }
         }
