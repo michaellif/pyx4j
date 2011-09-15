@@ -278,9 +278,9 @@ public class EntityPojoWrapperGenerator {
         }
         case PrimitiveSet: {
             if (useCollectionForPrimitiveSet) {
-                return "((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "().setValue($1);";
+                return "((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "().setCollectionValue($1);";
             } else {
-                return "((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "().setValue($1);";
+                return "((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "().setArrayValue($1);";
             }
         }
         default:

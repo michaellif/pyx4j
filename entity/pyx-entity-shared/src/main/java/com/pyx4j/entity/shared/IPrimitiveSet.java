@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared;
 
+import java.util.Collection;
 import java.util.Set;
 
 public interface IPrimitiveSet<TYPE> extends IObject<Set<TYPE>>, Set<TYPE> {
@@ -29,5 +30,7 @@ public interface IPrimitiveSet<TYPE> extends IObject<Set<TYPE>>, Set<TYPE> {
 
     public void set(IPrimitiveSet<TYPE> typedSet);
 
-    public void setValue(TYPE[] value) throws ClassCastException;
+    public void setArrayValue(TYPE[] value) throws ClassCastException;
+
+    public void setCollectionValue(Collection<TYPE> value) throws ClassCastException;
 }
