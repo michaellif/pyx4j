@@ -109,8 +109,12 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
     }
 
     @Override
-    public void set(IPrimitive<TYPE> entity) {
-        setValue(entity.getValue());
+    public void set(IPrimitive<TYPE> object) {
+        if (object == null) {
+            setValue(null);
+        } else {
+            setValue(object.getValue());
+        }
 
     }
 
