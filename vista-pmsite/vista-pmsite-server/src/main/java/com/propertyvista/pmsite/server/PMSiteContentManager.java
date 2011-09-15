@@ -27,6 +27,7 @@ import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.protocol.http.WebRequestCycle;
 
 import com.pyx4j.entity.server.EntityServicesImpl;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -34,6 +35,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.Locale;
 import com.propertyvista.domain.site.Locale.Lang;
@@ -41,11 +43,15 @@ import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteLocale;
+import com.propertyvista.pmsite.server.converter.BuildingAmenityAmenityDTOConverter;
+import com.propertyvista.pmsite.server.converter.BuildingPropertyDTOConverter;
+import com.propertyvista.pmsite.server.converter.FloorplanFloorplanPropertyDTOConverter;
 import com.propertyvista.pmsite.server.model.ApartmentModel;
 import com.propertyvista.pmsite.server.model.NewsDataModel;
 import com.propertyvista.pmsite.server.model.PromoDataModel;
 import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 import com.propertyvista.pmsite.server.model.TestimDataModel;
+import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
@@ -214,7 +220,7 @@ public class PMSiteContentManager implements Serializable {
                 dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), city));
             }
         }
-        List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(dbCriteria);
+        List<Building> buildings = Persistence.service().query(dbCriteria);
 
         PropertyListDTO ret = EntityFactory.create(PropertyListDTO.class);
         for (Building building : buildings) {
@@ -223,12 +229,25 @@ public class PMSiteContentManager implements Serializable {
                 continue;
             }
 
-            //In memory filters
-            EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
-            floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
-            List<Floorplan> floorplans = PersistenceServicesFactory.getPersistenceService().query(floorplanCriteria);
-
-            ret.properties().add(Converter.convert(building, floorplans));
+            PropertyDTO propertyDTO = new BuildingPropertyDTOConverter().createDTO(building);
+            {
+                EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
+                floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
+                for (Floorplan floorplan : Persistence.service().query(floorplanCriteria)) {
+                    propertyDTO.floorplansProperty().add(new FloorplanFloorplanPropertyDTOConverter().createDTO(floorplan));
+                }
+            }
+            {
+                EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+                for (BuildingAmenity amenity : Persistence.service().query(criteria)) {
+                    propertyDTO.amenities().add(new BuildingAmenityAmenityDTOConverter().createDTO(amenity));
+                }
+            }
+            if (!building.media().isEmpty()) {
+                propertyDTO.mainMedia().setValue(building.media().get(0).getPrimaryKey());
+            }
+            ret.properties().add(propertyDTO);
         }
         return ret;
     }
