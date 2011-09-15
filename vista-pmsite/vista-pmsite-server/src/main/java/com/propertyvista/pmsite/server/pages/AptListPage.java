@@ -23,12 +23,12 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 
+import com.pyx4j.entity.server.ServerEntityFactory;
+import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 
-import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
-import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaInputPanel;
 import com.propertyvista.pmsite.server.panels.AptListPanel;
 import com.propertyvista.pmsite.server.panels.GwtInclude;
@@ -48,24 +48,28 @@ public class AptListPage extends BasePage {
         }
 
         PropertySearchCriteria criteria = EntityArgsConverter.createFromArgs(PropertySearchCriteria.class, argsE);
+        IPojo<PropertySearchCriteria> pojo = ServerEntityFactory.getPojo(criteria);
+        final CompoundPropertyModel<IPojo<PropertySearchCriteria>> model = new CompoundPropertyModel<IPojo<PropertySearchCriteria>>(pojo);
 
-        SearchCriteriaModel searchCrit = PMSiteApplication.get().getSearchModel();
-
-        if (params != null) {
-            String prov = params.getString("province");
-            String city = params.getString("city");
-            if (prov != null) {
-                searchCrit.setProvinceCity(prov, city);
-            }
-        }
-        CompoundPropertyModel<SearchCriteriaModel> model = new CompoundPropertyModel<SearchCriteriaModel>(searchCrit);
-
-        final Form<SearchCriteriaModel> form = new Form<SearchCriteriaModel>("advancedSearchCriteriaForm", model) {
+        final Form<IPojo<PropertySearchCriteria>> form = new Form<IPojo<PropertySearchCriteria>>("advancedSearchCriteriaForm", model) {
             private static final long serialVersionUID = 1L;
 
             @Override
             public void onSubmit() {
-                setResponsePage(AptListPage.class);
+                // need to use parameters for bookmarkable search
+                setResponsePage(AptListPage.class, prepareParams());
+            }
+
+            private PageParameters prepareParams() {
+                PropertySearchCriteria criteria = model.getObject().getEntityValue();
+                Map<String, List<String>> args = EntityArgsConverter.convertToArgs(criteria);
+
+                Map<String, String[]> argsW = new HashMap<String, String[]>();
+                for (String key : args.keySet()) {
+                    argsW.put(key, new String[] { args.get(key).get(0) });
+                }
+
+                return new PageParameters(argsW);
             }
         };
 

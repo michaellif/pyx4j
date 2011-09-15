@@ -18,8 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import js.JSResources;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
@@ -34,27 +32,26 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.MinimumValidator;
 
+import com.pyx4j.entity.server.pojo.IPojo;
+
 import com.propertyvista.pmsite.server.PMSiteContentManager;
-import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class AdvancedSearchCriteriaInputPanel extends Panel {
     private static final long serialVersionUID = 1L;
 
-    public AdvancedSearchCriteriaInputPanel(String id, CompoundPropertyModel<SearchCriteriaModel> model) {
+    public AdvancedSearchCriteriaInputPanel(String id, CompoundPropertyModel<IPojo<PropertySearchCriteria>> model) {
         super(id, model);
-
-        getApplication().getSharedResources().putClassAlias(JSResources.class, "js");
-//        add(new JavaScriptReference("jquery", JSResources.class, "jquery-1.6.3.min.js"));
 
         // add Error Message panel
         add(new FeedbackPanel("form_messages"));
 
         // add searchType radio selectors
-        RadioGroup<SearchCriteriaModel.SearchType> searchTypeRadio = new RadioGroup<SearchCriteriaModel.SearchType>("searchType");
-        searchTypeRadio.add(new Radio<SearchCriteriaModel.SearchType>("searchByCity", new Model<SearchCriteriaModel.SearchType>(
-                SearchCriteriaModel.SearchType.City)));
-        searchTypeRadio.add(new Radio<SearchCriteriaModel.SearchType>("searchByProx", new Model<SearchCriteriaModel.SearchType>(
-                SearchCriteriaModel.SearchType.Proximity)));
+        RadioGroup<PropertySearchCriteria.SearchType> searchTypeRadio = new RadioGroup<PropertySearchCriteria.SearchType>("searchType");
+        searchTypeRadio.add(new Radio<PropertySearchCriteria.SearchType>("searchByCity", new Model<PropertySearchCriteria.SearchType>(
+                PropertySearchCriteria.SearchType.city)));
+        searchTypeRadio.add(new Radio<PropertySearchCriteria.SearchType>("searchByProx", new Model<PropertySearchCriteria.SearchType>(
+                PropertySearchCriteria.SearchType.proximity)));
         add(searchTypeRadio.setRequired(true));
 
         // add Province drop-down
@@ -67,9 +64,11 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
 
         // add City drop-down
         List<String> cities;
-        String selProv = model.getObject().getProvince();
+        String selProv = model.getObject().getEntityValue().province().getValue();
+        String selCity = null;
         if (selProv != null) {
             cities = provCityMap.get(selProv);
+            selCity = model.getObject().getEntityValue().city().getValue();
         } else {
             cities = Arrays.asList("- Select Province -");
         }
@@ -85,6 +84,9 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
             }
             jsCityList += "provCity['" + StringEscapeUtils.escapeJavaScript(_prov) + "'] = [" + _list + "];\n";
         }
+        if (selProv != null && selCity != null) {
+            jsCityList += "var selCity = '" + StringEscapeUtils.escapeJavaScript(selCity) + "';\n";
+        }
         add(new Label("jsCityList", jsCityList).setEscapeModelStrings(false));
 
         // add location input
@@ -98,7 +100,7 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
 
         // add common fields
         // bedrooms
-        add(new DropDownChoice<SearchCriteriaModel.BedroomChoice>("bedsMin", Arrays.asList(SearchCriteriaModel.BedroomChoice.values())) {
+        add(new DropDownChoice<PropertySearchCriteria.BedroomChoice>("minBeds", Arrays.asList(PropertySearchCriteria.BedroomChoice.values())) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -106,7 +108,7 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
                 return "";
             }
         });
-        add(new DropDownChoice<SearchCriteriaModel.BedroomChoice>("bedsMax", Arrays.asList(SearchCriteriaModel.BedroomChoice.values())) {
+        add(new DropDownChoice<PropertySearchCriteria.BedroomChoice>("maxBeds", Arrays.asList(PropertySearchCriteria.BedroomChoice.values())) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -115,7 +117,7 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
             }
         });
         // bathrooms
-        add(new DropDownChoice<SearchCriteriaModel.BathroomChoice>("bathsMin", Arrays.asList(SearchCriteriaModel.BathroomChoice.values())) {
+        add(new DropDownChoice<PropertySearchCriteria.BathroomChoice>("minBath", Arrays.asList(PropertySearchCriteria.BathroomChoice.values())) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -123,7 +125,7 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
                 return "";
             }
         });
-        add(new DropDownChoice<SearchCriteriaModel.BathroomChoice>("bathsMax", Arrays.asList(SearchCriteriaModel.BathroomChoice.values())) {
+        add(new DropDownChoice<PropertySearchCriteria.BathroomChoice>("maxBath", Arrays.asList(PropertySearchCriteria.BathroomChoice.values())) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -132,10 +134,10 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
             }
         });
         // price
-        add(new TextField<Integer>("priceMin").add(new MinimumValidator<Integer>(100)));
-        add(new TextField<Integer>("priceMax").add(new MinimumValidator<Integer>(100)));
+        add(new TextField<Integer>("minPrice").add(new MinimumValidator<Integer>(100)));
+        add(new TextField<Integer>("maxPrice").add(new MinimumValidator<Integer>(100)));
         // amenities
-        add(new CheckBoxMultipleChoice<SearchCriteriaModel.AmenitySet>("amenities", Arrays.asList(SearchCriteriaModel.AmenitySet.values())));
+        add(new CheckBoxMultipleChoice<PropertySearchCriteria.AmenitySet>("amenities", Arrays.asList(PropertySearchCriteria.AmenitySet.values())));
     }
 
 }

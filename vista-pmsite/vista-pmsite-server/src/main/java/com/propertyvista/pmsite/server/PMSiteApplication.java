@@ -13,6 +13,8 @@
  */
 package com.propertyvista.pmsite.server;
 
+import js.JSResources;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
@@ -47,6 +49,9 @@ public class PMSiteApplication extends WebApplication {
         mountBookmarkablePage("residents", ResidentsPage.class);
 
         mount(new MixedParamUrlCodingStrategy("cnt", StaticPage.class, PMSiteContentManager.PARAMETER_NAMES));
+
+        // add js "virtual" folder
+        getSharedResources().putClassAlias(JSResources.class, "js");
 
         // create search model
         this.searchModel = new SearchCriteriaModel();

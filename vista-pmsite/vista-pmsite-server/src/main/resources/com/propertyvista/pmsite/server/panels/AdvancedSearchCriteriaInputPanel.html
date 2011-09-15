@@ -159,9 +159,9 @@ $(function(){
 $(function(){
 	var sel = document.getElementById('provSelect');
 	if (! sel) return;
-	setSelectionOptions('citySelect', provCity[sel.options[sel.selectedIndex].text], 'Choose One');
+	setSelectionOptions('citySelect', provCity[sel.options[sel.selectedIndex].text], 'Choose One', selCity);
 });
-function setSelectionOptions(selId, optArr, defOpt) {
+function setSelectionOptions(selId, optArr, defOpt, selOpt) {
 	var sel = document.getElementById(selId);
 	if (! sel) return;
 	sel.options.length = 0;
@@ -169,7 +169,7 @@ function setSelectionOptions(selId, optArr, defOpt) {
 		sel.options[0] = new Option(defOpt,'');
 	}
 	for (var i = 0; i < optArr.length; i++) {
-		sel.options[sel.options.length] = new Option(optArr[i],i);
+		sel.options[sel.options.length] = new Option(optArr[i],i,(optArr[i] == selOpt));
 	}
 }
 </script>
@@ -212,15 +212,15 @@ function setSelectionOptions(selId, optArr, defOpt) {
 	<div class="search_common_box input_block_frame">
 	    <div class="search_field">
 			<label>Bedrooms</label>
-			<select wicket:id="bedsMin"></select> to <select wicket:id="bedsMax"></select>
+			<select wicket:id="minBeds"></select> to <select wicket:id="maxBeds"></select>
 		</div>
 	    <div class="search_field">
 			<label>Bathrooms</label>
-			<select wicket:id="bathsMin"></select> to <select wicket:id="bathsMax"></select>
+			<select wicket:id="minBath"></select> to <select wicket:id="maxBath"></select>
 		</div>
 	    <div class="search_field">
 			<label>Price</label>
-			<input wicket:id="priceMin" type="text"/> to <input wicket:id="priceMax" type="text"/>
+			<input wicket:id="minPrice" type="text"/> to <input wicket:id="maxPrice" type="text"/>
 		</div>
 	</div>
 	<div class="search_amenity_box input_block_frame">

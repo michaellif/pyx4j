@@ -67,7 +67,7 @@ public class QuickSearchCriteriaInputPanel extends Panel {
         add(cityChoice);
 
         // bedrooms
-        add(new DropDownChoice<PropertySearchCriteria.BedroomChoice>("bedsChoice", Arrays.asList(PropertySearchCriteria.BedroomChoice.values())) {
+        add(new DropDownChoice<PropertySearchCriteria.BedroomRange>("bedsChoice", Arrays.asList(PropertySearchCriteria.BedroomRange.values())) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -76,23 +76,23 @@ public class QuickSearchCriteriaInputPanel extends Panel {
             }
         });
 
-        IChoiceRenderer<PropertySearchCriteria.PriceChoice> priceChoiceRenderer = new IChoiceRenderer<PropertySearchCriteria.PriceChoice>() {
+        IChoiceRenderer<PropertySearchCriteria.PriceRange> priceRangeRenderer = new IChoiceRenderer<PropertySearchCriteria.PriceRange>() {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public String getDisplayValue(PropertySearchCriteria.PriceChoice paramT) {
+            public String getDisplayValue(PropertySearchCriteria.PriceRange paramT) {
                 return paramT.toString();
             }
 
             @Override
-            public String getIdValue(PropertySearchCriteria.PriceChoice paramT, int paramInt) {
+            public String getIdValue(PropertySearchCriteria.PriceRange paramT, int paramInt) {
                 return String.valueOf(paramInt);
             }
 
         };
 
-        DropDownChoice<PropertySearchCriteria.PriceChoice> priceChoice = new DropDownChoice<PropertySearchCriteria.PriceChoice>("priceRange",
-                Arrays.asList(PropertySearchCriteria.PriceChoice.values()), priceChoiceRenderer) {
+        DropDownChoice<PropertySearchCriteria.PriceRange> priceRange = new DropDownChoice<PropertySearchCriteria.PriceRange>("priceRange",
+                Arrays.asList(PropertySearchCriteria.PriceRange.values()), priceRangeRenderer) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -101,7 +101,7 @@ public class QuickSearchCriteriaInputPanel extends Panel {
             }
 
         };
-        add(priceChoice);
+        add(priceRange);
 
     }
 }

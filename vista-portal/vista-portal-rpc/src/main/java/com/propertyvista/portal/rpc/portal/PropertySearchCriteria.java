@@ -26,13 +26,13 @@ public interface PropertySearchCriteria extends IEntity {
         city, proximity;
     }
 
-    public static enum PriceChoice {
+    public static enum PriceRange {
 
         Any(null), lt600(0), gt600(600), gt800(800), gt1000(1000), gt1200(1200);
 
         private final Integer minPrice;
 
-        private PriceChoice(Integer minPrice) {
+        private PriceRange(Integer minPrice) {
             this.minPrice = minPrice;
         }
 
@@ -71,19 +71,19 @@ public interface PropertySearchCriteria extends IEntity {
         }
     }
 
-    public static enum BedroomChoice {
+    public static enum BedroomRange {
         Any(null, null), One(1, 1), OneOrMore(1), Two(2, 2), TwoOrMore(2), Three(3, 3), ThreeOrMore(3), Four(4, 4), FourOrMore(4);
 
         private final Integer minBeds;
 
         private final Integer maxBeds;
 
-        private BedroomChoice(Integer minBeds, Integer maxBeds) {
+        private BedroomRange(Integer minBeds, Integer maxBeds) {
             this.minBeds = minBeds;
             this.maxBeds = maxBeds;
         }
 
-        private BedroomChoice(Integer minBeds) {
+        private BedroomRange(Integer minBeds) {
             this(minBeds, null);
         }
 
@@ -102,6 +102,36 @@ public interface PropertySearchCriteria extends IEntity {
             }
             return minBeds + (maxBeds == null ? " or more" : "");
         }
+    }
+
+    public static enum BedroomChoice {
+        Any(null), One(1), Two(2), Three(3), Four(4);
+        private final Integer rooms;
+
+        private BedroomChoice(Integer rooms) {
+            this.rooms = rooms;
+        }
+
+        public int getRooms() {
+            return rooms;
+        }
+    }
+
+    public static enum BathroomChoice {
+        Any(null), One(1), Two(2), Three(3), Four(4);
+        private final Integer rooms;
+
+        private BathroomChoice(Integer rooms) {
+            this.rooms = rooms;
+        }
+
+        public int getRooms() {
+            return rooms;
+        }
+    }
+
+    public static enum AmenitySet {
+        Elevator, Fitness, Parking, Pool
     }
 
     @NotNull
@@ -128,6 +158,8 @@ public interface PropertySearchCriteria extends IEntity {
 
     IPrimitive<Integer> maxPrice();
 
+    IPrimitive<AmenitySet> amenities();
+
     IPrimitive<Boolean> elevator();
 
     IPrimitive<Boolean> fitness();
@@ -141,13 +173,13 @@ public interface PropertySearchCriteria extends IEntity {
      * 
      * @return
      */
-    IPrimitive<BedroomChoice> bedsChoice();
+    IPrimitive<BedroomRange> bedsRange();
 
     /**
      * don't use in criteria
      * 
      * @return
      */
-    IPrimitive<PriceChoice> priceRange();
+    IPrimitive<PriceRange> priceRange();
 
 }

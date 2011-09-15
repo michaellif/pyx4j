@@ -68,10 +68,10 @@ public class QuickSearchCriteriaPanel extends Panel {
             criteria.priceRange().setValue(null);
         }
 
-        if (!criteria.bedsChoice().isNull()) {
-            criteria.minBeds().setValue(criteria.bedsChoice().getValue().getMinBeds());
-            criteria.maxBeds().setValue(criteria.bedsChoice().getValue().getMaxBeds());
-            criteria.bedsChoice().setValue(null);
+        if (!criteria.bedsRange().isNull()) {
+            criteria.minBeds().setValue(criteria.bedsRange().getValue().getMinBeds());
+            criteria.maxBeds().setValue(criteria.bedsRange().getValue().getMaxBeds());
+            criteria.bedsRange().setValue(null);
         }
 
         Map<String, List<String>> args = EntityArgsConverter.convertToArgs(criteria);

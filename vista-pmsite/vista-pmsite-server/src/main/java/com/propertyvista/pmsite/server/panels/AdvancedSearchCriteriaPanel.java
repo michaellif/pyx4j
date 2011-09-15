@@ -8,19 +8,28 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Aug 31, 2011
- * @author job_vista
+ * @author stanp
  * @version $Id$
  */
 package com.propertyvista.pmsite.server.panels;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 
-import com.propertyvista.pmsite.server.PMSiteApplication;
-import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
+import com.pyx4j.entity.server.ServerEntityFactory;
+import com.pyx4j.entity.server.pojo.IPojo;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.utils.EntityArgsConverter;
+
 import com.propertyvista.pmsite.server.pages.AptListPage;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class AdvancedSearchCriteriaPanel extends Panel {
     private static final long serialVersionUID = 1L;
@@ -28,14 +37,29 @@ public class AdvancedSearchCriteriaPanel extends Panel {
     public AdvancedSearchCriteriaPanel() {
         super("advancedSearchCriteriaPanel");
 
-        CompoundPropertyModel<SearchCriteriaModel> model = new CompoundPropertyModel<SearchCriteriaModel>(PMSiteApplication.get().getSearchModel());
+        PropertySearchCriteria entity = EntityFactory.create(PropertySearchCriteria.class);
+        IPojo<PropertySearchCriteria> pojo = ServerEntityFactory.getPojo(entity);
+        final CompoundPropertyModel<IPojo<PropertySearchCriteria>> model = new CompoundPropertyModel<IPojo<PropertySearchCriteria>>(pojo);
 
-        final Form<SearchCriteriaModel> form = new Form<SearchCriteriaModel>("advancedSearchCriteriaForm", model) {
+        final Form<IPojo<PropertySearchCriteria>> form = new Form<IPojo<PropertySearchCriteria>>("advancedSearchCriteriaForm", model) {
             private static final long serialVersionUID = 1L;
 
             @Override
             public void onSubmit() {
-                setResponsePage(AptListPage.class);
+                // need to use parameters for bookmarkable search
+                setResponsePage(AptListPage.class, prepareParams());
+            }
+
+            private PageParameters prepareParams() {
+                PropertySearchCriteria criteria = model.getObject().getEntityValue();
+                Map<String, List<String>> args = EntityArgsConverter.convertToArgs(criteria);
+
+                Map<String, String[]> argsW = new HashMap<String, String[]>();
+                for (String key : args.keySet()) {
+                    argsW.put(key, new String[] { args.get(key).get(0) });
+                }
+
+                return new PageParameters(argsW);
             }
         };
 
