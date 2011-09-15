@@ -29,16 +29,19 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 
 import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaInputPanel;
 import com.propertyvista.pmsite.server.panels.AptListPanel;
 import com.propertyvista.pmsite.server.panels.GwtInclude;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.AmenityType;
 
 public class AptListPage extends BasePage {
 
     public AptListPage(PageParameters params) {
         super(params);
+        setVersioned(false);
 
         Map<String, String[]> argsW = params.toRequestParameters();
 
@@ -48,6 +51,15 @@ public class AptListPage extends BasePage {
         }
 
         PropertySearchCriteria criteria = EntityArgsConverter.createFromArgs(PropertySearchCriteria.class, argsE);
+
+        String[] amenities = argsW.get("amenities");
+
+        if (amenities != null) {
+            for (int i = 0; i < amenities.length; i++) {
+                criteria.amenities().add(AmenityType.valueOf(amenities[i]));
+            }
+        }
+
         IPojo<PropertySearchCriteria> pojo = ServerEntityFactory.getPojo(criteria);
         final CompoundPropertyModel<IPojo<PropertySearchCriteria>> model = new CompoundPropertyModel<IPojo<PropertySearchCriteria>>(pojo);
 
@@ -56,21 +68,9 @@ public class AptListPage extends BasePage {
 
             @Override
             public void onSubmit() {
-                // need to use parameters for bookmarkable search
-                setResponsePage(AptListPage.class, prepareParams());
+                setResponsePage(AptListPage.class, PageParamsUtil.convertToPageParameters(model.getObject().getEntityValue()));
             }
 
-            private PageParameters prepareParams() {
-                PropertySearchCriteria criteria = model.getObject().getEntityValue();
-                Map<String, List<String>> args = EntityArgsConverter.convertToArgs(criteria);
-
-                Map<String, String[]> argsW = new HashMap<String, String[]>();
-                for (String key : args.keySet()) {
-                    argsW.put(key, new String[] { args.get(key).get(0) });
-                }
-
-                return new PageParameters(argsW);
-            }
         };
 
         //TODO use PropertySearchCriteria instead

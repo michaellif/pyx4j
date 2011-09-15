@@ -13,11 +13,6 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -26,8 +21,8 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 
+import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
@@ -46,21 +41,9 @@ public class AdvancedSearchCriteriaPanel extends Panel {
 
             @Override
             public void onSubmit() {
-                // need to use parameters for bookmarkable search
-                setResponsePage(AptListPage.class, prepareParams());
+                setResponsePage(AptListPage.class, PageParamsUtil.convertToPageParameters(model.getObject().getEntityValue()));
             }
 
-            private PageParameters prepareParams() {
-                PropertySearchCriteria criteria = model.getObject().getEntityValue();
-                Map<String, List<String>> args = EntityArgsConverter.convertToArgs(criteria);
-
-                Map<String, String[]> argsW = new HashMap<String, String[]>();
-                for (String key : args.keySet()) {
-                    argsW.put(key, new String[] { args.get(key).get(0) });
-                }
-
-                return new PageParameters(argsW);
-            }
         };
 
         form.add(new AdvancedSearchCriteriaInputPanel("searchCriteriaInput", model));
