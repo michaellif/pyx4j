@@ -34,7 +34,7 @@ public class DashboardEditorForm extends CrmEntityForm<DashboardMetadata> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
         main.add(inject(proto().name()), 15);
         main.add(inject(proto().description()), 25);

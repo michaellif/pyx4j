@@ -46,7 +46,7 @@ public class ReportViewActivity extends BoardViewActivity<ReportView> implements
         dashboardType = null;
 
         String id;
-        if ((id = ((AppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_ITEM_ID)) != null) {
+        if ((id = ((AppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
             entityId = new Key(id);
         } else if (place instanceof CrmSiteMap.Report.System) {
             dashboardType = DashboardType.system;

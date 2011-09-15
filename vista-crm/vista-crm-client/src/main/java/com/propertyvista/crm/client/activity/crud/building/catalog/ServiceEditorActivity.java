@@ -14,12 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.building.catalog;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.IListerView;
@@ -36,8 +34,6 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 
 public class ServiceEditorActivity extends EditorActivityBase<Service> implements ServiceEditorView.Presenter {
-
-    private Service.Type itemType;
 
     private final IListerView.Presenter featureLister;
 
@@ -58,29 +54,21 @@ public class ServiceEditorActivity extends EditorActivityBase<Service> implement
     }
 
     @Override
-    public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
-        if (isNewItem()) {
-            ((ServiceEditorView) view).showSelectTypePopUp(new AsyncCallback<Service.Type>() {
-                @Override
-                public void onSuccess(Service.Type result) {
-                    itemType = result;
-                    ServiceEditorActivity.super.start(panel, eventBus);
-                }
+    protected void createNewEntity(final AsyncCallback<Service> callback) {
+        ((ServiceEditorView) view).showSelectTypePopUp(new AsyncCallback<Service.Type>() {
+            @Override
+            public void onSuccess(Service.Type type) {
+                Service entity = EntityFactory.create(entityClass);
+                entity.type().setValue(type);
 
-                @Override
-                public void onFailure(Throwable caught) {
-                    throw new UnrecoverableClientError(caught);
-                }
-            });
-        } else {
-            super.start(panel, eventBus);
-        }
-    }
+                callback.onSuccess(entity);
+            }
 
-    @Override
-    protected void initNewItem(Service entity) {
-        super.initNewItem(entity);
-        entity.type().setValue(itemType);
+            @Override
+            public void onFailure(Throwable caught) {
+                callback.onFailure(caught);
+            }
+        });
     }
 
     @Override

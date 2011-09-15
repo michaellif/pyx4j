@@ -14,12 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.building.catalog;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
@@ -31,8 +29,6 @@ import com.propertyvista.domain.financial.offering.ServiceCatalog;
 
 public class FeatureEditorActivity extends EditorActivityBase<Feature> {
 
-    private Feature.Type itemType;
-
     @SuppressWarnings("unchecked")
     public FeatureEditorActivity(Place place) {
         super((FeatureEditorView) MarketingViewFactory.instance(FeatureEditorView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class),
@@ -41,55 +37,31 @@ public class FeatureEditorActivity extends EditorActivityBase<Feature> {
     }
 
     @Override
-    public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
-        if (isNewItem()) {
-            ((FeatureEditorView) view).showSelectTypePopUp(new AsyncCallback<Feature.Type>() {
-                @Override
-                public void onSuccess(Feature.Type result) {
-                    itemType = result;
-                    FeatureEditorActivity.super.start(panel, eventBus);
-                }
-
-                @Override
-                public void onFailure(Throwable caught) {
-                    throw new UnrecoverableClientError(caught);
-                }
-            });
-        } else {
-            super.start(panel, eventBus);
-        }
-    }
-
-    @Override
-    protected void createNewItem(final AsyncCallback<Feature> callback) {
-        super.createNewItem(new AsyncCallback<Feature>() {
+    protected void createNewEntity(final AsyncCallback<Feature> callback) {
+        ((FeatureEditorView) view).showSelectTypePopUp(new AsyncCallback<Feature.Type>() {
             @Override
-            public void onSuccess(final Feature feature) {
+            public void onSuccess(final Feature.Type type) {
                 ((FeatureCrudService) service).retrieveCatalog(new AsyncCallback<ServiceCatalog>() {
                     @Override
                     public void onSuccess(ServiceCatalog catalog) {
-                        feature.catalog().set(catalog);
-                        callback.onSuccess(feature);
+                        Feature entity = EntityFactory.create(entityClass);
+                        entity.type().setValue(type);
+                        entity.catalog().set(catalog);
+
+                        callback.onSuccess(entity);
                     }
 
                     @Override
                     public void onFailure(Throwable caught) {
-                        throw new UnrecoverableClientError(caught);
+                        callback.onFailure(caught);
                     }
                 }, parentID);
             }
 
             @Override
             public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
+                callback.onFailure(caught);
             }
         });
-    }
-
-    @Override
-    protected void initNewItem(Feature entity) {
-        super.initNewItem(entity);
-        entity.type().setValue(itemType);
-
     }
 }

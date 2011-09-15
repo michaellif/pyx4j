@@ -106,7 +106,9 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
     @Override
     public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
+        if (index < tabPanel.getWidgetCount()) {
+            tabPanel.selectTab(index);
+        }
     }
 
     @Override

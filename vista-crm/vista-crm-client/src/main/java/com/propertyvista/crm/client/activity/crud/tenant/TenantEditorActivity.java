@@ -14,12 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.tenant;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
@@ -31,8 +29,6 @@ import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implements TenantEditorView.Presenter {
 
-    private Tenant.Type tenantType;
-
     @SuppressWarnings("unchecked")
     public TenantEditorActivity(Place place) {
         super((TenantEditorView) TenantViewFactory.instance(TenantEditorView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class),
@@ -41,29 +37,20 @@ public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implemen
     }
 
     @Override
-    public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
-        if (isNewItem()) {
-            ((TenantEditorView) view).showSelectTypePopUp(new AsyncCallback<Tenant.Type>() {
-                @Override
-                public void onSuccess(Tenant.Type result) {
-                    tenantType = result;
-                    TenantEditorActivity.super.start(panel, eventBus);
-                }
+    protected void createNewEntity(final AsyncCallback<TenantDTO> callback) {
+        ((TenantEditorView) view).showSelectTypePopUp(new AsyncCallback<Tenant.Type>() {
+            @Override
+            public void onSuccess(Tenant.Type type) {
+                TenantDTO entity = EntityFactory.create(entityClass);
+                entity.type().setValue(type);
 
-                @Override
-                public void onFailure(Throwable caught) {
-                    throw new UnrecoverableClientError(caught);
-                }
-            });
-        } else {
-            super.start(panel, eventBus);
-        }
-    }
+                callback.onSuccess(entity);
+            }
 
-    @Override
-    protected void initNewItem(TenantDTO entity) {
-        if (isNewItem()) {
-            entity.type().setValue(tenantType);
-        }
+            @Override
+            public void onFailure(Throwable caught) {
+                callback.onFailure(caught);
+            }
+        });
     }
 }

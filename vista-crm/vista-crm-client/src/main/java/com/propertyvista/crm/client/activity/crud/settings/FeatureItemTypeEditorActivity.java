@@ -16,7 +16,9 @@ package com.propertyvista.crm.client.activity.crud.settings;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
@@ -35,7 +37,9 @@ public class FeatureItemTypeEditorActivity extends EditorActivityBase<ServiceIte
     }
 
     @Override
-    protected void initNewItem(ServiceItemType entity) {
+    protected void createNewEntity(AsyncCallback<ServiceItemType> callback) {
+        ServiceItemType entity = EntityFactory.create(entityClass);
         entity.type().setValue(ServiceItemType.Type.feature);
+        super.createNewEntity(callback);
     }
 }

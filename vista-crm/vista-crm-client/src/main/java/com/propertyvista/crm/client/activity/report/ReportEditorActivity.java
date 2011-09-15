@@ -15,7 +15,9 @@ package com.propertyvista.crm.client.activity.report;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
@@ -38,11 +40,10 @@ public class ReportEditorActivity extends EditorActivityBase<DashboardMetadata> 
     }
 
     @Override
-    protected void initNewItem(DashboardMetadata entity) {
-        if (isNewItem()) {
-            entity.type().setValue(DashboardType.system);
-            entity.layoutType().setValue(LayoutType.Report);
-        }
+    protected void createNewEntity(AsyncCallback<DashboardMetadata> callback) {
+        DashboardMetadata entity = EntityFactory.create(entityClass);
+        entity.type().setValue(DashboardType.system);
+        entity.layoutType().setValue(LayoutType.Report);
     }
 
     @Override
