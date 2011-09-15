@@ -206,17 +206,17 @@ public class CrmSiteMap implements SiteMap {
         }
     }
 
-    @NavigationItem(navigLabel = "Report")
+    @PlaceProperties(caption = "Report")
     public static class Report extends CrudAppPlace {
+
+        @PlaceProperties(caption = "Reports")
+        @NavigationItem(navigLabel = "Manage Reports")
+        public static class Management extends CrudAppPlace {
+        }
 
         @PlaceProperties(caption = "Edit")
         @NavigationItem(navigLabel = "Edit")
         public static class Edit extends CrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Report Management")
-        @NavigationItem(navigLabel = "Manage Reports")
-        public static class Management extends AppPlace {
         }
 
         @PlaceProperties(caption = "System Report")
@@ -226,18 +226,17 @@ public class CrmSiteMap implements SiteMap {
     }
 
     @PlaceProperties(caption = "Dashboard")
-    @NavigationItem(navigLabel = "Dashboard")
     public static class Dashboard extends CrudAppPlace {
+
+        @PlaceProperties(caption = "Dashboards")
+        @NavigationItem(navigLabel = "Manage Dashboards")
+        public static class Management extends CrudAppPlace {
+
+        }
 
         @PlaceProperties(caption = "Edit")
         @NavigationItem(navigLabel = "Edit")
         public static class Edit extends CrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Dashboard Management")
-        @NavigationItem(navigLabel = "Manage Dashboards")
-        public static class Management extends AppPlace {
-
         }
 
         @PlaceProperties(caption = "System Dashboard")

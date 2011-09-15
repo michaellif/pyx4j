@@ -17,14 +17,18 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace.Type;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.event.NavigationUpdateEvent;
 import com.propertyvista.crm.client.ui.dashboard.DashboardEditor;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
@@ -70,5 +74,12 @@ public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadat
     protected void onSaveSuccess(DashboardMetadata result) {
         super.onSaveSuccess(result);
         AppSite.instance().getEventBus().fireEvent(new NavigationUpdateEvent());
+    }
+
+    @Override
+    protected void goToViewer(Key entityID) {
+        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(CrmSiteMap.Dashboard.Management.class);
+        place.setType(Type.lister);
+        AppSite.getPlaceController().goTo(place);
     }
 }

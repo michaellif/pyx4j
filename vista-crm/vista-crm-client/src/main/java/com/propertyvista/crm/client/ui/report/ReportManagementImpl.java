@@ -19,7 +19,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class ReportManagementImpl extends CrmListerViewImplBase<DashboardMetadata> implements ReportManagement {
     public ReportManagementImpl() {
-        super(CrmSiteMap.Report.class);
+        super(CrmSiteMap.Report.Management.class);
         setLister(new ReportLister());
     }
 }
