@@ -21,8 +21,8 @@ import java.util.Map;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextField;
@@ -39,6 +39,10 @@ import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class AdvancedSearchCriteriaInputPanel extends Panel {
     private static final long serialVersionUID = 1L;
+
+    private static enum NumNames {
+        zero, One, Two, Three, Four, Five, Six, Seven, Eight;
+    }
 
     public AdvancedSearchCriteriaInputPanel(String id, CompoundPropertyModel<IPojo<PropertySearchCriteria>> model) {
         super(id, model);
@@ -98,17 +102,33 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         distInput.add(new MinimumValidator<Integer>(1));
         add(distInput);
 
+        IChoiceRenderer<Integer> intRenderer = new IChoiceRenderer<Integer>() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public String getDisplayValue(Integer param) {
+                return param == null ? "Any" : NumNames.values()[param].name();
+            }
+
+            @Override
+            public String getIdValue(Integer param, int paramInt) {
+                return String.valueOf(paramInt);
+            }
+
+        };
+
         // add common fields
         // bedrooms
-        add(new DropDownChoice<PropertySearchCriteria.BedroomChoice>("minBeds", Arrays.asList(PropertySearchCriteria.BedroomChoice.values())) {
+        add(new DropDownChoice<Integer>("minBeds", Arrays.asList(new Integer[] { null, 1, 2, 3, 4, 5 }), intRenderer) {
             private static final long serialVersionUID = 1L;
 
             @Override
             protected CharSequence getDefaultChoice(final Object selected) {
                 return "";
             }
+
         });
-        add(new DropDownChoice<PropertySearchCriteria.BedroomChoice>("maxBeds", Arrays.asList(PropertySearchCriteria.BedroomChoice.values())) {
+        add(new DropDownChoice<Integer>("maxBeds", Arrays.asList(new Integer[] { null, 1, 2, 3, 4, 5 }), intRenderer) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -117,7 +137,7 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
             }
         });
         // bathrooms
-        add(new DropDownChoice<PropertySearchCriteria.BathroomChoice>("minBath", Arrays.asList(PropertySearchCriteria.BathroomChoice.values())) {
+        add(new DropDownChoice<Integer>("minBath", Arrays.asList(new Integer[] { null, 1, 2, 3 }), intRenderer) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -125,7 +145,7 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
                 return "";
             }
         });
-        add(new DropDownChoice<PropertySearchCriteria.BathroomChoice>("maxBath", Arrays.asList(PropertySearchCriteria.BathroomChoice.values())) {
+        add(new DropDownChoice<Integer>("maxBath", Arrays.asList(new Integer[] { null, 1, 2, 3 }), intRenderer) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -137,7 +157,6 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         add(new TextField<Integer>("minPrice").add(new MinimumValidator<Integer>(100)));
         add(new TextField<Integer>("maxPrice").add(new MinimumValidator<Integer>(100)));
         // amenities
-        add(new CheckBoxMultipleChoice<PropertySearchCriteria.AmenitySet>("amenities", Arrays.asList(PropertySearchCriteria.AmenitySet.values())));
+        //add(new CheckBoxMultipleChoice<PropertySearchCriteria.AmenitySet>("amenities", Arrays.asList(PropertySearchCriteria.AmenitySet.values())));
     }
-
 }

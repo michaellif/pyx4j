@@ -108,32 +108,6 @@ public interface PropertySearchCriteria extends IEntity {
         }
     }
 
-    public static enum BedroomChoice {
-        Any(null), One(1), Two(2), Three(3), Four(4);
-        private final Integer rooms;
-
-        private BedroomChoice(Integer rooms) {
-            this.rooms = rooms;
-        }
-
-        public int getRooms() {
-            return rooms;
-        }
-    }
-
-    public static enum BathroomChoice {
-        Any(null), One(1), Two(2), Three(3), Four(4);
-        private final Integer rooms;
-
-        private BathroomChoice(Integer rooms) {
-            this.rooms = rooms;
-        }
-
-        public int getRooms() {
-            return rooms;
-        }
-    }
-
     public static enum AmenitySet {
         Elevator, Fitness, Parking, Pool
     }
