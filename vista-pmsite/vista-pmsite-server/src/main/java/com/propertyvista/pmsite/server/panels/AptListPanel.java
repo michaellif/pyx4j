@@ -33,11 +33,11 @@ import com.pyx4j.entity.shared.IList;
 import com.propertyvista.domain.contact.IAddress;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.model.AttributeClassModifier;
-import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class AptListPanel extends Panel {
     private static final long serialVersionUID = 1L;
@@ -46,9 +46,9 @@ public class AptListPanel extends Panel {
         super(id, model);
 
         // TODO - the model object has to be replaced by the SearchCriteriaModel.displayMode component 
-        SearchCriteriaModel.DisplayMode displayModeModel = SearchCriteriaModel.DisplayMode.Map;
-        RadioGroup<SearchCriteriaModel.DisplayMode> displayModeRadio = new RadioGroup<SearchCriteriaModel.DisplayMode>("displayMode",
-                new Model<SearchCriteriaModel.DisplayMode>(displayModeModel)) {
+        PropertySearchCriteria.DisplayMode displayModeModel = PropertySearchCriteria.DisplayMode.map;
+        RadioGroup<PropertySearchCriteria.DisplayMode> displayModeRadio = new RadioGroup<PropertySearchCriteria.DisplayMode>("displayMode",
+                new Model<PropertySearchCriteria.DisplayMode>(displayModeModel)) {
             // TODO replace this BS (server round trip) with JS (onclick handler)
             private static final long serialVersionUID = 1L;
 
@@ -64,14 +64,14 @@ public class AptListPanel extends Panel {
                 Component list = getParent().get("aptResultList");
 
                 // TODO replace this BS with JS
-                if (newMode == SearchCriteriaModel.DisplayMode.Map) {
+                if (newMode == PropertySearchCriteria.DisplayMode.map) {
                     if (map != null) {
                         map.add(new AttributeClassModifier("display_none", null));
                     }
                     if (list != null) {
                         list.add(new AttributeClassModifier(null, "display_none"));
                     }
-                } else if (newMode == SearchCriteriaModel.DisplayMode.List) {
+                } else if (newMode == PropertySearchCriteria.DisplayMode.list) {
                     if (list != null) {
                         list.add(new AttributeClassModifier("display_none", null));
                     }
@@ -81,10 +81,10 @@ public class AptListPanel extends Panel {
                 }
             }
         };
-        displayModeRadio.add(new Radio<SearchCriteriaModel.DisplayMode>("displayMap", new Model<SearchCriteriaModel.DisplayMode>(
-                SearchCriteriaModel.DisplayMode.Map)));
-        displayModeRadio.add(new Radio<SearchCriteriaModel.DisplayMode>("displayList", new Model<SearchCriteriaModel.DisplayMode>(
-                SearchCriteriaModel.DisplayMode.List)));
+        displayModeRadio.add(new Radio<PropertySearchCriteria.DisplayMode>("displayMap", new Model<PropertySearchCriteria.DisplayMode>(
+                PropertySearchCriteria.DisplayMode.map)));
+        displayModeRadio.add(new Radio<PropertySearchCriteria.DisplayMode>("displayList", new Model<PropertySearchCriteria.DisplayMode>(
+                PropertySearchCriteria.DisplayMode.list)));
         add(displayModeRadio.setRequired(true));
 
         add(new Label("aptResultMap", ""));

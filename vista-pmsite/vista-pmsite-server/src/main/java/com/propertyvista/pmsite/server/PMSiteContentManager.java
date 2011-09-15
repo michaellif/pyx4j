@@ -48,7 +48,6 @@ import com.propertyvista.pmsite.server.converter.FloorplanFloorplanPropertyDTOCo
 import com.propertyvista.pmsite.server.model.ApartmentModel;
 import com.propertyvista.pmsite.server.model.NewsDataModel;
 import com.propertyvista.pmsite.server.model.PromoDataModel;
-import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 import com.propertyvista.pmsite.server.model.TestimDataModel;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
@@ -251,14 +250,14 @@ public class PMSiteContentManager implements Serializable {
         return ret;
     }
 
-    public static ApartmentModel getPropertyModel(SearchCriteriaModel searchCriteria) {
+    public static ApartmentModel getPropertyModel(PropertySearchCriteria searchCriteria) {
         ApartmentModel model = new ApartmentModel();
 
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
 
         // add search criteria
-        if (searchCriteria.getSearchType() == SearchCriteriaModel.SearchType.City) {
-            String city = searchCriteria.getCity();
+        if (PropertySearchCriteria.SearchType.city.equals(searchCriteria.searchType())) {
+            String city = searchCriteria.city().getStringView();
             if (city != null) {
                 dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), city));
             }

@@ -67,7 +67,7 @@ public class QuickSearchCriteriaInputPanel extends Panel {
         add(cityChoice);
 
         // bedrooms
-        add(new DropDownChoice<PropertySearchCriteria.BedroomRange>("bedsChoice", Arrays.asList(PropertySearchCriteria.BedroomRange.values())) {
+        add(new DropDownChoice<PropertySearchCriteria.BedroomRange>("bedsRange", Arrays.asList(PropertySearchCriteria.BedroomRange.values())) {
             private static final long serialVersionUID = 1L;
 
             @Override

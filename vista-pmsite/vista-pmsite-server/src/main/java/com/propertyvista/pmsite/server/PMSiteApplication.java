@@ -23,7 +23,6 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.target.coding.MixedParamUrlCodingStrategy;
 import org.apache.wicket.request.target.coding.QueryStringUrlCodingStrategy;
 
-import com.propertyvista.pmsite.server.model.SearchCriteriaModel;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.pmsite.server.pages.FindAptPage;
@@ -32,8 +31,6 @@ import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
 
 public class PMSiteApplication extends WebApplication {
-
-    private SearchCriteriaModel searchModel;
 
     @Override
     public Class<? extends Page> getHomePage() {
@@ -53,8 +50,6 @@ public class PMSiteApplication extends WebApplication {
         // add js "virtual" folder
         getSharedResources().putClassAlias(JSResources.class, "js");
 
-        // create search model
-        this.searchModel = new SearchCriteriaModel();
     }
 
     @Override
@@ -66,7 +61,4 @@ public class PMSiteApplication extends WebApplication {
         return (PMSiteApplication) WebApplication.get();
     }
 
-    public SearchCriteriaModel getSearchModel() {
-        return searchModel;
-    }
 }

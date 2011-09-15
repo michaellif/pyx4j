@@ -26,6 +26,10 @@ public interface PropertySearchCriteria extends IEntity {
         city, proximity;
     }
 
+    public enum DisplayMode {
+        map, list
+    }
+
     public static enum PriceRange {
 
         Any(null), lt600(0), gt600(600), gt800(800), gt1000(1000), gt1200(1200);
