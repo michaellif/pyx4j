@@ -22,7 +22,7 @@ import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.basic.Label;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -57,7 +57,7 @@ public class StaticPage extends BasePage {
                         .getLocale()));
                 pageContentCriteria.add(PropertyCriterion.eq(pageContentCriteria.proto().descriptor(), descriptor));
 
-                List<PageContent> pages = PersistenceServicesFactory.getPersistenceService().query(pageContentCriteria);
+                List<PageContent> pages = Persistence.service().query(pageContentCriteria);
                 if (pages.size() == 1) {
                     response.write(pages.get(0).content().getStringView());
                 }

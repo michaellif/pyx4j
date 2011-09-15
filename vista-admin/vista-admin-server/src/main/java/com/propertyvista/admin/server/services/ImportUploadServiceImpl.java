@@ -26,7 +26,7 @@ import org.xml.sax.InputSource;
 
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.deferred.DeferredProcessorThread;
@@ -82,7 +82,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
                 throw new Error();
             }
             NamespaceManager.setNamespace(Pmc.adminNamespace);
-            Pmc pmc = PersistenceServicesFactory.getPersistenceService().retrieve(Pmc.class, importDTO.id().getValue());
+            Pmc pmc = Persistence.service().retrieve(Pmc.class, importDTO.id().getValue());
             if (pmc == null) {
                 throw new Error("PMC Not found");
             }

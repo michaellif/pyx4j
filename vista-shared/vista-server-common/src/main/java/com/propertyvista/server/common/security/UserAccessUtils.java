@@ -18,7 +18,7 @@ import java.util.GregorianCalendar;
 
 import org.xnap.commons.i18n.I18n;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
@@ -30,7 +30,7 @@ public class UserAccessUtils {
     protected static I18n i18n = I18nFactory.getI18n();
 
     public static String createAccessToken(User user, int ttlDays) {
-        UserCredential credential = PersistenceServicesFactory.getPersistenceService().retrieve(UserCredential.class, user.getPrimaryKey());
+        UserCredential credential = Persistence.service().retrieve(UserCredential.class, user.getPrimaryKey());
         if (credential == null) {
             throw new UserRuntimeException(i18n.tr("Invalid login/password")); // TODO is this a correct message?
         }
@@ -38,7 +38,7 @@ public class UserAccessUtils {
         Calendar expire = new GregorianCalendar();
         expire.add(Calendar.DATE, ttlDays);
         credential.accessKeyExpire().setValue(expire.getTime());
-        PersistenceServicesFactory.getPersistenceService().persist(credential);
+        Persistence.service().persist(credential);
 
         String token = AccessKey.compressToken(user.email().getValue(), credential.accessKey().getValue());
 

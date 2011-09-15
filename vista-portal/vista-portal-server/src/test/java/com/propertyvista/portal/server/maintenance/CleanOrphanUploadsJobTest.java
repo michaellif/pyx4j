@@ -31,7 +31,7 @@ import org.quartz.TriggerBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.quartz.SchedulerHelper;
@@ -77,25 +77,25 @@ public class CleanOrphanUploadsJobTest extends VistaDBTestBase {
             return;
         }
 
-        int totalCountExpected = PersistenceServicesFactory.getPersistenceService().count(EntityQueryCriteria.create(ApplicationDocumentData.class));
+        int totalCountExpected = Persistence.service().count(EntityQueryCriteria.create(ApplicationDocumentData.class));
 
         //first run on on fully linked and recently created records - no records deletions expected
         instance.execute(context);
-        int totalCountAfter = PersistenceServicesFactory.getPersistenceService().count(EntityQueryCriteria.create(ApplicationDocumentData.class));
+        int totalCountAfter = Persistence.service().count(EntityQueryCriteria.create(ApplicationDocumentData.class));
         Assert.assertEquals("It was expected no changes since all records are linked and recent", totalCountExpected, totalCountAfter);
 
         //create new application data record
-        List<ApplicationDocumentData> allDocData = PersistenceServicesFactory.getPersistenceService().query(
+        List<ApplicationDocumentData> allDocData = Persistence.service().query(
                 EntityQueryCriteria.create(ApplicationDocumentData.class));
         ApplicationDocumentData data1 = allDocData.get(0);
         ApplicationDocumentData applicationDocumentData = createDataRecord(data1.tenant());
         totalCountExpected++;
-        totalCountAfter = PersistenceServicesFactory.getPersistenceService().count(EntityQueryCriteria.create(ApplicationDocumentData.class));
+        totalCountAfter = Persistence.service().count(EntityQueryCriteria.create(ApplicationDocumentData.class));
         Assert.assertEquals("It was expected record count increased since we added one more data record", totalCountExpected, totalCountAfter);
 
         instance.execute(context);
 
-        ApplicationDocumentData data = PersistenceServicesFactory.getPersistenceService().retrieve(ApplicationDocumentData.class,
+        ApplicationDocumentData data = Persistence.service().retrieve(ApplicationDocumentData.class,
                 applicationDocumentData.id().getValue());
         Assert.assertNotNull("Cannot find data record", data);
 
@@ -103,10 +103,10 @@ public class CleanOrphanUploadsJobTest extends VistaDBTestBase {
         Calendar c = new GregorianCalendar();
         c.add(Calendar.HOUR, -25);
         applicationDocumentData.created().setValue(c.getTime());
-        PersistenceServicesFactory.getPersistenceService().persist(applicationDocumentData);
+        Persistence.service().persist(applicationDocumentData);
 
         instance.execute(context);
-        data = PersistenceServicesFactory.getPersistenceService().retrieve(ApplicationDocumentData.class, applicationDocumentData.id().getValue());
+        data = Persistence.service().retrieve(ApplicationDocumentData.class, applicationDocumentData.id().getValue());
         Assert.assertNull("Record is still in DB - expected to be cleaned up", data);
 
         /*
@@ -115,19 +115,19 @@ public class CleanOrphanUploadsJobTest extends VistaDBTestBase {
          * EntityQueryCriteria.create(ApplicationDocument.class);
          * //criteria.add(PropertyCriterion.eq(criteria.proto().dataId(), 1L));
          * //ApplicationDocument doc =
-         * PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+         * Persistence.service().retrieve(criteria);
          * //logger.info("doc={}", doc);
          * List<ApplicationDocument> allDocs =
          * PersistenceServicesFactory.getPersistenceService
          * ().query(EntityQueryCriteria.create(ApplicationDocument.class));
          * Assert.assertFalse("There is no ApplicationDocument records in DB for testing",
          * allDocs.isEmpty());
-         * PersistenceServicesFactory.getPersistenceService().delete(allDocs.get(0));
+         * Persistence.service().delete(allDocs.get(0));
          * 
          * //then run the job again - expect no changes since all records are recent
          * instance.execute(context);
          * totalCountAfter =
-         * PersistenceServicesFactory.getPersistenceService().count(EntityQueryCriteria
+         * Persistence.service().count(EntityQueryCriteria
          * .create(ApplicationDocumentData.class));
          * Assert.assertEquals("It was expected no changes since all records are recent",
          * totalCountExpected, totalCountAfter);
@@ -143,14 +143,14 @@ public class CleanOrphanUploadsJobTest extends VistaDBTestBase {
          * Calendar c = new GregorianCalendar();
          * c.add(Calendar.HOUR, -25);
          * d.created().setValue(c.getTime());
-         * PersistenceServicesFactory.getPersistenceService().persist(d);
+         * Persistence.service().persist(d);
          * }
          * //logger.info("appDocDataId={}", appDocDataId);
          * 
          * //then run the job again - expect one unlinked records to be deleted
          * instance.execute(context);
          * totalCountAfter =
-         * PersistenceServicesFactory.getPersistenceService().count(EntityQueryCriteria
+         * Persistence.service().count(EntityQueryCriteria
          * .create(ApplicationDocumentData.class));
          * totalCountExpected--;
          * Assert.assertEquals("It was expected one unlinked record to be deleted",
@@ -160,7 +160,7 @@ public class CleanOrphanUploadsJobTest extends VistaDBTestBase {
          * still linked
          * instance.execute(context);
          * totalCountAfter =
-         * PersistenceServicesFactory.getPersistenceService().count(EntityQueryCriteria
+         * Persistence.service().count(EntityQueryCriteria
          * .create(ApplicationDocumentData.class));
          * Assert.assertEquals(
          * "It was expected no changes since all remaining records are linked",
@@ -168,21 +168,21 @@ public class CleanOrphanUploadsJobTest extends VistaDBTestBase {
          * 
          * //unlink one more record
          * allDocs =
-         * PersistenceServicesFactory.getPersistenceService().query(EntityQueryCriteria
+         * Persistence.service().query(EntityQueryCriteria
          * .create(ApplicationDocument.class));
          * Assert.assertFalse("There is no ApplicationDocument records in DB for testing",
          * allDocs.isEmpty());
-         * PersistenceServicesFactory.getPersistenceService().delete(allDocs.get(0));
+         * Persistence.service().delete(allDocs.get(0));
          * //criteria = EntityQueryCriteria.create(ApplicationDocument.class);
          * //criteria.add(PropertyCriterion.eq(criteria.proto().dataId(), appDocDataId));
-         * //doc = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+         * //doc = Persistence.service().retrieve(criteria);
          * //logger.info("doc={}", doc);
-         * //PersistenceServicesFactory.getPersistenceService().delete(doc);
+         * //Persistence.service().delete(doc);
          * 
          * //then run the job again - expect second unlinked records to be deleted
          * instance.execute(context);
          * totalCountAfter =
-         * PersistenceServicesFactory.getPersistenceService().count(EntityQueryCriteria
+         * Persistence.service().count(EntityQueryCriteria
          * .create(ApplicationDocumentData.class));
          * totalCountExpected--;
          * Assert.assertEquals("It was expected one unlinked record to be deleted",
@@ -223,7 +223,7 @@ public class CleanOrphanUploadsJobTest extends VistaDBTestBase {
 
         applicationDocumentData.data().setValue(new byte[0]);
         applicationDocumentData.contentType().setValue("image/jpeg");
-        PersistenceServicesFactory.getPersistenceService().persist(applicationDocumentData);
+        Persistence.service().persist(applicationDocumentData);
         return applicationDocumentData;
     }
 }

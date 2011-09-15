@@ -16,7 +16,7 @@ package com.propertyvista.portal.server.preloader;
 import java.util.List;
 import java.util.Locale;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 
@@ -36,7 +36,7 @@ public class DevelopmentSecurityPreloader extends AbstractDataPreloader {
             }
         }
 
-        PersistenceServicesFactory.getPersistenceService().persist(developmentUsers);
+        Persistence.service().persist(developmentUsers);
         developersCount += developmentUsers.size();
 
         StringBuilder b = new StringBuilder();

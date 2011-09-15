@@ -23,7 +23,7 @@ import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.DemoData;
@@ -91,7 +91,7 @@ public class PreloadTenants extends BaseVistaDataPreloader {
         StringBuilder sb = new StringBuilder();
         sb.append("\n\nLoaded ");
 
-        List<Tenant> tenants = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Tenant>(Tenant.class));
+        List<Tenant> tenants = Persistence.service().query(new EntityQueryCriteria<Tenant>(Tenant.class));
         sb.append(tenants.size()).append(" tenants\n");
         for (Tenant tenant : tenants) {
             sb.append("\t");

@@ -22,7 +22,6 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -44,7 +43,7 @@ public class VistaDBReset {
         VistaServerSideConfiguration conf = new VistaServerSideConfiguration();
         ServerSideConfiguration.setInstance(conf);
         NamespaceManager.setNamespace(VistaNamespaceResolver.demoNamespace);
-        EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) PersistenceServicesFactory.getPersistenceService();
+        EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
         List<String> allClasses = EntityClassFinder.findEntityClasses();
         for (String className : allClasses) {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);

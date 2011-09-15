@@ -17,7 +17,7 @@ import java.io.IOException;
 
 import com.propertvista.generator.util.RandomUtil;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
@@ -50,11 +50,11 @@ public class PortalSitePreloader extends AbstractDataPreloader {
         try {
             enLocale = EntityFactory.create(Locale.class);
             enLocale.lang().setValue(Lang.en);
-            PersistenceServicesFactory.getPersistenceService().persist(enLocale);
+            Persistence.service().persist(enLocale);
 
             frLocale = EntityFactory.create(Locale.class);
             frLocale.lang().setValue(Lang.fr);
-            PersistenceServicesFactory.getPersistenceService().persist(frLocale);
+            Persistence.service().persist(frLocale);
 
             SiteDescriptor site = EntityFactory.create(SiteDescriptor.class);
             site.skin().setValue(Skin.skin1);
@@ -78,7 +78,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
                                 + "But men, why she's starring at me constantly!!!");
                 testimonial.author().setValue("Uncle Vasya Sr.");
 
-                PersistenceServicesFactory.getPersistenceService().persist(testimonial);
+                Persistence.service().persist(testimonial);
             }
 
             {
@@ -89,7 +89,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
                 news.content().setValue("Just by one star and get another two for free! Absolutely free! Just do not forget to pay property tax.");
                 news.date().setValue(RandomUtil.randomLogicalDate());
 
-                PersistenceServicesFactory.getPersistenceService().persist(news);
+                Persistence.service().persist(news);
             }
 
             site.childPages().add(createDynamicPage("Find an Apartment", "Trouver un appartement", PageDescriptor.Type.findApartment));
@@ -104,7 +104,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
             site.childPages().add(createStaticPage("Terms Of Use", "site-customer-care.html", "Mentions légales", "site-customer-care.html"));
             site.childPages().add(createStaticPage("Privacy", "site-customer-care.html", "Politique de confidentialité", "site-customer-care.html"));
 
-            PersistenceServicesFactory.getPersistenceService().persist(site);
+            Persistence.service().persist(site);
 
             StringBuilder b = new StringBuilder();
             b.append("Created Pages");
@@ -122,7 +122,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
     private PageDescriptor createStaticPage(String enCaption, String enResource, String frCaption, String frResource) throws ClassCastException, IOException {
 
         PageDescriptor page = createPage(enCaption, frCaption, PageDescriptor.Type.staticContent);
-        PersistenceServicesFactory.getPersistenceService().persist(page);
+        Persistence.service().persist(page);
 
         if (enResource != null) {
             PageContent pageContent = EntityFactory.create(PageContent.class);

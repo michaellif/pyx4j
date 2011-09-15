@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
 import com.propertyvista.domain.ref.City;
@@ -39,9 +39,9 @@ public class LocationPreloader extends AbstractDataPreloader {
         SharedData.registerProvinces(provinces);
         SharedData.registerCountries(countries);
 
-        PersistenceServicesFactory.getPersistenceService().persist(countries);
+        Persistence.service().persist(countries);
         countriesCount += countries.size();
-        PersistenceServicesFactory.getPersistenceService().persist(provinces);
+        Persistence.service().persist(provinces);
         provinceCount += provinces.size();
 
         Map<String, Province> provincesMap = new HashMap<String, Province>();
@@ -52,7 +52,7 @@ public class LocationPreloader extends AbstractDataPreloader {
         for (City c : cities) {
             c.province().set(provincesMap.get(c.province().name().getValue()));
         }
-        PersistenceServicesFactory.getPersistenceService().persist(cities);
+        Persistence.service().persist(cities);
 
         StringBuilder b = new StringBuilder();
         b.append("Created " + countriesCount + " Countries").append('\n');

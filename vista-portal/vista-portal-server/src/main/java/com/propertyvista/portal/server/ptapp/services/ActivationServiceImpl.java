@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.RuntimeExceptionSerializable;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -94,13 +94,13 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         // find user(s) with the same email
         EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), request.email().getValue().toLowerCase()));
-        List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
+        List<User> users = Persistence.service().query(criteria);
         if (users.size() == 0) {
             throw new UserRuntimeException(i18n.tr("E-mail not registered"));
         }
         User user = users.get(0);
 
-        UserCredential credential = PersistenceServicesFactory.getPersistenceService().retrieve(UserCredential.class, user.getPrimaryKey());
+        UserCredential credential = Persistence.service().retrieve(UserCredential.class, user.getPrimaryKey());
         if (credential == null) {
             throw new UserRuntimeException(i18n.tr("Invalid login/password")); // TODO is this a correct message?
         }
@@ -108,7 +108,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         Calendar expire = new GregorianCalendar();
         expire.add(Calendar.DATE, 1);
         credential.accessKeyExpire().setValue(expire.getTime());
-        PersistenceServicesFactory.getPersistenceService().persist(credential);
+        Persistence.service().persist(credential);
 
         String token = AccessKey.compressToken(user.email().getValue(), credential.accessKey().getValue());
 
@@ -141,13 +141,13 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         EntityQueryCriteria<User> criteria = new EntityQueryCriteria<User>(User.class);
 
         criteria.add(PropertyCriterion.eq(userMeta.email(), token.email));
-        List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
+        List<User> users = Persistence.service().query(criteria);
         if (users.size() != 1) {
             throw new RuntimeExceptionSerializable(i18n.tr("Invalid request"));
         }
         User user = users.get(0);
 
-        UserCredential cr = PersistenceServicesFactory.getPersistenceService().retrieve(UserCredential.class, user.getPrimaryKey());
+        UserCredential cr = Persistence.service().retrieve(UserCredential.class, user.getPrimaryKey());
         if (cr == null) {
             throw new RuntimeExceptionSerializable(i18n.tr("Invalid user account, contact support"));
         }
@@ -163,7 +163,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         }
         cr.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
         cr.accessKey().setValue(null);
-        PersistenceServicesFactory.getPersistenceService().persist(cr);
+        Persistence.service().persist(cr);
 
         callback.onSuccess(AuthenticationServiceImpl.createAuthenticationResponse(VistaAuthenticationServicesImpl.beginSession(user, cr)));
 

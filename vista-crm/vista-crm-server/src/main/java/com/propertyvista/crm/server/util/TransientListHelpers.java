@@ -16,7 +16,7 @@ package com.propertyvista.crm.server.util;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -28,7 +28,7 @@ public class TransientListHelpers {
     }
 
     public static <E extends IEntity> List<E> load(Class<E> entityClass, EntityQueryCriteria<E> criteria) {
-        return PersistenceServicesFactory.getPersistenceService().query(criteria);
+        return Persistence.service().query(criteria);
     }
 
     public static <E extends IEntity> void save(IList<E> list, Class<E> entityClass) {
@@ -51,7 +51,7 @@ public class TransientListHelpers {
 
         // remove orphaned ones:
         for (E item : current) {
-            PersistenceServicesFactory.getPersistenceService().delete(item);
+            Persistence.service().delete(item);
         }
     }
 }

@@ -23,7 +23,7 @@ import com.propertvista.generator.gdo.TenantSummaryGDO;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -97,7 +97,7 @@ public class PtPreloader extends BaseVistaDataPreloader {
     private User loadUser(String name) {
         EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().name(), name));
-        user = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        user = Persistence.service().retrieve(criteria);
         return user;
     }
 
@@ -106,7 +106,7 @@ public class PtPreloader extends BaseVistaDataPreloader {
         assert (user != null);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
 
-        Application application = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        Application application = Persistence.service().retrieve(criteria);
         return application;
     }
 
@@ -114,7 +114,7 @@ public class PtPreloader extends BaseVistaDataPreloader {
     //        EntityQueryCriteria<ApplicationProgress> criteria = EntityQueryCriteria.create(ApplicationProgress.class);
     //        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
     //
-    //        ApplicationProgress progress = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+    //        ApplicationProgress progress = Persistence.service().retrieve(criteria);
     //        if (progress == null) {
     //            throw new IllegalStateException("Could not find progress for application");
     //        }
@@ -130,7 +130,7 @@ public class PtPreloader extends BaseVistaDataPreloader {
     //    private void loadUnitSelection(StringBuilder sb) {
     //        EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
     //        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-    //        UnitSelection unitSelection = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+    //        UnitSelection unitSelection = Persistence.service().retrieve(criteria);
     //
     //        ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
     //        apartmentServices.loadAvailableUnits(unitSelection);
@@ -146,10 +146,10 @@ public class PtPreloader extends BaseVistaDataPreloader {
 
         PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, PreloadConfig.createTest());
 
-        ApplicationSummaryGDO summary = generator.createSummary(user, PersistenceServicesFactory.getPersistenceService().retrieve(AptUnit.class, new Key(1)));
+        ApplicationSummaryGDO summary = generator.createSummary(user, Persistence.service().retrieve(AptUnit.class, new Key(1)));
 
         persistFullApplication(summary, generator);
-        //List<ApplicationDocument> adocs = PersistenceServicesFactory.getPersistenceService().query(EntityQueryCriteria.create(ApplicationDocument.class));
+        //List<ApplicationDocument> adocs = Persistence.service().query(EntityQueryCriteria.create(ApplicationDocument.class));
         //for(ApplicationDocument adoc : adocs) {
         //    Persistence.service().persist(generator.createApplicationDocumentData(adoc.filename().getValue(), adoc.id().getValue()));
         //}

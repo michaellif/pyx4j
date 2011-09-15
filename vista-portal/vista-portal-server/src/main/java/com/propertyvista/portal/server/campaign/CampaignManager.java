@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -60,7 +60,7 @@ public class CampaignManager {
         EntityQueryCriteria<CampaignHistory> criteria = EntityQueryCriteria.create(CampaignHistory.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
         criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), trigger));
-        CampaignHistory history = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        CampaignHistory history = Persistence.service().retrieve(criteria);
         if (history != null) {
             return;
         }
@@ -73,7 +73,7 @@ public class CampaignManager {
         history.trigger().setValue(trigger);
         history.campaign().set(phoneCallCampaign);
         execute(phoneCallCampaign, tenant);
-        PersistenceServicesFactory.getPersistenceService().persist(history);
+        Persistence.service().persist(history);
     }
 
     private static void execute(PhoneCallCampaign phoneCallCampaign, TenantInLease tenant) {
@@ -97,7 +97,7 @@ public class CampaignManager {
     public static PhoneCallCampaign getCampaign(CampaignTriger trigger) {
         EntityQueryCriteria<PhoneCallCampaign> criteria = EntityQueryCriteria.create(PhoneCallCampaign.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().triger(), trigger));
-        PhoneCallCampaign phoneCallCampaign = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        PhoneCallCampaign phoneCallCampaign = Persistence.service().retrieve(criteria);
         if (phoneCallCampaign == null) {
             return null;
         }
@@ -107,7 +107,7 @@ public class CampaignManager {
             String caller = "14166028523";
             String campaignid = CallFire.createNotificationCampaign(message, caller);
             phoneCallCampaign.campaignid().setValue(campaignid);
-            PersistenceServicesFactory.getPersistenceService().persist(phoneCallCampaign);
+            Persistence.service().persist(phoneCallCampaign);
         }
         return phoneCallCampaign;
 

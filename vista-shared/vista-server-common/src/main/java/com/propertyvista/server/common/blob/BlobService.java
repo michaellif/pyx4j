@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 
@@ -40,16 +40,16 @@ public class BlobService {
         entity.name().setValue(name);
         entity.content().setValue(content);
         entity.contentType().setValue(contentType);
-        PersistenceServicesFactory.getPersistenceService().persist(entity);
+        Persistence.service().persist(entity);
         return entity.getPrimaryKey();
     }
 
     public static void delete(Key key) {
-        PersistenceServicesFactory.getPersistenceService().delete(FileBlob.class, key);
+        Persistence.service().delete(FileBlob.class, key);
     }
 
     public static void serve(Key key, HttpServletResponse response) throws IOException {
-        FileBlob blob = PersistenceServicesFactory.getPersistenceService().retrieve(FileBlob.class, key);
+        FileBlob blob = Persistence.service().retrieve(FileBlob.class, key);
         if (blob != null) {
             response.setContentLength(blob.content().getValue().length);
             OutputStream out = response.getOutputStream();
@@ -62,7 +62,7 @@ public class BlobService {
     }
 
     public static void save(Key key, File destination) throws IOException {
-        FileBlob blob = PersistenceServicesFactory.getPersistenceService().retrieve(FileBlob.class, key);
+        FileBlob blob = Persistence.service().retrieve(FileBlob.class, key);
         if (blob != null) {
             FileUtils.forceMkdir(destination.getParentFile());
             OutputStream out = new FileOutputStream(destination);

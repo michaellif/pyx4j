@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
@@ -52,7 +52,7 @@ public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
         log.debug("maxDate={}", maxDate);
         allDataCriteria.add(new PropertyCriterion(allDataCriteria.proto().created(), Restriction.LESS_THAN, maxDate.getTime()));
 
-        List<Key> dataKeys = PersistenceServicesFactory.getPersistenceService().queryKeys(allDataCriteria);
+        List<Key> dataKeys = Persistence.service().queryKeys(allDataCriteria);
         log.debug("Number of data records found within the timeframe: {}", dataKeys.size());
         log.trace("dataKeys={}", dataKeys);
 
@@ -60,10 +60,10 @@ public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
         for (Key dataKey : dataKeys) {
             EntityQueryCriteria<ApplicationDocument> criteria = EntityQueryCriteria.create(ApplicationDocument.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().dataId(), dataKey));
-            ApplicationDocument doc = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+            ApplicationDocument doc = Persistence.service().retrieve(criteria);
             if (doc == null) {
                 log.debug("CleanOrphanApplicationDocumentDataRecordsJob: Found orphan ApplicationDocumentData record - deleting. id={}", dataKey);
-                PersistenceServicesFactory.getPersistenceService().delete(ApplicationDocumentData.class, dataKey);
+                Persistence.service().delete(ApplicationDocumentData.class, dataKey);
                 deleted++;
             }
         }

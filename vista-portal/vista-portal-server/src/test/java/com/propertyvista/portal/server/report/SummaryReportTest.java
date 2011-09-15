@@ -24,7 +24,7 @@ import com.propertvista.generator.PTGenerator;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.report.test.ReportsTestBase;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -74,17 +74,17 @@ public class SummaryReportTest extends ReportsTestBase {
     private static SummaryDTO retreiveSummary() {
         EntityQueryCriteria<User> userCriteria = EntityQueryCriteria.create(User.class);
         userCriteria.add(PropertyCriterion.eq(userCriteria.proto().name(), DemoData.PRELOADED_USERNAME));
-        User devUser = PersistenceServicesFactory.getPersistenceService().retrieve(userCriteria);
+        User devUser = Persistence.service().retrieve(userCriteria);
         Assert.assertNotNull("devUser " + DemoData.PRELOADED_USERNAME, devUser);
 
         EntityQueryCriteria<Application> applicationCriteria = EntityQueryCriteria.create(Application.class);
         applicationCriteria.add(PropertyCriterion.eq(applicationCriteria.proto().user(), devUser));
-        Application application = PersistenceServicesFactory.getPersistenceService().retrieve(applicationCriteria);
+        Application application = Persistence.service().retrieve(applicationCriteria);
         Assert.assertNotNull("devUser application", application);
 
         EntityQueryCriteria<Summary> criteria = EntityQueryCriteria.create(Summary.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-        Summary summary = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        Summary summary = Persistence.service().retrieve(criteria);
         if (summary == null) {
             summary = EntityFactory.create(SummaryDTO.class);
             summary.application().set(application);

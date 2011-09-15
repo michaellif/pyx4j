@@ -13,7 +13,7 @@
  */
 package com.propertyvista.server.common.reference;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -33,11 +33,11 @@ public class PublicDataUpdater {
         EntityQueryCriteria<City> criteriaCity = EntityQueryCriteria.create(City.class);
         criteriaCity.add(PropertyCriterion.eq(criteriaCity.proto().name(), building.info().address().city().getValue()));
         //TODO verify Province
-        City city = PersistenceServicesFactory.getPersistenceService().retrieve(criteriaCity);
+        City city = Persistence.service().retrieve(criteriaCity);
         if (city != null) {
             if (!city.hasProperties().isBooleanTrue()) {
                 city.hasProperties().setValue(Boolean.TRUE);
-                PersistenceServicesFactory.getPersistenceService().persist(city);
+                Persistence.service().persist(city);
             }
         } else {
             city = EntityFactory.create(City.class);
@@ -45,7 +45,7 @@ public class PublicDataUpdater {
             city.province().set(building.info().address().province());
             city.location().setValue(building.info().address().location().getValue());
             city.hasProperties().setValue(Boolean.TRUE);
-            PersistenceServicesFactory.getPersistenceService().persist(city);
+            Persistence.service().persist(city);
         }
     }
 }

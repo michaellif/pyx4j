@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
@@ -51,8 +51,8 @@ public class TenantInfoServiceImpl implements TenantInfoService {
         new TenantConverter.Tenant2TenantInfo().copyDTOtoDBO(dto, r.tenant);
         new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(dto, r.tenantScreening);
 
-        PersistenceServicesFactory.getPersistenceService().merge(r.tenant);
-        PersistenceServicesFactory.getPersistenceService().merge(r.tenantScreening);
+        Persistence.service().merge(r.tenant);
+        Persistence.service().merge(r.tenantScreening);
 
         dto = new TenantConverter.Tenant2TenantInfo().createDTO(r.tenant);
         new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(r.tenantScreening, dto);

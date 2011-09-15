@@ -16,7 +16,7 @@ package com.propertyvista.interfaces.importer;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -35,7 +35,7 @@ public class BuildingUpdater {
         {
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), buildingIO.propertyCode().getValue()));
-            List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(criteria);
+            List<Building> buildings = Persistence.service().query(criteria);
             if (buildings.size() == 0) {
                 throw new Error("Building '" + buildingIO.propertyCode().getValue() + "' not found");
             } else if (buildings.size() > 1) {
@@ -51,7 +51,7 @@ public class BuildingUpdater {
                 EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
                 criteria.add(PropertyCriterion.eq(criteria.proto().name(), floorplanIO.name().getValue()));
-                List<Floorplan> floorplans = PersistenceServicesFactory.getPersistenceService().query(criteria);
+                List<Floorplan> floorplans = Persistence.service().query(criteria);
                 if (floorplans.size() == 0) {
                     throw new Error("Floorplan '" + floorplanIO.name().getValue() + "' in  building '" + buildingIO.propertyCode().getValue() + "' not found");
                 } else if (floorplans.size() > 1) {
@@ -67,7 +67,7 @@ public class BuildingUpdater {
                 EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
                 criteria.add(PropertyCriterion.eq(criteria.proto().info().number(), aptUnitIO.number().getValue()));
-                List<AptUnit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
+                List<AptUnit> units = Persistence.service().query(criteria);
 
                 AptUnit unit;
                 if (units.size() == 0) {

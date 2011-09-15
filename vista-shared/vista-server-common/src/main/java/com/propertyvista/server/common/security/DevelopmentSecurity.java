@@ -13,7 +13,7 @@
  */
 package com.propertyvista.server.common.security;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.dev.DevSession;
@@ -71,7 +71,7 @@ public class DevelopmentSecurity {
         EntityQueryCriteria<DevelopmentUser> criteria = EntityQueryCriteria.create(DevelopmentUser.class);
 
         criteria.add(PropertyCriterion.eq(criteria.proto().host1(), host));
-        developmentUserHostBased = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        developmentUserHostBased = Persistence.service().retrieve(criteria);
         if (developmentUserHostBased != null) {
             return developmentUserHostBased;
         }
@@ -79,14 +79,14 @@ public class DevelopmentSecurity {
         // TODO add OR to MySQL criteria
         criteria.getFilters().clear();
         criteria.add(PropertyCriterion.eq(criteria.proto().host2(), host));
-        developmentUserHostBased = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        developmentUserHostBased = Persistence.service().retrieve(criteria);
         if (developmentUserHostBased != null) {
             return developmentUserHostBased;
         }
 
         criteria.getFilters().clear();
         criteria.add(PropertyCriterion.eq(criteria.proto().host3(), host));
-        developmentUserHostBased = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        developmentUserHostBased = Persistence.service().retrieve(criteria);
         if (developmentUserHostBased != null) {
             return developmentUserHostBased;
         }
@@ -101,6 +101,6 @@ public class DevelopmentSecurity {
         }
         EntityQueryCriteria<DevelopmentUser> criteria = EntityQueryCriteria.create(DevelopmentUser.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
-        return PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        return Persistence.service().retrieve(criteria);
     }
 }

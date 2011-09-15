@@ -21,7 +21,7 @@
 package com.propertyvista.paypad.server.ci.preloader;
 
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -42,7 +42,7 @@ public class PreloadInterfaceEntities extends AbstractDataPreloader {
         credential.enabled().setValue(Boolean.TRUE);
 
         credential.namespace().setValue("t-yardi");
-        PersistenceServicesFactory.getPersistenceService().persist(credential);
+        Persistence.service().persist(credential);
 
         return "Created " + 1 + " InterfaceEntities";
     }

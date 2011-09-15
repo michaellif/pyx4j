@@ -20,7 +20,7 @@ import java.util.Map;
 import junit.framework.Assert;
 
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -33,7 +33,7 @@ public class VistaDBResetTest extends VistaDBTestBase {
 
     public void testObjectsStructure() {
         List<String> allClasses = EntityClassFinder.findEntityClasses();
-        EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) PersistenceServicesFactory.getPersistenceService();
+        EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
 
         Map<String, Class<? extends IEntity>> allTables = new Hashtable<String, Class<? extends IEntity>>();
 

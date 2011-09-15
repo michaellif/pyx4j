@@ -31,7 +31,6 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -88,7 +87,7 @@ public class DBResetServlet extends HttpServlet {
                         throw new Error("Invalid request param");
                     }
 
-                    EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) PersistenceServicesFactory.getPersistenceService();
+                    EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
 
                     ResetType type = ResetType.all;
                     String tp = req.getParameter("type");

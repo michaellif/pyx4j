@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.server.ptapp.services;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -45,7 +45,7 @@ public class ApplicationDebug {
 
 //        EntityQueryCriteria<TenantFinancialEditorDTO> financialCriteria = EntityQueryCriteria.create(TenantFinancialEditorDTO.class);
 //        financialCriteria.add(PropertyCriterion.eq(financialCriteria.proto().application(), application));
-//        for (TenantFinancialEditorDTO fin : PersistenceServicesFactory.getPersistenceService().query(financialCriteria)) {
+//        for (TenantFinancialEditorDTO fin : Persistence.service().query(financialCriteria)) {
 //            SummaryPotentialTenantFinancial sf = summary.tenantFinancials().$();
 //            sf.tenantFinancial().set(fin);
 //            summary.tenantFinancials().add(sf);
@@ -58,6 +58,6 @@ public class ApplicationDebug {
         @SuppressWarnings("unchecked")
         EntityQueryCriteria<T> criteria = (EntityQueryCriteria<T>) EntityQueryCriteria.create(entity.getValueClass());
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-        entity.set(PersistenceServicesFactory.getPersistenceService().retrieve(criteria));
+        entity.set(Persistence.service().retrieve(criteria));
     }
 }

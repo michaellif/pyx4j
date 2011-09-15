@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -62,7 +62,7 @@ public class ExportDownloadServlet extends HttpServlet {
 
         ImportIO importIO = EntityFactory.create(ImportIO.class);
         EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
-        List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(buildingCriteria);
+        List<Building> buildings = Persistence.service().query(buildingCriteria);
         for (Building building : buildings) {
             importIO.buildings().add(new BuildingRetriever().getModel(building, imagesBaseFolder));
         }

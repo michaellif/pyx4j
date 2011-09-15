@@ -25,7 +25,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
@@ -72,7 +72,7 @@ public class PmcCrudServiceImpl implements PmcCrudService {
         try {
             NamespaceManager.setNamespace(Pmc.adminNamespace);
             entity = convertDTO2DBO(editableEntity);
-            PersistenceServicesFactory.getPersistenceService().persist(entity);
+            Persistence.service().persist(entity);
 
             preloadPmc(editableEntity);
 
@@ -103,7 +103,7 @@ public class PmcCrudServiceImpl implements PmcCrudService {
         Pmc entity;
         try {
             NamespaceManager.setNamespace(Pmc.adminNamespace);
-            entity = PersistenceServicesFactory.getPersistenceService().retrieve(Pmc.class, entityId);
+            entity = Persistence.service().retrieve(Pmc.class, entityId);
         } finally {
             NamespaceManager.remove();
         }
@@ -116,7 +116,7 @@ public class PmcCrudServiceImpl implements PmcCrudService {
         try {
             NamespaceManager.setNamespace(Pmc.adminNamespace);
             entity = convertDTO2DBO(editableEntity);
-            PersistenceServicesFactory.getPersistenceService().merge(entity);
+            Persistence.service().merge(entity);
         } finally {
             NamespaceManager.remove();
         }
@@ -153,7 +153,7 @@ public class PmcCrudServiceImpl implements PmcCrudService {
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         try {
             NamespaceManager.setNamespace(Pmc.adminNamespace);
-            PersistenceServicesFactory.getPersistenceService().delete(Pmc.class, entityId);
+            Persistence.service().delete(Pmc.class, entityId);
         } finally {
             NamespaceManager.remove();
         }

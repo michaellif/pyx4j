@@ -26,7 +26,7 @@ import com.propertvista.generator.MediaGenerator;
 import com.propertvista.generator.util.PictureUtil;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
@@ -183,7 +183,7 @@ public class Importer {
      */
     @Deprecated
     private static void persist(IEntity entity) {
-        PersistenceServicesFactory.getPersistenceService().persist(entity);
+        Persistence.service().persist(entity);
     }
 
     public Model getModel() {

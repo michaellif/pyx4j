@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.propertvista.generator.util.CommonsGenerator;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -54,7 +54,7 @@ public class Converter {
         List<FloorplanAmenity> amenities = new ArrayList<FloorplanAmenity>();
         EntityQueryCriteria<FloorplanAmenity> floorplanAmenityCriteria = EntityQueryCriteria.create(FloorplanAmenity.class);
         floorplanAmenityCriteria.add(PropertyCriterion.eq(floorplanAmenityCriteria.proto().belongsTo(), from));
-        amenities.addAll(PersistenceServicesFactory.getPersistenceService().query(floorplanAmenityCriteria));
+        amenities.addAll(Persistence.service().query(floorplanAmenityCriteria));
 
         for (FloorplanAmenity amenity : amenities) {
             AmenityDTO amntDTO = EntityFactory.create(AmenityDTO.class);
@@ -107,7 +107,7 @@ public class Converter {
         EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
         amenitysCriteria.add(new PropertyCriterion(EntityFactory.getEntityPrototype(BuildingAmenity.class).belongsTo().getPath().toString(), Restriction.EQUAL,
                 from));
-        for (BuildingAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(amenitysCriteria)) {
+        for (BuildingAmenity amenity : Persistence.service().query(amenitysCriteria)) {
             AmenityDTO amntDTO = EntityFactory.create(AmenityDTO.class);
             amntDTO.name().setValue(amenity.getStringView());
             to.amenities().add(amntDTO);

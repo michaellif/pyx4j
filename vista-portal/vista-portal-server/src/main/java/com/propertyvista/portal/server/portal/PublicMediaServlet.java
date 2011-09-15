@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.VistaBehavior;
@@ -58,7 +58,7 @@ public class PublicMediaServlet extends HttpServlet {
         }
 
         //TODO deserialize key
-        Media media = PersistenceServicesFactory.getPersistenceService().retrieve(Media.class, new Key(id));
+        Media media = Persistence.service().retrieve(Media.class, new Key(id));
         if (!media.visibleToPublic().isBooleanTrue()) {
             if (!SecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);

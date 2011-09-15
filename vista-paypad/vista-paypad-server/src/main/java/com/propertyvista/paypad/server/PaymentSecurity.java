@@ -26,7 +26,7 @@ import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
@@ -53,7 +53,7 @@ public class PaymentSecurity {
 
             EntityQueryCriteria<InterfaceEntity> criteria = EntityQueryCriteria.create(InterfaceEntity.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().name(), requestMessage.getInterfaceEntity()));
-            List<InterfaceEntity> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
+            List<InterfaceEntity> users = Persistence.service().query(criteria);
             if (users.size() != 1) {
                 log.debug("Invalid log-in attempt {} rs {}", requestMessage.getInterfaceEntity(), users.size());
                 AbstractAntiBot.authenticationFailed(requestMessage.getInterfaceEntity());

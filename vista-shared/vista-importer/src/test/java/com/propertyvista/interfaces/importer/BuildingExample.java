@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.xml.XMLEntityWriter;
@@ -55,7 +55,7 @@ public class BuildingExample {
 
         EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
 
-        List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(buildingCriteria);
+        List<Building> buildings = Persistence.service().query(buildingCriteria);
 
         for (Building building : buildings) {
             importIO.buildings().add(new BuildingRetriever().getModel(building, imagesBaseFolder));

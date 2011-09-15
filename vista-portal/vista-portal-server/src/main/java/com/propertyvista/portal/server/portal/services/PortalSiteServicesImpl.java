@@ -20,7 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.EntityServicesImpl;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -55,7 +55,7 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
 
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
 
-        List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(dbCriteria);
+        List<Building> buildings = Persistence.service().query(dbCriteria);
 
         PropertyListDTO ret = EntityFactory.create(PropertyListDTO.class);
         for (Building building : buildings) {
@@ -67,7 +67,7 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
             //In memory filters
             EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
             floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
-            List<Floorplan> floorplans = PersistenceServicesFactory.getPersistenceService().query(floorplanCriteria);
+            List<Floorplan> floorplans = Persistence.service().query(floorplanCriteria);
 
             ret.properties().add(Converter.convert(building, floorplans));
         }
@@ -76,7 +76,7 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
 
     @Override
     public void retrievePropertyDetails(AsyncCallback<PropertyDetailsDTO> callback, Key propertyId) {
-        Building building = PersistenceServicesFactory.getPersistenceService().retrieve(Building.class, propertyId);
+        Building building = Persistence.service().retrieve(Building.class, propertyId);
         if (building == null) {
             callback.onSuccess(null);
             return;
@@ -86,7 +86,7 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
         // find floor plans
         EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
         floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
-        List<Floorplan> floorplans = PersistenceServicesFactory.getPersistenceService().query(floorplanCriteria);
+        List<Floorplan> floorplans = Persistence.service().query(floorplanCriteria);
 
         dto.set(Converter.convert(building, floorplans));
 
@@ -95,7 +95,7 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
         }
 
         if (!building.media().isEmpty()) {
-            PersistenceServicesFactory.getPersistenceService().retrieve(building.media());
+            Persistence.service().retrieve(building.media());
             for (Media m : building.media()) {
                 dto.media().add(Converter.convert(m));
             }
@@ -106,7 +106,7 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
 
     @Override
     public void retrieveFloorplanDetails(AsyncCallback<FloorplanDetailsDTO> callback, Key floorplanId) {
-        Floorplan floorplan = PersistenceServicesFactory.getPersistenceService().retrieve(Floorplan.class, floorplanId);
+        Floorplan floorplan = Persistence.service().retrieve(Floorplan.class, floorplanId);
         if (floorplan == null) {
             callback.onSuccess(null);
             return;
@@ -116,7 +116,7 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
         dto.set(Converter.convert(floorplan));
 
         if (!floorplan.media().isEmpty()) {
-            PersistenceServicesFactory.getPersistenceService().retrieve(floorplan.media());
+            Persistence.service().retrieve(floorplan.media());
             for (Media m : floorplan.media()) {
                 dto.media().add(Converter.convert(m));
             }
@@ -125,7 +125,7 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
         // List of building amenities 
         EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
         amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), floorplan.building()));
-        for (BuildingAmenity amenity : PersistenceServicesFactory.getPersistenceService().query(amenitysCriteria)) {
+        for (BuildingAmenity amenity : Persistence.service().query(amenitysCriteria)) {
             AmenityDTO amntDTO = EntityFactory.create(AmenityDTO.class);
             amntDTO.name().setValue(amenity.getStringView());
             dto.buildingAmenities().add(amntDTO);
@@ -140,7 +140,7 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
     public void retrieveStaticContent(AsyncCallback<PageContent> callback, Key pageContentId) {
 //        EntityQueryCriteria<PageContent> criteria = EntityQueryCriteria.create(PageContent.class);
 //        criteria.add(PropertyCriterion.eq(criteria.proto().path(), path));
-//        PageContent c = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+//        PageContent c = Persistence.service().retrieve(criteria);
         callback.onSuccess(null);
     }
 

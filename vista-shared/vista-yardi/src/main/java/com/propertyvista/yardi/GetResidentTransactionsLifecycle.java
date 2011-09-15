@@ -20,7 +20,7 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.axis2.AxisFault;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.property.asset.building.Building;
@@ -35,9 +35,9 @@ public class GetResidentTransactionsLifecycle {
 //    private final static Logger log = LoggerFactory.getLogger(GetResidentTransactionsLifecycle.class);
 
     public Model load() {
-        List<AptUnit> units = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<AptUnit>(AptUnit.class));
-        List<Tenant> tenants = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Tenant>(Tenant.class));
-        List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Building>(Building.class));
+        List<AptUnit> units = Persistence.service().query(new EntityQueryCriteria<AptUnit>(AptUnit.class));
+        List<Tenant> tenants = Persistence.service().query(new EntityQueryCriteria<Tenant>(Tenant.class));
+        List<Building> buildings = Persistence.service().query(new EntityQueryCriteria<Building>(Building.class));
         Model model = new Model();
         model.getAptUnits().addAll(units);
         model.getTenants().addAll(tenants);
@@ -62,7 +62,7 @@ public class GetResidentTransactionsLifecycle {
 
         if (persist) {
             for (AptUnit unit : merged.getAptUnits()) {
-                PersistenceServicesFactory.getPersistenceService().persist(unit);
+                Persistence.service().persist(unit);
             }
         }
 

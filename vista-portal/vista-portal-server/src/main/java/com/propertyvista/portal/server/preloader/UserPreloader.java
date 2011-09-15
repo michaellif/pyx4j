@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -53,7 +53,7 @@ public class UserPreloader extends BaseVistaDataPreloader {
         if (!ApplicationMode.isDevelopment()) {
             EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
-            List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
+            List<User> users = Persistence.service().query(criteria);
             if (users.size() != 0) {
                 log.debug("User alredy exists");
                 return users.get(0);
@@ -64,7 +64,7 @@ public class UserPreloader extends BaseVistaDataPreloader {
         user.name().setValue(email.substring(0, email.indexOf('@')));
         user.email().setValue(email);
 
-        PersistenceServicesFactory.getPersistenceService().persist(user);
+        Persistence.service().persist(user);
 
         UserCredential credential = EntityFactory.create(UserCredential.class);
         credential.setPrimaryKey(user.getPrimaryKey());
@@ -74,7 +74,7 @@ public class UserPreloader extends BaseVistaDataPreloader {
         credential.enabled().setValue(Boolean.TRUE);
         credential.behavior().setValue(behavior);
 
-        PersistenceServicesFactory.getPersistenceService().persist(credential);
+        Persistence.service().persist(credential);
 
         return user;
     }

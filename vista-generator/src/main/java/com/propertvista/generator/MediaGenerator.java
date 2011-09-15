@@ -19,7 +19,7 @@ import java.util.Map;
 import com.propertvista.generator.util.PictureUtil;
 import com.propertvista.generator.util.RandomUtil;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.csv.CSVLoad;
@@ -88,7 +88,7 @@ public class MediaGenerator {
                 m = (Media) m.cloneEntity();
                 m.setPrimaryKey(null);
             }
-            PersistenceServicesFactory.getPersistenceService().persist(m);
+            Persistence.service().persist(m);
             floorplan.media().add(m);
         }
     }

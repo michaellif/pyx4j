@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 import com.pyx4j.site.rpc.AppPlace;
@@ -79,18 +79,18 @@ public class ApplicationProgressMgr extends ApplicationMgr {
     }
 
     public static void invalidateChargesStep() {
-        Application app = PersistenceServicesFactory.getPersistenceService().retrieve(Application.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
+        Application app = Persistence.service().retrieve(Application.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
         ApplicationWizardStep chargesStep = findWizardStep(app, PtSiteMap.Charges.class);
         switch (chargesStep.status().getValue()) {
         case latest:
         case complete:
             chargesStep.status().setValue(ApplicationWizardStep.Status.invalid);
-            PersistenceServicesFactory.getPersistenceService().persist(chargesStep);
+            Persistence.service().persist(chargesStep);
         }
     }
 
     public static void syncroizeApplicationProgress(List<TenantInApplicationDTO> tenants) {
-        Application app = PersistenceServicesFactory.getPersistenceService().retrieve(Application.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
+        Application app = Persistence.service().retrieve(Application.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
 
         ApplicationWizardStep infoStep = findWizardStep(app, PtSiteMap.Info.class);
         ApplicationWizardStep financialStep = findWizardStep(app, PtSiteMap.Financial.class);
@@ -113,8 +113,8 @@ public class ApplicationProgressMgr extends ApplicationMgr {
         }
         updateStepCompletion(infoStep);
         updateStepCompletion(financialStep);
-        PersistenceServicesFactory.getPersistenceService().merge(infoStep);
-        PersistenceServicesFactory.getPersistenceService().merge(financialStep);
+        Persistence.service().merge(infoStep);
+        Persistence.service().merge(financialStep);
     }
 
     private static void updateParentStepStatus(ApplicationWizardStep step, ApplicationWizardSubstep substep) {

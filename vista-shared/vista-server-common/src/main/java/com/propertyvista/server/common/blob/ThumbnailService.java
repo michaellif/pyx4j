@@ -30,7 +30,7 @@ import com.mortennobel.imagescaling.AdvancedResizeOp;
 import com.mortennobel.imagescaling.ThumpnailRescaleOp;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18nFactory;
@@ -80,7 +80,7 @@ public class ThumbnailService {
             throw new UserRuntimeException(i18n.tr("Unable to resample the image ''{0}''", fileName));
         }
 
-        PersistenceServicesFactory.getPersistenceService().persist(blob);
+        Persistence.service().persist(blob);
     }
 
     private static byte[] resample(BufferedImage image, Dimension dimension) {
@@ -133,11 +133,11 @@ public class ThumbnailService {
     }
 
     public static void delete(Key key) {
-        PersistenceServicesFactory.getPersistenceService().delete(ThumbnailBlob.class, key);
+        Persistence.service().delete(ThumbnailBlob.class, key);
     }
 
     public static void serve(Key key, ThumbnailSize size, HttpServletResponse response) throws IOException {
-        ThumbnailBlob blob = PersistenceServicesFactory.getPersistenceService().retrieve(ThumbnailBlob.class, key);
+        ThumbnailBlob blob = Persistence.service().retrieve(ThumbnailBlob.class, key);
         if (blob != null) {
             byte[] data = null;
             switch (size) {

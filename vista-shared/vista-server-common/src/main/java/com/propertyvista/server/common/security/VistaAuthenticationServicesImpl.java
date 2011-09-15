@@ -27,7 +27,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.EntityServicesImpl;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
@@ -68,7 +68,7 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
 
         EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
-        List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
+        List<User> users = Persistence.service().query(criteria);
         if (users.size() != 1) {
             log.debug("Invalid log-in attempt {} rs {}", email, users.size());
             if (AbstractAntiBot.authenticationFailed(email)) {
@@ -79,7 +79,7 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
         }
         User user = users.get(0);
 
-        UserCredential cr = PersistenceServicesFactory.getPersistenceService().retrieve(UserCredential.class, user.getPrimaryKey());
+        UserCredential cr = Persistence.service().retrieve(UserCredential.class, user.getPrimaryKey());
         if (cr == null) {
             throw new UserRuntimeException(i18n.tr("Invalid user account, contact support"));
         }

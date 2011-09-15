@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
@@ -64,7 +64,7 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
 
     @Override
     public void retrieve(AsyncCallback<DTO> callback, Key entityId) {
-        DBO entity = PersistenceServicesFactory.getPersistenceService().retrieve(dboClass, entityId);
+        DBO entity = Persistence.service().retrieve(dboClass, entityId);
         DTO dto = GenericConverter.convertDBO2DTO(entity, dtoClass);
         enhanceDTO(entity, dto, false);
         callback.onSuccess(dto);
@@ -80,7 +80,7 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        PersistenceServicesFactory.getPersistenceService().delete(dboClass, entityId);
+        Persistence.service().delete(dboClass, entityId);
         callback.onSuccess(true);
     }
 

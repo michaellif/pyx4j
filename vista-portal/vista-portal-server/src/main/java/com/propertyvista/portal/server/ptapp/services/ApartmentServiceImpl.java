@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -56,16 +56,16 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     public ApartmentInfoDTO retrieveData() {
         Lease lease = PtAppContext.getCurrentUserLease();
-        if (!PersistenceServicesFactory.getPersistenceService().retrieve(lease)) {
+        if (!Persistence.service().retrieve(lease)) {
             throw new Error("There is no current Lease set!");
         }
-        if (!PersistenceServicesFactory.getPersistenceService().retrieve(lease.unit())) {
+        if (!Persistence.service().retrieve(lease.unit())) {
             throw new Error("There is no Unit selected!?.");
         }
-        if (!PersistenceServicesFactory.getPersistenceService().retrieve(lease.unit().floorplan())) {
+        if (!Persistence.service().retrieve(lease.unit().floorplan())) {
             throw new Error("There is no unit Floorplan data!?.");
         }
-        if (!PersistenceServicesFactory.getPersistenceService().retrieve(lease.unit().belongsTo())) {
+        if (!Persistence.service().retrieve(lease.unit().belongsTo())) {
             throw new Error("There is no unit building data!?.");
         }
 
@@ -97,24 +97,24 @@ public class ApartmentServiceImpl implements ApartmentService {
     private ServiceCatalog syncBuildingServiceCatalog(Building building) {
 
         // load detached entities:
-        PersistenceServicesFactory.getPersistenceService().retrieve(building.serviceCatalog());
+        Persistence.service().retrieve(building.serviceCatalog());
 
         // update service catalogue double-reference lists:
         EntityQueryCriteria<Service> serviceCriteria = EntityQueryCriteria.create(Service.class);
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), building.serviceCatalog()));
-        List<Service> services = PersistenceServicesFactory.getPersistenceService().query(serviceCriteria);
+        List<Service> services = Persistence.service().query(serviceCriteria);
         building.serviceCatalog().services().clear();
         building.serviceCatalog().services().addAll(services);
 
         EntityQueryCriteria<Feature> featureCriteria = EntityQueryCriteria.create(Feature.class);
         featureCriteria.add(PropertyCriterion.eq(featureCriteria.proto().catalog(), building.serviceCatalog()));
-        List<Feature> features = PersistenceServicesFactory.getPersistenceService().query(featureCriteria);
+        List<Feature> features = Persistence.service().query(featureCriteria);
         building.serviceCatalog().features().clear();
         building.serviceCatalog().features().addAll(features);
 
         EntityQueryCriteria<Concession> concessionCriteria = EntityQueryCriteria.create(Concession.class);
         concessionCriteria.add(PropertyCriterion.eq(concessionCriteria.proto().catalog(), building.serviceCatalog()));
-        List<Concession> concessions = PersistenceServicesFactory.getPersistenceService().query(concessionCriteria);
+        List<Concession> concessions = Persistence.service().query(concessionCriteria);
         building.serviceCatalog().concessions().clear();
         building.serviceCatalog().concessions().addAll(concessions);
 

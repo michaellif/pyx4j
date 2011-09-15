@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.PreloadConfig;
@@ -37,7 +37,7 @@ public class CampaignPreloader extends BaseVistaDataPreloader {
         campaign.triger().setValue(CampaignTriger.ApplicationCompleated);
         campaign.message().setValue("Hello ${b}, at this point our presentation is concluded. Thank you very much for your time.");
 
-        PersistenceServicesFactory.getPersistenceService().persist(campaign);
+        Persistence.service().persist(campaign);
 
         return "Created " + 1 + " PhoneCallCampaign";
     }

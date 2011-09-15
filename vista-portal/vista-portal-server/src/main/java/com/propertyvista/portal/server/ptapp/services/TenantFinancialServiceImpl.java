@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
@@ -49,7 +49,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
 
         new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(dto, r.tenantScreening);
 
-        PersistenceServicesFactory.getPersistenceService().merge(r.tenantScreening);
+        Persistence.service().merge(r.tenantScreening);
 
         dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(r.tenantScreening);
         dto.setPrimaryKey(r.tenantInLease.getPrimaryKey());

@@ -20,7 +20,7 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.axis2.AxisFault;
 
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.property.asset.building.Building;
@@ -39,7 +39,7 @@ public class GetPropertyConfigurationLifecycle {
     }
 
     public List<Building> load() {
-        List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Building>(Building.class));
+        List<Building> buildings = Persistence.service().query(new EntityQueryCriteria<Building>(Building.class));
         return buildings;
     }
 
@@ -49,10 +49,10 @@ public class GetPropertyConfigurationLifecycle {
         List<Building> merged = new BuildingsMerger().merge(imported, existing);
         if (persist) {
             for (Building building : merged) {
-                PersistenceServicesFactory.getPersistenceService().persist(building.info().address());
-                PersistenceServicesFactory.getPersistenceService().persist(building.info());
-                PersistenceServicesFactory.getPersistenceService().persist(building.marketing());
-                PersistenceServicesFactory.getPersistenceService().persist(building);
+                Persistence.service().persist(building.info().address());
+                Persistence.service().persist(building.info());
+                Persistence.service().persist(building.marketing());
+                Persistence.service().persist(building);
             }
         }
         return merged;

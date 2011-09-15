@@ -28,7 +28,6 @@ import org.apache.wicket.protocol.http.WebRequestCycle;
 
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -125,7 +124,7 @@ public class PMSiteContentManager implements Serializable {
     private SiteDescriptor retrieveSiteDescriptor() {
         EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
 
-        SiteDescriptor site = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        SiteDescriptor site = Persistence.service().retrieve(criteria);
         for (PageDescriptor descriptor : site.childPages()) {
             createPath(descriptor);
         }
@@ -264,7 +263,7 @@ public class PMSiteContentManager implements Serializable {
                 dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), city));
             }
         }
-        List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(dbCriteria);
+        List<Building> buildings = Persistence.service().query(dbCriteria);
         model.setBuildingList(buildings);
 
         for (Building building : buildings) {
@@ -272,7 +271,7 @@ public class PMSiteContentManager implements Serializable {
             // add floorplans
             EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
             floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
-            List<Floorplan> floorplans = PersistenceServicesFactory.getPersistenceService().query(floorplanCriteria);
+            List<Floorplan> floorplans = Persistence.service().query(floorplanCriteria);
             model.putBuildingUnits(propId, floorplans);
             for (Floorplan fp : floorplans) {
                 long fpId = fp.id().getValue().asLong();
@@ -321,7 +320,7 @@ public class PMSiteContentManager implements Serializable {
 
         // do promo building lookup
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
-        List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(dbCriteria);
+        List<Building> buildings = Persistence.service().query(dbCriteria);
         for (Building bld : buildings) {
             PromoDataModel item = new PromoDataModel();
             if (bld.media().isEmpty() || bld.info().address().isEmpty()) {

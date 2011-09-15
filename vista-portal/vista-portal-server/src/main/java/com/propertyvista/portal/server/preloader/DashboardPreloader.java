@@ -14,7 +14,7 @@
 package com.propertyvista.portal.server.preloader;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -64,7 +64,7 @@ public class DashboardPreloader extends AbstractDataPreloader {
         dmd.gadgets().add(gmd);
 
         dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        PersistenceServicesFactory.getPersistenceService().persist(dmd);
+        Persistence.service().persist(dmd);
 
 // the second one:
         dmd = EntityFactory.create(DashboardMetadata.class);
@@ -117,7 +117,7 @@ public class DashboardPreloader extends AbstractDataPreloader {
         dmd.gadgets().add(gmd);
 
         dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        PersistenceServicesFactory.getPersistenceService().persist(dmd);
+        Persistence.service().persist(dmd);
 
         return "Created " + 2 + " demo dashboards";
     }
