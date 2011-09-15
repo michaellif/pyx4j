@@ -49,6 +49,25 @@ public class IPojoTest extends TestCase {
 
     }
 
+    public void testPojoPrimitiveSet() throws Exception {
+
+        PojoTestEntity entity = EntityFactory.create(PojoTestEntity.class);
+        entity.aliases().add("Bob 21");
+        entity.aliases().add("Bob 22");
+
+        IPojo<PojoTestEntity> pojo = ServerEntityFactory.getPojo(entity);
+
+        assertEquals("Bob 21", BeanUtils.getProperty(pojo, entity.aliases().getFieldName() + "[0]"));
+        assertEquals("Bob 22", BeanUtils.getProperty(pojo, entity.aliases().getFieldName() + "[1]"));
+
+        String[] data = new String[] { "v1", "v2" };
+        BeanUtils.setProperty(pojo, entity.aliases().getFieldName(), data);
+
+        assertEquals("v1", BeanUtils.getProperty(pojo, entity.aliases().getFieldName() + "[0]"));
+        assertEquals("v2", BeanUtils.getProperty(pojo, entity.aliases().getFieldName() + "[1]"));
+
+    }
+
     public void testPojoArrays() throws Exception {
         PojoTestEntity entity = EntityFactory.create(PojoTestEntity.class);
         PojoMemberTestEntity arrayItem = EntityFactory.create(PojoMemberTestEntity.class);

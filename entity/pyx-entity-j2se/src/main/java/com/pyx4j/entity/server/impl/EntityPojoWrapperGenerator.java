@@ -164,6 +164,7 @@ public class EntityPojoWrapperGenerator {
                 case Entity:
                     ctValueClass = getPojoCtClass(EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getValueClass()));
                     break;
+                case EntitySet:
                 case EntityList:
                     ctValueClass = getPojoCtClass(EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getValueClass()));
                     ctValueClass = pool.get(ctValueClass.getName() + "[]");
@@ -171,9 +172,12 @@ public class EntityPojoWrapperGenerator {
                 case Primitive:
                     ctValueClass = pool.get(memberMeta.getValueClass().getName());
                     break;
+                case PrimitiveSet:
+                    ctValueClass = pool.get(memberMeta.getValueClass().getName());
+                    ctValueClass = pool.get(ctValueClass.getName() + "[]");
+                    break;
                 default:
-                    //TODO
-                    continue;
+                    throw new Error("Unsupported ClassType " + memberMeta.getObjectClassType());
                 }
 
                 String beanMemberName = getBeanName(memberName);
@@ -227,6 +231,7 @@ public class EntityPojoWrapperGenerator {
             b.append(");}");
             return b.toString();
         }
+        case EntitySet:
         case EntityList: {
             StringBuilder b = new StringBuilder("{");
             b.append("return (" + ctValueClass.getName() + ") toArray(");
@@ -235,8 +240,15 @@ public class EntityPojoWrapperGenerator {
             b.append(");}");
             return b.toString();
         }
+        case PrimitiveSet: {
+            StringBuilder b = new StringBuilder("{");
+            b.append("return (" + ctValueClass.getName() + ") ");
+            b.append("((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "().toArray(");
+            b.append(" new ").append(ctValueClass.getName().replace("[]", "[0]"));
+            b.append(");}");
+            return b.toString();
+        }
         default:
-            //TODO
             return " throw new Error(\"Getter for " + memberMeta.getObjectClassType() + " Not implmented yet\");";
         }
     }
@@ -245,12 +257,16 @@ public class EntityPojoWrapperGenerator {
         switch (memberMeta.getObjectClassType()) {
         case Primitive:
             return "((" + entityClassName + ") super.entity)." + memberMeta.getFieldName() + "().setValue($1);";
+        case EntitySet:
         case EntityList: {
             StringBuilder b = new StringBuilder("{");
             b.append("fromArray($1, ");
             b.append("((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "()");
             b.append(");}");
             return b.toString();
+        }
+        case PrimitiveSet: {
+            return "((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "().setValue($1);";
         }
         default:
             return " throw new Error(\"Seter for " + memberMeta.getObjectClassType() + " Not implmented yet\");";

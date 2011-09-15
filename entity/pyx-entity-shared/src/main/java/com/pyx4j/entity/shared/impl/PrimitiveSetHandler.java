@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.shared.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -95,6 +97,14 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
     @Override
     public boolean addAll(Collection<? extends TYPE> c) {
         return ensureValue().addAll(c);
+    }
+
+    @Override
+    public void setValue(TYPE[] value) throws ClassCastException {
+        clear();
+        if ((value != null) && (value.length != 0)) {
+            addAll(Arrays.asList(value));
+        }
     }
 
     @Override
@@ -204,8 +214,16 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
 
     @Override
     public <T> T[] toArray(T[] a) {
-        // TODO implement this
-        throw new UnsupportedOperationException();
+        Set<TYPE> set = getValue();
+        if (set != null) {
+            return set.toArray(a);
+        } else {
+            if (a.length == 0) {
+                return a;
+            } else {
+                return new ArrayList<T>().toArray(a);
+            }
+        }
     }
 
     @Override
