@@ -110,7 +110,7 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
     @Override
     public void setCollectionValue(Collection<TYPE> c) throws ClassCastException {
         Set<?> value = getValue();
-        if (value == c) {
+        if ((c == this) || (value == c)) {
             return;
         }
         if (value != null) {
