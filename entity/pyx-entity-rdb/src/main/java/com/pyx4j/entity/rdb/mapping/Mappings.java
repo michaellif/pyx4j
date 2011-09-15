@@ -38,6 +38,7 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.ConnectionProvider;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 
@@ -66,6 +67,11 @@ public class Mappings {
         } else {
             sequences = null;
         }
+    }
+
+    //TODO fix connection
+    public TableModel getTableModel(Class<? extends IEntity> entityClass) {
+        return ensureTable(null, connectionProvider.getDialect(), EntityFactory.getEntityMeta(entityClass));
     }
 
     public TableModel ensureTable(Connection connection, Dialect dialect, EntityMeta entityMeta) {
@@ -99,7 +105,7 @@ public class Mappings {
             // Got the lock, see if model already created
             model = tables.get(entityMeta.getEntityClass());
             if (model == null) {
-                model = new TableModel(dialect, entityMeta);
+                model = new TableModel(dialect, this, entityMeta);
                 if (usedTableNames.contains(model.getTableName().toLowerCase(Locale.ENGLISH))) {
                     log.warn("redefining/extending table {} for class {}", model.getTableName(), entityMeta.getEntityClass());
                 }
@@ -150,7 +156,7 @@ public class Mappings {
     public void droppedTable(Dialect dialect, EntityMeta entityMeta) {
         TableModel model = tables.get(entityMeta.getEntityClass());
         if (model == null) {
-            model = new TableModel(dialect, entityMeta);
+            model = new TableModel(dialect, this, entityMeta);
         }
         usedTableNames.remove(model.getTableName().toLowerCase(Locale.ENGLISH));
         tables.remove(entityMeta.getEntityClass());

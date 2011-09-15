@@ -114,7 +114,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     public boolean isTableExists(Class<? extends IEntity> entityClass) {
-        TableModel tm = new TableModel(connectionProvider.getDialect(), EntityFactory.getEntityMeta(entityClass));
+        TableModel tm = new TableModel(connectionProvider.getDialect(), mappings, EntityFactory.getEntityMeta(entityClass));
         try {
             return tm.isTableExists(connectionProvider);
         } catch (SQLException e) {
@@ -125,7 +125,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     public void dropTable(Class<? extends IEntity> entityClass) {
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
-        TableModel tm = new TableModel(connectionProvider.getDialect(), entityMeta);
+        TableModel tm = new TableModel(connectionProvider.getDialect(), mappings, entityMeta);
         try {
             tm.dropTable(connectionProvider);
             mappings.droppedTable(connectionProvider.getDialect(), entityMeta);

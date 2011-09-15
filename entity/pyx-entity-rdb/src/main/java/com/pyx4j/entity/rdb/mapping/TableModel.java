@@ -74,7 +74,7 @@ public class TableModel {
 
     private String sqlUpdate;
 
-    public TableModel(Dialect dialect, EntityMeta entityMeta) {
+    public TableModel(Dialect dialect, Mappings mappings, EntityMeta entityMeta) {
         this.dialect = dialect;
         this.entityMeta = entityMeta;
         Table tableAnnotation = entityMeta.getEntityClass().getAnnotation(Table.class);
@@ -83,14 +83,18 @@ public class TableModel {
         } else {
             primaryKeyStrategy = Table.PrimaryKeyStrategy.AUTO;
         }
-        tableName = dialect.getNamingConvention().sqlTableName(entityMeta.getPersistenceName());
-        entityOperationsMeta = new EntityOperationsMeta(dialect, entityMeta);
+        tableName = getTableName(dialect, entityMeta);
+        entityOperationsMeta = new EntityOperationsMeta(dialect, mappings, entityMeta);
 
         if (dialect.isSequencesBaseIdentity()) {
             for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
                 member.setSqlSequenceName(dialect.getNamingConvention().sqlChildTableSequenceName(member.sqlName()));
             }
         }
+    }
+
+    public static String getTableName(Dialect dialect, EntityMeta entityMeta) {
+        return dialect.getNamingConvention().sqlTableName(entityMeta.getPersistenceName());
     }
 
     public void ensureExists(Connection connection, Dialect dialect) throws SQLException {

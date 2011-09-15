@@ -36,6 +36,7 @@ import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
@@ -52,6 +53,8 @@ public class QueryBuilder<T extends IEntity> {
 
     private final StringBuilder sql = new StringBuilder();
 
+    private final StringBuilder joinWhereSql = new StringBuilder();
+
     private final boolean multitenant;
 
     private final List<Object> bindParams = new Vector<Object>();
@@ -62,7 +65,10 @@ public class QueryBuilder<T extends IEntity> {
 
     private final EntityOperationsMeta operationsMeta;
 
+    private final Dialect dialect;
+
     public QueryBuilder(Dialect dialect, String alias, EntityMeta entityMeta, EntityOperationsMeta operationsMeta, EntityQueryCriteria<T> criteria) {
+        this.dialect = dialect;
         this.mainTableSqlAlias = alias;
         this.operationsMeta = operationsMeta;
         this.multitenant = dialect.isMultitenant();
@@ -85,13 +91,15 @@ public class QueryBuilder<T extends IEntity> {
 
                     ObjectClassType objectClassType = ObjectClassType.Primitive;
                     MemberMeta memberMeta = null;
+                    MemberOperationsMeta memberOper = null;
                     String memberPersistenceName = propertyCriterion.getPropertyName();
                     String pkPath = GWTJava5Helper.getSimpleName(entityMeta.getEntityClass()) + Path.PATH_SEPARATOR + IEntity.PRIMARY_KEY + Path.PATH_SEPARATOR;
                     if (pkPath.equals(propertyCriterion.getPropertyName()) || IEntity.PRIMARY_KEY.equals(propertyCriterion.getPropertyName())) {
                         memberPersistenceName = IEntity.PRIMARY_KEY;
                     } else if (!propertyCriterion.getPropertyName().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX)) {
-                        MemberOperationsMeta memberOper = operationsMeta.getMember(propertyCriterion.getPropertyName());
+                        memberOper = operationsMeta.getMember(propertyCriterion.getPropertyName());
                         if (memberOper == null) {
+                            //TODO use getFirstDirectMember
                             throw new RuntimeException("Unknown member " + propertyCriterion.getPropertyName() + " in " + entityMeta.getEntityClass().getName());
                         }
                         memberMeta = memberOper.getMemberMeta();
@@ -101,13 +109,7 @@ public class QueryBuilder<T extends IEntity> {
                     switch (objectClassType) {
                     case EntityList:
                     case EntitySet:
-                        String memberJoinAlias = memberJoinAliases.get(memberMeta.getFieldName());
-                        if (memberJoinAlias == null) {
-                            memberJoinAlias = "c" + String.valueOf(memberJoinAliases.size() + 1);
-                            memberJoinAliases.put(memberMeta.getFieldName(), memberJoinAlias);
-                            sql.append(alias).append(".id = ");
-                            sql.append(memberJoinAlias).append(".owner AND ");
-                        }
+                        String memberJoinAlias = getJoin(memberOper, alias);
                         sql.append(memberJoinAlias).append(".value ");
                         break;
                     default:
@@ -162,19 +164,68 @@ public class QueryBuilder<T extends IEntity> {
         }
         if ((criteria.getSorts() != null) && (!criteria.getSorts().isEmpty())) {
             log.debug("sort by {}", criteria.getSorts());
-            sql.append(" ORDER BY ");
+            StringBuilder sortsSql = new StringBuilder();
+            sortsSql.append(" ORDER BY ");
             boolean firstOrderBy = true;
             for (EntityQueryCriteria.Sort sort : criteria.getSorts()) {
                 if (firstOrderBy) {
                     firstOrderBy = false;
                 } else {
-                    sql.append(", ");
+                    sortsSql.append(", ");
                 }
-                sql.append(alias).append('.');
-                sql.append(sort.getPropertyName()).append(' ');
-                sql.append(sort.isDescending() ? "DESC" : "ASC");
+                String thisAlias = alias;
+                String memberPersistenceName;
+                MemberOperationsMeta memberOper = operationsMeta.getMember(sort.getPropertyName());
+                if (memberOper != null) {
+                    memberPersistenceName = memberOper.sqlName();
+                } else {
+                    memberOper = operationsMeta.getFirstDirectMember(sort.getPropertyName());
+                    if (memberOper != null) {
+                        thisAlias = getJoin(memberOper, alias);
+
+                        //TODO recursion
+                        EntityOperationsMeta otherEntityOperMeta = operationsMeta.getMappedOperationsMeta((Class<? extends IEntity>) memberOper.getMemberMeta()
+                                .getObjectClass());
+                        String pathFragmet = sort.getPropertyName().substring(memberOper.getMemberPath().length());
+                        MemberOperationsMeta memberOper2 = otherEntityOperMeta.getMember(GWTJava5Helper.getSimpleName(memberOper.getMemberMeta()
+                                .getObjectClass()) + Path.PATH_SEPARATOR + pathFragmet);
+                        memberPersistenceName = memberOper2.sqlName();
+                    } else {
+                        // Asume proper SQL string supplied
+                        memberPersistenceName = sort.getPropertyName();
+                    }
+                }
+
+                sortsSql.append(thisAlias).append('.');
+                sortsSql.append(memberPersistenceName).append(' ');
+                sortsSql.append(sort.isDescending() ? "DESC" : "ASC");
+            }
+
+            sql.append(sortsSql);
+        }
+    }
+
+    private String getJoin(MemberOperationsMeta memberOper, String mainAlias) {
+        String memberJoinAlias = memberJoinAliases.get(memberOper.getMemberPath());
+        if (memberJoinAlias == null) {
+            memberJoinAlias = "j" + String.valueOf(memberJoinAliases.size() + 1);
+            memberJoinAliases.put(memberOper.getMemberPath(), memberJoinAlias);
+
+            if (joinWhereSql.length() > 0) {
+                joinWhereSql.append(" AND ");
+            }
+
+            if (memberOper.getMemberMeta().getObjectClassType() == ObjectClassType.Entity) {
+                joinWhereSql.append(mainAlias).append(".").append(memberOper.sqlName());
+                joinWhereSql.append(" = ");
+                joinWhereSql.append(memberJoinAlias).append(".id ");
+            } else {
+                // Collection
+                joinWhereSql.append(mainAlias).append(".id = ");
+                joinWhereSql.append(memberJoinAlias).append(".owner ");
             }
         }
+        return memberJoinAlias;
     }
 
     private boolean valueIsNull(Object value) {
@@ -192,13 +243,22 @@ public class QueryBuilder<T extends IEntity> {
         return getJoins(mainTableSqlName) + getWhere();
     }
 
-    String getJoins(String mainTableSqlName) {
+    @SuppressWarnings("unchecked")
+    private String getJoins(String mainTableSqlName) {
         StringBuilder sqlFrom = new StringBuilder();
         sqlFrom.append(mainTableSqlName).append(' ').append(mainTableSqlAlias);
         for (Map.Entry<String, String> me : memberJoinAliases.entrySet()) {
             sqlFrom.append(", ");
 
-            sqlFrom.append(operationsMeta.getCollectionMember(me.getKey()).sqlName());
+            MemberOperationsMeta memberOper = operationsMeta.getMember(me.getKey());
+            if (memberOper.getMemberMeta().getObjectClassType() == ObjectClassType.Entity) {
+                sqlFrom.append(TableModel.getTableName(dialect,
+                        EntityFactory.getEntityMeta((Class<? extends IEntity>) memberOper.getMemberMeta().getObjectClass())));
+            } else {
+                // Collections
+                sqlFrom.append(memberOper.sqlName());
+            }
+
             sqlFrom.append(" ");
             // AS
             sqlFrom.append(me.getValue());
@@ -210,21 +270,27 @@ public class QueryBuilder<T extends IEntity> {
         return mainTableSqlAlias;
     }
 
-    String getWhere() {
-        if (sql.length() == 0) {
+    private String getWhere() {
+        if ((sql.length() == 0) && (joinWhereSql.length() == 0)) {
             return "";
         } else {
-            return " WHERE " + sql.toString();
+            StringBuilder sqlWhere = new StringBuilder(" WHERE ");
+            sqlWhere.append(joinWhereSql);
+            if ((sql.length() != 0) && (joinWhereSql.length() != 0)) {
+                sqlWhere.append(" AND ");
+            }
+            sqlWhere.append(sql);
+            return sqlWhere.toString();
         }
     }
 
-    String getWhere(String conditions) {
-        if (sql.length() == 0) {
-            return " WHERE " + conditions;
-        } else {
-            return " WHERE " + conditions + " AND " + sql.toString();
-        }
-    }
+//    String getWhere(String conditions) {
+//        if (sql.length() == 0) {
+//            return " WHERE " + conditions;
+//        } else {
+//            return " WHERE " + conditions + " AND " + sql.toString();
+//        }
+//    }
 
     static Object encodeValue(Object value) {
         if (value instanceof Enum) {

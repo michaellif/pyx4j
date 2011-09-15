@@ -22,7 +22,6 @@ package com.pyx4j.entity.shared.criterion;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 import com.pyx4j.commons.EqualsHelper;
@@ -68,6 +67,11 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
 
         public boolean isDescending() {
             return this.descending;
+        }
+
+        @Override
+        public String toString() {
+            return getPropertyName() + (isDescending() ? " Desc" : " Asc");
         }
 
     }
@@ -195,6 +199,7 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
 
     // N.B. Do not use @Override for GWT to compile
     //@Override
+    @Override
     public Object clone() {
         EntityQueryCriteria<E> c = create(getEntityClass());
         if (this.getSorts() != null) {
@@ -209,7 +214,7 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
         }
         return c;
     }
-    
+
     @Override
     public String getServiceCallMarker() {
         return this.entityPrototype.getEntityMeta().getCaption().replace(' ', '_');

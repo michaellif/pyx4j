@@ -28,6 +28,8 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class MemberOperationsMeta implements EntityMemberAccess {
 
+    private final String memberPath;
+
     private final MemberMeta memberMeta;
 
     private final EntityMemberAccess memberAccess;
@@ -42,18 +44,23 @@ public class MemberOperationsMeta implements EntityMemberAccess {
 
     private String sqlSequenceName;
 
-    public MemberOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta) {
-        this(memberAccess, valueAdapter, sqlName, memberMeta, null, null);
+    public MemberOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta, String memberPath) {
+        this(memberAccess, valueAdapter, sqlName, memberMeta, memberPath, null, null);
     }
 
-    public MemberOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta,
+    public MemberOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta, String memberPath,
             Class<? extends IndexAdapter<?>> indexAdapterClass, Class<?> indexValueClass) {
+        this.memberPath = memberPath;
         this.memberMeta = memberMeta;
         this.memberAccess = memberAccess;
         this.valueAdapter = valueAdapter;
         this.sqlName = sqlName;
         this.indexAdapterClass = indexAdapterClass;
         this.indexValueClass = indexValueClass;
+    }
+
+    public String getMemberPath() {
+        return memberPath;
     }
 
     @Override
