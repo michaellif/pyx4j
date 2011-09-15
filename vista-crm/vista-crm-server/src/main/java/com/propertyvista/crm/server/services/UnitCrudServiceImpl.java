@@ -42,6 +42,7 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
             Persistence.service().retrieve(in.floorplan());
             // TODO actually just this is necessary, but it' doesn't implemented still:
             //Persistence.service().retrieve(in.floorplan().name());
+            //Persistence.service().retrieve(in.floorplan().marketingName());
 
             // just clear unnecessary data before serialisation: 
             in.marketing().description().setValue(null);
