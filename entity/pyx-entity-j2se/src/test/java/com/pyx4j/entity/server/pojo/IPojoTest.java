@@ -20,11 +20,15 @@
  */
 package com.pyx4j.entity.server.pojo;
 
+import java.util.Collection;
+import java.util.Vector;
+
 import junit.framework.TestCase;
 
 import org.apache.commons.beanutils.BeanUtils;
 
 import com.pyx4j.entity.server.ServerEntityFactory;
+import com.pyx4j.entity.server.impl.EntityPojoWrapperGenerator;
 import com.pyx4j.entity.server.pojo.model.PojoMemberTestEntity;
 import com.pyx4j.entity.server.pojo.model.PojoTestEntity;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -57,14 +61,25 @@ public class IPojoTest extends TestCase {
 
         IPojo<PojoTestEntity> pojo = ServerEntityFactory.getPojo(entity);
 
-        assertEquals("Bob 21", BeanUtils.getProperty(pojo, entity.aliases().getFieldName() + "[0]"));
-        assertEquals("Bob 22", BeanUtils.getProperty(pojo, entity.aliases().getFieldName() + "[1]"));
+        if (EntityPojoWrapperGenerator.useCollectionForPrimitiveSet) {
+            Collection<String> data = new Vector<String>();
+            data.add("v1");
+            data.add("v2");
 
-        String[] data = new String[] { "v1", "v2" };
-        BeanUtils.setProperty(pojo, entity.aliases().getFieldName(), data);
+            //BeanUtils.setProperty(pojo, entity.aliases().getFieldName(), data);
 
-        assertEquals("v1", BeanUtils.getProperty(pojo, entity.aliases().getFieldName() + "[0]"));
-        assertEquals("v2", BeanUtils.getProperty(pojo, entity.aliases().getFieldName() + "[1]"));
+            //assertEquals("v1", entity.aliases().iterator().next());
+        } else {
+            assertEquals("Bob 21", BeanUtils.getProperty(pojo, entity.aliases().getFieldName() + "[0]"));
+            assertEquals("Bob 22", BeanUtils.getProperty(pojo, entity.aliases().getFieldName() + "[1]"));
+
+            String[] data = new String[] { "v1", "v2" };
+            BeanUtils.setProperty(pojo, entity.aliases().getFieldName(), data);
+
+            assertEquals("v1", BeanUtils.getProperty(pojo, entity.aliases().getFieldName() + "[0]"));
+            assertEquals("v2", BeanUtils.getProperty(pojo, entity.aliases().getFieldName() + "[1]"));
+            assertEquals("v1", entity.aliases().iterator().next());
+        }
 
     }
 

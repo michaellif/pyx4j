@@ -21,6 +21,7 @@
 package com.pyx4j.entity.server.impl;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
@@ -123,6 +124,8 @@ public class EntityPojoWrapperGenerator {
         return name;
     }
 
+    public static final boolean useCollectionForPrimitiveSet = true;
+
     @SuppressWarnings("unchecked")
     private <T extends IEntity> CtClass getPojoCtClass(EntityMeta entityMeta) {
         String entityClassName = entityMeta.getEntityClass().getName();
@@ -173,8 +176,12 @@ public class EntityPojoWrapperGenerator {
                     ctValueClass = pool.get(memberMeta.getValueClass().getName());
                     break;
                 case PrimitiveSet:
-                    ctValueClass = pool.get(memberMeta.getValueClass().getName());
-                    ctValueClass = pool.get(ctValueClass.getName() + "[]");
+                    if (useCollectionForPrimitiveSet) {
+                        ctValueClass = pool.get(Collection.class.getName());
+                    } else {
+                        ctValueClass = pool.get(memberMeta.getValueClass().getName());
+                        ctValueClass = pool.get(ctValueClass.getName() + "[]");
+                    }
                     break;
                 default:
                     throw new Error("Unsupported ClassType " + memberMeta.getObjectClassType());
@@ -243,9 +250,13 @@ public class EntityPojoWrapperGenerator {
         case PrimitiveSet: {
             StringBuilder b = new StringBuilder("{");
             b.append("return (" + ctValueClass.getName() + ") ");
-            b.append("((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "().toArray(");
-            b.append(" new ").append(ctValueClass.getName().replace("[]", "[0]"));
-            b.append(");}");
+            if (useCollectionForPrimitiveSet) {
+                b.append("((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "()");
+            } else {
+                b.append("((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "().toArray(");
+                b.append(" new ").append(ctValueClass.getName().replace("[]", "[0]")).append(")");
+            }
+            b.append(";}");
             return b.toString();
         }
         default:
@@ -266,7 +277,11 @@ public class EntityPojoWrapperGenerator {
             return b.toString();
         }
         case PrimitiveSet: {
-            return "((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "().setValue($1);";
+            if (useCollectionForPrimitiveSet) {
+                return "((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "().setValue($1);";
+            } else {
+                return "((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "().setValue($1);";
+            }
         }
         default:
             return " throw new Error(\"Seter for " + memberMeta.getObjectClassType() + " Not implmented yet\");";
