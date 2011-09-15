@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.Path;
 
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
@@ -47,6 +48,15 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
             // just clear unnecessary data before serialisation: 
             in.marketing().description().setValue(null);
             in.info().economicStatusDescription().setValue(null);
+        }
+    }
+
+    @Override
+    protected String convertPropertyDTOPathToDBO(String path, AptUnit dboProto, AptUnitDTO dtoProto) {
+        if (path.equals(dtoProto.buildingCode().getPath().toString())) {
+            return dboProto.belongsTo().propertyCode().getPath().toString();
+        } else {
+            return dboProto.getObjectClass().getSimpleName() + path.substring(path.indexOf(Path.PATH_SEPARATOR));
         }
     }
 }

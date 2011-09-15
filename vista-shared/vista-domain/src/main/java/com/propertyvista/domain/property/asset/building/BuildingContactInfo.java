@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.company.OrganisationContact;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
+import com.propertyvista.domain.property.PropertyPhone;
 
 public interface BuildingContactInfo extends IEntity {
 
@@ -35,7 +36,12 @@ public interface BuildingContactInfo extends IEntity {
 
     @Owned
     @Detached
+    @Deprecated
     IList<Phone> phones();
+
+    @Owned
+    @Detached
+    IList<PropertyPhone> phones2();
 
     @Owned
     @Detached

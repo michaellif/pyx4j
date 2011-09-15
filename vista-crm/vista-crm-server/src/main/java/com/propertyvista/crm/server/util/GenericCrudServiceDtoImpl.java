@@ -18,7 +18,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
@@ -85,7 +84,15 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
     }
 
     protected void enhancePropertyCriterion(EntityListCriteria<DBO> dbCriteria, PropertyCriterion propertyCriterion) {
-        throw new Error("Unsupported property");
+        throw new Error("Unsupported Criterion property " + propertyCriterion.getPropertyName());
+    }
+
+    protected String enhancePropertySorts(EntityListCriteria<DBO> dbCriteria, Sort sort) {
+        throw new Error("Unsupported Sort property " + sort.getPropertyName());
+    }
+
+    protected String convertPropertyDTOPathToDBO(String path, DBO dboProto, DTO dtoProto) {
+        return dboProto.getObjectClass().getSimpleName() + path.substring(path.indexOf(Path.PATH_SEPARATOR));
     }
 
     protected void enhanceListCriteria(EntityListCriteria<DBO> dbCriteria, EntityListCriteria<DTO> dtoCriteria) {
@@ -95,7 +102,7 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
                     PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
                     String path = propertyCriterion.getPropertyName();
                     if (path.startsWith(dtoCriteria.proto().getObjectClass().getSimpleName())) {
-                        String dbObjectPath = dbCriteria.proto().getObjectClass().getSimpleName() + path.substring(path.indexOf(Path.PATH_SEPARATOR));
+                        String dbObjectPath = convertPropertyDTOPathToDBO(path, dbCriteria.proto(), dtoCriteria.proto());
                         dbCriteria.add(new PropertyCriterion(dbObjectPath, propertyCriterion.getRestriction(), propertyCriterion.getValue()));
                     } else {
                         enhancePropertyCriterion(dbCriteria, propertyCriterion);
@@ -107,13 +114,19 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
             // Just copy all Sorts for now. Change to non sortable one that are failing
             for (Sort s : dtoCriteria.getSorts()) {
                 String path = s.getPropertyName();
+
                 if (path.startsWith(dtoCriteria.proto().getObjectClass().getSimpleName())) {
-                    String propertyName = path.substring(path.indexOf(Path.PATH_SEPARATOR) + 1, path.length() - 1).replace('/', '_');
-                    if (s.isDescending()) {
-                        dbCriteria.desc(propertyName);
-                    } else {
-                        dbCriteria.asc(propertyName);
+                    path = convertPropertyDTOPathToDBO(path, dbCriteria.proto(), dtoCriteria.proto());
+                } else {
+                    path = enhancePropertySorts(dbCriteria, s);
+                    if (path == null) {
+                        continue;
                     }
+                }
+                if (s.isDescending()) {
+                    dbCriteria.desc(path);
+                } else {
+                    dbCriteria.asc(path);
                 }
             }
         }
