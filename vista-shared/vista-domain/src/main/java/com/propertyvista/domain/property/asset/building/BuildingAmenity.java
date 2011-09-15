@@ -30,6 +30,13 @@ public interface BuildingAmenity extends Amenity {
 
     @Translatable
     public enum Type {
+        fitness,
+
+        elevator,
+
+        parking,
+
+        pool,
 
         availability24Hours,
 
@@ -49,13 +56,7 @@ public interface BuildingAmenity extends Amenity {
 
         doorAttendant,
 
-        fitnessCenter,
-
-        elevator,
-
         freeWeights,
-
-        garage,
 
         gate,
 
@@ -82,8 +83,6 @@ public interface BuildingAmenity extends Amenity {
         onSiteManagement,
 
         packageReceiving,
-
-        pool,
 
         playGround,
 

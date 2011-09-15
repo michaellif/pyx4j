@@ -103,7 +103,7 @@ public class PropertyMapController {
         PropertyListDTO filteredProperties = EntityFactory.create(PropertyListDTO.class);
         if (SearchType.city.equals(criteria.searchType().getValue()) && !criteria.city().isNull()) {
             for (PropertyDTO property : allProperties.properties()) {
-                if (!criteria.city().equals(property.address().city()) || !criteria.province().equals(property.address().province().name())) {
+                if (!criteria.city().equals(property.address().city())) {
                     continue;
                 }
                 filteredProperties.properties().add(property);

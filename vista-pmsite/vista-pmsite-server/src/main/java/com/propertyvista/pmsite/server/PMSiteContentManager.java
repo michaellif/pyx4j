@@ -230,9 +230,9 @@ public class PMSiteContentManager implements Serializable {
 
             PropertyDTO propertyDTO = new BuildingPropertyDTOConverter().createDTO(building);
             {
-                EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
-                floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
-                for (Floorplan floorplan : Persistence.service().query(floorplanCriteria)) {
+                EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
+                for (Floorplan floorplan : Persistence.service().query(criteria)) {
                     propertyDTO.floorplansProperty().add(new FloorplanFloorplanPropertyDTOConverter().createDTO(floorplan));
                 }
             }
