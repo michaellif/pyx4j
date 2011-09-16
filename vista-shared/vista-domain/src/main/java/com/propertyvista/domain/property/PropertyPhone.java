@@ -34,7 +34,7 @@ import com.propertyvista.domain.ref.PhoneProviderReferenceAdapter;
 public interface PropertyPhone extends IEntity {
 
     @Translatable
-    @XmlType(name = "PhoneType")
+    @XmlType(name = "PropertyPhoneType")
     public enum Type {
 
         landLine,

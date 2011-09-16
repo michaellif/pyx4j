@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.geo.GeoPoint;
 
-import com.propertyvista.domain.contact.Phone;
+import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.ConstructionType;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.FloorType;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.FoundationType;
@@ -40,7 +40,7 @@ public interface BuildingIO extends IEntity {
 
     IPrimitive<String> email();
 
-    IList<Phone> phones();
+    IList<PropertyPhone> phones();
 
     IPrimitive<GeoPoint> addressCoordinates();
 
