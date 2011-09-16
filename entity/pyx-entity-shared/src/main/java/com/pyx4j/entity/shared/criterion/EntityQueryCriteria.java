@@ -31,7 +31,7 @@ import com.pyx4j.entity.shared.IEntity;
 
 /**
  * Representation of a query criterion.
- * 
+ *
  * Translates to org.hibernate.Criteria in RDBMS or Query in GAE
  */
 public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHaveServiceCallMarker {
@@ -199,7 +199,6 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
 
     // N.B. Do not use @Override for GWT to compile
     //@Override
-    @Override
     public Object clone() {
         EntityQueryCriteria<E> c = create(getEntityClass());
         if (this.getSorts() != null) {
