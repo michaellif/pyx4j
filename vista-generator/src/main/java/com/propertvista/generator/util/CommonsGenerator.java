@@ -27,6 +27,7 @@ import com.propertyvista.domain.contact.Email.Type;
 import com.propertyvista.domain.contact.IAddressFull.StreetDirection;
 import com.propertyvista.domain.contact.IAddressFull.StreetType;
 import com.propertyvista.domain.contact.Phone;
+import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.PropertyPhone;
@@ -37,11 +38,20 @@ public class CommonsGenerator {
 
     static String[] lipsum;
 
+    static String[] lipsumShort;
+
     public static String lipsum() {
         if (lipsum == null) {
             lipsum = CSVLoad.loadFile(IOUtils.resourceFileName("lipsum.csv", CommonsGenerator.class), "description");
         }
         return lipsum[DataGenerator.nextInt(lipsum.length, "lipsum", 4)];
+    }
+
+    public static String lipsumShort() {
+        if (lipsumShort == null) {
+            lipsumShort = CSVLoad.loadFile(IOUtils.resourceFileName("lipsum-short.csv", CommonsGenerator.class), "description");
+        }
+        return lipsumShort[DataGenerator.nextInt(lipsumShort.length, "lipsumShort", 4)];
     }
 
     public static Name createName() {
@@ -117,7 +127,12 @@ public class CommonsGenerator {
     public static PropertyPhone createPropertyPhone() {
         PropertyPhone phone = EntityFactory.create(PropertyPhone.class);
         phone.number().setValue(DataGenerator.randomPhone(RandomUtil.randomBoolean() ? "416" : "905"));
+        if (RandomUtil.randomBoolean()) {
+            phone.extension().setValue(RandomUtil.randomInt(100));
+        }
         phone.type().setValue(RandomUtil.randomEnum(PropertyPhone.Type.class));
+        phone.visibility().setValue(RandomUtil.randomEnum(PublicVisibilityType.class));
+        phone.description().setValue(lipsumShort());
         return phone;
     }
 

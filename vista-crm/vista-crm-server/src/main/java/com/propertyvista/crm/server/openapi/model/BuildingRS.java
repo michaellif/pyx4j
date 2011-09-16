@@ -32,6 +32,7 @@ public class BuildingRS {
 
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "phone"))
+    @Deprecated
     public List<String> contactPhones = new ArrayList<String>();
 
     public MarketingRS marketing;

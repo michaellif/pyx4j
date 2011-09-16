@@ -134,6 +134,9 @@ public class BuildingsResource {
                 if (building.contacts().phones2Migrate().getMeta().isDetached()) {
                     Persistence.service().retrieve(building.contacts().phones2Migrate());
                 }
+                if (building.contacts().phones().getMeta().isDetached()) {
+                    Persistence.service().retrieve(building.contacts().phones());
+                }
                 buildingRS = Converter.convertBuilding(building);
                 buildingRS.unitCount = 0;
                 buildingsRS.buildings.add(buildingRS);
@@ -152,6 +155,9 @@ public class BuildingsResource {
                     }
                     if (building.contacts().phones2Migrate().getMeta().isDetached()) {
                         Persistence.service().retrieve(building.contacts().phones2Migrate());
+                    }
+                    if (building.contacts().phones().getMeta().isDetached()) {
+                        Persistence.service().retrieve(building.contacts().phones());
                     }
                     Converter.copyDBOtoRS(building, buildingRS);
                 }

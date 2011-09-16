@@ -25,8 +25,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-// TODO define basic phone + contactPhone + BuildingPhone etc. which has different types enum...
-@ToStringFormat("{0} {1,choice,null#|!null#ex.{1}}")
+@ToStringFormat("{0}{1,choice,null#|!null# ex.{1}}")
 public interface Phone extends IEntity {
 
     @Translatable

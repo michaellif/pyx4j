@@ -28,4 +28,9 @@ public class MarketingRS {
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "blurb", type = AdvertisingBlurbRS.class))
     public List<AdvertisingBlurbRS> blurbs = new ArrayList<AdvertisingBlurbRS>();
+
+    @XmlElementWrapper
+    @XmlElements(@XmlElement(name = "phone", type = PhoneRS.class))
+    public List<PhoneRS> phones = new ArrayList<PhoneRS>();
+
 }

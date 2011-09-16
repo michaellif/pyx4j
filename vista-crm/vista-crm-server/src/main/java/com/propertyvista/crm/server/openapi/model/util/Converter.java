@@ -34,17 +34,19 @@ import com.propertyvista.crm.server.openapi.model.GeoLocation;
 import com.propertyvista.crm.server.openapi.model.MarketingRS;
 import com.propertyvista.crm.server.openapi.model.MediaRS;
 import com.propertyvista.crm.server.openapi.model.ParkingRS;
+import com.propertyvista.crm.server.openapi.model.PhoneRS;
 import com.propertyvista.crm.server.openapi.model.UtilityRS;
 import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.contact.Address.AddressType;
 import com.propertyvista.domain.contact.IAddressFull.StreetDirection;
 import com.propertyvista.domain.contact.IAddressFull.StreetType;
-import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
+import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Parking;
@@ -80,12 +82,17 @@ public class Converter {
 
         to.propertyManager = from.propertyManager().name().getStringView();
         to.contactEmail = from.contacts().email().address().getStringView();
-        for (Phone phone : from.contacts().phones2Migrate()) {
-            to.contactPhones.add(phone.getStringView());
-        }
 
         to.info = convertBuildingInfo(from.info());
         to.marketing = convertMarketing(from.marketing());
+
+        for (PropertyPhone phone : from.contacts().phones()) {
+            if (PublicVisibilityType.global.equals(phone.visibility().getValue())) {
+                to.contactPhones.add(phone.getStringView());
+                to.marketing.phones.add(convertPropertyPhone(phone));
+            }
+
+        }
     }
 
     public static Building convertBuilding(BuildingRS from) {
@@ -141,6 +148,13 @@ public class Converter {
 
         to.content().setValue(blurb.content);
 
+        return to;
+    }
+
+    public static PhoneRS convertPropertyPhone(PropertyPhone propertyPhone) {
+        PhoneRS to = new PhoneRS();
+        to.number = propertyPhone.getStringView();
+        to.description = propertyPhone.description().getStringView();
         return to;
     }
 
@@ -235,7 +249,7 @@ public class Converter {
         AmenityRS to = new AmenityRS();
 
         to.name = from.name().getStringView();
-        to.description = from.name().getStringView();
+        to.description = from.description().getStringView();
 
         return to;
     }
@@ -261,7 +275,7 @@ public class Converter {
         AmenityRS to = new AmenityRS();
 
         to.name = from.name().getStringView();
-        to.description = from.name().getStringView();
+        to.description = from.description().getStringView();
 
         return to;
     }

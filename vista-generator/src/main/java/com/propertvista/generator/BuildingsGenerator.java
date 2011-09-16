@@ -99,6 +99,7 @@ public class BuildingsGenerator {
         Address address = CommonsGenerator.createAddress();
 
         // phones
+        @Deprecated
         List<Phone> phones = new ArrayList<Phone>();
         phones.add(CommonsGenerator.createPhone());
 
@@ -162,7 +163,9 @@ public class BuildingsGenerator {
         for (Phone phone : phones) {
             building.contacts().phones2Migrate().add(phone);
         }
-        building.contacts().phones().add(CommonsGenerator.createPropertyPhone());
+        for (int i = 0; i <= RandomUtil.randomInt(3); i++) {
+            building.contacts().phones().add(CommonsGenerator.createPropertyPhone());
+        }
 
         building.contacts().website().setValue(website);
         building.contacts().email().set(email); // not sure yet what to do about
@@ -367,7 +370,7 @@ public class BuildingsGenerator {
         amenity.type().setValue(RandomUtil.randomEnum(BuildingAmenity.Type.class));
 
         amenity.name().setValue(RandomUtil.randomLetters(6));
-        amenity.description().setValue("Amenity description here...");
+        amenity.description().setValue(CommonsGenerator.lipsumShort());
 
         return amenity;
     }
@@ -416,7 +419,7 @@ public class BuildingsGenerator {
         amenity.type().setValue(RandomUtil.random(FloorplanAmenity.Type.values()));
 
         amenity.name().setValue(RandomUtil.randomLetters(6));
-        amenity.description().setValue("Amenity description here...");
+        amenity.description().setValue(CommonsGenerator.lipsumShort());
 
         return amenity;
     }

@@ -16,6 +16,7 @@ package com.propertvista.generator;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.propertvista.generator.util.CommonsGenerator;
 import com.propertvista.generator.util.PictureUtil;
 import com.propertvista.generator.util.RandomUtil;
 
@@ -65,7 +66,7 @@ public class MediaGenerator {
         File file = EntityFactory.create(File.class);
 
         file.filename().setValue("file102.jpg");
-        media.caption().setValue("file102");
+        media.caption().setValue(CommonsGenerator.lipsumShort());
         file.contentMimeType().setValue(MimeMap.getContentType(DownloadFormat.JPEG));
         media.file().set(file);
         media.visibility().setValue(PublicVisibilityType.global);
