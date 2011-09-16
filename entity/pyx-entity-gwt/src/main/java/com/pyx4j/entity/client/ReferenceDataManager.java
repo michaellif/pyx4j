@@ -60,7 +60,7 @@ public class ReferenceDataManager {
     private static void obtainImpl(EntityQueryCriteria<?> criteria, AsyncCallback<List<?>> handlingCallback, boolean background) {
         final boolean inCache = cache.containsKey(criteria);
         if (!inCache) {
-            final EntityQueryCriteria<?> originalCriteria = (EntityQueryCriteria<?>) criteria.clone();
+            final EntityQueryCriteria<?> originalCriteria = criteria.iclone();
             // Handle concurrent load
             List<AsyncCallback<List<?>>> loading = concurrentLoad.get(originalCriteria);
             if (loading == null) {
