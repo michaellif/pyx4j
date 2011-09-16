@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ui;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -24,14 +23,9 @@ import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.client.ui.AppSiteView;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
-import com.pyx4j.widgets.client.style.StyleManger;
 
-import com.propertyvista.portal.client.mvp.ActionsActivityMapper;
-import com.propertyvista.portal.client.mvp.BottomActivityMapper;
 import com.propertyvista.portal.client.mvp.ContentActivityMapper;
-import com.propertyvista.portal.client.mvp.LogoActivityMapper;
 import com.propertyvista.portal.client.mvp.MainNavigActivityMapper;
-import com.propertyvista.portal.client.themes.BlueColdTheme;
 
 public class PortalScreen extends FlowPanel {
 
@@ -45,28 +39,10 @@ public class PortalScreen extends FlowPanel {
 
         EventBus eventBus = AppSite.getEventBus();
 
-        StyleManger.installTheme(new BlueColdTheme());
-
         String prefix = DEFAULT_STYLE_PREFIX;
 
         setStyleName(prefix);
 
-        //============ Header  ============
-
-        FlowPanel headerWrapper = new FlowPanel();
-        headerWrapper.setStyleName(prefix + StyleSuffix.Header);
-        headerWrapper.setWidth("100%");
-        add(headerWrapper);
-
-        DisplayPanel logoDisplayPanel = new DisplayPanel();
-        logoDisplayPanel.getElement().getStyle().setFloat(Style.Float.LEFT);
-        headerWrapper.add(logoDisplayPanel);
-
-        DisplayPanel actionsDisplayPanel = new DisplayPanel();
-        actionsDisplayPanel.getElement().getStyle().setFloat(Style.Float.RIGHT);
-        headerWrapper.add(actionsDisplayPanel);
-
-        //================ Main application area ======= 
         FlowPanel mainNavigWrapper = new FlowPanel();
         mainNavigWrapper.setStyleName(prefix + StyleSuffix.MainNavig);
         add(mainNavigWrapper);
@@ -86,20 +62,8 @@ public class PortalScreen extends FlowPanel {
         contentDisplayPanel.setStyleName(prefix + StyleSuffix.Content);
         mainWrapper.add(contentDisplayPanel);
 
-        //================== Footer ========================
-        FlowPanel footerWrapper = new FlowPanel();
-        footerWrapper.setStyleName(prefix + StyleSuffix.Footer);
-        footerWrapper.getElement().getStyle().setProperty("clear", "left");
-        add(footerWrapper);
-
-        DisplayPanel bottomDisplayPanel = new DisplayPanel();
-        footerWrapper.add(bottomDisplayPanel);
-
-        bind(new LogoActivityMapper(), logoDisplayPanel, eventBus);
-        bind(new ActionsActivityMapper(), actionsDisplayPanel, eventBus);
         bind(new MainNavigActivityMapper(), mainNavigDisplayPanel, eventBus);
         bind(new ContentActivityMapper(), contentDisplayPanel, eventBus);
-        bind(new BottomActivityMapper(), bottomDisplayPanel, eventBus);
 
     }
 

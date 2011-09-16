@@ -18,9 +18,6 @@ import java.util.List;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.site.PageDescriptor;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-
 public class NavigItem {
 
     private final AppPlace place;
@@ -35,32 +32,12 @@ public class NavigItem {
         secondaryNavigation = new LinkedList<NavigItem>();
     }
 
-    public NavigItem(String path, String caption) {
-        this.place = new PortalSiteMap.Page();
-        this.caption = caption;
-        place.putArg(PortalSiteMap.ARG_PAGE_ID, path);
-        secondaryNavigation = new LinkedList<NavigItem>();
-    }
-
     public AppPlace getPlace() {
         return place;
     }
 
     public String getCaption() {
         return caption;
-    }
-
-    public static AppPlace convertTypeToPlace(PageDescriptor.Type type) {
-        switch (type) {
-        case staticContent:
-            return new PortalSiteMap.Page();
-        case residents:
-            return new PortalSiteMap.Residents();
-        case potentialTenants:
-            return new PortalSiteMap.PotentialTenants();
-        default:
-            return new PortalSiteMap.Landing();
-        }
     }
 
     public List<NavigItem> getSecondaryNavigation() {

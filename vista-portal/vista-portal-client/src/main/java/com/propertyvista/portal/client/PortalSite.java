@@ -21,10 +21,11 @@ import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.widgets.client.style.StyleManger;
 
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
-import com.propertyvista.portal.client.ui.FindApartmentScreen;
+import com.propertyvista.portal.client.themes.BlueColdTheme;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
@@ -34,7 +35,9 @@ public class PortalSite extends VistaSite {
 
     private static PortalSiteServices srv = GWT.create(PortalSiteServices.class);
 
-    public static final String APT_SEARCH_INSERTION_ID = "vista.aptsearch";
+    public static final String RESIDENT_INSERTION_ID = "vista.resident";
+
+    public static final String RESIDENT_TEST_INSERTION_ID = "vista.resident.test";
 
     public PortalSite() {
         super(PortalSiteMap.class);
@@ -44,12 +47,17 @@ public class PortalSite extends VistaSite {
     public void onSiteLoad() {
         super.onSiteLoad();
 
-        if (RootPanel.get(APT_SEARCH_INSERTION_ID) != null) {
+        if (RootPanel.get(RESIDENT_INSERTION_ID) != null) {
             getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.Residents());
-            RootPanel.get(APT_SEARCH_INSERTION_ID).add(new FindApartmentScreen());
+            RootPanel.get(RESIDENT_INSERTION_ID).add(new PortalScreen());
+        } else if (RootPanel.get(RESIDENT_TEST_INSERTION_ID) != null) {
+            getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.Landing());
+            RootPanel.get(RESIDENT_TEST_INSERTION_ID).add(new PortalScreen());
+            StyleManger.installTheme(new BlueColdTheme());
         } else {
             getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.Landing());
             RootPanel.get().add(new PortalScreen());
+            StyleManger.installTheme(new BlueColdTheme());
         }
 
         hideLoadingIndicator();

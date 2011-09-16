@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.client.activity;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.xnap.commons.i18n.I18n;
@@ -24,27 +24,18 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.client.SecurityControllerEvent;
-import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.portal.client.ui.MainNavigView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 
 public class MainNavigActivity extends AbstractActivity implements MainNavigView.MainNavigPresenter {
 
-    private static boolean started = false;
-
     private final MainNavigView view;
 
     private final AppPlace place;
-
-    private static final Place ResidentsPlace = new PortalSiteMap.Residents();
 
     private static List<NavigItem> items;
 
@@ -64,57 +55,24 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        eventBus.addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
-            @Override
-            public void onSecurityContextChange(SecurityControllerEvent event) {
-                if (items != null && !items.isEmpty()) {
-                    for (NavigItem item : items) {
-                        AppPlace place = item.getPlace();
 
-                        if (place != null && place.equals(ResidentsPlace))
-                            if (ClientContext.isAuthenticated()) {
-                                view.setSecondaryNavig(item.getPlace(), getSecondaryNavig(PageDescriptor.Type.residents));
-                            } else {
-                                view.setSecondaryNavig(place, null);
-                            }
-                    }
-                }
-            }
-        });
-        if (started) {
-            view.changePlace(place);
+//            AppPlace place = NavigItem.convertTypeToPlace(descriptor.type().getValue());
+//            NavigItem mainNavig = new NavigItem(place, AppSite.getHistoryMapper().getPlaceInfo(place).getCaption());
+//            if (ClientContext.isAuthenticated()) {
+//                mainNavig.setSecondaryNavigation(getSecondaryNavig(descriptor.type().getValue()));
+//            }
+//            items.add(mainNavig);
 
-        } else {
-//            PortalSite.getPortalSiteServices().retrieveMainNavig(new DefaultAsyncCallback<PageDescriptor>() {
-//                @Override
-//                public void onSuccess(PageDescriptor navig) {
-//                    items = new ArrayList<NavigItem>();
-//                    for (PageDescriptor descriptor : navig.childPages()) {
-//                        if (PageDescriptor.Type.staticContent.equals(descriptor.type().getValue())) {
-//                            NavigItem mainNavig = new NavigItem(descriptor.caption().getStringView(), descriptor.caption().getStringView());
-//
-//                            if (!descriptor.childPages().isNull() && !descriptor.childPages().isEmpty()) {
-//                                for (PageDescriptor secondaryPage : descriptor.childPages()) {
-//                                    NavigItem secondaryNavig = new NavigItem(secondaryPage.caption().getStringView(), secondaryPage.caption().getStringView());
-//                                    mainNavig.addSecondaryNavigItem(secondaryNavig);
-//                                }
-//                            }
-//                            items.add(mainNavig);
-//
-//                        } else {
-//                            AppPlace place = NavigItem.convertTypeToPlace(descriptor.type().getValue());
-//                            NavigItem mainNavig = new NavigItem(place, AppSite.getHistoryMapper().getPlaceInfo(place).getCaption());
-//                            if (ClientContext.isAuthenticated()) {
-//                                mainNavig.setSecondaryNavigation(getSecondaryNavig(descriptor.type().getValue()));
-//                            }
-//                            items.add(mainNavig);
-//                        }
-//                    }
-//                    view.setMainNavig(items);
-//                }
-//            });
-            started = true;
-        }
+        List<NavigItem> items = new ArrayList<NavigItem>();
+
+        items.add(new NavigItem(new Residents.PersonalInfo(), i18n.tr("Personal Info")));
+        items.add(new NavigItem(new Residents.CurrentBill(), i18n.tr("Current Bill")));
+        items.add(new NavigItem(new Residents.PaymentMethods(), i18n.tr("Payment Methods")));
+        items.add(new NavigItem(new Residents.BillingHistory(), i18n.tr("Billing History")));
+        items.add(new NavigItem(new Residents.Maintenance(), i18n.tr("Maintenance")));
+
+        view.setMainNavig(items);
+
     }
 
     @Override
@@ -125,18 +83,6 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     @Override
     public Place getWhere() {
         return AppSite.getPlaceController().getWhere();
-    }
-
-    private List<NavigItem> getSecondaryNavig(PageDescriptor.Type pagetype) {
-        List<NavigItem> secondaryNavig = new LinkedList<NavigItem>();
-        if (PageDescriptor.Type.residents.equals(pagetype)) {
-            secondaryNavig.add(new NavigItem(new Residents.PersonalInfo(), i18n.tr("Personal Info")));
-            secondaryNavig.add(new NavigItem(new Residents.CurrentBill(), i18n.tr("Current Bill")));
-            secondaryNavig.add(new NavigItem(new Residents.PaymentMethods(), i18n.tr("Payment Methods")));
-            secondaryNavig.add(new NavigItem(new Residents.BillingHistory(), i18n.tr("Billing History")));
-            secondaryNavig.add(new NavigItem(new Residents.Maintenance(), i18n.tr("Maintenance")));
-        }
-        return secondaryNavig;
     }
 
 }

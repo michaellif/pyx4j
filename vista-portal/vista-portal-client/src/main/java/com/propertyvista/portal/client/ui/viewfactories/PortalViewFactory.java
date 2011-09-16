@@ -21,8 +21,6 @@ import com.propertyvista.portal.client.ui.LoginInvitationView;
 import com.propertyvista.portal.client.ui.LoginInvitationViewImpl;
 import com.propertyvista.portal.client.ui.LoginView;
 import com.propertyvista.portal.client.ui.LoginViewImpl;
-import com.propertyvista.portal.client.ui.LogoView;
-import com.propertyvista.portal.client.ui.LogoViewImpl;
 import com.propertyvista.portal.client.ui.MainNavigView;
 import com.propertyvista.portal.client.ui.MainNavigViewImpl;
 import com.propertyvista.portal.client.ui.PotentialTenantView;
@@ -60,8 +58,6 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new FooterViewImpl());
             } else if (LoginView.class.equals(type)) {
                 map.put(type, new LoginViewImpl());
-            } else if (LogoView.class.equals(type)) {
-                map.put(type, new LogoViewImpl());
             } else if (MaintenanceView.class.equals(type)) {
                 map.put(type, new MaintenanceViewImpl());
             } else if (MainNavigView.class.equals(type)) {

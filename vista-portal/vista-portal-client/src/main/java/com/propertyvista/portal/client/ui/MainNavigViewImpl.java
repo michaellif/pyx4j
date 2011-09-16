@@ -90,6 +90,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
     @Override
     public void setMainNavig(List<NavigItem> items) {
         AppPlace secondarySelected = null;
+        tabsHolder.clear();
         for (NavigItem item : items) {
             List<NavigItem> secondaryItems = item.getSecondaryNavigation();
             NavigTab mainNavigTab = new NavigTab(item, DEFAULT_STYLE_PREFIX);

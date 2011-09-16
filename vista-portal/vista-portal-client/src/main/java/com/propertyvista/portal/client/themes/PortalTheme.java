@@ -30,7 +30,6 @@ import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
 import com.propertyvista.portal.client.resources.PortalImages;
-import com.propertyvista.portal.client.ui.LogoViewImpl;
 import com.propertyvista.portal.client.ui.MainNavigViewImpl;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.TopRightActionsViewImpl;
@@ -56,7 +55,6 @@ public abstract class PortalTheme extends VistaTheme {
         initEntityDataTableStyles();
         initDecoratorsStyles();
         initSiteViewStyles();
-        initLogoViewStyles();
         initTopActionStyles();
         initVistaMainNavigViewStyles();
         initTableDecorators();
@@ -278,17 +276,6 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColor.BORDER);
         addStyle(style);
-    }
-
-    private void initLogoViewStyles() {
-        String prefix = LogoViewImpl.DEFAULT_STYLE_PREFIX;
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("font-size", "2em");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("padding-left", "20px");
-        style.addProperty("padding-top", "40px");
-        addStyle(style);
-
     }
 
     private void initTopActionStyles() {
