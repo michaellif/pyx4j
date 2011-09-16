@@ -360,7 +360,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             // phones
             sb.append("\t");
 
-            for (Phone phone : building.contacts().phones()) {
+            for (Phone phone : building.contacts().phones2Migrate()) {
                 sb.append(phone.number().getStringView());
                 sb.append("/").append(phone.type().getStringView());
             }

@@ -46,8 +46,8 @@ public class BuildingRetriever {
         if (building.marketing().adBlurbs().getMeta().isDetached()) {
             Persistence.service().retrieve(building.marketing().adBlurbs());
         }
-        if (building.contacts().phones().getMeta().isDetached()) {
-            Persistence.service().retrieve(building.contacts().phones());
+        if (building.contacts().phones2Migrate().getMeta().isDetached()) {
+            Persistence.service().retrieve(building.contacts().phones2Migrate());
         }
 
         BuildingIO buildingIO = new BuildingConverter().createDTO(building);

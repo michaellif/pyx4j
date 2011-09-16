@@ -110,7 +110,7 @@ public class Mapper {
 
         building.contacts().email().set(CommonsGenerator.createEmail(property.getContact().getEmail(), Email.Type.other));
 
-        building.contacts().phones().add(CommonsGenerator.createPhone(property.getContact().getTel()));
+        building.contacts().phones2Migrate().add(CommonsGenerator.createPhone(property.getContact().getTel()));
 
         building.contacts().website().setValue(property.getWebsite());
 

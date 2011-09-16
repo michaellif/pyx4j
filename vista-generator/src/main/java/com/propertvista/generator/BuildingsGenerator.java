@@ -160,8 +160,10 @@ public class BuildingsGenerator {
         }
 
         for (Phone phone : phones) {
-            building.contacts().phones().add(phone);
+            building.contacts().phones2Migrate().add(phone);
         }
+        building.contacts().phones().add(CommonsGenerator.createPropertyPhone());
+
         building.contacts().website().setValue(website);
         building.contacts().email().set(email); // not sure yet what to do about
                                                 // the email and its type

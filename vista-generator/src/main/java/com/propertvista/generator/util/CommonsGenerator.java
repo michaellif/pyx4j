@@ -29,6 +29,7 @@ import com.propertyvista.domain.contact.IAddressFull.StreetType;
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.server.common.reference.SharedData;
 
@@ -110,6 +111,13 @@ public class CommonsGenerator {
         phone.number().setValue(number);
         phone.extension().setValue(ext);
 
+        return phone;
+    }
+
+    public static PropertyPhone createPropertyPhone() {
+        PropertyPhone phone = EntityFactory.create(PropertyPhone.class);
+        phone.number().setValue(DataGenerator.randomPhone(RandomUtil.randomBoolean() ? "416" : "905"));
+        phone.type().setValue(RandomUtil.randomEnum(PropertyPhone.Type.class));
         return phone;
     }
 

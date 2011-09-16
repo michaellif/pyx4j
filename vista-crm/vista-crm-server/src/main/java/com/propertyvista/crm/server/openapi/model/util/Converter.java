@@ -80,7 +80,7 @@ public class Converter {
 
         to.propertyManager = from.propertyManager().name().getStringView();
         to.contactEmail = from.contacts().email().address().getStringView();
-        for (Phone phone : from.contacts().phones()) {
+        for (Phone phone : from.contacts().phones2Migrate()) {
             to.contactPhones.add(phone.getStringView());
         }
 
