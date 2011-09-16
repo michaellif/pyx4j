@@ -13,10 +13,10 @@
  */
 package com.propertyvista.portal.server.generator;
 
+import junit.framework.TestCase;
+
 import com.propertvista.generator.PTGenerator;
 import com.propertvista.generator.gdo.ApplicationSummaryGDO;
-
-import junit.framework.TestCase;
 
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.User;

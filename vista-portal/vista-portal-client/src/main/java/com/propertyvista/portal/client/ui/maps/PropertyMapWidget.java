@@ -72,7 +72,7 @@ public class PropertyMapWidget extends AbstractMapWidget {
             MarkerOptions markerOptions = MarkerOptions.newInstance();
             markerOptions.setTitle(property.address().getStringView());
 
-            Icon icon = Icon.newInstance(PortalImages.INSTANCE.mapMarker().getURL());
+            Icon icon = Icon.newInstance(PortalImages.INSTANCE.mapMarker().getSafeUri().asString());
             //TODO get shadow URL
             //icon.setShadowURL(FmRiaResources.INSTANCE.mapMarkerHouseShadow().getURL());
             icon.setIconSize(Size.newInstance(38, 41));

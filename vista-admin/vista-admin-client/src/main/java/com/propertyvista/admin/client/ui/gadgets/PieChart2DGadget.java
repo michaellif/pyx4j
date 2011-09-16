@@ -21,10 +21,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
+import com.pyx4j.svg.chart.ArcBasedChartConfigurator;
 import com.pyx4j.svg.chart.ChartTheme;
 import com.pyx4j.svg.chart.DataSource;
 import com.pyx4j.svg.chart.PieChart2D;
-import com.pyx4j.svg.chart.ArcBasedChartConfigurator;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 import com.pyx4j.widgets.client.svg.SvgPanel;
 

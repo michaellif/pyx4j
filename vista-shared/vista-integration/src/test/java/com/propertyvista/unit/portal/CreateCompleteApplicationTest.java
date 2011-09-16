@@ -56,8 +56,8 @@ import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 import com.propertyvista.server.common.reference.SharedData;
 
@@ -453,13 +453,12 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         saveAndContinue();
     }
 
-    @SuppressWarnings("unchecked")
     private void enterSummaryPage(ApplicationSummaryGDO summary) {
         // This data is not generated
         // Forge the  Digital Signature
         //TODO summary.agree().setValue(Boolean.TRUE);
 
-        TenantSummaryGDO mainTenant = summary.tenants().get(0);
+        //TODO TenantSummaryGDO mainTenant = summary.tenants().get(0);
         //TODO summary.fullName().setValue(EntityFromatUtils.nvl_concat(" ", mainTenant.person().name().firstName(), mainTenant.person().name().lastName()));
 
         //TODO setValueOnForm(summary.agree());

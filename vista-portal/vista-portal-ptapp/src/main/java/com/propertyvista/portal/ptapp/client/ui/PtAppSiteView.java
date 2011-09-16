@@ -17,9 +17,9 @@ import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.AppSiteView;
@@ -48,7 +48,7 @@ public class PtAppSiteView extends FlowPanel {
 
         StyleManger.installTheme(new GainsboroTheme());
 
-        EventBus eventBus = AppSite.instance().getEventBus();
+        EventBus eventBus = AppSite.getEventBus();
 
         String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
 

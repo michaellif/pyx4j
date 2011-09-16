@@ -310,7 +310,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             @Override
             protected CEntityFolderItemEditor<TenantInLease> createItem() {
                 return new CEntityFolderRowEditor<TenantInLease>(TenantInLease.class, columns()) {
-                    @SuppressWarnings("rawtypes")
                     @Override
                     public IsWidget createContent() {
                         if (isFirst()) {

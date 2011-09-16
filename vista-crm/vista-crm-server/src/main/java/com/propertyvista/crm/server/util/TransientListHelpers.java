@@ -16,7 +16,6 @@ package com.propertyvista.crm.server.util;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;

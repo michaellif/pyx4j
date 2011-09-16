@@ -21,7 +21,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
-import com.propertyvista.portal.server.ptapp.util.TenantConverter.TenantEditorConverter;
 
 public class TenantTestAdapter {
 

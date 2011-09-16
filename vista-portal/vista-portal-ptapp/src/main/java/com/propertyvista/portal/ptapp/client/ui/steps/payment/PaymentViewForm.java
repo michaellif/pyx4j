@@ -123,22 +123,22 @@ public class PaymentViewForm extends CEntityForm<PaymentInfo> {
         for (int i = 0; i < PaymentType.values().length; i++) {
             switch (i) {
             case 0:
-                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentACH().getURL());
+                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentACH().getSafeUri());
                 break;
             case 1:
-                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentVISA().getURL());
+                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentVISA().getSafeUri());
                 break;
             case 2:
-                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentAMEX().getURL());
+                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentAMEX().getSafeUri());
                 break;
             case 3:
-                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentMC().getURL());
+                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentMC().getSafeUri());
                 break;
             case 4:
-                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentDiscover().getURL());
+                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentDiscover().getSafeUri());
                 break;
             default:
-                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentInterac().getURL());
+                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentInterac().getSafeUri());
                 break;
             }
             paymentTypeImage.setHeight("20px");

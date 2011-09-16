@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.ui.crud.tenant;
 import com.pyx4j.site.client.ui.crud.IListerView;
 
 import com.propertyvista.domain.tenant.income.PersonalAsset;
-import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
+import com.propertyvista.domain.tenant.income.TenantGuarantor;
 
 public interface TenantScreeningView {
 

@@ -17,8 +17,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.selenium.SeleniumTestBase;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
+import com.pyx4j.selenium.SeleniumTestBase;
 
 import com.propertyvista.portal.tester.TestComponentDebugId;
 import com.propertyvista.portal.tester.TesterDebugId;

@@ -66,7 +66,7 @@ public class AddressUtils {
         injectIAddress(main, proto, parent, true);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings("unchecked")
     public static void injectIAddress(VistaDecoratorsFlowPanel main, final IAddressFull proto, final CEntityEditor<?> parent, boolean showUnit) {
         if (showUnit) {
             main.add(parent.inject(proto.unitNumber()), 5);
@@ -97,7 +97,7 @@ public class AddressUtils {
         injectIAddress(split, proto, parent, true);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings("unchecked")
     public static void injectIAddress(VistaDecoratorsSplitFlowPanel split, final IAddressFull proto, final CEntityEditor<?> parent, boolean showUnit) {
         if (showUnit) {
             split.getLeftPanel().add(parent.inject(proto.unitNumber()), 5);

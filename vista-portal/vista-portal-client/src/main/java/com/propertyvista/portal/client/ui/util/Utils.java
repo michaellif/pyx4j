@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.util;
 
+import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.user.client.ui.Image;
 
 import com.propertyvista.portal.client.resources.PortalImages;
@@ -21,20 +22,20 @@ import com.propertyvista.portal.domain.payment.PaymentType;
 public class Utils {
 
     public static Image getPaymentCardImage(PaymentType type) {
-        String url;
+        SafeUri url;
 
         if (type == PaymentType.Echeck) {
-            url = PortalImages.INSTANCE.paymentACH().getURL();
+            url = PortalImages.INSTANCE.paymentACH().getSafeUri();
         } else if (type == PaymentType.Visa) {
-            url = PortalImages.INSTANCE.paymentVISA().getURL();
+            url = PortalImages.INSTANCE.paymentVISA().getSafeUri();
         } else if (type == PaymentType.Amex) {
-            url = PortalImages.INSTANCE.paymentAMEX().getURL();
+            url = PortalImages.INSTANCE.paymentAMEX().getSafeUri();
         } else if (type == PaymentType.MasterCard) {
-            url = PortalImages.INSTANCE.paymentMC().getURL();
+            url = PortalImages.INSTANCE.paymentMC().getSafeUri();
         } else if (type == PaymentType.Discover) {
-            url = PortalImages.INSTANCE.paymentDiscover().getURL();
+            url = PortalImages.INSTANCE.paymentDiscover().getSafeUri();
         } else {
-            url = PortalImages.INSTANCE.paymentInterac().getURL();
+            url = PortalImages.INSTANCE.paymentInterac().getSafeUri();
         }
         return new Image(url);
     }

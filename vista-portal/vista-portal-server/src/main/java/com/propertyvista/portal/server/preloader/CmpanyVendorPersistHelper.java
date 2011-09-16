@@ -35,7 +35,6 @@ public class CmpanyVendorPersistHelper extends BaseVistaDataPreloader {
         super(config);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {

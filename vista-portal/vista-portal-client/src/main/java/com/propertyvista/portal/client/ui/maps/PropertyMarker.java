@@ -77,7 +77,7 @@ public class PropertyMarker extends Marker {
         MarkerOptions markerOptions = MarkerOptions.newInstance();
         markerOptions.setTitle(property.address().getStringView());
         Icon icon = null;
-        icon = Icon.newInstance(PortalImages.INSTANCE.delRow().getURL());
+        icon = Icon.newInstance(PortalImages.INSTANCE.delRow().getSafeUri().asString());
         //TODO get shadow URL
         //icon.setShadowURL(FmRiaResources.INSTANCE.mapMarkerHouseShadow().getURL());
         icon.setIconSize(Size.newInstance(38, 41));
@@ -91,10 +91,10 @@ public class PropertyMarker extends Marker {
     public void setMarkerType(MarkerType markerType) {
         switch (markerType) {
         case inbound:
-            MarkerImpl.impl.setImage(this, PortalImages.INSTANCE.mapMarker().getURL());
+            MarkerImpl.impl.setImage(this, PortalImages.INSTANCE.mapMarker().getSafeUri().asString());
             break;
         case outbound:
-            MarkerImpl.impl.setImage(this, PortalImages.INSTANCE.mapMarkerOutbound().getURL());
+            MarkerImpl.impl.setImage(this, PortalImages.INSTANCE.mapMarkerOutbound().getSafeUri().asString());
             break;
         }
     }

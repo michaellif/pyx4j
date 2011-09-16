@@ -123,7 +123,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
     protected void initBodyStyles() {
         super.initBodyStyles();
         Style style = new Style(".body-navig");
-        style.addProperty("background", "url('" + CrmImages.INSTANCE.bodyBackground().getURL() + "') repeat-x 0 0 #F7F7F7");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.bodyBackground().getSafeUri().asString() + "') repeat-x 0 0 #F7F7F7");
         addStyle(style);
     }
 
@@ -151,7 +151,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
 
         // Footer:
         style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Footer));
-        style.addProperty("background", "url('" + CrmImages.INSTANCE.logo().getURL() + "') no-repeat scroll left center transparent");
+        style.addProperty("background", "url('" + CrmImages.INSTANCE.logo().getSafeUri().asString() + "') no-repeat scroll left center transparent");
         style.addProperty("background-color", "#ccc");
         addStyle(style);
 

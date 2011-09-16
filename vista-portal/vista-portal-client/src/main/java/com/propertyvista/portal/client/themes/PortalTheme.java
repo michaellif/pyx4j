@@ -364,7 +364,7 @@ public abstract class PortalTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(secondPrefix, MainNavigViewImpl.StyleSuffix.Label, MainNavigViewImpl.StyleDependent.current));
-        style.addProperty("background", "url('" + PortalImages.INSTANCE.pointer().getURL() + "') no-repeat scroll 50% 100% transparent");
+        style.addProperty("background", "url('" + PortalImages.INSTANCE.pointer().getSafeUri().asString() + "') no-repeat scroll 50% 100% transparent");
         style.addProperty("color", "white");
         addStyle(style);
 

@@ -336,15 +336,15 @@ public class VistaTheme extends Theme {
         style.addProperty("outline", "none");
         style.addProperty("width", "18px");
         style.addProperty("height", "22px");
-        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPicker().getURL() + "') no-repeat 100%");
+        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPicker().getSafeUri().asString() + "') no-repeat 100%");
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_Picker, "-hover");
-        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerHover().getURL() + "') no-repeat 100%");
+        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerHover().getSafeUri().asString() + "') no-repeat 100%");
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_Picker, "-pushed");
-        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerPushed().getURL() + "') no-repeat 100%");
+        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerPushed().getSafeUri().asString() + "') no-repeat 100%");
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_PickerPanel);
@@ -854,7 +854,7 @@ public class VistaTheme extends Theme {
     protected void initSlideshowActionStyle() {
 
         Style style = new Style(CSSClass.pyx4j_SlideshowAction);
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowItem().getURL() + "') no-repeat");
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowItem().getSafeUri().asString() + "') no-repeat");
         style.addProperty("width", "17px");
         style.addProperty("height", "16px");
         style.addProperty("cursor", "pointer");
@@ -866,23 +866,23 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_SlideshowAction, "-left");
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowLeft().getURL() + "') no-repeat");
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowLeft().getSafeUri().asString() + "') no-repeat");
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_SlideshowAction, "-right");
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowRight().getURL() + "') no-repeat");
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowRight().getSafeUri().asString() + "') no-repeat");
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_SlideshowAction, "-selected");
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowSelectedItem().getURL() + "') no-repeat");
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowSelectedItem().getSafeUri().asString() + "') no-repeat");
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_SlideshowAction, "-playing");
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowPause().getURL() + "') no-repeat");
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowPause().getSafeUri().asString() + "') no-repeat");
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_SlideshowAction, "-paused");
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowPlay().getURL() + "') no-repeat");
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowPlay().getSafeUri().asString() + "') no-repeat");
         addStyle(style);
 
     }

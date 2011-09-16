@@ -113,7 +113,7 @@ public abstract class VistaAdminTheme extends VistaTheme {
     protected void initBodyStyles() {
         super.initBodyStyles();
         Style style = new Style(".body-navig");
-        style.addProperty("background", "url('" + AdminImages.INSTANCE.bodyBackground().getURL() + "') repeat-x 0 0 #F7F7F7");
+        style.addProperty("background", "url('" + AdminImages.INSTANCE.bodyBackground().getSafeUri().asString() + "') repeat-x 0 0 #F7F7F7");
         addStyle(style);
     }
 
@@ -141,7 +141,7 @@ public abstract class VistaAdminTheme extends VistaTheme {
 
         // Footer:
         style = new Style(Selector.valueOf(prefix, AdminView.StyleSuffix.Footer));
-        style.addProperty("background", "url('" + AdminImages.INSTANCE.logo().getURL() + "') no-repeat scroll left center transparent");
+        style.addProperty("background", "url('" + AdminImages.INSTANCE.logo().getSafeUri().asString() + "') no-repeat scroll left center transparent");
         style.addProperty("background-color", "#ccc");
         addStyle(style);
 
