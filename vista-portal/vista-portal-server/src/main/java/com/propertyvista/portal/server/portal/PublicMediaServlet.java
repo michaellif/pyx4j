@@ -30,6 +30,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.VistaBehavior;
+import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.server.common.blob.BlobService;
@@ -59,7 +60,7 @@ public class PublicMediaServlet extends HttpServlet {
 
         //TODO deserialize key
         Media media = Persistence.service().retrieve(Media.class, new Key(id));
-        if (!media.visibleToPublic().isBooleanTrue()) {
+        if (!PublicVisibilityType.global.equals(media.visibility().getValue())) {
             if (!SecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 return;

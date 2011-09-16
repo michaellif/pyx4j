@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
+import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.ref.PhoneProvider;
 import com.propertyvista.domain.ref.PhoneProviderReferenceAdapter;
 
@@ -50,6 +51,8 @@ public interface PropertyPhone extends IEntity {
 
     @MemberColumn(name = "phoneType")
     IPrimitive<Type> type();
+
+    IPrimitive<PublicVisibilityType> visibility();
 
     /**
      * in format 123-4567 123-456-7890 )

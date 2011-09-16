@@ -17,6 +17,8 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.marketing.PublicVisibilityType;
+
 @Transient
 public interface MediaIO extends IEntity {
 
@@ -36,5 +38,6 @@ public interface MediaIO extends IEntity {
 
     IPrimitive<String> uri();
 
-    IPrimitive<Boolean> visibleToPublic();
+    IPrimitive<PublicVisibilityType> visibility();
+
 }

@@ -28,6 +28,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.File;
+import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
@@ -67,7 +68,7 @@ public class MediaGenerator {
         media.caption().setValue("file102");
         file.contentMimeType().setValue(MimeMap.getContentType(DownloadFormat.JPEG));
         media.file().set(file);
-        media.visibleToPublic().setValue(Boolean.TRUE);
+        media.visibility().setValue(PublicVisibilityType.global);
 
         return media;
     }
@@ -97,7 +98,7 @@ public class MediaGenerator {
         Map<Media, byte[]> data = PictureUtil.loadResourceMedia(filename, BuildingsGenerator.class);
         for (Map.Entry<Media, byte[]> me : data.entrySet()) {
             Media m = me.getKey();
-            m.visibleToPublic().setValue(Boolean.TRUE);
+            m.visibility().setValue(PublicVisibilityType.global);
             m.type().setValue(Media.Type.file);
             m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentMimeType().getValue()));
 

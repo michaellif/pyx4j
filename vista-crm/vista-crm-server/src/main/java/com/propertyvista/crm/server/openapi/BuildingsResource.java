@@ -48,6 +48,7 @@ import com.propertyvista.crm.server.openapi.model.BuildingsRS;
 import com.propertyvista.crm.server.openapi.model.FloorplanRS;
 import com.propertyvista.crm.server.openapi.model.util.Converter;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.asset.Complex;
@@ -176,7 +177,7 @@ public class BuildingsResource {
                 if (!building.media().isEmpty()) {
                     Persistence.service().retrieve(building.media());
                     for (Media media : building.media()) {
-                        if (media.visibleToPublic().isBooleanTrue()) {
+                        if (PublicVisibilityType.global.equals(media.visibility().getValue())) {
                             buildingRS.medias.add(Converter.convertMedia(media));
                         }
                     }
@@ -251,7 +252,7 @@ public class BuildingsResource {
                 if (!floorplan.media().isEmpty()) {
                     Persistence.service().retrieve(floorplan.media());
                     for (Media media : floorplan.media()) {
-                        if (media.visibleToPublic().isBooleanTrue()) {
+                        if (PublicVisibilityType.global.equals(media.visibility().getValue())) {
                             floorplanRS.medias.add(Converter.convertMedia(media));
                         }
                     }

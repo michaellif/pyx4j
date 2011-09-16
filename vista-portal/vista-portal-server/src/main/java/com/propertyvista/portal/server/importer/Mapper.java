@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.contact.Email;
+import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -116,7 +117,7 @@ public class Mapper {
 
         if (CommonsStringUtils.isStringSet(property.getYoutube())) {
             Media media = EntityFactory.create(Media.class);
-            media.visibleToPublic().setValue(Boolean.TRUE);
+            media.visibility().setValue(PublicVisibilityType.global);
             media.type().setValue(Media.Type.youTube);
             media.caption().setValue("A " + building.info().name().getValue() + " video");
             media.youTubeVideoID().setValue(property.getYoutube());

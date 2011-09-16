@@ -26,10 +26,10 @@ import com.propertvista.generator.MediaGenerator;
 import com.propertvista.generator.util.PictureUtil;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
@@ -159,7 +159,7 @@ public class Importer {
         Map<Media, byte[]> data = PictureUtil.loadbuildingMedia(building.propertyCode().getValue());
         for (Map.Entry<Media, byte[]> me : data.entrySet()) {
             Media m = me.getKey();
-            m.visibleToPublic().setValue(Boolean.TRUE);
+            m.visibility().setValue(PublicVisibilityType.global);
             m.type().setValue(Media.Type.file);
             m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentMimeType().getValue()));
 

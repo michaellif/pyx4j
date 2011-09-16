@@ -40,6 +40,7 @@ import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyManager;
@@ -163,7 +164,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
                     media.type().setValue(Media.Type.youTube);
                     media.caption().setValue("A " + building.info().name().getValue() + " video");
                     media.youTubeVideoID().setValue(MediaGenerator.randomYoutubeId());
-                    media.visibleToPublic().setValue(Boolean.TRUE);
+                    media.visibility().setValue(PublicVisibilityType.global);
                     building.media().add(media);
                 }
                 Persistence.service().persist(building.media());

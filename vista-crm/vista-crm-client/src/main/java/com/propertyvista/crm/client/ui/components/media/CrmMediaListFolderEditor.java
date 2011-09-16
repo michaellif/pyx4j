@@ -121,7 +121,7 @@ public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
                 }
 
                 split.getRightPanel().add(inject(proto().caption()), 15);
-                split.getRightPanel().add(inject(proto().visibleToPublic()), 5);
+                split.getRightPanel().add(inject(proto().visibility()), 5);
 
                 HorizontalPanel wrap = new HorizontalPanel();
                 SimplePanel thumbnailWrap = new SimplePanel();

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.media;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
@@ -23,6 +22,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.File;
+import com.propertyvista.domain.marketing.PublicVisibilityType;
 
 public interface Media extends IEntity {
 
@@ -55,6 +55,5 @@ public interface Media extends IEntity {
 
     IPrimitive<String> url();
 
-    @Caption(name = "Public")
-    IPrimitive<Boolean> visibleToPublic();
+    IPrimitive<PublicVisibilityType> visibility();
 }
