@@ -18,8 +18,8 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import com.propertyvista.pmsite.server.PMSiteContentManager;
-import com.propertyvista.pmsite.server.model.NewsDataModel;
+import com.propertyvista.domain.site.News;
+import com.propertyvista.pmsite.server.PMSiteSession;
 
 public class NewsPanel extends Panel {
     private static final long serialVersionUID = 1L;
@@ -27,15 +27,22 @@ public class NewsPanel extends Panel {
     public NewsPanel(String id) {
         super(id);
 
-        add(new ListView<NewsDataModel>("newsItem", PMSiteContentManager.getNews()) {
+        add(new ListView<News>("newsItem", ((PMSiteSession) getSession()).getContentManager().getNews()) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void populateItem(ListItem<NewsDataModel> item) {
-                NewsDataModel news = item.getModelObject();
-                item.add(new Label("date", news.getDate().toString()));
-                item.add(new Label("headline", news.getHeadline()));
-                item.add(new Label("text", news.getText()));
+            protected void populateItem(ListItem<News> item) {
+                News news = item.getModelObject();
+                item.add(new Label("date", news.date().getStringView()));
+                item.add(new Label("headline", news.caption().getStringView()));
+
+                //TODO cut it nicely
+                String content = news.content().getStringView();
+                if (content.length() >= 150) {
+                    content = content.substring(0, 150) + " ...";
+                }
+                item.add(new Label("text", content));
+
                 item.add(new Label("more", "&raquo;").setEscapeModelStrings(false));
             }
         });

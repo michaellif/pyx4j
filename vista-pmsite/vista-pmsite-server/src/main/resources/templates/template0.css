@@ -453,18 +453,15 @@ ul.footer_locations li {
 	float: left;
 	width: 260px;
 	height: 143px;
-	margin: 20px;
+	margin: 15px;
 	padding: 20px;
 	background: url("images/template0/cite.png") no-repeat;
 }
 
-.testim_box .infobox_content:first-child {
-	margin-left: 0px;
-}
-
 .testim_box .name {
 	color: #B5E329;
-	padding: 20px 0 0 0;
+	text-align: right;
+	padding: 10px 0 0 0;
 }
 
 .testim_box .read_more {
@@ -478,7 +475,7 @@ ul.footer_locations li {
 	padding: 20px 30px;
 	display: inline-block;
 	min-height: 614px;
-	background: url("images/template0/bg_sidebar.gif") repeat-x;
+	background: url("images/template0/bg_sidebar.gif") repeat-x #34363C;
 }
 
 .news_box .date {
@@ -511,4 +508,30 @@ ul.footer_locations li {
 	width: 660px;
 	float: right;
 	display: inline-block;
+}
+
+.promo_box {
+	width:600px;
+	height:240px;
+	padding:20px 0px;
+	float:left;
+	overflow:hidden;
+}
+.promo_box .infobox_content {
+	width:130px;
+	height:200px;
+	float:left;
+	margin-left:20px;
+}
+.promo_box .infobox_content:first-child {
+	margin-left:0px;
+}
+.promo_box .picture {
+	width:130px;
+	background:grey;
+}
+.promo_box .read_more {
+	color:#B5E329;
+	font-size:16px;
+	padding-left:10px;
 }

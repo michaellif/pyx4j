@@ -25,22 +25,31 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import com.propertyvista.pmsite.server.PMSiteContentManager;
-import com.propertyvista.pmsite.server.model.TestimDataModel;
+import com.propertyvista.domain.site.Testimonial;
+import com.propertyvista.pmsite.server.PMSiteSession;
 
 public class TestimPanel extends Panel {
     private static final long serialVersionUID = 1L;
 
     public TestimPanel(String id) {
         super(id);
-        add(new ListView<TestimDataModel>("testimItem", PMSiteContentManager.getTestimonials()) {
+        add(new ListView<Testimonial>("testimItem", ((PMSiteSession) getSession()).getContentManager().getTestimonials()) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void populateItem(ListItem<TestimDataModel> item) {
-                TestimDataModel testim = item.getModelObject();
-                item.add(new Label("quote", testim.getQuote()));
-                item.add(new Label("name", testim.getName()));
+            protected void populateItem(ListItem<Testimonial> item) {
+                Testimonial testim = item.getModelObject();
+
+                //TODO cut it nicely
+                String content = testim.content().getStringView();
+                if (content.length() >= 100) {
+                    content = content.substring(0, 100) + " ...";
+                }
+
+                item.add(new Label("quote", content));
+                item.add(new Label("more", "&raquo;").setEscapeModelStrings(false));
+
+                item.add(new Label("name", testim.author().getStringView()));
             }
         });
     }

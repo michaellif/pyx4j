@@ -29,6 +29,7 @@ import org.apache.wicket.protocol.http.WebRequestCycle;
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -38,17 +39,17 @@ import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.Locale;
 import com.propertyvista.domain.site.Locale.Lang;
+import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteLocale;
+import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.pmsite.server.converter.BuildingAmenityAmenityDTOConverter;
 import com.propertyvista.pmsite.server.converter.BuildingPropertyDTOConverter;
 import com.propertyvista.pmsite.server.converter.FloorplanFloorplanPropertyDTOConverter;
 import com.propertyvista.pmsite.server.model.ApartmentModel;
-import com.propertyvista.pmsite.server.model.NewsDataModel;
 import com.propertyvista.pmsite.server.model.PromoDataModel;
-import com.propertyvista.pmsite.server.model.TestimDataModel;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
@@ -69,10 +70,15 @@ public class PMSiteContentManager implements Serializable {
 
     private final SiteDescriptor site;
 
+    private final List<News> news;
+
+    private final List<Testimonial> testimonials;
+
     private Locale locale;
 
     public PMSiteContentManager() {
         site = retrieveSiteDescriptor();
+
         locale = readLocaleFromCookie();
         if (locale == null) {
             if (site.locales().size() > 0) {
@@ -81,6 +87,10 @@ public class PMSiteContentManager implements Serializable {
                 throw new Error("No locales found");
             }
         }
+
+        news = retrieveNews();
+        testimonials = retrieveTestimonials();
+
     }
 
     public Locale getLocale() {
@@ -121,9 +131,10 @@ public class PMSiteContentManager implements Serializable {
     }
 
     private SiteDescriptor retrieveSiteDescriptor() {
-        EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
 
+        EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
         SiteDescriptor site = Persistence.service().retrieve(criteria);
+
         for (PageDescriptor descriptor : site.childPages()) {
             createPath(descriptor);
         }
@@ -132,6 +143,29 @@ public class PMSiteContentManager implements Serializable {
 
     public SiteDescriptor getSiteDescriptor() {
         return site;
+    }
+
+    private List<News> retrieveNews() {
+        EntityListCriteria<News> criteria = EntityListCriteria.create(News.class);
+        // criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), locale.lang().getValue()));
+        criteria.desc(criteria.proto().date().getPath().toString());
+        criteria.setPageSize(4);
+        criteria.setPageNumber(0);
+        return Persistence.service().query(criteria);
+    }
+
+    public List<News> getNews() {
+        return news;
+    }
+
+    private List<Testimonial> retrieveTestimonials() {
+        EntityQueryCriteria<Testimonial> criteria = EntityQueryCriteria.create(Testimonial.class);
+        //criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), locale.lang().getValue()));
+        return Persistence.service().query(criteria);
+    }
+
+    public List<Testimonial> getTestimonials() {
+        return testimonials;
     }
 
     private void createPath(PageDescriptor parent) {
@@ -296,24 +330,6 @@ public class PMSiteContentManager implements Serializable {
         return "/vista/media/" + mediaId + "/" + size + ".png";
     }
 
-    public static List<NewsDataModel> getNews() {
-        ArrayList<NewsDataModel> news = new ArrayList<NewsDataModel>();
-        NewsDataModel item = new NewsDataModel();
-        item.setDate(null)
-                .setHeadline("Indirect references to such addresses should be contained within theenterprise.")
-                .setText(
-                        "Private hosts can communicate with all other hostsinside the enterprise, both public and private.  While nothaving external (outside of the enterprise) IP connectivity privatehosts can still have access to external services via mediatinggateways. Such hosts will use the private address spacedefined above.");
-        news.add(item);
-        item = new NewsDataModel();
-        item.setDate(null)
-                .setHeadline(" However, they cannothave IP connectivity to any host outside of the enterprise.")
-                .setText(
-                        "While nothaving external (outside of the enterprise) IP connectivity privatehosts can still have access to external services via mediatinggateways.  In particular, Internet service providers should takemeasures to prevent such leakage.");
-        news.add(item);
-
-        return news;
-    }
-
     public static List<PromoDataModel> getPromotions() {
         ArrayList<PromoDataModel> promo = new ArrayList<PromoDataModel>();
 
@@ -337,15 +353,4 @@ public class PMSiteContentManager implements Serializable {
         return promo;
     }
 
-    public static List<TestimDataModel> getTestimonials() {
-        ArrayList<TestimDataModel> testim = new ArrayList<TestimDataModel>();
-        TestimDataModel item = new TestimDataModel();
-        item.setName("Pinoccio").setQuote("Indirect references to such addresses should be contained within theenterprise.");
-        testim.add(item);
-        item = new TestimDataModel();
-        item.setName("Seven Dwarfs").setQuote(" However, they cannothave IP connectivity to any host outside of the enterprise.");
-        testim.add(item);
-
-        return testim;
-    }
 }

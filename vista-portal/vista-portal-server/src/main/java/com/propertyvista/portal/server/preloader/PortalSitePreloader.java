@@ -17,6 +17,7 @@ import java.io.IOException;
 
 import com.propertvista.generator.util.RandomUtil;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -59,7 +60,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
             SiteDescriptor site = EntityFactory.create(SiteDescriptor.class);
             site.skin().setValue(Skin.skin1);
             site.baseColor().setValue("#fff");
-            site.copyright().setValue("� Starlight Apartments 2011");
+            site.copyright().setValue("© Starlight Apartments 2011");
 
             SiteLocale enSiteLocale = EntityFactory.create(SiteLocale.class);
             enSiteLocale.locale().set(enLocale);
@@ -69,40 +70,88 @@ public class PortalSitePreloader extends AbstractDataPreloader {
             frSiteLocale.locale().set(frLocale);
             site.locales().add(frSiteLocale);
 
-            {
-                Testimonial testimonial = EntityFactory.create(Testimonial.class);
-                testimonial.locale().set(enLocale);
+            Persistence.service().persist(
+                    createTestimonial(enLocale,
+                            "You know... I was simply abscessed with that picture: stars everywhere and you are so small in the entire Universe... "
+                                    + "But men, why she's starring at me constantly!!!", "Uncle Vasya Sr."));
 
-                testimonial.content().setValue(
-                        "You know... I was simply abscessed with that picture: stars everywhere and you are so small in the entire Universe... "
-                                + "But men, why she's starring at me constantly!!!");
-                testimonial.author().setValue("Uncle Vasya Sr.");
+            Persistence.service().persist(
+                    createTestimonial(enLocale,
+                            "You2 know... I was simply abscessed with that picture: stars everywhere and you are so small in the entire Universe... "
+                                    + "But men, why she's starring at me constantly!!!", "Uncle Vasya Sr."));
 
-                Persistence.service().persist(testimonial);
-            }
+            Persistence.service().persist(
+                    createTestimonial(enLocale,
+                            "You3 know... I was simply abscessed with that picture: stars everywhere and you are so small in the entire Universe... "
+                                    + "But men, why she's starring at me constantly!!!", "Uncle Vasya Sr."));
 
-            {
-                News news = EntityFactory.create(News.class);
-                news.locale().set(enLocale);
+            Persistence.service().persist(
+                    createTestimonial(enLocale,
+                            "You4 know... I was simply abscessed with that picture: stars everywhere and you are so small in the entire Universe... "
+                                    + "But men, why she's starring at me constantly!!!", "Uncle Vasya Sr."));
 
-                news.caption().setValue("Incredible offer!..");
-                news.content().setValue("Just by one star and get another two for free! Absolutely free! Just do not forget to pay property tax.");
-                news.date().setValue(RandomUtil.randomLogicalDate());
+            Persistence
+                    .service()
+                    .persist(
+                            createNews(
+                                    enLocale,
+                                    "Vancouver prices to keep rising",
+                                    "The Vancouver housing market may already be unaffordable for many, but there’s enough demand to keep prices rising, according to a new forecast.",
+                                    new LogicalDate(111, 03, 22)));
 
-                Persistence.service().persist(news);
-            }
+            Persistence
+                    .service()
+                    .persist(
+                            createNews(
+                                    frLocale,
+                                    "Les prix à Vancouver continuer à augmenter",
+                                    "Le marché du logement de Vancouver peut-être déjà inabordable pour beaucoup, mais il ya une demande suffisante pour maintenir la hausse des prix, selon une nouvelle prévision.",
+                                    new LogicalDate(111, 03, 22)));
+
+            Persistence
+                    .service()
+                    .persist(
+                            createNews(
+                                    enLocale,
+                                    "Ottawa, Toronto defy national sales trend ... for now",
+                                    "Resale housing activity in August remained stable for the second consecutive month, according to new stats from The Canadian Real Estate Association, although brokers in Toronto and Ottawa benefited from an uptick in sales.",
+                                    new LogicalDate(111, 05, 03)));
+
+            Persistence
+                    .service()
+                    .persist(
+                            createNews(
+                                    frLocale,
+                                    "Ottawa, Toronto défient nationale tendance des ventes ... pour l'instant",
+                                    "L'activité de revente de logements en août est resté stable pour le deuxième mois consécutif, selon de nouvelles statistiques de l'Association canadienne de l'immeuble, bien que les courtiers à Toronto et Ottawa ont bénéficié d'une hausse des ventes.",
+                                    new LogicalDate(111, 05, 03)));
+
+            Persistence.service().persist(
+                    createNews(enLocale, "Incredible offer4!..",
+                            "Just4 by one star and get another two for free! Absolutely free! Just do not forget to pay property tax.",
+                            RandomUtil.randomLogicalDate()));
+
+            Persistence.service().persist(
+                    createNews(enLocale, "Incredible offer5!..",
+                            "Just5 by one star and get another two for free! Absolutely free! Just do not forget to pay property tax.",
+                            RandomUtil.randomLogicalDate()));
+
+            Persistence.service().persist(
+                    createNews(enLocale, "Incredible offer6!..",
+                            "Just6 by one star and get another two for free! Absolutely free! Just do not forget to pay property tax.",
+                            RandomUtil.randomLogicalDate()));
 
             site.childPages().add(createDynamicPage("Find an Apartment", "Trouver un appartement", PageDescriptor.Type.findApartment));
-            site.childPages().add(createDynamicPage("Residents", "Les r�sidents", PageDescriptor.Type.residents));
+            site.childPages().add(createDynamicPage("Residents", "Les résidents", PageDescriptor.Type.residents));
             {
                 PageDescriptor page = createStaticPage("About us", "site-about.html", "A propos de nous", "site-about-fr.html");
                 page.childPages().add(createStaticPage("Overview", "site-overview.html", "Vue d'ensemble", "site-overview-fr.html"));
                 page.childPages().add(createStaticPage("Team", "site-team.html", "Team", "site-team.html"));
                 site.childPages().add(page);
             }
-            site.childPages().add(createStaticPage("Customer Care", "site-customer-care.html", "Assistance Client�le", "site-customer-care.html"));
-            site.childPages().add(createStaticPage("Terms Of Use", "site-customer-care.html", "Mentions l�gales", "site-customer-care.html"));
-            site.childPages().add(createStaticPage("Privacy", "site-customer-care.html", "Politique de confidentialit�", "site-customer-care.html"));
+            site.childPages().add(createStaticPage("Customer Care", "site-customer-care.html", "Assistance Clientèle", "site-customer-care.html"));
+            site.childPages().add(createStaticPage("Terms Of Use", "site-customer-care.html", "Mentions légales", "site-customer-care.html"));
+            site.childPages().add(createStaticPage("Privacy", "site-customer-care.html", "Politique de confidentialité", "site-customer-care.html"));
 
             Persistence.service().persist(site);
 
@@ -113,6 +162,27 @@ public class PortalSitePreloader extends AbstractDataPreloader {
         } catch (IOException e) {
             throw new Error(e);
         }
+    }
+
+    private Testimonial createTestimonial(Locale locale, String content, String author) {
+        Testimonial testimonial = EntityFactory.create(Testimonial.class);
+        testimonial.locale().set(locale);
+
+        testimonial.content().setValue(content);
+        testimonial.author().setValue(author);
+
+        return testimonial;
+    }
+
+    private News createNews(Locale locale, String caption, String content, LogicalDate date) {
+        News news = EntityFactory.create(News.class);
+        news.locale().set(locale);
+
+        news.caption().setValue(caption);
+        news.content().setValue(content);
+        news.date().setValue(date);
+
+        return news;
     }
 
     private PageDescriptor createDynamicPage(String enCaption, String frCaption, PageDescriptor.Type type) throws ClassCastException, IOException {
