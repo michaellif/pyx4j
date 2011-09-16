@@ -25,8 +25,6 @@ import java.util.Set;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.ResettableEventBus;
 import com.google.gwt.event.shared.UmbrellaException;
 import com.google.gwt.place.shared.PlaceChangeEvent;
@@ -34,6 +32,8 @@ import com.google.gwt.place.shared.PlaceChangeRequestEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.web.bindery.event.shared.EventBus;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
@@ -61,7 +61,7 @@ public class AppActivityManager implements PlaceChangeEvent.Handler, PlaceChange
 
     private static final Activity NULL_ACTIVITY = new AbstractActivity() {
         @Override
-        public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        public void start(AcceptsOneWidget panel, com.google.gwt.event.shared.EventBus eventBus) {
         }
     };
 

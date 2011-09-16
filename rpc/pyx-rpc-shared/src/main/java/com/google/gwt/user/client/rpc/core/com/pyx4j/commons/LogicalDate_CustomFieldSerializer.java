@@ -57,7 +57,6 @@ public class LogicalDate_CustomFieldSerializer extends CustomFieldSerializer<Log
         return new LogicalDate(streamReader.readInt(), streamReader.readInt(), streamReader.readInt());
     }
 
-    @SuppressWarnings("deprecation")
     public static void serialize(SerializationStreamWriter streamWriter, LogicalDate instance) throws SerializationException {
         streamWriter.writeInt(instance.getYear());
         streamWriter.writeInt(instance.getMonth());

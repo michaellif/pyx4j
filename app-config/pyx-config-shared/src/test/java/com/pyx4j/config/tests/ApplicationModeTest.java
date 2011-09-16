@@ -20,9 +20,9 @@
  */
 package com.pyx4j.config.tests;
 
-import com.pyx4j.config.shared.ApplicationMode;
-
 import junit.framework.TestCase;
+
+import com.pyx4j.config.shared.ApplicationMode;
 
 public class ApplicationModeTest extends TestCase {
 
