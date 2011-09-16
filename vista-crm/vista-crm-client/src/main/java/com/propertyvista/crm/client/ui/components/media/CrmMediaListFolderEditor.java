@@ -19,6 +19,8 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
@@ -100,24 +102,15 @@ public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
                     split.getLeftPanel().add(inject(proto().url()), 25);
                     split.getLeftPanel().add(inject(proto().file(), new FileUploadHyperlink(parent.isEditable(), imageTarget)), 25);
                 } else {
-                    split.getLeftPanel().add(inject(proto().youTubeVideoID(), new CHyperlink(new Command() {
+                    Command showMediaCommand = new Command() {
                         @Override
                         public void execute() {
                             showMedia();
                         }
-                    })), 25);
-                    split.getLeftPanel().add(inject(proto().url(), new CHyperlink(new Command() {
-                        @Override
-                        public void execute() {
-                            showMedia();
-                        }
-                    })), 25);
-                    split.getLeftPanel().add(inject(proto().file(), new CEntityHyperlink(new Command() {
-                        @Override
-                        public void execute() {
-                            showMedia();
-                        }
-                    })), 25);
+                    };
+                    split.getLeftPanel().add(inject(proto().youTubeVideoID(), new CHyperlink(showMediaCommand)), 25);
+                    split.getLeftPanel().add(inject(proto().url(), new CHyperlink(showMediaCommand)), 25);
+                    split.getLeftPanel().add(inject(proto().file(), new CEntityHyperlink(showMediaCommand)), 25);
                 }
 
                 split.getRightPanel().add(inject(proto().caption()), 15);
@@ -134,6 +127,13 @@ public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
                     width = ImageConsts.FLOORPLAN_SMALL.width;
                 }
                 thumbnailWrap.getElement().getStyle().setWidth(width, Style.Unit.PX);
+                thumbnail.addClickHandler(new ClickHandler() {
+
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        showMedia();
+                    }
+                });
 
                 wrap.add(main);
                 wrap.add(thumbnailWrap);
