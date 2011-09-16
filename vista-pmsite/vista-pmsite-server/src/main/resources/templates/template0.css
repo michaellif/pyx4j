@@ -397,7 +397,7 @@ select {
 
 ul.footer_locations {
 	list-style-type: none;
-	height: 140px;
+	display: inline-block;
 	color: #339900;
 	font-weight: bold;
 }
