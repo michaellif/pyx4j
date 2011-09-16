@@ -62,7 +62,7 @@ public class SubtypeInjectors {
                 if (showType) {
                     columns.add(new EntityFolderColumnDescriptor(proto().type(), "8em"));
                 }
-                columns.add(new EntityFolderColumnDescriptor(proto().number(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().number(), "11em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().extension(), "5em"));
                 if (showDescription) {
                     columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
@@ -82,10 +82,10 @@ public class SubtypeInjectors {
                 List<EntityFolderColumnDescriptor> columns;
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().type(), "7em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().number(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().number(), "11em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().extension(), "5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().provider(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().provider(), "10em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().visibility(), "6em"));
                 return columns;
             }
