@@ -43,6 +43,8 @@ public interface PropertyPhone extends IEntity {
 
         fax,
 
+        pager,
+
         other;
 
         @Override
