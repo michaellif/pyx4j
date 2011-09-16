@@ -25,9 +25,10 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
 
     private VistaDataPreloaders(PreloadConfig config, boolean production) {
         add(new LocationPreloader());
-        add(new PmcPreloader());
+        add(new ServiceCatalogPreloader());
 
         if (!production) {
+            add(new RefferenceDataPreloader());
             add(new UserPreloader(config));
             add(new CampaignPreloader(config));
             add(new BuildingPreloader(config));

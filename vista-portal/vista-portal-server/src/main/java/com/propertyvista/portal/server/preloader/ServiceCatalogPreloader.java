@@ -13,9 +13,6 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.propertvista.generator.ServiceTypesGenerator;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -27,11 +24,9 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
-public class PmcPreloader extends AbstractDataPreloader {
+public class ServiceCatalogPreloader extends AbstractDataPreloader {
 
-    private final static Logger log = LoggerFactory.getLogger(PmcPreloader.class);
-
-    public PmcPreloader() {
+    public ServiceCatalogPreloader() {
 
     }
 
