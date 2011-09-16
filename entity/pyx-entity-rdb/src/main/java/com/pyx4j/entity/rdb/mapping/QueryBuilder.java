@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -129,6 +130,7 @@ public class QueryBuilder<T extends IEntity> {
                             throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction() + " for NULL value");
                         }
                     } else {
+                        Serializable bindValue = propertyCriterion.getValue();
                         switch (propertyCriterion.getRestriction()) {
                         case LESS_THAN:
                             sql.append(" < ? ");
@@ -152,12 +154,19 @@ public class QueryBuilder<T extends IEntity> {
                             sql.append(" IN ? ");
                             break;
                         case RDB_LIKE:
+                            if (bindValue != null) {
+                                if (hasLikeValue(bindValue.toString())) {
+                                    bindValue = bindValue.toString().replace('*', dialect.likeWildCards());
+                                } else {
+                                    bindValue = dialect.likeWildCards() + bindValue.toString() + dialect.likeWildCards();
+                                }
+                            }
                             sql.append(" LIKE ? ");
                             break;
                         default:
                             throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction());
                         }
-                        bindParams.add(propertyCriterion.getValue());
+                        bindParams.add(bindValue);
                     }
                 }
             }
@@ -188,6 +197,10 @@ public class QueryBuilder<T extends IEntity> {
 
             sql.append(sortsSql);
         }
+    }
+
+    private static boolean hasLikeValue(String value) {
+        return value.contains("*");
     }
 
     private static class MemeberWithAlias {

@@ -162,6 +162,10 @@ public abstract class Dialect {
         }
     }
 
+    public char likeWildCards() {
+        return '%';
+    }
+
     public boolean isSequencesBaseIdentity() {
         return false;
     }

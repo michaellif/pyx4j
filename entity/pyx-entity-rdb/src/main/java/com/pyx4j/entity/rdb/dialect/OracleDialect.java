@@ -69,6 +69,11 @@ public class OracleDialect extends Dialect {
     }
 
     @Override
+    public char likeWildCards() {
+        return '*';
+    }
+
+    @Override
     public boolean isSequencesBaseIdentity() {
         return true;
     }
