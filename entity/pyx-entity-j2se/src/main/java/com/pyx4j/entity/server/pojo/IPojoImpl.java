@@ -29,11 +29,14 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-public class IPojoImpl<E extends IEntity> implements IPojo<E> {
+public abstract class IPojoImpl<E extends IEntity> implements IPojo<E> {
 
     private static final long serialVersionUID = 4465417396453810949L;
 
     protected E entity;
+
+    private IPojoImpl() {
+    }
 
     protected IPojoImpl(Class<E> entityClass) {
         entity = EntityFactory.create(entityClass);
