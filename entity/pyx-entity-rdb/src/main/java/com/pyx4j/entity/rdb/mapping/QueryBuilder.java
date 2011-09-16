@@ -44,7 +44,6 @@ import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 public class QueryBuilder<T extends IEntity> {
@@ -90,30 +89,31 @@ public class QueryBuilder<T extends IEntity> {
                     PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
 
                     ObjectClassType objectClassType = ObjectClassType.Primitive;
-                    MemberMeta memberMeta = null;
-                    MemberOperationsMeta memberOper = null;
+                    MemeberWithAlias memeberWithAlias = null;
                     String memberPersistenceName = propertyCriterion.getPropertyName();
                     String pkPath = GWTJava5Helper.getSimpleName(entityMeta.getEntityClass()) + Path.PATH_SEPARATOR + IEntity.PRIMARY_KEY + Path.PATH_SEPARATOR;
                     if (pkPath.equals(propertyCriterion.getPropertyName()) || IEntity.PRIMARY_KEY.equals(propertyCriterion.getPropertyName())) {
                         memberPersistenceName = IEntity.PRIMARY_KEY;
                     } else if (!propertyCriterion.getPropertyName().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX)) {
-                        memberOper = operationsMeta.getMember(propertyCriterion.getPropertyName());
-                        if (memberOper == null) {
-                            //TODO use getFirstDirectMember
+                        memeberWithAlias = getMemberOperationsMetaByPath(alias, propertyCriterion.getPropertyName());
+                        if (memeberWithAlias == null) {
                             throw new RuntimeException("Unknown member " + propertyCriterion.getPropertyName() + " in " + entityMeta.getEntityClass().getName());
                         }
-                        memberMeta = memberOper.getMemberMeta();
-                        objectClassType = memberMeta.getObjectClassType();
-                        memberPersistenceName = memberOper.sqlName();
+                        objectClassType = memeberWithAlias.memberOper.getMemberMeta().getObjectClassType();
+                        memberPersistenceName = memeberWithAlias.memberOper.sqlName();
                     }
                     switch (objectClassType) {
                     case EntityList:
                     case EntitySet:
-                        String memberJoinAlias = getJoin(memberOper, alias);
+                        String memberJoinAlias = getJoin(memeberWithAlias.memberOper, memeberWithAlias.alias);
                         sql.append(memberJoinAlias).append(".value ");
                         break;
                     default:
-                        sql.append(alias).append('.');
+                        if (memeberWithAlias == null) {
+                            sql.append(alias).append('.');
+                        } else {
+                            sql.append(memeberWithAlias.alias).append('.');
+                        }
                         sql.append(dialect.getNamingConvention().sqlFieldName(memberPersistenceName));
                     }
 
@@ -173,35 +173,57 @@ public class QueryBuilder<T extends IEntity> {
                 } else {
                     sortsSql.append(", ");
                 }
-                String thisAlias = alias;
-                String memberPersistenceName;
-                MemberOperationsMeta memberOper = operationsMeta.getMember(sort.getPropertyName());
-                if (memberOper != null) {
-                    memberPersistenceName = memberOper.sqlName();
+                MemeberWithAlias descr = getMemberOperationsMetaByPath(alias, sort.getPropertyName());
+                if (descr != null) {
+                    sortsSql.append(descr.alias).append('.');
+                    sortsSql.append(descr.memberOper.sqlName());
                 } else {
-                    memberOper = operationsMeta.getFirstDirectMember(sort.getPropertyName());
-                    if (memberOper != null) {
-                        thisAlias = getJoin(memberOper, alias);
-
-                        //TODO recursion
-                        EntityOperationsMeta otherEntityOperMeta = operationsMeta.getMappedOperationsMeta((Class<? extends IEntity>) memberOper.getMemberMeta()
-                                .getObjectClass());
-                        String pathFragmet = sort.getPropertyName().substring(memberOper.getMemberPath().length());
-                        MemberOperationsMeta memberOper2 = otherEntityOperMeta.getMember(GWTJava5Helper.getSimpleName(memberOper.getMemberMeta()
-                                .getObjectClass()) + Path.PATH_SEPARATOR + pathFragmet);
-                        memberPersistenceName = memberOper2.sqlName();
-                    } else {
-                        // Asume proper SQL string supplied
-                        memberPersistenceName = sort.getPropertyName();
-                    }
+                    // Assume proper SQL string supplied ???
+                    //TODO verify sql INJECTION
+                    sortsSql.append(alias).append('.');
+                    sortsSql.append(sort.getPropertyName());
                 }
-
-                sortsSql.append(thisAlias).append('.');
-                sortsSql.append(memberPersistenceName).append(' ');
-                sortsSql.append(sort.isDescending() ? "DESC" : "ASC");
+                sortsSql.append(' ').append(sort.isDescending() ? "DESC" : "ASC");
             }
 
             sql.append(sortsSql);
+        }
+    }
+
+    private static class MemeberWithAlias {
+
+        MemberOperationsMeta memberOper;
+
+        String alias;
+
+        public MemeberWithAlias(MemberOperationsMeta memberOper, String alias) {
+            this.memberOper = memberOper;
+            this.alias = alias;
+        }
+    }
+
+    private MemeberWithAlias getMemberOperationsMetaByPath(String mainAlias, String propertyPath) {
+        MemberOperationsMeta memberOper = operationsMeta.getMember(propertyPath);
+        if (memberOper != null) {
+            return new MemeberWithAlias(memberOper, mainAlias);
+        } else {
+            memberOper = operationsMeta.getFirstDirectMember(propertyPath);
+            if (memberOper != null) {
+                String thisAlias = getJoin(memberOper, mainAlias);
+
+                //TODO recursion
+                @SuppressWarnings("unchecked")
+                EntityOperationsMeta otherEntityOperMeta = operationsMeta.getMappedOperationsMeta((Class<? extends IEntity>) memberOper.getMemberMeta()
+                        .getObjectClass());
+
+                String pathFragmet = propertyPath.substring(memberOper.getMemberPath().length());
+                MemberOperationsMeta memberOper2 = otherEntityOperMeta.getMember(GWTJava5Helper.getSimpleName(memberOper.getMemberMeta().getObjectClass())
+                        + Path.PATH_SEPARATOR + pathFragmet);
+
+                return new MemeberWithAlias(memberOper2, thisAlias);
+            } else {
+                return null;
+            }
         }
     }
 
