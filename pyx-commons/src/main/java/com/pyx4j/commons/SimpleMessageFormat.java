@@ -182,7 +182,16 @@ public class SimpleMessageFormat {
                                 prevFormat = choiceFormat;
                                 continue;
                             }
+                        } else if (choiceValueText.equals("!null")) {
+                            if (value != null) {
+                                formatedValue = format(choiceFormat, arguments);
+                                break;
+                            } else {
+                                prevFormat = choiceFormat;
+                                continue;
+                            }
                         }
+
                         double choiceValue = Double.valueOf(choiceValueText).doubleValue();
                         if (selectorValue == choiceValue) {
                             formatedValue = format(choiceFormat, arguments);
