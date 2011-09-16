@@ -504,12 +504,32 @@ public class TableModel {
         String sql = null;
         try {
             QueryBuilder<T> qb = new QueryBuilder<T>(dialect, "m1", entityMeta, entityOperationsMeta, criteria);
-            stmt = connection.prepareStatement(sql = "SELECT m1.* FROM " + qb.getSQL(tableName));
+            sql = "SELECT m1.* FROM " + qb.getSQL(tableName);
+            int offset = 0;
+            boolean addLimit = false;
+            if (criteria instanceof EntityListCriteria) {
+                EntityListCriteria<T> c = (EntityListCriteria<T>) criteria;
+                if (c.getPageSize() > 0) {
+                    offset = c.getPageSize() * c.getPageNumber();
+                    if (limit > 0) {
+                        limit = Math.min(limit, c.getPageSize());
+                    } else {
+                        limit = c.getPageSize();
+                    }
+                    addLimit = true;
+                    sql = dialect.applyLimitCriteria(sql);
+                }
+            }
+            stmt = connection.prepareStatement(sql);
             if (limit > 0) {
                 stmt.setMaxRows(limit);
             }
-            qb.bindParameters(stmt);
-
+            int parameterIndex = qb.bindParameters(stmt);
+            if (addLimit) {
+                stmt.setInt(parameterIndex, limit);
+                parameterIndex++;
+                stmt.setInt(parameterIndex, offset);
+            }
             rs = stmt.executeQuery();
 
             List<T> rc = new Vector<T>();
@@ -545,9 +565,9 @@ public class TableModel {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
+            sql = "SELECT m1.* FROM " + qb.getSQL(tableName);
             int limit = -1;
             int offset = 0;
-            sql = "SELECT m1.* FROM " + qb.getSQL(tableName);
             if (criteria instanceof EntityListCriteria) {
                 EntityListCriteria<T> c = (EntityListCriteria<T>) criteria;
                 if (c.getPageSize() > 0) {
