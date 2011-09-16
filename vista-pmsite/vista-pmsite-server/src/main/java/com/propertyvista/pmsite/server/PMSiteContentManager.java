@@ -147,7 +147,7 @@ public class PMSiteContentManager implements Serializable {
 
     private List<News> retrieveNews() {
         EntityListCriteria<News> criteria = EntityListCriteria.create(News.class);
-        // criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), locale.lang().getValue()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), locale.lang().getValue()));
         criteria.desc(criteria.proto().date().getPath().toString());
         criteria.setPageSize(4);
         criteria.setPageNumber(0);
@@ -160,7 +160,7 @@ public class PMSiteContentManager implements Serializable {
 
     private List<Testimonial> retrieveTestimonials() {
         EntityQueryCriteria<Testimonial> criteria = EntityQueryCriteria.create(Testimonial.class);
-        //criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), locale.lang().getValue()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), locale.lang().getValue()));
         return Persistence.service().query(criteria);
     }
 
