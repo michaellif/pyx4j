@@ -34,6 +34,7 @@ import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
+import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.vendor.Contract;
 import com.propertyvista.domain.property.vendor.Licence;
 import com.propertyvista.domain.property.vendor.Maintenance;
@@ -61,11 +62,31 @@ public class SubtypeInjectors {
                 if (showType) {
                     columns.add(new EntityFolderColumnDescriptor(proto().type(), "8em"));
                 }
-                columns.add(new EntityFolderColumnDescriptor(proto().number(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().number(), "10em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().extension(), "5em"));
                 if (showDescription) {
                     columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
                 }
+                return columns;
+            }
+        }));
+        main.add(new HTML());
+    }
+
+    public static void injectPropertyPhones(VistaDecoratorsFlowPanel main, IList<PropertyPhone> proto, CEntityEditor<?> parent) {
+
+        main.add(new CrmSectionSeparator(proto.getMeta().getCaption()));
+        main.add(parent.inject(proto, new CrmEntityFolder<PropertyPhone>(PropertyPhone.class, i18n.tr("Phone"), parent.isEditable()) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                List<EntityFolderColumnDescriptor> columns;
+                columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().number(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().extension(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().provider(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().visibility(), "6em"));
                 return columns;
             }
         }));
