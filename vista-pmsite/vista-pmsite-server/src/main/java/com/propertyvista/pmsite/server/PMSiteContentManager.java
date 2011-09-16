@@ -130,16 +130,16 @@ public class PMSiteContentManager implements Serializable {
         return site;
     }
 
+    public SiteDescriptor getSiteDescriptor() {
+        return site;
+    }
+
     private void createPath(PageDescriptor parent) {
         System.out.println(parent);
         for (PageDescriptor descriptor : parent.childPages()) {
             descriptor._path().add(parent);
             createPath(descriptor);
         }
-    }
-
-    public SiteDescriptor getSiteDescriptor() {
-        return site;
     }
 
     public PageDescriptor getStaticPageDescriptor(PageParameters parameters) {
