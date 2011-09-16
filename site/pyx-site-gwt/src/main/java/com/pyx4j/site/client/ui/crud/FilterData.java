@@ -33,6 +33,8 @@ public class FilterData {
         is,
 
         isNot,
+
+        like,
 //        
 // TODO ? These criterias aren't supported by DB search engine currently, so postpone implementation ?          
 //        contains,

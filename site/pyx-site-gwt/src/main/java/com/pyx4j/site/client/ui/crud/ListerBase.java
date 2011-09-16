@@ -65,7 +65,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.site.client.NavigationIDs;
 import com.pyx4j.site.client.resources.SiteImages;
@@ -611,7 +610,8 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                     fieldsList.setValue(fds.iterator().next());
                     setValueHolder(fieldsList.getValue().getPath());
                 } else {
-                    valueHolder.setWidget(new CTextField());
+                    operandsList.setOptions(EnumSet.allOf(Operands.class));
+                    operandsList.setValue(Operands.is);
                 }
                 fieldsList.addValueChangeHandler(new ValueChangeHandler<FieldData>() {
                     @Override
@@ -625,8 +625,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 setCellWidth(fieldsList, "40%");
                 formatCell(fieldsList.asWidget());
 
-                operandsList.setOptions(EnumSet.allOf(Operands.class));
-                operandsList.setValue(Operands.is);
                 operandsList.setWidth("100%");
 
                 add(operandsList);
@@ -688,9 +686,17 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
                 // correct operands list:
                 Class<?> valueClass = member.getValueClass();
-                if (valueClass.isEnum() || valueClass.equals(Boolean.class) || valueClass.equals(String.class)) {
+                if (member.getMeta().isEntity() || valueClass.isEnum() || valueClass.equals(Boolean.class)) {
+
+                    operandsList.removeOption(Operands.like);
                     operandsList.removeOption(Operands.greaterThen);
                     operandsList.removeOption(Operands.lessThen);
+
+                } else if (valueClass.equals(String.class)) {
+
+                    operandsList.removeOption(Operands.greaterThen);
+                    operandsList.removeOption(Operands.lessThen);
+
                 }
             }
         }
