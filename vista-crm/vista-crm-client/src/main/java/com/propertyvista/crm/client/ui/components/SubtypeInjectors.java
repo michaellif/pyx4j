@@ -85,8 +85,9 @@ public class SubtypeInjectors {
                 columns.add(new EntityFolderColumnDescriptor(proto().number(), "11em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().extension(), "5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().designation(), "10em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().provider(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().visibility(), "6em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().visibility(), "7em"));
                 return columns;
             }
         }));

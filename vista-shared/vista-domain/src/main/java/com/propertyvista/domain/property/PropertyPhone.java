@@ -53,8 +53,38 @@ public interface PropertyPhone extends IEntity {
         }
     }
 
+    @Translatable
+    @XmlType(name = "PhoneDesignation")
+    public enum DesignationType {
+
+        pool,
+
+        elevator,
+
+        intercom,
+
+        office,
+
+        laundry,
+
+        pointOfSale,
+
+        fireMonitoring,
+
+        internet,
+
+        fax;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
     @MemberColumn(name = "phoneType")
     IPrimitive<Type> type();
+
+    IPrimitive<DesignationType> designation();
 
     IPrimitive<PublicVisibilityType> visibility();
 
