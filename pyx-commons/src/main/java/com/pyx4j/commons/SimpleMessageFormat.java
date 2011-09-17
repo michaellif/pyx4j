@@ -156,6 +156,21 @@ public class SimpleMessageFormat {
                     }
                     formatedValue = SimpleNumberFormatImpl.format(formatStyle, toDouble(value));
                 }
+            } else if (formatType.equals("size")) {
+                if (value == null) {
+                    formatedValue = "";
+                } else {
+                    long length = Double.valueOf(toDouble(value)).longValue();
+                    if (length < 1024) {
+                        //TODO use i18n
+                        formatedValue = String.valueOf(length) + " B";
+                    } else if (length < 1024 * 1024) {
+                        formatedValue = String.valueOf(length / 1024) + " KB";
+                    } else {
+                        formatedValue = String.valueOf(length / (1024 * 1024)) + " MB";
+                    }
+
+                }
             } else if (formatType.equals("date")) {
                 formatedValue = SimpleDateFormatImpl.format(formatStyle, (Date) value);
             } else if (formatType.equals("time")) {
