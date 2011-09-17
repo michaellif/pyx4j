@@ -23,7 +23,6 @@ import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextField;
@@ -36,6 +35,7 @@ import org.apache.wicket.validation.validator.MinimumValidator;
 import com.pyx4j.entity.server.pojo.IPojo;
 
 import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.model.WicketUtils;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class AdvancedSearchCriteriaInputPanel extends Panel {
@@ -45,7 +45,7 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         zero, One, Two, Three, Four, Five, Six, Seven, Eight;
     }
 
-    public AdvancedSearchCriteriaInputPanel(String id, CompoundPropertyModel<IPojo<PropertySearchCriteria>> model) {
+    public AdvancedSearchCriteriaInputPanel(String id, final CompoundPropertyModel<IPojo<PropertySearchCriteria>> model) {
         super(id, model);
 
         // add Error Message panel
@@ -62,7 +62,7 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         // add Province drop-down
         final Map<String, List<String>> provCityMap = PMSiteContentManager.getProvinceCityMap();
         List<String> provinces = new ArrayList<String>(provCityMap.keySet());
-        DropDownChoice<String> provChoice = new DropDownChoice<String>("province", provinces);
+        DropDownChoice<String> provChoice = new WicketUtils.DropDownList<String>("province", provinces, false, true);
         provChoice.add(new SimpleAttributeModifier("onChange",
                 "setSelectionOptions('citySelect', provCity[this.options[this.selectedIndex].text], 'Choose One')"));
         add(provChoice);
@@ -70,15 +70,16 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         // add City drop-down
         List<String> cities;
         String selProv = model.getObject().getEntityValue().province().getValue();
-        String selCity = null;
         if (selProv != null) {
             cities = provCityMap.get(selProv);
-            selCity = model.getObject().getEntityValue().city().getValue();
         } else {
             cities = Arrays.asList("- Select Province -");
         }
-        DropDownChoice<String> cityChoice = new DropDownChoice<String>("city", cities);
-        add(cityChoice);
+        /*
+         * add city; set Type to string to avoid reverse conversion from choices
+         * since the choices are empty when we set it via js
+         */
+        add(new WicketUtils.DropDownList<String>("city", cities, false, true).setType(String.class));
 
         // add JS city list
         String jsCityList = "\nvar provCity = {};\n";
@@ -89,9 +90,8 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
             }
             jsCityList += "provCity['" + StringEscapeUtils.escapeJavaScript(_prov) + "'] = [" + _list + "];\n";
         }
-        if (selProv != null && selCity != null) {
-            jsCityList += "var selCity = '" + StringEscapeUtils.escapeJavaScript(selCity) + "';\n";
-        }
+        String selCity = model.getObject().getEntityValue().city().getValue();
+        jsCityList += "var selCity = '" + (selCity == null ? "" : StringEscapeUtils.escapeJavaScript(selCity)) + "';\n";
         add(new Label("jsCityList", jsCityList).setEscapeModelStrings(false));
 
         // add location input
@@ -103,57 +103,17 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         distInput.add(new MinimumValidator<Integer>(1));
         add(distInput);
 
-        IChoiceRenderer<Integer> intRenderer = new IChoiceRenderer<Integer>() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public String getDisplayValue(Integer param) {
-                return param == null ? "Any" : NumNames.values()[param].name();
-            }
-
-            @Override
-            public String getIdValue(Integer param, int paramInt) {
-                return String.valueOf(paramInt);
-            }
-
-        };
-
         // add common fields
         // bedrooms
-        add(new DropDownChoice<Integer>("minBeds", Arrays.asList(new Integer[] { null, 1, 2, 3, 4, 5 }), intRenderer) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected CharSequence getDefaultChoice(final Object selected) {
-                return "";
-            }
-
-        });
-        add(new DropDownChoice<Integer>("maxBeds", Arrays.asList(new Integer[] { null, 1, 2, 3, 4, 5 }), intRenderer) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected CharSequence getDefaultChoice(final Object selected) {
-                return "";
-            }
-        });
+        add(new WicketUtils.DropDownList<PropertySearchCriteria.BedroomChoice>("minBeds", Arrays.asList(PropertySearchCriteria.BedroomChoice.values()), true,
+                false));
+        add(new WicketUtils.DropDownList<PropertySearchCriteria.BedroomChoice>("maxBeds", Arrays.asList(PropertySearchCriteria.BedroomChoice.values()), true,
+                false));
         // bathrooms
-        add(new DropDownChoice<Integer>("minBath", Arrays.asList(new Integer[] { null, 1, 2, 3 }), intRenderer) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected CharSequence getDefaultChoice(final Object selected) {
-                return "";
-            }
-        });
-        add(new DropDownChoice<Integer>("maxBath", Arrays.asList(new Integer[] { null, 1, 2, 3 }), intRenderer) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected CharSequence getDefaultChoice(final Object selected) {
-                return "";
-            }
-        });
+        add(new WicketUtils.DropDownList<PropertySearchCriteria.BathroomChoice>("minBath", Arrays.asList(PropertySearchCriteria.BathroomChoice.values()), true,
+                false));
+        add(new WicketUtils.DropDownList<PropertySearchCriteria.BathroomChoice>("maxBath", Arrays.asList(PropertySearchCriteria.BathroomChoice.values()), true,
+                false));
         // price
         add(new TextField<Integer>("minPrice").add(new MinimumValidator<Integer>(100)));
         add(new TextField<Integer>("maxPrice").add(new MinimumValidator<Integer>(100)));

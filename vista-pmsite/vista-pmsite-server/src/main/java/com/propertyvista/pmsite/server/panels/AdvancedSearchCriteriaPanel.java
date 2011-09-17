@@ -33,6 +33,9 @@ public class AdvancedSearchCriteriaPanel extends Panel {
         super("advancedSearchCriteriaPanel");
 
         PropertySearchCriteria entity = EntityFactory.create(PropertySearchCriteria.class);
+        if (entity.searchType().getValue() == null) {
+            entity.searchType().setValue(PropertySearchCriteria.SearchType.city);
+        }
         IPojo<PropertySearchCriteria> pojo = ServerEntityFactory.getPojo(entity);
         final CompoundPropertyModel<IPojo<PropertySearchCriteria>> model = new CompoundPropertyModel<IPojo<PropertySearchCriteria>>(pojo);
 

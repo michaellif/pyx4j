@@ -51,15 +51,12 @@ public class AptListPage extends BasePage {
         }
 
         PropertySearchCriteria criteria = EntityArgsConverter.createFromArgs(PropertySearchCriteria.class, argsE);
-
         String[] amenities = argsW.get("amenities");
-
         if (amenities != null) {
             for (int i = 0; i < amenities.length; i++) {
                 criteria.amenities().add(AmenityType.valueOf(amenities[i]));
             }
         }
-
         IPojo<PropertySearchCriteria> pojo = ServerEntityFactory.getPojo(criteria);
         final CompoundPropertyModel<IPojo<PropertySearchCriteria>> model = new CompoundPropertyModel<IPojo<PropertySearchCriteria>>(pojo);
 

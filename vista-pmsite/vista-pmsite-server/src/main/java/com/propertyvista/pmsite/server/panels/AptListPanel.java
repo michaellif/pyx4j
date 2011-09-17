@@ -32,7 +32,8 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.contact.IAddress;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
-import com.propertyvista.pmsite.server.model.AttributeClassModifier;
+import com.propertyvista.pmsite.server.model.WicketUtils;
+import com.propertyvista.pmsite.server.model.WicketUtils.AttributeClassModifier;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
@@ -66,14 +67,14 @@ public class AptListPanel extends Panel {
                 // TODO replace this BS with JS
                 if (newMode == PropertySearchCriteria.DisplayMode.map) {
                     if (map != null) {
-                        map.add(new AttributeClassModifier("display_none", null));
+                        map.add(new WicketUtils.AttributeClassModifier("display_none", null));
                     }
                     if (list != null) {
-                        list.add(new AttributeClassModifier(null, "display_none"));
+                        list.add(new WicketUtils.AttributeClassModifier(null, "display_none"));
                     }
                 } else if (newMode == PropertySearchCriteria.DisplayMode.list) {
                     if (list != null) {
-                        list.add(new AttributeClassModifier("display_none", null));
+                        list.add(new WicketUtils.AttributeClassModifier("display_none", null));
                     }
                     if (map != null) {
                         map.add(new AttributeClassModifier(null, "display_none"));

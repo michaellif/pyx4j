@@ -30,6 +30,8 @@ public interface BuildingAmenity extends Amenity {
 
     @Translatable
     public enum Type {
+        garage, fitnessCenter,
+
         fitness,
 
         elevator,

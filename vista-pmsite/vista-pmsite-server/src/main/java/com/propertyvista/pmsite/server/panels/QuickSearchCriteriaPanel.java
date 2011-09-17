@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.BedroomChoice;
 
 //http://www.google.com/codesearch#o92Uy7_Jjpw/base/openqrm-3.5.2/src/base/java/main/code/com/qlusters/qrm/web/wicket/markup/&type=cs
 public class QuickSearchCriteriaPanel extends Panel {
@@ -64,8 +65,8 @@ public class QuickSearchCriteriaPanel extends Panel {
         }
 
         if (!criteria.bedsRange().isNull()) {
-            criteria.minBeds().setValue(criteria.bedsRange().getValue().getMinBeds());
-            criteria.maxBeds().setValue(criteria.bedsRange().getValue().getMaxBeds());
+            criteria.minBeds().setValue(BedroomChoice.getChoice(criteria.bedsRange().getValue().getMinBeds()));
+            criteria.maxBeds().setValue(BedroomChoice.getChoice(criteria.bedsRange().getValue().getMaxBeds()));
             criteria.bedsRange().setValue(null);
         }
 

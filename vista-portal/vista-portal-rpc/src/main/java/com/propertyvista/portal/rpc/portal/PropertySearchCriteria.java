@@ -109,8 +109,48 @@ public interface PropertySearchCriteria extends IEntity {
         }
     }
 
+    public static enum BedroomChoice {
+        Any(0), One(1), Two(2), Three(3), Four(4);
+        Integer beds = 0;
+
+        private BedroomChoice(Integer beds) {
+            this.beds = beds;
+        }
+
+        public static BedroomChoice getChoice(Integer beds) {
+            BedroomChoice choice = null;
+            for (BedroomChoice c : BedroomChoice.values()) {
+                if (c.beds == beds) {
+                    choice = c;
+                    break;
+                }
+            }
+            return choice;
+        }
+    }
+
+    public static enum BathroomChoice {
+        Any(0), One(1), Two(2), Three(3), Four(4), Five(5);
+        Integer bath = 0;
+
+        private BathroomChoice(Integer bath) {
+            this.bath = bath;
+        }
+
+        public static BathroomChoice getChoice(Integer bath) {
+            BathroomChoice choice = null;
+            for (BathroomChoice c : BathroomChoice.values()) {
+                if (c.bath == bath) {
+                    choice = c;
+                    break;
+                }
+            }
+            return choice;
+        }
+    }
+
     public static enum AmenityType {
-        Elevator, Fitness, Parking, Pool
+        Elevator, Fitness, Parking, Pool, Garage
     }
 
     @NotNull
@@ -125,13 +165,13 @@ public interface PropertySearchCriteria extends IEntity {
 
     IPrimitive<Integer> distance();
 
-    IPrimitive<Integer> minBeds();
+    IPrimitive<BedroomChoice> minBeds();
 
-    IPrimitive<Integer> maxBeds();
+    IPrimitive<BedroomChoice> maxBeds();
 
-    IPrimitive<Integer> minBath();
+    IPrimitive<BathroomChoice> minBath();
 
-    IPrimitive<Integer> maxBath();
+    IPrimitive<BathroomChoice> maxBath();
 
     IPrimitive<Integer> minPrice();
 
@@ -139,14 +179,15 @@ public interface PropertySearchCriteria extends IEntity {
 
     IPrimitiveSet<AmenityType> amenities();
 
-    IPrimitive<Boolean> elevator();
-
-    IPrimitive<Boolean> fitness();
-
-    IPrimitive<Boolean> parking();
-
-    IPrimitive<Boolean> pool();
-
+/*
+ * IPrimitive<Boolean> elevator();
+ * 
+ * IPrimitive<Boolean> fitness();
+ * 
+ * IPrimitive<Boolean> parking();
+ * 
+ * IPrimitive<Boolean> pool();
+ */
     /**
      * don't use in criteria
      * 
