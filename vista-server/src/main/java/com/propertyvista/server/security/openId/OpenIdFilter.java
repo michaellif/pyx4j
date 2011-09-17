@@ -71,7 +71,8 @@ public class OpenIdFilter implements Filter {
                     ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 } else {
                     String receivingURL = ServletUtils.getActualRequestURL(httprequest, true);
-                    if (!receivingURL.startsWith(ServerSideConfiguration.instance().getMainApplicationURL())) {
+                    if (!receivingURL.startsWith(ServerSideConfiguration.instance().getMainApplicationURL())
+                            && (!receivingURL.matches("http://\\w+\\.dev\\.birchwoodsoftwaregroup\\.com:\\d+/.+"))) {
                         StringBuffer properUrl = new StringBuffer(ServerSideConfiguration.instance().getMainApplicationURL());
                         properUrl.append(servletPath.substring(1));
                         if (CommonsStringUtils.isStringSet(httprequest.getQueryString())) {
@@ -83,12 +84,12 @@ public class OpenIdFilter implements Filter {
                         if (!devSession.isAlive()) {
                             devSession = DevSession.beginSession();
                         }
-
-                        OpenIdServlet.createResponsePage((HttpServletResponse) response, true, "Login via Google Apps",
-                                OpenId.getDestinationUrl(OpenIdServlet.DOMAIN));
                         if (devSession.getAttribute(REQUESTED_URL_ATTRIBUTE) == null) {
                             devSession.setAttribute(REQUESTED_URL_ATTRIBUTE, receivingURL);
                         }
+                        OpenIdServlet.createResponsePage((HttpServletResponse) response, true, "Login via Google Apps",
+                                OpenId.getDestinationUrl(OpenIdServlet.DOMAIN));
+
                     }
                 }
             }

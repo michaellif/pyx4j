@@ -93,7 +93,11 @@ public class OpenId {
             // leave out for stateless operation / if there is no session
             DevSession.getSession().setAttribute(DISCOVERED_ATTRIBUTE, discovered);
 
-            AuthRequest authReq = manager.authenticate(discovered, ServerSideConfiguration.instance().getMainApplicationURL() + returnServletPath);
+            String mainApplicationURL = (String) DevSession.getSession().getAttribute(OpenIdFilter.REQUESTED_URL_ATTRIBUTE);
+            if (mainApplicationURL == null) {
+                mainApplicationURL = ServerSideConfiguration.instance().getMainApplicationURL();
+            }
+            AuthRequest authReq = manager.authenticate(discovered, mainApplicationURL + returnServletPath);
 
             if (requestNameAttributes || requestEmailAttributes) {
                 FetchRequest fetch = FetchRequest.createFetchRequest();
