@@ -98,4 +98,9 @@ public abstract class ConfigurationHSQL implements Configuration {
     public NamingConvention namingConvention() {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return ConfigurationToString.toString(this);
+    }
 }

@@ -209,7 +209,7 @@ public class ServerSideConfiguration {
         }
     }
 
-    public static void logSystemProperties() {
+    public static String getSystemProperties() {
         StringBuffer sysProperties = new StringBuffer();
         Properties properties = System.getProperties();
         // Sort the list
@@ -244,7 +244,11 @@ public class ServerSideConfiguration {
             }
             sysProperties.append("         " + key_p.toString() + " = [" + value_p.toString() + "\n");
         }
-        LoggerFactory.getLogger(ServerSideConfiguration.class).debug("System Properties:\n" + sysProperties.toString());
+        return sysProperties.toString();
+    }
+
+    public static void logSystemProperties() {
+        LoggerFactory.getLogger(ServerSideConfiguration.class).debug("System Properties:\n" + getSystemProperties());
     }
 
 }

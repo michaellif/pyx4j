@@ -89,4 +89,9 @@ public abstract class ConfigurationOracle implements Configuration {
         return new NamingConventionOracle(32, null);
     }
 
+    @Override
+    public String toString() {
+        return ConfigurationToString.toString(this);
+    }
+
 }

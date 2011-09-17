@@ -88,4 +88,8 @@ public abstract class ConfigurationMySQL implements Configuration {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return ConfigurationToString.toString(this);
+    }
 }
