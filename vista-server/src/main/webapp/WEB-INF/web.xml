@@ -314,6 +314,16 @@
     </servlet-mapping>
     
     <servlet>
+        <servlet-name>VistaConfigInfoServlet</servlet-name>
+        <servlet-class>com.propertyvista.admin.server.services.VistaConfigInfoServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>VistaConfigInfoServlet</servlet-name>
+        <url-pattern>/admin/config</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>JobScheduler</servlet-name>
         <servlet-class>com.propertyvista.portal.server.scheduler.JobScheduler</servlet-class>
         <load-on-startup>1</load-on-startup>
