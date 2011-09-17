@@ -64,6 +64,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.CEmailLabel;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.common.client.ui.validators.OldAgeValidator;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
@@ -627,6 +628,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             @Override
             protected CEntityFolderItemEditor<ChargeItem> createItem() {
                 return new CEntityFolderRowEditor<ChargeItem>(ChargeItem.class, columns()) {
+                    CEntityFolderRowEditor<ChargeItem> chargeItemEditor = this;
 
                     @Override
                     public IFolderItemEditorDecorator<ChargeItem> createFolderItemDecorator() {
@@ -638,12 +640,73 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable());
 
                         main.add(inject(proto().item(), new CEntityLabel()), 20);
-                        // TODO - it's unclear how to display adjusted price!?.. 
-                        //main.add(inject(proto().price(), new CLabel()), 6);
+
+                        VistaDecoratorsSplitFlowPanel split;
+                        main.add(split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 12, 20));
+                        split.getLeftPanel().add(inject(proto().price(), new CLabel()), 6);
+                        if (parent.isEditable()) {
+                            split.getRightPanel().add(new Button("Recalculate...", new ClickHandler() {
+                                @Override
+                                public void onClick(ClickEvent event) {
+
+                                    Double adjustedPrice = getValue().item().price().getValue();
+                                    for (ChargeItemAdjustment adjustment : getValue().adjustments()) {
+                                        Double calc_ed = calculateAdjustments(adjustedPrice, adjustment);
+                                        if (calc_ed != Double.NaN) {
+                                            adjustedPrice = calc_ed;
+                                        }
+                                    }
+
+                                    // update UI/Value:
+                                    get(chargeItemEditor.proto().price()).populate(adjustedPrice);
+                                    getValue().price().setValue(adjustedPrice);
+                                }
+                            }));
+                        }
 
                         main.add(new CrmSectionSeparator(CrmEntityFolder.i18n.tr("Adjustments:")));
-                        main.add(inject(proto().adjustments(), createItemAdjustmentListView()));
+                        main.add(inject(proto().adjustments(), createItemAdjustmentListView(chargeItemEditor)));
                         return main;
+                    }
+
+                    private Double calculateAdjustments(Double startPrice, ChargeItemAdjustment adjustment) {
+                        // preconditions:
+                        if (adjustment.isNull() || adjustment.type().isNull() || adjustment.termType().isNull()) {
+                            return Double.NaN; // not fully filled adjustment!.. 
+                        }
+
+                        // Calculate adjustments:
+                        Double adjustedPrice = startPrice;
+                        if (adjustment.termType().getValue().equals(ChargeItemAdjustment.TermType.term)) {
+                            if (adjustment.type().getValue().equals(ChargeItemAdjustment.Type.free)) {
+                                adjustedPrice = 0.0;
+                            } else {
+                                if (adjustment.value().isNull()) {
+                                    return Double.NaN; // value is necessary on this stage!..
+                                }
+
+                                switch (adjustment.chargeType().getValue()) {
+                                case priceChange:
+                                    adjustedPrice = adjustment.value().getValue();
+                                    break;
+
+                                case discount:
+                                    switch (adjustment.type().getValue()) {
+                                    case monetary:
+                                        adjustedPrice -= adjustment.value().getValue();
+                                        break;
+
+                                    case percentage:
+                                        adjustedPrice *= 1 - adjustment.value().getValue() / 100;
+                                        break;
+                                    }
+
+                                    break;
+                                }
+                            }
+                        }
+
+                        return adjustedPrice;
                     }
                 };
             }
@@ -710,7 +773,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         };
     }
 
-    private CEntityFolderEditor<ChargeItemAdjustment> createItemAdjustmentListView() {
+    private CEntityFolderEditor<ChargeItemAdjustment> createItemAdjustmentListView(final CEntityFolderRowEditor<ChargeItem> chargeItemEditor) {
         return new CrmEntityFolder<ChargeItemAdjustment>(ChargeItemAdjustment.class, i18n.tr("Adjustment"), isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {

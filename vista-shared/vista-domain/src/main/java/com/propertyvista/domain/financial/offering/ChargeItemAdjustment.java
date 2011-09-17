@@ -67,7 +67,7 @@ public interface ChargeItemAdjustment extends IEntity {
 
     /*
      * for percentage - percentage
-     * for monetary/free - amount
+     * for monetary - amount
      */
     @NotNull
     @Format("#0.00")
