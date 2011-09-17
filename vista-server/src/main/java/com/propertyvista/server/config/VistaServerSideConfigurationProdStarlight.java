@@ -18,7 +18,7 @@ import com.pyx4j.config.server.IPersistenceConfiguration;
 
 import com.propertyvista.config.VistaSMTPMailServiceConfig;
 
-public class VistaServerSideConfigurationProdStarlight extends VistaServerSideConfiguration {
+public class VistaServerSideConfigurationProdStarlight extends VistaServerSideConfigurationProd {
 
     @Override
     public String getApplicationURLDefault() {
