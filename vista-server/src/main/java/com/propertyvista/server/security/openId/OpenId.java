@@ -60,7 +60,7 @@ public class OpenId {
 
     static boolean requestNameAttributes = false;
 
-    public static synchronized String getDestinationUrl(String userDomain) {
+    public static synchronized String getDestinationUrl(String userDomain, String receivingURL) {
         try {
             if (manager == null) {
                 ProxyConfig proxy = SystemConfig.instance().getProxyConfig();
@@ -94,12 +94,15 @@ public class OpenId {
             // leave out for stateless operation / if there is no session
             DevSession.getSession().setAttribute(DISCOVERED_ATTRIBUTE, discovered);
 
-            String mainApplicationURL = (String) DevSession.getSession().getAttribute(OpenIdFilter.REQUESTED_URL_ATTRIBUTE);
+            String mainApplicationURL = receivingURL;
             if (mainApplicationURL == null) {
                 mainApplicationURL = ServerSideConfiguration.instance().getMainApplicationURL();
             } else {
                 URL url = new URL(mainApplicationURL);
                 mainApplicationURL = url.getProtocol() + "://" + url.getAuthority();
+                if (!mainApplicationURL.endsWith("/")) {
+                    mainApplicationURL += mainApplicationURL + "/";
+                }
                 if (!ServerSideConfiguration.instance().isContextLessDeployment()) {
                     int contextPathEnd = url.getPath().indexOf("/", 1);
                     if (contextPathEnd > 0) {

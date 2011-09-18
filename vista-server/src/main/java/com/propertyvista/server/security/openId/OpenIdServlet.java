@@ -46,7 +46,8 @@ public class OpenIdServlet extends HttpServlet {
         OpenIdResponse openIdResponse = OpenId.readResponse(request, DOMAIN);
         if (openIdResponse == null) {
             log.debug("Can't find authentication information in OpenId URL");
-            createResponsePage(response, true, "Login via Google Apps", OpenId.getDestinationUrl(OpenIdServlet.DOMAIN));
+            createResponsePage(response, true, "Login via Google Apps",
+                    OpenId.getDestinationUrl(OpenIdServlet.DOMAIN, ServerSideConfiguration.instance().getMainApplicationURL()));
         } else {
             log.info("openIdResponse.email [{}]", openIdResponse.email);
             DevSession devSession = DevSession.getSession();
