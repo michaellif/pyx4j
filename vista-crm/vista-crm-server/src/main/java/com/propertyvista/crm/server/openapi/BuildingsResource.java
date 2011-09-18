@@ -123,141 +123,145 @@ public class BuildingsResource {
         Map<Complex, BuildingRS> complexes = new Hashtable<Complex, BuildingRS>();
 
         for (Building building : buildings) {
-            BuildingRS buildingRS;
+            try {
+                BuildingRS buildingRS;
 
-            // Group buildings by Complex, Exporting as one Building in Complex.
-            boolean exportBuildingInfo = false;
-            if (building.complex().isNull()) {
-                if (building.marketing().adBlurbs().getMeta().isDetached()) {
-                    Persistence.service().retrieve(building.marketing().adBlurbs());
-                }
-                if (building.contacts().phones().getMeta().isDetached()) {
-                    Persistence.service().retrieve(building.contacts().phones());
-                }
-                buildingRS = Converter.convertBuilding(building);
-                buildingRS.unitCount = 0;
-                buildingsRS.buildings.add(buildingRS);
-                exportBuildingInfo = true;
-            } else {
-                buildingRS = complexes.get(building.complex());
-                if (buildingRS == null) {
-                    buildingRS = new BuildingRS();
-                    buildingsRS.buildings.add(buildingRS);
-                    buildingRS.unitCount = 0;
-                }
-                if (building.complexPrimary().isBooleanTrue()) {
-                    exportBuildingInfo = true;
+                // Group buildings by Complex, Exporting as one Building in Complex.
+                boolean exportBuildingInfo = false;
+                if (building.complex().isNull()) {
                     if (building.marketing().adBlurbs().getMeta().isDetached()) {
                         Persistence.service().retrieve(building.marketing().adBlurbs());
                     }
                     if (building.contacts().phones().getMeta().isDetached()) {
                         Persistence.service().retrieve(building.contacts().phones());
                     }
-                    Converter.copyDBOtoRS(building, buildingRS);
+                    buildingRS = Converter.convertBuilding(building);
+                    buildingRS.unitCount = 0;
+                    buildingsRS.buildings.add(buildingRS);
+                    exportBuildingInfo = true;
+                } else {
+                    buildingRS = complexes.get(building.complex());
+                    if (buildingRS == null) {
+                        buildingRS = new BuildingRS();
+                        buildingsRS.buildings.add(buildingRS);
+                        buildingRS.unitCount = 0;
+                    }
+                    if (building.complexPrimary().isBooleanTrue()) {
+                        exportBuildingInfo = true;
+                        if (building.marketing().adBlurbs().getMeta().isDetached()) {
+                            Persistence.service().retrieve(building.marketing().adBlurbs());
+                        }
+                        if (building.contacts().phones().getMeta().isDetached()) {
+                            Persistence.service().retrieve(building.contacts().phones());
+                        }
+                        Converter.copyDBOtoRS(building, buildingRS);
+                    }
                 }
-            }
 
-            if (exportBuildingInfo) {
-                //Get Amenity
-                {
-                    EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
-                    criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
-                    for (BuildingAmenity amenity : Persistence.service().query(criteria)) {
-                        buildingRS.amenities.add(Converter.convertBuildingAmenity(amenity));
-                    }
-                }
-                //Parking
-                {
-                    EntityQueryCriteria<Parking> criteria = EntityQueryCriteria.create(Parking.class);
-                    criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
-                    for (Parking i : Persistence.service().query(criteria)) {
-                        buildingRS.parkings.add(Converter.convertParking(i));
-                    }
-                }
-                if (!building.media().isEmpty()) {
-                    Persistence.service().retrieve(building.media());
-                    for (Media media : building.media()) {
-                        if (PublicVisibilityType.global.equals(media.visibility().getValue())) {
-                            buildingRS.medias.add(Converter.convertMedia(media));
+                if (exportBuildingInfo) {
+                    //Get Amenity
+                    {
+                        EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
+                        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+                        for (BuildingAmenity amenity : Persistence.service().query(criteria)) {
+                            buildingRS.amenities.add(Converter.convertBuildingAmenity(amenity));
                         }
                     }
-                }
-
-                {
-                    Persistence.service().retrieve(building.serviceCatalog());
-                    for (ServiceItemType utility : building.serviceCatalog().includedUtilities()) {
-                        buildingRS.includedUtilities.add(Converter.convertBuildingIncludedUtility(utility));
+                    //Parking
+                    {
+                        EntityQueryCriteria<Parking> criteria = EntityQueryCriteria.create(Parking.class);
+                        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+                        for (Parking i : Persistence.service().query(criteria)) {
+                            buildingRS.parkings.add(Converter.convertParking(i));
+                        }
                     }
-                }
-            }
-
-            EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
-            floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
-            List<Floorplan> floorplans = service.query(floorplanCriteria);
-            nextFloorplan: for (Floorplan floorplan : floorplans) {
-                FloorplanRS floorplanRS = Converter.convertFloorplan(floorplan);
-                floorplanRS.unitCount = 0;
-
-                // Count Units and find earliest availableFrom
-                {
-                    EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-                    criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
-                    for (AptUnit u : Persistence.service().query(criteria)) {
-                        floorplanRS.unitCount++;
-
-                        floorplanRS.rentFrom = min(floorplanRS.rentFrom, u.financial().marketRent().getValue());
-                        floorplanRS.rentTo = max(floorplanRS.rentTo, u.financial().marketRent().getValue());
-                        floorplanRS.sqftFrom = min(floorplanRS.sqftFrom, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
-                        floorplanRS.sqftTo = max(floorplanRS.sqftTo, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
-
-                        if (!u.availableForRent().isNull()) {
-                            if ((floorplanRS.availableFrom == null) || (floorplanRS.availableFrom.after(u.availableForRent().getValue()))) {
-                                floorplanRS.availableFrom = u.availableForRent().getValue();
+                    if (!building.media().isEmpty()) {
+                        Persistence.service().retrieve(building.media());
+                        for (Media media : building.media()) {
+                            if (PublicVisibilityType.global.equals(media.visibility().getValue())) {
+                                buildingRS.medias.add(Converter.convertMedia(media));
                             }
                         }
                     }
-                }
 
-                //From all floorplans matched by beds/baths, We select 1 with closest availability and we show it on the site
-                FloorplanRS floorplanSameRS = findSameFloorplan(buildingRS.floorplans, Converter.convertFloorplan(floorplan));
-                if (floorplanSameRS != null) {
-                    if ((floorplanRS.availableFrom == null) || (floorplanSameRS.availableFrom == null)
-                            || floorplanRS.availableFrom.after(floorplanSameRS.availableFrom)) {
-                        // Ignore this floorplanRS
-                        floorplanSameRS.unitCount += floorplanRS.unitCount;
-                        floorplanSameRS.rentFrom = min(floorplanSameRS.rentFrom, floorplanRS.rentFrom);
-                        floorplanSameRS.rentTo = max(floorplanSameRS.rentTo, floorplanRS.rentTo);
-                        floorplanSameRS.sqftFrom = min(floorplanSameRS.sqftFrom, floorplanRS.sqftFrom);
-                        floorplanSameRS.sqftTo = max(floorplanSameRS.sqftTo, floorplanRS.sqftTo);
-                        continue nextFloorplan;
-                    }
-                    floorplanRS.unitCount += floorplanSameRS.unitCount;
-                    floorplanRS.rentFrom = min(floorplanSameRS.rentFrom, floorplanRS.rentFrom);
-                    floorplanRS.rentTo = max(floorplanSameRS.rentTo, floorplanRS.rentTo);
-                    floorplanRS.sqftFrom = min(floorplanSameRS.sqftFrom, floorplanRS.sqftFrom);
-                    floorplanRS.sqftTo = max(floorplanSameRS.sqftTo, floorplanRS.sqftTo);
-
-                    buildingRS.floorplans.remove(floorplanSameRS);
-                }
-                buildingRS.floorplans.add(floorplanRS);
-
-                //Get Amenity
-                {
-                    EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
-                    criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), floorplan));
-                    for (FloorplanAmenity amenity : Persistence.service().query(criteria)) {
-                        floorplanRS.amenities.add(Converter.convertFloorplanAmenity(amenity));
-                    }
-                }
-                if (!floorplan.media().isEmpty()) {
-                    Persistence.service().retrieve(floorplan.media());
-                    for (Media media : floorplan.media()) {
-                        if (PublicVisibilityType.global.equals(media.visibility().getValue())) {
-                            floorplanRS.medias.add(Converter.convertMedia(media));
+                    {
+                        Persistence.service().retrieve(building.serviceCatalog());
+                        for (ServiceItemType utility : building.serviceCatalog().includedUtilities()) {
+                            buildingRS.includedUtilities.add(Converter.convertBuildingIncludedUtility(utility));
                         }
                     }
                 }
 
+                EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
+                floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
+                List<Floorplan> floorplans = service.query(floorplanCriteria);
+                nextFloorplan: for (Floorplan floorplan : floorplans) {
+                    FloorplanRS floorplanRS = Converter.convertFloorplan(floorplan);
+                    floorplanRS.unitCount = 0;
+
+                    // Count Units and find earliest availableFrom
+                    {
+                        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+                        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
+                        for (AptUnit u : Persistence.service().query(criteria)) {
+                            floorplanRS.unitCount++;
+
+                            floorplanRS.rentFrom = min(floorplanRS.rentFrom, u.financial().marketRent().getValue());
+                            floorplanRS.rentTo = max(floorplanRS.rentTo, u.financial().marketRent().getValue());
+                            floorplanRS.sqftFrom = min(floorplanRS.sqftFrom, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
+                            floorplanRS.sqftTo = max(floorplanRS.sqftTo, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
+
+                            if (!u.availableForRent().isNull()) {
+                                if ((floorplanRS.availableFrom == null) || (floorplanRS.availableFrom.after(u.availableForRent().getValue()))) {
+                                    floorplanRS.availableFrom = u.availableForRent().getValue();
+                                }
+                            }
+                        }
+                    }
+
+                    //From all floorplans matched by beds/baths, We select 1 with closest availability and we show it on the site
+                    FloorplanRS floorplanSameRS = findSameFloorplan(buildingRS.floorplans, Converter.convertFloorplan(floorplan));
+                    if (floorplanSameRS != null) {
+                        if ((floorplanRS.availableFrom == null) || (floorplanSameRS.availableFrom == null)
+                                || floorplanRS.availableFrom.after(floorplanSameRS.availableFrom)) {
+                            // Ignore this floorplanRS
+                            floorplanSameRS.unitCount += floorplanRS.unitCount;
+                            floorplanSameRS.rentFrom = min(floorplanSameRS.rentFrom, floorplanRS.rentFrom);
+                            floorplanSameRS.rentTo = max(floorplanSameRS.rentTo, floorplanRS.rentTo);
+                            floorplanSameRS.sqftFrom = min(floorplanSameRS.sqftFrom, floorplanRS.sqftFrom);
+                            floorplanSameRS.sqftTo = max(floorplanSameRS.sqftTo, floorplanRS.sqftTo);
+                            continue nextFloorplan;
+                        }
+                        floorplanRS.unitCount += floorplanSameRS.unitCount;
+                        floorplanRS.rentFrom = min(floorplanSameRS.rentFrom, floorplanRS.rentFrom);
+                        floorplanRS.rentTo = max(floorplanSameRS.rentTo, floorplanRS.rentTo);
+                        floorplanRS.sqftFrom = min(floorplanSameRS.sqftFrom, floorplanRS.sqftFrom);
+                        floorplanRS.sqftTo = max(floorplanSameRS.sqftTo, floorplanRS.sqftTo);
+
+                        buildingRS.floorplans.remove(floorplanSameRS);
+                    }
+                    buildingRS.floorplans.add(floorplanRS);
+
+                    //Get Amenity
+                    {
+                        EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
+                        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), floorplan));
+                        for (FloorplanAmenity amenity : Persistence.service().query(criteria)) {
+                            floorplanRS.amenities.add(Converter.convertFloorplanAmenity(amenity));
+                        }
+                    }
+                    if (!floorplan.media().isEmpty()) {
+                        Persistence.service().retrieve(floorplan.media());
+                        for (Media media : floorplan.media()) {
+                            if (PublicVisibilityType.global.equals(media.visibility().getValue())) {
+                                floorplanRS.medias.add(Converter.convertMedia(media));
+                            }
+                        }
+                    }
+
+                }
+            } catch (Throwable t) {
+                log.error("Error converting building {}", building, t);
             }
         }
 
