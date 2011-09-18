@@ -101,12 +101,16 @@ public class OpenId {
                 URL url = new URL(mainApplicationURL);
                 mainApplicationURL = url.getProtocol() + "://" + url.getAuthority();
                 if (!mainApplicationURL.endsWith("/")) {
-                    mainApplicationURL += mainApplicationURL + "/";
+                    mainApplicationURL += "/";
                 }
                 if (!ServerSideConfiguration.instance().isContextLessDeployment()) {
                     int contextPathEnd = url.getPath().indexOf("/", 1);
                     if (contextPathEnd > 0) {
-                        mainApplicationURL += url.getPath().substring(0, contextPathEnd) + "/";
+                        String context = url.getPath().substring(0, contextPathEnd) + "/";
+                        if (context.startsWith("/")) {
+                            context = context.substring(1);
+                        }
+                        mainApplicationURL += context;
                     }
                 }
             }
