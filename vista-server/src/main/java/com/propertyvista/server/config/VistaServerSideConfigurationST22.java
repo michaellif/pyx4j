@@ -37,7 +37,7 @@ public class VistaServerSideConfigurationST22 extends VistaServerSideConfigurati
 
     @Override
     public boolean openIdrequired() {
-        return false;
+        return true;
     }
 
     @Override
