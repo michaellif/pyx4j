@@ -13,10 +13,13 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
+import javax.servlet.http.Cookie;
+
 import org.apache.wicket.Response;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebComponent;
+import org.apache.wicket.protocol.http.WebRequest;
 
 import com.propertyvista.pmsite.server.panels.NewsPanel;
 import com.propertyvista.pmsite.server.panels.PromoPanel;
@@ -42,7 +45,8 @@ public class LandingPage extends BasePage {
                 //TODO make image component for landing page banner
                 //https://cwiki.apache.org/WICKET/how-to-load-an-external-image.html
                 response.write("<div style='height: 375px; position: relative; width: 960px;'>");
-                response.write("<img style='position: absolute; bottom:0; left:0' src='resources/templates.TemplateResources/images/template0/landing.png' alt=''>");
+                response.write("<img style='position: absolute; bottom:0; left:0' src='resources/templates.TemplateResources/images/template"
+                        + getPmsiteStyle() + "/landing.png' alt=''>");
                 response.write("</div>");
             }
         });
@@ -52,4 +56,23 @@ public class LandingPage extends BasePage {
         add(new TestimPanel("testimPanel"));
     }
 
+    //TODO remove after getting image from server
+    private int getPmsiteStyle() {
+        Cookie pmsiteStyleCookie = null;
+        Cookie[] cookies = ((WebRequest) getRequestCycle().getRequest()).getCookies();
+        if (cookies == null) {
+            return 0;
+        }
+        for (Cookie cookie : cookies) {
+            if ("pmsiteStyle".equals(cookie.getName())) {
+                pmsiteStyleCookie = cookie;
+                break;
+            }
+        }
+        if (pmsiteStyleCookie != null) {
+            return Integer.valueOf(pmsiteStyleCookie.getValue());
+        } else {
+            return 0;
+        }
+    }
 }

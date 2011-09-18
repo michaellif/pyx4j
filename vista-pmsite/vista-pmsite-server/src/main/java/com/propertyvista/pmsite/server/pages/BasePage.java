@@ -13,21 +13,19 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.Cookie;
 
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.resources.StyleSheetReference;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.resource.TextTemplateResourceReference;
 
 import templates.TemplateResources;
 
+import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.panels.FooterPanel;
 import com.propertyvista.pmsite.server.panels.HeaderPanel;
 
@@ -62,21 +60,10 @@ public abstract class BasePage extends WebPage {
 
         final int style = getPmsiteStyle();
 
-        add(new StyleSheetReference("stylesheet", new TextTemplateResourceReference(TemplateResources.class, "template" + style + ".css", "text/css",
-                new LoadableDetachableModel<Map<String, Object>>() {
-                    private static final long serialVersionUID = 1L;
+        String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
 
-                    @Override
-                    public Map<String, Object> load() {
-                        final Map<String, Object> vars = new HashMap<String, Object>();
-                        if (style == 0) {
-                            vars.put("color1", "#bababa");
-                        } else {
-                            vars.put("color1", "#baba00");
-                        }
-                        return vars;
-                    }
-                })));
+        add(new StyleSheetReference("stylesheet", new TextTemplateResourceReference(TemplateResources.class, "template" + style + ".css", "text/css",
+                new StylesheetTemplateModel(baseColor))));
 
         add(new HeaderPanel());
         add(new FooterPanel());

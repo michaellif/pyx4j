@@ -59,7 +59,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
 
             SiteDescriptor site = EntityFactory.create(SiteDescriptor.class);
             site.skin().setValue(Skin.skin1);
-            site.baseColor().setValue("#fff");
+            site.baseColor().setValue("#4488bb");
             site.copyright().setValue("© Starlight Apartments 2011");
 
             SiteLocale enSiteLocale = EntityFactory.create(SiteLocale.class);

@@ -40,7 +40,7 @@ select:focus {
 	outline: medium none;
 }
 
-html,body,#splash {
+html,body {
 	height: 100%;
 	width: 100%;
 }
@@ -220,6 +220,12 @@ select {
 	padding: 0 19px;
 }
 
+.landing_content_right {
+	width: 660px;
+	padding: 10px;
+	display: inline-block;
+}
+
 .quickSearchCriteria {
 	display: block;
 	position: absolute;
@@ -389,9 +395,12 @@ select {
 /*
  * Footer
  */
+ 
+ #footer {
+    position: relative;
+}
+
 .footer_wrap {
-	float: left;
-	clear: left;
 	margin-left: 60px;
 }
 
@@ -476,6 +485,7 @@ ul.footer_locations li {
 	display: inline-block;
 	min-height: 614px;
 	background: url("images/template0/bg_sidebar.gif") repeat-x #34363C;
+	float: left;
 }
 
 .news_box .date {
@@ -504,11 +514,6 @@ ul.footer_locations li {
 	line-height: 40px;
 }
 
-.landing_content_right {
-	width: 660px;
-	float: right;
-	display: inline-block;
-}
 
 .promo_box {
 	width:600px;
