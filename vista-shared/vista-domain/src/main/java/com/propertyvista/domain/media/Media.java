@@ -16,6 +16,7 @@ package com.propertyvista.domain.media;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -45,6 +46,7 @@ public interface Media extends IEntity {
     IPrimitive<String> caption();
 
     @MemberColumn(name = "mediaType")
+    @NotNull
     IPrimitive<Type> type();
 
     @EmbeddedEntity
