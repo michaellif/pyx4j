@@ -123,7 +123,7 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
 
             @Override
             public long getMaxRequests() {
-                return 120;
+                return 400;
             }
         };
     }
