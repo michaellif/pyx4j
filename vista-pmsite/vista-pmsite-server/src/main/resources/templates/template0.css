@@ -340,6 +340,22 @@ select {
 	padding: 0 0 20px;
 }
 
+.staticMain .caption2 {
+	background: url("images/template0/subtitle_bg.gif") repeat-x transparent;
+	height: 60px;
+	width:749px;
+	margin:1px 0 0 211px;
+}
+
+.staticMain .caption2 h1 {
+	font-size: 16px;
+	font-weight: bold;
+	text-transform:uppercase;
+	padding: 22px 0 0 24px;
+	color:#222;
+	float:left;
+}
+
 .staticConten {
 	
 }

@@ -13,80 +13,32 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Radio;
-import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.Model;
 
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.contact.IAddress;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
-import com.propertyvista.pmsite.server.model.WicketUtils;
 import com.propertyvista.pmsite.server.model.WicketUtils.AttributeClassModifier;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class AptListPanel extends Panel {
     private static final long serialVersionUID = 1L;
 
     public AptListPanel(String id, CompoundPropertyModel<IList<PropertyDTO>> model) {
         super(id, model);
-
-        // TODO - the model object has to be replaced by the SearchCriteriaModel.displayMode component 
-        PropertySearchCriteria.DisplayMode displayModeModel = PropertySearchCriteria.DisplayMode.map;
-        RadioGroup<PropertySearchCriteria.DisplayMode> displayModeRadio = new RadioGroup<PropertySearchCriteria.DisplayMode>("displayMode",
-                new Model<PropertySearchCriteria.DisplayMode>(displayModeModel)) {
-            // TODO replace this BS (server round trip) with JS (onclick handler)
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected boolean wantOnSelectionChangedNotifications() {
-                return true;
-            }
-
-            @Override
-            protected void onSelectionChanged(Object newMode) {
-                // get components
-                Component map = getParent().get("aptResultMap");
-                Component list = getParent().get("aptResultList");
-
-                // TODO replace this BS with JS
-                if (newMode == PropertySearchCriteria.DisplayMode.map) {
-                    if (map != null) {
-                        map.add(new WicketUtils.AttributeClassModifier("display_none", null));
-                    }
-                    if (list != null) {
-                        list.add(new WicketUtils.AttributeClassModifier(null, "display_none"));
-                    }
-                } else if (newMode == PropertySearchCriteria.DisplayMode.list) {
-                    if (list != null) {
-                        list.add(new WicketUtils.AttributeClassModifier("display_none", null));
-                    }
-                    if (map != null) {
-                        map.add(new AttributeClassModifier(null, "display_none"));
-                    }
-                }
-            }
-        };
-        displayModeRadio.add(new Radio<PropertySearchCriteria.DisplayMode>("displayMap", new Model<PropertySearchCriteria.DisplayMode>(
-                PropertySearchCriteria.DisplayMode.map)));
-        displayModeRadio.add(new Radio<PropertySearchCriteria.DisplayMode>("displayList", new Model<PropertySearchCriteria.DisplayMode>(
-                PropertySearchCriteria.DisplayMode.list)));
-        add(displayModeRadio.setRequired(true));
 
         add(new Label("aptResultMap", ""));
         WebMarkupContainer aptList = new WebMarkupContainer("aptResultList");
@@ -103,7 +55,7 @@ public class AptListPanel extends Panel {
                     mediaId = propInfo.mainMedia().getValue().asLong();
                 }
                 item.add(new Image("picture").add(new SimpleAttributeModifier("src", PMSiteContentManager.getMediaImgUrl(mediaId, "small"))));
-                item.add(new BookmarkablePageLink<Void>("aptDetails", AptDetailsPage.class, new PageParameters("propid=" + propInfo.id().getValue())));
+                item.add(new BookmarkablePageLink<Void>("aptDetails", AptDetailsPage.class, new PageParameters("propId=" + propInfo.id().getValue())));
                 IAddress addr = propInfo.address();
                 String addrFmt = addr.street1().getValue() + " " + addr.street2().getValue() + ", " + addr.city().getValue() + ", "
                         + addr.province().name().getValue() + ", " + addr.postalCode().getValue();
@@ -119,8 +71,10 @@ public class AptListPanel extends Panel {
                         String type = floorPlan.name().getValue();
                         if (type != null && type.length() > 0) {
                             type += " - ";
+                        } else {
+                            type = "";
                         }
-                        type += floorPlan.bedrooms().getValue() + " Bedroom, " + floorPlan.bathrooms().getValue() + " Bathroom";
+                        type += floorPlan.bedrooms().getValue() + " Bed, " + floorPlan.bathrooms().getValue() + " Bath";
                         String price = "price not available";
                         Double numPrice = null;
                         if ((numPrice = floorPlan.price().min().getValue()) != null) {

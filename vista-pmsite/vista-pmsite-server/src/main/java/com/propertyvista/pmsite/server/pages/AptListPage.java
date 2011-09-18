@@ -57,6 +57,9 @@ public class AptListPage extends BasePage {
                 criteria.amenities().add(AmenityType.valueOf(amenities[i]));
             }
         }
+        if (criteria.searchType().getValue() == null) {
+            criteria.searchType().setValue(PropertySearchCriteria.SearchType.city);
+        }
         IPojo<PropertySearchCriteria> pojo = ServerEntityFactory.getPojo(criteria);
         final CompoundPropertyModel<IPojo<PropertySearchCriteria>> model = new CompoundPropertyModel<IPojo<PropertySearchCriteria>>(pojo);
 
@@ -70,7 +73,6 @@ public class AptListPage extends BasePage {
 
         };
 
-        //TODO use PropertySearchCriteria instead
         form.add(new AdvancedSearchCriteriaInputPanel("searchCriteriaInput", model));
         form.add(new Button("searchSubmit"));
 

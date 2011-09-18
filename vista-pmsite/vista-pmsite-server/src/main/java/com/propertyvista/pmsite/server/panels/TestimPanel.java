@@ -15,7 +15,7 @@
  * the License.
  *
  * Created on Sep 9, 2011
- * @author job_vista
+ * @author stanp
  * @version $Id$
  */
 package com.propertyvista.pmsite.server.panels;
