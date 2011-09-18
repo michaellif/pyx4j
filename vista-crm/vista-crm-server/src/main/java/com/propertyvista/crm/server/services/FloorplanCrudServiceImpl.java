@@ -24,6 +24,7 @@ import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.dto.FloorplanDTO;
 
 public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorplan, FloorplanDTO> implements FloorplanCrudService {
@@ -52,12 +53,37 @@ public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorpla
             Persistence.service().merge(item);
         }
         boolean isCreate = dbo.id().isNull();
+
+        boolean counterModified = false;
+        {
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), dbo));
+            Integer orig = dbo.counters()._unitCount().getValue();
+            dbo.counters()._unitCount().setValue(Persistence.service().count(criteria));
+            if (!dbo.counters()._unitCount().getValue().equals(orig)) {
+                counterModified = true;
+            }
+        }
+        {
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().floorplan().marketingName(), dbo.marketingName().getValue()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), dbo.building()));
+            Integer orig = dbo.counters()._marketingUnitCount().getValue();
+            dbo.counters()._marketingUnitCount().setValue(Persistence.service().count(criteria));
+            if (!dbo.counters()._marketingUnitCount().getValue().equals(orig)) {
+                counterModified = true;
+            }
+        }
+        if (counterModified) {
+            Persistence.service().merge(dbo.counters());
+        }
+
         Persistence.service().merge(dbo);
 
         if (!isCreate) {
-            EntityQueryCriteria<FloorplanAmenity> amenitysCriteria = EntityQueryCriteria.create(FloorplanAmenity.class);
-            amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), dbo));
-            List<FloorplanAmenity> existingAmenities = Persistence.service().query(amenitysCriteria);
+            EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), dbo));
+            List<FloorplanAmenity> existingAmenities = Persistence.service().query(criteria);
             for (FloorplanAmenity amenity : existingAmenities) {
                 if (!dto.amenities().contains(amenity)) {
                     Persistence.service().delete(amenity);
@@ -68,5 +94,17 @@ public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorpla
             amenity.belongsTo().set(dbo);
         }
         Persistence.service().merge(dto.amenities());
+
+        //Update _values on AptUnit, TODO see if # had not been modified and then do not save AptUnit
+        {
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), dbo));
+            List<AptUnit> units = Persistence.service().query(criteria);
+            for (AptUnit u : units) {
+                u.info()._bathrooms().set(dbo.bathrooms());
+                u.info()._bedrooms().set(dbo.bedrooms());
+            }
+            Persistence.service().persist(units);
+        }
     }
 }
