@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.security.openId;
 
+import java.net.URL;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -96,6 +97,15 @@ public class OpenId {
             String mainApplicationURL = (String) DevSession.getSession().getAttribute(OpenIdFilter.REQUESTED_URL_ATTRIBUTE);
             if (mainApplicationURL == null) {
                 mainApplicationURL = ServerSideConfiguration.instance().getMainApplicationURL();
+            } else {
+                URL url = new URL(mainApplicationURL);
+                mainApplicationURL = url.getProtocol() + "://" + url.getAuthority();
+                if (!ServerSideConfiguration.instance().isContextLessDeployment()) {
+                    int contextPathEnd = url.getPath().indexOf("/", 1);
+                    if (contextPathEnd > 0) {
+                        mainApplicationURL += url.getPath().substring(0, contextPathEnd) + "/";
+                    }
+                }
             }
             AuthRequest authReq = manager.authenticate(discovered, mainApplicationURL + returnServletPath);
 
