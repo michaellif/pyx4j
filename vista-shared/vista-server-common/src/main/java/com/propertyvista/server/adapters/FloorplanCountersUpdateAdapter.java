@@ -49,6 +49,7 @@ public class FloorplanCountersUpdateAdapter implements com.propertyvista.shared.
             if (updateMarketingCounter) {
                 EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().floorplan().marketingName(), floorplanOrig.marketingName().getValue()));
+                criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), floorplanOrig.building()));
                 floorplanOrig.counters()._marketingUnitCount().setValue(Persistence.service().count(criteria) - 1);
             }
             boolean addingCounters = floorplanOrig.counters().id().isNull();
@@ -67,6 +68,7 @@ public class FloorplanCountersUpdateAdapter implements com.propertyvista.shared.
             if (updateMarketingCounter) {
                 EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().floorplan().marketingName(), floorplanNew.marketingName().getValue()));
+                criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), floorplanNew.building()));
                 floorplanNew.counters()._marketingUnitCount().setValue(Persistence.service().count(criteria) + 1);
             }
             boolean addingCounters = floorplanNew.counters().id().isNull();
