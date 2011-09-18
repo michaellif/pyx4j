@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -60,17 +61,32 @@ public class ExportDownloadServlet extends HttpServlet {
             imagesBaseFolder = null;
         }
 
-        ImportIO importIO = EntityFactory.create(ImportIO.class);
-        EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
-        List<Building> buildings = Persistence.service().query(buildingCriteria);
-        for (Building building : buildings) {
-            importIO.buildings().add(new BuildingRetriever().getModel(building, imagesBaseFolder));
+        byte[] data;
+        try {
+            ImportIO importIO = EntityFactory.create(ImportIO.class);
+            EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
+            List<Building> buildings = Persistence.service().query(buildingCriteria);
+            for (Building building : buildings) {
+                try {
+                    importIO.buildings().add(new BuildingRetriever().getModel(building, imagesBaseFolder));
+                } catch (Throwable t) {
+                    log.error("Error converting building {}", building, t);
+                    throw t;
+                }
+            }
+            XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
+            XMLEntityWriter xmlWriter = new XMLEntityWriter(xml, new ImportXMLEntityName());
+            xmlWriter.setEmitId(false);
+            xmlWriter.write(importIO);
+            data = xml.getBytes();
+        } catch (Throwable t) {
+            log.error("Error converting data", t);
+            if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+                throw new Error("Internal error", t);
+            } else {
+                throw new Error("Internal error");
+            }
         }
-        XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
-        XMLEntityWriter xmlWriter = new XMLEntityWriter(xml, new ImportXMLEntityName());
-        xmlWriter.setEmitId(false);
-        xmlWriter.write(importIO);
-        byte[] data = xml.getBytes();
 
         response.setHeader("Content-Disposition", "attachment; filename=\"export.xml\"");
         long fileExpires = System.currentTimeMillis() + Consts.MIN2MSEC * 2;

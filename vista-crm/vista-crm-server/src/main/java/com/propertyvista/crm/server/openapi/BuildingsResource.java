@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -262,6 +263,11 @@ public class BuildingsResource {
                 }
             } catch (Throwable t) {
                 log.error("Error converting building {}", building, t);
+                if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+                    throw new Error("Internal error", t);
+                } else {
+                    throw new Error("Internal error");
+                }
             }
         }
 
