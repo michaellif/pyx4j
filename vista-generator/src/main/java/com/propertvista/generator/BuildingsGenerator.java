@@ -40,7 +40,6 @@ import com.propertyvista.domain.PetChargeRule;
 import com.propertyvista.domain.charges.ChargeType;
 import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.contact.Email;
-import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
@@ -98,11 +97,6 @@ public class BuildingsGenerator {
         // address
         Address address = CommonsGenerator.createAddress();
 
-        // phones
-        @Deprecated
-        List<Phone> phones = new ArrayList<Phone>();
-        phones.add(CommonsGenerator.createPhone());
-
         // email
         String emailAddress = "building" + (counter + 1) + "@propertyvista.com";
         Email email = CommonsGenerator.createEmail(emailAddress, Email.Type.work);
@@ -119,13 +113,13 @@ public class BuildingsGenerator {
         // now
         PropertyProfile propertyProfile = createPropertyProfile(counter);
 
-        Building building = createBuilding(propertyCode, buildingType, website, address, phones, email);
+        Building building = createBuilding(propertyCode, buildingType, website, address, email);
         // log.info("Created: " + building);
 
         return building;
     }
 
-    private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, String website, Address address, List<Phone> phones, Email email) {
+    private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, String website, Address address, Email email) {
         Building building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(propertyCode);
 
@@ -154,15 +148,12 @@ public class BuildingsGenerator {
 
         building.marketing().name().setValue(RandomUtil.randomLetters(4) + " " + RandomUtil.randomLetters(6));
         building.marketing().description().setValue(CommonsGenerator.lipsum());
-        for (int i = 0; 1 < RandomUtil.randomInt(3); ++i) {
+        for (int i = 0; 1 < RandomUtil.randomInt(3); i++) {
             AdvertisingBlurb item = EntityFactory.create(AdvertisingBlurb.class);
             item.content().setValue(CommonsGenerator.lipsum());
             building.marketing().adBlurbs().add(item);
         }
 
-        for (Phone phone : phones) {
-            building.contacts().phones2Migrate().add(phone);
-        }
         for (int i = 0; i <= RandomUtil.randomInt(3); i++) {
             building.contacts().phones().add(CommonsGenerator.createPropertyPhone());
         }

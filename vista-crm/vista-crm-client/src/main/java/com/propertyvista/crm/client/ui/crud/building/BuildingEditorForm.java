@@ -253,7 +253,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(new VistaLineSeparator());
 
         main.add(inject(proto().contacts().email().address()), main.getDefaultLabelWidth(), 30, i18n.tr("Email Address"));
-        SubtypeInjectors.injectPhones(main, proto().contacts().phones2Migrate(), this, false, true);
         SubtypeInjectors.injectPropertyPhones(main, proto().contacts().phones(), this);
 
         main.add(new CrmSectionSeparator(i18n.tr("Media:")));

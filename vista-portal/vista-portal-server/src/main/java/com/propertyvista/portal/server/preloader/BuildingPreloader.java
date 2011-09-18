@@ -44,6 +44,7 @@ import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyManager;
+import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Elevator;
@@ -361,7 +362,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             // phones
             sb.append("\t");
 
-            for (Phone phone : building.contacts().phones2Migrate()) {
+            for (PropertyPhone phone : building.contacts().phones()) {
                 sb.append(phone.number().getStringView());
                 sb.append("/").append(phone.type().getStringView());
             }

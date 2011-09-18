@@ -131,9 +131,6 @@ public class BuildingsResource {
                 if (building.marketing().adBlurbs().getMeta().isDetached()) {
                     Persistence.service().retrieve(building.marketing().adBlurbs());
                 }
-                if (building.contacts().phones2Migrate().getMeta().isDetached()) {
-                    Persistence.service().retrieve(building.contacts().phones2Migrate());
-                }
                 if (building.contacts().phones().getMeta().isDetached()) {
                     Persistence.service().retrieve(building.contacts().phones());
                 }
@@ -152,9 +149,6 @@ public class BuildingsResource {
                     exportBuildingInfo = true;
                     if (building.marketing().adBlurbs().getMeta().isDetached()) {
                         Persistence.service().retrieve(building.marketing().adBlurbs());
-                    }
-                    if (building.contacts().phones2Migrate().getMeta().isDetached()) {
-                        Persistence.service().retrieve(building.contacts().phones2Migrate());
                     }
                     if (building.contacts().phones().getMeta().isDetached()) {
                         Persistence.service().retrieve(building.contacts().phones());

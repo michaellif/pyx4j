@@ -29,6 +29,7 @@ import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
@@ -111,7 +112,10 @@ public class Mapper {
 
         building.contacts().email().set(CommonsGenerator.createEmail(property.getContact().getEmail(), Email.Type.other));
 
-        building.contacts().phones2Migrate().add(CommonsGenerator.createPhone(property.getContact().getTel()));
+        PropertyPhone phone = EntityFactory.create(PropertyPhone.class);
+        phone.visibility().setValue(PublicVisibilityType.global);
+        phone.number().setValue(property.getContact().getTel());
+        building.contacts().phones().add(phone);
 
         building.contacts().website().setValue(property.getWebsite());
 

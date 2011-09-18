@@ -16,7 +16,6 @@ package com.propertyvista.domain.property.asset.building;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -24,7 +23,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.company.OrganisationContact;
 import com.propertyvista.domain.contact.Email;
-import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.property.PropertyPhone;
 
 public interface BuildingContactInfo extends IEntity {
@@ -37,13 +35,6 @@ public interface BuildingContactInfo extends IEntity {
 
     @Owned
     @Detached
-    @Deprecated
-    @MemberColumn(name = "phones")
-    IList<Phone> phones2Migrate();
-
-    @Owned
-    @Detached
-    @MemberColumn(name = "property_phones")
     IList<PropertyPhone> phones();
 
     @Owned
