@@ -24,6 +24,8 @@ import org.apache.wicket.request.target.coding.MixedParamUrlCodingStrategy;
 import org.apache.wicket.request.target.coding.QueryStringUrlCodingStrategy;
 import org.apache.wicket.util.time.Duration;
 
+import com.pyx4j.config.shared.ApplicationMode;
+
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.pmsite.server.pages.FindAptPage;
@@ -40,8 +42,10 @@ public class PMSiteApplication extends WebApplication {
 
     @Override
     protected void init() {
-        //TODO For Development
-        getResourceSettings().setResourcePollFrequency(Duration.ONE_SECOND);
+
+        if (ApplicationMode.isDevelopment()) {
+            getResourceSettings().setResourcePollFrequency(Duration.ONE_SECOND);
+        }
 
         mountBookmarkablePage("findapt", FindAptPage.class);
         mount(new QueryStringUrlCodingStrategy("aptlist", AptListPage.class));
