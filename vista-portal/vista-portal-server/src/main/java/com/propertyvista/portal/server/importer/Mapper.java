@@ -104,8 +104,9 @@ public class Mapper {
         building.info().structureType().setValue(mapStructureType(property.getType()));
         building.info().type().setValue(BuildingInfo.Type.residential);
 
+        List<FloorplanDTO> floorplans = new ArrayList<FloorplanDTO>();
         for (Room room : property.getRooms().getRooms()) {
-            createFloorplan(property, room, building);
+            floorplans.add(createFloorplan(property, room, building));
         }
 
         building.info().address().set(mapAddress(property.getAddress()));
@@ -140,7 +141,7 @@ public class Mapper {
 
         // create vista units for available units
         for (AvailableUnit availableUnit : buildingUnits) {
-            createUnit(property, availableUnit, building);
+            createUnit(property, availableUnit, building, floorplans);
         }
         // int numFloors = property.getFloors() == null
         // || property.getFloors() == 0 ? 1 : property.getFloors();
@@ -150,7 +151,7 @@ public class Mapper {
         // }
     }
 
-    private void createUnit(Property property, AvailableUnit availableUnit, Building building) {
+    private void createUnit(Property property, AvailableUnit availableUnit, Building building, List<FloorplanDTO> floorplans) {
         UnitRelatedData unit = EntityFactory.create(UnitRelatedData.class);
 
         AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
@@ -167,10 +168,21 @@ public class Mapper {
 
         // unit.info().floor().setValue(floor);
 
+        // find proper floorplan
+        for (FloorplanDTO floorplan : floorplans) {
+//            log.info("Floorplan '{}'", floorplan.name().getValue());
+            if (availableUnit.getDescription().trim().equals(floorplan.name().getValue())) {
+                unit.floorplan().set(floorplan);
+            }
+        }
+        if (unit.floorplan().isNull()) {
+            log.warn("Could not find floorplan for '{}'", availableUnit.getDescription().trim());
+        }
+
         model.getUnits().add(unit);
     }
 
-    private void createFloorplan(Property property, Room room, Building building) {
+    private FloorplanDTO createFloorplan(Property property, Room room, Building building) {
         FloorplanDTO floorplan = EntityFactory.create(FloorplanDTO.class);
 
         floorplan.building().set(building);
@@ -199,6 +211,8 @@ public class Mapper {
 //        }
 
         model.getFloorplans().add(floorplan);
+
+        return floorplan;
     }
 
     private static Address mapAddress(com.propertyvista.portal.server.importer.bean.Address from) {
