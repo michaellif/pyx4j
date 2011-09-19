@@ -132,11 +132,18 @@ public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorpla
             }
         }
         if (!EqualsHelper.equals(origMarketingName, dbo.marketingName().getValue())) {
+            int newCount;
+            {
+                EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().floorplan().marketingName(), origMarketingName));
+                criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), dbo.building()));
+                newCount = Persistence.service().count(criteria);
+            }
             EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().marketingName(), origMarketingName));
             criteria.add(PropertyCriterion.eq(criteria.proto().building(), dbo.building()));
             for (Floorplan othrPlan : Persistence.service().query(criteria)) {
-                othrPlan.counters()._marketingUnitCount().set(dbo.counters()._marketingUnitCount());
+                othrPlan.counters()._marketingUnitCount().setValue(newCount);
                 Persistence.service().persist(othrPlan.counters());
             }
         }
