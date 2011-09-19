@@ -37,13 +37,11 @@ import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
-import com.propertyvista.common.client.ui.validators.YouTubeVideoIdFormat;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdValidator;
 import com.propertyvista.crm.client.ui.components.CrmBoxFolderDecorator;
 import com.propertyvista.crm.client.ui.components.CrmBoxFolderItemDecorator;
@@ -152,8 +150,10 @@ public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
                         }
                     });
 
-                    ((CTextFieldBase<String, ?>) get(proto().youTubeVideoID())).setFormat(new YouTubeVideoIdFormat());
                     get(proto().youTubeVideoID()).addValueValidator(new YouTubeVideoIdValidator());
+
+                    // Validate media completeness:
+                    addValueValidator(new MediaItemValidator());
                 }
             }
 

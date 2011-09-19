@@ -49,9 +49,8 @@ public class YouTubeVideoIdFormat implements IFormat<String> {
         }
         value = value.trim();
         if (!value.matches("[a-zA-Z0-9_-]{11}")) {
-            return null;
+            throw new ParseException("Not a valid YouTube Video ID!..", 0);
         }
         return value;
     }
-
 }
