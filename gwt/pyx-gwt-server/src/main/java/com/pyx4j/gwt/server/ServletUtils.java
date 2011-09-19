@@ -55,6 +55,26 @@ public class ServletUtils {
         return receivingURL.toString();
     }
 
+    public static String getActualRequestBaseURL(HttpServletRequest request) {
+        String receivingURL;
+        String forwarded = request.getHeader("x-forwarded-host");
+        if (forwarded != null) {
+            receivingURL = "http://" + forwarded;
+            if (!ServerSideConfiguration.instance().isContextLessDeployment()) {
+                receivingURL += request.getContextPath();
+            }
+        } else {
+            receivingURL = request.getRequestURL().toString();
+            if (request.getServletPath().length() > 1) {
+                int idx = receivingURL.indexOf(request.getServletPath());
+                if (idx > 0) {
+                    receivingURL = receivingURL.substring(0, idx);
+                }
+            }
+        }
+        return receivingURL;
+    }
+
     public static String getActualRequestRemoteAddr(ServletRequest request) {
         if (request instanceof HttpServletRequest) {
             String forwarded = ((HttpServletRequest) request).getHeader("x-forwarded-for");
