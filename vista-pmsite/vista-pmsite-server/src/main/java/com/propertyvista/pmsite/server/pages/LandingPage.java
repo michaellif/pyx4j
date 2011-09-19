@@ -13,14 +13,17 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
-import javax.servlet.http.Cookie;
-
 import org.apache.wicket.Response;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebComponent;
-import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.markup.html.resources.StyleSheetReference;
+import org.apache.wicket.resource.TextTemplateResourceReference;
 
+import templates.TemplateResources;
+
+import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.panels.NewsPanel;
 import com.propertyvista.pmsite.server.panels.PromoPanel;
 import com.propertyvista.pmsite.server.panels.QuickSearchCriteriaPanel;
@@ -31,6 +34,10 @@ public class LandingPage extends BasePage {
     public LandingPage() {
         super();
         setVersioned(false);
+
+        String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
+        add(new StyleSheetReference("landing_css", new TextTemplateResourceReference(TemplateResources.class, "landing" + getPmsiteStyle() + ".css",
+                "text/css", new StylesheetTemplateModel(baseColor))));
 
         add(new QuickSearchCriteriaPanel());
 
@@ -56,23 +63,4 @@ public class LandingPage extends BasePage {
         add(new TestimPanel("testimPanel"));
     }
 
-    //TODO remove after getting image from server
-    private int getPmsiteStyle() {
-        Cookie pmsiteStyleCookie = null;
-        Cookie[] cookies = ((WebRequest) getRequestCycle().getRequest()).getCookies();
-        if (cookies == null) {
-            return 0;
-        }
-        for (Cookie cookie : cookies) {
-            if ("pmsiteStyle".equals(cookie.getName())) {
-                pmsiteStyleCookie = cookie;
-                break;
-            }
-        }
-        if (pmsiteStyleCookie != null) {
-            return Integer.valueOf(pmsiteStyleCookie.getValue());
-        } else {
-            return 0;
-        }
-    }
 }

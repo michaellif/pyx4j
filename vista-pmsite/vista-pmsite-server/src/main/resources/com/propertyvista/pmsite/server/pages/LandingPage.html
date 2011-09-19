@@ -2,6 +2,9 @@
 <head>
 <title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<wicket:head>
+	<link wicket:id="landing_css" />
+</wicket:head>
 </head>
 <body>
 	<wicket:extend>
@@ -9,7 +12,7 @@
 			<div class="main">
 				<div class="landing_content_wrap" wicket:id="landing_content" />
 				<div wicket:id="quickSearchCriteriaPanel" />
-				<div wicket:id="newsPanel" class="infobox news_box" />
+				<div class="infobox news_box" wicket:id="newsPanel" />
 				<div class="landing_content_right">
 					<div wicket:id="promoPanel" class="infobox promo_box" />
 					<div wicket:id="testimPanel" class="infobox testim_box" />

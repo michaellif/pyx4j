@@ -58,11 +58,8 @@ public abstract class BasePage extends WebPage {
             }
         });
 
-        final int style = getPmsiteStyle();
-
         String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
-
-        add(new StyleSheetReference("stylesheet", new TextTemplateResourceReference(TemplateResources.class, "template" + style + ".css", "text/css",
+        add(new StyleSheetReference("stylesheet", new TextTemplateResourceReference(TemplateResources.class, "main" + getPmsiteStyle() + ".css", "text/css",
                 new StylesheetTemplateModel(baseColor))));
 
         add(new HeaderPanel());
@@ -70,7 +67,7 @@ public abstract class BasePage extends WebPage {
 
     }
 
-    private int getPmsiteStyle() {
+    protected int getPmsiteStyle() {
         Cookie pmsiteStyleCookie = null;
         Cookie[] cookies = ((WebRequest) getRequestCycle().getRequest()).getCookies();
         if (cookies == null) {
