@@ -47,7 +47,6 @@ public class TenantInfoServiceImpl implements TenantInfoService {
         log.debug("Saving Tenant Info {}", dto);
 
         TenantRetriever r = new TenantRetriever(dto.getPrimaryKey());
-
         new TenantConverter.Tenant2TenantInfo().copyDTOtoDBO(dto, r.tenant);
         new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(dto, r.tenantScreening);
 
