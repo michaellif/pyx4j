@@ -73,6 +73,51 @@ select {
 	color: #333;
 }
 
+.vista-pmsite-contentWrap {
+
+}
+
+.vista-pmsite-content {
+	margin: 0 auto;
+	position: relative;
+	width: 960px;
+}
+
+.vista-pmsite-mainWrap {
+	width: 960px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+.vista-pmsite-sidebarWrap {
+	float: left;
+	position: relative;
+	width: 100%;
+	right: 680px;
+    border-right: 1px solid ${primeColor1e};
+}
+
+.vista-pmsite-main {
+	width: 680px;
+	position: relative;
+	float: left;
+	left: 680px;
+}
+
+.vista-pmsite-sidebar {
+	position: relative;
+	float: left;
+	width: 280px;
+	left: 680px;
+}
+
+.vista-pmsite-banner {
+	height: 375px;
+	position: relative;
+	width: 960px;
+	background: ${primeColor1a}
+}
+
 .header {
 	width: 100%;
 }
@@ -200,25 +245,6 @@ select {
 
 .langItem a:hover {
 	color: ${accentColor1c};
-}
-
-.landing_content {
-
-}
-
-.landing_content .main {
-	padding: 0 19px;
-}
-
-.landing_content_right {
-	width: 660px;
-	padding: 10px;
-	display: inline-block;
-	border-left: 1px solid ${primeColor1e};
-}
-
-.landing_content_wrap {
-	background: ${primeColor1a}
 }
 
 .quickSearchCriteria {

@@ -1,9 +1,9 @@
-.testim_box {
-	padding: 20px 0px;
+.vista-pmsite-testimBox {
+	padding: 20px 10px;
 	float: left;
 }
 
-.testim_box .infobox_content {
+.vista-pmsite-testimBox .infobox_content {
 	width: 250px;
 	height: 80px;
 	overflow: hidden;
@@ -15,41 +15,40 @@
 	background: ${primeColor1a};
 }
 
-.testim_box .name {
+.vista-pmsite-testimBox .name {
 	color: ${accentColor1b};
 	text-align: right;
 	padding: 10px 0 0 0;
 }
 
-.testim_box .read_more {
+.vista-pmsite-testimBox .read_more {
 	color: ${accentColor1b};
 	font-size: 16px;
 	padding-left: 10px;
 }
 
-.news_box {
-    padding: 30px 20px 30px 0;
-    width: 253px;
+.vista-pmsite-newsBox {
+	padding: 20px 30px;
 	display: inline-block;
 	min-height: 614px;
-    float: left;
+	float: left;
 }
 
-.news_box .date {
+.vista-pmsite-newsBox .date {
 	color: ${accentColor1a};
 	padding-top: 10px;
 }
 
-.news_box .headline {
+.vista-pmsite-newsBox .headline {
 	padding-top: 10px;
 	color: ${accentColor1b};
 }
 
-.news_box .text {
+.vista-pmsite-newsBox .text {
 	padding-top: 10px;
 }
 
-.news_box .read_more {
+.vista-pmsite-newsBox .read_more {
 	color: ${accentColor1b};
 	font-size: 20px;
 	line-height: 14px;
@@ -62,29 +61,33 @@
 }
 
 
-
-.promo_box {
+.vista-pmsite-promoBox {
 	width:600px;
 	height:240px;
-	padding:20px 0px;
+	padding:20px 10px;
 	float:left;
 	overflow:hidden;
 }
-.promo_box .infobox_content {
+
+.vista-pmsite-promoBox .infobox_content {
 	width:130px;
 	height:200px;
 	float:left;
 	margin-left:20px;
 }
-.promo_box .infobox_content:first-child {
+
+.vista-pmsite-promoBox .infobox_content:first-child {
 	margin-left:0px;
 }
-.promo_box .picture {
+
+.vista-pmsite-promoBox .picture {
 	width:130px;
 	background:grey;
 }
-.promo_box .read_more {
-	color:${accentColor1b};
+
+.vista-pmsite-promoBox .read_more {
+	color: ${accentColor1b};
 	font-size:16px;
 	padding-left:10px;
 }
+

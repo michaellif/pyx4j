@@ -8,14 +8,22 @@
 </head>
 <body>
 	<wicket:extend>
-		<div class="landing_content">
-			<div class="main">
-				<div class="landing_content_wrap" wicket:id="landing_content" />
-				<div wicket:id="quickSearchCriteriaPanel" />
-				<div class="infobox news_box" wicket:id="newsPanel" />
-				<div class="landing_content_right">
-					<div wicket:id="promoPanel" class="infobox promo_box" />
-					<div wicket:id="testimPanel" class="infobox testim_box" />
+
+		<div class="vista-pmsite-contentWrap">
+			<div class="vista-pmsite-content">
+				<div class="vista-pmsite-banner" wicket:id="landing_content"></div>
+				<div wicket:id="quickSearchCriteriaPanel"></div>
+
+				<div class="vista-pmsite-mainWrap">
+					<div class="vista-pmsite-sidebarWrap">
+						<div class="vista-pmsite-sidebar">
+							<div class="vista-pmsite-newsBox" wicket:id="newsPanel"></div>
+						</div>
+						<div class="vista-pmsite-main">
+							<div class="vista-pmsite-promoBox" wicket:id="promoPanel"></div>
+							<div class="vista-pmsite-testimBox" wicket:id="testimPanel"></div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

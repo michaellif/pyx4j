@@ -51,10 +51,8 @@ public class LandingPage extends BasePage {
 
                 //TODO make image component for landing page banner
                 //https://cwiki.apache.org/WICKET/how-to-load-an-external-image.html
-                response.write("<div style='height: 375px; position: relative; width: 960px;'>");
                 response.write("<img style='position: absolute; bottom:0; left:0' src='resources/templates.TemplateResources/images/template"
                         + getPmsiteStyle() + "/landing.png' alt=''>");
-                response.write("</div>");
             }
         });
 

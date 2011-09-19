@@ -75,6 +75,55 @@ select {
 	color: #333;
 }
 
+.vista-pmsite-contentWrap {
+	background: url("images/template0/content_bg.png") repeat-x scroll 0 0
+		#37393F;
+}
+
+.vista-pmsite-content {
+	margin: 0 auto;
+	position: relative;
+	width: 960px;
+	padding: 0 19px;
+	background: url("images/template0/main_bg.png") no-repeat scroll 50% 0
+		transparent;
+}
+
+.vista-pmsite-mainWrap {
+	width: 960px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+.vista-pmsite-sidebarWrap {
+	float: left;
+	position: relative;
+	width: 100%;
+	right: 680px;
+	background: url("images/template0/bg_sidebar.gif") repeat-x scroll 0 0
+		#34363C;
+}
+
+.vista-pmsite-main {
+	width: 680px;
+	position: relative;
+	float: left;
+	left: 680px;
+}
+
+.vista-pmsite-sidebar {
+	position: relative;
+	float: left;
+	width: 280px;
+	left: 680px;
+}
+
+.vista-pmsite-banner {
+	height: 375px;
+	position: relative;
+	width: 960px;
+}
+
 .header {
 	background: url("images/template0/header_right.jpg") no-repeat scroll
 		100% 0 transparent;
@@ -209,23 +258,6 @@ select {
 	color: #B5E329;
 }
 
-.landing_content {
-	background: url("images/template0/content_bg.png") repeat-x scroll 0 0
-		#37393F;
-}
-
-.landing_content .main {
-	background: url("images/template0/main_bg.png") no-repeat scroll 50% 0
-		transparent;
-	padding: 0 19px;
-}
-
-.landing_content_right {
-	width: 660px;
-	padding: 10px;
-	display: inline-block;
-}
-
 .quickSearchCriteria {
 	display: block;
 	position: absolute;
@@ -343,17 +375,17 @@ select {
 .staticMain .caption2 {
 	background: url("images/template0/subtitle_bg.gif") repeat-x transparent;
 	height: 60px;
-	width:749px;
-	margin:1px 0 0 211px;
+	width: 749px;
+	margin: 1px 0 0 211px;
 }
 
 .staticMain .caption2 h1 {
 	font-size: 16px;
 	font-weight: bold;
-	text-transform:uppercase;
+	text-transform: uppercase;
 	padding: 22px 0 0 24px;
-	color:#222;
-	float:left;
+	color: #222;
+	float: left;
 }
 
 .staticConten {
@@ -411,9 +443,8 @@ select {
 /*
  * Footer
  */
- 
- #footer {
-    position: relative;
+#footer {
+	position: relative;
 }
 
 .footer_wrap {
