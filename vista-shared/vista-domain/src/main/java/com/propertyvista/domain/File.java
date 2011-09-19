@@ -14,6 +14,7 @@
 package com.propertyvista.domain;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
@@ -25,6 +26,9 @@ public interface File extends IEntity {
     IPrimitive<String> accessKey();
 
     IPrimitive<Key> blobKey();
+
+    @MemberColumn(name = "updated_timestamp")
+    IPrimitive<Long> timestamp();
 
     IPrimitive<Integer> cacheVersion();
 

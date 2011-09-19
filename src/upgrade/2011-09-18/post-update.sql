@@ -4,6 +4,8 @@ UPDATE AptUnit SET financial_marketRent = financial_unitRent;
 
 UPDATE Media SET visibility = 'global';
 
+UPDATE Media SET mediaFile_updated_timestamp = 1316459569 WHERE mediaFile_blobKey IS NOT NULL;
+
 UPDATE PropertyPhone SET visibility = 'global';
 
 DELETE FROM FloorplanCounters;

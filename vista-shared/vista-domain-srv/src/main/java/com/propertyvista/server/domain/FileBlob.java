@@ -13,8 +13,11 @@
  */
 package com.propertyvista.server.domain;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -34,5 +37,8 @@ public interface FileBlob extends IEntity {
     IPrimitive<byte[]> content();
 
     IPrimitive<String> contentType();
+
+    @Timestamp(Timestamp.Update.Updated)
+    IPrimitive<Date> updated();
 
 }

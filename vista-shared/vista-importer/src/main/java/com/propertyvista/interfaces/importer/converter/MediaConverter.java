@@ -157,6 +157,7 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
             }
             dbo.file().filename().setValue(file.getName());
             dbo.file().contentMimeType().setValue(MimeMap.getContentType(extension));
+            dbo.file().timestamp().setValue(System.currentTimeMillis());
             byte raw[] = getBinary(file);
             dbo.file().fileSize().setValue(raw.length);
 

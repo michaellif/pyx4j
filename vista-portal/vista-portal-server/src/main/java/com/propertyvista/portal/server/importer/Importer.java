@@ -162,6 +162,7 @@ public class Importer {
             m.visibility().setValue(PublicVisibilityType.global);
             m.type().setValue(Media.Type.file);
             m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentMimeType().getValue()));
+            m.file().timestamp().setValue(System.currentTimeMillis());
 
             ThumbnailService.persist(m.file().blobKey().getValue(), m.file().filename().getValue(), me.getValue(), ImageTarget.Building);
 

@@ -15,6 +15,7 @@ package com.propertyvista.portal.server.portal;
 
 import java.io.IOException;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.SecurityController;
@@ -34,6 +36,7 @@ import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.server.common.blob.BlobService;
+import com.propertyvista.server.common.blob.ETag;
 import com.propertyvista.server.common.blob.ThumbnailService;
 
 /**
@@ -43,6 +46,16 @@ import com.propertyvista.server.common.blob.ThumbnailService;
 public class PublicMediaServlet extends HttpServlet {
 
     private final static Logger log = LoggerFactory.getLogger(PublicMediaServlet.class);
+
+    private int cacheExpiresHours = 24;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        String rate = config.getInitParameter("cacheExpiresHours");
+        if (rate != null) {
+            cacheExpiresHours = Integer.parseInt(rate);
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -72,6 +85,28 @@ public class PublicMediaServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         } else {
+            String token = ETag.getEntityTag(media.file(), thumbnailSize);
+            response.setHeader("Etag", '"' + token + '"');
+
+            if (!media.file().timestamp().isNull()) {
+                long since = request.getDateHeader("If-Modified-Since");
+                if ((since != -1) && (media.file().timestamp().getValue() < since)) {
+                    response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                    return;
+                }
+                response.setDateHeader("Last-Modified", media.file().timestamp().getValue());
+                // HTTP 1.0
+                response.setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
+                // HTTP 1.1
+                response.setHeader("Cache-Control", "public, max-age=" + ((long) Consts.HOURS2SEC * cacheExpiresHours));
+
+            }
+            String previousToken = request.getHeader("If-None-Match");
+            if (previousToken != null && previousToken.equals(token)) {
+                response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                return;
+            }
+
             if (thumbnailSize == null) {
                 if (!media.file().contentMimeType().isNull()) {
                     response.setContentType(media.file().contentMimeType().getValue());

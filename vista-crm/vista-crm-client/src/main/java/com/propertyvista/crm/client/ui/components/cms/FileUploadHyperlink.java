@@ -44,6 +44,7 @@ public class FileUploadHyperlink extends CAbstractHyperlink<File> {
                         getValue().blobKey().setValue(serverUploadResponse.uploadKey);
                         getValue().filename().setValue(serverUploadResponse.fileName);
                         getValue().fileSize().setValue(serverUploadResponse.fileSize);
+                        getValue().timestamp().setValue(serverUploadResponse.timestamp);
                         getValue().contentMimeType().setValue(serverUploadResponse.fileContentType);
                         setNativeValue(getValue());
                     }
