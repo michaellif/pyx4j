@@ -17,9 +17,11 @@ import java.util.List;
 
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.Response;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebComponent;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.resources.StyleSheetReference;
 import org.apache.wicket.resource.TextTemplateResourceReference;
@@ -43,6 +45,9 @@ public class StaticPage extends BasePage {
         super(parameters);
         setVersioned(false);
 
+        WebMarkupContainer mainPanel = new WebMarkupContainer("mainPanel");
+        add(mainPanel);
+
         String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
         add(new StyleSheetReference("static_css", new TextTemplateResourceReference(TemplateResources.class, "static" + getPmsiteStyle() + ".css", "text/css",
                 new StylesheetTemplateModel(baseColor))));
@@ -51,11 +56,17 @@ public class StaticPage extends BasePage {
 
         final PMSiteContentManager contentManager = ((PMSiteSession) getSession()).getContentManager();
 
-        add(new SecondaryNavigationPanel("secondaryNavig", this));
+        SecondaryNavigationPanel secondaryNavigationPanel = new SecondaryNavigationPanel("secondaryNavig", this);
 
-        add(new Label("caption", PMSiteContentManager.getCaption(descriptor, contentManager.getLocale())));
+        add(secondaryNavigationPanel);
 
-        add(new WebComponent("content") {
+        if (secondaryNavigationPanel.getViewSize() == 0) {
+            mainPanel.add(new SimpleAttributeModifier("style", "width:100%"));
+        }
+
+        mainPanel.add(new Label("caption", PMSiteContentManager.getCaption(descriptor, contentManager.getLocale())));
+
+        mainPanel.add(new WebComponent("content") {
 
             private static final long serialVersionUID = 1L;
 

@@ -33,6 +33,8 @@ public class SecondaryNavigationPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
+    private final ListView<NavigationItem> listView;
+
     public SecondaryNavigationPanel(String id, StaticPage page) {
         super(id);
 
@@ -45,7 +47,7 @@ public class SecondaryNavigationPanel extends Panel {
 
         List<NavigationItem> items = ((PMSiteSession) getSession()).getNavigItems(descriptor);
 
-        ListView<NavigationItem> listView = new ListView<NavigationItem>("secondaryNavigItem", items) {
+        listView = new ListView<NavigationItem>("secondaryNavigItem", items) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -74,10 +76,14 @@ public class SecondaryNavigationPanel extends Panel {
 
             }
         };
-        if (listView.getViewSize() == 0) {
+        if (getViewSize() == 0) {
             setVisible(false);
         } else {
             add(listView);
         }
+    }
+
+    public int getViewSize() {
+        return listView.getViewSize();
     }
 }
