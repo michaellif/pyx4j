@@ -65,5 +65,6 @@ public class TenantRetriever {
         }
 
         tenant = Persistence.service().retrieve(Tenant.class, tenantInLease.tenant().getPrimaryKey());
+        Persistence.service().retrieve(tenant.emergencyContacts());
     }
 }
