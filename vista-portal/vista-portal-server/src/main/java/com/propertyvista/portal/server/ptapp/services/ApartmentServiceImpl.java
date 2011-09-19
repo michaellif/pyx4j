@@ -34,6 +34,7 @@ import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ServiceConcession;
 import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
@@ -68,18 +69,17 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         // fill DTO:
         ApartmentInfoDTO unitInfo = EntityFactory.create(ApartmentInfoDTO.class);
-        unitInfo.name().setValue(lease.unit().floorplan().name().getValue());
-        unitInfo.beds().setValue(lease.unit().floorplan().bedrooms().getStringView());
+        unitInfo.name().setValue(lease.unit().floorplan().marketingName().getValue());
+        unitInfo.bedrooms().setValue(lease.unit().floorplan().bedrooms().getStringView());
         if (lease.unit().floorplan().dens().getValue() > 0) {
-            unitInfo.beds().setValue(unitInfo.beds().getValue() + " + " + lease.unit().floorplan().dens().getStringView() + " den(s)");
+            unitInfo.bedrooms().setValue(unitInfo.bedrooms().getValue() + " + " + lease.unit().floorplan().dens().getStringView() + " den(s)");
         }
-        unitInfo.baths().setValue(lease.unit().floorplan().bathrooms().getStringView());
+        unitInfo.bathrooms().setValue(lease.unit().floorplan().bathrooms().getStringView());
         if (lease.unit().floorplan().halfBath().getValue() > 0) {
-            unitInfo.baths().setValue(unitInfo.baths().getValue() + " + " + lease.unit().floorplan().halfBath().getStringView() + " half bath(s)");
+            unitInfo.bathrooms().setValue(unitInfo.bathrooms().getValue() + " + " + lease.unit().floorplan().halfBath().getStringView() + " separate WC(s)");
         }
 
-        unitInfo.number().setValue(lease.unit().info().number().getValue());
-        unitInfo.area().setValue(lease.unit().info().area().getStringView() + " " + lease.unit().info().areaUnits().getStringView());
+        unitInfo.suiteNumber().setValue(lease.unit().info().number().getValue());
 
         // serviceCatalog processing:
         fillServiceItems(unitInfo, lease.unit().belongsTo(), lease);
@@ -120,8 +120,12 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     private void fillServiceItems(ApartmentInfoDTO entity, Building building, Lease lease) {
 
+        entity.includedUtilities().clear();
+        entity.excludedUtilities().clear();
+
         entity.agreedAddOns().clear();
         entity.availableAddOns().clear();
+
         entity.concessions().clear();
 
         for (ChargeItem utility : lease.serviceAgreement().featureItems()) {
@@ -133,6 +137,18 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
 
         syncBuildingServiceCatalog(lease.unit().belongsTo());
+
+        entity.includedUtilities().addAll(building.serviceCatalog().includedUtilities());
+
+        // calulate excluded utilities:
+        EntityQueryCriteria<ServiceItemType> serviceItemCriteria = EntityQueryCriteria.create(ServiceItemType.class);
+        serviceItemCriteria.add(PropertyCriterion.eq(serviceItemCriteria.proto().featureType(), Feature.Type.utility));
+        for (ServiceItemType item : Persistence.service().query(serviceItemCriteria)) {
+            if (!entity.includedUtilities().contains(item)) {
+                entity.excludedUtilities().add(item);
+            }
+        }
+
         for (Service service : building.serviceCatalog().services()) {
             if (service.type().equals(lease.type())) {
                 for (ServiceFeature feature : service.features()) {

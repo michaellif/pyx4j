@@ -53,15 +53,11 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
 
             EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
             amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), in));
-            for (BuildingAmenity item : Persistence.service().query(amenitysCriteria)) {
-                dto.amenities().add(item);
-            }
+            dto.amenities().addAll(Persistence.service().query(amenitysCriteria));
 
             EntityQueryCriteria<ServiceItemType> serviceItemCriteria = EntityQueryCriteria.create(ServiceItemType.class);
             serviceItemCriteria.add(PropertyCriterion.eq(serviceItemCriteria.proto().featureType(), Feature.Type.utility));
-            for (ServiceItemType item : Persistence.service().query(serviceItemCriteria)) {
-                dto.availableUtilities().add(item);
-            }
+            dto.availableUtilities().addAll(Persistence.service().query(serviceItemCriteria));
 
             // Geotagging:
             dto.geoLocation().set(EntityFactory.create(GeoLocation.class));

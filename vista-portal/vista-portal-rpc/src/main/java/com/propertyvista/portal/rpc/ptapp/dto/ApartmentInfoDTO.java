@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 /**
  * For primary - Unit for lease info + price + term
@@ -34,16 +35,18 @@ public interface ApartmentInfoDTO extends IEntity {
     // Floorplan data:
     IPrimitive<String> name();
 
-    IPrimitive<String> beds();
+    IPrimitive<String> bedrooms();
 
-    IPrimitive<String> baths();
+    IPrimitive<String> bathrooms();
 
     // Unit data:
-    IPrimitive<String> number();
-
-    IPrimitive<String> area();
+    IPrimitive<String> suiteNumber();
 
     // ServiceCatalog stuff:
+    IList<ServiceItemType> includedUtilities();
+
+    IList<ServiceItemType> excludedUtilities();
+
     IList<ServiceItem> agreedAddOns();
 
     IList<ServiceItem> availableAddOns();

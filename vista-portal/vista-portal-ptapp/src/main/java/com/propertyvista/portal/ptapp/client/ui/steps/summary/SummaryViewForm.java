@@ -222,11 +222,10 @@ public class SummaryViewForm extends CEntityForm<SummaryDTO> {
             setCellWidth(main, "100%");
 
             Map<String, String> tableLayout = new LinkedHashMap<String, String>();
-            tableLayout.put("Type", "25%");
+            tableLayout.put("Type", "30%");
             tableLayout.put("Unit", "20%");
-            tableLayout.put("Beds", "10%");
-            tableLayout.put("Baths", "10%");
-            tableLayout.put("Area", "10%");
+            tableLayout.put("Bedrooms", "10%");
+            tableLayout.put("Bathrooms", "10%");
             tableLayout.put("Available", "15%");
 
             // fill header:
@@ -250,10 +249,9 @@ public class SummaryViewForm extends CEntityForm<SummaryDTO> {
             main.add(content = new FlowPanel());
 
             addCell(tableLayout, content, "Type", inject(proto().selectedUnit().name()).asWidget());
-            addCell(tableLayout, content, "Unit", inject(proto().selectedUnit().number()).asWidget());
-            addCell(tableLayout, content, "Beds", inject(proto().selectedUnit().beds()).asWidget());
-            addCell(tableLayout, content, "Baths", inject(proto().selectedUnit().baths()).asWidget());
-            addCell(tableLayout, content, "Area", inject(proto().selectedUnit().area()).asWidget());
+            addCell(tableLayout, content, "Unit", inject(proto().selectedUnit().suiteNumber()).asWidget());
+            addCell(tableLayout, content, "Bedrooms", inject(proto().selectedUnit().bedrooms()).asWidget());
+            addCell(tableLayout, content, "Bathrooms", inject(proto().selectedUnit().bathrooms()).asWidget());
             addCell(tableLayout, content, "Available", inject(proto().selectedUnit().leaseFrom()).asWidget());
         }
 
