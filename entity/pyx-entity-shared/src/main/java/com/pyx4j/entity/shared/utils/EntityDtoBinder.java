@@ -135,6 +135,7 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
 
             if (b.binder == null) {
                 if (dboM instanceof ICollection) {
+                    ((ICollection<IEntity, ?>) dtoM).clear();
                     for (IEntity dboMi : (ICollection<IEntity, ?>) dboM) {
                         if (dboMi.isValuesDetached() && !dtoM.getMeta().isDetached()) {
                             throw new Error("Copying detached entity " + dboMi.getDebugExceptionInfoString());
@@ -147,6 +148,7 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
             } else if (dtoM instanceof IEntity) {
                 b.binder.copyDBOtoDTO((IEntity) dboM, (IEntity) dtoM);
             } else if (dboM instanceof ICollection) {
+                ((ICollection<IEntity, ?>) dtoM).clear();
                 for (IEntity dboMi : (ICollection<IEntity, ?>) dboM) {
                     ((ICollection<IEntity, ?>) dtoM).add(b.binder.createDTO(dboMi));
                 }
@@ -171,6 +173,7 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
             IObject dboM = dbo.getMember(b.dboMemberPath);
             if (b.binder == null) {
                 if (dtoM instanceof ICollection) {
+                    ((ICollection<IEntity, ?>) dboM).clear();
                     for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
                         ((ICollection<IEntity, ?>) dboM).add(dtoMi);
                     }
@@ -180,6 +183,7 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
             } else if (dtoM instanceof IEntity) {
                 b.binder.copyDTOtoDBO((IEntity) dtoM, (IEntity) dboM);
             } else if (dtoM instanceof ICollection) {
+                ((ICollection<IEntity, ?>) dboM).clear();
                 for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
                     ((ICollection<IEntity, ?>) dboM).add(b.binder.createDBO(dtoMi));
                 }
