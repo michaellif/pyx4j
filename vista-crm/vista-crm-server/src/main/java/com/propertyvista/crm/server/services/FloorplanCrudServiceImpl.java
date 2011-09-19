@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services;
 
 import java.util.List;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -54,31 +55,18 @@ public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorpla
         }
         boolean isCreate = dbo.id().isNull();
 
-        boolean counterModified = false;
-        {
-            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), dbo));
-            Integer orig = dbo.counters()._unitCount().getValue();
-            dbo.counters()._unitCount().setValue(Persistence.service().count(criteria));
-            if (!dbo.counters()._unitCount().getValue().equals(orig)) {
-                counterModified = true;
-            }
+        if (dbo.counters().id().isNull()) {
+            Persistence.service().persist(dbo.counters());
         }
-        {
-            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().floorplan().marketingName(), dbo.marketingName().getValue()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), dbo.building()));
-            Integer orig = dbo.counters()._marketingUnitCount().getValue();
-            dbo.counters()._marketingUnitCount().setValue(Persistence.service().count(criteria));
-            if (!dbo.counters()._marketingUnitCount().getValue().equals(orig)) {
-                counterModified = true;
-            }
-        }
-        if (counterModified) {
-            Persistence.service().merge(dbo.counters());
+
+        String origMarketingName = null;
+        if (!isCreate) {
+            Floorplan origFloorplan = Persistence.service().retrieve(Floorplan.class, dbo.id().getValue());
+            origMarketingName = origFloorplan.marketingName().getValue();
         }
 
         Persistence.service().merge(dbo);
+        updateCounters(dbo, origMarketingName);
 
         if (!isCreate) {
             EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
@@ -105,6 +93,52 @@ public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorpla
                 u.info()._bedrooms().set(dbo.bedrooms());
             }
             Persistence.service().persist(units);
+        }
+    }
+
+    private void updateCounters(Floorplan dbo, String origMarketingName) {
+        boolean counterModified = false;
+        {
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), dbo));
+            Integer orig = dbo.counters()._unitCount().getValue();
+            dbo.counters()._unitCount().setValue(Persistence.service().count(criteria));
+            if (!dbo.counters()._unitCount().getValue().equals(orig)) {
+                counterModified = true;
+            }
+        }
+        {
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().floorplan().marketingName(), dbo.marketingName().getValue()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), dbo.building()));
+            Integer orig = dbo.counters()._marketingUnitCount().getValue();
+            dbo.counters()._marketingUnitCount().setValue(Persistence.service().count(criteria));
+            if (!dbo.counters()._marketingUnitCount().getValue().equals(orig)) {
+                counterModified = true;
+            }
+        }
+        if (counterModified) {
+            Persistence.service().persist(dbo.counters());
+        }
+
+        //Update other Floorplans with the same marketingName
+        {
+            EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().marketingName(), dbo.marketingName().getValue()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), dbo.building()));
+            for (Floorplan othrPlan : Persistence.service().query(criteria)) {
+                othrPlan.counters()._marketingUnitCount().set(dbo.counters()._marketingUnitCount());
+                Persistence.service().persist(othrPlan.counters());
+            }
+        }
+        if (!EqualsHelper.equals(origMarketingName, dbo.marketingName().getValue())) {
+            EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().marketingName(), origMarketingName));
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), dbo.building()));
+            for (Floorplan othrPlan : Persistence.service().query(criteria)) {
+                othrPlan.counters()._marketingUnitCount().set(dbo.counters()._marketingUnitCount());
+                Persistence.service().persist(othrPlan.counters());
+            }
         }
     }
 }
