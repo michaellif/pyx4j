@@ -56,9 +56,6 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     public ApartmentInfoDTO retrieveData() {
         Lease lease = PtAppContext.getCurrentUserLease();
-        if (!Persistence.service().retrieve(lease)) {
-            throw new Error("There is no current Lease set!");
-        }
         if (!Persistence.service().retrieve(lease.unit())) {
             throw new Error("There is no Unit selected!?.");
         }
