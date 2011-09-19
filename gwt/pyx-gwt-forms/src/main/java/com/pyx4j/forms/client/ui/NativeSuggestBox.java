@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -112,7 +114,7 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
     }
 
     @Override
-    public E getNativeValue() {
+    public E getNativeValue() throws ParseException {
         return delegate.getNativeValue();
     }
 

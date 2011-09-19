@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -61,7 +62,7 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
     }
 
     @Override
-    public Date getNativeValue() {
+    public Date getNativeValue() throws ParseException {
         return textBox.getNativeValue();
     }
 

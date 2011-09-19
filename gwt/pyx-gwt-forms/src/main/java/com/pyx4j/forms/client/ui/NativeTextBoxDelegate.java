@@ -63,13 +63,13 @@ public class NativeTextBoxDelegate<E> {
         }
     }
 
-    public E getNativeValue() {
+    public E getNativeValue() throws ParseException {
         try {
             parseFailed = false;
             return cTextBox.getFormat().parse(nativeTextBox.getNativeText());
         } catch (ParseException e) {
             parseFailed = true;
-            return null;
+            throw e;
         }
     }
 

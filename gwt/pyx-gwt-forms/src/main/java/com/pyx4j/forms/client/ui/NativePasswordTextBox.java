@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
 import com.pyx4j.forms.client.ui.NativeTextBox.StyleDependent;
 import com.pyx4j.widgets.client.PasswordTextBox;
 import com.pyx4j.widgets.client.style.Selector;
@@ -49,7 +51,7 @@ public class NativePasswordTextBox extends PasswordTextBox implements INativeTex
     }
 
     @Override
-    public String getNativeValue() {
+    public String getNativeValue() throws ParseException {
         return delegate.getNativeValue();
     }
 

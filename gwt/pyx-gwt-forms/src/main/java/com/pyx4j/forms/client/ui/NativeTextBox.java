@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
 import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.Selector;
@@ -53,7 +55,7 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
     }
 
     @Override
-    public E getNativeValue() {
+    public E getNativeValue() throws ParseException {
         return delegate.getNativeValue();
     }
 
