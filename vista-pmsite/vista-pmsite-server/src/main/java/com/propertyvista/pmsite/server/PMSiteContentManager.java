@@ -284,6 +284,36 @@ public class PMSiteContentManager implements Serializable {
         return ret;
     }
 
+    public static PropertyDTO getPropertyDetails(long propId) {
+        EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
+        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().id(), propId));
+        List<Building> buildings = Persistence.service().query(dbCriteria);
+        if (buildings.size() != 1) {
+            return null;
+        }
+        Building building = buildings.get(0);
+        PropertyDTO propertyDTO = new BuildingPropertyDTOConverter().createDTO(building);
+        {
+            EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
+            for (Floorplan floorplan : Persistence.service().query(criteria)) {
+                propertyDTO.floorplansProperty().add(new FloorplanFloorplanPropertyDTOConverter().createDTO(floorplan));
+            }
+        }
+        {
+            EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            for (BuildingAmenity amenity : Persistence.service().query(criteria)) {
+                propertyDTO.amenities().add(new BuildingAmenityAmenityDTOConverter().createDTO(amenity));
+            }
+        }
+        if (!building.media().isEmpty()) {
+            propertyDTO.mainMedia().setValue(building.media().get(0).getPrimaryKey());
+        }
+
+        return propertyDTO;
+    }
+
     public static ApartmentModel getPropertyModel(PropertySearchCriteria searchCriteria) {
         ApartmentModel model = new ApartmentModel();
 
