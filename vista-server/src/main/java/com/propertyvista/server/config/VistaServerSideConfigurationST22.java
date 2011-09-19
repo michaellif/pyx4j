@@ -57,23 +57,44 @@ public class VistaServerSideConfigurationST22 extends VistaServerSideConfigurati
 
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
-        return new VistaConfigurationMySQL() {
+        boolean useStarClone = true;
+        if (!useStarClone) {
+            return new VistaConfigurationMySQL() {
 
-            @Override
-            public String dbName() {
-                return "vista_st22";
-            }
+                @Override
+                public String dbName() {
+                    return "vista_st22";
+                }
 
-            @Override
-            public String userName() {
-                return "vista-st22";
-            }
+                @Override
+                public String userName() {
+                    return "vista-st22";
+                }
 
-            @Override
-            public String password() {
-                return "vista-st22";
-            }
-        };
+                @Override
+                public String password() {
+                    return "vista-st22";
+                }
+            };
+        } else {
+            return new VistaConfigurationMySQL() {
+
+                @Override
+                public String dbName() {
+                    return "vista_star";
+                }
+
+                @Override
+                public String userName() {
+                    return "vista_star";
+                }
+
+                @Override
+                public String password() {
+                    return "vista_star";
+                }
+            };
+        }
     }
 
 }
