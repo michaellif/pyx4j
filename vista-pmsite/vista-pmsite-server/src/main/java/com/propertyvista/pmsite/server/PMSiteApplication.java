@@ -22,6 +22,7 @@ import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.target.coding.MixedParamUrlCodingStrategy;
 import org.apache.wicket.request.target.coding.QueryStringUrlCodingStrategy;
+import org.apache.wicket.util.time.Duration;
 
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
@@ -39,6 +40,9 @@ public class PMSiteApplication extends WebApplication {
 
     @Override
     protected void init() {
+        //TODO For Development
+        getResourceSettings().setResourcePollFrequency(Duration.ONE_SECOND);
+
         mountBookmarkablePage("findapt", FindAptPage.class);
         mount(new QueryStringUrlCodingStrategy("aptlist", AptListPage.class));
         mount(new QueryStringUrlCodingStrategy("aptinfo", AptDetailsPage.class));
