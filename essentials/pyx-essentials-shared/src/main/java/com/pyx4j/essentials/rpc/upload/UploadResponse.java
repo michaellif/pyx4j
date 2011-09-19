@@ -35,6 +35,11 @@ public class UploadResponse implements Serializable {
     public int fileSize;
 
     /**
+     * Server side time when we got the file
+     */
+    public long timestamp;
+
+    /**
      * Optional, If new process is started to handle the data received
      */
     public String processingDeferredCorrelationId;
