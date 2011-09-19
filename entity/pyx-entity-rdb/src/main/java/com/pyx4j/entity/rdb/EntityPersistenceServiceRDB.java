@@ -489,6 +489,57 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         return applyModifications(connection, tm, baseEntity, entity);
     }
 
+    @SuppressWarnings("unchecked")
+    private void fireModificationAdapters(Connection connection, TableModel tm, IEntity entity) {
+        Class<? extends MemberModificationAdapter<?>>[] entityMembersModificationAdapters = null;
+        Adapters adapters = entity.getEntityMeta().getAnnotation(Adapters.class);
+        if (adapters != null) {
+            entityMembersModificationAdapters = adapters.modificationAdapters();
+        }
+        for (MemberOperationsMeta member : tm.operationsMeta().getAllMembers()) {
+            MemberMeta memberMeta = member.getMemberMeta();
+            Object value;
+            if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                value = ((IEntity) member.getMember(entity)).getPrimaryKey();
+            } else {
+                value = member.getMemberValue(entity);
+            }
+            MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
+            if (memberColumn != null && memberColumn.modificationAdapters() != null) {
+                for (Class<? extends MemberModificationAdapter<?>> adapterClass : memberColumn.modificationAdapters()) {
+                    @SuppressWarnings("rawtypes")
+                    MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
+                    if (!adapter.allowModifications(entity, memberMeta, null, value)) {
+                        log.error("Forbiden change -> [{}]", value);
+                        throw new Error("Forbiden change " + memberMeta.getCaption() + " of " + entity.getEntityMeta().getCaption());
+                    }
+                }
+            }
+            if (entityMembersModificationAdapters != null) {
+                for (Class<? extends MemberModificationAdapter<?>> adapterClass : entityMembersModificationAdapters) {
+                    @SuppressWarnings("rawtypes")
+                    MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
+                    if (!adapter.allowModifications(entity, memberMeta, null, value)) {
+                        log.error("Forbiden change -> [{}]", value);
+                        throw new Error("Forbiden change " + memberMeta.getCaption() + " of " + entity.getEntityMeta().getCaption());
+                    }
+                }
+            }
+            if (memberMeta.isOwnedRelationships() && ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                // Special case for child collections update. Collection itself is the same and in the same order.
+                ICollection<IEntity, ?> collectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
+                Iterator<IEntity> iterator = collectionMember.iterator();
+                TableModel childTM = tableModel(connection, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getValueClass()));
+                for (; iterator.hasNext();) {
+                    IEntity childEntity = iterator.next();
+                    if (!childEntity.isValuesDetached()) {
+                        fireModificationAdapters(connection, childTM, childEntity);
+                    }
+                }
+            }
+        }
+    }
+
     private void merge(Connection connection, TableModel tm, IEntity entity, Date now) {
         if (entity.isValuesDetached()) {
             throw new RuntimeException("Saving detached entity " + entity.getDebugExceptionInfoString());
@@ -499,6 +550,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (entity.getPrimaryKey() != null) {
             updated = retrieveAndApplyModifications(connection, tm, baseEntity, entity);
         } else {
+            fireModificationAdapters(connection, tm, entity);
             updated = true;
         }
         for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) {
