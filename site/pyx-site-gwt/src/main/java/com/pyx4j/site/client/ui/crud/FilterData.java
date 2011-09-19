@@ -81,6 +81,7 @@ public class FilterData {
     }
 
     public boolean isFilterOK() {
-        return (getMemberPath() != null && getOperand() != null && getValue() != null);
+        return (getMemberPath() != null && getOperand() != null && (getValue() != null || (getOperand().equals(Operands.is) || getOperand().equals(
+                Operands.isNot))));
     }
 }
