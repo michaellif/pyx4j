@@ -10,5 +10,7 @@ DELETE FROM FloorplanCounters;
 
 INSERT INTO FloorplanCounters (ns, id, _unitCount) SELECT ns, floorplan, COUNT(*) FROM AptUnit WHERE floorplan IS NOT NULL GROUP BY ns, floorplan;
 
+UPDATE FloorplanCounters SET _marketingUnitCount = (SELECT COUNT(*) FROM AptUnit, floorplan WHERE AptUnit.floorplan = floorplan.id AND FloorplanCounters.id = floorplan.id  GROUP BY floorplan.ns, floorplan.marketingName, floorplan.building);
+
 COMMIT;
 
