@@ -78,7 +78,8 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
     @SuppressWarnings("unchecked")
     public SummaryDTO createSummaryDTO(Summary dbo) {
 
-        SummaryDTO summary = dbo.clone(SummaryDTO.class);
+        SummaryDTO summary = EntityFactory.create(SummaryDTO.class);
+        summary.set(dbo.cast());
 
         summary.selectedUnit().set(new ApartmentServiceImpl().retrieveData());
 
