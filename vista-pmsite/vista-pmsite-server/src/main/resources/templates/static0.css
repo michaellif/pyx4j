@@ -1,0 +1,130 @@
+.vista-pmsite-staticPage {
+	background: url("images/template0/inner_content_bg.png") repeat-x scroll
+		0 0 #37393F;
+}
+
+.vista-pmsite-staticPage .vista-pmsite-content {
+	background: url("images/template0/inner_bg.png") no-repeat scroll 50% 0
+		transparent;
+}
+
+.vista-pmsite-staticPage .vista-pmsite-contentWrap {
+	background: url("images/template0/inner_content_bg.png") repeat-x scroll
+		0 0 #37393F;
+}
+
+.vista-pmsite-staticPage .vista-pmsite-main .caption {
+	background: url("images/template0/title_bg.gif") repeat-y scroll 0 -40px
+		transparent;
+	background-size: 100% 100%;
+	height: 80px;
+	overflow: hidden;
+	padding: 40px 0 0 30px;
+}
+
+.vista-pmsite-staticPage .vista-pmsite-main .caption h1 {
+	font-size: 36px;
+	font-weight: normal;
+	line-height: 38px;
+	padding: 0 0 20px;
+}
+
+.vista-pmsite-staticPage .vista-pmsite-main .caption2 {
+	background: url("images/template0/subtitle_bg.gif") repeat-x transparent;
+	height: 60px;
+	width: 749px;
+	margin: 1px 0 0 211px;
+}
+
+.vista-pmsite-staticPage .vista-pmsite-main .caption2 h1 {
+	font-size: 16px;
+	font-weight: bold;
+	text-transform: uppercase;
+	padding: 22px 0 0 24px;
+	color: #222;
+	float: left;
+}
+
+.vista-pmsite-staticPage .secondaryNavig {
+	padding: 35px 0;
+	width: 211px;
+	float: left;
+	min-height: 400px;
+}
+
+.vista-pmsite-staticPage .secondaryNavig ul {
+	list-style: none outside none;
+	margin: 0;
+	padding: 0;
+}
+
+.vista-pmsite-staticPage .secondaryNavig ul li {
+	color: #CCCCCC;
+	font-size: 17px;
+	height: 38px;
+	line-height: 38px;
+	overflow: hidden;
+	padding: 0 10px 0 35px;
+}
+
+.vista-pmsite-staticPage .secondaryNavig ul li.active {
+	background: url("images/template0/menu_active.png") no-repeat scroll 0
+		50% transparent;
+}
+
+.vista-pmsite-staticPage .secondaryNavig ul li a {
+	color: #CCCCCC;
+}
+
+.vista-pmsite-staticPage .secondaryNavig ul li a:hover {
+	color: #B5E329;
+	text-decoration: none;
+}
+
+.vista-pmsite-staticPage .content {
+	min-height: 396px;
+	color: #333333;
+	background-color: white;
+	line-height: 20px;
+	overflow: hidden;
+	padding: 30px 30px 0;
+}
+
+.vista-pmsite-staticPagen .content  a {
+	color: #339900;
+}
+
+.vista-pmsite-staticPage .content  p {
+	padding: 0 0 25px;
+}
+
+.vista-pmsite-staticPage .content h1 {
+	
+}
+
+.vista-pmsite-staticPage .content  h2 {
+	font-size: 18px;
+	line-height: 20px;
+	padding: 0 0 25px;
+}
+
+.vista-pmsite-staticPage .content  h3 {
+	font-size: 16px;
+	line-height: 20px;
+	padding: 0 0 25px;
+}
+
+.vista-pmsite-staticPage .content  h4 {
+	font-size: 14px;
+	line-height: 20px;
+	padding: 0 0 25px;
+}
+
+.vista-pmsite-staticPage .content  address {
+	padding: 0 0 25px;
+}
+
+.vista-pmsite-staticPage .content ul,.staticMain .content ol {
+	margin: 0;
+	padding: 0 0 25px 25px;
+}

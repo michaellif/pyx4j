@@ -85,8 +85,6 @@ select {
 	position: relative;
 	width: 960px;
 	padding: 0 19px;
-	background: url("images/template0/main_bg.png") no-repeat scroll 50% 0
-		transparent;
 }
 
 .vista-pmsite-mainWrap {
@@ -99,29 +97,21 @@ select {
 	float: left;
 	position: relative;
 	width: 100%;
-	right: 680px;
-	background: url("images/template0/bg_sidebar.gif") repeat-x scroll 0 0
-		#34363C;
+	right: 750px;
 }
 
 .vista-pmsite-main {
-	width: 680px;
+	width: 750px;
 	position: relative;
 	float: left;
-	left: 680px;
+	left: 750px;
 }
 
 .vista-pmsite-sidebar {
 	position: relative;
 	float: left;
-	width: 280px;
-	left: 680px;
-}
-
-.vista-pmsite-banner {
-	height: 375px;
-	position: relative;
-	width: 960px;
+	width: 210px;
+	left: 750px;
 }
 
 .header {
@@ -308,137 +298,8 @@ select {
 	width: 128px;
 }
 
-.staticMain {
-	background: url("images/template0/inner_content_bg.png") repeat-x scroll
-		0 0 #37393F;
-}
 
-.staticMain .main {
-	min-height: 546px;
-	padding: 0 19px;
-	background: url("images/template0/inner_bg.png") no-repeat scroll 0 0
-		transparent;
-}
 
-.secondaryNavig {
-	padding: 35px 0;
-	width: 211px;
-	float: left;
-	min-height: 400px;
-}
-
-.secondaryNavig ul {
-	list-style: none outside none;
-	margin: 0;
-	padding: 0;
-}
-
-.secondaryNavig ul li {
-	color: #CCCCCC;
-	font-size: 17px;
-	height: 38px;
-	line-height: 38px;
-	overflow: hidden;
-	padding: 0 10px 0 35px;
-}
-
-.secondaryNavig ul li.active {
-	background: url("images/template0/menu_active.png") no-repeat scroll 0
-		50% transparent;
-}
-
-.secondaryNavig ul li a {
-	color: #CCCCCC;
-}
-
-.secondaryNavig ul li a:hover {
-	color: #B5E329;
-	text-decoration: none;
-}
-
-.staticMain .caption {
-	background: url("images/template0/title_bg.gif") repeat-y scroll 0 -40px
-		transparent;
-	background-size: 100% 100%;
-	height: 80px;
-	overflow: hidden;
-	padding: 40px 0 0 30px;
-}
-
-.staticMain .caption h1 {
-	font-size: 36px;
-	font-weight: normal;
-	line-height: 38px;
-	padding: 0 0 20px;
-}
-
-.staticMain .caption2 {
-	background: url("images/template0/subtitle_bg.gif") repeat-x transparent;
-	height: 60px;
-	width: 749px;
-	margin: 1px 0 0 211px;
-}
-
-.staticMain .caption2 h1 {
-	font-size: 16px;
-	font-weight: bold;
-	text-transform: uppercase;
-	padding: 22px 0 0 24px;
-	color: #222;
-	float: left;
-}
-
-.staticConten {
-	
-}
-
-.staticMain .content {
-	min-height: 396px;
-	color: #333333;
-	background-color: white;
-	line-height: 20px;
-	overflow: hidden;
-	padding: 30px 30px 0;
-}
-
-.staticMain .content  a {
-	color: #339900;
-}
-
-.staticMain .content  p {
-	padding: 0 0 25px;
-}
-
-.staticMain .content h1 {
-	
-}
-
-.staticMain .content  h2 {
-	font-size: 18px;
-	line-height: 20px;
-	padding: 0 0 25px;
-}
-
-.staticMain .content  h3 {
-	font-size: 16px;
-	line-height: 20px;
-	padding: 0 0 25px;
-}
-
-.staticMain .content  h4 {
-	font-size: 14px;
-	line-height: 20px;
-	padding: 0 0 25px;
-}
-
-.staticMain .content  address {
-	padding: 0 0 25px;
-}
-
-.staticMain .content ul,.staticMain .content ol {
-	margin: 0;
-	padding: 0 0 25px 25px;
-}
 
 /*
  * Footer

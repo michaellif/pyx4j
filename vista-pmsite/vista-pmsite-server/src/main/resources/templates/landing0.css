@@ -1,9 +1,37 @@
-.vista-pmsite-testimBox {
+.vista-pmsite-landingPage .vista-pmsite-sidebarWrap {
+	right: 680px;
+		background: url("images/template0/bg_sidebar.gif") repeat-x scroll 0 0
+		#34363C;
+	
+}
+
+.vista-pmsite-landingPage .vista-pmsite-content {
+	background: url("images/template0/main_bg.png") no-repeat scroll 50% 0
+		transparent;
+}
+
+.vista-pmsite-landingPage .vista-pmsite-main {
+	width: 680px;
+	left: 680px;
+}
+
+.vista-pmsite-landingPage .vista-pmsite-sidebar {
+	width: 280px;
+	left: 680px;
+}
+
+.vista-pmsite-landingPage .banner {
+	height: 375px;
+	position: relative;
+	width: 960px;
+}
+
+.vista-pmsite-landingPage .testimBox {
 	padding: 20px 10px;
 	float: left;
 }
 
-.vista-pmsite-testimBox .infobox_content {
+.vista-pmsite-landingPage .testimBox .infobox_content {
 	width: 250px;
 	height: 80px;
 	overflow: hidden;
@@ -15,19 +43,19 @@
 	background: url("images/template0/cite.png") no-repeat;
 }
 
-.vista-pmsite-testimBox .name {
+.vista-pmsite-landingPage .testimBox .name {
 	color: #B5E329;
 	text-align: right;
 	padding: 10px 0 0 0;
 }
 
-.vista-pmsite-testimBox .read_more {
+.vista-pmsite-landingPage .testimBox .read_more {
 	color: #B5E329;
 	font-size: 16px;
 	padding-left: 10px;
 }
 
-.vista-pmsite-newsBox {
+.vista-pmsite-landingPage .newsBox {
 	width: 220px;
 	padding: 20px 30px;
 	display: inline-block;
@@ -36,54 +64,58 @@
 	float: left;
 }
 
-.vista-pmsite-newsBox .date {
+.vista-pmsite-landingPage .newsBox .date {
 	color: #777;
 	padding-top: 10px;
 }
 
-.vista-pmsite-newsBox .headline {
+.vista-pmsite-landingPage .newsBox .headline {
 	padding-top: 10px;
 	color: #B5E329;
 }
 
-.vista-pmsite-newsBox .text {
+.vista-pmsite-landingPage .newsBox .text {
 	padding-top: 10px;
 }
 
-.vista-pmsite-newsBox .read_more {
+.vista-pmsite-landingPage .newsBox .read_more {
 	color: #B5E329;
 	font-size: 20px;
 	line-height: 14px;
 	vertical-align: text-top;
 }
 
-.infobox_heading {
+.vista-pmsite-landingPage .infobox_heading {
 	font-size: 22px;
 	line-height: 40px;
 }
 
 
-.vista-pmsite-promoBox {
+.vista-pmsite-landingPage .promoBox {
 	width:600px;
 	height:240px;
 	padding:20px 10px;
 	float:left;
 	overflow:hidden;
 }
-.vista-pmsite-promoBox .infobox_content {
+
+.vista-pmsite-landingPage .promoBox .infobox_content {
 	width:130px;
 	height:200px;
 	float:left;
 	margin-left:20px;
 }
-.vista-pmsite-promoBox .infobox_content:first-child {
+
+.vista-pmsite-landingPage .promoBox .infobox_content:first-child {
 	margin-left:0px;
 }
-.vista-pmsite-promoBox .picture {
+
+.vista-pmsite-landingPage .promoBox .picture {
 	width:130px;
 	background:grey;
 }
-.vista-pmsite-promoBox .read_more {
+
+.vista-pmsite-landingPage .promoBox .read_more {
 	color:#B5E329;
 	font-size:16px;
 	padding-left:10px;

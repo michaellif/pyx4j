@@ -21,6 +21,10 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.resources.StyleSheetReference;
+import org.apache.wicket.resource.TextTemplateResourceReference;
+
+import templates.TemplateResources;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -30,12 +34,19 @@ import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.panels.SecondaryNavigationPanel;
 
 public class StaticPage extends BasePage {
 
     public StaticPage(final PageParameters parameters) {
         super(parameters);
+        setVersioned(false);
+
+        String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
+        add(new StyleSheetReference("static_css", new TextTemplateResourceReference(TemplateResources.class, "static" + getPmsiteStyle() + ".css", "text/css",
+                new StylesheetTemplateModel(baseColor))));
+
         final PageDescriptor descriptor = ((PMSiteSession) getSession()).getContentManager().getStaticPageDescriptor(parameters);
 
         final PMSiteContentManager contentManager = ((PMSiteSession) getSession()).getContentManager();
@@ -62,8 +73,8 @@ public class StaticPage extends BasePage {
                     response.write(pages.get(0).content().getStringView());
                 }
             }
+
         });
 
     }
-
 }

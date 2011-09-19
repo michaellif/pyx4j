@@ -2,20 +2,33 @@
 <head>
 <title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<wicket:head>
+	<link wicket:id="static_css" />
+</wicket:head>
 </head>
 <body>
 	<wicket:extend>
-		<div class="staticMain">
-			<div class="main">
-				<div class="secondaryNavig" wicket:id="secondaryNavig" />
-				<div class="staticConten">
-					<div class="caption">
-						<h1 wicket:id="caption" />
+
+		<div class="vista-pmsite-staticPage">
+			<div class="vista-pmsite-contentWrap">
+				<div class="vista-pmsite-content">
+					<div class="vista-pmsite-mainWrap">
+						<div class="vista-pmsite-sidebarWrap">
+							<div class="vista-pmsite-sidebar">
+								<div class="secondaryNavig" wicket:id="secondaryNavig" />
+							</div>
+							<div class="vista-pmsite-main">
+								<div class="caption">
+									<h1 wicket:id="caption" />
+								</div>
+								<div class="content" wicket:id="content" />
+							</div>							
+						</div>
 					</div>
-					<div class="content" wicket:id="content" />
 				</div>
 			</div>
 		</div>
+
 	</wicket:extend>
 </body>
 </html>
