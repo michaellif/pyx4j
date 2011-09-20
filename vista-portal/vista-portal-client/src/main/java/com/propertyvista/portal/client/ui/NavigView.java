@@ -22,17 +22,15 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.activity.NavigItem;
 
-public interface MainNavigView extends IsWidget {
+public interface NavigView extends IsWidget {
 
-    public void setPresenter(MainNavigPresenter presenter);
+    public void setPresenter(NavigPresenter presenter);
 
-    public void setMainNavig(List<NavigItem> items);
-
-    public void setSecondaryNavig(AppPlace mainItemPlace, List<NavigItem> secondayItems);
+    public void setNavig(List<NavigItem> items);
 
     public void changePlace(AppPlace place);
 
-    public interface MainNavigPresenter {
+    public interface NavigPresenter {
         public void navigTo(Place place);
 
         public Place getWhere();

@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
-import com.propertyvista.portal.client.activity.MainNavigActivity;
+import com.propertyvista.portal.client.activity.NavigActivity;
 
 public class MainNavigActivityMapper implements AppActivityMapper {
 
@@ -28,7 +28,7 @@ public class MainNavigActivityMapper implements AppActivityMapper {
 
     @Override
     public void obtainActivity(Place place, AsyncCallback<Activity> callback) {
-        callback.onSuccess(new MainNavigActivity(place));
+        callback.onSuccess(new NavigActivity(place));
 
     }
 }

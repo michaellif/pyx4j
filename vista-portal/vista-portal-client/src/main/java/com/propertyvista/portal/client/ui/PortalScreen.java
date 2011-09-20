@@ -32,7 +32,7 @@ public class PortalScreen extends FlowPanel {
     public static String DEFAULT_STYLE_PREFIX = "PortalView";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Content, Header, Footer, MainNavig, Center, Main, Left, Right, Display, SecondaryNavig, StaticContent
+        Content, Header, Footer, MainNavig, Center, Main, Left, Right, Display, StaticContent
     }
 
     public PortalScreen() {

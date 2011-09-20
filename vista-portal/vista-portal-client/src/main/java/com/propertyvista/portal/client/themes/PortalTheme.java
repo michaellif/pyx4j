@@ -29,8 +29,7 @@ import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
-import com.propertyvista.portal.client.resources.PortalImages;
-import com.propertyvista.portal.client.ui.MainNavigViewImpl;
+import com.propertyvista.portal.client.ui.NavigViewImpl;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.decorations.BasicCardDecorator;
 import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
@@ -140,10 +139,6 @@ public abstract class PortalTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Content));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.SecondaryNavig));
-        style.addProperty("margin", "5px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Left));
@@ -277,8 +272,7 @@ public abstract class PortalTheme extends VistaTheme {
     }
 
     private void initVistaMainNavigViewStyles() {
-        String prefix = MainNavigViewImpl.DEFAULT_STYLE_PREFIX;
-        String secondPrefix = MainNavigViewImpl.SECONDARY_STYLE_PREFIX;
+        String prefix = NavigViewImpl.DEFAULT_STYLE_PREFIX;
 
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("width", "100%");
@@ -286,12 +280,7 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("padding-bottom", "20px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(secondPrefix));
-        style.addProperty("width", "100%");
-        style.addProperty("overflow", "hidden");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Holder));
+        style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Holder));
         style.addProperty("margin", "0");
         style.addProperty("padding", "0");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE35);
@@ -299,15 +288,7 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("overflow", "hidden");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(secondPrefix, MainNavigViewImpl.StyleSuffix.Holder));
-        style.addProperty("margin", "0");
-        style.addProperty("padding", "0");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE95);
-        style.addProperty("list-style", "none");
-        style.addProperty("overflow", "hidden");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Tab));
+        style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Tab));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE55);
         style.addProperty("margin-right", "4px");
         style.addProperty("border", "none");
@@ -317,11 +298,7 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("-moz-border-radius-topright", "8px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(secondPrefix, MainNavigViewImpl.StyleSuffix.Tab));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE95);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label, MainNavigViewImpl.StyleDependent.current));
+        style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Label, NavigViewImpl.StyleDependent.current));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE95);
         style.addProperty("color", "white");
         style.addProperty("border-top-left-radius", "8px");
@@ -330,28 +307,13 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("-moz-border-radius-topright", "8px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(secondPrefix, MainNavigViewImpl.StyleSuffix.Label, MainNavigViewImpl.StyleDependent.current));
-        style.addProperty("background", "url('" + PortalImages.INSTANCE.pointer().getSafeUri().asString() + "') no-repeat scroll 50% 100% transparent");
-        style.addProperty("color", "white");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label));
+        style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Label));
         style.addProperty("height", "50px");
         style.addProperty("line-height", "50px");
         style.addProperty("color", "white");
         style.addProperty("font-size", "14px");
         style.addProperty("font-style", "normal");
         //      style.addProperty("text-shadow", "0 -1px 0 #E6E6E6");
-        style.addProperty("padding-left", "29px");
-        style.addProperty("padding-right", "29px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(secondPrefix, MainNavigViewImpl.StyleSuffix.Label));
-        style.addProperty("height", "60px");
-        style.addProperty("line-height", "60px");
-        style.addProperty("color", "white");
-        style.addProperty("font-size", "14px");
-        style.addProperty("font-style", "normal");
         style.addProperty("padding-left", "29px");
         style.addProperty("padding-right", "29px");
         addStyle(style);

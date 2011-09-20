@@ -27,26 +27,26 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.client.ui.MainNavigView;
+import com.propertyvista.portal.client.ui.NavigView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 
-public class MainNavigActivity extends AbstractActivity implements MainNavigView.MainNavigPresenter {
+public class NavigActivity extends AbstractActivity implements NavigView.NavigPresenter {
 
-    private final MainNavigView view;
+    private final NavigView view;
 
     private final AppPlace place;
 
-    private static I18n i18n = I18nFactory.getI18n(MainNavigActivity.class);
+    private static I18n i18n = I18nFactory.getI18n(NavigActivity.class);
 
-    public MainNavigActivity(Place place) {
-        this.view = (MainNavigView) PortalViewFactory.instance(MainNavigView.class);
+    public NavigActivity(Place place) {
+        this.view = (NavigView) PortalViewFactory.instance(NavigView.class);
         view.setPresenter(this);
         this.place = (AppPlace) place;
         withPlace(place);
     }
 
-    public MainNavigActivity withPlace(Place place) {
+    public NavigActivity withPlace(Place place) {
         return this;
     }
 
@@ -59,7 +59,7 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
         items.add(new NavigItem(new Residents.PaymentMethods(), i18n.tr("Payment Methods")));
         items.add(new NavigItem(new Residents.BillingHistory(), i18n.tr("Billing History")));
         items.add(new NavigItem(new Residents.Maintenance(), i18n.tr("Maintenance")));
-        view.setMainNavig(items);
+        view.setNavig(items);
 
     }
 

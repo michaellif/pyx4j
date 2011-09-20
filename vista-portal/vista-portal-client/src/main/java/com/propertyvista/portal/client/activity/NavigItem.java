@@ -13,9 +13,6 @@
  */
 package com.propertyvista.portal.client.activity;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import com.pyx4j.site.rpc.AppPlace;
 
 public class NavigItem {
@@ -24,12 +21,9 @@ public class NavigItem {
 
     private final String caption;
 
-    private List<NavigItem> secondaryNavigation;
-
     public NavigItem(AppPlace place, String caption) {
         this.place = place;
         this.caption = caption;
-        secondaryNavigation = new LinkedList<NavigItem>();
     }
 
     public AppPlace getPlace() {
@@ -38,24 +32,6 @@ public class NavigItem {
 
     public String getCaption() {
         return caption;
-    }
-
-    public List<NavigItem> getSecondaryNavigation() {
-        return secondaryNavigation;
-    }
-
-    public void addSecondaryNavigItem(NavigItem item) {
-        if (item != null) {
-            secondaryNavigation.add(item);
-        }
-    }
-
-    public void setSecondaryNavigation(List<NavigItem> secondaryNavigation) {
-        if (secondaryNavigation == null) {
-            this.secondaryNavigation = new LinkedList<NavigItem>();
-        } else {
-            this.secondaryNavigation = secondaryNavigation;
-        }
     }
 
 }
