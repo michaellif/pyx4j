@@ -28,7 +28,7 @@ import com.propertyvista.portal.client.mvp.CaptionActivityMapper;
 import com.propertyvista.portal.client.mvp.ContentActivityMapper;
 import com.propertyvista.portal.client.mvp.NavigActivityMapper;
 
-public class PortalScreen extends FlowPanel {
+public class PortalScreen extends SimplePanel {
 
     public static String DEFAULT_STYLE_PREFIX = "PortalView";
 
@@ -44,27 +44,33 @@ public class PortalScreen extends FlowPanel {
 
         setStyleName(prefix);
 
-        DisplayPanel captionDisplayPanel = new DisplayPanel();
-        add(captionDisplayPanel);
+        SimplePanel mainWrap = new SimplePanel();
+        mainWrap.setStyleName("vista-pmsite-mainWrap");
+        setWidget(mainWrap);
 
-        FlowPanel navigWrapper = new FlowPanel();
-        navigWrapper.setStyleName(prefix + StyleSuffix.Navig);
-        add(navigWrapper);
+        FlowPanel sidebarWrap = new FlowPanel();
+        sidebarWrap.setStyleName("vista-pmsite-sidebarWrap");
+        mainWrap.setWidget(sidebarWrap);
+
+        SimplePanel sidebar = new SimplePanel();
+        sidebar.setStyleName("vista-pmsite-sidebar");
+        sidebarWrap.add(sidebar);
+
+        FlowPanel main = new FlowPanel();
+        main.setStyleName("vista-pmsite-main");
+        sidebarWrap.add(main);
 
         DisplayPanel navigDisplayPanel = new DisplayPanel();
-        navigWrapper.add(navigDisplayPanel);
+        navigDisplayPanel.setStyleName("secondaryNavig");
+        sidebar.setWidget(navigDisplayPanel);
 
-        SimplePanel centerWrapper = new SimplePanel();
-        centerWrapper.setStyleName(prefix + StyleSuffix.Center);
-        add(centerWrapper);
-
-        FlowPanel mainWrapper = new FlowPanel();
-        mainWrapper.setStyleName(prefix + StyleSuffix.Main);
-        centerWrapper.add(mainWrapper);
+        DisplayPanel captionDisplayPanel = new DisplayPanel();
+        captionDisplayPanel.setStyleName("caption");
+        main.add(captionDisplayPanel);
 
         DisplayPanel contentDisplayPanel = new DisplayPanel();
-        contentDisplayPanel.setStyleName(prefix + StyleSuffix.Content);
-        mainWrapper.add(contentDisplayPanel);
+        contentDisplayPanel.setStyleName("content");
+        main.add(contentDisplayPanel);
 
         bind(new NavigActivityMapper(), navigDisplayPanel, eventBus);
         bind(new CaptionActivityMapper(), captionDisplayPanel, eventBus);
