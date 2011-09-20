@@ -5,9 +5,9 @@
 	<inherits name='com.pyx4j.security.SecurityShared'/>
 	<inherits name='com.pyx4j.security.RPC'/>
 	
-	<generate-with class="com.pyx4j.security.rebind.DefineSecurityControllerGenerator">
-        <when-type-assignable class="com.pyx4j.security.shared.SecurityController"/>
-    </generate-with>
+    <replace-with class="com.pyx4j.security.client.ClientSecurityController">
+        <when-type-is class="com.pyx4j.security.shared.SecurityController"/>
+    </replace-with>
     
 	<source path="client"/>
 </module>
