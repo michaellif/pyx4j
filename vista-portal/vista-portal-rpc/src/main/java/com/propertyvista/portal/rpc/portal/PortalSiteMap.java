@@ -34,22 +34,28 @@ public class PortalSiteMap implements SiteMap {
     public static class PotentialTenants extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Residents")
-    @NavigationItem(navigLabel = "Residents")
     public static class Residents extends AppPlace {
 
+        @PlaceProperties(caption = "Personal Info")
+        @NavigationItem(navigLabel = "Personal Info")
         public static class PersonalInfo extends AppPlace {
         }
 
+        @PlaceProperties(caption = "Maintenance")
+        @NavigationItem(navigLabel = "Maintenance")
         public static class Maintenance extends AppPlace {
 
             public static class MaintenanceListHistory extends CrudAppPlace {
             }
         }
 
+        @PlaceProperties(caption = "Billing History")
+        @NavigationItem(navigLabel = "Billing History")
         public static class BillingHistory extends AppPlace {
         }
 
+        @PlaceProperties(caption = "Payment Methods")
+        @NavigationItem(navigLabel = "Payment Methods")
         public static class PaymentMethods extends AppPlace {
 
             public static class NewPaymentMethod extends AppPlace {
@@ -59,6 +65,8 @@ public class PortalSiteMap implements SiteMap {
             }
         }
 
+        @PlaceProperties(caption = "Current Bill")
+        @NavigationItem(navigLabel = "Current Bill")
         public static class CurrentBill extends AppPlace {
         }
 

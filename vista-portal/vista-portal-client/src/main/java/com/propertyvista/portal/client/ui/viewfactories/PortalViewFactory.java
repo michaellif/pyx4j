@@ -15,6 +15,8 @@ package com.propertyvista.portal.client.ui.viewfactories;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.portal.client.ui.CaptionView;
+import com.propertyvista.portal.client.ui.CaptionViewImpl;
 import com.propertyvista.portal.client.ui.NavigView;
 import com.propertyvista.portal.client.ui.NavigViewImpl;
 import com.propertyvista.portal.client.ui.PotentialTenantView;
@@ -46,6 +48,8 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new MaintenanceViewImpl());
             } else if (NavigView.class.equals(type)) {
                 map.put(type, new NavigViewImpl());
+            } else if (CaptionView.class.equals(type)) {
+                map.put(type, new CaptionViewImpl());
             } else if (BillingHistoryView.class.equals(type)) {
                 map.put(type, new BillingHistoryViewImpl());
             } else if (PersonalInfoView.class.equals(type)) {

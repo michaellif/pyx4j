@@ -28,11 +28,10 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
-
-import com.propertyvista.portal.client.activity.NavigItem;
 
 public class NavigViewImpl extends SimplePanel implements NavigView {
 
@@ -68,14 +67,14 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
     }
 
     @Override
-    public void setNavig(List<NavigItem> items) {
+    public void setNavig(List<AppPlace> items) {
         tabsHolder.clear();
-        for (NavigItem item : items) {
+        for (AppPlace item : items) {
             NavigTab navigTab = new NavigTab(item, DEFAULT_STYLE_PREFIX);
             tabsHolder.add(navigTab);
 
             AppPlace currentPlace = (AppPlace) presenter.getWhere();
-            if (item.getPlace().equals(currentPlace)) {
+            if (item.equals(currentPlace)) {
                 navigTab.select();
             }
         }
@@ -111,7 +110,7 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
             if (tabs == null || place == null)
                 return null;
             for (NavigTab tab : tabs) {
-                if (tab.getNavigItem().getPlace().equals(place)) {
+                if (tab.getPlace().equals(place)) {
                     return tab;
                 }
             }
@@ -137,19 +136,16 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
 
         private boolean selected;
 
-        private final NavigItem navigItem;
+        private final AppPlace place;
 
-        NavigTab(NavigItem menuItem, String styleName) {
+        NavigTab(AppPlace appPlace, String styleName) {
             super();
             if (styleName == null) {
                 styleName = DEFAULT_STYLE_PREFIX;
             }
 
-            this.navigItem = menuItem;
+            this.place = appPlace;
             selected = false;
-
-            String caption = menuItem.getCaption();
-            final AppPlace place = menuItem.getPlace();
 
             setElement(DOM.createElement("li"));
             setStyleName(styleName + StyleSuffix.Tab.name());
@@ -157,7 +153,7 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
             getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
             sinkEvents(Event.ONCLICK);
 
-            label = new Label(caption);
+            label = new Label(AppSite.getHistoryMapper().getPlaceInfo(place).getNavigLabel());
             label.setStyleName(styleName + StyleSuffix.Label.name());
             add(label);
 
@@ -194,8 +190,8 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
             return selected;
         }
 
-        public NavigItem getNavigItem() {
-            return navigItem;
+        public AppPlace getPlace() {
+            return place;
         }
 
     }

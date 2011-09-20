@@ -53,12 +53,12 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        List<NavigItem> items = new ArrayList<NavigItem>();
-        items.add(new NavigItem(new Residents.PersonalInfo(), i18n.tr("Personal Info")));
-        items.add(new NavigItem(new Residents.CurrentBill(), i18n.tr("Current Bill")));
-        items.add(new NavigItem(new Residents.PaymentMethods(), i18n.tr("Payment Methods")));
-        items.add(new NavigItem(new Residents.BillingHistory(), i18n.tr("Billing History")));
-        items.add(new NavigItem(new Residents.Maintenance(), i18n.tr("Maintenance")));
+        List<AppPlace> items = new ArrayList<AppPlace>();
+        items.add(new Residents.PersonalInfo());
+        items.add(new Residents.CurrentBill());
+        items.add(new Residents.PaymentMethods());
+        items.add(new Residents.BillingHistory());
+        items.add(new Residents.Maintenance());
         view.setNavig(items);
 
     }

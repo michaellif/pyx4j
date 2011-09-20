@@ -11,27 +11,24 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui;
+package com.propertyvista.portal.client.mvp;
 
-import java.util.List;
-
+import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.client.activity.AppActivityMapper;
 
-public interface NavigView extends IsWidget {
+import com.propertyvista.portal.client.activity.CaptionActivity;
 
-    public void setPresenter(NavigPresenter presenter);
+public class CaptionActivityMapper implements AppActivityMapper {
 
-    public void setNavig(List<AppPlace> items);
+    public CaptionActivityMapper() {
+    }
 
-    public void changePlace(AppPlace place);
-
-    public interface NavigPresenter {
-        public void navigTo(Place place);
-
-        public Place getWhere();
+    @Override
+    public void obtainActivity(Place place, AsyncCallback<Activity> callback) {
+        callback.onSuccess(new CaptionActivity(place));
 
     }
 }

@@ -13,25 +13,21 @@
  */
 package com.propertyvista.portal.client.ui;
 
-import java.util.List;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
+public class CaptionViewImpl extends SimplePanel implements CaptionView {
 
-import com.pyx4j.site.rpc.AppPlace;
+    private final Label captionLabel;
 
-public interface NavigView extends IsWidget {
-
-    public void setPresenter(NavigPresenter presenter);
-
-    public void setNavig(List<AppPlace> items);
-
-    public void changePlace(AppPlace place);
-
-    public interface NavigPresenter {
-        public void navigTo(Place place);
-
-        public Place getWhere();
-
+    public CaptionViewImpl() {
+        captionLabel = new Label();
+        setWidget(captionLabel);
     }
+
+    @Override
+    public void setCaption(String caption) {
+        captionLabel.setText(caption);
+    }
+
 }

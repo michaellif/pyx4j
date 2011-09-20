@@ -7,31 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 7, 2011
- * @author michaellif
+ * Created on Feb 1, 2011
+ * @author Misha
  * @version $Id$
  */
-package com.propertyvista.portal.client.activity;
+package com.propertyvista.portal.client.ui;
 
-import com.pyx4j.site.rpc.AppPlace;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class NavigItem {
+public interface CaptionView extends IsWidget {
 
-    private final AppPlace place;
-
-    private final String caption;
-
-    public NavigItem(AppPlace place, String caption) {
-        this.place = place;
-        this.caption = caption;
-    }
-
-    public AppPlace getPlace() {
-        return place;
-    }
-
-    public String getCaption() {
-        return caption;
-    }
+    public void setCaption(String caption);
 
 }

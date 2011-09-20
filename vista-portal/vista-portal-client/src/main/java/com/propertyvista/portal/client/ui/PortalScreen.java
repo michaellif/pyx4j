@@ -24,6 +24,7 @@ import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.client.ui.AppSiteView;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
+import com.propertyvista.portal.client.mvp.CaptionActivityMapper;
 import com.propertyvista.portal.client.mvp.ContentActivityMapper;
 import com.propertyvista.portal.client.mvp.NavigActivityMapper;
 
@@ -42,6 +43,9 @@ public class PortalScreen extends FlowPanel {
         String prefix = DEFAULT_STYLE_PREFIX;
 
         setStyleName(prefix);
+
+        DisplayPanel captionDisplayPanel = new DisplayPanel();
+        add(captionDisplayPanel);
 
         FlowPanel navigWrapper = new FlowPanel();
         navigWrapper.setStyleName(prefix + StyleSuffix.Navig);
@@ -63,6 +67,7 @@ public class PortalScreen extends FlowPanel {
         mainWrapper.add(contentDisplayPanel);
 
         bind(new NavigActivityMapper(), navigDisplayPanel, eventBus);
+        bind(new CaptionActivityMapper(), captionDisplayPanel, eventBus);
         bind(new ContentActivityMapper(), contentDisplayPanel, eventBus);
 
     }
