@@ -1,67 +1,75 @@
-.vista-pmsite-testimBox {
+.vista-pmsite-landingPage .banner {
+	height: 375px;
+	position: relative;
+	width: 960px;
+	background: ${primeColor1a};
+}
+
+.vista-pmsite-landingPage .testimBox {
 	padding: 20px 10px;
 	float: left;
 }
 
-.vista-pmsite-testimBox .infobox_content {
+.vista-pmsite-landingPage .testimBox .infobox_content {
 	width: 250px;
 	height: 80px;
 	overflow: hidden;
 	float: left;
 	width: 260px;
 	height: 100px;
-	margin: 15px;
+	margin: 10px;
 	padding: 20px;
 	background: ${primeColor1a};
 }
 
-.vista-pmsite-testimBox .name {
+.vista-pmsite-landingPage .testimBox .name {
 	color: ${accentColor1b};
 	text-align: right;
 	padding: 10px 0 0 0;
 }
 
-.vista-pmsite-testimBox .read_more {
+.vista-pmsite-landingPage .testimBox .read_more {
 	color: ${accentColor1b};
 	font-size: 16px;
 	padding-left: 10px;
 }
 
-.vista-pmsite-newsBox {
+.vista-pmsite-landingPage .newsBox {
+	width: 220px;
 	padding: 20px 30px;
 	display: inline-block;
 	min-height: 614px;
 	float: left;
 }
 
-.vista-pmsite-newsBox .date {
+.vista-pmsite-landingPage .newsBox .date {
 	color: ${accentColor1a};
 	padding-top: 10px;
 }
 
-.vista-pmsite-newsBox .headline {
+.vista-pmsite-landingPage .newsBox .headline {
 	padding-top: 10px;
 	color: ${accentColor1b};
 }
 
-.vista-pmsite-newsBox .text {
+.vista-pmsite-landingPage .newsBox .text {
 	padding-top: 10px;
 }
 
-.vista-pmsite-newsBox .read_more {
+.vista-pmsite-landingPage .newsBox .read_more {
 	color: ${accentColor1b};
 	font-size: 20px;
 	line-height: 14px;
 	vertical-align: text-top;
 }
 
-.infobox_heading {
+.vista-pmsite-landingPage .infobox_heading {
 	font-size: 22px;
 	line-height: 40px;
 }
 
 
-.vista-pmsite-promoBox {
+.vista-pmsite-landingPage .promoBox {
 	width:600px;
 	height:240px;
 	padding:20px 10px;
@@ -69,25 +77,74 @@
 	overflow:hidden;
 }
 
-.vista-pmsite-promoBox .infobox_content {
+.vista-pmsite-landingPage .promoBox .infobox_content {
 	width:130px;
 	height:200px;
 	float:left;
 	margin-left:20px;
 }
 
-.vista-pmsite-promoBox .infobox_content:first-child {
+.vista-pmsite-landingPage .promoBox .infobox_content:first-child {
 	margin-left:0px;
 }
 
-.vista-pmsite-promoBox .picture {
+.vista-pmsite-landingPage .promoBox .picture {
 	width:130px;
 	background:grey;
 }
 
-.vista-pmsite-promoBox .read_more {
+.vista-pmsite-landingPage .promoBox .read_more {
 	color: ${accentColor1b};
 	font-size:16px;
 	padding-left:10px;
 }
+
+.vista-pmsite-landingPage .quickSearchCriteria {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 200px;
+	margin-left: 50px;
+}
+
+.vista-pmsite-landingPage .quickSearchCriteria h3 {
+	color: #555555;
+	font-size: 16px;
+	padding: 20px 0;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.vista-pmsite-landingPage .quickSearchCriteria label {
+	color: #555555;
+	display: block;
+	font-size: 13px;
+	padding: 0 0 3px;
+}
+
+.vista-pmsite-landingPage .quickSearchCriteria select {
+	width: 100%;
+	margin-bottom: 15px;
+}
+
+.vista-pmsite-landingPage .quickSearchCriteria input {
+	background: none repeat scroll 0 0 transparent;
+	border: medium none;
+	color: #555555;
+	cursor: pointer;
+	font-size: 16px;
+	padding: 5px 0;
+	text-shadow: 0 1px 0 #777777;
+	text-transform: uppercase;
+	width: 128px;
+}
+
+.vista-pmsite-landingPage .quickSearchCriteria .submit {
+	height: 32px;
+	margin: 15px auto 0;
+	overflow: hidden;
+	width: 128px;
+}
+
 

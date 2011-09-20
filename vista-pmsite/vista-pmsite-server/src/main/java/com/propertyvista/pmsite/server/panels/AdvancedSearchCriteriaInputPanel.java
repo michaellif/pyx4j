@@ -117,7 +117,12 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         // price
         add(new TextField<Integer>("minPrice").add(new MinimumValidator<Integer>(100)));
         add(new TextField<Integer>("maxPrice").add(new MinimumValidator<Integer>(100)));
+
         // amenities
-        add(new CheckBoxMultipleChoice<PropertySearchCriteria.AmenityType>("amenities", Arrays.asList(PropertySearchCriteria.AmenityType.values())));
+        CheckBoxMultipleChoice<PropertySearchCriteria.AmenityType> checkBoxMultipleChoice = new CheckBoxMultipleChoice<PropertySearchCriteria.AmenityType>(
+                "amenities", Arrays.asList(PropertySearchCriteria.AmenityType.values()));
+        checkBoxMultipleChoice.setPrefix("<span>");
+        checkBoxMultipleChoice.setSuffix("</span>");
+        add(checkBoxMultipleChoice);
     }
 }
