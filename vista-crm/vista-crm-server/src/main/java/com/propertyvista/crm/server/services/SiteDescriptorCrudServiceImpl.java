@@ -53,6 +53,9 @@ public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceDtoImpl<Sit
         TransientListHelpers.save(dto.news(), News.class);
         TransientListHelpers.save(dto.testimonials(), Testimonial.class);
 
+        //TODO keep the sort order, Remove context for removed Locale
+        TransientListHelpers.save(dto.locales(), AvailableLocale.class);
+
         super.persistDBO(dbo, dto);
     }
 
@@ -60,8 +63,8 @@ public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceDtoImpl<Sit
     protected void enhanceDTO(SiteDescriptor dbo, SiteDescriptorDTO dto, boolean fromList) {
         if (!fromList) {
             // load transient data:
-            dto.news().addAll(TransientListHelpers.loadTransientList(News.class));
-            dto.testimonials().addAll(TransientListHelpers.loadTransientList(Testimonial.class));
+            dto.news().addAll(Persistence.service().query(EntityQueryCriteria.create(News.class)));
+            dto.testimonials().addAll(Persistence.service().query(EntityQueryCriteria.create(Testimonial.class)));
 
             {
                 EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);

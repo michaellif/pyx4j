@@ -22,14 +22,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 public class TransientListHelpers {
 
-    public static <E extends IEntity> List<E> loadTransientList(Class<E> entityClass) {
-        return load(entityClass, EntityQueryCriteria.create(entityClass));
-    }
-
-    public static <E extends IEntity> List<E> load(Class<E> entityClass, EntityQueryCriteria<E> criteria) {
-        return Persistence.service().query(criteria);
-    }
-
     public static <E extends IEntity> void save(IList<E> list, Class<E> entityClass) {
         save(list, entityClass, EntityQueryCriteria.create(entityClass));
     }
@@ -37,7 +29,7 @@ public class TransientListHelpers {
     public static <E extends IEntity> void save(IList<E> list, Class<E> entityClass, EntityQueryCriteria<E> criteria) {
 
         // load current:
-        List<E> current = load(entityClass, criteria);
+        List<E> current = Persistence.service().query(criteria);
 
         // save and remove from current if exist:
         for (E item : list) {
