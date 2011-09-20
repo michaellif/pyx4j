@@ -29,15 +29,16 @@ public class BrowserType {
     };
 
     public static native boolean isIENative() /*-{
-        return ($doc.body.insertAdjacentHTML != null);
+		return ($doc.body.insertAdjacentHTML != null);
     }-*/;
 
     public native static boolean isFirefoxNative() /*-{
-        var agt= $wnd.navigator.userAgent.toLowerCase(); return (agt.indexOf("firefox") != -1);
+		var agt = $wnd.navigator.userAgent.toLowerCase();
+		return (agt.indexOf("firefox") != -1);
     }-*/;
 
     public native static String getUserAgent() /*-{
-        return $wnd.navigator.userAgent;
+		return $wnd.navigator.userAgent;
     }-*/;
 
     public static final boolean isFirefox() {
@@ -221,6 +222,25 @@ public class BrowserType {
         @Override
         public final String getCompiledType() {
             return "CompiledType#IE8";
+        }
+    }
+
+    @SuppressWarnings("unused")
+    private static class ImplIE9 implements Impl {
+
+        @Override
+        public final Browser getType() {
+            return Browser.IE;
+        }
+
+        @Override
+        public float getVersion() {
+            return 9;
+        }
+
+        @Override
+        public final String getCompiledType() {
+            return "CompiledType#IE9";
         }
     }
 
