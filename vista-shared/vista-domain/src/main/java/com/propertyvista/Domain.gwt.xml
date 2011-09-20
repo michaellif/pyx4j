@@ -7,4 +7,6 @@
     <source path="domain"/>
     <source path="dto"/>
     <source path="misc"/>
+    <source path="shared"/>
+    
 </module>

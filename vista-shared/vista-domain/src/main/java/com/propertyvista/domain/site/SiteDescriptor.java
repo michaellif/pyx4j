@@ -40,9 +40,6 @@ public interface SiteDescriptor extends IEntity {
         }
     }
 
-    @Owned
-    IList<SiteLocale> locales();
-
     @NotNull
     @ToString(index = 0)
     IPrimitive<Skin> skin();

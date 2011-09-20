@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.propertyvista.crm.rpc.services.SiteDescriptorCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.crm.server.util.TransientListHelpers;
+import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.Testimonial;
@@ -61,6 +62,13 @@ public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceDtoImpl<Sit
             // load transient data:
             dto.news().addAll(TransientListHelpers.loadTransientList(News.class));
             dto.testimonials().addAll(TransientListHelpers.loadTransientList(Testimonial.class));
+
+            {
+                EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
+                criteria.asc(criteria.proto().displayOrder().getPath().toString());
+                dto.locales().addAll(Persistence.service().query(criteria));
+            }
+
         }
     }
 }

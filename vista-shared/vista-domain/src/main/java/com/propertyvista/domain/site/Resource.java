@@ -23,7 +23,7 @@ import com.propertyvista.domain.File;
 public interface Resource extends IEntity {
 
     @NotNull
-    Locale locale();
+    AvailableLocale locale();
 
     @EmbeddedEntity
     @MemberColumn(name = "resourceFile")

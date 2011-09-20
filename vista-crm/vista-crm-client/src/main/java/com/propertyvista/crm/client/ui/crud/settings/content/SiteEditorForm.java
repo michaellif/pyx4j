@@ -49,10 +49,10 @@ import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
+import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageDescriptor.Type;
-import com.propertyvista.domain.site.SiteLocale;
 import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
@@ -102,13 +102,14 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         return new CrmScrollPanel(main);
     }
 
-    private CEntityFolderEditor<SiteLocale> createLocalesList() {
-        return new CrmEntityFolder<SiteLocale>(SiteLocale.class, i18n.tr("SiteLocale"), isEditable()) {
-            private final CrmEntityFolder<SiteLocale> parent = this;
+    private CEntityFolderEditor<AvailableLocale> createLocalesList() {
+        return new CrmEntityFolder<AvailableLocale>(AvailableLocale.class, i18n.tr("SiteLocale"), isEditable()) {
+
+            private final CrmEntityFolder<AvailableLocale> parent = this;
 
             private final ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
             {
-                columns.add(new EntityFolderColumnDescriptor(proto().locale(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().lang(), "10em"));
             }
 
             @Override
@@ -117,8 +118,8 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
 
             @Override
-            public IFolderEditorDecorator<SiteLocale> createFolderDecorator() {
-                TableFolderEditorDecorator<SiteLocale> decor = (TableFolderEditorDecorator<SiteLocale>) super.createFolderDecorator();
+            public IFolderEditorDecorator<AvailableLocale> createFolderDecorator() {
+                TableFolderEditorDecorator<AvailableLocale> decor = (TableFolderEditorDecorator<AvailableLocale>) super.createFolderDecorator();
                 decor.setShowHeader(false);
                 return decor;
             }

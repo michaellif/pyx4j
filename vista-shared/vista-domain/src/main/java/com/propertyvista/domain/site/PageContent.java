@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface PageContent extends IEntity {
 
     @NotNull
-    Locale locale();
+    AvailableLocale locale();
 
     @Owner
     @Detached

@@ -16,6 +16,7 @@ package com.propertyvista.dto;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.Testimonial;
@@ -23,7 +24,10 @@ import com.propertyvista.domain.site.Testimonial;
 @Transient
 public interface SiteDescriptorDTO extends SiteDescriptor {
 
+    IList<AvailableLocale> locales();
+
     IList<News> news();
 
     IList<Testimonial> testimonials();
+
 }

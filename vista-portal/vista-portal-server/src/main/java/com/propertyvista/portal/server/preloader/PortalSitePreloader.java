@@ -23,22 +23,21 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.domain.site.Locale;
-import com.propertyvista.domain.site.Locale.Lang;
+import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
-import com.propertyvista.domain.site.SiteLocale;
 import com.propertyvista.domain.site.Testimonial;
+import com.propertyvista.shared.CompiledLocale;
 
 public class PortalSitePreloader extends AbstractDataPreloader {
 
-    private Locale enLocale;
+    private AvailableLocale enLocale;
 
-    private Locale frLocale;
+    private AvailableLocale frLocale;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -49,26 +48,18 @@ public class PortalSitePreloader extends AbstractDataPreloader {
     @Override
     public String create() {
         try {
-            enLocale = EntityFactory.create(Locale.class);
-            enLocale.lang().setValue(Lang.en);
+            enLocale = EntityFactory.create(AvailableLocale.class);
+            enLocale.lang().setValue(CompiledLocale.en);
             Persistence.service().persist(enLocale);
 
-            frLocale = EntityFactory.create(Locale.class);
-            frLocale.lang().setValue(Lang.fr);
+            frLocale = EntityFactory.create(AvailableLocale.class);
+            frLocale.lang().setValue(CompiledLocale.fr);
             Persistence.service().persist(frLocale);
 
             SiteDescriptor site = EntityFactory.create(SiteDescriptor.class);
             site.skin().setValue(Skin.skin1);
             site.baseColor().setValue("#4488bb");
-            site.copyright().setValue("Â© Starlight Apartments 2011");
-
-            SiteLocale enSiteLocale = EntityFactory.create(SiteLocale.class);
-            enSiteLocale.locale().set(enLocale);
-            site.locales().add(enSiteLocale);
-
-            SiteLocale frSiteLocale = EntityFactory.create(SiteLocale.class);
-            frSiteLocale.locale().set(frLocale);
-            site.locales().add(frSiteLocale);
+            site.copyright().setValue("© Starlight Âpartments 2011");
 
             Persistence.service().persist(
                     createTestimonial(enLocale,
@@ -164,7 +155,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
         }
     }
 
-    private Testimonial createTestimonial(Locale locale, String content, String author) {
+    private Testimonial createTestimonial(AvailableLocale locale, String content, String author) {
         Testimonial testimonial = EntityFactory.create(Testimonial.class);
         testimonial.locale().set(locale);
 
@@ -174,7 +165,7 @@ public class PortalSitePreloader extends AbstractDataPreloader {
         return testimonial;
     }
 
-    private News createNews(Locale locale, String caption, String content, LogicalDate date) {
+    private News createNews(AvailableLocale locale, String caption, String content, LogicalDate date) {
         News news = EntityFactory.create(News.class);
         news.locale().set(locale);
 

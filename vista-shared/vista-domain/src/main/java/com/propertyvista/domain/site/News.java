@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface News extends IEntity {
 
     @NotNull
-    Locale locale();
+    AvailableLocale locale();
 
     // -------------------------
 

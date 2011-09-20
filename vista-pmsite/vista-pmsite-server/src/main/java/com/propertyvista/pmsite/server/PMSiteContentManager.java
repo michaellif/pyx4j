@@ -37,13 +37,11 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.ref.City;
-import com.propertyvista.domain.site.Locale;
-import com.propertyvista.domain.site.Locale.Lang;
+import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
-import com.propertyvista.domain.site.SiteLocale;
 import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.pmsite.server.converter.BuildingAmenityAmenityDTOConverter;
 import com.propertyvista.pmsite.server.converter.BuildingPropertyDTOConverter;
@@ -54,6 +52,7 @@ import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
+import com.propertyvista.shared.CompiledLocale;
 
 public class PMSiteContentManager implements Serializable {
 
@@ -74,35 +73,38 @@ public class PMSiteContentManager implements Serializable {
 
     private final List<Testimonial> testimonials;
 
-    private Locale locale;
+    List<AvailableLocale> allAvailableLocale;
+
+    private AvailableLocale locale;
 
     public PMSiteContentManager() {
         site = retrieveSiteDescriptor();
 
+        EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
+        criteria.asc(criteria.proto().displayOrder().getPath().toString());
+        allAvailableLocale = Persistence.service().query(criteria);
+
         locale = readLocaleFromCookie();
-        if (locale == null) {
-            if (site.locales().size() > 0) {
-                locale = site.locales().get(0).locale();
-            } else {
-                throw new Error("No locales found");
-            }
-        }
 
         news = retrieveNews();
         testimonials = retrieveTestimonials();
 
     }
 
-    public Locale getLocale() {
+    public AvailableLocale getLocale() {
         return locale;
     }
 
-    public void setLocale(Locale locale) {
+    public List<AvailableLocale> getAllAvailableLocale() {
+        return allAvailableLocale;
+    }
+
+    public void setLocale(AvailableLocale locale) {
         this.locale = locale;
         ((WebRequestCycle) RequestCycle.get()).getWebResponse().addCookie(new Cookie("locale", locale.lang().getValue().name()));
     }
 
-    private Locale readLocaleFromCookie() {
+    private AvailableLocale readLocaleFromCookie() {
         Cookie localeCookie = null;
         Cookie[] cookies = ((WebRequest) ((WebRequestCycle) RequestCycle.get()).getRequest()).getCookies();
         if (cookies == null) {
@@ -114,20 +116,25 @@ public class PMSiteContentManager implements Serializable {
                 break;
             }
         }
-        if (localeCookie != null) {
+
+        if ((localeCookie != null) && (localeCookie.getValue() != null)) {
+            CompiledLocale lang = null;
             try {
-                Lang lang = Lang.valueOf(localeCookie.getValue());
-                for (SiteLocale locale : site.locales()) {
-                    if (lang.equals(locale.locale().lang().getValue())) {
-                        return locale.locale();
+                lang = CompiledLocale.valueOf(localeCookie.getValue());
+            } catch (IllegalArgumentException ignore) {
+            }
+
+            if (lang != null) {
+                for (AvailableLocale l : allAvailableLocale) {
+                    if (lang.equals(l.lang().getValue())) {
+                        return l;
                     }
                 }
-
-            } catch (Exception e) {
-                return null;
             }
         }
-        return null;
+
+        // Locale not found, select the first one.
+        return allAvailableLocale.get(0);
     }
 
     private SiteDescriptor retrieveSiteDescriptor() {
@@ -347,7 +354,7 @@ public class PMSiteContentManager implements Serializable {
         return model;
     }
 
-    public static String getCaption(PageDescriptor descriptor, Locale locale) {
+    public static String getCaption(PageDescriptor descriptor, AvailableLocale locale) {
         for (PageCaption caption : descriptor.caption()) {
             if (locale.lang().getValue().equals(caption.locale().lang().getValue())) {
                 return caption.caption().getValue();

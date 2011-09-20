@@ -21,7 +21,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import com.propertyvista.domain.site.SiteLocale;
+import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.pmsite.server.PMSiteSession;
 
 public class LocalePanel extends Panel {
@@ -31,26 +31,27 @@ public class LocalePanel extends Panel {
     public LocalePanel(String id) {
         super(id);
 
-        ListView<SiteLocale> listView = new ListView<SiteLocale>("langItem", new ArrayList<SiteLocale>(((PMSiteSession) getSession()).getContentManager()
-                .getSiteDescriptor().locales())) {
+        ListView<AvailableLocale> listView = new ListView<AvailableLocale>("langItem", new ArrayList<AvailableLocale>(((PMSiteSession) getSession())
+                .getContentManager().getAllAvailableLocale())) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void populateItem(ListItem<SiteLocale> item) {
+            protected void populateItem(ListItem<AvailableLocale> item) {
 
-                final SiteLocale locale = item.getModelObject();
+                final AvailableLocale locale = item.getModelObject();
 
                 Link<Void> link = new Link<Void>("langSelector") {
+
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     public void onClick() {
-                        ((PMSiteSession) getSession()).getContentManager().setLocale(locale.locale());
+                        ((PMSiteSession) getSession()).getContentManager().setLocale(locale);
                         setResponsePage(getPage().getPageClass(), getPage().getPageParameters());
                     }
                 };
                 item.add(link);
-                link.add(new Label("caption", locale.locale().lang().getValue().name()));
+                link.add(new Label("caption", locale.lang().getValue().name()));
 
             }
         };

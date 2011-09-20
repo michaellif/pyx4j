@@ -17,28 +17,18 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
-import com.pyx4j.i18n.shared.Translation;
 
-public interface Locale extends IEntity {
+import com.propertyvista.shared.CompiledLocale;
 
-    @Translatable
-    public enum Lang {
-
-        @Translation(value = "English")
-        en,
-
-        @Translation(value = "French")
-        fr;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
+/**
+ * Available Locale defines the Locale available for particular PMC
+ */
+public interface AvailableLocale extends IEntity {
 
     @NotNull
     @ToString(index = 0)
-    IPrimitive<Lang> lang();
+    IPrimitive<CompiledLocale> lang();
+
+    IPrimitive<Integer> displayOrder();
+
 }
