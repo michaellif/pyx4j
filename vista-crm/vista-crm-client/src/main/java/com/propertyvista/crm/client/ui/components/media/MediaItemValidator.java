@@ -27,20 +27,22 @@ public class MediaItemValidator implements EditableValueValidator<Media> {
 
     @Override
     public boolean isValid(CEditableComponent<Media, ?> component, Media value) {
-        boolean res = true;
+        if (value.type().isNull()) {
+            return false;
+        }
+        boolean valid = true;
         switch (value.type().getValue()) {
         case file:
-            res = !value.file().isNull();
+            valid = !value.file().isNull();
             break;
         case externalUrl:
-            res = !value.url().isNull();
+            valid = !value.url().isNull();
             break;
         case youTube:
-            res = !value.youTubeVideoID().isNull();
+            valid = !value.youTubeVideoID().isNull();
             break;
         }
-
-        return res;
+        return valid;
     }
 
     @Override
