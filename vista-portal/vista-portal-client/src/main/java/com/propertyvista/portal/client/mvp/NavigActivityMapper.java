@@ -21,9 +21,9 @@ import com.pyx4j.site.client.activity.AppActivityMapper;
 
 import com.propertyvista.portal.client.activity.NavigActivity;
 
-public class MainNavigActivityMapper implements AppActivityMapper {
+public class NavigActivityMapper implements AppActivityMapper {
 
-    public MainNavigActivityMapper() {
+    public NavigActivityMapper() {
     }
 
     @Override
