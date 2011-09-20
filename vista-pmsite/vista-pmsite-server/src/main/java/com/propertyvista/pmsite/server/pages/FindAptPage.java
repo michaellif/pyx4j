@@ -13,12 +13,25 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
+import org.apache.wicket.markup.html.resources.StyleSheetReference;
+import org.apache.wicket.resource.TextTemplateResourceReference;
+
+import templates.TemplateResources;
+
+import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaPanel;
 
 public class FindAptPage extends BasePage {
 
     public FindAptPage() {
         super();
+        setVersioned(false);
+
+        String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
+        add(new StyleSheetReference("findapt_css", new TextTemplateResourceReference(TemplateResources.class, "findapt" + getPmsiteStyle() + ".css",
+                "text/css", new StylesheetTemplateModel(baseColor))));
+
         add(new AdvancedSearchCriteriaPanel());
 
     }
