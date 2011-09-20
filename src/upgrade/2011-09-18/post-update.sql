@@ -10,14 +10,20 @@ UPDATE PropertyPhone SET visibility = 'global';
 
 DELETE FROM FloorplanCounters;
 
-INSERT INTO FloorplanCounters (ns, id, _unitCount) SELECT ns, floorplan, COUNT(*) FROM AptUnit WHERE floorplan IS NOT NULL GROUP BY ns, floorplan;
+INSERT INTO FloorplanCounters (ns, id ) SELECT ns, id FROM Floorplan;
+
+UPDATE Floorplan SET counters = Floorplan.id;
+
+COMMIT;
+
+UPDATE FloorplanCounters SET _unitCount = (SELECT COUNT(*) FROM AptUnit, Floorplan
+     WHERE AptUnit.floorplan = Floorplan.id AND AptUnit.belongsTo = Floorplan.building AND FloorplanCounters.id = Floorplan.id);
 
 COMMIT;
 
 UPDATE FloorplanCounters SET _marketingUnitCount = (SELECT COUNT(*) FROM AptUnit, Floorplan Fa, Floorplan Fm
      WHERE AptUnit.floorplan = Fa.id AND AptUnit.belongsTo = Fm.building AND Fa.marketingName = Fm.marketingName AND Fa.building = Fm.building AND FloorplanCounters.id = Fm.id);
 
-UPDATE Floorplan SET counters = Floorplan.id;
 
 COMMIT;
 
