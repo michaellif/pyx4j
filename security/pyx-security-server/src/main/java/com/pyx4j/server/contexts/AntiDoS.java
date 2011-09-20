@@ -49,6 +49,11 @@ public class AntiDoS {
 
         long duration;
 
+        @Override
+        public String toString() {
+            return "requests " + requests + ", duration " + duration;
+        }
+
     }
 
     private final ThrottleConfig throttleConfig;
@@ -91,7 +96,7 @@ public class AntiDoS {
                 if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
                     RequestDebug.debug(request);
                 }
-                log.error("possible denial-of-service attack from {} requests {}", remoteAddr, counter.requests);
+                log.error("possible denial-of-service attack from {}; {}", remoteAddr, counter);
                 return null;
             }
         }
