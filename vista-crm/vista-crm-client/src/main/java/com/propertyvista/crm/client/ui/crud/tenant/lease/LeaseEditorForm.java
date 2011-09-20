@@ -637,14 +637,13 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                     @Override
                     public IsWidget createContent() {
-                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable());
-
-                        main.add(inject(proto().item(), new CEntityLabel()), 20);
-
+                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
                         VistaDecoratorsSplitFlowPanel split;
-                        main.add(split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 12, 20));
-                        split.getLeftPanel().add(inject(proto().price(), new CLabel()), 6);
+
                         if (parent.isEditable()) {
+                            main.add(inject(proto().item(), new CEntityLabel()), 20);
+                            main.add(split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 26, 10));
+                            split.getLeftPanel().add(inject(proto().price(), new CLabel()), 6);
                             split.getRightPanel().add(new Button("Recalculate...", new ClickHandler() {
                                 @Override
                                 public void onClick(ClickEvent event) {
@@ -662,6 +661,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                     getValue().price().setValue(adjustedPrice);
                                 }
                             }));
+                        } else {
+                            main.add(split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 30, 16));
+                            split.getLeftPanel().add(inject(proto().item(), new CEntityLabel()), 20);
+                            split.getRightPanel().add(inject(proto().price(), new CLabel()), 6);
                         }
 
                         main.add(new CrmSectionSeparator(CrmEntityFolder.i18n.tr("Adjustments:")));
