@@ -32,7 +32,6 @@ import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.Style
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.MainNavigViewImpl;
 import com.propertyvista.portal.client.ui.PortalScreen;
-import com.propertyvista.portal.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.portal.client.ui.decorations.BasicCardDecorator;
 import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
 import com.propertyvista.portal.client.ui.decorations.TableFolderDecorator;
@@ -55,7 +54,6 @@ public abstract class PortalTheme extends VistaTheme {
         initEntityDataTableStyles();
         initDecoratorsStyles();
         initSiteViewStyles();
-        initTopActionStyles();
         initVistaMainNavigViewStyles();
         initTableDecorators();
         initCriteriaWidgetDecoratorStyles();
@@ -275,24 +273,6 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("background-color", ThemeColor.OBJECT_TONE30);
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColor.BORDER);
-        addStyle(style);
-    }
-
-    private void initTopActionStyles() {
-        String prefix = TopRightActionsViewImpl.DEFAULT_STYLE_PREFIX;
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("padding-top", "40px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TopRightActionsViewImpl.StyleSuffix.PhoneLabel));
-        style.addProperty("font-size", "2em");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("padding-right", "30px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TopRightActionsViewImpl.StyleSuffix.GreetingLabel));
-        style.addProperty("font-weight", "bold");
-        style.addProperty("font-size", "1em");
         addStyle(style);
     }
 

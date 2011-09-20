@@ -37,8 +37,6 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
 
     private final AppPlace place;
 
-    private static List<NavigItem> items;
-
     private static I18n i18n = I18nFactory.getI18n(MainNavigActivity.class);
 
     public MainNavigActivity(Place place) {
@@ -55,22 +53,12 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-
-//            AppPlace place = NavigItem.convertTypeToPlace(descriptor.type().getValue());
-//            NavigItem mainNavig = new NavigItem(place, AppSite.getHistoryMapper().getPlaceInfo(place).getCaption());
-//            if (ClientContext.isAuthenticated()) {
-//                mainNavig.setSecondaryNavigation(getSecondaryNavig(descriptor.type().getValue()));
-//            }
-//            items.add(mainNavig);
-
         List<NavigItem> items = new ArrayList<NavigItem>();
-
         items.add(new NavigItem(new Residents.PersonalInfo(), i18n.tr("Personal Info")));
         items.add(new NavigItem(new Residents.CurrentBill(), i18n.tr("Current Bill")));
         items.add(new NavigItem(new Residents.PaymentMethods(), i18n.tr("Payment Methods")));
         items.add(new NavigItem(new Residents.BillingHistory(), i18n.tr("Billing History")));
         items.add(new NavigItem(new Residents.Maintenance(), i18n.tr("Maintenance")));
-
         view.setMainNavig(items);
 
     }
