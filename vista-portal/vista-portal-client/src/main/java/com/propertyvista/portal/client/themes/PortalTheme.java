@@ -53,7 +53,7 @@ public abstract class PortalTheme extends VistaTheme {
         initEntityDataTableStyles();
         initDecoratorsStyles();
         initSiteViewStyles();
-        initVistaMainNavigViewStyles();
+        initVistaNavigViewStyles();
         initTableDecorators();
         initCriteriaWidgetDecoratorStyles();
         initBaseFolderItemViewerDecoratorStyles();
@@ -124,7 +124,7 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("text-decoration", "underline");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.MainNavig));
+        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Navig));
         style.addProperty("width", "100%");
         style.addProperty("height", "9.2em");
         addStyle(style);
@@ -271,7 +271,7 @@ public abstract class PortalTheme extends VistaTheme {
         addStyle(style);
     }
 
-    private void initVistaMainNavigViewStyles() {
+    private void initVistaNavigViewStyles() {
         String prefix = NavigViewImpl.DEFAULT_STYLE_PREFIX;
 
         Style style = new Style(Selector.valueOf(prefix));

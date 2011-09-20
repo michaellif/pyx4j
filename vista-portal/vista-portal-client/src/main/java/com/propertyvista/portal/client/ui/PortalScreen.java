@@ -32,7 +32,7 @@ public class PortalScreen extends FlowPanel {
     public static String DEFAULT_STYLE_PREFIX = "PortalView";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Content, Header, Footer, MainNavig, Center, Main, Left, Right, Display, StaticContent
+        Content, Header, Footer, Navig, Center, Main, Left, Right, Display, StaticContent
     }
 
     public PortalScreen() {
@@ -43,12 +43,12 @@ public class PortalScreen extends FlowPanel {
 
         setStyleName(prefix);
 
-        FlowPanel mainNavigWrapper = new FlowPanel();
-        mainNavigWrapper.setStyleName(prefix + StyleSuffix.MainNavig);
-        add(mainNavigWrapper);
+        FlowPanel navigWrapper = new FlowPanel();
+        navigWrapper.setStyleName(prefix + StyleSuffix.Navig);
+        add(navigWrapper);
 
-        DisplayPanel mainNavigDisplayPanel = new DisplayPanel();
-        mainNavigWrapper.add(mainNavigDisplayPanel);
+        DisplayPanel navigDisplayPanel = new DisplayPanel();
+        navigWrapper.add(navigDisplayPanel);
 
         SimplePanel centerWrapper = new SimplePanel();
         centerWrapper.setStyleName(prefix + StyleSuffix.Center);
@@ -62,7 +62,7 @@ public class PortalScreen extends FlowPanel {
         contentDisplayPanel.setStyleName(prefix + StyleSuffix.Content);
         mainWrapper.add(contentDisplayPanel);
 
-        bind(new NavigActivityMapper(), mainNavigDisplayPanel, eventBus);
+        bind(new NavigActivityMapper(), navigDisplayPanel, eventBus);
         bind(new ContentActivityMapper(), contentDisplayPanel, eventBus);
 
     }

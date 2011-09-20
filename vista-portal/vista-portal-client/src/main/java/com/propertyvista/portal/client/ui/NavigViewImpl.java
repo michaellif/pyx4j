@@ -71,12 +71,12 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
     public void setNavig(List<NavigItem> items) {
         tabsHolder.clear();
         for (NavigItem item : items) {
-            NavigTab mainNavigTab = new NavigTab(item, DEFAULT_STYLE_PREFIX);
-            tabsHolder.add(mainNavigTab);
+            NavigTab navigTab = new NavigTab(item, DEFAULT_STYLE_PREFIX);
+            tabsHolder.add(navigTab);
 
             AppPlace currentPlace = (AppPlace) presenter.getWhere();
             if (item.getPlace().equals(currentPlace)) {
-                mainNavigTab.select();
+                navigTab.select();
             }
         }
     }
