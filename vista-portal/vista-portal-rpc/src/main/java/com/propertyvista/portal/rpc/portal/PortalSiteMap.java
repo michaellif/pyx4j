@@ -38,20 +38,6 @@ public class PortalSiteMap implements SiteMap {
     @NavigationItem(navigLabel = "Residents")
     public static class Residents extends AppPlace {
 
-        @PlaceProperties(caption = "Sign In")
-        @NavigationItem(navigLabel = "residentLogin")
-        public static class Login extends AppPlace {
-        }
-
-        public static class RetirevePassword extends AppPlace {
-        }
-
-        public static class LoginInvitation extends AppPlace {
-        }
-
-        public static class CreateAccount extends AppPlace {
-        }
-
         public static class PersonalInfo extends AppPlace {
         }
 

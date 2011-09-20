@@ -17,10 +17,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.portal.client.ui.FooterView;
 import com.propertyvista.portal.client.ui.FooterViewImpl;
-import com.propertyvista.portal.client.ui.LoginInvitationView;
-import com.propertyvista.portal.client.ui.LoginInvitationViewImpl;
-import com.propertyvista.portal.client.ui.LoginView;
-import com.propertyvista.portal.client.ui.LoginViewImpl;
 import com.propertyvista.portal.client.ui.MainNavigView;
 import com.propertyvista.portal.client.ui.MainNavigViewImpl;
 import com.propertyvista.portal.client.ui.PotentialTenantView;
@@ -56,16 +52,12 @@ public class PortalViewFactory extends ViewFactoryBase {
         if (!map.containsKey(type)) {
             if (FooterView.class.equals(type)) {
                 map.put(type, new FooterViewImpl());
-            } else if (LoginView.class.equals(type)) {
-                map.put(type, new LoginViewImpl());
             } else if (MaintenanceView.class.equals(type)) {
                 map.put(type, new MaintenanceViewImpl());
             } else if (MainNavigView.class.equals(type)) {
                 map.put(type, new MainNavigViewImpl());
             } else if (BillingHistoryView.class.equals(type)) {
                 map.put(type, new BillingHistoryViewImpl());
-            } else if (LoginInvitationView.class.equals(type)) {
-                map.put(type, new LoginInvitationViewImpl());
             } else if (StaticPageView.class.equals(type)) {
                 map.put(type, new StaticPageViewImpl());
             } else if (PersonalInfoView.class.equals(type)) {
