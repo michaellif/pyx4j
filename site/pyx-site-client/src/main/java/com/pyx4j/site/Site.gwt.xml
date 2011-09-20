@@ -8,7 +8,7 @@
 	<inherits name='com.pyx4j.entity.Entity' />
     <inherits name='com.pyx4j.site.SiteShared'/>
     <inherits name='com.pyx4j.security.Security'/>
-    <inherits name='com.pyx4j.webstorage.HTML5LocalStorage'/>
+    <inherits name='com.google.gwt.storage.Storage'/>
     <inherits name='com.pyx4j.site.client.themes.light.LightTheme' />
     <inherits name='com.pyx4j.site.client.themes.dark.DarkTheme' />
     <inherits name='com.pyx4j.site.client.themes.business.BusinessTheme' />

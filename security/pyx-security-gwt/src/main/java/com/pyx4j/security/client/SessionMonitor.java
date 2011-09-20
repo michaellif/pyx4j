@@ -29,6 +29,8 @@ import com.google.gwt.event.logical.shared.InitializeEvent;
 import com.google.gwt.event.logical.shared.InitializeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.storage.client.Storage;
+import com.google.gwt.storage.client.StorageEvent;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 
@@ -38,11 +40,8 @@ import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RPCStatusChangeEvent;
 import com.pyx4j.rpc.client.RPCStatusChangeHandler;
 import com.pyx4j.security.shared.Behavior;
-import com.pyx4j.webstorage.client.HTML5Storage;
-import com.pyx4j.webstorage.client.StorageEvent;
-import com.pyx4j.webstorage.client.StorageEventHandler;
 
-public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandler {
+public class SessionMonitor implements RPCStatusChangeHandler, StorageEvent.Handler {
 
     private static final Logger log = LoggerFactory.getLogger(SessionMonitor.class);
 
@@ -116,8 +115,8 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
 
     protected SessionMonitor() {
         RPCManager.addRPCStatusChangeHandler(this);
-        if (HTML5Storage.isSupported()) {
-            HTML5Storage.getLocalStorage().addStorageEventHandler(this);
+        if (Storage.isSupported()) {
+            Storage.addStorageEventHandler(this);
         }
     }
 
@@ -181,9 +180,9 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
         } else {
             sessionCookieValueHashCode = String.valueOf(ClientContext.visitHashCode()) + String.valueOf(sessionCookieValue.hashCode());
         }
-        if (HTML5Storage.isSupported()) {
+        if (Storage.isSupported()) {
             log.debug("set session code {}", sessionCookieValueHashCode);
-            HTML5Storage.getLocalStorage().setItem(SESSION_ID_KEY, sessionCookieValueHashCode);
+            Storage.getLocalStorageIfSupported().setItem(SESSION_ID_KEY, sessionCookieValueHashCode);
         }
     }
 
@@ -226,7 +225,7 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
 
     @Override
     public void onStorageChange(StorageEvent event) {
-        String newHashCode = HTML5Storage.getLocalStorage().getItem(SESSION_ID_KEY);
+        String newHashCode = Storage.getLocalStorageIfSupported().getItem(SESSION_ID_KEY);
         if (!CommonsStringUtils.equals(sessionCookieValueHashCode, newHashCode)) {
             log.debug("Session change {} -> {}", sessionCookieValueHashCode, newHashCode);
             ClientContext.obtainAuthenticationData(null, null, true, false);

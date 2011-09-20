@@ -22,7 +22,7 @@ package com.pyx4j.webstorage.test.client;
 
 import junit.framework.TestCase;
 
-import com.pyx4j.webstorage.client.HTML5Storage;
+import com.google.gwt.storage.client.Storage;
 
 public class HTML5LocalStorageGWTTest extends TestCase {
 
@@ -31,11 +31,11 @@ public class HTML5LocalStorageGWTTest extends TestCase {
     private static final String TEST_DATA = "Bob";
 
     public void testIsSupported() {
-        assertTrue("IsSupported", HTML5Storage.isSupported());
+        assertTrue("IsSupported", Storage.isSupported());
     }
 
     public void testClear() {
-        HTML5Storage storage = HTML5Storage.getLocalStorage();
+        Storage storage = Storage.getLocalStorageIfSupported();
         storage.clear();
         assertEquals("Clean Length", 0, storage.getLength());
     }
@@ -45,7 +45,7 @@ public class HTML5LocalStorageGWTTest extends TestCase {
     }
 
     public void testWrite() {
-        HTML5Storage storage = HTML5Storage.getLocalStorage();
+        Storage storage = Storage.getLocalStorageIfSupported();
         storage.removeItem(getTestKey());
         int len = storage.getLength();
         storage.setItem(getTestKey(), TEST_DATA);
@@ -54,12 +54,12 @@ public class HTML5LocalStorageGWTTest extends TestCase {
     }
 
     public void testReadFromPreviousWrite() {
-        HTML5Storage storage = HTML5Storage.getLocalStorage();
+        Storage storage = Storage.getLocalStorageIfSupported();
         assertEquals("read data", TEST_DATA, storage.getItem(getTestKey()));
     }
 
     public void testRemoveFromPreviousWrite() {
-        HTML5Storage storage = HTML5Storage.getLocalStorage();
+        Storage storage = Storage.getLocalStorageIfSupported();
         assertEquals("read data", TEST_DATA, storage.getItem(getTestKey()));
         storage.removeItem(getTestKey());
         assertNull("read data", storage.getItem(getTestKey()));

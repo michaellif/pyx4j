@@ -4,15 +4,15 @@
 <!--
    This is used in development environment(Eclipse) to compile project faster. Only 3 browser permutations from 6 for production.
    Also default eclipse settings that are in SVN using this module and -draftCompile
-   
+
    48s instead of 67s on Core 2 Duo CPU T9400 @ 2.53GHz, 4GB RAM PC3-8500 (DDR3-1066)
    Next step is to set -localWorkers 2 -> 44s (on same CPU)
    more info  http://sites.google.com/a/pyx4j.com/references/b-time
-   
-   maven build is not using this module.  
+
+   maven build is not using this module.
  -->
 <module rename-to="g.site">
     <inherits name='com.pyx4j.examples.site.Site'/>
     <inherits name='com.google.gwt.user.Debug'/>
-    <set-property name="user.agent" value="safari,gecko1_8,ie8"/>
+    <set-property name="user.agent" value="safari,gecko1_8,ie9"/>
 </module>

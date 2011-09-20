@@ -25,15 +25,15 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.storage.client.Storage;
+import com.google.gwt.storage.client.StorageEvent;
+import com.google.gwt.storage.client.StorageEvent.Handler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 
-import com.pyx4j.webstorage.client.HTML5Storage;
-import com.pyx4j.webstorage.client.StorageEvent;
-import com.pyx4j.webstorage.client.StorageEventHandler;
 import com.pyx4j.widgets.client.GroupBoxPanel;
 
 public class HTML5StorageDemoPanel extends GroupBoxPanel {
@@ -113,16 +113,16 @@ public class HTML5StorageDemoPanel extends GroupBoxPanel {
         events.setTitle("Count of Storage Event");
     }
 
-    HTML5Storage getSelectedStorage() {
+    Storage getSelectedStorage() {
         if (sessionStorage.getValue()) {
-            return HTML5Storage.getSessionStorage();
+            return Storage.getSessionStorageIfSupported();
         } else {
-            return HTML5Storage.getLocalStorage();
+            return Storage.getLocalStorageIfSupported();
         }
     }
 
     private void addListeners() {
-        HTML5Storage.getLocalStorage().addStorageEventHandler(new StorageEventHandler() {
+        Storage.addStorageEventHandler(new Handler() {
             @Override
             public void onStorageChange(StorageEvent event) {
                 log.debug("Storage Event {} at {} ", event.getKey(), event.getUrl());

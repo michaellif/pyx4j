@@ -33,6 +33,7 @@ import com.google.gwt.event.logical.shared.InitializeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
@@ -49,7 +50,6 @@ import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.security.rpc.UserVisitChangedSystemNotification;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.UserVisit;
-import com.pyx4j.webstorage.client.HTML5Storage;
 
 public class ClientContext {
 
@@ -223,8 +223,8 @@ public class ClientContext {
         if (eventBus != null) {
             eventBus.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, userVisit));
         }
-        if (HTML5Storage.isSupported()) {
-            HTML5Storage.getLocalStorage().setItem(TOKEN_STORAGE_ATTRIBUTE, sessionToken);
+        if (Storage.isSupported()) {
+            Storage.getLocalStorageIfSupported().setItem(TOKEN_STORAGE_ATTRIBUTE, sessionToken);
         }
         if (ClientSecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
             RPCManager.enableAppEngineUsageStats();
@@ -404,8 +404,8 @@ public class ClientContext {
 
             if (service != null) {
                 String sessionToken = null;
-                if (HTML5Storage.isSupported()) {
-                    sessionToken = HTML5Storage.getLocalStorage().getItem(TOKEN_STORAGE_ATTRIBUTE);
+                if (Storage.isSupported()) {
+                    sessionToken = Storage.getLocalStorageIfSupported().getItem(TOKEN_STORAGE_ATTRIBUTE);
                 }
                 log.debug("authenticate {}", sessionToken);
                 service.authenticate(callback, sessionToken);

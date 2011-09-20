@@ -26,6 +26,7 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -46,7 +47,6 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
-import com.pyx4j.webstorage.client.HTML5Storage;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
@@ -110,8 +110,8 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
         rememberID = (CCheckBox) form.get(form.proto().rememberID());
 
-        if (HTML5Storage.isSupported()) {
-            String userId = HTML5Storage.getLocalStorage().getItem(BaseLogInPanel.HTML5_KEY);
+        if (Storage.isSupported()) {
+            String userId = Storage.getLocalStorageIfSupported().getItem(BaseLogInPanel.HTML5_KEY);
             if (CommonsStringUtils.isStringSet(userId)) {
                 form.get(form.proto().email()).setValue(userId);
                 rememberID.setValue(true);
@@ -220,11 +220,11 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
                 form.get(form.proto().password()).setValue(null);
                 form.get(form.proto().captcha()).setMandatory(false);
                 ClientContext.authenticated(result);
-                if (HTML5Storage.isSupported()) {
+                if (Storage.isSupported()) {
                     if (rememberID.getValue()) {
-                        HTML5Storage.getLocalStorage().setItem(BaseLogInPanel.HTML5_KEY, form.get(form.proto().email()).getValue());
+                        Storage.getLocalStorageIfSupported().setItem(BaseLogInPanel.HTML5_KEY, form.get(form.proto().email()).getValue());
                     } else {
-                        HTML5Storage.getLocalStorage().removeItem(BaseLogInPanel.HTML5_KEY);
+                        Storage.getLocalStorageIfSupported().removeItem(BaseLogInPanel.HTML5_KEY);
                     }
                 }
                 onLogInComplete();
