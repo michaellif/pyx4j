@@ -174,6 +174,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
             service.create(new AsyncCallback<E>() {
                 @Override
                 public void onSuccess(E result) {
+                    onSaved(result);
                     if (apply) {
                         onApplySuccess(result);
                     } else {
@@ -190,6 +191,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
             service.save(new AsyncCallback<E>() {
                 @Override
                 public void onSuccess(E result) {
+                    onSaved(result);
                     if (apply) {
                         onApplySuccess(result);
                     } else {
@@ -203,6 +205,10 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
                 }
             }, view.getValue());
         }
+    }
+
+    protected void onSaved(E result) {
+
     }
 
     protected void onApplySuccess(E result) {
