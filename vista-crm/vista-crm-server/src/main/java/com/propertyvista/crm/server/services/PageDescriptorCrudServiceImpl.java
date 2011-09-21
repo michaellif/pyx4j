@@ -15,11 +15,15 @@ package com.propertyvista.crm.server.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.SiteDescriptor;
 
 public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDescriptor> implements PageDescriptorCrudService {
 
@@ -44,14 +48,26 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
 
     @Override
     public void save(AsyncCallback<PageDescriptor> callback, PageDescriptor entity) {
-
         // update caption:
         entity.caption().clear();
         for (PageContent content : entity.content()) {
             content._caption().locale().set(content.locale());
             entity.caption().add(content._caption());
         }
-
         super.save(callback, entity);
+    }
+
+    @Override
+    protected void persistDBO(PageDescriptor dbo) {
+        if (dbo.type().isNull()) {
+            dbo.type().setValue(PageDescriptor.Type.staticContent);
+        }
+        boolean isCreate = dbo.id().isNull();
+        super.persistDBO(dbo);
+        if (isCreate) {
+            SiteDescriptor site = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
+            site.childPages().add(dbo);
+            Persistence.service().persist(site);
+        }
     }
 }

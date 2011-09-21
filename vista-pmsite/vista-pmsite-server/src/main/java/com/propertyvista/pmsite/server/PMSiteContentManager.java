@@ -141,6 +141,10 @@ public class PMSiteContentManager implements Serializable {
 
         EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
         SiteDescriptor site = Persistence.service().retrieve(criteria);
+        if (site == null) {
+            //Working on Empty DB
+            site = EntityFactory.create(SiteDescriptor.class);
+        }
 
         for (PageDescriptor descriptor : site.childPages()) {
             createPath(descriptor);

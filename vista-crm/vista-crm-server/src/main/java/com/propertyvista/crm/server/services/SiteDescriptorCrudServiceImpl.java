@@ -19,6 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.crm.rpc.services.SiteDescriptorCrudService;
@@ -41,7 +42,9 @@ public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceDtoImpl<Sit
         EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
         List<Key> list = Persistence.service().queryKeys(criteria);
         if (list.isEmpty()) {
-            throw new Error("Home item not found");
+            SiteDescriptor site = EntityFactory.create(SiteDescriptor.class);
+            Persistence.service().persist(site);
+            callback.onSuccess(site.getPrimaryKey());
         } else {
             callback.onSuccess(list.get(0));
         }

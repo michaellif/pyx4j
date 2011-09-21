@@ -35,9 +35,13 @@ public abstract class GenericCrudServiceImpl<DBO extends IEntity> implements Abs
         this.dboClass = dboClass;
     }
 
+    protected void persistDBO(DBO dbo) {
+        EntityServicesImpl.secureSave(dbo);
+    }
+
     @Override
     public void create(AsyncCallback<DBO> callback, DBO entity) {
-        EntityServicesImpl.secureSave(entity);
+        persistDBO(entity);
         callback.onSuccess(entity);
     }
 
@@ -56,7 +60,7 @@ public abstract class GenericCrudServiceImpl<DBO extends IEntity> implements Abs
 
     @Override
     public void save(AsyncCallback<DBO> callback, DBO entity) {
-        EntityServicesImpl.secureSave(entity);
+        persistDBO(entity);
         enhanceSave(entity);
         callback.onSuccess(entity);
     }
