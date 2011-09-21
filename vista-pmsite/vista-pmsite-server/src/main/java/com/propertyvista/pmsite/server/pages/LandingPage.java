@@ -37,9 +37,6 @@ public class LandingPage extends BasePage {
         super();
         setVersioned(false);
 
-        //TODO      add(new StyleSheetReference("landing_css", new TextTemplateResourceReference(TemplateResources.class, "landing" + getPmsiteStyle() + ".css",
-//      "text/css", new StylesheetTemplateModel(baseColor))));
-
         add(new QuickSearchCriteriaPanel());
 
         add(new WebComponent("landing_content") {
