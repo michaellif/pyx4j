@@ -110,6 +110,9 @@ public class SchedulerHelper {
         quartzProperties.put(dsConfigPrefix + StdSchedulerFactory.PROP_DATASOURCE_USER, rdbConfiguration.userName());
         quartzProperties.put(dsConfigPrefix + StdSchedulerFactory.PROP_DATASOURCE_PASSWORD, rdbConfiguration.password());
         quartzProperties.put(dsConfigPrefix + StdSchedulerFactory.PROP_DATASOURCE_MAX_CONNECTIONS, "4");
+        if (rdbConfiguration.connectionValidationQuery() != null) {
+            quartzProperties.put(dsConfigPrefix + StdSchedulerFactory.PROP_DATASOURCE_VALIDATION_QUERY, rdbConfiguration.connectionValidationQuery());
+        }
 
         schedulerFactory = new StdSchedulerFactory(quartzProperties);
 
