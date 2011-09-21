@@ -46,6 +46,7 @@ public class PMSiteApplication extends WebApplication {
         if (ApplicationMode.isDevelopment()) {
             getResourceSettings().setResourcePollFrequency(Duration.ONE_SECOND);
         }
+        getPageSettings().addComponentResolver(new I18nMessageResolver());
 
         mountBookmarkablePage("findapt", FindAptPage.class);
         mount(new QueryStringUrlCodingStrategy("aptlist", AptListPage.class));
