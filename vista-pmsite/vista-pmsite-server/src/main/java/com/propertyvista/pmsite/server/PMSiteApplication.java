@@ -13,6 +13,7 @@
  */
 package com.propertyvista.pmsite.server;
 
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
@@ -26,6 +27,7 @@ import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.pmsite.server.pages.FindAptPage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
+import com.propertyvista.pmsite.server.pages.StaticPage;
 
 public class PMSiteApplication extends WebApplication {
 
@@ -41,19 +43,27 @@ public class PMSiteApplication extends WebApplication {
 
         mountPage("findapt", FindAptPage.class);
 
-        //TODO        mount(new QueryStringUrlCodingStrategy("aptlist", AptListPage.class));
         mountPage("aptlist", AptListPage.class);
 
-        //TODO        mount(new QueryStringUrlCodingStrategy("aptinfo", AptDetailsPage.class));
         mountPage("aptinfo", AptDetailsPage.class);
 
         mountPage("residents", ResidentsPage.class);
 
-//TODO        mount(new MixedParamUrlCodingStrategy("cnt", StaticPage.class, PMSiteContentManager.PARAMETER_NAMES));
-        mountPage("cnt", FindAptPage.class);
+        mountPage("cnt" + PMSiteContentManager.PARAMETER_PATH, StaticPage.class);
 
         // add js "virtual" folder
-//TODO        getSharedResources().putClassAlias(JSResources.class, "js");
+        // getSharedResources().putClassAlias(JSResources.class, "js");
+
+//        mountResource("js", new ResourceReference(JSResources.class, "js") {
+//            private static final long serialVersionUID = 1L;
+//
+//            JSResources jsResources = new JSResources();
+//
+//            @Override
+//            public IResource getResource() {
+//                return jsResources;
+//            }
+//        });
 
     }
 
@@ -71,4 +81,12 @@ public class PMSiteApplication extends WebApplication {
         return (PMSiteApplication) WebApplication.get();
     }
 
+    @Override
+    public RuntimeConfigurationType getConfigurationType() {
+        if (ApplicationMode.isDevelopment()) {
+            return RuntimeConfigurationType.DEVELOPMENT;
+        } else {
+            return RuntimeConfigurationType.DEPLOYMENT;
+        }
+    }
 }

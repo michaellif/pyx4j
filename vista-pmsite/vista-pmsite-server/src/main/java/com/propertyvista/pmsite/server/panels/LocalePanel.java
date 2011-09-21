@@ -16,7 +16,7 @@ package com.propertyvista.pmsite.server.panels;
 import java.util.ArrayList;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.StatelessLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -40,7 +40,7 @@ public class LocalePanel extends Panel {
 
                 final AvailableLocale locale = item.getModelObject();
 
-                Link<Void> link = new Link<Void>("langSelector") {
+                StatelessLink<Void> link = new StatelessLink<Void>("langSelector") {
 
                     private static final long serialVersionUID = 1L;
 

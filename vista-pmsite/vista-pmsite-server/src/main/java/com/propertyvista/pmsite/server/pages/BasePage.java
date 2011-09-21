@@ -13,19 +13,26 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.StatelessLink;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.resource.TextTemplateResourceReference;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 
 import templates.TemplateResources;
+
+import com.pyx4j.config.shared.ApplicationMode;
 
 import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
@@ -45,7 +52,7 @@ public abstract class BasePage extends WebPage {
     public BasePage(PageParameters parameters) {
         super(parameters);
 
-        add(new Link<Void>("switchStyle") {
+        StatelessLink<Void> switchStyleLink = new StatelessLink<Void>("switchStyle") {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -66,7 +73,9 @@ public abstract class BasePage extends WebPage {
 
                 setResponsePage(getPageClass(), getPageParameters());
             }
-        });
+
+        };
+        add(switchStyleLink);
 
         add(new HeaderPanel());
         add(new FooterPanel());
@@ -100,4 +109,38 @@ public abstract class BasePage extends WebPage {
         }
     }
 
+    @Override
+    protected void onBeforeRender() {
+        super.onBeforeRender();
+
+        if (ApplicationMode.isDevelopment()) {
+            checkIfPageStateless(this);
+        }
+    }
+
+    private void checkIfPageStateless(Page p) {
+        if (!p.isPageStateless()) {
+            // find out why
+            final List<Component> statefulComponents = new ArrayList<Component>();
+            p.visitChildren(Component.class, new IVisitor() {
+
+                @Override
+                public void component(Object paramT, IVisit paramIVisit) {
+                    if (!((Component) paramT).isStateless()) {
+                        statefulComponents.add(((Component) paramT));
+                    }
+                }
+
+            });
+
+            String message = "Whoops! this page is no longer stateless";
+            if (statefulComponents.size() > 0) {
+                message += " - the reason is that it contains the following stateful components: ";
+                for (Component c : statefulComponents) {
+                    message += "\n" + c.getMarkupId();
+                }
+            }
+            p.warn(message);
+        }
+    }
 }

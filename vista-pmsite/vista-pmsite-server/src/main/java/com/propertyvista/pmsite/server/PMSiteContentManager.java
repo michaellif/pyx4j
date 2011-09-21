@@ -61,9 +61,13 @@ public class PMSiteContentManager implements Serializable {
     public static final String PAGE_ID_PARAM_NAME = "pageId";
 
     public static String[] PARAMETER_NAMES = new String[10];
+
+    public static StringBuilder PARAMETER_PATH = new StringBuilder();
+
     static {
         for (int i = 0; i < PARAMETER_NAMES.length; i++) {
             PARAMETER_NAMES[i] = PMSiteContentManager.PAGE_ID_PARAM_NAME + i;
+            PARAMETER_PATH.append("/#{").append(PARAMETER_NAMES[i]).append("}");
         }
     }
 
