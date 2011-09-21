@@ -13,15 +13,10 @@
  */
 package com.propertyvista.pmsite.server;
 
-import js.JSResources;
-
-import org.apache.wicket.Page;
-import org.apache.wicket.Request;
-import org.apache.wicket.Response;
 import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.request.target.coding.MixedParamUrlCodingStrategy;
-import org.apache.wicket.request.target.coding.QueryStringUrlCodingStrategy;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
 import org.apache.wicket.util.time.Duration;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -31,34 +26,40 @@ import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.pmsite.server.pages.FindAptPage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
-import com.propertyvista.pmsite.server.pages.StaticPage;
 
 public class PMSiteApplication extends WebApplication {
 
     @Override
-    public Class<? extends Page> getHomePage() {
-        return LandingPage.class;
-    }
-
-    @Override
     protected void init() {
+
+        super.init();
 
         if (ApplicationMode.isDevelopment()) {
             getResourceSettings().setResourcePollFrequency(Duration.ONE_SECOND);
         }
-        getPageSettings().addComponentResolver(new I18nMessageResolver());
+//        getPageSettings().addComponentResolver(new I18nMessageResolver());
 
-        mountBookmarkablePage("findapt", FindAptPage.class);
-        mount(new QueryStringUrlCodingStrategy("aptlist", AptListPage.class));
-        mount(new QueryStringUrlCodingStrategy("aptinfo", AptDetailsPage.class));
+        mountPage("findapt", FindAptPage.class);
 
-        mountBookmarkablePage("residents", ResidentsPage.class);
+        //TODO        mount(new QueryStringUrlCodingStrategy("aptlist", AptListPage.class));
+        mountPage("aptlist", AptListPage.class);
 
-        mount(new MixedParamUrlCodingStrategy("cnt", StaticPage.class, PMSiteContentManager.PARAMETER_NAMES));
+        //TODO        mount(new QueryStringUrlCodingStrategy("aptinfo", AptDetailsPage.class));
+        mountPage("aptinfo", AptDetailsPage.class);
+
+        mountPage("residents", ResidentsPage.class);
+
+//TODO        mount(new MixedParamUrlCodingStrategy("cnt", StaticPage.class, PMSiteContentManager.PARAMETER_NAMES));
+        mountPage("cnt", FindAptPage.class);
 
         // add js "virtual" folder
-        getSharedResources().putClassAlias(JSResources.class, "js");
+//TODO        getSharedResources().putClassAlias(JSResources.class, "js");
 
+    }
+
+    @Override
+    public Class<LandingPage> getHomePage() {
+        return LandingPage.class;
     }
 
     @Override

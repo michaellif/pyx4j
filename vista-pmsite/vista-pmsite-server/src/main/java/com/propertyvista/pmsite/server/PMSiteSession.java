@@ -16,8 +16,8 @@ package com.propertyvista.pmsite.server;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.Request;
 import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.request.Request;
 
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.pmsite.server.panels.NavigationItem;
@@ -63,8 +63,10 @@ public class PMSiteSession extends WebSession {
 
     public List<NavigationItem> getNavigItems(PageDescriptor content) {
         List<NavigationItem> list = new ArrayList<NavigationItem>();
-        for (PageDescriptor descriptor : content.childPages()) {
-            list.add(new NavigationItem(descriptor, contentManager));
+        if (content != null) {
+            for (PageDescriptor descriptor : content.childPages()) {
+                list.add(new NavigationItem(descriptor, contentManager));
+            }
         }
         return list;
     }

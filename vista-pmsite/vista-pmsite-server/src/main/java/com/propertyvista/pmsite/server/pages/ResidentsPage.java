@@ -13,7 +13,7 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
-import org.apache.wicket.markup.html.resources.StyleSheetReference;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.resource.TextTemplateResourceReference;
 
 import templates.TemplateResources;
@@ -24,14 +24,21 @@ import com.propertyvista.pmsite.server.panels.GwtInclude;
 
 public class ResidentsPage extends BasePage {
 
+    private static final long serialVersionUID = 1L;
+
     public ResidentsPage() {
         super();
-
-        String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
-        add(new StyleSheetReference("resident_css", new TextTemplateResourceReference(TemplateResources.class, "resident" + getPmsiteStyle() + ".css",
-                "text/css", new StylesheetTemplateModel(baseColor))));
 
         add(new GwtInclude("gwtInclude"));
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
+        TextTemplateResourceReference refCSS = new TextTemplateResourceReference(TemplateResources.class, "resident" + getPmsiteStyle() + ".css", "text/css",
+                new StylesheetTemplateModel(baseColor));
+        response.renderCSSReference(refCSS);
+        super.renderHead(response);
+
+    }
 }

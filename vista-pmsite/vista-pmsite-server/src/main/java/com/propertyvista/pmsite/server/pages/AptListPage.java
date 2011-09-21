@@ -13,15 +13,16 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.mapper.parameter.PageParameters.NamedPair;
 
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.pojo.IPojo;
@@ -39,22 +40,27 @@ import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.AmenityType;
 
 public class AptListPage extends BasePage {
 
+    private static final long serialVersionUID = 1L;
+
     public AptListPage(PageParameters params) {
         super(params);
         setVersioned(false);
 
-        Map<String, String[]> argsW = params.toRequestParameters();
+        List<NamedPair> namedPairs = params.getAllNamed();
 
         Map<String, List<String>> argsE = new HashMap<String, List<String>>();
-        for (String key : argsW.keySet()) {
-            argsE.put(key, Arrays.asList(argsW.get(key)[0]));
+        for (NamedPair namedPair : namedPairs) {
+            if (!argsE.containsKey(namedPair.getKey())) {
+                argsE.put(namedPair.getKey(), new ArrayList<String>());
+            }
+            argsE.get(namedPair.getKey()).add(namedPair.getValue());
         }
 
         PropertySearchCriteria criteria = EntityArgsConverter.createFromArgs(PropertySearchCriteria.class, argsE);
-        String[] amenities = argsW.get("amenities");
+        List<String> amenities = argsE.get("amenities");
         if (amenities != null) {
-            for (int i = 0; i < amenities.length; i++) {
-                criteria.amenities().add(AmenityType.valueOf(amenities[i]));
+            for (int i = 0; i < amenities.size(); i++) {
+                criteria.amenities().add(AmenityType.valueOf(amenities.get(i)));
             }
         }
         if (criteria.searchType().getValue() == null) {

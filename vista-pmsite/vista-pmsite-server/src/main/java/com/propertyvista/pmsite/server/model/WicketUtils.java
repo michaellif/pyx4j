@@ -83,9 +83,10 @@ public class WicketUtils {
             this.useKeys = useKeys;
         }
 
-        @Override
-        protected CharSequence getDefaultChoice(final Object selected) {
-            return useDefault ? super.getDefaultChoice(selected) : "";
-        }
+        //TODO
+//        @Override
+//        protected CharSequence getDefaultChoice(final Object selected) {
+//            return useDefault ? super.getDefaultChoice(selected) : "";
+//        }
     }
 }

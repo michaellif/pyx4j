@@ -15,15 +15,15 @@ package com.propertyvista.pmsite.server.pages;
 
 import java.util.List;
 
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.Response;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.resources.StyleSheetReference;
+import org.apache.wicket.request.Response;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.resource.TextTemplateResourceReference;
 
 import templates.TemplateResources;
@@ -41,16 +41,14 @@ import com.propertyvista.pmsite.server.panels.SecondaryNavigationPanel;
 
 public class StaticPage extends BasePage {
 
+    private static final long serialVersionUID = 1L;
+
     public StaticPage(final PageParameters parameters) {
         super(parameters);
         setVersioned(false);
 
         WebMarkupContainer mainPanel = new WebMarkupContainer("mainPanel");
         add(mainPanel);
-
-        String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
-        add(new StyleSheetReference("static_css", new TextTemplateResourceReference(TemplateResources.class, "static" + getPmsiteStyle() + ".css", "text/css",
-                new StylesheetTemplateModel(baseColor))));
 
         final PageDescriptor descriptor = ((PMSiteSession) getSession()).getContentManager().getStaticPageDescriptor(parameters);
 
@@ -71,7 +69,7 @@ public class StaticPage extends BasePage {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+            public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
                 Response response = getRequestCycle().getResponse();
 
                 EntityQueryCriteria<PageContent> pageContentCriteria = EntityQueryCriteria.create(PageContent.class);
@@ -86,6 +84,16 @@ public class StaticPage extends BasePage {
             }
 
         });
+
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
+        TextTemplateResourceReference refCSS = new TextTemplateResourceReference(TemplateResources.class, "static" + getPmsiteStyle() + ".css", "text/css",
+                new StylesheetTemplateModel(baseColor));
+        response.renderCSSReference(refCSS);
+        super.renderHead(response);
 
     }
 }

@@ -15,7 +15,7 @@ package com.propertyvista.pmsite.server.panels;
 
 import java.io.Serializable;
 
-import org.apache.wicket.PageParameters;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.pmsite.server.PMSiteContentManager;

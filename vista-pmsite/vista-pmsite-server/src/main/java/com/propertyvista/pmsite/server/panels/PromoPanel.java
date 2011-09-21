@@ -41,7 +41,7 @@ public class PromoPanel extends Panel {
             @Override
             protected void populateItem(ListItem<PromoDataModel> item) {
                 PromoDataModel promo = item.getModelObject();
-                item.add(new Image("picture").add(new SimpleAttributeModifier("src", promo.getImg())));
+                item.add(new Image("picture", "").add(new SimpleAttributeModifier("src", promo.getImg())));
                 item.add(new Label("address", promo.getAddress()));
             }
         });

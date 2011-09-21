@@ -13,8 +13,8 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.panels.AptDetailsPanel;
@@ -22,11 +22,13 @@ import com.propertyvista.portal.domain.dto.PropertyDTO;
 
 public class AptDetailsPage extends BasePage {
 
+    private static final long serialVersionUID = 1L;
+
     public AptDetailsPage() {
         super();
-        PageParameters params = getRequestCycle().getPageParameters();
+        PageParameters params = getPageParameters();
         Integer propId = null;
-        if (params == null || (propId = params.getInt("propId")) == null) {
+        if (params == null || (propId = params.get("propId").toInt()) == null) {
             setResponsePage(AptListPage.class);
             return;
         }

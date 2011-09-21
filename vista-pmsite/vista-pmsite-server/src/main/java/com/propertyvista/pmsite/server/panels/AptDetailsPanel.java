@@ -39,7 +39,7 @@ public class AptDetailsPanel extends Panel {
         if (propInfo.mainMedia().getValue() != null) {
             mediaId = propInfo.mainMedia().getValue().asLong();
         }
-        add(new Image("picture").add(new SimpleAttributeModifier("src", PMSiteContentManager.getMediaImgUrl(mediaId, "small"))));
+        add(new Image("picture", "").add(new SimpleAttributeModifier("src", PMSiteContentManager.getMediaImgUrl(mediaId, "small"))));
         IAddress addr = propInfo.address();
         String addrFmt = addr.street1().getValue() + " " + addr.street2().getValue() + ", " + addr.city().getValue() + ", " + addr.province().name().getValue()
                 + ", " + addr.postalCode().getValue();

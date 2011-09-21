@@ -13,13 +13,16 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
+import java.util.List;
+
 import javax.servlet.http.Cookie;
 
-import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.resources.StyleSheetReference;
-import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.request.http.WebRequest;
+import org.apache.wicket.request.http.WebResponse;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.resource.TextTemplateResourceReference;
 
 import templates.TemplateResources;
@@ -32,8 +35,11 @@ import com.propertyvista.pmsite.server.panels.HeaderPanel;
 //http://www.google.com/codesearch#ah7E8QWg9kg/trunk/src/main/java/com/jianfeiliao/portfolio/panel/content/StuffPanel.java&type=cs
 public abstract class BasePage extends WebPage {
 
+    private static final long serialVersionUID = 1L;
+
     public BasePage() {
         this(null);
+
     }
 
     public BasePage(PageParameters parameters) {
@@ -52,24 +58,29 @@ public abstract class BasePage extends WebPage {
                 } else {
                     style = 0;
                 }
-                getWebRequestCycle().getWebResponse().addCookie(new Cookie("pmsiteStyle", String.valueOf(style)));
+                ((WebResponse) getResponse()).addCookie(new Cookie("pmsiteStyle", String.valueOf(style)));
+                //TODO getRequestCycle().getWebResponse().addCookie(new Cookie("pmsiteStyle", String.valueOf(style)));
 
                 setResponsePage(getPageClass(), getPageParameters());
             }
         });
-
-        String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
-        add(new StyleSheetReference("stylesheet", new TextTemplateResourceReference(TemplateResources.class, "main" + getPmsiteStyle() + ".css", "text/css",
-                new StylesheetTemplateModel(baseColor))));
 
         add(new HeaderPanel());
         add(new FooterPanel());
 
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
+        TextTemplateResourceReference refCSS = new TextTemplateResourceReference(TemplateResources.class, "main" + getPmsiteStyle() + ".css", "text/css",
+                new StylesheetTemplateModel(baseColor));
+        response.renderCSSReference(refCSS);
+    }
+
     protected int getPmsiteStyle() {
         Cookie pmsiteStyleCookie = null;
-        Cookie[] cookies = ((WebRequest) getRequestCycle().getRequest()).getCookies();
+        List<Cookie> cookies = ((WebRequest) getRequest()).getCookies();
         if (cookies == null) {
             return 0;
         }

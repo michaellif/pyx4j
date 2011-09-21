@@ -70,10 +70,10 @@ public class QuickSearchCriteriaInputPanel extends Panel {
         add(new DropDownChoice<PropertySearchCriteria.BedroomRange>("bedsRange", Arrays.asList(PropertySearchCriteria.BedroomRange.values())) {
             private static final long serialVersionUID = 1L;
 
-            @Override
-            protected CharSequence getDefaultChoice(final Object selected) {
-                return "";
-            }
+//TODO            @Override
+//            protected CharSequence getDefaultChoice(final Object selected) {
+//                return "";
+//            }
         });
 
         IChoiceRenderer<PropertySearchCriteria.PriceRange> priceRangeRenderer = new IChoiceRenderer<PropertySearchCriteria.PriceRange>() {
@@ -95,10 +95,10 @@ public class QuickSearchCriteriaInputPanel extends Panel {
                 Arrays.asList(PropertySearchCriteria.PriceRange.values()), priceRangeRenderer) {
             private static final long serialVersionUID = 1L;
 
-            @Override
-            protected CharSequence getDefaultChoice(final Object selected) {
-                return "";
-            }
+//TODO           @Override
+//            protected CharSequence getDefaultChoice(final Object selected) {
+//                return "";
+//            }
 
         };
         add(priceRange);

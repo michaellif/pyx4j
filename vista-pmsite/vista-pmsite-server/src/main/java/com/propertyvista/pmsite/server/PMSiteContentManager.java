@@ -21,10 +21,10 @@ import java.util.Map;
 
 import javax.servlet.http.Cookie;
 
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.RequestCycle;
-import org.apache.wicket.protocol.http.WebRequest;
-import org.apache.wicket.protocol.http.WebRequestCycle;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebRequest;
+import org.apache.wicket.request.http.WebResponse;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -101,12 +101,12 @@ public class PMSiteContentManager implements Serializable {
 
     public void setLocale(AvailableLocale locale) {
         this.locale = locale;
-        ((WebRequestCycle) RequestCycle.get()).getWebResponse().addCookie(new Cookie("locale", locale.lang().getValue().name()));
+        ((WebResponse) RequestCycle.get().getResponse()).addCookie(new Cookie("locale", locale.lang().getValue().name()));
     }
 
     private AvailableLocale readLocaleFromCookie() {
         Cookie localeCookie = null;
-        Cookie[] cookies = ((WebRequest) ((WebRequestCycle) RequestCycle.get()).getRequest()).getCookies();
+        List<Cookie> cookies = ((WebRequest) RequestCycle.get().getRequest()).getCookies();
         if (cookies == null) {
             return allAvailableLocale.get(0);
         }
@@ -191,8 +191,11 @@ public class PMSiteContentManager implements Serializable {
         List<PageDescriptor> pages = site.childPages();
         PageDescriptor current = null;
         for (String paramName : PARAMETER_NAMES) {
-            if (parameters.containsKey(paramName)) {
-                current = getPageDescriptor(pages, parameters.getString(paramName));
+            if (!parameters.get(paramName).isEmpty()) {
+                current = getPageDescriptor(pages, parameters.get(paramName).toString());
+                if (current == null) {
+                    throw new Error("No page found");
+                }
                 pages = current.childPages();
             }
         }
@@ -359,6 +362,9 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public static String getCaption(PageDescriptor descriptor, AvailableLocale locale) {
+        if (descriptor == null) {
+            return "";
+        }
         for (PageCaption caption : descriptor.caption()) {
             if (locale.lang().getValue().equals(caption.locale().lang().getValue())) {
                 return caption.caption().getValue();
