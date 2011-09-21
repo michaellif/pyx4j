@@ -29,6 +29,11 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.EntityServices;
@@ -48,6 +53,8 @@ public class ReferenceDataManager {
     private static final Map<EntityQueryCriteria<?>, List<? extends IEntity>> cache = new HashMap<EntityQueryCriteria<?>, List<? extends IEntity>>();
 
     private static final Map<EntityQueryCriteria<?>, List<AsyncCallback<List<?>>>> concurrentLoad = new HashMap<EntityQueryCriteria<?>, List<AsyncCallback<List<?>>>>();
+
+    private static EventBus eventBus;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public static <T extends IEntity> void obtain(EntityQueryCriteria<T> criteria, AsyncCallback<List<T>> handlingCallback, boolean background) {
@@ -123,7 +130,7 @@ public class ReferenceDataManager {
     /**
      * Update the reference data when Entity is modified by user.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static <T extends IEntity> void update(T ent) {
         for (Map.Entry<EntityQueryCriteria<?>, List<? extends IEntity>> me : cache.entrySet()) {
             if (me.getKey().getEntityClass().equals(ent.getObjectClass())) {
@@ -142,13 +149,22 @@ public class ReferenceDataManager {
                 }
             }
         }
+        if (eventBus != null) {
+            eventBus.fireEvent(new ValueChangeEvent(ent.getObjectClass()) {
+            });
+        }
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static void remove(IEntity ent) {
         for (Map.Entry<EntityQueryCriteria<?>, List<? extends IEntity>> me : cache.entrySet()) {
             if (me.getKey().getEntityClass().equals(ent.getObjectClass())) {
                 me.getValue().remove(ent);
             }
+        }
+        if (eventBus != null) {
+            eventBus.fireEvent(new ValueChangeEvent(ent.getObjectClass()) {
+            });
         }
     }
 
@@ -160,9 +176,22 @@ public class ReferenceDataManager {
                 it.remove();
             }
         }
+
+        if (eventBus != null) {
+            eventBus.fireEvent(new ValueChangeEvent<Class<T>>(domain) {
+            });
+        }
     }
 
     public static void invalidate() {
         cache.clear();
+    }
+
+    public static <T extends IEntity> HandlerRegistration addValueChangeHandler(ValueChangeHandler<Class<T>> handler) {
+        if (eventBus == null) {
+            eventBus = new SimpleEventBus();
+        }
+        return eventBus.addHandler(ValueChangeEvent.getType(), handler);
+
     }
 }

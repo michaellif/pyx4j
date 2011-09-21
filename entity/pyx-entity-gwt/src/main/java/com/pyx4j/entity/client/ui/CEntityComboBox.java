@@ -31,6 +31,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -247,6 +249,14 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
                         }
                     });
                 }
+                ReferenceDataManager.addValueChangeHandler(new ValueChangeHandler<Class<E>>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<Class<E>> event) {
+                        if (criteria.getEntityClass() == event.getValue()) {
+                            resetOptions();
+                        }
+                    }
+                });
             }
 
         }
