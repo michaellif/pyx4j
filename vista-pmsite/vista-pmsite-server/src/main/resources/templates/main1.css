@@ -93,22 +93,26 @@ select {
 	float: left;
 	position: relative;
 	width: 100%;
-	right: 678px;
+	right: 680px;
+	border-right: 1px solid ${primeColor1e};
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;   
 }
 
 .vista-pmsite-main {
 	width: 678px;
 	position: relative;
 	float: left;
-	left: 678px;
+	left: 680px;
+	background: #ffffff;
 }
 
 .vista-pmsite-sidebar {
 	position: relative;
 	float: left;
-	width: 279px;
-	left: 678px;
-	border-right: 1px solid ${primeColor1e};
+	width: 280px;
+	left: 680px;
 }
 
 .vista-pmsite-banner {
@@ -305,4 +309,34 @@ ul.footer_locations li {
 .footer_legal {
 	text-align: center;
 	line-height: 60px;
+}
+
+.vista-pmsite-main .caption {
+	background-size: 100% 100%;
+	height: 80px;
+	overflow: hidden;
+	padding: 40px 0 0 30px;
+}
+
+.vista-pmsite-main .caption h1 {
+	font-size: 36px;
+	font-weight: normal;
+	line-height: 38px;
+	padding: 0 0 20px;
+}
+
+.vista-pmsite-main .caption2 {
+	background: url("images/template0/subtitle_bg.gif") repeat-x transparent;
+	height: 60px;
+	width: 749px;
+	margin: 1px 0 0 211px;
+}
+
+.vista-pmsite-main .caption2 h1 {
+	font-size: 16px;
+	font-weight: bold;
+	text-transform: uppercase;
+	padding: 22px 0 0 24px;
+	color: #222;
+	float: left;
 }

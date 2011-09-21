@@ -108,7 +108,7 @@ public class PMSiteContentManager implements Serializable {
         Cookie localeCookie = null;
         Cookie[] cookies = ((WebRequest) ((WebRequestCycle) RequestCycle.get()).getRequest()).getCookies();
         if (cookies == null) {
-            return null;
+            return allAvailableLocale.get(0);
         }
         for (Cookie cookie : cookies) {
             if ("locale".equals(cookie.getName())) {

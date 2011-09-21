@@ -304,3 +304,35 @@ ul.footer_locations li {
 	text-align: center;
 	line-height: 60px;
 }
+
+.vista-pmsite-main .caption {
+	background: url("images/template0/title_bg.gif") repeat-y scroll 0 -40px
+		transparent;
+	background-size: 100% 100%;
+	height: 80px;
+	overflow: hidden;
+	padding: 40px 0 0 30px;
+}
+
+.vista-pmsite-main .caption h1 {
+	font-size: 36px;
+	font-weight: normal;
+	line-height: 38px;
+	padding: 0 0 20px;
+}
+
+.vista-pmsite-main .caption2 {
+	background: url("images/template0/subtitle_bg.gif") repeat-x transparent;
+	height: 60px;
+	width: 749px;
+	margin: 1px 0 0 211px;
+}
+
+.vista-pmsite-main .caption2 h1 {
+	font-size: 16px;
+	font-weight: bold;
+	text-transform: uppercase;
+	padding: 22px 0 0 24px;
+	color: #222;
+	float: left;
+}

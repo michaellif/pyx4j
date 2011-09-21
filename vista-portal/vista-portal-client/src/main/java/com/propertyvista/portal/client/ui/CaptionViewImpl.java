@@ -13,21 +13,21 @@
  */
 package com.propertyvista.portal.client.ui;
 
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 public class CaptionViewImpl extends SimplePanel implements CaptionView {
 
-    private final Label captionLabel;
+    private final HTML captionLabel;
 
     public CaptionViewImpl() {
-        captionLabel = new Label();
+        captionLabel = new HTML();
         setWidget(captionLabel);
     }
 
     @Override
     public void setCaption(String caption) {
-        captionLabel.setText(caption);
+        captionLabel.setHTML("<h1>" + caption + "</h1>");
     }
 
 }
