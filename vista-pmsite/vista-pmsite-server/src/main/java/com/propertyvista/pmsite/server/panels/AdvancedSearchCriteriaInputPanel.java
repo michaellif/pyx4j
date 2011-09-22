@@ -18,8 +18,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import js.JSResources;
+
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -30,6 +33,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.validation.validator.MinimumValidator;
 
 import com.pyx4j.entity.server.pojo.IPojo;
@@ -40,10 +44,6 @@ import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class AdvancedSearchCriteriaInputPanel extends Panel {
     private static final long serialVersionUID = 1L;
-
-    private static enum NumNames {
-        zero, One, Two, Three, Four, Five, Six, Seven, Eight;
-    }
 
     public AdvancedSearchCriteriaInputPanel(String id, final CompoundPropertyModel<IPojo<PropertySearchCriteria>> model) {
         super(id, model);
@@ -63,8 +63,8 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         final Map<String, List<String>> provCityMap = PMSiteContentManager.getProvinceCityMap();
         List<String> provinces = new ArrayList<String>(provCityMap.keySet());
         DropDownChoice<String> provChoice = new WicketUtils.DropDownList<String>("province", provinces, false, true);
-        provChoice.add(new SimpleAttributeModifier("onChange",
-                "setSelectionOptions('citySelect', provCity[this.options[this.selectedIndex].text], 'Choose One')"));
+        provChoice.add(AttributeModifier
+                .replace("onChange", "setSelectionOptions('citySelect', provCity[this.options[this.selectedIndex].text], 'Choose One')"));
         add(provChoice);
 
         // add City drop-down
@@ -124,5 +124,10 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         checkBoxMultipleChoice.setPrefix("<span>");
         checkBoxMultipleChoice.setSuffix("</span>");
         add(checkBoxMultipleChoice);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "jquery-1.6.3.min.js"));
     }
 }

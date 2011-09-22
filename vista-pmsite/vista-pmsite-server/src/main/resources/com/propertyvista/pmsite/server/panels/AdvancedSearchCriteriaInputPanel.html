@@ -1,19 +1,15 @@
-<wicket:head>
-	<script wicket_id="jquery" src="resources/js/jquery-1.6.3.min.js"></script>
-</wicket:head>
 <wicket:panel
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-
 <script>
 $(function(){
-	var mySet = $(".search_typesel_box");
+	var mySet = $(".searchTypeSelBox");
 	mySet
 		.hover(
 			function() {
-				$(this).addClass('typesel_active_hover');
+				$(this).addClass('typeselActiveHover');
 			},
 			function() {
-				$(this).removeClass('typesel_active_hover');
+				$(this).removeClass('typeselActiveHover');
 			}
 		)
 		.click(function() {
@@ -21,7 +17,7 @@ $(function(){
 			mySet.each(function() {
 				var self = $(this);
 				var isActive = (self.children('input[type="radio"]').prop('checked') == 1);
-				self.toggleClass('typesel_active', isActive);
+				self.toggleClass('typeselActive', isActive);
 				$('[name="'+self.attr('name')+'_input"]').css('display', isActive ? 'block' : 'none');
 			});
 		});
@@ -57,56 +53,56 @@ function setSelectionOptions(selId, optArr, defOpt, selOpt) {
 	<div wicket:id="form_messages"/>
 	<div>
 		<div wicket:id="searchType">
-	    <div class="search_typesel_box" name="search_bycity_box">
+	    <div class="searchTypeSelBox" name="search_bycity_box">
 	    	<input wicket:id="searchByCity" type="radio"/>
 			<label><span class="spacer_by">By </span>City</label>
 	    </div>
-    	<div class="search_typesel_box" name="search_byprox_box">
+    	<div class="searchTypeSelBox" name="search_byprox_box">
 	    	<input wicket:id="searchByProx" type="radio"/>
     		<label><span class="spacer_by">By </span>Proximity</label>
 		</div>	  
 		</div>
 	</div>
-    <div class="search_type_box input_block_frame" name="search_bycity_box_input">
-	    <div class="search_field">
+    <div class="searchTypeBox inputBlockFrame" name="search_bycity_box_input">
+	    <div class="searchField">
 			<label>Province</label>
 			<select wicket:id="province" id="provSelect"></select>
 		</div>
-	   	<div class="search_field">
+	   	<div class="searchField">
 			<label>City</label>
 			<select wicket:id="city" id="citySelect"></select>
 		</div>
     </div>
 
-    <div class="search_type_box input_block_frame" name="search_byprox_box_input">
-		<div class="search_field">
+    <div class="searchTypeBox inputBlockFrame" name="search_byprox_box_input">
+		<div class="searchField">
 			<label>Address / Postal Code</label>
 			<input wicket:id="location" type="text"/>
 		</div>
-		<div class="search_field">
+		<div class="searchField">
 			<label>Distance</label>
 			<input wicket:id="distance" type="text"/>
 		</div>
     </div>
 
-	<div class="search_common_box input_block_frame">
-	    <div class="search_field">
+	<div class="searchCommonBox inputBlockFrame">
+	    <div class="searchField">
 			<label>Bedrooms</label>
-			<select wicket:id="minBeds"></select><span class="input_join_box">to</span><select wicket:id="maxBeds"></select>
+			<select wicket:id="minBeds"></select><span class="inputJoinBox">to</span><select wicket:id="maxBeds"></select>
 		</div>
-	    <div class="search_field">
+	    <div class="searchField">
 			<label>Bathrooms</label>
-			<select wicket:id="minBath"></select><span class="input_join_box">to</span><select wicket:id="maxBath"></select>
+			<select wicket:id="minBath"></select><span class="inputJoinBox">to</span><select wicket:id="maxBath"></select>
 		</div>
-	    <div class="search_field">
+	    <div class="searchField">
 			<label>Price</label>
-			<input wicket:id="minPrice" type="text"/><span class="input_join_box">to</span><input wicket:id="maxPrice" type="text"/>
+			<input wicket:id="minPrice" type="text"/><span class="inputJoinBox">to</span><input wicket:id="maxPrice" type="text"/>
 		</div>
 	</div>
-	<div class="search_amenity_box input_block_frame">
-	    <div class="search_field">
+	<div class="searchAmenityBox inputBlockFrame">
+	    <div class="searchField">
 			<label>Amenities</label> 
-			<div wicket:id="amenities" class="amenity_list"></div>
+			<div wicket:id="amenities" class="amenityList"></div>
 		</div>
 	</div>
 </wicket:panel>

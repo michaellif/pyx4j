@@ -20,7 +20,7 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -41,7 +41,7 @@ public class PromoPanel extends Panel {
             @Override
             protected void populateItem(ListItem<PromoDataModel> item) {
                 PromoDataModel promo = item.getModelObject();
-                item.add(new Image("picture", "").add(new SimpleAttributeModifier("src", promo.getImg())));
+                item.add(new Image("picture", "").add(AttributeModifier.replace("src", promo.getImg())));
                 item.add(new Label("address", promo.getAddress()));
             }
         });

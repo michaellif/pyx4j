@@ -30,7 +30,7 @@ public class WicketUtils {
         private final String find;
 
         public AttributeClassModifier(String find, String replace) {
-            super("class", true, new Model<String>(replace));
+            super("class", new Model<String>(replace));
             this.find = find;
         }
 

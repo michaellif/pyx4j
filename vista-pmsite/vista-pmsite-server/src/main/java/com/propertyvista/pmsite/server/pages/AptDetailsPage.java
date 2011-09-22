@@ -13,12 +13,9 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.model.Model;
 
-import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.panels.AptDetailsPanel;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
 
 public class AptDetailsPage extends BasePage {
 
@@ -26,14 +23,18 @@ public class AptDetailsPage extends BasePage {
 
     public AptDetailsPage() {
         super();
-        PageParameters params = getPageParameters();
-        Integer propId = null;
-        if (params == null || (propId = params.get("propId").toInt()) == null) {
+        Long propId = null;
+        try {
+            propId = getRequest().getRequestParameters().getParameterValue("propId").toLong();
+        } catch (java.lang.NumberFormatException ignore) {
+            // do nothing
+        }
+        if (propId == null) {
             setResponsePage(AptListPage.class);
             return;
         }
 
-        add(new AptDetailsPanel("aptDetailsPanel", new CompoundPropertyModel<PropertyDTO>(PMSiteContentManager.getPropertyDetails(propId))));
+        add(new AptDetailsPanel("aptDetailsPanel", new Model<Long>(propId)));
     }
 
 }

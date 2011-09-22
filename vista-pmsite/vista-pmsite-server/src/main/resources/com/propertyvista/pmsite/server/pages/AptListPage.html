@@ -6,6 +6,9 @@
 <body>
 	<wicket:extend>
 		<style>
+.vista-pmsite-aptListPage {
+//float:left;
+}
 .secondaryNavigTitle {
 	float: left;
 	clear: both;
@@ -15,14 +18,21 @@
 	font-size:14px;
 	font-weight:bold;
 }
-.advanced_search_v_wrap {
+.advancedSearchNarrowWraprap {
 	float: left;
 	clear: left;
 	width: 190px;
 	margin: 10px;
 }
-
-.advanced_search_v_wrap input[type=submit] {
+.caption22 {
+	background:
+		url("resources/templates.TemplateResources/images/template0/subtitle_bg.gif")
+		repeat-x;
+	height:40px;
+	width:100%;
+	float:left;
+}
+.advancedSearchNarrowWraprap input[type=submit] {
 	background:
 		url("resources/templates.TemplateResources/images/template0/btn.png")
 		no-repeat;
@@ -39,19 +49,19 @@
 	cursor: pointer;
 }
 
-.advanced_search_v_wrap label {
+.advancedSearchNarrowWraprap label {
 	display: block;
 	padding: 4px 0;
 	white-space: nowrap;
 }
 
-.advanced_search_v_wrap .input_block_frame {
+.advancedSearchNarrowWraprap .inputBlockFrame {
 	float: left;
 	width: 100%;
 	margin-top: 20px;
 }
 
-.advanced_search_v_wrap .search_typesel_box {
+.advancedSearchNarrowWraprap .searchTypeSelBox {
 	float: left;
 	width: 70px;
 	font-size: 14px;
@@ -64,56 +74,56 @@
 	text-align: center;
 }
 
-.advanced_search_v_wrap .search_typesel_box:first-child {
+.advancedSearchNarrowWraprap .searchTypeSelBox:first-child {
 	margin-left: 0px;
 }
 
-.advanced_search_v_wrap .search_typesel_box .spacer_by {
+.advancedSearchNarrowWraprap .searchTypeSelBox .spacer_by {
 	display: none;
 }
 
-.advanced_search_v_wrap .search_typesel_box label {
+.advancedSearchNarrowWraprap .searchTypeSelBox label {
 	display: inline-block;
 }
 
-.advanced_search_v_wrap .search_typesel_box input[type=radio] {
+.advancedSearchNarrowWraprap .searchTypeSelBox input[type=radio] {
 	display: none;
 }
 
-.advanced_search_v_wrap .search_type_box {
+.advancedSearchNarrowWraprap .searchTypeBox {
 	float: left;
 }
 
-.advanced_search_v_wrap .search_type_box select {
+.advancedSearchNarrowWraprap .searchTypeBox select {
 	width: 188px;
 	margin: 1px;
 }
-.advanced_search_v_wrap .search_type_box input[type=text] {
+.advancedSearchNarrowWraprap .searchTypeBox input[type=text] {
 	width: 184px;
 	margin: 1px;
 }
 
-.advanced_search_v_wrap .search_common_box {
+.advancedSearchNarrowWraprap .searchCommonBox {
 	float: left;
 	clear: both;
 	width: 100%;
 }
 
-.advanced_search_v_wrap .search_common_box select {
+.advancedSearchNarrowWraprap .searchCommonBox select {
 	width: 82px;
 	margin: 1px;
 }
 
-.advanced_search_v_wrap .search_common_box input[type=text] {
+.advancedSearchNarrowWraprap .searchCommonBox input[type=text] {
 	width: 78px;
 	margin: 1px;
 }
-.advanced_search_v_wrap .search_common_box .search_field .input_join_box {
+.advancedSearchNarrowWraprap .searchCommonBox .searchField .inputJoinBox {
 	display:inline-block;
 	width:22px;
 	text-align:center;
 }
-.advanced_search_v_wrap .search_amenity_box {
+.advancedSearchNarrowWraprap .searchAmenityBox {
 	float: left;
 	clear: both;
 	width: 100%;
@@ -122,31 +132,31 @@
 	margin-bottom: 30px;
 }
 
-.advanced_search_v_wrap .search_amenity_box .search_field>label {
+.advancedSearchNarrowWraprap .searchAmenityBox .searchField>label {
 	float: left;
 	width: 100%;
 }
 
-.advanced_search_v_wrap .search_amenity_box br {
+.advancedSearchNarrowWraprap .searchAmenityBox br {
 	display: none;
 }
 
-.advanced_search_v_wrap .search_amenity_box .amenity_list {
+.advancedSearchNarrowWraprap .searchAmenityBox .amenityList {
 	float: left;
 	clear: left;
 	width: 100%;
 }
 
-.advanced_search_v_wrap .search_amenity_box .amenity_list label {
+.advancedSearchNarrowWraprap .searchAmenityBox .amenityList label {
 	display: inline-block;
 	width: 70px;
 }
 
-.advanced_search_v_wrap .typesel_active_hover {
+.advancedSearchNarrowWraprap .typeselActiveHover {
 	background-color: #19181f !important;
 }
 
-.advanced_search_v_wrap .typesel_active {
+.advancedSearchNarrowWraprap .typeselActive {
 	background-color: #19181f !important;
 	box-shadow:-1px -1px 1px #000 inset, 1px 1px 1px #55565b;
 	padding-top: 2px !important;
@@ -155,8 +165,7 @@
 
 .apartment_listing_wrap {
 	float: left;
-//	clear: both;
-	width:100%;
+	width:600px;
 	padding-bottom:30px;
 }
 
@@ -195,11 +204,12 @@ $(function() {
 	});
 })
 </script>
-		<div class="staticMain">
-			<div class="main">
+	<div class="vista-pmsite-aptListPage">
+		<div class="vista-pmsite-contentWrap">
+			<div class="vista-pmsite-content">
 				<div class="secondaryNavig">
 					<div class="secondaryNavigTitle">Find An Appartment</div>
-					<div class="advanced_search_v_wrap">
+					<div class="advancedSearchNarrowWraprap">
 						<form class="advancedSearchCriteria"
 							wicket:id="advancedSearchCriteriaForm">
 							<div wicket:id="searchCriteriaInput" />
@@ -213,14 +223,14 @@ $(function() {
 				</div>
 				<div class="content">
 					<div class="apartment_listing_wrap">
-						<div wicket:id="aptListPanel" />
+						<div class="listing_listview" wicket:id="aptListPanel" />
+						<div class="listing_mapview" wicket:id="gwtInclude" />
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div wicket:id="gwtInclude" />
-
+	</div>
 	</wicket:extend>
 </body>
 </html>

@@ -29,12 +29,13 @@
 	padding: 0 0 20px;
 }
 
-.vista-pmsite-findAptPage .advancedSearchCriteria {
+.advancedSearchWideWrap {
 	padding: 30px 60px;
+	width:566px;
 }
 
 
-.vista-pmsite-findAptPage input[type=submit] {
+.advancedSearchWideWrap input[type=submit] {
     background: url("images/template0/btn.png") no-repeat;
     border: none;
     width: 128px;
@@ -47,14 +48,12 @@
     cursor: pointer;
 }
 
-.vista-pmsite-findAptPage label {
+.advancedSearchWideWrap label {
 	display:block;
 	padding:6px 0;
 	white-space:nowrap;
 }
-.vista-pmsite-findAptPage .input_block_frame {
-}
-.vista-pmsite-findAptPage .search_typesel_box {
+.advancedSearchWideWrap .searchTypeSelBox {
 	width:226px;
 	font-size:20px;
 	letter-spacing:3px;
@@ -66,84 +65,90 @@
 	text-align:center;
 	float:left; 
 }
-.vista-pmsite-findAptPage .search_typesel_box:first-child {
+.advancedSearchWideWrap .searchTypeSelBox:first-child {
 	margin-left:0px;
 }
-.vista-pmsite-findAptPage .search_typesel_box label {
+.advancedSearchWideWrap .searchTypeSelBox label {
 	display:inline-block;
 }
-.vista-pmsite-findAptPage .search_typesel_box input[type=radio] {
+.advancedSearchWideWrap .searchTypeSelBox input[type=radio] {
 	display:none;
 }
-.vista-pmsite-findAptPage .search_type_box {
+.advancedSearchWideWrap .searchTypeBox {
 	float:left;
 	clear:both;
 	width:100%;
 	margin-top:30px;
 }
-.vista-pmsite-findAptPage .search_type_box .search_field {
+.advancedSearchWideWrap .searchTypeBox .searchField {
 	float:left;
 	margin-left:25px;
 }
-.vista-pmsite-findAptPage .search_type_box .search_field:first-child {
+.advancedSearchWideWrap .searchTypeBox .searchField:first-child {
 	margin-left:0;
 }
-.vista-pmsite-findAptPage .search_type_box select {
+.advancedSearchWideWrap .searchTypeBox select {
 	width:266px;
 	margin:1px;
 }
-.vista-pmsite-findAptPage .search_type_box input[type=text] {
+.advancedSearchWideWrap .searchTypeBox input[type=text] {
 	width:262px;
 	margin:1px;
 }
-.vista-pmsite-findAptPage .search_common_box {
+.advancedSearchWideWrap .searchCommonBox {
+	clear:both;
+	float:left;
 	width:100%;
 	margin-top:30px;
-	clear:both;
 }
-.vista-pmsite-findAptPage .search_common_box .search_field {
-	width:174px;
+.advancedSearchWideWrap .searchCommonBox .searchField {
+	width:170px;
 	margin-left:22px;
 	display: inline-block;
 }
-.vista-pmsite-findAptPage .search_common_box .search_field:first-child {
+.advancedSearchWideWrap .searchCommonBox .searchField:first-child {
 	margin-left:0px;
 }
-.vista-pmsite-findAptPage .search_common_box .search_field .input_join_box {
+.advancedSearchWideWrap .searchCommonBox .searchField .inputJoinBox {
 	display:inline-block;
 	width:34px;
 	text-align:center;
 }
-.vista-pmsite-findAptPage .search_common_box select,
-.vista-pmsite-findAptPage .search_common_box input[type=text] {
+.advancedSearchWideWrap .searchCommonBox select,
+.advancedSearchWideWrap .searchCommonBox input[type=text] {
 	width:62px;
 	margin:1px;
 }
-.vista-pmsite-findAptPage .search_amenity_box {
+.advancedSearchWideWrap .searchAmenityBox {
+	float:left;
+	clear:both;
 	width:100%;
 	border-top:1px dotted #5d5e63;
 	padding-top:20px;
 	margin-top:30px;
 	margin-bottom:40px;
 }
-.vista-pmsite-findAptPage .search_amenity_box .search_field > label {
+.advancedSearchWideWrap .searchAmenityBox .searchField > label {
+	float:left;
+	clear:left;
 	width:110px;
 }
-.vista-pmsite-findAptPage .search_amenity_box br {
+.advancedSearchWideWrap .searchAmenityBox br {
 	display:none;
 }
-.vista-pmsite-findAptPage .search_amenity_box .amenity_list {
+.advancedSearchWideWrap .searchAmenityBox .amenityList {
+	float:left;
 	width:450px;
 	display: inline-block;
 }
-.vista-pmsite-findAptPage .search_amenity_box .amenity_list label {
+.advancedSearchWideWrap .searchAmenityBox .amenityList label {
 	display:inline-block;
 	width:88px;
 }
-.vista-pmsite-findAptPage .typesel_active_hover {
+.advancedSearchWideWrap .typeselActiveHover {
 	background-color:#19181f !important;
 }
-.vista-pmsite-findAptPage .typesel_active {
+.advancedSearchWideWrap .typeselActive {
 	background-color:#19181f !important;
 	box-shadow:-1px -1px 1px #000 inset, 1px 1px 1px #55565b;
 	padding-top:4px !important;

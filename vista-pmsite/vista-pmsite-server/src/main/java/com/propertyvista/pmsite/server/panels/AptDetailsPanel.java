@@ -13,45 +13,55 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import java.util.List;
+
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 
-import com.propertyvista.domain.contact.IAddress;
+import com.propertyvista.domain.contact.Address;
+import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
-import com.propertyvista.portal.domain.dto.AmenityDTO;
-import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
 
 public class AptDetailsPanel extends Panel {
     private static final long serialVersionUID = 1L;
 
-    public AptDetailsPanel(String id, CompoundPropertyModel<PropertyDTO> model) {
-        super(id, model);
+    public AptDetailsPanel(String id, Model<Long> model) {
+        super(id);
 
-        PropertyDTO propInfo = model.getObject();
-        // PropertyDetailsDTO
+        Long propId = model.getObject();
+        Building propInfo = PMSiteContentManager.getBuildingDetails(propId);
+        List<Floorplan> plans = PMSiteContentManager.getBuildingFloorplans(propInfo);
+        List<BuildingAmenity> amenities = PMSiteContentManager.getBuildingAmenities(propInfo);
+
         long mediaId = 1;
-        if (propInfo.mainMedia().getValue() != null) {
-            mediaId = propInfo.mainMedia().getValue().asLong();
+        if (propInfo.media().size() > 0) {
+            mediaId = propInfo.media().get(0).getPrimaryKey().asLong();
         }
-        add(new Image("picture", "").add(new SimpleAttributeModifier("src", PMSiteContentManager.getMediaImgUrl(mediaId, "small"))));
-        IAddress addr = propInfo.address();
-        String addrFmt = addr.street1().getValue() + " " + addr.street2().getValue() + ", " + addr.city().getValue() + ", " + addr.province().name().getValue()
-                + ", " + addr.postalCode().getValue();
+        add(new Image("picture", "").add(AttributeModifier.replace("src", PMSiteContentManager.getMediaImgUrl(mediaId, "small"))));
+        Address addr = propInfo.info().address();
+        String addrFmt = "";
+        if (addr != null) {
+            addrFmt += addr.streetNumber().getValue() + " " + addr.streetName().getValue() + ", " + addr.city().getValue() + ", "
+                    + addr.province().code().getValue() + " " + addr.postalCode().getValue();
+        }
         add(new Label("address", addrFmt));
-        add(new Label("description", propInfo.description().getValue()));
+        add(new Label("description", propInfo.marketing().description().getValue()));
 
-        add(new ListView<FloorplanPropertyDTO>("types", propInfo.floorplansProperty()) {
+        add(new ListView<Floorplan>("types", plans) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void populateItem(ListItem<FloorplanPropertyDTO> item) {
-                FloorplanPropertyDTO floorPlan = item.getModelObject();
+            protected void populateItem(ListItem<Floorplan> item) {
+                Floorplan floorPlan = item.getModelObject();
                 String type = floorPlan.name().getValue();
                 if (type != null && type.length() > 0) {
                     type += " - ";
@@ -60,21 +70,33 @@ public class AptDetailsPanel extends Panel {
                 }
                 type += floorPlan.bedrooms().getValue() + " Bed, " + floorPlan.bathrooms().getValue() + " Bath";
                 String price = "price not available";
-                Double numPrice = null;
-                if ((numPrice = floorPlan.price().min().getValue()) != null) {
-                    price = "from $" + String.valueOf(Math.round(numPrice));
-                }
+                /*
+                 * Double numPrice = null;
+                 * if ((numPrice = floorPlan.price().min().getValue()) != null) {
+                 * price = "from $" + String.valueOf(Math.round(numPrice));
+                 * }
+                 */
                 item.add(new Label("type", type + ", " + price));
             }
         });
 
-        add(new ListView<AmenityDTO>("amenities", propInfo.amenities()) {
+        add(new ListView<BuildingAmenity>("amenities", amenities) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void populateItem(ListItem<AmenityDTO> item) {
+            protected void populateItem(ListItem<BuildingAmenity> item) {
                 item.add(new Label("amenity", item.getModelObject().name().getValue()));
             }
         });
+        for (Floorplan fp : plans) {
+            System.out.println("===> Floorplan: " + fp.name().getValue());
+            for (Media m : fp.media()) {
+                System.out.println("===> Media found: " + m.getPrimaryKey().asLong());
+            }
+            List<AptUnit> units = PMSiteContentManager.getBuildingAptUnits(propInfo, fp);
+            for (AptUnit u : units) {
+                System.out.println("===> Unit found: " + u.info().number().getValue() + ":" + u.financial().unitRent().getValue());
+            }
+        }
     }
 }
