@@ -36,6 +36,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.News;
@@ -46,7 +47,6 @@ import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.pmsite.server.converter.BuildingAmenityAmenityDTOConverter;
 import com.propertyvista.pmsite.server.converter.BuildingPropertyDTOConverter;
 import com.propertyvista.pmsite.server.converter.FloorplanFloorplanPropertyDTOConverter;
-import com.propertyvista.pmsite.server.model.ApartmentModel;
 import com.propertyvista.pmsite.server.model.PromoDataModel;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
@@ -302,67 +302,33 @@ public class PMSiteContentManager implements Serializable {
         return ret;
     }
 
-    public static PropertyDTO getPropertyDetails(long propId) {
+    public static Building getBuildingDetails(long propId) {
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().id(), propId));
         List<Building> buildings = Persistence.service().query(dbCriteria);
         if (buildings.size() != 1) {
             return null;
         }
-        Building building = buildings.get(0);
-        PropertyDTO propertyDTO = new BuildingPropertyDTOConverter().createDTO(building);
-        {
-            EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
-            for (Floorplan floorplan : Persistence.service().query(criteria)) {
-                propertyDTO.floorplansProperty().add(new FloorplanFloorplanPropertyDTOConverter().createDTO(floorplan));
-            }
-        }
-        {
-            EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
-            for (BuildingAmenity amenity : Persistence.service().query(criteria)) {
-                propertyDTO.amenities().add(new BuildingAmenityAmenityDTOConverter().createDTO(amenity));
-            }
-        }
-        if (!building.media().isEmpty()) {
-            propertyDTO.mainMedia().setValue(building.media().get(0).getPrimaryKey());
-        }
-
-        return propertyDTO;
+        return buildings.get(0);
     }
 
-    public static ApartmentModel getPropertyModel(PropertySearchCriteria searchCriteria) {
-        ApartmentModel model = new ApartmentModel();
+    public static List<Floorplan> getBuildingFloorplans(Building bld) {
+        EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().building(), bld));
+        return Persistence.service().query(criteria);
+    }
 
-        EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
+    public static List<AptUnit> getBuildingAptUnits(Building bld, Floorplan fp) {
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), bld));
+        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), fp));
+        return Persistence.service().query(criteria);
+    }
 
-        // add search criteria
-        if (PropertySearchCriteria.SearchType.city.equals(searchCriteria.searchType())) {
-            String city = searchCriteria.city().getStringView();
-            if (city != null) {
-                dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), city));
-            }
-        }
-        List<Building> buildings = Persistence.service().query(dbCriteria);
-        model.setBuildingList(buildings);
-
-        for (Building building : buildings) {
-            long propId = building.id().getValue().asLong();
-            // add floorplans
-            EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
-            floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
-            List<Floorplan> floorplans = Persistence.service().query(floorplanCriteria);
-            model.putBuildingUnits(propId, floorplans);
-            for (Floorplan fp : floorplans) {
-                long fpId = fp.id().getValue().asLong();
-                // get price and sq. footage
-            }
-            // add amenities
-            // add media
-        }
-
-        return model;
+    public static List<BuildingAmenity> getBuildingAmenities(Building bld) {
+        EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), bld));
+        return Persistence.service().query(criteria);
     }
 
     public static String getCaption(PageDescriptor descriptor, AvailableLocale locale) {
