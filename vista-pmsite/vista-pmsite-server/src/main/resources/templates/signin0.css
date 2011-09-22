@@ -1,0 +1,31 @@
+.vista-pmsite-signInPage {
+    color: #CCCCCC;
+    font-size: 16px;
+}
+
+.vista-pmsite-signInPage .vista-pmsite-contentWrap {
+	background: url("images/template0/inner_content_bg.png") repeat-x scroll
+		0 0 #37393F;
+}
+
+.vista-pmsite-signInPage .vista-pmsite-content {
+	background: url("images/template0/inner_bg.png") no-repeat scroll 50% 0
+		transparent;
+}
+
+.vista-pmsite-signInPage .caption {
+	background: url("images/template0/title_bg.gif") repeat-y scroll 0 -40px
+		transparent;
+	background-size: 100% 100%;
+	height: 80px;
+	overflow: hidden;
+	padding: 40px 0 0 30px;
+}
+
+.vista-pmsite-signInPage .caption h1 {
+	font-size: 36px;
+	font-weight: normal;
+	line-height: 38px;
+	padding: 0 0 20px;
+}
+

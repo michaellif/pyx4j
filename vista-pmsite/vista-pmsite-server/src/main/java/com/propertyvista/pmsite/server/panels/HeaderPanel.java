@@ -29,6 +29,8 @@ public class HeaderPanel extends Panel {
 
         add(new LocalePanel("locale"));
 
+        add(new AuthenticationPanel("auth"));
+
         add(new MainNavigationPanel("mainNavig"));
     }
 

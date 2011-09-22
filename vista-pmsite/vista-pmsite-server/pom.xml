@@ -43,6 +43,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-auth-roles</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
+        
+        <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-entity-rdb</artifactId>
             <version>${pyxVersion}</version>

@@ -16,13 +16,14 @@ package com.propertyvista.pmsite.server;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
 
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.pmsite.server.panels.NavigationItem;
 
-public class PMSiteSession extends WebSession {
+public class PMSiteSession extends AuthenticatedWebSession {
 
     private static final long serialVersionUID = 1L;
 
@@ -73,6 +74,20 @@ public class PMSiteSession extends WebSession {
 
     public PMSiteContentManager getContentManager() {
         return contentManager;
+    }
+
+    @Override
+    public boolean authenticate(final String username, final String password) {
+        final String VISTA = "vista";
+        return VISTA.equals(username) && VISTA.equals(password);
+    }
+
+    @Override
+    public Roles getRoles() {
+        if (isSignedIn()) {
+            return new Roles(Roles.USER);
+        }
+        return null;
     }
 
 }

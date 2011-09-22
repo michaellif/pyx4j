@@ -15,6 +15,9 @@ package com.propertyvista.pmsite.server;
 
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
+import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
@@ -27,9 +30,10 @@ import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.pmsite.server.pages.FindAptPage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
+import com.propertyvista.pmsite.server.pages.SignInPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
 
-public class PMSiteApplication extends WebApplication {
+public class PMSiteApplication extends AuthenticatedWebApplication {
 
     @Override
     protected void init() {
@@ -88,5 +92,15 @@ public class PMSiteApplication extends WebApplication {
         } else {
             return RuntimeConfigurationType.DEPLOYMENT;
         }
+    }
+
+    @Override
+    protected Class<? extends AbstractAuthenticatedWebSession> getWebSessionClass() {
+        return PMSiteSession.class;
+    }
+
+    @Override
+    protected Class<? extends WebPage> getSignInPageClass() {
+        return SignInPage.class;
     }
 }
