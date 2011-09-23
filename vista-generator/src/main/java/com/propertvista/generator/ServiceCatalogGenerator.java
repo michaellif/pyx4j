@@ -238,5 +238,4 @@ public class ServiceCatalogGenerator {
 
         return items;
     }
-
 }

@@ -13,11 +13,13 @@
  */
 package com.propertyvista.crm.client.activity.crud.tenant.lease;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
@@ -32,6 +34,7 @@ import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
 import com.propertyvista.crm.rpc.services.SelectTenantCrudService;
 import com.propertyvista.crm.rpc.services.SelectUnitCrudService;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ServiceConcession;
 import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
@@ -207,13 +210,18 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         currentValue.selectedFeatureItems().clear();
         currentValue.selectedConcesions().clear();
         if (selectedService != null) {
-            IList<ServiceItemType> includedUtilities = currentValue.selectedBuilding().serviceCatalog().includedUtilities();
-            boolean hasIncludedUtilities = (includedUtilities != null && !includedUtilities.isEmpty());
+
+            ServiceCatalog catalog = currentValue.selectedBuilding().serviceCatalog();
+            List<ServiceItemType> utilitiesToExclude = new ArrayList<ServiceItemType>(catalog.includedUtilities().size() + catalog.externalUtilities().size());
+            utilitiesToExclude.addAll(catalog.includedUtilities());
+            utilitiesToExclude.addAll(catalog.externalUtilities());
+
+            currentValue.selectedBuilding().serviceCatalog().includedUtilities();
             for (ServiceFeature feature : selectedService.features()) {
-                if (hasIncludedUtilities) {
+                if (!utilitiesToExclude.isEmpty()) {
                     for (ServiceItem item : feature.feature().items()) {
                         // filter out utilities included in price for selected building:
-                        if (!includedUtilities.contains(item.type())) {
+                        if (!utilitiesToExclude.contains(item.type())) {
                             currentValue.selectedFeatureItems().add(item);
                         }
                     }
