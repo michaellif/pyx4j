@@ -513,7 +513,12 @@ public class VistaTheme extends Theme {
     protected void initTextBoxStyle() {
 
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_TextBox));
-        style.addProperty("font", "12px/1.4em Arial, Helvetica, sans-serif");
+
+// TODO check why is it necessary to add /1.4em parameter - it seems that IE9 uses it correctly and shifts TextBox text-line to the bottom,
+//      while all other browsers (Firefox, Chrome) or ignore it or thomehow different calculate text line position.
+//        style.addProperty("font", "12px/1.4em Arial, Helvetica, sans-serif");
+
+        style.addProperty("font", "12px Arial, Helvetica, sans-serif");
         style.addProperty("color", ThemeColor.TEXT);
         style.addProperty("background-color", ThemeColor.TEXT_BACKGROUND);
         style.addProperty("border-width", "1px");
