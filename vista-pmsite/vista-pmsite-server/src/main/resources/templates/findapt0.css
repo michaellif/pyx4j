@@ -54,6 +54,13 @@
 	white-space:nowrap;
 }
 .advancedSearchWideWrap .searchTypeSelBox {
+	float:left;
+	clear:both;
+	width:100%;
+	margin-top:30px;
+	height: 60px;
+}
+.advancedSearchWideWrap .searchTypeSelButton {
 	width:226px;
 	font-size:20px;
 	letter-spacing:3px;
@@ -65,13 +72,13 @@
 	text-align:center;
 	float:left; 
 }
-.advancedSearchWideWrap .searchTypeSelBox:first-child {
+.advancedSearchWideWrap .searchTypeSelButton:first-child {
 	margin-left:0px;
 }
-.advancedSearchWideWrap .searchTypeSelBox label {
+.advancedSearchWideWrap .searchTypeSelButton label {
 	display:inline-block;
 }
-.advancedSearchWideWrap .searchTypeSelBox input[type=radio] {
+.advancedSearchWideWrap .searchTypeSelButton input[type=radio] {
 	display:none;
 }
 .advancedSearchWideWrap .searchTypeBox {

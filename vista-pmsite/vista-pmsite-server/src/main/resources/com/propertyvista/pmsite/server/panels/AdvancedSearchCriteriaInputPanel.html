@@ -2,7 +2,7 @@
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <script>
 $(function(){
-	var mySet = $(".searchTypeSelBox");
+	var mySet = $(".searchTypeSelButton");
 	mySet
 		.hover(
 			function() {
@@ -51,16 +51,16 @@ function setSelectionOptions(selId, optArr, defOpt, selOpt) {
 </script>
 <script wicket:id="jsCityList"/>
 	<div wicket:id="form_messages"/>
-	<div>
+	<div class="searchTypeSelBox">
 		<div wicket:id="searchType">
-	    <div class="searchTypeSelBox" name="search_bycity_box">
-	    	<input wicket:id="searchByCity" type="radio"/>
-			<label><span class="spacer_by">By </span>City</label>
-	    </div>
-    	<div class="searchTypeSelBox" name="search_byprox_box">
-	    	<input wicket:id="searchByProx" type="radio"/>
-    		<label><span class="spacer_by">By </span>Proximity</label>
-		</div>	  
+		    <div class="searchTypeSelButton" name="search_bycity_box">
+		    	<input wicket:id="searchByCity" type="radio"/>
+				<label><span class="spacer_by">By </span>City</label>
+	    	</div>
+    		<div class="searchTypeSelButton" name="search_byprox_box">
+	    		<input wicket:id="searchByProx" type="radio"/>
+    			<label><span class="spacer_by">By </span>Proximity</label>
+			</div>	  
 		</div>
 	</div>
     <div class="searchTypeBox inputBlockFrame" name="search_bycity_box_input">

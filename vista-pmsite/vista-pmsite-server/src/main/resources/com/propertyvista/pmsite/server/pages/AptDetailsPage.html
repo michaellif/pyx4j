@@ -5,23 +5,61 @@
 </head>
 <body>
 	<wicket:extend>
-
-<div class="staticMain">
-<div class="main">
-	<div class="secondaryNavig">
-		<div class="apartment_details_pic_wrap">
+<style>
+.vista-pmsite-aptDetailsPage {
+}
+.vista-pmsite-aptDetailsPage .vista-pmsite-contentWrap {
+	background: url("wicket/resource/templates.TemplateResources/images/template0/inner_content_bg.png") repeat-x #37393F;
+}
+.vista-pmsite-aptDetailsPage .vista-pmsite-content {
+	background: url("wicket/resource/templates.TemplateResources/images/template0/inner_bg.png") no-repeat;
+}
+.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar {
+	display: inline-block;
+	width: 211px;
+	vertical-align: top;
+}
+.vista-pmsite-aptDetailsPage .secondaryNavig {
+	color:#aaa;
+}
+.vista-pmsite-aptDetailsPage .secondaryNavig h3 {
+	width:100%;
+	text-align:center;
+	text-transform:uppercase;
+	font-size:14px;
+	font-weight:bold;
+	padding: 10px 0;
+	margin-top:5px;
+}
+.vista-pmsite-aptDetailsPage .vista-pmsite-main {
+	display: inline-block;
+	width: 744px;
+	vertical-align: top;
+	min-height:400px;
+}
+</style>
+	<div class="vista-pmsite-aptDetailsPage">
+		<div class="vista-pmsite-contentWrap">
+			<div class="vista-pmsite-content">
+				<div class="vista-pmsite-mainWrap">
+					<div class="vista-pmsite-sidebarWrap">
+						<div class="vista-pmsite-sidebar">
+							<div class="secondaryNavig">
+							</div>
+						</div>
+						<div class="vista-pmsite-main">
+							<div class="caption2">
+								<h1>Apartment Details</h1>
+							</div>
+							<div class="apartment_details_wrap">
+						        <div wicket:id="aptDetailsPanel" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-	<div class="caption2">
-		<h1>Apartment Details</h1>
-	</div>
-	<div class="content">
-		<div class="apartment_details_wrap">
-	        <div wicket:id="aptDetailsPanel" />
-		</div>
-	</div>
-</div>
-</div>
-      </wicket:extend>
+	</wicket:extend>
 </body>
 </html>

@@ -13,11 +13,7 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.WebComponent;
-import org.apache.wicket.request.Response;
 import org.apache.wicket.resource.TextTemplateResourceReference;
 
 import templates.TemplateResources;
@@ -38,22 +34,6 @@ public class LandingPage extends BasePage {
         setVersioned(false);
 
         add(new QuickSearchCriteriaPanel());
-
-        add(new WebComponent("landing_content") {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-                Response response = getRequestCycle().getResponse();
-
-                //TODO make image component for landing page banner
-                //https://cwiki.apache.org/WICKET/how-to-load-an-external-image.html
-                response.write("<img style='position: absolute; bottom:0; left:0' src='wicket/resource/templates.TemplateResources/images/template"
-                        + getPmsiteStyle() + "/landing.png' alt=''>");
-            }
-        });
-
         add(new NewsPanel("newsPanel"));
         add(new PromoPanel("promoPanel"));
         add(new TestimPanel("testimPanel"));

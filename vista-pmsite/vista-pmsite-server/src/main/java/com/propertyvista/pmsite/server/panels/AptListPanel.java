@@ -40,7 +40,7 @@ public class AptListPanel extends Panel {
     public AptListPanel(String id, CompoundPropertyModel<IList<PropertyDTO>> model) {
         super(id, model);
 
-        add(new Label("aptResultMap", ""));
+        add(new GwtInclude("gwtInclude"));
         WebMarkupContainer aptList = new WebMarkupContainer("aptResultList");
         add(aptList.add(new AttributeClassModifier(null, "display_none")));
         aptList.add(new ListView<PropertyDTO>("aptListItem", model) {

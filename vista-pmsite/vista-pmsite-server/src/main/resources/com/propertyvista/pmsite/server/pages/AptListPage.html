@@ -7,41 +7,42 @@
 	<wicket:extend>
 		<style>
 .vista-pmsite-aptListPage {
-//float:left;
 }
-.secondaryNavigTitle {
-	float: left;
-	clear: both;
+.vista-pmsite-aptListPage .vista-pmsite-content {
+	background: url("wicket/resource/templates.TemplateResources/images/template0/inner_bg.png") no-repeat;
+}
+.vista-pmsite-aptListPage .vista-pmsite-contentWrap {
+	background: url("wicket/resource/templates.TemplateResources/images/template0/inner_content_bg.png") repeat-x #37393F;
+}
+.vista-pmsite-aptListPage .vista-pmsite-sidebar {
+	display: inline-block;
+	width: 211px;
+	vertical-align: top;
+}
+.vista-pmsite-aptListPage .secondaryNavig {
+	color:#aaa;
+}
+.vista-pmsite-aptListPage .secondaryNavig h3 {
 	width:100%;
 	text-align:center;
 	text-transform:uppercase;
 	font-size:14px;
 	font-weight:bold;
+	padding: 10px 0;
+	margin-top:5px;
 }
-.advancedSearchNarrowWraprap {
-	float: left;
-	clear: left;
+.advancedSearchNarrowWrap {
 	width: 190px;
 	margin: 10px;
 }
-.caption22 {
+.advancedSearchNarrowWrap input[type=submit] {
 	background:
-		url("resources/templates.TemplateResources/images/template0/subtitle_bg.gif")
-		repeat-x;
-	height:40px;
-	width:100%;
-	float:left;
-}
-.advancedSearchNarrowWraprap input[type=submit] {
-	background:
-		url("resources/templates.TemplateResources/images/template0/btn.png")
+		url("wicket/resource/templates.TemplateResources/images/template0/btn.png")
 		no-repeat;
 	border: none;
 	width: 128px;
 	height: 32px;
 	padding: 5px 0;
-	float: left;
-	clear: left;
 	color: #000000;
 	font-size: 16px;
 	text-shadow: 0 1px 0 #CCCCCC;
@@ -49,19 +50,21 @@
 	cursor: pointer;
 }
 
-.advancedSearchNarrowWraprap label {
+.advancedSearchNarrowWrap label {
 	display: block;
 	padding: 4px 0;
 	white-space: nowrap;
 }
 
-.advancedSearchNarrowWraprap .inputBlockFrame {
-	float: left;
+.advancedSearchNarrowWrap .inputBlockFrame {
 	width: 100%;
 	margin-top: 20px;
 }
 
-.advancedSearchNarrowWraprap .searchTypeSelBox {
+.advancedSearchNarrowWrap .searchTypeSelBox {
+	height:40px;
+}
+.advancedSearchNarrowWrap .searchTypeSelButton {
 	float: left;
 	width: 70px;
 	font-size: 14px;
@@ -74,103 +77,103 @@
 	text-align: center;
 }
 
-.advancedSearchNarrowWraprap .searchTypeSelBox:first-child {
+.advancedSearchNarrowWrap .searchTypeSelButton:first-child {
 	margin-left: 0px;
 }
 
-.advancedSearchNarrowWraprap .searchTypeSelBox .spacer_by {
+.advancedSearchNarrowWrap .searchTypeSelButton .spacer_by {
 	display: none;
 }
 
-.advancedSearchNarrowWraprap .searchTypeSelBox label {
+.advancedSearchNarrowWrap .searchTypeSelButton label {
 	display: inline-block;
 }
 
-.advancedSearchNarrowWraprap .searchTypeSelBox input[type=radio] {
+.advancedSearchNarrowWrap .searchTypeSelButton input[type=radio] {
 	display: none;
 }
 
-.advancedSearchNarrowWraprap .searchTypeBox {
-	float: left;
+.advancedSearchNarrowWrap .searchTypeBox {
+	height:100px;
 }
 
-.advancedSearchNarrowWraprap .searchTypeBox select {
+.advancedSearchNarrowWrap .searchTypeBox select {
 	width: 188px;
 	margin: 1px;
 }
-.advancedSearchNarrowWraprap .searchTypeBox input[type=text] {
+.advancedSearchNarrowWrap .searchTypeBox input[type=text] {
 	width: 184px;
 	margin: 1px;
 }
 
-.advancedSearchNarrowWraprap .searchCommonBox {
-	float: left;
-	clear: both;
-	width: 100%;
+.advancedSearchNarrowWrap .searchCommonBox {
+	height: 160px;
 }
 
-.advancedSearchNarrowWraprap .searchCommonBox select {
+.advancedSearchNarrowWrap .searchCommonBox select {
 	width: 82px;
 	margin: 1px;
 }
 
-.advancedSearchNarrowWraprap .searchCommonBox input[type=text] {
+.advancedSearchNarrowWrap .searchCommonBox input[type=text] {
 	width: 78px;
 	margin: 1px;
 }
-.advancedSearchNarrowWraprap .searchCommonBox .searchField .inputJoinBox {
+.advancedSearchNarrowWrap .searchCommonBox .searchField .inputJoinBox {
 	display:inline-block;
 	width:22px;
 	text-align:center;
 }
-.advancedSearchNarrowWraprap .searchAmenityBox {
-	float: left;
-	clear: both;
-	width: 100%;
+.advancedSearchNarrowWrap .searchAmenityBox {
 	border-top: 1px dotted #5d5e63;
 	padding-top: 10px;
 	margin-bottom: 30px;
 }
 
-.advancedSearchNarrowWraprap .searchAmenityBox .searchField>label {
-	float: left;
+.advancedSearchNarrowWrap .searchAmenityBox .searchField>label {
+	display: block;
 	width: 100%;
 }
 
-.advancedSearchNarrowWraprap .searchAmenityBox br {
+.advancedSearchNarrowWrap .searchAmenityBox br {
 	display: none;
 }
 
-.advancedSearchNarrowWraprap .searchAmenityBox .amenityList {
-	float: left;
-	clear: left;
+.advancedSearchNarrowWrap .searchAmenityBox .amenityList {
+	display: block;
 	width: 100%;
 }
 
-.advancedSearchNarrowWraprap .searchAmenityBox .amenityList label {
+.advancedSearchNarrowWrap .searchAmenityBox .amenityList label {
 	display: inline-block;
 	width: 70px;
 }
 
-.advancedSearchNarrowWraprap .typeselActiveHover {
+.advancedSearchNarrowWrap .typeselActiveHover {
 	background-color: #19181f !important;
 }
 
-.advancedSearchNarrowWraprap .typeselActive {
+.advancedSearchNarrowWrap .typeselActive {
 	background-color: #19181f !important;
 	box-shadow:-1px -1px 1px #000 inset, 1px 1px 1px #55565b;
 	padding-top: 2px !important;
 	padding-bottom: 4px !important;
 }
-
-.apartment_listing_wrap {
-	float: left;
-	width:600px;
-	padding-bottom:30px;
+.vista-pmsite-aptListPage .vista-pmsite-main {
+	display: inline-block;
+	width: 744px;
+	vertical-align: top;
+}
+.vista-pmsite-aptListPage .apartment_listing_wrap {
+	width:100%;
+}
+.vista-pmsite-aptListPage .apartment_listing_wrap .listing_listview {
+	background:white;
+	padding-bottom:40px;
 }
 
 .switchMapList {
-	background-image: url("resources/templates.TemplateResources/images/template0/aptListIcons.png");
+	background-image: url("wicket/resource/templates.TemplateResources/images/template0/aptListIcons.png");
 	background-repeat: no-repeat;
 	width:120px;
 	height:25px;
@@ -184,11 +187,15 @@
 	cursor:pointer;
 }
 .switchMapList:hover {
-	background-image: url("resources/templates.TemplateResources/images/template0/aptListIcons-hlight.png");
+	background-image: url("wicket/resource/templates.TemplateResources/images/template0/aptListIcons-hlight.png");
 	color:#339900;
 }
 .switchMapList_List {
 	background-position:0px -60px;
+}
+.vista-pmsite-aptListPage .apartment_listing_wrap .listing_mapview {
+	width:744px;
+	height:650px;
 }
 </style>
 <script language="javascript">
@@ -207,29 +214,33 @@ $(function() {
 	<div class="vista-pmsite-aptListPage">
 		<div class="vista-pmsite-contentWrap">
 			<div class="vista-pmsite-content">
-				<div class="secondaryNavig">
-					<div class="secondaryNavigTitle">Find An Appartment</div>
-					<div class="advancedSearchNarrowWraprap">
-						<form class="advancedSearchCriteria"
-							wicket:id="advancedSearchCriteriaForm">
-							<div wicket:id="searchCriteriaInput" />
-							<input type="submit" wicket:id="searchSubmit" value="Search" />
-						</form>
-					</div>
-				</div>
-				<div class="caption2">
-					<h1>Found Properties</h1>
-					<div id="switchMapList" class="switchMapList switchMapList_List">List View</div>
-				</div>
-				<div class="content">
-					<div class="apartment_listing_wrap">
-						<div class="listing_listview" wicket:id="aptListPanel" />
-						<div class="listing_mapview" wicket:id="gwtInclude" />
+				<div class="vista-pmsite-mainWrap">
+					<div class="vista-pmsite-sidebarWrap">
+						<div class="vista-pmsite-sidebar">
+							<div class="secondaryNavig">
+								<h3>Find An Appartment</h3>
+								<div class="advancedSearchNarrowWrap">
+									<form class="advancedSearchCriteria"
+										wicket:id="advancedSearchCriteriaForm">
+										<div wicket:id="searchCriteriaInput" />
+										<input type="submit" wicket:id="searchSubmit" value="Search" />
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="vista-pmsite-main">
+							<div class="caption2">
+								<h1>Found Properties</h1>
+								<div id="switchMapList" class="switchMapList switchMapList_List">List View</div>
+							</div>
+							<div class="apartment_listing_wrap">
+								<div wicket:id="aptListPanel" />
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
 	</div>
 	</wicket:extend>
 </body>

@@ -74,46 +74,9 @@ select {
 	background-color: #eee;
 	color: #333;
 }
-
-.vista-pmsite-contentWrap {
-	background: url("images/template0/content_bg.png") repeat-x scroll 0 0
-		#37393F;
-}
-
-.vista-pmsite-content {
-	margin: 0 auto;
-	position: relative;
-	width: 960px;
-	padding: 0 19px;
-}
-
-.vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
-	overflow: hidden;
-}
-
-.vista-pmsite-sidebarWrap {
-	float: left;
-	position: relative;
-	width: 100%;
-	right: 750px;
-}
-
-.vista-pmsite-main {
-	width: 750px;
-	position: relative;
-	float: left;
-	left: 750px;
-}
-
-.vista-pmsite-sidebar {
-	position: relative;
-	float: left;
-	width: 210px;
-	left: 750px;
-}
-
+/*
+ * header
+ */
 .header {
 	background: url("images/template0/header_right.jpg") no-repeat scroll
 		100% 0 transparent;
@@ -305,6 +268,22 @@ ul.footer_locations li {
 	line-height: 60px;
 }
 
+/*
+ * Content
+ */
+.vista-pmsite-contentWrap {
+}
+.vista-pmsite-content {
+	margin: 0 auto;
+	width: 960px;
+	padding: 0 19px;
+}
+.vista-pmsite-mainWrap {
+	width: 960px;
+	margin: 0 auto;
+}
+.vista-pmsite-main {
+}
 .vista-pmsite-main .caption {
 	background: url("images/template0/title_bg.gif") repeat-y scroll 0 -40px
 		transparent;
@@ -313,21 +292,18 @@ ul.footer_locations li {
 	overflow: hidden;
 	padding: 40px 0 0 30px;
 }
-
 .vista-pmsite-main .caption h1 {
 	font-size: 36px;
 	font-weight: normal;
 	line-height: 38px;
 	padding: 0 0 20px;
 }
-
-.vista-pmsite-main .caption2 {
-	background: url("images/template0/subtitle_bg.gif") repeat-x transparent;
-	height: 60px;
-	width: 749px;
-	margin: 1px 0 0 211px;
+.caption2 {
+	background:
+		url("images/template0/subtitle_bg.gif")
+		repeat-x transparent;
+	height:60px;
 }
-
 .vista-pmsite-main .caption2 h1 {
 	font-size: 16px;
 	font-weight: bold;
