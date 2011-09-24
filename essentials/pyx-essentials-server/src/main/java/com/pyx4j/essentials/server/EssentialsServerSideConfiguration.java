@@ -40,4 +40,10 @@ public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
     public String getReCaptchaPublicKey() {
         return null;
     }
+
+    @Override
+    public boolean datastoreReadOnly() {
+        return false;
+    }
+
 }
