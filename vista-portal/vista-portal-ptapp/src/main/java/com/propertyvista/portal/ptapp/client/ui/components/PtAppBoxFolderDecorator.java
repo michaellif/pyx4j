@@ -29,7 +29,7 @@ public class PtAppBoxFolderDecorator<E extends IEntity> extends BoxFolderEditorD
     }
 
     public PtAppBoxFolderDecorator(PtAppEntityFolder<E> parent, boolean editable) {
-        this(i18n.tr("Add new ") + parent.getItemName(), editable);
+        this(i18n.tr("Add ") + parent.getItemName(), editable);
     }
 
     public PtAppBoxFolderDecorator(PtAppEntityFolder<E> parent) {

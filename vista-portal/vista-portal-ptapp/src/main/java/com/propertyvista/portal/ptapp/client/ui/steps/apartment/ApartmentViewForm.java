@@ -162,7 +162,7 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
     }
 
     private CEntityFolderEditor<ServiceItem> createFeaturesFolderEditor(final Feature.Type type) {
-        return new PtAppEntityFolder<ServiceItem>(ServiceItem.class, i18n.tr("Item"), true) {
+        return new PtAppEntityFolder<ServiceItem>(ServiceItem.class, type.toString(), true) {
             private final PtAppEntityFolder<ServiceItem> parent = this;
 
             @Override

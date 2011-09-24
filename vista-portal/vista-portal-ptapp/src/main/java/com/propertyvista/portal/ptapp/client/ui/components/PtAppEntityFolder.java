@@ -60,7 +60,7 @@ public abstract class PtAppEntityFolder<E extends IEntity> extends CEntityFolder
 
     @Override
     protected IFolderEditorDecorator<E> createFolderDecorator() {
-        return new PtAppTableFolderDecorator<E>(columns(), i18n.tr("Add new ") + itemName, editable);
+        return new PtAppTableFolderDecorator<E>(columns(), i18n.tr("Add ") + itemName, editable);
     }
 
     public String getItemName() {

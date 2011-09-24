@@ -32,7 +32,7 @@ public class PtAppTableFolderDecorator<E extends IEntity> extends TableFolderEdi
     }
 
     public PtAppTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, PtAppEntityFolder<E> parent, boolean editable) {
-        this(columns, i18n.tr("Add new ") + parent.getItemName(), editable);
+        this(columns, i18n.tr("Add ") + parent.getItemName(), editable);
     }
 
     public PtAppTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, PtAppEntityFolder<E> parent) {
