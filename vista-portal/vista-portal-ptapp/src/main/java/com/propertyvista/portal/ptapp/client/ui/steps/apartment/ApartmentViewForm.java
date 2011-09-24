@@ -101,10 +101,10 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
         main.add(new VistaHeaderBar(i18n.tr("Utilities")));
         main.add(split = new VistaDecoratorsSplitFlowPanel(true, main.getDefaultLabelWidth(), 15));
 
-        split.getLeftPanel().add(new HTML(HtmlUtils.h6(i18n.tr("Included:"))));
+        split.getLeftPanel().add(new HTML(HtmlUtils.h6(i18n.tr("Included in price:"))));
         split.getLeftPanel().add(inject(proto().includedUtilities(), createUtilitiesFolderEditor()));
 
-        split.getRightPanel().add(new HTML(HtmlUtils.h6(i18n.tr("Excluded:"))));
+        split.getRightPanel().add(new HTML(HtmlUtils.h6(i18n.tr("Excluded (3-d party provided):"))));
         split.getRightPanel().add(inject(proto().externalUtilities(), createUtilitiesFolderEditor()));
 
         main.add(new HTML(HtmlUtils.h6(i18n.tr("To Add:"))));
