@@ -49,6 +49,11 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
 
     private static Logger log = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
+    @Override
+    public void getSystemReadOnlyStatus(AsyncCallback<Boolean> callback) {
+        callback.onSuccess(ServerSideConfiguration.instance().datastoreReadOnly());
+    }
+
     public static AuthenticationResponse createAuthenticationResponse(String sessionToken) {
         AuthenticationResponse ar = new AuthenticationResponse();
         if (Context.getSession() != null) {

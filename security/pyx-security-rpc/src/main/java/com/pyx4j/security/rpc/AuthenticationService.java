@@ -26,6 +26,8 @@ import com.pyx4j.rpc.shared.IService;
 
 public interface AuthenticationService extends IService {
 
+    public void getSystemReadOnlyStatus(AsyncCallback<Boolean> callback);
+
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, String sessionToken);
 
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, AuthenticationRequest request);
