@@ -69,11 +69,7 @@ public interface PropertyPhone extends IEntity {
 
         pointOfSale,
 
-        fireMonitoring,
-
-        internet,
-
-        fax;
+        fireMonitoring;
 
         @Override
         public String toString() {
