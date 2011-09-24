@@ -45,7 +45,11 @@ public interface ApartmentInfoDTO extends IEntity {
     // ServiceCatalog stuff:
     IList<ServiceItemType> includedUtilities();
 
-    IList<ServiceItemType> excludedUtilities();
+    IList<ServiceItemType> externalUtilities();
+
+    IList<ServiceItem> agreedUtilities();
+
+    IList<ServiceItem> availableUtilities();
 
     IList<ServiceItem> agreedAddOns();
 

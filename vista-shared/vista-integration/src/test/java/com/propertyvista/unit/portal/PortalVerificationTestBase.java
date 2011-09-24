@@ -37,7 +37,6 @@ import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
-import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
@@ -369,18 +368,19 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertValueOnForm(debugID, guarantor.email());
     }
 
-    protected void verifyPetsPages(List<Pet> pets, boolean doSave) {
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Addons.class));
-        int num = 0;
-        for (Pet pet : pets) {
-            verifyPetRow(D.id(proto(PetsDTO.class).list(), num), detach(pet));
-            num++;
-        }
-        assertNotPresent(D.id(proto(PetsDTO.class).list(), num, proto(Pet.class).type()));
-        if (doSave) {
-            saveAndContinue();
-        }
-    }
+// TODO it's now should be on Apartment page:     
+//    protected void verifyPetsPages(List<Pet> pets, boolean doSave) {
+//        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Addons.class));
+//        int num = 0;
+//        for (Pet pet : pets) {
+//            verifyPetRow(D.id(proto(PetsDTO.class).list(), num), detach(pet));
+//            num++;
+//        }
+//        assertNotPresent(D.id(proto(PetsDTO.class).list(), num, proto(Pet.class).type()));
+//        if (doSave) {
+//            saveAndContinue();
+//        }
+//    }
 
     private void verifyPetRow(IDebugId debugID, Pet pet) {
         assertValueOnForm(debugID, pet.type());

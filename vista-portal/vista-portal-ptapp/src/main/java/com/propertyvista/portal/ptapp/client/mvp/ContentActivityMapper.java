@@ -24,7 +24,6 @@ import com.propertyvista.portal.ptapp.client.activity.GenericMessageActivity;
 import com.propertyvista.portal.ptapp.client.activity.LoginActivity;
 import com.propertyvista.portal.ptapp.client.activity.ResetPasswordActivity;
 import com.propertyvista.portal.ptapp.client.activity.RetrievePasswordActivity;
-import com.propertyvista.portal.ptapp.client.activity.steps.AddonsActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.ApartmentActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.ChargesActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.CompletionActivity;
@@ -53,8 +52,6 @@ public class ContentActivityMapper implements ActivityMapper {
 // WizardSteps:
         } else if (place instanceof PtSiteMap.Apartment) {
             return new ApartmentActivity((AppPlace) place);
-        } else if (place instanceof PtSiteMap.Addons) {
-            return new AddonsActivity((AppPlace) place);
         } else if (place instanceof PtSiteMap.Tenants) {
             return new TenantsActivity((AppPlace) place);
         } else if (place instanceof PtSiteMap.Info) {

@@ -20,9 +20,16 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
@@ -35,12 +42,15 @@ import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 
+import com.propertyvista.common.client.ui.components.OkCancelBox;
+import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
@@ -59,27 +69,27 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(true);
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(true, 10);
         VistaDecoratorsFlowPanel part;
 
         main.add(new VistaHeaderBar(i18n.tr("General Info")));
-        main.add(part = new VistaDecoratorsFlowPanel(true));
+        main.add(part = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         part.getElement().getStyle().setPaddingLeft(2, Unit.EM);
         part.add(inject(proto().name()), 20);
 
         main.add(new VistaLineSeparator(100, Unit.PCT));
 
         VistaDecoratorsSplitFlowPanel split;
-        main.add(split = new VistaDecoratorsSplitFlowPanel(true, 10, 25));
+        main.add(split = new VistaDecoratorsSplitFlowPanel(true, main.getDefaultLabelWidth(), 20));
         split.getElement().getStyle().setPaddingLeft(2, Unit.EM);
 
-        split.getLeftPanel().add(inject(proto().suiteNumber()), 15);
+        split.getLeftPanel().add(inject(proto().suiteNumber()), 10);
 
-        split.getRightPanel().add(inject(proto().bedrooms()), 15);
-        split.getRightPanel().add(inject(proto().bathrooms()), 15);
+        split.getRightPanel().add(inject(proto().bedrooms()), 10);
+        split.getRightPanel().add(inject(proto().bathrooms()), 10);
 
         main.add(new VistaHeaderBar(i18n.tr("Lease Terms")));
-        main.add(part = new VistaDecoratorsFlowPanel(true));
+        main.add(part = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         part.getElement().getStyle().setPaddingLeft(2, Unit.EM);
         part.add(inject(proto().leaseFrom()), 8);
         part.add(inject(proto().leaseTo()), 8);
@@ -89,17 +99,19 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
         main.add(inject(proto().concessions(), createConcessionsFolderEditor()));
 
         main.add(new VistaHeaderBar(i18n.tr("Utilities")));
-        main.add(split = new VistaDecoratorsSplitFlowPanel(true, 10, 15));
+        main.add(split = new VistaDecoratorsSplitFlowPanel(true, main.getDefaultLabelWidth(), 15));
 
         split.getLeftPanel().add(new HTML(HtmlUtils.h6(i18n.tr("Included:"))));
         split.getLeftPanel().add(inject(proto().includedUtilities(), createUtilitiesFolderEditor()));
 
         split.getRightPanel().add(new HTML(HtmlUtils.h6(i18n.tr("Excluded:"))));
-        split.getRightPanel().add(inject(proto().excludedUtilities(), createUtilitiesFolderEditor()));
+        split.getRightPanel().add(inject(proto().externalUtilities(), createUtilitiesFolderEditor()));
 
-        main.add(new VistaHeaderBar(i18n.tr("Add-ons")));
-        main.add(inject(proto().agreedAddOns(), createFeaturesFolderEditor()));
-        main.add(inject(proto().availableAddOns(), createFeaturesFolderEditor()));
+        main.add(new HTML(HtmlUtils.h6(i18n.tr("To Add:"))));
+        main.add(inject(proto().agreedUtilities(), createFeaturesFolderEditor(Feature.Type.utility)));
+
+        main.add(new VistaHeaderBar(i18n.tr("Options")));
+        main.add(inject(proto().agreedAddOns(), createFeaturesFolderEditor(Feature.Type.addOn)));
 
         // last step - add building picture on the right:
         HorizontalPanel content = new HorizontalPanel();
@@ -107,6 +119,9 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
         content.add(new BuildingPicture());
         return content;
     }
+
+//
+// List Viewers:
 
     private CEntityFolderEditor<ServiceItemType> createUtilitiesFolderEditor() {
         return new PtAppEntityFolder<ServiceItemType>(ServiceItemType.class, i18n.tr("Utility"), false) {
@@ -146,8 +161,8 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
         };
     }
 
-    private CEntityFolderEditor<ServiceItem> createFeaturesFolderEditor() {
-        return new PtAppEntityFolder<ServiceItem>(ServiceItem.class, i18n.tr("Item"), false) {
+    private CEntityFolderEditor<ServiceItem> createFeaturesFolderEditor(final Feature.Type type) {
+        return new PtAppEntityFolder<ServiceItem>(ServiceItem.class, i18n.tr("Item"), true) {
             private final PtAppEntityFolder<ServiceItem> parent = this;
 
             @Override
@@ -162,7 +177,22 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
             @Override
             protected IFolderEditorDecorator<ServiceItem> createFolderDecorator() {
                 PtAppTableFolderDecorator<ServiceItem> decor = new PtAppTableFolderDecorator<ServiceItem>(columns(), parent);
-//                decor.setShowHeader(false);
+                setExternalAddItemProcessing(true);
+                decor.addItemAddClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox(type)) {
+                            @Override
+                            protected void onClose(SelectFeatureBox box) {
+                                if (box.getSelectedItems() != null) {
+                                    for (ServiceItem item : box.getSelectedItems()) {
+                                        addItem(item);
+                                    }
+                                }
+                            }
+                        };
+                    }
+                });
                 return decor;
             }
         };
@@ -189,5 +219,112 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
                 return decor;
             }
         };
+    }
+
+//
+// Selection Boxes:
+
+    private class SelectFeatureBox extends OkCancelBox {
+
+        private ListBox list;
+
+        private List<ServiceItem> selectedItems;
+
+        private final Feature.Type type;
+
+        private SimplePanel content;
+
+        public SelectFeatureBox(Feature.Type type) {
+            super("Select " + type.toString() + "(s)");
+            this.type = type;
+
+            // createContent called from within surper's constructor but we need to use our constructor parameters...
+            content.setWidget(createRealContent());
+        }
+
+        @Override
+        protected Widget createContent() {
+            okButton.setEnabled(false);
+            return (content = new SimplePanel());
+        }
+
+        // createContent called from within surper's constructor but we need to use our constructor parameters...
+        protected Widget createRealContent() {
+            okButton.setEnabled(false);
+
+            if (!getAvailableList().isEmpty()) {
+                list = new ListBox(true);
+                list.addChangeHandler(new ChangeHandler() {
+                    @Override
+                    public void onChange(ChangeEvent event) {
+                        okButton.setEnabled(list.getSelectedIndex() >= 0);
+                    }
+                });
+
+                for (ServiceItem item : getAvailableList()) {
+                    if (!getAgreedList().contains(item)) {
+                        list.addItem(item.getStringView());
+                        list.setValue(list.getItemCount() - 1, item.id().toString());
+                    }
+                }
+
+                if (list.getItemCount() > 0) {
+                    list.setVisibleItemCount(8);
+                    list.setWidth("100%");
+                    return list.asWidget();
+                } else {
+                    return new HTML(i18n.tr("All ") + type.toString() + i18n.tr("(s) have been selected already!.."));
+                }
+            } else {
+                return new HTML(i18n.tr("There are no ") + type.toString() + i18n.tr("(s) available!.."));
+            }
+        }
+
+        @Override
+        protected void setSize() {
+            setSize("350px", "100px");
+        }
+
+        @Override
+        protected boolean onOk() {
+            selectedItems = new ArrayList<ServiceItem>(4);
+            for (int i = 0; i < list.getItemCount(); ++i) {
+                if (list.isItemSelected(i)) {
+                    for (ServiceItem item : getAvailableList()) {
+                        if (list.getValue(i).contentEquals(item.id().toString())) {
+                            selectedItems.add(item);
+                        }
+                    }
+                }
+            }
+            return super.onOk();
+        }
+
+        @Override
+        protected void onCancel() {
+            selectedItems = null;
+        }
+
+        protected List<ServiceItem> getSelectedItems() {
+            return selectedItems;
+        }
+
+        private List<ServiceItem> getAgreedList() {
+            switch (type) {
+            case utility:
+                return getValue().agreedUtilities();
+            default:
+                return getValue().agreedAddOns();
+            }
+        }
+
+        private List<ServiceItem> getAvailableList() {
+            switch (type) {
+            case utility:
+                return getValue().availableUtilities();
+            default:
+                return getValue().availableAddOns();
+            }
+        }
     }
 }

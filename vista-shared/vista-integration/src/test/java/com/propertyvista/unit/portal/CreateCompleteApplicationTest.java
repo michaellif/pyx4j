@@ -48,8 +48,6 @@ import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
-import com.propertyvista.dto.PetsDTO;
-import com.propertyvista.dto.VehiclesDTO;
 import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
@@ -103,8 +101,9 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         enterTenantsPage(summary.tenants());
         enterTestInfoPages(summary.tenants());
         enterFinancialPages(summary.tenants());
-        enterPetsPage(summary.lease().pets());
-        enterVehiclesPage(summary.lease().vehicles());
+// TODO it's now should be on Apartment page:     
+//        enterPetsPage(summary.lease().pets());
+//        enterVehiclesPage(summary.lease().vehicles());
 
         enterChargesPage(summary);
 
@@ -124,7 +123,8 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         verifyTenantsPage(summary.tenants(), false);
         verifyInfoPages(summary.tenants(), false);
         verifyFinancialPages(summary.tenants(), false);
-        verifyPetsPages(summary.lease().pets(), false);
+// TODO it's now should be on Apartment page:     
+//        verifyPetsPages(summary.lease().pets(), false);
 
         //TODO Leon
 
@@ -407,30 +407,31 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         setValueOnForm(fromDebugId, guarantor.email());
     }
 
-    private void enterPetsPage(List<Pet> pets) {
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Addons.class));
-        int num = 0;
-        for (Pet pet : pets) {
-            selenium.click(D.id(proto(PetsDTO.class).list(), FormNavigationDebugId.Form_Add));
-            enterPetRow(D.id(proto(PetsDTO.class).list(), num), detach(pet));
-            num++;
-        }
-        saveAndContinue();
-    }
-
-    private void enterVehiclesPage(List<Vehicle> vehicles) {
-        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Addons.class));
-        int num = 0;
-        for (Vehicle vehicle : vehicles) {
-            selenium.click(D.id(proto(VehiclesDTO.class).list(), FormNavigationDebugId.Form_Add));
-            enterVehicleRow(D.id(proto(VehiclesDTO.class).list(), num), detach(vehicle));
-            num++;
-        }
-        //verify size (e.g. no next row exists)
-        assertFalse(selenium.isElementPresent(D.id(proto(VehiclesDTO.class).list(), num, proto(Vehicle.class).plateNumber())));
-
-        saveAndContinue();
-    }
+// TODO it's now should be on Apartment page:     
+//    private void enterPetsPage(List<Pet> pets) {
+//        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Addons.class));
+//        int num = 0;
+//        for (Pet pet : pets) {
+//            selenium.click(D.id(proto(PetsDTO.class).list(), FormNavigationDebugId.Form_Add));
+//            enterPetRow(D.id(proto(PetsDTO.class).list(), num), detach(pet));
+//            num++;
+//        }
+//        saveAndContinue();
+//    }
+//
+//    private void enterVehiclesPage(List<Vehicle> vehicles) {
+//        selenium.click(D.id(VistaFormsDebugId.MainNavigation_Prefix, PtSiteMap.Addons.class));
+//        int num = 0;
+//        for (Vehicle vehicle : vehicles) {
+//            selenium.click(D.id(proto(VehiclesDTO.class).list(), FormNavigationDebugId.Form_Add));
+//            enterVehicleRow(D.id(proto(VehiclesDTO.class).list(), num), detach(vehicle));
+//            num++;
+//        }
+//        //verify size (e.g. no next row exists)
+//        assertFalse(selenium.isElementPresent(D.id(proto(VehiclesDTO.class).list(), num, proto(Vehicle.class).plateNumber())));
+//
+//        saveAndContinue();
+//    }
 
     private void enterPetRow(IDebugId debugID, Pet pet) {
         setValueOnForm(debugID, pet.type());

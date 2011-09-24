@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.components;
+package com.propertyvista.common.client.ui.components;
 
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
@@ -82,7 +82,7 @@ public abstract class OkCancelBox extends DialogPanel {
 
     /**
      * Implement in derived class - your inner content of the box.
-     * Note: called from withinparent's constructor!!!
+     * Note: called from within parent's constructor!!!
      * 
      * @return widget with user's content.
      */

@@ -53,7 +53,8 @@ public class PreloadedUsersTest extends PortalVerificationTestBase {
         verifyTenantsPage(summary.tenants(), true);
         verifyInfoPages(summary.tenants(), true);
         verifyFinancialPages(summary.tenants(), true);
-        verifyPetsPages(summary.lease().pets(), false);
+// TODO it's now should be on Apartment page:     
+//        verifyPetsPages(summary.lease().pets(), false);
 
     }
 

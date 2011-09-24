@@ -34,10 +34,10 @@ import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 import com.pyx4j.site.client.ui.crud.EditorViewImplBase;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.common.client.ui.components.OkCancelBox;
+import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
-import com.propertyvista.crm.client.ui.components.OkCancelBox;
-import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 
 public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {

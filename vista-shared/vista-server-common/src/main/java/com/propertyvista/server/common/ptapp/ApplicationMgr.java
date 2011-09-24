@@ -35,7 +35,7 @@ public class ApplicationMgr {
     public static List<ApplicationWizardStep> createApplicationProgress() {
         List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
         progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
-        progress.add(createWizardStep(PtSiteMap.Addons.class, ApplicationWizardStep.Status.notVisited));
+//        progress.add(createWizardStep(PtSiteMap.Addons.class, ApplicationWizardStep.Status.notVisited));
         progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
         progress.add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
         progress.add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));

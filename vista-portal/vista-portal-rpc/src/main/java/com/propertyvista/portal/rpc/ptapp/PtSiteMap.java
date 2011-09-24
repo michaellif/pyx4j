@@ -45,11 +45,6 @@ public class PtSiteMap implements SiteMap {
     public static class Apartment extends AppPlace implements WizardStepPlace {
     }
 
-    @NavigationItem(navigLabel = "Addons")
-    @PlaceProperties(caption = "Addons")
-    public static class Addons extends AppPlace implements WizardStepPlace {
-    }
-
     @NavigationItem(navigLabel = "Tenants")
     @PlaceProperties(caption = "Tenants")
     public static class Tenants extends AppPlace implements WizardStepPlace {
@@ -88,5 +83,4 @@ public class PtSiteMap implements SiteMap {
     @PlaceProperties(caption = "")
     public static class GenericMessage extends AppPlace {
     }
-
 }

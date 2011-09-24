@@ -18,8 +18,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.propertyvista.crm.client.ui.components.OkCancelBox;
-import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
+import com.propertyvista.common.client.ui.components.OkCancelBox;
+import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;

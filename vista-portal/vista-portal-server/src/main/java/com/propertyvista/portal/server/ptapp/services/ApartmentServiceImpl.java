@@ -27,8 +27,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.offering.ChargeItem;
-import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ServiceConcession;
@@ -103,17 +101,29 @@ public class ApartmentServiceImpl implements ApartmentService {
         building.serviceCatalog().services().clear();
         building.serviceCatalog().services().addAll(services);
 
-        EntityQueryCriteria<Feature> featureCriteria = EntityQueryCriteria.create(Feature.class);
-        featureCriteria.add(PropertyCriterion.eq(featureCriteria.proto().catalog(), building.serviceCatalog()));
-        List<Feature> features = Persistence.service().query(featureCriteria);
-        building.serviceCatalog().features().clear();
-        building.serviceCatalog().features().addAll(features);
-
-        EntityQueryCriteria<Concession> concessionCriteria = EntityQueryCriteria.create(Concession.class);
-        concessionCriteria.add(PropertyCriterion.eq(concessionCriteria.proto().catalog(), building.serviceCatalog()));
-        List<Concession> concessions = Persistence.service().query(concessionCriteria);
-        building.serviceCatalog().concessions().clear();
-        building.serviceCatalog().concessions().addAll(concessions);
+        // load detached data:
+        for (Service item : services) {
+            Persistence.service().retrieve(item.items());
+            Persistence.service().retrieve(item.features());
+            for (ServiceFeature fi : item.features()) {
+                Persistence.service().retrieve(fi.feature().items());
+            }
+            Persistence.service().retrieve(item.concessions());
+        }
+//        
+//  Currently not used here:        
+//
+//        EntityQueryCriteria<Feature> featureCriteria = EntityQueryCriteria.create(Feature.class);
+//        featureCriteria.add(PropertyCriterion.eq(featureCriteria.proto().catalog(), building.serviceCatalog()));
+//        List<Feature> features = Persistence.service().query(featureCriteria);
+//        building.serviceCatalog().features().clear();
+//        building.serviceCatalog().features().addAll(features);
+//
+//        EntityQueryCriteria<Concession> concessionCriteria = EntityQueryCriteria.create(Concession.class);
+//        concessionCriteria.add(PropertyCriterion.eq(concessionCriteria.proto().catalog(), building.serviceCatalog()));
+//        List<Concession> concessions = Persistence.service().query(concessionCriteria);
+//        building.serviceCatalog().concessions().clear();
+//        building.serviceCatalog().concessions().addAll(concessions);
 
         return building.serviceCatalog();
     }
@@ -121,44 +131,56 @@ public class ApartmentServiceImpl implements ApartmentService {
     private void fillServiceItems(ApartmentInfoDTO entity, Building building, Lease lease) {
 
         entity.includedUtilities().clear();
-        entity.excludedUtilities().clear();
+        entity.externalUtilities().clear();
+
+        entity.agreedUtilities().clear();
+        entity.availableUtilities().clear();
 
         entity.agreedAddOns().clear();
         entity.availableAddOns().clear();
 
         entity.concessions().clear();
 
-        for (ChargeItem utility : lease.serviceAgreement().featureItems()) {
-            entity.agreedAddOns().add(utility.item());
-        }
-
-        for (ServiceConcession consession : lease.serviceAgreement().concessions()) {
-            entity.concessions().add(consession.concession());
-        }
-
         syncBuildingServiceCatalog(lease.unit().belongsTo());
 
         entity.includedUtilities().addAll(building.serviceCatalog().includedUtilities());
+        entity.externalUtilities().addAll(building.serviceCatalog().externalUtilities());
 
-        // calulate excluded utilities:
-        EntityQueryCriteria<ServiceItemType> serviceItemCriteria = EntityQueryCriteria.create(ServiceItemType.class);
-        serviceItemCriteria.add(PropertyCriterion.eq(serviceItemCriteria.proto().featureType(), Feature.Type.utility));
-        for (ServiceItemType item : Persistence.service().query(serviceItemCriteria)) {
-            if (!entity.includedUtilities().contains(item)) {
-                entity.excludedUtilities().add(item);
+        // fill agreed items:
+        for (ChargeItem item : lease.serviceAgreement().featureItems()) {
+            if (item.item().type().type().getValue().equals(ServiceItemType.Type.feature)) {
+                switch (item.item().type().featureType().getValue()) {
+                case utility:
+                    entity.agreedUtilities().add(item.item());
+                    break;
+                default:
+                    entity.agreedAddOns().add(item.item());
+                }
             }
         }
 
+        // fill available items:
         for (Service service : building.serviceCatalog().services()) {
             if (service.type().equals(lease.type())) {
                 for (ServiceFeature feature : service.features()) {
                     for (ServiceItem item : feature.feature().items()) {
-                        if (!entity.agreedAddOns().contains(item)) {
+                        switch (item.type().featureType().getValue()) {
+                        case utility:
+                            if (!entity.includedUtilities().contains(item.type()) && !entity.externalUtilities().contains(item.type())) {
+                                entity.availableUtilities().add(item);
+                            }
+                            break;
+                        default:
                             entity.availableAddOns().add(item);
                         }
                     }
                 }
             }
+        }
+
+        // fill concessions:
+        for (ServiceConcession consession : lease.serviceAgreement().concessions()) {
+            entity.concessions().add(consession.concession());
         }
     }
 }

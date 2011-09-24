@@ -129,6 +129,8 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             }
             Persistence.service().retrieve(item.concessions());
         }
+//      
+//  Currently not used here:        
 //
 //        EntityQueryCriteria<Feature> featureCriteria = EntityQueryCriteria.create(Feature.class);
 //        featureCriteria.add(PropertyCriterion.eq(featureCriteria.proto().catalog(), building.serviceCatalog()));

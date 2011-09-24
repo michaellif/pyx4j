@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
-import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
+import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Feature;

@@ -30,7 +30,7 @@ import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
-import com.propertyvista.crm.client.ui.components.ShowPopUpBox;
+import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
