@@ -136,8 +136,8 @@ public class ApartmentServiceImpl implements ApartmentService {
         entity.agreedUtilities().clear();
         entity.availableUtilities().clear();
 
-        entity.agreedAddOns().clear();
-        entity.availableAddOns().clear();
+        entity.agreedOptions().clear();
+        entity.availableOptions().clear();
 
         entity.concessions().clear();
 
@@ -154,7 +154,7 @@ public class ApartmentServiceImpl implements ApartmentService {
                     entity.agreedUtilities().add(item.item());
                     break;
                 default:
-                    entity.agreedAddOns().add(item.item());
+                    entity.agreedOptions().add(item.item());
                 }
             }
         }
@@ -171,7 +171,7 @@ public class ApartmentServiceImpl implements ApartmentService {
                             }
                             break;
                         default:
-                            entity.availableAddOns().add(item);
+                            entity.availableOptions().add(item);
                         }
                     }
                 }

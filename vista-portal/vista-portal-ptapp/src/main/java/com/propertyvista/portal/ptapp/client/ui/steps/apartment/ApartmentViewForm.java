@@ -111,7 +111,7 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
         main.add(inject(proto().agreedUtilities(), createFeaturesFolderEditor(Feature.Type.utility)));
 
         main.add(new VistaHeaderBar(i18n.tr("Options")));
-        main.add(inject(proto().agreedAddOns(), createFeaturesFolderEditor(Feature.Type.addOn)));
+        main.add(inject(proto().agreedOptions(), createFeaturesFolderEditor(Feature.Type.addOn)));
 
         // last step - add building picture on the right:
         HorizontalPanel content = new HorizontalPanel();
@@ -314,7 +314,7 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
             case utility:
                 return getValue().agreedUtilities();
             default:
-                return getValue().agreedAddOns();
+                return getValue().agreedOptions();
             }
         }
 
@@ -323,7 +323,7 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
             case utility:
                 return getValue().availableUtilities();
             default:
-                return getValue().availableAddOns();
+                return getValue().availableOptions();
             }
         }
     }
