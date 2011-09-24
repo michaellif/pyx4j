@@ -239,9 +239,9 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().financial().lastAppraisalValue()), 10);
         split.getRightPanel().add(inject(proto().financial().currency().name()), split.getRightPanel().getDefaultLabelWidth(), 10, i18n.tr("Currency Name"));
 
-        main.add(new CrmSectionSeparator(i18n.tr("Included in price Utilities:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Included Utilities:")));
         main.add(inject(proto().serviceCatalog().includedUtilities(), createUtilitiesListEditor()));
-        main.add(new CrmSectionSeparator(i18n.tr("External (3-d party provided) Utilities:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Excluded Utilities:")));
         main.add(inject(proto().serviceCatalog().externalUtilities(), createUtilitiesListEditor()));
 
         return new CrmScrollPanel(main);
