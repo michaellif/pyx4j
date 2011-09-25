@@ -37,12 +37,18 @@ public class AdminSiteMap implements SiteMap {
     public static class ChangePassword extends AppPlace {
     }
 
-    public static class Properties extends AppPlace {
+    public static class Management extends AppPlace {
         @PlaceProperties(caption = "PMC")
         @NavigationItem(navigLabel = "PMCs")
         public static class PMC extends CrudAppPlace {
         }
+    }
 
+    public static class Administration extends AppPlace {
+        @PlaceProperties(caption = "System Maintenance")
+        @NavigationItem(navigLabel = "System Maintenance")
+        public static class Maintenance extends CrudAppPlace {
+        }
     }
 
     @NavigationItem(navigLabel = "Alerts")

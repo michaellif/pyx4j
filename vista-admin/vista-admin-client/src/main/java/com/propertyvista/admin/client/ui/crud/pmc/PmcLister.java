@@ -25,7 +25,7 @@ import com.propertyvista.admin.rpc.PmcDTO;
 public class PmcLister extends ListerBase<PmcDTO> {
 
     public PmcLister() {
-        super(PmcDTO.class, AdminSiteMap.Properties.PMC.class, false, true);
+        super(PmcDTO.class, AdminSiteMap.Management.PMC.class, false, true);
     }
 
     @Override

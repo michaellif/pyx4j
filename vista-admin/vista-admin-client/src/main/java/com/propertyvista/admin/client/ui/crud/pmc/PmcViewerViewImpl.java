@@ -27,7 +27,7 @@ import com.propertyvista.admin.rpc.PmcDTO;
 public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implements PmcViewerView {
 
     public PmcViewerViewImpl() {
-        super(AdminSiteMap.Properties.PMC.class, new PmcEditorForm(new AdminViewersComponentFactory()));
+        super(AdminSiteMap.Management.PMC.class, new PmcEditorForm(new AdminViewersComponentFactory()));
 
         CHyperlink upload = new CHyperlink(new Command() {
             @Override

@@ -24,6 +24,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.activity.AccountActivity;
 import com.propertyvista.admin.client.activity.AlertActivity;
+import com.propertyvista.admin.client.activity.MaintenanceActivity;
 import com.propertyvista.admin.client.activity.MessageActivity;
 import com.propertyvista.admin.client.activity.SettingsActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcEditorActivity;
@@ -43,7 +44,7 @@ public class MainActivityMapper implements AppActivityMapper {
             @Override
             public void onSuccess() {
                 Activity activity = null;
-                if (place instanceof AdminSiteMap.Properties.PMC) {
+                if (place instanceof AdminSiteMap.Management.PMC) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         activity = new PmcEditorActivity(place);
@@ -56,6 +57,14 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
+                    // - Administration:
+                } else if (place instanceof AdminSiteMap.Administration.Maintenance) {
+                    activity = new MaintenanceActivity(place);
+
+                    // - Settings:
+                } else if (place instanceof AdminSiteMap.Settings) {
+                    activity = new SettingsActivity(place);
+
                     // - Other:
                 } else if (place instanceof AdminSiteMap.Account) {
                     activity = new AccountActivity(place);
@@ -63,10 +72,6 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new AlertActivity(place);
                 } else if (place instanceof AdminSiteMap.Message) {
                     activity = new MessageActivity(place);
-
-                    // - Settings:
-                } else if (place instanceof AdminSiteMap.Settings) {
-                    activity = new SettingsActivity(place);
                 }
 
                 callback.onSuccess(activity);

@@ -15,24 +15,16 @@ package com.propertyvista.admin.client.viewfactories;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.admin.client.ui.crud.pmc.PmcEditorView;
-import com.propertyvista.admin.client.ui.crud.pmc.PmcEditorViewImpl;
-import com.propertyvista.admin.client.ui.crud.pmc.PmcListerView;
-import com.propertyvista.admin.client.ui.crud.pmc.PmcListerViewImpl;
-import com.propertyvista.admin.client.ui.crud.pmc.PmcViewerView;
-import com.propertyvista.admin.client.ui.crud.pmc.PmcViewerViewImpl;
+import com.propertyvista.admin.client.ui.administration.MaintenanceView;
+import com.propertyvista.admin.client.ui.administration.MaintenanceViewImpl;
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
 
-public class PmcCrudVeiwFactory extends ViewFactoryBase {
+public class AdministrationVeiwFactory extends ViewFactoryBase {
 
     public static IsWidget instance(Class<?> type) {
         if (!map.containsKey(type)) {
-            if (PmcListerView.class.equals(type)) {
-                map.put(type, new PmcListerViewImpl());
-            } else if (PmcViewerView.class.equals(type)) {
-                map.put(type, new PmcViewerViewImpl());
-            } else if (PmcEditorView.class.equals(type)) {
-                map.put(type, new PmcEditorViewImpl());
+            if (MaintenanceView.class.equals(type)) {
+                map.put(type, new MaintenanceViewImpl());
             }
         }
         return map.get(type);

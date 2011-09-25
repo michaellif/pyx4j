@@ -18,15 +18,15 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.admin.client.ui.SettingsView;
-import com.propertyvista.admin.client.viewfactories.AdminVeiwFactory;
+import com.propertyvista.admin.client.ui.administration.MaintenanceView;
+import com.propertyvista.admin.client.viewfactories.AdministrationVeiwFactory;
 
-public class SettingsActivity extends AbstractActivity {
+public class MaintenanceActivity extends AbstractActivity {
 
-    private final SettingsView view;
+    private final MaintenanceView view;
 
-    public SettingsActivity(Place place) {
-        view = (SettingsView) AdminVeiwFactory.instance(SettingsView.class);
+    public MaintenanceActivity(Place place) {
+        view = (MaintenanceView) AdministrationVeiwFactory.instance(MaintenanceView.class);
         assert (view != null);
     }
 
@@ -36,7 +36,7 @@ public class SettingsActivity extends AbstractActivity {
 
     }
 
-    public SettingsActivity withPlace(Place place) {
+    public MaintenanceActivity withPlace(Place place) {
         return this;
     }
 }

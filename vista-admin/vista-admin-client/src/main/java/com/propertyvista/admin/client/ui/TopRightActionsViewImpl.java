@@ -102,9 +102,6 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
                 presenter.showSettings();
             }
         });
-        settings.setDebugId(new StringDebugId("administration"));
-        settings.setValue(i18n.tr("Administration"));
-        settings.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
         themes = new CHyperlink(null, new Command() {
             @Override

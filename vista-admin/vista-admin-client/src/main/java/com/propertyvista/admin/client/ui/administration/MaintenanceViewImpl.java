@@ -7,20 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
- * @author Vlad
+ * Created on May 9, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.propertyvista.admin.client.ui.crud.pmc;
+package com.propertyvista.admin.client.ui.administration;
 
-import com.propertyvista.admin.client.ui.crud.AdminListerViewImplBase;
-import com.propertyvista.admin.rpc.AdminSiteMap;
-import com.propertyvista.admin.rpc.PmcDTO;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implements PmcListerView {
+public class MaintenanceViewImpl extends SimplePanel implements MaintenanceView {
 
-    public PmcListerViewImpl() {
-        super(AdminSiteMap.Management.PMC.class);
-        setLister(new PmcLister());
+    public MaintenanceViewImpl() {
+        setSize("100%", "100%");
+        HTML label = new HTML("Maintenance...");
+        setWidget(label);
     }
 }

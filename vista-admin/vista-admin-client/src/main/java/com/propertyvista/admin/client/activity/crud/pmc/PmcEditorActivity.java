@@ -20,7 +20,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.admin.client.ui.crud.pmc.PmcEditorView;
-import com.propertyvista.admin.client.viewfactories.PmcCrudVeiwFactory;
+import com.propertyvista.admin.client.viewfactories.ManagementVeiwFactory;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 
@@ -28,7 +28,7 @@ public class PmcEditorActivity extends EditorActivityBase<PmcDTO> {
 
     @SuppressWarnings("unchecked")
     public PmcEditorActivity(Place place) {
-        super((PmcEditorView) PmcCrudVeiwFactory.instance(PmcEditorView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class), PmcDTO.class);
+        super((PmcEditorView) ManagementVeiwFactory.instance(PmcEditorView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class), PmcDTO.class);
         setPlace(place);
     }
 }

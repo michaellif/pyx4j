@@ -26,7 +26,7 @@ public class PmcEditorViewImpl extends AdminEditorViewImplBase<PmcDTO> implement
     private final CrudEntityForm<PmcDTO> newItemForm = new PmcEditorFormNewItem();
 
     public PmcEditorViewImpl() {
-        super(AdminSiteMap.Properties.PMC.class);
+        super(AdminSiteMap.Management.PMC.class);
         existingItemForm.initialize();
         newItemForm.initialize();
     }
