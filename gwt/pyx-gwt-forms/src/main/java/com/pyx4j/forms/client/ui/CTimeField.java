@@ -29,7 +29,6 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.i18n.client.DateTimeFormat;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
 public class CTimeField extends CTextFieldBase<Time, NativeTextBox<Time>> {
 
@@ -44,7 +43,6 @@ public class CTimeField extends CTextFieldBase<Time, NativeTextBox<Time>> {
     public CTimeField(String title) {
         super(title);
         setTimeFormat(defaultTimeFormat);
-        addValueValidator(new TextBoxParserValidator<Time>(i18n.tr("Not a valid time. Must be in the format 12:00 AM")));
     }
 
     @Override
@@ -61,7 +59,6 @@ public class CTimeField extends CTextFieldBase<Time, NativeTextBox<Time>> {
         private final DateTimeFormat parser;
 
         public TimeFormat(final String format) {
-
             parser = DateTimeFormat.getFormat(format);
         }
 
@@ -81,10 +78,9 @@ public class CTimeField extends CTextFieldBase<Time, NativeTextBox<Time>> {
                 try {
                     return new Time(parser.parseStrict(string).getTime());
                 } catch (IllegalArgumentException e) {
-                    throw new ParseException("TimeFormat", 0);
+                    throw new ParseException("Invalid time format. Must be in the format 12:00 AM/PM", 0);
                 }
             }
         }
-
     }
 }
