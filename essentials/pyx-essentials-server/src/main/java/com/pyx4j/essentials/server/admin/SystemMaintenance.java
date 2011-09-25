@@ -78,7 +78,7 @@ public class SystemMaintenance {
         if (isSystemMaintenance()) {
             return systemMaintenanceState.type().getValue();
         } else {
-            return null;
+            return SystemState.Online;
         }
     }
 
