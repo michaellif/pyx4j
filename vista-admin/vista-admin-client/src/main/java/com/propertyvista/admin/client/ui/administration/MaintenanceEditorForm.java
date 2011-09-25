@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
+import com.pyx4j.forms.client.ui.CBooleanLabel;
 
 import com.propertyvista.admin.client.ui.components.AdminEditorsComponentFactory;
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
@@ -37,16 +38,12 @@ public class MaintenanceEditorForm extends AdminEntityForm<SystemMaintenanceStat
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
-        main.add(inject(proto().inEffect()), 5);
-
+        main.add(inject(proto().inEffect(), new CBooleanLabel()), 10);
         main.add(inject(proto().type()), 10);
-
+        main.add(inject(proto().startDate()), 10);
         main.add(inject(proto().startTime()), 10);
-
         main.add(inject(proto().gracePeriod()), 10);
-
         main.add(inject(proto().duration()), 10);
-
         main.add(inject(proto().message()), 20);
 
         return new AdminScrollPanel(main);
