@@ -21,8 +21,8 @@
 package com.pyx4j.essentials.rpc.admin;
 
 import java.sql.Time;
-import java.util.Date;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
@@ -40,7 +40,7 @@ public interface SystemMaintenanceState extends IEntity {
 
     IPrimitive<SystemState> type();
 
-    IPrimitive<Date> startDate();
+    IPrimitive<LogicalDate> startDate();
 
     @Editor(type = Editor.EditorType.timepicker)
     @Format("HH:mm")

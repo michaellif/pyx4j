@@ -21,17 +21,20 @@
 package com.pyx4j.essentials.server.admin;
 
 import java.io.File;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.SystemState;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.essentials.server.xml.XMLEntityConverter;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.log4j.LoggerConfig;
 
@@ -126,13 +129,35 @@ public class SystemMaintenance {
         return systemMaintenanceState;
     }
 
+    @SuppressWarnings("deprecation")
     public static void setSystemMaintenanceInfo(SystemMaintenanceState state) {
         stopSystemMaintenance();
-        if (!state.startTime().isNull()) {
-            systemMaintenanceState = state;
-            if (state.startTime().getValue().after(new Date())) {
-                maintenanceScheduled = state.startTime().getValue().getTime() - state.gracePeriod().getValue();
-                maintenanceScheduledEnd = state.startTime().getValue().getTime() + Consts.MIN2MSEC * state.duration().getValue();
+        systemMaintenanceState = state;
+        if (!state.startTime().isNull() || !state.startDate().isNull()) {
+            Calendar startTime = new GregorianCalendar();
+            if (state.startDate().isNull()) {
+                startTime.setTime(DateUtils.dayStart(state.startDate().getValue()));
+                state.startDate().setValue(new LogicalDate(startTime.getTime()));
+            }
+            if (!state.startTime().isNull()) {
+                startTime.set(Calendar.HOUR_OF_DAY, state.startTime().getValue().getHours());
+                startTime.set(Calendar.MINUTE, state.startTime().getValue().getMinutes());
+                startTime.set(Calendar.SECOND, state.startTime().getValue().getSeconds());
+                startTime.set(Calendar.MILLISECOND, 0);
+            }
+
+            long start = startTime.getTimeInMillis();
+            if (!state.gracePeriod().isNull()) {
+                start -= state.gracePeriod().getValue();
+            }
+            if (state.duration().isNull()) {
+                state.duration().setValue(60);
+            }
+            long end = startTime.getTimeInMillis() + Consts.MIN2MSEC * state.duration().getValue();
+
+            if (start >= System.currentTimeMillis() && (end <= System.currentTimeMillis())) {
+                maintenanceScheduled = start;
+                maintenanceScheduledEnd = end;
                 if (systemMaintenanceState.type().isNull()) {
                     systemMaintenanceState.type().setValue(SystemState.ReadOnly);
                 }

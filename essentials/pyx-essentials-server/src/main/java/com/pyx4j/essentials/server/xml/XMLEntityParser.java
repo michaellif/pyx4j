@@ -20,9 +20,14 @@
  */
 package com.pyx4j.essentials.server.xml;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -231,6 +236,14 @@ public class XMLEntityParser {
         String str = valueNode.getTextContent();
         if (valueClass.isAssignableFrom(byte[].class)) {
             return new Base64().decode(str);
+        } else if (valueClass.isAssignableFrom(java.sql.Time.class)) {
+            SimpleDateFormat tFormat = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+            tFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            try {
+                return new java.sql.Time(tFormat.parse(str).getTime());
+            } catch (ParseException e) {
+                throw new Error("Error parsing time [" + str + "]", e);
+            }
         } else if (valueClass.isAssignableFrom(Date.class)) {
             return DateUtils.detectDateformat(str);
         } else if (valueClass.equals(GeoPoint.class)) {
@@ -272,13 +285,34 @@ public class XMLEntityParser {
             if (valueClass.isAssignableFrom(byte[].class)) {
                 return new Base64().decode(str);
             } else if (Date.class.isAssignableFrom(valueClass)) {
-                Date date = DateUtils.detectDateformat(str);
-                if (valueClass.equals(java.sql.Date.class)) {
-                    return new java.sql.Date(date.getTime());
-                } else if (valueClass.equals(LogicalDate.class)) {
-                    return new LogicalDate(date);
+                if (valueClass.isAssignableFrom(java.sql.Time.class)) {
+                    SimpleDateFormat tFormat = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+                    //TODO
+                    //tFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    try {
+                        return new java.sql.Time(tFormat.parse(str).getTime());
+                    } catch (ParseException e) {
+                        throw new Error("Error parsing time [" + str + "]", e);
+                    }
                 } else {
-                    return date;
+                    if (valueClass.equals(java.sql.Date.class) || valueClass.equals(LogicalDate.class)) {
+                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                        //TODO
+                        //df.setTimeZone(TimeZone.getTimeZone("UTC"));
+                        Date date;
+                        try {
+                            date = df.parse(str);
+                        } catch (ParseException e) {
+                            date = DateUtils.detectDateformat(str);
+                        }
+                        if (valueClass.equals(java.sql.Date.class)) {
+                            return new java.sql.Date(date.getTime());
+                        } else {
+                            return new LogicalDate(date.getTime());
+                        }
+                    } else {
+                        return DateUtils.detectDateformat(str);
+                    }
                 }
             } else if (valueClass.equals(GeoPoint.class)) {
                 return parsGeoPoint(valueNode, memberMeta, member);
@@ -289,5 +323,4 @@ public class XMLEntityParser {
             throw new Error("Pars of " + member.getFieldName() + " (" + memberMeta.getValueClass() + ") '" + str + "' Not yet implemented");
         }
     }
-
 }
