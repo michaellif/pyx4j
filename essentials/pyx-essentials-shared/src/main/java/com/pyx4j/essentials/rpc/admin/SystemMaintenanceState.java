@@ -20,6 +20,7 @@
  */
 package com.pyx4j.essentials.rpc.admin;
 
+import java.sql.Time;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
@@ -38,7 +39,9 @@ public interface SystemMaintenanceState extends IEntity {
 
     IPrimitive<SystemState> type();
 
-    IPrimitive<Date> startTime();
+    IPrimitive<Date> startDate();
+
+    IPrimitive<Time> startTime();
 
     @Caption(name = "Grace Period (min)")
     IPrimitive<Long> gracePeriod();
