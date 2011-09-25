@@ -28,8 +28,8 @@ public interface AdminService extends IService {
 
     public void getSystemReadOnlyStatus(AsyncCallback<Boolean> callback);
 
-    public void setSystemMaintenanceSchedule(AsyncCallback<SystemMaintenanceState> callback);
+    public void getSystemMaintenanceState(AsyncCallback<SystemMaintenanceState> callback);
 
-    public void scheduleSystemMaintenance(AsyncCallback<SystemMaintenanceState> callback, SystemMaintenanceState state);
+    public void setSystemMaintenanceState(AsyncCallback<SystemMaintenanceState> callback, SystemMaintenanceState state);
 
 }

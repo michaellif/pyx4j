@@ -34,12 +34,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void setSystemMaintenanceSchedule(AsyncCallback<SystemMaintenanceState> callback) {
+    public void getSystemMaintenanceState(AsyncCallback<SystemMaintenanceState> callback) {
         callback.onSuccess(SystemMaintenance.getSystemMaintenanceInfo());
     }
 
     @Override
-    public void scheduleSystemMaintenance(AsyncCallback<SystemMaintenanceState> callback, SystemMaintenanceState state) {
+    public void setSystemMaintenanceState(AsyncCallback<SystemMaintenanceState> callback, SystemMaintenanceState state) {
         SystemMaintenance.setSystemMaintenanceInfo(state);
         callback.onSuccess(SystemMaintenance.getSystemMaintenanceInfo());
     }
