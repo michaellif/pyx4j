@@ -17,8 +17,12 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.ui.crud.IEditorView;
 
 import com.propertyvista.admin.client.ui.administration.MaintenanceView;
@@ -57,25 +61,72 @@ public class MaintenanceActivity extends AbstractActivity implements IEditorView
 
     @Override
     public void populate() {
-        // TODO Auto-generated method stub
+        service.getSystemMaintenanceState(new AsyncCallback<SystemMaintenanceState>() {
+            @Override
+            public void onSuccess(SystemMaintenanceState result) {
+                onPopulateSuccess(result);
+            }
 
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+        });
     }
 
     @Override
     public void apply() {
-        // TODO Auto-generated method stub
-
+        trySave(true);
     }
 
     @Override
     public void save() {
-        // TODO Auto-generated method stub
-
+        trySave(false);
     }
 
     @Override
     public void cancel() {
-        // TODO Auto-generated method stub
+        History.back();
+    }
 
+    public void trySave(final boolean apply) {
+
+        service.setSystemMaintenanceState(new AsyncCallback<SystemMaintenanceState>() {
+            @Override
+            public void onSuccess(SystemMaintenanceState result) {
+                onSaved(result);
+                if (apply) {
+                    onApplySuccess(result);
+                } else {
+                    onSaveSuccess(result);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                onSaveFail(caught);
+            }
+        }, view.getValue());
+    }
+
+    protected void onSaved(SystemMaintenanceState result) {
+    }
+
+    protected void onApplySuccess(SystemMaintenanceState result) {
+        view.onApplySuccess();
+    }
+
+    protected void onSaveSuccess(SystemMaintenanceState result) {
+        view.onSaveSuccess();
+    }
+
+    protected void onSaveFail(Throwable caught) {
+        if (!view.onSaveFail(caught)) {
+            throw new UnrecoverableClientError(caught);
+        }
+    }
+
+    public void onPopulateSuccess(SystemMaintenanceState result) {
+        view.populate(result);
     }
 }
