@@ -22,5 +22,8 @@ public class MaintenanceViewImpl extends AdminEditorViewImplBase<SystemMaintenan
 
     public MaintenanceViewImpl() {
         super(AdminSiteMap.Administration.Maintenance.class, new MaintenanceEditorForm());
+
+        // hide save button:
+        btnSave.setVisible(false);
     }
 }
