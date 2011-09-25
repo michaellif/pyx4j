@@ -22,6 +22,7 @@ package com.pyx4j.essentials.server;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
+import com.pyx4j.essentials.server.admin.SystemMaintenance;
 
 public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
 
@@ -43,7 +44,7 @@ public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
 
     @Override
     public boolean datastoreReadOnly() {
-        return false;
+        return SystemMaintenance.isSystemMaintenance();
     }
 
 }

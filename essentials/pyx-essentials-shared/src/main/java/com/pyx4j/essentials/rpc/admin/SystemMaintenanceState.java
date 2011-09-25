@@ -26,11 +26,14 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.essentials.rpc.SystemState;
 
 @Transient
 public interface SystemMaintenanceState extends IEntity {
 
     IPrimitive<Boolean> inEffect();
+
+    IPrimitive<SystemState> type();
 
     IPrimitive<Date> startTime();
 

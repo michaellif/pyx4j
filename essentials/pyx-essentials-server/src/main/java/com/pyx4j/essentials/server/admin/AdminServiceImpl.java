@@ -23,7 +23,6 @@ package com.pyx4j.essentials.server.admin;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.admin.AdminService;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 
@@ -34,18 +33,14 @@ public class AdminServiceImpl implements AdminService {
         callback.onSuccess(ServerSideConfiguration.instance().datastoreReadOnly());
     }
 
-    static SystemMaintenanceState tmp_state = EntityFactory.create(SystemMaintenanceState.class);
-
     @Override
     public void setSystemMaintenanceSchedule(AsyncCallback<SystemMaintenanceState> callback) {
-        // TODO Auto-generated method stub,  Use new class SystemMaintenance
-        callback.onSuccess(tmp_state);
+        callback.onSuccess(SystemMaintenance.getSystemMaintenanceInfo());
     }
 
     @Override
     public void scheduleSystemMaintenance(AsyncCallback<SystemMaintenanceState> callback, SystemMaintenanceState state) {
-        // TODO Auto-generated method stub,  Use new class SystemMaintenance
-        tmp_state.set(tmp_state);
-        callback.onSuccess(tmp_state);
+        SystemMaintenance.setSystemMaintenanceInfo(state);
+        callback.onSuccess(SystemMaintenance.getSystemMaintenanceInfo());
     }
 }

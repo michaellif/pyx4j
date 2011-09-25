@@ -51,6 +51,7 @@ public class EntityServicesImpl {
     private static I18n i18n = I18nFactory.getI18n();
 
     public static String applicationReadOnlyMessage() {
+        //TODO use SystemMaintenance. getApplicationMaintenanceMessage()
         return i18n.tr("Application is in read-only due to short maintenance.\nPlease try again in one hour");
     }
 

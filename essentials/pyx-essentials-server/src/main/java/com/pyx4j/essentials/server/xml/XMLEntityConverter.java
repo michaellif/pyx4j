@@ -20,8 +20,13 @@
  */
 package com.pyx4j.essentials.server.xml;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -33,6 +38,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.gwt.server.IOUtils;
 
 public class XMLEntityConverter {
 
@@ -56,4 +62,56 @@ public class XMLEntityConverter {
         return parse(doc.getDocumentElement());
     }
 
+    public static void writeFile(IEntity entity, File file, boolean emitId) {
+        FileWriter w = null;
+        try {
+            w = new FileWriter(file);
+            XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
+            XMLEntityWriter xmlWriter = new XMLEntityWriter(xml);
+            xmlWriter.setEmitId(emitId);
+            xmlWriter.write(entity);
+            w.write(xml.toString());
+            w.flush();
+        } catch (IOException e) {
+            throw new Error(e);
+        } finally {
+            IOUtils.closeQuietly(w);
+        }
+    }
+
+    public static <T extends IEntity> T readFile(Class<T> entityClass, File file) {
+        Reader in = null;
+        try {
+            return parse(entityClass, new InputSource(in = new FileReader(file)), new XMLEntityFactoryDefault());
+        } catch (IOException e) {
+            throw new Error(e);
+        } finally {
+            IOUtils.closeQuietly(in);
+        }
+    }
+
+    public static <T extends IEntity> T parse(Class<T> entityClass, InputSource input, XMLEntityFactory factory) {
+        XMLEntityParser parser = new XMLEntityParser(factory);
+        return parser.parse(entityClass, newDocument(input).getDocumentElement());
+    }
+
+    public static Document newDocument(InputSource input) {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setIgnoringComments(true);
+        factory.setValidating(false);
+        DocumentBuilder builder;
+        try {
+            builder = factory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            throw new Error(e);
+        }
+        builder.setErrorHandler(null);
+        try {
+            return builder.parse(input);
+        } catch (SAXException e) {
+            throw new Error(e);
+        } catch (IOException e) {
+            throw new Error(e);
+        }
+    }
 }
