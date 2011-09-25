@@ -56,7 +56,6 @@ public class MaintenanceActivity extends AbstractActivity implements IEditorView
     @Override
     public void setPlace(Place place) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -64,7 +63,7 @@ public class MaintenanceActivity extends AbstractActivity implements IEditorView
         service.getSystemMaintenanceState(new AsyncCallback<SystemMaintenanceState>() {
             @Override
             public void onSuccess(SystemMaintenanceState result) {
-                onPopulateSuccess(result);
+                view.populate(result);
             }
 
             @Override
@@ -90,43 +89,22 @@ public class MaintenanceActivity extends AbstractActivity implements IEditorView
     }
 
     public void trySave(final boolean apply) {
-
         service.setSystemMaintenanceState(new AsyncCallback<SystemMaintenanceState>() {
             @Override
             public void onSuccess(SystemMaintenanceState result) {
-                onSaved(result);
                 if (apply) {
-                    onApplySuccess(result);
+                    view.onApplySuccess();
                 } else {
-                    onSaveSuccess(result);
+                    view.onSaveSuccess();
                 }
             }
 
             @Override
             public void onFailure(Throwable caught) {
-                onSaveFail(caught);
+                if (!view.onSaveFail(caught)) {
+                    throw new UnrecoverableClientError(caught);
+                }
             }
         }, view.getValue());
-    }
-
-    protected void onSaved(SystemMaintenanceState result) {
-    }
-
-    protected void onApplySuccess(SystemMaintenanceState result) {
-        view.onApplySuccess();
-    }
-
-    protected void onSaveSuccess(SystemMaintenanceState result) {
-        view.onSaveSuccess();
-    }
-
-    protected void onSaveFail(Throwable caught) {
-        if (!view.onSaveFail(caught)) {
-            throw new UnrecoverableClientError(caught);
-        }
-    }
-
-    public void onPopulateSuccess(SystemMaintenanceState result) {
-        view.populate(result);
     }
 }
