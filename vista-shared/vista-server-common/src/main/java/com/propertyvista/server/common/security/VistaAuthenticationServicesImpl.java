@@ -25,19 +25,17 @@ import org.xnap.commons.i18n.I18n;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
-import com.pyx4j.security.server.AppengineHelper;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.UserVisit;
 
@@ -57,9 +55,11 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
     @IgnoreSessionToken
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, AuthenticationRequest request) {
 
-        if (ServerSideConfiguration.instance().datastoreReadOnly() || AppengineHelper.isDBReadOnly()) {
-            throw new UserRuntimeException(EntityServicesImpl.applicationReadOnlyMessage());
+        switch (SystemMaintenance.getState()) {
+        case Unavailable:
+            throw new UserRuntimeException(SystemMaintenance.getApplicationMaintenanceMessage());
         }
+
         if (CommonsStringUtils.isEmpty(request.email().getValue()) || CommonsStringUtils.isEmpty(request.password().getValue())) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
