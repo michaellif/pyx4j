@@ -78,7 +78,7 @@ public class CTimeField extends CTextFieldBase<Time, NativeTextBox<Time>> {
                 try {
                     return new Time(parser.parseStrict(string).getTime());
                 } catch (IllegalArgumentException e) {
-                    throw new ParseException("Invalid time format. Must be in the format 12:00 AM/PM", 0);
+                    throw new ParseException("Invalid time format. Use 12:00 AM/PM format", 0);
                 }
             }
         }
