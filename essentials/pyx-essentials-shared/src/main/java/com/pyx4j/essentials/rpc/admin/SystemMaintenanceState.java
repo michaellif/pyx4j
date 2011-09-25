@@ -25,6 +25,7 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -41,6 +42,8 @@ public interface SystemMaintenanceState extends IEntity {
 
     IPrimitive<Date> startDate();
 
+    @Editor(type = Editor.EditorType.timepicker)
+    @Format("HH:mm")
     IPrimitive<Time> startTime();
 
     @Caption(name = "Grace Period (min)")
