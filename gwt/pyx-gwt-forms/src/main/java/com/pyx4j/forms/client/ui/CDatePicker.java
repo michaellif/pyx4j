@@ -30,7 +30,6 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
 public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
 
@@ -51,7 +50,6 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
     public CDatePicker(String title) {
         super(title);
         setFormat(new DateFormat());
-        addValueValidator(new TextBoxParserValidator<Date>(i18n.tr("Should be in format MM/dd/yyyy")));
     }
 
     @Override
@@ -122,10 +120,8 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
             try {
                 return parser.parseStrict(string.replace('-', '/'));
             } catch (IllegalArgumentException e) {
-                throw new ParseException("DateFormat", 0);
+                throw new ParseException("Invalid date format. Use MM/dd/yyyy format", 0);
             }
         }
-
     }
-
 }
