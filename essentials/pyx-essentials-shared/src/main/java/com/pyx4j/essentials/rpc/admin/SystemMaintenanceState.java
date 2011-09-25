@@ -23,6 +23,7 @@ package com.pyx4j.essentials.rpc.admin;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -44,6 +45,7 @@ public interface SystemMaintenanceState extends IEntity {
     IPrimitive<Integer> duration();
 
     @Caption(name = "Message to Users")
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> message();
 
 }
