@@ -13,8 +13,9 @@
  */
 package com.propertyvista.admin.client.ui.administration;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
+import com.pyx4j.site.client.ui.crud.IEditorView;
 
-public interface MaintenanceView extends IsWidget {
+public interface MaintenanceView extends IEditorView<SystemMaintenanceState> {
 
 }

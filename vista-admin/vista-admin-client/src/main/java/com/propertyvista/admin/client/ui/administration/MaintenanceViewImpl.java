@@ -13,14 +13,14 @@
  */
 package com.propertyvista.admin.client.ui.administration;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 
-public class MaintenanceViewImpl extends SimplePanel implements MaintenanceView {
+import com.propertyvista.admin.client.ui.crud.AdminEditorViewImplBase;
+import com.propertyvista.admin.rpc.AdminSiteMap;
+
+public class MaintenanceViewImpl extends AdminEditorViewImplBase<SystemMaintenanceState> implements MaintenanceView {
 
     public MaintenanceViewImpl() {
-        setSize("100%", "100%");
-        HTML label = new HTML("Maintenance...");
-        setWidget(label);
+        super(AdminSiteMap.Administration.Maintenance.class, new MaintenanceEditorForm());
     }
 }
