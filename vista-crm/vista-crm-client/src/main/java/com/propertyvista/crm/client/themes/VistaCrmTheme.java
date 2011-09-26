@@ -173,12 +173,13 @@ public abstract class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         // anchors within the ActionBar:
-        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Action) + " a:link, a:visited, a:active");
+        String selectorPrefix = Selector.valueOf(prefix, CrmView.StyleSuffix.Action);
+        style = new Style(selectorPrefix + " a:link, " + selectorPrefix + " a:visited, " + selectorPrefix + " a:active");
         style.addProperty("text-decoration", "none");
         style.addProperty("color", ThemeColor.OBJECT_TONE20);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, CrmView.StyleSuffix.Action) + " a:hover");
+        style = new Style(selectorPrefix + " a:hover");
         style.addProperty("text-decoration", "underline");
         addStyle(style);
     }
@@ -191,12 +192,12 @@ public abstract class VistaCrmTheme extends VistaTheme {
         /*
          * anchors within the class:
          */
-        style = new Style(Selector.valueOf(prefix + " a:link, a:visited, a:active"));
-        style.addProperty("text-decoration", "none");
-        addStyle(style);
-
         style = new Style(Selector.valueOf(prefix + " a:hover"));
         style.addProperty("text-decoration", "underline");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix + " a:link, " + prefix + " a:visited, " + prefix + " a:active"));
+        style.addProperty("text-decoration", "none");
         addStyle(style);
 
         /*
@@ -248,7 +249,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         /*
          * anchors within the class:
          */
-        style = new Style(prefix + " a:link, a:visited, a:active");
+        style = new Style(prefix + " a:link, " + prefix + " a:visited, " + prefix + " a:active");
         style.addProperty("text-decoration", "none");
         addStyle(style);
 
@@ -478,7 +479,7 @@ public abstract class VistaCrmTheme extends VistaTheme {
         /*
          * anchors within the class:
          */
-        style = new Style(Selector.valueOf(prefix + " a:link, a:visited, a:active"));
+        style = new Style(Selector.valueOf(prefix + " a:link, " + prefix + " a:visited, " + prefix + " a:active"));
         style.addProperty("text-decoration", "none");
         style.addProperty("color", ThemeColor.OBJECT_TONE85);
         addStyle(style);
@@ -637,11 +638,12 @@ public abstract class VistaCrmTheme extends VistaTheme {
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector) + " a:link, a:visited, a:active");
+        String selectorPrefix = Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector);
+        style = new Style(selectorPrefix + " a:link, " + selectorPrefix + " a:visited, " + selectorPrefix + " a:active");
         style.addProperty("color", ThemeColor.OBJECT_TONE10);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector) + ":hover");
+        style = new Style(selectorPrefix + ":hover");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE80);
         style.addProperty("color", ThemeColor.OBJECT_TONE10);
         addStyle(style);
