@@ -255,12 +255,9 @@ public class XMLEntityWriter {
             return new Base64().encodeToString((byte[]) value);
         } else if (value instanceof java.sql.Date) {
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            //TODO
-            //df.setTimeZone(TimeZone.getTimeZone("UTC"));
             return df.format((Date) value);
         } else if (value instanceof java.sql.Time) {
             DateFormat df = new SimpleDateFormat("HH:mm:ss");
-            //df.setTimeZone(TimeZone.getTimeZone("UTC"));
             return df.format((Date) value);
         } else if (value instanceof Date) {
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

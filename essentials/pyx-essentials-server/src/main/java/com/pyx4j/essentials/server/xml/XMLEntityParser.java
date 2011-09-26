@@ -27,7 +27,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -238,7 +237,6 @@ public class XMLEntityParser {
             return new Base64().decode(str);
         } else if (valueClass.isAssignableFrom(java.sql.Time.class)) {
             SimpleDateFormat tFormat = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
-            tFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
             try {
                 return new java.sql.Time(tFormat.parse(str).getTime());
             } catch (ParseException e) {
@@ -287,8 +285,6 @@ public class XMLEntityParser {
             } else if (Date.class.isAssignableFrom(valueClass)) {
                 if (valueClass.isAssignableFrom(java.sql.Time.class)) {
                     SimpleDateFormat tFormat = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
-                    //TODO
-                    //tFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
                     try {
                         return new java.sql.Time(tFormat.parse(str).getTime());
                     } catch (ParseException e) {
@@ -296,14 +292,12 @@ public class XMLEntityParser {
                     }
                 } else {
                     if (valueClass.equals(java.sql.Date.class) || valueClass.equals(LogicalDate.class)) {
-                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                        //TODO
-                        //df.setTimeZone(TimeZone.getTimeZone("UTC"));
+                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
                         Date date;
                         try {
                             date = df.parse(str);
                         } catch (ParseException e) {
-                            date = DateUtils.detectDateformat(str);
+                            throw new Error("Error parsing time [" + str + "]", e);
                         }
                         if (valueClass.equals(java.sql.Date.class)) {
                             return new java.sql.Date(date.getTime());
