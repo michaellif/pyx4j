@@ -20,12 +20,11 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
-public interface LockerArea extends IEntity {
+public interface LockerArea extends BuildingElement {
 
     @Owner
     @Detached
