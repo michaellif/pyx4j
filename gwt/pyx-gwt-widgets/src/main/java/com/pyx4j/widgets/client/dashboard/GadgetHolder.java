@@ -128,6 +128,8 @@ final class GadgetHolder extends SimplePanel {
 
         caption.addStyleName(CSSNames.BASE_NAME + StyleSuffix.HolderCaption);
         caption.getElement().getStyle().setProperty("minHeight", "20px");
+        // override possible inherited style in order to avoid caption "jumping" on mouse over in IE9
+        caption.getElement().getStyle().setProperty("lineHeight", "normal");
         caption.setWidth("100%");
 
         // put it together:
