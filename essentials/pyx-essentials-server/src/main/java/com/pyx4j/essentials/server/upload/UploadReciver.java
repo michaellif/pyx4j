@@ -20,8 +20,6 @@
  */
 package com.pyx4j.essentials.server.upload;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 
 public interface UploadReciver {
@@ -29,7 +27,7 @@ public interface UploadReciver {
     /**
      * @return Maximum size of a single uploaded file.
      */
-    long getMaxSize(HttpServletRequest request);
+    long getMaxSize();
 
     public void onUploadStart(String fileName);
 

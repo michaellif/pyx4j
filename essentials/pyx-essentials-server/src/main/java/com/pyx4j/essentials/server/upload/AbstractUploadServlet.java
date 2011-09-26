@@ -43,7 +43,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
@@ -120,7 +119,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
             UploadReciver reciver = reciverClass.newInstance();
 
             ServletFileUpload fileUpload = new ServletFileUpload();
-            long maxSize = reciver.getMaxSize(request);
+            long maxSize = reciver.getMaxSize();
             fileUpload.setFileSizeMax(maxSize);
 
             ProgressListenerImpl progressListener = new ProgressListenerImpl();
@@ -166,14 +165,6 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                                 out.println(i18n.tr("File upload size exceed {0} megabyte maximum", (maxSize / (1024 * 1024))));
                                 return;
                             }
-                        } catch (Throwable e) {
-                            log.error("Upload error", e);
-                            if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
-                                out.println("Failed to receive upload " + CommonsStringUtils.nvl(e.getMessage()));
-                            } else {
-                                out.println(i18n.tr("Failed to receive upload"));
-                            }
-                            return;
                         } finally {
                             IOUtils.closeQuietly(in);
                             IOUtils.closeQuietly(os);

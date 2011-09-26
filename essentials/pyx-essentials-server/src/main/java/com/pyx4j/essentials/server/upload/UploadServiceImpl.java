@@ -47,6 +47,11 @@ public abstract class UploadServiceImpl<E extends IEntity> implements UploadServ
     }
 
     @Override
+    public void getMaxFileSize(AsyncCallback<Long> callback) {
+        callback.onSuccess(getMaxSize());
+    }
+
+    @Override
     public void prepareUpload(AsyncCallback<UploadId> callback, E data) {
         UploadId id = new UploadId();
         onpPepareUpload(data, id);

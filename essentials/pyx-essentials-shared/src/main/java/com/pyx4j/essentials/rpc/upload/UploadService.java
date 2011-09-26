@@ -40,6 +40,8 @@ public interface UploadService<E extends IEntity> extends IService {
 
     public static final String ResponseProcessWillContinue = "_CONTINUE_";
 
+    public void getMaxFileSize(AsyncCallback<Long> callback);
+
     public void prepareUpload(AsyncCallback<UploadId> callback, E data);
 
     public void cancelUpload(AsyncCallback<VoidSerializable> callback, UploadId uploadId);
