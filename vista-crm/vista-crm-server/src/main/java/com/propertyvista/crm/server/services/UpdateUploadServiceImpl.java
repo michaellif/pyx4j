@@ -16,8 +16,6 @@ package com.propertyvista.crm.server.services;
 import java.io.ByteArrayInputStream;
 import java.util.Collection;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -44,7 +42,7 @@ public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO> 
     private final static Logger log = LoggerFactory.getLogger(UpdateUploadServiceImpl.class);
 
     @Override
-    public long getMaxSize(HttpServletRequest request) {
+    public long getMaxSize() {
         return 5 * 1024 * 1024;
     }
 

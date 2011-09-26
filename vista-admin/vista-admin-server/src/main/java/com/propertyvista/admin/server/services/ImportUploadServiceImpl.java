@@ -18,8 +18,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -51,7 +49,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
     private final static Logger log = LoggerFactory.getLogger(ImportUploadServiceImpl.class);
 
     @Override
-    public long getMaxSize(HttpServletRequest request) {
+    public long getMaxSize() {
         return 5 * 1024 * 1024;
     }
 

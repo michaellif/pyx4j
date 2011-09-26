@@ -15,8 +15,6 @@ package com.propertyvista.crm.server.services;
 
 import java.util.Collection;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.io.FilenameUtils;
 
 import com.pyx4j.commons.Key;
@@ -36,7 +34,7 @@ import com.propertyvista.server.common.blob.ThumbnailService;
 public class SiteResourcesUploadServiceImpl extends UploadServiceImpl<IEntity> implements SiteResourcesUploadService {
 
     @Override
-    public long getMaxSize(HttpServletRequest request) {
+    public long getMaxSize() {
         return 5 * 1024 * 1024;
     }
 
