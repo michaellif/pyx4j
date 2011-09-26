@@ -41,11 +41,15 @@ public class FooterPanel extends Panel {
             protected void populateItem(ListItem<City> item) {
                 City city = item.getModelObject();
                 PageParameters params = new PageParameters();
-                params.add("city", city.name().getValue());
-                params.add("province", city.province().name().getValue());
-                BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", AptListPage.class, params);
-                link.add(new Label("city", city.name().getValue() + " (" + city.province().code().getValue() + ")"));
-                item.add(link);
+                String _city = city.name().getValue();
+                String _prov = city.province().name().getValue();
+                if (_city != null && _prov != null) {
+                    params.add("city", _city);
+                    params.add("province", _prov);
+                    BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", AptListPage.class, params);
+                    link.add(new Label("city", _city + " (" + _prov + ")"));
+                    item.add(link);
+                }
             }
         });
 
