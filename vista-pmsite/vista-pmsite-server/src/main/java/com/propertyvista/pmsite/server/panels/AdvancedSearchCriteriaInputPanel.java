@@ -75,10 +75,6 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         } else {
             cities = Arrays.asList("- Select Province -");
         }
-        /*
-         * add city; set Type to string to avoid reverse conversion from choices
-         * since the choices are empty when we set it via js
-         */
         add(new WicketUtils.DropDownList<String>("city", cities, false, true));
 
         // add JS city list

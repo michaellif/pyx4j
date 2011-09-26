@@ -18,6 +18,7 @@ import java.util.List;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.Model;
 
 public class WicketUtils {
@@ -56,7 +57,7 @@ public class WicketUtils {
     }
 
     /*
-     * Selector with keys as values and default choice switch
+     * Stateless Selector with keys as values and default choice switch
      */
     public static class DropDownList<T> extends DropDownChoice<T> {
         private static final long serialVersionUID = 1L;
@@ -78,6 +79,7 @@ public class WicketUtils {
                 public String getIdValue(T param, int paramInt) {
                     return useKeys ? String.valueOf(paramInt) : getDisplayValue(param);
                 }
+
             });
             this.useDefault = useDefault;
             this.useKeys = useKeys;
@@ -86,6 +88,40 @@ public class WicketUtils {
         @Override
         protected CharSequence getDefaultChoice(final String selected) {
             return useDefault ? super.getDefaultChoice(selected) : "";
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected T convertChoiceIdToChoice(String id) {
+            if (useKeys) {
+                // do default key-value conversion 
+                return super.convertChoiceIdToChoice(id);
+            } else {
+                // just return the key, as we used it as value
+                return (T) id;
+            }
+        }
+
+        @Override
+        public boolean getStatelessHint() {
+            return true;
+        }
+    }
+
+    /*
+     * Stateless non-resource (external) image
+     */
+    public static class SimpleImage extends Image {
+        private static final long serialVersionUID = 1L;
+
+        public SimpleImage(String id, String url) {
+            super(id);
+            add(AttributeModifier.replace("src", url));
+        }
+
+        @Override
+        public boolean getStatelessHint() {
+            return true;
         }
     }
 }

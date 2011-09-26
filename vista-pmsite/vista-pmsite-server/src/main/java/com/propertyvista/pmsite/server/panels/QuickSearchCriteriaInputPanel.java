@@ -26,6 +26,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import com.pyx4j.entity.server.pojo.IPojo;
 
 import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.model.WicketUtils.DropDownList;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class QuickSearchCriteriaInputPanel extends Panel {
@@ -38,22 +39,24 @@ public class QuickSearchCriteriaInputPanel extends Panel {
         // add Province drop-down
         final Map<String, List<String>> provCityMap = PMSiteContentManager.getProvinceCityMap();
         List<String> provinces = new ArrayList<String>(provCityMap.keySet());
-        DropDownChoice<String> provChoice = new DropDownChoice<String>("province", provinces) {
+        DropDownList<String> provChoice = new DropDownList<String>("province", provinces, false, true) {
             private static final long serialVersionUID = 1L;
-
-            @Override
-            protected boolean wantOnSelectionChangedNotifications() {
-                return true;
-            }
-
-            @Override
-            protected void onSelectionChanged(String newProv) {
-                // get city component
-                @SuppressWarnings("unchecked")
-                DropDownChoice<String> city = (DropDownChoice<String>) getParent().get("city");
-                if (city != null)
-                    city.setChoices(provCityMap.get(newProv));
-            }
+/*
+ * @Override
+ * protected boolean wantOnSelectionChangedNotifications() {
+ * return true;
+ * }
+ * 
+ * @Override
+ * protected void onSelectionChanged(String newProv) {
+ * // get city component
+ * 
+ * @SuppressWarnings("unchecked")
+ * DropDownChoice<String> city = (DropDownChoice<String>) getParent().get("city");
+ * if (city != null)
+ * city.setChoices(provCityMap.get(newProv));
+ * }
+ */
         };
         add(provChoice);
         // add City drop-down
@@ -63,7 +66,7 @@ public class QuickSearchCriteriaInputPanel extends Panel {
         } else {
             cities = Arrays.asList("- Select Province First -");
         }
-        DropDownChoice<String> cityChoice = new DropDownChoice<String>("city", cities);
+        DropDownList<String> cityChoice = new DropDownList<String>("city", cities, false, true);
         add(cityChoice);
 
         // bedrooms

@@ -15,6 +15,8 @@ package com.propertyvista.pmsite.server.panels;
 
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.StatelessForm;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 
@@ -40,7 +42,7 @@ public class QuickSearchCriteriaPanel extends Panel {
 
         final CompoundPropertyModel<IPojo<PropertySearchCriteria>> model = new CompoundPropertyModel<IPojo<PropertySearchCriteria>>(pojo);
 
-        final Form<IPojo<PropertySearchCriteria>> form = new Form<IPojo<PropertySearchCriteria>>("quickSearchCriteriaForm", model) {
+        final Form<IPojo<PropertySearchCriteria>> form = new StatelessForm<IPojo<PropertySearchCriteria>>("quickSearchCriteriaForm", model) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -50,6 +52,7 @@ public class QuickSearchCriteriaPanel extends Panel {
             }
         };
 
+        form.add(new FeedbackPanel("form_messages"));
         form.add(new QuickSearchCriteriaInputPanel("searchCriteriaInput", model));
         form.add(new Button("searchSubmit"));
 

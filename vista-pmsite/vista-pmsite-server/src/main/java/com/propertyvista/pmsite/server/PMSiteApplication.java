@@ -13,6 +13,7 @@
  */
 package com.propertyvista.pmsite.server;
 
+import org.apache.wicket.IRequestCycleProvider;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
@@ -55,9 +56,6 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
         mountPage("cnt" + PMSiteContentManager.PARAMETER_PATH, StaticPage.class);
 
-        // add js "virtual" folder
-        // getSharedResources().putClassAlias(JSResources.class, "js");
-
 //        mountResource("js", new ResourceReference(JSResources.class, "js") {
 //            private static final long serialVersionUID = 1L;
 //
@@ -68,7 +66,11 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 //                return jsResources;
 //            }
 //        });
+    }
 
+    @Override
+    public IRequestCycleProvider getRequestCycleProvider() {
+        return super.getRequestCycleProvider();
     }
 
     @Override

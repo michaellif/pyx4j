@@ -15,7 +15,7 @@ package com.propertyvista.pmsite.server.pages;
 
 import java.util.List;
 
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -59,7 +59,7 @@ public class StaticPage extends BasePage {
         add(secondaryNavigationPanel);
 
         if (secondaryNavigationPanel.getViewSize() == 0) {
-            mainPanel.add(new SimpleAttributeModifier("style", "width:100%"));
+            mainPanel.add(AttributeModifier.replace("style", "width:100%"));
         }
 
         mainPanel.add(new Label("caption", PMSiteContentManager.getCaption(descriptor, contentManager.getLocale())));

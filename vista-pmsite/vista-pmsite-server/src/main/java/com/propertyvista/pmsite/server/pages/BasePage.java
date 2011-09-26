@@ -79,7 +79,6 @@ public abstract class BasePage extends WebPage {
 
         add(new HeaderPanel());
         add(new FooterPanel());
-
     }
 
     @Override
@@ -122,20 +121,19 @@ public abstract class BasePage extends WebPage {
         if (!p.isPageStateless()) {
             // find out why
             final List<Component> statefulComponents = new ArrayList<Component>();
-            p.visitChildren(Component.class, new IVisitor() {
+            p.visitChildren(Component.class, new IVisitor<Component, Object>() {
 
                 @Override
-                public void component(Object paramT, IVisit paramIVisit) {
-                    if (!((Component) paramT).isStateless()) {
-                        statefulComponents.add(((Component) paramT));
+                public void component(Component paramT, IVisit<Object> paramIVisit) {
+                    if (!paramT.isStateless()) {
+                        statefulComponents.add(paramT);
                     }
                 }
 
             });
 
-            String message = "Whoops! this page is no longer stateless";
+            String message = "Stateful components found: ";
             if (statefulComponents.size() > 0) {
-                message += " - the reason is that it contains the following stateful components: ";
                 for (Component c : statefulComponents) {
                     message += "\n" + c.getMarkupId();
                 }

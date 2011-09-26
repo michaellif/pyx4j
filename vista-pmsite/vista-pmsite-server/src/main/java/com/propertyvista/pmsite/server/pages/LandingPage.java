@@ -31,6 +31,7 @@ public class LandingPage extends BasePage {
 
     public LandingPage() {
         super();
+        setStatelessHint(true);
         setVersioned(false);
 
         add(new QuickSearchCriteriaPanel());
