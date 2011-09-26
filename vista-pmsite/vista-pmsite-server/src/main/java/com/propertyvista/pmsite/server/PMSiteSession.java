@@ -19,13 +19,22 @@ import java.util.List;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.pmsite.server.panels.NavigationItem;
+import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 
 public class PMSiteSession extends AuthenticatedWebSession {
 
     private static final long serialVersionUID = 1L;
+
+    private final static Logger log = LoggerFactory.getLogger(PMSiteSession.class);
 
     private final PMSiteContentManager contentManager;
 
@@ -78,8 +87,24 @@ public class PMSiteSession extends AuthenticatedWebSession {
 
     @Override
     public boolean authenticate(final String username, final String password) {
-        final String VISTA = "vista";
-        return VISTA.equals(username) && VISTA.equals(password);
+        AuthenticationRequest request = EntityFactory.create(AuthenticationRequest.class);
+        request.email().setValue(username);
+        request.password().setValue(password);
+
+        try {
+            VistaAuthenticationServicesImpl.beginSession(request);
+            return true;
+        } catch (Throwable e) {
+            // TODO What to do with Error messages ?
+            log.error("Error", e);
+            return false;
+        }
+    }
+
+    @Override
+    public void signOut() {
+        Lifecycle.endSession();
+        super.signOut();
     }
 
     @Override

@@ -54,7 +54,12 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
     @Override
     @IgnoreSessionToken
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, AuthenticationRequest request) {
+        // Begin Session
+        callback.onSuccess(createAuthenticationResponse(beginSession(request)));
 
+    }
+
+    public static String beginSession(AuthenticationRequest request) {
         switch (SystemMaintenance.getState()) {
         case Unavailable:
             throw new UserRuntimeException(SystemMaintenance.getApplicationMaintenanceMessage());
@@ -94,10 +99,7 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
                 throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
         }
-
-        // Begin Session
-        callback.onSuccess(createAuthenticationResponse(beginSession(user, cr)));
-
+        return beginSession(user, cr);
     }
 
     public static String beginSession(User user, UserCredential userCredential) {
