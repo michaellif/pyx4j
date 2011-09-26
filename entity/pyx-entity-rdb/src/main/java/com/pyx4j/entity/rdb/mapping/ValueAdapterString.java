@@ -58,7 +58,11 @@ class ValueAdapterString extends ValueAdapterPrimitive {
                 throw new RuntimeException("Member size vialoation member '" + member.getMemberMeta().getFieldName() + "' size " + size
                         + " is greater than max allowed " + maxLength);
             }
-            stmt.setString(parameterIndex, value);
+            if (size == 0) {
+                stmt.setNull(parameterIndex, sqlType);
+            } else {
+                stmt.setString(parameterIndex, value);
+            }
         }
         return 1;
     }
