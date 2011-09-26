@@ -18,6 +18,7 @@ import java.util.List;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -36,9 +37,9 @@ public class BuildingUpdater {
             criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), buildingIO.propertyCode().getValue()));
             List<Building> buildings = Persistence.service().query(criteria);
             if (buildings.size() == 0) {
-                throw new Error("Building '" + buildingIO.propertyCode().getValue() + "' not found");
+                throw new UserRuntimeException("Building '" + buildingIO.propertyCode().getValue() + "' not found");
             } else if (buildings.size() > 1) {
-                throw new Error("More then one building '" + buildingIO.propertyCode().getValue() + "' found");
+                throw new UserRuntimeException("More then one building '" + buildingIO.propertyCode().getValue() + "' found");
             } else {
                 building = buildings.get(0);
             }
@@ -52,10 +53,11 @@ public class BuildingUpdater {
                 criteria.add(PropertyCriterion.eq(criteria.proto().name(), floorplanIO.name().getValue()));
                 List<Floorplan> floorplans = Persistence.service().query(criteria);
                 if (floorplans.size() == 0) {
-                    throw new Error("Floorplan '" + floorplanIO.name().getValue() + "' in  building '" + buildingIO.propertyCode().getValue() + "' not found");
+                    throw new UserRuntimeException("Floorplan '" + floorplanIO.name().getValue() + "' in  building '" + buildingIO.propertyCode().getValue()
+                            + "' not found");
                 } else if (floorplans.size() > 1) {
-                    throw new Error("More then one Floorplan '" + floorplanIO.name().getValue() + "' in  building '" + buildingIO.propertyCode().getValue()
-                            + "' found");
+                    throw new UserRuntimeException("More then one Floorplan '" + floorplanIO.name().getValue() + "' in  building '"
+                            + buildingIO.propertyCode().getValue() + "' found");
                 } else {
                     floorplan = floorplans.get(0);
                 }
@@ -70,11 +72,11 @@ public class BuildingUpdater {
 
                 AptUnit unit;
                 if (units.size() == 0) {
-                    throw new Error("AptUnit '" + aptUnitIO.number().getValue() + "' in '" + floorplanIO.name().getValue() + "' in '"
+                    throw new UserRuntimeException("AptUnit '" + aptUnitIO.number().getValue() + "' in '" + floorplanIO.name().getValue() + "' in '"
                             + buildingIO.propertyCode().getValue() + "' not found");
                 } else if (units.size() > 1) {
-                    throw new Error("More then one AptUnit '" + aptUnitIO.number().getValue() + "' in '" + floorplanIO.name().getValue() + "' in '"
-                            + buildingIO.propertyCode().getValue() + "' found");
+                    throw new UserRuntimeException("More then one AptUnit '" + aptUnitIO.number().getValue() + "' in '" + floorplanIO.name().getValue()
+                            + "' in '" + buildingIO.propertyCode().getValue() + "' found");
                 } else {
                     unit = units.get(0);
                 }

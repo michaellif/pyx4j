@@ -29,6 +29,7 @@ import com.pyx4j.essentials.server.deferred.DeferredProcessorThread;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 import com.pyx4j.essentials.server.upload.UploadServiceImpl;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.crm.rpc.dto.UpdateUploadDTO;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
@@ -54,10 +55,11 @@ public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO> 
 
     @Override
     public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess process, final UploadResponse response) {
-
+        final String namespace = NamespaceManager.getNamespace();
         Thread t = new DeferredProcessorThread("Update", process, new Runnable() {
             @Override
             public void run() {
+                NamespaceManager.setNamespace(namespace);
                 runImport(data, process, response);
             }
         });

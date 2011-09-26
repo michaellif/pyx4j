@@ -16,6 +16,7 @@ package com.propertyvista.interfaces.importer.xml;
 import com.pyx4j.essentials.server.xml.XMLEntityFactoryStrict;
 
 import com.propertyvista.domain.contact.Phone;
+import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.interfaces.importer.model.AddressIO;
 import com.propertyvista.interfaces.importer.model.AdvertisingBlurbIO;
 import com.propertyvista.interfaces.importer.model.AmenityIO;
@@ -50,5 +51,6 @@ public class ImportXMLEntityFactory extends XMLEntityFactoryStrict {
 
         // Taken from domain directly
         bind(Phone.class);
+        bind(PropertyPhone.class);
     }
 }
