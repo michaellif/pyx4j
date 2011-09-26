@@ -101,17 +101,31 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
         main.add(new VistaHeaderBar(i18n.tr("Utilities")));
         main.add(split = new VistaDecoratorsSplitFlowPanel(true, main.getDefaultLabelWidth(), 15));
 
-        split.getLeftPanel().add(new HTML(HtmlUtils.h6(i18n.tr("Included in price:"))));
+        split.getLeftPanel().add(new HTML(HtmlUtils.h5(i18n.tr("Included:"))));
         split.getLeftPanel().add(inject(proto().includedUtilities(), createUtilitiesFolderEditor()));
 
-        split.getRightPanel().add(new HTML(HtmlUtils.h6(i18n.tr("Excluded (3-d party provided):"))));
+        split.getRightPanel().add(new HTML(HtmlUtils.h5(i18n.tr("Excluded:"))));
         split.getRightPanel().add(inject(proto().externalUtilities(), createUtilitiesFolderEditor()));
 
-        main.add(new HTML(HtmlUtils.h6(i18n.tr("To Add:"))));
-        main.add(inject(proto().agreedUtilities(), createFeaturesFolderEditor(Feature.Type.utility)));
+        main.add(new VistaLineSeparator(100, Unit.PCT));
+        main.add(new HTML(HtmlUtils.h5(i18n.tr("Charged:"))));
+        main.add(inject(proto().availableUtilities(), createFeaturesFolderEditor(Feature.Type.utility, false)));
 
-        main.add(new VistaHeaderBar(i18n.tr("Options")));
-        main.add(inject(proto().agreedOptions(), createFeaturesFolderEditor(Feature.Type.addOn)));
+        main.add(new VistaHeaderBar(i18n.tr("Add-ons")));
+        main.add(new HTML(HtmlUtils.h5(i18n.tr("Pets:"))));
+        main.add(inject(proto().agreedPets(), createFeaturesFolderEditor(Feature.Type.pet, true)));
+
+        main.add(new VistaLineSeparator(100, Unit.PCT));
+        main.add(new HTML(HtmlUtils.h5(i18n.tr("Parking:"))));
+        main.add(inject(proto().agreedParking(), createFeaturesFolderEditor(Feature.Type.parking, true)));
+
+        main.add(new VistaLineSeparator(100, Unit.PCT));
+        main.add(new HTML(HtmlUtils.h5(i18n.tr("Storage:"))));
+        main.add(inject(proto().agreedStorage(), createFeaturesFolderEditor(Feature.Type.locker, true)));
+
+        main.add(new VistaLineSeparator(100, Unit.PCT));
+        main.add(new HTML(HtmlUtils.h5(i18n.tr("Other:"))));
+        main.add(inject(proto().agreedOther(), createFeaturesFolderEditor(Feature.Type.addOn, true)));
 
         // last step - add building picture on the right:
         HorizontalPanel content = new HorizontalPanel();
@@ -161,8 +175,8 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
         };
     }
 
-    private CEntityFolderEditor<ServiceItem> createFeaturesFolderEditor(final Feature.Type type) {
-        return new PtAppEntityFolder<ServiceItem>(ServiceItem.class, type.toString(), true) {
+    private CEntityFolderEditor<ServiceItem> createFeaturesFolderEditor(final Feature.Type type, boolean editable) {
+        return new PtAppEntityFolder<ServiceItem>(ServiceItem.class, type.toString(), editable) {
             private final PtAppEntityFolder<ServiceItem> parent = this;
 
             @Override
@@ -262,7 +276,7 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
                 });
 
                 for (ServiceItem item : getAvailableList()) {
-                    if (!getAgreedList().contains(item)) {
+                    if (isCompatible(item) && !getAgreedList().contains(item)) {
                         list.addItem(item.getStringView());
                         list.setValue(list.getItemCount() - 1, item.id().toString());
                     }
@@ -313,8 +327,14 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
             switch (type) {
             case utility:
                 return getValue().agreedUtilities();
+            case pet:
+                return getValue().agreedPets();
+            case parking:
+                return getValue().agreedParking();
+            case locker:
+                return getValue().agreedStorage();
             default:
-                return getValue().agreedOptions();
+                return getValue().agreedOther();
             }
         }
 
@@ -325,6 +345,24 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
             default:
                 return getValue().availableOptions();
             }
+        }
+
+        private boolean isCompatible(ServiceItem item) {
+
+            if (type.equals(Feature.Type.addOn)) {
+                switch (item.type().featureType().getValue()) {
+                case utility:
+                case pet:
+                case parking:
+                case locker:
+                    return false;
+
+                default:
+                    return true;
+                }
+            }
+
+            return (item.type().featureType().getValue().equals(type));
         }
     }
 }

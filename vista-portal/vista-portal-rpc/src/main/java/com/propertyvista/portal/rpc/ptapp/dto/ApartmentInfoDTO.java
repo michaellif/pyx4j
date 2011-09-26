@@ -51,7 +51,13 @@ public interface ApartmentInfoDTO extends IEntity {
 
     IList<ServiceItem> availableUtilities();
 
-    IList<ServiceItem> agreedOptions();
+    IList<ServiceItem> agreedPets();
+
+    IList<ServiceItem> agreedParking();
+
+    IList<ServiceItem> agreedStorage();
+
+    IList<ServiceItem> agreedOther();
 
     IList<ServiceItem> availableOptions();
 

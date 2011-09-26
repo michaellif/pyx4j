@@ -25,6 +25,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Service;
@@ -56,13 +57,13 @@ public class ApartmentServiceImpl implements ApartmentService {
     public ApartmentInfoDTO retrieveData() {
         Lease lease = PtAppContext.getCurrentUserLease();
         if (!Persistence.service().retrieve(lease.unit())) {
-            throw new Error("There is no Unit selected!?.");
+            throw new UserRuntimeException("There is no Unit selected!?.");
         }
         if (!Persistence.service().retrieve(lease.unit().floorplan())) {
-            throw new Error("There is no unit Floorplan data!?.");
+            throw new UserRuntimeException("There is no unit Floorplan data!?.");
         }
         if (!Persistence.service().retrieve(lease.unit().belongsTo())) {
-            throw new Error("There is no unit building data!?.");
+            throw new UserRuntimeException("There is no unit building data!?.");
         }
 
         // fill DTO:
@@ -136,7 +137,9 @@ public class ApartmentServiceImpl implements ApartmentService {
         entity.agreedUtilities().clear();
         entity.availableUtilities().clear();
 
-        entity.agreedOptions().clear();
+        entity.agreedPets().clear();
+        entity.agreedParking().clear();
+        entity.agreedOther().clear();
         entity.availableOptions().clear();
 
         entity.concessions().clear();
@@ -153,8 +156,17 @@ public class ApartmentServiceImpl implements ApartmentService {
                 case utility:
                     entity.agreedUtilities().add(item.item());
                     break;
+                case pet:
+                    entity.agreedPets().add(item.item());
+                    break;
+                case parking:
+                    entity.agreedParking().add(item.item());
+                    break;
+                case locker:
+                    entity.agreedStorage().add(item.item());
+                    break;
                 default:
-                    entity.agreedOptions().add(item.item());
+                    entity.agreedOther().add(item.item());
                 }
             }
         }
