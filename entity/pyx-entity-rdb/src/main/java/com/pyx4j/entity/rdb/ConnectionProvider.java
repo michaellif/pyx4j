@@ -37,6 +37,7 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolProvider;
 import com.pyx4j.entity.rdb.dialect.Dialect;
@@ -45,6 +46,7 @@ import com.pyx4j.entity.rdb.dialect.MySQLDialect;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 import com.pyx4j.entity.rdb.dialect.OracleDialect;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 public class ConnectionProvider {
 
@@ -55,6 +57,14 @@ public class ConnectionProvider {
     private DataSource dataSource;
 
     private Dialect dialect;
+
+    public static enum ConnectionTarget {
+
+        forUpdate,
+
+        forRead,
+
+    }
 
     public ConnectionProvider(Configuration cfg) throws SQLException {
         setupDataSource(cfg);
@@ -162,8 +172,11 @@ public class ConnectionProvider {
         return dialect;
     }
 
-    public Connection getConnection() {
+    public Connection getConnection(ConnectionTarget reason) {
         try {
+            if ((reason == ConnectionTarget.forUpdate) && ServerSideConfiguration.instance().datastoreReadOnly()) {
+                throw new UserRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
+            }
             return dataSource.getConnection();
         } catch (SQLException e) {
             log.error("SQL connection error", e);

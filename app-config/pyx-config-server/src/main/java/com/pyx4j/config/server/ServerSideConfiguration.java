@@ -172,6 +172,10 @@ public class ServerSideConfiguration {
         return false;
     }
 
+    public String getApplicationMaintenanceMessage() {
+        return "Application is in read-only due to maintenance.";
+    }
+
     public EnvironmentType getEnvironmentType() {
         if (environmentType != null) {
             return environmentType;

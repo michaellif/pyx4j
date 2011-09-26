@@ -39,6 +39,7 @@ import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Table.PrimaryKeyStrategy;
 import com.pyx4j.entity.rdb.ConnectionProvider;
+import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
@@ -140,7 +141,7 @@ public class TableModel {
     }
 
     public boolean isTableExists(ConnectionProvider connectionProvider) throws SQLException {
-        Connection connection = connectionProvider.getConnection();
+        Connection connection = connectionProvider.getConnection(ConnectionTarget.forRead);
         try {
             return (TableMetadata.getTableMetadata(connection, tableName) != null);
         } finally {
@@ -149,7 +150,7 @@ public class TableModel {
     }
 
     public void dropTable(ConnectionProvider connectionProvider) throws SQLException {
-        Connection connection = connectionProvider.getConnection();
+        Connection connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
         List<String> sqls = new Vector<String>();
         try {
             for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
@@ -166,7 +167,7 @@ public class TableModel {
     }
 
     public void execute(ConnectionProvider connectionProvider, List<String> sqls) throws SQLException {
-        Connection connection = connectionProvider.getConnection();
+        Connection connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
         try {
             SQLUtils.execute(connection, sqls);
         } finally {

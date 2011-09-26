@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.ConnectionProvider;
+import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -140,7 +141,7 @@ public class Mappings {
     private void ensureSequence(Dialect dialect, String sequenceName) {
         // Verify Sequence already exists
         if (!sequences.contains(sequenceName.toLowerCase(Locale.ENGLISH))) {
-            Connection connection = connectionProvider.getConnection();
+            Connection connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
             try {
                 SQLUtils.execute(connection, dialect.getCreateSequenceSql(sequenceName));
             } catch (SQLException e) {
@@ -173,7 +174,7 @@ public class Mappings {
 
     private void droppedSequence(Dialect dialect, String sequenceName) {
         if (sequences.contains(sequenceName.toLowerCase(Locale.ENGLISH))) {
-            Connection connection = connectionProvider.getConnection();
+            Connection connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
             try {
                 SQLUtils.execute(connection, dialect.getDropSequenceSql(sequenceName));
             } catch (SQLException e) {
@@ -187,7 +188,7 @@ public class Mappings {
     }
 
     private void initSequences() {
-        Connection connection = connectionProvider.getConnection();
+        Connection connection = connectionProvider.getConnection(ConnectionTarget.forRead);
         Statement stmt = null;
         ResultSet rs = null;
         try {

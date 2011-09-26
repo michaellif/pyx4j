@@ -45,6 +45,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
 import com.pyx4j.entity.rdb.mapping.CollectionsTableModel;
@@ -138,7 +139,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     private void databaseVersion() {
         Connection connection = null;
         try {
-            connection = connectionProvider.getConnection();
+            connection = connectionProvider.getConnection(ConnectionTarget.forRead);
             DatabaseMetaData dbMeta = connection.getMetaData();
             log.debug("DB {} {}", dbMeta.getDatabaseProductName(), dbMeta.getDatabaseProductVersion());
         } catch (SQLException e) {
@@ -157,7 +158,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public void persist(IEntity entity) {
         Connection connection = null;
         try {
-            connection = connectionProvider.getConnection();
+            connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
             persist(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
         } finally {
             SQLUtils.closeQuietly(connection);
@@ -290,7 +291,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Connection connection = null;
         try {
             if (entityIterable.iterator().hasNext()) {
-                connection = connectionProvider.getConnection();
+                connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
                 for (T entity : entityIterable) {
                     persist(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
                 }
@@ -306,7 +307,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Connection connection = null;
         try {
             if (entityIterable.iterator().hasNext()) {
-                connection = connectionProvider.getConnection();
+                connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
                 T entity = entityIterable.iterator().next();
                 persist(connection, tableModel(connection, entity.getEntityMeta()), entityIterable, DateUtils.getRoundedNow());
             }
@@ -320,7 +321,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Connection connection = null;
         try {
             if (entityIterable.iterator().hasNext()) {
-                connection = connectionProvider.getConnection();
+                connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
                 for (T entity : entityIterable) {
                     merge(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
                 }
@@ -387,7 +388,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public void merge(IEntity entity) {
         Connection connection = null;
         try {
-            connection = connectionProvider.getConnection();
+            connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
             merge(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
         } finally {
             SQLUtils.closeQuietly(connection);
@@ -607,7 +608,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public <T extends IEntity> boolean retrieve(T entity) {
         Connection connection = null;
         try {
-            connection = connectionProvider.getConnection();
+            connection = connectionProvider.getConnection(ConnectionTarget.forRead);
             return cascadeRetrieve(connection, entity) != null;
         } finally {
             SQLUtils.closeQuietly(connection);
@@ -650,7 +651,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria) {
         Connection connection = null;
         try {
-            connection = connectionProvider.getConnection();
+            connection = connectionProvider.getConnection(ConnectionTarget.forRead);
             TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
             List<T> rs = tm.query(connection, criteria, 1);
             if (rs.isEmpty()) {
@@ -677,7 +678,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Map<Key, T> entities = new HashMap<Key, T>();
         TableModel tm = null;
         try {
-            connection = connectionProvider.getConnection();
+            connection = connectionProvider.getConnection(ConnectionTarget.forRead);
             int count = 0;
             for (Key pk : primaryKeys) {
                 final T entity = EntityFactory.create(entityClass);
@@ -736,7 +737,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria) {
         Connection connection = null;
         try {
-            connection = connectionProvider.getConnection();
+            connection = connectionProvider.getConnection(ConnectionTarget.forRead);
             TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
             List<T> l = tm.query(connection, criteria, -1);
             for (T entity : l) {
@@ -750,7 +751,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> ICursorIterator<T> query(final String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
-        final Connection connection = connectionProvider.getConnection();
+        final Connection connection = connectionProvider.getConnection(ConnectionTarget.forRead);
         final TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
         if (encodedCursorRefference != null) {
             log.info("Received encodedCursorReference:" + encodedCursorRefference + ", will use it");
@@ -804,7 +805,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public <T extends IEntity> List<Key> queryKeys(EntityQueryCriteria<T> criteria) {
         Connection connection = null;
         try {
-            connection = connectionProvider.getConnection();
+            connection = connectionProvider.getConnection(ConnectionTarget.forRead);
             TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
             return tm.queryKeys(connection, criteria, -1);
         } finally {
@@ -822,7 +823,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public <T extends IEntity> int count(EntityQueryCriteria<T> criteria) {
         Connection connection = null;
         try {
-            connection = connectionProvider.getConnection();
+            connection = connectionProvider.getConnection(ConnectionTarget.forRead);
             TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
             Number count = (Number) tm.aggregate(connection, criteria, SQLAggregateFunctions.COUNT, null);
             if (count == null) {
@@ -848,7 +849,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     private <T extends IEntity> void delete(EntityMeta entityMeta, Key primaryKey, IEntity cascadedeleteDataEntity) {
         Connection connection = null;
         try {
-            connection = connectionProvider.getConnection();
+            connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
             cascadeDelete(connection, entityMeta, primaryKey, cascadedeleteDataEntity);
         } finally {
             SQLUtils.closeQuietly(connection);
@@ -904,7 +905,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public <T extends IEntity> int delete(EntityQueryCriteria<T> criteria) {
         Connection connection = null;
         try {
-            connection = connectionProvider.getConnection();
+            connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
             TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
 
             List<T> entities = tm.query(connection, criteria, -1);
@@ -958,7 +959,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public <T extends IEntity> void delete(Class<T> entityClass, Iterable<Key> primaryKeys) {
         Connection connection = null;
         try {
-            connection = connectionProvider.getConnection();
+            connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
             EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
             TableModel tm = tableModel(connection, entityMeta);
             for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
@@ -974,7 +975,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public <T extends IEntity> void truncate(Class<T> entityClass) {
         Connection connection = null;
         try {
-            connection = connectionProvider.getConnection();
+            connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
             EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
             TableModel tm = tableModel(connection, entityMeta);
             for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {

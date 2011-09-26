@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.mapping.TableMetadata;
 
@@ -66,7 +67,7 @@ public class RDBUtils implements Closeable {
     }
 
     public boolean isTableExists(String tableName) throws SQLException {
-        Connection connection = connectionProvider.getConnection();
+        Connection connection = connectionProvider.getConnection(ConnectionTarget.forRead);
         try {
             return (TableMetadata.getTableMetadata(connection, tableName) != null);
         } finally {
@@ -75,7 +76,7 @@ public class RDBUtils implements Closeable {
     }
 
     public void dropTable(String tableName) throws SQLException {
-        Connection connection = connectionProvider.getConnection();
+        Connection connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
         List<String> sqls = new Vector<String>();
         try {
             sqls.add("drop table " + tableName);
@@ -86,7 +87,7 @@ public class RDBUtils implements Closeable {
     }
 
     public void execute(List<String> sqls) throws SQLException {
-        Connection connection = connectionProvider.getConnection();
+        Connection connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
         try {
             SQLUtils.execute(connection, sqls);
         } finally {
@@ -95,7 +96,7 @@ public class RDBUtils implements Closeable {
     }
 
     public void execute(String sql) throws SQLException {
-        Connection connection = connectionProvider.getConnection();
+        Connection connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
         try {
             SQLUtils.execute(connection, sql);
         } finally {

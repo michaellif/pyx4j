@@ -47,4 +47,9 @@ public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
         return SystemMaintenance.isSystemMaintenance();
     }
 
+    @Override
+    public String getApplicationMaintenanceMessage() {
+        return SystemMaintenance.getApplicationMaintenanceMessage();
+    }
+
 }

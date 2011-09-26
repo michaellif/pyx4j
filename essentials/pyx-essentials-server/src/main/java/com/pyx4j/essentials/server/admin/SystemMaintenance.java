@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -155,12 +156,15 @@ public class SystemMaintenance {
             }
             long end = startTime.getTimeInMillis() + Consts.MIN2MSEC * state.duration().getValue();
 
+            maintenanceScheduled = start;
+            maintenanceScheduledEnd = end;
+            if (systemMaintenanceState.type().isNull()) {
+                systemMaintenanceState.type().setValue(SystemState.ReadOnly);
+            }
+            if (!systemMaintenanceState.message().isNull() && CommonsStringUtils.isEmpty(systemMaintenanceState.message().getValue())) {
+                systemMaintenanceState.message().setValue(null);
+            }
             if (start >= System.currentTimeMillis() && (end <= System.currentTimeMillis())) {
-                maintenanceScheduled = start;
-                maintenanceScheduledEnd = end;
-                if (systemMaintenanceState.type().isNull()) {
-                    systemMaintenanceState.type().setValue(SystemState.ReadOnly);
-                }
                 log.info("maintenanceScheduled {}", state.startTime());
             }
         }

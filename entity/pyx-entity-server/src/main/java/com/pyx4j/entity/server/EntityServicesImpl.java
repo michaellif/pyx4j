@@ -25,7 +25,6 @@ import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
@@ -39,8 +38,7 @@ import com.pyx4j.entity.server.search.SearchResultIterator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
-import com.pyx4j.i18n.shared.I18nFactory;
-import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -48,19 +46,12 @@ public class EntityServicesImpl {
 
     private static final Logger log = LoggerFactory.getLogger(EntityServicesImpl.class);
 
-    private static I18n i18n = I18nFactory.getI18n();
-
-    public static String applicationReadOnlyMessage() {
-        //TODO use SystemMaintenance. getApplicationMaintenanceMessage()
-        return i18n.tr("Application is in read-only due to short maintenance.\nPlease try again in one hour");
-    }
-
     public static class SaveImpl implements EntityServices.Save {
 
         @Override
         public IEntity execute(IEntity request) {
             if (ServerSideConfiguration.instance().datastoreReadOnly()) {
-                throw new UnRecoverableRuntimeException(applicationReadOnlyMessage());
+                throw new UserRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
             }
             if (request.getPrimaryKey() == null) {
                 SecurityController.assertPermission(EntityPermission.permissionCreate(request));
@@ -83,7 +74,7 @@ public class EntityServicesImpl {
 
     public static <T extends IEntity> void secureSave(T entity) {
         if (ServerSideConfiguration.instance().datastoreReadOnly()) {
-            throw new UnRecoverableRuntimeException(applicationReadOnlyMessage());
+            throw new UserRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
         }
         if (entity.getPrimaryKey() == null) {
             SecurityController.assertPermission(EntityPermission.permissionCreate(entity));
@@ -98,7 +89,7 @@ public class EntityServicesImpl {
         @Override
         public Vector<? extends IEntity> execute(Vector<? extends IEntity> request) {
             if (ServerSideConfiguration.instance().datastoreReadOnly()) {
-                throw new UnRecoverableRuntimeException(applicationReadOnlyMessage());
+                throw new UserRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
             }
             for (IEntity ent : request) {
                 if (ent.getPrimaryKey() == null) {
@@ -229,7 +220,7 @@ public class EntityServicesImpl {
         @Override
         public VoidSerializable execute(IEntity entity) {
             if (ServerSideConfiguration.instance().datastoreReadOnly()) {
-                throw new UnRecoverableRuntimeException(applicationReadOnlyMessage());
+                throw new UserRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
             }
             SecurityController.assertPermission(new EntityPermission(entity.getValueClass(), EntityPermission.DELETE));
             PersistenceServicesFactory.getPersistenceService().delete(entity);
@@ -243,7 +234,7 @@ public class EntityServicesImpl {
         @Override
         public VoidSerializable execute(IEntity entity) {
             if (ServerSideConfiguration.instance().datastoreReadOnly()) {
-                throw new UnRecoverableRuntimeException(applicationReadOnlyMessage());
+                throw new UserRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
             }
             SecurityController.assertPermission(new EntityPermission(entity.getValueClass(), EntityPermission.DELETE));
             IEntity actualEntity = PersistenceServicesFactory.getPersistenceService().retrieve(entity.getEntityMeta().getEntityClass(), entity.getPrimaryKey());
