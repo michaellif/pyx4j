@@ -35,6 +35,7 @@ public class AuthenticationPanel extends Panel {
             public void onClick() {
                 if (((PMSiteSession) getSession()).isSignedIn()) {
                     getSession().invalidate();
+                    setResponsePage(getPage().getClass(), getPage().getPageParameters());
                 } else {
                     setResponsePage(SignInPage.class, null);
                 }

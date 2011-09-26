@@ -46,6 +46,8 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         }
 //        getPageSettings().addComponentResolver(new I18nMessageResolver());
 
+        mountPage("signin", SignInPage.class);
+
         mountPage("findapt", FindAptPage.class);
 
         mountPage("aptlist", AptListPage.class);
