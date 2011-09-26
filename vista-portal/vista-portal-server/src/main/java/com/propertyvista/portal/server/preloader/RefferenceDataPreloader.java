@@ -35,7 +35,7 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
 
     @Override
     public String create() {
-        createNamed(PhoneProvider.class, "Roges", "Bell", "Telus", "Fido", "Mobilicity", "Primus", "Télébec", "Virgin Mobile", "Wind Mobile");
+        createNamed(PhoneProvider.class, "Rogers", "Bell", "Telus", "Fido", "Mobilicity", "Primus", "Télébec", "Virgin Mobile", "Wind Mobile");
         return null;
     }
 }

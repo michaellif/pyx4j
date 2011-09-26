@@ -28,7 +28,7 @@ UPDATE FloorplanCounters SET _marketingUnitCount = (SELECT COUNT(*) FROM AptUnit
 COMMIT;
 
 
-INSERT INTO PhoneProvider(id,ns,name) VALUES (1,'star','Roges');
+INSERT INTO PhoneProvider(id,ns,name) VALUES (1,'star','Rogers');
 INSERT INTO PhoneProvider(id,ns,name) VALUES (2,'star','Bell');
 INSERT INTO PhoneProvider(id,ns,name) VALUES (3,'star','Telus');
 INSERT INTO PhoneProvider(id,ns,name) VALUES (4,'star','Fido');
