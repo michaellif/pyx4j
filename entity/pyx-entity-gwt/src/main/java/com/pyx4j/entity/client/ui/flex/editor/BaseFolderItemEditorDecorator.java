@@ -97,7 +97,7 @@ public abstract class BaseFolderItemEditorDecorator<E extends IEntity> extends S
     }
 
     public void setRemovable(boolean removable) {
-        this.removable = removable;
+        imageHolder.setVisible(this.removable = removable);
     }
 
     @Override
