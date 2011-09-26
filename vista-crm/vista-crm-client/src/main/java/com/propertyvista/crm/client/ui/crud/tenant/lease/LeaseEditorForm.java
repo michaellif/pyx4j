@@ -49,6 +49,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -88,8 +89,10 @@ import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.ChargeItemAdjustment;
 import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceConcession;
 import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
@@ -628,11 +631,22 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             @Override
             protected CEntityFolderItemEditor<ChargeItem> createItem() {
                 return new CEntityFolderRowEditor<ChargeItem>(ChargeItem.class, columns()) {
-                    CEntityFolderRowEditor<ChargeItem> chargeItemEditor = this;
+                    private final CEntityFolderRowEditor<ChargeItem> chargeItemEditor = this;
+
+                    private final CrmBoxFolderItemDecorator<ChargeItem> decor = new CrmBoxFolderItemDecorator<ChargeItem>(parent);
 
                     @Override
                     public IFolderItemEditorDecorator<ChargeItem> createFolderItemDecorator() {
-                        return new CrmBoxFolderItemDecorator<ChargeItem>(parent);
+                        return decor;
+                    }
+
+                    @Override
+                    public void populate(ChargeItem value) {
+                        super.populate(value);
+                        if (value.item().type().type().getValue() == ServiceItemType.Type.feature
+                                && value.item().type().featureType().getValue() == Feature.Type.utility) {
+                            decor.setRemovable(false);
+                        }
                     }
 
                     @Override
@@ -712,6 +726,21 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         return adjustedPrice;
                     }
                 };
+            }
+
+            @Override
+            public void populate(IList<ChargeItem> value) {
+                super.populate(value);
+
+                // prepopulate utilities for the new item: 
+                if (parent.isEditable() && value.isEmpty()) {
+                    for (ServiceItem item : LeaseEditorForm.this.getValue().selectedUtilityItems()) {
+                        ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                        newItem.item().set(item);
+                        newItem.price().setValue(item.price().getValue());
+                        addItem(newItem);
+                    }
+                }
             }
         };
     }
