@@ -110,6 +110,11 @@ public class Mappings {
                 if (usedTableNames.contains(model.getTableName().toLowerCase(Locale.ENGLISH))) {
                     log.warn("redefining/extending table {} for class {}", model.getTableName(), entityMeta.getEntityClass());
                 }
+                for (MemberOperationsMeta member : model.operationsMeta().getCollectionMembers()) {
+                    if (usedTableNames.contains(member.sqlName().toLowerCase(Locale.ENGLISH))) {
+                        log.warn("redefining/extending table {} for member {}", member.sqlName(), member.getMemberPath());
+                    }
+                }
                 try {
                     model.ensureExists(connection, dialect);
                 } catch (SQLException e) {
@@ -126,6 +131,9 @@ public class Mappings {
                 }
                 tables.put(entityMeta.getEntityClass(), model);
                 usedTableNames.add(model.getTableName().toLowerCase(Locale.ENGLISH));
+                for (MemberOperationsMeta member : model.operationsMeta().getCollectionMembers()) {
+                    usedTableNames.add(member.sqlName().toLowerCase(Locale.ENGLISH));
+                }
             } else if (traceInit) {
                 log.trace(Trace.id() + "ensureTable {} TableModel alredy created", entityMeta.getPersistenceName());
             }
