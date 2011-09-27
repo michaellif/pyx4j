@@ -26,13 +26,13 @@ public class LogicalDateXmlAdapter extends XmlAdapter<XMLGregorianCalendar, Date
     @SuppressWarnings("deprecation")
     @Override
     public Date unmarshal(XMLGregorianCalendar v) throws Exception {
-        return new Date(v.getYear() - 1900, v.getMonth(), 2);
+        return new Date(v.getYear() - 1900, v.getMonth() - 1, 2);
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public XMLGregorianCalendar marshal(Date v) throws Exception {
-        return DatatypeFactory.newInstance().newXMLGregorianCalendarDate(1900 + v.getYear(), v.getMonth(), 2, DatatypeConstants.FIELD_UNDEFINED);
+        return DatatypeFactory.newInstance().newXMLGregorianCalendarDate(1900 + v.getYear(), v.getMonth() + 1, 2, DatatypeConstants.FIELD_UNDEFINED);
     }
 
 }

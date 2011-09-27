@@ -70,7 +70,7 @@ public class PaymentSecurity {
                 return false;
             }
         } finally {
-            NamespaceManager.setNamespace(null);
+            NamespaceManager.remove();
         }
 
         NamespaceManager.setNamespace(user.namespace().getValue());
