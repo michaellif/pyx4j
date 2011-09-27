@@ -128,8 +128,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     private Widget createFinancialsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
-        main.add(inject(proto().financial().unitRent()), 10);
-        main.add(inject(proto().financial().marketRent()), 10);
+        main.add(inject(proto().financial().unitRent(), new CNumberLabel()), 10);
+        main.add(inject(proto().financial().marketRent(), new CNumberLabel()), 10);
 
         return new CrmScrollPanel(main);
     }
