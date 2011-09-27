@@ -69,7 +69,7 @@ public class EntityOperationsMeta {
     private final Mappings mappings;
 
     EntityOperationsMeta(Dialect dialect, Mappings mappings, EntityMeta entityMeta) {
-        build(dialect, dialect.getNamingConvention(), GWTJava5Helper.getSimpleName(entityMeta.getEntityClass()), null, null, entityMeta);
+        build(dialect, dialect.getNamingConvention(), entityMeta, GWTJava5Helper.getSimpleName(entityMeta.getEntityClass()), null, null, entityMeta);
         this.mappings = mappings;
     }
 
@@ -77,7 +77,8 @@ public class EntityOperationsMeta {
         return mappings.getTableModel(entityClass).operationsMeta();
     }
 
-    private void build(Dialect dialect, NamingConvention namingConvention, String path, List<String> accessPath, List<String> namesPath, EntityMeta entityMeta) {
+    private void build(Dialect dialect, NamingConvention namingConvention, EntityMeta rootEntityMeta, String path, List<String> accessPath,
+            List<String> namesPath, EntityMeta entityMeta) {
         for (String memberName : entityMeta.getMemberNames()) {
             MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
             if (memberMeta.isTransient()) {
@@ -105,7 +106,7 @@ public class EntityOperationsMeta {
                     }
                     namesPathChild.add(memberPersistenceName);
 
-                    build(dialect, namingConvention, path + Path.PATH_SEPARATOR + memberName, accessPathChild, namesPathChild,
+                    build(dialect, namingConvention, rootEntityMeta, path + Path.PATH_SEPARATOR + memberName, accessPathChild, namesPathChild,
                             EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
                 }
             } else {
@@ -118,9 +119,9 @@ public class EntityOperationsMeta {
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     String sqlName;
                     if (namesPath != null) {
-                        sqlName = namingConvention.sqlEmbededTableName(entityMeta.getPersistenceName(), namesPath, memberPersistenceName);
+                        sqlName = namingConvention.sqlEmbededTableName(rootEntityMeta.getPersistenceName(), namesPath, memberPersistenceName);
                     } else {
-                        sqlName = namingConvention.sqlChildTableName(entityMeta.getPersistenceName(), memberPersistenceName);
+                        sqlName = namingConvention.sqlChildTableName(rootEntityMeta.getPersistenceName(), memberPersistenceName);
                     }
                     MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, null, sqlName, memberMeta, path + Path.PATH_SEPARATOR + memberName
                             + Path.PATH_SEPARATOR);
@@ -154,9 +155,9 @@ public class EntityOperationsMeta {
                 } else if (IPrimitiveSet.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     String sqlName;
                     if (namesPath != null) {
-                        sqlName = namingConvention.sqlEmbededTableName(entityMeta.getPersistenceName(), namesPath, memberPersistenceName);
+                        sqlName = namingConvention.sqlEmbededTableName(rootEntityMeta.getPersistenceName(), namesPath, memberPersistenceName);
                     } else {
-                        sqlName = namingConvention.sqlChildTableName(entityMeta.getPersistenceName(), memberPersistenceName);
+                        sqlName = namingConvention.sqlChildTableName(rootEntityMeta.getPersistenceName(), memberPersistenceName);
                     }
                     MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, null, sqlName, memberMeta, path + Path.PATH_SEPARATOR + memberName
                             + Path.PATH_SEPARATOR);

@@ -105,6 +105,7 @@ public class TableModel {
             }
             TableMetadata tableMetadata = TableMetadata.getTableMetadata(connection, tableName);
             if (tableMetadata == null) {
+                log.debug("table {} does not exists", tableName);
                 SQLUtils.execute(connection, TableDDL.sqlCreate(dialect, this));
                 if (Mappings.traceInit) {
                     log.trace(Trace.id() + "table created {}", tableName);

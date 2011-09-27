@@ -78,6 +78,7 @@ public class NamingConventionModern implements NamingConvention {
     public String sqlEmbededTableName(String javaPersistenceTableName, List<String> path, String javaPersistenceFieldName) {
         StringBuilder sql = new StringBuilder();
         sql.append(javaPersistenceTableName);
+        sql.append(childSeparator);
         for (String pathPart : path) {
             sql.append(pathPart);
             sql.append('_');
