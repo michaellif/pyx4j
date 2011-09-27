@@ -25,6 +25,8 @@ import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -62,32 +64,51 @@ public class EntityImplReflectionHelper {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public static IObject<?> lazyCreateMember(Class<?> interfaceClass, SharedEntityHandler implHandler, String memberName) {
-        Method method;
-        try {
-            method = interfaceClass.getMethod(memberName, (Class[]) null);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException("Unknown member " + memberName + " in " + interfaceClass.getName());
-        }
-        Class<?> memberClass = method.getReturnType();
-        if (IPrimitive.class.equals(memberClass)) {
-            Class<?> paramType = primitiveValueClass(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0]);
-            return implHandler.lazyCreateMemberIPrimitive(method.getName(), paramType);
-        } else if (IEntity.class.isAssignableFrom(memberClass)) {
-            return implHandler.lazyCreateMemberIEntity(method.getName(), (Class<IEntity>) method.getReturnType());
-        } else if (ISet.class.equals(memberClass)) {
-            Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
-            return implHandler.lazyCreateMemberISet(method.getName(), (Class<IEntity>) paramType);
-        } else if (IList.class.equals(memberClass)) {
-            Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
-            return implHandler.lazyCreateMemberIList(method.getName(), (Class<IEntity>) paramType);
-        } else if (IPrimitiveSet.class.equals(memberClass)) {
-            Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
-            return implHandler.lazyCreateMemberIPrimitiveSet(method.getName(), (Class<IEntity>) paramType);
-        } else {
-            throw new RuntimeException("Unknown member " + memberName + " type " + memberClass);
-        }
+    private static class MethodInfo {
+
+        Class<?> klass;
+
+        Class<?> valueCalss;
     }
 
+    private static Map<String, MethodInfo> members = new HashMap<String, MethodInfo>();
+
+    @SuppressWarnings("unchecked")
+    public static IObject<?> lazyCreateMember(Class<?> interfaceClass, SharedEntityHandler implHandler, String memberName) {
+        String uName = interfaceClass.getName() + "." + memberName;
+        MethodInfo methodInfo = members.get(uName);
+        if (methodInfo == null) {
+            Method method;
+            try {
+                method = interfaceClass.getMethod(memberName, (Class[]) null);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException("Unknown member " + memberName + " in " + interfaceClass.getName());
+            }
+            methodInfo = new MethodInfo();
+            methodInfo.klass = method.getReturnType();
+            if (!IEntity.class.isAssignableFrom(methodInfo.klass)) {
+                ParameterizedType genericType = (ParameterizedType) method.getGenericReturnType();
+                Type paramType = genericType.getActualTypeArguments()[0];
+                if (IPrimitive.class.equals(methodInfo.klass)) {
+                    methodInfo.valueCalss = primitiveValueClass(paramType);
+                } else {
+                    methodInfo.valueCalss = (Class<?>) paramType;
+                }
+            }
+            members.put(uName, methodInfo);
+        }
+        if (IPrimitive.class.equals(methodInfo.klass)) {
+            return implHandler.lazyCreateMemberIPrimitive(memberName, methodInfo.valueCalss);
+        } else if (IEntity.class.isAssignableFrom(methodInfo.klass)) {
+            return implHandler.lazyCreateMemberIEntity(memberName, (Class<IEntity>) methodInfo.klass);
+        } else if (ISet.class.equals(methodInfo.klass)) {
+            return implHandler.lazyCreateMemberISet(memberName, (Class<IEntity>) methodInfo.valueCalss);
+        } else if (IList.class.equals(methodInfo.klass)) {
+            return implHandler.lazyCreateMemberIList(memberName, (Class<IEntity>) methodInfo.valueCalss);
+        } else if (IPrimitiveSet.class.equals(methodInfo.klass)) {
+            return implHandler.lazyCreateMemberIPrimitiveSet(memberName, (Class<IEntity>) methodInfo.valueCalss);
+        } else {
+            throw new RuntimeException("Unknown member " + memberName + " type " + methodInfo.klass);
+        }
+    }
 }
