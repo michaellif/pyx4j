@@ -29,7 +29,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ListBox;
@@ -635,21 +634,11 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 return new CEntityFolderRowEditor<ChargeItem>(ChargeItem.class, columns()) {
                     private final CEntityFolderRowEditor<ChargeItem> chargeItemEditor = this;
 
+                    private final CNumberLabel adjustedPriceValue = new CNumberLabel();
+
+                    private final CrmSectionSeparator adjustmentSeparator = new CrmSectionSeparator(CrmEntityFolder.i18n.tr("Adjustments:"));
+
                     private final CrmBoxFolderItemDecorator<ChargeItem> decor = new CrmBoxFolderItemDecorator<ChargeItem>(parent);
-
-                    @Override
-                    public IFolderItemEditorDecorator<ChargeItem> createFolderItemDecorator() {
-                        return decor;
-                    }
-
-                    @Override
-                    public void populate(ChargeItem value) {
-                        super.populate(value);
-                        if (value.item().type().type().getValue() == ServiceItemType.Type.feature
-                                && value.item().type().featureType().getValue() == Feature.Type.utility) {
-                            decor.setRemovable(false);
-                        }
-                    }
 
                     @Override
                     public IsWidget createContent() {
@@ -661,40 +650,52 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         split.getRightPanel().add(inject(proto().price(), new CLabel()), 6);
 
                         if (parent.isEditable()) {
-                            Widget w;
-                            final CNumberLabel adjustedPriceLabel;
+                            HTML adjustedPriceLabel = new HTML("<b>" + CrmEntityFolder.i18n.tr("Adjusted Price:") + "&nbsp;&nbsp; </b>");
+                            adjustedPriceLabel.setWordWrap(false);
+                            adjustedPriceValue.setNumberFormat("#0.00");
+                            adjustedPriceValue.setValue(0.0);
+
                             HorizontalPanel adjustedPricePanel = new HorizontalPanel();
-                            adjustedPricePanel.add(w = new HTML("<b>" + CrmEntityFolder.i18n.tr("Adjusted Price:") + "&nbsp;&nbsp; </b>"));
-                            ((HTML) w).setWordWrap(false);
-                            adjustedPricePanel.setCellWidth(w, "25%");
-                            adjustedPricePanel.setCellHorizontalAlignment(w, HasHorizontalAlignment.ALIGN_RIGHT);
-                            adjustedPricePanel.add(adjustedPriceLabel = new CNumberLabel());
-                            adjustedPricePanel.setCellWidth(adjustedPriceLabel, "15%");
-                            adjustedPricePanel.add(new Button("Recalculate...", new ClickHandler() {
-                                @Override
-                                public void onClick(ClickEvent event) {
-                                    Double adjustedPrice = getValue().item().price().getValue();
-
-                                    for (ChargeItemAdjustment adjustment : getValue().adjustments()) {
-                                        Double calc_ed = calculateAdjustments(adjustedPrice, adjustment);
-                                        if (calc_ed != Double.NaN) {
-                                            adjustedPrice = calc_ed;
-                                        }
-                                    }
-
-                                    // update UI/Value:
-                                    adjustedPriceLabel.setValue(adjustedPrice);
-                                }
-                            }));
-                            adjustedPriceLabel.setNumberFormat("#0.00");
-                            adjustedPriceLabel.setValue(0.0);
-                            adjustedPricePanel.setWidth("100%");
-                            main.add(adjustedPricePanel);
+                            adjustedPricePanel.add(adjustedPriceLabel);
+                            adjustedPricePanel.add(adjustedPriceValue);
+                            split.getRightPanel().add(adjustedPricePanel);
                         }
 
-                        main.add(new CrmSectionSeparator(CrmEntityFolder.i18n.tr("Adjustments:")));
+                        main.add(adjustmentSeparator);
                         main.add(inject(proto().adjustments(), createItemAdjustmentListView(chargeItemEditor)));
                         return main;
+                    }
+
+                    @Override
+                    public IFolderItemEditorDecorator<ChargeItem> createFolderItemDecorator() {
+                        return decor;
+                    }
+
+                    @Override
+                    public void populate(ChargeItem value) {
+                        super.populate(value);
+
+                        if (value.item().type().type().getValue() == ServiceItemType.Type.feature
+                                && value.item().type().featureType().getValue() == Feature.Type.utility) {
+                            decor.setRemovable(false);
+                        }
+
+                        if (parent.isEditable()) {
+                            calculateAdjustments();
+                        } else {
+                            adjustmentSeparator.setVisible(!value.adjustments().isEmpty());
+                        }
+                    }
+
+                    @Override
+                    public void addValidations() {
+                        super.addValidations();
+                        addValueChangeHandler(new ValueChangeHandler<ChargeItem>() {
+                            @Override
+                            public void onValueChange(ValueChangeEvent<ChargeItem> event) {
+                                calculateAdjustments();
+                            }
+                        });
                     }
 
                     private Double calculateAdjustments(Double startPrice, ChargeItemAdjustment adjustment) {
@@ -740,6 +741,20 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         }
 
                         return adjustedPrice;
+                    }
+
+                    private void calculateAdjustments() {
+                        Double adjustedPrice = getValue().price().getValue();
+
+                        for (ChargeItemAdjustment adjustment : getValue().adjustments()) {
+                            Double calc_ed = calculateAdjustments(adjustedPrice, adjustment);
+                            if (!calc_ed.equals(Double.NaN)) {
+                                adjustedPrice = calc_ed;
+                            }
+                        }
+
+                        // update UI/Value:
+                        adjustedPriceValue.setValue(adjustedPrice);
                     }
                 };
             }
