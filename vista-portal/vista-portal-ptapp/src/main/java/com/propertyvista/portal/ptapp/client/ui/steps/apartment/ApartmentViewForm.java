@@ -63,6 +63,18 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(ApartmentViewForm.class);
 
+    private VistaDecoratorsFlowPanel consessionPanel;
+
+    private VistaDecoratorsFlowPanel chargedPanel;
+
+    private VistaDecoratorsFlowPanel petsPanel;
+
+    private VistaDecoratorsFlowPanel parkingPanel;
+
+    private VistaDecoratorsFlowPanel storagePanel;
+
+    private VistaDecoratorsFlowPanel otherPanel;
+
     public ApartmentViewForm() {
         super(ApartmentInfoDTO.class, new VistaViewersComponentFactory());
     }
@@ -95,8 +107,9 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
         part.add(inject(proto().leaseTo()), 8);
         part.add(inject(proto().unitRent()), 8);
 
-        main.add(new VistaHeaderBar(i18n.tr(i18n.tr("Promotions, Discounts and Concessions"))));
-        main.add(inject(proto().concessions(), createConcessionsFolderEditor()));
+        main.add(consessionPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
+        consessionPanel.add(new VistaHeaderBar(i18n.tr(i18n.tr("Promotions, Discounts and Concessions"))));
+        consessionPanel.add(inject(proto().concessions(), createConcessionsFolderEditor()));
 
         main.add(new VistaHeaderBar(i18n.tr("Utilities")));
         main.add(split = new VistaDecoratorsSplitFlowPanel(true, main.getDefaultLabelWidth(), 15));
@@ -107,31 +120,51 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
         split.getRightPanel().add(new HTML(HtmlUtils.h5(i18n.tr("Excluded:"))));
         split.getRightPanel().add(inject(proto().externalUtilities(), createUtilitiesFolderEditor()));
 
-        main.add(new VistaLineSeparator(100, Unit.PCT));
-        main.add(new HTML(HtmlUtils.h5(i18n.tr("Charged:"))));
-        main.add(inject(proto().availableUtilities(), createFeaturesFolderEditor(Feature.Type.utility, false)));
+        main.add(chargedPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
+        chargedPanel.add(new VistaLineSeparator(100, Unit.PCT));
+        chargedPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Charged:"))));
+        chargedPanel.add(inject(proto().agreedUtilities(), createFeaturesFolderEditor(Feature.Type.utility, false)));
 
         main.add(new VistaHeaderBar(i18n.tr("Add-ons")));
-        main.add(new HTML(HtmlUtils.h5(i18n.tr("Pets:"))));
-        main.add(inject(proto().agreedPets(), createFeaturesFolderEditor(Feature.Type.pet, true)));
 
-        main.add(new VistaLineSeparator(100, Unit.PCT));
-        main.add(new HTML(HtmlUtils.h5(i18n.tr("Parking:"))));
-        main.add(inject(proto().agreedParking(), createFeaturesFolderEditor(Feature.Type.parking, true)));
+        main.add(petsPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
+        petsPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Pets:"))));
+        petsPanel.add(inject(proto().agreedPets(), createFeaturesFolderEditor(Feature.Type.pet, true)));
 
-        main.add(new VistaLineSeparator(100, Unit.PCT));
-        main.add(new HTML(HtmlUtils.h5(i18n.tr("Storage:"))));
-        main.add(inject(proto().agreedStorage(), createFeaturesFolderEditor(Feature.Type.locker, true)));
+        main.add(parkingPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
+        parkingPanel.add(new VistaLineSeparator(100, Unit.PCT));
+        parkingPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Parking:"))));
+        parkingPanel.add(inject(proto().agreedParking(), createFeaturesFolderEditor(Feature.Type.parking, true)));
 
-        main.add(new VistaLineSeparator(100, Unit.PCT));
-        main.add(new HTML(HtmlUtils.h5(i18n.tr("Other:"))));
-        main.add(inject(proto().agreedOther(), createFeaturesFolderEditor(Feature.Type.addOn, true)));
+        main.add(storagePanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
+        storagePanel.add(new VistaLineSeparator(100, Unit.PCT));
+        storagePanel.add(new HTML(HtmlUtils.h5(i18n.tr("Storage:"))));
+        storagePanel.add(inject(proto().agreedStorage(), createFeaturesFolderEditor(Feature.Type.locker, true)));
+
+        main.add(otherPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
+        otherPanel.add(new VistaLineSeparator(100, Unit.PCT));
+        otherPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Other:"))));
+        otherPanel.add(inject(proto().agreedOther(), createFeaturesFolderEditor(Feature.Type.addOn, true)));
 
         // last step - add building picture on the right:
         HorizontalPanel content = new HorizontalPanel();
         content.add(main);
         content.add(new BuildingPicture());
         return content;
+    }
+
+    @Override
+    public void populate(ApartmentInfoDTO value) {
+        super.populate(value);
+
+        //hide/show various panels depend on populated data:
+        consessionPanel.setVisible(!value.concessions().isEmpty());
+        chargedPanel.setVisible(!value.agreedUtilities().isEmpty());
+
+        petsPanel.setVisible(!value.agreedPets().isEmpty() || !value.availablePets().isEmpty());
+        parkingPanel.setVisible(!value.agreedParking().isEmpty() || !value.availableParking().isEmpty());
+        storagePanel.setVisible(!value.agreedStorage().isEmpty() || !value.availableStorage().isEmpty());
+        otherPanel.setVisible(!value.agreedOther().isEmpty() || !value.availableOther().isEmpty());
     }
 
 //
@@ -342,8 +375,14 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
             switch (type) {
             case utility:
                 return getValue().availableUtilities();
+            case pet:
+                return getValue().availablePets();
+            case parking:
+                return getValue().availableParking();
+            case locker:
+                return getValue().availableStorage();
             default:
-                return getValue().availableOptions();
+                return getValue().availableOther();
             }
         }
 

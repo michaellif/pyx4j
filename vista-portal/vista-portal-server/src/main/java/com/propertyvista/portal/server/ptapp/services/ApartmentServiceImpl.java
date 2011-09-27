@@ -138,9 +138,13 @@ public class ApartmentServiceImpl implements ApartmentService {
         entity.availableUtilities().clear();
 
         entity.agreedPets().clear();
+        entity.availablePets().clear();
         entity.agreedParking().clear();
+        entity.availableParking().clear();
+        entity.agreedStorage().clear();
+        entity.availableStorage().clear();
         entity.agreedOther().clear();
-        entity.availableOptions().clear();
+        entity.availableOther().clear();
 
         entity.concessions().clear();
 
@@ -182,8 +186,17 @@ public class ApartmentServiceImpl implements ApartmentService {
                                 entity.availableUtilities().add(item);
                             }
                             break;
+                        case pet:
+                            entity.availablePets().add(item);
+                            break;
+                        case parking:
+                            entity.availableParking().add(item);
+                            break;
+                        case locker:
+                            entity.availableStorage().add(item);
+                            break;
                         default:
-                            entity.availableOptions().add(item);
+                            entity.availableOther().add(item);
                         }
                     }
                 }

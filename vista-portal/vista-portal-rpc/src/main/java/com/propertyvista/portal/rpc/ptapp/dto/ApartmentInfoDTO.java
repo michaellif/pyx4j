@@ -42,7 +42,7 @@ public interface ApartmentInfoDTO extends IEntity {
     // Unit data:
     IPrimitive<String> suiteNumber();
 
-    // ServiceCatalog stuff:
+    // Service Catalogue stuff:
     IList<ServiceItemType> includedUtilities();
 
     IList<ServiceItemType> externalUtilities();
@@ -53,13 +53,19 @@ public interface ApartmentInfoDTO extends IEntity {
 
     IList<ServiceItem> agreedPets();
 
+    IList<ServiceItem> availablePets();
+
     IList<ServiceItem> agreedParking();
+
+    IList<ServiceItem> availableParking();
 
     IList<ServiceItem> agreedStorage();
 
+    IList<ServiceItem> availableStorage();
+
     IList<ServiceItem> agreedOther();
 
-    IList<ServiceItem> availableOptions();
+    IList<ServiceItem> availableOther();
 
     IList<Concession> concessions();
 
