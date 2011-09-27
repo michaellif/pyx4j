@@ -56,7 +56,7 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
 
     @Override
     protected IFolderEditorDecorator<E> createFolderDecorator() {
-        return new CrmTableFolderDecorator<E>(columns(), i18n.tr("Add new ") + itemName, editable);
+        return new CrmTableFolderDecorator<E>(columns(), i18n.tr("Add ") + itemName, editable);
     }
 
     public String getItemName() {

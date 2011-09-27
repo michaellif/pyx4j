@@ -29,7 +29,7 @@ public class CrmBoxFolderDecorator<E extends IEntity> extends BoxFolderEditorDec
     }
 
     public CrmBoxFolderDecorator(CrmEntityFolder<E> parent, boolean editable) {
-        this(i18n.tr("Add new ") + parent.getItemName(), editable);
+        this(i18n.tr("Add ") + parent.getItemName(), editable);
     }
 
     public CrmBoxFolderDecorator(CrmEntityFolder<E> parent) {

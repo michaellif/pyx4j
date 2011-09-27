@@ -32,7 +32,7 @@ public class CrmTableFolderDecorator<E extends IEntity> extends TableFolderEdito
     }
 
     public CrmTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, CrmEntityFolder<E> parent, boolean editable) {
-        this(columns, i18n.tr("Add new ") + parent.getItemName(), editable);
+        this(columns, i18n.tr("Add ") + parent.getItemName(), editable);
     }
 
     public CrmTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, CrmEntityFolder<E> parent) {
