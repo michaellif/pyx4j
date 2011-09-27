@@ -211,6 +211,18 @@ select {
 	color: #B5E329;
 }
 
+.auth {
+	float: right;
+	padding: 0 10px;
+}
+
+.auth a {
+    color: #339900;
+}
+
+.auth a:hover {
+	color: #B5E329;
+}
 /*
  * Footer
  */
