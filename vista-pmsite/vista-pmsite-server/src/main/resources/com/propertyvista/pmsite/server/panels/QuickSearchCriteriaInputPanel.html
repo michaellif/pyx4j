@@ -1,13 +1,23 @@
 <wicket:panel
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 
-    <h3>FIND AN APARTMENT</h3>
+	<script>
+		$(function(){
+			// set City for selected province
+			var sel = document.getElementById('provSelect');
+			if (! sel) return;
+			setSelectionOptions('citySelect', provCity[sel.options[sel.selectedIndex].text], 'Choose One', selCity);
+		});
+	</script>
+	<script wicket:id="jsCityList"/>
+
+	<h3>FIND AN APARTMENT</h3>
 
 	<label>Province</label>
-	<select wicket:id="province"></select>
+	<select wicket:id="province" id="provSelect"></select>
 
 	<label>City</label>
-	<select wicket:id="city"></select>
+	<select wicket:id="city" id="citySelect"></select>
 
 	<label>Bedrooms</label>
 	<select wicket:id="bedsRange"></select>

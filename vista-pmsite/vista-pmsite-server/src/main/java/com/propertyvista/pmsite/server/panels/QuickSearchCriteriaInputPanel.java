@@ -18,6 +18,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -26,7 +29,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import com.pyx4j.entity.server.pojo.IPojo;
 
 import com.propertyvista.pmsite.server.PMSiteContentManager;
-import com.propertyvista.pmsite.server.model.WicketUtils.DropDownList;
+import com.propertyvista.pmsite.server.model.WicketUtils;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class QuickSearchCriteriaInputPanel extends Panel {
@@ -39,35 +42,33 @@ public class QuickSearchCriteriaInputPanel extends Panel {
         // add Province drop-down
         final Map<String, List<String>> provCityMap = PMSiteContentManager.getProvinceCityMap();
         List<String> provinces = new ArrayList<String>(provCityMap.keySet());
-        DropDownList<String> provChoice = new DropDownList<String>("province", provinces, false, true) {
-            private static final long serialVersionUID = 1L;
-/*
- * @Override
- * protected boolean wantOnSelectionChangedNotifications() {
- * return true;
- * }
- * 
- * @Override
- * protected void onSelectionChanged(String newProv) {
- * // get city component
- * 
- * @SuppressWarnings("unchecked")
- * DropDownChoice<String> city = (DropDownChoice<String>) getParent().get("city");
- * if (city != null)
- * city.setChoices(provCityMap.get(newProv));
- * }
- */
-        };
+        DropDownChoice<String> provChoice = new WicketUtils.DropDownList<String>("province", provinces, false, true);
+        provChoice.add(AttributeModifier
+                .replace("onChange", "setSelectionOptions('citySelect', provCity[this.options[this.selectedIndex].text], 'Choose One')"));
         add(provChoice);
+
         // add City drop-down
-        List<String> cities = null;
-        if (!model.getObject().getEntityValue().province().isNull()) {
-            cities = provCityMap.get(model.getObject().getEntityValue().province().getValue());
+        List<String> cities;
+        String selProv = model.getObject().getEntityValue().province().getValue();
+        if (selProv != null) {
+            cities = provCityMap.get(selProv);
         } else {
-            cities = Arrays.asList("- Select Province First -");
+            cities = Arrays.asList("- Select Province -");
         }
-        DropDownList<String> cityChoice = new DropDownList<String>("city", cities, false, true);
-        add(cityChoice);
+        add(new WicketUtils.DropDownList<String>("city", cities, false, true));
+
+        // add JS city list
+        String jsCityList = "\nvar provCity = {};\n";
+        for (String _prov : provCityMap.keySet()) {
+            String _list = "";
+            for (String _city : provCityMap.get(_prov)) {
+                _list += ("".equals(_list) ? "" : ",") + "'" + StringEscapeUtils.escapeJavaScript(_city) + "'";
+            }
+            jsCityList += "provCity['" + StringEscapeUtils.escapeJavaScript(_prov) + "'] = [" + _list + "];\n";
+        }
+        String selCity = model.getObject().getEntityValue().city().getValue();
+        jsCityList += "var selCity = '" + (selCity == null ? "" : StringEscapeUtils.escapeJavaScript(selCity)) + "';\n";
+        add(new Label("jsCityList", jsCityList).setEscapeModelStrings(false));
 
         // bedrooms
         add(new DropDownChoice<PropertySearchCriteria.BedroomRange>("bedsRange", Arrays.asList(PropertySearchCriteria.BedroomRange.values())) {

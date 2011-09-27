@@ -18,28 +18,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import js.JSResources;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.validation.validator.MinimumValidator;
 
 import com.pyx4j.entity.server.pojo.IPojo;
 
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.model.WicketUtils;
+import com.propertyvista.pmsite.server.model.WicketUtils.SimpleRadio;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class AdvancedSearchCriteriaInputPanel extends Panel {
@@ -48,14 +43,11 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
     public AdvancedSearchCriteriaInputPanel(String id, final CompoundPropertyModel<IPojo<PropertySearchCriteria>> model) {
         super(id, model);
 
-        // add Error Message panel
-        add(new FeedbackPanel("form_messages"));
-
         // add searchType radio selectors
         RadioGroup<PropertySearchCriteria.SearchType> searchTypeRadio = new RadioGroup<PropertySearchCriteria.SearchType>("searchType");
-        searchTypeRadio.add(new Radio<PropertySearchCriteria.SearchType>("searchByCity", new Model<PropertySearchCriteria.SearchType>(
+        searchTypeRadio.add(new SimpleRadio<PropertySearchCriteria.SearchType>("searchByCity", new Model<PropertySearchCriteria.SearchType>(
                 PropertySearchCriteria.SearchType.city)));
-        searchTypeRadio.add(new Radio<PropertySearchCriteria.SearchType>("searchByProx", new Model<PropertySearchCriteria.SearchType>(
+        searchTypeRadio.add(new SimpleRadio<PropertySearchCriteria.SearchType>("searchByProx", new Model<PropertySearchCriteria.SearchType>(
                 PropertySearchCriteria.SearchType.proximity)));
         add(searchTypeRadio.setRequired(true));
 
@@ -117,13 +109,6 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         // amenities
         CheckBoxMultipleChoice<PropertySearchCriteria.AmenityType> checkBoxMultipleChoice = new CheckBoxMultipleChoice<PropertySearchCriteria.AmenityType>(
                 "amenities", Arrays.asList(PropertySearchCriteria.AmenityType.values()));
-        checkBoxMultipleChoice.setPrefix("<span>");
-        checkBoxMultipleChoice.setSuffix("</span>");
         add(checkBoxMultipleChoice);
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "jquery-1.6.3.min.js"));
     }
 }

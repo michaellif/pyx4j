@@ -232,10 +232,15 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public static List<City> getCities() {
+        ArrayList<City> cityList = new ArrayList<City>();
         EntityQueryCriteria<City> criteria = EntityQueryCriteria.create(City.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().hasProperties(), Boolean.TRUE));
-        return EntityServicesImpl.secureQuery(criteria);
-
+        for (City city : EntityServicesImpl.secureQuery(criteria)) {
+            if (!city.name().isNull() && !city.province().name().isNull() && !city.province().code().isNull()) {
+                cityList.add(city);
+            }
+        }
+        return cityList;
     }
 
     public static Map<String, List<String>> getProvinceCityMap() {

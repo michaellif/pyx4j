@@ -40,11 +40,11 @@ public class FooterPanel extends Panel {
             @Override
             protected void populateItem(ListItem<City> item) {
                 City city = item.getModelObject();
-                PageParameters params = new PageParameters();
                 String _city = city.name().getValue();
                 String _prov = city.province().name().getValue();
                 String _prov2 = city.province().code().getValue();
                 if (_city != null && _prov != null && _prov2 != null) {
+                    PageParameters params = new PageParameters();
                     params.add("city", _city);
                     params.add("province", _prov);
                     BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", AptListPage.class, params);

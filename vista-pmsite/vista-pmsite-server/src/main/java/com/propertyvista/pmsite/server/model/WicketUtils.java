@@ -18,7 +18,9 @@ import java.util.List;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 public class WicketUtils {
@@ -123,5 +125,24 @@ public class WicketUtils {
         public boolean getStatelessHint() {
             return true;
         }
+    }
+
+    public static class SimpleRadio<T> extends Radio<T> {
+        private static final long serialVersionUID = 1L;
+
+        public SimpleRadio(String id, IModel<T> model) {
+            super(id, model);
+        }
+
+        @Override
+        public boolean getStatelessHint() {
+            return true;
+        }
+
+        @Override
+        public String getValue() {
+            return getParent().getId() + ":" + getId();
+        }
+
     }
 }

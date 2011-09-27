@@ -14,7 +14,8 @@
 package com.propertyvista.pmsite.server.panels;
 
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.StatelessForm;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 
@@ -33,22 +34,25 @@ public class AdvancedSearchCriteriaPanel extends Panel {
         super("advancedSearchCriteriaPanel");
 
         PropertySearchCriteria entity = EntityFactory.create(PropertySearchCriteria.class);
-        if (entity.searchType().getValue() == null) {
+        if (entity.searchType().isNull()) {
             entity.searchType().setValue(PropertySearchCriteria.SearchType.city);
         }
         IPojo<PropertySearchCriteria> pojo = ServerEntityFactory.getPojo(entity);
         final CompoundPropertyModel<IPojo<PropertySearchCriteria>> model = new CompoundPropertyModel<IPojo<PropertySearchCriteria>>(pojo);
 
-        final Form<IPojo<PropertySearchCriteria>> form = new Form<IPojo<PropertySearchCriteria>>("advancedSearchCriteriaForm", model) {
+        final StatelessForm<IPojo<PropertySearchCriteria>> form = new StatelessForm<IPojo<PropertySearchCriteria>>("advancedSearchCriteriaForm", model) {
             private static final long serialVersionUID = 1L;
 
             @Override
             public void onSubmit() {
+                System.out.println("===> " + getRequest().getRequestParameters().getParameterValue("searchCriteriaInput:searchType"));
                 setResponsePage(AptListPage.class, PageParamsUtil.convertToPageParameters(model.getObject().getEntityValue()));
             }
 
         };
 
+        // add Error Message panel
+        form.add(new FeedbackPanel("form_messages"));
         form.add(new AdvancedSearchCriteriaInputPanel("searchCriteriaInput", model));
         form.add(new Button("searchSubmit"));
 

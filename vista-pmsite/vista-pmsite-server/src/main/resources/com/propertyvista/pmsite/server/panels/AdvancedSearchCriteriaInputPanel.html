@@ -1,56 +1,41 @@
 <wicket:panel
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-<script>
-$(function(){
-	var mySet = $(".searchTypeSelButton");
-	mySet
-		.hover(
-			function() {
-				$(this).addClass('typeselActiveHover');
-			},
-			function() {
-				$(this).removeClass('typeselActiveHover');
-			}
-		)
-		.click(function() {
-			$(this).children('input[type="radio"]').prop('checked', 1);
-			mySet.each(function() {
-				var self = $(this);
-				var isActive = (self.children('input[type="radio"]').prop('checked') == 1);
-				self.toggleClass('typeselActive', isActive);
-				$('[name="'+self.attr('name')+'_input"]').css('display', isActive ? 'block' : 'none');
+	<script>
+	$(function(){
+		var mySet = $(".searchTypeSelButton");
+		mySet
+			.hover(
+				function() {
+					$(this).addClass('typeselActiveHover');
+				},
+				function() {
+					$(this).removeClass('typeselActiveHover');
+				}
+			)
+			.click(function() {
+				$(this).children('input[type="radio"]').prop('checked', 1);
+				mySet.each(function() {
+					var self = $(this);
+					var isActive = (self.children('input[type="radio"]').prop('checked') == 1);
+					self.toggleClass('typeselActive', isActive);
+					$('[name="'+self.attr('name')+'_input"]').css('display', isActive ? 'block' : 'none');
+				});
 			});
-		});
 		mySet.children('input[type="radio"]').each(function() {
 			if (this.checked) {
 				$(this).click();
 				return  false;
 			}
 		});
-
-// set City for selected province
-	{
+	});
+	$(function(){
 		var sel = document.getElementById('provSelect');
 		if (! sel) return;
 		setSelectionOptions('citySelect', provCity[sel.options[sel.selectedIndex].text], 'Choose One', selCity);
-	}
-});
-// province onclick handler
-function setSelectionOptions(selId, optArr, defOpt, selOpt) {
-	var sel = document.getElementById(selId);
-	if (! sel) return;
-	sel.options.length = 0;
-	if (defOpt) {
-		sel.options[0] = new Option(defOpt,'');
-	}
-	for (var i = 0; i < optArr.length; i++) {
-		var v = optArr[i];
-		sel.options[sel.options.length] = new Option(v,v,(v == selOpt));
-	}
-}
-</script>
-<script wicket:id="jsCityList"/>
-	<div wicket:id="form_messages"/>
+	});
+	</script>
+	<script wicket:id="jsCityList"/>
+
 	<div class="searchTypeSelBox">
 		<div wicket:id="searchType">
 		    <div class="searchTypeSelButton" name="search_bycity_box">

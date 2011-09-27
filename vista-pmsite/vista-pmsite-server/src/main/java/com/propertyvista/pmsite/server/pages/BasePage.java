@@ -18,6 +18,8 @@ import java.util.List;
 
 import javax.servlet.http.Cookie;
 
+import js.JSResources;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -26,6 +28,7 @@ import org.apache.wicket.markup.html.link.StatelessLink;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.resource.TextTemplateResourceReference;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
@@ -87,6 +90,8 @@ public abstract class BasePage extends WebPage {
         TextTemplateResourceReference refCSS = new TextTemplateResourceReference(TemplateResources.class, "main" + getPmsiteStyle() + ".css", "text/css",
                 new StylesheetTemplateModel(baseColor));
         response.renderCSSReference(refCSS);
+        response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "jquery-1.6.3.min.js"));
+        response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "pmsite_jslib-1.0.js"));
     }
 
     protected int getPmsiteStyle() {
