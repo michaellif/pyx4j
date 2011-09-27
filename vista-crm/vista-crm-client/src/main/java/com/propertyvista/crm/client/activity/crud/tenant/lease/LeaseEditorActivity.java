@@ -220,21 +220,17 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
             currentValue.selectedBuilding().serviceCatalog().includedUtilities();
             for (ServiceFeature feature : selectedService.features()) {
-                if (!utilitiesToExclude.isEmpty()) {
-                    for (ServiceItem item : feature.feature().items()) {
-                        switch (feature.feature().type().getValue()) {
-                        case utility:
-                            // filter out utilities included in price for selected building:
-                            if (!utilitiesToExclude.contains(item.type())) {
-                                currentValue.selectedUtilityItems().add(item);
-                            }
-                            break;
-                        default:
-                            currentValue.selectedFeatureItems().add(item);
+                for (ServiceItem item : feature.feature().items()) {
+                    switch (feature.feature().type().getValue()) {
+                    case utility:
+                        // filter out utilities included in price for selected building:
+                        if (!utilitiesToExclude.contains(item.type())) {
+                            currentValue.selectedUtilityItems().add(item);
                         }
+                        break;
+                    default:
+                        currentValue.selectedFeatureItems().add(item);
                     }
-                } else {
-                    currentValue.selectedFeatureItems().addAll(feature.feature().items());
                 }
             }
             // fill concessions:
