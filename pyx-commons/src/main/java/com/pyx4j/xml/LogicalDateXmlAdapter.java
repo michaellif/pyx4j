@@ -31,12 +31,12 @@ public class LogicalDateXmlAdapter extends XmlAdapter<XMLGregorianCalendar, Logi
 
     @Override
     public LogicalDate unmarshal(XMLGregorianCalendar v) throws Exception {
-        return new LogicalDate(v.getYear() - 1900, v.getMonth(), v.getDay());
+        return new LogicalDate(v.getYear() - 1900, v.getMonth() - 1, v.getDay());
     }
 
     @Override
     public XMLGregorianCalendar marshal(LogicalDate v) throws Exception {
-        return DatatypeFactory.newInstance().newXMLGregorianCalendarDate(1900 + v.getYear(), v.getMonth(), v.getDate(), DatatypeConstants.FIELD_UNDEFINED);
+        return DatatypeFactory.newInstance().newXMLGregorianCalendarDate(1900 + v.getYear(), v.getMonth() + 1, v.getDate(), DatatypeConstants.FIELD_UNDEFINED);
     }
 
 }
