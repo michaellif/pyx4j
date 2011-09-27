@@ -44,7 +44,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberField;
-import com.pyx4j.forms.client.ui.CDoubleLabel;
+import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
@@ -134,7 +134,7 @@ public class ChargeSplitListFolder extends CEntityFolderEditor<TenantCharge> {
             @Override
             protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
                 if (isFirst() && (column.getObject() == proto().percentage())) {
-                    return inject(column.getObject(), new CDoubleLabel());
+                    return inject(column.getObject(), new CNumberLabel());
                 }
                 return super.createCell(column);
             }

@@ -54,7 +54,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CDoubleLabel;
+import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
@@ -662,13 +662,13 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                         if (parent.isEditable()) {
                             Widget w;
-                            final CDoubleLabel adjustedPriceLabel;
+                            final CNumberLabel adjustedPriceLabel;
                             HorizontalPanel adjustedPricePanel = new HorizontalPanel();
                             adjustedPricePanel.add(w = new HTML("<b>" + CrmEntityFolder.i18n.tr("Adjusted Price:") + "&nbsp;&nbsp; </b>"));
                             ((HTML) w).setWordWrap(false);
                             adjustedPricePanel.setCellWidth(w, "25%");
                             adjustedPricePanel.setCellHorizontalAlignment(w, HasHorizontalAlignment.ALIGN_RIGHT);
-                            adjustedPricePanel.add(adjustedPriceLabel = new CDoubleLabel());
+                            adjustedPricePanel.add(adjustedPriceLabel = new CNumberLabel());
                             adjustedPricePanel.setCellWidth(adjustedPriceLabel, "15%");
                             adjustedPricePanel.add(new Button("Recalculate...", new ClickHandler() {
                                 @Override

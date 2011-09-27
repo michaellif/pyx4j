@@ -26,7 +26,7 @@ import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.CDoubleLabel;
+import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -94,8 +94,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         split.getRightPanel().add(inject(proto().info().floor()), 5);
         split.getRightPanel().add(inject(proto().info().number()), 5);
-        split.getRightPanel().add(inject(proto().info()._bedrooms(), new CDoubleLabel()), 5);
-        split.getRightPanel().add(inject(proto().info()._bathrooms(), new CDoubleLabel()), 5);
+        split.getRightPanel().add(inject(proto().info()._bedrooms(), new CNumberLabel()), 5);
+        split.getRightPanel().add(inject(proto().info()._bathrooms(), new CNumberLabel()), 5);
         split.getRightPanel().add(inject(proto().info().area()), 8);
         split.getRightPanel().add(inject(proto().info().areaUnits()), 8);
 
