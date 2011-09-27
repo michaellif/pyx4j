@@ -50,7 +50,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
 
     @Override
     public long getMaxSize() {
-        return 5 * 1024 * 1024;
+        return 10 * 1024 * 1024;
     }
 
     @Override
