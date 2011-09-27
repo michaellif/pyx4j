@@ -29,6 +29,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ListBox;
@@ -53,6 +54,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CDoubleLabel;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
@@ -654,15 +656,25 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
                         VistaDecoratorsSplitFlowPanel split;
 
+                        main.add(split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 8, 20));
+                        split.getLeftPanel().add(inject(proto().item().type().name(), new CLabel()), 10);
+                        split.getRightPanel().add(inject(proto().price(), new CLabel()), 6);
+
                         if (parent.isEditable()) {
-                            main.add(inject(proto().item(), new CEntityLabel()), 20);
-                            main.add(split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 26, 10));
-                            split.getLeftPanel().add(inject(proto().price(), new CLabel()), 6);
-                            split.getRightPanel().add(new Button("Recalculate...", new ClickHandler() {
+                            Widget w;
+                            final CDoubleLabel adjustedPriceLabel;
+                            HorizontalPanel adjustedPricePanel = new HorizontalPanel();
+                            adjustedPricePanel.add(w = new HTML("<b>" + CrmEntityFolder.i18n.tr("Adjusted Price:") + "&nbsp;&nbsp; </b>"));
+                            ((HTML) w).setWordWrap(false);
+                            adjustedPricePanel.setCellWidth(w, "25%");
+                            adjustedPricePanel.setCellHorizontalAlignment(w, HasHorizontalAlignment.ALIGN_RIGHT);
+                            adjustedPricePanel.add(adjustedPriceLabel = new CDoubleLabel());
+                            adjustedPricePanel.setCellWidth(adjustedPriceLabel, "15%");
+                            adjustedPricePanel.add(new Button("Recalculate...", new ClickHandler() {
                                 @Override
                                 public void onClick(ClickEvent event) {
-
                                     Double adjustedPrice = getValue().item().price().getValue();
+
                                     for (ChargeItemAdjustment adjustment : getValue().adjustments()) {
                                         Double calc_ed = calculateAdjustments(adjustedPrice, adjustment);
                                         if (calc_ed != Double.NaN) {
@@ -671,14 +683,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                     }
 
                                     // update UI/Value:
-                                    get(chargeItemEditor.proto().price()).populate(adjustedPrice);
-                                    getValue().price().setValue(adjustedPrice);
+                                    adjustedPriceLabel.setValue(adjustedPrice);
                                 }
                             }));
-                        } else {
-                            main.add(split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 30, 16));
-                            split.getLeftPanel().add(inject(proto().item(), new CEntityLabel()), 20);
-                            split.getRightPanel().add(inject(proto().price(), new CLabel()), 6);
+                            adjustedPriceLabel.setValue(0.0);
+                            adjustedPricePanel.setWidth("100%");
+                            main.add(adjustedPricePanel);
                         }
 
                         main.add(new CrmSectionSeparator(CrmEntityFolder.i18n.tr("Adjustments:")));

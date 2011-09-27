@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
@@ -25,6 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface ChargeItem extends IEntity {
 
     @ToString(index = 0)
+    @Caption(name = "Service Item")
     ServiceItem item();
 
     // base price: originally - from item, then adjusted by adjustment list!

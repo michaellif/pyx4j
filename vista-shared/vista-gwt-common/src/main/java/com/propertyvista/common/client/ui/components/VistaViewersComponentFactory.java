@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CNumberLabel;
+import com.pyx4j.forms.client.ui.CDoubleLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 
 import com.propertyvista.domain.GeoLocation;
@@ -48,7 +48,7 @@ public class VistaViewersComponentFactory extends EntityFormComponentFactory {
             } else if (mm.getValueClass().isEnum()) {
                 return new CEnumLabel();
             } else if (mm.isNumberValueClass()) {
-                CNumberLabel comp = new CNumberLabel();
+                CDoubleLabel comp = new CDoubleLabel();
                 if (mm.getFormat() != null) {
                     (comp).setNumberFormat(mm.getFormat());
                 }
