@@ -698,6 +698,20 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         });
                     }
 
+                    private void calculateAdjustments() {
+                        Double adjustedPrice = getValue().price().getValue();
+
+                        for (ChargeItemAdjustment adjustment : getValue().adjustments()) {
+                            Double calc_ed = calculateAdjustments(adjustedPrice, adjustment);
+                            if (!calc_ed.isNaN()) {
+                                adjustedPrice = calc_ed;
+                            }
+                        }
+
+                        // update UI/Value:
+                        adjustedPriceValue.setValue(adjustedPrice);
+                    }
+
                     private Double calculateAdjustments(Double startPrice, ChargeItemAdjustment adjustment) {
                         // preconditions:
                         if (adjustment.isNull() || adjustment.type().isNull() || adjustment.termType().isNull()) {
@@ -743,19 +757,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         return adjustedPrice;
                     }
 
-                    private void calculateAdjustments() {
-                        Double adjustedPrice = getValue().price().getValue();
-
-                        for (ChargeItemAdjustment adjustment : getValue().adjustments()) {
-                            Double calc_ed = calculateAdjustments(adjustedPrice, adjustment);
-                            if (!calc_ed.equals(Double.NaN)) {
-                                adjustedPrice = calc_ed;
-                            }
-                        }
-
-                        // update UI/Value:
-                        adjustedPriceValue.setValue(adjustedPrice);
-                    }
                 };
             }
 
