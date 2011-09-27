@@ -84,7 +84,7 @@ public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
 
             @Override
             public IFolderItemEditorDecorator<Media> createFolderItemDecorator() {
-                return new CrmBoxFolderItemDecorator<Media>(parent, !isFirst() && parent.isEditable());
+                return new CrmBoxFolderItemDecorator<Media>(parent, parent.isEditable());
             }
 
             @Override
