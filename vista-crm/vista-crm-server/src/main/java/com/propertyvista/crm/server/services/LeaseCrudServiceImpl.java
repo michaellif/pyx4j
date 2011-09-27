@@ -33,9 +33,11 @@ import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
+import com.propertyvista.crm.server.util.PriceCalculationHaelpers;
 import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.Vehicle;
+import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -148,6 +150,11 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 //        building.serviceCatalog().concessions().addAll(concessions);
 
         return building;
+    }
+
+    @Override
+    public void calculateChargeItemAdjustments(AsyncCallback<Double> callback, ChargeItem item) {
+        callback.onSuccess(PriceCalculationHaelpers.calculateChargeItemAdjustments(item));
     }
 
     @Override

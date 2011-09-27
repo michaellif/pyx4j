@@ -33,6 +33,7 @@ import com.propertyvista.crm.rpc.services.LeaseCrudService;
 import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
 import com.propertyvista.crm.rpc.services.SelectTenantCrudService;
 import com.propertyvista.crm.rpc.services.SelectUnitCrudService;
+import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ServiceConcession;
@@ -176,6 +177,11 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             unitsLister.setParentFiltering(selected.getPrimaryKey());
         }
         unitsLister.populate(0);
+    }
+
+    @Override
+    public void calculateChargeItemAdjustments(AsyncCallback<Double> callback, ChargeItem item) {
+        ((LeaseCrudService) service).calculateChargeItemAdjustments(callback, item);
     }
 
     private void fillserviceItems(LeaseDTO currentValue) {

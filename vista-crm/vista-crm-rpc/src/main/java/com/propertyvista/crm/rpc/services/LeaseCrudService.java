@@ -19,6 +19,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
+import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -27,6 +28,8 @@ public interface LeaseCrudService extends AbstractCrudService<LeaseDTO> {
     void syncBuildingServiceCatalog(AsyncCallback<Building> callback, Key entityId);
 
     void removeTenat(AsyncCallback<Boolean> callback, Key entityId);
+
+    void calculateChargeItemAdjustments(AsyncCallback<Double> callback, ChargeItem item);
 
     void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId);
 }

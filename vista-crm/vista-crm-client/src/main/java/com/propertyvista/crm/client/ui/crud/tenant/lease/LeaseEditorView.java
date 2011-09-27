@@ -13,9 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.site.client.ui.crud.IEditorView;
 import com.pyx4j.site.client.ui.crud.IListerView;
 
+import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -40,6 +43,8 @@ public interface LeaseEditorView extends IEditorView<LeaseDTO> {
         void setSelectedService(ServiceItem serviceItem);
 
         void removeTenat(TenantInLease tenant);
+
+        void calculateChargeItemAdjustments(AsyncCallback<Double> callback, ChargeItem item);
     }
 
     IListerView<Building> getBuildingListerView();
@@ -47,5 +52,4 @@ public interface LeaseEditorView extends IEditorView<LeaseDTO> {
     IListerView<AptUnit> getUnitListerView();
 
     IListerView<Tenant> getTenantListerView();
-
 }

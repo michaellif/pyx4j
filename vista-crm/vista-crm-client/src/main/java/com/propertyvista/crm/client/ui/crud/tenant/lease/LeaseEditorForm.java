@@ -699,64 +699,22 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
 
                     private void calculateAdjustments() {
-                        Double adjustedPrice = getValue().price().getValue();
+                        if (parent.isEditable()) {
+                            ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).calculateChargeItemAdjustments(
+                                    new AsyncCallback<Double>() {
 
-                        for (ChargeItemAdjustment adjustment : getValue().adjustments()) {
-                            Double calc_ed = calculateAdjustments(adjustedPrice, adjustment);
-                            if (!calc_ed.isNaN()) {
-                                adjustedPrice = calc_ed;
-                            }
+                                        @Override
+                                        public void onSuccess(Double result) {
+                                            adjustedPriceValue.setValue(result);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Throwable caught) {
+                                            // TODO Auto-generated method stub
+                                        }
+                                    }, getValue());
                         }
-
-                        // update UI/Value:
-                        adjustedPriceValue.setValue(adjustedPrice);
                     }
-
-                    private Double calculateAdjustments(Double startPrice, ChargeItemAdjustment adjustment) {
-                        // preconditions:
-                        if (adjustment.isNull() || adjustment.type().isNull() || adjustment.termType().isNull()) {
-                            return Double.NaN; // not fully filled adjustment!.. 
-                        }
-
-                        // Calculate adjustments:
-                        Double adjustedPrice = startPrice;
-                        if (adjustment.termType().getValue().equals(ChargeItemAdjustment.TermType.term)) {
-                            if (adjustment.type().getValue().equals(ChargeItemAdjustment.Type.free)) {
-                                adjustedPrice = 0.0;
-                            } else {
-                                if (adjustment.value().isNull()) {
-                                    return Double.NaN; // value is necessary on this stage!..
-                                }
-
-                                switch (adjustment.type().getValue()) {
-                                case monetary:
-                                    switch (adjustment.chargeType().getValue()) {
-                                    case discount:
-                                        adjustedPrice -= adjustment.value().getValue();
-                                        break;
-                                    case priceRaise:
-                                        adjustedPrice += adjustment.value().getValue();
-                                        break;
-                                    }
-                                    break;
-
-                                case percentage:
-                                    switch (adjustment.chargeType().getValue()) {
-                                    case discount:
-                                        adjustedPrice *= 1 - adjustment.value().getValue() / 100;
-                                        break;
-                                    case priceRaise:
-                                        adjustedPrice *= 1 + adjustment.value().getValue() / 100;
-                                        break;
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-
-                        return adjustedPrice;
-                    }
-
                 };
             }
 
