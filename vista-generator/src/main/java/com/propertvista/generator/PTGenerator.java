@@ -61,6 +61,7 @@ import com.propertyvista.domain.tenant.Tenant.Type;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
+import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeSource;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
@@ -171,6 +172,26 @@ public class PTGenerator {
         employer.ends().setValue(new LogicalDate(DateUtils.createDate(endYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)).getTime()));
 
         return employer;
+    }
+
+    private IncomeInfoSelfEmployed createSelfEmployed() {
+        IncomeInfoSelfEmployed selfEmpl = EntityFactory.create(IncomeInfoSelfEmployed.class);
+
+        populateAddress(selfEmpl);
+
+        selfEmpl.name().setValue(RandomUtil.random(DemoData.EMPLOYER_NAMES));
+        selfEmpl.supervisorName().setValue("Mr. " + RandomUtil.random(DemoData.LAST_NAMES));
+        selfEmpl.supervisorPhone().setValue(RandomUtil.randomPhone());
+        selfEmpl.monthlyAmount().set(DomainUtil.createMoney(1000d + RandomUtil.randomInt(4000)));
+        selfEmpl.position().setValue(RandomUtil.random(DemoData.OCCUPATIONS));
+
+        int startYear = 1990 + RandomUtil.randomInt(20);
+        int endYear = startYear + 1 + RandomUtil.randomInt(8);
+
+        selfEmpl.starts().setValue(new LogicalDate(DateUtils.createDate(startYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)).getTime()));
+        selfEmpl.ends().setValue(new LogicalDate(DateUtils.createDate(endYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)).getTime()));
+
+        return selfEmpl;
     }
 
     public ApplicationDocument createApplicationDocument(TenantInLease tenantInfo, String fileName, ApplicationDocument.DocumentType documentType) {
@@ -490,6 +511,15 @@ public class PTGenerator {
         if (tenantScreening.incomes().size() == 0) {
             minAssets = 1;
         }
+
+        IncomeInfoEmployer income1 = EntityFactory.create(IncomeInfoEmployer.class);
+        income1.set(createEmployer());
+        tenantScreening.incomes2().add(income1);
+
+        IncomeInfoSelfEmployed income2 = EntityFactory.create(IncomeInfoSelfEmployed.class);
+        income2.set(createSelfEmployed());
+        tenantScreening.incomes2().add(income2);
+
         for (int i = 0; i < minAssets + RandomUtil.randomInt(3); i++) {
             PersonalAsset asset = EntityFactory.create(PersonalAsset.class);
 

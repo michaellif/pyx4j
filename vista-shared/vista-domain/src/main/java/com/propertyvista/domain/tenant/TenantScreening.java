@@ -32,6 +32,7 @@ import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
@@ -70,6 +71,10 @@ public interface TenantScreening extends IEntity {
     @Detached
     @Length(3)
     IList<PersonalIncome> incomes();
+
+    @Owned
+    @Length(3)
+    IList<IIncomeInfo> incomes2();
 
     @Owned
     @Detached
