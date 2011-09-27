@@ -78,7 +78,6 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
                 }
             });
         } else {
-
             getService().retrieveMetadata(new AsyncCallback<DashboardMetadata>() {
                 @Override
                 public void onSuccess(DashboardMetadata result) {

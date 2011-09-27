@@ -36,7 +36,7 @@ public interface ChargeItemAdjustment extends IEntity {
 
     @Translatable
     enum ChargeType {
-        discount, priceChange;
+        discount, priceRaise;
 
         @Override
         public String toString() {

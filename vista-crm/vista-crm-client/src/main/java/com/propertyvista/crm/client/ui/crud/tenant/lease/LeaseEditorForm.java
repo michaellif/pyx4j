@@ -54,10 +54,10 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
+import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.IFormView;
@@ -686,6 +686,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                     adjustedPriceLabel.setValue(adjustedPrice);
                                 }
                             }));
+                            adjustedPriceLabel.setNumberFormat("#0.00");
                             adjustedPriceLabel.setValue(0.0);
                             adjustedPricePanel.setWidth("100%");
                             main.add(adjustedPricePanel);
@@ -712,22 +713,27 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                     return Double.NaN; // value is necessary on this stage!..
                                 }
 
-                                switch (adjustment.chargeType().getValue()) {
-                                case priceChange:
-                                    adjustedPrice = adjustment.value().getValue();
-                                    break;
-
-                                case discount:
-                                    switch (adjustment.type().getValue()) {
-                                    case monetary:
+                                switch (adjustment.type().getValue()) {
+                                case monetary:
+                                    switch (adjustment.chargeType().getValue()) {
+                                    case discount:
                                         adjustedPrice -= adjustment.value().getValue();
                                         break;
-
-                                    case percentage:
-                                        adjustedPrice *= 1 - adjustment.value().getValue() / 100;
+                                    case priceRaise:
+                                        adjustedPrice += adjustment.value().getValue();
                                         break;
                                     }
+                                    break;
 
+                                case percentage:
+                                    switch (adjustment.chargeType().getValue()) {
+                                    case discount:
+                                        adjustedPrice *= 1 - adjustment.value().getValue() / 100;
+                                        break;
+                                    case priceRaise:
+                                        adjustedPrice *= 1 + adjustment.value().getValue() / 100;
+                                        break;
+                                    }
                                     break;
                                 }
                             }
