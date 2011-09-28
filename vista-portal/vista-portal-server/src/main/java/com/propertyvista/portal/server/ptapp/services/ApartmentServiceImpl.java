@@ -39,6 +39,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 
 public class ApartmentServiceImpl implements ApartmentService {
 
@@ -156,21 +157,22 @@ public class ApartmentServiceImpl implements ApartmentService {
         // fill agreed items:
         for (ChargeItem item : lease.serviceAgreement().featureItems()) {
             if (item.item().type().type().getValue().equals(ServiceItemType.Type.feature)) {
+                PriceCalculationHelpers.calculateChargeItemAdjustments(item);
                 switch (item.item().type().featureType().getValue()) {
                 case utility:
-                    entity.agreedUtilities().add(item.item());
+                    entity.agreedUtilities().add(item);
                     break;
                 case pet:
-                    entity.agreedPets().add(item.item());
+                    entity.agreedPets().add(item);
                     break;
                 case parking:
-                    entity.agreedParking().add(item.item());
+                    entity.agreedParking().add(item);
                     break;
                 case locker:
-                    entity.agreedStorage().add(item.item());
+                    entity.agreedStorage().add(item);
                     break;
                 default:
-                    entity.agreedOther().add(item.item());
+                    entity.agreedOther().add(item);
                 }
             }
         }

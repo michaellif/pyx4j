@@ -11,12 +11,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.server.util;
+package com.propertyvista.server.common.charges;
 
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.ChargeItemAdjustment;
 
-public class PriceCalculationHaelpers {
+public class PriceCalculationHelpers {
 
     public static Double calculateChargeItemAdjustments(ChargeItem item) {
         Double adjustedPrice = item.price().getValue();
@@ -28,7 +28,8 @@ public class PriceCalculationHaelpers {
             }
         }
 
-        // update UI/Value:
+        // update Value:
+        item.adjustedPrice().setValue(adjustedPrice);
         return adjustedPrice;
     }
 

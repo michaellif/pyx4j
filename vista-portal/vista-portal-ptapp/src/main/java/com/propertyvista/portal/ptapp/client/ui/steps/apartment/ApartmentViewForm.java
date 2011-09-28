@@ -39,8 +39,10 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
@@ -49,6 +51,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
+import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
@@ -204,22 +207,22 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
         };
     }
 
-    private CEntityFolderEditor<ServiceItem> createFeaturesFolderEditor(final Feature.Type type, boolean editable) {
-        return new PtAppEntityFolder<ServiceItem>(ServiceItem.class, editable) {
-            private final PtAppEntityFolder<ServiceItem> parent = this;
+    private CEntityFolderEditor<ChargeItem> createFeaturesFolderEditor(final Feature.Type type, boolean editable) {
+        return new PtAppEntityFolder<ChargeItem>(ChargeItem.class, editable) {
+            private final PtAppEntityFolder<ChargeItem> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().price(), "7em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().description(), "30em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().item().type(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().adjustedPrice(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().item().description(), "30em"));
                 return columns;
             }
 
             @Override
-            protected IFolderEditorDecorator<ServiceItem> createFolderDecorator() {
-                PtAppTableFolderDecorator<ServiceItem> decor = new PtAppTableFolderDecorator<ServiceItem>(columns(), parent);
+            protected IFolderEditorDecorator<ChargeItem> createFolderDecorator() {
+                PtAppTableFolderDecorator<ChargeItem> decor = new PtAppTableFolderDecorator<ChargeItem>(columns(), parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
@@ -229,7 +232,11 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
                             protected void onClose(SelectFeatureBox box) {
                                 if (box.getSelectedItems() != null) {
                                     for (ServiceItem item : box.getSelectedItems()) {
-                                        addItem(item);
+                                        ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                                        newItem.item().set(item);
+                                        newItem.price().setValue(item.price().getValue());
+                                        newItem.adjustedPrice().setValue(item.price().getValue());
+                                        addItem(newItem);
                                     }
                                 }
                             }
@@ -237,6 +244,25 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
                     }
                 });
                 return decor;
+            }
+
+            protected void unconditionalRemoveItem(CEntityFolderItemEditor<ChargeItem> item, IFolderItemEditorDecorator<ChargeItem> folderItemDecorator) {
+                super.removeItem(item, folderItemDecorator);
+            }
+
+            @Override
+            protected void removeItem(final CEntityFolderItemEditor<ChargeItem> item, final IFolderItemEditorDecorator<ChargeItem> folderItemDecorator) {
+                if (!item.getValue().adjustments().isEmpty()) {
+                    MessageDialog.confirm(i18n.tr("Warning!"),
+                            i18n.tr("Removing this item you will lost price adjustment agreed in the office! Are you sure to remove it?"), new Runnable() {
+                                @Override
+                                public void run() {
+                                    unconditionalRemoveItem(item, folderItemDecorator);
+                                }
+                            });
+                } else {
+                    super.removeItem(item, folderItemDecorator);
+                }
             }
         };
     }
@@ -352,7 +378,7 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
             return selectedItems;
         }
 
-        private List<ServiceItem> getAgreedList() {
+        private List<ChargeItem> getAgreedList() {
             switch (type) {
             case utility:
                 return getValue().agreedUtilities();
