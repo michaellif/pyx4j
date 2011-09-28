@@ -23,7 +23,9 @@ package com.pyx4j.entity.rdb.mapping;
 import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -151,8 +153,27 @@ public class QueryBuilder<T extends IEntity> {
                             sql.append(" != ? ");
                             break;
                         case IN:
-                            sql.append(" IN ? ");
-                            break;
+                            sql.append(" IN (");
+                            Collection<?> items;
+                            if (bindValue.getClass().isArray()) {
+                                items = Arrays.asList((Object[]) bindValue);
+                            } else if (bindValue instanceof Collection) {
+                                items = (Collection<?>) bindValue;
+                            } else {
+                                throw new RuntimeException("Unsupported Type for IN " + bindValue.getClass().getName());
+                            }
+                            boolean first = true;
+                            for (Object i : items) {
+                                if (first) {
+                                    first = false;
+                                } else {
+                                    sql.append(",");
+                                }
+                                sql.append(" ? ");
+                                bindParams.add(i);
+                            }
+                            sql.append(")");
+                            continue;
                         case RDB_LIKE:
                             if (bindValue != null) {
                                 if (hasLikeValue(bindValue.toString())) {
