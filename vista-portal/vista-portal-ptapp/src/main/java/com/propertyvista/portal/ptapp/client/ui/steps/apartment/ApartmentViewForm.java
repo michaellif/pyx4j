@@ -111,14 +111,14 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
         consessionPanel.add(new VistaHeaderBar(i18n.tr(i18n.tr("Promotions, Discounts and Concessions"))));
         consessionPanel.add(inject(proto().concessions(), createConcessionsFolderEditor()));
 
-        main.add(new VistaHeaderBar(i18n.tr("Included:")));
+        main.add(new VistaHeaderBar(i18n.tr("Included")));
         main.add(inject(proto().includedUtilities(), createUtilitiesFolderEditor()));
 
-        main.add(new VistaHeaderBar(i18n.tr("Excluded:")));
+        main.add(new VistaHeaderBar(i18n.tr("Excluded")));
         main.add(inject(proto().externalUtilities(), createUtilitiesFolderEditor()));
 
         main.add(chargedPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
-        chargedPanel.add(new VistaHeaderBar(i18n.tr("Charged Utilities:")));
+        chargedPanel.add(new VistaHeaderBar(i18n.tr("Charged Utilities")));
         chargedPanel.add(inject(proto().agreedUtilities(), createFeaturesFolderEditor(Feature.Type.utility, false)));
 
         main.add(new VistaHeaderBar(i18n.tr("Add-ons")));

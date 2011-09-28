@@ -239,9 +239,9 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().financial().lastAppraisalValue()), 10);
         split.getRightPanel().add(inject(proto().financial().currency().name()), split.getRightPanel().getDefaultLabelWidth(), 10, i18n.tr("Currency Name"));
 
-        main.add(new CrmSectionSeparator(i18n.tr("Included Utilities:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Included Utilities/Add-ons:")));
         main.add(inject(proto().serviceCatalog().includedUtilities(), createUtilitiesListEditor()));
-        main.add(new CrmSectionSeparator(i18n.tr("Excluded Utilities:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Excluded Utilities/Add-ons:")));
         main.add(inject(proto().serviceCatalog().externalUtilities(), createUtilitiesListEditor()));
 
         return new CrmScrollPanel(main);
@@ -274,7 +274,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 //
 // List Viewers:
     private CEntityFolderEditor<BuildingAmenity> createAmenitiesListEditor() {
-        return new CrmEntityFolder<BuildingAmenity>(BuildingAmenity.class, i18n.tr("Amenity"), isEditable()) {
+        return new CrmEntityFolder<BuildingAmenity>(BuildingAmenity.class, isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
@@ -287,7 +287,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private CEntityFolderEditor<ServiceItemType> createUtilitiesListEditor() {
-        return new CrmEntityFolder<ServiceItemType>(ServiceItemType.class, i18n.tr("Utility"), isEditable()) {
+        return new CrmEntityFolder<ServiceItemType>(ServiceItemType.class, isEditable()) {
             private final CrmEntityFolder<ServiceItemType> parent = this;
 
             @Override
@@ -341,7 +341,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private CEntityFolderEditor<OrganisationContact> createContactsListEditor() {
-        return new CrmEntityFolder<OrganisationContact>(OrganisationContact.class, i18n.tr("Contact"), isEditable()) {
+        return new CrmEntityFolder<OrganisationContact>(OrganisationContact.class, isEditable()) {
             private final CrmEntityFolder<OrganisationContact> parent = this;
 
             @Override
@@ -429,7 +429,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                 list.setWidth("100%");
                 return list.asWidget();
             } else {
-                return new HTML(i18n.tr("There are no concessions!.."));
+                return new HTML(i18n.tr("There are no items available!.."));
             }
         }
 
