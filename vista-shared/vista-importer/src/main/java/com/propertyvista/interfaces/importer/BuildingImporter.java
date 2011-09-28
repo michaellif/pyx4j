@@ -153,7 +153,7 @@ public class BuildingImporter {
                     building.media().add(new MediaConverter(imagesBaseFolder, ignoreMissingMedia, ImageTarget.Building).createDBO(iIO));
                 } catch (Throwable e) {
                     log.error("Building '" + buildingIO.propertyCode().getValue() + "' media error", e);
-                    throw new UserRuntimeException(i18n.tr("Building ''{}'' media error {}", buildingIO.propertyCode().getValue(), e.getMessage()));
+                    throw new UserRuntimeException(i18n.tr("Building ''{0}'' media error {1}", buildingIO.propertyCode().getValue(), e.getMessage()));
                 }
             }
             Persistence.service().persist(building.media());
@@ -202,7 +202,7 @@ public class BuildingImporter {
                         } catch (Throwable e) {
                             log.error("Building '" + buildingIO.propertyCode().getValue() + "' floorplan '" + floorplanIO.name().getValue() + "' media error",
                                     e);
-                            throw new UserRuntimeException(i18n.tr("Building ''{}'' floorplan ''{}'' media error {}", buildingIO.propertyCode().getValue(),
+                            throw new UserRuntimeException(i18n.tr("Building ''{0}'' floorplan ''{1}'' media error {2}", buildingIO.propertyCode().getValue(),
                                     floorplanIO.name().getValue(), e.getMessage()));
                         }
                     }
