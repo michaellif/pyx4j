@@ -31,7 +31,7 @@ import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Base2Entity;
-import com.pyx4j.entity.test.shared.domain.inherit.ConcreteEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 
 public class EntityReflectionTest extends InitializerTestCase {
 
@@ -72,12 +72,12 @@ public class EntityReflectionTest extends InitializerTestCase {
 
         assertTrue("Base2Entity instanceOf Base1Entity", base2Entity.isInstanceOf(Base1Entity.class));
         assertFalse("Base2Entity isAssignableFrom Base1Entity", base2Entity.isAssignableFrom(Base1Entity.class));
-        assertFalse("Base2Entity instanceOf ConcreteEntity", base2Entity.isInstanceOf(ConcreteEntity.class));
-        assertTrue("Base2Entity isAssignableFrom ConcreteEntity", base2Entity.isAssignableFrom(ConcreteEntity.class));
+        assertFalse("Base2Entity instanceOf ConcreteEntity", base2Entity.isInstanceOf(Concrete2Entity.class));
+        assertTrue("Base2Entity isAssignableFrom ConcreteEntity", base2Entity.isAssignableFrom(Concrete2Entity.class));
 
-        ConcreteEntity concreteEntity = EntityFactory.create(ConcreteEntity.class);
-        assertTrue("ConcreteEntity instanceOf ConcreteEntity", concreteEntity.isInstanceOf(ConcreteEntity.class));
-        assertTrue("ConcreteEntity isAssignableFrom ConcreteEntity", concreteEntity.isAssignableFrom(ConcreteEntity.class));
+        Concrete2Entity concreteEntity = EntityFactory.create(Concrete2Entity.class);
+        assertTrue("ConcreteEntity instanceOf ConcreteEntity", concreteEntity.isInstanceOf(Concrete2Entity.class));
+        assertTrue("ConcreteEntity isAssignableFrom ConcreteEntity", concreteEntity.isAssignableFrom(Concrete2Entity.class));
 
         assertTrue("ConcreteEntity instanceOf Base1Entity", concreteEntity.isInstanceOf(Base1Entity.class));
         assertFalse("ConcreteEntity isAssignableFrom Base1Entity", concreteEntity.isAssignableFrom(Base1Entity.class));

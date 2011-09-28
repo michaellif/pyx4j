@@ -42,7 +42,7 @@ import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
-import com.pyx4j.entity.test.shared.domain.inherit.ConcreteEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
 
 public class XMLEntityConverterTest extends TestCase {
@@ -116,7 +116,7 @@ public class XMLEntityConverterTest extends TestCase {
     }
 
     public void testAbstractMember() throws Exception {
-        ConcreteEntity ent1 = EntityFactory.create(ConcreteEntity.class);
+        Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
         ent1.setPrimaryKey(new Key(1));
         ent1.name1().setValue("1");
         ent1.name().setValue("1.00");
@@ -129,7 +129,7 @@ public class XMLEntityConverterTest extends TestCase {
 
         String xml = getXML(ent1);
         System.out.println(xml);
-        ConcreteEntity ent2 = (ConcreteEntity) XMLEntityConverter.parse(getDom(xml).getDocumentElement());
+        Concrete2Entity ent2 = (Concrete2Entity) XMLEntityConverter.parse(getDom(xml).getDocumentElement());
 
         assertTrue("item1 Not Same data\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2));
     }
@@ -138,7 +138,7 @@ public class XMLEntityConverterTest extends TestCase {
         RefferenceEntity rootEntity = EntityFactory.create(RefferenceEntity.class);
         rootEntity.setPrimaryKey(new Key(7));
 
-        ConcreteEntity ent1 = EntityFactory.create(ConcreteEntity.class);
+        Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
         ent1.setPrimaryKey(new Key(1));
         ent1.name1().setValue("1");
         ent1.name().setValue("1.00");
@@ -165,7 +165,7 @@ public class XMLEntityConverterTest extends TestCase {
             item2 = t;
         }
 
-        assertTrue("item1 data type " + item1.getClass(), item1 instanceof ConcreteEntity);
+        assertTrue("item1 data type " + item1.getClass(), item1 instanceof Concrete2Entity);
         assertTrue("item2 data type " + item2.getClass(), item2 instanceof Concrete1Entity);
 
         assertEquals("item1 value", ent1, item1);

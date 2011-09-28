@@ -39,7 +39,7 @@ import com.pyx4j.entity.test.shared.domain.inherit.AddressExt;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Base2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
-import com.pyx4j.entity.test.shared.domain.inherit.ConcreteEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 
 public class EntityMetaTest extends InitializerTestCase {
 
@@ -95,8 +95,8 @@ public class EntityMetaTest extends InitializerTestCase {
         //            fail("Should not create AbstractEntity");
         //        }
 
-        base = EntityFactory.create(ConcreteEntity.class);
-        assertTrue("Right class", base instanceof ConcreteEntity);
+        base = EntityFactory.create(Concrete2Entity.class);
+        assertTrue("Right class", base instanceof Concrete2Entity);
         assertTrue("Has member name1", base.getEntityMeta().getMemberNames().contains("name1"));
         assertTrue("Has member name2", base.getEntityMeta().getMemberNames().contains("name2"));
         assertTrue("Has member name", base.getEntityMeta().getMemberNames().contains("name"));
@@ -104,15 +104,15 @@ public class EntityMetaTest extends InitializerTestCase {
 
     public void testAbstractMember() {
 
-        ConcreteEntity ent1 = EntityFactory.create(ConcreteEntity.class);
+        Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
         ent1.name1().setValue("v-name1");
         ent1.name2().setValue("v-name2");
         ent1.name().setValue("v-name");
 
-        ConcreteEntity ent2 = EntityFactory.create(ConcreteEntity.class);
+        Concrete2Entity ent2 = EntityFactory.create(Concrete2Entity.class);
 
         Base1Entity memberEmpty = ent2.refference();
-        assertFalse("Right class " + memberEmpty.getClass(), memberEmpty instanceof ConcreteEntity);
+        assertFalse("Right class " + memberEmpty.getClass(), memberEmpty instanceof Concrete2Entity);
         assertEquals("No cast required", true, memberEmpty.isObjectClassSameAsDef());
 
         assertTrue("Has member name1", ent2.refference().getEntityMeta().getMemberNames().contains("name1"));
@@ -123,10 +123,10 @@ public class EntityMetaTest extends InitializerTestCase {
 
         Base1Entity member = ent2.refference();
         assertTrue("Right class " + member.getClass(), member instanceof Base1Entity);
-        assertFalse("Right class " + member.getClass(), member instanceof ConcreteEntity);
+        assertFalse("Right class " + member.getClass(), member instanceof Concrete2Entity);
         assertEquals("Cast required", false, member.isObjectClassSameAsDef());
 
-        ConcreteEntity ent1x;
+        Concrete2Entity ent1x;
         // This does not work.
         //ent1x = (ConcreteEntity) ent2.refference();
         ent1x = ent2.refference().cast();
@@ -140,7 +140,7 @@ public class EntityMetaTest extends InitializerTestCase {
     }
 
     public void testDownCast() {
-        ConcreteEntity ent1 = EntityFactory.create(ConcreteEntity.class);
+        Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
         ent1.setPrimaryKey(new Key(10));
         ent1.name().setValue("v-name");
         ent1.name2().setValue("v-name2");
@@ -160,7 +160,7 @@ public class EntityMetaTest extends InitializerTestCase {
     }
 
     public void testAbstractMemberEquals() {
-        ConcreteEntity root = EntityFactory.create(ConcreteEntity.class);
+        Concrete2Entity root = EntityFactory.create(Concrete2Entity.class);
 
         Concrete1Entity ent1 = EntityFactory.create(Concrete1Entity.class);
         ent1.setPrimaryKey(new Key(11));

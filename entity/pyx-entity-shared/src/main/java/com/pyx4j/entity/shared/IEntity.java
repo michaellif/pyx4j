@@ -43,6 +43,8 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public static String DETACHED_ATTR = ATTR_PREFIX + "detached";
 
+    public static final boolean ___TODO_inheritance2__ = false;
+
     public Key getPrimaryKey();
 
     public void setPrimaryKey(Key pk);
@@ -94,12 +96,25 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public boolean containsMemberValue(String memberName);
 
+    /**
+     * For IEntity ObjectClass and ValueClass are the same.
+     * Represents the java interface class that is used to create this entity.
+     * In case of inheritance IEntity may be of different type, see getInstanceValueClass()
+     */
     @Override
     public Class<? extends IEntity> getValueClass();
 
+    /**
+     * For IEntity ObjectClass and ValueClass are the same.
+     * Represents the java interface class that is used to create this entity.
+     * In case of inheritance IEntity may be of different type, see getInstanceValueClass()
+     */
     @Override
     public Class<? extends IEntity> getObjectClass();
 
+    /**
+     * Returns ValueClass or another IEntity class that is inherited from ValueClass if abstract Entity had been set with another value.
+     */
     public Class<? extends IEntity> getInstanceValueClass();
 
     /**

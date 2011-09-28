@@ -85,7 +85,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     private final Mappings mappings;
 
-    public static final boolean trace = false;
+    public static final boolean trace = true;
 
     public EntityPersistenceServiceRDB() {
         this(RDBUtils.getRDBConfiguration());

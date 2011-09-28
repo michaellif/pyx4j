@@ -412,7 +412,11 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     @Override
     public EntityMeta getEntityMeta() {
         // Cache EntityMeta is done in Entity implementations using static member.
-        return EntityFactory.getEntityMeta(getObjectClass());
+        if (isTemplateEntity || (IEntity.___TODO_inheritance2__ == false)) {
+            return EntityFactory.getEntityMeta(getValueClass());
+        } else {
+            return EntityFactory.getEntityMeta(getInstanceValueClass());
+        }
     }
 
     /**

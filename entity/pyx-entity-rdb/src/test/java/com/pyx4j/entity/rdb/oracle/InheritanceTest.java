@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,21 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-01-04
+ * Created on Sep 28, 2011
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain.inherit;
+package com.pyx4j.entity.rdb.oracle;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.rdb.InheritanceTestCase;
+import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
+import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-@AbstractEntity
-@Inheritance
-public interface Base1Entity extends IEntity {
+public class InheritanceTest extends InheritanceTestCase {
 
-    IPrimitive<String> name1();
+    @Override
+    protected PersistenceEnvironment getPersistenceEnvironment() {
+        return PersistenceEnvironmentFactory.getOraclePersistenceEnvironment();
+    }
 
 }

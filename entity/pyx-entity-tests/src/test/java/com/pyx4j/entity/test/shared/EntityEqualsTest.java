@@ -31,7 +31,7 @@ import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
-import com.pyx4j.entity.test.shared.domain.inherit.ConcreteEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
 
 public class EntityEqualsTest extends InitializerTestCase {
@@ -149,13 +149,13 @@ public class EntityEqualsTest extends InitializerTestCase {
 
     public void testIsEmptyAbstractSetMember() {
         RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
-        ConcreteEntity ent1 = EntityFactory.create(ConcreteEntity.class);
+        Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
         ent.refferences().add(ent1);
 
         assertTrue("should be Empty", ent1.isEmpty());
         assertFalse("Collection -> should NOT be Empty", ent.isEmpty());
 
-        ConcreteEntity ent2 = EntityFactory.create(ConcreteEntity.class);
+        Concrete2Entity ent2 = EntityFactory.create(Concrete2Entity.class);
         ent2.setPrimaryKey(new Key(22));
         ent1.refference().set(ent2);
         assertTrue("should be still Empty", ent1.isEmpty());

@@ -27,7 +27,7 @@ import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
-import com.pyx4j.entity.test.shared.domain.inherit.ConcreteEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
 
 public class CollectionsImplementationTest extends InitializerTestCase {
@@ -102,7 +102,7 @@ public class CollectionsImplementationTest extends InitializerTestCase {
     }
 
     public void testAbstractSetMember() {
-        ConcreteEntity ent1 = EntityFactory.create(ConcreteEntity.class);
+        Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
 
         RefferenceEntity ent2 = EntityFactory.create(RefferenceEntity.class);
 
@@ -111,7 +111,7 @@ public class CollectionsImplementationTest extends InitializerTestCase {
         assertEquals("collection size", 1, ent2.refferences().size());
         Base1Entity item = ent2.refferences().iterator().next();
 
-        assertTrue("item data type " + item.getClass(), item instanceof ConcreteEntity);
+        assertTrue("item data type " + item.getClass(), item instanceof Concrete2Entity);
 
         ent2.refferences().remove(ent1);
         assertEquals("empty collection size", 0, ent2.refferences().size());

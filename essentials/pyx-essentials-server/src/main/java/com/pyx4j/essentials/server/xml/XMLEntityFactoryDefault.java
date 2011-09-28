@@ -40,7 +40,7 @@ public class XMLEntityFactoryDefault implements XMLEntityFactory {
     private final Map<String, String> names = new HashMap<String, String>();
 
     public XMLEntityFactoryDefault() {
-        List<String> allClasses = EntityClassFinder.findEntityClasses();
+        List<String> allClasses = EntityClassFinder.getEntityClassesNames();
         log.debug("has {} entity classes", allClasses.size());
         for (String className : allClasses) {
             // strip the package name

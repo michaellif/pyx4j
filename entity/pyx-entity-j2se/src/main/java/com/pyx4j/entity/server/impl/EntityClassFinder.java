@@ -38,12 +38,21 @@ public class EntityClassFinder extends ClassFinder {
 
     public static final String MARKER_RESOURCE_NAME = "META-INF/persistence-domain.marker";
 
+    private static List<String> foundEntityClasses;
+
     protected EntityClassFinder(String urlExternalForm) {
         super(urlExternalForm.substring(0, urlExternalForm.lastIndexOf(MARKER_RESOURCE_NAME)));
         log.debug("domain path {}", getBaseURL());
     }
 
-    public static List<String> findEntityClasses() {
+    public static List<String> getEntityClassesNames() {
+        if (foundEntityClasses == null) {
+            foundEntityClasses = findEntityClassesNames();
+        }
+        return foundEntityClasses;
+    }
+
+    public static List<String> findEntityClassesNames() {
         List<String> classes = new Vector<String>();
         ClassLoader cld = Thread.currentThread().getContextClassLoader();
         Enumeration<URL> urls;

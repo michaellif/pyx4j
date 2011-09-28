@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain.inherit;
 
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
@@ -27,6 +28,9 @@ import com.pyx4j.entity.shared.ISet;
 public interface RefferenceEntity extends IEntity {
 
     IPrimitive<String> name();
+
+    @Owned
+    Base1Entity refference();
 
     ISet<Base1Entity> refferences();
 }

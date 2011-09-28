@@ -23,11 +23,14 @@ package com.pyx4j.entity.server;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.server.impl.EntityClassFinder;
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
 import com.pyx4j.entity.server.impl.EntityMetaImpl;
 import com.pyx4j.entity.server.impl.EntityPojoWrapperGenerator;
@@ -41,7 +44,7 @@ public class ServerEntityFactory implements IEntityFactory {
 
     private static final Logger log = LoggerFactory.getLogger(ServerEntityFactory.class);
 
-    private static final Map<Class<?>, Class<?>> impClasses = new HashMap<Class<?>, Class<?>>();
+    private static final Map<Class<? extends IEntity>, Class<?>> impClasses = new HashMap<Class<? extends IEntity>, Class<?>>();
 
     private static final Map<Class<?>, Class<?>> pojoImpClasses = new HashMap<Class<?>, Class<?>>();
 
@@ -123,6 +126,22 @@ public class ServerEntityFactory implements IEntityFactory {
     @Override
     public EntityMeta createEntityMeta(Class<? extends IEntity> entityClass) {
         return new EntityMetaImpl(entityClass);
+    }
+
+    private static boolean allCalssesFound;
+
+    public static Set<Class<? extends IEntity>> getAllEntityClasses() {
+        if (!allCalssesFound) {
+            List<String> allClasses = EntityClassFinder.getEntityClassesNames();
+            for (String className : allClasses) {
+                Class<? extends IEntity> entityClass = entityClass(className);
+                if (!impClasses.containsKey(entityClass)) {
+                    impClasses.put(entityClass, null);
+                }
+            }
+            allCalssesFound = true;
+        }
+        return impClasses.keySet();
     }
 
     public static <T extends IEntity> Class<IPojo<T>> getPojoClass(Class<T> entityClass) {

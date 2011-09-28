@@ -31,6 +31,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.rdb.dialect.Dialect;
@@ -138,8 +139,15 @@ public class EntityOperationsMeta {
                     } else {
                         sqlName = namingConvention.sqlFieldName(memberPersistenceName);
                     }
-                    MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, new ValueAdapterEntity(dialect), sqlName, memberMeta, path
-                            + Path.PATH_SEPARATOR + memberName + Path.PATH_SEPARATOR);
+                    ValueAdapter valueAdapter;
+                    if (memberMeta.getObjectClass().getAnnotation(Inheritance.class) != null) {
+                        valueAdapter = new ValueAdapterEntityVirtual(dialect, (Class<IEntity>) memberMeta.getObjectClass());
+                    } else {
+                        valueAdapter = new ValueAdapterEntity(dialect);
+                    }
+                    MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR
+                            + memberName + Path.PATH_SEPARATOR);
+
                     columnMembers.add(member);
                     membersByPath.put(member.getMemberPath(), member);
                     allMembers.add(member);

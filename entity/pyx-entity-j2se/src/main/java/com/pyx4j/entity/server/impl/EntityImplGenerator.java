@@ -47,6 +47,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ClassFinder;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
@@ -138,7 +140,7 @@ public class EntityImplGenerator {
         }
 
         long start = System.currentTimeMillis();
-        List<String> classes = EntityClassFinder.findEntityClasses();
+        List<String> classes = EntityClassFinder.getEntityClassesNames();
         if (classes.size() == 0) {
             log.warn("IEntity classes not found");
             return;
@@ -236,7 +238,7 @@ public class EntityImplGenerator {
         }
 
         long start = System.currentTimeMillis();
-        List<String> classes = EntityClassFinder.findEntityClasses();
+        List<String> classes = EntityClassFinder.getEntityClassesNames();
         if (classes.size() == 0) {
             log.warn("IEntity classes not found");
             return;
@@ -383,14 +385,17 @@ public class EntityImplGenerator {
             }
             implClass.addMethod(getMembersMethod);
 
-            //Static for optimization
-            CtField entityMetaField = new CtField(pool.get(EntityMeta.class.getName()), "entityMeta", implClass);
-            entityMetaField.setModifiers(Modifier.PRIVATE | Modifier.STATIC);
-            implClass.addField(entityMetaField);
+            if ((IEntity.___TODO_inheritance2__ == false)
+                    || ((interfaceClass.getAnnotation(Inheritance.class) == null) && (interfaceClass.getAnnotation(AbstractEntity.class) == null))) {
+                //Static for optimization
+                CtField entityMetaField = new CtField(pool.get(EntityMeta.class.getName()), "entityMeta", implClass);
+                entityMetaField.setModifiers(Modifier.PRIVATE | Modifier.STATIC);
+                implClass.addField(entityMetaField);
 
-            CtMethod getEntityMetaMethod = new CtMethod(pool.get(EntityMeta.class.getName()), "getEntityMeta", null, implClass);
-            getEntityMetaMethod.setBody("{ if (entityMeta == null) { entityMeta = super.getEntityMeta(); } return entityMeta; }");
-            implClass.addMethod(getEntityMetaMethod);
+                CtMethod getEntityMetaMethod = new CtMethod(pool.get(EntityMeta.class.getName()), "getEntityMeta", null, implClass);
+                getEntityMetaMethod.setBody("{ if (entityMeta == null) { entityMeta = super.getEntityMeta(); } return entityMeta; }");
+                implClass.addMethod(getEntityMetaMethod);
+            }
 
             return implClass;
         } catch (CannotCompileException e) {
