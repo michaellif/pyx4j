@@ -35,8 +35,16 @@ public abstract class PtAppEntityFolder<E extends IEntity> extends CEntityFolder
 
     private final boolean editable;
 
+    public PtAppEntityFolder(Class<E> clazz) {
+        this(clazz, true);
+    }
+
     public PtAppEntityFolder(Class<E> clazz, String itemName) {
         this(clazz, itemName, true);
+    }
+
+    public PtAppEntityFolder(Class<E> clazz, boolean editable) {
+        this(clazz, null, editable);
     }
 
     public PtAppEntityFolder(Class<E> clazz, String itemName, boolean editable) {
@@ -53,18 +61,18 @@ public abstract class PtAppEntityFolder<E extends IEntity> extends CEntityFolder
         return new CEntityFolderRowEditor<E>(clazz, columns()) {
             @Override
             public IFolderItemEditorDecorator<E> createFolderItemDecorator() {
-                return new PtAppTableFolderItemDecorator<E>(i18n.tr("Remove ") + itemName, editable);
+                return new PtAppTableFolderItemDecorator<E>(i18n.tr("Remove ") + getItemName(), editable);
             }
         };
     }
 
     @Override
     protected IFolderEditorDecorator<E> createFolderDecorator() {
-        return new PtAppTableFolderDecorator<E>(columns(), i18n.tr("Add ") + itemName, editable);
+        return new PtAppTableFolderDecorator<E>(columns(), i18n.tr("Add ") + getItemName(), editable);
     }
 
     public String getItemName() {
-        return itemName;
+        return (itemName != null ? itemName : "");
     }
 
     @Override

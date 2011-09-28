@@ -35,6 +35,18 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
 
     private final boolean editable;
 
+    public CrmEntityFolder(Class<E> clazz) {
+        this(clazz, true);
+    }
+
+    public CrmEntityFolder(Class<E> clazz, String itemName) {
+        this(clazz, itemName, true);
+    }
+
+    public CrmEntityFolder(Class<E> clazz, boolean editable) {
+        this(clazz, null, editable);
+    }
+
     public CrmEntityFolder(Class<E> clazz, String itemName, boolean editable) {
         super(clazz);
         this.clazz = clazz;
@@ -49,18 +61,18 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
         return new CEntityFolderRowEditor<E>(clazz, columns()) {
             @Override
             public IFolderItemEditorDecorator<E> createFolderItemDecorator() {
-                return new CrmTableFolderItemDecorator<E>(i18n.tr("Remove ") + itemName, editable);
+                return new CrmTableFolderItemDecorator<E>(i18n.tr("Remove ") + getItemName(), editable);
             }
         };
     }
 
     @Override
     protected IFolderEditorDecorator<E> createFolderDecorator() {
-        return new CrmTableFolderDecorator<E>(columns(), i18n.tr("Add ") + itemName, editable);
+        return new CrmTableFolderDecorator<E>(columns(), i18n.tr("Add ") + getItemName(), editable);
     }
 
     public String getItemName() {
-        return itemName;
+        return (itemName != null ? itemName : "");
     }
 
     @Override

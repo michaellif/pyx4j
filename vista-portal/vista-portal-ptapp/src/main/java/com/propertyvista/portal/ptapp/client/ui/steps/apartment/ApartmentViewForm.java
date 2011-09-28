@@ -111,18 +111,14 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
         consessionPanel.add(new VistaHeaderBar(i18n.tr(i18n.tr("Promotions, Discounts and Concessions"))));
         consessionPanel.add(inject(proto().concessions(), createConcessionsFolderEditor()));
 
-        main.add(new VistaHeaderBar(i18n.tr("Utilities")));
-        main.add(split = new VistaDecoratorsSplitFlowPanel(true, main.getDefaultLabelWidth(), 15));
+        main.add(new VistaHeaderBar(i18n.tr("Included:")));
+        main.add(inject(proto().includedUtilities(), createUtilitiesFolderEditor()));
 
-        split.getLeftPanel().add(new HTML(HtmlUtils.h5(i18n.tr("Included:"))));
-        split.getLeftPanel().add(inject(proto().includedUtilities(), createUtilitiesFolderEditor()));
-
-        split.getRightPanel().add(new HTML(HtmlUtils.h5(i18n.tr("Excluded:"))));
-        split.getRightPanel().add(inject(proto().externalUtilities(), createUtilitiesFolderEditor()));
+        main.add(new VistaHeaderBar(i18n.tr("Excluded:")));
+        main.add(inject(proto().externalUtilities(), createUtilitiesFolderEditor()));
 
         main.add(chargedPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
-        chargedPanel.add(new VistaLineSeparator(100, Unit.PCT));
-        chargedPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Charged:"))));
+        chargedPanel.add(new VistaHeaderBar(i18n.tr("Charged Utilities:")));
         chargedPanel.add(inject(proto().agreedUtilities(), createFeaturesFolderEditor(Feature.Type.utility, false)));
 
         main.add(new VistaHeaderBar(i18n.tr("Add-ons")));
@@ -171,7 +167,7 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
 // List Viewers:
 
     private CEntityFolderEditor<ServiceItemType> createUtilitiesFolderEditor() {
-        return new PtAppEntityFolder<ServiceItemType>(ServiceItemType.class, i18n.tr("Utility"), false) {
+        return new PtAppEntityFolder<ServiceItemType>(ServiceItemType.class, false) {
             private final PtAppEntityFolder<ServiceItemType> parent = this;
 
             @Override
@@ -209,7 +205,7 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
     }
 
     private CEntityFolderEditor<ServiceItem> createFeaturesFolderEditor(final Feature.Type type, boolean editable) {
-        return new PtAppEntityFolder<ServiceItem>(ServiceItem.class, type.toString(), editable) {
+        return new PtAppEntityFolder<ServiceItem>(ServiceItem.class, editable) {
             private final PtAppEntityFolder<ServiceItem> parent = this;
 
             @Override
@@ -246,7 +242,7 @@ public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
     }
 
     private CEntityFolderEditor<Concession> createConcessionsFolderEditor() {
-        return new PtAppEntityFolder<Concession>(Concession.class, i18n.tr("Concession"), false) {
+        return new PtAppEntityFolder<Concession>(Concession.class, false) {
             private final PtAppEntityFolder<Concession> parent = this;
 
             @Override
