@@ -62,6 +62,14 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(propertyName, Restriction.EQUAL, value);
     }
 
+    public static PropertyCriterion ne(IObject<?> member, Serializable value) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.NOT_EQUAL, value);
+    }
+
+    public static PropertyCriterion in(IObject<?> member, Serializable... value) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.IN, value);
+    }
+
     public String getPropertyName() {
         return this.propertyName;
     }
