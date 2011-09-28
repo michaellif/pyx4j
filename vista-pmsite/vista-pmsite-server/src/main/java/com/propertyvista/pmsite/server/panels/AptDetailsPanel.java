@@ -13,11 +13,11 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -30,6 +30,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 
 public class AptDetailsPanel extends Panel {
     private static final long serialVersionUID = 1L;
@@ -38,15 +39,24 @@ public class AptDetailsPanel extends Panel {
         super(id);
 
         Long propId = model.getObject();
-        Building propInfo = PMSiteContentManager.getBuildingDetails(propId);
-        List<Floorplan> plans = PMSiteContentManager.getBuildingFloorplans(propInfo);
+        final Building propInfo = PMSiteContentManager.getBuildingDetails(propId);
+        final List<Floorplan> plans = PMSiteContentManager.getBuildingFloorplans(propInfo);
+        final HashMap<Floorplan, List<AptUnit>> fpUnits = new HashMap<Floorplan, List<AptUnit>>();
+        for (Floorplan fp : plans) {
+            List<AptUnit> units = PMSiteContentManager.getBuildingAptUnits(propInfo, fp);
+            // do some sanity check so we don't render incomplete floorplans
+            // TODO - may need to move this to PMSiteContentManager
+            if (units.size() > 0) {
+                fpUnits.put(fp, units);
+            }
+        }
         List<BuildingAmenity> amenities = PMSiteContentManager.getBuildingAmenities(propInfo);
 
         long mediaId = 1;
         if (propInfo.media().size() > 0) {
             mediaId = propInfo.media().get(0).getPrimaryKey().asLong();
         }
-        add(new Image("picture", "").add(AttributeModifier.replace("src", PMSiteContentManager.getMediaImgUrl(mediaId, "small"))));
+        add(new SimpleImage("picture", PMSiteContentManager.getMediaImgUrl(mediaId, "small")));
         Address addr = propInfo.info().address();
         String addrFmt = "";
         if (addr != null) {
@@ -56,7 +66,7 @@ public class AptDetailsPanel extends Panel {
         add(new Label("address", addrFmt));
         add(new Label("description", propInfo.marketing().description().getValue()));
 
-        add(new ListView<Floorplan>("types", plans) {
+        add(new ListView<Floorplan>("types", new ArrayList<Floorplan>(fpUnits.keySet())) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -70,12 +80,16 @@ public class AptDetailsPanel extends Panel {
                 }
                 type += floorPlan.bedrooms().getValue() + " Bed, " + floorPlan.bathrooms().getValue() + " Bath";
                 String price = "price not available";
-                /*
-                 * Double numPrice = null;
-                 * if ((numPrice = floorPlan.price().min().getValue()) != null) {
-                 * price = "from $" + String.valueOf(Math.round(numPrice));
-                 * }
-                 */
+                Double minPrice = null;
+                for (AptUnit u : fpUnits.get(floorPlan)) {
+                    Double _prc = u.financial().unitRent().getValue();
+                    if (minPrice == null || minPrice > _prc) {
+                        minPrice = _prc;
+                    }
+                }
+                if (minPrice != null) {
+                    price = "from $" + String.valueOf(Math.round(minPrice));
+                }
                 item.add(new Label("type", type + ", " + price));
             }
         });
@@ -88,14 +102,17 @@ public class AptDetailsPanel extends Panel {
                 item.add(new Label("amenity", item.getModelObject().name().getValue()));
             }
         });
+        for (Media m : propInfo.media()) {
+            System.out.println("==> Bldg media: " + m.getPrimaryKey().asLong());
+        }
         for (Floorplan fp : plans) {
-            System.out.println("===> Floorplan: " + fp.name().getValue());
+            System.out.println("==> Floorplan: " + fp.name().getValue());
             for (Media m : fp.media()) {
-                System.out.println("===> Media found: " + m.getPrimaryKey().asLong());
+                System.out.println("--->   Media found: " + m.getPrimaryKey().asLong());
             }
             List<AptUnit> units = PMSiteContentManager.getBuildingAptUnits(propInfo, fp);
             for (AptUnit u : units) {
-                System.out.println("===> Unit found: " + u.info().number().getValue() + ":" + u.financial().unitRent().getValue());
+                System.out.println("--->   Unit found: " + u.info().number().getValue() + ":" + u.financial().unitRent().getValue());
             }
         }
     }

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters.NamedPair;
@@ -43,7 +43,6 @@ public class AptListPage extends BasePage {
 
     public AptListPage(PageParameters params) {
         super(params);
-        setVersioned(false);
 
         List<NamedPair> namedPairs = params.getAllNamed();
 
@@ -68,7 +67,7 @@ public class AptListPage extends BasePage {
         IPojo<PropertySearchCriteria> pojo = ServerEntityFactory.getPojo(criteria);
         final CompoundPropertyModel<IPojo<PropertySearchCriteria>> model = new CompoundPropertyModel<IPojo<PropertySearchCriteria>>(pojo);
 
-        final Form<IPojo<PropertySearchCriteria>> form = new Form<IPojo<PropertySearchCriteria>>("advancedSearchCriteriaForm", model) {
+        final StatelessForm<IPojo<PropertySearchCriteria>> form = new StatelessForm<IPojo<PropertySearchCriteria>>("advancedSearchCriteriaForm", model) {
             private static final long serialVersionUID = 1L;
 
             @Override
