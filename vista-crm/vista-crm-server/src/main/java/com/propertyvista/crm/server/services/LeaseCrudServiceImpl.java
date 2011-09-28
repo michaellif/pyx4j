@@ -77,6 +77,12 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
             dto.tenants().clear();
             dto.tenants().addAll(Persistence.service().query(criteria));
+
+            // calculate price adjustments:
+            PriceCalculationHelpers.calculateChargeItemAdjustments(dto.serviceAgreement().serviceItem());
+            for (ChargeItem item : dto.serviceAgreement().featureItems()) {
+                PriceCalculationHelpers.calculateChargeItemAdjustments(item);
+            }
         }
     }
 

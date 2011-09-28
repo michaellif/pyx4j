@@ -56,7 +56,6 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
-import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.IFormView;
@@ -618,6 +617,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                             ChargeItem newItem = EntityFactory.create(ChargeItem.class);
                                             newItem.item().set(item);
                                             newItem.price().setValue(item.price().getValue());
+                                            newItem.adjustedPrice().setValue(item.price().getValue());
                                             addItem(newItem);
                                         }
                                     }
@@ -634,9 +634,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 return new CEntityFolderRowEditor<ChargeItem>(ChargeItem.class, columns()) {
                     private final CEntityFolderRowEditor<ChargeItem> chargeItemEditor = this;
 
-                    private final CNumberLabel adjustedPriceValue = new CNumberLabel();
-
-                    private final CrmSectionSeparator adjustmentSeparator = new CrmSectionSeparator(CrmEntityFolder.i18n.tr("Adjustments:"));
+                    private VistaDecoratorsFlowPanel adjustmentPanel;
 
                     private final CrmBoxFolderItemDecorator<ChargeItem> decor = new CrmBoxFolderItemDecorator<ChargeItem>(parent);
 
@@ -645,24 +643,15 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
                         VistaDecoratorsSplitFlowPanel split;
 
-                        main.add(split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 8, 20));
+                        main.add(split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 22));
                         split.getLeftPanel().add(inject(proto().item().type().name(), new CLabel()), 10);
                         split.getRightPanel().add(inject(proto().price(), new CLabel()), 6);
+                        split.getRightPanel().add(inject(proto().adjustedPrice(), new CLabel()), 6);
 
-                        if (parent.isEditable()) {
-                            HTML adjustedPriceLabel = new HTML("<b>" + CrmEntityFolder.i18n.tr("Adjusted Price:") + "&nbsp;&nbsp; </b>");
-                            adjustedPriceLabel.setWordWrap(false);
-                            adjustedPriceValue.setNumberFormat("#0.00");
-                            adjustedPriceValue.setValue(0.0);
-
-                            HorizontalPanel adjustedPricePanel = new HorizontalPanel();
-                            adjustedPricePanel.add(adjustedPriceLabel);
-                            adjustedPricePanel.add(adjustedPriceValue);
-                            split.getRightPanel().add(adjustedPricePanel);
-                        }
-
-                        main.add(adjustmentSeparator);
-                        main.add(inject(proto().adjustments(), createItemAdjustmentListView(chargeItemEditor)));
+                        adjustmentPanel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
+                        adjustmentPanel.add(new CrmSectionSeparator(CrmEntityFolder.i18n.tr("Adjustments:")));
+                        adjustmentPanel.add(inject(proto().adjustments(), createItemAdjustmentListView(chargeItemEditor)));
+                        main.add(adjustmentPanel);
                         return main;
                     }
 
@@ -680,10 +669,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                             decor.setRemovable(false);
                         }
 
-                        if (parent.isEditable()) {
-                            calculateAdjustments();
-                        } else {
-                            adjustmentSeparator.setVisible(!value.adjustments().isEmpty());
+                        if (!parent.isEditable()) {
+                            adjustmentPanel.setVisible(!value.adjustments().isEmpty());
+                            get(proto().adjustedPrice()).setVisible(!value.adjustments().isEmpty());
                         }
                     }
 
@@ -705,7 +693,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                                         @Override
                                         public void onSuccess(Double result) {
-                                            adjustedPriceValue.setValue(result);
+                                            get(proto().adjustedPrice()).setValue(result);
                                         }
 
                                         @Override

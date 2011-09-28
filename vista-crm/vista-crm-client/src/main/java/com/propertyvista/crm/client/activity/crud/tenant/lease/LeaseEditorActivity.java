@@ -88,7 +88,6 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     @Override
     public void onPopulateSuccess(LeaseDTO result) {
-
         buildingsLister.populate(0);
         tenantsLister.populate(0);
 
@@ -218,7 +217,6 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         currentValue.selectedConcesions().clear();
 
         if (selectedService != null) {
-
             ServiceCatalog catalog = currentValue.selectedBuilding().serviceCatalog();
             List<ServiceItemType> utilitiesToExclude = new ArrayList<ServiceItemType>(catalog.includedUtilities().size() + catalog.externalUtilities().size());
             utilitiesToExclude.addAll(catalog.includedUtilities());

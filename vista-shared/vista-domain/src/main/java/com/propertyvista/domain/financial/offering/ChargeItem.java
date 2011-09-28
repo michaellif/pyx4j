@@ -42,7 +42,6 @@ public interface ChargeItem extends IEntity {
      */
     @Transient
     @Format("#0.00")
-    @Caption(name = "Price")
     IPrimitive<Double> adjustedPrice();
 
     @Owned
