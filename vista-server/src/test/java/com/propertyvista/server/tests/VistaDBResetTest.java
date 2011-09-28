@@ -32,7 +32,7 @@ import com.propertyvista.config.tests.VistaDBTestBase;
 public class VistaDBResetTest extends VistaDBTestBase {
 
     public void testObjectsStructure() {
-        List<String> allClasses = EntityClassFinder.findEntityClasses();
+        List<String> allClasses = EntityClassFinder.getEntityClassesNames();
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
 
         Map<String, Class<? extends IEntity>> allTables = new Hashtable<String, Class<? extends IEntity>>();

@@ -56,7 +56,7 @@ public class DBResetServlet extends HttpServlet {
             try {
                 EssentialsServerSideConfiguration conf = (EssentialsServerSideConfiguration) ServerSideConfiguration.instance();
                 EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
-                List<String> allClasses = EntityClassFinder.findEntityClasses();
+                List<String> allClasses = EntityClassFinder.getEntityClassesNames();
                 for (String className : allClasses) {
                     Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
                     EntityMeta meta = EntityFactory.getEntityMeta(entityClass);

@@ -96,7 +96,7 @@ public class DBResetServlet extends HttpServlet {
                     }
 
                     if (EnumSet.of(ResetType.all, ResetType.clear).contains(type)) {
-                        List<String> allClasses = EntityClassFinder.findEntityClasses();
+                        List<String> allClasses = EntityClassFinder.getEntityClassesNames();
                         for (String className : allClasses) {
                             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
                             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);

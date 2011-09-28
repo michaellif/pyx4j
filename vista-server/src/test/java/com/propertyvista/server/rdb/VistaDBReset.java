@@ -44,7 +44,7 @@ public class VistaDBReset {
         ServerSideConfiguration.setInstance(conf);
         NamespaceManager.setNamespace(VistaNamespaceResolver.demoNamespace);
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
-        List<String> allClasses = EntityClassFinder.findEntityClasses();
+        List<String> allClasses = EntityClassFinder.getEntityClassesNames();
         for (String className : allClasses) {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
