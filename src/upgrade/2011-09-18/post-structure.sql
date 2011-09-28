@@ -18,5 +18,7 @@ CREATE INDEX Floorplan$media_ownerIdx ON Floorplan$media (owner);
 
 CREATE INDEX AptUnit$marketing_adBlurbs_ownerIdx ON AptUnit$marketing_adBlurbs (owner);
 
+CREATE INDEX FloorplanAmenity_ownerIdx ON FloorplanAmenity (belongsTo);
+
 COMMIT;
 
