@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.contact;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -25,6 +27,7 @@ import com.pyx4j.i18n.shared.Translatable;
 public interface Email extends IEntity {
 
     @Translatable
+    @XmlType(name = "EmailType")
     public enum Type {
         home, work, other;
 

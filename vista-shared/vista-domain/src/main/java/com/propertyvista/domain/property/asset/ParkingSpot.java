@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -26,6 +28,7 @@ import com.pyx4j.i18n.shared.Translatable;
 public interface ParkingSpot extends IEntity {
 
     @Translatable
+    @XmlType(name = "ParkingSpotType")
     public enum Type {
 
         regular,

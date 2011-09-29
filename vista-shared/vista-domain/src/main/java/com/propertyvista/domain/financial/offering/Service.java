@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -32,6 +34,7 @@ import com.pyx4j.i18n.shared.Translatable;
 public interface Service extends IEntity {
 
     @Translatable
+    @XmlType(name = "ServiceType")
     public enum Type {
 
         residentialUnit,

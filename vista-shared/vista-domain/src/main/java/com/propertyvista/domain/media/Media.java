@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.media;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
@@ -28,6 +30,7 @@ import com.propertyvista.domain.marketing.PublicVisibilityType;
 public interface Media extends IEntity {
 
     @Translatable
+    @XmlType(name = "MediaType")
     public enum Type {
 
         file,

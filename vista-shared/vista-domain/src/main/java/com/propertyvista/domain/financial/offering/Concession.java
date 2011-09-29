@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
@@ -32,6 +34,7 @@ import com.pyx4j.i18n.shared.Translatable;
 public interface Concession extends IEntity {
 
     @Translatable
+    @XmlType(name = "ConcessionType")
     enum Type {
         promotionalItem, percentageOff, monetaryOff, free;
 
@@ -42,6 +45,7 @@ public interface Concession extends IEntity {
     }
 
     @Translatable
+    @XmlType(name = "ConcessionTerm")
     enum Term {
         firstMonth, lastMonth, term;
 
@@ -52,6 +56,7 @@ public interface Concession extends IEntity {
     }
 
     @Translatable
+    @XmlType(name = "ConcessionCondition")
     enum Condition {
         compliance, none;
 
@@ -62,6 +67,7 @@ public interface Concession extends IEntity {
     }
 
     @Translatable
+    @XmlType(name = "ConcessionStatus")
     public enum Status {
 
         draft,

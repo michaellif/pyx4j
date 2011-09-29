@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
@@ -35,6 +37,7 @@ import com.propertyvista.domain.person.Person;
 public interface Tenant extends IEntity {
 
     @Translatable
+    @XmlType(name = "TenantType")
     public enum Type {
 
         person,

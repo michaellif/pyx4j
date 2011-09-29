@@ -15,6 +15,8 @@ package com.propertyvista.domain.tenant;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ToString;
@@ -29,6 +31,7 @@ import com.pyx4j.i18n.shared.Translation;
 public interface TenantIn extends IEntity {
 
     @Translatable
+    @XmlType(name = "TenantStatus")
     public static enum Status implements Serializable {
 
         Applicant,
@@ -45,6 +48,7 @@ public interface TenantIn extends IEntity {
     }
 
     @Translatable
+    @XmlType(name = "TenantRelationship")
     public static enum Relationship implements Serializable {
 
         Spouse,

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
@@ -25,6 +27,7 @@ import com.pyx4j.i18n.shared.Translatable;
 public interface ChargeItemAdjustment extends IEntity {
 
     @Translatable
+    @XmlType(name = "ChargeAdjustmentType")
     enum Type {
         percentage, monetary, free;
 
@@ -35,6 +38,7 @@ public interface ChargeItemAdjustment extends IEntity {
     }
 
     @Translatable
+    @XmlType(name = "ChargeType")
     enum ChargeType {
         discount, priceRaise;
 
@@ -45,6 +49,7 @@ public interface ChargeItemAdjustment extends IEntity {
     }
 
     @Translatable
+    @XmlType(name = "ChargeTermType")
     enum TermType {
         firstMonth, lastMonth, term;
 

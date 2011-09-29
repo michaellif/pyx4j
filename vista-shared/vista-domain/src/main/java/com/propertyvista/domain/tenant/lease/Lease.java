@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
@@ -36,6 +38,7 @@ import com.propertyvista.domain.tenant.TenantInLease;
 public interface Lease extends IEntity {
 
     @Translatable
+    @XmlType(name = "LeaseStatus")
     public enum Status {
 
         Draft,
