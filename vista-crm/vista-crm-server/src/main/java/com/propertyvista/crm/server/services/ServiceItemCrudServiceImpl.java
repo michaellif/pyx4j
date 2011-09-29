@@ -29,6 +29,15 @@ public class ServiceItemCrudServiceImpl extends GenericCrudServiceImpl<ServiceIt
     protected void enhanceRetrieve(ServiceItem entity, boolean fromList) {
         if (!fromList) {
             // Load detached data:
+            if (entity.element().isValuesDetached()) {
+                Persistence.service().retrieve(entity.element());
+            }
+        }
+    }
+
+    @Override
+    protected void enhanceSave(ServiceItem entity) {
+        if (entity.element().isValuesDetached()) {
             Persistence.service().retrieve(entity.element());
         }
     }

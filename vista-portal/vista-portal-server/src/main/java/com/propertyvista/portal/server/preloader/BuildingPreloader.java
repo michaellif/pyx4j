@@ -129,6 +129,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         List<Complex> complexesWithBuildins = new Vector<Complex>();
 
         for (Building building : buildings) {
+            Persistence.service().persist(building);
 
             if (DataGenerator.randomBoolean()) {
                 building.complex().set(DataGenerator.random(complexes));
@@ -145,6 +146,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
 
             // Service Catalog:
             ServiceCatalog catalog = EntityFactory.create(ServiceCatalog.class);
+            catalog.belongsTo().set(building);
             Persistence.service().persist(catalog);
 
             pmcGenerator.createServiceCatalog(catalog);
@@ -170,7 +172,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
                 Persistence.service().persist(building.media());
             }
 
-            Persistence.service().persist(building);
+            Persistence.service().merge(building);
 
             // Elevators
             List<Elevator> elevators = generator.createElevators(building, config.getNumElevators());

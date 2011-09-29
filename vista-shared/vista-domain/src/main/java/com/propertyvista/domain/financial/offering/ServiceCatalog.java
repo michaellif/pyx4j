@@ -13,10 +13,15 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.property.asset.building.Building;
 
 /**
  * Defines Services on a given Building
@@ -28,6 +33,11 @@ public interface ServiceCatalog extends IEntity {
      */
     @Deprecated
     IPrimitive<String> x();
+
+    @Owner
+    @Detached
+    @ReadOnly
+    Building belongsTo();
 
     /**
      * Double links - main dependency in appropriate entity:\

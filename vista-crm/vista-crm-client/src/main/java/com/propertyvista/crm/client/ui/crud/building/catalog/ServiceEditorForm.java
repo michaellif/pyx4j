@@ -59,6 +59,7 @@ import com.propertyvista.domain.financial.offering.ServiceConcession;
 import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class ServiceEditorForm extends CrmEntityForm<Service> {
 
@@ -148,7 +149,26 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
 
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-                        CComponent<?> comp = super.createCell(column);
+                        CComponent<?> comp;
+
+                        if (column.getObject() == proto().element()) {
+                            comp = inject(column.getObject(), new CEntityComboBox<AptUnit>(AptUnit.class));
+//                            @SuppressWarnings("unchecked")
+//                            CEntityComboBox<AptUnit> combo = (CEntityComboBox<AptUnit>) comp;
+//                            combo.setOptionsFilter(new OptionsFilter<AptUnit>() {
+//                                @Override
+//                                public boolean acceptOption(AptUnit entity) {
+//                                    Service value = ServiceEditorForm.this.getValue();
+//                                    if (value != null && !value.isNull()) {
+//                                        return entity.belongsTo().equals(value.catalog().belongsTo());
+//                                    }
+//                                    return false;
+//                                }
+//                            });
+                        } else {
+                            comp = super.createCell(column);
+                        }
+
                         if (column.getObject() == proto().type()) {
                             if (comp instanceof CEntityComboBox<?>) {
                                 @SuppressWarnings("unchecked")
@@ -165,6 +185,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
                                 });
                             }
                         }
+
                         return comp;
                     }
                 };
