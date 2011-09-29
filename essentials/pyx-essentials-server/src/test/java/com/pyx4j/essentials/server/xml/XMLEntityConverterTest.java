@@ -118,18 +118,21 @@ public class XMLEntityConverterTest extends TestCase {
     public void testAbstractMember() throws Exception {
         Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
         ent1.setPrimaryKey(new Key(1));
-        ent1.name1().setValue("1");
-        ent1.name().setValue("1.00");
+        ent1.nameB1().setValue("B1");
+        ent1.nameC2().setValue("C1");
 
         Concrete1Entity ent11 = EntityFactory.create(Concrete1Entity.class);
         ent11.setPrimaryKey(new Key(11));
-        ent11.name1().setValue("1.1");
+        ent11.nameB1().setValue("B1.1");
+        ent11.nameC1().setValue("C1.1");
 
         ent1.refference().set(ent11);
 
         String xml = getXML(ent1);
         System.out.println(xml);
         Concrete2Entity ent2 = (Concrete2Entity) XMLEntityConverter.parse(getDom(xml).getDocumentElement());
+
+        System.out.println(ent2);
 
         assertTrue("item1 Not Same data\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2));
     }
@@ -140,14 +143,14 @@ public class XMLEntityConverterTest extends TestCase {
 
         Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
         ent1.setPrimaryKey(new Key(1));
-        ent1.name1().setValue("1");
-        ent1.name().setValue("1.00");
+        ent1.nameB1().setValue("1");
+        ent1.nameC2().setValue("1.00");
         rootEntity.refferences().add(ent1);
 
         Concrete1Entity ent2 = EntityFactory.create(Concrete1Entity.class);
         ent2.setPrimaryKey(new Key(2));
-        ent2.name1().setValue("2");
-        ent2.name11().setValue("2.11");
+        ent2.nameB1().setValue("2");
+        ent2.nameC1().setValue("2.11");
         rootEntity.refferences().add(ent2);
 
         String xml = getXML(rootEntity);
@@ -158,7 +161,7 @@ public class XMLEntityConverterTest extends TestCase {
 
         Base1Entity item1 = it.next();
         Base1Entity item2 = it.next();
-        if (item1.name1().getValue().equals("2")) {
+        if (item1.nameB1().getValue().equals("2")) {
             // swap the order for tests
             Base1Entity t = item1;
             item1 = item2;

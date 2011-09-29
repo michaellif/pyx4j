@@ -68,7 +68,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     private Map<String, Object> data;
 
-    protected transient HashMap<String, IObject<?>> members;
+    private transient HashMap<String, IObject<?>> members;
 
     /**
      * N.B. Default initialization during serialization to 'false'.

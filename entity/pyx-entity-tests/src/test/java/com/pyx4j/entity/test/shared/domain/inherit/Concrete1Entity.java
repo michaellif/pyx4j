@@ -26,5 +26,5 @@ import com.pyx4j.entity.shared.IPrimitive;
 @DiscriminatorValue("C1")
 public interface Concrete1Entity extends Base1Entity {
 
-    IPrimitive<String> name11();
+    IPrimitive<String> nameC1();
 }

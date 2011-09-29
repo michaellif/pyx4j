@@ -22,6 +22,7 @@ package com.pyx4j.entity.rdb;
 
 import junit.framework.Assert;
 
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
@@ -30,14 +31,17 @@ import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
 public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
     public void testMemeber() {
+        if (!Inheritance.__TODO_POLYMORPHIC__) {
+            //doMemeber();
+        }
     }
 
-    public void TODOtestMemeber() {
+    public void doMemeber() {
         RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
         Concrete2Entity ent2 = EntityFactory.create(Concrete2Entity.class);
-        ent2.name().setValue("n:" + uniqueString());
-        ent2.name1().setValue("n1:" + uniqueString());
-        ent2.name2().setValue("n2:" + uniqueString());
+        ent2.nameC2().setValue("n:" + uniqueString());
+        ent2.nameB1().setValue("n1:" + uniqueString());
+        ent2.nameB2().setValue("n2:" + uniqueString());
         ent.refference().set(ent2);
 
         srv.persist(ent);
@@ -50,8 +54,8 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
         Concrete2Entity ent2r = entr.refference().cast();
 
-        Assert.assertEquals("Proper value", ent2.name1().getValue(), ent2r.name1().getValue());
-        Assert.assertEquals("Proper value", ent2.name2().getValue(), ent2r.name2().getValue());
-        Assert.assertEquals("Proper value", ent2.name().getValue(), ent2r.name().getValue());
+        Assert.assertEquals("Proper value", ent2.nameB1().getValue(), ent2r.nameB1().getValue());
+        Assert.assertEquals("Proper value", ent2.nameB2().getValue(), ent2r.nameB2().getValue());
+        Assert.assertEquals("Proper value", ent2.nameC2().getValue(), ent2r.nameC2().getValue());
     }
 }

@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 @DiscriminatorValue("C2")
 public interface Concrete2Entity extends Base2Entity {
 
-    IPrimitive<String> name();
+    IPrimitive<String> nameC2();
 
     // Reference of undefined type.
     Base1Entity refference();

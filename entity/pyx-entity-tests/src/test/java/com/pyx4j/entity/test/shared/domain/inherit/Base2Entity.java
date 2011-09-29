@@ -26,6 +26,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 @AbstractEntity
 public interface Base2Entity extends Base1Entity {
 
-    IPrimitive<String> name2();
+    IPrimitive<String> nameB2();
 
 }

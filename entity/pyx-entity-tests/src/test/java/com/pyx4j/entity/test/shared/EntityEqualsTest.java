@@ -25,12 +25,14 @@ import java.util.Date;
 import junit.framework.Assert;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
+import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
 
@@ -121,6 +123,33 @@ public class EntityEqualsTest extends InitializerTestCase {
         t2.notes().clear();
         t2.notes().add("Note X");
         assertFalse("Data should be different\n" + t1.toString() + "\n!=\n" + t2.toString(), EntityGraph.fullyEqual(t1, t2));
+    }
+
+    public void testFullyEqualWithPolymorphicEntity() {
+        Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
+        ent1.setPrimaryKey(new Key(1));
+
+        Concrete1Entity ent11 = EntityFactory.create(Concrete1Entity.class);
+        ent1.refference().set(ent11);
+        ent11.setPrimaryKey(new Key(11));
+        ent11.nameB1().setValue("B1.1");
+        ent11.nameC1().setValue("C1.1");
+
+        Concrete2Entity ent2 = EntityFactory.create(Concrete2Entity.class);
+        ent2.setPrimaryKey(new Key(1));
+
+        Concrete1Entity ent21 = EntityFactory.create(Concrete1Entity.class);
+        ent2.refference().set(ent21);
+        ent21.setPrimaryKey(new Key(11));
+        ent21.nameB1().setValue("B1.1");
+        ent21.nameC1().setValue("C1.1");
+
+        assertTrue("Same data\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2));
+
+        if (!Inheritance.__TODO_POLYMORPHIC__) {
+            ent21.nameC1().setValue("C1.1x");
+            assertFalse("Data should be different\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2));
+        }
     }
 
     public void testBusinessEqual() {

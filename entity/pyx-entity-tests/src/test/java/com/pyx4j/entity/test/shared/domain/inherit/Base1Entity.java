@@ -29,6 +29,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Inheritance
 public interface Base1Entity extends IEntity {
 
-    IPrimitive<String> name1();
+    IPrimitive<String> nameB1();
 
 }
