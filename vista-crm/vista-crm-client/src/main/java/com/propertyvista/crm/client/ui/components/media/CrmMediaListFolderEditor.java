@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.CEntityHyperlink;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
@@ -204,7 +205,11 @@ public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
                     break;
 
                 case externalUrl:
-                    Window.open(getValue().url().getValue(), Media.Type.externalUrl.name(), null);
+                    String url = getValue().url().getValue();
+                    if (!ValidationUtils.urlHasProtocol(url)) {
+                        url = "http://" + url;
+                    }
+                    Window.open(url, Media.Type.externalUrl.name(), null);
                     break;
 
                 case youTube:

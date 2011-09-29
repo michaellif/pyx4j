@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
@@ -218,7 +219,11 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             main.add(inject(proto().contacts().website(), new CHyperlink(new Command() {
                 @Override
                 public void execute() {
-                    Window.open(getValue().contacts().website().getValue(), proto().contacts().website().getMeta().getCaption(), null);
+                    String url = getValue().contacts().website().getValue();
+                    if (!ValidationUtils.urlHasProtocol(url)) {
+                        url = "http://" + url;
+                    }
+                    Window.open(url, proto().contacts().website().getMeta().getCaption(), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
                 }
             })), 50);
         }
