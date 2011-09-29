@@ -65,6 +65,8 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("REFFERENCE", "REF");
         shortWords.add("REFFERENCES", "REFS");
         shortWords.add("ARCHIVE", "ARC");
+        shortWords.add("ENITY", "ENT");
+        shortWords.add("ENTITIES", "ENTS");
         return new NamingConventionOracle(32, shortWords);
     }
 
