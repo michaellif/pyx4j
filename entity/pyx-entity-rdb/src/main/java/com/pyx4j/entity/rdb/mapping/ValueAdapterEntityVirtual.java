@@ -31,7 +31,9 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.server.ServerEntityFactory;
@@ -58,7 +60,16 @@ public class ValueAdapterEntityVirtual implements ValueAdapter {
             if (entityClass.isAssignableFrom(ec)) {
                 DiscriminatorValue discriminator = ec.getAnnotation(DiscriminatorValue.class);
                 if (discriminator != null) {
+                    if (CommonsStringUtils.isEmpty(discriminator.value())) {
+                        throw new Error("Missing value of @DiscriminatorValue annotation on class " + entityClass.getName());
+                    }
+                    if (impClasses.containsKey(discriminator.value())) {
+                        throw new Error("Duplicate value of @DiscriminatorValue annotation on class " + entityClass.getName() + "; the same as in calss "
+                                + impClasses.get(discriminator.value()));
+                    }
                     impClasses.put(discriminator.value(), ec);
+                } else if (ec.getAnnotation(AbstractEntity.class) != null) {
+                    throw new Error("Missing @DiscriminatorValue annotation on class " + entityClass.getName());
                 }
             }
         }
