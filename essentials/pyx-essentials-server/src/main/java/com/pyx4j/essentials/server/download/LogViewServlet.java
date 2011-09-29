@@ -52,6 +52,8 @@ public class LogViewServlet extends HttpServlet {
 
     protected File rootDirectory;
 
+    protected boolean attachment = false;
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -67,6 +69,7 @@ public class LogViewServlet extends HttpServlet {
         } else {
             this.rootDirectory = new File(containerHome, root);
         }
+        attachment = "true".equalsIgnoreCase(config.getInitParameter("attachment"));
     }
 
     private void verifyPath(String path) throws ServletException {
@@ -214,7 +217,9 @@ public class LogViewServlet extends HttpServlet {
     protected void setFileResponseHeaders(File file, HttpServletResponse response) {
         response.setContentType(fileMimeType(file.getName()));
         response.setContentLength((int) file.length());
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+        if (attachment) {
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+        }
     }
 
     private void sendFile(String path, HttpServletResponse response) throws ServletException, IOException {
