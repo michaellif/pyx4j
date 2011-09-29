@@ -35,6 +35,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -58,6 +59,9 @@ public class ValueAdapterEntityVirtual implements ValueAdapter {
 
         for (Class<? extends IEntity> ec : ServerEntityFactory.getAllEntityClasses()) {
             if (entityClass.isAssignableFrom(ec)) {
+                if (ec.getAnnotation(Transient.class) != null) {
+                    continue;
+                }
                 DiscriminatorValue discriminator = ec.getAnnotation(DiscriminatorValue.class);
                 if (discriminator != null) {
                     if (CommonsStringUtils.isEmpty(discriminator.value())) {
