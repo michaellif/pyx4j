@@ -222,6 +222,52 @@
         </profile>
 
         <profile>
+            <id>pyx4j-oracle-tests</id>
+            <activation>
+                <property>
+                    <name>pyx4j-oracle-tests</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>test-reset-oracle-db</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>sqlplus</executable>
+                                    <arguments>
+                                        <argument>-L</argument>
+                                        <argument>-S</argument>
+                                        <argument>tst_entity/tst_entity@TST_ENTITY</argument>
+                                        <argument>@${basedir}\scripts\oracle\ora-reset.sql</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/mysql/*.*</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
             <id>pyx4j-all-db-tests</id>
             <build>
                 <plugins>

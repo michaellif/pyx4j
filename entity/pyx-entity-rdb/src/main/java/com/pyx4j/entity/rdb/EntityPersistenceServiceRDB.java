@@ -85,7 +85,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     private final Mappings mappings;
 
-    public static final boolean trace = true;
+    public static final boolean trace = false;
 
     public EntityPersistenceServiceRDB() {
         this(RDBUtils.getRDBConfiguration());
@@ -193,6 +193,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             IEntity childEntity = (IEntity) member.getMember(entity);
             if (memberMeta.isOwnedRelationships()) {
                 if (!childEntity.isValuesDetached()) {
+                    childEntity = childEntity.cast();
                     persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
                 }
             } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
@@ -616,10 +617,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     private <T extends IEntity> T cascadeRetrieve(Connection connection, T entity) {
-        TableModel tm = tableModel(connection, entity.getEntityMeta());
         if (entity.getPrimaryKey() == null) {
             return null;
         }
+        TableModel tm = tableModel(connection, entity.getEntityMeta());
         if (tm.retrieve(connection, entity.getPrimaryKey(), entity)) {
             return cascadeRetrieveMembers(connection, tm, entity);
         } else {
@@ -635,9 +636,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 continue;
             }
             if (memberMeta.isEntity()) {
-                IEntity childEntity = (IEntity) member.getMember(entity);
+                IEntity childEntity = ((IEntity) member.getMember(entity)).cast();
                 cascadeRetrieve(connection, childEntity);
             } else {
+                @SuppressWarnings("unchecked")
                 ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
                 for (IEntity childEntity : iCollectionMember) {
                     cascadeRetrieve(connection, childEntity);

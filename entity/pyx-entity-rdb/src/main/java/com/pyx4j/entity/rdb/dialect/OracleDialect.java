@@ -112,9 +112,14 @@ public class OracleDialect extends Dialect {
     @Override
     public String applyLimitCriteria(String sql) {
         StringBuffer msql = new StringBuffer(sql.length() + 128);
-        msql.append("SELECT * FROM ( SELECT _row_.*, rownum _rownum_ FROM ( ");
+        msql.append("SELECT * FROM ( SELECT p_row_.*, rownum p_rownum_ FROM ( ");
         msql.append(sql);
-        msql.append(" ) _row_ WHERE rownum <= ?) WHERE _rownum_ > ?");
+        msql.append(" ) p_row_ WHERE rownum <= ?) WHERE p_rownum_ >= ?");
         return msql.toString();
+    }
+
+    @Override
+    public boolean limitCriteriaIsRelative() {
+        return false;
     }
 }

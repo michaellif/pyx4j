@@ -55,6 +55,11 @@ public abstract class ConfigurationOracle implements Configuration {
     }
 
     @Override
+    public String connectionAutomaticTestTable() {
+        return "C3P0_CONNECTION_TEST";
+    }
+
+    @Override
     public boolean readOnly() {
         return false;
     }

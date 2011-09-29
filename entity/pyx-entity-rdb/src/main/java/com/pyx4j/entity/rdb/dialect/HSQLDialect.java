@@ -49,4 +49,8 @@ public class HSQLDialect extends Dialect {
         return sql + " LIMIT ? OFFSET ?";
     }
 
+    @Override
+    public boolean limitCriteriaIsRelative() {
+        return true;
+    }
 }

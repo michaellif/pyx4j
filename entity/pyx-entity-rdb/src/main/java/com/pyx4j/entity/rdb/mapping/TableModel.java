@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.Trace;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Table.PrimaryKeyStrategy;
 import com.pyx4j.entity.rdb.ConnectionProvider;
@@ -78,6 +79,10 @@ public class TableModel {
     public TableModel(Dialect dialect, Mappings mappings, EntityMeta entityMeta) {
         this.dialect = dialect;
         this.entityMeta = entityMeta;
+        if (entityMeta.getEntityClass().getAnnotation(AbstractEntity.class) != null) {
+            throw new Error("Persistance of AbstractEntity is not permited now");
+        }
+
         Table tableAnnotation = entityMeta.getEntityClass().getAnnotation(Table.class);
         if (tableAnnotation != null) {
             primaryKeyStrategy = tableAnnotation.primaryKeyStrategy();
@@ -528,7 +533,11 @@ public class TableModel {
             }
             int parameterIndex = qb.bindParameters(stmt);
             if (addLimit) {
-                stmt.setInt(parameterIndex, limit);
+                if (dialect.limitCriteriaIsRelative()) {
+                    stmt.setInt(parameterIndex, limit);
+                } else {
+                    stmt.setInt(parameterIndex, offset + limit);
+                }
                 parameterIndex++;
                 stmt.setInt(parameterIndex, offset);
             }
@@ -584,7 +593,11 @@ public class TableModel {
             }
             int parameterIndex = qb.bindParameters(stmt);
             if (limit > 0) {
-                stmt.setInt(parameterIndex, limit);
+                if (dialect.limitCriteriaIsRelative()) {
+                    stmt.setInt(parameterIndex, limit);
+                } else {
+                    stmt.setInt(parameterIndex, limit + offset);
+                }
                 parameterIndex++;
                 stmt.setInt(parameterIndex, offset);
             }

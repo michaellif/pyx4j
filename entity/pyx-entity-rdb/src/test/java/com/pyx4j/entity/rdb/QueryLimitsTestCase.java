@@ -67,7 +67,8 @@ public abstract class QueryLimitsTestCase extends DatastoreTestBase {
         try {
             int cnt = 0;
             while (cnt < 5) {
-                emps2.next();
+                Employee emp = emps2.next();
+                System.out.println("item:" + cnt + "" + emp.firstName());
                 cnt++;
             }
             Assert.assertFalse("has no More", emps0.hasNext());

@@ -51,6 +51,8 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public String connectionValidationQuery();
 
+    public String connectionAutomaticTestTable();
+
     public boolean readOnly();
 
     public ConnectionPoolProvider connectionPool();

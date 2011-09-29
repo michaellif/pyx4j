@@ -55,4 +55,9 @@ public class MySQLDialect extends Dialect {
     public String applyLimitCriteria(String sql) {
         return sql + " LIMIT ? OFFSET ?";
     }
+
+    @Override
+    public boolean limitCriteriaIsRelative() {
+        return true;
+    }
 }

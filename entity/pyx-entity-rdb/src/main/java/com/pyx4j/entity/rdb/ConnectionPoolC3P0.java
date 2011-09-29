@@ -50,7 +50,7 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
         dataSource.setAcquireRetryAttempts(3); // Defines how many times c3p0 will try to acquire a new Connection from the database before giving up
         dataSource.setMaxIdleTime(20 * Consts.MIN2SEC); // Seconds a Connection can remain pooled but unused before being discarded.
 
-        dataSource.setAutomaticTestTable("_c3p0_connection_test"); // If provided, c3p0 will create an empty table of the specified name, and use queries against that table to test the Connection
+        dataSource.setAutomaticTestTable(cfg.connectionAutomaticTestTable()); // If provided, c3p0 will create an empty table of the specified name, and use queries against that table to test the Connection
         dataSource.setIdleConnectionTestPeriod(5 * Consts.MIN2SEC); //If this is a number greater than 0, c3p0 will test all idle, pooled but unchecked-out connections, every this number of seconds.
 
         dataSource.setMaxStatements(cfg.maxPoolPreparedStatements());

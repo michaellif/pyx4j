@@ -34,6 +34,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Inheritance {
 
-    public static final boolean __TODO_POLYMORPHIC__ = true;
+    public static final boolean __TODO_POLYMORPHIC__ = false;
 
 }

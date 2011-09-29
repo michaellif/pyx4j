@@ -189,4 +189,8 @@ public abstract class Dialect {
     public String applyLimitCriteria(String sql) {
         throw new Error("Dialect does not support limit");
     }
+
+    public boolean limitCriteriaIsRelative() {
+        throw new Error("Dialect does not support limit");
+    }
 }

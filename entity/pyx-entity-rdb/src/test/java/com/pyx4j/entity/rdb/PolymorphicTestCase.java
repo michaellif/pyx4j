@@ -22,7 +22,6 @@ package com.pyx4j.entity.rdb;
 
 import junit.framework.Assert;
 
-import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
@@ -31,12 +30,7 @@ import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
 public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
     public void testMemeber() {
-        if (!Inheritance.__TODO_POLYMORPHIC__) {
-            //doMemeber();
-        }
-    }
 
-    public void doMemeber() {
         RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
         Concrete2Entity ent2 = EntityFactory.create(Concrete2Entity.class);
         ent2.nameC2().setValue("n:" + uniqueString());
