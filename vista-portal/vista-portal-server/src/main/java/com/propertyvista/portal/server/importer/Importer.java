@@ -26,7 +26,6 @@ import com.propertvista.generator.MediaGenerator;
 import com.propertvista.generator.util.PictureUtil;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.marketing.PublicVisibilityType;
@@ -124,8 +123,9 @@ public class Importer {
 //                persist(feature);
 //            }
 
-            Floorplan floorplan = down(floorplanDTO, Floorplan.class);
+            Floorplan floorplan = floorplanDTO.clone(Floorplan.class);
             Persistence.service().persist(floorplan); // persist real unit here, not DTO!..
+            floorplanDTO.setPrimaryKey(floorplan.getPrimaryKey());
 
             // persist internal lists and with belongness: 
             for (FloorplanAmenity amenity : floorplanDTO.amenities()) {
@@ -136,7 +136,7 @@ public class Importer {
 
         for (UnitRelatedData unitData : model.getUnits()) {
             // persist plain internal lists:
-            AptUnit unit = down(unitData, AptUnit.class);
+            AptUnit unit = unitData.clone(AptUnit.class);
             Persistence.service().persist(unit); // persist real unit here, not DTO!..
 
             // persist internal lists and with belongness: 
@@ -189,12 +189,5 @@ public class Importer {
 
     public Model getModel() {
         return model;
-    }
-
-    // Genric DTO -> O convertion:
-    public static <S extends IEntity, D extends S> S down(D src, Class<S> dstClass) {
-        S dst = EntityFactory.create(dstClass);
-        dst.set(src);
-        return dst;
     }
 }

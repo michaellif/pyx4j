@@ -27,7 +27,6 @@ import com.propertvista.generator.util.RandomUtil;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
@@ -233,7 +232,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
                     MediaGenerator.attachGeneratedFloorplanMedia(floorplanDTO);
                 }
 
-                Floorplan floorplan = down(floorplanDTO, Floorplan.class);
+                Floorplan floorplan = floorplanDTO.clone(Floorplan.class);
                 Persistence.service().persist(floorplan); // persist real unit here, not DTO!..
                 floorplanDTO.setPrimaryKey(floorplan.getPrimaryKey());
 
@@ -249,7 +248,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             for (UnitRelatedData unitData : units) {
                 // persist plain internal lists:
 
-                AptUnit unit = down(unitData, AptUnit.class);
+                AptUnit unit = unitData.clone(AptUnit.class);
                 Persistence.service().persist(unit); // persist real unit here, not DTO!..
 
                 // persist internal lists and with belongness: 
@@ -396,10 +395,5 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         }
         sb.append("\n");
         return sb.toString();
-    }
-
-    // Genric DTO -> O convertion:
-    public static <S extends IEntity, D extends S> S down(D src, Class<S> dstClass) {
-        return src.clone(dstClass);
     }
 }
