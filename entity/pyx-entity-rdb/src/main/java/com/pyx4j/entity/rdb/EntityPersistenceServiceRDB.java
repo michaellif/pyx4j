@@ -158,6 +158,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public void persist(IEntity entity) {
         Connection connection = null;
         try {
+            entity = entity.cast();
             connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
             persist(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
         } finally {
@@ -389,6 +390,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public void merge(IEntity entity) {
         Connection connection = null;
         try {
+            entity = entity.cast();
             connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
             merge(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
         } finally {
@@ -609,6 +611,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public <T extends IEntity> boolean retrieve(T entity) {
         Connection connection = null;
         try {
+            entity = entity.cast();
             connection = connectionProvider.getConnection(ConnectionTarget.forRead);
             return cascadeRetrieve(connection, entity) != null;
         } finally {
