@@ -19,6 +19,7 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
@@ -40,7 +41,7 @@ public class VistaDBResetTest extends VistaDBTestBase {
         for (String className : allClasses) {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            if (meta.isTransient()) {
+            if (meta.isTransient() || (entityClass.getAnnotation(AbstractEntity.class) != null)) {
                 continue;
             }
             if (className.endsWith("DTO")) {
