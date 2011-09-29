@@ -14,8 +14,10 @@
 package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.shared.IEntity;
 
+@Inheritance
 @AbstractEntity
 public interface BuildingElement extends IEntity {
 
