@@ -27,7 +27,7 @@ import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
 
-public abstract class InheritanceTestCase extends DatastoreTestBase {
+public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
     public void testMemeber() {
     }

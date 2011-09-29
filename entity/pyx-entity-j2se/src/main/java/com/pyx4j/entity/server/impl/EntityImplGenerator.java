@@ -332,7 +332,7 @@ public class EntityImplGenerator {
             field.setModifiers(Modifier.PRIVATE | Modifier.STATIC | Modifier.FINAL);
             implClass.addField(field, "1L");
 
-            // Override getObjectClass with proper value since transient value is null in super 
+            // Override getObjectClass with proper value since transient value is null in super during java deserialization
             CtMethod getObjectClassOverride = new CtMethod(pool.get(Class.class.getName()), "getObjectClass", null, implClass);
             getObjectClassOverride.setBody("return " + interfaceName + ".class;");
             implClass.addMethod(getObjectClassOverride);
@@ -385,7 +385,7 @@ public class EntityImplGenerator {
             }
             implClass.addMethod(getMembersMethod);
 
-            if ((IEntity.___TODO_inheritance2__ == false)
+            if ((Inheritance.__TODO_POLYMORPHIC__)
                     || ((interfaceClass.getAnnotation(Inheritance.class) == null) && (interfaceClass.getAnnotation(AbstractEntity.class) == null))) {
                 //Static for optimization
                 CtField entityMetaField = new CtField(pool.get(EntityMeta.class.getName()), "entityMeta", implClass);

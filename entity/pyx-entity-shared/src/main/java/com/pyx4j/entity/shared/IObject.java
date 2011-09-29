@@ -35,6 +35,9 @@ public interface IObject<VALUE_TYPE> {
 
     public Path getPath();
 
+    /**
+     * @return Actual primitive class String, Double ..., or for entity class that extends IEntity (e.g. the same as getObjectClass())
+     */
     public Class<?> getValueClass();
 
     /**

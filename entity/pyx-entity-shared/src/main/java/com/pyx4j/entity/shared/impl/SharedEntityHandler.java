@@ -44,6 +44,7 @@ import com.pyx4j.commons.IdentityHashSet;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LoopCounter;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -95,16 +96,18 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         delegateValue = (parent != null) && (getOwner() == parent);
     }
 
+    /**
+     * We Override this method in generator with proper value to help java objects deserialization
+     */
     @SuppressWarnings("unchecked")
     @Override
     public Class<? extends IEntity> getObjectClass() {
         return (Class<? extends IEntity>) super.getObjectClass();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Class<? extends IEntity> getValueClass() {
-        return (Class<? extends IEntity>) super.getObjectClass();
+        return getObjectClass();
     }
 
     @Override
@@ -412,8 +415,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     @Override
     public EntityMeta getEntityMeta() {
         // Cache EntityMeta is done in Entity implementations using static member.
-        if (isTemplateEntity || (IEntity.___TODO_inheritance2__ == false)) {
-            return EntityFactory.getEntityMeta(getValueClass());
+        if (isTemplateEntity || (Inheritance.__TODO_POLYMORPHIC__)) {
+            return EntityFactory.getEntityMeta(getObjectClass());
         } else {
             return EntityFactory.getEntityMeta(getInstanceValueClass());
         }

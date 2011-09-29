@@ -20,11 +20,11 @@
  */
 package com.pyx4j.entity.rdb.hsql;
 
-import com.pyx4j.entity.rdb.InheritanceTestCase;
+import com.pyx4j.entity.rdb.PolymorphicTestCase;
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-public class InheritanceTest extends InheritanceTestCase {
+public class PolymorphicTest extends PolymorphicTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {

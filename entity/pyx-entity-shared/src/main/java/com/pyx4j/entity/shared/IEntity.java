@@ -43,8 +43,6 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public static String DETACHED_ATTR = ATTR_PREFIX + "detached";
 
-    public static final boolean ___TODO_inheritance2__ = false;
-
     public Key getPrimaryKey();
 
     public void setPrimaryKey(Key pk);
