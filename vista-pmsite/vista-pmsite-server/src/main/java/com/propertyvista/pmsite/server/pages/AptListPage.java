@@ -26,14 +26,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters.NamedPair;
 
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.pojo.IPojo;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaInputPanel;
 import com.propertyvista.pmsite.server.panels.AptListPanel;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.AmenityType;
 
@@ -82,6 +81,6 @@ public class AptListPage extends BasePage {
 
         add(form);
 
-        add(new AptListPanel("aptListPanel", new CompoundPropertyModel<IList<PropertyDTO>>(PMSiteContentManager.getPropertyList(criteria).properties())));
+        add(new AptListPanel("aptListPanel", new CompoundPropertyModel<List<Building>>(PMSiteContentManager.getPropertyList(criteria))));
     }
 }

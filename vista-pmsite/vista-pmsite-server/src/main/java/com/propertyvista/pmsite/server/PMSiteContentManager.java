@@ -44,12 +44,7 @@ import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.Testimonial;
-import com.propertyvista.pmsite.server.converter.BuildingAmenityAmenityDTOConverter;
-import com.propertyvista.pmsite.server.converter.BuildingPropertyDTOConverter;
-import com.propertyvista.pmsite.server.converter.FloorplanFloorplanPropertyDTOConverter;
 import com.propertyvista.pmsite.server.model.PromoDataModel;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
-import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
 import com.propertyvista.shared.CompiledLocale;
@@ -265,7 +260,7 @@ public class PMSiteContentManager implements Serializable {
         return provCityMap;
     }
 
-    public static PropertyListDTO getPropertyList(PropertySearchCriteria searchCriteria) {
+    public static List<Building> getPropertyList(PropertySearchCriteria searchCriteria) {
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
 
         // add search criteria
@@ -275,36 +270,15 @@ public class PMSiteContentManager implements Serializable {
                 dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), city));
             }
         }
-        List<Building> buildings = Persistence.service().query(dbCriteria);
+        ArrayList<Building> buildings = new ArrayList<Building>(Persistence.service().query(dbCriteria));
 
-        PropertyListDTO ret = EntityFactory.create(PropertyListDTO.class);
         for (Building building : buildings) {
-
+            // do some sanity check
             if (building.info().address().location().isNull() || building.info().address().location().getValue().getLat() == 0) {
-                continue;
+                buildings.remove(building);
             }
-
-            PropertyDTO propertyDTO = new BuildingPropertyDTOConverter().createDTO(building);
-            {
-                EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
-                for (Floorplan floorplan : Persistence.service().query(criteria)) {
-                    propertyDTO.floorplansProperty().add(new FloorplanFloorplanPropertyDTOConverter().createDTO(floorplan));
-                }
-            }
-            {
-                EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
-                for (BuildingAmenity amenity : Persistence.service().query(criteria)) {
-                    propertyDTO.amenities().add(new BuildingAmenityAmenityDTOConverter().createDTO(amenity));
-                }
-            }
-            if (!building.media().isEmpty()) {
-                propertyDTO.mainMedia().setValue(building.media().get(0).getPrimaryKey());
-            }
-            ret.properties().add(propertyDTO);
         }
-        return ret;
+        return buildings;
     }
 
     public static Building getBuildingDetails(long propId) {
@@ -317,10 +291,18 @@ public class PMSiteContentManager implements Serializable {
         return buildings.get(0);
     }
 
-    public static List<Floorplan> getBuildingFloorplans(Building bld) {
+    public static Map<Floorplan, List<AptUnit>> getBuildingFloorplans(Building bld) {
+        final HashMap<Floorplan, List<AptUnit>> floorplans = new HashMap<Floorplan, List<AptUnit>>();
         EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().building(), bld));
-        return Persistence.service().query(criteria);
+        for (Floorplan fp : Persistence.service().query(criteria)) {
+            List<AptUnit> units = PMSiteContentManager.getBuildingAptUnits(bld, fp);
+            // do some sanity check so we don't render incomplete floorplans
+            if (units.size() > 0) {
+                floorplans.put(fp, units);
+            }
+        }
+        return floorplans;
     }
 
     public static List<AptUnit> getBuildingAptUnits(Building bld, Floorplan fp) {
