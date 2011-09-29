@@ -44,7 +44,6 @@ import com.pyx4j.commons.IdentityHashSet;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LoopCounter;
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -414,12 +413,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public EntityMeta getEntityMeta() {
-        // Cache EntityMeta is done in Entity implementations using static member.
-        if (isTemplateEntity || (Inheritance.__TODO_POLYMORPHIC__)) {
-            return EntityFactory.getEntityMeta(getObjectClass());
-        } else {
-            return EntityFactory.getEntityMeta(getInstanceValueClass());
-        }
+        // Cache EntityMeta is done in J2SE Entity implementations using static member.
+        return EntityFactory.getEntityMeta(getObjectClass());
     }
 
     /**
@@ -657,9 +652,13 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         } else {
             T typeAttr = (T) entityValue.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR);
             Class<T> clazz = (Class<T>) typeAttr.getValueClass();
-            T entity = EntityFactory.create(clazz, getParent(), getFieldName());
-            entity.setValue(ensureValue());
-            return entity;
+            if (this.getValueClass().equals(clazz)) {
+                return (T) this;
+            } else {
+                T entity = EntityFactory.create(clazz, getParent(), getFieldName());
+                entity.setValue(ensureValue());
+                return entity;
+            }
         }
     }
 
@@ -690,7 +689,14 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         if (entityValue == null) {
             return true;
         } else {
-            return !entityValue.containsKey(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR);
+            IEntity typeAttr = (IEntity) entityValue.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR);
+            if (typeAttr == null) {
+                return true;
+            } else {
+                @SuppressWarnings("unchecked")
+                Class<IEntity> clazz = (Class<IEntity>) typeAttr.getValueClass();
+                return (this.getValueClass().equals(clazz));
+            }
         }
     }
 

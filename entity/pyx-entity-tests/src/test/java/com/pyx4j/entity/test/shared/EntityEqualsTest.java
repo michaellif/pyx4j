@@ -25,7 +25,6 @@ import java.util.Date;
 import junit.framework.Assert;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.test.shared.domain.Department;
@@ -146,10 +145,8 @@ public class EntityEqualsTest extends InitializerTestCase {
 
         assertTrue("Same data\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2));
 
-        if (!Inheritance.__TODO_POLYMORPHIC__) {
-            ent21.nameC1().setValue("C1.1x");
-            assertFalse("Data should be different\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2));
-        }
+        ent21.nameC1().setValue("C1.1x");
+        assertFalse("Data should be different\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2));
     }
 
     public void testBusinessEqual() {

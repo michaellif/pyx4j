@@ -90,6 +90,10 @@ public class EntityGraph {
     }
 
     public static boolean fullyEqualValues(IEntity ent1, IEntity ent2) {
+        // Case if required to concert instance
+        ent1 = ent1.cast();
+        ent2 = ent2.cast();
+
         EntityMeta em = ent1.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
