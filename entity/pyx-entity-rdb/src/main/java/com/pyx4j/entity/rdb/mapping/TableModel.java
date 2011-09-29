@@ -80,7 +80,7 @@ public class TableModel {
         this.dialect = dialect;
         this.entityMeta = entityMeta;
         if (entityMeta.getEntityClass().getAnnotation(AbstractEntity.class) != null) {
-            throw new Error("Persistance of AbstractEntity is not permited now");
+            throw new Error("Persistance of @AbstractEntity " + entityMeta.getEntityClass().getName() + " is not permited now");
         }
 
         Table tableAnnotation = entityMeta.getEntityClass().getAnnotation(Table.class);
