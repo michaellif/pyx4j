@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
@@ -25,6 +26,8 @@ import com.propertyvista.domain.tenant.income.TenantGuarantor;
 public interface TenantFinancialDTO extends IEntity {
 
     IList<PersonalIncome> incomes();
+
+    IList<IIncomeInfo> incomes2();
 
     IList<PersonalAsset> assets();
 

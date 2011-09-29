@@ -52,6 +52,7 @@ import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.domain.financial.Money;
+import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
@@ -85,6 +86,9 @@ public class FinancialViewForm extends CEntityForm<TenantFinancialDTO> {
     public IsWidget createContent() {
 
         FlowPanel main = new FlowPanel();
+
+        main.add(createHeader(proto().incomes()));
+        main.add(inject(proto().incomes2(), createIncomeFolderEditor2()));
         main.add(createHeader(proto().incomes()));
         main.add(inject(proto().incomes(), createIncomeFolderEditor()));
         main.add(new HTML());
@@ -125,6 +129,11 @@ public class FinancialViewForm extends CEntityForm<TenantFinancialDTO> {
     }
 
     @Override
+    public void populate(TenantFinancialDTO value) {
+        super.populate(value);
+    }
+
+    @Override
     public void addValidations() {
         this.addValueValidator(new EditableValueValidator<TenantFinancialDTO>() {
 
@@ -138,6 +147,34 @@ public class FinancialViewForm extends CEntityForm<TenantFinancialDTO> {
                 return i18n.tr("At least one source of income or one asset is required");
             }
         });
+    }
+
+    private CEntityFolderEditor<IIncomeInfo> createIncomeFolderEditor2() {
+
+        return new CEntityFolderEditor<IIncomeInfo>(IIncomeInfo.class) {
+
+            @Override
+            protected IFolderEditorDecorator<IIncomeInfo> createFolderDecorator() {
+                if (isSummaryViewMode()) {
+                    return new BoxReadOnlyFolderDecorator<IIncomeInfo>() {
+                        @Override
+                        public void setFolder(CEntityFolderEditor<?> w) {
+                            super.setFolder(w);
+                            this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+                        }
+                    };
+                } else {
+                    return new BoxFolderEditorDecorator<IIncomeInfo>(PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
+                            i18n.tr("Add an income source"));
+                }
+            }
+
+            @Override
+            protected CEntityFolderItemEditor<IIncomeInfo> createItem() {
+                return new FinancialViewIncomeForm2(summaryViewMode);
+            }
+
+        };
     }
 
     private CEntityFolderEditor<PersonalIncome> createIncomeFolderEditor() {

@@ -118,6 +118,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 
                 TenantFinancialDTO tf = EntityFactory.create(TenantFinancialDTO.class);
                 tf.incomes().addAll(tenantScreening.incomes());
+                tf.incomes2().addAll(tenantScreening.incomes2());
                 tf.assets().addAll(tenantScreening.assets());
                 tf.guarantors().addAll(tenantScreening.guarantors());
 

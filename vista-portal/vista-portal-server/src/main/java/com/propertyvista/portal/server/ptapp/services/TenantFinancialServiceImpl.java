@@ -20,7 +20,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.tenant.income.IIncomeInfo;
+import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
+import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
@@ -37,6 +41,14 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
 
         TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(r.tenantScreening);
         dto.setPrimaryKey(r.tenantInLease.getPrimaryKey());
+
+        //TODO for test
+        IIncomeInfo ii = EntityFactory.create(IncomeInfoEmployer.class);
+        dto.incomes2().add(ii);
+
+        ii = EntityFactory.create(IncomeInfoSelfEmployed.class);
+        dto.incomes2().add(ii);
+        //TODO end for test
 
         callback.onSuccess(dto);
     }

@@ -14,6 +14,7 @@
 package com.propertyvista.domain.tenant.income;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -24,6 +25,7 @@ import com.propertyvista.domain.financial.Money;
 /**
  * General required information for all Income types.
  */
+@AbstractEntity
 public interface IIncomeInfo extends IEntity {
 
     @Caption(name = "Description")
