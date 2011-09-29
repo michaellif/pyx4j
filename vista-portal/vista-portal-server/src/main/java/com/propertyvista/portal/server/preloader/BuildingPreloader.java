@@ -235,6 +235,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
 
                 Floorplan floorplan = down(floorplanDTO, Floorplan.class);
                 Persistence.service().persist(floorplan); // persist real unit here, not DTO!..
+                floorplanDTO.setPrimaryKey(floorplan.getPrimaryKey());
 
                 for (FloorplanAmenity amenity : floorplanDTO.amenities()) {
                     amenity.belongsTo().set(floorplan);
