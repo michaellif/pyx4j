@@ -56,6 +56,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
+import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.IFormView;
@@ -645,8 +646,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                         main.add(split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 22));
                         split.getLeftPanel().add(inject(proto().item().type().name(), new CLabel()), 10);
-                        split.getRightPanel().add(inject(proto().price(), new CLabel()), 6);
-                        split.getRightPanel().add(inject(proto().adjustedPrice(), new CLabel()), 6);
+                        split.getRightPanel().add(inject(proto().price(), new CNumberLabel()), 6);
+                        split.getRightPanel().add(inject(proto().adjustedPrice(), new CNumberLabel()), 6);
 
                         adjustmentPanel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
                         adjustmentPanel.add(new CrmSectionSeparator(CrmEntityFolder.i18n.tr("Adjustments:")));
