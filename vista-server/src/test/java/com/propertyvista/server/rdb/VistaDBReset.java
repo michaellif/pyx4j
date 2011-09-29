@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
@@ -48,7 +49,7 @@ public class VistaDBReset {
         for (String className : allClasses) {
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            if (meta.isTransient()) {
+            if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null) {
                 continue;
             }
             if (srv.isTableExists(meta.getEntityClass())) {
