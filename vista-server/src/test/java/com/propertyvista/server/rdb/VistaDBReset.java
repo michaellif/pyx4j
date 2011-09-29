@@ -13,21 +13,14 @@
  */
 package com.propertyvista.server.rdb;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
+import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.ServerEntityFactory;
-import com.pyx4j.entity.server.impl.EntityClassFinder;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.NamespaceManager;
 
@@ -44,19 +37,7 @@ public class VistaDBReset {
         VistaServerSideConfiguration conf = new VistaServerSideConfiguration();
         ServerSideConfiguration.setInstance(conf);
         NamespaceManager.setNamespace(VistaNamespaceResolver.demoNamespace);
-        EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
-        List<String> allClasses = EntityClassFinder.getEntityClassesNames();
-        for (String className : allClasses) {
-            Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
-            EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null) {
-                continue;
-            }
-            if (srv.isTableExists(meta.getEntityClass())) {
-                log.info("drop table {}", meta.getEntityClass().getName());
-                srv.dropTable(meta.getEntityClass());
-            }
-        }
+        RDBUtils.dropAllEntityTables();
         SchedulerHelper.dbReset();
         log.info("Generating new Data...");
         long start = System.currentTimeMillis();

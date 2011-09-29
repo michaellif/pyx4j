@@ -16,7 +16,6 @@ package com.propertyvista.server.ci;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.EnumSet;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,15 +28,11 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
+import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.ServerEntityFactory;
-import com.pyx4j.entity.server.impl.EntityClassFinder;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.quartz.SchedulerHelper;
@@ -87,8 +82,6 @@ public class DBResetServlet extends HttpServlet {
                         throw new Error("Invalid request param");
                     }
 
-                    EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
-
                     ResetType type = ResetType.all;
                     String tp = req.getParameter("type");
                     if (CommonsStringUtils.isStringSet(tp)) {
@@ -96,19 +89,7 @@ public class DBResetServlet extends HttpServlet {
                     }
 
                     if (EnumSet.of(ResetType.all, ResetType.clear).contains(type)) {
-                        List<String> allClasses = EntityClassFinder.getEntityClassesNames();
-                        for (String className : allClasses) {
-                            Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
-                            EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-                            if (meta.isTransient()) {
-                                continue;
-                            }
-                            if (srv.isTableExists(meta.getEntityClass())) {
-                                log.warn("drop table {}", meta.getEntityClass());
-                                buf.append("drop table " + meta.getEntityClass() + "\n");
-                                srv.dropTable(meta.getEntityClass());
-                            }
-                        }
+                        RDBUtils.dropAllEntityTables();
                     }
 
                     SchedulerHelper.shutdown();
