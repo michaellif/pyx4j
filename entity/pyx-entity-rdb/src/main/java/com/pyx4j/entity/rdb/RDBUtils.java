@@ -31,9 +31,16 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.mapping.TableMetadata;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.ServerEntityFactory;
+import com.pyx4j.entity.server.impl.EntityClassFinder;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public class RDBUtils implements Closeable {
 
@@ -101,6 +108,22 @@ public class RDBUtils implements Closeable {
             SQLUtils.execute(connection, sql);
         } finally {
             SQLUtils.closeQuietly(connection);
+        }
+    }
+
+    public static void dropAllEntityTables() {
+        EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
+        List<String> allClasses = EntityClassFinder.getEntityClassesNames();
+        for (String className : allClasses) {
+            Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
+            EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
+            if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null) {
+                continue;
+            }
+            if (srv.isTableExists(meta.getEntityClass())) {
+                log.info("drop table {}", meta.getEntityClass().getName());
+                srv.dropTable(meta.getEntityClass());
+            }
         }
     }
 }
