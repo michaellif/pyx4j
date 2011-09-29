@@ -61,15 +61,15 @@ public class ValueAdapterEntityVirtual implements ValueAdapter {
                 DiscriminatorValue discriminator = ec.getAnnotation(DiscriminatorValue.class);
                 if (discriminator != null) {
                     if (CommonsStringUtils.isEmpty(discriminator.value())) {
-                        throw new Error("Missing value of @DiscriminatorValue annotation on class " + entityClass.getName());
+                        throw new Error("Missing value of @DiscriminatorValue annotation on class " + ec.getName());
                     }
                     if (impClasses.containsKey(discriminator.value())) {
-                        throw new Error("Duplicate value of @DiscriminatorValue annotation on class " + entityClass.getName() + "; the same as in calss "
+                        throw new Error("Duplicate value of @DiscriminatorValue annotation on class " + ec.getName() + "; the same as in calss "
                                 + impClasses.get(discriminator.value()));
                     }
                     impClasses.put(discriminator.value(), ec);
-                } else if (ec.getAnnotation(AbstractEntity.class) != null) {
-                    throw new Error("Missing @DiscriminatorValue annotation on class " + entityClass.getName());
+                } else if (ec.getAnnotation(AbstractEntity.class) == null) {
+                    throw new Error("Missing @DiscriminatorValue annotation on class " + ec.getName());
                 }
             }
         }
