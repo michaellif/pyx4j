@@ -30,4 +30,12 @@ public class ValidationUtils {
     public static boolean isUSZipCodeValid(String value) {
         return value.matches("^\\d{5}(-\\d{4})?$");
     }
+
+    public static boolean isCorrectUrl(String value) {
+        return value.matches("^\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+    }
+
+    public static boolean urlHasProtocol(String url) {
+        return url.matches("^\\b(https?|ftp|file)://{1}.*");
+    }
 }
