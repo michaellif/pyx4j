@@ -15,9 +15,7 @@ package com.propertyvista.common.client.ui.components;
 
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 
 /**
  * Implements all that mechanics to show pop-up box in the centre of the current window.
@@ -33,20 +31,13 @@ public abstract class ShowPopUpBox<T extends PopupPanel> {
 
     public ShowPopUpBox(T box) {
         this.box = box;
-
-        this.box.setPopupPositionAndShow(new PositionCallback() {
-            @Override
-            public void setPosition(int offsetWidth, int offsetHeight) {
-                ShowPopUpBox.this.box.setPopupPosition((Window.getClientWidth() - offsetWidth) / 2, (Window.getClientHeight() - offsetHeight) * 5 / 9);
-            }
-        });
         this.box.addCloseHandler(new CloseHandler<PopupPanel>() {
             @Override
             public void onClose(CloseEvent<PopupPanel> event) {
                 ShowPopUpBox.this.onClose(ShowPopUpBox.this.box);
             }
         });
-        this.box.show();
+        this.box.center();
     }
 
     /**
