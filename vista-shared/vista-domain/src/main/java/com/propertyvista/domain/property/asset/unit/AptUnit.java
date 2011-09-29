@@ -16,6 +16,7 @@ package com.propertyvista.domain.property.asset.unit;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
@@ -32,6 +33,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.shared.adapters.FloorplanCountersUpdateAdapter;
 
+@DiscriminatorValue("UnitBuildingElement")
 public interface AptUnit extends BuildingElement {
 
     @Owner

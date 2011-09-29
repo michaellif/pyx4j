@@ -16,6 +16,7 @@ package com.propertyvista.domain.property.asset;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -29,6 +30,7 @@ import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
+@DiscriminatorValue("ParkingBuildingElement")
 public interface Parking extends BuildingElement {
 
     @Translatable

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.pyx4j.entity.server.Persistence;
+
 import com.propertyvista.crm.rpc.services.ServiceItemCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.financial.offering.ServiceItem;
@@ -21,5 +23,13 @@ public class ServiceItemCrudServiceImpl extends GenericCrudServiceImpl<ServiceIt
 
     public ServiceItemCrudServiceImpl() {
         super(ServiceItem.class);
+    }
+
+    @Override
+    protected void enhanceRetrieve(ServiceItem entity, boolean fromList) {
+        if (!fromList) {
+            // Load detached data:
+            Persistence.service().retrieve(entity.element());
+        }
     }
 }
