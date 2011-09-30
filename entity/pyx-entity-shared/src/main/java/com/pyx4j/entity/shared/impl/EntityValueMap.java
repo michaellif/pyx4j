@@ -21,10 +21,13 @@
 package com.pyx4j.entity.shared.impl;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.IEntity;
@@ -110,9 +113,20 @@ public class EntityValueMap extends HashMap<String, Object> {
         }
     }
 
+    private static void appendFiled(StringBuilder b, String ident, String name, Object value) {
+        if (value != null) {
+            if (ToStringStyle.fieldMultiLine) {
+                b.append(ident);
+            }
+            b.append(name).append("=").append(value);
+            if (ToStringStyle.fieldMultiLine) {
+                b.append('\n');
+            }
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public static void dumpMap(StringBuilder b, Map<String, Object> map, Set<Map<String, Object>> processed, String ident) {
-
         if (ToStringStyle.fieldMultiLine) {
             b.append(ident);
         }
@@ -121,18 +135,9 @@ public class EntityValueMap extends HashMap<String, Object> {
         if (ToStringStyle.fieldMultiLine) {
             b.append('\n');
         }
+        Object pk = map.get(IEntity.PRIMARY_KEY);
+        appendFiled(b, ident, IEntity.PRIMARY_KEY, pk);
         if (processed.contains(map)) {
-            Object pk = map.get(IEntity.PRIMARY_KEY);
-            if (pk != null) {
-                if (ToStringStyle.fieldMultiLine) {
-                    b.append(ident);
-                }
-                b.append(IEntity.PRIMARY_KEY).append("=").append(pk);
-                if (ToStringStyle.fieldMultiLine) {
-                    b.append('\n');
-                }
-            }
-
             if (ToStringStyle.fieldMultiLine) {
                 b.append(ident);
             }
@@ -142,29 +147,19 @@ public class EntityValueMap extends HashMap<String, Object> {
             }
             return;
         }
-        Object type = map.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR);
-        if (type != null) {
-            if (ToStringStyle.fieldMultiLine) {
-                b.append(ident);
-            }
-            b.append(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR).append('=').append(type);
-            if (ToStringStyle.fieldMultiLine) {
-                b.append('\n');
-            }
-        }
+
+        appendFiled(b, ident, SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR, map.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR));
         if (map.containsKey(SharedEntityHandler.DETACHED_ATTR)) {
-            if (ToStringStyle.fieldMultiLine) {
-                b.append(ident);
-            }
-            b.append(SharedEntityHandler.DETACHED_ATTR);
-            if (ToStringStyle.fieldMultiLine) {
-                b.append('\n');
-            }
+            appendFiled(b, ident, SharedEntityHandler.DETACHED_ATTR, Boolean.TRUE);
         }
 
         processed.add(map);
-        for (Map.Entry<String, Object> me : map.entrySet()) {
-            if (me.getKey().startsWith(SharedEntityHandler.ATTR_PREFIX)) {
+
+        List<String> keys = new Vector<String>(map.keySet());
+        Collections.sort(keys);
+
+        for (String key : keys) {
+            if (key.equals(IEntity.PRIMARY_KEY) || key.startsWith(SharedEntityHandler.ATTR_PREFIX)) {
                 continue;
             }
             if (ToStringStyle.fieldMultiLine) {
@@ -172,21 +167,22 @@ public class EntityValueMap extends HashMap<String, Object> {
             } else {
                 b.append(' ');
             }
-            b.append(me.getKey()).append('=');
-            if (me.getValue() instanceof Map<?, ?>) {
+            b.append(key).append('=');
+            Object value = map.get(key);
+            if (value instanceof Map<?, ?>) {
                 b.append('{');
                 if (ToStringStyle.fieldMultiLine) {
                     b.append('\n');
                 }
-                dumpMap(b, (Map<String, Object>) me.getValue(), processed, ident + ToStringStyle.PADDING);
+                dumpMap(b, (Map<String, Object>) value, processed, ident + ToStringStyle.PADDING);
                 if (ToStringStyle.fieldMultiLine) {
                     b.append(ident);
                 }
                 b.append('}');
-            } else if (me.getValue() instanceof Collection<?>) {
+            } else if (value instanceof Collection<?>) {
                 b.append('[');
                 boolean collectionFirst = true;
-                for (Object o : (Collection<?>) me.getValue()) {
+                for (Object o : (Collection<?>) value) {
                     if (collectionFirst) {
                         collectionFirst = false;
                     } else {
@@ -208,7 +204,7 @@ public class EntityValueMap extends HashMap<String, Object> {
                 }
                 b.append(']');
             } else {
-                b.append(me.getValue());
+                b.append(value);
             }
             if (ToStringStyle.fieldMultiLine) {
                 b.append('\n');
