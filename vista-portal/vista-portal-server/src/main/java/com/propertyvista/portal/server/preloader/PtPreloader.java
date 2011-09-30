@@ -36,7 +36,6 @@ import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineList;
 import com.propertyvista.domain.contact.IAddress;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
-import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
@@ -158,14 +157,6 @@ public class PtPreloader extends BaseVistaDataPreloader {
     }
 
     private void persistFullApplication(ApplicationSummaryGDO summary, PTGenerator generator) {
-
-        Persistence.service().persist(summary.lease().pets());
-
-        for (Vehicle vh : summary.lease().vehicles()) {
-            Persistence.service().persist(vh.province());
-            Persistence.service().persist(vh.country());
-            Persistence.service().persist(vh);
-        }
 
         Persistence.service().persist(summary.lease());
 

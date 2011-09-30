@@ -50,9 +50,8 @@ import com.propertyvista.domain.contact.IAddressFull.StreetDirection;
 import com.propertyvista.domain.contact.IAddressFull.StreetType;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
-import com.propertyvista.domain.financial.offering.extradata.PetType;
-import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.financial.offering.extradata.Pet.WeightUnit;
+import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -115,9 +114,6 @@ public class PTGenerator {
         summary.lease().actualMoveIn().setValue(RandomUtil.randomLogicalDate(2011, 2011));
         summary.lease().expectedMoveOut().setValue(RandomUtil.randomLogicalDate(2012, 2012));
         summary.lease().signDate().setValue(RandomUtil.randomLogicalDate(2012, 2012));
-
-        createPets(summary.lease().pets());
-        createVehicles(summary.lease().vehicles());
 
         //summary.charges().set(createCharges(summary, selectedUnit));
 
@@ -269,7 +265,7 @@ public class PTGenerator {
         for (int i = 0; i < maxPets; i++) {
             Pet pet = EntityFactory.create(Pet.class);
 
-            pet.type().setValue(PetType.dog);
+            pet.type().setValue(Pet.Type.dog);
             pet.name().setValue(RandomUtil.random(DemoData.PET_NAMES));
             pet.color().setValue(RandomUtil.random(DemoData.PET_COLORS));
             pet.breed().setValue(RandomUtil.random(DemoData.PET_BREEDS));

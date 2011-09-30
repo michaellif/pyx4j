@@ -29,8 +29,6 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.extradata.Pet;
-import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.media.Document;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -87,14 +85,6 @@ public interface Lease extends IEntity {
      */
     @Detached
     IList<TenantInLease> tenants();
-
-    @Detached
-    // should be loaded in service when necessary!..
-    IList<Vehicle> vehicles();
-
-    @Detached
-    // should be loaded in service when necessary!..
-    IList<Pet> pets();
 
     // Dates:
     IPrimitive<LogicalDate> leaseFrom();

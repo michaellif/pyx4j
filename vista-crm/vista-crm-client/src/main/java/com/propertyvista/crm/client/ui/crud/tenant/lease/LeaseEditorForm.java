@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -125,7 +126,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         tabPanel.add(createDetailsTab(), i18n.tr("Details"));
         tabPanel.add(createTenantsTab(), i18n.tr("Tenants"));
-        tabPanel.add(createAddonsTab(), i18n.tr("Add-ons"));
         tabPanel.add(createServiceAgreementTab(), i18n.tr("Service Agreement"));
 
         appStatusTab = createAppStatustab();
@@ -198,17 +198,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
         main.add(inject(proto().tenants(), createTenantsListViewer()));
-
-        return new CrmScrollPanel(main);
-    }
-
-    private Widget createAddonsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-
-        main.add(new CrmSectionSeparator(i18n.tr("Pets:")));
-        main.add(inject(proto().pets(), createPetListViewer()));
-        main.add(new CrmSectionSeparator(i18n.tr("Vehicles/Parking:")));
-        main.add(inject(proto().vehicles(), createVehicleListViewer()));
 
         return new CrmScrollPanel(main);
     }
@@ -647,10 +636,18 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
                         VistaDecoratorsSplitFlowPanel split;
 
+                        CLabel lb;
                         main.add(split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 22));
-                        split.getLeftPanel().add(inject(proto().item().type().name(), new CLabel()), 10);
-                        split.getRightPanel().add(inject(proto().price(), new CNumberLabel()), 6);
-                        split.getRightPanel().add(inject(proto().adjustedPrice(), new CNumberLabel()), 6);
+                        split.getLeftPanel().add(inject(proto().item().type().name(), lb = new CLabel()));
+                        lb.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+
+                        CNumberLabel nl;
+                        split.getRightPanel().add(inject(proto().price(), nl = new CNumberLabel()), 6);
+                        nl.setNumberFormat(proto().price().getMeta().getFormat());
+
+                        split.getRightPanel().add(inject(proto().adjustedPrice(), nl = new CNumberLabel()), 6);
+                        nl.setNumberFormat(proto().adjustedPrice().getMeta().getFormat());
+                        nl.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
                         main.add(extraDataPanel);
 
@@ -687,6 +684,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                 @Override
                                 public IsWidget createContent() {
                                     VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
+                                    panel.add(new CrmSectionSeparator(CrmEntityFolder.i18n.tr("Vehicle data:")));
                                     panel.add(inject(proto().plateNumber()), 8);
                                     panel.add(inject(proto().year()), 5);
                                     panel.add(inject(proto().make()), 8);
@@ -706,6 +704,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                 @Override
                                 public IsWidget createContent() {
                                     VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
+                                    panel.add(new CrmSectionSeparator(CrmEntityFolder.i18n.tr("Pet data:")));
                                     panel.add(inject(proto().type()), 5);
                                     panel.add(inject(proto().name()), 14);
                                     panel.add(inject(proto().color()), 6);

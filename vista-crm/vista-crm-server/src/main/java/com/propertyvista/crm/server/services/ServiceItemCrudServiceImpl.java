@@ -38,7 +38,7 @@ public class ServiceItemCrudServiceImpl extends GenericCrudServiceImpl<ServiceIt
     @Override
     protected void enhanceSave(ServiceItem entity) {
         if (entity.element().isValuesDetached()) {
-            Persistence.service().retrieve(entity.element());
+            Persistence.service().merge(entity.element());
         }
     }
 }

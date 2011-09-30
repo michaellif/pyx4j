@@ -31,6 +31,20 @@ import com.propertyvista.domain.financial.offering.ChargeItemExtraData;
 @DiscriminatorValue("Pet_ChargeItemExtraData")
 public interface Pet extends ChargeItemExtraData {
 
+    public enum Type {
+
+        @Translation("Dog")
+        dog,
+
+        @Translation("Cat")
+        cat;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
     public enum WeightUnit {
 
         @Translation("LB")
@@ -49,7 +63,7 @@ public interface Pet extends ChargeItemExtraData {
     @NotNull
     @BusinessEqualValue
     @MemberColumn(name = "tp")
-    public IPrimitive<PetType> type();
+    public IPrimitive<Type> type();
 
     @NotNull
     @BusinessEqualValue

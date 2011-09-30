@@ -37,8 +37,6 @@ import com.propertyvista.domain.User;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceFeature;
-import com.propertyvista.domain.financial.offering.extradata.Pet;
-import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -63,8 +61,6 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         if (!fromList) {
             // load detached entities:
             Persistence.service().retrieve(in.unit());
-            Persistence.service().retrieve(in.vehicles());
-            Persistence.service().retrieve(in.pets());
             Persistence.service().retrieve(in.documents());
 
             // fill selected building by unit:
@@ -89,14 +85,11 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     protected void persistDBO(Lease dbo, LeaseDTO dto) {
         // persist non-owned lists items:
-        for (Pet item : dbo.pets()) {
-            Persistence.service().merge(item);
-        }
-        for (Vehicle item : dbo.vehicles()) {
-            Persistence.service().merge(item);
-        }
         for (TenantInLease item : dbo.tenants()) {
             Persistence.service().merge(item);
+        }
+        for (ChargeItem item : dbo.serviceAgreement().featureItems()) {
+            Persistence.service().merge(item.extraData());
         }
         Persistence.service().merge(dbo);
     }
