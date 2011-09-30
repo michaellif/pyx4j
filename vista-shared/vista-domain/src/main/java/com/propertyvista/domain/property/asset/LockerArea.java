@@ -13,25 +13,15 @@
  */
 package com.propertyvista.domain.property.asset;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.property.asset.building.Building;
-
 @DiscriminatorValue("LockerAreaBuildingElement")
 public interface LockerArea extends BuildingElement {
-
-    @Owner
-    @Detached
-    @ReadOnly
-    Building belongsTo();
 
     @ToString(index = 0)
     IPrimitive<String> name();

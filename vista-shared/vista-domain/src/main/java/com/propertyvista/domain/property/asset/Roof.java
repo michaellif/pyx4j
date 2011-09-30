@@ -14,27 +14,20 @@
 package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.Notes;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.vendor.LicencedWarrantedMaintained;
 
 @ToStringFormat("{0} {1}")
-public interface Roof extends LicencedWarrantedMaintained, Notes {
-
-    @Owner
-    @Detached
-    @ReadOnly
-    Building belongsTo();
+@DiscriminatorValue("RoofBuildingElement")
+public interface Roof extends LicencedWarrantedMaintained, Notes, BuildingElement {
 
     @ToString(index = 0)
     @MemberColumn(name = "roofType")
