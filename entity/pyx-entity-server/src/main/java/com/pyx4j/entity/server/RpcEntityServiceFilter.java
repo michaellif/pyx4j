@@ -48,13 +48,29 @@ public class RpcEntityServiceFilter implements IServiceFilter {
 
     @Override
     public Serializable filterIncomming(Class<? extends Service<?, ?>> serviceClass, Serializable request) {
-        filterRpcTransient(request, new IdentityHashSet<Serializable>(), true);
+        boolean ok = false;
+        try {
+            filterRpcTransient(request, new IdentityHashSet<Serializable>(), true);
+            ok = true;
+        } finally {
+            if (!ok) {
+                log.error("request not valid {}", request);
+            }
+        }
         return request;
     }
 
     @Override
     public Serializable filterOutgoing(Class<? extends Service<?, ?>> serviceClass, Serializable response) {
-        filterRpcTransient(response, new IdentityHashSet<Serializable>(), false);
+        boolean ok = false;
+        try {
+            filterRpcTransient(response, new IdentityHashSet<Serializable>(), false);
+            ok = true;
+        } finally {
+            if (!ok) {
+                log.error("response not valid {}", response);
+            }
+        }
         return response;
     }
 
@@ -88,12 +104,14 @@ public class RpcEntityServiceFilter implements IServiceFilter {
         if (entity.isNull() || processed.contains(entity) || processed.contains(entity.getValue())) {
             return;
         }
+        processed.add(entity);
+        processed.add((Serializable) entity.getValue());
+
+        entity = entity.cast();
         EntityMeta em = entity.getEntityMeta();
         if (em.isRpcTransient()) {
             throw new Error("Should not serialize " + entity.getObjectClass());
         }
-        processed.add(entity);
-        processed.add((Serializable) entity.getValue());
 
         nextValue: for (Map.Entry<String, Object> me : entity.getValue().entrySet()) {
             String memberName = me.getKey();

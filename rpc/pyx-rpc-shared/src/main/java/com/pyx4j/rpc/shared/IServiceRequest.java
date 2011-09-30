@@ -81,4 +81,13 @@ public class IServiceRequest implements Serializable, IHaveServiceCallMarker {
         return className.substring(className.lastIndexOf(".") + 1) + "." + getServiceMethodId();
     }
 
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        b.append(serviceClassId).append('.').append(serviceMethodId).append('(');
+        b.append(args);
+        b.append(')');
+        return b.toString();
+    }
+
 }
