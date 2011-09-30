@@ -34,6 +34,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.site.client.ui.crud.CEntityCrudHyperlink;
@@ -156,20 +157,23 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
                         if (column.getObject() == proto().element()) {
                             if (parent.isEditable()) {
                                 comp = inject(column.getObject(), new CEntityComboBox<AptUnit>(AptUnit.class));
+//                                CEntityComboBox<AptUnit> combo = (CEntityComboBox<AptUnit>) comp;
+//                                combo.setOptionsFilter(new OptionsFilter<AptUnit>() {
+//                                    @Override
+//                                    public boolean acceptOption(AptUnit entity) {
+//                                        Service value = ServiceEditorForm.this.getValue();
+//                                        if (value != null && !value.isNull()) {
+//                                            return entity.belongsTo().equals(value.catalog().belongsTo());
+//                                        }
+//                                        return false;
+//                                    }
+//                                });
+
                                 @SuppressWarnings("unchecked")
                                 CEntityComboBox<AptUnit> combo = (CEntityComboBox<AptUnit>) comp;
-                                combo.setOptionsFilter(new OptionsFilter<AptUnit>() {
-                                    @Override
-                                    public boolean acceptOption(AptUnit entity) {
-                                        Service value = ServiceEditorForm.this.getValue();
-                                        if (value != null && !value.isNull()) {
-                                            return entity.belongsTo().equals(value.catalog().belongsTo());
-                                        }
-                                        return false;
-                                    }
-                                });
+                                combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), ServiceEditorForm.this.getValue().catalog().belongsTo()));
                             } else {
-                                comp = new CEntityCrudHyperlink<AptUnit>(MainActivityMapper.getCrudAppPlace(AptUnit.class));
+                                comp = inject(column.getObject(), new CEntityCrudHyperlink<AptUnit>(MainActivityMapper.getCrudAppPlace(AptUnit.class)));
                             }
                         } else {
                             comp = super.createCell(column);
