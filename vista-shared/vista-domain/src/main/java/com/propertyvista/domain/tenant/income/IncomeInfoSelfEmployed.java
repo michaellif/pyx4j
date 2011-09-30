@@ -14,12 +14,14 @@
 package com.propertyvista.domain.tenant.income;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.Money;
 
+@DiscriminatorValue("selfEmployed")
 public interface IncomeInfoSelfEmployed extends IEntity, IEmploymentInfo {
 
     @Override

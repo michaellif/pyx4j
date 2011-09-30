@@ -13,8 +13,10 @@
  */
 package com.propertyvista.domain.tenant.income;
 
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IEntity;
 
+@DiscriminatorValue("other")
 public interface IncomeInfoOther extends IEntity, IIncomeInfo {
 
 }

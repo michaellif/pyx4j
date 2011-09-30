@@ -130,7 +130,7 @@ public class PtAppWizardManager {
             if (place.getPlaceId().equals(step.placeId().getValue()) && (!ApplicationWizardStep.Status.notVisited.equals(step.status().getValue()))) {
                 if (step.substeps().size() > 0) {
                     for (ApplicationWizardSubstep substep : step.substeps()) {
-                        if (substep.placeArgument().getStringView().equals(place.getArg(PtSiteMap.STEP_ARG_NAME))) {
+                        if (substep.placeArgument().getStringView().equals(place.getFirstArg(PtSiteMap.STEP_ARG_NAME))) {
                             return (!ApplicationWizardStep.Status.notVisited.equals(substep.status().getValue()));
                         }
                     }

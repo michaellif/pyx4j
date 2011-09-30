@@ -15,6 +15,7 @@ package com.propertyvista.domain.tenant.income;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -24,6 +25,7 @@ import com.pyx4j.i18n.shared.Translation;
 import com.propertyvista.domain.contact.IAddressFull;
 import com.propertyvista.domain.financial.Money;
 
+@DiscriminatorValue("student")
 public interface IncomeInfoStudentIncome extends IEntity, IAddressFull, IIncomeInfo {
 
     public enum FundingChoice {

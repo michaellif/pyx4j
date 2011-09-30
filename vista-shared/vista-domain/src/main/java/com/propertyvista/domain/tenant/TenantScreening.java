@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -74,6 +75,7 @@ public interface TenantScreening extends IEntity {
 
     @Owned
     @Length(3)
+    @Transient
     IList<IIncomeInfo> incomes2();
 
     @Owned

@@ -13,15 +13,19 @@
  */
 package com.propertyvista.domain.tenant.income;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.IAddressFull;
 import com.propertyvista.domain.financial.Money;
 
+@AbstractEntity
+@Inheritance
 public interface IEmploymentInfo extends IAddressFull, IIncomeInfo {
 
     @Override

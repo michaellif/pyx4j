@@ -135,7 +135,7 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
             }
 
             if (substep.placeArgument().getValue() != null
-                    && substep.placeArgument().getValue().toString().equals(presenter.getWhere().getArg(PtSiteMap.STEP_ARG_NAME))) {
+                    && substep.placeArgument().getValue().toString().equals(presenter.getWhere().getFirstArg(PtSiteMap.STEP_ARG_NAME))) {
                 addStyleDependentName(StyleDependent.current.name());
                 label.addStyleDependentName(StyleDependent.current.name());
             }
