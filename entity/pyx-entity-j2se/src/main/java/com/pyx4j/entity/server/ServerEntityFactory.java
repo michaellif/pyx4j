@@ -22,6 +22,7 @@ package com.pyx4j.entity.server;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,8 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 public class ServerEntityFactory implements IEntityFactory {
 
     private static final Logger log = LoggerFactory.getLogger(ServerEntityFactory.class);
+
+    private static Set<Class<? extends IEntity>> allEntityClasses;
 
     private static final Map<Class<? extends IEntity>, Class<?>> impClasses = new HashMap<Class<? extends IEntity>, Class<?>>();
 
@@ -128,10 +131,8 @@ public class ServerEntityFactory implements IEntityFactory {
         return new EntityMetaImpl(entityClass);
     }
 
-    private static boolean allCalssesFound;
-
     public static Set<Class<? extends IEntity>> getAllEntityClasses() {
-        if (!allCalssesFound) {
+        if (allEntityClasses == null) {
             List<String> allClasses = EntityClassFinder.getEntityClassesNames();
             for (String className : allClasses) {
                 Class<? extends IEntity> entityClass = entityClass(className);
@@ -139,9 +140,9 @@ public class ServerEntityFactory implements IEntityFactory {
                     impClasses.put(entityClass, null);
                 }
             }
-            allCalssesFound = true;
+            allEntityClasses = Collections.unmodifiableSet(impClasses.keySet());
         }
-        return impClasses.keySet();
+        return allEntityClasses;
     }
 
     public static <T extends IEntity> Class<IPojo<T>> getPojoClass(Class<T> entityClass) {
