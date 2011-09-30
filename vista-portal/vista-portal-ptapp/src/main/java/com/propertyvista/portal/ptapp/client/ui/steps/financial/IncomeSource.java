@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.financial;
 
-import com.pyx4j.entity.client.ui.flex.editor.IPolymorphicDiscriminator;
+import com.pyx4j.entity.client.ui.flex.editor.IDiscriminator;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translation;
 
@@ -23,7 +23,7 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSeasonallyEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoSocialServices;
 
-public enum IncomeSource implements IPolymorphicDiscriminator<IIncomeInfo> {
+public enum IncomeSource implements IDiscriminator<IIncomeInfo> {
 
     @Translation("Full time")
     fulltime(IncomeInfoEmployer.class),

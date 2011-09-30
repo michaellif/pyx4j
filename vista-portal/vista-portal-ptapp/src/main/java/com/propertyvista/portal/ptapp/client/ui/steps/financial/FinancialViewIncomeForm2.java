@@ -34,7 +34,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CPolymorphicEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IPolymorphicDiscriminator;
+import com.pyx4j.entity.client.ui.flex.editor.IDiscriminator;
 import com.pyx4j.entity.client.ui.flex.editor.IPolymorphicEditorDecorator;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -72,7 +72,7 @@ public class FinancialViewIncomeForm2 extends CEntityFolderItemEditor<IIncomeInf
         editor = new CPolymorphicEntityEditor<IIncomeInfo>(IIncomeInfo.class, Arrays.asList(IncomeSource.values())) {
 
             @Override
-            protected CEntityEditor<? extends IIncomeInfo> createItem(IPolymorphicDiscriminator<IIncomeInfo> discriminator) {
+            protected CEntityEditor<? extends IIncomeInfo> createItem(IDiscriminator<IIncomeInfo> discriminator) {
                 switch ((IncomeSource) discriminator) {
                 case fulltime:
                     return createEmployerEditor();
