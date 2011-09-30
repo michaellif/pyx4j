@@ -36,6 +36,7 @@ import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.site.client.ui.crud.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.ListerBase.ItemSelectionHandler;
 
@@ -44,6 +45,7 @@ import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
@@ -152,19 +154,23 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
                         CComponent<?> comp;
 
                         if (column.getObject() == proto().element()) {
-                            comp = inject(column.getObject(), new CEntityComboBox<AptUnit>(AptUnit.class));
-//                            @SuppressWarnings("unchecked")
-//                            CEntityComboBox<AptUnit> combo = (CEntityComboBox<AptUnit>) comp;
-//                            combo.setOptionsFilter(new OptionsFilter<AptUnit>() {
-//                                @Override
-//                                public boolean acceptOption(AptUnit entity) {
-//                                    Service value = ServiceEditorForm.this.getValue();
-//                                    if (value != null && !value.isNull()) {
-//                                        return entity.belongsTo().equals(value.catalog().belongsTo());
-//                                    }
-//                                    return false;
-//                                }
-//                            });
+                            if (parent.isEditable()) {
+                                comp = inject(column.getObject(), new CEntityComboBox<AptUnit>(AptUnit.class));
+                                @SuppressWarnings("unchecked")
+                                CEntityComboBox<AptUnit> combo = (CEntityComboBox<AptUnit>) comp;
+                                combo.setOptionsFilter(new OptionsFilter<AptUnit>() {
+                                    @Override
+                                    public boolean acceptOption(AptUnit entity) {
+                                        Service value = ServiceEditorForm.this.getValue();
+                                        if (value != null && !value.isNull()) {
+                                            return entity.belongsTo().equals(value.catalog().belongsTo());
+                                        }
+                                        return false;
+                                    }
+                                });
+                            } else {
+                                comp = new CEntityCrudHyperlink<AptUnit>(MainActivityMapper.getCrudAppPlace(AptUnit.class));
+                            }
                         } else {
                             comp = super.createCell(column);
                         }
