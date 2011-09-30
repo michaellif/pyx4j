@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.Range;
@@ -43,6 +44,7 @@ import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
@@ -83,9 +85,6 @@ import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
-import com.propertyvista.domain.Pet;
-import com.propertyvista.domain.Pet.WeightUnit;
-import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.ChargeItemAdjustment;
@@ -93,7 +92,9 @@ import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceConcession;
 import com.propertyvista.domain.financial.offering.ServiceItem;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.extradata.Pet;
+import com.propertyvista.domain.financial.offering.extradata.Pet.WeightUnit;
+import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
@@ -267,7 +268,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 // List Viewers:
 
     private CEntityFolderEditor<TenantInLease> createTenantsListViewer() {
-        return new CrmEntityFolder<TenantInLease>(TenantInLease.class, i18n.tr("Tenant"), isEditable()) {
+        return new CrmEntityFolder<TenantInLease>(TenantInLease.class, isEditable()) {
             private final CrmEntityFolder<TenantInLease> parent = this;
 
             @Override
@@ -592,7 +593,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     }
 
     private CEntityFolderEditor<ChargeItem> createFeaturesFolderEditor() {
-        return new CrmEntityFolder<ChargeItem>(ChargeItem.class, i18n.tr("Charge Item"), isEditable()) {
+        return new CrmEntityFolder<ChargeItem>(ChargeItem.class, isEditable()) {
             private final CrmEntityFolder<ChargeItem> parent = this;
 
             @Override
@@ -635,6 +636,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 return new CEntityFolderRowEditor<ChargeItem>(ChargeItem.class, columns()) {
                     private final CEntityFolderRowEditor<ChargeItem> chargeItemEditor = this;
 
+                    private final SimplePanel extraDataPanel = new SimplePanel();
+
                     private VistaDecoratorsFlowPanel adjustmentPanel;
 
                     private final CrmBoxFolderItemDecorator<ChargeItem> decor = new CrmBoxFolderItemDecorator<ChargeItem>(parent);
@@ -649,6 +652,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         split.getRightPanel().add(inject(proto().price(), new CNumberLabel()), 6);
                         split.getRightPanel().add(inject(proto().adjustedPrice(), new CNumberLabel()), 6);
 
+                        main.add(extraDataPanel);
+
                         adjustmentPanel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
                         adjustmentPanel.add(new CrmSectionSeparator(CrmEntityFolder.i18n.tr("Adjustments:")));
                         adjustmentPanel.add(inject(proto().adjustments(), createItemAdjustmentListView(chargeItemEditor)));
@@ -661,18 +666,67 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         return decor;
                     }
 
+                    @SuppressWarnings({ "unchecked", "rawtypes" })
                     @Override
                     public void populate(ChargeItem value) {
                         super.populate(value);
 
-                        if (value.item().type().type().getValue() == ServiceItemType.Type.feature
-                                && value.item().type().featureType().getValue() == Feature.Type.utility) {
+                        if (value.item().type().featureType().getValue() == Feature.Type.utility) {
                             decor.setRemovable(false);
                         }
 
                         if (!parent.isEditable()) {
                             adjustmentPanel.setVisible(!value.adjustments().isEmpty());
                             get(proto().adjustedPrice()).setVisible(!value.adjustments().isEmpty());
+                        }
+
+                        CEntityEditor editor = null;
+                        switch (value.item().type().featureType().getValue()) {
+                        case parking:
+                            editor = new CEntityEditor<Vehicle>(Vehicle.class) {
+                                @Override
+                                public IsWidget createContent() {
+                                    VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
+                                    panel.add(inject(proto().plateNumber()), 8);
+                                    panel.add(inject(proto().year()), 5);
+                                    panel.add(inject(proto().make()), 8);
+                                    panel.add(inject(proto().model()), 8);
+                                    panel.add(inject(proto().country()), 9);
+                                    panel.add(inject(proto().province()), 16);
+                                    return panel;
+                                }
+                            };
+
+                            if (value.extraData().isNull()) {
+                                value.extraData().set(EntityFactory.create(Vehicle.class));
+                            }
+                            break;
+                        case pet:
+                            editor = new CEntityEditor<Pet>(Pet.class) {
+                                @Override
+                                public IsWidget createContent() {
+                                    VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
+                                    panel.add(inject(proto().type()), 5);
+                                    panel.add(inject(proto().name()), 14);
+                                    panel.add(inject(proto().color()), 6);
+                                    panel.add(inject(proto().breed()), 13);
+                                    panel.add(inject(proto().weight()), 4);
+                                    panel.add(inject(proto().weightUnit()), 4);
+                                    panel.add(inject(proto().birthDate()), 8.2);
+                                    return panel;
+                                }
+                            };
+
+                            if (value.extraData().isNull()) {
+                                value.extraData().set(EntityFactory.create(Pet.class));
+                            }
+                            break;
+                        }
+
+                        if (editor != null) {
+                            editor.onBound(chargeItemEditor);
+                            editor.populate(value.extraData().cast());
+                            extraDataPanel.setWidget(editor);
                         }
                     }
 
@@ -725,7 +779,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     }
 
     private CEntityFolderEditor<ServiceConcession> createConcessionsFolderEditor() {
-        return new CrmEntityFolder<ServiceConcession>(ServiceConcession.class, i18n.tr("Concession"), isEditable()) {
+        return new CrmEntityFolder<ServiceConcession>(ServiceConcession.class, isEditable()) {
             private final CrmEntityFolder<ServiceConcession> parent = this;
 
             @Override
@@ -785,7 +839,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     }
 
     private CEntityFolderEditor<ChargeItemAdjustment> createItemAdjustmentListView(final CEntityFolderRowEditor<ChargeItem> chargeItemEditor) {
-        return new CrmEntityFolder<ChargeItemAdjustment>(ChargeItemAdjustment.class, i18n.tr("Adjustment"), isEditable()) {
+        return new CrmEntityFolder<ChargeItemAdjustment>(ChargeItemAdjustment.class, isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
