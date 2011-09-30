@@ -222,7 +222,7 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
     }
 
     protected void repopulate(E value) {
-        System.out.println("++++++++++" + value.getObjectClass());
+        System.out.println("++++++++++" + value);
 
         for (IPolymorphicDiscriminator<E> discriminator : discriminators) {
             if (discriminator.getType().equals(value.getObjectClass())) {

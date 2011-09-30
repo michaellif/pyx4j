@@ -49,12 +49,13 @@ public abstract class CEntityContainer<DATA_TYPE, WIDGET_TYPE extends Widget & I
             return true;
         }
 
-        for (CEditableComponent<?, ?> ccomponent : getComponents()) {
-            if (!ccomponent.isValid()) {
-                return false;
+        if (getComponents() != null) {
+            for (CEditableComponent<?, ?> ccomponent : getComponents()) {
+                if (!ccomponent.isValid()) {
+                    return false;
+                }
             }
         }
-
         return super.isValid();
     }
 
@@ -90,10 +91,11 @@ public abstract class CEntityContainer<DATA_TYPE, WIDGET_TYPE extends Widget & I
     @Override
     public void setVisited(boolean visited) {
         super.setVisited(visited);
-        for (CEditableComponent<?, ?> ccomponent : getComponents()) {
-            ((CEditableComponent<?, ?>) ccomponent).setVisited(visited);
+        if (getComponents() != null) {
+            for (CEditableComponent<?, ?> ccomponent : getComponents()) {
+                ((CEditableComponent<?, ?>) ccomponent).setVisited(visited);
+            }
         }
-
     }
 
     public abstract IsWidget createContent();
