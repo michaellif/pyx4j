@@ -184,7 +184,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
                                 CEntityComboBox<BuildingElement> combo = (CEntityComboBox) comp;
 
                                 Service value = ServiceEditorForm.this.getValue();
-                                combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), value.catalog().belongsTo()));
+                                combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), value.catalog().belongsTo().detach()));
                             } else {
                                 comp = inject(column.getObject(), new CEntityCrudHyperlink<AptUnit>(MainActivityMapper.getCrudAppPlace(buildingElementClass)));
                             }

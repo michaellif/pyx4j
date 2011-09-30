@@ -30,7 +30,6 @@ public class ServiceCrudServiceImpl extends GenericCrudServiceImpl<Service> impl
         if (!fromList) {
             // Load detached data:
             Persistence.service().retrieve(entity.catalog());
-            Persistence.service().retrieve(entity.catalog().belongsTo());
 
             Persistence.service().retrieve(entity.items());
             Persistence.service().retrieve(entity.features());
