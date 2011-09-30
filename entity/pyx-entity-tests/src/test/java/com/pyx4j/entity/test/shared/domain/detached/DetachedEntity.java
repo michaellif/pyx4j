@@ -20,9 +20,11 @@
  */
 package com.pyx4j.entity.test.shared.domain.detached;
 
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Table(prefix = "test")
 public interface DetachedEntity extends IEntity {
 
     IPrimitive<String> name();

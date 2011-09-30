@@ -192,13 +192,15 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();
             IEntity childEntity = (IEntity) member.getMember(entity);
-            if (memberMeta.isOwnedRelationships()) {
-                if (!childEntity.isValuesDetached()) {
-                    childEntity = childEntity.cast();
-                    persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+            if (!childEntity.isNull()) {
+                if (memberMeta.isOwnedRelationships()) {
+                    if (!childEntity.isValuesDetached()) {
+                        childEntity = childEntity.cast();
+                        persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
+                    }
+                } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null)) {
+                    mergeReference(connection, memberMeta, childEntity, now);
                 }
-            } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
-                mergeReference(connection, memberMeta, childEntity, now);
             }
         }
         String updatedTs = tm.entityMeta().getUpdatedTimestampMember();
@@ -533,10 +535,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 // Special case for child collections update. Collection itself is the same and in the same order.
                 ICollection<IEntity, ?> collectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
                 Iterator<IEntity> iterator = collectionMember.iterator();
-                TableModel childTM = tableModel(connection, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getValueClass()));
                 for (; iterator.hasNext();) {
                     IEntity childEntity = iterator.next();
                     if (!childEntity.isValuesDetached()) {
+                        childEntity = childEntity.cast();
+                        TableModel childTM = tableModel(connection, EntityFactory.getEntityMeta(childEntity.getValueClass()));
                         fireModificationAdapters(connection, childTM, childEntity);
                     }
                 }
@@ -571,7 +574,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         delete(baseChildEntity);
                     }
                 }
-                if (!childEntity.isValuesDetached()) {
+                if (!childEntity.isValuesDetached() && (!childEntity.isNull())) {
+                    childEntity = childEntity.cast();
                     merge(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
                 }
             } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {

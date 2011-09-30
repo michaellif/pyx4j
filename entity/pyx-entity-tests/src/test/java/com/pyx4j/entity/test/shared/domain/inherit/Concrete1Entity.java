@@ -21,9 +21,11 @@
 package com.pyx4j.entity.test.shared.domain.inherit;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @DiscriminatorValue("C1")
+@Table(prefix = "test")
 public interface Concrete1Entity extends Base1Entity {
 
     IPrimitive<String> nameC1();

@@ -21,10 +21,12 @@
 package com.pyx4j.entity.test.shared.domain.inherit;
 
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 
+@Table(prefix = "test")
 public interface RefferenceEntity extends IEntity {
 
     IPrimitive<String> name();
@@ -32,5 +34,6 @@ public interface RefferenceEntity extends IEntity {
     @Owned
     Base1Entity refference();
 
-    ISet<Base1Entity> refferences();
+    @Owned
+    IList<Base1Entity> refferences();
 }

@@ -25,6 +25,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.IdentityHashSet;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -38,6 +41,8 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class EntityGraph {
+
+    protected static final Logger log = LoggerFactory.getLogger(EntityGraph.class);
 
     public static interface ApplyMethod {
 
@@ -81,16 +86,20 @@ public class EntityGraph {
         }
     }
 
+    private static final boolean traceFullyEqual = false;
+
     public static boolean fullyEqual(IEntity ent1, IEntity ent2) {
         if (!EqualsHelper.equals(ent1, ent2)) {
-            //            System.out.println("--changes\n" + ent1 + "\n!=\n" + ent2);
+            if (traceFullyEqual) {
+                log.info("--changes\n{}\n!=\n{}", ent1, ent2);
+            }
             return false;
         }
         return fullyEqualValues(ent1, ent2);
     }
 
     public static boolean fullyEqualValues(IEntity ent1, IEntity ent2) {
-        // Case if required to concert instance
+        // Cast if required to concert instance
         ent1 = ent1.cast();
         ent2 = ent2.cast();
 
@@ -104,12 +113,21 @@ public class EntityGraph {
                     continue;
                 } else if (ent1Member.getMeta().isEmbedded()) {
                     if (!fullyEqualValues(ent1Member, ent2Member)) {
+                        if (traceFullyEqual) {
+                            log.info("--changes in member {}", memberName);
+                        }
                         return false;
                     }
                 } else if (!fullyEqual(ent1Member, ent2Member)) {
+                    if (traceFullyEqual) {
+                        log.info("--changes in member {}", memberName);
+                    }
                     return false;
                 }
             } else if (!EqualsHelper.equals(ent1.getMember(memberName), ent2.getMember(memberName))) {
+                if (traceFullyEqual) {
+                    log.info("--changes in member {}", memberName);
+                }
                 return false;
             }
         }
@@ -136,6 +154,11 @@ public class EntityGraph {
             return ent1.getPath();
         }
         processed.add(ent1);
+
+        // Cast if required to concert instance
+        ent1 = ent1.cast();
+        ent2 = ent2.cast();
+
         EntityMeta em = ent1.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);

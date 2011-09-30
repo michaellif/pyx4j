@@ -83,7 +83,8 @@ public abstract class DatastoreTestBase extends TestCase {
     }
 
     protected void assertFullyEqual(String message, IEntity ent1, IEntity ent2) {
-        assertTrue(message + "\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2));
+        assertTrue(message + "\n" + EntityGraph.getChangedDataPath(ent1, ent2) + "\n" + ent1.toString() + "\n!=\n" + ent2.toString(),
+                EntityGraph.fullyEqual(ent1, ent2));
     }
 
     public synchronized String uniqueString() {
