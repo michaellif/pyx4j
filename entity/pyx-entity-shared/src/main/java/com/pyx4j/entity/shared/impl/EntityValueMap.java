@@ -121,7 +121,6 @@ public class EntityValueMap extends HashMap<String, Object> {
         if (ToStringStyle.fieldMultiLine) {
             b.append('\n');
         }
-
         if (processed.contains(map)) {
             Object pk = map.get(IEntity.PRIMARY_KEY);
             if (pk != null) {
@@ -143,15 +142,37 @@ public class EntityValueMap extends HashMap<String, Object> {
             }
             return;
         }
+        Object type = map.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR);
+        if (type != null) {
+            if (ToStringStyle.fieldMultiLine) {
+                b.append(ident);
+            }
+            b.append(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR).append('=').append(type);
+            if (ToStringStyle.fieldMultiLine) {
+                b.append('\n');
+            }
+        }
+        if (map.containsKey(SharedEntityHandler.DETACHED_ATTR)) {
+            if (ToStringStyle.fieldMultiLine) {
+                b.append(ident);
+            }
+            b.append(SharedEntityHandler.DETACHED_ATTR);
+            if (ToStringStyle.fieldMultiLine) {
+                b.append('\n');
+            }
+        }
 
         processed.add(map);
         for (Map.Entry<String, Object> me : map.entrySet()) {
+            if (me.getKey().startsWith(SharedEntityHandler.ATTR_PREFIX)) {
+                continue;
+            }
             if (ToStringStyle.fieldMultiLine) {
                 b.append(ident);
             } else {
                 b.append(' ');
             }
-            b.append(me.getKey()).append("=");
+            b.append(me.getKey()).append('=');
             if (me.getValue() instanceof Map<?, ?>) {
                 b.append('{');
                 if (ToStringStyle.fieldMultiLine) {
