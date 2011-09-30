@@ -15,12 +15,12 @@ package com.propertyvista.portal.rpc.ptapp;
 
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.User;
-import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineSelectable;
+import com.propertyvista.domain.financial.offering.extradata.Pet;
+import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;

@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-@DiscriminatorValue("ParkingBuildingElement")
+@DiscriminatorValue("Parking_BuildingElement")
 public interface Parking extends BuildingElement {
 
     @Translatable

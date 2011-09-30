@@ -25,9 +25,9 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.Pet;
-import com.propertyvista.domain.PetChargeRule;
 import com.propertyvista.domain.charges.ChargeType;
+import com.propertyvista.domain.financial.offering.extradata.Pet;
+import com.propertyvista.domain.financial.offering.extradata.PetChargeRule;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.dto.VehiclesDTO;

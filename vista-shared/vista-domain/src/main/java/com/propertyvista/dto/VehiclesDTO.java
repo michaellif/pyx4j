@@ -20,8 +20,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.Vehicle;
-import com.propertyvista.domain.VehicleChargeRule;
+import com.propertyvista.domain.financial.offering.extradata.Vehicle;
+import com.propertyvista.domain.financial.offering.extradata.VehicleChargeRule;
 
 @Transient
 public interface VehiclesDTO extends IEntity {

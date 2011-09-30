@@ -16,12 +16,12 @@ package com.propertyvista.domain.util;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.Pet.WeightUnit;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
 import com.propertyvista.domain.charges.ChargeLineSelectable;
 import com.propertyvista.domain.financial.Currency;
 import com.propertyvista.domain.financial.Money;
+import com.propertyvista.domain.financial.offering.extradata.Pet.WeightUnit;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 
 public class DomainUtil {

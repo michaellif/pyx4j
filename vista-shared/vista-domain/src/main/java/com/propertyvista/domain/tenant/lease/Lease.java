@@ -28,9 +28,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
-import com.propertyvista.domain.Pet;
-import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.extradata.Pet;
+import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.media.Document;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;

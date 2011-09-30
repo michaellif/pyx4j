@@ -20,7 +20,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@DiscriminatorValue("LockerAreaBuildingElement")
+@DiscriminatorValue("LockerArea_BuildingElement")
 public interface LockerArea extends BuildingElement {
 
     @ToString(index = 0)

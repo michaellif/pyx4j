@@ -11,7 +11,7 @@
  * @author aroytbur
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.domain.financial.offering.extradata;
 
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;

@@ -20,8 +20,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.Pet;
-import com.propertyvista.domain.PetChargeRule;
+import com.propertyvista.domain.financial.offering.extradata.Pet;
+import com.propertyvista.domain.financial.offering.extradata.PetChargeRule;
 
 @Transient
 public interface PetsDTO extends IEntity {

@@ -49,7 +49,7 @@ import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.domain.EmergencyContact;
-import com.propertyvista.domain.Vehicle;
+import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.portal.client.resources.PortalImages;

@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.Vehicle;
+import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.person.Person;
 
 @Transient

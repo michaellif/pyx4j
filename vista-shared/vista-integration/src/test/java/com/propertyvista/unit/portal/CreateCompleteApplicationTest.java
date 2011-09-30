@@ -32,14 +32,14 @@ import com.pyx4j.selenium.D;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.EmergencyContact;
-import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.User;
-import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.contact.IAddress;
 import com.propertyvista.domain.contact.IAddressFull;
+import com.propertyvista.domain.financial.offering.extradata.Pet;
+import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;

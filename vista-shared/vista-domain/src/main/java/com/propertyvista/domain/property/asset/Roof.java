@@ -26,7 +26,7 @@ import com.propertyvista.domain.Notes;
 import com.propertyvista.domain.property.vendor.LicencedWarrantedMaintained;
 
 @ToStringFormat("{0} {1}")
-@DiscriminatorValue("RoofBuildingElement")
+@DiscriminatorValue("Roof_BuildingElement")
 public interface Roof extends LicencedWarrantedMaintained, Notes, BuildingElement {
 
     @ToString(index = 0)

@@ -11,11 +11,12 @@
  * @author antonk
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.domain.financial.offering.extradata;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -23,16 +24,16 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.property.asset.ParkingSpot;
+import com.propertyvista.domain.financial.offering.ChargeItemExtraData;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.CountryReferenceAdapter;
 import com.propertyvista.domain.ref.Province;
 
 @Table(name = "pt_vehicle")
-public interface Vehicle extends IEntity {
+@DiscriminatorValue("Vehicle_ChargeItemExtraData")
+public interface Vehicle extends ChargeItemExtraData {
 
     @BusinessEqualValue
     IPrimitive<String> plateNumber();
@@ -55,6 +56,4 @@ public interface Vehicle extends IEntity {
     @Editor(type = EditorType.combo)
     @Reference(adapter = CountryReferenceAdapter.class)
     Country country();
-
-    ParkingSpot parkingSpot();
 }

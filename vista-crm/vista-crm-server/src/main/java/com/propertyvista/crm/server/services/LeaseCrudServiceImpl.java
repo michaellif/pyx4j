@@ -33,12 +33,12 @@ import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
-import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.User;
-import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceFeature;
+import com.propertyvista.domain.financial.offering.extradata.Pet;
+import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;

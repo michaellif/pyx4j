@@ -30,7 +30,7 @@ import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.shared.adapters.FloorplanCountersUpdateAdapter;
 
-@DiscriminatorValue("UnitBuildingElement")
+@DiscriminatorValue("Unit_BuildingElement")
 public interface AptUnit extends BuildingElement {
 
     @NotNull

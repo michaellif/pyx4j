@@ -29,14 +29,14 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.EmergencyContact;
-import com.propertyvista.domain.Pet;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.User;
-import com.propertyvista.domain.Vehicle;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineList;
 import com.propertyvista.domain.contact.IAddress;
+import com.propertyvista.domain.financial.offering.extradata.Pet;
+import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
@@ -164,7 +164,6 @@ public class PtPreloader extends BaseVistaDataPreloader {
         for (Vehicle vh : summary.lease().vehicles()) {
             Persistence.service().persist(vh.province());
             Persistence.service().persist(vh.country());
-            Persistence.service().persist(vh.parkingSpot());
             Persistence.service().persist(vh);
         }
 

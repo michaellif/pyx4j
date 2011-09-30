@@ -36,10 +36,10 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.PetChargeRule;
 import com.propertyvista.domain.charges.ChargeType;
 import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.contact.Email;
+import com.propertyvista.domain.financial.offering.extradata.PetChargeRule;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
