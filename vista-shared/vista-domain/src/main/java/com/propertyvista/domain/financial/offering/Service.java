@@ -47,7 +47,9 @@ public interface Service extends IEntity {
 
         sundry,
 
-        garage;
+        garage,
+
+        storage;
 
         @Override
         public String toString() {

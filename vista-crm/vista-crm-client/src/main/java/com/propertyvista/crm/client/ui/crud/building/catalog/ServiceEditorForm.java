@@ -63,7 +63,9 @@ import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.BuildingElement;
+import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
+import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class ServiceEditorForm extends CrmEntityForm<Service> {
@@ -167,6 +169,12 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
                         case garage:
                             buildingElementClass = Parking.class;
                             break;
+                        case storage:
+                            buildingElementClass = LockerArea.class;
+                            break;
+                        case roof:
+                            buildingElementClass = Roof.class;
+                            break;
                         }
 
                         CComponent<?> comp;
@@ -180,12 +188,15 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
                             } else {
                                 comp = inject(column.getObject(), new CEntityCrudHyperlink<AptUnit>(MainActivityMapper.getCrudAppPlace(buildingElementClass)));
                             }
-                        } else if (column.getObject() == proto().type()) {
-                            comp = inject(column.getObject(), new CEntityComboBox<ServiceItemType>(ServiceItemType.class));
-                            CEntityComboBox<ServiceItemType> combo = (CEntityComboBox<ServiceItemType>) comp;
-                            combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), ServiceEditorForm.this.getValue().type().getValue()));
                         } else {
                             comp = super.createCell(column);
+                        }
+
+                        if (column.getObject() == proto().type()) {
+                            if (comp instanceof CEntityComboBox<?>) {
+                                CEntityComboBox<ServiceItemType> combo = (CEntityComboBox<ServiceItemType>) comp;
+                                combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), ServiceEditorForm.this.getValue().type().getValue()));
+                            }
                         }
 
                         return comp;
