@@ -17,17 +17,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.propertvista.generator.PTGenerator;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
+import com.propertyvista.server.common.reference.SharedData;
 
 public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl implements TenantFinancialService {
 
@@ -42,13 +43,15 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
         TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(r.tenantScreening);
         dto.setPrimaryKey(r.tenantInLease.getPrimaryKey());
 
-        //TODO for test
-        IIncomeInfo ii = EntityFactory.create(IncomeInfoEmployer.class);
-        dto.incomes2().add(ii);
+        SharedData.init();
 
-        ii = EntityFactory.create(IncomeInfoSelfEmployed.class);
-        dto.incomes2().add(ii);
-        //TODO end for test
+        IncomeInfoEmployer income1 = EntityFactory.create(IncomeInfoEmployer.class);
+        income1.set(PTGenerator.createEmployer());
+        dto.incomes2().add(income1);
+
+        IncomeInfoSelfEmployed income2 = EntityFactory.create(IncomeInfoSelfEmployed.class);
+        income2.set(PTGenerator.createSelfEmployed());
+        dto.incomes2().add(income2);
 
         callback.onSuccess(dto);
     }

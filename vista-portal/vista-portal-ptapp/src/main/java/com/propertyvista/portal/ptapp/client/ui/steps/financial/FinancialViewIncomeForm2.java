@@ -14,6 +14,7 @@
 package com.propertyvista.portal.ptapp.client.ui.steps.financial;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
 import org.xnap.commons.i18n.I18n;
@@ -137,14 +138,22 @@ public class FinancialViewIncomeForm2 extends CEntityFolderItemEditor<IIncomeInf
 
     @Override
     public void populate(IIncomeInfo value) {
-        super.populate(value);
         editor.populate(value);
     }
 
     @Override
     public void setValue(IIncomeInfo value) {
-        super.setValue(value);
         editor.setValue(value);
+    }
+
+    @Override
+    public IIncomeInfo getValue() {
+        return editor.getValue();
+    }
+
+    @Override
+    public Collection<? extends CEditableComponent<?, ?>> getComponents() {
+        return Arrays.asList(new CPolymorphicEntityEditor<?>[] { editor });
     }
 
     private static void injectIEmploymentInfo(VistaDecoratorsFlowPanel main, IEmploymentInfo proto, CEntityEditor<?> parent) {

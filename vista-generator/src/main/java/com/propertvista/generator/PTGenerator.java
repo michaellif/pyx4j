@@ -154,7 +154,7 @@ public class PTGenerator {
         return lq;
     }
 
-    private IncomeInfoEmployer createEmployer() {
+    public static IncomeInfoEmployer createEmployer() {
         IncomeInfoEmployer employer = EntityFactory.create(IncomeInfoEmployer.class);
 
         populateAddress(employer);
@@ -174,7 +174,7 @@ public class PTGenerator {
         return employer;
     }
 
-    private IncomeInfoSelfEmployed createSelfEmployed() {
+    public static IncomeInfoSelfEmployed createSelfEmployed() {
         IncomeInfoSelfEmployed selfEmpl = EntityFactory.create(IncomeInfoSelfEmployed.class);
 
         populateAddress(selfEmpl);
@@ -335,7 +335,7 @@ public class PTGenerator {
         }
     }
 
-    public void populateAddress(IAddressFull address) {
+    public static void populateAddress(IAddressFull address) {
 
         address.unitNumber().setValue(Integer.toString(RandomUtil.randomInt(1000)));
         address.streetNumber().setValue(Integer.toString(RandomUtil.randomInt(10000)));
@@ -511,14 +511,6 @@ public class PTGenerator {
         if (tenantScreening.incomes().size() == 0) {
             minAssets = 1;
         }
-
-        IncomeInfoEmployer income1 = EntityFactory.create(IncomeInfoEmployer.class);
-        income1.set(createEmployer());
-        tenantScreening.incomes2().add(income1);
-
-        IncomeInfoSelfEmployed income2 = EntityFactory.create(IncomeInfoSelfEmployed.class);
-        income2.set(createSelfEmployed());
-        tenantScreening.incomes2().add(income2);
 
         for (int i = 0; i < minAssets + RandomUtil.randomInt(3); i++) {
             PersonalAsset asset = EntityFactory.create(PersonalAsset.class);
