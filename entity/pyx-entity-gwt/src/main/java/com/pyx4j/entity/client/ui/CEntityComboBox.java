@@ -338,7 +338,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
         }
         super.populate(value);
 
-        if (optionsFilter != null || !criteria.getFilters().isEmpty()) {
+        if (optionsFilter != null || (criteria != null && !criteria.getFilters().isEmpty())) {
             // Fire options reload since optionsFilter may depend on other values in the model.
             resetOptions();
             retriveOptions(null);
