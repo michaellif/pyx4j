@@ -21,6 +21,7 @@
 package com.pyx4j.essentials.server.dev;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -38,8 +39,12 @@ public class RpcEntityDumpServiceFilter implements IServiceFilter {
             for (Serializable arg : ((IServiceRequest) request).getArgs()) {
                 if (arg instanceof IEntity) {
                     DataDump.dump("got-" + ((IServiceRequest) request).getRpcCallNumber(), (IEntity) arg);
+                } else {
+                    DataDump.dump("got-" + ((IServiceRequest) request).getRpcCallNumber(), arg);
                 }
             }
+        } else {
+            DataDump.dump("got", request);
         }
         return request;
     }
@@ -50,7 +55,9 @@ public class RpcEntityDumpServiceFilter implements IServiceFilter {
         if (response instanceof IEntity) {
             DataDump.dump("send", (IEntity) response);
         } else if (response instanceof EntitySearchResult) {
-            DataDump.dump("send", ((EntitySearchResult<IEntity>) response).getData());
+            DataDump.dump("send", (List<? extends IEntity>) ((EntitySearchResult<IEntity>) response).getData());
+        } else {
+            DataDump.dump("send", response);
         }
         return response;
     }

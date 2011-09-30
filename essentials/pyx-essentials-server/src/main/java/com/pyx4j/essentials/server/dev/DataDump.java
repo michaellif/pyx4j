@@ -23,15 +23,19 @@ package com.pyx4j.essentials.server.dev;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.builder.DeepReflectionToStringBuilder;
+import org.apache.commons.lang.builder.DeepToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.server.xml.XMLEntityWriter;
@@ -69,6 +73,10 @@ public class DataDump {
         dumpAny(type, ent);
     }
 
+    public static void dump(String type, Serializable object) {
+        dumpAny(type, object);
+    }
+
     @SuppressWarnings("unchecked")
     private static void dumpAny(String type, Object item) {
         if ((item == null) || (!ServerSideConfiguration.instance().isDevelopmentBehavior())) {
@@ -78,6 +86,7 @@ public class DataDump {
         NumberFormat nf = new DecimalFormat("0000");
         StringBuffer name = new StringBuffer(nf.format(id));
         name.append('-').append(type).append('-');
+        String ext = ".xml";
         {
             IEntity ent = null;
             if (item instanceof List) {
@@ -85,14 +94,22 @@ public class DataDump {
                 if (!((List<?>) item).isEmpty()) {
                     ent = (IEntity) ((List<?>) item).get(0);
                 }
-            } else {
+            } else if (item instanceof IEntity) {
                 ent = (IEntity) item;
+            } else {
+                ext = ".log";
+                if (item != null) {
+                    name.append(item.getClass().getSimpleName());
+                    if (item instanceof IHaveServiceCallMarker) {
+                        name.append('-').append(((IHaveServiceCallMarker) item).getServiceCallMarker().replace('\\', '_').replace('/', '_'));
+                    }
+                }
             }
             if (ent != null) {
                 name.append(ent.getEntityMeta().getEntityClass().getSimpleName());
             }
         }
-        name.append(".xml");
+        name.append(ext);
         File dir;
         if (LoggerConfig.getContextName() != null) {
             dir = new File("logs", LoggerConfig.getContextName());
@@ -113,6 +130,7 @@ public class DataDump {
         FileWriter w = null;
         try {
             w = new FileWriter(f);
+
             XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
             DumpXMLEntityWriter xmlWriter = new DumpXMLEntityWriter(xml);
             if (item instanceof List) {
@@ -121,11 +139,14 @@ public class DataDump {
                     xmlWriter.write(ent);
                 }
                 xml.end("list");
-            } else {
+                w.write(xml.toString());
+            } else if (item instanceof IEntity) {
                 xmlWriter.write((IEntity) item);
+                w.write(xml.toString());
+            } else {
+                w.write(DeepReflectionToStringBuilder.toString(item, DeepToStringStyle.STYLE_NO_IDENTITY));
             }
 
-            w.write(xml.toString());
             w.flush();
             log.debug("dumped value to file {}", f.getAbsolutePath());
         } catch (IOException e) {
