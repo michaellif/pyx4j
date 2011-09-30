@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain.inherit;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -29,6 +30,7 @@ public interface Concrete2Entity extends Base2Entity {
     IPrimitive<String> nameC2();
 
     // Reference of undefined type.
+    @Detached
     Base1Entity refference();
 
 }
