@@ -26,7 +26,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
@@ -34,6 +33,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -62,6 +62,8 @@ import com.propertyvista.domain.financial.offering.ServiceConcession;
 import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.property.asset.BuildingElement;
+import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class ServiceEditorForm extends CrmEntityForm<Service> {
@@ -145,55 +147,45 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             @Override
             protected CEntityFolderItemEditor<ServiceItem> createItem() {
                 return new CEntityFolderRowEditor<ServiceItem>(ServiceItem.class, columns()) {
+//                    private CEntityComboBox<AptUnit> combo;
+
                     @Override
                     public IFolderItemEditorDecorator<ServiceItem> createFolderItemDecorator() {
                         return new CrmTableFolderItemDecorator<ServiceItem>(parent);
                     }
 
+                    @SuppressWarnings({ "unchecked", "rawtypes" })
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-                        CComponent<?> comp;
-
-                        if (column.getObject() == proto().element()) {
-                            if (parent.isEditable()) {
-                                comp = inject(column.getObject(), new CEntityComboBox<AptUnit>(AptUnit.class));
-//                                CEntityComboBox<AptUnit> combo = (CEntityComboBox<AptUnit>) comp;
-//                                combo.setOptionsFilter(new OptionsFilter<AptUnit>() {
-//                                    @Override
-//                                    public boolean acceptOption(AptUnit entity) {
-//                                        Service value = ServiceEditorForm.this.getValue();
-//                                        if (value != null && !value.isNull()) {
-//                                            return entity.belongsTo().equals(value.catalog().belongsTo());
-//                                        }
-//                                        return false;
-//                                    }
-//                                });
-
-                                @SuppressWarnings("unchecked")
-                                CEntityComboBox<AptUnit> combo = (CEntityComboBox<AptUnit>) comp;
-                                combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), ServiceEditorForm.this.getValue().catalog().belongsTo()));
-                            } else {
-                                comp = inject(column.getObject(), new CEntityCrudHyperlink<AptUnit>(MainActivityMapper.getCrudAppPlace(AptUnit.class)));
-                            }
-                        } else {
-                            comp = super.createCell(column);
+                        Class<? extends IEntity> buildingElementClass = null;
+                        switch (ServiceEditorForm.this.getValue().type().getValue()) {
+                        case residentialUnit:
+                        case residentialShortTermUnit:
+                        case commercialUnit:
+                            buildingElementClass = AptUnit.class;
+                            break;
+                        case garage:
+                            buildingElementClass = Parking.class;
+                            break;
                         }
 
-                        if (column.getObject() == proto().type()) {
-                            if (comp instanceof CEntityComboBox<?>) {
-                                @SuppressWarnings("unchecked")
-                                CEntityComboBox<ServiceItemType> combo = (CEntityComboBox<ServiceItemType>) comp;
-                                combo.setOptionsFilter(new OptionsFilter<ServiceItemType>() {
-                                    @Override
-                                    public boolean acceptOption(ServiceItemType entity) {
-                                        Service value = ServiceEditorForm.this.getValue();
-                                        if (value != null && !value.isNull()) {
-                                            return entity.serviceType().equals(value.type());
-                                        }
-                                        return false;
-                                    }
-                                });
+                        CComponent<?> comp;
+                        if (column.getObject() == proto().element()) {
+                            if (parent.isEditable()) {
+                                comp = inject(column.getObject(), new CEntityComboBox(buildingElementClass));
+                                CEntityComboBox<BuildingElement> combo = (CEntityComboBox) comp;
+
+                                Service value = ServiceEditorForm.this.getValue();
+                                combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), value.catalog().belongsTo()));
+                            } else {
+                                comp = inject(column.getObject(), new CEntityCrudHyperlink<AptUnit>(MainActivityMapper.getCrudAppPlace(buildingElementClass)));
                             }
+                        } else if (column.getObject() == proto().type()) {
+                            comp = inject(column.getObject(), new CEntityComboBox<ServiceItemType>(ServiceItemType.class));
+                            CEntityComboBox<ServiceItemType> combo = (CEntityComboBox<ServiceItemType>) comp;
+                            combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), ServiceEditorForm.this.getValue().type().getValue()));
+                        } else {
+                            comp = super.createCell(column);
                         }
 
                         return comp;

@@ -15,20 +15,15 @@ package com.propertyvista.domain.property.asset;
 
 import javax.xml.bind.annotation.XmlType;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translatable;
-
-import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("ParkingBuildingElement")
 public interface Parking extends BuildingElement {
@@ -54,11 +49,6 @@ public interface Parking extends BuildingElement {
             return I18nEnum.tr(this);
         }
     }
-
-    @Owner
-    @Detached
-    @ReadOnly
-    Building belongsTo();
 
     @ToString(index = 0)
     IPrimitive<String> name();

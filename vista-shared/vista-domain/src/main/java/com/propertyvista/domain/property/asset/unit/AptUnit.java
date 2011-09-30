@@ -21,8 +21,6 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -30,17 +28,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.shared.adapters.FloorplanCountersUpdateAdapter;
 
 @DiscriminatorValue("UnitBuildingElement")
 public interface AptUnit extends BuildingElement {
-
-    @Owner
-    @Detached
-    @ReadOnly
-    @Caption(name = "Building")
-    Building belongsTo();
 
     @NotNull
     @Detached

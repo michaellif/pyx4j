@@ -14,11 +14,22 @@
 package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
+
+import com.propertyvista.domain.property.asset.building.Building;
 
 @Inheritance
 @AbstractEntity
 public interface BuildingElement extends IEntity {
 
+    @Owner
+    @Detached
+    @ReadOnly
+    @Caption(name = "Building")
+    Building belongsTo();
 }
