@@ -189,7 +189,7 @@ public class TableModel {
             sql.append(" (");
             int numberOfParams = 0;
             for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
-                for (String name : member.getValueAdapter().getColumnNames(member)) {
+                for (String name : member.getValueAdapter().getColumnNames(member.sqlName())) {
                     if (numberOfParams != 0) {
                         sql.append(", ");
                     }
@@ -251,7 +251,7 @@ public class TableModel {
             sql.append(" SET ");
             boolean first = true;
             for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
-                for (String name : member.getValueAdapter().getColumnNames(member)) {
+                for (String name : member.getValueAdapter().getColumnNames(member.sqlName())) {
                     if (first) {
                         first = false;
                     } else {

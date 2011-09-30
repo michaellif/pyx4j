@@ -146,11 +146,11 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
     }
 
-    public void testListMemeberPersist() {
+    public void XtestListMemeberPersist() {
         testListMemeber(TestCaseMethod.Persist);
     }
 
-    public void testListMemeberMerge() {
+    public void XtestListMemeberMerge() {
         testListMemeber(TestCaseMethod.Merge);
     }
 
@@ -161,13 +161,13 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Concrete1Entity ent1 = EntityFactory.create(Concrete1Entity.class);
         ent1.nameC1().setValue("c1:" + uniqueString());
         ent1.nameB1().setValue("n1:" + uniqueString());
-        //ent.refferences().add(ent1);
+        ent.refferences().add(ent1);
 
         Concrete2Entity ent2 = EntityFactory.create(Concrete2Entity.class);
         ent2.nameC2().setValue("c2:" + uniqueString());
         ent2.nameB1().setValue("b1:" + uniqueString());
         ent2.nameB2().setValue("b2:" + uniqueString());
-        //ent.refferences().add(ent2);
+        ent.refferences().add(ent2);
 
         srv.persist(ent);
 

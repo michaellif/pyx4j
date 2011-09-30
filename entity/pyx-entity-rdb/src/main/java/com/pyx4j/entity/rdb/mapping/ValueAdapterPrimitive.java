@@ -34,9 +34,9 @@ abstract class ValueAdapterPrimitive implements ValueAdapter {
     }
 
     @Override
-    public List<String> getColumnNames(MemberOperationsMeta member) {
+    public List<String> getColumnNames(String memberSqlName) {
         List<String> columnNames = new Vector<String>();
-        columnNames.add(member.sqlName());
+        columnNames.add(memberSqlName);
         return columnNames;
     }
 

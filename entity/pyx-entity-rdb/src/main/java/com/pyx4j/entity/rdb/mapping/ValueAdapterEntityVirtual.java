@@ -80,10 +80,10 @@ public class ValueAdapterEntityVirtual implements ValueAdapter {
     }
 
     @Override
-    public List<String> getColumnNames(MemberOperationsMeta member) {
+    public List<String> getColumnNames(String memberSqlName) {
         List<String> columnNames = new Vector<String>();
-        columnNames.add(member.sqlName());
-        columnNames.add(member.sqlName() + DISCRIMINATOR_COLUNM_NAME_SUFIX);
+        columnNames.add(memberSqlName);
+        columnNames.add(memberSqlName + DISCRIMINATOR_COLUNM_NAME_SUFIX);
         return columnNames;
     }
 

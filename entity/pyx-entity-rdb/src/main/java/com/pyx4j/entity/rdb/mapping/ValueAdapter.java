@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.IEntity;
 
 interface ValueAdapter {
 
-    List<String> getColumnNames(MemberOperationsMeta member);
+    List<String> getColumnNames(String memberSqlName);
 
     boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String coumnName);
 

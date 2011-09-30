@@ -124,8 +124,14 @@ public class EntityOperationsMeta {
                     } else {
                         sqlName = namingConvention.sqlChildTableName(rootEntityMeta.getPersistenceName(), memberPersistenceName);
                     }
-                    MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, null, sqlName, memberMeta, path + Path.PATH_SEPARATOR + memberName
-                            + Path.PATH_SEPARATOR);
+                    ValueAdapter valueAdapter;
+                    if (memberMeta.getValueClass().getAnnotation(Inheritance.class) != null) {
+                        valueAdapter = new ValueAdapterEntityVirtual(dialect, (Class<IEntity>) memberMeta.getValueClass());
+                    } else {
+                        valueAdapter = new ValueAdapterEntity(dialect);
+                    }
+                    MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR
+                            + memberName + Path.PATH_SEPARATOR);
                     collectionMembers.add(member);
                     membersByPath.put(member.getMemberPath(), member);
                     allMembers.add(member);
@@ -167,8 +173,13 @@ public class EntityOperationsMeta {
                     } else {
                         sqlName = namingConvention.sqlChildTableName(rootEntityMeta.getPersistenceName(), memberPersistenceName);
                     }
-                    MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, null, sqlName, memberMeta, path + Path.PATH_SEPARATOR + memberName
-                            + Path.PATH_SEPARATOR);
+                    ValueAdapter valueAdapter = createValueAdapter(dialect, memberMeta.getValueClass());
+                    if (valueAdapter == null) {
+                        throw new Error("Unsupported IPrimitive<" + memberMeta.getValueClass().getName() + "> " + memberName + " in "
+                                + entityMeta.getEntityClass().getName());
+                    }
+                    MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR
+                            + memberName + Path.PATH_SEPARATOR);
                     collectionMembers.add(member);
                     membersByPath.put(member.getMemberPath(), member);
                 } else {

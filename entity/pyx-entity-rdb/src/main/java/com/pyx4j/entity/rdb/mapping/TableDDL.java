@@ -50,7 +50,7 @@ class TableDDL {
         }
 
         for (MemberOperationsMeta member : tableModel.operationsMeta().getColumnMembers()) {
-            for (String sqlName : member.getValueAdapter().getColumnNames(member)) {
+            for (String sqlName : member.getValueAdapter().getColumnNames(member.sqlName())) {
                 sql.append(", ");
                 sql.append(sqlName).append(' ');
                 member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
@@ -83,7 +83,7 @@ class TableDDL {
             if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 continue;
             }
-            for (String sqlName : member.getValueAdapter().getColumnNames(member)) {
+            for (String sqlName : member.getValueAdapter().getColumnNames(member.sqlName())) {
                 ColumnMetadata columnMeta = tableMetadata.getColumn(sqlName);
                 if (columnMeta == null) {
                     StringBuilder sql = new StringBuilder("ALTER TABLE ");
@@ -125,17 +125,6 @@ class TableDDL {
         return alterSqls;
     }
 
-    private static String sqlType(Dialect dialect, MemberMeta memberMeta) {
-        StringBuilder sql = new StringBuilder();
-        sql.append(dialect.getSqlType(memberMeta.getValueClass(), memberMeta.getLength()));
-        if (Enum.class.isAssignableFrom(memberMeta.getValueClass())) {
-            sql.append("(" + TableModel.ENUM_STRING_LENGHT_MAX + ")");
-        } else if (String.class == memberMeta.getValueClass()) {
-            sql.append('(').append((memberMeta.getLength() == 0) ? TableModel.ORDINARY_STRING_LENGHT_MAX : memberMeta.getLength()).append(')');
-        }
-        return sql.toString();
-    }
-
     private static String indexSqlType(Dialect dialect, MemberOperationsMeta member) {
         StringBuilder sql = new StringBuilder();
         sql.append(dialect.getSqlType(member.getIndexValueClass()));
@@ -156,15 +145,17 @@ class TableDDL {
         sql.append(member.sqlName());
 
         sql.append(" (");
-
-        sql.append(" id ").append(dialect.getSqlType(Long.class)).append(" ").append(dialect.getGeneratedIdColumnString()).append(", ");
         if (dialect.isMultitenant()) {
             sql.append(" ns ").append(dialect.getSqlType(String.class)).append('(').append(200).append("), ");
         }
-        sql.append(" owner ").append(dialect.getSqlType(Long.class)).append(", ");
-        sql.append(" value ").append(sqlType(dialect, member.getMemberMeta()));
+        sql.append(" id ").append(dialect.getSqlType(Long.class)).append(" ").append(dialect.getGeneratedIdColumnString()).append(", ");
+        sql.append(" owner ").append(dialect.getSqlType(Long.class));
 
-        // TODO store value class for AbstractEntity
+        for (String sqlName : member.getValueAdapter().getColumnNames("value")) {
+            sql.append(", ");
+            sql.append(sqlName).append(' ');
+            member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
+        }
 
         if (member.getMemberMeta().getObjectClassType() == ObjectClassType.EntityList) {
             sql.append(", ");
@@ -184,7 +175,22 @@ class TableDDL {
         List<String> alterSqls = new Vector<String>();
 
         alterSqls.add(alterColumn(dialect, memberTableMetadata, "owner", Long.class, dialect.getSqlType(Long.class)));
-        alterSqls.add(alterColumn(dialect, memberTableMetadata, "value", member.getMemberMeta().getValueClass(), sqlType(dialect, member.getMemberMeta())));
+
+        for (String sqlName : member.getValueAdapter().getColumnNames("value")) {
+            ColumnMetadata columnMeta = memberTableMetadata.getColumn(sqlName);
+            if (columnMeta == null) {
+                StringBuilder sql = new StringBuilder("ALTER TABLE ");
+                sql.append(memberTableMetadata.getTableName());
+                sql.append(" ADD "); // [ column ]
+                sql.append(sqlName).append(' ');
+                member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
+                alterSqls.add(sql.toString());
+            } else {
+                if (!member.getValueAdapter().isCompatibleType(dialect, columnMeta.getTypeName(), member, sqlName)) {
+                    throw new RuntimeException(memberTableMetadata.getTableName() + "." + sqlName + " incompatible SQL type " + columnMeta.getTypeName());
+                }
+            }
+        }
 
         if (member.getMemberMeta().getObjectClassType() == ObjectClassType.EntityList) {
             alterSqls.add(alterColumn(dialect, memberTableMetadata, "seq", Integer.class, dialect.getSqlType(Integer.class)));
