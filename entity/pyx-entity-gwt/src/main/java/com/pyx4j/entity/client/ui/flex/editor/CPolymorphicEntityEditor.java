@@ -54,18 +54,18 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
 
     private final SimplePanel container;
 
-    private final List<? extends IPolymorphicDiscriminator<E>> discriminators;
+    private final List<? extends IDiscriminator<E>> discriminators;
 
-    private final HashMap<? extends IPolymorphicDiscriminator<? extends E>, IEntity> subtypesHash;
+    private final HashMap<? extends IDiscriminator<? extends E>, IEntity> subtypesHash;
 
     protected int currentRowDebugId = 0;
 
-    public CPolymorphicEntityEditor(Class<E> rowClass, List<? extends IPolymorphicDiscriminator<E>> discriminators) {
+    public CPolymorphicEntityEditor(Class<E> rowClass, List<? extends IDiscriminator<E>> discriminators) {
         super(rowClass);
         this.discriminators = discriminators;
         container = new SimplePanel();
         container.getElement().setClassName("TESTTEST");
-        subtypesHash = new HashMap<IPolymorphicDiscriminator<? extends E>, IEntity>();
+        subtypesHash = new HashMap<IDiscriminator<? extends E>, IEntity>();
     }
 
     @Override
@@ -80,10 +80,10 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
         return createDecorator();
     }
 
-    protected abstract CEntityEditor<? extends E> createItem(IPolymorphicDiscriminator<E> discriminator);
+    protected abstract CEntityEditor<? extends E> createItem(IDiscriminator<E> discriminator);
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private CEntityEditor<? extends E> createItemPrivate(IPolymorphicDiscriminator<E> discriminator) {
+    private CEntityEditor<? extends E> createItemPrivate(IDiscriminator<E> discriminator) {
 
         CEntityEditor<? extends E> item = createItem(discriminator);
 
@@ -224,7 +224,7 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
     protected void repopulate(E value) {
         System.out.println("++++++++++" + value);
 
-        for (IPolymorphicDiscriminator<E> discriminator : discriminators) {
+        for (IDiscriminator<E> discriminator : discriminators) {
             if (discriminator.getType().equals(value.getObjectClass())) {
                 CEntityEditor editor = createItemPrivate(discriminator);
                 editor.onBound(this);

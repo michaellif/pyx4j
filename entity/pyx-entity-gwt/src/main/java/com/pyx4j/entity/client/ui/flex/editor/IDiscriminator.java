@@ -22,7 +22,7 @@ package com.pyx4j.entity.client.ui.flex.editor;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public interface IPolymorphicDiscriminator<E extends IEntity> {
+public interface IDiscriminator<E extends IEntity> {
 
     Class<? extends E> getType();
 
