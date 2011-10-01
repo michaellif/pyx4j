@@ -19,14 +19,14 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 
-public abstract class PtAppEntityFolder<E extends IEntity> extends CEntityFolderEditor<E> {
+public abstract class PtAppEntityFolder<E extends IEntity> extends CEntityFolder<E> {
     protected static I18n i18n = I18nFactory.getI18n(PtAppEntityFolder.class);
 
     private final Class<E> clazz;

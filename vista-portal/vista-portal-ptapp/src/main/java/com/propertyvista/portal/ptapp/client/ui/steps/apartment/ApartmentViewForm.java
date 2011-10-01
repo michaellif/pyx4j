@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
@@ -169,7 +169,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 //
 // List Viewers:
 
-    private CEntityFolderEditor<ServiceItemType> createUtilitiesFolderEditor() {
+    private CEntityFolder<ServiceItemType> createUtilitiesFolderEditor() {
         return new PtAppEntityFolder<ServiceItemType>(ServiceItemType.class, false) {
             private final PtAppEntityFolder<ServiceItemType> parent = this;
 
@@ -207,7 +207,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
         };
     }
 
-    private CEntityFolderEditor<ChargeItem> createFeaturesFolderEditor(final Feature.Type type, boolean editable) {
+    private CEntityFolder<ChargeItem> createFeaturesFolderEditor(final Feature.Type type, boolean editable) {
         return new PtAppEntityFolder<ChargeItem>(ChargeItem.class, editable) {
             private final PtAppEntityFolder<ChargeItem> parent = this;
 
@@ -267,7 +267,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
         };
     }
 
-    private CEntityFolderEditor<Concession> createConcessionsFolderEditor() {
+    private CEntityFolder<Concession> createConcessionsFolderEditor() {
         return new PtAppEntityFolder<Concession>(Concession.class, false) {
             private final PtAppEntityFolder<Concession> parent = this;
 

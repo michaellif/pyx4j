@@ -41,7 +41,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
@@ -342,9 +342,9 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             content.add(cellContent);
         }
 
-        public CEntityFolderEditor<TenantInLease> createTenantTable() {
+        public CEntityFolder<TenantInLease> createTenantTable() {
 
-            return new CEntityFolderEditor<TenantInLease>(TenantInLease.class) {
+            return new CEntityFolder<TenantInLease>(TenantInLease.class) {
 
                 @Override
                 protected CEntityFolderItemEditor<TenantInLease> createItem() {
@@ -386,9 +386,9 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
     /*
      * Tenants detailed information view implementation
      */
-    public CEntityFolderEditor<TenantInLease> createTenantView() {
+    public CEntityFolder<TenantInLease> createTenantView() {
 
-        return new CEntityFolderEditor<TenantInLease>(TenantInLease.class) {
+        return new CEntityFolder<TenantInLease>(TenantInLease.class) {
 
             @Override
             protected CEntityFolderItemEditor<TenantInLease> createItem() {
@@ -405,9 +405,9 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
     /*
      * Financial detailed information view implementation
      */
-    public CEntityFolderEditor<SummaryTenantFinancialDTO> createFinancialView() {
+    public CEntityFolder<SummaryTenantFinancialDTO> createFinancialView() {
 
-        return new CEntityFolderEditor<SummaryTenantFinancialDTO>(SummaryTenantFinancialDTO.class) {
+        return new CEntityFolder<SummaryTenantFinancialDTO>(SummaryTenantFinancialDTO.class) {
 
             @Override
             protected CEntityFolderItemEditor<SummaryTenantFinancialDTO> createItem() {

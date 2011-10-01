@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
@@ -102,7 +102,7 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
         });
     }
 
-    private CEntityFolderEditor<TenantInApplicationDTO> createTenantsEditorColumns() {
+    private CEntityFolder<TenantInApplicationDTO> createTenantsEditorColumns() {
 
         return new PtAppEntityFolder<TenantInApplicationDTO>(TenantInApplicationDTO.class, i18n.tr("Person"), isEditable()) {
             private final PtAppEntityFolder<TenantInApplicationDTO> parent = this;

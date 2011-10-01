@@ -36,7 +36,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
@@ -278,7 +278,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
 //
 // List Viewers:
-    private CEntityFolderEditor<BuildingAmenity> createAmenitiesListEditor() {
+    private CEntityFolder<BuildingAmenity> createAmenitiesListEditor() {
         return new CrmEntityFolder<BuildingAmenity>(BuildingAmenity.class, isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -291,7 +291,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         };
     }
 
-    private CEntityFolderEditor<ServiceItemType> createUtilitiesListEditor() {
+    private CEntityFolder<ServiceItemType> createUtilitiesListEditor() {
         return new CrmEntityFolder<ServiceItemType>(ServiceItemType.class, isEditable()) {
             private final CrmEntityFolder<ServiceItemType> parent = this;
 
@@ -345,7 +345,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         };
     }
 
-    private CEntityFolderEditor<OrganisationContact> createContactsListEditor() {
+    private CEntityFolder<OrganisationContact> createContactsListEditor() {
         return new CrmEntityFolder<OrganisationContact>(OrganisationContact.class, isEditable()) {
             private final CrmEntityFolder<OrganisationContact> parent = this;
 

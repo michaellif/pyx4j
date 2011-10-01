@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
@@ -73,7 +73,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
         return new CrmScrollPanel(main);
     }
 
-    private CEntityFolderEditor<PageContent> createPageContentsList() {
+    private CEntityFolder<PageContent> createPageContentsList() {
         return new CrmEntityFolder<PageContent>(PageContent.class, i18n.tr("PageContent"), isEditable()) {
             private final CrmEntityFolder<PageContent> parent = this;
 
@@ -127,7 +127,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
         };
     }
 
-    private CEntityFolderEditor<PageDescriptor> createChildPagesList() {
+    private CEntityFolder<PageDescriptor> createChildPagesList() {
         return new CrmEntityFolder<PageDescriptor>(PageDescriptor.class, i18n.tr("Page"), !isEditable()) {
             private final CrmEntityFolder<PageDescriptor> parent = this;
 

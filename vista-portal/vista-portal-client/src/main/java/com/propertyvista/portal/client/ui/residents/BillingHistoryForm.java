@@ -18,23 +18,12 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderItemViewer;
-import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderViewer;
-import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
-import com.pyx4j.entity.client.ui.flex.viewer.IFolderViewerDecorator;
-import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.portal.client.ui.decorations.PortalHeaderBar;
-import com.propertyvista.portal.client.ui.decorations.TableFolderDecorator;
-import com.propertyvista.portal.client.ui.decorations.TableItemDecorator;
-import com.propertyvista.portal.domain.dto.BillDTO;
 import com.propertyvista.portal.domain.dto.BillListDTO;
 import com.propertyvista.portal.domain.dto.BillListDTO.SearchType;
 
@@ -62,7 +51,7 @@ public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements Bi
         });
 
         container.add(header);
-        container.add(inject(proto().bills(), createBillingHistoryViewer()));
+        //container.add(inject(proto().bills(), createBillingHistoryViewer()));
         return container;
     }
 
@@ -72,85 +61,85 @@ public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements Bi
 
     }
 
-    class TableFolderViewer<E extends IEntity> extends TableFolderDecorator<BillDTO> {
+//    class TableFolderViewer<E extends IEntity> extends TableFolderDecorator<BillDTO> {
+//
+//        private final FlowPanel content;
+//
+//        TableFolderViewer() {
+//            content = new FlowPanel();
+//            content.setWidth("100%");
+//            HorizontalPanel header = new HorizontalPanel();
+//            header.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Header);
+//            header.setWidth("100%");
+//            formatHeader("Type", "20%", header);
+//            formatHeader("Date", "30%", header);
+//            formatHeader("Amount", "30%", header);
+//            formatHeader("Transaction ID", "20%", header);
+//            content.add(header);
+//        }
+//
+//        @Override
+//        public void setFolder(CEntityFolderViewer<?> viewer) {
+//            content.add(viewer.getContainer());
+//            setWidget(content);
+//        }
+//
+//        private void formatHeader(String title, String width, CellPanel parent) {
+//            Label item = new Label(i18n.tr(title));
+//            parent.add(item);
+//            parent.setCellWidth(item, width);
+//        }
+//    }
 
-        private final FlowPanel content;
+//    private CEntityFolderViewer<BillDTO> createBillingHistoryViewer() {
+//        return new CEntityFolderViewer<BillDTO>(BillDTO.class) {
+//
+//            @Override
+//            protected IFolderViewerDecorator<BillDTO> createFolderDecorator() {
+//                return new TableFolderViewer<BillDTO>();
+//            }
+//
+//            @Override
+//            protected CEntityFolderItemViewer<BillDTO> createItem() {
+//                return createBillLineViewer();
+//            }
+//        };
+//
+//    }
 
-        TableFolderViewer() {
-            content = new FlowPanel();
-            content.setWidth("100%");
-            HorizontalPanel header = new HorizontalPanel();
-            header.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Header);
-            header.setWidth("100%");
-            formatHeader("Type", "20%", header);
-            formatHeader("Date", "30%", header);
-            formatHeader("Amount", "30%", header);
-            formatHeader("Transaction ID", "20%", header);
-            content.add(header);
-        }
-
-        @Override
-        public void setFolder(CEntityFolderViewer<?> viewer) {
-            content.add(viewer.getContainer());
-            setWidget(content);
-        }
-
-        private void formatHeader(String title, String width, CellPanel parent) {
-            Label item = new Label(i18n.tr(title));
-            parent.add(item);
-            parent.setCellWidth(item, width);
-        }
-    }
-
-    private CEntityFolderViewer<BillDTO> createBillingHistoryViewer() {
-        return new CEntityFolderViewer<BillDTO>(BillDTO.class) {
-
-            @Override
-            protected IFolderViewerDecorator<BillDTO> createFolderDecorator() {
-                return new TableFolderViewer<BillDTO>();
-            }
-
-            @Override
-            protected CEntityFolderItemViewer<BillDTO> createItem() {
-                return createBillLineViewer();
-            }
-        };
-
-    }
-
-    private CEntityFolderItemViewer<BillDTO> createBillLineViewer() {
-
-        return new CEntityFolderItemViewer<BillDTO>() {
-
-            @Override
-            public IFolderItemViewerDecorator<BillDTO> createFolderItemDecorator() {
-                return new TableItemDecorator<BillDTO>();
-            }
-
-            @Override
-            public IsWidget createContent(BillDTO value) {
-                return createBillLine(value);
-            }
-
-            private IsWidget createBillLine(final BillDTO bill) {
-                HorizontalPanel container = new HorizontalPanel();
-                //   container.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Row);
-                container.setWidth("100%");
-                formatValue(bill.type().getStringView(), "20%", container);
-                formatValue(bill.paidOn().getStringView(), "30%", container);
-                formatValue(bill.total().getStringView(), "30%", container);
-                formatValue(bill.transactionID().getStringView(), "20%", container);
-
-                return container;
-            }
-
-            private void formatValue(String value, String width, CellPanel parent) {
-                Label item = new Label(i18n.tr(value));
-                parent.add(item);
-                parent.setCellWidth(item, width);
-
-            }
-        };
-    }
+//    private CEntityFolderItemViewer<BillDTO> createBillLineViewer() {
+//
+//        return new CEntityFolderItemViewer<BillDTO>() {
+//
+//            @Override
+//            public IFolderItemViewerDecorator<BillDTO> createFolderItemDecorator() {
+//                return new TableItemDecorator<BillDTO>();
+//            }
+//
+//            @Override
+//            public IsWidget createContent(BillDTO value) {
+//                return createBillLine(value);
+//            }
+//
+//            private IsWidget createBillLine(final BillDTO bill) {
+//                HorizontalPanel container = new HorizontalPanel();
+//                //   container.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Row);
+//                container.setWidth("100%");
+//                formatValue(bill.type().getStringView(), "20%", container);
+//                formatValue(bill.paidOn().getStringView(), "30%", container);
+//                formatValue(bill.total().getStringView(), "30%", container);
+//                formatValue(bill.transactionID().getStringView(), "20%", container);
+//
+//                return container;
+//            }
+//
+//            private void formatValue(String value, String width, CellPanel parent) {
+//                Label item = new Label(i18n.tr(value));
+//                parent.add(item);
+//                parent.setCellWidth(item, width);
+//
+//            }
+//        };
+//    }
 
 }

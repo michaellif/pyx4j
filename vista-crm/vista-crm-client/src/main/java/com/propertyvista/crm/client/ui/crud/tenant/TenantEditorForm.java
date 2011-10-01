@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
@@ -154,7 +154,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         tabPanel.setDisableMode(isEditable());
     }
 
-    private CEntityFolderEditor<EmergencyContact> createEmergencyContactFolderEditor() {
+    private CEntityFolder<EmergencyContact> createEmergencyContactFolderEditor() {
         return new CrmEntityFolder<EmergencyContact>(EmergencyContact.class, i18n.tr("Contact"), isEditable()) {
             private final CrmEntityFolder<EmergencyContact> parent = this;
 

@@ -17,7 +17,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
@@ -27,7 +27,7 @@ import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
-public class ChargeLineFolder extends CEntityFolderEditor<ChargeLine> {
+public class ChargeLineFolder extends CEntityFolder<ChargeLine> {
 
     public ChargeLineFolder() {
         super(ChargeLine.class);
@@ -38,7 +38,7 @@ public class ChargeLineFolder extends CEntityFolderEditor<ChargeLine> {
         return new BoxReadOnlyFolderDecorator<ChargeLine>() {
 
             @Override
-            public void setFolder(CEntityFolderEditor<?> w) {
+            public void setFolder(CEntityFolder<?> w) {
                 super.setFolder(w);
                 this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
             }

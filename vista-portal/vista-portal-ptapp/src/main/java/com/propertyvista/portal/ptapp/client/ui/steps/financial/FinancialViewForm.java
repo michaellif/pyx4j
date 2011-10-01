@@ -35,7 +35,7 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
@@ -149,16 +149,16 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
         });
     }
 
-    private CEntityFolderEditor<IIncomeInfo> createIncomeFolderEditor2() {
+    private CEntityFolder<IIncomeInfo> createIncomeFolderEditor2() {
 
-        return new CEntityFolderEditor<IIncomeInfo>(IIncomeInfo.class) {
+        return new CEntityFolder<IIncomeInfo>(IIncomeInfo.class) {
 
             @Override
             protected IFolderDecorator<IIncomeInfo> createFolderDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<IIncomeInfo>() {
                         @Override
-                        public void setFolder(CEntityFolderEditor<?> w) {
+                        public void setFolder(CEntityFolder<?> w) {
                             super.setFolder(w);
                             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                         }
@@ -177,16 +177,16 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
         };
     }
 
-    private CEntityFolderEditor<PersonalIncome> createIncomeFolderEditor() {
+    private CEntityFolder<PersonalIncome> createIncomeFolderEditor() {
 
-        return new CEntityFolderEditor<PersonalIncome>(PersonalIncome.class) {
+        return new CEntityFolder<PersonalIncome>(PersonalIncome.class) {
 
             @Override
             protected IFolderDecorator<PersonalIncome> createFolderDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<PersonalIncome>() {
                         @Override
-                        public void setFolder(CEntityFolderEditor<?> w) {
+                        public void setFolder(CEntityFolder<?> w) {
                             super.setFolder(w);
                             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                         }
@@ -205,8 +205,8 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
         };
     }
 
-    private CEntityFolderEditor<PersonalAsset> createAssetFolderEditorColumns() {
-        return new CEntityFolderEditor<PersonalAsset>(PersonalAsset.class) {
+    private CEntityFolder<PersonalAsset> createAssetFolderEditorColumns() {
+        return new CEntityFolder<PersonalAsset>(PersonalAsset.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
             {
@@ -221,7 +221,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<PersonalAsset>() {
                         @Override
-                        public void setFolder(CEntityFolderEditor<?> w) {
+                        public void setFolder(CEntityFolder<?> w) {
                             super.setFolder(w);
                             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                         }
@@ -279,15 +279,15 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
     }
 
-    private CEntityFolderEditor<TenantGuarantor> createGuarantorFolderEditorColumns() {
-        return new CEntityFolderEditor<TenantGuarantor>(TenantGuarantor.class) {
+    private CEntityFolder<TenantGuarantor> createGuarantorFolderEditorColumns() {
+        return new CEntityFolder<TenantGuarantor>(TenantGuarantor.class) {
 
             @Override
             protected IFolderDecorator<TenantGuarantor> createFolderDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<TenantGuarantor>() {
                         @Override
-                        public void setFolder(CEntityFolderEditor<?> w) {
+                        public void setFolder(CEntityFolder<?> w) {
                             super.setFolder(w);
                             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                         }

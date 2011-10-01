@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
@@ -102,7 +102,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         return new CrmScrollPanel(main);
     }
 
-    private CEntityFolderEditor<AvailableLocale> createLocalesList() {
+    private CEntityFolder<AvailableLocale> createLocalesList() {
         return new CrmEntityFolder<AvailableLocale>(AvailableLocale.class, i18n.tr("SiteLocale"), isEditable()) {
 
             private final CrmEntityFolder<AvailableLocale> parent = this;
@@ -126,7 +126,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         };
     }
 
-    private CEntityFolderEditor<PageDescriptor> createChildPagesList() {
+    private CEntityFolder<PageDescriptor> createChildPagesList() {
         return new CrmEntityFolder<PageDescriptor>(PageDescriptor.class, i18n.tr("Page"), !isEditable()) {
             private final CrmEntityFolder<PageDescriptor> parent = this;
 
@@ -203,7 +203,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         return new ScrollPanel(main);
     }
 
-    private CEntityFolderEditor<Testimonial> createTestimonialsList() {
+    private CEntityFolder<Testimonial> createTestimonialsList() {
         return new CrmEntityFolder<Testimonial>(Testimonial.class, i18n.tr("Testimonial"), isEditable()) {
             private final CrmEntityFolder<Testimonial> parent = this;
 
@@ -240,7 +240,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         };
     }
 
-    private CEntityFolderEditor<News> createNewsList() {
+    private CEntityFolder<News> createNewsList() {
         return new CrmEntityFolder<News>(News.class, i18n.tr("News"), isEditable()) {
             private final CrmEntityFolder<News> parent = this;
 

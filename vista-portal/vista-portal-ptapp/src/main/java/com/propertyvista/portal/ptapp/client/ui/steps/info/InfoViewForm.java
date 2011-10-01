@@ -32,7 +32,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
@@ -347,7 +347,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
 
     }
 
-    private CEntityFolderEditor<EmergencyContact> createEmergencyContactFolderEditor() {
+    private CEntityFolder<EmergencyContact> createEmergencyContactFolderEditor() {
 
         return new PtAppEntityFolder<EmergencyContact>(EmergencyContact.class, i18n.tr("Contact")) {
             private final PtAppEntityFolder<EmergencyContact> parent = this;

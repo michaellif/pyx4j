@@ -31,7 +31,7 @@ import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
@@ -326,7 +326,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         return new ScrollPanel(main);
     }
 
-    private CEntityFolderEditor<PersonalIncome> createIncomeFolderEditor() {
+    private CEntityFolder<PersonalIncome> createIncomeFolderEditor() {
         return new CrmEntityFolder<PersonalIncome>(PersonalIncome.class, i18n.tr("Income source"), isEditable()) {
 
             @Override
@@ -346,7 +346,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         };
     }
 
-    private CEntityFolderEditor<PersonalAsset> createAssetFolderEditorColumns() {
+    private CEntityFolder<PersonalAsset> createAssetFolderEditorColumns() {
         return new CrmEntityFolder<PersonalAsset>(PersonalAsset.class, i18n.tr("Asset"), isEditable()) {
             private final CrmEntityFolder<PersonalAsset> parent = this;
 
@@ -403,7 +403,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         };
     }
 
-    private CEntityFolderEditor<TenantGuarantor> createGuarantorFolderEditorColumns() {
+    private CEntityFolder<TenantGuarantor> createGuarantorFolderEditorColumns() {
         return new CrmEntityFolder<TenantGuarantor>(TenantGuarantor.class, i18n.tr("Guarantor"), isEditable()) {
             private final CrmEntityFolder<TenantGuarantor> parent = this;
 

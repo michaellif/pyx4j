@@ -31,10 +31,8 @@ import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
 import com.propertyvista.portal.client.ui.NavigViewImpl;
 import com.propertyvista.portal.client.ui.PortalScreen;
-import com.propertyvista.portal.client.ui.decorations.BasicCardDecorator;
 import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
 import com.propertyvista.portal.client.ui.decorations.TableFolderDecorator;
-import com.propertyvista.portal.client.ui.decorations.TableItemDecorator;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.client.ui.residents.NewPaymentMethodForm;
 
@@ -56,7 +54,6 @@ public abstract class PortalTheme extends VistaTheme {
         initVistaNavigViewStyles();
         initTableDecorators();
         initCriteriaWidgetDecoratorStyles();
-        initBaseFolderItemViewerDecoratorStyles();
         initPropertyMarkerStyle();
         initPaymentRadioButtonGroupStyles();
     }
@@ -365,53 +362,6 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("padding-bottom", "10px");
         style.addProperty("border-bottom", "solid 1px");
         style.addProperty("border-color", ThemeColor.SEPARATOR);
-        addStyle(style);
-
-        prefix = TableItemDecorator.DEFAULT_STYLE_PREFIX;
-        style = new Style(Selector.valueOf(prefix));
-        style.addProperty("padding-top", "10px");
-        style.addProperty("padding-bottom", "10px");
-        style.addProperty("border-bottom", "solid 1px");
-        style.addProperty("border-color", ThemeColor.SEPARATOR);
-        addStyle(style);
-    }
-
-    private void initBaseFolderItemViewerDecoratorStyles() {
-        String prefix = BasicCardDecorator.DEFAULT_STYLE_PREFIX;
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("border-top", "solid 1px");
-        style.addProperty("border-color", ThemeColor.SEPARATOR);
-        style.addProperty("padding", "15px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, BasicCardDecorator.StyleSuffix.Content));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, BasicCardDecorator.StyleSuffix.Menu));
-        style.addProperty("border-color", ThemeColor.SEPARATOR);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, BasicCardDecorator.StyleSuffix.MenuItem));
-        style.addProperty("text-decoration", "none");
-        style.addProperty("color", ThemeColor.OBJECT_TONE95);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, BasicCardDecorator.StyleSuffix.MenuItemLine));
-        style.addProperty("border-bottom", "solid 1px");
-        style.addProperty("border-color", ThemeColor.SEPARATOR);
-        style.addProperty("margin-bottom", "10px");
-        addStyle(style);
-
-        //TODO  think of a better way
-        style = new Style(Selector.valueOf(prefix, BasicCardDecorator.StyleSuffix.MenuItem) + ":hover");
-        style.addProperty("text-decoration", "underline");
-        style.addProperty("color", ThemeColor.OBJECT_TONE95);
-        addStyle(style);
-
-        //TODO need prefix+dependent Selector.valueOf implementation
-        style = new Style("." + prefix + "-" + BasicCardDecorator.StyleDependent.hover);
-        //TODO Not sure how to combine ThemeColor.OBJECT_TONE with !important declaration
-        style.addProperty("background-color", "#eeeeee!important");
         addStyle(style);
 
     }

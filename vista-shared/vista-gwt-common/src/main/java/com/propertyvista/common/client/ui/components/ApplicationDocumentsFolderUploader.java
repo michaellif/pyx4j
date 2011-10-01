@@ -47,7 +47,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
@@ -65,7 +65,7 @@ import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.misc.ApplicationDocumentServletParameters;
 import com.propertyvista.misc.ServletMapping;
 
-public class ApplicationDocumentsFolderUploader extends CEntityFolderEditor<ApplicationDocument> {
+public class ApplicationDocumentsFolderUploader extends CEntityFolder<ApplicationDocument> {
 
     private static I18n i18n = I18nFactory.getI18n(ApplicationDocumentsFolderUploader.class);
 
@@ -180,7 +180,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolderEditor<Appl
         }
 
         @Override
-        public void setFolder(CEntityFolderEditor<?> w) {
+        public void setFolder(CEntityFolder<?> w) {
             appDocsListHolder.setWidget(w.getContainer());
         }
 

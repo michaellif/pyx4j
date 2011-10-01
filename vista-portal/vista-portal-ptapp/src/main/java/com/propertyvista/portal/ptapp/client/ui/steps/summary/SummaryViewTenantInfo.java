@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
@@ -187,8 +187,8 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
         return addressPanel;
     }
 
-    private CEntityFolderEditor<Vehicle> createVehicleFolderEditorColumns() {
-        return new CEntityFolderEditor<Vehicle>(Vehicle.class) {
+    private CEntityFolder<Vehicle> createVehicleFolderEditorColumns() {
+        return new CEntityFolder<Vehicle>(Vehicle.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
 
@@ -226,9 +226,9 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
 
     }
 
-    private CEntityFolderEditor<EmergencyContact> createEmergencyContactsFolder() {
+    private CEntityFolder<EmergencyContact> createEmergencyContactsFolder() {
 
-        return new CEntityFolderEditor<EmergencyContact>(EmergencyContact.class) {
+        return new CEntityFolder<EmergencyContact>(EmergencyContact.class) {
 
             @Override
             protected IFolderDecorator<EmergencyContact> createFolderDecorator() {

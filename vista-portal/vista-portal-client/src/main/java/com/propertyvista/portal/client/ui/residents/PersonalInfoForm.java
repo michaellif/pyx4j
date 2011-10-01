@@ -30,7 +30,7 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
@@ -101,9 +101,9 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
 
     }
 
-    private CEntityFolderEditor<EmergencyContact> createEmergencyContactFolderEditor() {
+    private CEntityFolder<EmergencyContact> createEmergencyContactFolderEditor() {
 
-        return new CEntityFolderEditor<EmergencyContact>(EmergencyContact.class) {
+        return new CEntityFolder<EmergencyContact>(EmergencyContact.class) {
 
             @Override
             protected IFolderDecorator<EmergencyContact> createFolderDecorator() {
@@ -151,8 +151,8 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
         };
     }
 
-    private CEntityFolderEditor<Vehicle> createVehicleFolderEditorColumns() {
-        return new CEntityFolderEditor<Vehicle>(Vehicle.class) {
+    private CEntityFolder<Vehicle> createVehicleFolderEditorColumns() {
+        return new CEntityFolder<Vehicle>(Vehicle.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
 

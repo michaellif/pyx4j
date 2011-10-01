@@ -24,7 +24,7 @@ import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
@@ -76,7 +76,7 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
         return new CrmScrollPanel(main);
     }
 
-    private CEntityFolderEditor<ServiceItem> createItemsFolderEditor() {
+    private CEntityFolder<ServiceItem> createItemsFolderEditor() {
         return new CrmEntityFolder<ServiceItem>(ServiceItem.class, i18n.tr("Item"), isEditable()) {
             private final CrmEntityFolder<ServiceItem> thisRef = this;
 

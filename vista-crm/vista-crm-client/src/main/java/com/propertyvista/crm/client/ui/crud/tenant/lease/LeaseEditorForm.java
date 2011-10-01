@@ -46,7 +46,7 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
@@ -256,7 +256,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 //
 // List Viewers:
 
-    private CEntityFolderEditor<TenantInLease> createTenantsListViewer() {
+    private CEntityFolder<TenantInLease> createTenantsListViewer() {
         return new CrmEntityFolder<TenantInLease>(TenantInLease.class, isEditable()) {
             private final CrmEntityFolder<TenantInLease> parent = this;
 
@@ -434,7 +434,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         };
     }
 
-    private CEntityFolderEditor<Pet> createPetListViewer() {
+    private CEntityFolder<Pet> createPetListViewer() {
         return new CrmEntityFolder<Pet>(Pet.class, i18n.tr("Pet"), isEditable()) {
             private final CrmEntityFolder<Pet> parent = this;
 
@@ -511,7 +511,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         };
     }
 
-    private CEntityFolderEditor<Vehicle> createVehicleListViewer() {
+    private CEntityFolder<Vehicle> createVehicleListViewer() {
         return new CrmEntityFolder<Vehicle>(Vehicle.class, i18n.tr("Vehicle"), isEditable()) {
             private final CrmEntityFolder<Vehicle> parent = this;
 
@@ -567,7 +567,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         };
     }
 
-    private CEntityFolderEditor<ApplicationStatusDTO> createAppStatusListViewer() {
+    private CEntityFolder<ApplicationStatusDTO> createAppStatusListViewer() {
         return new CrmEntityFolder<ApplicationStatusDTO>(ApplicationStatusDTO.class, i18n.tr("Status"), false) {
 
             @Override
@@ -581,7 +581,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         };
     }
 
-    private CEntityFolderEditor<ChargeItem> createFeaturesFolderEditor() {
+    private CEntityFolder<ChargeItem> createFeaturesFolderEditor() {
         return new CrmEntityFolder<ChargeItem>(ChargeItem.class, isEditable()) {
             private final CrmEntityFolder<ChargeItem> parent = this;
 
@@ -777,7 +777,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         };
     }
 
-    private CEntityFolderEditor<ServiceConcession> createConcessionsFolderEditor() {
+    private CEntityFolder<ServiceConcession> createConcessionsFolderEditor() {
         return new CrmEntityFolder<ServiceConcession>(ServiceConcession.class, isEditable()) {
             private final CrmEntityFolder<ServiceConcession> parent = this;
 
@@ -837,7 +837,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         };
     }
 
-    private CEntityFolderEditor<ChargeItemAdjustment> createItemAdjustmentListView(final CEntityFolderRowEditor<ChargeItem> chargeItemEditor) {
+    private CEntityFolder<ChargeItemAdjustment> createItemAdjustmentListView(final CEntityFolderRowEditor<ChargeItem> chargeItemEditor) {
         return new CrmEntityFolder<ChargeItemAdjustment>(ChargeItemAdjustment.class, isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {

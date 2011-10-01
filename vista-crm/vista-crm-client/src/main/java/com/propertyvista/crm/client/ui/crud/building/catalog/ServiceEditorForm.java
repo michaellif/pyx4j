@@ -27,7 +27,7 @@ import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
@@ -132,7 +132,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
         return new CrmScrollPanel(main);
     }
 
-    private CEntityFolderEditor<ServiceItem> createItemsFolderEditor() {
+    private CEntityFolder<ServiceItem> createItemsFolderEditor() {
         return new CrmEntityFolder<ServiceItem>(ServiceItem.class, i18n.tr("Item"), isEditable()) {
             private final CrmEntityFolder<ServiceItem> parent = this;
 
@@ -206,7 +206,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
         };
     }
 
-    private CEntityFolderEditor<ServiceFeature> createFeaturesFolderEditor() {
+    private CEntityFolder<ServiceFeature> createFeaturesFolderEditor() {
         return new CrmEntityFolder<ServiceFeature>(ServiceFeature.class, i18n.tr("Feature"), isEditable()) {
             private final CrmEntityFolder<ServiceFeature> parent = this;
 
@@ -262,7 +262,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
         };
     }
 
-    private CEntityFolderEditor<ServiceConcession> createConcessionsFolderEditor() {
+    private CEntityFolder<ServiceConcession> createConcessionsFolderEditor() {
         return new CrmEntityFolder<ServiceConcession>(ServiceConcession.class, i18n.tr("Concession"), isEditable()) {
             private final CrmEntityFolder<ServiceConcession> parent = this;
 

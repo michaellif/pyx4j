@@ -33,7 +33,7 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
@@ -143,9 +143,9 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
         });
     }
 
-    private CEntityFolderEditor<Pet> createPetsEditorColumns() {
+    private CEntityFolder<Pet> createPetsEditorColumns() {
 
-        return new CEntityFolderEditor<Pet>(Pet.class) {
+        return new CEntityFolder<Pet>(Pet.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
             {
@@ -167,7 +167,7 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<Pet>() {
                         @Override
-                        public void setFolder(CEntityFolderEditor<?> w) {
+                        public void setFolder(CEntityFolder<?> w) {
                             super.setFolder(w);
                             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                         }
@@ -238,8 +238,8 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
         };
     }
 
-    private CEntityFolderEditor<Vehicle> createVehicleEditorColumns() {
-        return new CEntityFolderEditor<Vehicle>(Vehicle.class) {
+    private CEntityFolder<Vehicle> createVehicleEditorColumns() {
+        return new CEntityFolder<Vehicle>(Vehicle.class) {
 
             private List<EntityFolderColumnDescriptor> columns;
 
@@ -261,7 +261,7 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<Vehicle>() {
                         @Override
-                        public void setFolder(CEntityFolderEditor<?> w) {
+                        public void setFolder(CEntityFolder<?> w) {
                             super.setFolder(w);
                             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                         }

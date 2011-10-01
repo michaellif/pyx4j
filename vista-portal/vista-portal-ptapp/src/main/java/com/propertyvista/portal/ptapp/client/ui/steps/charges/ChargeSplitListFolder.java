@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
@@ -51,7 +51,7 @@ import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
-public class ChargeSplitListFolder extends CEntityFolderEditor<TenantCharge> {
+public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
 
     private static I18n i18n = I18nFactory.getI18n(ChargeSplitListFolder.class);
 
@@ -195,7 +195,7 @@ public class ChargeSplitListFolder extends CEntityFolderEditor<TenantCharge> {
         }
 
         @Override
-        public void setFolder(final CEntityFolderEditor<?> folder) {
+        public void setFolder(final CEntityFolder<?> folder) {
             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
             if (getWidgetCount() > 1) {
                 remove(1);

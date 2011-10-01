@@ -18,7 +18,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -35,7 +35,7 @@ public class BoxReadOnlyFolderDecorator<E extends IEntity> extends SimplePanel i
     }
 
     @Override
-    public void setFolder(CEntityFolderEditor<?> w) {
+    public void setFolder(CEntityFolder<?> w) {
         super.setWidget(w.getContainer());
     }
 

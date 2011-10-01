@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityFolder;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
@@ -70,7 +70,7 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
         return new CrmScrollPanel(main);
     }
 
-    private CEntityFolderEditor<FloorplanAmenity> createAmenitiesListEditor() {
+    private CEntityFolder<FloorplanAmenity> createAmenitiesListEditor() {
         return new CrmEntityFolder<FloorplanAmenity>(FloorplanAmenity.class, i18n.tr("Amenity"), isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
