@@ -13,12 +13,12 @@
  */
 package com.propertyvista.domain.financial.offering;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.shared.IEntity;
 
 @Inheritance
-@DiscriminatorValue("_ChargeItemExtraData")
+@AbstractEntity
 public interface ChargeItemExtraData extends IEntity {
 
 }
