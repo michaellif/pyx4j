@@ -22,26 +22,36 @@ package com.pyx4j.entity.client.ui.flex;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.client.ui.DelegatingEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -50,9 +60,13 @@ public class EntityBinder<E extends IEntity> {
 
     private static final Logger log = LoggerFactory.getLogger(EntityBinder.class);
 
+    private final CEntityEditor<E> editor;
+
     private final E entityPrototype;
 
     private E editableEntity;
+
+    private E origEntity;
 
     private final HashMap<CEditableComponent<?, ?>, Path> binding = new HashMap<CEditableComponent<?, ?>, Path>();
 
@@ -87,13 +101,18 @@ public class EntityBinder<E extends IEntity> {
         }
     }
 
-    public EntityBinder(Class<E> clazz) {
-        entityPrototype = EntityFactory.getEntityPrototype(clazz);
-        valuePropagation = new ValuePropagation();
+    public EntityBinder(Class<E> clazz, CEntityEditor<E> editor) {
+        this.entityPrototype = EntityFactory.getEntityPrototype(clazz);
+        this.editor = editor;
+        this.valuePropagation = new ValuePropagation();
     }
 
     public E proto() {
         return entityPrototype;
+    }
+
+    public CEntityEditor<E> getEntityEditor() {
+        return editor;
     }
 
     @SuppressWarnings("unchecked")
@@ -128,12 +147,62 @@ public class EntityBinder<E extends IEntity> {
     }
 
     @SuppressWarnings("unchecked")
-    public void bind(CEditableComponent<?, ?> component, IObject<?> member) {
+    public <T> void bind(CEditableComponent<T, ?> component, IObject<?> member) {
         // verify that member actually exists in entity.
         assert (proto().getMember(member.getPath()) != null);
         component.addValueChangeHandler(valuePropagation);
         applyAttributes(component, member);
         binding.put(component, member.getPath());
+
+        component.addPropertyChangeHandler(new PropertyChangeHandler() {
+            boolean sheduled = false;
+
+            @Override
+            public void onPropertyChange(final PropertyChangeEvent event) {
+                if (!sheduled) {
+                    sheduled = true;
+                    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
+                        @Override
+                        public void execute() {
+                            if (PropertyChangeEvent.PropertyName.VALIDITY.equals(event.getPropertyName())) {
+                                log.trace("CEntityEditor.onPropertyChange fired from {}. Changed property is {}.", editor.getTitle(), event.getPropertyName());
+                                editor.revalidate();
+                                PropertyChangeEvent.fire(editor, PropertyChangeEvent.PropertyName.VALIDITY);
+
+                            }
+                            sheduled = false;
+                        }
+                    });
+                }
+            }
+        });
+
+        component.addValueChangeHandler(new ValueChangeHandler<T>() {
+            boolean sheduled = false;
+
+            @Override
+            public void onValueChange(final ValueChangeEvent<T> event) {
+                if (!sheduled) {
+                    sheduled = true;
+                    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
+                        @Override
+                        public void execute() {
+                            editor.revalidate();
+                            log.trace("CEntityEditor.onValueChange fired from {}. New value is {}.", editor.getTitle(), event.getValue());
+                            ValueChangeEvent.fire(editor, getValue());
+                            sheduled = false;
+                        }
+                    });
+                }
+
+            }
+        });
+
+        component.addAccessAdapter(editor);
+        if (component instanceof CEntityComponent) {
+            ((CEntityComponent<?, ?>) component).onBound(editor);
+        }
+
     }
 
     protected void applyAttributes(CEditableComponent<?, ?> component, IObject<?> member) {
@@ -152,10 +221,6 @@ public class EntityBinder<E extends IEntity> {
         }
         component.setTitle(mm.getCaption());
         component.setDebugId(member.getPath());
-    }
-
-    public void populate(E entity) {
-        setValue(entity);
     }
 
     @SuppressWarnings("unchecked")
@@ -205,4 +270,144 @@ public class EntityBinder<E extends IEntity> {
         return binding.keySet();
     }
 
+    public E getOrigValue() {
+        if (getEntityEditor().isBound()) {
+            throw new Error("Editor is bound. Only isChanged() method of root editor can be called.");
+        }
+        return origEntity;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void populate(E entity) {
+        if (getEntityEditor().isBound()) {
+            setValue(entity);
+        } else {
+            this.origEntity = entity;
+            if (entity != null) {
+                setValue((E) entity.cloneEntity());
+            } else {
+                setValue((E) EntityFactory.create(proto().getValueClass()));
+            }
+        }
+    }
+
+    public boolean isChanged() {
+        if (getEntityEditor().isBound()) {
+            throw new Error("Editor is bound. Only isChanged() method of root editor can be called.");
+        }
+        return !equalRecursive(getOrigValue(), getValue());
+    }
+
+    public static boolean equalRecursive(IEntity entity1, IEntity entity2) {
+        return equalRecursive(entity1, entity2, new HashSet<IEntity>());
+    }
+
+    private static boolean equalRecursive(IEntity entity1, IEntity entity2, Set<IEntity> processed) {
+        if (((entity2 == null) || entity2.isNull())) {
+            return isEmptyEntity(entity1);
+        } else if ((entity1 == null) || entity1.isNull()) {
+            return isEmptyEntity(entity2);
+        }
+        if (processed != null) {
+            if (processed.contains(entity1)) {
+                return true;
+            }
+            processed.add(entity1);
+        }
+        EntityMeta em = entity1.getEntityMeta();
+        for (String memberName : em.getMemberNames()) {
+            MemberMeta memberMeta = em.getMemberMeta(memberName);
+            if (memberMeta.isDetached() || memberMeta.isTransient() || memberMeta.isRpcTransient()) {
+                continue;
+            }
+            if (memberMeta.isEntity()) {
+                if (memberMeta.isEmbedded()) {
+                    if (!equalRecursive((IEntity) entity1.getMember(memberName), (IEntity) entity2.getMember(memberName), processed)) {
+                        log.debug("changed {}", memberName);
+                        return false;
+                    }
+                } else if (((IEntity) entity1.getMember(memberName)).isNull()) {
+                    if (!((IEntity) entity2.getMember(memberName)).isNull()) {
+                        log.debug("changed [null] -> [{}]", entity2.getMember(memberName));
+                        return false;
+                    }
+                } else if (!EqualsHelper.equals(entity1.getMember(memberName), entity2.getMember(memberName))) {
+                    log.debug("changed [{}] -> [{}]", entity1.getMember(memberName), entity2.getMember(memberName));
+                    return false;
+                }
+            } else if (ISet.class.equals(memberMeta.getObjectClass())) {
+                //TODO OwnedRelationships
+                if (!EqualsHelper.equals((ISet<?>) entity1.getMember(memberName), (ISet<?>) entity2.getMember(memberName))) {
+                    log.debug("changed {}", memberName);
+                    return false;
+                }
+            } else if (IList.class.equals(memberMeta.getObjectClass())) {
+                if (memberMeta.isOwnedRelationships()) {
+                    if (!listValuesEquals((IList<?>) entity1.getMember(memberName), (IList<?>) entity2.getMember(memberName), processed)) {
+                        log.debug("changed {}", memberName);
+                        return false;
+                    }
+                } else if (!EqualsHelper.equals((IList<?>) entity1.getMember(memberName), (IList<?>) entity2.getMember(memberName))) {
+                    log.debug("changed {}", memberName);
+                    return false;
+                }
+            } else if (!EqualsHelper.equals(entity1.getMember(memberName), entity2.getMember(memberName))) {
+                log.debug("changed {}", memberName);
+                log.debug("[{}] -> [{}]", entity1.getMember(memberName), entity2.getMember(memberName));
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean listValuesEquals(IList<?> value1, IList<?> value2, Set<IEntity> processed) {
+        if (value1.size() != value2.size()) {
+            return false;
+        }
+        Iterator<?> iter1 = value1.iterator();
+        Iterator<?> iter2 = value2.iterator();
+        for (; iter1.hasNext() && iter2.hasNext();) {
+            if (!equalRecursive((IEntity) iter1.next(), (IEntity) iter2.next(), processed)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isEmptyEntity(IEntity entity) {
+        if ((entity == null) || entity.isNull()) {
+            return true;
+        }
+        EntityMeta em = entity.getEntityMeta();
+        for (String memberName : em.getMemberNames()) {
+            MemberMeta memberMeta = em.getMemberMeta(memberName);
+            if (memberMeta.isDetached() || memberMeta.isTransient() || memberMeta.isRpcTransient()) {
+                continue;
+            }
+            IObject<?> member = entity.getMember(memberName);
+            if (member.isNull()) {
+                continue;
+            } else if (memberMeta.isEntity()) {
+                if (!isEmptyEntity((IEntity) member)) {
+                    log.debug("member {} not empty; {}", memberName, member);
+                    return false;
+                }
+            } else if ((ISet.class.equals(memberMeta.getObjectClass())) || (IList.class.equals(memberMeta.getObjectClass()))) {
+                if (!((ICollection<?, ?>) member).isEmpty()) {
+                    log.debug("member {} not empty; {}", memberName, member);
+                    return false;
+                }
+            } else if (Boolean.class.equals(memberMeta.getValueClass())) {
+                // Special case for values presented by CheckBox
+                if (member.getValue() == Boolean.TRUE) {
+                    log.debug("member {} not empty; {}", memberName, member);
+                    return false;
+                }
+            } else {
+                log.debug("member {} not empty; {}", memberName, member);
+                return false;
+            }
+        }
+        return true;
+    }
 }

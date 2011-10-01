@@ -39,7 +39,7 @@ import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.client.ui.CEntityForm;
 import com.pyx4j.entity.client.ui.EntityFormFactory;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.client.ui.flex.EntityFormBinder;
+import com.pyx4j.entity.client.ui.flex.EntityBinder;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -205,11 +205,11 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
      * @return true when any field in Entity has been changes.
      */
     public boolean isChanged() {
-        return !EntityFormBinder.equalRecursive(form.getOrigValue(), getEntityForSave());
+        return !EntityBinder.equalRecursive(form.getOrigValue(), getEntityForSave());
     }
 
     public static boolean equalRecursive(IEntity entity1, IEntity entity2) {
-        return EntityFormBinder.equalRecursive(entity1, entity2);
+        return EntityBinder.equalRecursive(entity1, entity2);
     }
 
     //TODO move to EntityEditorWidget

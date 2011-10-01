@@ -24,10 +24,10 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IEntity;
 
-public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
+public abstract class CrudEntityForm<E extends IEntity> extends CEntityEditor<E> {
 
     protected static I18n i18n = I18nFactory.getI18n(CrudEntityForm.class);
 

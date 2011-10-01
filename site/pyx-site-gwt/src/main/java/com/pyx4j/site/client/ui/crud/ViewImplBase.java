@@ -47,7 +47,7 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel implements 
 
     public ViewImplBase(CrudEntityForm<E> form) {
         this();
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 
@@ -58,7 +58,7 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel implements 
 
     public ViewImplBase(Widget header, double size, CrudEntityForm<E> form) {
         this(header, size);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 

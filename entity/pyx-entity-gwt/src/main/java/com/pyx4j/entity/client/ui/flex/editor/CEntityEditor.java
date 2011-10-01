@@ -25,20 +25,17 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityContainer;
 import com.pyx4j.entity.client.ui.flex.EntityBinder;
+import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
 import com.pyx4j.entity.client.ui.flex.NativeEntityPanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
@@ -46,14 +43,17 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
     private static final Logger log = LoggerFactory.getLogger(CEntityEditor.class);
 
+    protected IEditableComponentFactory factory;
+
     private final EntityBinder<E> binder;
 
     public CEntityEditor(Class<E> clazz) {
-        this(new EntityBinder<E>(clazz));
+        this(clazz, new EntityFormComponentFactory());
     }
 
-    public CEntityEditor(EntityBinder<E> binder) {
-        this.binder = binder;
+    public CEntityEditor(Class<E> clazz, IEditableComponentFactory factory) {
+        binder = new EntityBinder<E>(clazz, this);
+        this.factory = factory;
     }
 
     public EntityBinder<E> binder() {
@@ -82,6 +82,15 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        if (isBound()) {
+            return super.create(member);
+        } else {
+            return factory.create(member);
+        }
+    }
+
+    @Override
     public Collection<? extends CEditableComponent<?, ?>> getComponents() {
         return binder.getComponents();
     }
@@ -93,56 +102,6 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
     public final <T> void bind(CEditableComponent<T, ?> component, IObject<?> member) {
         binder.bind(component, member);
-
-        component.addPropertyChangeHandler(new PropertyChangeHandler() {
-            boolean sheduled = false;
-
-            @Override
-            public void onPropertyChange(final PropertyChangeEvent event) {
-                if (!sheduled) {
-                    sheduled = true;
-                    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
-                        @Override
-                        public void execute() {
-                            if (PropertyChangeEvent.PropertyName.VALIDITY.equals(event.getPropertyName())) {
-                                log.trace("CEntityEditor.onPropertyChange fired from {}. Changed property is {}.", CEntityEditor.this.getTitle(),
-                                        event.getPropertyName());
-                                revalidate();
-                                PropertyChangeEvent.fire(CEntityEditor.this, PropertyChangeEvent.PropertyName.VALIDITY);
-
-                            }
-                            sheduled = false;
-                        }
-                    });
-                }
-            }
-        });
-
-        component.addValueChangeHandler(new ValueChangeHandler<T>() {
-            boolean sheduled = false;
-
-            @Override
-            public void onValueChange(final ValueChangeEvent<T> event) {
-                if (!sheduled) {
-                    sheduled = true;
-                    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
-                        @Override
-                        public void execute() {
-                            revalidate();
-                            log.trace("CEntityEditor.onValueChange fired from {}. New value is {}.", CEntityEditor.this.getTitle(), event.getValue());
-                            ValueChangeEvent.fire(CEntityEditor.this, getValue());
-                            sheduled = false;
-                        }
-                    });
-                }
-
-            }
-        });
-
-        component.addAccessAdapter(this);
-        if (component instanceof CEntityComponent) {
-            ((CEntityComponent<?, ?>) component).onBound(this);
-        }
     }
 
     @Override
@@ -157,7 +116,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         initContent();
     }
 
-    protected final void initContent() {
+    public final void initContent() {
         attachContent();
         addValidations();
     }

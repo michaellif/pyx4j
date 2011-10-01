@@ -70,6 +70,10 @@ public abstract class CEntityComponent<DATA_TYPE, WIDGET_TYPE extends Widget & I
         bindParent = parent;
     }
 
+    public boolean isBound() {
+        return bindParent != null;
+    }
+
     public void addValidations() {
 
     }
