@@ -73,7 +73,7 @@ public class ValueAdapterEntityVirtual implements ValueAdapter {
                     }
                     impClasses.put(discriminator.value(), ec);
                 } else if (ec.getAnnotation(AbstractEntity.class) == null) {
-                    throw new Error("Missing @DiscriminatorValue annotation on class " + ec.getName());
+                    throw new Error("Class " + ec.getName() + " require @AbstractEntity or @DiscriminatorValue annotation");
                 }
             }
         }
