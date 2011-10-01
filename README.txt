@@ -1,13 +1,13 @@
 ========= Install Eclipse ==========
 
 1. Get: Eclipse SDK
-       eclipse-SDK-3.7-win32.zip or eclipse-SDK-3?.7-win32-x86_64.zip
+       eclipse-SDK-3.7.1-win32.zip or eclipse-SDK-3.7.1-win32-x86_64.zip
 
-2. Unzip it to directory: eclipse-3.7.0   (Optionally)
+2. Unzip it to directory: eclipse-3.7.1   (Optionally)
 
 3. Create Shortcut, provide path to JDK (for example -vm "C:\My\Programs\Java\jdk1.6.0_24\bin\javaw.exe")
    Or full Target on Windows 32:
-        D:\prog\dev\eclipse\eclipse-3.7.0\eclipse.exe -vm D:/jdk1.6.0/bin/javaw.exe -vmargs -Xmx456M -XX:MaxPermSize=256m
+        D:\prog\dev\eclipse\eclipse-3.7.1\eclipse.exe -vm D:/jdk1.6.0/bin/javaw.exe -vmargs -Xmx456M -XX:MaxPermSize=256m
 
    On Windows 64 When using 64-bit JDK set:
         -Xmx1024M -XX:MaxPermSize=512m -XX:ReservedCodeCacheSize=128m
@@ -55,7 +55,7 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k -XX:ReservedCodeCacheSize=64m
 
 ========= Install Google App Engine SDK for Java =========
 
-1. Install "Google plugins for Eclipse 3.7 version 2.3.2.r37..."
+1. Install "Google plugins for Eclipse 3.7 version 2.4.1.r37..."
     site url: http://dl.google.com/eclipse/plugin/3.7
 
     You may install SDKs bundle for GAE and GWT from google site for faster download.
@@ -65,9 +65,9 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k -XX:ReservedCodeCacheSize=64m
     Star this bugs: http://code.google.com/p/googleappengine/issues/detail?id=3401
                     http://code.google.com/p/googleappengine/issues/detail?id=2282
 
-2. Download and unzip appengine-java-sdk-1.5.1.zip
+2. Download and unzip appengine-java-sdk-1.5.3.zip
 		from http://code.google.com/appengine/downloads.html
-3. Unzip GAE SDK to C:\3p-libs\gae\appengine-java-sdk-1.5.1  (or make NTFS link)
+3. Unzip GAE SDK to C:\3p-libs\gae\appengine-java-sdk-1.5.3  (or make NTFS link)
 4. Configure Eclipse -> Preferences -> Google -> App Engine to use SDK above!
 
 4. For heavy server side development use jrebel
