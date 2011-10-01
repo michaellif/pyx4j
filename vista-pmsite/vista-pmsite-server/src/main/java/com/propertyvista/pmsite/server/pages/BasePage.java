@@ -106,11 +106,11 @@ public abstract class BasePage extends WebPage {
                 break;
             }
         }
+        int styleId = 0;
         if (pmsiteStyleCookie != null) {
-            return Integer.valueOf(pmsiteStyleCookie.getValue());
-        } else {
-            return 0;
+            styleId = Integer.valueOf(pmsiteStyleCookie.getValue());
         }
+        return styleId;
     }
 
     @Override

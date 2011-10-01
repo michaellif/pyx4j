@@ -26,44 +26,57 @@ public class StylesheetTemplateModel extends LoadableDetachableModel<Map<String,
 
     private static final String DEFAULT_COLOR = "#666666";
 
-    private final String baseColor;
+    private static final int VIBRANCE_CNT = 10;
+
+    private final String primeColor;
 
     private final String accentColor;
 
+    private final String bgColor;
+
+    private final String fgColor;
+
+    private final String hlightColor;
+
     public StylesheetTemplateModel(String baseColor) {
         //this.baseColor = baseColor;
-        this.baseColor = "#e2e2e2";
-        this.accentColor = "red";
+        this.primeColor = "#0000ff"; //-- H1
+        this.accentColor = "#ff0000"; //- H2
+        this.hlightColor = "#00ff00"; //- H3
+        this.bgColor = "#ffffff"; //----- H4
+        this.fgColor = "#000000"; //----- H5
     }
 
     @Override
     public Map<String, Object> load() {
-        Color bc = stringToColor(baseColor);
-        float[] baseHsb = Color.RGBtoHSB(bc.getRed(), bc.getGreen(), bc.getBlue(), null);
-        Color ac = stringToColor(accentColor);
-        float[] accentHsb = Color.RGBtoHSB(ac.getRed(), ac.getGreen(), ac.getBlue(), null);
+        final Map<String, Object> varModel = new HashMap<String, Object>();
+        varModel.putAll(generateColorMap("primeColor", primeColor));
+        varModel.putAll(generateColorMap("accentColor", accentColor));
+        varModel.putAll(generateColorMap("bgColor", bgColor));
+        varModel.putAll(generateColorMap("fgColor", fgColor));
+        varModel.putAll(generateColorMap("hlightColor", hlightColor));
 
-        final Map<String, Object> vars = new HashMap<String, Object>();
-        vars.put("primeColor1a", colorToString(new Color(HSBVtoRGB(baseHsb[0], baseHsb[1], baseHsb[2], 0.6f))));
-        vars.put("primeColor1b", colorToString(new Color(HSBVtoRGB(baseHsb[0], baseHsb[1], baseHsb[2], 0.8f))));
-        vars.put("primeColor1c", colorToString(new Color(HSBVtoRGB(baseHsb[0], baseHsb[1], baseHsb[2], 1f))));
-        vars.put("primeColor1d", colorToString(new Color(HSBVtoRGB(baseHsb[0], baseHsb[1], baseHsb[2], 1.2f))));
-        vars.put("primeColor1e", colorToString(new Color(HSBVtoRGB(baseHsb[0], baseHsb[1], baseHsb[2], 1.4f))));
-
-        vars.put("accentColor1a", colorToString(new Color(HSBVtoRGB(accentHsb[0], accentHsb[1], accentHsb[2], 0.7f))));
-        vars.put("accentColor1b", colorToString(new Color(HSBVtoRGB(accentHsb[0], accentHsb[1], accentHsb[2], 1.0f))));
-        vars.put("accentColor1c", colorToString(new Color(HSBVtoRGB(accentHsb[0], accentHsb[1], accentHsb[2], 1.3f))));
-
-        return vars;
+        return varModel;
     }
 
-    public static int HSBVtoRGB(float hue, float saturation, float brightness, float vibrance) {
+    private static Map<String, String> generateColorMap(String keyBase, String color) {
+        Color c = stringToColor(color);
+        float[] HSBModel = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
+        final Map<String, String> colorMap = new HashMap<String, String>(VIBRANCE_CNT);
+        for (int vib = 0; vib < VIBRANCE_CNT; vib++) {
+            float vibrance = (float) (1.0 - (float) vib / VIBRANCE_CNT); // 1.0 -> 0.1
+            colorMap.put(keyBase + "_" + (100 - 10 * vib), colorToString(new Color(HSBVtoRGB(HSBModel[0], HSBModel[1], HSBModel[2], vibrance))));
+        }
+        return colorMap;
+    }
+
+    private static int HSBVtoRGB(float hue, float saturation, float brightness, float vibrance) {
         float ns = saturation * vibrance;
         float nb = 1 - (1 - brightness) * vibrance;
         return Color.HSBtoRGB(hue, ns, nb);
     }
 
-    public static Color stringToColor(String value) {
+    private static Color stringToColor(String value) {
         if (value == null) {
             value = DEFAULT_COLOR;
         }
