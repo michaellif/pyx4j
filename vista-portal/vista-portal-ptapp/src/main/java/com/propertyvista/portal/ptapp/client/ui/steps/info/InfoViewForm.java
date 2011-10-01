@@ -30,7 +30,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
@@ -67,7 +66,7 @@ import com.propertyvista.portal.ptapp.client.ui.components.PtAppBoxFolderItemDec
 import com.propertyvista.portal.ptapp.client.ui.components.PtAppEntityFolder;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 
-public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
+public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(InfoViewForm.class);
 

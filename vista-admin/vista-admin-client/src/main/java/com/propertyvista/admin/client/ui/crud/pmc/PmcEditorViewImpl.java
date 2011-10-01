@@ -27,8 +27,8 @@ public class PmcEditorViewImpl extends AdminEditorViewImplBase<PmcDTO> implement
 
     public PmcEditorViewImpl() {
         super(AdminSiteMap.Management.PMC.class);
-        existingItemForm.initialize();
-        newItemForm.initialize();
+        existingItemForm.initContent();
+        newItemForm.initContent();
     }
 
     @Override

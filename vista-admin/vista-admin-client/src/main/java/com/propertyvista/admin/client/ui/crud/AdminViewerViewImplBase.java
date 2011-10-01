@@ -55,7 +55,7 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
 
     public AdminViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, AdminEntityForm<E> form) {
         this(placeClass);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 

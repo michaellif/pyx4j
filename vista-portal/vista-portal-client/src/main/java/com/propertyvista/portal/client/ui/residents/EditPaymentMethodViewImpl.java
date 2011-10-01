@@ -40,7 +40,7 @@ public class EditPaymentMethodViewImpl extends FlowPanel implements EditPaymentM
 
     public EditPaymentMethodViewImpl() {
         form = new EditPaymentMethodForm();
-        form.initialize();
+        form.initContent();
         add(form);
 
         Button submitButton = new Button(i18n.tr("Save"));

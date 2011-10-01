@@ -23,14 +23,14 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.DecorationData.ShowMandatory;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 
-public class LoginViewForm extends CEntityForm<AuthenticationRequest> {
+public class LoginViewForm extends CEntityEditor<AuthenticationRequest> {
 
     private static I18n i18n = I18nFactory.getI18n(LoginViewForm.class);
 

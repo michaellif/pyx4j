@@ -35,7 +35,7 @@ public class MaintenanceViewImpl extends FlowPanel implements MaintenanceView {
 
     public MaintenanceViewImpl() {
         form = new MaintenanceForm();
-        form.initialize();
+        form.initContent();
         add(form);
 
         Button submitButton = new Button(i18n.tr("Submit"));

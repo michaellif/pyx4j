@@ -26,10 +26,10 @@ import com.google.gwt.view.client.Range;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.OptionsFilter;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
@@ -55,7 +55,7 @@ import com.propertyvista.domain.ref.Province;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 
-public class PersonalInfoForm extends CEntityForm<ResidentDTO> implements PersonalInfoView {
+public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements PersonalInfoView {
 
     private final DecorationData decor;
 

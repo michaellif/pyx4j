@@ -21,14 +21,14 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.forms.client.ui.CHyperlink;
 
 import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
 import com.propertyvista.portal.client.ui.decorations.PortalHeaderBar;
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 
-public class MaintenanceForm extends CEntityForm<MaintenanceRequestDTO> implements MaintenanceView {
+public class MaintenanceForm extends CEntityEditor<MaintenanceRequestDTO> implements MaintenanceView {
 
     private static I18n i18n = I18nFactory.getI18n(MaintenanceForm.class);
 

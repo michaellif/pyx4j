@@ -23,7 +23,7 @@ public class SiteEditorImpl extends CrmEditorViewImplBase<SiteDescriptorDTO> imp
         super(CrmSiteMap.Settings.Content.class);
         // create/init/set main form here: 
         CrmEntityForm<SiteDescriptorDTO> form = new SiteEditorForm(this);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 }

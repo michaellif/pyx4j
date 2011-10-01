@@ -25,7 +25,7 @@ public class BuildingEditorViewImpl extends CrmEditorViewImplBase<BuildingDTO> i
 
         // create/init/set main form here: 
         CrmEntityForm<BuildingDTO> form = new BuildingEditorForm(this);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 

@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderItemViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
@@ -47,7 +47,7 @@ import com.propertyvista.portal.client.ui.util.Utils;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
 
-public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implements PaymentMethodsView {
+public class PaymentMethodsForm extends CEntityEditor<PaymentMethodListDTO> implements PaymentMethodsView {
 
     private static I18n i18n = I18nFactory.getI18n(PaymentMethodsForm.class);
 

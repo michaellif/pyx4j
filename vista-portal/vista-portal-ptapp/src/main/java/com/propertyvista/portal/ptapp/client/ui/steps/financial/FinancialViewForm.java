@@ -31,10 +31,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
@@ -63,7 +63,7 @@ import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDec
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 
-public class FinancialViewForm extends CEntityForm<TenantFinancialDTO> {
+public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(FinancialViewForm.class);
 

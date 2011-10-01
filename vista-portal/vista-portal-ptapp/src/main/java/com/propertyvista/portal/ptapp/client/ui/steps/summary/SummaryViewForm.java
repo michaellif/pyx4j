@@ -40,7 +40,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
@@ -75,7 +75,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryTenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 
-public class SummaryViewForm extends CEntityForm<SummaryDTO> {
+public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(SummaryViewForm.class);
 

@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
@@ -37,7 +37,7 @@ import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
-public class ChargesViewForm extends CEntityForm<Charges> {
+public class ChargesViewForm extends CEntityEditor<Charges> {
 
     private final FlowPanel splitCharges = new FlowPanel();
 

@@ -19,7 +19,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.forms.client.ui.CLabel;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
@@ -30,7 +30,7 @@ import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 
-public class EditPaymentMethodForm extends CEntityForm<PaymentMethodDTO> {
+public class EditPaymentMethodForm extends CEntityEditor<PaymentMethodDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(EditPaymentMethodForm.class);
 

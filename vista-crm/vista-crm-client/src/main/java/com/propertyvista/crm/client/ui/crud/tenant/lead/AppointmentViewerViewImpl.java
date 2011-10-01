@@ -34,7 +34,7 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
 
         // create/init/set main form here: 
         CrmEntityForm<Appointment> form = new AppointmentEditorForm(new CrmViewersComponentFactory(), this);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 

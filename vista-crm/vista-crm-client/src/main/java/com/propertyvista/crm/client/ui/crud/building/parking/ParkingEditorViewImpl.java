@@ -24,7 +24,7 @@ public class ParkingEditorViewImpl extends CrmEditorViewImplBase<ParkingDTO> imp
 
         // create/init/set main form here: 
         ParkingEditorForm form = new ParkingEditorForm(this);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 }

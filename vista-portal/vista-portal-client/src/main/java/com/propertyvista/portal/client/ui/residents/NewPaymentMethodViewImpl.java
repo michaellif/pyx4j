@@ -36,7 +36,7 @@ public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMet
 
     public NewPaymentMethodViewImpl() {
         form = new NewPaymentMethodForm();
-        form.initialize();
+        form.initContent();
         add(form);
 
         Button submitButton = new Button(i18n.tr("Save"));

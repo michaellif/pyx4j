@@ -34,7 +34,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.view.client.Range;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -66,7 +65,7 @@ import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargeLineFolder;
 
-public class PaymentViewForm extends CEntityForm<PaymentInfo> {
+public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
 
     private static I18n i18n = I18nFactory.getI18n(PaymentViewForm.class);
 

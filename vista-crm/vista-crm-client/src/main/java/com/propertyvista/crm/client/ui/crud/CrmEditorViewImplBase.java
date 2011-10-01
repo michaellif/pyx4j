@@ -63,7 +63,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
 
     public CrmEditorViewImplBase(Class<? extends AppPlace> placeClass, CrudEntityForm<E> form) {
         this(placeClass);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 

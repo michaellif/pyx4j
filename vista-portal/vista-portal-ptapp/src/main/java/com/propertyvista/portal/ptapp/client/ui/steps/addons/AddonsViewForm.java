@@ -31,8 +31,8 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.OptionsFilter;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
@@ -54,8 +54,8 @@ import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
-import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.financial.offering.extradata.Pet.WeightUnit;
+import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.util.DomainUtil;
@@ -65,7 +65,7 @@ import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderIte
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.ptapp.dto.AddOnsDTO;
 
-public class AddonsViewForm extends CEntityForm<AddOnsDTO> {
+public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(AddonsViewForm.class);
 

@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderItemViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.CEntityFolderViewer;
 import com.pyx4j.entity.client.ui.flex.viewer.IFolderItemViewerDecorator;
@@ -38,7 +38,7 @@ import com.propertyvista.portal.domain.dto.BillDTO;
 import com.propertyvista.portal.domain.dto.BillListDTO;
 import com.propertyvista.portal.domain.dto.BillListDTO.SearchType;
 
-public class BillingHistoryForm extends CEntityForm<BillListDTO> implements BillingHistoryView {
+public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements BillingHistoryView {
 
     protected static I18n i18n = I18nFactory.getI18n(BillingHistoryForm.class);
 

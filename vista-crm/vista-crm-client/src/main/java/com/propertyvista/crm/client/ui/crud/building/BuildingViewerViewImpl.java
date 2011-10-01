@@ -90,7 +90,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
         // create/init/set main form here: 
         CrmEntityForm<BuildingDTO> form = new BuildingEditorForm(new CrmViewersComponentFactory(), this);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 

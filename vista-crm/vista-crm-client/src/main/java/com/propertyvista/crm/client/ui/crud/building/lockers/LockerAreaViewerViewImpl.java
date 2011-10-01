@@ -38,7 +38,7 @@ public class LockerAreaViewerViewImpl extends CrmViewerViewImplBase<LockerAreaDT
 
         // create/init/set main form here: 
         LockerAreaEditorForm form = new LockerAreaEditorForm(new CrmViewersComponentFactory(), this);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 

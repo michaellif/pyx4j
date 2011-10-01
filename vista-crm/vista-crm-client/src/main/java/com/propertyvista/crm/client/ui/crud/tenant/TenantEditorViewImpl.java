@@ -33,7 +33,7 @@ public class TenantEditorViewImpl extends CrmEditorViewImplBase<TenantDTO> imple
 
         // create/init/set main form here: 
         CrmEntityForm<TenantDTO> form = new TenantEditorForm(this);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 

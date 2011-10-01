@@ -22,7 +22,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
@@ -34,12 +34,12 @@ public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePassw
 
     private Presenter presenter;
 
-    private final CEntityForm<PasswordRetrievalRequest> form;
+    private final CEntityEditor<PasswordRetrievalRequest> form;
 
     public RetrievePasswordViewImpl() {
 
         form = new RetrievePasswordViewForm();
-        form.initialize();
+        form.initContent();
         form.populate(null);
         add(form);
         getElement().getStyle().setMarginTop(10, Unit.PCT);

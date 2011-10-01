@@ -26,7 +26,7 @@ public class ServiceViewerViewImpl extends CrmViewerViewImplBase<Service> implem
 
         // create/init/set main form here: 
         CrmEntityForm<Service> form = new ServiceEditorForm(new CrmViewersComponentFactory(), this);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 }

@@ -61,7 +61,7 @@ public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> impleme
 
         // create/init/set main form here: 
         CrmEntityForm<LeaseDTO> form = new LeaseEditorForm(this);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 

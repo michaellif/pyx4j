@@ -47,7 +47,7 @@ public class ShowingEditorViewImpl extends CrmEditorViewImplBase<Showing> implem
 
         // create/init/set main form here: 
         CrmEntityForm<Showing> form = new ShowingEditorForm(this);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 

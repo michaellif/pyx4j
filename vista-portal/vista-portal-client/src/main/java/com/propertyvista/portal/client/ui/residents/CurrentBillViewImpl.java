@@ -29,7 +29,7 @@ public class CurrentBillViewImpl extends FlowPanel implements CurrentBillView {
 
     public CurrentBillViewImpl() {
         billForm = new CurrentBillForm();
-        billForm.initialize();
+        billForm.initContent();
         add(new VistaHeaderBar(i18n.tr("Current Bill"), "100%"));
         add(billForm);
 

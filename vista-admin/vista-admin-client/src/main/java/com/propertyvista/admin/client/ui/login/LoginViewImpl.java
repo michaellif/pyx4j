@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -45,7 +45,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
     private Presenter presenter;
 
-    private final CEntityForm<AuthenticationRequest> form;
+    private final CEntityEditor<AuthenticationRequest> form;
 
     private int devCount = 1;
 
@@ -53,12 +53,12 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
     private HandlerRegistration handlerRegistration;
 
-    private PreloadConfig config = PreloadConfig.createDefault();
+    private final PreloadConfig config = PreloadConfig.createDefault();
 
     public LoginViewImpl() {
 
         form = new LoginViewForm();
-        form.initialize();
+        form.initContent();
         form.get(form.proto().captcha()).setVisible(false);
         form.populate(null);
 

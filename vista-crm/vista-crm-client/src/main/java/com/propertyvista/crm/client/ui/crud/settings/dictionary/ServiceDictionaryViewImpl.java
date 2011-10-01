@@ -37,7 +37,7 @@ public class ServiceDictionaryViewImpl extends CrmViewerViewImplBase<ServiceItem
 
         // create/init/set main form here: 
         CrmEntityForm<ServiceItemType> form = new ServiceDictionaryViewForm(this);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 

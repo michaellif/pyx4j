@@ -34,7 +34,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
         // create/init/set main form here: 
         CrmEntityForm<TenantDTO> form = new TenantEditorForm(new CrmViewersComponentFactory(), this);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 

@@ -18,12 +18,12 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 
-public class CreateAccountViewForm extends CEntityForm<AccountCreationRequest> {
+public class CreateAccountViewForm extends CEntityEditor<AccountCreationRequest> {
 
     public CreateAccountViewForm() {
         super(AccountCreationRequest.class);

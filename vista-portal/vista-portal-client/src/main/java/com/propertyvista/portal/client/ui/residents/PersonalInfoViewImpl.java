@@ -38,7 +38,7 @@ public class PersonalInfoViewImpl extends FlowPanel implements PersonalInfoView 
 
     public PersonalInfoViewImpl() {
         form = new PersonalInfoForm();
-        form.initialize();
+        form.initContent();
         add(form);
 
         Button saveButton = new Button(i18n.tr("Save"));

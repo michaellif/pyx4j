@@ -29,8 +29,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
@@ -54,7 +54,7 @@ import com.propertyvista.portal.ptapp.client.ui.components.PtAppTableFolderItemD
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 
-public class TenantsViewForm extends CEntityForm<TenantInApplicationListDTO> {
+public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
     static I18n i18n = I18nFactory.getI18n(TenantsViewForm.class);
 

@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.HtmlUtils;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.DecorationData.ShowMandatory;
@@ -30,7 +30,7 @@ import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.crm.client.ui.login.NewPasswordView.ConversationType;
 import com.propertyvista.crm.rpc.PasswordChangeRequest;
 
-public class NewPasswordViewForm extends CEntityForm<PasswordChangeRequest> {
+public class NewPasswordViewForm extends CEntityEditor<PasswordChangeRequest> {
 
     private static I18n i18n = I18nFactory.getI18n(NewPasswordViewForm.class);
 

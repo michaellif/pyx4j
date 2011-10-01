@@ -52,7 +52,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
         // create/init/set main form here: 
         CrmEntityForm<Lead> form = new LeadEditorForm(new CrmViewersComponentFactory(), this);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 

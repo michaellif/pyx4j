@@ -26,7 +26,7 @@ public class PageViewerImpl extends CrmViewerViewImplBase<PageDescriptor> implem
         super(CrmSiteMap.Settings.Page.class);
         // create/init/set main form here: 
         CrmEntityForm<PageDescriptor> form = new PageEditorForm(this, new CrmViewersComponentFactory());
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 

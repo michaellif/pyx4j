@@ -32,8 +32,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.HtmlUtils;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
@@ -62,7 +62,7 @@ import com.propertyvista.portal.ptapp.client.ui.components.PtAppTableFolderDecor
 import com.propertyvista.portal.ptapp.client.ui.components.PtAppTableFolderItemDecorator;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
-public class ApartmentViewForm extends CEntityForm<ApartmentInfoDTO> {
+public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(ApartmentViewForm.class);
 

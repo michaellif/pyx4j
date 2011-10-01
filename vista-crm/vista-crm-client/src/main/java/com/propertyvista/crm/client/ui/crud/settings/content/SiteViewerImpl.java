@@ -26,7 +26,7 @@ public class SiteViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> imp
         super(CrmSiteMap.Settings.Content.class);
         // create/init/set main form here: 
         CrmEntityForm<SiteDescriptorDTO> form = new SiteEditorForm(this, new CrmViewersComponentFactory());
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 

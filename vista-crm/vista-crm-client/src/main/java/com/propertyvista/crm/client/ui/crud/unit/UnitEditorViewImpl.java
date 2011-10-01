@@ -25,7 +25,7 @@ public class UnitEditorViewImpl extends CrmEditorViewImplBase<AptUnitDTO> implem
 
         // create/init/set main form here: 
         CrmEntityForm<AptUnitDTO> form = new UnitEditorForm(this);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 }

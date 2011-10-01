@@ -21,7 +21,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
@@ -40,7 +40,7 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
 
     private static I18n i18n = I18nFactory.getI18n(ImportUploadDialog.class);
 
-    private final CEntityForm<PmcImportDTO> form;
+    private final CEntityEditor<PmcImportDTO> form;
 
     private final UploadPanel<PmcImportDTO> uploadPanel;
 
@@ -81,7 +81,7 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
         uploadPanel.getElement().getStyle().setMarginTop(50, Style.Unit.PX);
         uploadPanel.getElement().getStyle().setPaddingLeft(35, Style.Unit.PX);
 
-        form = new CEntityForm<PmcImportDTO>(PmcImportDTO.class) {
+        form = new CEntityEditor<PmcImportDTO>(PmcImportDTO.class) {
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
@@ -93,7 +93,7 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
         };
         form.populate(null);
         form.getValue().setPrimaryKey(pmc.getPrimaryKey());
-        form.initialize();
+        form.initContent();
 
         dialog.setBody(form.asWidget());
         dialog.setPixelSize(460, 150);

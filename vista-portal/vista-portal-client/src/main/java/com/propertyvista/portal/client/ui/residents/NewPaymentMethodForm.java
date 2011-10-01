@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.view.client.Range;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -57,7 +56,7 @@ import com.propertyvista.portal.domain.payment.CreditCardInfo;
 import com.propertyvista.portal.domain.payment.EcheckInfo;
 import com.propertyvista.portal.domain.payment.PaymentType;
 
-public class NewPaymentMethodForm extends CEntityForm<PaymentMethodGenericDTO> {
+public class NewPaymentMethodForm extends CEntityEditor<PaymentMethodGenericDTO> {
 
     private static I18n i18n = I18nFactory.getI18n(NewPaymentMethodForm.class);
 

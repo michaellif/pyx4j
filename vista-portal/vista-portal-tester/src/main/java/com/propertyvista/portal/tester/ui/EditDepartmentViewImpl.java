@@ -13,7 +13,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
@@ -41,9 +40,9 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
 
     private Presenter presenter;
 
-    private final CEntityForm<Department> form;
+    private final CEntityEditor<Department> form;
 
-    private static class DepartmentForm extends CEntityForm<Department> {
+    private static class DepartmentForm extends CEntityEditor<Department> {
 
         public DepartmentForm() {
             super(Department.class);
@@ -168,7 +167,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
         add(labael);
 
         form = new DepartmentForm();
-        form.initialize();
+        form.initContent();
 
         add(form);
 

@@ -23,7 +23,7 @@ public class BillingHistoryViewImpl extends SimplePanel implements BillingHistor
 
     public BillingHistoryViewImpl() {
         billingForm = new BillingHistoryForm();
-        billingForm.initialize();
+        billingForm.initContent();
         setWidget(billingForm);
 
     }

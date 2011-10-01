@@ -23,7 +23,7 @@ public class PaymentMethodsViewImpl extends SimplePanel implements PaymentMethod
 
     public PaymentMethodsViewImpl() {
         form = new PaymentMethodsForm();
-        form.initialize();
+        form.initContent();
         setWidget(form);
 
     }

@@ -57,7 +57,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     public CrmViewerViewImplBase(Class<? extends AppPlace> placeClass, CrmEntityForm<E> form) {
         this(placeClass);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 

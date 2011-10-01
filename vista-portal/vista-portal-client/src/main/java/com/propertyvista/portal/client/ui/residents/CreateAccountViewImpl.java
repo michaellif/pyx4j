@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
@@ -50,7 +50,7 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
 
     private Presenter presenter;
 
-    private final CEntityForm<AccountCreationRequest> form;
+    private final CEntityEditor<AccountCreationRequest> form;
 
     private int devCount = 1;
 
@@ -102,7 +102,7 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
         add(rightColumn);
 
         form = new CreateAccountViewForm();
-        form.initialize();
+        form.initContent();
         form.populate(null);
         rightColumn.add(form);
 

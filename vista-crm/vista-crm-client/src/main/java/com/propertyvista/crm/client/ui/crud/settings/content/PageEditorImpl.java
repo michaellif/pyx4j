@@ -23,7 +23,7 @@ public class PageEditorImpl extends CrmEditorViewImplBase<PageDescriptor> implem
         super(CrmSiteMap.Settings.Page.class);
         // create/init/set main form here: 
         CrmEntityForm<PageDescriptor> form = new PageEditorForm(this);
-        form.initialize();
+        form.initContent();
         setForm(form);
     }
 }
