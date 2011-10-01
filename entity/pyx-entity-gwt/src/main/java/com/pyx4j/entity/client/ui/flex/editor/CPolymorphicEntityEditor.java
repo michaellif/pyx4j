@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.ui.flex.CEntityComponent;
 import com.pyx4j.entity.client.ui.flex.NativeEntityPanel;
+import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;

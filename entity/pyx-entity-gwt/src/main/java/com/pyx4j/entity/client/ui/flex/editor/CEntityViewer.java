@@ -14,30 +14,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 12, 2011
- * @author Misha
+ * Created on Jun 1, 2011
+ * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.entity.client.ui.flex.editor;
 
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.client.ui.flex.CEntityComponent;
+import com.pyx4j.entity.client.ui.flex.NativeEntityPanel;
 import com.pyx4j.entity.shared.IEntity;
 
-public interface IFolderItemDecorator<E extends IEntity> extends IsWidget {
+public abstract class CEntityViewer<E extends IEntity> extends CEntityComponent<E, NativeEntityPanel<E>> {
 
-    HandlerRegistration addItemClickHandler(ClickHandler handler);
+    @Override
+    public void populate(E value) {
+        super.populate(value);
+        setContent(createContent(value));
+    }
 
-    HandlerRegistration addItemRemoveClickHandler(ClickHandler handler);
+    @Override
+    protected NativeEntityPanel<E> createWidget() {
+        return new NativeEntityPanel<E>();
+    }
 
-    HandlerRegistration addRowUpClickHandler(ClickHandler handler);
+    public abstract IsWidget createContent(E value);
 
-    HandlerRegistration addRowDownClickHandler(ClickHandler handler);
-
-    HandlerRegistration addRowCollapseClickHandler(ClickHandler handler);
-
-    void setFolderItem(CEntityFolderItemEditor<E> item);
-
+    protected void setContent(IsWidget widget) {
+        asWidget().setWidget(widget);
+    }
 }

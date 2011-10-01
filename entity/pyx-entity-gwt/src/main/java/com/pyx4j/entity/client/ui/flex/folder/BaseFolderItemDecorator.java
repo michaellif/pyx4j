@@ -18,7 +18,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.pyx4j.entity.client.ui.flex.editor;
+package com.pyx4j.entity.client.ui.flex.folder;
 
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
