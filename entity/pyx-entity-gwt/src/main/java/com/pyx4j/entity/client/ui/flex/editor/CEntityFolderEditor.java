@@ -57,7 +57,7 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolderEditor.class);
 
-    private IFolderEditorDecorator<E> folderDecorator;
+    private IFolderDecorator<E> folderDecorator;
 
     private final FlowPanel container;
 
@@ -94,7 +94,7 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
     }
 
     @Override
-    public IFolderEditorDecorator<E> createContent() {
+    public IFolderDecorator<E> createContent() {
         return createFolderDecorator();
     }
 
@@ -149,13 +149,13 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
         return item;
     }
 
-    protected abstract IFolderEditorDecorator<E> createFolderDecorator();
+    protected abstract IFolderDecorator<E> createFolderDecorator();
 
     public void setExternalAddItemProcessing(boolean externalAddItemProcessing) {
         this.externalAddItemProcessing = externalAddItemProcessing;
     }
 
-    public void setFolderDecorator(IFolderEditorDecorator<E> folderDecorator) {
+    public void setFolderDecorator(IFolderDecorator<E> folderDecorator) {
         this.folderDecorator = folderDecorator;
 
         addValueChangeHandler(folderDecorator);
@@ -174,11 +174,11 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
         }
         //TODO use components inheritance
         if (this.getDebugId() != null) {
-            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderEditorDecorator.DEBUGID_SUFIX);
+            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
         }
     }
 
-    public IFolderEditorDecorator<E> getFolderDecorator() {
+    public IFolderDecorator<E> getFolderDecorator() {
         return folderDecorator;
     }
 
@@ -186,7 +186,7 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
     public void setDebugId(IDebugId debugId) {
         super.setDebugId(debugId);
         if ((debugId != null) && (folderDecorator != null)) {
-            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderEditorDecorator.DEBUGID_SUFIX);
+            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
         }
     }
 
@@ -217,7 +217,7 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
 
     }
 
-    protected void removeItem(CEntityFolderItemEditor<E> item, IFolderItemEditorDecorator<E> folderItemDecorator) {
+    protected void removeItem(CEntityFolderItemEditor<E> item, IFolderItemDecorator<E> folderItemDecorator) {
         getValue().remove(item.getValue());
         abandonFolderItem(item);
         item.removeAllHandlers();
@@ -277,8 +277,8 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
             container.remove(item);
         }
 
-        if (folderDecorator instanceof TableFolderEditorDecorator) {
-            ((TableFolderEditorDecorator<E>) folderDecorator).setHeaderVisible(container.getWidgetCount() > 0);
+        if (folderDecorator instanceof TableFolderDecorator) {
+            ((TableFolderDecorator<E>) folderDecorator).setHeaderVisible(container.getWidgetCount() > 0);
         }
     }
 
@@ -301,7 +301,7 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
 
     private void adoptFolderItem(final CEntityFolderItemEditor<E> component) {
 
-        final IFolderItemEditorDecorator<E> folderItemDecorator = component.createFolderItemDecorator();
+        final IFolderItemDecorator<E> folderItemDecorator = component.createFolderItemDecorator();
 
         component.setFolderItemDecorator(folderItemDecorator);
         component.addAccessAdapter(this);

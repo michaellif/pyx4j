@@ -44,9 +44,9 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
         handlerRegistrations = new ArrayList<HandlerRegistration>();
     }
 
-    public abstract IFolderItemEditorDecorator<E> createFolderItemDecorator();
+    public abstract IFolderItemDecorator<E> createFolderItemDecorator();
 
-    public void setFolderItemDecorator(IFolderItemEditorDecorator<E> folderItemDecorator) {
+    public void setFolderItemDecorator(IFolderItemDecorator<E> folderItemDecorator) {
         asWidget().setWidget(folderItemDecorator);
         folderItemDecorator.setFolderItem(this);
     }

@@ -32,31 +32,31 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
-public class TableFolderItemEditorDecorator<E extends IEntity> extends BaseFolderItemEditorDecorator<E> {
+public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
 
     private final HTML validationMessageHolder;
 
-    public TableFolderItemEditorDecorator(ImageResource removeButton) {
+    public TableFolderItemDecorator(ImageResource removeButton) {
         this(removeButton, (ImageResource) null);
     }
 
-    public TableFolderItemEditorDecorator(ImageResource removeButton, ImageResource removeButtonHover) {
+    public TableFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover) {
         this(removeButton, removeButtonHover, null);
     }
 
-    public TableFolderItemEditorDecorator(ImageResource removeButton, String title) {
+    public TableFolderItemDecorator(ImageResource removeButton, String title) {
         this(removeButton, (ImageResource) null, title);
     }
 
-    public TableFolderItemEditorDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title) {
+    public TableFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title) {
         this(removeButton, removeButtonHover, title, true);
     }
 
-    public TableFolderItemEditorDecorator(ImageResource removeButton, String title, boolean removable) {
+    public TableFolderItemDecorator(ImageResource removeButton, String title, boolean removable) {
         this(removeButton, null, title, removable);
     }
 
-    public TableFolderItemEditorDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title, boolean removable) {
+    public TableFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title, boolean removable) {
         super(removeButton, removeButtonHover, title, removable);
 
         VerticalPanel mainPanel = new VerticalPanel();
@@ -112,6 +112,6 @@ public class TableFolderItemEditorDecorator<E extends IEntity> extends BaseFolde
     @Override
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
-        validationMessageHolder.ensureDebugId(new CompositeDebugId(baseID, IFolderEditorDecorator.DecoratorsIds.Label).debugId());
+        validationMessageHolder.ensureDebugId(new CompositeDebugId(baseID, IFolderDecorator.DecoratorsIds.Label).debugId());
     }
 }

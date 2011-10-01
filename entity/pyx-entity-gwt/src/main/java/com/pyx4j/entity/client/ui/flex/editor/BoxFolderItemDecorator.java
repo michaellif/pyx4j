@@ -28,9 +28,9 @@ import com.google.gwt.resources.client.ImageResource;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public class BoxFolderItemEditorDecorator<E extends IEntity> extends BaseFolderItemEditorDecorator<E> {
+public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
 
-    public BoxFolderItemEditorDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title, boolean removable) {
+    public BoxFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title, boolean removable) {
         super(removeButton, removeButtonHover, title, removable);
 
         getContent().getElement().getStyle().setMarginTop(10, Unit.PX);
@@ -43,23 +43,23 @@ public class BoxFolderItemEditorDecorator<E extends IEntity> extends BaseFolderI
         setWidget(getRowHolder());
     }
 
-    public BoxFolderItemEditorDecorator(ImageResource removeButton, String title, boolean removable) {
+    public BoxFolderItemDecorator(ImageResource removeButton, String title, boolean removable) {
         this(removeButton, null, title, removable);
     }
 
-    public BoxFolderItemEditorDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title) {
+    public BoxFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title) {
         this(removeButton, removeButtonHover, title, true);
     }
 
-    public BoxFolderItemEditorDecorator(ImageResource removeButton, String title) {
+    public BoxFolderItemDecorator(ImageResource removeButton, String title) {
         this(removeButton, null, title);
     }
 
-    public BoxFolderItemEditorDecorator(ImageResource removeButton, ImageResource removeButtonHover) {
+    public BoxFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover) {
         this(removeButton, removeButtonHover, null);
     }
 
-    public BoxFolderItemEditorDecorator(ImageResource removeButton) {
+    public BoxFolderItemDecorator(ImageResource removeButton) {
         this(removeButton, (ImageResource) null);
     }
 

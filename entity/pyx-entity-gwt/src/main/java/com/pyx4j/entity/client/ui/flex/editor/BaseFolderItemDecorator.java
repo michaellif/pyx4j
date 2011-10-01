@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.forms.client.ui.decorators.ImageHolder;
 import com.pyx4j.widgets.client.ImageButton;
 
-public abstract class BaseFolderItemEditorDecorator<E extends IEntity> extends SimplePanel implements IFolderItemEditorDecorator<E> {
+public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimplePanel implements IFolderItemDecorator<E> {
 
     private final FlowPanel rowHolder = new FlowPanel();;
 
@@ -46,11 +46,11 @@ public abstract class BaseFolderItemEditorDecorator<E extends IEntity> extends S
 
     private boolean removable;
 
-    public BaseFolderItemEditorDecorator(ImageResource button, String title, boolean buttonVisible) {
+    public BaseFolderItemDecorator(ImageResource button, String title, boolean buttonVisible) {
         this(button, null, title, buttonVisible);
     }
 
-    public BaseFolderItemEditorDecorator(ImageResource button, ImageResource buttonHover, String title, boolean buttonVisible) {
+    public BaseFolderItemDecorator(ImageResource button, ImageResource buttonHover, String title, boolean buttonVisible) {
         this.removable = (buttonVisible && button != null);
 
         rowHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);

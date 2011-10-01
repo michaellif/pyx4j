@@ -26,29 +26,29 @@ import com.google.gwt.resources.client.ImageResource;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-public class BoxFolderEditorDecorator<E extends IEntity> extends BaseFolderEditorDecorator<E> {
+public class BoxFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E> {
 
-    public BoxFolderEditorDecorator(ImageResource addButton) {
+    public BoxFolderDecorator(ImageResource addButton) {
         this(addButton, (ImageResource) null);
     }
 
-    public BoxFolderEditorDecorator(ImageResource addButton, ImageResource addButtonHover) {
+    public BoxFolderDecorator(ImageResource addButton, ImageResource addButtonHover) {
         this(addButton, addButtonHover, null, false);
     }
 
-    public BoxFolderEditorDecorator(ImageResource addButton, String title) {
+    public BoxFolderDecorator(ImageResource addButton, String title) {
         this(addButton, null, title);
     }
 
-    public BoxFolderEditorDecorator(ImageResource addButton, ImageResource addButtonHover, String title) {
+    public BoxFolderDecorator(ImageResource addButton, ImageResource addButtonHover, String title) {
         this(addButton, addButtonHover, title, true);
     }
 
-    public BoxFolderEditorDecorator(ImageResource addButton, String title, boolean addable) {
+    public BoxFolderDecorator(ImageResource addButton, String title, boolean addable) {
         this(addButton, null, title, addable);
     }
 
-    public BoxFolderEditorDecorator(ImageResource addButton, ImageResource addButtonHover, String title, boolean addable) {
+    public BoxFolderDecorator(ImageResource addButton, ImageResource addButtonHover, String title, boolean addable) {
         super(addButton, addButtonHover, title, addable);
 
         add(getContainer());

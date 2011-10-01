@@ -149,7 +149,7 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
 
         //TODO use components inheritance
         if (this.getDebugId() != null) {
-            decorator.asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderEditorDecorator.DEBUGID_SUFIX);
+            decorator.asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
         }
     }
 
@@ -161,7 +161,7 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
     public void setDebugId(IDebugId debugId) {
         super.setDebugId(debugId);
         if ((debugId != null) && (decorator != null)) {
-            decorator.asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderEditorDecorator.DEBUGID_SUFIX);
+            decorator.asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
         }
     }
 
