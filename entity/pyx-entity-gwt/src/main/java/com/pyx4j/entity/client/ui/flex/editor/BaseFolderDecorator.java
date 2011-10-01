@@ -103,7 +103,7 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
     }
 
     @Override
-    public void setFolder(CEntityFolderEditor<?> w) {
+    public void setFolder(CEntityFolder<?> w) {
         container.setWidget(w.getContainer());
     }
 

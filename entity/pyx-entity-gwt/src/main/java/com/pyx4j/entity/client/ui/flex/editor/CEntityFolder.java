@@ -53,9 +53,9 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 /**
  * This component represents list of IEntities
  */
-public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityContainer<IList<E>, NativeEntityPanel<IList<E>>> {
+public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<IList<E>, NativeEntityPanel<IList<E>>> {
 
-    private static final Logger log = LoggerFactory.getLogger(CEntityFolderEditor.class);
+    private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
     private IFolderDecorator<E> folderDecorator;
 
@@ -69,7 +69,7 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
 
     private boolean externalAddItemProcessing = false;
 
-    public CEntityFolderEditor(Class<E> rowClass) {
+    public CEntityFolder(Class<E> rowClass) {
         container = new FlowPanel();
         itemsMap = new LinkedHashMap<E, CEntityFolderItemEditor<E>>();
         if (rowClass != null) {
@@ -114,9 +114,9 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
                     Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
                         @Override
                         public void execute() {
-                            log.debug("CEntityFolder.onValueChange fired from {}. New value is {}.", CEntityFolderEditor.this.getTitle(), event.getValue());
+                            log.debug("CEntityFolder.onValueChange fired from {}. New value is {}.", CEntityFolder.this.getTitle(), event.getValue());
                             revalidate();
-                            ValueChangeEvent.fire(CEntityFolderEditor.this, getValue());
+                            ValueChangeEvent.fire(CEntityFolder.this, getValue());
                             sheduled = false;
                         }
                     });
@@ -135,10 +135,10 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
                     Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
                         @Override
                         public void execute() {
-                            log.debug("CEntityFolder.onPropertyChange fired from {}. Changed property is {}.", CEntityFolderEditor.this.getTitle(),
+                            log.debug("CEntityFolder.onPropertyChange fired from {}. Changed property is {}.", CEntityFolder.this.getTitle(),
                                     event.getPropertyName());
                             revalidate();
-                            ValueChangeEvent.fire(CEntityFolderEditor.this, getValue());
+                            ValueChangeEvent.fire(CEntityFolder.this, getValue());
                             sheduled = false;
                         }
                     });
@@ -207,10 +207,10 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
             public void onSuccess(E result) {
                 comp.setFirst(container.getWidgetCount() == 0);
                 getValue().add(result);
-                comp.onBound(CEntityFolderEditor.this);
+                comp.onBound(CEntityFolder.this);
                 comp.populate(result);
                 adoptFolderItem(comp);
-                ValueChangeEvent.fire(CEntityFolderEditor.this, getValue());
+                ValueChangeEvent.fire(CEntityFolder.this, getValue());
             }
 
         });
@@ -221,7 +221,7 @@ public abstract class CEntityFolderEditor<E extends IEntity> extends CEntityCont
         getValue().remove(item.getValue());
         abandonFolderItem(item);
         item.removeAllHandlers();
-        ValueChangeEvent.fire(CEntityFolderEditor.this, getValue());
+        ValueChangeEvent.fire(CEntityFolder.this, getValue());
     }
 
     /**

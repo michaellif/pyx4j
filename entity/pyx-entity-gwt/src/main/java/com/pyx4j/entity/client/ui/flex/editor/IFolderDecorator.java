@@ -35,7 +35,7 @@ public interface IFolderDecorator<E extends IEntity> extends IsWidget, ValueChan
 
     HandlerRegistration addItemAddClickHandler(ClickHandler handler);
 
-    void setFolder(CEntityFolderEditor<?> w);
+    void setFolder(CEntityFolder<?> w);
 
     public enum DecoratorsIds implements IDebugId {
         Validation, Label;

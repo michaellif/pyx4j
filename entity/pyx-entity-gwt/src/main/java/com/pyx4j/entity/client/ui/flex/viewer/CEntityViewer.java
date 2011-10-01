@@ -24,9 +24,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.CEntityComponent;
 import com.pyx4j.entity.client.ui.flex.NativeEntityPanel;
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IEntity;
 
-public abstract class CEntityViewer<E extends IObject<?>> extends CEntityComponent<E, NativeEntityPanel<E>> {
+public abstract class CEntityViewer<E extends IEntity> extends CEntityComponent<E, NativeEntityPanel<E>> {
 
     @Override
     public void populate(E value) {
