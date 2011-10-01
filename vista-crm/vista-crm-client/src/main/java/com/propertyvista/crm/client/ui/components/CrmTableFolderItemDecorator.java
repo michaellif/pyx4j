@@ -16,12 +16,12 @@ package com.propertyvista.crm.client.ui.components;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 
-public class CrmTableFolderItemDecorator<E extends IEntity> extends TableFolderItemEditorDecorator<E> {
+public class CrmTableFolderItemDecorator<E extends IEntity> extends TableFolderItemDecorator<E> {
     protected static I18n i18n = I18nFactory.getI18n(CrmTableFolderItemDecorator.class);
 
     public CrmTableFolderItemDecorator(String title, boolean editable) {

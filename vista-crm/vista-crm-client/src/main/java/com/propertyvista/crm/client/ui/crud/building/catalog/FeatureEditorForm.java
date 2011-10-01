@@ -27,7 +27,7 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -94,7 +94,7 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
             protected CEntityFolderItemEditor<ServiceItem> createItem() {
                 return new CEntityFolderRowEditor<ServiceItem>(ServiceItem.class, columns()) {
                     @Override
-                    public IFolderItemEditorDecorator<ServiceItem> createFolderItemDecorator() {
+                    public IFolderItemDecorator<ServiceItem> createFolderItemDecorator() {
                         return new CrmTableFolderItemDecorator<ServiceItem>(thisRef);
                     }
 

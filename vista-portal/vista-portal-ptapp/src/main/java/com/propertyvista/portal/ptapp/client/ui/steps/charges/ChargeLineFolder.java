@@ -19,8 +19,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.domain.charges.ChargeLine;
@@ -34,7 +34,7 @@ public class ChargeLineFolder extends CEntityFolderEditor<ChargeLine> {
     }
 
     @Override
-    protected IFolderEditorDecorator<ChargeLine> createFolderDecorator() {
+    protected IFolderDecorator<ChargeLine> createFolderDecorator() {
         return new BoxReadOnlyFolderDecorator<ChargeLine>() {
 
             @Override
@@ -51,7 +51,7 @@ public class ChargeLineFolder extends CEntityFolderEditor<ChargeLine> {
         return new CEntityFolderItemEditor<ChargeLine>(ChargeLine.class) {
 
             @Override
-            public IFolderItemEditorDecorator<ChargeLine> createFolderItemDecorator() {
+            public IFolderItemDecorator<ChargeLine> createFolderItemDecorator() {
                 return new BoxReadOnlyFolderItemDecorator<ChargeLine>(!isFirst(), "400px");
             }
 

@@ -34,8 +34,8 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -358,7 +358,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<EmergencyContact> createFolderDecorator() {
+            protected IFolderDecorator<EmergencyContact> createFolderDecorator() {
                 return new PtAppBoxFolderDecorator<EmergencyContact>(parent);
             }
 
@@ -380,7 +380,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
                     }
 
                     @Override
-                    public IFolderItemEditorDecorator<EmergencyContact> createFolderItemDecorator() {
+                    public IFolderItemDecorator<EmergencyContact> createFolderItemDecorator() {
                         return new PtAppBoxFolderItemDecorator<EmergencyContact>(parent, !isFirst());
                     }
                 };

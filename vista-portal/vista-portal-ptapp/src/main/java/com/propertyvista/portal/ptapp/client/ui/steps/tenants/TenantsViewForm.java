@@ -34,7 +34,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -231,7 +231,7 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
                     }
 
                     @Override
-                    public IFolderItemEditorDecorator<TenantInApplicationDTO> createFolderItemDecorator() {
+                    public IFolderItemDecorator<TenantInApplicationDTO> createFolderItemDecorator() {
                         return new PtAppTableFolderItemDecorator<TenantInApplicationDTO>(parent, parent.isEditable() && !isFirst());
                     }
 

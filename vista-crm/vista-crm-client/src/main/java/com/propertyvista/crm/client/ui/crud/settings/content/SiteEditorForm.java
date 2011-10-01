@@ -29,9 +29,9 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -118,8 +118,8 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
 
             @Override
-            public IFolderEditorDecorator<AvailableLocale> createFolderDecorator() {
-                TableFolderEditorDecorator<AvailableLocale> decor = (TableFolderEditorDecorator<AvailableLocale>) super.createFolderDecorator();
+            public IFolderDecorator<AvailableLocale> createFolderDecorator() {
+                TableFolderDecorator<AvailableLocale> decor = (TableFolderDecorator<AvailableLocale>) super.createFolderDecorator();
                 decor.setShowHeader(false);
                 return decor;
             }
@@ -163,14 +163,14 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
                     }
 
                     @Override
-                    public IFolderItemEditorDecorator<PageDescriptor> createFolderItemDecorator() {
+                    public IFolderItemDecorator<PageDescriptor> createFolderItemDecorator() {
                         return new CrmTableFolderItemDecorator<PageDescriptor>(parent, !parent.isEditable());
                     }
                 };
             }
 
             @Override
-            protected IFolderEditorDecorator<PageDescriptor> createFolderDecorator() {
+            protected IFolderDecorator<PageDescriptor> createFolderDecorator() {
                 CrmTableFolderDecorator<PageDescriptor> decor = new CrmTableFolderDecorator<PageDescriptor>(columns(), parent);
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
@@ -214,7 +214,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<Testimonial> createFolderDecorator() {
+            protected IFolderDecorator<Testimonial> createFolderDecorator() {
                 return new CrmBoxFolderDecorator<Testimonial>(parent);
             }
 
@@ -232,7 +232,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
                     }
 
                     @Override
-                    public IFolderItemEditorDecorator<Testimonial> createFolderItemDecorator() {
+                    public IFolderItemDecorator<Testimonial> createFolderItemDecorator() {
                         return new CrmBoxFolderItemDecorator<Testimonial>(parent);
                     }
                 };
@@ -251,7 +251,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<News> createFolderDecorator() {
+            protected IFolderDecorator<News> createFolderDecorator() {
                 return new CrmBoxFolderDecorator<News>(parent);
             }
 
@@ -270,7 +270,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
                     }
 
                     @Override
-                    public IFolderItemEditorDecorator<News> createFolderItemDecorator() {
+                    public IFolderItemDecorator<News> createFolderItemDecorator() {
                         return new CrmBoxFolderItemDecorator<News>(parent);
                     }
                 };

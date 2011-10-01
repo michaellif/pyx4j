@@ -33,8 +33,8 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
@@ -202,7 +202,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
             }
 
             @Override
-            protected IFolderEditorDecorator<Vehicle> createFolderDecorator() {
+            protected IFolderDecorator<Vehicle> createFolderDecorator() {
                 return new BoxReadOnlyFolderDecorator<Vehicle>();
             }
 
@@ -215,7 +215,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
                 return new CEntityFolderRowEditor<Vehicle>(Vehicle.class, columns) {
 
                     @Override
-                    public IFolderItemEditorDecorator<Vehicle> createFolderItemDecorator() {
+                    public IFolderItemDecorator<Vehicle> createFolderItemDecorator() {
                         return new BoxReadOnlyFolderItemDecorator<Vehicle>(false);
                     }
 
@@ -231,7 +231,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
         return new CEntityFolderEditor<EmergencyContact>(EmergencyContact.class) {
 
             @Override
-            protected IFolderEditorDecorator<EmergencyContact> createFolderDecorator() {
+            protected IFolderDecorator<EmergencyContact> createFolderDecorator() {
                 return new BoxReadOnlyFolderDecorator<EmergencyContact>();
             }
 
@@ -273,7 +273,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
                     }
 
                     @Override
-                    public IFolderItemEditorDecorator<EmergencyContact> createFolderItemDecorator() {
+                    public IFolderItemDecorator<EmergencyContact> createFolderItemDecorator() {
                         return new BoxReadOnlyFolderItemDecorator<EmergencyContact>(!isFirst());
                     }
                 };

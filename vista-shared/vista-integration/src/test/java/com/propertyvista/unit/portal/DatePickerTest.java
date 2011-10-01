@@ -19,7 +19,7 @@ import java.util.Calendar;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
 import com.pyx4j.forms.client.ui.CCompDebugId;
 import com.pyx4j.selenium.D;
 import com.pyx4j.widgets.client.datepicker.DatePickerIDs;
@@ -34,7 +34,7 @@ public class DatePickerTest extends DatePickerTestBase {
 
     private final IDebugId datePickerId = D.id(datePickerTextBoxId, CCompDebugId.trigger);
 
-    private final IDebugId validation = new CompositeDebugId(D.id(proto(TenantInLeaseListDTO.class).tenants(), 0), IFolderEditorDecorator.DecoratorsIds.Label);
+    private final IDebugId validation = new CompositeDebugId(D.id(proto(TenantInLeaseListDTO.class).tenants(), 0), IFolderDecorator.DecoratorsIds.Label);
 
     public void testDatePicker() throws Exception {
         login();

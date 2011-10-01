@@ -27,8 +27,8 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -159,7 +159,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
             private final CrmEntityFolder<EmergencyContact> parent = this;
 
             @Override
-            protected IFolderEditorDecorator<EmergencyContact> createFolderDecorator() {
+            protected IFolderDecorator<EmergencyContact> createFolderDecorator() {
                 return new CrmBoxFolderDecorator<EmergencyContact>(parent);
             }
 
@@ -196,7 +196,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
                     }
 
                     @Override
-                    public IFolderItemEditorDecorator<EmergencyContact> createFolderItemDecorator() {
+                    public IFolderItemDecorator<EmergencyContact> createFolderItemDecorator() {
                         return new CrmBoxFolderItemDecorator<EmergencyContact>(parent, !isFirst() && parent.isEditable());
                     }
                 };

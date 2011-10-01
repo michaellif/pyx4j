@@ -43,8 +43,8 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.client.DownloadFrame;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -369,14 +369,14 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
                         }
 
                         @Override
-                        public IFolderItemEditorDecorator<TenantInLease> createFolderItemDecorator() {
+                        public IFolderItemDecorator<TenantInLease> createFolderItemDecorator() {
                             return new BoxReadOnlyFolderItemDecorator<TenantInLease>(false);
                         }
                     };
                 }
 
                 @Override
-                protected IFolderEditorDecorator<TenantInLease> createFolderDecorator() {
+                protected IFolderDecorator<TenantInLease> createFolderDecorator() {
                     return new BoxReadOnlyFolderDecorator<TenantInLease>();
                 }
             };
@@ -396,7 +396,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<TenantInLease> createFolderDecorator() {
+            protected IFolderDecorator<TenantInLease> createFolderDecorator() {
                 return new BoxReadOnlyFolderDecorator<TenantInLease>();
             }
         };
@@ -415,7 +415,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<SummaryTenantFinancialDTO> createFolderDecorator() {
+            protected IFolderDecorator<SummaryTenantFinancialDTO> createFolderDecorator() {
                 return new BoxReadOnlyFolderDecorator<SummaryTenantFinancialDTO>();
             }
         };

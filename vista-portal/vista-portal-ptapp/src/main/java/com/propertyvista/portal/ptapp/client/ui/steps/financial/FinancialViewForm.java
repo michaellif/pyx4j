@@ -32,16 +32,16 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.BoxFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -154,7 +154,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
         return new CEntityFolderEditor<IIncomeInfo>(IIncomeInfo.class) {
 
             @Override
-            protected IFolderEditorDecorator<IIncomeInfo> createFolderDecorator() {
+            protected IFolderDecorator<IIncomeInfo> createFolderDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<IIncomeInfo>() {
                         @Override
@@ -164,7 +164,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
                         }
                     };
                 } else {
-                    return new BoxFolderEditorDecorator<IIncomeInfo>(PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
+                    return new BoxFolderDecorator<IIncomeInfo>(PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
                             i18n.tr("Add an income source"));
                 }
             }
@@ -182,7 +182,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
         return new CEntityFolderEditor<PersonalIncome>(PersonalIncome.class) {
 
             @Override
-            protected IFolderEditorDecorator<PersonalIncome> createFolderDecorator() {
+            protected IFolderDecorator<PersonalIncome> createFolderDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<PersonalIncome>() {
                         @Override
@@ -192,7 +192,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
                         }
                     };
                 } else {
-                    return new BoxFolderEditorDecorator<PersonalIncome>(PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
+                    return new BoxFolderDecorator<PersonalIncome>(PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
                             i18n.tr("Add an income source"));
                 }
             }
@@ -217,7 +217,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<PersonalAsset> createFolderDecorator() {
+            protected IFolderDecorator<PersonalAsset> createFolderDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<PersonalAsset>() {
                         @Override
@@ -227,7 +227,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
                         }
                     };
                 } else {
-                    return new TableFolderEditorDecorator<PersonalAsset>(columns, PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
+                    return new TableFolderDecorator<PersonalAsset>(columns, PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
                             i18n.tr("Add an asset"));
                 }
             }
@@ -237,11 +237,11 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
                 return new CEntityFolderRowEditor<PersonalAsset>(PersonalAsset.class, columns) {
 
                     @Override
-                    public IFolderItemEditorDecorator<PersonalAsset> createFolderItemDecorator() {
+                    public IFolderItemDecorator<PersonalAsset> createFolderItemDecorator() {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator<PersonalAsset>(false);
                         } else {
-                            return new TableFolderItemEditorDecorator<PersonalAsset>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover(),
+                            return new TableFolderItemDecorator<PersonalAsset>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover(),
                                     i18n.tr("Remove asset"));
                         }
                     }
@@ -283,7 +283,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
         return new CEntityFolderEditor<TenantGuarantor>(TenantGuarantor.class) {
 
             @Override
-            protected IFolderEditorDecorator<TenantGuarantor> createFolderDecorator() {
+            protected IFolderDecorator<TenantGuarantor> createFolderDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<TenantGuarantor>() {
                         @Override
@@ -293,7 +293,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
                         }
                     };
                 } else {
-                    return new BoxFolderEditorDecorator<TenantGuarantor>(PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
+                    return new BoxFolderDecorator<TenantGuarantor>(PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
                             i18n.tr("Add guarantor"));
                 }
             }
@@ -329,11 +329,11 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
                     }
 
                     @Override
-                    public IFolderItemEditorDecorator<TenantGuarantor> createFolderItemDecorator() {
+                    public IFolderItemDecorator<TenantGuarantor> createFolderItemDecorator() {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator<TenantGuarantor>(false);
                         } else {
-                            return new BoxFolderItemEditorDecorator<TenantGuarantor>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover(),
+                            return new BoxFolderItemDecorator<TenantGuarantor>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover(),
                                     i18n.tr("Remove guarantor"));
                         }
                     }

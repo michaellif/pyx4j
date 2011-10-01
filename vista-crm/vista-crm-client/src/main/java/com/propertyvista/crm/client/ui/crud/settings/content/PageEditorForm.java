@@ -27,8 +27,8 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -83,7 +83,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
             }
 
             @Override
-            protected IFolderEditorDecorator<PageContent> createFolderDecorator() {
+            protected IFolderDecorator<PageContent> createFolderDecorator() {
                 return new CrmBoxFolderDecorator<PageContent>(parent);
             }
 
@@ -113,7 +113,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
                     }
 
                     @Override
-                    public IFolderItemEditorDecorator<PageContent> createFolderItemDecorator() {
+                    public IFolderItemDecorator<PageContent> createFolderItemDecorator() {
                         return new CrmBoxFolderItemDecorator<PageContent>(parent);
                     }
                 };
@@ -164,14 +164,14 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
                     }
 
                     @Override
-                    public IFolderItemEditorDecorator<PageDescriptor> createFolderItemDecorator() {
+                    public IFolderItemDecorator<PageDescriptor> createFolderItemDecorator() {
                         return new CrmTableFolderItemDecorator<PageDescriptor>(parent, !parent.isEditable());
                     }
                 };
             }
 
             @Override
-            protected IFolderEditorDecorator<PageDescriptor> createFolderDecorator() {
+            protected IFolderDecorator<PageDescriptor> createFolderDecorator() {
                 CrmTableFolderDecorator<PageDescriptor> decor = new CrmTableFolderDecorator<PageDescriptor>(columns(), parent);
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override

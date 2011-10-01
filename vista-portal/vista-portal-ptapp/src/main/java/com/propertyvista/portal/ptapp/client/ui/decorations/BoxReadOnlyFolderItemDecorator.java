@@ -21,12 +21,12 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 
-public class BoxReadOnlyFolderItemDecorator<E extends IEntity> extends FlowPanel implements IFolderItemEditorDecorator<E> {
+public class BoxReadOnlyFolderItemDecorator<E extends IEntity> extends FlowPanel implements IFolderItemDecorator<E> {
 
     private final SimplePanel content;
 

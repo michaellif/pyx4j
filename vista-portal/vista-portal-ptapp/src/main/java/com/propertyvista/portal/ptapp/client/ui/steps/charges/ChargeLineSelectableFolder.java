@@ -19,8 +19,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
@@ -39,7 +39,7 @@ public class ChargeLineSelectableFolder extends CEntityFolderEditor<ChargeLineSe
     }
 
     @Override
-    protected IFolderEditorDecorator<ChargeLineSelectable> createFolderDecorator() {
+    protected IFolderDecorator<ChargeLineSelectable> createFolderDecorator() {
         return new BoxReadOnlyFolderDecorator<ChargeLineSelectable>() {
 
             @Override
@@ -56,7 +56,7 @@ public class ChargeLineSelectableFolder extends CEntityFolderEditor<ChargeLineSe
         return new CEntityFolderItemEditor<ChargeLineSelectable>(ChargeLineSelectable.class) {
 
             @Override
-            public IFolderItemEditorDecorator<ChargeLineSelectable> createFolderItemDecorator() {
+            public IFolderItemDecorator<ChargeLineSelectable> createFolderItemDecorator() {
                 return new BoxReadOnlyFolderItemDecorator<ChargeLineSelectable>(!isFirst(), "400px");
             }
 

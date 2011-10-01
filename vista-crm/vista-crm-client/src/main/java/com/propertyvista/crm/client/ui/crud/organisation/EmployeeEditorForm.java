@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -122,7 +122,7 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
             }
 
             @Override
-            protected IFolderEditorDecorator<AssignedPortfolio> createFolderDecorator() {
+            protected IFolderDecorator<AssignedPortfolio> createFolderDecorator() {
                 return new CrmTableFolderDecorator<AssignedPortfolio>(columns(), parent) {
                     {
                         setShowHeader(false);
@@ -145,7 +145,7 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
             }
 
             @Override
-            protected IFolderEditorDecorator<ManagedEmployee> createFolderDecorator() {
+            protected IFolderDecorator<ManagedEmployee> createFolderDecorator() {
                 return new CrmTableFolderDecorator<ManagedEmployee>(columns(), parent) {
                     {
                         setShowHeader(false);

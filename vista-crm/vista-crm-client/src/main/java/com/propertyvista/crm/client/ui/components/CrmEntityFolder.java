@@ -22,8 +22,8 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 
 public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEditor<E> {
@@ -60,14 +60,14 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolderEd
     protected CEntityFolderItemEditor<E> createItem() {
         return new CEntityFolderRowEditor<E>(clazz, columns()) {
             @Override
-            public IFolderItemEditorDecorator<E> createFolderItemDecorator() {
+            public IFolderItemDecorator<E> createFolderItemDecorator() {
                 return new CrmTableFolderItemDecorator<E>(i18n.tr("Remove ") + getItemName(), editable);
             }
         };
     }
 
     @Override
-    protected IFolderEditorDecorator<E> createFolderDecorator() {
+    protected IFolderDecorator<E> createFolderDecorator() {
         return new CrmTableFolderDecorator<E>(columns(), i18n.tr("Add ") + getItemName(), editable);
     }
 

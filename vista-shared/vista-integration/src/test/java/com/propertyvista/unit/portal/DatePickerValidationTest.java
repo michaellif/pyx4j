@@ -17,7 +17,7 @@ import java.util.Calendar;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
 import com.pyx4j.forms.client.ui.CCompDebugId;
 import com.pyx4j.selenium.D;
 
@@ -189,7 +189,7 @@ public class DatePickerValidationTest extends DatePickerTestBase {
     }
 
     private IDebugId validation(int index) {
-        return new CompositeDebugId(baseID(index), IFolderEditorDecorator.DecoratorsIds.Label);
+        return new CompositeDebugId(baseID(index), IFolderDecorator.DecoratorsIds.Label);
     }
 
     private IDebugId baseID(int index) {

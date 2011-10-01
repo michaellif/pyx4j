@@ -34,8 +34,8 @@ import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.CEntityHyperlink;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -73,7 +73,7 @@ public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
     }
 
     @Override
-    protected IFolderEditorDecorator<Media> createFolderDecorator() {
+    protected IFolderDecorator<Media> createFolderDecorator() {
         return new CrmBoxFolderDecorator<Media>(this);
     }
 
@@ -84,7 +84,7 @@ public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
             Image thumbnail;
 
             @Override
-            public IFolderItemEditorDecorator<Media> createFolderItemDecorator() {
+            public IFolderItemDecorator<Media> createFolderItemDecorator() {
                 return new CrmBoxFolderItemDecorator<Media>(parent, parent.isEditable());
             }
 

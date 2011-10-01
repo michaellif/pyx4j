@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
@@ -74,7 +74,7 @@ public abstract class SummaryViewTenantListBase<E extends IEntity> extends CEnti
     }
 
     @Override
-    public IFolderItemEditorDecorator<E> createFolderItemDecorator() {
+    public IFolderItemDecorator<E> createFolderItemDecorator() {
         return new BoxReadOnlyFolderItemDecorator<E>(false);
     }
 

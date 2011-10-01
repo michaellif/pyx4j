@@ -14,16 +14,16 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.BoxFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
@@ -102,8 +102,8 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                 }
 
                 @Override
-                protected IFolderEditorDecorator<Employee> createFolderDecorator() {
-                    return new TableFolderEditorDecorator<Employee>(columns, SiteImages.INSTANCE.addRow());
+                protected IFolderDecorator<Employee> createFolderDecorator() {
+                    return new TableFolderDecorator<Employee>(columns, SiteImages.INSTANCE.addRow());
                 }
 
                 @Override
@@ -115,8 +115,8 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                     return new CEntityFolderRowEditor<Employee>(Employee.class, columns) {
 
                         @Override
-                        public IFolderItemEditorDecorator createFolderItemDecorator() {
-                            return new TableFolderItemEditorDecorator(SiteImages.INSTANCE.removeRow());
+                        public IFolderItemDecorator createFolderItemDecorator() {
+                            return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow());
                         }
 
                     };
@@ -130,8 +130,8 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
             return new CEntityFolderEditor<Employee>(Employee.class) {
 
                 @Override
-                protected IFolderEditorDecorator<Employee> createFolderDecorator() {
-                    return new BoxFolderEditorDecorator<Employee>(SiteImages.INSTANCE.addRow());
+                protected IFolderDecorator<Employee> createFolderDecorator() {
+                    return new BoxFolderDecorator<Employee>(SiteImages.INSTANCE.addRow());
 
                 }
 
@@ -151,8 +151,8 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                         }
 
                         @Override
-                        public IFolderItemEditorDecorator createFolderItemDecorator() {
-                            return new BoxFolderItemEditorDecorator(SiteImages.INSTANCE.removeRow());
+                        public IFolderItemDecorator createFolderItemDecorator() {
+                            return new BoxFolderItemDecorator(SiteImages.INSTANCE.removeRow());
                         }
                     };
                 }

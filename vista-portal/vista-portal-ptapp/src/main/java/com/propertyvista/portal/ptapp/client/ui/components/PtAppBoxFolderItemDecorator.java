@@ -16,12 +16,12 @@ package com.propertyvista.portal.ptapp.client.ui.components;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 
-public class PtAppBoxFolderItemDecorator<E extends IEntity> extends BoxFolderItemEditorDecorator<E> {
+public class PtAppBoxFolderItemDecorator<E extends IEntity> extends BoxFolderItemDecorator<E> {
     protected static I18n i18n = I18nFactory.getI18n(PtAppBoxFolderItemDecorator.class);
 
     public PtAppBoxFolderItemDecorator(String title, boolean editable) {

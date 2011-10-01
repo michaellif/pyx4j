@@ -39,8 +39,8 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -303,7 +303,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<ServiceItemType> createFolderDecorator() {
+            protected IFolderDecorator<ServiceItemType> createFolderDecorator() {
                 CrmTableFolderDecorator<ServiceItemType> decor = new CrmTableFolderDecorator<ServiceItemType>(columns(), parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
@@ -329,7 +329,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             protected CEntityFolderItemEditor<ServiceItemType> createItem() {
                 return new CEntityFolderRowEditor<ServiceItemType>(ServiceItemType.class, columns()) {
                     @Override
-                    public IFolderItemEditorDecorator<ServiceItemType> createFolderItemDecorator() {
+                    public IFolderItemDecorator<ServiceItemType> createFolderItemDecorator() {
                         return new CrmTableFolderItemDecorator<ServiceItemType>(parent);
                     }
 
@@ -355,7 +355,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<OrganisationContact> createFolderDecorator() {
+            protected IFolderDecorator<OrganisationContact> createFolderDecorator() {
                 return new CrmBoxFolderDecorator<OrganisationContact>(parent);
             }
 
@@ -364,7 +364,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                 return new CEntityFolderRowEditor<OrganisationContact>(OrganisationContact.class, columns()) {
 
                     @Override
-                    public IFolderItemEditorDecorator<OrganisationContact> createFolderItemDecorator() {
+                    public IFolderItemDecorator<OrganisationContact> createFolderItemDecorator() {
                         return new CrmBoxFolderItemDecorator<OrganisationContact>(parent);
                     }
 

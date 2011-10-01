@@ -49,8 +49,8 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -274,8 +274,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<TenantInLease> createFolderDecorator() {
-                IFolderEditorDecorator<TenantInLease> decor = new CrmTableFolderDecorator<TenantInLease>(columns(), parent);
+            protected IFolderDecorator<TenantInLease> createFolderDecorator() {
+                IFolderDecorator<TenantInLease> decor = new CrmTableFolderDecorator<TenantInLease>(columns(), parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
@@ -297,7 +297,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }
 
             @Override
-            protected void removeItem(CEntityFolderItemEditor<TenantInLease> item, IFolderItemEditorDecorator<TenantInLease> folderItemDecorator) {
+            protected void removeItem(CEntityFolderItemEditor<TenantInLease> item, IFolderItemDecorator<TenantInLease> folderItemDecorator) {
                 ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).removeTenat(item.getValue());
                 super.removeItem(item, folderItemDecorator);
             }
@@ -413,7 +413,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
 
                     @Override
-                    public IFolderItemEditorDecorator<TenantInLease> createFolderItemDecorator() {
+                    public IFolderItemDecorator<TenantInLease> createFolderItemDecorator() {
                         return new CrmTableFolderItemDecorator<TenantInLease>(parent, parent.isEditable() && !isFirst());
                     }
 
@@ -465,7 +465,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             protected CEntityFolderItemEditor<Pet> createItem() {
                 return new CEntityFolderRowEditor<Pet>(Pet.class, columns()) {
                     @Override
-                    public IFolderItemEditorDecorator<Pet> createFolderItemDecorator() {
+                    public IFolderItemDecorator<Pet> createFolderItemDecorator() {
                         return new CrmTableFolderItemDecorator<Pet>(parent);
                     }
 
@@ -534,7 +534,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 return new CEntityFolderRowEditor<Vehicle>(Vehicle.class, columns()) {
 
                     @Override
-                    public IFolderItemEditorDecorator<Vehicle> createFolderItemDecorator() {
+                    public IFolderItemDecorator<Vehicle> createFolderItemDecorator() {
                         return new CrmTableFolderItemDecorator<Vehicle>(parent);
                     }
 
@@ -591,7 +591,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<ChargeItem> createFolderDecorator() {
+            protected IFolderDecorator<ChargeItem> createFolderDecorator() {
                 CrmBoxFolderDecorator<ChargeItem> decor = new CrmBoxFolderDecorator<ChargeItem>(parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
@@ -659,7 +659,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
 
                     @Override
-                    public IFolderItemEditorDecorator<ChargeItem> createFolderItemDecorator() {
+                    public IFolderItemDecorator<ChargeItem> createFolderItemDecorator() {
                         return decor;
                     }
 
@@ -789,7 +789,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<ServiceConcession> createFolderDecorator() {
+            protected IFolderDecorator<ServiceConcession> createFolderDecorator() {
                 CrmTableFolderDecorator<ServiceConcession> decor = new CrmTableFolderDecorator<ServiceConcession>(columns(), parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
@@ -821,7 +821,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             protected CEntityFolderItemEditor<ServiceConcession> createItem() {
                 return new CEntityFolderRowEditor<ServiceConcession>(ServiceConcession.class, columns()) {
                     @Override
-                    public IFolderItemEditorDecorator<ServiceConcession> createFolderItemDecorator() {
+                    public IFolderItemDecorator<ServiceConcession> createFolderItemDecorator() {
                         return new CrmTableFolderItemDecorator<ServiceConcession>(parent);
                     }
 

@@ -19,12 +19,12 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderDecorator;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 
-public class CrmTableFolderDecorator<E extends IEntity> extends TableFolderEditorDecorator<E> {
+public class CrmTableFolderDecorator<E extends IEntity> extends TableFolderDecorator<E> {
     protected static I18n i18n = I18nFactory.getI18n(CrmTableFolderDecorator.class);
 
     public CrmTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, String title, boolean editable) {

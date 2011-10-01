@@ -19,11 +19,11 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-public class BoxReadOnlyFolderDecorator<E extends IEntity> extends SimplePanel implements IFolderEditorDecorator<E> {
+public class BoxReadOnlyFolderDecorator<E extends IEntity> extends SimplePanel implements IFolderDecorator<E> {
 
     @Override
     public void onValueChange(ValueChangeEvent<IList<E>> event) {

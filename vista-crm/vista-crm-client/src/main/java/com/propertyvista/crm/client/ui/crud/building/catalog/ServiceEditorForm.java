@@ -30,8 +30,8 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -152,7 +152,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
 //                    private CEntityComboBox<AptUnit> combo;
 
                     @Override
-                    public IFolderItemEditorDecorator<ServiceItem> createFolderItemDecorator() {
+                    public IFolderItemDecorator<ServiceItem> createFolderItemDecorator() {
                         return new CrmTableFolderItemDecorator<ServiceItem>(parent);
                     }
 
@@ -218,7 +218,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             }
 
             @Override
-            protected IFolderEditorDecorator<ServiceFeature> createFolderDecorator() {
+            protected IFolderDecorator<ServiceFeature> createFolderDecorator() {
                 CrmTableFolderDecorator<ServiceFeature> decor = new CrmTableFolderDecorator<ServiceFeature>(columns(), parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
@@ -246,7 +246,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             protected CEntityFolderItemEditor<ServiceFeature> createItem() {
                 return new CEntityFolderRowEditor<ServiceFeature>(ServiceFeature.class, columns()) {
                     @Override
-                    public IFolderItemEditorDecorator<ServiceFeature> createFolderItemDecorator() {
+                    public IFolderItemDecorator<ServiceFeature> createFolderItemDecorator() {
                         return new CrmTableFolderItemDecorator<ServiceFeature>(parent);
                     }
 
@@ -274,7 +274,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             }
 
             @Override
-            protected IFolderEditorDecorator<ServiceConcession> createFolderDecorator() {
+            protected IFolderDecorator<ServiceConcession> createFolderDecorator() {
                 CrmTableFolderDecorator<ServiceConcession> decor = new CrmTableFolderDecorator<ServiceConcession>(columns(), parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
@@ -302,7 +302,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             protected CEntityFolderItemEditor<ServiceConcession> createItem() {
                 return new CEntityFolderRowEditor<ServiceConcession>(ServiceConcession.class, columns()) {
                     @Override
-                    public IFolderItemEditorDecorator<ServiceConcession> createFolderItemDecorator() {
+                    public IFolderItemDecorator<ServiceConcession> createFolderItemDecorator() {
                         return new CrmTableFolderItemDecorator<ServiceConcession>(parent);
                     }
 

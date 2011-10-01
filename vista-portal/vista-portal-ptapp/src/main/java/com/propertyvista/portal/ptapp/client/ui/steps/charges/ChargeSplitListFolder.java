@@ -33,9 +33,9 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -112,7 +112,7 @@ public class ChargeSplitListFolder extends CEntityFolderEditor<TenantCharge> {
     }
 
     @Override
-    protected IFolderEditorDecorator<TenantCharge> createFolderDecorator() {
+    protected IFolderDecorator<TenantCharge> createFolderDecorator() {
         return new ChargeSplitListFolderDecorator();
     }
 
@@ -121,8 +121,8 @@ public class ChargeSplitListFolder extends CEntityFolderEditor<TenantCharge> {
         return new CEntityFolderRowEditor<TenantCharge>(TenantCharge.class, columns) {
 
             @Override
-            public IFolderItemEditorDecorator<TenantCharge> createFolderItemDecorator() {
-                TableFolderItemEditorDecorator<TenantCharge> dec = new TableFolderItemEditorDecorator<TenantCharge>(null);
+            public IFolderItemDecorator<TenantCharge> createFolderItemDecorator() {
+                TableFolderItemDecorator<TenantCharge> dec = new TableFolderItemDecorator<TenantCharge>(null);
                 if (!isFirst()) {
                     Widget sp = new VistaLineSeparator(400, Unit.PX, 0.5, Unit.EM, 0.5, Unit.EM);
                     sp.getElement().getStyle().setPadding(0, Unit.EM);
@@ -175,7 +175,7 @@ public class ChargeSplitListFolder extends CEntityFolderEditor<TenantCharge> {
         };
     }
 
-    public class ChargeSplitListFolderDecorator extends VerticalPanel implements IFolderEditorDecorator<TenantCharge> {
+    public class ChargeSplitListFolderDecorator extends VerticalPanel implements IFolderDecorator<TenantCharge> {
 
         private final HTML validationMessageHolder;
 

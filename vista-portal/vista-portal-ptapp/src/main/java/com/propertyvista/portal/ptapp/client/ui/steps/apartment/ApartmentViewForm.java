@@ -37,8 +37,8 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -181,7 +181,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<ServiceItemType> createFolderDecorator() {
+            protected IFolderDecorator<ServiceItemType> createFolderDecorator() {
                 PtAppTableFolderDecorator<ServiceItemType> decor = new PtAppTableFolderDecorator<ServiceItemType>(columns(), parent);
                 decor.setShowHeader(false);
                 return decor;
@@ -191,7 +191,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
             protected CEntityFolderItemEditor<ServiceItemType> createItem() {
                 return new CEntityFolderRowEditor<ServiceItemType>(ServiceItemType.class, columns()) {
                     @Override
-                    public IFolderItemEditorDecorator<ServiceItemType> createFolderItemDecorator() {
+                    public IFolderItemDecorator<ServiceItemType> createFolderItemDecorator() {
                         return new PtAppTableFolderItemDecorator<ServiceItemType>(parent);
                     }
 
@@ -221,7 +221,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<ChargeItem> createFolderDecorator() {
+            protected IFolderDecorator<ChargeItem> createFolderDecorator() {
                 PtAppTableFolderDecorator<ChargeItem> decor = new PtAppTableFolderDecorator<ChargeItem>(columns(), parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
@@ -246,12 +246,12 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
                 return decor;
             }
 
-            protected void unconditionalRemoveItem(CEntityFolderItemEditor<ChargeItem> item, IFolderItemEditorDecorator<ChargeItem> folderItemDecorator) {
+            protected void unconditionalRemoveItem(CEntityFolderItemEditor<ChargeItem> item, IFolderItemDecorator<ChargeItem> folderItemDecorator) {
                 super.removeItem(item, folderItemDecorator);
             }
 
             @Override
-            protected void removeItem(final CEntityFolderItemEditor<ChargeItem> item, final IFolderItemEditorDecorator<ChargeItem> folderItemDecorator) {
+            protected void removeItem(final CEntityFolderItemEditor<ChargeItem> item, final IFolderItemDecorator<ChargeItem> folderItemDecorator) {
                 if (!item.getValue().adjustments().isEmpty()) {
                     MessageDialog.confirm(i18n.tr("Warning!"),
                             i18n.tr("Removing this item you will lost price adjustment agreed in the office! Are you sure to remove it?"), new Runnable() {
@@ -282,7 +282,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<Concession> createFolderDecorator() {
+            protected IFolderDecorator<Concession> createFolderDecorator() {
                 PtAppTableFolderDecorator<Concession> decor = new PtAppTableFolderDecorator<Concession>(columns(), parent);
 //                decor.setShowHeader(false);
                 return decor;

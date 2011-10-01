@@ -36,10 +36,10 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -163,7 +163,7 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<Pet> createFolderDecorator() {
+            protected IFolderDecorator<Pet> createFolderDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<Pet>() {
                         @Override
@@ -173,7 +173,7 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
                         }
                     };
                 } else {
-                    return new TableFolderEditorDecorator<Pet>(columns, PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(), i18n.tr("Add a pet"));
+                    return new TableFolderDecorator<Pet>(columns, PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(), i18n.tr("Add a pet"));
                 }
 
             }
@@ -192,11 +192,11 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
                 return new CEntityFolderRowEditor<Pet>(Pet.class, columns) {
 
                     @Override
-                    public IFolderItemEditorDecorator<Pet> createFolderItemDecorator() {
+                    public IFolderItemDecorator<Pet> createFolderItemDecorator() {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator<Pet>(false);
                         } else {
-                            return new TableFolderItemEditorDecorator<Pet>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover(), i18n.tr("Remove pet"));
+                            return new TableFolderItemDecorator<Pet>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover(), i18n.tr("Remove pet"));
                         }
                     }
 
@@ -257,7 +257,7 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
             }
 
             @Override
-            protected IFolderEditorDecorator<Vehicle> createFolderDecorator() {
+            protected IFolderDecorator<Vehicle> createFolderDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<Vehicle>() {
                         @Override
@@ -267,7 +267,7 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
                         }
                     };
                 } else {
-                    return new TableFolderEditorDecorator<Vehicle>(columns, PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
+                    return new TableFolderDecorator<Vehicle>(columns, PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
                             i18n.tr("Add a vehicle"));
                 }
             }
@@ -281,11 +281,11 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
                 return new CEntityFolderRowEditor<Vehicle>(Vehicle.class, columns) {
 
                     @Override
-                    public IFolderItemEditorDecorator<Vehicle> createFolderItemDecorator() {
+                    public IFolderItemDecorator<Vehicle> createFolderItemDecorator() {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator<Vehicle>(false);
                         } else {
-                            return new TableFolderItemEditorDecorator<Vehicle>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover(),
+                            return new TableFolderItemDecorator<Vehicle>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover(),
                                     i18n.tr("Remove vehicle"));
                         }
                     }

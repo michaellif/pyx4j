@@ -34,8 +34,8 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -335,7 +335,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             }
 
             @Override
-            protected IFolderEditorDecorator<PersonalIncome> createFolderDecorator() {
+            protected IFolderDecorator<PersonalIncome> createFolderDecorator() {
                 return new CrmBoxFolderDecorator<PersonalIncome>(this);
             }
 
@@ -368,7 +368,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
                 return new CEntityFolderRowEditor<PersonalAsset>(PersonalAsset.class, columns) {
 
                     @Override
-                    public IFolderItemEditorDecorator<PersonalAsset> createFolderItemDecorator() {
+                    public IFolderItemDecorator<PersonalAsset> createFolderItemDecorator() {
                         return new CrmTableFolderItemDecorator<PersonalAsset>(parent);
                     }
 
@@ -413,7 +413,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             }
 
             @Override
-            protected IFolderEditorDecorator<TenantGuarantor> createFolderDecorator() {
+            protected IFolderDecorator<TenantGuarantor> createFolderDecorator() {
                 return new CrmBoxFolderDecorator<TenantGuarantor>(parent);
             }
 
@@ -443,7 +443,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
                     }
 
                     @Override
-                    public IFolderItemEditorDecorator<TenantGuarantor> createFolderItemDecorator() {
+                    public IFolderItemDecorator<TenantGuarantor> createFolderItemDecorator() {
                         return new CrmBoxFolderItemDecorator<TenantGuarantor>(parent);
                     }
 

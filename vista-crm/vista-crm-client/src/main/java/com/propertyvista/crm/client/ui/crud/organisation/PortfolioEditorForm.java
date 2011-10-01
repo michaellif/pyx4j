@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -68,7 +68,7 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
             }
 
             @Override
-            protected IFolderEditorDecorator<AssignedBuilding> createFolderDecorator() {
+            protected IFolderDecorator<AssignedBuilding> createFolderDecorator() {
                 return new CrmTableFolderDecorator<AssignedBuilding>(columns(), parent) {
                     {
                         setShowHeader(false);

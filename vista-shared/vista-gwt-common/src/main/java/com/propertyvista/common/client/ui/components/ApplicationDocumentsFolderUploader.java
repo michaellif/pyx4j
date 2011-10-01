@@ -50,9 +50,9 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -85,7 +85,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolderEditor<Appl
     }
 
     @Override
-    protected IFolderEditorDecorator<ApplicationDocument> createFolderDecorator() {
+    protected IFolderDecorator<ApplicationDocument> createFolderDecorator() {
         return new UploaderFolderDecorator();
     }
 
@@ -111,13 +111,13 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolderEditor<Appl
             }
 
             @Override
-            public IFolderItemEditorDecorator createFolderItemDecorator() {
-                return new TableFolderItemEditorDecorator(FormImageBundle.INSTANCE.delRow(), FormImageBundle.INSTANCE.delRowHover(), i18n.tr("Remove file"));
+            public IFolderItemDecorator createFolderItemDecorator() {
+                return new TableFolderItemDecorator(FormImageBundle.INSTANCE.delRow(), FormImageBundle.INSTANCE.delRowHover(), i18n.tr("Remove file"));
             }
         };
     }
 
-    protected void callSuperRemoveItem(final CEntityFolderItemEditor<ApplicationDocument> comp, final IFolderItemEditorDecorator folderItemDecorator) {
+    protected void callSuperRemoveItem(final CEntityFolderItemEditor<ApplicationDocument> comp, final IFolderItemDecorator folderItemDecorator) {
         super.removeItem(comp, folderItemDecorator);
     }
 
@@ -125,7 +125,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolderEditor<Appl
         tenantId = id;
     }
 
-    private class UploaderFolderDecorator extends HorizontalPanel implements IFolderEditorDecorator<ApplicationDocument> {
+    private class UploaderFolderDecorator extends HorizontalPanel implements IFolderDecorator<ApplicationDocument> {
 
         private SimplePanel appDocsListHolder;
 

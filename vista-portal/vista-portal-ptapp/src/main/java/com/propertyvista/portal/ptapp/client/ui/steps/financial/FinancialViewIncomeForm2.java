@@ -29,11 +29,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.flex.CEntityComponent;
-import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CPolymorphicEntityEditor;
-import com.pyx4j.entity.client.ui.flex.editor.IFolderItemEditorDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.IFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.editor.IDiscriminator;
 import com.pyx4j.entity.client.ui.flex.editor.IPolymorphicEditorDecorator;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -128,11 +128,11 @@ public class FinancialViewIncomeForm2 extends CEntityFolderItemEditor<IIncomeInf
     }
 
     @Override
-    public IFolderItemEditorDecorator<IIncomeInfo> createFolderItemDecorator() {
+    public IFolderItemDecorator<IIncomeInfo> createFolderItemDecorator() {
         if (summaryViewMode) {
             return new BoxReadOnlyFolderItemDecorator<IIncomeInfo>(!isFirst());
         } else {
-            return new BoxFolderItemEditorDecorator<IIncomeInfo>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover());
+            return new BoxFolderItemDecorator<IIncomeInfo>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover());
         }
     }
 
