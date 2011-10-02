@@ -25,12 +25,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 
 class ValueAdapterString extends ValueAdapterPrimitive {
 
-    protected ValueAdapterString(Dialect dialect) {
+    private final MemberMeta memberMeta;
+
+    protected ValueAdapterString(Dialect dialect, MemberMeta memberMeta) {
         super(dialect, String.class);
+        this.memberMeta = memberMeta;
     }
 
     @Override
@@ -44,36 +47,36 @@ class ValueAdapterString extends ValueAdapterPrimitive {
     }
 
     @Override
-    public int bindValue(PreparedStatement stmt, int parameterIndex, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        String value = (String) member.getMemberValue(entity);
-        if (value == null) {
+    public int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
+        String str = (String) value;
+        if (str == null) {
             stmt.setNull(parameterIndex, sqlType);
         } else {
-            int maxLength = member.getMemberMeta().getLength();
+            int maxLength = memberMeta.getLength();
             if (maxLength == 0) {
                 maxLength = TableModel.ORDINARY_STRING_LENGHT_MAX;
             }
-            int size = value.length();
+            int size = str.length();
             if (size > maxLength) {
-                throw new RuntimeException("Member size vialoation member '" + member.getMemberMeta().getFieldName() + "' size " + size
-                        + " is greater than max allowed " + maxLength);
+                throw new RuntimeException("Member size vialoation member '" + memberMeta.getFieldName() + "' size " + size + " is greater than max allowed "
+                        + maxLength);
             }
             if (size == 0) {
                 stmt.setNull(parameterIndex, sqlType);
             } else {
-                stmt.setString(parameterIndex, value);
+                stmt.setString(parameterIndex, str);
             }
         }
         return 1;
     }
 
     @Override
-    public void retrieveValue(ResultSet rs, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        String value = rs.getString(member.sqlName());
-        if (value == null) {
-            member.setMemberValue(entity, null);
+    public Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
+        String value = rs.getString(memberSqlName);
+        if (rs.wasNull()) {
+            return null;
         } else {
-            member.setMemberValue(entity, value);
+            return value;
         }
     }
 

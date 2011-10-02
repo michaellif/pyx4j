@@ -25,7 +25,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.IEntity;
 
 class ValueAdapterTime extends ValueAdapterPrimitive {
 
@@ -34,23 +33,22 @@ class ValueAdapterTime extends ValueAdapterPrimitive {
     }
 
     @Override
-    public int bindValue(PreparedStatement stmt, int parameterIndex, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        java.sql.Time value = (java.sql.Time) member.getMemberValue(entity);
+    public int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
         if (value == null) {
             stmt.setNull(parameterIndex, sqlType);
         } else {
-            stmt.setTime(parameterIndex, value);
+            stmt.setTime(parameterIndex, (java.sql.Time) value);
         }
         return 1;
     }
 
     @Override
-    public void retrieveValue(ResultSet rs, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        java.sql.Time value = rs.getTime(member.sqlName());
+    public Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
+        java.sql.Time value = rs.getTime(memberSqlName);
         if (rs.wasNull()) {
-            member.setMemberValue(entity, null);
+            return null;
         } else {
-            member.setMemberValue(entity, value);
+            return value;
         }
     }
 

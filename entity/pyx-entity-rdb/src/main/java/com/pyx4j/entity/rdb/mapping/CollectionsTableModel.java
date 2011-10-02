@@ -115,7 +115,12 @@ public class CollectionsTableModel {
         StringBuilder sql = new StringBuilder();
         try {
             sql.append("INSERT INTO ").append(member.sqlName()).append(" ( ");
-            sql.append("owner, value");
+            sql.append("owner");
+
+            for (String name : member.getValueAdapter().getColumnNames("value")) {
+                sql.append(", ");
+                sql.append(name);
+            }
 
             if (isList) {
                 sql.append(", seq");
@@ -147,8 +152,11 @@ public class CollectionsTableModel {
                 if ((value != null) || insertNull) {
                     int parameterIndex = 1;
                     stmt.setLong(parameterIndex, primaryKey.asLong());
+
+                    //// parameterIndex += member.getValueAdapter().bindValue(stmt, parameterIndex, entity, member);
                     parameterIndex++;
                     stmt.setObject(parameterIndex, TableModel.encodeValue(valueClass, value), targetSqlType);
+
                     parameterIndex++;
                     if (isList) {
                         stmt.setInt(parameterIndex, seq);
@@ -267,22 +275,9 @@ public class CollectionsTableModel {
     }
 
     static void retrieve(Connection connection, Dialect dialect, IEntity entity, MemberOperationsMeta member) {
-        ObjectClassType type = member.getMemberMeta().getObjectClassType();
-        Collection<Object> dataSet = retrieveData(connection, dialect, entity.getPrimaryKey(), member, type);
-        if (type == ObjectClassType.PrimitiveSet) {
-            member.setMemberValue(entity, dataSet);
-        } else {
-            @SuppressWarnings("unchecked")
-            ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
-            for (Object value : dataSet) {
-                iCollectionMember.add((IEntity) value);
-            }
-        }
-    }
-
-    private static Collection<Object> retrieveData(Connection connection, Dialect dialect, Key primaryKey, MemberOperationsMeta member, ObjectClassType type) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
+        ObjectClassType type = member.getMemberMeta().getObjectClassType();
         boolean isList = (type == ObjectClassType.EntityList);
         StringBuilder sql = new StringBuilder();
         try {
@@ -294,28 +289,19 @@ public class CollectionsTableModel {
                 sql.append(" ORDER BY seq");
             }
             stmt = connection.prepareStatement(sql.toString());
-            stmt.setLong(1, primaryKey.asLong());
+            stmt.setLong(1, entity.getPrimaryKey().asLong());
             if (dialect.isMultitenant()) {
                 stmt.setString(2, NamespaceManager.getNamespace());
             }
             rs = stmt.executeQuery();
-            Collection<Object> dataSet = isList ? new Vector<Object>() : new HashSet<Object>();
+
+            @SuppressWarnings("unchecked")
+            Collection<Object> collectionMember = (Collection<Object>) member.getMember(entity);
             while (rs.next()) {
-                if (type == ObjectClassType.PrimitiveSet) {
-                    dataSet.add(TableModel.decodeValue(rs.getObject("value"), member.getMemberMeta()));
-                } else {
-                    // TODO get type
-                    @SuppressWarnings("unchecked")
-                    IEntity childIEntity = EntityFactory.create((Class<IEntity>) member.getMemberMeta().getValueClass());
-                    long ck = rs.getLong("value");
-                    if (!rs.wasNull()) {
-                        childIEntity.setPrimaryKey(new Key(ck));
-                        childIEntity.setValuesDetached();
-                    }
-                    dataSet.add(childIEntity);
-                }
+                Object value = member.getValueAdapter().retrieveValue(rs, "value");
+                collectionMember.add(value);
             }
-            return dataSet;
+
         } catch (SQLException e) {
             log.error("{} SQL {}", member.sqlName(), sql);
             log.error("{} SQL select error", member.sqlName(), e);

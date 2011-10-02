@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.geo.GeoPoint;
 
 class ValueAdapterGeoPoint implements ValueAdapter {
@@ -57,33 +56,26 @@ class ValueAdapterGeoPoint implements ValueAdapter {
     }
 
     @Override
-    public int bindValue(PreparedStatement stmt, int parameterIndex, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        GeoPoint value = (GeoPoint) member.getMemberValue(entity);
+    public int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
         if (value == null) {
             stmt.setNull(parameterIndex, sqlType);
             stmt.setNull(parameterIndex + 1, sqlType);
         } else {
-            stmt.setDouble(parameterIndex, value.getLat());
-            stmt.setDouble(parameterIndex + 1, value.getLng());
+            GeoPoint geo = (GeoPoint) value;
+            stmt.setDouble(parameterIndex, geo.getLat());
+            stmt.setDouble(parameterIndex + 1, geo.getLng());
         }
         return 2;
     }
 
     @Override
-    public void retrieveValue(ResultSet rs, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        double lat = rs.getDouble(member.sqlName() + "_lat");
-        GeoPoint value;
+    public Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
+        double lat = rs.getDouble(memberSqlName + "_lat");
         if (rs.wasNull()) {
-            value = null;
+            return null;
         } else {
-            value = new GeoPoint(lat, rs.getDouble(member.sqlName() + "_lng"));
+            return new GeoPoint(lat, rs.getDouble(memberSqlName + "_lng"));
         }
-        if (value == null) {
-            member.setMemberValue(entity, null);
-        } else {
-            member.setMemberValue(entity, value);
-        }
-
     }
 
 }

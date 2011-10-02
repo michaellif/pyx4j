@@ -284,7 +284,17 @@ public class TableModel {
     private int bindPersistParameters(Dialect dialect, PreparedStatement stmt, IEntity entity) throws SQLException {
         int parameterIndex = 1;
         for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
-            parameterIndex += member.getValueAdapter().bindValue(stmt, parameterIndex, entity, member);
+            if (member.getMemberMeta().isEntity()) {
+                IEntity childEntity = (IEntity) member.getMember(entity);
+                if ((childEntity.getPrimaryKey() == null) && !childEntity.isNull()) {
+                    log.error("Saving non persisted reference {}", childEntity);
+                    throw new Error("Saving non persisted reference " + member.getMemberMeta().getValueClass().getName() + " "
+                            + member.getMemberMeta().getCaption() + " of " + entity.getEntityMeta().getCaption());
+                }
+                parameterIndex += member.getValueAdapter().bindValue(stmt, parameterIndex, childEntity);
+            } else {
+                parameterIndex += member.getValueAdapter().bindValue(stmt, parameterIndex, member.getMemberValue(entity));
+            }
         }
         for (MemberOperationsMeta member : entityOperationsMeta.getIndexMembers()) {
             bindParameter(dialect, stmt, parameterIndex, member.getIndexValueClass(), member.getIndexedValue(entity), null);
@@ -454,7 +464,14 @@ public class TableModel {
     private void retrieveValues(ResultSet rs, IEntity entity) throws SQLException {
         entity.setValuesPopulated();
         for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
-            member.getValueAdapter().retrieveValue(rs, entity, member);
+            Object value = member.getValueAdapter().retrieveValue(rs, member.sqlName());
+            if (value != null) {
+                if (member.getMemberMeta().isEntity()) {
+                    ((IEntity) member.getMember(entity)).set((IEntity) value);
+                } else {
+                    member.setMemberValue(entity, value);
+                }
+            }
         }
     }
 
@@ -485,15 +502,12 @@ public class TableModel {
                 if ((dialect.isMultitenant()) && !rs.getString("ns").equals(NamespaceManager.getNamespace())) {
                     throw new RuntimeException("namespace acess error");
                 }
-                if (!key.equals(entity.getPrimaryKey())) {
-                    entity.setPrimaryKey(key);
-                }
+                entity.setPrimaryKey(key);
                 retrieveValues(rs, entity);
 
                 for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
                     CollectionsTableModel.retrieve(connection, dialect, entity, member);
                 }
-
                 return true;
             }
         } catch (SQLException e) {

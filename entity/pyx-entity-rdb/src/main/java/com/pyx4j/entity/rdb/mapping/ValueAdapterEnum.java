@@ -25,12 +25,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.IEntity;
 
 class ValueAdapterEnum extends ValueAdapterPrimitive {
 
-    protected ValueAdapterEnum(Dialect dialect, Class<?> valueClass) {
+    @SuppressWarnings("rawtypes")
+    protected Class<Enum> valueClass;
+
+    protected ValueAdapterEnum(Dialect dialect, @SuppressWarnings("rawtypes") Class<Enum> valueClass) {
         super(dialect, valueClass);
+        this.valueClass = valueClass;
     }
 
     @Override
@@ -40,24 +43,23 @@ class ValueAdapterEnum extends ValueAdapterPrimitive {
     }
 
     @Override
-    public int bindValue(PreparedStatement stmt, int parameterIndex, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        Enum<?> value = (Enum<?>) member.getMemberValue(entity);
+    public int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
         if (value == null) {
             stmt.setNull(parameterIndex, sqlType);
         } else {
-            stmt.setString(parameterIndex, value.name());
+            stmt.setString(parameterIndex, ((Enum<?>) value).name());
         }
         return 1;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings("unchecked")
     @Override
-    public void retrieveValue(ResultSet rs, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        String value = rs.getString(member.sqlName());
-        if (value == null) {
-            member.setMemberValue(entity, null);
+    public Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
+        String value = rs.getString(memberSqlName);
+        if (rs.wasNull()) {
+            return null;
         } else {
-            member.setMemberValue(entity, Enum.valueOf((Class<Enum>) member.getMemberMeta().getValueClass(), value));
+            return Enum.valueOf(valueClass, value);
         }
     }
 

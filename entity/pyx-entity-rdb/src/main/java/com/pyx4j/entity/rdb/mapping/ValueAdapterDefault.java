@@ -25,7 +25,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.IEntity;
 
 class ValueAdapterDefault extends ValueAdapterPrimitive {
 
@@ -34,8 +33,7 @@ class ValueAdapterDefault extends ValueAdapterPrimitive {
     }
 
     @Override
-    public int bindValue(PreparedStatement stmt, int parameterIndex, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        Object value = member.getMemberValue(entity);
+    public int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
         if (value == null) {
             stmt.setNull(parameterIndex, sqlType);
         } else {
@@ -45,12 +43,12 @@ class ValueAdapterDefault extends ValueAdapterPrimitive {
     }
 
     @Override
-    public void retrieveValue(ResultSet rs, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        Object value = rs.getObject(member.sqlName());
-        if (value == null) {
-            member.setMemberValue(entity, null);
+    public Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
+        Object value = rs.getObject(memberSqlName);
+        if (rs.wasNull()) {
+            return null;
         } else {
-            member.setMemberValue(entity, value);
+            return value;
         }
     }
 

@@ -26,7 +26,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.IEntity;
 
 interface ValueAdapter {
 
@@ -36,8 +35,8 @@ interface ValueAdapter {
 
     void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String coumnName);
 
-    int bindValue(PreparedStatement stmt, int parameterIndex, IEntity entity, MemberOperationsMeta member) throws SQLException;
+    int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException;
 
-    void retrieveValue(ResultSet rs, IEntity entity, MemberOperationsMeta member) throws SQLException;
+    Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException;
 
 }

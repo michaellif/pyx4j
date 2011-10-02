@@ -28,9 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.AbstractEntity;
@@ -42,8 +39,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
 public class ValueAdapterEntityVirtual implements ValueAdapter {
-
-    private static final Logger log = LoggerFactory.getLogger(ValueAdapterEntity.class);
 
     private static String DISCRIMINATOR_COLUNM_NAME_SUFIX = "_disc";
 
@@ -107,18 +102,12 @@ public class ValueAdapterEntityVirtual implements ValueAdapter {
     }
 
     @Override
-    public int bindValue(PreparedStatement stmt, int parameterIndex, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        IEntity childEntity = (IEntity) member.getMember(entity);
+    public int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
+        IEntity childEntity = (IEntity) value;
         Key primaryKey = childEntity.getPrimaryKey();
         if (primaryKey == null) {
-            if (!childEntity.isNull()) {
-                log.error("Saving non persisted reference {}", childEntity);
-                throw new Error("Saving non persisted reference " + member.getMemberMeta().getValueClass().getName() + " "
-                        + member.getMemberMeta().getCaption() + " of " + entity.getEntityMeta().getCaption());
-            } else {
-                stmt.setNull(parameterIndex, sqlTypeKey);
-                stmt.setNull(parameterIndex + 1, sqlTypeDiscriminator);
-            }
+            stmt.setNull(parameterIndex, sqlTypeKey);
+            stmt.setNull(parameterIndex + 1, sqlTypeDiscriminator);
         } else {
             stmt.setLong(parameterIndex, primaryKey.asLong());
             DiscriminatorValue discriminator = childEntity.getInstanceValueClass().getAnnotation(DiscriminatorValue.class);
@@ -128,21 +117,17 @@ public class ValueAdapterEntityVirtual implements ValueAdapter {
     }
 
     @Override
-    public void retrieveValue(ResultSet rs, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        IEntity memberEntity = (IEntity) member.getMember(entity);
-        long value = rs.getLong(member.sqlName());
-        Key pk;
+    public Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
+        long value = rs.getLong(memberSqlName);
         if (rs.wasNull()) {
-            pk = null;
-            memberEntity.setValue(null);
+            return null;
         } else {
-            pk = new Key(value);
-            String discriminatorValue = rs.getString(member.sqlName() + DISCRIMINATOR_COLUNM_NAME_SUFIX);
+            String discriminatorValue = rs.getString(memberSqlName + DISCRIMINATOR_COLUNM_NAME_SUFIX);
             Class<? extends IEntity> entityClass = impClasses.get(discriminatorValue);
             IEntity entityValue = EntityFactory.create(entityClass);
-            entityValue.setPrimaryKey(pk);
+            entityValue.setPrimaryKey(new Key(value));
             entityValue.setValuesDetached();
-            memberEntity.set(entityValue);
+            return entityValue;
         }
     }
 

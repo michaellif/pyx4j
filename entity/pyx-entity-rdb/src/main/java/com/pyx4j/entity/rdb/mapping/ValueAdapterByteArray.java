@@ -26,37 +26,43 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 
 class ValueAdapterByteArray extends ValueAdapterPrimitive {
 
-    protected ValueAdapterByteArray(Dialect dialect) {
+    private final MemberMeta memberMeta;
+
+    protected ValueAdapterByteArray(Dialect dialect, MemberMeta memberMeta) {
         super(dialect, byte[].class);
+        this.memberMeta = memberMeta;
     }
 
     @Override
-    public int bindValue(PreparedStatement stmt, int parameterIndex, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        byte[] value = (byte[]) member.getMemberValue(entity);
+    public int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
         if (value == null) {
             stmt.setNull(parameterIndex, sqlType);
         } else {
-            int maxLength = member.getMemberMeta().getLength();
+            int maxLength = memberMeta.getLength();
             if (maxLength > 0) {
                 int size = Array.getLength(value);
                 if (size > maxLength) {
-                    throw new RuntimeException("Member size vialoation member '" + member.getMemberMeta().getFieldName() + "' size " + size
+                    throw new RuntimeException("Member size vialoation member '" + memberMeta.getFieldName() + "' size " + size
                             + " is greater than max allowed " + maxLength);
                 }
             }
-            stmt.setBytes(parameterIndex, value);
+            stmt.setBytes(parameterIndex, (byte[]) value);
         }
         return 1;
     }
 
     @Override
-    public void retrieveValue(ResultSet rs, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        byte[] value = rs.getBytes(member.sqlName());
-        member.setMemberValue(entity, value);
+    public Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
+        byte[] value = rs.getBytes(memberSqlName);
+        if (rs.wasNull()) {
+            return null;
+        } else {
+            return value;
+        }
     }
 
 }

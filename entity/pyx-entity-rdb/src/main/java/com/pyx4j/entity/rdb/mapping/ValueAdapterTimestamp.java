@@ -24,11 +24,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.IEntity;
 
 class ValueAdapterTimestamp extends ValueAdapterPrimitive {
 
@@ -37,13 +35,12 @@ class ValueAdapterTimestamp extends ValueAdapterPrimitive {
     }
 
     @Override
-    public int bindValue(PreparedStatement stmt, int parameterIndex, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        java.util.Date value = (Date) member.getMemberValue(entity);
+    public int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
         if (value == null) {
             stmt.setNull(parameterIndex, sqlType);
         } else {
             Calendar c = new GregorianCalendar();
-            c.setTime(value);
+            c.setTime((java.util.Date) value);
             // DB does not store Milliseconds
             c.set(Calendar.MILLISECOND, 0);
             stmt.setTimestamp(parameterIndex, new java.sql.Timestamp(c.getTimeInMillis()));
@@ -52,12 +49,12 @@ class ValueAdapterTimestamp extends ValueAdapterPrimitive {
     }
 
     @Override
-    public void retrieveValue(ResultSet rs, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        java.sql.Timestamp value = rs.getTimestamp(member.sqlName());
+    public Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
+        java.sql.Timestamp value = rs.getTimestamp(memberSqlName);
         if (rs.wasNull()) {
-            member.setMemberValue(entity, null);
+            return null;
         } else {
-            member.setMemberValue(entity, new java.util.Date(value.getTime()));
+            return new java.util.Date(value.getTime());
         }
     }
 }

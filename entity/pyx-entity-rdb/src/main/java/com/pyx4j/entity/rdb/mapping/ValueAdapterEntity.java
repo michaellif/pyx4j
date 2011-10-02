@@ -26,21 +26,20 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Vector;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
 class ValueAdapterEntity implements ValueAdapter {
 
-    private static final Logger log = LoggerFactory.getLogger(ValueAdapterEntity.class);
-
     protected int sqlTypeKey;
 
-    protected ValueAdapterEntity(Dialect dialect) {
+    private final Class<? extends IEntity> entityClass;
+
+    protected ValueAdapterEntity(Dialect dialect, Class<? extends IEntity> entityClass) {
         sqlTypeKey = dialect.getTargetSqlType(Long.class);
+        this.entityClass = entityClass;
     }
 
     @Override
@@ -61,17 +60,11 @@ class ValueAdapterEntity implements ValueAdapter {
     }
 
     @Override
-    public int bindValue(PreparedStatement stmt, int parameterIndex, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        IEntity childEntity = (IEntity) member.getMember(entity);
+    public int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
+        IEntity childEntity = (IEntity) value;
         Key primaryKey = childEntity.getPrimaryKey();
         if (primaryKey == null) {
-            if (!childEntity.isNull()) {
-                log.error("Saving non persisted reference {}", childEntity);
-                throw new Error("Saving non persisted reference " + member.getMemberMeta().getValueClass().getName() + " "
-                        + member.getMemberMeta().getCaption() + " of " + entity.getEntityMeta().getCaption());
-            } else {
-                stmt.setNull(parameterIndex, sqlTypeKey);
-            }
+            stmt.setNull(parameterIndex, sqlTypeKey);
         } else {
             stmt.setLong(parameterIndex, primaryKey.asLong());
         }
@@ -79,19 +72,15 @@ class ValueAdapterEntity implements ValueAdapter {
     }
 
     @Override
-    public void retrieveValue(ResultSet rs, IEntity entity, MemberOperationsMeta member) throws SQLException {
-        long value = rs.getLong(member.sqlName());
-        Key pk;
+    public Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
+        long value = rs.getLong(memberSqlName);
         if (rs.wasNull()) {
-            pk = null;
+            return null;
         } else {
-            pk = new Key(value);
-        }
-        IEntity memberEntity = (IEntity) member.getMember(entity);
-        memberEntity.setValue(null);
-        memberEntity.setPrimaryKey(pk);
-        if (pk != null) {
-            memberEntity.setValuesDetached();
+            IEntity entity = EntityFactory.create(entityClass);
+            entity.setPrimaryKey(new Key(value));
+            entity.setValuesDetached();
+            return entity;
         }
     }
 }

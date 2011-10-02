@@ -107,8 +107,10 @@ public class EntityOperationsMeta {
                     }
                     namesPathChild.add(memberPersistenceName);
 
+                    @SuppressWarnings("unchecked")
+                    Class<? extends IEntity> entityClass = (Class<IEntity>) memberMeta.getObjectClass();
                     build(dialect, namingConvention, rootEntityMeta, path + Path.PATH_SEPARATOR + memberName, accessPathChild, namesPathChild,
-                            EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
+                            EntityFactory.getEntityMeta(entityClass));
                 }
             } else {
                 EntityMemberAccess memberAccess;
@@ -124,11 +126,13 @@ public class EntityOperationsMeta {
                     } else {
                         sqlName = namingConvention.sqlChildTableName(rootEntityMeta.getPersistenceName(), memberPersistenceName);
                     }
+                    @SuppressWarnings("unchecked")
+                    Class<? extends IEntity> entityClass = (Class<IEntity>) memberMeta.getValueClass();
                     ValueAdapter valueAdapter;
-                    if (memberMeta.getValueClass().getAnnotation(Inheritance.class) != null) {
-                        valueAdapter = new ValueAdapterEntityVirtual(dialect, (Class<IEntity>) memberMeta.getValueClass());
+                    if (entityClass.getAnnotation(Inheritance.class) != null) {
+                        valueAdapter = new ValueAdapterEntityVirtual(dialect, entityClass);
                     } else {
-                        valueAdapter = new ValueAdapterEntity(dialect);
+                        valueAdapter = new ValueAdapterEntity(dialect, entityClass);
                     }
                     MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR
                             + memberName + Path.PATH_SEPARATOR);
@@ -145,11 +149,13 @@ public class EntityOperationsMeta {
                     } else {
                         sqlName = namingConvention.sqlFieldName(memberPersistenceName);
                     }
+                    @SuppressWarnings("unchecked")
+                    Class<? extends IEntity> entityClass = (Class<IEntity>) memberMeta.getObjectClass();
                     ValueAdapter valueAdapter;
-                    if (memberMeta.getObjectClass().getAnnotation(Inheritance.class) != null) {
-                        valueAdapter = new ValueAdapterEntityVirtual(dialect, (Class<IEntity>) memberMeta.getObjectClass());
+                    if (entityClass.getAnnotation(Inheritance.class) != null) {
+                        valueAdapter = new ValueAdapterEntityVirtual(dialect, entityClass);
                     } else {
-                        valueAdapter = new ValueAdapterEntity(dialect);
+                        valueAdapter = new ValueAdapterEntity(dialect, entityClass);
                     }
                     MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR
                             + memberName + Path.PATH_SEPARATOR);
@@ -173,7 +179,7 @@ public class EntityOperationsMeta {
                     } else {
                         sqlName = namingConvention.sqlChildTableName(rootEntityMeta.getPersistenceName(), memberPersistenceName);
                     }
-                    ValueAdapter valueAdapter = createValueAdapter(dialect, memberMeta.getValueClass());
+                    ValueAdapter valueAdapter = createValueAdapter(dialect, memberMeta);
                     if (valueAdapter == null) {
                         throw new Error("Unsupported IPrimitive<" + memberMeta.getValueClass().getName() + "> " + memberName + " in "
                                 + entityMeta.getEntityClass().getName());
@@ -189,7 +195,7 @@ public class EntityOperationsMeta {
                     } else {
                         sqlName = namingConvention.sqlFieldName(memberPersistenceName);
                     }
-                    ValueAdapter valueAdapter = createValueAdapter(dialect, memberMeta.getValueClass());
+                    ValueAdapter valueAdapter = createValueAdapter(dialect, memberMeta);
                     if (valueAdapter == null) {
                         throw new Error("Unsupported IPrimitive<" + memberMeta.getValueClass().getName() + "> " + memberName + " in "
                                 + entityMeta.getEntityClass().getName());
@@ -214,9 +220,10 @@ public class EntityOperationsMeta {
         }
     }
 
-    private ValueAdapter createValueAdapter(Dialect dialect, Class<?> valueClass) {
+    private ValueAdapter createValueAdapter(Dialect dialect, MemberMeta memberMeta) {
+        Class<?> valueClass = memberMeta.getValueClass();
         if (valueClass.equals(String.class)) {
-            return new ValueAdapterString(dialect);
+            return new ValueAdapterString(dialect, memberMeta);
         } else if (valueClass.equals(Double.class)) {
             return new ValueAdapterDouble(dialect);
         } else if (valueClass.equals(Float.class)) {
@@ -236,7 +243,9 @@ public class EntityOperationsMeta {
         } else if (valueClass.equals(java.sql.Time.class)) {
             return new ValueAdapterTime(dialect);
         } else if (valueClass.isEnum()) {
-            return new ValueAdapterEnum(dialect, valueClass);
+            @SuppressWarnings({ "rawtypes", "unchecked" })
+            Class<Enum> enumValueClass = (Class<Enum>) valueClass;
+            return new ValueAdapterEnum(dialect, enumValueClass);
         } else if (valueClass.equals(Boolean.class)) {
             return new ValueAdapterBoolean(dialect);
         } else if (valueClass.equals(Short.class)) {
@@ -244,7 +253,7 @@ public class EntityOperationsMeta {
         } else if (valueClass.equals(Byte.class)) {
             return new ValueAdapterByte(dialect);
         } else if (valueClass.equals(byte[].class)) {
-            return new ValueAdapterByteArray(dialect);
+            return new ValueAdapterByteArray(dialect, memberMeta);
         } else if (valueClass.equals(GeoPoint.class)) {
             return new ValueAdapterGeoPoint(dialect);
         } else {
