@@ -28,6 +28,7 @@ public class MySQLDialect extends Dialect {
         super(DatabaseType.MySQL, namingConvention, multitenant);
         addTypeMeta(Integer.class, "int");
         addTypeMeta(Short.class, "smallint");
+        addTypeMeta(Byte.class, "tinyint");
         addTypeMeta(Long.class, "bigint");
         addTypeMeta(Double.class, "double");
         addTypeMeta(Boolean.class, "bit");

@@ -27,6 +27,7 @@ public class HSQLDialect extends Dialect {
     public HSQLDialect(NamingConvention namingConvention, boolean multitenant) {
         super(DatabaseType.HSQLDB, namingConvention, multitenant);
         addTypeMeta(Short.class, "smallint");
+        addTypeMeta(Byte.class, "tinyint");
         addTypeMeta(Long.class, "bigint");
         addTypeMeta(Double.class, "double");
         addTypeMeta(Boolean.class, "boolean");

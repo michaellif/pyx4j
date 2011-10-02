@@ -41,10 +41,10 @@ import com.pyx4j.i18n.shared.Translatable;
 @Table(prefix = "test")
 public interface Employee extends IEntity {
 
-    public static int DECLARED_MEMBERS = 15;
+    public static int DECLARED_MEMBERS = 17;
 
-    public static String[] MEMBERS_ORDER = new String[] { "firstName", "from", "reliable", "holidays", "rating", "salary", "employmentStatus", "accessStatus",
-            "tasks", "tasksSorted", "department", "manager", "homeAddress", "workAddress", "image" };
+    public static String[] MEMBERS_ORDER = new String[] { "firstName", "from", "reliable", "holidays", "rating", "flagByte", "flagShort", "salary",
+            "employmentStatus", "accessStatus", "tasks", "tasksSorted", "department", "manager", "homeAddress", "workAddress", "image" };
 
     @Translatable
     public static enum EmploymentStatus {
@@ -72,6 +72,10 @@ public interface Employee extends IEntity {
 
     @Indexed
     IPrimitive<Integer> rating();
+
+    IPrimitive<Byte> flagByte();
+
+    IPrimitive<Short> flagShort();
 
     @Indexed
     IPrimitive<Double> salary();

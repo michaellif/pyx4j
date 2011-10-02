@@ -205,6 +205,32 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Value", Integer.valueOf(5), emp2.rating().getValue());
     }
 
+    public void testShort() {
+        Employee emp = EntityFactory.create(Employee.class);
+        Assert.assertNull("Initial value", emp.flagShort().getValue());
+        Assert.assertEquals("Class of Value", Short.class, emp.flagShort().getValueClass());
+        emp.flagShort().setValue((short) 5);
+
+        srv.persist(emp);
+        Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
+        Assert.assertNotNull("retrieve by PK " + emp.getPrimaryKey(), emp2);
+        Assert.assertEquals("Class of Value", Short.class, emp2.flagShort().getValue().getClass());
+        Assert.assertEquals("Value", Short.valueOf((short) 5), emp2.flagShort().getValue());
+    }
+
+    public void testByte() {
+        Employee emp = EntityFactory.create(Employee.class);
+        Assert.assertNull("Initial value", emp.flagByte().getValue());
+        Assert.assertEquals("Class of Value", Byte.class, emp.flagByte().getValueClass());
+        emp.flagByte().setValue((byte) 51);
+
+        srv.persist(emp);
+        Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
+        Assert.assertNotNull("retrieve by PK " + emp.getPrimaryKey(), emp2);
+        Assert.assertEquals("Class of Value", Byte.class, emp2.flagByte().getValue().getClass());
+        Assert.assertEquals("Value", Byte.valueOf((byte) 51), emp2.flagByte().getValue());
+    }
+
     public void testDouble() {
         Employee emp = EntityFactory.create(Employee.class);
         Assert.assertNull("Initial value", emp.salary().getValue());

@@ -30,6 +30,7 @@ public class OracleDialect extends Dialect {
         super(DatabaseType.Oracle, namingConvention, multitenant);
         addTypeMeta(Integer.class, "number", 10, 0);
         addTypeMeta(Short.class, "number", 5, 0);
+        addTypeMeta(Byte.class, "number", 3, 0);
         addTypeMeta(Long.class, "number", 19, 0);
         addTypeMeta(Double.class, "double precision", "float");
         addTypeMeta(Float.class, "float", "double precision");

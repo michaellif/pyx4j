@@ -901,10 +901,17 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 return value;
             }
         } else if (value instanceof Long) {
-            if (Integer.class.isAssignableFrom(iEntity.getEntityMeta().getMemberMeta(keyName).getValueClass())) {
+            Class<?> metaValueClass = iEntity.getEntityMeta().getMemberMeta(keyName).getValueClass();
+            if (Integer.class.isAssignableFrom(metaValueClass)) {
                 return ((Long) value).intValue();
-            } else if (com.pyx4j.commons.Key.class.isAssignableFrom(iEntity.getEntityMeta().getMemberMeta(keyName).getValueClass())) {
+            } else if (com.pyx4j.commons.Key.class.isAssignableFrom(metaValueClass)) {
                 return new com.pyx4j.commons.Key(((Long) value).longValue());
+            } else if (Long.class.isAssignableFrom(metaValueClass)) {
+                return value;
+            } else if (Short.class.isAssignableFrom(metaValueClass)) {
+                return ((Long) value).shortValue();
+            } else if (Byte.class.isAssignableFrom(metaValueClass)) {
+                return ((Long) value).byteValue();
             } else {
                 return value;
             }
