@@ -24,6 +24,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -140,7 +141,7 @@ public class ServerEntityFactory implements IEntityFactory {
                     impClasses.put(entityClass, null);
                 }
             }
-            allEntityClasses = Collections.unmodifiableSet(impClasses.keySet());
+            allEntityClasses = Collections.unmodifiableSet(new HashSet<Class<? extends IEntity>>(impClasses.keySet()));
         }
         return allEntityClasses;
     }
