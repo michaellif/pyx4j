@@ -197,7 +197,7 @@ public class IServiceAdapterImpl implements IServiceAdapter {
             } else {
                 log.error("Error", e.getCause());
                 if (ApplicationMode.isDevelopment()) {
-                    throw new UnRecoverableRuntimeException(e.getCause().getMessage());
+                    throw new UnRecoverableRuntimeException(ApplicationMode.DEV + e.getCause().getMessage());
                 } else {
                     throw new UnRecoverableRuntimeException("Fatal system error");
                 }
