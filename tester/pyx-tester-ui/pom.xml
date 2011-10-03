@@ -35,13 +35,20 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>examples-domain</artifactId>
+            <artifactId>pyx-tester-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-site-gwt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
     </dependencies>
 
     <properties>
+        <!--  TODO -->
         <gwtModule>g.site</gwtModule>
         <gwtModuleCompile>${gwtModule}</gwtModuleCompile>
         <gwtDestinationWarFolder>${basedir}/../pyx-tester-server/src/main/webapp</gwtDestinationWarFolder>
