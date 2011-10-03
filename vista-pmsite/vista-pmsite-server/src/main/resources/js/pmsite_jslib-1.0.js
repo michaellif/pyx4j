@@ -10,6 +10,7 @@ function setSelectionOptions(selId, optArr, defOpt, selOpt) {
 	}
 	for (var i = 0; i < optArr.length; i++) {
 		var v = optArr[i];
-		sel.options[sel.options.length] = new Option(v,v,(v == selOpt));
+		var selected = (v == selOpt);
+		sel.options[sel.options.length] = new Option(v,v,selected,selected);
 	}
 }

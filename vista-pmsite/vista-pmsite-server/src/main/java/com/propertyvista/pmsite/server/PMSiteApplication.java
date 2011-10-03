@@ -22,6 +22,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
 import org.apache.wicket.util.time.Duration;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -43,6 +44,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
         if (ApplicationMode.isDevelopment()) {
             getResourceSettings().setResourcePollFrequency(Duration.ONE_SECOND);
+            getResourceSettings().setCachingStrategy(NoOpResourceCachingStrategy.INSTANCE);
         }
 //        getPageSettings().addComponentResolver(new I18nMessageResolver());
 

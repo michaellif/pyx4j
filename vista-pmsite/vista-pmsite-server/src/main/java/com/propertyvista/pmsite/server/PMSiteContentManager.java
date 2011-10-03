@@ -270,14 +270,16 @@ public class PMSiteContentManager implements Serializable {
                 dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), city));
             }
         }
-        ArrayList<Building> buildings = new ArrayList<Building>(Persistence.service().query(dbCriteria));
-
+        final List<Building> buildings = Persistence.service().query(dbCriteria);
+        ArrayList<Building> remove = new ArrayList<Building>();
         for (Building building : buildings) {
             // do some sanity check
             if (building.info().address().location().isNull() || building.info().address().location().getValue().getLat() == 0) {
-                buildings.remove(building);
+                remove.add(building);
             }
         }
+        buildings.removeAll(remove);
+
         return buildings;
     }
 

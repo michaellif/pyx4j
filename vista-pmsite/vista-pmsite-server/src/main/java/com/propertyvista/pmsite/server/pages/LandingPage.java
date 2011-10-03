@@ -46,6 +46,7 @@ public class LandingPage extends BasePage {
         TextTemplateResourceReference refCSS = new TextTemplateResourceReference(TemplateResources.class, "landing" + getPmsiteStyle() + ".css", "text/css",
                 new StylesheetTemplateModel(baseColor));
         response.renderCSSReference(refCSS);
+
         super.renderHead(response);
 
     }
