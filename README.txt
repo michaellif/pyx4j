@@ -65,9 +65,9 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k -XX:ReservedCodeCacheSize=64m
     Star this bugs: http://code.google.com/p/googleappengine/issues/detail?id=3401
                     http://code.google.com/p/googleappengine/issues/detail?id=2282
 
-2. Download and unzip appengine-java-sdk-1.5.3.zip
+2. Download and unzip appengine-java-sdk-1.5.4.zip
 		from http://code.google.com/appengine/downloads.html
-3. Unzip GAE SDK to C:\3p-libs\gae\appengine-java-sdk-1.5.3  (or make NTFS link)
+3. Unzip GAE SDK to C:\3p-libs\gae\appengine-java-sdk-1.5.4  (or make NTFS link)
 4. Configure Eclipse -> Preferences -> Google -> App Engine to use SDK above!
 
 4. For heavy server side development use jrebel
