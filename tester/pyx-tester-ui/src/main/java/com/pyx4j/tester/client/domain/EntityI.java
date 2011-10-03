@@ -18,15 +18,20 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.entity.ui.flex.demo.client.domain;
+package com.pyx4j.tester.client.domain;
 
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface EntityII extends IEntity {
+public interface EntityI extends IEntity {
 
     IPrimitive<String> stringMember();
 
     IPrimitive<Integer> integerMember();
+
+    @Owned
+    IList<EntityII> entityIIList();
 
 }

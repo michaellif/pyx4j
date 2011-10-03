@@ -20,14 +20,25 @@
  */
 package com.pyx4j.tester.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.tester.client.domain.DomainFactory;
+import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
+import com.pyx4j.widgets.client.style.StyleManger;
+import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 
 public class TesterEntryPoint implements EntryPoint {
+
+    private static final Logger log = LoggerFactory.getLogger(TesterEntryPoint.class);
 
     public TesterEntryPoint() {
         UnrecoverableErrorHandlerDialog.register();
@@ -44,6 +55,26 @@ public class TesterEntryPoint implements EntryPoint {
             }
         }.hideLoadingIndicator();
 
-        MessageDialog.info("Hi", "It worked");
+        StyleManger.installTheme(new WindowsTheme());
+
+        ClientLogger.setDebugOn(true);
+        ClientLogger.setTraceOn(true);
+        UnrecoverableErrorHandlerDialog.register();
+
+        VerticalPanel contentPanel = new VerticalPanel();
+
+        RootPanel.get().add(GlassPanel.instance());
+        RootPanel.get().add(contentPanel);
+        contentPanel.setWidth("100%");
+
+        //========== Report ==========//
+        contentPanel.add(new HTML("<b>Report Test:</b>"));
+
+        MainForm mainForm = new MainForm();
+        mainForm.initContent();
+
+        contentPanel.add(mainForm);
+
+        mainForm.populate(DomainFactory.createEntityI());
     }
 }

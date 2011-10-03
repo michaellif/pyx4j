@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.entity.ui.flex.demo.client.domain;
+package com.pyx4j.tester.client.domain;
 
 import com.pyx4j.entity.shared.EntityFactory;
 

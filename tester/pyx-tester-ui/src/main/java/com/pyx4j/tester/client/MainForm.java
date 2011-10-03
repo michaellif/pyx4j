@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.ui.flex.demo.client;
+package com.pyx4j.tester.client;
 
 import static com.pyx4j.commons.HtmlUtils.h2;
 
@@ -38,9 +38,9 @@ import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
-import com.pyx4j.entity.ui.flex.demo.client.domain.EntityI;
-import com.pyx4j.entity.ui.flex.demo.client.domain.EntityII;
 import com.pyx4j.forms.client.ui.decorators.ElegantWidgetDecorator;
+import com.pyx4j.tester.client.domain.EntityI;
+import com.pyx4j.tester.client.domain.EntityII;
 
 public class MainForm extends CEntityEditor<EntityI> {
 
