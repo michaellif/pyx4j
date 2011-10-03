@@ -49,7 +49,7 @@
 
     <properties>
         <!--  TODO -->
-        <gwtModule>g.site</gwtModule>
+        <gwtModule>com.pyx4j.tester.Client</gwtModule>
         <gwtModuleCompile>${gwtModule}</gwtModuleCompile>
         <gwtDestinationWarFolder>${basedir}/../pyx-tester-server/src/main/webapp</gwtDestinationWarFolder>
     </properties>
