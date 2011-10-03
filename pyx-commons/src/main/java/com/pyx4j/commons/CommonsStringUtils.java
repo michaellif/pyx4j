@@ -107,7 +107,7 @@ public class CommonsStringUtils {
         return str.concat(padding(pads, padChar));
     }
 
-    private static String padding(int repeat, char padChar) throws IndexOutOfBoundsException {
+    public static String padding(int repeat, char padChar) throws IndexOutOfBoundsException {
         if (repeat < 0) {
             throw new IndexOutOfBoundsException("Cannot pad a negative amount: " + repeat);
         }
