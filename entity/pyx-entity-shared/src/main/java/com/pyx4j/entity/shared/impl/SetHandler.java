@@ -137,7 +137,7 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
         if (o instanceof IEntity) {
             Set<?> set = getValue();
             if (set != null) {
-                return set.contains(((IEntity) o).getValue());
+                return set.contains(comparableValue((IEntity) o));
             }
         }
         return false;

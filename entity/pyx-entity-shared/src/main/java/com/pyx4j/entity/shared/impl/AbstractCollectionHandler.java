@@ -73,8 +73,8 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
             throw new ClassCastException("Collection member type expected " + getValueClass());
         }
         Map<String, Object> value = ((SharedEntityHandler) entity).ensureValue();
-        if (!this.getValueClass().equals(entity.getObjectClass())) {
-            value.put(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(entity.getObjectClass()));
+        if (!this.getValueClass().equals(entity.getInstanceValueClass())) {
+            value.put(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
         }
         ((SharedEntityHandler) entity).attachToOwner(this, this.getFieldName());
 
@@ -87,12 +87,24 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         return value;
     }
 
+    protected Map<String, Object> comparableValue(IEntity entity) {
+        Map<String, Object> enitytValue = entity.getValue();
+        if ((entity.getPrimaryKey() == null) || this.getValueClass().equals(entity.getInstanceValueClass())) {
+            return enitytValue;
+        } else {
+            Map<String, Object> comparableValue = new EntityValueMap();
+            comparableValue.put(IEntity.PRIMARY_KEY, enitytValue.get(IEntity.PRIMARY_KEY));
+            comparableValue.put(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
+            return comparableValue;
+        }
+    }
+
     @Override
     public boolean remove(Object o) {
         if ((o instanceof IEntity) && (((IEntity) o).isInstanceOf(getValueClass()))) {
             Collection<?> collectionValue = (Collection<?>) getValue();
             if (collectionValue != null) {
-                Map<String, Object> enitytValue = ((IEntity) o).getValue();
+                Map<String, Object> enitytValue = comparableValue((IEntity) o);
                 boolean rc = collectionValue.remove(enitytValue);
                 if (rc && getMeta().isOwnedRelationships()) {
                     ((SharedEntityHandler) getOwner()).removeValueFromGraph(enitytValue);

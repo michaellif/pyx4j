@@ -311,9 +311,9 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         } else {
             Map<String, Object> value = ((SharedEntityHandler) entity).ensureValue();
             //TODO Test type safety at runtime.
-            if (!this.getObjectClass().equals(entity.getObjectClass())) {
-                // allow AbstractMember
-                value.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(entity.getObjectClass()));
+            if (!this.getObjectClass().equals(entity.getInstanceValueClass())) {
+                // allow polymorphic Member
+                value.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
             }
             if ((getOwner() != null) && getMeta().isOwnedRelationships() && (((SharedEntityHandler) entity).getOwner() != this.getOwner())) {
                 // attach incoming entity to new owner
@@ -331,6 +331,9 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     public boolean equals(Object other) {
         if (other == this) {
             return true;
+        }
+        if (isTemplateEntity) {
+            return (other != null) && this.getClass().equals(other.getClass());
         }
         Map<String, Object> thisValue = this.getValue(false);
         if ((other == null) || (thisValue == null) || (!(other instanceof IEntity))

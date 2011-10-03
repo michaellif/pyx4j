@@ -24,10 +24,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -40,8 +37,6 @@ import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -63,83 +58,56 @@ public class CollectionsTableModel {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static void insert(Connection connection, Dialect dialect, IEntity entity, MemberOperationsMeta member) {
-        @SuppressWarnings("unchecked")
         Collection<Object> dataSet = (Collection<Object>) member.getMemberValue(entity);
         if ((dataSet == null) || dataSet.isEmpty()) {
             return;
         } else {
-            insert(connection, dialect, entity.getPrimaryKey(), member, dataSet, true);
+            insert(connection, dialect, entity, member, (Collection<Object>) member.getMember(entity), null);
         }
     }
 
-    /**
-     * Convert collection to its IDs
-     */
-    @SuppressWarnings("rawtypes")
-    private static List convertICollectionKeys(MemberOperationsMeta member, Collection<Object> dataSet, boolean insertNull) {
-        List<Long> idDataSet = new ArrayList<Long>();
-        for (Object value : dataSet) {
-            @SuppressWarnings("unchecked")
-            Map<String, Object> map = (Map<String, Object>) value;
-            if (map == null) {
-                if (!insertNull) {
-                    idDataSet.add(null);
-                } else {
-                    throw new Error("Saving null item from collection " + member.getMemberName());
-                }
-            } else {
-                Key childKey = (Key) map.get(IEntity.PRIMARY_KEY);
-                if (childKey == null) {
-                    throw new Error("Saving non persisted item from collection " + member.getMemberName());
-                }
-                idDataSet.add(childKey.asLong());
-            }
-        }
-        return idDataSet;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static void insert(Connection connection, Dialect dialect, Key primaryKey, MemberOperationsMeta member, Collection<Object> dataSet,
-            boolean insertNull) {
+    private static void insert(Connection connection, Dialect dialect, IEntity entity, MemberOperationsMeta member, Collection<Object> dataSet,
+            List<Object> dataPositions) {
         PreparedStatement stmt = null;
-        Class<?> valueClass = member.getMemberMeta().getValueClass();
+
         ObjectClassType type = member.getMemberMeta().getObjectClassType();
         boolean isList = (type == ObjectClassType.EntityList);
-        if (type != ObjectClassType.PrimitiveSet) {
-            dataSet = convertICollectionKeys(member, dataSet, insertNull);
-            valueClass = Long.class;
-        }
 
-        int targetSqlType = dialect.getTargetSqlType(valueClass);
         StringBuilder sql = new StringBuilder();
         try {
+            int numberOfParams = 0;
             sql.append("INSERT INTO ").append(member.sqlName()).append(" ( ");
             sql.append("owner");
+            numberOfParams++;
 
             for (String name : member.getValueAdapter().getColumnNames("value")) {
                 sql.append(", ");
                 sql.append(name);
+                numberOfParams++;
             }
 
             if (isList) {
                 sql.append(", seq");
+                numberOfParams++;
             }
             if (dialect.isMultitenant()) {
                 sql.append(", ns");
+                numberOfParams++;
             }
             if (dialect.isSequencesBaseIdentity()) {
                 sql.append(", id");
             }
 
-            sql.append(" ) VALUES (?, ?");
+            sql.append(" ) VALUES (");
+            for (int i = 0; i < numberOfParams; i++) {
+                if (i != 0) {
+                    sql.append(", ");
+                }
+                sql.append("?");
+            }
 
-            if (isList) {
-                sql.append(", ?");
-            }
-            if (dialect.isMultitenant()) {
-                sql.append(", ?");
-            }
             if (dialect.isSequencesBaseIdentity()) {
                 sql.append(", ").append(dialect.getSequenceNextValSql(member.getSqlSequenceName()));
             }
@@ -149,28 +117,35 @@ public class CollectionsTableModel {
             stmt = connection.prepareStatement(sql.toString());
             int seq = 0;
             for (Object value : dataSet) {
-                if ((value != null) || insertNull) {
-                    int parameterIndex = 1;
-                    stmt.setLong(parameterIndex, primaryKey.asLong());
-
-                    //// parameterIndex += member.getValueAdapter().bindValue(stmt, parameterIndex, entity, member);
-                    parameterIndex++;
-                    stmt.setObject(parameterIndex, TableModel.encodeValue(valueClass, value), targetSqlType);
-
-                    parameterIndex++;
-                    if (isList) {
-                        stmt.setInt(parameterIndex, seq);
-                        parameterIndex++;
+                if ((type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
+                    IEntity childEntity = (IEntity) value;
+                    if ((childEntity.getPrimaryKey() == null) && !childEntity.isNull()) {
+                        log.error("Saving non persisted reference {}", childEntity);
+                        throw new Error("Saving non persisted reference " + member.getMemberMeta().getValueClass().getName() + " from collection "
+                                + member.getMemberMeta().getCaption() + " of " + entity.getEntityMeta().getCaption());
                     }
-                    if (dialect.isMultitenant()) {
-                        stmt.setString(parameterIndex, NamespaceManager.getNamespace());
-                        parameterIndex++;
-                    }
-                    if (EntityPersistenceServiceRDB.trace) {
-                        log.info(Trace.id() + "insert {} (" + primaryKey + ", " + value + ", " + seq + ")", member.sqlName());
-                    }
-                    stmt.executeUpdate();
                 }
+                int parameterIndex = 1;
+                stmt.setLong(parameterIndex, entity.getPrimaryKey().asLong());
+                parameterIndex++;
+
+                parameterIndex += member.getValueAdapter().bindValue(stmt, parameterIndex, value);
+
+                if (isList) {
+                    if (dataPositions != null) {
+                        seq = dataPositions.indexOf(value);
+                    }
+                    stmt.setInt(parameterIndex, seq);
+                    parameterIndex++;
+                }
+                if (dialect.isMultitenant()) {
+                    stmt.setString(parameterIndex, NamespaceManager.getNamespace());
+                    parameterIndex++;
+                }
+                if (EntityPersistenceServiceRDB.trace) {
+                    log.info(Trace.id() + "insert {} (" + entity.getPrimaryKey() + ", " + value + ", " + seq + ")", member.sqlName());
+                }
+                stmt.executeUpdate();
                 seq++;
             }
         } catch (SQLException e) {
@@ -186,28 +161,24 @@ public class CollectionsTableModel {
     public static void update(Connection connection, Dialect dialect, IEntity entity, MemberOperationsMeta member) {
         ObjectClassType type = member.getMemberMeta().getObjectClassType();
         boolean isList = (type == ObjectClassType.EntityList);
-        boolean isPrimitive = (type == ObjectClassType.PrimitiveSet);
 
-        Collection<Object> dataSet = (Collection<Object>) member.getMemberValue(entity);
+        Collection<Object> collectionMember = (Collection<Object>) member.getMember(entity);
+
+        List<Object> allData = new Vector<Object>();
+        allData.addAll(collectionMember);
 
         List<Object> insertData = new Vector<Object>();
-
-        List<Object> collectionValues = null;
-        if (dataSet != null) {
-            if (isPrimitive) {
-                insertData.addAll(dataSet);
-            } else {
-                insertData = convertICollectionKeys(member, dataSet, false);
-                collectionValues = new ArrayList<Object>();
-                collectionValues.addAll(dataSet);
-            }
-        }
+        insertData.addAll(allData);
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
         StringBuilder sql = new StringBuilder();
         try {
-            sql.append("SELECT id, value ");
+            sql.append("SELECT id");
+            for (String name : member.getValueAdapter().getColumnNames("value")) {
+                sql.append(", ");
+                sql.append(name);
+            }
             if (isList) {
                 sql.append(", seq");
             }
@@ -229,28 +200,19 @@ public class CollectionsTableModel {
                 if ((dialect.isMultitenant()) && !rs.getString("ns").equals(NamespaceManager.getNamespace())) {
                     throw new RuntimeException("namespace acess error");
                 }
-                Object value;
-                if (isPrimitive) {
-                    value = TableModel.decodeValue(rs.getObject("value"), member.getMemberMeta());
-                } else {
-                    value = TableModel.getLongValue(rs, "value");
-                }
-                int valueIdx = insertData.indexOf(value);
+                Object value = member.getValueAdapter().retrieveValue(rs, "value");
+                int valueIdx = allData.indexOf(value);
                 if (valueIdx != -1) {
-                    if (isPrimitive) {
-                        insertData.remove(value);
-                    } else {
-                        if (isList) {
-                            if (valueIdx != rs.getInt("seq")) {
-                                if (EntityPersistenceServiceRDB.trace) {
-                                    log.info(Trace.id() + "update {} (" + entity.getPrimaryKey() + ", " + value + ", " + rs.getInt("seq") + "->" + valueIdx
-                                            + ")", member.sqlName());
-                                }
-                                rs.updateInt("seq", valueIdx);
-                                rs.updateRow();
+                    insertData.remove(value);
+                    if (isList) {
+                        if (valueIdx != rs.getInt("seq")) {
+                            if (EntityPersistenceServiceRDB.trace) {
+                                log.info(Trace.id() + "update {} (" + entity.getPrimaryKey() + ", " + value + ", " + rs.getInt("seq") + "->" + valueIdx + ")",
+                                        member.sqlName());
                             }
+                            rs.updateInt("seq", valueIdx);
+                            rs.updateRow();
                         }
-                        collectionValues.set(valueIdx, null);
                     }
                 } else {
                     rs.deleteRow();
@@ -266,11 +228,7 @@ public class CollectionsTableModel {
         }
 
         if (!insertData.isEmpty()) {
-            if (isPrimitive) {
-                insert(connection, dialect, entity.getPrimaryKey(), member, insertData, true);
-            } else {
-                insert(connection, dialect, entity.getPrimaryKey(), member, collectionValues, false);
-            }
+            insert(connection, dialect, entity, member, insertData, allData);
         }
     }
 
@@ -281,7 +239,17 @@ public class CollectionsTableModel {
         boolean isList = (type == ObjectClassType.EntityList);
         StringBuilder sql = new StringBuilder();
         try {
-            sql.append("SELECT value FROM ").append(member.sqlName()).append(" WHERE owner = ?");
+            sql.append("SELECT ");
+            boolean firstColumn = true;
+            for (String name : member.getValueAdapter().getColumnNames("value")) {
+                if (firstColumn) {
+                    firstColumn = false;
+                } else {
+                    sql.append(", ");
+                }
+                sql.append(name);
+            }
+            sql.append(" FROM ").append(member.sqlName()).append(" WHERE owner = ?");
             if (dialect.isMultitenant()) {
                 sql.append(" AND ns = ?");
             }
@@ -297,7 +265,68 @@ public class CollectionsTableModel {
 
             @SuppressWarnings("unchecked")
             Collection<Object> collectionMember = (Collection<Object>) member.getMember(entity);
+            if (!collectionMember.isEmpty()) {
+                log.warn("retrieving to not empty collection {}", member.getMemberPath());
+            }
             while (rs.next()) {
+                Object value = member.getValueAdapter().retrieveValue(rs, "value");
+                collectionMember.add(value);
+            }
+
+        } catch (SQLException e) {
+            log.error("{} SQL {}", member.sqlName(), sql);
+            log.error("{} SQL select error", member.sqlName(), e);
+            throw new RuntimeException(e);
+        } finally {
+            SQLUtils.closeQuietly(rs);
+            SQLUtils.closeQuietly(stmt);
+        }
+    }
+
+    static <T extends IEntity> void retrieve(Connection connection, Dialect dialect, Map<Long, T> entities, MemberOperationsMeta member) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ObjectClassType type = member.getMemberMeta().getObjectClassType();
+        boolean isList = (type == ObjectClassType.EntityList);
+        StringBuilder sql = new StringBuilder();
+        try {
+            sql.append("SELECT owner");
+            for (String name : member.getValueAdapter().getColumnNames("value")) {
+                sql.append(", ");
+                sql.append(name);
+            }
+            sql.append(" FROM ").append(member.sqlName()).append(" WHERE ");
+            if (dialect.isMultitenant()) {
+                sql.append(" ns = ? AND ");
+            }
+            sql.append(" owner = IN (");
+            for (int i = 0; i < entities.keySet().size(); i++) {
+                if (i != 0) {
+                    sql.append(',');
+                }
+                sql.append(" ? ");
+            }
+            sql.append(')');
+            sql.append(" ORDER BY owner");
+            if (isList) {
+                sql.append(", seq");
+            }
+            stmt = connection.prepareStatement(sql.toString());
+            int parameterIndex = 1;
+            if (dialect.isMultitenant()) {
+                stmt.setString(parameterIndex, NamespaceManager.getNamespace());
+                parameterIndex++;
+            }
+            for (Long pk : entities.keySet()) {
+                stmt.setLong(parameterIndex, pk);
+            }
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                long currKey = rs.getLong("owner");
+                T entity = entities.get(currKey);
+                @SuppressWarnings("unchecked")
+                Collection<Object> collectionMember = (Collection<Object>) member.getMember(entity);
                 Object value = member.getValueAdapter().retrieveValue(rs, "value");
                 collectionMember.add(value);
             }
@@ -375,87 +404,6 @@ public class CollectionsTableModel {
             log.error("{} SQL truncate error", member.sqlName(), e);
             throw new RuntimeException(e);
         } finally {
-            SQLUtils.closeQuietly(stmt);
-        }
-    }
-
-    static <T extends IEntity> void retrieve(Connection connection, Map<Long, T> entities, MemberOperationsMeta member) {
-        ObjectClassType type = member.getMemberMeta().getObjectClassType();
-
-        List<Long> pkList = new Vector<Long>();
-        for (Long pk : entities.keySet()) {
-            pkList.add(pk);
-        }
-        Map<Long, Collection<Object>> dataSet = retrieveData(connection, pkList, member, type);
-
-        for (T entity : entities.values()) {
-            Collection<Object> entSet = dataSet.get(entity.getPrimaryKey());
-            if (type == ObjectClassType.PrimitiveSet) {
-                member.setMemberValue(entity, entSet);
-            } else {
-                @SuppressWarnings("unchecked")
-                ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
-                for (Object value : entSet) {
-                    iCollectionMember.add((IEntity) value);
-                }
-            }
-        }
-    }
-
-    private static Map<Long, Collection<Object>> retrieveData(Connection connection, List<Long> primaryKeys, MemberOperationsMeta member, ObjectClassType type) {
-        boolean isList = (type == ObjectClassType.EntityList);
-        StringBuilder queryStr = new StringBuilder();
-        queryStr.append("SELECT owner, value FROM ").append(member.sqlName()).append(" WHERE owner IN (");
-        int count = 0;
-        for (long primaryKey : primaryKeys) {
-            if (count != 0) {
-                queryStr.append(',');
-            }
-            queryStr.append(primaryKey);
-            count++;
-        }
-        queryStr.append(") ORDER BY owner ");
-        if (isList) {
-            queryStr.append(", seq");
-        }
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try {
-            stmt = connection.prepareStatement(queryStr.toString());
-            rs = stmt.executeQuery();
-
-            Map<Long, Collection<Object>> retMap = new HashMap<Long, Collection<Object>>();
-            Collection<Object> dataSet = isList ? new Vector<Object>() : new HashSet<Object>();
-            long currKey = -1, prevKey = -1;
-            while (rs.next()) {
-                currKey = rs.getLong("owner");
-                if (prevKey == -1) {
-                    prevKey = currKey;
-                }
-                if (currKey != prevKey) { // if we roll to new owner, then add dataSet to the retMap
-                    retMap.put(prevKey, dataSet);
-                    dataSet = isList ? new Vector<Object>() : new HashSet<Object>(); // create object for next owner
-                    prevKey = currKey;
-                }
-                if (type == ObjectClassType.PrimitiveSet) {
-                    dataSet.add(TableModel.decodeValue(rs.getObject("value"), member.getMemberMeta()));
-                } else {
-                    // TODO get type
-                    @SuppressWarnings("unchecked")
-                    IEntity childIEntity = EntityFactory.create((Class<IEntity>) member.getMemberMeta().getValueClass());
-                    long ck = rs.getLong("value");
-                    if (!rs.wasNull()) {
-                        childIEntity.setPrimaryKey(new Key(ck));
-                    }
-                    dataSet.add(childIEntity);
-                }
-            }
-            return retMap;
-        } catch (SQLException e) {
-            log.error("{} SQL select error", member.sqlName(), e);
-            throw new RuntimeException(e);
-        } finally {
-            SQLUtils.closeQuietly(rs);
             SQLUtils.closeQuietly(stmt);
         }
     }

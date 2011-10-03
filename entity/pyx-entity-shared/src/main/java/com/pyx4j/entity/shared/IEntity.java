@@ -55,10 +55,19 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
      */
     public boolean isEmpty();
 
+    /**
+     * @return true is only PrimaryKey and type information is present, other data was not retrieved, TODO getStringView()
+     */
     public boolean isValuesDetached();
 
+    /**
+     * Internally used by persistence layer when loading all values for entity
+     */
     public void setValuesPopulated();
 
+    /**
+     * Internally used by persistence layer when creating new Entity reference
+     */
     public void setValuesDetached();
 
     public IObject<?> getMember(String memberName);

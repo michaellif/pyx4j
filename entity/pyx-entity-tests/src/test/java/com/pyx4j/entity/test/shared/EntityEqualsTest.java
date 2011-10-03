@@ -31,6 +31,8 @@ import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
+import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
+import com.pyx4j.entity.test.shared.domain.inherit.Base2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
@@ -72,6 +74,27 @@ public class EntityEqualsTest extends InitializerTestCase {
 
         assertTrue("copied Items have same value", task1.equals(task2));
         assertEquals("copied Items have same hashCode", task1.hashCode(), task2.hashCode());
+    }
+
+    public void testTemplateEntityEqual() {
+        assertFalse("compare Prototypes", EntityFactory.getEntityPrototype(Base1Entity.class).equals(EntityFactory.getEntityPrototype(Base2Entity.class)));
+    }
+
+    public void testPolymorphicEqual() {
+        Base1Entity ent1b = EntityFactory.create(Base1Entity.class);
+        Concrete1Entity ent1 = EntityFactory.create(Concrete1Entity.class);
+        ent1.setPrimaryKey(new Key(1));
+        ent1b.set(ent1);
+
+        Base1Entity ent2b = EntityFactory.create(Base1Entity.class);
+        Concrete2Entity ent2 = EntityFactory.create(Concrete2Entity.class);
+        ent2.setPrimaryKey(new Key(1));
+        ent2b.set(ent2);
+
+        assertFalse("Items of diferent type are diferent", ent1b.equals(ent2b));
+
+        // N.B. Value comparison result is undefined in general case!
+        assertFalse("Items of diferent type are diferent", ent1b.getValue().equals(ent2b.getValue()));
     }
 
     public void testEqualsWithSet() {
@@ -186,4 +209,5 @@ public class EntityEqualsTest extends InitializerTestCase {
         ent1.refference().set(ent2);
         assertTrue("should be still Empty", ent1.isEmpty());
     }
+
 }

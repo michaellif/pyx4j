@@ -155,16 +155,16 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         Employee emp = EntityFactory.create(Employee.class);
         emp.firstName().setValue("Bob" + uniqueString());
 
-        Task task = EntityFactory.create(Task.class);
-        task.description().setValue("Do Nothing");
-        emp.tasksSorted().add(task);
+        Task task11 = EntityFactory.create(Task.class);
+        task11.description().setValue("Do Nothing");
+        emp.tasksSorted().add(task11);
 
         srv.persist(emp);
 
         Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
         Assert.assertEquals("Retr. Set size", 1, emp2.tasksSorted().size());
         Task task2 = emp2.tasksSorted().iterator().next();
-        Assert.assertEquals("Owned value Pk", task.getPrimaryKey(), task2.getPrimaryKey());
+        Assert.assertEquals("Owned value Pk", task11.getPrimaryKey(), task2.getPrimaryKey());
         Assert.assertFalse("Values retrived", task2.isValuesDetached());
 
         String description = "Work1 " + uniqueString();
@@ -175,7 +175,7 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         Employee emp3 = srv.retrieve(Employee.class, emp.getPrimaryKey());
         Assert.assertEquals("Retr. Set size", 1, emp3.tasksSorted().size());
         Task task3 = emp3.tasksSorted().iterator().next();
-        Assert.assertEquals("Owned value Pk", task.getPrimaryKey(), task3.getPrimaryKey());
+        Assert.assertEquals("Owned value Pk", task11.getPrimaryKey(), task3.getPrimaryKey());
         Assert.assertEquals("description update", description, task3.description().getValue());
 
         //--- Sort Order
@@ -197,7 +197,7 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         //--- Sort Order Additions
 
         Task task44 = emp4.tasksSorted().$();
-        String description44 = "Work2 " + uniqueString();
+        String description44 = "Work3 " + uniqueString();
         task44.description().setValue(description44);
         emp4.tasksSorted().add(task44);
 
@@ -207,6 +207,18 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Retr. Set size", 3, emp5.tasksSorted().size());
 
         Assert.assertEquals("Added as last", task44, emp5.tasksSorted().get(2));
+
+        //--- Sort Order And removal
+        emp5.tasksSorted().remove(task22);
+        emp5.tasksSorted().remove(task44);
+        emp5.tasksSorted().add(0, task44);
+
+        srvSave(emp5, testCaseMethod);
+
+        Employee emp6r = srv.retrieve(Employee.class, emp.getPrimaryKey());
+        Assert.assertEquals("Retr. Set size", 2, emp6r.tasksSorted().size());
+        Assert.assertEquals("Owned value 0", task44, emp6r.tasksSorted().get(0));
+        Assert.assertEquals("Owned value 1", task11, emp6r.tasksSorted().get(1));
 
         // Just cleanup
         srv.delete(emp3);

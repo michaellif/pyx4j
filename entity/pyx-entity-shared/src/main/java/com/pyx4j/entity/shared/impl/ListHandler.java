@@ -120,7 +120,7 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
         if (o instanceof IEntity) {
             List<?> value = getValue();
             if (value != null) {
-                return value.contains(((IEntity) o).getValue());
+                return value.contains(comparableValue((IEntity) o));
             }
         }
         return false;
@@ -147,7 +147,7 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
         if (o instanceof IEntity) {
             List<?> value = getValue();
             if (value != null) {
-                return value.indexOf(((IEntity) o).getValue());
+                return value.indexOf(comparableValue((IEntity) o));
             } else {
                 return -1;
             }

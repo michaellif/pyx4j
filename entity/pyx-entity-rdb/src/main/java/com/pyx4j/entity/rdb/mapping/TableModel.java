@@ -80,7 +80,7 @@ public class TableModel {
         this.dialect = dialect;
         this.entityMeta = entityMeta;
         if (entityMeta.getEntityClass().getAnnotation(AbstractEntity.class) != null) {
-            throw new Error("Persistance of @AbstractEntity " + entityMeta.getEntityClass().getName() + " is not permited now");
+            throw new Error("Persistance of @AbstractEntity " + entityMeta.getEntityClass().getName() + " is not permited");
         }
 
         Table tableAnnotation = entityMeta.getEntityClass().getAnnotation(Table.class);
@@ -389,75 +389,6 @@ public class TableModel {
             return new java.sql.Timestamp(c.getTimeInMillis());
         } else {
             return value;
-        }
-    }
-
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    static Object decodeValue(Object value, MemberMeta memberMeta) {
-        if (value == null) {
-            return null;
-        } else if (memberMeta.getValueClass().isEnum()) {
-            return Enum.valueOf((Class<Enum>) memberMeta.getValueClass(), (String) value);
-        } else if (java.sql.Date.class.isAssignableFrom(memberMeta.getValueClass())) {
-            return value;
-        } else if (java.sql.Time.class.isAssignableFrom(memberMeta.getValueClass())) {
-            return value;
-        } else if (java.util.Date.class.isAssignableFrom(memberMeta.getValueClass())) {
-            return new java.util.Date(((java.util.Date) value).getTime());
-        } else {
-            if (value.getClass().equals(memberMeta.getValueClass())) {
-                return value;
-            } else {
-                // This is manly used for Oracle
-                if (Long.class.equals(memberMeta.getValueClass())) {
-                    if (value instanceof Long) {
-                        return value;
-                    } else if (value instanceof Number) {
-                        return Long.valueOf(((Number) value).longValue());
-                    }
-                } else if (Integer.class.equals(memberMeta.getValueClass())) {
-                    if (value instanceof Integer) {
-                        return value;
-                    } else if (value instanceof Number) {
-                        return Integer.valueOf(((Number) value).intValue());
-                    }
-                } else if (Double.class.equals(memberMeta.getValueClass())) {
-                    if (value instanceof Double) {
-                        return value;
-                    } else if (value instanceof Number) {
-                        return Double.valueOf(((Number) value).doubleValue());
-                    }
-                } else if (Float.class.equals(memberMeta.getValueClass())) {
-                    if (value instanceof Float) {
-                        return value;
-                    } else if (value instanceof Number) {
-                        return Float.valueOf(((Number) value).floatValue());
-                    }
-                } else if (Boolean.class.equals(memberMeta.getValueClass())) {
-                    if (value instanceof Boolean) {
-                        return value;
-                    } else if (value instanceof Number) {
-                        return Boolean.valueOf(((Number) value).intValue() > 0);
-                    }
-                }
-
-                throw new Error("Type conversion " + value.getClass() + "->" + memberMeta.getValueClass() + " not implemanted");
-            }
-        }
-    }
-
-    public static Long getLongValue(ResultSet rs, String columnSqlName) throws SQLException {
-        Object value = rs.getObject(columnSqlName);
-        if (value != null) {
-            if (value instanceof Long) {
-                return (Long) value;
-            } else if (value instanceof Number) {
-                return ((Number) value).longValue();
-            } else {
-                return rs.getLong(columnSqlName);
-            }
-        } else {
-            return null;
         }
     }
 

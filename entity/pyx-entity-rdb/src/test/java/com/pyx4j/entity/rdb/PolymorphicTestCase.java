@@ -146,11 +146,11 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
     }
 
-    public void XtestListMemeberPersist() {
+    public void testListMemeberPersist() {
         testListMemeber(TestCaseMethod.Persist);
     }
 
-    public void XtestListMemeberMerge() {
+    public void testListMemeberMerge() {
         testListMemeber(TestCaseMethod.Merge);
     }
 
@@ -169,33 +169,60 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         ent2.nameB2().setValue("b2:" + uniqueString());
         ent.refferences().add(ent2);
 
-        srv.persist(ent);
+        srvSave(ent, testCaseMethod);
+        Assert.assertEquals("Proper size", 2, ent.refferences().size());
 
-        RefferenceEntity entr = srv.retrieve(RefferenceEntity.class, ent.getPrimaryKey());
+        // Save with no changes
+        srvSave(ent, testCaseMethod);
 
-        if (true) {
-            return;
-        }
+        RefferenceEntity entr1 = srv.retrieve(RefferenceEntity.class, ent.getPrimaryKey());
+        Assert.assertEquals("Proper size", 2, entr1.refferences().size());
 
-        {
-            Base1Entity ent1rb = entr.refferences().get(0);
+        Base1Entity ent1br1 = entr1.refferences().get(0);
 
-            Assert.assertEquals("Proper instance", Concrete1Entity.class, ent1rb.getInstanceValueClass());
-            Concrete1Entity ent1r = ent1rb.cast();
-            Assert.assertEquals("Proper PK value", ent1.id(), ent1r.id());
-            Assert.assertEquals("Proper value", ent1.nameC1().getValue(), ent1r.nameC1().getValue());
-            Assert.assertEquals("Proper value", ent1.nameB1().getValue(), ent1r.nameB1().getValue());
-        }
+        Assert.assertEquals("Proper instance", Concrete1Entity.class, ent1br1.getInstanceValueClass());
+        Concrete1Entity ent1r1 = ent1br1.cast();
+        Assert.assertEquals("Proper PK value", ent1.id(), ent1r1.id());
+        Assert.assertEquals("Proper value", ent1.nameC1().getValue(), ent1r1.nameC1().getValue());
+        Assert.assertEquals("Proper value", ent1.nameB1().getValue(), ent1r1.nameB1().getValue());
 
-        {
-            Base1Entity ent2rb = entr.refferences().get(1);
+        Base1Entity ent2br1 = entr1.refferences().get(1);
 
-            Assert.assertEquals("Proper instance", Concrete2Entity.class, ent2rb.getInstanceValueClass());
-            Concrete2Entity ent2r = ent2rb.cast();
+        Assert.assertEquals("Proper instance", Concrete2Entity.class, ent2br1.getInstanceValueClass());
+        Concrete2Entity ent2r1 = ent2br1.cast();
 
-            Assert.assertEquals("Proper value", ent2.nameB1().getValue(), ent2r.nameB1().getValue());
-            Assert.assertEquals("Proper value", ent2.nameB2().getValue(), ent2r.nameB2().getValue());
-            Assert.assertEquals("Proper value", ent2.nameC2().getValue(), ent2r.nameC2().getValue());
-        }
+        Assert.assertEquals("Proper value", ent2.nameB1().getValue(), ent2r1.nameB1().getValue());
+        Assert.assertEquals("Proper value", ent2.nameB2().getValue(), ent2r1.nameB2().getValue());
+        Assert.assertEquals("Proper value", ent2.nameC2().getValue(), ent2r1.nameC2().getValue());
+
+        assertFalse("Items of diferent type are diferent", ent1br1.equals(ent2br1));
+
+        // test change order
+        entr1.refferences().remove(ent1r1);
+        Assert.assertEquals("Item was removed", 1, entr1.refferences().size());
+
+        entr1.refferences().add(ent1r1);
+        srvSave(entr1, testCaseMethod);
+
+        RefferenceEntity entr2 = srv.retrieve(RefferenceEntity.class, ent.getPrimaryKey());
+        Assert.assertEquals("Proper size", 2, entr2.refferences().size());
+
+        Base1Entity ent1br2 = entr2.refferences().get(1);
+
+        Assert.assertEquals("Proper instance", Concrete1Entity.class, ent1br2.getInstanceValueClass());
+        Concrete1Entity ent1r2 = ent1br2.cast();
+        Assert.assertEquals("Proper PK value", ent1.id(), ent1r2.id());
+        Assert.assertEquals("Proper value", ent1.nameC1().getValue(), ent1r2.nameC1().getValue());
+        Assert.assertEquals("Proper value", ent1.nameB1().getValue(), ent1r2.nameB1().getValue());
+
+        Base1Entity ent2r2b = entr2.refferences().get(0);
+
+        Assert.assertEquals("Proper instance", Concrete2Entity.class, ent2r2b.getInstanceValueClass());
+        Concrete2Entity ent2r2 = ent2r2b.cast();
+
+        Assert.assertEquals("Proper value", ent2.nameB1().getValue(), ent2r2.nameB1().getValue());
+        Assert.assertEquals("Proper value", ent2.nameB2().getValue(), ent2r2.nameB2().getValue());
+        Assert.assertEquals("Proper value", ent2.nameC2().getValue(), ent2r2.nameC2().getValue());
+
     }
 }

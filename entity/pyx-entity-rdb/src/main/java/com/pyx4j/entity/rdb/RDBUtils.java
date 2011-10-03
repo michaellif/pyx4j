@@ -68,6 +68,10 @@ public class RDBUtils implements Closeable {
         return (Configuration) cfg;
     }
 
+    public Connection getConnection() {
+        return connectionProvider.getConnection(ConnectionTarget.forUpdate);
+    }
+
     @Override
     public void close() {
         connectionProvider.dispose();

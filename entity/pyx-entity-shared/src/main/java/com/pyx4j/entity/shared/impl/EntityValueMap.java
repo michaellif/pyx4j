@@ -69,7 +69,8 @@ public class EntityValueMap extends HashMap<String, Object> {
         if (pk == null) {
             return false;
         }
-        return EqualsHelper.equals(pk, ((Map<?, ?>) other).get(IEntity.PRIMARY_KEY));
+        return EqualsHelper.equals(pk, ((Map<?, ?>) other).get(IEntity.PRIMARY_KEY))
+                && EqualsHelper.classEquals(this.get(IEntity.CONCRETE_TYPE_DATA_ATTR), ((Map<?, ?>) other).get(IEntity.CONCRETE_TYPE_DATA_ATTR));
     }
 
     public boolean isNull() {

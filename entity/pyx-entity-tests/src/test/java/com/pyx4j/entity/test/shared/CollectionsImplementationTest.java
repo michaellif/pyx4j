@@ -22,11 +22,15 @@ package com.pyx4j.entity.test.shared;
 
 import java.util.Date;
 
+import junit.framework.Assert;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
+import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
 
@@ -115,5 +119,29 @@ public class CollectionsImplementationTest extends InitializerTestCase {
 
         ent2.refferences().remove(ent1);
         assertEquals("empty collection size", 0, ent2.refferences().size());
+    }
+
+    public void testPolymorphicRemoval() {
+
+        Concrete1Entity ent1 = EntityFactory.create(Concrete1Entity.class);
+        ent1.setPrimaryKey(new Key(1));
+
+        // The same ID of different type
+        Concrete2Entity ent2 = EntityFactory.create(Concrete2Entity.class);
+        ent2.setPrimaryKey(new Key(1));
+
+        RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
+        ent.refferences().add(ent1);
+        ent.refferences().add(ent2);
+        Assert.assertEquals("Item was added", 2, ent.refferences().size());
+
+        Concrete1Entity ent1x = EntityFactory.create(Concrete1Entity.class);
+        ent1x.setPrimaryKey(new Key(1));
+
+        ent.refferences().remove(ent1x);
+        Assert.assertEquals("Item was removed", 1, ent.refferences().size());
+
+        Assert.assertEquals("Proper item reamins", ent2, ent.refferences().get(0));
+
     }
 }

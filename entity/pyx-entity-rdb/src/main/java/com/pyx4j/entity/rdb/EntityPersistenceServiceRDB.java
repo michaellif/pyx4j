@@ -458,10 +458,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 Iterator<IEntity> iterator = collectionMember.iterator();
                 ICollection<IEntity, ?> baseCollectionMember = (ICollection<IEntity, ?>) member.getMember(baseEntity);
                 Iterator<IEntity> baseIterator = baseCollectionMember.iterator();
-                TableModel childTM = tableModel(connection, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getValueClass()));
                 for (; iterator.hasNext() && baseIterator.hasNext();) {
                     IEntity childEntity = iterator.next();
                     if (!childEntity.isValuesDetached()) {
+                        childEntity = childEntity.cast();
+                        TableModel childTM = tableModel(connection, EntityFactory.getEntityMeta(childEntity.getValueClass()));
                         IEntity childBaseEntity = baseIterator.next();
                         updated |= retrieveAndApplyModifications(connection, childTM, childBaseEntity, childEntity);
                     }
