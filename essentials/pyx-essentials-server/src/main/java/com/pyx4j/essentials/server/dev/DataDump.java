@@ -65,20 +65,29 @@ public class DataDump {
 
     }
 
+    private static enum DataType {
+
+        Entity,
+
+        EntityList,
+
+        SerializableObject
+    }
+
     public static void dump(String type, List<? extends IEntity> entList) {
-        dumpAny(type, entList);
+        dumpAny(type, entList, DataType.EntityList);
     }
 
     public static void dump(String type, IEntity ent) {
-        dumpAny(type, ent);
+        dumpAny(type, ent, DataType.Entity);
     }
 
     public static void dump(String type, Serializable object) {
-        dumpAny(type, object);
+        dumpAny(type, object, DataType.SerializableObject);
     }
 
     @SuppressWarnings("unchecked")
-    private static void dumpAny(String type, Object item) {
+    private static void dumpAny(String type, Object item, DataType dataType) {
         if ((item == null) || (!ServerSideConfiguration.instance().isDevelopmentBehavior())) {
             return;
         }
@@ -89,14 +98,16 @@ public class DataDump {
         String ext = ".xml";
         {
             IEntity ent = null;
-            if (item instanceof List) {
+            switch (dataType) {
+            case EntityList:
                 name.append("list");
                 if (!((List<?>) item).isEmpty()) {
                     ent = (IEntity) ((List<?>) item).get(0);
                 }
-            } else if (item instanceof IEntity) {
+                break;
+            case Entity:
                 ent = (IEntity) item;
-            } else {
+            default:
                 ext = ".log";
                 if (item != null) {
                     name.append(item.getClass().getSimpleName());
@@ -130,23 +141,25 @@ public class DataDump {
         FileWriter w = null;
         try {
             w = new FileWriter(f);
-
-            XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
-            DumpXMLEntityWriter xmlWriter = new DumpXMLEntityWriter(xml);
-            if (item instanceof List) {
-                xml.start("list");
-                for (IEntity ent : (List<IEntity>) item) {
-                    xmlWriter.write(ent);
-                }
-                xml.end("list");
-                w.write(xml.toString());
-            } else if (item instanceof IEntity) {
-                xmlWriter.write((IEntity) item);
-                w.write(xml.toString());
-            } else {
+            switch (dataType) {
+            case SerializableObject:
                 w.write(DeepReflectionToStringBuilder.toString(item, DeepToStringStyle.STYLE_NO_IDENTITY));
+                break;
+            default:
+                XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
+                DumpXMLEntityWriter xmlWriter = new DumpXMLEntityWriter(xml);
+                if (item instanceof List) {
+                    xml.start("list");
+                    for (IEntity ent : (List<IEntity>) item) {
+                        xmlWriter.write(ent);
+                    }
+                    xml.end("list");
+                    w.write(xml.toString());
+                } else if (item instanceof IEntity) {
+                    xmlWriter.write((IEntity) item);
+                    w.write(xml.toString());
+                }
             }
-
             w.flush();
             log.debug("dumped value to file {}", f.getAbsolutePath());
         } catch (IOException e) {
