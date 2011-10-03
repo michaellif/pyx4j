@@ -36,7 +36,7 @@ import com.pyx4j.widgets.client.ImageButton;
 
 public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimplePanel implements IFolderItemDecorator<E> {
 
-    private final FlowPanel rowHolder = new FlowPanel();;
+    private final FlowPanel container = new FlowPanel();;
 
     private final SimplePanel content = new SimplePanel();;
 
@@ -53,22 +53,22 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
     public BaseFolderItemDecorator(ImageResource button, ImageResource buttonHover, String title, boolean buttonVisible) {
         this.removable = (buttonVisible && button != null);
 
-        rowHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        container.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         if (button != null) {
             removeImage = new ImageButton(button, buttonHover, title);
             imageHolder = new ImageHolder(removeImage);
-            imageHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+            imageHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
 
             if (!buttonVisible) {
                 imageHolder.setVisible(false);
             }
 
-            rowHolder.add(imageHolder);
+            container.add(imageHolder);
         }
 
         content.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-        rowHolder.add(content);
+        container.add(content);
 
         if (removeImage != null) {
             removeImage.setTitle(title);
@@ -80,16 +80,8 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
         return content;
     }
 
-    protected FlowPanel getRowHolder() {
-        return rowHolder;
-    }
-
-    protected ImageHolder getImageHolder() {
-        return imageHolder;
-    }
-
-    protected Image getRemoveImage() {
-        return removeImage;
+    protected FlowPanel getContainer() {
+        return container;
     }
 
     public boolean isRemovable() {
@@ -116,7 +108,7 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
     @Override
     public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
         if (isRemovable()) {
-            return getRemoveImage().addClickHandler(handler);
+            return removeImage.addClickHandler(handler);
         }
         return null;
     }

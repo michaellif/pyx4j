@@ -40,7 +40,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         getContent().getElement().getStyle().setBorderWidth(1, Unit.PX);
         getContent().getElement().getStyle().setBorderColor("#999");
 
-        setWidget(getRowHolder());
+        setWidget(getContainer());
     }
 
     public BoxFolderItemDecorator(ImageResource removeButton, String title, boolean removable) {

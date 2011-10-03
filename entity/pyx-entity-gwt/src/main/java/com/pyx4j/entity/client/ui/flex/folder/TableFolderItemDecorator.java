@@ -62,7 +62,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
         VerticalPanel mainPanel = new VerticalPanel();
         setWidget(mainPanel);
 
-        mainPanel.add(getRowHolder());
+        mainPanel.add(getContainer());
 
         validationMessageHolder = new HTML();
         validationMessageHolder.getElement().getStyle().setColor("red");
@@ -85,7 +85,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
     @Override
     public HandlerRegistration addItemClickHandler(final ClickHandler handler) {
         //TODO add proper handler removal
-        return getRowHolder().addDomHandler(new ClickHandler() {
+        return getContainer().addDomHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {

@@ -28,8 +28,11 @@ public class DomainFactory {
         EntityI retVal = EntityFactory.create(EntityI.class);
         retVal.stringMember().setValue("== EntityI Value ==");
         retVal.integerMember().setValue(11);
-        retVal.entityIIList().add(createEntityII());
-        retVal.entityIIList().add(createEntityII());
+        retVal.entityIIList1().add(createEntityII());
+        retVal.entityIIList1().add(createEntityII());
+        retVal.entityIIList2().add(createEntityII());
+        retVal.entityIIList2().add(createEntityII());
+        retVal.entityIIList2().add(createEntityII());
         return retVal;
     }
 

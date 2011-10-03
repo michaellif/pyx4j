@@ -22,6 +22,8 @@ package com.pyx4j.tester.client;
 
 import static com.pyx4j.commons.HtmlUtils.h2;
 
+import java.util.ArrayList;
+
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
@@ -31,13 +33,17 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.images.WidgetsImages;
+import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
 import com.pyx4j.forms.client.ui.decorators.ElegantWidgetDecorator;
 import com.pyx4j.tester.client.domain.EntityI;
 import com.pyx4j.tester.client.domain.EntityII;
@@ -59,11 +65,14 @@ public class MainForm extends CEntityEditor<EntityI> {
         main.add(header);
         main.add(new ElegantWidgetDecorator(inject(proto().stringMember())));
         main.add(new ElegantWidgetDecorator(inject(proto().integerMember())));
-        main.add(inject(proto().entityIIList(), createEntityIISetFolder()));
+        main.add(new HTML("---------------- Box Folder ----------------"));
+        main.add(inject(proto().entityIIList1(), createEntityIIFolder1()));
+        main.add(new HTML("---------------- Table Folder ----------------"));
+        main.add(inject(proto().entityIIList2(), createEntityIIFolder2()));
         return main;
     }
 
-    private CEntityFolder<EntityII> createEntityIISetFolder() {
+    private CEntityFolder<EntityII> createEntityIIFolder1() {
 
         return new CEntityFolder<EntityII>(EntityII.class) {
 
@@ -100,4 +109,36 @@ public class MainForm extends CEntityEditor<EntityI> {
         };
     }
 
+    private CEntityFolder<EntityII> createEntityIIFolder2() {
+
+        return new CEntityFolder<EntityII>(EntityII.class) {
+
+            private final ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+
+            {
+                columns.add(new EntityFolderColumnDescriptor(proto().stringMember(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().integerMember(), "15em"));
+            }
+
+            @Override
+            protected IFolderDecorator<EntityII> createDecorator() {
+                return new TableFolderDecorator<EntityII>(columns, WidgetsImages.INSTANCE.add(), WidgetsImages.INSTANCE.addHover(), i18n.tr("Add EntityII"));
+
+            }
+
+            @Override
+            protected CEntityFolderItemEditor<EntityII> createItem() {
+                // TODO Auto-generated method stub
+                return new CEntityFolderRowEditor<EntityII>(EntityII.class, columns) {
+
+                    @Override
+                    protected IFolderItemDecorator<EntityII> createDecorator() {
+                        return new TableFolderItemDecorator<EntityII>(WidgetsImages.INSTANCE.del(), WidgetsImages.INSTANCE.delHover(),
+                                i18n.tr("Remove EntityII"));
+                    }
+                };
+            }
+
+        };
+    }
 }
