@@ -369,14 +369,14 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
                         }
 
                         @Override
-                        public IFolderItemDecorator<TenantInLease> createFolderItemDecorator() {
+                        public IFolderItemDecorator<TenantInLease> createDecorator() {
                             return new BoxReadOnlyFolderItemDecorator<TenantInLease>(false);
                         }
                     };
                 }
 
                 @Override
-                protected IFolderDecorator<TenantInLease> createFolderDecorator() {
+                protected IFolderDecorator<TenantInLease> createDecorator() {
                     return new BoxReadOnlyFolderDecorator<TenantInLease>();
                 }
             };
@@ -396,7 +396,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             }
 
             @Override
-            protected IFolderDecorator<TenantInLease> createFolderDecorator() {
+            protected IFolderDecorator<TenantInLease> createDecorator() {
                 return new BoxReadOnlyFolderDecorator<TenantInLease>();
             }
         };
@@ -415,7 +415,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             }
 
             @Override
-            protected IFolderDecorator<SummaryTenantFinancialDTO> createFolderDecorator() {
+            protected IFolderDecorator<SummaryTenantFinancialDTO> createDecorator() {
                 return new BoxReadOnlyFolderDecorator<SummaryTenantFinancialDTO>();
             }
         };

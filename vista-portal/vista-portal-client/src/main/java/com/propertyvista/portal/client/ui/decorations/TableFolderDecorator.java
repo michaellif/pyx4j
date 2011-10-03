@@ -49,7 +49,7 @@ public class TableFolderDecorator<E extends IEntity> extends SimplePanel impleme
     }
 
     @Override
-    public void setFolder(CEntityFolder<?> folder) {
+    public void setComponent(CEntityFolder folder) {
         setWidget(folder.getContainer());
     }
 

@@ -60,14 +60,14 @@ public abstract class PtAppEntityFolder<E extends IEntity> extends CEntityFolder
     protected CEntityFolderItemEditor<E> createItem() {
         return new CEntityFolderRowEditor<E>(clazz, columns()) {
             @Override
-            public IFolderItemDecorator<E> createFolderItemDecorator() {
+            public IFolderItemDecorator<E> createDecorator() {
                 return new PtAppTableFolderItemDecorator<E>(i18n.tr("Remove ") + getItemName(), editable);
             }
         };
     }
 
     @Override
-    protected IFolderDecorator<E> createFolderDecorator() {
+    protected IFolderDecorator<E> createDecorator() {
         return new PtAppTableFolderDecorator<E>(columns(), i18n.tr("Add ") + getItemName(), editable);
     }
 

@@ -118,8 +118,8 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
 
             @Override
-            public IFolderDecorator<AvailableLocale> createFolderDecorator() {
-                TableFolderDecorator<AvailableLocale> decor = (TableFolderDecorator<AvailableLocale>) super.createFolderDecorator();
+            public IFolderDecorator<AvailableLocale> createDecorator() {
+                TableFolderDecorator<AvailableLocale> decor = (TableFolderDecorator<AvailableLocale>) super.createDecorator();
                 decor.setShowHeader(false);
                 return decor;
             }
@@ -163,14 +163,14 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
                     }
 
                     @Override
-                    public IFolderItemDecorator<PageDescriptor> createFolderItemDecorator() {
+                    public IFolderItemDecorator<PageDescriptor> createDecorator() {
                         return new CrmTableFolderItemDecorator<PageDescriptor>(parent, !parent.isEditable());
                     }
                 };
             }
 
             @Override
-            protected IFolderDecorator<PageDescriptor> createFolderDecorator() {
+            protected IFolderDecorator<PageDescriptor> createDecorator() {
                 CrmTableFolderDecorator<PageDescriptor> decor = new CrmTableFolderDecorator<PageDescriptor>(columns(), parent);
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
@@ -214,7 +214,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
 
             @Override
-            protected IFolderDecorator<Testimonial> createFolderDecorator() {
+            protected IFolderDecorator<Testimonial> createDecorator() {
                 return new CrmBoxFolderDecorator<Testimonial>(parent);
             }
 
@@ -232,7 +232,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
                     }
 
                     @Override
-                    public IFolderItemDecorator<Testimonial> createFolderItemDecorator() {
+                    public IFolderItemDecorator<Testimonial> createDecorator() {
                         return new CrmBoxFolderItemDecorator<Testimonial>(parent);
                     }
                 };
@@ -251,7 +251,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
 
             @Override
-            protected IFolderDecorator<News> createFolderDecorator() {
+            protected IFolderDecorator<News> createDecorator() {
                 return new CrmBoxFolderDecorator<News>(parent);
             }
 
@@ -270,7 +270,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
                     }
 
                     @Override
-                    public IFolderItemDecorator<News> createFolderItemDecorator() {
+                    public IFolderItemDecorator<News> createDecorator() {
                         return new CrmBoxFolderItemDecorator<News>(parent);
                     }
                 };

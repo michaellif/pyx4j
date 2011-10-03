@@ -152,7 +152,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
 //                    private CEntityComboBox<AptUnit> combo;
 
                     @Override
-                    public IFolderItemDecorator<ServiceItem> createFolderItemDecorator() {
+                    public IFolderItemDecorator<ServiceItem> createDecorator() {
                         return new CrmTableFolderItemDecorator<ServiceItem>(parent);
                     }
 
@@ -218,7 +218,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             }
 
             @Override
-            protected IFolderDecorator<ServiceFeature> createFolderDecorator() {
+            protected IFolderDecorator<ServiceFeature> createDecorator() {
                 CrmTableFolderDecorator<ServiceFeature> decor = new CrmTableFolderDecorator<ServiceFeature>(columns(), parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
@@ -246,7 +246,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             protected CEntityFolderItemEditor<ServiceFeature> createItem() {
                 return new CEntityFolderRowEditor<ServiceFeature>(ServiceFeature.class, columns()) {
                     @Override
-                    public IFolderItemDecorator<ServiceFeature> createFolderItemDecorator() {
+                    public IFolderItemDecorator<ServiceFeature> createDecorator() {
                         return new CrmTableFolderItemDecorator<ServiceFeature>(parent);
                     }
 
@@ -274,7 +274,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             }
 
             @Override
-            protected IFolderDecorator<ServiceConcession> createFolderDecorator() {
+            protected IFolderDecorator<ServiceConcession> createDecorator() {
                 CrmTableFolderDecorator<ServiceConcession> decor = new CrmTableFolderDecorator<ServiceConcession>(columns(), parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
@@ -302,7 +302,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             protected CEntityFolderItemEditor<ServiceConcession> createItem() {
                 return new CEntityFolderRowEditor<ServiceConcession>(ServiceConcession.class, columns()) {
                     @Override
-                    public IFolderItemDecorator<ServiceConcession> createFolderItemDecorator() {
+                    public IFolderItemDecorator<ServiceConcession> createDecorator() {
                         return new CrmTableFolderItemDecorator<ServiceConcession>(parent);
                     }
 

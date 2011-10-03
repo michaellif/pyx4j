@@ -83,7 +83,7 @@ public class PaymentMethodsForm extends CEntityEditor<PaymentMethodListDTO> impl
         }
 
         @Override
-        public void setFolder(CEntityFolder<?> viewer) {
+        public void setComponent(CEntityFolder viewer) {
             content.add(viewer.getContainer());
 
             String lbl = i18n.tr("Add New Payment Method");

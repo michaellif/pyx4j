@@ -34,12 +34,12 @@ public class ChargeLineFolder extends CEntityFolder<ChargeLine> {
     }
 
     @Override
-    protected IFolderDecorator<ChargeLine> createFolderDecorator() {
+    protected IFolderDecorator<ChargeLine> createDecorator() {
         return new BoxReadOnlyFolderDecorator<ChargeLine>() {
 
             @Override
-            public void setFolder(CEntityFolder<?> w) {
-                super.setFolder(w);
+            public void setComponent(CEntityFolder w) {
+                super.setComponent(w);
                 this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
             }
         };
@@ -51,7 +51,7 @@ public class ChargeLineFolder extends CEntityFolder<ChargeLine> {
         return new CEntityFolderItemEditor<ChargeLine>(ChargeLine.class) {
 
             @Override
-            public IFolderItemDecorator<ChargeLine> createFolderItemDecorator() {
+            public IFolderItemDecorator<ChargeLine> createDecorator() {
                 return new BoxReadOnlyFolderItemDecorator<ChargeLine>(!isFirst(), "400px");
             }
 

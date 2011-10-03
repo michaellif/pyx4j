@@ -98,20 +98,27 @@ public class FinancialViewIncomeForm2 extends CEntityFolderItemEditor<IIncomeInf
                     }
 
                     @Override
-                    public void onValueChange(ValueChangeEvent event) {
-                        // TODO Auto-generated method stub
-
-                    }
-
-                    @Override
                     public HandlerRegistration addItemSwitchClickHandler(ClickHandler handler) {
                         // TODO Auto-generated method stub
                         return null;
                     }
 
                     @Override
-                    public void setEditor(CPolymorphicEntityEditor w) {
+                    public void setComponent(CPolymorphicEntityEditor<IIncomeInfo> content) {
+                        // TODO Auto-generated method stub
+
+                    }
+
+                    @Override
+                    public void onValueChange(ValueChangeEvent<IIncomeInfo> event) {
+                        // TODO Auto-generated method stub
+
+                    }
+
+                    @Override
+                    public void setEditor(CPolymorphicEntityEditor<IIncomeInfo> w) {
                         panel.setWidget(w.getContainer());
+
                     }
                 };
             }
@@ -128,7 +135,7 @@ public class FinancialViewIncomeForm2 extends CEntityFolderItemEditor<IIncomeInf
     }
 
     @Override
-    public IFolderItemDecorator<IIncomeInfo> createFolderItemDecorator() {
+    public IFolderItemDecorator<IIncomeInfo> createDecorator() {
         if (summaryViewMode) {
             return new BoxReadOnlyFolderItemDecorator<IIncomeInfo>(!isFirst());
         } else {

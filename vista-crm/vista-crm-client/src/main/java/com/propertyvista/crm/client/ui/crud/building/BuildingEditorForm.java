@@ -303,7 +303,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             }
 
             @Override
-            protected IFolderDecorator<ServiceItemType> createFolderDecorator() {
+            protected IFolderDecorator<ServiceItemType> createDecorator() {
                 CrmTableFolderDecorator<ServiceItemType> decor = new CrmTableFolderDecorator<ServiceItemType>(columns(), parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
@@ -329,7 +329,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             protected CEntityFolderItemEditor<ServiceItemType> createItem() {
                 return new CEntityFolderRowEditor<ServiceItemType>(ServiceItemType.class, columns()) {
                     @Override
-                    public IFolderItemDecorator<ServiceItemType> createFolderItemDecorator() {
+                    public IFolderItemDecorator<ServiceItemType> createDecorator() {
                         return new CrmTableFolderItemDecorator<ServiceItemType>(parent);
                     }
 
@@ -355,7 +355,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             }
 
             @Override
-            protected IFolderDecorator<OrganisationContact> createFolderDecorator() {
+            protected IFolderDecorator<OrganisationContact> createDecorator() {
                 return new CrmBoxFolderDecorator<OrganisationContact>(parent);
             }
 
@@ -364,7 +364,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                 return new CEntityFolderRowEditor<OrganisationContact>(OrganisationContact.class, columns()) {
 
                     @Override
-                    public IFolderItemDecorator<OrganisationContact> createFolderItemDecorator() {
+                    public IFolderItemDecorator<OrganisationContact> createDecorator() {
                         return new CrmBoxFolderItemDecorator<OrganisationContact>(parent);
                     }
 

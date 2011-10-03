@@ -159,7 +159,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
             private final CrmEntityFolder<EmergencyContact> parent = this;
 
             @Override
-            protected IFolderDecorator<EmergencyContact> createFolderDecorator() {
+            protected IFolderDecorator<EmergencyContact> createDecorator() {
                 return new CrmBoxFolderDecorator<EmergencyContact>(parent);
             }
 
@@ -196,7 +196,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
                     }
 
                     @Override
-                    public IFolderItemDecorator<EmergencyContact> createFolderItemDecorator() {
+                    public IFolderItemDecorator<EmergencyContact> createDecorator() {
                         return new CrmBoxFolderItemDecorator<EmergencyContact>(parent, !isFirst() && parent.isEditable());
                     }
                 };

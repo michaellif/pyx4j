@@ -102,7 +102,7 @@ public class TenantFinancialViewIncomeForm extends CEntityFolderItemEditor<Perso
     }
 
     @Override
-    public IFolderItemDecorator<PersonalIncome> createFolderItemDecorator() {
+    public IFolderItemDecorator<PersonalIncome> createDecorator() {
         return new BoxFolderItemDecorator<PersonalIncome>(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), i18n.tr("Remove income"), !readOnlyMode);
     }
 

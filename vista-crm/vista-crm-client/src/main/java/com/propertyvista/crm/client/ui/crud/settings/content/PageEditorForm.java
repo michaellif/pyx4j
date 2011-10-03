@@ -83,7 +83,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
             }
 
             @Override
-            protected IFolderDecorator<PageContent> createFolderDecorator() {
+            protected IFolderDecorator<PageContent> createDecorator() {
                 return new CrmBoxFolderDecorator<PageContent>(parent);
             }
 
@@ -113,7 +113,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
                     }
 
                     @Override
-                    public IFolderItemDecorator<PageContent> createFolderItemDecorator() {
+                    public IFolderItemDecorator<PageContent> createDecorator() {
                         return new CrmBoxFolderItemDecorator<PageContent>(parent);
                     }
                 };
@@ -164,14 +164,14 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
                     }
 
                     @Override
-                    public IFolderItemDecorator<PageDescriptor> createFolderItemDecorator() {
+                    public IFolderItemDecorator<PageDescriptor> createDecorator() {
                         return new CrmTableFolderItemDecorator<PageDescriptor>(parent, !parent.isEditable());
                     }
                 };
             }
 
             @Override
-            protected IFolderDecorator<PageDescriptor> createFolderDecorator() {
+            protected IFolderDecorator<PageDescriptor> createDecorator() {
                 CrmTableFolderDecorator<PageDescriptor> decor = new CrmTableFolderDecorator<PageDescriptor>(columns(), parent);
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override

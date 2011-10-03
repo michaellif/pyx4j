@@ -231,7 +231,7 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
                     }
 
                     @Override
-                    public IFolderItemDecorator<TenantInApplicationDTO> createFolderItemDecorator() {
+                    public IFolderItemDecorator<TenantInApplicationDTO> createDecorator() {
                         return new PtAppTableFolderItemDecorator<TenantInApplicationDTO>(parent, parent.isEditable() && !isFirst());
                     }
 

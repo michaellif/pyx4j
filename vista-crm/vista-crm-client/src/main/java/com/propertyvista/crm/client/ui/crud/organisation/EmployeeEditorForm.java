@@ -122,7 +122,7 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
             }
 
             @Override
-            protected IFolderDecorator<AssignedPortfolio> createFolderDecorator() {
+            protected IFolderDecorator<AssignedPortfolio> createDecorator() {
                 return new CrmTableFolderDecorator<AssignedPortfolio>(columns(), parent) {
                     {
                         setShowHeader(false);
@@ -145,7 +145,7 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
             }
 
             @Override
-            protected IFolderDecorator<ManagedEmployee> createFolderDecorator() {
+            protected IFolderDecorator<ManagedEmployee> createDecorator() {
                 return new CrmTableFolderDecorator<ManagedEmployee>(columns(), parent) {
                     {
                         setShowHeader(false);

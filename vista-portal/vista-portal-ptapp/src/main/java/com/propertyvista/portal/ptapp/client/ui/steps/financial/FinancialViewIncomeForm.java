@@ -101,7 +101,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItemEditor<PersonalInc
     }
 
     @Override
-    public IFolderItemDecorator<PersonalIncome> createFolderItemDecorator() {
+    public IFolderItemDecorator<PersonalIncome> createDecorator() {
         if (summaryViewMode) {
             return new BoxReadOnlyFolderItemDecorator<PersonalIncome>(!isFirst());
         } else {

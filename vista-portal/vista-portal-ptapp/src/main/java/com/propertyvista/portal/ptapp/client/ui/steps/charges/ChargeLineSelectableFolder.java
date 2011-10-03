@@ -39,12 +39,12 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
     }
 
     @Override
-    protected IFolderDecorator<ChargeLineSelectable> createFolderDecorator() {
+    protected IFolderDecorator<ChargeLineSelectable> createDecorator() {
         return new BoxReadOnlyFolderDecorator<ChargeLineSelectable>() {
 
             @Override
-            public void setFolder(CEntityFolder<?> w) {
-                super.setFolder(w);
+            public void setComponent(CEntityFolder w) {
+                super.setComponent(w);
                 this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
             }
         };
@@ -56,7 +56,7 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
         return new CEntityFolderItemEditor<ChargeLineSelectable>(ChargeLineSelectable.class) {
 
             @Override
-            public IFolderItemDecorator<ChargeLineSelectable> createFolderItemDecorator() {
+            public IFolderItemDecorator<ChargeLineSelectable> createDecorator() {
                 return new BoxReadOnlyFolderItemDecorator<ChargeLineSelectable>(!isFirst(), "400px");
             }
 

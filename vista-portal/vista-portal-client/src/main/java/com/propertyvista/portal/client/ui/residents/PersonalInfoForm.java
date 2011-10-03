@@ -106,7 +106,7 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
         return new CEntityFolder<EmergencyContact>(EmergencyContact.class) {
 
             @Override
-            protected IFolderDecorator<EmergencyContact> createFolderDecorator() {
+            protected IFolderDecorator<EmergencyContact> createDecorator() {
                 return new BoxFolderDecorator<EmergencyContact>(PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
                         i18n.tr("Add one more contact"));
             }
@@ -144,7 +144,7 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
             }
 
             @Override
-            public IFolderItemDecorator createFolderItemDecorator() {
+            public IFolderItemDecorator createDecorator() {
                 return new BoxFolderItemDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove contact"),
                         !isFirst());
             }
@@ -167,7 +167,7 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
             }
 
             @Override
-            protected IFolderDecorator<Vehicle> createFolderDecorator() {
+            protected IFolderDecorator<Vehicle> createDecorator() {
                 return new TableFolderDecorator<Vehicle>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
                         i18n.tr("Add a vehicle"));
             }
@@ -181,7 +181,7 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
                 return new CEntityFolderRowEditor<Vehicle>(Vehicle.class, columns) {
 
                     @Override
-                    public IFolderItemDecorator createFolderItemDecorator() {
+                    public IFolderItemDecorator createDecorator() {
                         return new TableFolderItemDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
                                 i18n.tr("Remove vehicle"));
                     }

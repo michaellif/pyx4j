@@ -87,8 +87,8 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
         FlowPanel main = new FlowPanel();
 
-        main.add(createHeader(proto().incomes()));
-        main.add(inject(proto().incomes2(), createIncomeFolderEditor2()));
+//        main.add(createHeader(proto().incomes()));
+//        main.add(inject(proto().incomes2(), createIncomeFolderEditor2()));
         main.add(createHeader(proto().incomes()));
         main.add(inject(proto().incomes(), createIncomeFolderEditor()));
         main.add(new HTML());
@@ -154,18 +154,17 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
         return new CEntityFolder<IIncomeInfo>(IIncomeInfo.class) {
 
             @Override
-            protected IFolderDecorator<IIncomeInfo> createFolderDecorator() {
+            protected IFolderDecorator<IIncomeInfo> createDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<IIncomeInfo>() {
                         @Override
-                        public void setFolder(CEntityFolder<?> w) {
-                            super.setFolder(w);
+                        public void setComponent(CEntityFolder w) {
+                            super.setComponent(w);
                             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                         }
                     };
                 } else {
-                    return new BoxFolderDecorator<IIncomeInfo>(PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
-                            i18n.tr("Add an income source"));
+                    return new BoxFolderDecorator<IIncomeInfo>(PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(), i18n.tr("Add an income source"));
                 }
             }
 
@@ -182,12 +181,12 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
         return new CEntityFolder<PersonalIncome>(PersonalIncome.class) {
 
             @Override
-            protected IFolderDecorator<PersonalIncome> createFolderDecorator() {
+            protected IFolderDecorator<PersonalIncome> createDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<PersonalIncome>() {
                         @Override
-                        public void setFolder(CEntityFolder<?> w) {
-                            super.setFolder(w);
+                        public void setComponent(CEntityFolder w) {
+                            super.setComponent(w);
                             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                         }
                     };
@@ -217,12 +216,12 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
             }
 
             @Override
-            protected IFolderDecorator<PersonalAsset> createFolderDecorator() {
+            protected IFolderDecorator<PersonalAsset> createDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<PersonalAsset>() {
                         @Override
-                        public void setFolder(CEntityFolder<?> w) {
-                            super.setFolder(w);
+                        public void setComponent(CEntityFolder w) {
+                            super.setComponent(w);
                             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                         }
                     };
@@ -237,7 +236,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
                 return new CEntityFolderRowEditor<PersonalAsset>(PersonalAsset.class, columns) {
 
                     @Override
-                    public IFolderItemDecorator<PersonalAsset> createFolderItemDecorator() {
+                    public IFolderItemDecorator<PersonalAsset> createDecorator() {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator<PersonalAsset>(false);
                         } else {
@@ -283,18 +282,17 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
         return new CEntityFolder<TenantGuarantor>(TenantGuarantor.class) {
 
             @Override
-            protected IFolderDecorator<TenantGuarantor> createFolderDecorator() {
+            protected IFolderDecorator<TenantGuarantor> createDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<TenantGuarantor>() {
                         @Override
-                        public void setFolder(CEntityFolder<?> w) {
-                            super.setFolder(w);
+                        public void setComponent(CEntityFolder w) {
+                            super.setComponent(w);
                             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                         }
                     };
                 } else {
-                    return new BoxFolderDecorator<TenantGuarantor>(PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
-                            i18n.tr("Add guarantor"));
+                    return new BoxFolderDecorator<TenantGuarantor>(PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(), i18n.tr("Add guarantor"));
                 }
             }
 
@@ -329,7 +327,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
                     }
 
                     @Override
-                    public IFolderItemDecorator<TenantGuarantor> createFolderItemDecorator() {
+                    public IFolderItemDecorator<TenantGuarantor> createDecorator() {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator<TenantGuarantor>(false);
                         } else {

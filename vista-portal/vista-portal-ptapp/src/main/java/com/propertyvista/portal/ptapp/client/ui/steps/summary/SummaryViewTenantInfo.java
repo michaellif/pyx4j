@@ -202,7 +202,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
             }
 
             @Override
-            protected IFolderDecorator<Vehicle> createFolderDecorator() {
+            protected IFolderDecorator<Vehicle> createDecorator() {
                 return new BoxReadOnlyFolderDecorator<Vehicle>();
             }
 
@@ -215,7 +215,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
                 return new CEntityFolderRowEditor<Vehicle>(Vehicle.class, columns) {
 
                     @Override
-                    public IFolderItemDecorator<Vehicle> createFolderItemDecorator() {
+                    public IFolderItemDecorator<Vehicle> createDecorator() {
                         return new BoxReadOnlyFolderItemDecorator<Vehicle>(false);
                     }
 
@@ -231,7 +231,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
         return new CEntityFolder<EmergencyContact>(EmergencyContact.class) {
 
             @Override
-            protected IFolderDecorator<EmergencyContact> createFolderDecorator() {
+            protected IFolderDecorator<EmergencyContact> createDecorator() {
                 return new BoxReadOnlyFolderDecorator<EmergencyContact>();
             }
 
@@ -273,7 +273,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
                     }
 
                     @Override
-                    public IFolderItemDecorator<EmergencyContact> createFolderItemDecorator() {
+                    public IFolderItemDecorator<EmergencyContact> createDecorator() {
                         return new BoxReadOnlyFolderItemDecorator<EmergencyContact>(!isFirst());
                     }
                 };

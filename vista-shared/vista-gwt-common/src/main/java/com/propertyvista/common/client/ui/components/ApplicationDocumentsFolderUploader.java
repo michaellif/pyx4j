@@ -85,7 +85,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
     }
 
     @Override
-    protected IFolderDecorator<ApplicationDocument> createFolderDecorator() {
+    protected IFolderDecorator<ApplicationDocument> createDecorator() {
         return new UploaderFolderDecorator();
     }
 
@@ -111,7 +111,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
             }
 
             @Override
-            public IFolderItemDecorator createFolderItemDecorator() {
+            public IFolderItemDecorator createDecorator() {
                 return new TableFolderItemDecorator(FormImageBundle.INSTANCE.delRow(), FormImageBundle.INSTANCE.delRowHover(), i18n.tr("Remove file"));
             }
         };
@@ -180,7 +180,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
         }
 
         @Override
-        public void setFolder(CEntityFolder<?> w) {
+        public void setComponent(CEntityFolder w) {
             appDocsListHolder.setWidget(w.getContainer());
         }
 

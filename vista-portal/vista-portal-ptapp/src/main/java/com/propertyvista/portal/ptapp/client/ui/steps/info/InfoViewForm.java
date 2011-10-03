@@ -358,7 +358,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
             }
 
             @Override
-            protected IFolderDecorator<EmergencyContact> createFolderDecorator() {
+            protected IFolderDecorator<EmergencyContact> createDecorator() {
                 return new PtAppBoxFolderDecorator<EmergencyContact>(parent);
             }
 
@@ -380,7 +380,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
                     }
 
                     @Override
-                    public IFolderItemDecorator<EmergencyContact> createFolderItemDecorator() {
+                    public IFolderItemDecorator<EmergencyContact> createDecorator() {
                         return new PtAppBoxFolderItemDecorator<EmergencyContact>(parent, !isFirst());
                     }
                 };

@@ -107,12 +107,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
     }
 
     @Override
-    public ChargeSplitListFolderDecorator getFolderDecorator() {
-        return (ChargeSplitListFolderDecorator) super.getFolderDecorator();
-    }
-
-    @Override
-    protected IFolderDecorator<TenantCharge> createFolderDecorator() {
+    protected IFolderDecorator<TenantCharge> createDecorator() {
         return new ChargeSplitListFolderDecorator();
     }
 
@@ -121,7 +116,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
         return new CEntityFolderRowEditor<TenantCharge>(TenantCharge.class, columns) {
 
             @Override
-            public IFolderItemDecorator<TenantCharge> createFolderItemDecorator() {
+            public IFolderItemDecorator<TenantCharge> createDecorator() {
                 TableFolderItemDecorator<TenantCharge> dec = new TableFolderItemDecorator<TenantCharge>(null);
                 if (!isFirst()) {
                     Widget sp = new VistaLineSeparator(400, Unit.PX, 0.5, Unit.EM, 0.5, Unit.EM);
@@ -195,7 +190,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
         }
 
         @Override
-        public void setFolder(final CEntityFolder<?> folder) {
+        public void setComponent(final CEntityFolder folder) {
             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
             if (getWidgetCount() > 1) {
                 remove(1);

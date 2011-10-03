@@ -102,7 +102,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                 }
 
                 @Override
-                protected IFolderDecorator<Employee> createFolderDecorator() {
+                protected IFolderDecorator<Employee> createDecorator() {
                     return new TableFolderDecorator<Employee>(columns, SiteImages.INSTANCE.addRow());
                 }
 
@@ -115,7 +115,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                     return new CEntityFolderRowEditor<Employee>(Employee.class, columns) {
 
                         @Override
-                        public IFolderItemDecorator createFolderItemDecorator() {
+                        public IFolderItemDecorator createDecorator() {
                             return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow());
                         }
 
@@ -130,7 +130,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
             return new CEntityFolder<Employee>(Employee.class) {
 
                 @Override
-                protected IFolderDecorator<Employee> createFolderDecorator() {
+                protected IFolderDecorator<Employee> createDecorator() {
                     return new BoxFolderDecorator<Employee>(SiteImages.INSTANCE.addRow());
 
                 }
@@ -151,7 +151,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                         }
 
                         @Override
-                        public IFolderItemDecorator createFolderItemDecorator() {
+                        public IFolderItemDecorator createDecorator() {
                             return new BoxFolderItemDecorator(SiteImages.INSTANCE.removeRow());
                         }
                     };

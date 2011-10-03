@@ -335,7 +335,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             }
 
             @Override
-            protected IFolderDecorator<PersonalIncome> createFolderDecorator() {
+            protected IFolderDecorator<PersonalIncome> createDecorator() {
                 return new CrmBoxFolderDecorator<PersonalIncome>(this);
             }
 
@@ -368,7 +368,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
                 return new CEntityFolderRowEditor<PersonalAsset>(PersonalAsset.class, columns) {
 
                     @Override
-                    public IFolderItemDecorator<PersonalAsset> createFolderItemDecorator() {
+                    public IFolderItemDecorator<PersonalAsset> createDecorator() {
                         return new CrmTableFolderItemDecorator<PersonalAsset>(parent);
                     }
 
@@ -413,7 +413,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             }
 
             @Override
-            protected IFolderDecorator<TenantGuarantor> createFolderDecorator() {
+            protected IFolderDecorator<TenantGuarantor> createDecorator() {
                 return new CrmBoxFolderDecorator<TenantGuarantor>(parent);
             }
 
@@ -443,7 +443,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
                     }
 
                     @Override
-                    public IFolderItemDecorator<TenantGuarantor> createFolderItemDecorator() {
+                    public IFolderItemDecorator<TenantGuarantor> createDecorator() {
                         return new CrmBoxFolderItemDecorator<TenantGuarantor>(parent);
                     }
 

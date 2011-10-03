@@ -60,14 +60,14 @@ public abstract class CrmEntityFolder<E extends IEntity> extends CEntityFolder<E
     protected CEntityFolderItemEditor<E> createItem() {
         return new CEntityFolderRowEditor<E>(clazz, columns()) {
             @Override
-            public IFolderItemDecorator<E> createFolderItemDecorator() {
+            public IFolderItemDecorator<E> createDecorator() {
                 return new CrmTableFolderItemDecorator<E>(i18n.tr("Remove ") + getItemName(), editable);
             }
         };
     }
 
     @Override
-    protected IFolderDecorator<E> createFolderDecorator() {
+    protected IFolderDecorator<E> createDecorator() {
         return new CrmTableFolderDecorator<E>(columns(), i18n.tr("Add ") + getItemName(), editable);
     }
 

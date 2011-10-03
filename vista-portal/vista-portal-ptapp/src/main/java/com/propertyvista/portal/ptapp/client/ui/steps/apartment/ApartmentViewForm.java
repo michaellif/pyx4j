@@ -181,7 +181,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
             }
 
             @Override
-            protected IFolderDecorator<ServiceItemType> createFolderDecorator() {
+            protected IFolderDecorator<ServiceItemType> createDecorator() {
                 PtAppTableFolderDecorator<ServiceItemType> decor = new PtAppTableFolderDecorator<ServiceItemType>(columns(), parent);
                 decor.setShowHeader(false);
                 return decor;
@@ -191,7 +191,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
             protected CEntityFolderItemEditor<ServiceItemType> createItem() {
                 return new CEntityFolderRowEditor<ServiceItemType>(ServiceItemType.class, columns()) {
                     @Override
-                    public IFolderItemDecorator<ServiceItemType> createFolderItemDecorator() {
+                    public IFolderItemDecorator<ServiceItemType> createDecorator() {
                         return new PtAppTableFolderItemDecorator<ServiceItemType>(parent);
                     }
 
@@ -221,7 +221,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
             }
 
             @Override
-            protected IFolderDecorator<ChargeItem> createFolderDecorator() {
+            protected IFolderDecorator<ChargeItem> createDecorator() {
                 PtAppTableFolderDecorator<ChargeItem> decor = new PtAppTableFolderDecorator<ChargeItem>(columns(), parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
@@ -282,7 +282,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
             }
 
             @Override
-            protected IFolderDecorator<Concession> createFolderDecorator() {
+            protected IFolderDecorator<Concession> createDecorator() {
                 PtAppTableFolderDecorator<Concession> decor = new PtAppTableFolderDecorator<Concession>(columns(), parent);
 //                decor.setShowHeader(false);
                 return decor;

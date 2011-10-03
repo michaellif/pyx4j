@@ -163,12 +163,12 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
             }
 
             @Override
-            protected IFolderDecorator<Pet> createFolderDecorator() {
+            protected IFolderDecorator<Pet> createDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<Pet>() {
                         @Override
-                        public void setFolder(CEntityFolder<?> w) {
-                            super.setFolder(w);
+                        public void setComponent(CEntityFolder w) {
+                            super.setComponent(w);
                             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                         }
                     };
@@ -192,7 +192,7 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
                 return new CEntityFolderRowEditor<Pet>(Pet.class, columns) {
 
                     @Override
-                    public IFolderItemDecorator<Pet> createFolderItemDecorator() {
+                    public IFolderItemDecorator<Pet> createDecorator() {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator<Pet>(false);
                         } else {
@@ -257,18 +257,17 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
             }
 
             @Override
-            protected IFolderDecorator<Vehicle> createFolderDecorator() {
+            protected IFolderDecorator<Vehicle> createDecorator() {
                 if (isSummaryViewMode()) {
                     return new BoxReadOnlyFolderDecorator<Vehicle>() {
                         @Override
-                        public void setFolder(CEntityFolder<?> w) {
-                            super.setFolder(w);
+                        public void setComponent(CEntityFolder w) {
+                            super.setComponent(w);
                             this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                         }
                     };
                 } else {
-                    return new TableFolderDecorator<Vehicle>(columns, PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(),
-                            i18n.tr("Add a vehicle"));
+                    return new TableFolderDecorator<Vehicle>(columns, PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(), i18n.tr("Add a vehicle"));
                 }
             }
 
@@ -281,7 +280,7 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
                 return new CEntityFolderRowEditor<Vehicle>(Vehicle.class, columns) {
 
                     @Override
-                    public IFolderItemDecorator<Vehicle> createFolderItemDecorator() {
+                    public IFolderItemDecorator<Vehicle> createDecorator() {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator<Vehicle>(false);
                         } else {

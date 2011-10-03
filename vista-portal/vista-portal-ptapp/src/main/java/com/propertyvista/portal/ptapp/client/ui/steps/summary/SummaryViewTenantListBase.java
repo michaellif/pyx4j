@@ -74,7 +74,7 @@ public abstract class SummaryViewTenantListBase<E extends IEntity> extends CEnti
     }
 
     @Override
-    public IFolderItemDecorator<E> createFolderItemDecorator() {
+    public IFolderItemDecorator<E> createDecorator() {
         return new BoxReadOnlyFolderItemDecorator<E>(false);
     }
 

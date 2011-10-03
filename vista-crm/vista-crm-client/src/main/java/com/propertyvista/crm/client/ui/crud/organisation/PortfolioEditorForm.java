@@ -68,7 +68,7 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
             }
 
             @Override
-            protected IFolderDecorator<AssignedBuilding> createFolderDecorator() {
+            protected IFolderDecorator<AssignedBuilding> createDecorator() {
                 return new CrmTableFolderDecorator<AssignedBuilding>(columns(), parent) {
                     {
                         setShowHeader(false);
