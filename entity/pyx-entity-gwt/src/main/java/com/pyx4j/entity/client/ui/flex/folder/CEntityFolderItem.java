@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
-public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContainer<E, NativeEntityPanel<E>> {
+public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContainer<E> {
 
     @Override
     public Collection<? extends CEditableComponent<?, ?>> getComponents() {

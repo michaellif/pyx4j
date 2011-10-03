@@ -23,19 +23,20 @@ package com.pyx4j.entity.client.ui.flex.folder;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.entity.client.ui.flex.IDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-public interface IFolderDecorator<E extends IEntity> extends IsWidget, ValueChangeHandler<IList<E>> {
+public interface IFolderDecorator<E extends IEntity> extends IDecorator<CEntityFolder<E>>, ValueChangeHandler<IList<E>> {
 
     public static String DEBUGID_SUFIX = "_fd_";
 
     HandlerRegistration addItemAddClickHandler(ClickHandler handler);
 
-    void setFolder(CEntityFolder<?> w);
+    @Override
+    void setComponent(CEntityFolder<E> w);
 
     public enum DecoratorsIds implements IDebugId {
         Validation, Label;

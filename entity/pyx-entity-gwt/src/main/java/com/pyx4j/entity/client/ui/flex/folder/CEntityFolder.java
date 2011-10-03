@@ -34,12 +34,12 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.ui.flex.CEntityComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityContainer;
-import com.pyx4j.entity.client.ui.flex.NativeEntityPanel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -53,7 +53,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 /**
  * This component represents list of IEntities
  */
-public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<IList<E>, NativeEntityPanel<IList<E>>> {
+public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<IList<E>> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
@@ -89,20 +89,25 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     @Override
     public void onBound(CEntityComponent<?, ?> parent) {
         super.onBound(parent);
-        setFolderDecorator(createContent());
+        initContent();
         addValidations();
     }
 
     @Override
-    public IFolderDecorator<E> createContent() {
-        return createFolderDecorator();
+    public IsWidget createContent() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     protected abstract CEntityFolderItemEditor<E> createItem();
 
-    private CEntityFolderItemEditor<E> createItemPrivate() {
+    private CEntityFolderItemEditor<E> createItemPrivate(boolean first) {
 
         CEntityFolderItemEditor<E> item = createItem();
+
+        //Call setFirst before onBound()
+        item.setFirst(first);
+        item.onBound(this);
 
         item.addValueChangeHandler(new ValueChangeHandler<E>() {
             boolean sheduled = false;
@@ -149,23 +154,17 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         return item;
     }
 
-    protected abstract IFolderDecorator<E> createFolderDecorator();
-
     public void setExternalAddItemProcessing(boolean externalAddItemProcessing) {
         this.externalAddItemProcessing = externalAddItemProcessing;
     }
 
-    public void setFolderDecorator(IFolderDecorator<E> folderDecorator) {
-        this.folderDecorator = folderDecorator;
-
-        addValueChangeHandler(folderDecorator);
-
-        asWidget().setWidget(folderDecorator);
-
-        folderDecorator.setFolder(this);
+    @Override
+    public void initContent() {
+        super.initContent();
+        addValueChangeHandler((IFolderDecorator) getDecorator());
 
         if (!externalAddItemProcessing) {
-            folderDecorator.addItemAddClickHandler(new ClickHandler() {
+            ((IFolderDecorator) getDecorator()).addItemAddClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     addItem();
@@ -174,12 +173,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         }
         //TODO use components inheritance
         if (this.getDebugId() != null) {
-            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
+            getDecorator().asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
         }
-    }
-
-    public IFolderDecorator<E> getFolderDecorator() {
-        return folderDecorator;
     }
 
     @Override
@@ -201,13 +196,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             return;
         }
 
-        final CEntityFolderItemEditor<E> comp = createItemPrivate();
+        final CEntityFolderItemEditor<E> comp = createItemPrivate(container.getWidgetCount() == 0);
         createNewEntity(newEntity, new DefaultAsyncCallback<E>() {
             @Override
             public void onSuccess(E result) {
-                comp.setFirst(container.getWidgetCount() == 0);
                 getValue().add(result);
-                comp.onBound(CEntityFolder.this);
                 comp.populate(result);
                 adoptFolderItem(comp);
                 ValueChangeEvent.fire(CEntityFolder.this, getValue());
@@ -261,10 +254,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
                     comp = oldMap.remove(item);
                     comp.setFirst(first);
                 } else {
-                    comp = createItemPrivate();
-                    //Call setFirst before onBound()
-                    comp.setFirst(first);
-                    comp.onBound(this);
+                    comp = createItemPrivate(first);
                 }
 
                 comp.populate(item);
@@ -299,11 +289,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         ValueChangeEvent.fire(this, getValue());
     }
 
+    @Override
+    protected abstract IFolderDecorator<E> createDecorator();
+
     private void adoptFolderItem(final CEntityFolderItemEditor<E> component) {
 
-        final IFolderItemDecorator<E> folderItemDecorator = component.createFolderItemDecorator();
-
-        component.setFolderItemDecorator(folderItemDecorator);
         component.addAccessAdapter(this);
         if (container.getWidgetIndex(component) == -1) {
             container.add(component);
@@ -313,16 +303,19 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         IDebugId rowDebugId = new CompositeDebugId(this.getDebugId(), "row", currentRowDebugId);
         currentRowDebugId++;
 
-        component.setDebugId(rowDebugId);
-        folderItemDecorator.asWidget().ensureDebugId(rowDebugId.debugId());
+        final IFolderItemDecorator decorator = (IFolderItemDecorator) component.getDecorator();
 
-        folderItemDecorator.addItemRemoveClickHandler(new ClickHandler() {
+        decorator.asWidget().ensureDebugId(rowDebugId.debugId());
+
+        decorator.addItemRemoveClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
-                removeItem(component, folderItemDecorator);
+                removeItem(component, decorator);
             }
         });
+
+        component.setDebugId(rowDebugId);
 
     }
 
@@ -345,10 +338,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    protected NativeEntityPanel<IList<E>> createWidget() {
-        return new NativeEntityPanel<IList<E>>();
-    }
-
     public FlowPanel getContainer() {
         return container;
     }

@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -33,13 +34,12 @@ import com.pyx4j.entity.client.ui.flex.CEntityComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityContainer;
 import com.pyx4j.entity.client.ui.flex.EntityBinder;
 import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
-import com.pyx4j.entity.client.ui.flex.NativeEntityPanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
-public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<E, NativeEntityPanel<E>> {
+public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityEditor.class);
 
@@ -113,16 +113,8 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
     @Override
     public void onBound(CEntityComponent<?, ?> parent) {
         super.onBound(parent);
+        ((SimplePanel) getContainer()).setWidget(createContent());
         initContent();
-    }
-
-    public final void initContent() {
-        attachContent();
-        addValidations();
-    }
-
-    public void attachContent() {
-        setWidget(createContent());
     }
 
     public final CEditableComponent<?, ?> inject(IObject<?> member) {
@@ -147,11 +139,6 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
     public CEditableComponent<?, ?> getRaw(IObject<?> member) {
         return binder.get(member);
-    }
-
-    @Override
-    protected NativeEntityPanel<E> createWidget() {
-        return new NativeEntityPanel<E>();
     }
 
     public void setWidget(IsWidget widget) {

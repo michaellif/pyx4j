@@ -26,17 +26,18 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.Panel;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
-public abstract class CEntityContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> extends
-        CEntityComponent<DATA_TYPE, WIDGET_TYPE> {
+public abstract class CEntityContainer<E extends IObject<?>> extends CEntityComponent<E, NativeEntityPanel<E>> {
 
     private static I18n i18n = I18nFactory.getI18n(CEntityContainer.class);
+
+    private IDecorator decorator;
 
     public abstract Collection<? extends CEditableComponent<?, ?>> getComponents();
 
@@ -65,8 +66,8 @@ public abstract class CEntityContainer<DATA_TYPE, WIDGET_TYPE extends Widget & I
             if (component.isValid()) {
                 continue;
             }
-            if (component instanceof CEntityContainer<?, ?>) {
-                validationResults.appendValidationErrors(((CEntityContainer<?, ?>) component).getValidationResults());
+            if (component instanceof CEntityContainer<?>) {
+                validationResults.appendValidationErrors(((CEntityContainer<?>) component).getValidationResults());
             } else if (component.isVisited()) {
                 validationResults.appendValidationError(i18n.tr("Field ''{0}'' is not valid. {1}", component.getTitle(), component.getValidationMessage()));
             }
@@ -99,5 +100,34 @@ public abstract class CEntityContainer<DATA_TYPE, WIDGET_TYPE extends Widget & I
     }
 
     public abstract IsWidget createContent();
+
+    protected IDecorator<?> createDecorator() {
+        return null;
+    }
+
+    public Panel getContainer() {
+        return asWidget();
+    }
+
+    @Override
+    protected NativeEntityPanel<E> createWidget() {
+        return new NativeEntityPanel<E>();
+    }
+
+    public void initContent() {
+        decorator = createDecorator();
+        if (decorator == null) {
+            asWidget().setWidget(createContent());
+        } else {
+            asWidget().setWidget(decorator);
+            decorator.setComponent(this);
+        }
+
+        addValidations();
+    }
+
+    public IDecorator<?> getDecorator() {
+        return decorator;
+    }
 
 }

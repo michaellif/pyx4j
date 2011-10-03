@@ -14,34 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jun 1, 2011
+ * Created on Oct 1, 2011
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.entity.client.ui.flex.editor;
+package com.pyx4j.entity.client.ui.flex;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.flex.CEntityContainer;
-import com.pyx4j.entity.client.ui.flex.NativeEntityPanel;
-import com.pyx4j.entity.shared.IEntity;
+@SuppressWarnings("rawtypes")
+public interface IDecorator<E extends CEntityContainer> extends IsWidget {
 
-public abstract class CEntityViewer<E extends IEntity> extends CEntityContainer<E> {
+    void setComponent(E content);
 
-    @Override
-    public void populate(E value) {
-        super.populate(value);
-        setContent(createContent(value));
-    }
-
-    @Override
-    protected NativeEntityPanel<E> createWidget() {
-        return new NativeEntityPanel<E>();
-    }
-
-    public abstract IsWidget createContent(E value);
-
-    protected void setContent(IsWidget widget) {
-        asWidget().setWidget(widget);
-    }
 }

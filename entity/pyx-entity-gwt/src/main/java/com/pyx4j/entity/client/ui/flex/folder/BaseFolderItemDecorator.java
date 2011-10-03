@@ -101,7 +101,7 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
     }
 
     @Override
-    public void setFolderItem(CEntityFolderItemEditor<E> folderItem) {
+    public void setComponent(CEntityFolderItemEditor<E> folderItem) {
         content.setWidget(folderItem.getContainer());
     }
 

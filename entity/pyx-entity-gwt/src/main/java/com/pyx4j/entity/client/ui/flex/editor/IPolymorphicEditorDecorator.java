@@ -23,18 +23,18 @@ package com.pyx4j.entity.client.ui.flex.editor;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.entity.client.ui.flex.IDecorator;
 import com.pyx4j.entity.shared.IEntity;
 
-public interface IPolymorphicEditorDecorator<E extends IEntity> extends IsWidget, ValueChangeHandler<E> {
+public interface IPolymorphicEditorDecorator<E extends IEntity> extends IDecorator<CPolymorphicEntityEditor<E>>, ValueChangeHandler<E> {
 
     public static String DEBUGID_SUFIX = "_fd_";
 
     HandlerRegistration addItemSwitchClickHandler(ClickHandler handler);
 
-    void setEditor(CPolymorphicEntityEditor<?> w);
+    void setEditor(CPolymorphicEntityEditor<E> w);
 
     public enum DecoratorsIds implements IDebugId {
         Validation, Label;

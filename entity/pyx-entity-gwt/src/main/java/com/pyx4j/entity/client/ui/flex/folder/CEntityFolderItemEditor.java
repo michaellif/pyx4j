@@ -45,12 +45,8 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
         handlerRegistrations = new ArrayList<HandlerRegistration>();
     }
 
-    public abstract IFolderItemDecorator<E> createFolderItemDecorator();
-
-    public void setFolderItemDecorator(IFolderItemDecorator<E> folderItemDecorator) {
-        asWidget().setWidget(folderItemDecorator);
-        folderItemDecorator.setFolderItem(this);
-    }
+    @Override
+    protected abstract IFolderItemDecorator<E> createDecorator();
 
     public void setFirst(boolean first) {
         this.first = first;
@@ -60,13 +56,9 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
         return first;
     }
 
+    @Override
     public SimplePanel getContainer() {
         return container;
-    }
-
-    @Override
-    public void attachContent() {
-        getContainer().setWidget(createContent());
     }
 
     @Override

@@ -25,10 +25,11 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 
-public class NativeEntityPanel<E> extends SimplePanel implements INativeEditableComponent<E> {
+public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel implements INativeEditableComponent<E> {
 
     public NativeEntityPanel() {
     }

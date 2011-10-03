@@ -35,7 +35,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.ui.flex.CEntityComponent;
-import com.pyx4j.entity.client.ui.flex.NativeEntityPanel;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -137,6 +136,7 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
         return item;
     }
 
+    @Override
     protected abstract IPolymorphicEditorDecorator<E> createDecorator();
 
     public void setDecorator(IPolymorphicEditorDecorator<E> decorator) {
@@ -223,15 +223,11 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
     }
 
     protected void repopulate(E value) {
-        System.out.println("++++++++++" + value);
-
         for (IDiscriminator<E> discriminator : discriminators) {
             if (discriminator.getType().equals(value.getObjectClass())) {
                 CEntityEditor editor = createItemPrivate(discriminator);
                 editor.onBound(this);
                 editor.populate(value);
-                System.out.println("++++++++++++++++++++++++++++++" + editor);
-
                 container.setWidget(editor);
 
                 break;
@@ -320,10 +316,6 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
     }
 
     @Override
-    protected NativeEntityPanel<E> createWidget() {
-        return new NativeEntityPanel<E>();
-    }
-
     public Panel getContainer() {
         return container;
     }

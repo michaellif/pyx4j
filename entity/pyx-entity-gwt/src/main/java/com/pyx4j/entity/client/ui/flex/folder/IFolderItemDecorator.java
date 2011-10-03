@@ -22,11 +22,11 @@ package com.pyx4j.entity.client.ui.flex.folder;
 
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.client.ui.flex.IDecorator;
 import com.pyx4j.entity.shared.IEntity;
 
-public interface IFolderItemDecorator<E extends IEntity> extends IsWidget {
+public interface IFolderItemDecorator<E extends IEntity> extends IDecorator<CEntityFolderItemEditor<E>> {
 
     HandlerRegistration addItemClickHandler(ClickHandler handler);
 
@@ -38,6 +38,7 @@ public interface IFolderItemDecorator<E extends IEntity> extends IsWidget {
 
     HandlerRegistration addRowCollapseClickHandler(ClickHandler handler);
 
-    void setFolderItem(CEntityFolderItemEditor<E> item);
+    @Override
+    void setComponent(CEntityFolderItemEditor<E> item);
 
 }
