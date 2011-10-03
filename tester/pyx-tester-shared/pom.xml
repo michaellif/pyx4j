@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.pyx4j</groupId>
+        <artifactId>pyx</artifactId>
+        <version>2.1.0-SNAPSHOT</version><!--pyx-version-->
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>pyx-tester-shared</artifactId>
+    <name>pyx-tester-shared</name>
+
+    <distributionManagement>
+        <!-- not for deployment in repository -->
+        <repository>
+            <id>pyx4j.com-no-deployment</id>
+            <url>file:///${basedir}/target/tmp</url>
+        </repository>
+        <snapshotRepository>
+            <id>pyx4j.com-no-deployment</id>
+            <url>file:///${basedir}/target/tmp</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+        	<groupId>com.pyx4j</groupId>
+        	<artifactId>pyx-security-rpc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+        	<groupId>com.pyx4j</groupId>
+        	<artifactId>pyx-rpc-shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+			<groupId>com.pyx4j</groupId>
+			<artifactId>pyx-site-shared</artifactId>
+            <version>${project.version}</version>
+		</dependency>
+
+    </dependencies>
+
+    <properties>
+        <project.jar-source-4gwt>true</project.jar-source-4gwt>
+    </properties>
+
+</project>

@@ -157,6 +157,9 @@
 
         <module>essentials/pyx-jetty-runtime</module>
 
+        <module>tester/pyx-tester-shared</module>
+        <module>tester/pyx-tester-ui</module>
+
         <module>incubator/tester/tester-client</module>
         <module>incubator/tester/tester-gae-server</module>
 
