@@ -23,8 +23,10 @@ package com.pyx4j.entity.client.ui.flex.folder;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.i18n.client.HasDirection.Direction;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.entity.client.images.EntityFolderImages;
@@ -35,6 +37,10 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
 
     private final HTML validationMessageHolder;
+
+    private final ItemActionsBar actionsPanel;
+
+    private SimplePanel contentHolder;
 
     public TableFolderItemDecorator(EntityFolderImages images) {
         this(images, null);
@@ -47,19 +53,24 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
     public TableFolderItemDecorator(EntityFolderImages images, String title, boolean removable) {
         super(images, title, removable);
 
-        VerticalPanel mainPanel = new VerticalPanel();
+        DockPanel mainPanel = new DockPanel();
         setWidget(mainPanel);
-
-        mainPanel.add(getContainer());
 
         validationMessageHolder = new HTML();
         validationMessageHolder.getElement().getStyle().setColor("red");
-        mainPanel.add(validationMessageHolder);
+        mainPanel.add(validationMessageHolder, DockPanel.SOUTH);
+
+        actionsPanel = new ItemActionsBar(true, Direction.RTL, images);
+        mainPanel.add(actionsPanel, DockPanel.EAST);
+
+        contentHolder = new SimplePanel();
+        mainPanel.add(contentHolder, DockPanel.CENTER);
+
     }
 
     @Override
     public void setComponent(final CEntityFolderItemEditor<E> folderItem) {
-        super.setComponent(folderItem);
+        contentHolder.setWidget(folderItem.getContainer());
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
@@ -73,13 +84,21 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
     @Override
     public HandlerRegistration addItemClickHandler(final ClickHandler handler) {
         //TODO add proper handler removal
-        return getContainer().addDomHandler(new ClickHandler() {
+        return contentHolder.addDomHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
                 handler.onClick(event);
             }
         }, ClickEvent.getType());
+    }
+
+    @Override
+    public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
+        if (isRemovable()) {
+            return actionsPanel.addItemRemoveClickHandler(handler);
+        }
+        return null;
     }
 
     @Override
@@ -102,4 +121,5 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
         super.onEnsureDebugId(baseID);
         validationMessageHolder.ensureDebugId(new CompositeDebugId(baseID, IFolderDecorator.DecoratorsIds.Label).debugId());
     }
+
 }

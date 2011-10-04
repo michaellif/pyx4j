@@ -25,6 +25,7 @@ import java.util.Collection;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Panel;
 
@@ -38,6 +39,8 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CEntityComp
     private static I18n i18n = I18nFactory.getI18n(CEntityContainer.class);
 
     private IDecorator decorator;
+
+    private ImageResource icon;
 
     public abstract Collection<? extends CEditableComponent<?, ?>> getComponents();
 
@@ -130,4 +133,11 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CEntityComp
         return decorator;
     }
 
+    public void setIcon(ImageResource icon) {
+        this.icon = icon;
+    }
+
+    public ImageResource getIcon() {
+        return icon;
+    }
 }

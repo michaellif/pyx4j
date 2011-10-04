@@ -20,65 +20,24 @@
  */
 package com.pyx4j.entity.client.ui.flex.folder;
 
-import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.FormNavigationDebugId;
-import com.pyx4j.forms.client.ui.decorators.ImageHolder;
-import com.pyx4j.widgets.client.ImageButton;
 
 public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimplePanel implements IFolderItemDecorator<E> {
 
-    private final FlowPanel container = new FlowPanel();;
+    private boolean removable = true;
 
-    private final SimplePanel content = new SimplePanel();;
+    private final EntityFolderImages images;
 
-    private ImageHolder imageHolder = null;
-
-    private Image removeImage = null;
-
-    private boolean removable;
-
-    public BaseFolderItemDecorator(EntityFolderImages images, String title, boolean buttonVisible) {
-        this.removable = (buttonVisible && images.del() != null);
-
-        container.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
-        if (images.del() != null) {
-            removeImage = new ImageButton(images.del(), images.delHover(), title);
-            imageHolder = new ImageHolder(removeImage);
-            imageHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-
-            if (!buttonVisible) {
-                imageHolder.setVisible(false);
-            }
-
-            container.add(imageHolder);
-        }
-
-        content.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-        container.add(content);
-
-        if (removeImage != null) {
-            removeImage.setTitle(title);
-            removeImage.getElement().getStyle().setCursor(Cursor.POINTER);
-        }
+    public BaseFolderItemDecorator(EntityFolderImages images, String removeLabel, boolean removable) {
+        this.images = images;
+        this.removable = removable;
     }
 
-    protected SimplePanel getContent() {
-        return content;
-    }
-
-    protected FlowPanel getContainer() {
-        return container;
+    public EntityFolderImages getImages() {
+        return images;
     }
 
     public boolean isRemovable() {
@@ -86,27 +45,6 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
     }
 
     public void setRemovable(boolean removable) {
-        imageHolder.setVisible(this.removable = removable);
-    }
-
-    @Override
-    public void setComponent(CEntityFolderItemEditor<E> folderItem) {
-        content.setWidget(folderItem.getContainer());
-    }
-
-    @Override
-    protected void onEnsureDebugId(String baseID) {
-        super.onEnsureDebugId(baseID);
-        if (removeImage != null) {
-            removeImage.ensureDebugId(baseID + "-" + FormNavigationDebugId.Form_Remove.debugId());
-        }
-    }
-
-    @Override
-    public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
-        if (isRemovable()) {
-            return removeImage.addClickHandler(handler);
-        }
-        return null;
+        this.removable = removable;
     }
 }

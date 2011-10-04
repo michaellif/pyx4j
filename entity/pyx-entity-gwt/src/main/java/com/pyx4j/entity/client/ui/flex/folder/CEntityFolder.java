@@ -213,7 +213,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     protected void removeItem(CEntityFolderItemEditor<E> item, IFolderItemDecorator<E> folderItemDecorator) {
         getValue().remove(item.getValue());
         abandonFolderItem(item);
-        item.removeAllHandlers();
         ValueChangeEvent.fire(CEntityFolder.this, getValue());
     }
 
@@ -283,40 +282,38 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         return true; // by default - all items are allowed!..
     }
 
-    private void abandonFolderItem(final CEntityFolderItemEditor<E> component) {
-        container.remove(component);
-        itemsMap.remove(component.getValue());
-        ValueChangeEvent.fire(this, getValue());
-    }
-
     @Override
     protected abstract IFolderDecorator<E> createDecorator();
 
-    private void adoptFolderItem(final CEntityFolderItemEditor<E> component) {
+    private void adoptFolderItem(final CEntityFolderItemEditor<E> item) {
 
-        component.addAccessAdapter(this);
-        if (container.getWidgetIndex(component) == -1) {
-            container.add(component);
+        item.addAccessAdapter(this);
+        if (container.getWidgetIndex(item) == -1) {
+            container.add(item);
         }
-        itemsMap.put(component.getValue(), component);
+        itemsMap.put(item.getValue(), item);
 
         IDebugId rowDebugId = new CompositeDebugId(this.getDebugId(), "row", currentRowDebugId);
+        item.setDebugId(rowDebugId);
         currentRowDebugId++;
 
-        final IFolderItemDecorator decorator = (IFolderItemDecorator) component.getDecorator();
-
-        decorator.asWidget().ensureDebugId(rowDebugId.debugId());
-
-        decorator.addItemRemoveClickHandler(new ClickHandler() {
+        item.addItemRemoveClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
-                removeItem(component, decorator);
+                removeItem(item, (IFolderItemDecorator) item.getDecorator());
             }
         });
 
-        component.setDebugId(rowDebugId);
+        item.onAdopt();
+        ValueChangeEvent.fire(this, getValue());
+    }
 
+    private void abandonFolderItem(final CEntityFolderItemEditor<E> item) {
+        container.remove(item);
+        itemsMap.remove(item.getValue());
+        item.onAbandon();
+        ValueChangeEvent.fire(this, getValue());
     }
 
     @Override

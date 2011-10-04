@@ -46,4 +46,21 @@ public interface EntityFolderImages extends ClientBundle {
     @Source("del_hover.png")
     ImageResource delHover();
 
+    @Source("arrow_up.png")
+    ImageResource moveUp();
+
+    @Source("arrow_up.png")
+    ImageResource moveUpHover();
+
+    @Source("arrow_down.png")
+    ImageResource moveDown();
+
+    @Source("arrow_down.png")
+    ImageResource moveDownHover();
+
+    ImageResource groupBoxOpen();
+
+    ImageResource groupBoxClose();
+
+    ImageResource warn();
 }

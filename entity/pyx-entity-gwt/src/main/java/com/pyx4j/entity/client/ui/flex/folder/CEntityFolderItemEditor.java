@@ -23,6 +23,7 @@ package com.pyx4j.entity.client.ui.flex.folder;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -75,10 +76,65 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
         return handlerRegistration;
     }
 
-    public void removeAllHandlers() {
+    public HandlerRegistration addItemClickHandler(ClickHandler handler) {
+        if (getDecorator() instanceof IFolderItemDecorator) {
+            HandlerRegistration handlerRegistration = ((IFolderItemDecorator<?>) getDecorator()).addItemClickHandler(handler);
+            handlerRegistrations.add(handlerRegistration);
+            return handlerRegistration;
+        } else {
+            return null;
+        }
+    }
+
+    public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
+        if (getDecorator() instanceof IFolderItemDecorator) {
+            HandlerRegistration handlerRegistration = ((IFolderItemDecorator<?>) getDecorator()).addItemRemoveClickHandler(handler);
+            handlerRegistrations.add(handlerRegistration);
+            return handlerRegistration;
+        } else {
+            return null;
+        }
+    }
+
+    public HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
+        if (getDecorator() instanceof IFolderItemDecorator) {
+            HandlerRegistration handlerRegistration = ((IFolderItemDecorator<?>) getDecorator()).addRowUpClickHandler(handler);
+            handlerRegistrations.add(handlerRegistration);
+            return handlerRegistration;
+        } else {
+            return null;
+        }
+    }
+
+    public HandlerRegistration addRowDownClickHandler(ClickHandler handler) {
+        if (getDecorator() instanceof IFolderItemDecorator) {
+            HandlerRegistration handlerRegistration = ((IFolderItemDecorator<?>) getDecorator()).addRowDownClickHandler(handler);
+            handlerRegistrations.add(handlerRegistration);
+            return handlerRegistration;
+        } else {
+            return null;
+        }
+    }
+
+    public HandlerRegistration addRowCollapseClickHandler(ClickHandler handler) {
+        if (getDecorator() instanceof IFolderItemDecorator) {
+            HandlerRegistration handlerRegistration = ((IFolderItemDecorator<?>) getDecorator()).addRowCollapseClickHandler(handler);
+            handlerRegistrations.add(handlerRegistration);
+            return handlerRegistration;
+        } else {
+            return null;
+        }
+    }
+
+    public void onAbandon() {
         for (HandlerRegistration handlerRegistration : handlerRegistrations) {
             handlerRegistration.removeHandler();
         }
+    }
+
+    public void onAdopt() {
+        // TODO Auto-generated method stub
+
     }
 
 }
