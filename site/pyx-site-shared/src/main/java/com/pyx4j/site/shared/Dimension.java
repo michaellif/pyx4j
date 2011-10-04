@@ -20,7 +20,11 @@
  */
 package com.pyx4j.site.shared;
 
-public class Dimension {
+import java.io.Serializable;
+
+public class Dimension implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public int width;
 
