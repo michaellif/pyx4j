@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,21 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 31, 2010
+ * Created on Oct 4, 2011
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rdb.hsql;
+package com.pyx4j.entity.test.shared.domain.inherit;
 
-import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
-import com.pyx4j.entity.test.server.PersistenceEnvironment;
-import com.pyx4j.entity.test.server.SetPersistanceTestCase;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public class SetPersistanceTest extends SetPersistanceTestCase {
+@Transient
+public interface RefferenceEntityDTO extends RefferenceEntity {
 
-    @Override
-    protected PersistenceEnvironment getPersistenceEnvironment() {
-        return PersistenceEnvironmentFactory.getHSQLPersistenceEnvironment();
-    }
+    IPrimitive<String> dtoStuff();
 
 }
