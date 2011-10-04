@@ -21,6 +21,7 @@ import java.util.Map;
 
 import javax.servlet.http.Cookie;
 
+import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
@@ -333,7 +334,7 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public static String getMediaImgUrl(long mediaId, String size) {
-        return "/vista/media/" + mediaId + "/" + size + ".png";
+        return WebApplication.get().getServletContext().getContextPath() + "/media/" + mediaId + "/" + size + ".png";
     }
 
     public static List<PromoDataModel> getPromotions() {
