@@ -19,7 +19,6 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -30,20 +29,6 @@ import com.propertyvista.domain.financial.offering.ChargeItemExtraData;
 
 @DiscriminatorValue("Pet_ChargeItemExtraData")
 public interface Pet extends ChargeItemExtraData {
-
-    public enum Type {
-
-        @Translation("Dog")
-        dog,
-
-        @Translation("Cat")
-        cat;
-
-        @Override
-        public String toString() {
-            return I18nEnum.tr(this);
-        }
-    }
 
     public enum WeightUnit {
 
@@ -58,12 +43,6 @@ public interface Pet extends ChargeItemExtraData {
             return I18nEnum.tr(this);
         }
     }
-
-    @Caption(name = "Pet type")
-    @NotNull
-    @BusinessEqualValue
-    @MemberColumn(name = "tp")
-    public IPrimitive<Type> type();
 
     @NotNull
     @BusinessEqualValue

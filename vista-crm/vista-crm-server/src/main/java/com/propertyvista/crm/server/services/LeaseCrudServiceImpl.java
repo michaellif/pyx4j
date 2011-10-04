@@ -89,7 +89,9 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             Persistence.service().merge(item);
         }
         for (ChargeItem item : dbo.serviceAgreement().featureItems()) {
-            Persistence.service().merge(item.extraData());
+            if (!item.extraData().isNull()) {
+                Persistence.service().merge(item.extraData());
+            }
         }
         Persistence.service().merge(dbo);
     }

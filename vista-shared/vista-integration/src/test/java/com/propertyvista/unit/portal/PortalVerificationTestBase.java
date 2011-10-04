@@ -383,7 +383,6 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
 //    }
 
     private void verifyPetRow(IDebugId debugID, Pet pet) {
-        assertValueOnForm(debugID, pet.type());
         assertValueOnForm(debugID, pet.name());
         assertValueOnForm(debugID, pet.color());
         assertValueOnForm(debugID, pet.breed());

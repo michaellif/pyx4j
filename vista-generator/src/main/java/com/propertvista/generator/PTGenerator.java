@@ -265,7 +265,6 @@ public class PTGenerator {
         for (int i = 0; i < maxPets; i++) {
             Pet pet = EntityFactory.create(Pet.class);
 
-            pet.type().setValue(Pet.Type.dog);
             pet.name().setValue(RandomUtil.random(DemoData.PET_NAMES));
             pet.color().setValue(RandomUtil.random(DemoData.PET_COLORS));
             pet.breed().setValue(RandomUtil.random(DemoData.PET_BREEDS));

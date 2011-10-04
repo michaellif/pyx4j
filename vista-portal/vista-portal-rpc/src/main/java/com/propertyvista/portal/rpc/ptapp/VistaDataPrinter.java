@@ -191,7 +191,6 @@ public class VistaDataPrinter {
 
         for (Pet pet : pets.list()) {
             sb.append("\n\t");
-            sb.append(pet.type().getValue()).append(" ");
             sb.append(pet.name().getStringView()).append(" ");
             sb.append(pet.color().getStringView()).append(" ");
             sb.append(pet.breed().getStringView()).append(" ");

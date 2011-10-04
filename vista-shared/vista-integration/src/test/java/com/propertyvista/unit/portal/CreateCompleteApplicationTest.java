@@ -434,7 +434,6 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
 //    }
 
     private void enterPetRow(IDebugId debugID, Pet pet) {
-        setValueOnForm(debugID, pet.type());
         setValueOnForm(debugID, pet.name());
         setValueOnForm(debugID, pet.color());
         setValueOnForm(debugID, pet.breed());

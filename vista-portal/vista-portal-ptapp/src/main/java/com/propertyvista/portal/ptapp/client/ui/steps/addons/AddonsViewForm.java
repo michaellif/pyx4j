@@ -150,7 +150,6 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
             private List<EntityFolderColumnDescriptor> columns;
             {
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().name(), "14em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().color(), "6em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().breed(), "13em"));

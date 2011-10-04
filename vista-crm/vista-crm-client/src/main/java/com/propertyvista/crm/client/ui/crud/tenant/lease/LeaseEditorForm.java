@@ -36,14 +36,10 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.Range;
 
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
@@ -53,12 +49,10 @@ import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -74,7 +68,6 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.common.client.ui.validators.OldAgeValidator;
-import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmBoxFolderDecorator;
@@ -86,7 +79,6 @@ import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
-import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.ChargeItemAdjustment;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -94,11 +86,8 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceConcession;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
-import com.propertyvista.domain.financial.offering.extradata.Pet.WeightUnit;
 import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -434,139 +423,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         };
     }
 
-    private CEntityFolder<Pet> createPetListViewer() {
-        return new CrmEntityFolder<Pet>(Pet.class, i18n.tr("Pet"), isEditable()) {
-            private final CrmEntityFolder<Pet> parent = this;
-
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().name(), "14em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().color(), "6em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().breed(), "13em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().weight(), "4em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().weightUnit(), "4em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().birthDate(), "8.2em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().chargeLine(), "7em"));
-                return columns;
-            }
-
-            @Override
-            public CEditableComponent<?, ?> create(IObject<?> member) {
-                if (member instanceof ChargeLine) {
-                    return new CEntityLabel();
-                } else {
-                    return super.create(member);
-                }
-            }
-
-            @Override
-            protected CEntityFolderItemEditor<Pet> createItem() {
-                return new CEntityFolderRowEditor<Pet>(Pet.class, columns()) {
-                    @Override
-                    public IFolderItemDecorator<Pet> createDecorator() {
-                        return new CrmTableFolderItemDecorator<Pet>(parent);
-                    }
-
-                    @Override
-                    public void addValidations() {
-//                        
-// TODO find out what to do with weight validation:                        
-//                        
-//                        EditableValueValidator<Integer> weightValidator = new EditableValueValidator<Integer>() {
-//                            @Override
-//                            public boolean isValid(CEditableComponent<Integer, ?> component, Integer value) {
-//                                return (value == null)
-//                                        || DomainUtil.getWeightKg(value, getValue().weightUnit().getValue()) <= LeaseEditorForm.this.getValue().pets()
-//                                                .maxPetWeight().getValue();
-//                            }
-//
-//                            @Override
-//                            public String getValidationMessage(CEditableComponent<Integer, ?> component, Integer value) {
-//                                return i18n.tr("Max allowed weight {0} {1} ",
-//                                        DomainUtil.getWeightKgToUnit(LeaseEditorForm.this.getValue().pets().maxPetWeight(), getValue().weightUnit()),
-//                                        getValue().weightUnit().getStringView());
-//                            }
-//                        };
-//
-//                        get(proto().weight()).addValueValidator(weightValidator);
-//                        get(proto().weightUnit()).addValueChangeHandler(new RevalidationTrigger<WeightUnit>(get(proto().weight())));
-//
-                        get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
-                    }
-
-                };
-            }
-
-            @Override
-            protected void createNewEntity(Pet newEntity, AsyncCallback<Pet> callback) {
-                newEntity.weightUnit().setValue(WeightUnit.lb);
-//              
-//TODO: find out where to get that ChargesSharedCalculation()...
-//              
-//                ChargesSharedCalculation.calculatePetCharges(PetsViewForm.this.getValue().petChargeRule(), newEntity);
-                super.createNewEntity(newEntity, callback);
-            }
-        };
-    }
-
-    private CEntityFolder<Vehicle> createVehicleListViewer() {
-        return new CrmEntityFolder<Vehicle>(Vehicle.class, i18n.tr("Vehicle"), isEditable()) {
-            private final CrmEntityFolder<Vehicle> parent = this;
-
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().plateNumber(), "8em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().year(), "5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().make(), "8em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().model(), "8em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().country(), "9em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().province(), "16em"));
-//                columns.add(new EntityFolderColumnDescriptor(proto().parkingSpot(), "13em"));
-                //  TODO : filter that parking spot on available spots only and from current building!..                  
-                return columns;
-            }
-
-            @Override
-            protected CEntityFolderItemEditor<Vehicle> createItem() {
-                return new CEntityFolderRowEditor<Vehicle>(Vehicle.class, columns()) {
-
-                    @Override
-                    public IFolderItemDecorator<Vehicle> createDecorator() {
-                        return new CrmTableFolderItemDecorator<Vehicle>(parent);
-                    }
-
-                    @Override
-                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-                        CComponent<?> comp = super.createCell(column);
-                        if (column.getObject() == proto().year() && comp instanceof CMonthYearPicker) {
-                            ((CMonthYearPicker) comp).setYearRange(new Range(1900, TimeUtils.today().getYear() + 1));
-                        }
-                        return comp;
-                    }
-
-                    @Override
-                    public void addValidations() {
-                        ProvinceContryFilters.attachFilters(get(proto().province()), get(proto().country()), new OptionsFilter<Province>() {
-                            @Override
-                            public boolean acceptOption(Province entity) {
-                                if (getValue() == null) {
-                                    return true;
-                                } else {
-                                    Country country = getValue().country();
-                                    return country.isNull() || EqualsHelper.equals(entity.country().name(), country.name());
-                                }
-                            }
-                        });
-                    }
-
-                };
-            }
-        };
-    }
-
     private CEntityFolder<ApplicationStatusDTO> createAppStatusListViewer() {
         return new CrmEntityFolder<ApplicationStatusDTO>(ApplicationStatusDTO.class, i18n.tr("Status"), false) {
 
@@ -705,7 +561,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                 public IsWidget createContent() {
                                     VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
                                     panel.add(new CrmSectionSeparator(CrmEntityFolder.i18n.tr("Pet data:")));
-                                    panel.add(inject(proto().type()), 5);
                                     panel.add(inject(proto().name()), 14);
                                     panel.add(inject(proto().color()), 6);
                                     panel.add(inject(proto().breed()), 13);
