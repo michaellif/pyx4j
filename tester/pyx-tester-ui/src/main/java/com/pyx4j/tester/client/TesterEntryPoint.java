@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -66,9 +65,6 @@ public class TesterEntryPoint implements EntryPoint {
         RootPanel.get().add(GlassPanel.instance());
         RootPanel.get().add(contentPanel);
         contentPanel.setWidth("100%");
-
-        //========== Report ==========//
-        contentPanel.add(new HTML("<b>Report Test:</b>"));
 
         MainForm mainForm = new MainForm();
         mainForm.initContent();

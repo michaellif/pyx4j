@@ -26,12 +26,12 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -45,32 +45,19 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
     private boolean showHeader = true;
 
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns) {
-        this(columns, null, null, null, false);
+        this(columns, EntityFolderImages.INSTANCE, null, false);
     }
 
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, String title) {
-        this(columns, addButton, (ImageResource) null, title);
+    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, EntityFolderImages images, String title) {
+        this(columns, images, title, true);
     }
 
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, ImageResource addButtonhover, String title) {
-        this(columns, addButton, addButtonhover, title, true);
+    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, EntityFolderImages images) {
+        this(columns, images, null, true);
     }
 
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton) {
-        this(columns, addButton, (ImageResource) null);
-    }
-
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, ImageResource addButtonhover) {
-        this(columns, addButton, addButtonhover, null, true);
-    }
-
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, String title, boolean addable) {
-        this(columns, addButton, null, title, addable);
-    }
-
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, ImageResource addButtonhover, String title,
-            boolean addable) {
-        super(addButton, addButtonhover, title, addable);
+    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, EntityFolderImages images, String title, boolean addable) {
+        super(images, title, addable);
 
         header = new HorizontalPanel();
         header.getElement().getStyle().setMarginBottom(3, Unit.PX);
@@ -114,7 +101,7 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
         add(getContainer());
 
         if (isAddable()) {
-            add(getImageHolder());
+            add(getActionsPanel());
         }
     }
 

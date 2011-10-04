@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.forms.client.ui.decorators.ImageHolder;
@@ -46,17 +47,13 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
 
     private boolean removable;
 
-    public BaseFolderItemDecorator(ImageResource button, String title, boolean buttonVisible) {
-        this(button, null, title, buttonVisible);
-    }
-
-    public BaseFolderItemDecorator(ImageResource button, ImageResource buttonHover, String title, boolean buttonVisible) {
-        this.removable = (buttonVisible && button != null);
+    public BaseFolderItemDecorator(EntityFolderImages images, String title, boolean buttonVisible) {
+        this.removable = (buttonVisible && images.del() != null);
 
         container.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-        if (button != null) {
-            removeImage = new ImageButton(button, buttonHover, title);
+        if (images.del() != null) {
+            removeImage = new ImageButton(images.del(), images.delHover(), title);
             imageHolder = new ImageHolder(removeImage);
             imageHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
 

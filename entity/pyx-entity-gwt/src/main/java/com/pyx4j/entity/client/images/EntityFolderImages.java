@@ -26,9 +26,9 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
-public interface WidgetsImages extends ClientBundle {
+public interface EntityFolderImages extends ClientBundle {
 
-    WidgetsImages INSTANCE = GWT.create(WidgetsImages.class);
+    EntityFolderImages INSTANCE = GWT.create(EntityFolderImages.class);
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("add.png")

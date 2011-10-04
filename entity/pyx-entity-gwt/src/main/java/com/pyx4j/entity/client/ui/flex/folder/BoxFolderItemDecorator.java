@@ -24,14 +24,14 @@ import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.resources.client.ImageResource;
 
+import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.shared.IEntity;
 
 public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
 
-    public BoxFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title, boolean removable) {
-        super(removeButton, removeButtonHover, title, removable);
+    public BoxFolderItemDecorator(EntityFolderImages images, String title, boolean removable) {
+        super(images, title, removable);
 
         getContent().getElement().getStyle().setMarginTop(10, Unit.PX);
         getContent().getElement().getStyle().setMarginLeft(10, Unit.PX);
@@ -43,24 +43,12 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         setWidget(getContainer());
     }
 
-    public BoxFolderItemDecorator(ImageResource removeButton, String title, boolean removable) {
-        this(removeButton, null, title, removable);
+    public BoxFolderItemDecorator(EntityFolderImages images, String title) {
+        this(images, title, true);
     }
 
-    public BoxFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title) {
-        this(removeButton, removeButtonHover, title, true);
-    }
-
-    public BoxFolderItemDecorator(ImageResource removeButton, String title) {
-        this(removeButton, null, title);
-    }
-
-    public BoxFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover) {
-        this(removeButton, removeButtonHover, null);
-    }
-
-    public BoxFolderItemDecorator(ImageResource removeButton) {
-        this(removeButton, (ImageResource) null);
+    public BoxFolderItemDecorator(EntityFolderImages images) {
+        this(images, null);
     }
 
     @Override

@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.images.WidgetsImages;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderDecorator;
@@ -47,6 +46,7 @@ import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
 import com.pyx4j.forms.client.ui.decorators.ElegantWidgetDecorator;
 import com.pyx4j.tester.client.domain.EntityI;
 import com.pyx4j.tester.client.domain.EntityII;
+import com.pyx4j.tester.client.images.Images;
 
 public class MainForm extends CEntityEditor<EntityI> {
 
@@ -78,7 +78,7 @@ public class MainForm extends CEntityEditor<EntityI> {
 
             @Override
             protected IFolderDecorator<EntityII> createDecorator() {
-                return new BoxFolderDecorator<EntityII>(WidgetsImages.INSTANCE.add(), WidgetsImages.INSTANCE.addHover(), i18n.tr("Add EntityII"));
+                return new BoxFolderDecorator<EntityII>(Images.INSTANCE, i18n.tr("Add EntityII"));
 
             }
 
@@ -100,7 +100,7 @@ public class MainForm extends CEntityEditor<EntityI> {
 
                     @Override
                     public IFolderItemDecorator<EntityII> createDecorator() {
-                        return new BoxFolderItemDecorator<EntityII>(WidgetsImages.INSTANCE.del(), WidgetsImages.INSTANCE.delHover(), i18n.tr("Remove EntityII"));
+                        return new BoxFolderItemDecorator<EntityII>(Images.INSTANCE, i18n.tr("Remove EntityII"));
                     }
 
                 };
@@ -122,7 +122,7 @@ public class MainForm extends CEntityEditor<EntityI> {
 
             @Override
             protected IFolderDecorator<EntityII> createDecorator() {
-                return new TableFolderDecorator<EntityII>(columns, WidgetsImages.INSTANCE.add(), WidgetsImages.INSTANCE.addHover(), i18n.tr("Add EntityII"));
+                return new TableFolderDecorator<EntityII>(columns, Images.INSTANCE, i18n.tr("Add EntityII"));
 
             }
 
@@ -133,8 +133,7 @@ public class MainForm extends CEntityEditor<EntityI> {
 
                     @Override
                     protected IFolderItemDecorator<EntityII> createDecorator() {
-                        return new TableFolderItemDecorator<EntityII>(WidgetsImages.INSTANCE.del(), WidgetsImages.INSTANCE.delHover(),
-                                i18n.tr("Remove EntityII"));
+                        return new TableFolderItemDecorator<EntityII>(Images.INSTANCE, i18n.tr("Remove EntityII"));
                     }
                 };
             }

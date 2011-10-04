@@ -23,11 +23,11 @@ package com.pyx4j.entity.client.ui.flex.folder;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -36,28 +36,16 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
 
     private final HTML validationMessageHolder;
 
-    public TableFolderItemDecorator(ImageResource removeButton) {
-        this(removeButton, (ImageResource) null);
+    public TableFolderItemDecorator(EntityFolderImages images) {
+        this(images, null);
     }
 
-    public TableFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover) {
-        this(removeButton, removeButtonHover, null);
+    public TableFolderItemDecorator(EntityFolderImages images, String title) {
+        this(images, title, true);
     }
 
-    public TableFolderItemDecorator(ImageResource removeButton, String title) {
-        this(removeButton, (ImageResource) null, title);
-    }
-
-    public TableFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title) {
-        this(removeButton, removeButtonHover, title, true);
-    }
-
-    public TableFolderItemDecorator(ImageResource removeButton, String title, boolean removable) {
-        this(removeButton, null, title, removable);
-    }
-
-    public TableFolderItemDecorator(ImageResource removeButton, ImageResource removeButtonHover, String title, boolean removable) {
-        super(removeButton, removeButtonHover, title, removable);
+    public TableFolderItemDecorator(EntityFolderImages images, String title, boolean removable) {
+        super(images, title, removable);
 
         VerticalPanel mainPanel = new VerticalPanel();
         setWidget(mainPanel);

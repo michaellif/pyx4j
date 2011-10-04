@@ -25,12 +25,12 @@ import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
@@ -40,7 +40,7 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
 
     private final SimplePanel container = new SimplePanel();
 
-    private FlowPanel imageHolder = null;
+    private FlowPanel actionsPanel = null;
 
     private Image addImage = null;
 
@@ -48,26 +48,26 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
 
     private boolean addable;
 
-    public BaseFolderDecorator(ImageResource addButton, String title, boolean addable) {
-        this(addButton, null, title, addable);
+    public BaseFolderDecorator(String title, boolean addable) {
+        this(EntityFolderImages.INSTANCE, title, addable);
     }
 
-    public BaseFolderDecorator(ImageResource addButton, ImageResource addButtonHover, String title, boolean addable) {
-        this.addable = addable && (addButton != null);
+    public BaseFolderDecorator(EntityFolderImages images, String title, boolean addable) {
+        this.addable = addable && (images.add() != null);
 
-        if (addButton != null) {
-            addImage = new ImageButton(addButton, addButtonHover, title);
+        if (images.add() != null) {
+            addImage = new ImageButton(images.add(), images.addHover(), title);
             addImage.getElement().getStyle().setFloat(Float.LEFT);
 
-            imageHolder = new FlowPanel();
-            imageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            imageHolder.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
-            imageHolder.add(addImage);
+            actionsPanel = new FlowPanel();
+            actionsPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            actionsPanel.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
+            actionsPanel.add(addImage);
 
             addButtonLabel = new Label(title);
             addButtonLabel.getElement().getStyle().setPaddingLeft(3, Unit.PX);
             addButtonLabel.getElement().getStyle().setFloat(Float.LEFT);
-            imageHolder.add(addButtonLabel);
+            actionsPanel.add(addButtonLabel);
         }
     }
 
@@ -75,8 +75,8 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
         return container;
     }
 
-    protected FlowPanel getImageHolder() {
-        return imageHolder;
+    protected FlowPanel getActionsPanel() {
+        return actionsPanel;
     }
 
     protected Image getAddImage() {
