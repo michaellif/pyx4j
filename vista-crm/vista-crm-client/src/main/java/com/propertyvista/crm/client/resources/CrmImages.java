@@ -17,7 +17,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
-public interface CrmImages extends ClientBundle {
+import com.pyx4j.entity.client.images.EntityFolderImages;
+
+public interface CrmImages extends ClientBundle, EntityFolderImages {
 
     CrmImages INSTANCE = GWT.create(CrmImages.class);
 
@@ -42,15 +44,19 @@ public interface CrmImages extends ClientBundle {
     @Source("search.png")
     ImageResource search();
 
+    @Override
     @Source("add.png")
     ImageResource add();
 
+    @Override
     @Source("add_hover.png")
     ImageResource addHover();
 
+    @Override
     @Source("del.png")
     ImageResource del();
 
+    @Override
     @Source("del_hover.png")
     ImageResource delHover();
 

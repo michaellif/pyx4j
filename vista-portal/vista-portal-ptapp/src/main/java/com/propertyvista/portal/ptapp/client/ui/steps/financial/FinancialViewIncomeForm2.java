@@ -139,7 +139,7 @@ public class FinancialViewIncomeForm2 extends CEntityFolderItemEditor<IIncomeInf
         if (summaryViewMode) {
             return new BoxReadOnlyFolderItemDecorator<IIncomeInfo>(!isFirst());
         } else {
-            return new BoxFolderItemDecorator<IIncomeInfo>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover());
+            return new BoxFolderItemDecorator<IIncomeInfo>(PortalImages.INSTANCE);
         }
     }
 

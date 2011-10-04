@@ -20,7 +20,9 @@ import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 import com.google.gwt.resources.client.TextResource;
 
-public interface PortalImages extends ClientBundle {
+import com.pyx4j.entity.client.images.EntityFolderImages;
+
+public interface PortalImages extends ClientBundle, EntityFolderImages {
 
     PortalImages INSTANCE = GWT.create(PortalImages.class);
 

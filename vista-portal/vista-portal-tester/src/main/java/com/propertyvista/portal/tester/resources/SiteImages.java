@@ -17,7 +17,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
-public interface SiteImages extends ClientBundle {
+import com.pyx4j.entity.client.images.EntityFolderImages;
+
+public interface SiteImages extends ClientBundle, EntityFolderImages {
 
     SiteImages INSTANCE = GWT.create(SiteImages.class);
 

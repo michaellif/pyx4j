@@ -19,22 +19,28 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
-public interface PortalImages extends ClientBundle {
+import com.pyx4j.entity.client.images.EntityFolderImages;
+
+public interface PortalImages extends ClientBundle, EntityFolderImages {
 
     PortalImages INSTANCE = GWT.create(PortalImages.class);
 
+    @Override
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("add.png")
     ImageResource add();
 
+    @Override
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("add_hover.png")
     ImageResource addHover();
 
+    @Override
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("del.png")
     ImageResource del();
 
+    @Override
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("del_hover.png")
     ImageResource delHover();

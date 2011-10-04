@@ -107,8 +107,7 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
 
             @Override
             protected IFolderDecorator<EmergencyContact> createDecorator() {
-                return new BoxFolderDecorator<EmergencyContact>(PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
-                        i18n.tr("Add one more contact"));
+                return new BoxFolderDecorator<EmergencyContact>(PortalImages.INSTANCE, i18n.tr("Add one more contact"));
             }
 
             @Override
@@ -145,8 +144,7 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
 
             @Override
             public IFolderItemDecorator createDecorator() {
-                return new BoxFolderItemDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(), i18n.tr("Remove contact"),
-                        !isFirst());
+                return new BoxFolderItemDecorator(PortalImages.INSTANCE, i18n.tr("Remove contact"), !isFirst());
             }
         };
     }
@@ -168,8 +166,7 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
 
             @Override
             protected IFolderDecorator<Vehicle> createDecorator() {
-                return new TableFolderDecorator<Vehicle>(columns, PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(),
-                        i18n.tr("Add a vehicle"));
+                return new TableFolderDecorator<Vehicle>(columns, PortalImages.INSTANCE, i18n.tr("Add a vehicle"));
             }
 
             @Override
@@ -182,8 +179,7 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
 
                     @Override
                     public IFolderItemDecorator createDecorator() {
-                        return new TableFolderItemDecorator(PortalImages.INSTANCE.delRow(), PortalImages.INSTANCE.delRowHover(),
-                                i18n.tr("Remove vehicle"));
+                        return new TableFolderItemDecorator(PortalImages.INSTANCE, i18n.tr("Remove vehicle"));
                     }
 
                     @Override

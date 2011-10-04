@@ -25,7 +25,7 @@ public class CrmBoxFolderItemDecorator<E extends IEntity> extends BoxFolderItemD
     protected static I18n i18n = I18nFactory.getI18n(CrmBoxFolderItemDecorator.class);
 
     public CrmBoxFolderItemDecorator(String title, boolean editable) {
-        super(CrmImages.INSTANCE.del(), CrmImages.INSTANCE.delHover(), title, editable);
+        super(CrmImages.INSTANCE, title, editable);
     }
 
     public CrmBoxFolderItemDecorator(CrmEntityFolder<E> parent, boolean editable) {

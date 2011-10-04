@@ -16,9 +16,10 @@ package com.propertyvista.common.client.resources;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
 
+import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ImageFactory.FormsImageBundle;
 
-public interface FormImageBundle extends FormsImageBundle {
+public interface FormImageBundle extends FormsImageBundle, EntityFolderImages {
 
     FormImageBundle INSTANCE = GWT.create(FormImageBundle.class);
 

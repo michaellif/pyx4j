@@ -112,7 +112,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
 
             @Override
             public IFolderItemDecorator createDecorator() {
-                return new TableFolderItemDecorator(FormImageBundle.INSTANCE.delRow(), FormImageBundle.INSTANCE.delRowHover(), i18n.tr("Remove file"));
+                return new TableFolderItemDecorator(FormImageBundle.INSTANCE, i18n.tr("Remove file"));
             }
         };
     }

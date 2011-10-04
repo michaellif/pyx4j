@@ -173,7 +173,7 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
                         }
                     };
                 } else {
-                    return new TableFolderDecorator<Pet>(columns, PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(), i18n.tr("Add a pet"));
+                    return new TableFolderDecorator<Pet>(columns, PortalImages.INSTANCE, i18n.tr("Add a pet"));
                 }
 
             }
@@ -196,7 +196,7 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator<Pet>(false);
                         } else {
-                            return new TableFolderItemDecorator<Pet>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover(), i18n.tr("Remove pet"));
+                            return new TableFolderItemDecorator<Pet>(PortalImages.INSTANCE, i18n.tr("Remove pet"));
                         }
                     }
 
@@ -267,7 +267,7 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
                         }
                     };
                 } else {
-                    return new TableFolderDecorator<Vehicle>(columns, PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(), i18n.tr("Add a vehicle"));
+                    return new TableFolderDecorator<Vehicle>(columns, PortalImages.INSTANCE, i18n.tr("Add a vehicle"));
                 }
             }
 
@@ -284,8 +284,7 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator<Vehicle>(false);
                         } else {
-                            return new TableFolderItemDecorator<Vehicle>(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover(),
-                                    i18n.tr("Remove vehicle"));
+                            return new TableFolderItemDecorator<Vehicle>(PortalImages.INSTANCE, i18n.tr("Remove vehicle"));
                         }
                     }
 

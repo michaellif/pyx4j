@@ -28,7 +28,7 @@ public class CrmTableFolderDecorator<E extends IEntity> extends TableFolderDecor
     protected static I18n i18n = I18nFactory.getI18n(CrmTableFolderDecorator.class);
 
     public CrmTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, String title, boolean editable) {
-        super(columns, CrmImages.INSTANCE.add(), CrmImages.INSTANCE.addHover(), title, editable);
+        super(columns, CrmImages.INSTANCE, title, editable);
     }
 
     public CrmTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, CrmEntityFolder<E> parent, boolean editable) {

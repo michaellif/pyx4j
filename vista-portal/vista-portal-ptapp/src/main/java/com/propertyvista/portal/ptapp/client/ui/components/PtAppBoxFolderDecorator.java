@@ -25,7 +25,7 @@ public class PtAppBoxFolderDecorator<E extends IEntity> extends BoxFolderDecorat
     protected static I18n i18n = I18nFactory.getI18n(PtAppBoxFolderDecorator.class);
 
     public PtAppBoxFolderDecorator(String title, boolean editable) {
-        super(PortalImages.INSTANCE.add(), PortalImages.INSTANCE.addHover(), title, editable);
+        super(PortalImages.INSTANCE, title, editable);
     }
 
     public PtAppBoxFolderDecorator(PtAppEntityFolder<E> parent, boolean editable) {

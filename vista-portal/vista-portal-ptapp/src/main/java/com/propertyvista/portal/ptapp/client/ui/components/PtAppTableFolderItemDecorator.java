@@ -25,7 +25,7 @@ public class PtAppTableFolderItemDecorator<E extends IEntity> extends TableFolde
     protected static I18n i18n = I18nFactory.getI18n(PtAppTableFolderItemDecorator.class);
 
     public PtAppTableFolderItemDecorator(String title, boolean editable) {
-        super(PortalImages.INSTANCE.del(), PortalImages.INSTANCE.delHover(), title, editable);
+        super(PortalImages.INSTANCE, title, editable);
     }
 
     public PtAppTableFolderItemDecorator(PtAppEntityFolder<E> parent, boolean editable) {
