@@ -62,7 +62,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         setWidget(mainPanel);
 
         toolbar = new BoxFolderItemToolbar(this);
-        mainPanel.add(new BoxFolderItemToolbar(this));
+        mainPanel.add(toolbar);
 
         contentHolder = new SimplePanel();
 
@@ -84,7 +84,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
     public void setExpended(boolean expended) {
         this.expended = expended;
-        contentHolder.setVisible(!expended);
+        contentHolder.setVisible(expended);
         toolbar.onExpended(expended);
     }
 

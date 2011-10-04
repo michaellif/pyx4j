@@ -25,9 +25,9 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.HasDirection.Direction;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.widgets.client.util.BrowserType;
@@ -40,7 +40,7 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
 
     private final Image collapseImage;
 
-    private final HTML caption;
+    private final Label caption;
 
     private final Image imageWarn;
 
@@ -76,11 +76,10 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
             @Override
             public void onClick(ClickEvent event) {
                 decorator.setExpended(!decorator.isExpended());
-                System.out.println("111++++++++++++++++");
             }
         }, ClickEvent.getType());
 
-        caption = new HTML("TEST22");
+        caption = new Label("");
 
         titleIcon = new Image();
         titleIcon.getElement().getStyle().setMarginTop(2, Unit.PX);
@@ -113,10 +112,7 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
 
     protected void onExpended(boolean expanded) {
         caption.setVisible(!expanded);
-        caption.getElement().getStyle().setProperty("color", "green");
-        caption.setTitle(caption.getText() + System.currentTimeMillis());
-        System.out.println("++++++++" + caption.getText() + System.currentTimeMillis());
-        collapseImage.setResource(expanded ? decorator.getImages().groupBoxOpen() : decorator.getImages().groupBoxClose());
+        collapseImage.setResource(expanded ? decorator.getImages().groupBoxClose() : decorator.getImages().groupBoxOpen());
     }
 
     protected void setTitleIcon(ImageResource icon) {
