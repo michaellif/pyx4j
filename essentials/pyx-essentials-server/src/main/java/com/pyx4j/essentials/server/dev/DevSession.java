@@ -74,6 +74,14 @@ public class DevSession {
         return session;
     }
 
+    public static DevSession getSession(boolean create) {
+        DevSession devSession = DevSession.getSession();
+        if (create && !devSession.isAlive()) {
+            devSession = DevSession.beginSession();
+        }
+        return devSession;
+    }
+
     public static DevSession beginSession() {
         DevSession session = new DevSession();
 
