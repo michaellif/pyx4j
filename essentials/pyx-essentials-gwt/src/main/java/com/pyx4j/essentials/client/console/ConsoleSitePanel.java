@@ -35,7 +35,9 @@ import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.site.client.InlineWidgetFactory;
 import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.site.client.SkinFactory;
+import com.pyx4j.site.client.themes.console.ConsolePalette;
 import com.pyx4j.site.client.themes.console.ConsoleTheme;
+import com.pyx4j.widgets.client.style.Palette;
 import com.pyx4j.widgets.client.style.Theme;
 
 public class ConsoleSitePanel extends SitePanel implements InlineWidgetFactory {
@@ -45,8 +47,13 @@ public class ConsoleSitePanel extends SitePanel implements InlineWidgetFactory {
 
         setSkinFactory(new SkinFactory() {
             @Override
-            public Theme createSkin(String skinName) {
+            public Theme createTheme(String skinName) {
                 return new ConsoleTheme();
+            }
+
+            @Override
+            public Palette createPalette(String skinName) {
+                return new ConsolePalette();
             }
         });
 

@@ -26,7 +26,8 @@ import com.google.gwt.user.client.Timer;
 import com.pyx4j.ria.client.theme.ThemeEditor;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.style.StyleManger;
-import com.pyx4j.widgets.client.style.theme.GrayTheme;
+import com.pyx4j.widgets.client.style.theme.GrayPalette;
+import com.pyx4j.widgets.client.style.theme.WindowsPalette;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 
 public class Toolbar extends com.pyx4j.ria.client.Toolbar {
@@ -46,14 +47,14 @@ public class Toolbar extends com.pyx4j.ria.client.Toolbar {
         addItem("L&F Win", new Command() {
             @Override
             public void execute() {
-                StyleManger.installTheme(new WindowsTheme());
+                StyleManger.installTheme(new WindowsTheme(), new WindowsPalette());
             }
         });
 
         addItem("L&F Gray", new Command() {
             @Override
             public void execute() {
-                StyleManger.installTheme(new GrayTheme());
+                StyleManger.installTheme(new WindowsTheme(), new GrayPalette());
             }
         });
 

@@ -78,7 +78,7 @@ public class StyleManger {
         return "http://" + alternativeHostnames[idx] + "/";
     }
 
-    public static void installTheme(Theme theme) {
+    public static void installTheme(Theme theme, Palette palette) {
         if (instance().theme != null && instance().theme.equals(theme)) {
             return;
         }
@@ -86,7 +86,7 @@ public class StyleManger {
         alternativeHostnameIdx = 0;
         StringBuilder stylesString = new StringBuilder();
         for (Style style : theme.getAllStyles()) {
-            stylesString.append(style.toString(theme));
+            stylesString.append(style.toString(theme, palette));
         }
         cleanUpInjectedStyles();
         log.debug("install style {} ", theme.getClass().getName());

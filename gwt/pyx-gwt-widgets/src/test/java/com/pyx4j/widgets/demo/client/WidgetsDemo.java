@@ -69,6 +69,7 @@ import com.pyx4j.widgets.client.photoalbum.Photo;
 import com.pyx4j.widgets.client.photoalbum.PhotoAlbum;
 import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
 import com.pyx4j.widgets.client.style.StyleManger;
+import com.pyx4j.widgets.client.style.theme.WindowsPalette;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 import com.pyx4j.widgets.demo.client.images.TestImages;
 
@@ -84,7 +85,7 @@ public class WidgetsDemo implements EntryPoint {
     @Override
     public void onModuleLoad() {
 
-        StyleManger.installTheme(new WindowsTheme());
+        StyleManger.installTheme(new WindowsTheme(), new WindowsPalette());
 
         ClientLogger.setDebugOn(true);
         ClientLogger.setTraceOn(true);

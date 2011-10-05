@@ -22,43 +22,14 @@ package com.pyx4j.ria.client.theme;
 
 import com.pyx4j.ria.client.HeaderPanel;
 import com.pyx4j.ria.client.SectionPanel;
-import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemePalette;
+import com.pyx4j.widgets.client.style.ThemeColors;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 
 public abstract class RiaTheme extends WindowsTheme {
 
-    private final float hue;
-
-    private final float saturation;
-
-    private final float brightness;
-
-    protected RiaTheme(float hue, float saturation, float brightness) {
-        this.hue = hue;
-        this.saturation = saturation;
-        this.brightness = brightness;
-        initThemeColors();
-    }
-
-    @Override
-    protected void initThemeColors() {
-        putThemeColor(ThemePalette.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.02));
-        putThemeColor(ThemePalette.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.12));
-        putThemeColor(ThemePalette.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.16));
-        putThemeColor(ThemePalette.OBJECT_TONE4, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.2));
-        putThemeColor(ThemePalette.OBJECT_TONE5, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.99));
-        putThemeColor(ThemePalette.BORDER, 0x666666);
-        putThemeColor(ThemePalette.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
-        putThemeColor(ThemePalette.SELECTION_TEXT, 0xffffff);
-        putThemeColor(ThemePalette.TEXT, 0x000000);
-        putThemeColor(ThemePalette.TEXT_BACKGROUND, 0xffffff);
-        putThemeColor(ThemePalette.DISABLED_TEXT_BACKGROUND, 0xfafafa);
-        putThemeColor(ThemePalette.MANDATORY_TEXT_BACKGROUND, 0xfcba84);
-        putThemeColor(ThemePalette.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
-        putThemeColor(ThemePalette.SEPARATOR, 0xeeeeee);
+    protected RiaTheme() {
     }
 
     @Override
@@ -89,8 +60,8 @@ public abstract class RiaTheme extends WindowsTheme {
     protected void initBodyStyles() {
         Style style = new Style("body");
         style.addProperty("font-size", "0.9em");
-        style.addProperty("background-color", ThemePalette.OBJECT_TONE2);
-        style.addProperty("color", ThemePalette.TEXT);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE2);
+        style.addProperty("color", ThemeColors.TEXT);
         addStyle(style);
     }
 
@@ -99,13 +70,13 @@ public abstract class RiaTheme extends WindowsTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SectionPanel.StyleSuffix.Root));
-        style.addProperty("border", "1px solid {}", ThemePalette.BORDER);
+        style.addProperty("border", "1px solid {}", ThemeColors.BORDER);
         style.addProperty("margin", "0px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SectionPanel.StyleSuffix.Content));
-        style.addProperty("border", "2px solid {}", ThemePalette.SELECTION);
-        style.addProperty("border-top", "4px solid {}", ThemePalette.SELECTION);
+        style.addProperty("border", "2px solid {}", ThemeColors.SELECTION);
+        style.addProperty("border-top", "4px solid {}", ThemeColors.SELECTION);
         style.addProperty("background-color", "white");
         addStyle(style);
 
@@ -113,7 +84,7 @@ public abstract class RiaTheme extends WindowsTheme {
 
     private void initHeaderPanelStyles(String prefix) {
         Style style = new Style(Selector.valueOf(prefix));
-        style.addGradientBackground(ThemePalette.OBJECT_TONE5);
+        style.addGradientBackground(ThemeColors.OBJECT_TONE5);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, HeaderPanel.StyleSuffix.Label));

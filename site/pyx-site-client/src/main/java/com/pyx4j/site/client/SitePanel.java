@@ -164,7 +164,7 @@ public abstract class SitePanel extends SimplePanel {
 
         log.info("Show page " + page.uri());
 
-        StyleManger.installTheme(skinFactory.createSkin(site.skinType()));
+        StyleManger.installTheme(skinFactory.createTheme(site.skinType()), skinFactory.createPalette(site.skinType()));
 
         final String key = page.uri() + "$" + page.discriminator();
         if (cachedPanels.containsKey(key)) {

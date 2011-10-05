@@ -42,8 +42,7 @@ import com.pyx4j.unit.runner.ServerTestRunner;
 import com.pyx4j.unit.shared.UnitDebugId;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 import com.pyx4j.widgets.client.style.StyleManger;
-import com.pyx4j.widgets.client.style.Theme;
-import com.pyx4j.widgets.client.style.ThemePalette;
+import com.pyx4j.widgets.client.style.theme.WindowsPalette;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 
 public class TesterClientEntryPoint implements EntryPoint {
@@ -55,9 +54,7 @@ public class TesterClientEntryPoint implements EntryPoint {
 
         ClientEntityFactory.ensureIEntityImplementations();
         UnrecoverableErrorHandlerDialog.register();
-        Theme theme = new WindowsTheme();
-        theme.putThemeColor(ThemePalette.OBJECT_TONE1, 0xFFFFFF);
-        StyleManger.installTheme(theme);
+        StyleManger.installTheme(new WindowsTheme(), new WindowsPalette());
 
         ClientLogger.addAppender(new RPCAppender());
         ClientLogger.setDebugOn(true);

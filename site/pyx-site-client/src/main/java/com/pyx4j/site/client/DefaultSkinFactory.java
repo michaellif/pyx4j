@@ -20,14 +20,16 @@
  */
 package com.pyx4j.site.client;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.pyx4j.site.client.themes.business.BusinessPalette;
 import com.pyx4j.site.client.themes.business.BusinessTheme;
+import com.pyx4j.site.client.themes.console.ConsolePalette;
 import com.pyx4j.site.client.themes.console.ConsoleTheme;
+import com.pyx4j.site.client.themes.dark.DarkPalette;
 import com.pyx4j.site.client.themes.dark.DarkTheme;
+import com.pyx4j.site.client.themes.light.LightPalette;
 import com.pyx4j.site.client.themes.light.LightTheme;
 import com.pyx4j.site.shared.domain.DefaultSkins;
+import com.pyx4j.widgets.client.style.Palette;
 import com.pyx4j.widgets.client.style.Theme;
 
 /**
@@ -37,34 +39,34 @@ import com.pyx4j.widgets.client.style.Theme;
 @Deprecated
 public class DefaultSkinFactory implements SkinFactory {
 
-    private final Map<String, Theme> themes = new HashMap<String, Theme>();
-
     public DefaultSkinFactory() {
 
     }
 
     @Override
-    public Theme createSkin(String skinName) {
+    public Theme createTheme(String skinName) {
         if (DefaultSkins.light.name().equals(skinName)) {
-            if (!themes.containsKey(skinName)) {
-                themes.put(skinName, new LightTheme());
-            }
-            return themes.get(skinName);
+            return new LightTheme();
         } else if (DefaultSkins.dark.name().equals(skinName)) {
-            if (!themes.containsKey(skinName)) {
-                themes.put(skinName, new DarkTheme());
-            }
-            return themes.get(skinName);
+            return new DarkTheme();
         } else if (DefaultSkins.business.name().equals(skinName)) {
-            if (!themes.containsKey(skinName)) {
-                themes.put(skinName, new BusinessTheme());
-            }
-            return themes.get(skinName);
+            return new BusinessTheme();
         } else if (DefaultSkins.console.name().equals(skinName)) {
-            if (!themes.containsKey(skinName)) {
-                themes.put(skinName, new ConsoleTheme());
-            }
-            return themes.get(skinName);
+            return new ConsoleTheme();
+        }
+        return null;
+    }
+
+    @Override
+    public Palette createPalette(String skinName) {
+        if (DefaultSkins.light.name().equals(skinName)) {
+            return new LightPalette();
+        } else if (DefaultSkins.dark.name().equals(skinName)) {
+            return new DarkPalette();
+        } else if (DefaultSkins.business.name().equals(skinName)) {
+            return new BusinessPalette();
+        } else if (DefaultSkins.console.name().equals(skinName)) {
+            return new ConsolePalette();
         }
         return null;
     }

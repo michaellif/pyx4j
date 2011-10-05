@@ -30,17 +30,17 @@ public class Property {
 
     private final String value;
 
-    private final ThemePalette color;
+    private final ThemeColors color;
 
     public Property(String name, String value) {
         this(name, value, null);
     }
 
-    public Property(String name, ThemePalette color) {
+    public Property(String name, ThemeColors color) {
         this(name, null, color);
     }
 
-    public Property(String name, String value, ThemePalette color) {
+    public Property(String name, String value, ThemeColors color) {
         this.name = name;
         this.value = value;
         this.color = color;
@@ -54,7 +54,7 @@ public class Property {
         name = nameValue[0].trim();
         String v = nameValue[1].trim();
         if (v.startsWith(COLOR_REF_PREFIX)) {
-            color = ThemePalette.valueOf(v.substring(1));
+            color = ThemeColors.valueOf(v.substring(1));
             value = null;
         } else {
             value = v;
@@ -70,7 +70,7 @@ public class Property {
         return value;
     }
 
-    public ThemePalette getColor() {
+    public ThemeColors getColor() {
         return color;
     }
 
@@ -83,12 +83,12 @@ public class Property {
         }
     }
 
-    public String toString(Theme theme) {
+    public String toString(Theme theme, Palette palette) {
         if (value == null) {
             if (color == null) {
                 throw new RuntimeException("theme property " + name + " should be set with value or color");
             }
-            return name + ": " + theme.getThemeColorString(color) + ";";
+            return name + ": " + palette.getThemeColorString(color) + ";";
         }
 
         String retVal = name + ": " + value + ";";
@@ -100,7 +100,7 @@ public class Property {
 
         int colorIdx = retVal.indexOf("{}");
         if (colorIdx != -1) {
-            retVal = retVal.substring(0, colorIdx) + theme.getThemeColorString(color) + retVal.substring(colorIdx + 2);
+            retVal = retVal.substring(0, colorIdx) + palette.getThemeColorString(color) + retVal.substring(colorIdx + 2);
         }
 
         return retVal;

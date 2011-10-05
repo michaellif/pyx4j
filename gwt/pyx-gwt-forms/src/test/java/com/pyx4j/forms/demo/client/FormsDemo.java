@@ -41,6 +41,7 @@ import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.widgets.client.style.StyleManger;
+import com.pyx4j.widgets.client.style.theme.WindowsPalette;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 
 /**
@@ -55,7 +56,7 @@ public class FormsDemo implements EntryPoint {
     @Override
     public void onModuleLoad() {
         ClientLogger.setDebugOn(true);
-        StyleManger.installTheme(new WindowsTheme());
+        StyleManger.installTheme(new WindowsTheme(), new WindowsPalette());
 
         RootPanel.get().getElement().getStyle().setProperty("margin", "0");
 

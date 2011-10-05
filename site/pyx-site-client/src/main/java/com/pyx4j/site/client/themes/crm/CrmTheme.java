@@ -26,28 +26,9 @@ import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.client.themes.SiteTheme;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemePalette;
+import com.pyx4j.widgets.client.style.ThemeColors;
 
 public class CrmTheme extends SiteTheme {
-
-    @Override
-    protected void initThemeColors() {
-        super.initThemeColors();
-        putThemeColor(ThemePalette.OBJECT_TONE1, 0xece9d8);
-        putThemeColor(ThemePalette.OBJECT_TONE2, 0xF6F9FF);
-        putThemeColor(ThemePalette.OBJECT_TONE3, 0xdbd8c7);
-        putThemeColor(ThemePalette.OBJECT_TONE4, 0xdbd8c7);
-        putThemeColor(ThemePalette.OBJECT_TONE5, 0xdbd8c7);
-        putThemeColor(ThemePalette.BORDER, 0xD0CAC4);
-        putThemeColor(ThemePalette.SELECTION, 0x86adc4);
-        putThemeColor(ThemePalette.SELECTION_TEXT, 0xffffff);
-        putThemeColor(ThemePalette.TEXT, 0x000000);
-        putThemeColor(ThemePalette.TEXT_BACKGROUND, 0xffffff);
-        putThemeColor(ThemePalette.DISABLED_TEXT_BACKGROUND, 0xfafafa);
-        putThemeColor(ThemePalette.MANDATORY_TEXT_BACKGROUND, 0xfcba84);
-        putThemeColor(ThemePalette.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
-        putThemeColor(ThemePalette.SEPARATOR, 0xeeeeee);
-    }
 
     @Override
     protected void initGeneralStyles() {
@@ -150,7 +131,7 @@ public class CrmTheme extends SiteTheme {
         style.addProperty("background", "transparent");
         style.addProperty("height", "30px");
         style.addProperty("border-top", "1px solid");
-        style.addProperty("border-color", ThemePalette.BORDER);
+        style.addProperty("border-color", ThemeColors.BORDER);
         style.addProperty("margin-top", "30px");
 
         addStyle(style);
@@ -188,7 +169,7 @@ public class CrmTheme extends SiteTheme {
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a");
-        style.addProperty("color", getThemeColorString(ThemePalette.TEXT));
+        style.addProperty("color", ThemeColors.TEXT);
         style.addProperty("padding", "0px 16px 0px 20px");
         style.addProperty("height", "32px");
         style.addProperty("text-decoration", "none");
@@ -341,17 +322,17 @@ public class CrmTheme extends SiteTheme {
     @Override
     protected void initEntityCRUDStyles() {
         Style style = new Style("." + EntityCSSClass.pyx4j_Entity_EntitySearchCriteria.name());
-        style.addProperty("background-color", ThemePalette.OBJECT_TONE2);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE2);
         style.addProperty("padding", "2px");
         style.addProperty("border", "solid 1px");
-        style.addProperty("border-color", ThemePalette.BORDER);
+        style.addProperty("border-color", ThemeColors.BORDER);
         addStyle(style);
         style = new Style("." + EntityCSSClass.pyx4j_Entity_EntityEditor.name());
-        style.addProperty("background-color", ThemePalette.OBJECT_TONE2);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE2);
         style.addProperty("padding", "3px");
         style.addProperty("margin-bottom", "10px");
         style.addProperty("border", "solid 1px");
-        style.addProperty("border-color", ThemePalette.BORDER);
+        style.addProperty("border-color", ThemeColors.BORDER);
         addStyle(style);
     }
 
@@ -386,9 +367,9 @@ public class CrmTheme extends SiteTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ActionsBar));
-        style.addProperty("background-color", ThemePalette.OBJECT_TONE2);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE2);
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemePalette.BORDER);
+        style.addProperty("border-color", ThemeColors.BORDER);
         addStyle(style);
     }
 
@@ -396,7 +377,7 @@ public class CrmTheme extends SiteTheme {
     protected void initMapStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Map.name());
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemePalette.BORDER);
+        style.addProperty("border-color", ThemeColors.BORDER);
         addStyle(style);
     }
 

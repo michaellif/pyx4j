@@ -20,7 +20,23 @@
  */
 package com.pyx4j.widgets.client.style;
 
-public enum ThemePalette {
+public enum ThemeColors {
+
+    object1("5B6E90"),
+
+    object2("A6D6E2"),
+
+    contrast1("E7AB6B"),
+
+    contrast2("E76B6B"),
+
+    background("F9EFD6"),
+
+    text("FFFFFF"),
+
+    form("FFFFFF"),
+
+    //=================================== Old stuff
 
     OBJECT_TONE1,
 
@@ -88,5 +104,19 @@ public enum ThemePalette {
 
     MANDATORY_TEXT_BACKGROUND,
 
-    READ_ONLY_TEXT_BACKGROUND
+    READ_ONLY_TEXT_BACKGROUND;
+
+    private String defaultColor;
+
+    private ThemeColors() {
+        this("ffffff");
+    }
+
+    private ThemeColors(String defaultColor) {
+        this.defaultColor = defaultColor;
+    }
+
+    public String getDefaultColor() {
+        return defaultColor;
+    }
 }

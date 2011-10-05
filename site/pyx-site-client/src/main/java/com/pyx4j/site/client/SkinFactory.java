@@ -20,10 +20,13 @@
  */
 package com.pyx4j.site.client;
 
+import com.pyx4j.widgets.client.style.Palette;
 import com.pyx4j.widgets.client.style.Theme;
 
 public interface SkinFactory {
 
-    Theme createSkin(String skinName);
+    Theme createTheme(String skinName);
+
+    Palette createPalette(String skinName);
 
 }

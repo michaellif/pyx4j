@@ -23,7 +23,7 @@ package com.pyx4j.entity.ria.client.theme;
 public class WindowsBlushTheme extends EntityRiaTheme {
 
     public WindowsBlushTheme() {
-        super((float) 305 / 360, (float) 0.5, (float) 0.8);
+//        super((float) 305 / 360, (float) 0.5, (float) 0.8);
     }
 
 }

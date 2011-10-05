@@ -48,7 +48,7 @@ import com.pyx4j.widgets.client.GroupBoxPanel;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.Theme;
-import com.pyx4j.widgets.client.style.ThemePalette;
+import com.pyx4j.widgets.client.style.ThemeColors;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 public class ThemeEditor extends AbstractView {
@@ -57,7 +57,7 @@ public class ThemeEditor extends AbstractView {
 
     private final Theme originalTheme;
 
-    private final Map<ThemePalette, ColorLabel> properties = new HashMap<ThemePalette, ColorLabel>();
+    private final Map<ThemeColors, ColorLabel> properties = new HashMap<ThemeColors, ColorLabel>();
 
     private ColorPickerDialog colorPickerDialog;
 
@@ -91,7 +91,7 @@ public class ThemeEditor extends AbstractView {
         colors.setContainer(table);
 
         int row = 0;
-        for (ThemePalette p : EnumSet.allOf(ThemePalette.class)) {
+        for (ThemeColors p : EnumSet.allOf(ThemeColors.class)) {
             Label l = new Label(p.name());
             l.getElement().getStyle().setProperty("fontSize", "0.6em");
             table.setWidget(row, 0, l);
@@ -154,7 +154,7 @@ public class ThemeEditor extends AbstractView {
 
         final Label label;
 
-        ColorLabel(final ThemePalette p) {
+        ColorLabel(final ThemeColors p) {
             bar = new InlineHTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
             bar.setWidth("20px");
             Element cElement = bar.getElement();
@@ -192,7 +192,7 @@ public class ThemeEditor extends AbstractView {
 
         //        private final ColorPicker picker;
 
-        private ThemePalette editThemeProperty;
+        private ThemeColors editThemeProperty;
 
         private Integer colorOriginal;
 
@@ -248,10 +248,10 @@ public class ThemeEditor extends AbstractView {
             this.show();
         }
 
-        private void edit(ThemePalette p) {
+        private void edit(ThemeColors p) {
             editThemeProperty = p;
             previewApplied = false;
-            colorOriginal = theme.getThemeColor(p);
+            //colorOriginal = theme.getThemeColor(p);
             Integer color = colorOriginal;
         }
 
@@ -276,12 +276,12 @@ public class ThemeEditor extends AbstractView {
         }
 
         private void setThemeColor(Integer color) {
-            theme.putThemeColor(editThemeProperty, color);
+            //theme.putThemeColor(editThemeProperty, color);
             updateThemePresentation();
         }
     }
 
-    private void editThemeProperty(ThemePalette p, InlineHTML h) {
+    private void editThemeProperty(ThemeColors p, InlineHTML h) {
         if (colorPickerDialog == null) {
             colorPickerDialog = new ColorPickerDialog();
         }
@@ -304,7 +304,7 @@ public class ThemeEditor extends AbstractView {
             public void onClick(ClickEvent event) {
                 theme = originalTheme.duplicate();
                 updateThemePresentation();
-                StyleManger.installTheme(originalTheme);
+//                StyleManger.installTheme(originalTheme);
             }
         }));
 
@@ -312,9 +312,9 @@ public class ThemeEditor extends AbstractView {
     }
 
     private void updateThemePresentation() {
-        for (Map.Entry<ThemePalette, ColorLabel> pe : properties.entrySet()) {
-            Integer color = theme.getThemeColor(pe.getKey());
-            pe.getValue().setColor(color);
+        for (Map.Entry<ThemeColors, ColorLabel> pe : properties.entrySet()) {
+//            Integer color = theme.getThemeColor(pe.getKey());
+//            pe.getValue().setColor(color);
         }
 
         int idx = styleSelector.getSelectedIndex();
@@ -337,7 +337,7 @@ public class ThemeEditor extends AbstractView {
     }
 
     private void applyTheme() {
-        StyleManger.installTheme(theme);
+        // StyleManger.installTheme(theme);
     }
 
 }

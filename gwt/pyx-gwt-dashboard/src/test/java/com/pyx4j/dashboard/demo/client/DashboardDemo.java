@@ -61,7 +61,7 @@ public final class DashboardDemo implements EntryPoint {
 
     @Override
     public void onModuleLoad() {
-        StyleManger.installTheme(new VistaTheme());
+        StyleManger.installTheme(new DashboardTheme(), new DashboardPalette());
 
         // set uncaught exception handler
         GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {

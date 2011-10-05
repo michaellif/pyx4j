@@ -35,7 +35,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.style.StyleManger;
-import com.pyx4j.widgets.client.style.theme.GrayTheme;
+import com.pyx4j.widgets.client.style.theme.GrayPalette;
+import com.pyx4j.widgets.client.style.theme.WindowsPalette;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -178,14 +179,14 @@ public class TestView extends AbstractView {
             addItem("L&F Win", new Command() {
                 @Override
                 public void execute() {
-                    StyleManger.installTheme(new WindowsTheme());
+                    StyleManger.installTheme(new WindowsTheme(), new WindowsPalette());
                 }
             });
 
             addItem("L&F Gray", new Command() {
                 @Override
                 public void execute() {
-                    StyleManger.installTheme(new GrayTheme());
+                    StyleManger.installTheme(new WindowsTheme(), new GrayPalette());
                 }
             });
 

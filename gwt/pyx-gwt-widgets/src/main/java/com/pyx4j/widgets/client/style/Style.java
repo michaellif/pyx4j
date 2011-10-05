@@ -59,11 +59,11 @@ public class Style {
         properties.add(new Property(name, value));
     }
 
-    public void addProperty(String name, String value, ThemePalette color) {
+    public void addProperty(String name, String value, ThemeColors color) {
         properties.add(new Property(name, value, color));
     }
 
-    public void addGradientBackground(ThemePalette color) {
+    public void addGradientBackground(ThemeColors color) {
 
         addProperty("filter", "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='{}')", color);
 
@@ -73,7 +73,7 @@ public class Style {
 
     }
 
-    public void addProperty(String name, ThemePalette color) {
+    public void addProperty(String name, ThemeColors color) {
         properties.add(new Property(name, color));
     }
 
@@ -115,11 +115,11 @@ public class Style {
         return builder.toString();
     }
 
-    public String toString(Theme theme) {
+    public String toString(Theme theme, Palette palette) {
         StringBuilder builder = new StringBuilder();
         builder.append(selector).append(" {\n");
         for (Property property : properties) {
-            builder.append("  ").append(property.toString(theme)).append("\n");
+            builder.append("  ").append(property.toString(theme, palette)).append("\n");
         }
         builder.append("}\n");
         return builder.toString();

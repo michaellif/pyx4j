@@ -22,9 +22,7 @@ package com.pyx4j.widgets.client.style;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -36,16 +34,12 @@ public class Theme {
 
     private final List<Style> styles;
 
-    private final Map<ThemePalette, Integer> themeColors;
-
     public Theme() {
         styles = new ArrayList<Style>();
-        themeColors = new HashMap<ThemePalette, Integer>();
     }
 
     protected Theme(Theme other) {
         styles = new ArrayList<Style>(other.styles);
-        themeColors = new HashMap<ThemePalette, Integer>(other.themeColors);
     }
 
     public List<Style> getAllStyles() {
@@ -68,28 +62,6 @@ public class Theme {
         }
 
         styles.add(style);
-    }
-
-    public Integer getThemeColor(ThemePalette color) {
-        if (themeColors.get(color) == null) {
-            log.warn("Theme color {} is not set", color.name());
-            return 0xffffff;
-        }
-        return themeColors.get(color);
-    }
-
-    public String getThemeColorString(ThemePalette color) {
-        String colorString = Integer.toHexString(getThemeColor(color));
-        int appendZeros = 6 - colorString.length();
-        for (int i = 0; i < appendZeros; i++) {
-            colorString = "0" + colorString;
-        }
-
-        return "#" + colorString;
-    }
-
-    public void putThemeColor(ThemePalette color, Integer value) {
-        themeColors.put(color, value);
     }
 
     public Theme duplicate() {
