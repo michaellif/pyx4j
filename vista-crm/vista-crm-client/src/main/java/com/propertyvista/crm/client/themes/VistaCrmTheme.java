@@ -39,7 +39,7 @@ import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 
-public abstract class VistaCrmTheme extends VistaTheme {
+public class VistaCrmTheme extends VistaTheme {
 
     public static double defaultHeaderHeight = 3;
 

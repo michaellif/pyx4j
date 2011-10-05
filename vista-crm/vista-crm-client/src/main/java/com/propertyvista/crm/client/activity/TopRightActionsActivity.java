@@ -25,11 +25,11 @@ import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.style.StyleManger;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.crm.client.themes.BlueColdPalette;
 import com.propertyvista.crm.client.themes.BownWarmPalette;
 import com.propertyvista.crm.client.themes.GainsboroPalette;
 import com.propertyvista.crm.client.themes.VillageGreenPalette;
+import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.TopRightActionsView;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl.Theme;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
@@ -90,16 +90,16 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     public void setTheme(Theme theme) {
         switch (theme) {
         case Gainsboro:
-            StyleManger.installTheme(new VistaTheme(), new GainsboroPalette());
+            StyleManger.installTheme(new VistaCrmTheme(), new GainsboroPalette());
             break;
         case VillageGreen:
-            StyleManger.installTheme(new VistaTheme(), new VillageGreenPalette());
+            StyleManger.installTheme(new VistaCrmTheme(), new VillageGreenPalette());
             break;
         case BlueCold:
-            StyleManger.installTheme(new VistaTheme(), new BlueColdPalette());
+            StyleManger.installTheme(new VistaCrmTheme(), new BlueColdPalette());
             break;
         case BrownWarm:
-            StyleManger.installTheme(new VistaTheme(), new BownWarmPalette());
+            StyleManger.installTheme(new VistaCrmTheme(), new BownWarmPalette());
             break;
         }
     }

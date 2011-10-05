@@ -14,10 +14,11 @@
 package com.propertyvista.crm.client.themes;
 
 import com.pyx4j.widgets.client.style.ColorFactory;
-import com.pyx4j.widgets.client.style.Palette;
 import com.pyx4j.widgets.client.style.ThemeColors;
 
-public class BlueColdPalette extends Palette {
+import com.propertyvista.common.client.theme.VistaPalette;
+
+public class BlueColdPalette extends VistaPalette {
 
     public BlueColdPalette() {
         float hue = (float) 218 / 360;
