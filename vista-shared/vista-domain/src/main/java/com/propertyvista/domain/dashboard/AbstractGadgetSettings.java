@@ -14,9 +14,11 @@
 package com.propertyvista.domain.dashboard;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 
+@Inheritance
 @AbstractEntity
 @Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = GadgetMetadata.class)
 public interface AbstractGadgetSettings extends IEntity {

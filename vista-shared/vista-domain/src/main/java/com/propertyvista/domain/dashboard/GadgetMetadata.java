@@ -15,8 +15,6 @@ package com.propertyvista.domain.dashboard;
 
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.ISharedUserEntity;
@@ -51,12 +49,7 @@ public interface GadgetMetadata extends ISharedUserEntity {
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
-    //This is temporary solution for multiple settings types, Managed on back-end
-    @RpcTransient
-    IPrimitive<String> settingsClass();
-
     // Save gadgets Settings separately
-    @Transient
     AbstractGadgetSettings settings();
 
     /*
