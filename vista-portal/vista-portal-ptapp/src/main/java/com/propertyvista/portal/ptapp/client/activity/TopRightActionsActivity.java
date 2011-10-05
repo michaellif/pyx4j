@@ -25,8 +25,9 @@ import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.style.StyleManger;
 
-import com.propertyvista.portal.ptapp.client.themes.GainsboroTheme;
-import com.propertyvista.portal.ptapp.client.themes.VillageGreenTheme;
+import com.propertyvista.portal.ptapp.client.themes.GainsboroPalette;
+import com.propertyvista.portal.ptapp.client.themes.VillageGreenPalette;
+import com.propertyvista.portal.ptapp.client.themes.VistaTheme;
 import com.propertyvista.portal.ptapp.client.ui.TopRightActionsView;
 import com.propertyvista.portal.ptapp.client.ui.TopRightActionsViewImpl.Theme;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
@@ -76,10 +77,10 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     public void setTheme(Theme theme) {
         switch (theme) {
         case Gainsboro:
-            StyleManger.installTheme(new GainsboroTheme());
+            StyleManger.installTheme(new VistaTheme(), new GainsboroPalette());
             break;
         case VillageGreen:
-            StyleManger.installTheme(new VillageGreenTheme());
+            StyleManger.installTheme(new VistaTheme(), new VillageGreenPalette());
             break;
         }
 

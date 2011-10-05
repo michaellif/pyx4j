@@ -34,7 +34,8 @@ import com.propertyvista.portal.ptapp.client.mvp.LogoActivityMapper;
 import com.propertyvista.portal.ptapp.client.mvp.MainNavigActivityMapper;
 import com.propertyvista.portal.ptapp.client.mvp.MessageActivityMapper;
 import com.propertyvista.portal.ptapp.client.mvp.SecondNavigActivityMapper;
-import com.propertyvista.portal.ptapp.client.themes.GainsboroTheme;
+import com.propertyvista.portal.ptapp.client.themes.GainsboroPalette;
+import com.propertyvista.portal.ptapp.client.themes.VistaTheme;
 
 public class PtAppSiteView extends FlowPanel {
 
@@ -46,7 +47,7 @@ public class PtAppSiteView extends FlowPanel {
 
     public PtAppSiteView() {
 
-        StyleManger.installTheme(new GainsboroTheme());
+        StyleManger.installTheme(new VistaTheme(), new GainsboroPalette());
 
         EventBus eventBus = AppSite.getEventBus();
 

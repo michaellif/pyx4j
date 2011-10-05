@@ -19,10 +19,9 @@ import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.site.client.ui.crud.ListerBase;
 import com.pyx4j.widgets.client.ListBox;
-import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemePalette;
+import com.pyx4j.widgets.client.style.ThemeColors;
 
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
@@ -36,7 +35,7 @@ import com.propertyvista.portal.client.ui.decorations.TableFolderDecorator;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.client.ui.residents.NewPaymentMethodForm;
 
-public abstract class PortalTheme extends VistaTheme {
+public class PortalTheme extends VistaTheme {
 
     public PortalTheme() {
         super();
@@ -56,27 +55,6 @@ public abstract class PortalTheme extends VistaTheme {
         initCriteriaWidgetDecoratorStyles();
         initPropertyMarkerStyle();
         initPaymentRadioButtonGroupStyles();
-    }
-
-    @Override
-    protected void initThemeColors() {
-        float hue = (float) 213 / 360;
-        float saturation = (float) 0.9;
-        float brightness = (float) 0.7;
-        putThemeColor(ThemePalette.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.08));
-        putThemeColor(ThemePalette.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.12));
-        putThemeColor(ThemePalette.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.16));
-        putThemeColor(ThemePalette.OBJECT_TONE4, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.2));
-        putThemeColor(ThemePalette.OBJECT_TONE5, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.99));
-        putThemeColor(ThemePalette.BORDER, 0xe7e7e7);
-        putThemeColor(ThemePalette.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
-        putThemeColor(ThemePalette.SELECTION_TEXT, 0xffffff);
-        putThemeColor(ThemePalette.TEXT, 0x000000);
-        putThemeColor(ThemePalette.TEXT_BACKGROUND, 0xffffff);
-        putThemeColor(ThemePalette.DISABLED_TEXT_BACKGROUND, 0xfafafa);
-        putThemeColor(ThemePalette.MANDATORY_TEXT_BACKGROUND, 0xe5e5e5);
-        putThemeColor(ThemePalette.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
-        putThemeColor(ThemePalette.SEPARATOR, 0xcccccc);
     }
 
     @Override
@@ -104,9 +82,9 @@ public abstract class PortalTheme extends VistaTheme {
 
         String headerstyle = Selector.valueOf(prefix, PortalScreen.StyleSuffix.Header);
         style = new Style(headerstyle);
-        style.addProperty("background-color", ThemePalette.OBJECT_TONE35);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE35);
         style.addProperty("font-size", "14px");
-        style.addProperty("color", ThemePalette.OBJECT_TONE95);
+        style.addProperty("color", ThemeColors.OBJECT_TONE95);
         style.addProperty("height", "115px");
         style.addProperty("display", "table");
         addStyle(style);
@@ -114,7 +92,7 @@ public abstract class PortalTheme extends VistaTheme {
         //TODO  think of a better way
         style = new Style(headerstyle + " a:link, a:visited, a:active");
         style.addProperty("text-decoration", "none");
-        style.addProperty("color", ThemePalette.OBJECT_TONE95);
+        style.addProperty("color", ThemeColors.OBJECT_TONE95);
         addStyle(style);
 
         style = new Style(headerstyle + " a:hover");
@@ -151,7 +129,7 @@ public abstract class PortalTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Footer));
-        style.addProperty("background-color", ThemePalette.OBJECT_TONE1);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE1);
         style.addProperty("clear", "left");
         addStyle(style);
 
@@ -161,7 +139,7 @@ public abstract class PortalTheme extends VistaTheme {
         style = new Style(Selector.valueOf(VistaLineSeparator.DEFAULT_STYLE_PREFIX));
         style.addProperty("border-top-width", "1px");
         style.addProperty("border-top-style", "dotted");
-        style.addProperty("border-top-color", ThemePalette.OBJECT_TONE4);
+        style.addProperty("border-top-color", ThemeColors.OBJECT_TONE4);
         style.addProperty("margin-bottom", "0.3em");
         style.addProperty("width", "400px");
         addStyle(style);
@@ -177,7 +155,7 @@ public abstract class PortalTheme extends VistaTheme {
                 if (st.getSelector().equals(gwtButton)) {
                     st.addProperty("border-radius", "5px");
                     st.addProperty("-moz-border-radius", "5px");
-                    st.addProperty("background-color", ThemePalette.OBJECT_TONE50);
+                    st.addProperty("background-color", ThemeColors.OBJECT_TONE50);
                     st.addProperty("border", "1px solid");
                     st.addProperty("border-color", "black");
                     st.addProperty("min-width", "100px");
@@ -202,7 +180,7 @@ public abstract class PortalTheme extends VistaTheme {
 
         style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.filtersPanel));
         style.addProperty("padding-top", "0.5em");
-        style.addProperty("background-color", ThemePalette.OBJECT_TONE15);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE15);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.listPanel));
@@ -216,30 +194,30 @@ public abstract class PortalTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Header));
-        style.addProperty("background-color", ThemePalette.OBJECT_TONE35);
-        style.addProperty("color", ThemePalette.OBJECT_TONE95);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE35);
+        style.addProperty("color", ThemeColors.OBJECT_TONE95);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector));
-        style.addProperty("background-color", ThemePalette.OBJECT_TONE60);
-        style.addProperty("color", ThemePalette.OBJECT_TONE10);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE60);
+        style.addProperty("color", ThemeColors.OBJECT_TONE10);
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector) + " a:link, a:visited, a:active");
-        style.addProperty("color", ThemePalette.OBJECT_TONE10);
+        style.addProperty("color", ThemeColors.OBJECT_TONE10);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector) + ":hover");
-        style.addProperty("background-color", ThemePalette.OBJECT_TONE80);
-        style.addProperty("color", ThemePalette.OBJECT_TONE10);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE80);
+        style.addProperty("color", ThemeColors.OBJECT_TONE10);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnMenu));
-        style.addProperty("background-color", ThemePalette.OBJECT_TONE10);
-        style.addProperty("color", ThemePalette.OBJECT_TONE90);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE10);
+        style.addProperty("color", ThemeColors.OBJECT_TONE90);
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemePalette.OBJECT_TONE90);
+        style.addProperty("border-color", ThemeColors.OBJECT_TONE90);
         style.addProperty("padding", "5px 7px");
         addStyle(style);
 
@@ -248,7 +226,7 @@ public abstract class PortalTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.even));
-        style.addProperty("background-color", ThemePalette.OBJECT_TONE15);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE15);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.odd));
@@ -262,9 +240,9 @@ public abstract class PortalTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ActionsBar));
-        style.addProperty("background-color", ThemePalette.OBJECT_TONE30);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE30);
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemePalette.BORDER);
+        style.addProperty("border-color", ThemeColors.BORDER);
         addStyle(style);
     }
 
@@ -280,13 +258,13 @@ public abstract class PortalTheme extends VistaTheme {
         style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Holder));
         style.addProperty("margin", "0");
         style.addProperty("padding", "0");
-        style.addProperty("background-color", ThemePalette.OBJECT_TONE35);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE35);
         style.addProperty("list-style", "none");
         style.addProperty("overflow", "hidden");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Tab));
-        style.addProperty("background-color", ThemePalette.OBJECT_TONE55);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE55);
         style.addProperty("margin-right", "4px");
         style.addProperty("border", "none");
         style.addProperty("border-top-left-radius", "8px");
@@ -296,7 +274,7 @@ public abstract class PortalTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Label, NavigViewImpl.StyleDependent.current));
-        style.addProperty("background-color", ThemePalette.OBJECT_TONE95);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE95);
         style.addProperty("color", "white");
         style.addProperty("border-top-left-radius", "8px");
         style.addProperty("border-top-right-radius", "8px");
@@ -320,7 +298,7 @@ public abstract class PortalTheme extends VistaTheme {
     private void initDecoratorsStyles() {
         String prefix = VistaHeaderBar.DEFAULT_STYLE_PREFIX;
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("background-color", ThemePalette.OBJECT_TONE25);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE25);
         style.addProperty("margin-top", "10px");
         style.addProperty("padding-top", "10px");
         style.addProperty("padding-bottom", "10px");
@@ -361,7 +339,7 @@ public abstract class PortalTheme extends VistaTheme {
         style.addProperty("margin-top", "5px");
         style.addProperty("padding-bottom", "10px");
         style.addProperty("border-bottom", "solid 1px");
-        style.addProperty("border-color", ThemePalette.SEPARATOR);
+        style.addProperty("border-color", ThemeColors.SEPARATOR);
         addStyle(style);
 
     }
@@ -392,7 +370,7 @@ public abstract class PortalTheme extends VistaTheme {
 
         style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardContentItem));
         style.addProperty("border-bottom", "1px solid");
-        style.addProperty("border-color", ThemePalette.SEPARATOR);
+        style.addProperty("border-color", ThemeColors.SEPARATOR);
         style.addProperty("margin-bottom", "5px");
         addStyle(style);
 
@@ -407,12 +385,12 @@ public abstract class PortalTheme extends VistaTheme {
 
         style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardMenuItem));
         style.addProperty("text-decoration", "none");
-        style.addProperty("color", ThemePalette.OBJECT_TONE95);
+        style.addProperty("color", ThemeColors.OBJECT_TONE95);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardMenuItem) + ":hover");
         style.addProperty("text-decoration", "underline");
-        style.addProperty("color", ThemePalette.OBJECT_TONE95);
+        style.addProperty("color", ThemeColors.OBJECT_TONE95);
         addStyle(style);
 
     }

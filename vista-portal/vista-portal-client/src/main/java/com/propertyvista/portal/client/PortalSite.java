@@ -25,7 +25,8 @@ import com.pyx4j.widgets.client.style.StyleManger;
 
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
-import com.propertyvista.portal.client.themes.BlueColdTheme;
+import com.propertyvista.portal.client.themes.PortalPalette;
+import com.propertyvista.portal.client.themes.PortalTheme;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
@@ -53,11 +54,11 @@ public class PortalSite extends VistaSite {
         } else if (RootPanel.get(RESIDENT_TEST_INSERTION_ID) != null) {
             getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.Landing());
             RootPanel.get(RESIDENT_TEST_INSERTION_ID).add(new PortalScreen());
-            StyleManger.installTheme(new BlueColdTheme());
+            StyleManger.installTheme(new PortalTheme(), new PortalPalette());
         } else {
             getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.Landing());
             RootPanel.get().add(new PortalScreen());
-            StyleManger.installTheme(new BlueColdTheme());
+            StyleManger.installTheme(new PortalTheme(), new PortalPalette());
         }
 
         hideLoadingIndicator();

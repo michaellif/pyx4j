@@ -25,14 +25,15 @@ import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.style.StyleManger;
 
-import com.propertyvista.admin.client.themes.BlueColdTheme;
-import com.propertyvista.admin.client.themes.BownWarmTheme;
-import com.propertyvista.admin.client.themes.GainsboroTheme;
-import com.propertyvista.admin.client.themes.VillageGreenTheme;
+import com.propertyvista.admin.client.themes.BlueColdPalette;
+import com.propertyvista.admin.client.themes.BownWarmPalette;
+import com.propertyvista.admin.client.themes.VillageGreenPalette;
 import com.propertyvista.admin.client.ui.TopRightActionsView;
 import com.propertyvista.admin.client.ui.TopRightActionsViewImpl.Theme;
 import com.propertyvista.admin.client.viewfactories.AdminVeiwFactory;
 import com.propertyvista.admin.rpc.AdminSiteMap;
+import com.propertyvista.common.client.theme.VistaPalette;
+import com.propertyvista.common.client.theme.VistaTheme;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
 
@@ -89,16 +90,16 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     public void setTheme(Theme theme) {
         switch (theme) {
         case Gainsboro:
-            StyleManger.installTheme(new GainsboroTheme());
+            StyleManger.installTheme(new VistaTheme(), new VistaPalette());
             break;
         case VillageGreen:
-            StyleManger.installTheme(new VillageGreenTheme());
+            StyleManger.installTheme(new VistaTheme(), new VillageGreenPalette());
             break;
         case BlueCold:
-            StyleManger.installTheme(new BlueColdTheme());
+            StyleManger.installTheme(new VistaTheme(), new BlueColdPalette());
             break;
         case BrownWarm:
-            StyleManger.installTheme(new BownWarmTheme());
+            StyleManger.installTheme(new VistaTheme(), new BownWarmPalette());
             break;
         }
     }

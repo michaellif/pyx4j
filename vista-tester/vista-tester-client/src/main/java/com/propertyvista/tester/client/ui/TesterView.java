@@ -29,6 +29,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.AppSiteView;
+import com.pyx4j.widgets.client.style.Palette;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.Theme;
 
@@ -54,11 +55,11 @@ public class TesterView extends LayoutPanel {
 
     TestAreaActivityMapper testareaActivityMapper,
 
-    Theme theme) {
+    Theme theme, Palette palette) {
 
         EventBus eventBus = AppSite.getEventBus();
 
-        StyleManger.installTheme(theme);
+        StyleManger.installTheme(theme, palette);
 
         String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
 
