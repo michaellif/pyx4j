@@ -25,7 +25,7 @@ import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.Theme;
-import com.pyx4j.widgets.client.style.ThemeColor;
+import com.pyx4j.widgets.client.style.ThemePalette;
 
 public class VistaTheme extends Theme {
 
@@ -43,20 +43,20 @@ public class VistaTheme extends Theme {
         float hue = (float) 160 / 360;
         float saturation = 0;
         float brightness = (float) 0.3;
-        putThemeColor(ThemeColor.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.05));
-        putThemeColor(ThemeColor.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.1));
-        putThemeColor(ThemeColor.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.2));
-        putThemeColor(ThemeColor.OBJECT_TONE4, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
-        putThemeColor(ThemeColor.OBJECT_TONE5, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.8));
-        putThemeColor(ThemeColor.BORDER, 0xf0f0f0);
-        putThemeColor(ThemeColor.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.6));
-        putThemeColor(ThemeColor.SELECTION_TEXT, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.025));
-        putThemeColor(ThemeColor.TEXT, 0x000000);
-        putThemeColor(ThemeColor.TEXT_BACKGROUND, 0xffffff);
-        putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, 0xfafafa);
-        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xfafafa);
-        putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
-        putThemeColor(ThemeColor.SEPARATOR, 0xeeeeee);
+        putThemeColor(ThemePalette.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.05));
+        putThemeColor(ThemePalette.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.1));
+        putThemeColor(ThemePalette.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.2));
+        putThemeColor(ThemePalette.OBJECT_TONE4, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
+        putThemeColor(ThemePalette.OBJECT_TONE5, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.8));
+        putThemeColor(ThemePalette.BORDER, 0xf0f0f0);
+        putThemeColor(ThemePalette.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.6));
+        putThemeColor(ThemePalette.SELECTION_TEXT, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.025));
+        putThemeColor(ThemePalette.TEXT, 0x000000);
+        putThemeColor(ThemePalette.TEXT_BACKGROUND, 0xffffff);
+        putThemeColor(ThemePalette.DISABLED_TEXT_BACKGROUND, 0xfafafa);
+        putThemeColor(ThemePalette.MANDATORY_TEXT_BACKGROUND, 0xfafafa);
+        putThemeColor(ThemePalette.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
+        putThemeColor(ThemePalette.SEPARATOR, 0xeeeeee);
     }
 
     protected void initGeneralStyles() {
@@ -120,8 +120,8 @@ public class VistaTheme extends Theme {
 
     protected void initBodyStyles() {
         Style style = new Style("body");
-        style.addProperty("background-color", ThemeColor.TEXT_BACKGROUND);
-        style.addProperty("color", ThemeColor.TEXT);
+        style.addProperty("background-color", ThemePalette.TEXT_BACKGROUND);
+        style.addProperty("color", ThemePalette.TEXT);
         style.addProperty("border", "none");
         style.addProperty("font", "12px/1.5em Arial, Helvetica, sans-serif");
         addStyle(style);
@@ -135,7 +135,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(".Dashboard-caption");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE5);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE5);
         style.addProperty("color", "white");
         style.addProperty("font-weight", "bold");
         style.addProperty("text-align", "center");
@@ -147,7 +147,7 @@ public class VistaTheme extends Theme {
 
         style = new Style(".Dashboard-menu");
         style.addProperty("font", "menu");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE1);
         style.addProperty("border", "1px solid #aaa");
         addStyle(style);
 
@@ -163,7 +163,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.ColumnHeading));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE4);
         style.addProperty("font-weight", "bold");
         style.addProperty("text-align", "center");
         addStyle(style);
@@ -173,24 +173,24 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.Holder));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE2);
         style.addProperty("border", "1px solid #aaa");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderSetup));
-        style.addProperty("background-color", ThemeColor.MANDATORY_TEXT_BACKGROUND);
+        style.addProperty("background-color", ThemePalette.MANDATORY_TEXT_BACKGROUND);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderCaption));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE4);
         style.addProperty("font", "caption");
         style.addProperty("font-weight", "bold");
         style.addProperty("color", "#444");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderCaption) + ":hover");
-        style.addProperty("background-color", ThemeColor.SELECTION);
-        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        style.addProperty("background-color", ThemePalette.SELECTION);
+        style.addProperty("color", ThemePalette.SELECTION_TEXT);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderHeading));
@@ -199,7 +199,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DashboardPanel.StyleSuffix.HolderMenu));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE1);
         style.addProperty("border", "1px solid #aaa");
         style.addProperty("font", "menu");
         addStyle(style);

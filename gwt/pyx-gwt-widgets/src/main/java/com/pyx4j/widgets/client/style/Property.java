@@ -30,17 +30,17 @@ public class Property {
 
     private final String value;
 
-    private final ThemeColor color;
+    private final ThemePalette color;
 
     public Property(String name, String value) {
         this(name, value, null);
     }
 
-    public Property(String name, ThemeColor color) {
+    public Property(String name, ThemePalette color) {
         this(name, null, color);
     }
 
-    public Property(String name, String value, ThemeColor color) {
+    public Property(String name, String value, ThemePalette color) {
         this.name = name;
         this.value = value;
         this.color = color;
@@ -54,7 +54,7 @@ public class Property {
         name = nameValue[0].trim();
         String v = nameValue[1].trim();
         if (v.startsWith(COLOR_REF_PREFIX)) {
-            color = ThemeColor.valueOf(v.substring(1));
+            color = ThemePalette.valueOf(v.substring(1));
             value = null;
         } else {
             value = v;
@@ -70,7 +70,7 @@ public class Property {
         return value;
     }
 
-    public ThemeColor getColor() {
+    public ThemePalette getColor() {
         return color;
     }
 

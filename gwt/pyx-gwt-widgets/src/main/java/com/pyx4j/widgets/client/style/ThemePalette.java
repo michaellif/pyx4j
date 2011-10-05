@@ -20,7 +20,7 @@
  */
 package com.pyx4j.widgets.client.style;
 
-public enum ThemeColor {
+public enum ThemePalette {
 
     OBJECT_TONE1,
 

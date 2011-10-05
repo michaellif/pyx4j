@@ -20,7 +20,7 @@
  */
 package com.pyx4j.widgets.client.style.theme;
 
-import com.pyx4j.widgets.client.style.ThemeColor;
+import com.pyx4j.widgets.client.style.ThemePalette;
 
 public class GrayTheme extends WindowsTheme {
 
@@ -30,20 +30,20 @@ public class GrayTheme extends WindowsTheme {
 
     @Override
     protected void initThemeColors() {
-        putThemeColor(ThemeColor.OBJECT_TONE1, 0x404040);
-        putThemeColor(ThemeColor.OBJECT_TONE2, 0x404040);
-        putThemeColor(ThemeColor.OBJECT_TONE3, 0x303030);
-        putThemeColor(ThemeColor.OBJECT_TONE4, 0x505050);
-        putThemeColor(ThemeColor.OBJECT_TONE5, 0x387CBB);
-        putThemeColor(ThemeColor.BORDER, 0xffffff);
-        putThemeColor(ThemeColor.SELECTION, 0xffa500);
-        putThemeColor(ThemeColor.SELECTION_TEXT, 0x000000);
-        putThemeColor(ThemeColor.TEXT_BACKGROUND, 0x000000);
-        putThemeColor(ThemeColor.TEXT, 0xffffff);
-        putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, 0xfafafa);
-        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xfcba84);
-        putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
-        putThemeColor(ThemeColor.SEPARATOR, 0x999999);
+        putThemeColor(ThemePalette.OBJECT_TONE1, 0x404040);
+        putThemeColor(ThemePalette.OBJECT_TONE2, 0x404040);
+        putThemeColor(ThemePalette.OBJECT_TONE3, 0x303030);
+        putThemeColor(ThemePalette.OBJECT_TONE4, 0x505050);
+        putThemeColor(ThemePalette.OBJECT_TONE5, 0x387CBB);
+        putThemeColor(ThemePalette.BORDER, 0xffffff);
+        putThemeColor(ThemePalette.SELECTION, 0xffa500);
+        putThemeColor(ThemePalette.SELECTION_TEXT, 0x000000);
+        putThemeColor(ThemePalette.TEXT_BACKGROUND, 0x000000);
+        putThemeColor(ThemePalette.TEXT, 0xffffff);
+        putThemeColor(ThemePalette.DISABLED_TEXT_BACKGROUND, 0xfafafa);
+        putThemeColor(ThemePalette.MANDATORY_TEXT_BACKGROUND, 0xfcba84);
+        putThemeColor(ThemePalette.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
+        putThemeColor(ThemePalette.SEPARATOR, 0x999999);
     }
 
 }

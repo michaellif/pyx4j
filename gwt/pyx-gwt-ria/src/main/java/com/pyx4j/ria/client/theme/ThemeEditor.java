@@ -48,7 +48,7 @@ import com.pyx4j.widgets.client.GroupBoxPanel;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.Theme;
-import com.pyx4j.widgets.client.style.ThemeColor;
+import com.pyx4j.widgets.client.style.ThemePalette;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 public class ThemeEditor extends AbstractView {
@@ -57,7 +57,7 @@ public class ThemeEditor extends AbstractView {
 
     private final Theme originalTheme;
 
-    private final Map<ThemeColor, ColorLabel> properties = new HashMap<ThemeColor, ColorLabel>();
+    private final Map<ThemePalette, ColorLabel> properties = new HashMap<ThemePalette, ColorLabel>();
 
     private ColorPickerDialog colorPickerDialog;
 
@@ -91,7 +91,7 @@ public class ThemeEditor extends AbstractView {
         colors.setContainer(table);
 
         int row = 0;
-        for (ThemeColor p : EnumSet.allOf(ThemeColor.class)) {
+        for (ThemePalette p : EnumSet.allOf(ThemePalette.class)) {
             Label l = new Label(p.name());
             l.getElement().getStyle().setProperty("fontSize", "0.6em");
             table.setWidget(row, 0, l);
@@ -154,7 +154,7 @@ public class ThemeEditor extends AbstractView {
 
         final Label label;
 
-        ColorLabel(final ThemeColor p) {
+        ColorLabel(final ThemePalette p) {
             bar = new InlineHTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
             bar.setWidth("20px");
             Element cElement = bar.getElement();
@@ -192,7 +192,7 @@ public class ThemeEditor extends AbstractView {
 
         //        private final ColorPicker picker;
 
-        private ThemeColor editThemeProperty;
+        private ThemePalette editThemeProperty;
 
         private Integer colorOriginal;
 
@@ -248,7 +248,7 @@ public class ThemeEditor extends AbstractView {
             this.show();
         }
 
-        private void edit(ThemeColor p) {
+        private void edit(ThemePalette p) {
             editThemeProperty = p;
             previewApplied = false;
             colorOriginal = theme.getThemeColor(p);
@@ -281,7 +281,7 @@ public class ThemeEditor extends AbstractView {
         }
     }
 
-    private void editThemeProperty(ThemeColor p, InlineHTML h) {
+    private void editThemeProperty(ThemePalette p, InlineHTML h) {
         if (colorPickerDialog == null) {
             colorPickerDialog = new ColorPickerDialog();
         }
@@ -312,7 +312,7 @@ public class ThemeEditor extends AbstractView {
     }
 
     private void updateThemePresentation() {
-        for (Map.Entry<ThemeColor, ColorLabel> pe : properties.entrySet()) {
+        for (Map.Entry<ThemePalette, ColorLabel> pe : properties.entrySet()) {
             Integer color = theme.getThemeColor(pe.getKey());
             pe.getValue().setColor(color);
         }

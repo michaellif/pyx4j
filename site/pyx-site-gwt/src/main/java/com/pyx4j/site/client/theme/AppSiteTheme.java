@@ -28,7 +28,7 @@ import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.Theme;
-import com.pyx4j.widgets.client.style.ThemeColor;
+import com.pyx4j.widgets.client.style.ThemePalette;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
 public abstract class AppSiteTheme extends Theme {
@@ -73,20 +73,20 @@ public abstract class AppSiteTheme extends Theme {
         float hue = (float) 213 / 360;
         float saturation = (float) 0.9;
         float brightness = (float) 0.7;
-        putThemeColor(ThemeColor.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.08));
-        putThemeColor(ThemeColor.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.12));
-        putThemeColor(ThemeColor.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.16));
-        putThemeColor(ThemeColor.OBJECT_TONE4, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.2));
-        putThemeColor(ThemeColor.OBJECT_TONE5, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.99));
-        putThemeColor(ThemeColor.BORDER, 0xf0f0f0);
-        putThemeColor(ThemeColor.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
-        putThemeColor(ThemeColor.SELECTION_TEXT, 0xffffff);
-        putThemeColor(ThemeColor.TEXT, 0x000000);
-        putThemeColor(ThemeColor.TEXT_BACKGROUND, 0xffffff);
-        putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, 0xfafafa);
-        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xfcba84);
-        putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
-        putThemeColor(ThemeColor.SEPARATOR, 0xeeeeee);
+        putThemeColor(ThemePalette.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.08));
+        putThemeColor(ThemePalette.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.12));
+        putThemeColor(ThemePalette.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.16));
+        putThemeColor(ThemePalette.OBJECT_TONE4, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.2));
+        putThemeColor(ThemePalette.OBJECT_TONE5, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.99));
+        putThemeColor(ThemePalette.BORDER, 0xf0f0f0);
+        putThemeColor(ThemePalette.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
+        putThemeColor(ThemePalette.SELECTION_TEXT, 0xffffff);
+        putThemeColor(ThemePalette.TEXT, 0x000000);
+        putThemeColor(ThemePalette.TEXT_BACKGROUND, 0xffffff);
+        putThemeColor(ThemePalette.DISABLED_TEXT_BACKGROUND, 0xfafafa);
+        putThemeColor(ThemePalette.MANDATORY_TEXT_BACKGROUND, 0xfcba84);
+        putThemeColor(ThemePalette.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
+        putThemeColor(ThemePalette.SEPARATOR, 0xeeeeee);
     }
 
     protected void initGeneralStyles() {
@@ -127,8 +127,8 @@ public abstract class AppSiteTheme extends Theme {
 
     protected void initBodyStyles() {
         Style style = new Style("body");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
-        style.addProperty("color", ThemeColor.TEXT);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE2);
+        style.addProperty("color", ThemePalette.TEXT);
         style.addProperty("margin", "0");
         style.addProperty("border", "none");
         addStyle(style);
@@ -136,19 +136,19 @@ public abstract class AppSiteTheme extends Theme {
 
     protected void initSectionStyles() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_Border));
-        style.addProperty("background-color", ThemeColor.BORDER);
+        style.addProperty("background-color", ThemePalette.BORDER);
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_SelectionBorder));
-        style.addProperty("background-color", ThemeColor.SELECTION);
+        style.addProperty("background-color", ThemePalette.SELECTION);
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_Background));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE2);
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_Content));
-        style.addProperty("background-color", ThemeColor.TEXT_BACKGROUND);
+        style.addProperty("background-color", ThemePalette.TEXT_BACKGROUND);
         addStyle(style);
     }
 
@@ -159,21 +159,21 @@ public abstract class AppSiteTheme extends Theme {
 
         //style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
 
-        style.addGradientBackground(ThemeColor.OBJECT_TONE2);
+        style.addGradientBackground(ThemePalette.OBJECT_TONE2);
 
         addStyle(style);
     }
 
     protected void initStatusBarStyle() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_StatusBar));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE2);
         style.addProperty("padding", "2 2 2 8");
         addStyle(style);
     }
 
     protected void initBarSeparatorStyle() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_BarSeparator));
-        style.addProperty("border-left", "2px ridge {}", ThemeColor.OBJECT_TONE2);
+        style.addProperty("border-left", "2px ridge {}", ThemePalette.OBJECT_TONE2);
 
         style.addProperty("margin-left", "3px");
         addStyle(style);
@@ -181,15 +181,15 @@ public abstract class AppSiteTheme extends Theme {
 
     protected void initProgressBarStyles() {
         Style style = new Style(".gwt-ProgressBar-shell");
-        style.addProperty("background-color", ThemeColor.BORDER);
+        style.addProperty("background-color", ThemePalette.BORDER);
         addStyle(style);
 
         style = new Style(".gwt-ProgressBar-bar");
-        style.addProperty("background-color", ThemeColor.SELECTION);
+        style.addProperty("background-color", ThemePalette.SELECTION);
         addStyle(style);
 
         style = new Style(".gwt-ProgressBar-text");
-        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        style.addProperty("color", ThemePalette.SELECTION_TEXT);
         addStyle(style);
     }
 
@@ -203,15 +203,15 @@ public abstract class AppSiteTheme extends Theme {
         addStyle(style);
 
         style = new Style(".gwt-MenuBar .gwt-MenuItem-selected");
-        style.addProperty("background", ThemeColor.SELECTION);
-        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        style.addProperty("background", ThemePalette.SELECTION);
+        style.addProperty("color", ThemePalette.SELECTION_TEXT);
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical");
         style.addProperty("margin-top", "0px");
         style.addProperty("margin-left", "0px");
-        style.addProperty("background", ThemeColor.TEXT_BACKGROUND);
-        style.addProperty("border", "1px solid {}", ThemeColor.SELECTION);
+        style.addProperty("background", ThemePalette.TEXT_BACKGROUND);
+        style.addProperty("border", "1px solid {}", ThemePalette.SELECTION);
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical .gwt-MenuItem");
@@ -230,12 +230,12 @@ public abstract class AppSiteTheme extends Theme {
     protected void initDialogBoxStyles() {
 
         Style style = new Style(".gwt-DialogBox");
-        style.addProperty("border", "2px outset {}", ThemeColor.BORDER);
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("border", "2px outset {}", ThemePalette.BORDER);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE4);
         addStyle(style);
 
         style = new Style(".gwt-DialogBox .Caption");
-        style.addProperty("background-color", ThemeColor.SELECTION);
+        style.addProperty("background-color", ThemePalette.SELECTION);
         addStyle(style);
 
         style = new Style(".gwt-PopupPanelGlass");
@@ -248,25 +248,25 @@ public abstract class AppSiteTheme extends Theme {
 
     protected void initDialogPanelStyles() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_Dialog));
-        style.addProperty("background-color", ThemeColor.SELECTION);
+        style.addProperty("background-color", ThemePalette.SELECTION);
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Dialog_Caption));
-        style.addProperty("background", ThemeColor.SELECTION);
+        style.addProperty("background", ThemePalette.SELECTION);
         style.addProperty("filter", "alpha(opacity=95)");
         style.addProperty("opacity", "0.95");
-        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        style.addProperty("color", ThemePalette.SELECTION_TEXT);
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Dialog_Resizer));
-        style.addProperty("background", ThemeColor.SELECTION);
+        style.addProperty("background", ThemePalette.SELECTION);
         style.addProperty("filter", "alpha(opacity=95)");
         style.addProperty("opacity", "0.95");
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Dialog_Content));
-        style.addProperty("background-color", ThemeColor.TEXT_BACKGROUND);
+        style.addProperty("background-color", ThemePalette.TEXT_BACKGROUND);
         addStyle(style);
     }
 
@@ -281,7 +281,7 @@ public abstract class AppSiteTheme extends Theme {
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.PanelBottom));
         style.addProperty("padding", "2px");
         style.addProperty("margin", "0px");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE1);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem));
@@ -291,20 +291,20 @@ public abstract class AppSiteTheme extends Theme {
         style.addProperty("text-align", "center");
         style.addProperty("margin-right", "1px");
         style.addProperty("margin-left", "1px");
-        style.addProperty("border-right", "1px solid {}", ThemeColor.SELECTION);
-        style.addProperty("border-left", "1px solid {}", ThemeColor.SELECTION);
-        style.addProperty("border-top", "1px solid {}", ThemeColor.SELECTION);
-        style.addGradientBackground(ThemeColor.OBJECT_TONE3);
+        style.addProperty("border-right", "1px solid {}", ThemePalette.SELECTION);
+        style.addProperty("border-left", "1px solid {}", ThemePalette.SELECTION);
+        style.addProperty("border-top", "1px solid {}", ThemePalette.SELECTION);
+        style.addGradientBackground(ThemePalette.OBJECT_TONE3);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected));
         style.addProperty("cursor", "default");
-        style.addProperty("background", ThemeColor.SELECTION);
+        style.addProperty("background", ThemePalette.SELECTION);
         style.addProperty("color", "white");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.hover));
-        style.addProperty("background", ThemeColor.OBJECT_TONE3);
+        style.addProperty("background", ThemePalette.OBJECT_TONE3);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected), Selector.valueOf(prefix,
@@ -318,7 +318,7 @@ public abstract class AppSiteTheme extends Theme {
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.List));
         style.addProperty("background-color", "white");
-        style.addProperty("border", "1px solid {}", ThemeColor.SELECTION);
+        style.addProperty("border", "1px solid {}", ThemePalette.SELECTION);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.ListItem));
@@ -327,8 +327,8 @@ public abstract class AppSiteTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.ListItem, TabPanel.StyleDependent.hover));
-        style.addProperty("background", ThemeColor.SELECTION);
-        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        style.addProperty("background", ThemePalette.SELECTION);
+        style.addProperty("color", ThemePalette.SELECTION_TEXT);
         addStyle(style);
 
     }
@@ -353,7 +353,7 @@ public abstract class AppSiteTheme extends Theme {
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_PickerPanel);
-        style.addProperty("border-color", ThemeColor.BORDER);
+        style.addProperty("border-color", ThemePalette.BORDER);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("background-color", "#fff");
@@ -387,11 +387,11 @@ public abstract class AppSiteTheme extends Theme {
         style.addProperty("padding-right", "2px");
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "outset");
-        style.addProperty("border-color", ThemeColor.OBJECT_TONE5);
+        style.addProperty("border-color", ThemePalette.OBJECT_TONE5);
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("outline", "none");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE1);
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_ButtonImage);
@@ -399,7 +399,7 @@ public abstract class AppSiteTheme extends Theme {
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button + "-hover" + " ." + CSSClass.pyx4j_ButtonContent);
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE4);
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button + "-pushed" + " ." + CSSClass.pyx4j_ButtonContent);
@@ -407,7 +407,7 @@ public abstract class AppSiteTheme extends Theme {
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button + "-checked" + " ." + CSSClass.pyx4j_ButtonContent);
-        style.addProperty("background", ThemeColor.OBJECT_TONE3);
+        style.addProperty("background", ThemePalette.OBJECT_TONE3);
         style.addProperty("border-style", "inset");
         addStyle(style);
     }
@@ -479,7 +479,7 @@ public abstract class AppSiteTheme extends Theme {
         addStyle(style);
 
         style = new Style(".gwt-TreeItem-selected");
-        style.addProperty("background", ThemeColor.SELECTION);
+        style.addProperty("background", ThemePalette.SELECTION);
         addStyle(style);
     }
 
@@ -516,7 +516,7 @@ public abstract class AppSiteTheme extends Theme {
 
     protected void initTextBoxStyle() {
         Style style = new Style(CSSClass.pyx4j_TextBox);
-        style.addProperty("border-color", ThemeColor.BORDER);
+        style.addProperty("border-color", ThemePalette.BORDER);
         style.addProperty("border-style", "inset");
         style.addProperty("border-width", "1px");
         style.addProperty("background-color", "#fff");
@@ -538,7 +538,7 @@ public abstract class AppSiteTheme extends Theme {
 
     protected void initListBoxStyle() {
         Style style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX));
-        style.addProperty("border-color", ThemeColor.BORDER);
+        style.addProperty("border-color", ThemePalette.BORDER);
         addStyle(style);
 
         style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX, null, NativeComboBox.StyleDependent.disabled));
@@ -548,7 +548,7 @@ public abstract class AppSiteTheme extends Theme {
         style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX, null, NativeComboBox.StyleDependent.readOnly));
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "none");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE1);
         addStyle(style);
 
         style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX, null, NativeComboBox.StyleDependent.invalid));
@@ -565,7 +565,7 @@ public abstract class AppSiteTheme extends Theme {
         style.addProperty("margin", "2px 4px");
         style.addProperty("border", "1px solid #A2BBDD");
         style.addProperty("background-color", "white");
-        style.addProperty("color", ThemeColor.TEXT);
+        style.addProperty("color", ThemePalette.TEXT);
         addStyle(style);
 
         style = new Style(".gwt-DatePicker td, .datePickerMonthSelector td:focus");
@@ -580,7 +580,7 @@ public abstract class AppSiteTheme extends Theme {
 
         style = new Style(".datePickerDay, .datePickerWeekdayLabel, .datePickerWeekendLabel");
         style.addProperty("font-size", "75%");
-        style.addProperty("outline-color", ThemeColor.TEXT);
+        style.addProperty("outline-color", ThemePalette.TEXT);
         style.addProperty("outline-style", "none");
         style.addProperty("outline-width", "medium");
         style.addProperty("padding", "4px");
@@ -663,19 +663,19 @@ public abstract class AppSiteTheme extends Theme {
 
         style = new Style(CSSClass.pyx4j_GroupBox, "-expanded");
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColor.OBJECT_TONE5);
+        style.addProperty("border-color", ThemePalette.OBJECT_TONE5);
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_GroupBox, "-collapsed");
         style.addProperty("border", "none");
         style.addProperty("border-top", "1px solid");
-        style.addProperty("border-color", ThemeColor.OBJECT_TONE5);
+        style.addProperty("border-color", ThemePalette.OBJECT_TONE5);
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_GroupBox_Caption);
         style.addProperty("padding", "5px 2px 2px 2px");
         style.addProperty("verticalAlign", "top");
-        style.addProperty("color", ThemeColor.OBJECT_TONE5);
+        style.addProperty("color", ThemePalette.OBJECT_TONE5);
         addStyle(style);
     }
 
@@ -745,7 +745,7 @@ public abstract class AppSiteTheme extends Theme {
         Style style = new Style(".gwt-SuggestBoxPopup");
         style.addProperty("background-color", "white");
         style.addProperty("padding", "2px");
-        style.addProperty("border-color", ThemeColor.BORDER);
+        style.addProperty("border-color", ThemePalette.BORDER);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("cursor", "pointer");

@@ -25,7 +25,7 @@ import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.ria.client.theme.RiaTheme;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemeColor;
+import com.pyx4j.widgets.client.style.ThemePalette;
 
 public abstract class EntityRiaTheme extends RiaTheme {
 
@@ -42,13 +42,13 @@ public abstract class EntityRiaTheme extends RiaTheme {
 
     protected void initEntityCRUDStyles() {
         Style style = new Style("." + EntityCSSClass.pyx4j_Entity_EntitySearchCriteria.name());
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE2);
         style.addProperty("padding", "2px");
         style.addProperty("border", "solid 1px");
-        style.addProperty("border-color", ThemeColor.BORDER);
+        style.addProperty("border-color", ThemePalette.BORDER);
         addStyle(style);
         style = new Style("." + EntityCSSClass.pyx4j_Entity_EntityEditor.name());
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE2);
         style.addProperty("padding", "3px");
         style.addProperty("margin-bottom", "10px");
         addStyle(style);
@@ -67,7 +67,7 @@ public abstract class EntityRiaTheme extends RiaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.even));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE2);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.odd));
@@ -84,9 +84,9 @@ public abstract class EntityRiaTheme extends RiaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ActionsBar));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE4);
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColor.BORDER);
+        style.addProperty("border-color", ThemePalette.BORDER);
         addStyle(style);
     }
 

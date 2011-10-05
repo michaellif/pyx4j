@@ -36,16 +36,16 @@ public class Theme {
 
     private final List<Style> styles;
 
-    private final Map<ThemeColor, Integer> themeColors;
+    private final Map<ThemePalette, Integer> themeColors;
 
     public Theme() {
         styles = new ArrayList<Style>();
-        themeColors = new HashMap<ThemeColor, Integer>();
+        themeColors = new HashMap<ThemePalette, Integer>();
     }
 
     protected Theme(Theme other) {
         styles = new ArrayList<Style>(other.styles);
-        themeColors = new HashMap<ThemeColor, Integer>(other.themeColors);
+        themeColors = new HashMap<ThemePalette, Integer>(other.themeColors);
     }
 
     public List<Style> getAllStyles() {
@@ -70,7 +70,7 @@ public class Theme {
         styles.add(style);
     }
 
-    public Integer getThemeColor(ThemeColor color) {
+    public Integer getThemeColor(ThemePalette color) {
         if (themeColors.get(color) == null) {
             log.warn("Theme color {} is not set", color.name());
             return 0xffffff;
@@ -78,7 +78,7 @@ public class Theme {
         return themeColors.get(color);
     }
 
-    public String getThemeColorString(ThemeColor color) {
+    public String getThemeColorString(ThemePalette color) {
         String colorString = Integer.toHexString(getThemeColor(color));
         int appendZeros = 6 - colorString.length();
         for (int i = 0; i < appendZeros; i++) {
@@ -88,7 +88,7 @@ public class Theme {
         return "#" + colorString;
     }
 
-    public void putThemeColor(ThemeColor color, Integer value) {
+    public void putThemeColor(ThemePalette color, Integer value) {
         themeColors.put(color, value);
     }
 
