@@ -7,17 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 30, 2011
- * @author Artyom
+ * Created on Oct 5, 2011
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.dashboard;
+package com.propertyvista.crm.rpc.services;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-public interface SortEntity extends IEntity {
-    IPrimitive<String> propertyName();
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportDTO;
 
-    IPrimitive<Boolean> descending();
+public interface UnitVacancyReportCrudService extends AbstractCrudService<UnitVacancyReportDTO> {
+
 }

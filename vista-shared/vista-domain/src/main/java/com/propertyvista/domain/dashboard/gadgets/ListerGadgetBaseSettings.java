@@ -11,7 +11,7 @@
  * @author Artyom
  * @version $Id$
  */
-package com.propertyvista.domain.dashboard;
+package com.propertyvista.domain.dashboard.gadgets;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Owned;
@@ -19,6 +19,9 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.i18n.shared.Translation;
+
+import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
+import com.propertyvista.domain.dashboard.StringHolder;
 
 @DiscriminatorValue("ListerGadgetBaseSettings")
 public interface ListerGadgetBaseSettings extends AbstractGadgetSettings {

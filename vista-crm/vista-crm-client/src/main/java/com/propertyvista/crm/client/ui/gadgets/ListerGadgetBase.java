@@ -44,9 +44,9 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
-import com.propertyvista.domain.dashboard.ListerGadgetBaseSettings;
-import com.propertyvista.domain.dashboard.ListerGadgetBaseSettings.RefreshInterval;
-import com.propertyvista.domain.dashboard.SortEntity;
+import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings;
+import com.propertyvista.domain.dashboard.gadgets.SortEntity;
+import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings.RefreshInterval;
 import com.propertyvista.domain.dashboard.StringHolder;
 
 public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
