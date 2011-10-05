@@ -23,6 +23,7 @@ package com.pyx4j.i18n.maven;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
 
@@ -36,6 +37,9 @@ import org.apache.maven.shared.artifact.filter.StrictPatternExcludesArtifactFilt
 import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
 import org.objectweb.asm.tree.analysis.AnalyzerException;
 
+import com.pyx4j.i18n.gettext.POEntry;
+import com.pyx4j.i18n.gettext.POFile;
+import com.pyx4j.i18n.gettext.POFileWriter;
 import com.pyx4j.scanner.DirectoryScanner;
 import com.pyx4j.scanner.JarFileScanner;
 import com.pyx4j.scanner.Scanner;
@@ -89,11 +93,41 @@ public class ExtractMojo extends AbstractMojo {
      * 
      * @parameter expression="compile"
      */
-    private String scope;
+    public String scope;
 
 //TODO  public List<String> classesInclude;
 
 //TODO    public List<String> classesExclude;
+
+    /**
+     * Filename of the created .pot file
+     * 
+     * @parameter expression="keys1.pot"
+     */
+    public String keysFile;
+
+    /**
+     * PO directory
+     * 
+     * @parameter expression="${basedir}/src/main/po"
+     */
+    public File poDirectory;
+
+    /**
+     * File to save extracted strings, you may use it to run spell checker.
+     * 
+     * @parameter expression="${project.build.directory}/i18n.txt"
+     */
+    public File extractedStrings;
+
+    /**
+     * The directory containing generated classes.
+     * 
+     * @parameter expression="${project.build.outputDirectory}"
+     * @required
+     * @readonly
+     */
+    private File classesDirectory;
 
     /**
      * The Maven project.
@@ -102,7 +136,7 @@ public class ExtractMojo extends AbstractMojo {
      * @required
      * @readonly
      */
-    private MavenProject project;
+    public MavenProject project;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -143,6 +177,11 @@ public class ExtractMojo extends AbstractMojo {
             }
             processArtifact(extractor, artifact);
         }
+
+        processClassesDirectory(extractor);
+
+        writePOFile(extractor);
+        writeTextFile(extractor);
     }
 
     private File getArtifactFile(Artifact artifact) throws MojoExecutionException {
@@ -164,7 +203,6 @@ public class ExtractMojo extends AbstractMojo {
 
     private void processArtifact(ConstantExtractor extractor, Artifact artifact) throws MojoExecutionException {
         getLog().debug("processing " + artifact);
-        System.out.println("--" + artifact);
 
         File file = getArtifactFile(artifact);
         Scanner scanner = null;
@@ -190,6 +228,75 @@ public class ExtractMojo extends AbstractMojo {
             throw new MojoExecutionException("Error reading dependency artifact " + artifact, e);
         } finally {
             IOUtils.closeQuietly(scanner);
+        }
+    }
+
+    private void processClassesDirectory(ConstantExtractor extractor) throws MojoExecutionException {
+        Scanner scanner = null;
+        try {
+            scanner = new DirectoryScanner(classesDirectory);
+            for (ScannerEntry source : scanner.getEntries()) {
+                if (!source.isDirectory() && source.getName().endsWith(".class")) {
+                    InputStream in = source.getInputStream();
+                    try {
+                        extractor.readClass(in);
+                    } finally {
+                        IOUtils.closeQuietly(in);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new MojoExecutionException("Error sacanning classesDirectory " + classesDirectory, e);
+        } catch (AnalyzerException e) {
+            throw new MojoExecutionException("Error reading classesDirectory " + classesDirectory, e);
+        } finally {
+            IOUtils.closeQuietly(scanner);
+        }
+
+    }
+
+    private void writePOFile(ConstantExtractor extractor) throws MojoExecutionException {
+        POFile po = new POFile();
+        po.createDefaultHeader();
+
+        for (String str : extractor.strings) {
+            POEntry pe = new POEntry();
+            pe.untranslated = str;
+            po.entries.add(pe);
+        }
+
+        if (!poDirectory.isDirectory()) {
+            if (!poDirectory.mkdirs()) {
+                throw new MojoExecutionException("Unable to create poDirectory " + poDirectory);
+            }
+        }
+
+        File file = new File(poDirectory, keysFile);
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(file, "UTF-8");
+            new POFileWriter().write(writer, po);
+            writer.flush();
+        } catch (IOException e) {
+            throw new MojoExecutionException("POFile " + file.getAbsolutePath() + " write error", e);
+        } finally {
+            IOUtils.closeQuietly(writer);
+        }
+    }
+
+    private void writeTextFile(ConstantExtractor extractor) throws MojoExecutionException {
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(extractedStrings, "UTF-8");
+            for (String str : extractor.strings) {
+                writer.println(str);
+                writer.println();
+            }
+            writer.flush();
+        } catch (IOException e) {
+            throw new MojoExecutionException("text file " + extractedStrings.getAbsolutePath() + " write error", e);
+        } finally {
+            IOUtils.closeQuietly(writer);
         }
     }
 }

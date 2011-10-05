@@ -33,7 +33,7 @@ import org.objectweb.asm.tree.analysis.BasicInterpreter;
 import org.objectweb.asm.tree.analysis.Value;
 import org.xnap.commons.i18n.I18n;
 
-class I18nConstantsInterpreter extends BasicInterpreter {
+abstract class I18nConstantsInterpreter extends BasicInterpreter {
 
     static String I18N_CLASS = codeName(I18n.class);
 
@@ -43,14 +43,10 @@ class I18nConstantsInterpreter extends BasicInterpreter {
 
     static final class StringConstantValue implements Value {
 
-        private final String string;
+        final String string;
 
         public StringConstantValue(String string) {
             this.string = string;
-        }
-
-        public String getString() {
-            return string;
         }
 
         @Override
@@ -59,6 +55,8 @@ class I18nConstantsInterpreter extends BasicInterpreter {
         }
     }
 
+    protected abstract void i18nString(String text);
+
     @Override
     public Value naryOperation(AbstractInsnNode insn, @SuppressWarnings("rawtypes") List values) throws AnalyzerException {
         if (insn.getOpcode() == INVOKEVIRTUAL) {
@@ -66,7 +64,7 @@ class I18nConstantsInterpreter extends BasicInterpreter {
             if (I18N_CLASS.equals(methodInsn.owner) && "tr".equals(methodInsn.name)) {
                 Value arg = (Value) values.get(1);
                 if (arg instanceof StringConstantValue) {
-                    System.out.println("--i18n text [" + ((StringConstantValue) arg).getString() + "]");
+                    i18nString(((StringConstantValue) arg).string);
                 }
             }
         }

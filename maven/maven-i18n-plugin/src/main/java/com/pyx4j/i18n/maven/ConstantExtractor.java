@@ -22,7 +22,9 @@ package com.pyx4j.i18n.maven;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
@@ -33,12 +35,21 @@ import org.objectweb.asm.tree.analysis.Interpreter;
 
 public class ConstantExtractor {
 
+    Set<String> strings = new HashSet<String>();
+
     public void readClass(InputStream in) throws IOException, AnalyzerException {
         ClassReader classReader = new ClassReader(in);
         ClassNode classNode = new ClassNode();
         classReader.accept(classNode, 0);
 
-        Interpreter interpreter = new I18nConstantsInterpreter();
+        Interpreter interpreter = new I18nConstantsInterpreter() {
+
+            @Override
+            protected void i18nString(String text) {
+                strings.add(text);
+            }
+        };
+
         Analyzer analyzer = new Analyzer(interpreter);
 
         for (@SuppressWarnings("rawtypes")

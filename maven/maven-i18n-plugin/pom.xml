@@ -62,8 +62,9 @@
         </dependency>
         
         <dependency>
-            <groupId>org.xnap.commons</groupId>
-            <artifactId>gettext-commons</artifactId>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-i18n-gettext</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
     </dependencies>
