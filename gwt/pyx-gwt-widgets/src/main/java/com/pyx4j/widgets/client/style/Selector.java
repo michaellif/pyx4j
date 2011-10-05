@@ -22,12 +22,12 @@ package com.pyx4j.widgets.client.style;
 
 public class Selector {
 
-    public static final String valueOf(String pefix, IStyleSuffix suffix, IStyleDependent dependent) {
-        return "." + pefix + (suffix == null ? "" : (suffix.name())) + (dependent == null ? "" : ("-" + dependent.name()));
+    public static final String valueOf(String prefix, IStyleSuffix suffix, IStyleDependent dependent) {
+        return "." + prefix + (suffix == null ? "" : (suffix.name())) + (dependent == null ? "" : ("-" + dependent.name()));
     }
 
-    public static final String valueOf(String pefix, IStyleSuffix suffix) {
-        return valueOf(pefix, suffix, null);
+    public static final String valueOf(String prefix, IStyleSuffix suffix) {
+        return valueOf(prefix, suffix, null);
     }
 
     public static final String valueOf(String prefix) {

@@ -38,10 +38,6 @@ public class Theme {
         styles = new ArrayList<Style>();
     }
 
-    protected Theme(Theme other) {
-        styles = new ArrayList<Style>(other.styles);
-    }
-
     public List<Style> getAllStyles() {
         return styles;
     }
@@ -64,18 +60,14 @@ public class Theme {
         styles.add(style);
     }
 
-    public Theme duplicate() {
-        return new Theme(this);
-    }
-
-    public String getThemeId() {
-        return this.getClass().getName();
+    public void addTheme(Theme theme) {
+        styles.addAll(theme.getAllStyles());
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Theme) {
-            return getThemeId() != null && getThemeId().equals(((Theme) obj).getThemeId());
+            return this.getClass().equals(((Theme) obj).getClass());
         }
         return false;
     }

@@ -53,7 +53,7 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 public class ThemeEditor extends AbstractView {
 
-    private Theme theme;
+    private final Theme theme;
 
     private final Theme originalTheme;
 
@@ -79,7 +79,8 @@ public class ThemeEditor extends AbstractView {
         contentPane.setWidget(mainPanel);
 
         originalTheme = StyleManger.getTheme();
-        theme = originalTheme.duplicate();
+        theme = null;
+        // theme = originalTheme.duplicate();
 
         GroupBoxPanel colors = new GroupBoxPanel(true);
         colors.setCaption("Colors");
@@ -302,7 +303,7 @@ public class ThemeEditor extends AbstractView {
         toolbarPane.add(new Button("Reset", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                theme = originalTheme.duplicate();
+                //  theme = originalTheme.duplicate();
                 updateThemePresentation();
 //                StyleManger.installTheme(originalTheme);
             }
