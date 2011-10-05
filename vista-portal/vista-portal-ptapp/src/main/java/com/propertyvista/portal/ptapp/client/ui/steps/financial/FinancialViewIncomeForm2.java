@@ -104,7 +104,7 @@ public class FinancialViewIncomeForm2 extends CEntityFolderItemEditor<IIncomeInf
                     }
 
                     @Override
-                    public void setFolderItem(CPolymorphicEntityEditor<IIncomeInfo> content) {
+                    public void setComponent(CPolymorphicEntityEditor<IIncomeInfo> content) {
                         // TODO Auto-generated method stub
 
                     }
