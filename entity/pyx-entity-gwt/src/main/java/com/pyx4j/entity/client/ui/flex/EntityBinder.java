@@ -282,10 +282,11 @@ public class EntityBinder<E extends IEntity> {
         if (getEntityEditor().isBound()) {
             setValue(entity);
         } else {
-            this.origEntity = (E) entity.cloneEntity();
             if (entity != null) {
+                this.origEntity = (E) entity.cloneEntity();
                 setValue(entity);
             } else {
+                this.origEntity = null;
                 setValue((E) EntityFactory.create(proto().getValueClass()));
             }
         }
