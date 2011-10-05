@@ -89,6 +89,14 @@ public class ItemActionsBar extends HorizontalPanel {
         return removeCommand.addClickHandler(handler);
     }
 
+    public HandlerRegistration addRowUpClickHandler(final ClickHandler handler) {
+        return upCommand.addClickHandler(handler);
+    }
+
+    public HandlerRegistration addRowDownClickHandler(final ClickHandler handler) {
+        return downCommand.addClickHandler(handler);
+    }
+
     public void setSortingState(SortingState state) {
         switch (state) {
         case First:

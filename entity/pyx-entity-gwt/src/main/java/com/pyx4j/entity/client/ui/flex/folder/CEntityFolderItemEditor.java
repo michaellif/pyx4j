@@ -38,6 +38,8 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
 
     private boolean first;
 
+    private boolean last;
+
     private final List<HandlerRegistration> handlerRegistrations;
 
     public CEntityFolderItemEditor(Class<E> clazz) {
@@ -55,6 +57,14 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
 
     public boolean isFirst() {
         return first;
+    }
+
+    public void setLast(boolean last) {
+        this.last = last;
+    }
+
+    public boolean isLast() {
+        return last;
     }
 
     @Override
@@ -109,16 +119,6 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
     public HandlerRegistration addRowDownClickHandler(ClickHandler handler) {
         if (getDecorator() instanceof IFolderItemDecorator) {
             HandlerRegistration handlerRegistration = ((IFolderItemDecorator<?>) getDecorator()).addRowDownClickHandler(handler);
-            handlerRegistrations.add(handlerRegistration);
-            return handlerRegistration;
-        } else {
-            return null;
-        }
-    }
-
-    public HandlerRegistration addRowCollapseClickHandler(ClickHandler handler) {
-        if (getDecorator() instanceof IFolderItemDecorator) {
-            HandlerRegistration handlerRegistration = ((IFolderItemDecorator<?>) getDecorator()).addRowCollapseClickHandler(handler);
             handlerRegistrations.add(handlerRegistration);
             return handlerRegistration;
         } else {

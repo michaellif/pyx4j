@@ -210,10 +210,45 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     }
 
-    protected void removeItem(CEntityFolderItemEditor<E> item, IFolderItemDecorator<E> folderItemDecorator) {
+    protected void removeItem(CEntityFolderItemEditor<E> item) {
         getValue().remove(item.getValue());
         abandonFolderItem(item);
         ValueChangeEvent.fire(CEntityFolder.this, getValue());
+    }
+
+    protected void moveUpItem(CEntityFolderItemEditor<E> item) {
+        moveItem(item, true);
+
+    }
+
+    protected void moveDownItem(CEntityFolderItemEditor<E> item) {
+        moveItem(item, false);
+    }
+
+    protected void moveItem(CEntityFolderItemEditor<E> item, boolean up) {
+        for (E value : itemsMap.keySet()) {
+            if (item.equals(itemsMap.get(value))) {
+                int indexBefore = getValue().indexOf(value);
+                int indexAfter = indexBefore + (up ? -1 : +1);
+                if (indexAfter < 0 || indexAfter > getValue().size()) {
+                    return;
+                }
+                getValue().remove(indexBefore);
+                getValue().add(indexAfter, value);
+
+                LinkedHashMap<E, CEntityFolderItemEditor<E>> oldMap = new LinkedHashMap<E, CEntityFolderItemEditor<E>>(itemsMap);
+                itemsMap.clear();
+                container.clear();
+                for (E entity : getValue()) {
+                    itemsMap.put(entity, oldMap.get(entity));
+                    container.add(oldMap.get(entity));
+                }
+                setNativeValue(getValue());
+                ValueChangeEvent.fire(CEntityFolder.this, getValue());
+                return;
+            }
+        }
+
     }
 
     /**
@@ -298,10 +333,21 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         currentRowDebugId++;
 
         item.addItemRemoveClickHandler(new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
-                removeItem(item, (IFolderItemDecorator) item.getDecorator());
+                removeItem(item);
+            }
+        });
+        item.addRowUpClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                moveUpItem(item);
+            }
+        });
+        item.addRowDownClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                moveDownItem(item);
             }
         });
 

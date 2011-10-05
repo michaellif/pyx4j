@@ -103,26 +103,17 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
     @Override
     public HandlerRegistration addItemClickHandler(ClickHandler handler) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
+        return toolbar.getActionsPanel().addRowUpClickHandler(handler);
     }
 
     @Override
     public HandlerRegistration addRowDownClickHandler(ClickHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public HandlerRegistration addRowCollapseClickHandler(ClickHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
+        return toolbar.getActionsPanel().addRowDownClickHandler(handler);
     }
 
 }

@@ -104,17 +104,12 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
 
     @Override
     public HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
-        return null;
+        return actionsPanel.addRowUpClickHandler(handler);
     }
 
     @Override
     public HandlerRegistration addRowDownClickHandler(ClickHandler handler) {
-        return null;
-    }
-
-    @Override
-    public HandlerRegistration addRowCollapseClickHandler(ClickHandler handler) {
-        return null;
+        return actionsPanel.addRowDownClickHandler(handler);
     }
 
     @Override
