@@ -20,13 +20,16 @@
  */
 package com.pyx4j.tester.client.domain;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface EntityII extends IEntity {
 
+    @ToString(index = 0)
     IPrimitive<String> stringMember();
 
+    @ToString(index = 1)
     IPrimitive<Integer> integerMember();
 
 }

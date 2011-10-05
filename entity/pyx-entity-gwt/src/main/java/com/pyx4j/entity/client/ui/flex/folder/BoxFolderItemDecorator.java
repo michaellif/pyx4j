@@ -27,8 +27,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
 public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
 
@@ -71,15 +69,10 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     }
 
     @Override
-    public void setComponent(final CEntityFolderItemEditor<E> folderItem) {
+    public void setFolderItem(final CEntityFolderItemEditor<E> folderItem) {
+        super.setFolderItem(folderItem);
         contentHolder.setWidget(folderItem.getContainer());
         toolbar.setTitleIcon(folderItem.getIcon());
-        folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
-            @Override
-            public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
-                System.out.println("+++++++++++++++PropertyChangeHandler");
-            }
-        });
     }
 
     public void setExpended(boolean expended) {

@@ -36,7 +36,7 @@ public interface IFolderDecorator<E extends IEntity> extends IDecorator<CEntityF
     HandlerRegistration addItemAddClickHandler(ClickHandler handler);
 
     @Override
-    void setComponent(CEntityFolder<E> w);
+    void setFolderItem(CEntityFolder<E> w);
 
     public enum DecoratorsIds implements IDebugId {
         Validation, Label;

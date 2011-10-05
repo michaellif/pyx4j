@@ -104,6 +104,8 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
             actionsPanel.getElement().getStyle().setMarginRight(40, Unit.PX);
         }
 
+        onExpended(decorator.isExpended());
+
     }
 
     protected ItemActionsBar getActionsPanel() {
@@ -111,6 +113,9 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
     }
 
     protected void onExpended(boolean expanded) {
+        if (decorator.getFolderItem() != null && decorator.getFolderItem().getValue() != null) {
+            caption.setText(decorator.getFolderItem().getValue().getStringView());
+        }
         caption.setVisible(!expanded);
         collapseImage.setResource(expanded ? decorator.getImages().groupBoxClose() : decorator.getImages().groupBoxOpen());
     }
@@ -119,6 +124,10 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         if (icon != null) {
             titleIcon.setResource(icon);
         }
+    }
+
+    protected void setCaption(String text) {
+        caption.setText(text);
     }
 
 }

@@ -31,9 +31,20 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
 
     private final EntityFolderImages images;
 
+    private CEntityFolderItemEditor<E> folderItem;
+
     public BaseFolderItemDecorator(EntityFolderImages images, String removeLabel, boolean removable) {
         this.images = images;
         this.removable = removable;
+    }
+
+    @Override
+    public void setFolderItem(final CEntityFolderItemEditor<E> folderItem) {
+        this.folderItem = folderItem;
+    }
+
+    public CEntityFolderItemEditor<E> getFolderItem() {
+        return folderItem;
     }
 
     public EntityFolderImages getImages() {
