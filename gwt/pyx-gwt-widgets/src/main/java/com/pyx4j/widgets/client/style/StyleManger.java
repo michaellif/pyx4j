@@ -38,6 +38,8 @@ public class StyleManger {
 
     private Theme theme;
 
+    private Palette palette;
+
     private static String[] alternativeHostnames;
 
     private static int alternativeHostnameIdx;
@@ -79,7 +81,7 @@ public class StyleManger {
     }
 
     public static void installTheme(Theme theme, Palette palette) {
-        if (instance().theme != null && instance().theme.equals(theme)) {
+        if (instance().theme != null && instance().theme.equals(theme) && instance().palette != null && instance().palette.equals(palette)) {
             return;
         }
         instance().theme = theme;
