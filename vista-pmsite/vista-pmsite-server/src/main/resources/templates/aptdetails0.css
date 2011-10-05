@@ -1,0 +1,86 @@
+.vista-pmsite-aptDetailsPage {
+}
+.vista-pmsite-aptDetailsPage .vista-pmsite-contentWrap {
+	background: url("images/template0/inner_content_bg.png") repeat-x #37393F;
+}
+.vista-pmsite-aptDetailsPage .vista-pmsite-content {
+	background: url("images/template0/inner_bg.png") no-repeat;
+}
+.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar {
+	display: inline-block;
+	width: 350px;
+	vertical-align: top;
+}
+.vista-pmsite-aptDetailsPage .vista-pmsite-main {
+	display: inline-block;
+	width: 605px;
+	vertical-align: top;
+	min-height:400px;
+	background:white;
+	color:#222;
+}
+.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox {
+	padding:20px 16px;
+	width:318px;
+	text-align:center;
+} 
+.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox .picture {
+	width:100%;
+}
+.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox .gallery img {
+	width:57px;
+	cursor:pointer;
+}
+.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox .gallery span {
+	float:left;
+	margin:5px 0 5px 8px;
+}
+.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox .gallery span:first-child {
+	margin-left:0;
+}
+.apartmentDetailsWrap {
+	width:100%;
+	margin-top:20px;
+}
+.apartmentDetailsWrap .infoBox {
+	display: inline-block;
+	vertical-align: top;
+	width:600px;
+	padding:0 20px;
+} 
+.apartmentDetailsWrap .infoBoxEntry {
+	padding:4px 0;
+} 
+.apartmentDetailsWrap .infoBoxEntry .infoBoxCaption {
+	display: inline-block;
+	vertical-align: top;
+	width:80px;
+	text-align:right;
+	padding-right:8px;
+	font-weight:normal;
+}
+.apartmentDetailsWrap .infoBoxEntry .infoBoxText {
+	display: inline-block;
+	vertical-align: top;
+	width:490px;
+	font-weight:bold;
+}
+.apartmentDetailsWrap .infoBox .description .infoBoxText {
+	font-weight:normal;
+}
+.apartmentDetailsWrap .infoBoxEntry ul.infoBoxText {
+	margin:0;
+	padding:0;
+}
+.apartmentDetailsWrap .infoBox .types li {
+	list-style:none;
+}
+.apartmentDetailsWrap .infoBox .amenities li {
+	float: left;
+	margin: 0 10px;
+}
+
+.apartmentDetailsWrap .infoBox .amenities li:first-child {
+	list-style: none;
+	margin-left: 0;
+}

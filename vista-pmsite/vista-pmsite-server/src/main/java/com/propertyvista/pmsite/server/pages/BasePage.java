@@ -29,7 +29,6 @@ import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.resource.TextTemplateResourceReference;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
@@ -39,6 +38,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 
 import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
+import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.FooterPanel;
 import com.propertyvista.pmsite.server.panels.HeaderPanel;
 
@@ -87,8 +87,8 @@ public abstract class BasePage extends WebPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
-        TextTemplateResourceReference refCSS = new TextTemplateResourceReference(TemplateResources.class, "main" + getPmsiteStyle() + ".css", "text/css",
-                new StylesheetTemplateModel(baseColor));
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "main" + getPmsiteStyle() + ".css",
+                "text/css", new StylesheetTemplateModel(baseColor));
         response.renderCSSReference(refCSS);
         response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "jquery-1.6.3.min.js"));
         response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "pmsite_jslib-1.0.js"));

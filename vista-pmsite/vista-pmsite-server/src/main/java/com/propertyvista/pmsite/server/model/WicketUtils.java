@@ -14,6 +14,7 @@
 package com.propertyvista.pmsite.server.model;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -22,6 +23,8 @@ import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.resource.TextTemplateResourceReference;
 
 public class WicketUtils {
     /*
@@ -144,5 +147,26 @@ public class WicketUtils {
             return getParent().getId() + ":" + getId();
         }
 
+    }
+
+    /*
+     * TextTemplateResource is auto-registered in ResourceReferenceRegistry cache
+     * by the ResourceReferenceRegistry constructor, if not exist, so no changes will
+     * be visible after the app is loaded for the first time.
+     * We need to remove and re-register it again to pickup possible changes from CRM
+     * in sub-sequential requests.
+     * NOTE: The Key construction is taken from the ResourceReference.java.
+     * It should match the original key used by the TextTemplateResourceReference
+     */
+    public static class VolatileTemplateResourceReference extends TextTemplateResourceReference {
+        private static final long serialVersionUID = 1L;
+
+        public VolatileTemplateResourceReference(Class<?> scope, String fileName, String contentType, IModel<Map<String, Object>> vars) {
+            super(scope, fileName, contentType, vars);
+            Key rcKey = new Key(scope.getName(), fileName, null, null, null);
+            WebApplication.get().getResourceReferenceRegistry().unregisterResourceReference(rcKey);
+            WebApplication.get().getResourceReferenceRegistry().registerResourceReference(this);
+
+        }
     }
 }

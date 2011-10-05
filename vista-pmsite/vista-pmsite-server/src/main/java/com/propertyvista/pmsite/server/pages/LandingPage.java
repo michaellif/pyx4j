@@ -14,13 +14,12 @@
 package com.propertyvista.pmsite.server.pages;
 
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.request.resource.ResourceReference.Key;
-import org.apache.wicket.resource.TextTemplateResourceReference;
 
 import templates.TemplateResources;
 
 import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
+import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.NewsPanel;
 import com.propertyvista.pmsite.server.panels.PromoPanel;
 import com.propertyvista.pmsite.server.panels.QuickSearchCriteriaPanel;
@@ -44,21 +43,8 @@ public class LandingPage extends BasePage {
     @Override
     public void renderHead(IHeaderResponse response) {
         String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
-        TextTemplateResourceReference refCSS = new TextTemplateResourceReference(TemplateResources.class, "landing" + getPmsiteStyle() + ".css", "text/css",
-                new StylesheetTemplateModel(baseColor));
-
-        /*
-         * TextTemplateResource is auto-registered in ResourceReferenceRegistry cache
-         * by the ResourceReferenceRegistry constructor, if not exist, so no changes will
-         * be visible after the app is loaded for the first time.
-         * We need to remove and re-register it again to pickup possible changes from CRM
-         * in sub-sequential requests.
-         * NORE: The Key construction is taken from the ResourceReference.java.
-         * It should match the original key used by the TextTemplateResourceReference
-         */
-        Key rcKey = new Key(refCSS.getScope().getName(), refCSS.getName(), null, null, null);
-        getApplication().getResourceReferenceRegistry().unregisterResourceReference(rcKey);
-        getApplication().getResourceReferenceRegistry().registerResourceReference(refCSS);
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "landing" + getPmsiteStyle() + ".css",
+                "text/css", new StylesheetTemplateModel(baseColor));
 
         response.renderCSSReference(refCSS);
 

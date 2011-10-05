@@ -43,7 +43,7 @@ select:focus {
 html,body {
 	height: 100%;
 	width: 100%;
-	color: #444444;
+	color: ${fgColor_100};
 }
 
 body {
@@ -51,13 +51,13 @@ body {
 }
 
 input,select,textarea {
-	color: #333333;
+	color: ${fgColor_100};
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 13px;
 }
 
 a {
-	color: ${fgColor_100};
+	color: ${hlightColor_100};
 	outline: medium none;
 	text-decoration: none;
 }
@@ -71,55 +71,6 @@ select {
 	-moz-border-radius: 3px;
 	background-color: #eee;
 	color: #333;
-}
-
-.vista-pmsite-contentWrap {
-
-}
-
-.vista-pmsite-content {
-	margin: 0 auto;
-	position: relative;
-	width: 960px;
-}
-
-.vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
-	overflow: hidden;
-}
-
-.vista-pmsite-sidebarWrap {
-	float: left;
-	position: relative;
-	width: 100%;
-	right: 680px;
-	border-right: 1px solid ${accentColor_10};
-	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-    box-sizing: border-box;   
-}
-
-.vista-pmsite-main {
-	width: 678px;
-	position: relative;
-	float: left;
-	left: 680px;
-	background: #ffffff;
-}
-
-.vista-pmsite-sidebar {
-	position: relative;
-	float: left;
-	width: 280px;
-	left: 680px;
-}
-
-.vista-pmsite-banner {
-	height: 375px;
-	position: relative;
-	width: 960px;
-	background: ${accentColor_10}
 }
 
 .header {
@@ -195,12 +146,6 @@ select {
 	line-height: 60px;
 	margin-left: 30px;
 	margin-right: 30px;
-	color: #555;
-}
-
-.navigation a {
-	text-decoration: none;
-	float: left;
 }
 
 .navigation span:lang(fr) {
@@ -209,24 +154,23 @@ select {
 	margin-right: 15px;
 }
 
-.navigation .active a { /*	background-color: #6fb700; */
-	color: #191B22;
-	height: 84px;
-	line-height: 64px;
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
+.navigation a {
+	color: ${fgColor_100};
+	text-decoration: none;
+	float: left;
 }
 
-.navigation .active span {
-	color: #111;
+.navigation a:hover {
+	background-color: ${accentColor_60};
+	color: ${primeColor_100};
 }
 
-.navigation span:hover {
-	color: ${accentColor_100};
+.navigation .active a {
+	background-color: ${accentColor_100};
 }
 
-.navigation .active span:hover {
-	color: #191B22;
+.navigation .active a:hover {
+	color: ${primeColor_60};
 }
 
 .locale {
@@ -324,19 +268,14 @@ ul.footer_locations li {
 	line-height: 38px;
 	padding: 0 0 20px;
 }
-
-.vista-pmsite-main .caption2 {
-	background: url("images/template0/subtitle_bg.gif") repeat-x transparent;
-	height: 60px;
-	width: 749px;
-	margin: 1px 0 0 211px;
+.caption2 {
+	height:60px;
 }
-
 .vista-pmsite-main .caption2 h1 {
 	font-size: 16px;
 	font-weight: bold;
 	text-transform: uppercase;
 	padding: 22px 0 0 24px;
-	color: #222;
+	color: ${fgColor_60};
 	float: left;
 }

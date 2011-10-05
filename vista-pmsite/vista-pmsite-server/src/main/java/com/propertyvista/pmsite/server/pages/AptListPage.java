@@ -18,11 +18,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters.NamedPair;
+
+import templates.TemplateResources;
 
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.pojo.IPojo;
@@ -30,7 +33,10 @@ import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
+import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
+import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaInputPanel;
 import com.propertyvista.pmsite.server.panels.AptListPanel;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
@@ -82,5 +88,15 @@ public class AptListPage extends BasePage {
         add(form);
 
         add(new AptListPanel("aptListPanel", new CompoundPropertyModel<List<Building>>(PMSiteContentManager.getPropertyList(criteria))));
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "aptlist" + getPmsiteStyle() + ".css",
+                "text/css", new StylesheetTemplateModel(baseColor));
+        response.renderCSSReference(refCSS);
+        super.renderHead(response);
+
     }
 }

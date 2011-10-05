@@ -18,9 +18,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+
+import templates.TemplateResources;
 
 import com.propertyvista.domain.contact.Address;
 import com.propertyvista.domain.media.Media;
@@ -29,7 +32,10 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
+import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 
 public class AptDetailsPage extends BasePage {
 
@@ -116,21 +122,15 @@ public class AptDetailsPage extends BasePage {
                 item.add(new Label("amenity", item.getModelObject().name().getValue()));
             }
         });
-        /*
-         * for (Media m : propInfo.media()) {
-         * System.out.println("==> Bldg media: " + m.getPrimaryKey().asLong());
-         * }
-         * for (Floorplan fp : plans) {
-         * System.out.println("==> Floorplan: " + fp.name().getValue());
-         * for (Media m : fp.media()) {
-         * System.out.println("--->   Media found: " + m.getPrimaryKey().asLong());
-         * }
-         * List<AptUnit> units = PMSiteContentManager.getBuildingAptUnits(propInfo, fp);
-         * for (AptUnit u : units) {
-         * System.out.println("--->   Unit found: " + u.info().number().getValue() + ":" + u.financial().unitRent().getValue());
-         * }
-         * }
-         */
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "aptdetails" + getPmsiteStyle() + ".css",
+                "text/css", new StylesheetTemplateModel(baseColor));
+        response.renderCSSReference(refCSS);
+        super.renderHead(response);
+
+    }
 }

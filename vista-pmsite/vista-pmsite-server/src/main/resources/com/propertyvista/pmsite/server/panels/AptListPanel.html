@@ -1,142 +1,35 @@
 <wicket:panel
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-<style>
-.apartment_listing_wrap .listing_entry {
-	background: white;
-	padding:20px;
-	border-bottom: 1px solid #ccc;
-	color: #222;
-}
-.apartment_listing_wrap .listing_entry:hover {
-	background:#d8e7bc;
-}
-.apartment_listing_wrap .listing_entry:first-child {
-	border-top: 1px solid #ccc;
-}
-.apartment_listing_wrap .listing_entry .picture_box {
-	display: inline-block;
-	vertical-align: top;
-	width:80px;
-	min-height:75px;
-	background:#ccc;
-	text-align:center;
-} 
-.apartment_listing_wrap .listing_entry .picture_box .picture {
-	width:100%;
-}
-.apartment_listing_wrap .listing_entry .info_box {
-	display: inline-block;
-	vertical-align: top;
-	width:450px;
-	padding:0 20px;
-} 
-.apartment_listing_wrap .listing_entry .info_box_entry {
-	padding:4px 0;
-} 
-.apartment_listing_wrap .listing_entry .info_box_entry .info_box_caption {
-	display: inline-block;
-	vertical-align: top;
-	width:80px;
-	text-align:right;
-	padding-right:8px;
-	font-weight:normal;
-}
-.apartment_listing_wrap .listing_entry .info_box_entry .info_box_text {
-	display: inline-block;
-	vertical-align: top;
-	width:340px;
-	font-weight:bold;
-}
-.apartment_listing_wrap .listing_entry .info_box .description .info_box_text {
-	font-weight:normal;
-}
-.apartment_listing_wrap .listing_entry .info_box ul.info_box_text {
-	margin:0;
-	padding:0;
-}
-.apartment_listing_wrap .listing_entry .info_box .types li {
-	list-style:none;
-}
-.apartment_listing_wrap .listing_entry .info_box .amenities li {
-	float: left;
-	margin: 0 10px;
-}
-
-.apartment_listing_wrap .listing_entry .info_box .amenities li:first-child {
-	list-style: none;
-	margin-left: 0;
-}
-.apartment_listing_wrap .listing_entry .control_box {
-	display: inline-block;
-	vertical-align: top;
-	width:80px;
-	padding:0 20px;
-} 
-.apartment_listing_wrap .listing_entry .control_button {
-	float:right;
-	padding:6px 0;
-	border-bottom: 1px solid #ccc;
-}
-.listingCtlButton {
-	background-image: url("wicket/resource/templates.TemplateResources/images/template0/aptListIcons.png");
-	background-repeat: no-repeat;
-	display:block;
-	width:70px;
-	height:25px;
-	padding-top:5px;
-	padding-left:30px;
-	font-weight:bold;
-	cursor:pointer;
-	color:#6c6d6f;
-}
-a.listingCtlButton {
-	color:#6c6d6f !important;
-	text-decoration:none;
-}
-.apartment_listing_wrap .listing_entry:hover .listingCtlButton {
-	background-image: url("wicket/resource/templates.TemplateResources/images/template0/aptListIcons-hlight.png");
-	color:#339900 !important;
-}
-#btnShowOnMap {
-	background-position:0px 0px;
-}
-#btnViewDetails {
-	background-position:0px -30px;
-}
-.display_none {
-	display:none;
-}
-</style>
 	<div class="listing_mapview" id="vista.aptmap" wicket:id="gwtInclude"/>
 	
 	<div class="listing_listview" wicket:id="aptResultList">
-		<div class="listing_entry" wicket:id="aptListItem">
-			<div class="picture_box">
+		<div class="listingEntry" wicket:id="aptListItem">
+			<div class="pictureBox">
 				<img class="picture" wicket:id="picture"/>
 			</div>
-			<div class="info_box">
-				<div class="info_box_entry address">
-					<label class="info_box_caption">Address:</label>
-					<span class="info_box_text" wicket:id="address"/>
+			<div class="infoBox">
+				<div class="infoBoxEntry address">
+					<label class="infoBoxCaption">Address:</label>
+					<span class="infoBoxText" wicket:id="address"/>
 				</div>
-				<div class="info_box_entry types">
-					<label class="info_box_caption">Types:</label>
-					<ul class="info_box_text"><li wicket:id="types"><span wicket:id="type"/></li></ul>
+				<div class="infoBoxEntry types">
+					<label class="infoBoxCaption">Types:</label>
+					<ul class="infoBoxText"><li wicket:id="types"><span wicket:id="type"/></li></ul>
 				</div>
-				<div class="info_box_entry amenities">
-					<label class="info_box_caption">Amenities:</label>
-					<ul class="info_box_text"><li wicket:id="amenities"><span wicket:id="amenity"/></li></ul>
+				<div class="infoBoxEntry amenities">
+					<label class="infoBoxCaption">Amenities:</label>
+					<ul class="infoBoxText"><li wicket:id="amenities"><span wicket:id="amenity"/></li></ul>
 				</div>
-				<div class="info_box_entry description">
-					<label class="info_box_caption">Notes:</label>
-					<span class="info_box_text" wicket:id="description"/>
+				<div class="infoBoxEntry description">
+					<label class="infoBoxCaption">Notes:</label>
+					<span class="infoBoxText" wicket:id="description"/>
 				</div>
 			</div>
-			<div class="control_box">
-				<div class="control_button">
+			<div class="controlBox">
+				<div class="controlButton">
 					<div id="btnShowOnMap" class="listingCtlButton">Map</div>
 				</div>
-				<div class="control_button">
+				<div class="controlButton">
 					<a id="btnViewDetails" class="listingCtlButton" wicket:id="aptDetails" href="">Details</a>
 				</div>
 			</div>

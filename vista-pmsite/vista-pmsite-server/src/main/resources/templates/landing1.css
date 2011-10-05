@@ -4,8 +4,9 @@
 }
 .vista-pmsite-landingPage .banner {
 	height: 375px;
-	position: relative;
+    margin: 0 auto;
 	width: 960px;
+	position: relative;
 	background: ${accentColor_20};
 }
 .vista-pmsite-landingPage .banner_img {
@@ -32,7 +33,6 @@
 
 .vista-pmsite-landingPage .quickSearchPanel label {
 	color: #555555;
-	color:blue;
 	display: block;
 	font-size: 13px;
 	padding: 0 0 3px;
@@ -43,19 +43,15 @@
 	margin-bottom: 15px;
 }
 
-.vista-pmsite-landingPage .quickSearchPanel input {
+.vista-pmsite-landingPage .quickSearchPanel input[type=submit] {
 	background: none repeat scroll 0 0 transparent;
 	border: medium none;
-	color: #555555;
+	color: ${bgColor_100};
 	cursor: pointer;
 	font-size: 16px;
 	padding: 5px 0;
-	text-shadow: 0 1px 0 #777777;
 	text-transform: uppercase;
 	width: 128px;
-}
-.vista-pmsite-landingPage .quickSearchPanel input[type=submit] {
-	color:white;
 }
 
 .vista-pmsite-landingPage .quickSearchPanel .submit {
@@ -65,6 +61,38 @@
 	margin: 15px auto 0;
 	overflow: hidden;
 	width: 128px;
+}
+
+.vista-pmsite-landingPage .vista-pmsite-mainWrap {
+	width: 960px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+.vista-pmsite-landingPage .vista-pmsite-sidebarWrap {
+	float: left;
+	position: relative;
+	width: 100%;
+	right: 680px;
+	border-right: 1px solid ${accentColor_10};
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;   
+}
+
+.vista-pmsite-landingPage .vista-pmsite-sidebar {
+	position: relative;
+	float: left;
+	width: 280px;
+	left: 680px;
+}
+
+.vista-pmsite-landingPage .vista-pmsite-main {
+	width: 678px;
+	position: relative;
+	float: left;
+	left: 680px;
+	background: ${bgC0lor_100};
 }
 
 .vista-pmsite-landingPage .testimBox {

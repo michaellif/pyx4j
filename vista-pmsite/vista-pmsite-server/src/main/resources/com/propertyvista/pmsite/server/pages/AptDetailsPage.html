@@ -5,94 +5,6 @@
 </head>
 <body>
 	<wicket:extend>
-<style>
-.vista-pmsite-aptDetailsPage {
-}
-.vista-pmsite-aptDetailsPage .vista-pmsite-contentWrap {
-	background: url("wicket/resource/templates.TemplateResources/images/template0/inner_content_bg.png") repeat-x #37393F;
-}
-.vista-pmsite-aptDetailsPage .vista-pmsite-content {
-	background: url("wicket/resource/templates.TemplateResources/images/template0/inner_bg.png") no-repeat;
-}
-.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar {
-	display: inline-block;
-	width: 350px;
-	vertical-align: top;
-}
-.vista-pmsite-aptDetailsPage .vista-pmsite-main {
-	display: inline-block;
-	width: 605px;
-	vertical-align: top;
-	min-height:400px;
-	background:white;
-	color:#222;
-}
-.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .picture_box {
-	padding:20px 16px;
-	width:318px;
-	text-align:center;
-} 
-.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .picture_box .picture {
-	width:100%;
-}
-.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .picture_box .gallery img {
-	width:57px;
-	cursor:pointer;
-}
-.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .picture_box .gallery span {
-	float:left;
-	margin:5px 0 5px 8px;
-}
-.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .picture_box .gallery span:first-child {
-	margin-left:0;
-}
-.apartment_details_wrap {
-	width:100%;
-	margin-top:20px;
-}
-.apartment_details_wrap .info_box {
-	display: inline-block;
-	vertical-align: top;
-	width:600px;
-	padding:0 20px;
-} 
-.apartment_details_wrap .info_box_entry {
-	padding:4px 0;
-} 
-.apartment_details_wrap .info_box_entry .info_box_caption {
-	display: inline-block;
-	vertical-align: top;
-	width:80px;
-	text-align:right;
-	padding-right:8px;
-	font-weight:normal;
-}
-.apartment_details_wrap .info_box_entry .info_box_text {
-	display: inline-block;
-	vertical-align: top;
-	width:490px;
-	font-weight:bold;
-}
-.apartment_details_wrap .info_box .description .info_box_text {
-	font-weight:normal;
-}
-.apartment_details_wrap .info_box_entry ul.info_box_text {
-	margin:0;
-	padding:0;
-}
-.apartment_details_wrap .info_box .types li {
-	list-style:none;
-}
-.apartment_details_wrap .info_box .amenities li {
-	float: left;
-	margin: 0 10px;
-}
-
-.apartment_details_wrap .info_box .amenities li:first-child {
-	list-style: none;
-	margin-left: 0;
-}
-</style>
 <script language="javascript">
 function setImgSrc(img, src) {
 	var el_img = document.getElementById(img);
@@ -105,7 +17,7 @@ function setImgSrc(img, src) {
 				<div class="vista-pmsite-mainWrap">
 					<div class="vista-pmsite-sidebarWrap">
 						<div class="vista-pmsite-sidebar">
-							<div class="picture_box">
+							<div class="pictureBox">
 								<img class="picture" wicket:id="picture"/>
 								<div class="gallery">
 									<span wicket:id="gallery"><img wicket:id="thumbnail"/></span>
@@ -116,23 +28,23 @@ function setImgSrc(img, src) {
 							<div class="caption2">
 								<h1>Apartment Details</h1>
 							</div>
-							<div class="apartment_details_wrap">
-								<div class="info_box">
-									<div class="info_box_entry address">
-										<label class="info_box_caption">Address:</label>
-										<span class="info_box_text" wicket:id="address"/>
+							<div class="apartmentDetailsWrap">
+								<div class="infoBox">
+									<div class="infoBoxEntry address">
+										<label class="infoBoxCaption">Address:</label>
+										<span class="infoBoxText" wicket:id="address"/>
 									</div>
-									<div class="info_box_entry types">
-										<label class="info_box_caption">Types:</label>
-										<ul class="info_box_text"><li wicket:id="types"><span wicket:id="type"/></li></ul>
+									<div class="infoBoxEntry types">
+										<label class="infoBoxCaption">Types:</label>
+										<ul class="infoBoxText"><li wicket:id="types"><span wicket:id="type"/></li></ul>
 									</div>
-									<div class="info_box_entry amenities">
-										<label class="info_box_caption">Amenities:</label>
-										<ul class="info_box_text"><li wicket:id="amenities"><span wicket:id="amenity"/></li></ul>
+									<div class="infoBoxEntry amenities">
+										<label class="infoBoxCaption">Amenities:</label>
+										<ul class="infoBoxText"><li wicket:id="amenities"><span wicket:id="amenity"/></li></ul>
 									</div>
-									<div class="info_box_entry description">
-										<label class="info_box_caption">Notes:</label>
-										<span class="info_box_text" wicket:id="description"/>
+									<div class="infoBoxEntry description">
+										<label class="infoBoxCaption">Notes:</label>
+										<span class="infoBoxText" wicket:id="description"/>
 									</div>
 								</div>
 							</div>
