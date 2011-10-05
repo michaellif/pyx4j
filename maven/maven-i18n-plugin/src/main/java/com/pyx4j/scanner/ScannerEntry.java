@@ -14,30 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Sep 24, 2011
+ * This classes are taken from Jour
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.i18n.gettext;
+package com.pyx4j.scanner;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.objectweb.asm.tree.analysis.AnalyzerException;
+public interface ScannerEntry {
 
-import com.pyx4j.i18n.maven.ConstantExtractor;
+    String getName();
 
-public class Verify {
+    boolean isDirectory();
 
-    public static void main(String[] args) throws IOException, AnalyzerException {
-        InputStream in;
-        System.out.println("--i18n tests --");
-        in = Verify.class.getResourceAsStream("/com/ut/MainClass.class");
-        try {
-            new ConstantExtractor().readClass(in);
-        } finally {
-            in.close();
-        }
-    }
+    long getSize();
 
+    long getTime();
+
+    InputStream getInputStream() throws IOException;
+
+    ScannerEntry getOrigin();
 }

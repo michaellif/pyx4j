@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.i18n.gettext.maven;
+package com.pyx4j.i18n.maven;
 
 import java.util.List;
 
@@ -63,7 +63,7 @@ class I18nConstantsInterpreter extends BasicInterpreter {
             if (I18N_CLASS.equals(methodInsn.owner) && "tr".equals(methodInsn.name)) {
                 Value arg = (Value) values.get(1);
                 if (arg instanceof StringConstantValue) {
-                    System.out.println(((StringConstantValue) arg).getString());
+                    System.out.println("--i18n text [" + ((StringConstantValue) arg).getString() + "]");
                 }
             }
         }

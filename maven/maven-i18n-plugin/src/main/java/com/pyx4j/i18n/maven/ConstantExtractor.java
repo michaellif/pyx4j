@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.i18n.gettext.maven;
+package com.pyx4j.i18n.maven;
 
 import java.io.IOException;
 import java.io.InputStream;
