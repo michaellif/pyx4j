@@ -18,7 +18,7 @@ import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemeColor;
+import com.pyx4j.widgets.client.style.ThemePalette;
 
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
@@ -58,20 +58,20 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
         float hue = (float) 213 / 360;
         float saturation = (float) 0.9;
         float brightness = (float) 0.7;
-        putThemeColor(ThemeColor.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.08));
-        putThemeColor(ThemeColor.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.12));
-        putThemeColor(ThemeColor.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.16));
-        putThemeColor(ThemeColor.OBJECT_TONE4, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.2));
-        putThemeColor(ThemeColor.OBJECT_TONE5, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.99));
-        putThemeColor(ThemeColor.BORDER, 0xf0f0f0);
-        putThemeColor(ThemeColor.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
-        putThemeColor(ThemeColor.SELECTION_TEXT, 0xffffff);
-        putThemeColor(ThemeColor.TEXT, 0x000000);
-        putThemeColor(ThemeColor.TEXT_BACKGROUND, 0xffffff);
-        putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, 0xfafafa);
-        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xe5e5e5);
-        putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
-        putThemeColor(ThemeColor.SEPARATOR, 0xeeeeee);
+        putThemeColor(ThemePalette.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.08));
+        putThemeColor(ThemePalette.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.12));
+        putThemeColor(ThemePalette.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.16));
+        putThemeColor(ThemePalette.OBJECT_TONE4, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.2));
+        putThemeColor(ThemePalette.OBJECT_TONE5, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.99));
+        putThemeColor(ThemePalette.BORDER, 0xf0f0f0);
+        putThemeColor(ThemePalette.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
+        putThemeColor(ThemePalette.SELECTION_TEXT, 0xffffff);
+        putThemeColor(ThemePalette.TEXT, 0x000000);
+        putThemeColor(ThemePalette.TEXT_BACKGROUND, 0xffffff);
+        putThemeColor(ThemePalette.DISABLED_TEXT_BACKGROUND, 0xfafafa);
+        putThemeColor(ThemePalette.MANDATORY_TEXT_BACKGROUND, 0xe5e5e5);
+        putThemeColor(ThemePalette.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
+        putThemeColor(ThemePalette.SEPARATOR, 0xeeeeee);
     }
 
     @Override
@@ -155,7 +155,7 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Footer));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE1);
         style.addProperty("clear", "left");
         addStyle(style);
 
@@ -163,7 +163,7 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
         addStyle(style);
 
         style = new Style(Selector.valueOf(VistaHeaderBar.DEFAULT_STYLE_PREFIX));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("background-color", ThemePalette.OBJECT_TONE4);
         style.addProperty("margin", "0.4em 0 0.4em 0");
         style.addProperty("width", "960px");
         addStyle(style);
@@ -177,7 +177,7 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
         style = new Style(Selector.valueOf(VistaLineSeparator.DEFAULT_STYLE_PREFIX));
         style.addProperty("border-top-width", "1px");
         style.addProperty("border-top-style", "dotted");
-        style.addProperty("border-top-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("border-top-color", ThemePalette.OBJECT_TONE4);
         style.addProperty("margin-bottom", "0.3em");
         style.addProperty("width", "400px");
         addStyle(style);
@@ -192,7 +192,7 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
         style.addProperty("text-align", "center");
         style.addProperty("vertical-align", "middle");
         style.addProperty("display", "block");
-        style.addProperty("color", ThemeColor.OBJECT_TONE5);
+        style.addProperty("color", ThemePalette.OBJECT_TONE5);
         addStyle(style);
 
     }
@@ -389,7 +389,7 @@ public abstract class VistaTheme extends com.propertyvista.common.client.theme.V
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.Label, SecondNavigViewImpl.StyleDependent.current));
-        style.addProperty("color", ThemeColor.TEXT);
+        style.addProperty("color", ThemePalette.TEXT);
         addStyle(style);
     }
 
