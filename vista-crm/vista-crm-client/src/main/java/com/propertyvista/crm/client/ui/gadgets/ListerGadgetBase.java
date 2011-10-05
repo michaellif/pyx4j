@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,7 +38,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
-import com.pyx4j.site.client.ui.crud.FilterData;
 import com.pyx4j.site.client.ui.crud.ListerBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
@@ -56,17 +54,11 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     /**
      * Refresh interval for the list when in development mode in milliseconds (relevant when refreshing is activated)
      */
-    private static final int DEVELOPMENT_MODE_REFRESH_INTERVAL = 10000;
-
     private static final RefreshInterval DEFAULT_REFRESH_INTERVAL = RefreshInterval.Never;
 
     private static final int DEFAULT_ITEMS_PER_PAGE = 10;
-  
+
     protected final EnhancedListerBase<E> listerBase;
-
-    private final AbstractCrudService<E> service;
-
-    private final Class<E> entityClass;
 
     protected ListerGadgetBaseSettings settings = null;
 
@@ -77,29 +69,22 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     public ListerGadgetBase(GadgetMetadata gmd, AbstractCrudService<E> service, Class<E> entityClass) {
         super(gmd);
 
-        this.service = service;
-        this.entityClass = entityClass;
-
         // TODO add more civilised (use isSettingsOk() method) when IEntity.isInstance() works well
         try {
             settings = gmd.settings().cast();
         } catch (Throwable eh) {
             settings = EntityFactory.create(ListerGadgetBaseSettings.class);
             resetToDefault(settings);
-            gmd.settings().set(settings);            
+            gmd.settings().set(settings);
         }
 
         refreshTimer = new RefreshTimer();
 
         listerBase = new EnhancedListerBase<E>(entityClass, null);
-        
-        // TODO enable filters when they can be persisted
-        
-        listerBase.setFiltersVisible(false);
-        listerActivity = new ListerActivityBase<E>(listerBase, service, entityClass) {
-        };
+        listerActivity = new ListerActivityBase<E>(listerBase, service, entityClass);
 
-        listerBase.setPresenter(listerActivity);
+        // TODO enable filters when they can be persisted
+        listerBase.setFiltersVisible(false);
 
         listerBase.addAttachHandler(new AttachEvent.Handler() {
             @Override
@@ -116,11 +101,10 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
                 }
             }
         });
-
     }
-    
+
     @Override
-    protected void selfInit(GadgetMetadata gmd) {       
+    protected void selfInit(GadgetMetadata gmd) {
         AbstractGadgetSettings settings = createSettings();
         initDefaultSettings(settings);
         gmd.settings().set(settings);
@@ -131,7 +115,6 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         return abstractSettings.isInstanceOf(ListerGadgetBaseSettings.class);
     }
 
-    
     protected AbstractGadgetSettings createSettings() {
         ListerGadgetBaseSettings settings = EntityFactory.create(ListerGadgetBaseSettings.class);
         assert settings != null : "Failed to instantiate ListerGadgetBaseSettings class";
@@ -152,7 +135,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         settings.refreshInterval().setValue(DEFAULT_REFRESH_INTERVAL);
         settings.itemsPerPage().setValue(DEFAULT_ITEMS_PER_PAGE);
         settings.currentPage().setValue(0);
-        settings.columnPaths().clear();        
+        settings.columnPaths().clear();
     }
 
     protected EnhancedListerBase<E> getListerBase() {
@@ -173,7 +156,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             if (GWT.isProdMode()) {
                 refreshIntervalMillis = refreshInterval.value() * 60000;
             } else {
-                refreshIntervalMillis = DEVELOPMENT_MODE_REFRESH_INTERVAL;
+                refreshIntervalMillis = refreshInterval.value() * 1000;
             }
         } else {
             refreshIntervalMillis = -1;
@@ -184,38 +167,14 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     @Override
     public GadgetMetadata getGadgetMetadata() {
         // store the state of ListerBase in the settings in order to provide up to date meta data
-        storeGadgetStateInSettings();
+        storeSettings();
 
         // in normal situation settings property should be referenced by gadget metadata
         return this.gadgetMetadata;
     }
-    
-    private void storeGadgetStateInSettings() {
-      // TODO FILTERING: current problem: filter value cannot be persisted (needs to be serialised in some way)
 
-      // SORTING:
-      settings.sorting().clear();
-      List<Sort> sorting = getListerBase().getSorting();
-      for (Sort sort : sorting) {
-          SortEntity sortEntity = SortToEntity(sort);
-          settings.sorting().add(sortEntity);
-      }
-
-      // CURRENT PAGE:
-      Integer currentPage = getListerBase().getLister().getPageNumber();
-      settings.currentPage().setValue(currentPage);
-
-      // COLUMNS:
-      settings.columnPaths().clear();
-      for (ColumnDescriptor<E> columnDescriptor : getListerBase().getSelectedColumnDescriptors()) {
-          StringHolder columnName = EntityFactory.create(StringHolder.class);
-          columnName.stringValue().setValue(columnDescriptor.getColumnName());
-          settings.columnPaths().add(columnName);
-      }        
-    }
- 
     public static SortEntity SortToEntity(Sort sort) {
-        SortEntity entity = EntityFactory.create(SortEntity.class);      
+        SortEntity entity = EntityFactory.create(SortEntity.class);
         entity.propertyName().setValue(sort.getPropertyName());
         entity.descending().setValue(sort.isDescending());
         return entity;
@@ -225,7 +184,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         Sort sort = new Sort(entity.propertyName().getValue(), entity.descending().getValue());
         return sort;
     }
-  
+
     //
     // IGadget:
     @Override
@@ -268,11 +227,35 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         return new SetupLister();
     }
 
+    private void storeSettings() {
+        // COLUMNS:
+        settings.columnPaths().clear();
+        for (ColumnDescriptor<E> columnDescriptor : getListerBase().getSelectedColumnDescriptors()) {
+            StringHolder columnName = EntityFactory.create(StringHolder.class);
+            columnName.stringValue().setValue(columnDescriptor.getColumnName());
+            settings.columnPaths().add(columnName);
+        }
+
+        // SORTING:
+        settings.sorting().clear();
+        List<Sort> sorting = getListerBase().getSorting();
+        for (Sort sort : sorting) {
+            SortEntity sortEntity = SortToEntity(sort);
+            settings.sorting().add(sortEntity);
+        }
+
+        // CURRENT PAGE:
+        Integer currentPage = getListerBase().getLister().getPageNumber();
+        settings.currentPage().setValue(currentPage);
+
+        // TODO FILTERING: current problem: filter value cannot be persisted (needs to be serialised in some way)
+    }
+
     private void applySettings() {
         getListerBase().setPageSize(settings.itemsPerPage().getValue());
         setRefreshInterval(settings.refreshInterval().getValue());
         refreshTimer.reactivate();
-        
+
         // apply columns
         ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
         if (settings.columnPaths().isEmpty()) {
@@ -302,10 +285,10 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         public EnhancedListerBase(Class<E> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass) {
             super(clazz, itemOpenPlaceClass);
         }
-        
+
         @Override
         public HandlerRegistration addAttachHandler(AttachEvent.Handler handler) {
-            return getListPanel().addAttachHandler(handler);            
+            return getListPanel().addAttachHandler(handler);
         }
 
         public E proto() {
@@ -359,10 +342,10 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             timer = new Timer() {
                 @Override
                 public void run() {
-                    storeGadgetStateInSettings();
-                    
+                    storeSettings();
+
                     // try to reload the page and if the page is empty try to load the previous one
-                    int pageToReload = getListerBase().getPageNumber();                    
+                    int pageToReload = getListerBase().getPageNumber();
                     do {
                         listerActivity.populate(pageToReload--);
                     } while ((listerBase.getPageNumber() > 0) && (listerBase.getPageSize() == 0));
@@ -433,7 +416,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
             HorizontalPanel refresh = new HorizontalPanel();
             refresh.add(new Label(i18n.tr("Refresh interval:")));
-          
+
             for (RefreshInterval i : RefreshInterval.values()) {
                 intervalList.addItem(i.toString());
                 intervalList.setValue(intervalList.getItemCount() - 1, i.name());
@@ -442,7 +425,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
                 }
             }
             intervalList.setWidth("100%");
-            
+
             refresh.add(intervalList);
             refresh.setCellHorizontalAlignment(intervalList, HasHorizontalAlignment.ALIGN_RIGHT);
 
@@ -479,9 +462,9 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             if (intervalList.getSelectedIndex() != -1) {
                 settings.refreshInterval().setValue(RefreshInterval.valueOf(intervalList.getValue(intervalList.getSelectedIndex())));
             }
-            
-            storeGadgetStateInSettings();            
-            
+
+            storeSettings();
+
             // restart the gadget:
             stop();
             start();
