@@ -39,7 +39,7 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
     }
 
     @Override
-    public void setFolderItem(final CEntityFolderItemEditor<E> folderItem) {
+    public void setComponent(final CEntityFolderItemEditor<E> folderItem) {
         this.folderItem = folderItem;
     }
 

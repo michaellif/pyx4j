@@ -123,7 +123,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CEntityComp
             asWidget().setWidget(createContent());
         } else {
             asWidget().setWidget(decorator);
-            decorator.setFolderItem(this);
+            decorator.setComponent(this);
         }
 
         addValidations();

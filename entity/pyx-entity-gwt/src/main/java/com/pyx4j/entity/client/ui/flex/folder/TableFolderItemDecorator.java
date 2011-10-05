@@ -69,8 +69,8 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
     }
 
     @Override
-    public void setFolderItem(final CEntityFolderItemEditor<E> folderItem) {
-        super.setFolderItem(folderItem);
+    public void setComponent(final CEntityFolderItemEditor<E> folderItem) {
+        super.setComponent(folderItem);
         contentHolder.setWidget(folderItem.getContainer());
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
