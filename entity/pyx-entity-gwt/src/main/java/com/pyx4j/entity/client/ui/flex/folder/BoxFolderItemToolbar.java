@@ -56,7 +56,7 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
 
         collapseImage = new Image();
         //Fix the ensureDebugId initialisation
-        collapseImage.setResource(decorator.getImages().groupBoxClose());
+        collapseImage.setResource(decorator.getImages().collapse());
         collapseImage.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -117,7 +117,7 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
             caption.setText(decorator.getFolderItem().getValue().getStringView());
         }
         caption.setVisible(!expanded);
-        collapseImage.setResource(expanded ? decorator.getImages().groupBoxClose() : decorator.getImages().groupBoxOpen());
+        collapseImage.setResource(expanded ? decorator.getImages().collapse() : decorator.getImages().expand());
     }
 
     protected void setTitleIcon(ImageResource icon) {
