@@ -49,6 +49,11 @@
             <version>3.3.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.xnap.commons</groupId>
+            <artifactId>gettext-commons</artifactId>
+        </dependency>
+
     </dependencies>
 
     <reporting>

@@ -14,30 +14,37 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Sep 24, 2011
+ * Created on Oct 5, 2011
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.i18n.gettext;
+package com.ut;
 
-import java.io.PrintStream;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
-public class Sample {
+public class MainClass {
 
-    private static final String HELLO = "Hello World!";
+    private static I18n i18n = I18nFactory.getI18n(MainClass.class);
 
-    public void go(String value2) {
-        PrintStream ps = System.out;
-        ps.println(HELLO);
+    private static final String A_CONST = "A Constantant.";
 
-        System.out.println("Go Home");
+    class NestedClass {
 
-        System.out.println("Stay " + " Cool ");
+        public void goNested() {
+            System.out.println(i18n.tr("Go Nested"));
+        }
 
-        String value = "n/a" + value2;
-        System.out.println(value);
+    }
 
-        System.out.println(value2);
+    public void go() {
+        System.out.println(i18n.tr("Go {0}", "500"));
+
+        System.out.println(i18n.tr(A_CONST));
+
+        System.out.println(i18n.tr("Inline " + "concatenation"));
+
+        System.out.println(i18n.tr("Finish {0}", 1800));
     }
 
 }

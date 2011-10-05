@@ -25,17 +25,16 @@ import java.io.InputStream;
 
 import org.objectweb.asm.tree.analysis.AnalyzerException;
 
+import com.pyx4j.i18n.gettext.maven.ConstantExtractor;
+
 public class Verify {
 
-    /**
-     * @param args
-     * @throws AnalyzerException
-     * @throws IOException
-     */
     public static void main(String[] args) throws IOException, AnalyzerException {
-        InputStream in = ConstantTracker.class.getResourceAsStream("Sample.class");
+        InputStream in;
+        System.out.println("--i18n tests --");
+        in = Verify.class.getResourceAsStream("/com/ut/MainClass.class");
         try {
-            ConstantTracker.findConstantArgumentsToPrintln(in);
+            new ConstantExtractor().readClass(in);
         } finally {
             in.close();
         }
