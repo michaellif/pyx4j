@@ -44,8 +44,8 @@ import com.propertyvista.admin.client.mvp.MainActivityMapper;
 import com.propertyvista.admin.client.mvp.NavigActivityMapper;
 import com.propertyvista.admin.client.mvp.ShortCutsActivityMapper;
 import com.propertyvista.admin.client.mvp.TopRightActionsActivityMapper;
-import com.propertyvista.admin.client.themes.GainsboroPalette;
 import com.propertyvista.admin.client.themes.VistaAdminTheme;
+import com.propertyvista.common.client.theme.GainsboroPalette;
 
 public class AdminView extends LayoutPanel {
 

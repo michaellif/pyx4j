@@ -37,6 +37,7 @@ import com.pyx4j.site.client.ui.AppSiteView;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.pyx4j.widgets.client.style.StyleManger;
 
+import com.propertyvista.common.client.theme.BlueColdPalette;
 import com.propertyvista.crm.client.mvp.FooterActivityMapper;
 import com.propertyvista.crm.client.mvp.LoginActivityMapper;
 import com.propertyvista.crm.client.mvp.LogoActivityMapper;
@@ -44,7 +45,6 @@ import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.mvp.NavigActivityMapper;
 import com.propertyvista.crm.client.mvp.ShortCutsActivityMapper;
 import com.propertyvista.crm.client.mvp.TopRightActionsActivityMapper;
-import com.propertyvista.crm.client.themes.BlueColdPalette;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 
 public class CrmView extends LayoutPanel {

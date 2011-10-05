@@ -25,14 +25,14 @@ import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.style.StyleManger;
 
-import com.propertyvista.admin.client.themes.BlueColdPalette;
-import com.propertyvista.admin.client.themes.BownWarmPalette;
-import com.propertyvista.admin.client.themes.VillageGreenPalette;
 import com.propertyvista.admin.client.ui.TopRightActionsView;
 import com.propertyvista.admin.client.ui.TopRightActionsViewImpl.Theme;
 import com.propertyvista.admin.client.viewfactories.AdminVeiwFactory;
 import com.propertyvista.admin.rpc.AdminSiteMap;
-import com.propertyvista.common.client.theme.VistaPalette;
+import com.propertyvista.common.client.theme.BlueColdPalette;
+import com.propertyvista.common.client.theme.BownWarmPalette;
+import com.propertyvista.common.client.theme.GainsboroPalette;
+import com.propertyvista.common.client.theme.VillageGreenPalette;
 import com.propertyvista.common.client.theme.VistaTheme;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
@@ -90,7 +90,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     public void setTheme(Theme theme) {
         switch (theme) {
         case Gainsboro:
-            StyleManger.installTheme(new VistaTheme(), new VistaPalette());
+            StyleManger.installTheme(new VistaTheme(), new GainsboroPalette());
             break;
         case VillageGreen:
             StyleManger.installTheme(new VistaTheme(), new VillageGreenPalette());

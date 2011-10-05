@@ -25,10 +25,10 @@ import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.style.StyleManger;
 
-import com.propertyvista.crm.client.themes.BlueColdPalette;
-import com.propertyvista.crm.client.themes.BownWarmPalette;
-import com.propertyvista.crm.client.themes.GainsboroPalette;
-import com.propertyvista.crm.client.themes.VillageGreenPalette;
+import com.propertyvista.common.client.theme.BlueColdPalette;
+import com.propertyvista.common.client.theme.BownWarmPalette;
+import com.propertyvista.common.client.theme.GainsboroPalette;
+import com.propertyvista.common.client.theme.VillageGreenPalette;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.TopRightActionsView;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl.Theme;

@@ -11,18 +11,18 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.themes;
+package com.propertyvista.common.client.theme;
 
 import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.ThemeColors;
 
 import com.propertyvista.common.client.theme.VistaPalette;
 
-public class BownWarmPalette extends VistaPalette {
+public class BlueColdPalette extends VistaPalette {
 
-    public BownWarmPalette() {
+    public BlueColdPalette() {
 
-        float hue = (float) 30 / 360;
+        float hue = (float) 218 / 360;
         float saturation = (float) 0.5;
         float brightness = (float) 0.5;
 

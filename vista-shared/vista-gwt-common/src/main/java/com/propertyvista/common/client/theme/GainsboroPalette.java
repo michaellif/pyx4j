@@ -11,13 +11,14 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.admin.client.themes;
+package com.propertyvista.common.client.theme;
 
 import com.pyx4j.widgets.client.style.ColorFactory;
-import com.pyx4j.widgets.client.style.Palette;
 import com.pyx4j.widgets.client.style.ThemeColors;
 
-public class GainsboroPalette extends Palette {
+import com.propertyvista.common.client.theme.VistaPalette;
+
+public class GainsboroPalette extends VistaPalette {
 
     public GainsboroPalette() {
         float hue = (float) 0 / 360;
