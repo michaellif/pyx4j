@@ -251,5 +251,18 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
     protected abstract LayoutType translateLayout(BoardLayout layout);
 
     protected abstract void setLayout(LayoutType layout);
+    
+//    @Override
+//    protected void onUnload() {
+//        try {
+//            if (presenter != null) {
+//                presenter.save();
+//            } 
+//        } catch (NullPointerException e) {
+//            // ignore: it looks like for some mystical reason onUnload() is called when the object is not totally constructed yet and somewhere on the way this gets to NullPointerException when trying to access some of the fields 
+//        }
+//        
+//        super.onUnload();
+//    }
 
 }

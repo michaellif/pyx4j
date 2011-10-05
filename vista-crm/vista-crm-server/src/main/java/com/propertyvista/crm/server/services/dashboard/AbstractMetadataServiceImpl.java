@@ -82,8 +82,10 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
             }
 
             if (!gm.settings().isNull()) {
-                EntityServicesImpl.secureSave(gm);
+                EntityServicesImpl.secureSave(gm.settings());
             }
+            
+            EntityServicesImpl.secureSave(gm);
         }
 
         EntityServicesImpl.secureSave(dm);
