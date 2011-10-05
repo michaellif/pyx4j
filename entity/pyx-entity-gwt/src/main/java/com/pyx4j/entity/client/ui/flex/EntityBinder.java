@@ -287,7 +287,7 @@ public class EntityBinder<E extends IEntity> {
                 setValue(entity);
             } else {
                 this.origEntity = null;
-                setValue((E) EntityFactory.create(proto().getValueClass()));
+                setValue(null);
             }
         }
     }
