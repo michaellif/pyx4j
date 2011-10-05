@@ -15,6 +15,9 @@
  * the License.
  *
  * Created on Oct 5, 2011
+ * 
+ * The idea is taken from https://gist.github.com/1201922
+ * 
  * @author vlads
  * @version $Id$
  */
