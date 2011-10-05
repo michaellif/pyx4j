@@ -117,8 +117,8 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
         };
     }
 
-    protected void callSuperRemoveItem(final CEntityFolderItemEditor<ApplicationDocument> comp, final IFolderItemDecorator folderItemDecorator) {
-        super.removeItem(comp, folderItemDecorator);
+    protected void callSuperRemoveItem(final CEntityFolderItemEditor<ApplicationDocument> comp) {
+        super.removeItem(comp);
     }
 
     public void setTenantID(Key id) {

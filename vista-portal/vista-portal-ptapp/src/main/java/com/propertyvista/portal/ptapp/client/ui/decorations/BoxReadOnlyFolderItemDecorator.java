@@ -79,9 +79,4 @@ public class BoxReadOnlyFolderItemDecorator<E extends IEntity> extends FlowPanel
         return null;
     }
 
-    @Override
-    public HandlerRegistration addRowCollapseClickHandler(ClickHandler handler) {
-        return null;
-    }
-
 }

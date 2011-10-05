@@ -286,9 +286,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }
 
             @Override
-            protected void removeItem(CEntityFolderItemEditor<TenantInLease> item, IFolderItemDecorator<TenantInLease> folderItemDecorator) {
+            protected void removeItem(CEntityFolderItemEditor<TenantInLease> item) {
                 ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).removeTenat(item.getValue());
-                super.removeItem(item, folderItemDecorator);
+                super.removeItem(item);
             }
 
             @Override

@@ -246,22 +246,22 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
                 return decor;
             }
 
-            protected void unconditionalRemoveItem(CEntityFolderItemEditor<ChargeItem> item, IFolderItemDecorator<ChargeItem> folderItemDecorator) {
-                super.removeItem(item, folderItemDecorator);
+            protected void unconditionalRemoveItem(CEntityFolderItemEditor<ChargeItem> item) {
+                super.removeItem(item);
             }
 
             @Override
-            protected void removeItem(final CEntityFolderItemEditor<ChargeItem> item, final IFolderItemDecorator<ChargeItem> folderItemDecorator) {
+            protected void removeItem(final CEntityFolderItemEditor<ChargeItem> item) {
                 if (!item.getValue().adjustments().isEmpty()) {
                     MessageDialog.confirm(i18n.tr("Warning!"),
                             i18n.tr("Removing this item you will lost price adjustment agreed in the office! Are you sure to remove it?"), new Runnable() {
                                 @Override
                                 public void run() {
-                                    unconditionalRemoveItem(item, folderItemDecorator);
+                                    unconditionalRemoveItem(item);
                                 }
                             });
                 } else {
-                    super.removeItem(item, folderItemDecorator);
+                    super.removeItem(item);
                 }
             }
         };
