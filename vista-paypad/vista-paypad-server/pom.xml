@@ -99,7 +99,7 @@
 
         <tomcatDeployServerId>tomcat-dev.birchwoodsoftwaregroup.com</tomcatDeployServerId>
         <vista-tomcat-url>http://dev.birchwoodsoftwaregroup.com</vista-tomcat-url>
-        <vista-app-ping-url>https://interfaces.birchwoodsoftwaregroup.com</vista-app-ping-url>
+        <vista-app-ping-url>https://secure.paymentpad.com</vista-app-ping-url>
 
     </properties>
 
