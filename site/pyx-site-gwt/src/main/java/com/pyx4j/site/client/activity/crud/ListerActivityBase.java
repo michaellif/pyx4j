@@ -43,13 +43,13 @@ import com.pyx4j.site.client.ui.crud.FilterData;
 import com.pyx4j.site.client.ui.crud.FilterData.Operands;
 import com.pyx4j.site.client.ui.crud.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.site.rpc.services.AbstractCrudService;
+import com.pyx4j.site.rpc.services.AbstractListService;
 
 public class ListerActivityBase<E extends IEntity> extends AbstractActivity implements IListerView.Presenter {
 
     private final IListerView<E> view;
 
-    private final AbstractCrudService<E> service;
+    private final AbstractListService<E> service;
 
     private final Class<E> entityClass;
 
@@ -59,7 +59,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private Key parentID;
 
-    public ListerActivityBase(IListerView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
+    public ListerActivityBase(IListerView<E> view, AbstractListService<E> service, Class<E> entityClass) {
         // development correctness checks:
         assert (view != null);
         assert (service != null);
