@@ -79,7 +79,7 @@ public class POFileWriter {
         if (str == null) {
             writer.print("\"\"");
         } else {
-            if (str.contains("\n") || (wrapLines && (str.length() >= pageWidth - 2 - prefixLen))) {
+            if (str.contains("\n") || (wrapLines && (str.length() > pageWidth - 2 - prefixLen))) {
                 writer.print("\"\"");
 
                 int lineSize = 0;
@@ -93,7 +93,8 @@ public class POFileWriter {
                         writer.print("\\n\"");
                         lineSize = 0;
                     } else {
-                        if (wrapLines && (lineSize + token.length() >= pageWidth - 2)) {
+                        if (wrapLines && (lineSize + token.length() > pageWidth - 2)) {
+                            writer.println("\"");
                             writer.print("\"");
                             lineSize = 0;
                         }

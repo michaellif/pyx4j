@@ -26,6 +26,8 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.artifact.Artifact;
@@ -44,6 +46,8 @@ import com.pyx4j.scanner.DirectoryScanner;
 import com.pyx4j.scanner.JarFileScanner;
 import com.pyx4j.scanner.Scanner;
 import com.pyx4j.scanner.ScannerEntry;
+
+import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
  * 
@@ -113,17 +117,33 @@ public class ExtractMojo extends AbstractMojo {
      */
     public File poDirectory;
 
+    public enum Sort {
+
+        none,
+
+        byText,
+
+        byFile
+    }
+
+    /**
+     * Set output sorting: none, byText, byFile
+     * 
+     * @parameter default-value="byText"
+     */
+    public Sort poSort = Sort.byText;
+
     /**
      * Set output page width
      * 
-     * @parameter
+     * @parameter default-value="78"
      */
     public int poPageWidth = 78;
 
     /**
      * Break long message lines, longer than the output page width, into several lines
      * 
-     * @parameter
+     * @parameter default-value="true"
      */
     public boolean poWrapLines = true;
 
@@ -273,10 +293,22 @@ public class ExtractMojo extends AbstractMojo {
         POFile po = new POFile();
         po.createDefaultHeader();
 
+        Pattern javaFormatPattern = Pattern.compile(".*\\{\\d(,.*)*\\}.*", Pattern.DOTALL);
+
         for (String str : extractor.strings) {
             POEntry pe = new POEntry();
             pe.untranslated = str;
+
+            Matcher m = javaFormatPattern.matcher(str);
+            if (m.matches()) {
+                pe.addFalg("java-format");
+            }
+
             po.entries.add(pe);
+        }
+
+        if ((poSort != null) && (poSort != Sort.none)) {
+            Collections.sort(po.entries, new POEntry.ByTextComparator());
         }
 
         if (!poDirectory.isDirectory()) {

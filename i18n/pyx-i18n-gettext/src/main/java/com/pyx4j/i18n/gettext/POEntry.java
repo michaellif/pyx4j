@@ -20,7 +20,9 @@
  */
 package com.pyx4j.i18n.gettext;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Vector;
 
 public class POEntry {
 
@@ -35,5 +37,44 @@ public class POEntry {
     public String untranslated;
 
     public String translated;
+
+    public void addFalg(String flag) {
+        if (flags == null) {
+            flags = new Vector<String>();
+        }
+        flags.add(flag);
+    }
+
+    public static class ByTextComparator implements Comparator<POEntry> {
+
+        @Override
+        public int compare(POEntry o1, POEntry o2) {
+            return o1.untranslated.compareTo(o2.untranslated);
+        }
+
+    }
+
+    public static class ByFileLocationComparator implements Comparator<POEntry> {
+
+        @Override
+        public int compare(POEntry o1, POEntry o2) {
+            String l1 = null;
+            if (o1.reference != null) {
+                l1 = o1.reference.get(0);
+            }
+            String l2 = null;
+            if (o2.reference != null) {
+                l2 = o2.reference.get(0);
+            }
+            // Null in Front
+            if (l2 == null) {
+                return 1;
+            }
+            if (l1 == null) {
+                return -1;
+            }
+            return l1.compareTo(l2);
+        }
+    }
 
 }
