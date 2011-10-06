@@ -16,11 +16,9 @@ package com.propertyvista.common.client.theme;
 import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.ThemeColors;
 
-import com.propertyvista.common.client.theme.VistaPalette;
-
 public class VillageGreenPalette extends VistaPalette {
 
-    public void VillageGreenPalette() {
+    public VillageGreenPalette() {
 
         float hue = (float) 88 / 360;
         float saturation = (float) 0.5;

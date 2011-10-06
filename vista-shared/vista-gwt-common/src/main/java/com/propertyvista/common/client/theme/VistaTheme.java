@@ -156,7 +156,7 @@ public class VistaTheme extends Theme {
 
         //style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
 
-        style.addGradientBackground(ThemeColors.OBJECT_TONE2);
+        style.addGradient(ThemeColors.OBJECT_TONE20, ThemeColors.OBJECT_TONE50);
 
         addStyle(style);
     }
@@ -170,7 +170,8 @@ public class VistaTheme extends Theme {
 
     protected void initBarSeparatorStyle() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_BarSeparator));
-        style.addProperty("border-left", "2px ridge {}", ThemeColors.OBJECT_TONE2);
+        style.addProperty("border-left", "2px ridge");
+        style.addProperty("border-left-color", ThemeColors.OBJECT_TONE2);
 
         style.addProperty("margin-left", "3px");
         addStyle(style);
@@ -208,7 +209,8 @@ public class VistaTheme extends Theme {
         style.addProperty("margin-top", "0px");
         style.addProperty("margin-left", "0px");
         style.addProperty("background", ThemeColors.TEXT_BACKGROUND);
-        style.addProperty("border", "1px solid {}", ThemeColors.SELECTION);
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColors.SELECTION);
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical .gwt-MenuItem");
@@ -227,7 +229,8 @@ public class VistaTheme extends Theme {
     protected void initDialogBoxStyles() {
 
         Style style = new Style(".gwt-DialogBox");
-        style.addProperty("border", "2px outset {}", ThemeColors.BORDER);
+        style.addProperty("border", "2px outset");
+        style.addProperty("border-color", ThemeColors.BORDER);
         style.addProperty("background-color", ThemeColors.OBJECT_TONE4);
         addStyle(style);
 
@@ -274,7 +277,8 @@ public class VistaTheme extends Theme {
         style = new Style(".gwt-TabLayoutPanelTabs");
         style.addProperty("padding-top", "0.5em");
         style.addProperty("padding-left", "0.5em");
-        style.addProperty("border-bottom", "4px solid {}", ThemeColors.OBJECT_TONE35);
+        style.addProperty("border-bottom", "4px solid");
+        style.addProperty("border-bottom-color", ThemeColors.OBJECT_TONE35);
         addStyle(style);
 
         style = new Style(".gwt-TabLayoutPanelTab");
@@ -287,9 +291,12 @@ public class VistaTheme extends Theme {
         style.addProperty("margin-left", "1px");
         style.addProperty("padding-right", "10px");
         style.addProperty("padding-left", "10px");
-        style.addProperty("border-right", "1px solid {}", ThemeColors.SELECTION);
-        style.addProperty("border-left", "1px solid {}", ThemeColors.SELECTION);
-        style.addProperty("border-top", "1px solid {}", ThemeColors.SELECTION);
+        style.addProperty("border-right", "1px solid");
+        style.addProperty("border-right-color", ThemeColors.SELECTION);
+        style.addProperty("border-left", "1px solid");
+        style.addProperty("border-left-color", ThemeColors.SELECTION);
+        style.addProperty("border-top", "1px solid");
+        style.addProperty("border-top-color", ThemeColors.SELECTION);
         style.addProperty("background", ThemeColors.SELECTION);
         style.addProperty("color", "white");
         style.addProperty("display", "inline-block");
@@ -298,7 +305,7 @@ public class VistaTheme extends Theme {
 
         style = new Style(".gwt-TabLayoutPanelTab-selected");
         style.addProperty("cursor", "default");
-        style.addGradientBackground(ThemeColors.OBJECT_TONE3);
+        style.addGradient(ThemeColors.OBJECT_TONE10, ThemeColors.OBJECT_TONE30);
         style.addProperty("color", "#333");
         addStyle(style);
 
