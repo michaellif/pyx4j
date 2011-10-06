@@ -26,6 +26,10 @@ import java.util.StringTokenizer;
 
 public class POFileWriter {
 
+    public int pageWidth = 78;
+
+    public boolean wrapLines = true;
+
     public void write(PrintWriter writer, POFile po) {
         for (String comment : po.comments) {
             writer.println(comment);
@@ -62,39 +66,44 @@ public class POFileWriter {
             }
 
             writer.print("msgid ");
-            writeString(writer, entry.untranslated);
+            writeString(writer, entry.untranslated, "msgid ".length());
 
             writer.print("msgstr ");
-            writeString(writer, entry.translated);
+            writeString(writer, entry.translated, "msgstr ".length());
 
             writer.println();
         }
     }
 
-    private void writeString(PrintWriter writer, String str) {
+    private void writeString(PrintWriter writer, String str, int prefixLen) {
         if (str == null) {
             writer.print("\"\"");
         } else {
-            if (str.contains("\n") || str.length() >= 78) {
-                writer.println("\"\"");
-                str = str.replace("\n", "\\n");
+            if (str.contains("\n") || (wrapLines && (str.length() >= pageWidth - 2 - prefixLen))) {
+                writer.print("\"\"");
 
                 int lineSize = 0;
-                writer.print("\"");
-
-                StringTokenizer t = new StringTokenizer(str, " \n", true);
+                StringTokenizer t = new StringTokenizer(str, wrapLines ? " \n" : "\n", true);
                 while (t.hasMoreTokens()) {
-                    String token = t.nextToken();
-                    if (lineSize + token.length() > 78) {
-                        writer.println("\"");
-                        writer.print("\"");
-                        lineSize = 0;
+                    if (lineSize == 0) {
+                        writer.print("\n\"");
                     }
-                    writer.print(token);
-                    lineSize += token.length();
+                    String token = t.nextToken();
+                    if (token.equals("\n")) {
+                        writer.print("\\n\"");
+                        lineSize = 0;
+                    } else {
+                        if (wrapLines && (lineSize + token.length() >= pageWidth - 2)) {
+                            writer.print("\"");
+                            lineSize = 0;
+                        }
+                        writer.print(token);
+                        lineSize += token.length();
+                    }
                 }
-
-                writer.print("\"");
+                if (lineSize != 0) {
+                    writer.print("\"");
+                }
             } else {
                 writer.print("\"");
                 writer.print(str);

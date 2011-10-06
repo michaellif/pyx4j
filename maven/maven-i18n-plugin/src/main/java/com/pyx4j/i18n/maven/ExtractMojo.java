@@ -114,6 +114,20 @@ public class ExtractMojo extends AbstractMojo {
     public File poDirectory;
 
     /**
+     * Set output page width
+     * 
+     * @parameter
+     */
+    public int poPageWidth = 78;
+
+    /**
+     * Break long message lines, longer than the output page width, into several lines
+     * 
+     * @parameter
+     */
+    public boolean poWrapLines = true;
+
+    /**
      * File to save extracted strings, you may use it to run spell checker.
      * 
      * @parameter expression="${project.build.directory}/i18n.txt"
@@ -275,7 +289,12 @@ public class ExtractMojo extends AbstractMojo {
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(file, "UTF-8");
-            new POFileWriter().write(writer, po);
+            POFileWriter poWriter = new POFileWriter();
+            poWriter.pageWidth = poPageWidth;
+            poWriter.wrapLines = poWrapLines;
+
+            poWriter.write(writer, po);
+
             writer.flush();
         } catch (IOException e) {
             throw new MojoExecutionException("POFile " + file.getAbsolutePath() + " write error", e);
