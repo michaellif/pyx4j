@@ -44,10 +44,10 @@ import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings;
-import com.propertyvista.domain.dashboard.gadgets.SortEntity;
-import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings.RefreshInterval;
 import com.propertyvista.domain.dashboard.StringHolder;
+import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings;
+import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings.RefreshInterval;
+import com.propertyvista.domain.dashboard.gadgets.SortEntity;
 
 public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
@@ -71,11 +71,11 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
         // TODO add more civilised (use isSettingsOk() method) when IEntity.isInstance() works well
         try {
-            settings = gmd.settings().cast();
+            settings = gadgetMetadata.settings().cast();
         } catch (Throwable eh) {
             settings = EntityFactory.create(ListerGadgetBaseSettings.class);
             resetToDefault(settings);
-            gmd.settings().set(settings);
+            gadgetMetadata.settings().set(settings);
         }
 
         refreshTimer = new RefreshTimer();
@@ -411,7 +411,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             items.setCellHorizontalAlignment(itemsPerPage, HasHorizontalAlignment.ALIGN_RIGHT);
 
             items.setSpacing(4);
-            items.setWidth("30%");
+            items.setWidth("100%");
             addition.add(items);
 
             HorizontalPanel refresh = new HorizontalPanel();

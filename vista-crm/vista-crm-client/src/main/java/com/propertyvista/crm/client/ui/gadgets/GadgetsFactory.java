@@ -38,7 +38,8 @@ public class GadgetsFactory {
         GadgetType.LineChartDisplay,
         GadgetType.BarChartDisplay,
         GadgetType.PieChartDisplay,
-        GadgetType.GaugeDisplay
+        GadgetType.GaugeDisplay,
+        GadgetType.UnitVacancyReport
     };
     private static GadgetType[] buildingDashboardGadgets = 
     {
@@ -70,6 +71,8 @@ public class GadgetsFactory {
             return new PieChartDisplayGadget(metaData);
         case GaugeDisplay:
             return new GaugeGadget(metaData);
+        case UnitVacancyReport:
+            return new UnitVacancyReportGadget(metaData);
         }
         return null;
     }
