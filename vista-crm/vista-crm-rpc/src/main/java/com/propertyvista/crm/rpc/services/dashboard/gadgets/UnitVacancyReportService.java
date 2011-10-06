@@ -11,12 +11,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.crm.rpc.services.dashboard.gadgets;
 
-import com.pyx4j.site.rpc.services.AbstractCrudService;
+import com.pyx4j.site.rpc.services.AbstractListService;
 
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportDTO;
 
-public interface UnitVacancyReportCrudService extends AbstractCrudService<UnitVacancyReportDTO> {
+public interface UnitVacancyReportService extends AbstractListService<UnitVacancyReportDTO> {
 
 }
