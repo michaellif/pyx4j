@@ -67,12 +67,12 @@ public class FileIOUtils {
         }
     }
 
-    public static byte[] loadBinary(File file) {
+    public static byte[] loadBinary(File file, int bufferSize) {
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         InputStream in = null;
         try {
             in = new FileInputStream(file);
-            IOUtils.copyStream(in, b, 1024);
+            IOUtils.copyStream(in, b, bufferSize);
             return b.toByteArray();
         } catch (IOException e) {
             throw new RuntimeException("File " + file.getAbsolutePath() + " read error", e);
