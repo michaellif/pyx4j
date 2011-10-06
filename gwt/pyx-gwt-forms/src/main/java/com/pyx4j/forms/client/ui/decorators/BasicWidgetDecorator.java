@@ -41,13 +41,13 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.NativeCheckBox;
 import com.pyx4j.widgets.client.Tooltip;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 public class BasicWidgetDecorator extends FlowPanel {
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_BasicWidgetDecorator";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Label, Component, Gap
     }
 

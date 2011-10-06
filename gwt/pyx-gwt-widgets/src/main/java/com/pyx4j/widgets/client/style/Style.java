@@ -27,28 +27,32 @@ public class Style {
 
     private String selector;
 
+    private Selector selectorNew;
+
     private final List<Property> properties = new ArrayList<Property>();
 
-    public Style(String... selector) {
-        this.selector = "";
-        for (int i = 0; i < selector.length; i++) {
-            if (this.selector.length() != 0) {
-                this.selector += " ";
-            }
-            this.selector += selector[i];
-        }
+    public Style(IStyleName styleName) {
+        this.selectorNew = new Selector.Builder(styleName).build();
     }
 
-    public Style(Enum<?> selector) {
-        this.selector = "." + selector.name();
+    public Style(IStyleName styleName, IStyleDependent dependent) {
+        this.selectorNew = new Selector.Builder(styleName).dependent(dependent).build();
     }
 
-    public Style(Enum<?> selector, String ext) {
-        this.selector = "." + selector.name() + ext;
+    public Style(String discriminator, IStyleName styleName) {
+        this.selectorNew = new Selector.Builder(styleName).discriminator(discriminator).build();
     }
 
-    public String getSelector() {
-        return selector;
+    public Style(String discriminator, IStyleName styleName, IStyleDependent dependent) {
+        this.selectorNew = new Selector.Builder(styleName).discriminator(discriminator).dependent(dependent).build();
+    }
+
+    public Style(Selector selector) {
+        this.selectorNew = selector;
+    }
+
+    public Style(String selector) {
+        this.selectorNew = new Selector(selector);
     }
 
     public void addProperty(Property propertie) {
@@ -69,7 +73,16 @@ public class Style {
 
     public String toString(Theme theme, Palette palette) {
         StringBuilder builder = new StringBuilder();
-        builder.append(selector).append(" {\n");
+
+        if (theme.getDiscriminator() != null) {
+            builder.append(theme.getDiscriminator()).append(" ");
+        }
+
+        if (selectorNew != null) {
+            builder.append(selectorNew).append(" {\n");
+        } else {
+            builder.append(selector).append(" {\n");
+        }
         for (Property property : properties) {
             builder.append("  ").append(property.toString(theme, palette)).append("\n");
         }
@@ -77,4 +90,18 @@ public class Style {
         return builder.toString();
     }
 
+    @Deprecated
+    public Style(Enum<?> selector) {
+        this.selector = "." + selector.name();
+    }
+
+    @Deprecated
+    public Style(Enum<?> selector, String ext) {
+        this.selector = "." + selector.name() + ext;
+    }
+
+    @Deprecated
+    public String getSelector() {
+        return selector;
+    }
 }

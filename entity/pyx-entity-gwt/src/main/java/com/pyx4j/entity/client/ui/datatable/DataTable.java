@@ -47,14 +47,14 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 public class DataTable<E extends IEntity> extends FlexTable implements DataTableModelListener {
 
     // CSS style names: 
     public static String BASE_NAME = "pyx4j_Entity_DataTable";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Row, Header, ActionsBar, ColumnSelector, ColumnMenu
     }
 

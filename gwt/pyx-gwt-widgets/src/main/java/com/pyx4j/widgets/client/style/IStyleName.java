@@ -20,7 +20,7 @@
  */
 package com.pyx4j.widgets.client.style;
 
-public interface IStyleSuffix {
+public interface IStyleName {
 
     public String name();
 

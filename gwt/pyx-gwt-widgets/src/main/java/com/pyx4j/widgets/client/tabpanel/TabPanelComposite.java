@@ -31,11 +31,7 @@ public class TabPanelComposite extends LayoutPanel {
     private final TabPanel tabPanel;
 
     public TabPanelComposite() {
-        this(TabPanel.DEFAULT_STYLE_PREFIX);
-    }
-
-    public TabPanelComposite(String stylePrefix) {
-        tabPanel = new TabPanel(stylePrefix);
+        tabPanel = new TabPanel();
         VerticalPanel panel = new VerticalPanel();
         TabBar tabBar = tabPanel.getTabBar();
         LayoutPanel deck = tabPanel.getDeck();

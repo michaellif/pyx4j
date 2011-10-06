@@ -29,13 +29,13 @@ import com.google.gwt.user.datepicker.client.CalendarModel;
 import com.google.gwt.user.datepicker.client.DatePicker;
 
 import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 public abstract class DatePickerExtended extends DatePicker {
 
     public static String BASE_NAME = "datePicker";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Grid, MonthSelector, GridDaysRow, Navigation, MonthLabel, YearLabel, YearNavigation
     }
 

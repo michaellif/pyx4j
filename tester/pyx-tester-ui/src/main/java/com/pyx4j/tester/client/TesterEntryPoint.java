@@ -30,11 +30,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.tester.client.domain.DomainFactory;
+import com.pyx4j.tester.client.theme.TesterPalette;
+import com.pyx4j.tester.client.theme.TesterTheme;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 import com.pyx4j.widgets.client.style.StyleManger;
-import com.pyx4j.widgets.client.style.theme.WindowsPalette;
-import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 
 public class TesterEntryPoint implements EntryPoint {
 
@@ -55,7 +55,7 @@ public class TesterEntryPoint implements EntryPoint {
             }
         }.hideLoadingIndicator();
 
-        StyleManger.installTheme(new WindowsTheme(), new WindowsPalette());
+        StyleManger.installTheme(new TesterTheme(), new TesterPalette());
 
         ClientLogger.setDebugOn(true);
         ClientLogger.setTraceOn(true);

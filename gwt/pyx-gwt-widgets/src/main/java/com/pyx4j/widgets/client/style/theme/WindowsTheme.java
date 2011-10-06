@@ -27,6 +27,7 @@ import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
 import com.pyx4j.widgets.client.style.CSSClass;
+import com.pyx4j.widgets.client.style.IStyleName;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.Theme;
@@ -50,7 +51,8 @@ public class WindowsTheme extends Theme {
         initStatusBarStyle();
         initProgressBarStyles();
         initMenuBarStyles();
-        initTabPanelStyles();
+        initTopTabPanelStyles();
+        initBottomTabPanelStyles();
         initDialogBoxStyles();
         initDialogPanelStyles();
         initGwtButtonStyles();
@@ -226,25 +228,19 @@ public class WindowsTheme extends Theme {
         addStyle(style);
     }
 
-    protected void initTabPanelStyles() {
-        initTopTabPanelStyles(TabPanel.DEFAULT_STYLE_PREFIX);
-        initBottomTabPanelStyles(pyx4j_TabBottom);
-
-    }
-
-    private void initTopTabPanelStyles(String prefix) {
-        Style style = new Style(Selector.valueOf(prefix));
+    private void initTopTabPanelStyles() {
+        Style style = new Style((IStyleName) TabPanel.StyleName.Tab);
         style.addProperty("margin-top", "2px");
         style.addProperty("margin-left", "6px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.PanelBottom));
+        style = new Style((IStyleName) TabPanel.StyleName.TabPanelBottom);
         style.addProperty("padding", "2px");
         style.addProperty("margin", "0px");
         style.addProperty("background-color", ThemeColors.OBJECT_TONE1);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem));
+        style = new Style((IStyleName) TabPanel.StyleName.TabBarItem);
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("height", "2em");
@@ -258,57 +254,57 @@ public class WindowsTheme extends Theme {
         style.addProperty("border-top", "1px solid");
         style.addProperty("border-top-color", ThemeColors.SELECTION);
         style.addGradient(ThemeColors.OBJECT_TONE10, ThemeColors.OBJECT_TONE30);
-
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected));
+        style = new Style(TabPanel.StyleName.TabBarItem, TabPanel.StyleDependent.selected);
         style.addProperty("cursor", "default");
         style.addProperty("background", ThemeColors.SELECTION);
         style.addProperty("color", "white");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.hover));
+        style = new Style(TabPanel.StyleName.TabBarItem, TabPanel.StyleDependent.hover);
         style.addProperty("background", ThemeColors.OBJECT_TONE3);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected), Selector.valueOf(prefix,
-                TabPanel.StyleSuffix.BarItemLabel));
+        style = new Style(new Selector.Builder(TabPanel.StyleName.TabBarItem).dependent(TabPanel.StyleDependent.selected).build().toString(),
+                TabPanel.StyleName.TabBarItemLabel);
         //style.addProperty("color", ThemeColor.SELECTION_TEXT);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItemLabel));
+        style = new Style((IStyleName) TabPanel.StyleName.TabBarItemLabel);
         style.addProperty("margin", "3px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.List));
+        style = new Style((IStyleName) TabPanel.StyleName.TabList);
         style.addProperty("background-color", "white");
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColors.SELECTION);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.ListItem));
+        style = new Style((IStyleName) TabPanel.StyleName.TabListItem);
         style.addProperty("color", "black");
         style.addProperty("padding", "4px 14px 4px 1px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.ListItem, TabPanel.StyleDependent.hover));
+        style = new Style(TabPanel.StyleName.TabListItem, TabPanel.StyleDependent.hover);
         style.addProperty("background", ThemeColors.SELECTION);
         style.addProperty("color", ThemeColors.SELECTION_TEXT);
         addStyle(style);
 
     }
 
-    private void initBottomTabPanelStyles(String prefix) {
-        Style style = new Style(Selector.valueOf(prefix));
+    private void initBottomTabPanelStyles() {
+        String discriminator = ".BottomTab";
+        Style style = new Style(discriminator, TabPanel.StyleName.Tab);
         style.addProperty("background-color", ThemeColors.SELECTION);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.PanelBottom));
+        style = new Style(discriminator, TabPanel.StyleName.TabPanelBottom);
         style.addProperty("padding", "2px");
         style.addProperty("margin", "0px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem));
+        style = new Style(discriminator, TabPanel.StyleName.TabBarItem);
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("text-align", "center");
@@ -317,19 +313,19 @@ public class WindowsTheme extends Theme {
         style.addProperty("background-color", ThemeColors.OBJECT_TONE3);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected));
+        style = new Style(discriminator, TabPanel.StyleName.TabBarItem, TabPanel.StyleDependent.selected);
         style.addProperty("border-top", "1px solid");
         style.addProperty("border-top-color", ThemeColors.OBJECT_TONE1);
         style.addProperty("cursor", "default");
         style.addProperty("background-color", ThemeColors.OBJECT_TONE1);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected), Selector.valueOf(prefix,
-                TabPanel.StyleSuffix.BarItemLabel));
+        style = new Style(new Selector.Builder(TabPanel.StyleName.TabBarItem).discriminator(discriminator).dependent(TabPanel.StyleDependent.selected).build()
+                .toString(), TabPanel.StyleName.TabBarItemLabel);
         style.addProperty("color", "black");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItemLabel));
+        style = new Style(discriminator, TabPanel.StyleName.TabBarItemLabel);
         style.addProperty("margin-left", "2px");
         style.addProperty("margin-right", "2px");
         addStyle(style);

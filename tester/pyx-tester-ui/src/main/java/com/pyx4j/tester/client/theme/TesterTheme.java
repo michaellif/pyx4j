@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,29 +14,35 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 18, 2010
+ * Created on Oct 6, 2011
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.theme;
+package com.pyx4j.tester.client.theme;
 
+import com.pyx4j.entity.client.ui.flex.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeComboBox;
+import com.pyx4j.forms.client.ui.NativeTextBox;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.Theme;
 import com.pyx4j.widgets.client.style.ThemeColors;
-import com.pyx4j.widgets.client.tabpanel.TabPanel;
+import com.pyx4j.widgets.client.util.BrowserType;
 
-public abstract class AppSiteTheme extends Theme {
+public class TesterTheme extends Theme {
 
-    public AppSiteTheme() {
+    public TesterTheme() {
         initStyles();
     }
 
     protected void initStyles() {
+
+        addTheme(new DefaultEntityFolderTheme());
+
         initGeneralStyles();
         initBodyStyles();
         initSectionStyles();
@@ -58,45 +64,67 @@ public abstract class AppSiteTheme extends Theme {
         initCheckBoxStyle();
         initListBoxStyle();
         initDatePickerStyle();
+        initMultipleDatePicker();
         initHyperlinkStyle();
         initGroupBoxStyle();
         initPhotoalbomStyle();
         initSlideshowActionStyle();
         initSuggestBoxStyle();
         initBannerStyle();
-        initSiteViewStyles();
     }
 
     protected void initGeneralStyles() {
-        Style style = new Style("td");
+        Style style = new Style("html");
+        addStyle(style);
+
+        style = new Style("td");
         style.addProperty("padding", "0px");
         addStyle(style);
+
+        style = new Style("p");
+        style.addProperty("margin", "0.3em");
+        addStyle(style);
+
         style = new Style("h1");
         style.addProperty("font-size", "2em");
+        style.addProperty("line-height", "2.5em");
+        style.addProperty("padding-bottom", "0.5px");
         style.addProperty("margin", "0");
         addStyle(style);
         style = new Style("h2");
         style.addProperty("font-size", "1.5em");
+        style.addProperty("padding-bottom", "0.5px");
         style.addProperty("margin", "0");
         addStyle(style);
         style = new Style("h3");
         style.addProperty("font-size", "1.17em");
+        style.addProperty("padding-bottom", "0.5px");
         style.addProperty("margin", "0");
         addStyle(style);
-        style = new Style("h4, p, blockquote, ul, fieldset, form, ol, dl, dir, menu");
+        style = new Style("h4, blockquote");
+        style.addProperty("font-size", "1.12em");
+        style.addProperty("padding-bottom", "0.3px");
         style.addProperty("margin", "0");
         addStyle(style);
         style = new Style("h5");
-        style.addProperty("font-size", "1.12em");
+        style.addProperty("font-size", "1.08em");
+        style.addProperty("padding-bottom", "0.2px");
         style.addProperty("margin", "0");
         addStyle(style);
         style = new Style("h6");
         style.addProperty("font-size", ".75em");
+        style.addProperty("padding-bottom", "0.2px");
         style.addProperty("margin", "0");
         addStyle(style);
+
         style = new Style("h1, h2, h3, h4, h5, h6, b, strong");
         style.addProperty("font-weight", "bolder");
         addStyle(style);
+
+        style = new Style("blockquote, ul, fieldset, form, ol, dl, dir, menu");
+        style.addProperty("margin", "0");
+        addStyle(style);
+
         style = new Style("blockquote");
         style.addProperty("margin-left", "40px");
         style.addProperty("margin-right", "40px");
@@ -105,11 +133,13 @@ public abstract class AppSiteTheme extends Theme {
 
     protected void initBodyStyles() {
         Style style = new Style("body");
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE2);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE1);
         style.addProperty("color", ThemeColors.TEXT);
         style.addProperty("margin", "0");
         style.addProperty("border", "none");
+        style.addProperty("font", "12px/1.5em Arial, Helvetica, sans-serif");
         addStyle(style);
+
     }
 
     protected void initSectionStyles() {
@@ -137,7 +167,7 @@ public abstract class AppSiteTheme extends Theme {
 
         //style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
 
-        style.addGradient(ThemeColors.OBJECT_TONE10, ThemeColors.OBJECT_TONE30);
+        style.addGradient(ThemeColors.OBJECT_TONE20, ThemeColors.OBJECT_TONE50);
 
         addStyle(style);
     }
@@ -251,70 +281,43 @@ public abstract class AppSiteTheme extends Theme {
         addStyle(style);
     }
 
-    private void initTabPanelStyles() {
-        String prefix = TabPanel.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("margin-top", "2px");
-        style.addProperty("margin-left", "6px");
+    protected void initTabPanelStyles() {
+        Style style = new Style(".gwt-TabLayoutPanel");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.PanelBottom));
-        style.addProperty("padding", "2px");
-        style.addProperty("margin", "0px");
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE1);
+        style = new Style(".gwt-TabLayoutPanelTabs");
+        style.addProperty("padding-top", "0.5em");
+        style.addProperty("padding-left", "0.5em");
+        style.addProperty("border-bottom", "4px solid");
+        style.addProperty("border-bottom-color", ThemeColors.OBJECT_TONE35);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem));
+        style = new Style(".gwt-TabLayoutPanelTab");
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("height", "2em");
+        style.addProperty("line-height", "2em");
         style.addProperty("text-align", "center");
         style.addProperty("margin-right", "1px");
         style.addProperty("margin-left", "1px");
+        style.addProperty("padding-right", "10px");
+        style.addProperty("padding-left", "10px");
         style.addProperty("border-right", "1px solid");
         style.addProperty("border-right-color", ThemeColors.SELECTION);
         style.addProperty("border-left", "1px solid");
         style.addProperty("border-left-color", ThemeColors.SELECTION);
         style.addProperty("border-top", "1px solid");
         style.addProperty("border-top-color", ThemeColors.SELECTION);
-        style.addGradient(ThemeColors.OBJECT_TONE10, ThemeColors.OBJECT_TONE30);
-
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected));
-        style.addProperty("cursor", "default");
         style.addProperty("background", ThemeColors.SELECTION);
         style.addProperty("color", "white");
+        style.addProperty("display", "inline-block");
+        style.addProperty("position", "relative");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.hover));
-        style.addProperty("background", ThemeColors.OBJECT_TONE3);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected), Selector.valueOf(prefix,
-                TabPanel.StyleSuffix.BarItemLabel));
-        //style.addProperty("color", ThemeColor.SELECTION_TEXT);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItemLabel));
-        style.addProperty("margin", "3px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.List));
-        style.addProperty("background-color", "white");
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.SELECTION);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.ListItem));
-        style.addProperty("color", "black");
-        style.addProperty("padding", "4px 14px 4px 1px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.ListItem, TabPanel.StyleDependent.hover));
-        style.addProperty("background", ThemeColors.SELECTION);
-        style.addProperty("color", ThemeColors.SELECTION_TEXT);
+        style = new Style(".gwt-TabLayoutPanelTab-selected");
+        style.addProperty("cursor", "default");
+        style.addGradient(ThemeColors.OBJECT_TONE10, ThemeColors.OBJECT_TONE30);
+        style.addProperty("color", "#333");
         addStyle(style);
 
     }
@@ -327,18 +330,18 @@ public abstract class AppSiteTheme extends Theme {
         style.addProperty("outline", "none");
         style.addProperty("width", "18px");
         style.addProperty("height", "22px");
-        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPicker().getURL() + "') no-repeat 100%");
+        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPicker().getSafeUri().asString() + "') no-repeat 100%");
         addStyle(style);
 
-        style = new Style(CSSClass.pyx4j_Picker, "-hover");
-        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerHover().getURL() + "') no-repeat 100%");
+        style = new Style("." + CSSClass.pyx4j_Picker + "-hover");
+        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerHover().getSafeUri().asString() + "') no-repeat 100%");
         addStyle(style);
 
-        style = new Style(CSSClass.pyx4j_Picker, "-pushed");
-        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerPushed().getURL() + "') no-repeat 100%");
+        style = new Style("." + CSSClass.pyx4j_Picker + "-pushed");
+        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerPushed().getSafeUri().asString() + "') no-repeat 100%");
         addStyle(style);
 
-        style = new Style(CSSClass.pyx4j_PickerPanel);
+        style = new Style("." + CSSClass.pyx4j_PickerPanel);
         style.addProperty("border-color", ThemeColors.BORDER);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
@@ -346,18 +349,18 @@ public abstract class AppSiteTheme extends Theme {
         addStyle(style);
 
         addStyle(style);
-        style = new Style(CSSClass.pyx4j_PickerPanel, " td");
+        style = new Style("." + CSSClass.pyx4j_PickerPanel + " td");
         style.addProperty("padding", "0px");
 
-        style = new Style(CSSClass.pyx4j_PickerPanel, " table");
+        style = new Style("." + CSSClass.pyx4j_PickerPanel + " table");
         style.addProperty("border-collapse", "collapse");
         addStyle(style);
 
-        style = new Style(CSSClass.pyx4j_PickerLine, " .gwt-TreeItem-selected");
+        style = new Style("." + CSSClass.pyx4j_PickerLine + " .gwt-TreeItem-selected");
         style.addProperty("background", "transparent");
         addStyle(style);
 
-        style = new Style(CSSClass.pyx4j_PickerLine_Selected);
+        style = new Style("." + CSSClass.pyx4j_PickerLine_Selected);
         style.addProperty("background", "lightGray");
         addStyle(style);
 
@@ -436,7 +439,7 @@ public abstract class AppSiteTheme extends Theme {
         addStyle(style);
 
         style = new Style(gwtButton + "[disabled]:hover");
-        style.addProperty("border", "2px outset #ccc");
+        style.addProperty("border", "1px outset #555");
         addStyle(style);
     }
 
@@ -497,33 +500,63 @@ public abstract class AppSiteTheme extends Theme {
 
     protected void initCheckBoxStyle() {
         Style style = new Style(CSSClass.pyx4j_CheckBox);
+        style.addProperty("margin", "40%");
         addStyle(style);
     }
 
     protected void initTextBoxStyle() {
-        Style style = new Style(CSSClass.pyx4j_TextBox);
-        style.addProperty("border-color", ThemeColors.BORDER);
-        style.addProperty("border-style", "inset");
+
+        Style style = new Style(Selector.valueOf(CSSClass.pyx4j_TextBox));
+
+// TODO check why is it necessary to add /1.4em parameter - it seems that IE9 uses it correctly and shifts TextBox text-line to the bottom,
+//      while all other browsers (Firefox, Chrome) or ignore it or thomehow different calculate text line position.
+//        style.addProperty("font", "12px/1.4em Arial, Helvetica, sans-serif");
+
+        style.addProperty("font", "12px Arial, Helvetica, sans-serif");
+        style.addProperty("color", ThemeColors.TEXT);
+        style.addProperty("background-color", ThemeColors.TEXT_BACKGROUND);
         style.addProperty("border-width", "1px");
-        style.addProperty("background-color", "#fff");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", ThemeColors.BORDER);
+        if (!BrowserType.isIE7()) {
+            style.addProperty("padding", "2px 5px");
+        }
+        style.addProperty("box-sizing", "border-box");
+        style.addProperty("-moz-box-sizing", "border-box");
+        style.addProperty("-webkit-box-sizing", "border-box");
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_TextBox, " td");
         style.addProperty("padding", "0px");
         addStyle(style);
 
-        style = new Style(CSSClass.pyx4j_TextBox, "-watermark");
+        style = new Style(Selector.valueOf(TextBox.DEFAULT_STYLE_PREFIX, null, TextBox.StyleDependent.watermark));
         style.addProperty("color", "gray");
         addStyle(style);
 
-        style = new Style(CSSClass.pyx4j_TextBox, "[disabled]");
-        style.addProperty("background-color", "#eee");
+        style = new Style(Selector.valueOf(TextBox.DEFAULT_STYLE_PREFIX, null, NativeTextBox.StyleDependent.disabled));
+        style.addProperty("background-color", "lightGray");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(TextBox.DEFAULT_STYLE_PREFIX, null, NativeTextBox.StyleDependent.readOnly));
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "none");
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE1);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(TextBox.DEFAULT_STYLE_PREFIX, null, NativeTextBox.StyleDependent.invalid));
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", "#f79494");
+        style.addProperty("background-color", "#f8d8d8");
         addStyle(style);
 
     }
 
     protected void initListBoxStyle() {
         Style style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX));
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColors.BORDER);
         addStyle(style);
 
@@ -637,6 +670,132 @@ public abstract class AppSiteTheme extends Theme {
 
     }
 
+    private void initMultipleDatePicker() {
+        Style style = new Style("table.datePickerMonthSelector");
+        style.addProperty("background-color", "#99A2A9");
+        style.addProperty("color", "#FFF");
+        style.addProperty("line-height", "12px");
+        style.addProperty("border-bottom", "1px solid #A8A8A8");
+        style.addProperty("border-collapse", "collapse");
+        addStyle(style);
+
+        style = new Style("table.datePickerMonthSelector table");
+        style.addProperty("border-collapse", "collapse");
+        addStyle(style);
+
+        style = new Style("table.gwt-DatePicker");
+        style.addProperty("width", "250px");
+        style.addProperty("border", "1px solid #A8A8A8");
+        addStyle(style);
+
+        style = new Style("table.gwt-DatePicker.multiple");
+        style.addProperty("border-left", "0");
+        style.addProperty("margin", "0");
+        addStyle(style);
+
+        style = new Style("table.gwt-DatePicker.multiple.first");
+        style.addProperty("border-left", "1px solid #A8A8A8");
+        addStyle(style);
+
+        style = new Style(".gwt-DatePicker td");
+        style.addProperty("text-align", "center");
+        style.addProperty("padding", "0");
+        style.addProperty("font-size", "11px");
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
+
+        style = new Style(".datePickerGrid .gwt-Label");
+        style.addProperty("border", "1px solid #F0F0F0");
+        addStyle(style);
+
+        style = new Style(".datePickerGrid .gwt-Label.disabled");
+        style.addProperty("color", "#B0B0B0");
+        addStyle(style);
+
+        style = new Style(".datePickerGrid .gwt-Label.heighlighted");
+        style.addProperty("border", "1px solid #D0D0F0");
+        style.addProperty("background-color", ThemeColors.SELECTION);
+        style.addProperty("color", ThemeColors.SELECTION_TEXT);
+        addStyle(style);
+
+        style = new Style(".datePickerGrid .gwt-Label.selected");
+        style.addProperty("border", "1px solid #E06020");
+        addStyle(style);
+
+        style = new Style(".datePickerMonthSelector .gwt-Label");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("font-size", "13px");
+        addStyle(style);
+
+        style = new Style("table.datePickerMonthSelector.multiple");
+        style.addProperty("line-height", "24px");
+        addStyle(style);
+
+        style = new Style(".datePickerMonthSelector img");
+        style.addProperty("width", "10px");
+        addStyle(style);
+
+        style = new Style(".datePickerMonthSelector img.top");
+        style.addProperty("position", "relative");
+        style.addProperty("top", "4px");
+        addStyle(style);
+
+        style = new Style(".datePickerMonthSelector img.middle");
+        style.addProperty("position", "relative");
+        style.addProperty("top", "2px");
+        addStyle(style);
+
+        style = new Style(".datePickerMonthSelector img.bottom");
+        style.addProperty("position", "relative");
+        style.addProperty("top", "-2px");
+        addStyle(style);
+
+        style = new Style(".datePickerMonthSelector");
+        style.addProperty("background-color", "#F0F0F0");
+        style.addProperty("margin", "0");
+        style.addProperty("padding", "0");
+        addStyle(style);
+
+        style = new Style(".datePickerGrid");
+        style.addProperty("width", "100%");
+        style.addProperty("background-color", "#F0F0F0");
+        style.addProperty("padding", "10px");
+        addStyle(style);
+
+        style = new Style(".datePickerGrid tr.datePickerGridDaysRow");
+        style.addProperty("height", "20px");
+        addStyle(style);
+
+        style = new Style(".datePickerGrid .datePickerGridDaysRow td");
+        style.addProperty("border-bottom", "1px solid black");
+        style.addProperty("margin-bottom", "5px");
+        addStyle(style);
+
+        style = new Style("monthSelectorNextMonth");
+        style.addProperty("border-right", "1px solid #A8B8B8");
+        addStyle(style);
+
+        style = new Style(".monthSelectorNavigation.right");
+        style.addProperty("border-right", "1px solid #A8B8B8");
+        addStyle(style);
+
+        style = new Style(".monthSelectorNavigation");
+        style.addProperty("width", "15%");
+        addStyle(style);
+
+        style = new Style("monthSelectorMonthLabel");
+        style.addProperty("width", "35%");
+        addStyle(style);
+
+        style = new Style(".monthSelectorYearLabel");
+        style.addProperty("width", "25%");
+        addStyle(style);
+
+        style = new Style(".monthSelectorYearNavigation");
+        style.addProperty("width", "10%");
+        addStyle(style);
+    }
+
     protected void initHyperlinkStyle() {
     }
 
@@ -694,7 +853,7 @@ public abstract class AppSiteTheme extends Theme {
     protected void initSlideshowActionStyle() {
 
         Style style = new Style(CSSClass.pyx4j_SlideshowAction);
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowItem().getURL() + "') no-repeat");
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowItem().getSafeUri().asString() + "') no-repeat");
         style.addProperty("width", "17px");
         style.addProperty("height", "16px");
         style.addProperty("cursor", "pointer");
@@ -706,23 +865,23 @@ public abstract class AppSiteTheme extends Theme {
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_SlideshowAction, "-left");
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowLeft().getURL() + "') no-repeat");
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowLeft().getSafeUri().asString() + "') no-repeat");
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_SlideshowAction, "-right");
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowRight().getURL() + "') no-repeat");
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowRight().getSafeUri().asString() + "') no-repeat");
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_SlideshowAction, "-selected");
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowSelectedItem().getURL() + "') no-repeat");
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowSelectedItem().getSafeUri().asString() + "') no-repeat");
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_SlideshowAction, "-playing");
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowPause().getURL() + "') no-repeat");
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowPause().getSafeUri().asString() + "') no-repeat");
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_SlideshowAction, "-paused");
-        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowPlay().getURL() + "') no-repeat");
+        style.addProperty("background", "url('" + ImageFactory.getImages().slideshowPlay().getSafeUri().asString() + "') no-repeat");
         addStyle(style);
 
     }
@@ -752,7 +911,4 @@ public abstract class AppSiteTheme extends Theme {
         addStyle(style);
 
     }
-
-    protected abstract void initSiteViewStyles();
-
 }

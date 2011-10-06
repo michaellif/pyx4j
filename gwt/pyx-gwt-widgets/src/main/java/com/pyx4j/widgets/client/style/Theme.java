@@ -32,9 +32,16 @@ public class Theme {
 
     private static final Logger log = LoggerFactory.getLogger(Theme.class);
 
+    private final String discriminator;
+
     private final List<Style> styles;
 
     public Theme() {
+        this(null);
+    }
+
+    public Theme(String discriminator) {
+        this.discriminator = discriminator;
         styles = new ArrayList<Style>();
     }
 
@@ -70,6 +77,10 @@ public class Theme {
             return this.getClass().equals(((Theme) obj).getClass());
         }
         return false;
+    }
+
+    public String getDiscriminator() {
+        return discriminator;
     }
 
 }

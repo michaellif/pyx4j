@@ -69,7 +69,6 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         add(collapseImageHolder);
 
         HorizontalPanel captionHolder = new HorizontalPanel();
-        captionHolder.setWidth("300px");
         captionHolder.getElement().getStyle().setMarginLeft(5, Unit.PX);
         captionHolder.getElement().getStyle().setMarginRight(5, Unit.PX);
         captionHolder.addDomHandler(new ClickHandler() {

@@ -1,12 +1,12 @@
 package com.pyx4j.site.client.ui;
 
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 public interface AppSiteView {
 
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Header, MainNavig, Caption, SecondaryNavig, Message, Content, Center, Main, Left, Right, Footer, Display
     }
 

@@ -37,6 +37,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
@@ -83,12 +84,12 @@ public class MainForm extends CEntityEditor<EntityI> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<EntityII> createItem() {
+            protected CEntityFolderBoxEditor<EntityII> createItem() {
                 return createEntityIISetRow();
             }
 
-            private CEntityFolderItemEditor<EntityII> createEntityIISetRow() {
-                return new CEntityFolderItemEditor<EntityII>(EntityII.class) {
+            private CEntityFolderBoxEditor<EntityII> createEntityIISetRow() {
+                return new CEntityFolderBoxEditor<EntityII>(EntityII.class) {
 
                     @Override
                     public IsWidget createContent() {

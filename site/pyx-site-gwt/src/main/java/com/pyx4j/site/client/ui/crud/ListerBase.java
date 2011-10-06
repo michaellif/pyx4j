@@ -71,13 +71,13 @@ import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.site.client.ui.crud.FilterData.Operands;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.ImageButton;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 public abstract class ListerBase<E extends IEntity> extends VerticalPanel implements IListerView<E> {
 
     public static String DEFAULT_STYLE_PREFIX = "vista_Lister";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         actionsPanel, filtersPanel, listPanel, newItemButton, actionButton
     }
 

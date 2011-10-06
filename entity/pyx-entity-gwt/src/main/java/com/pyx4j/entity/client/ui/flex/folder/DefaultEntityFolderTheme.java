@@ -20,17 +20,42 @@
  */
 package com.pyx4j.entity.client.ui.flex.folder;
 
+import com.pyx4j.widgets.client.style.IStyleName;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.Theme;
 
 public class DefaultEntityFolderTheme extends Theme {
 
-    public DefaultEntityFolderTheme(String prefix) {
-        Style style = new Style(Selector.valueOf(prefix));
+    public DefaultEntityFolderTheme() {
+        initStyles();
+    }
+
+    protected void initStyles() {
+        Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolder);
         style.addProperty("margin-top", "2px");
         style.addProperty("margin-left", "6px");
         addStyle(style);
-    }
 
+        style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderBoxDecorator);
+        style.addProperty("margin", "6px");
+        style.addProperty("border", "dotted 1px");
+        style.addProperty("border-color", "#333");
+        addStyle(style);
+
+        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderBoxDecorator).hover().build());
+        style.addProperty("border", "solid 1px");
+        style.addProperty("border-color", "#333");
+        addStyle(style);
+
+        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderActionsBar).build());
+        style.addProperty("opacity", "0.2");
+        addStyle(style);
+
+        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderActionsBar).discriminator(
+                new Selector.Builder(CEntityFolder.StyleName.EntityFolderBoxDecorator).hover().build().toString()).build());
+        style.addProperty("opacity", "1");
+        addStyle(style);
+
+    }
 }

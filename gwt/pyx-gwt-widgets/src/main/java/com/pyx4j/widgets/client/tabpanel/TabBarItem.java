@@ -158,13 +158,13 @@ public class TabBarItem extends HorizontalPanel {
     }
 
     public void setStylePrefix(String styleName) {
-        setStyleName(Selector.getStyleName(styleName, TabPanel.StyleSuffix.BarItem));
-        leftSubpanel.setStyleName(Selector.getStyleName(styleName, TabPanel.StyleSuffix.BarItemLeft));
-        rightSubpanel.setStyleName(Selector.getStyleName(styleName, TabPanel.StyleSuffix.BarItemRight));
+        setStyleName(Selector.getStyleName(styleName, TabPanel.StyleName.TabBarItem));
+        leftSubpanel.setStyleName(Selector.getStyleName(styleName, TabPanel.StyleName.TabBarItemLeft));
+        rightSubpanel.setStyleName(Selector.getStyleName(styleName, TabPanel.StyleName.TabBarItemRight));
         if (icon != null) {
-            icon.setStyleName(Selector.getStyleName(styleName, TabPanel.StyleSuffix.BarItemImage));
+            icon.setStyleName(Selector.getStyleName(styleName, TabPanel.StyleName.TabBarItemImage));
         }
-        label.setStyleName(Selector.getStyleName(styleName, TabPanel.StyleSuffix.BarItemLabel));
+        label.setStyleName(Selector.getStyleName(styleName, TabPanel.StyleName.TabBarItemLabel));
     }
 
     public void onTabTitleChange(String labelString) {

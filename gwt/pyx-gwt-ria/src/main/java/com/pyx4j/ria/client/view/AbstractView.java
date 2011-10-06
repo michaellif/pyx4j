@@ -26,7 +26,6 @@ import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
@@ -51,7 +50,7 @@ public abstract class AbstractView extends Tab {
         tabsMark = new SimplePanel();
         rootPanel.addSouth(tabsMark, 0);
 
-        tabPanel = new TabPanel(WindowsTheme.pyx4j_TabBottom);
+        tabPanel = new TabPanel();
 
         rootPanel.add(tabPanel.getDeck());
 

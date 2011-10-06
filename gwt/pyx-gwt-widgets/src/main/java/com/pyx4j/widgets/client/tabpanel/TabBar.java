@@ -38,7 +38,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.style.Selector;
 
 public class TabBar extends DockLayoutPanel {
 
@@ -63,6 +62,8 @@ public class TabBar extends DockLayoutPanel {
         this.tabPanel = tabPanel;
 
         tabListTrigger = new TabListTrigger();
+        tabListTrigger.setStyleName(TabPanel.StyleName.TabBarItem.name());
+
         tabListTrigger.setVisible(false);
 
         tabListTrigger.setWidget(new Image(ImageFactory.getImages().moveTabbarRight()));
@@ -91,12 +92,6 @@ public class TabBar extends DockLayoutPanel {
 
         sinkEvents(Event.ONCLICK);
 
-    }
-
-    public void setStylePrefix(String styleName) {
-        setStyleName(styleName);
-        tabListTrigger.setStyleName(Selector.getStyleName(styleName, TabPanel.StyleSuffix.BarItem));
-        listAllTabsDropDown.setStylePrefix(styleName);
     }
 
     public void addTabBarItem(Tab tab) {

@@ -45,16 +45,14 @@ import com.pyx4j.widgets.client.event.shared.BeforeCloseEvent;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseHandler;
 import com.pyx4j.widgets.client.event.shared.HasBeforeCloseHandlers;
 import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHandlers<Tab>, HasCloseHandlers<Tab>, HasBeforeCloseHandlers<Tab> {
 
     private static final Logger log = LoggerFactory.getLogger(TabPanel.class);
 
-    public static String DEFAULT_STYLE_PREFIX = "pyx4j_Tab";
-
-    public static enum StyleSuffix implements IStyleSuffix {
-        PanelBottom, BarItem, BarItemLeft, BarItemRight, BarItemLabel, BarItemImage, List, ListItem
+    public static enum StyleName implements IStyleName {
+        Tab, TabPanelBottom, TabBarItem, TabBarItemLeft, TabBarItemRight, TabBarItemLabel, TabBarItemImage, TabList, TabListItem
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -67,23 +65,11 @@ public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHa
 
     private final HashSet<Tab> tabs = new HashSet<Tab>();
 
-    private final String stylePrefix;
-
     private EventBus eventBus;
 
     public TabPanel() {
-        this(DEFAULT_STYLE_PREFIX);
-    }
-
-    public TabPanel(String stylePrefix) {
         tabBar = new TabBar(this);
-        this.stylePrefix = stylePrefix;
-        tabBar.setStylePrefix(stylePrefix);
-        deck.setStyleName(stylePrefix + StyleSuffix.PanelBottom);
-    }
-
-    public String getStylePrefix() {
-        return stylePrefix;
+        deck.setStyleName(StyleName.TabPanelBottom.name());
     }
 
     public void add(Tab tab) {
@@ -124,7 +110,7 @@ public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHa
         tabs.remove(tab);
         tab.setParentTabPanel(null);
         if (deck.getWidgetCount() == 0) {
-            deck.removeStyleName(getStylePrefix() + StyleSuffix.PanelBottom);
+            deck.removeStyleName(StyleName.TabPanelBottom.name());
         }
 
         CloseEvent.fire(this, tab);

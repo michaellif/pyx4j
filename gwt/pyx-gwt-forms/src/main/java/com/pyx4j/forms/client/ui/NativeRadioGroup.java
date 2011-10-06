@@ -38,14 +38,14 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.widgets.client.RadioButton;
 import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 import com.pyx4j.widgets.client.style.Selector;
 
 public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableComponent<E> {
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_RadioGroup";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Item
     }
 

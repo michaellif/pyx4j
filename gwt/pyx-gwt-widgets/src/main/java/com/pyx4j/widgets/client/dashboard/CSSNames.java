@@ -21,13 +21,13 @@ SS * Pyx4j framework
 package com.pyx4j.widgets.client.dashboard;
 
 import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 public class CSSNames {
     // CSS style names: 
     public static String BASE_NAME = "pyx4j_Board";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Column, ColumnSpacer, Holder, HolderSetup, HolderCaption, HolderHeading, HolderMenu, DndPositioner, DndReportPositioner
     }
 

@@ -63,7 +63,7 @@ public class TabListDropDown extends PopupPanel {
 
     public void setStylePrefix(String stylePrefix) {
         this.stylePrefix = stylePrefix;
-        setStyleName(Selector.getStyleName(stylePrefix, TabPanel.StyleSuffix.List));
+        setStyleName(Selector.getStyleName(stylePrefix, TabPanel.StyleName.TabList));
     }
 
     public void showSelector() {
@@ -71,7 +71,7 @@ public class TabListDropDown extends PopupPanel {
         List<Tab> allTabs = trigger.getAllTabs();
         for (final Tab tab : allTabs) {
             final Label item = new Label(tab.getTabTitle(), false);
-            item.setStyleName(Selector.getStyleName(stylePrefix, TabPanel.StyleSuffix.ListItem));
+            item.setStyleName(Selector.getStyleName(stylePrefix, TabPanel.StyleName.TabListItem));
 
             item.addDomHandler(new MouseOverHandler() {
                 @Override

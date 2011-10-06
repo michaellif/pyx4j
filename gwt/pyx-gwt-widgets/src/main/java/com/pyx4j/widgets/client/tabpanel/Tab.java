@@ -93,9 +93,6 @@ public class Tab extends LayoutPanel {
 
     protected void setParentTabPanel(TabPanel parentTabPanel) {
         this.parentTabPanel = parentTabPanel;
-        if (parentTabPanel != null) {
-            tabBarItem.setStylePrefix(parentTabPanel.getStylePrefix());
-        }
     }
 
     protected TabBarItem getTabBarItem() {

@@ -49,6 +49,8 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.widgets.client.style.IStyleDependent;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 /**
  * This component represents list of IEntities
@@ -56,6 +58,14 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<IList<E>> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
+
+    public static enum StyleName implements IStyleName {
+        EntityFolder, EntityFolderBoxItem, EntityFolderBoxDecorator, EntityFolderRowItem, EntityFolderActionsBar
+    }
+
+    public static enum StyleDependent implements IStyleDependent {
+        selected, disabled, hover
+    }
 
     private IFolderDecorator<E> folderDecorator;
 
@@ -71,6 +81,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     public CEntityFolder(Class<E> rowClass) {
         container = new FlowPanel();
+        asWidget().setStyleName(StyleName.EntityFolder.name());
         itemsMap = new LinkedHashMap<E, CEntityFolderItemEditor<E>>();
         if (rowClass != null) {
             entityPrototype = EntityFactory.getEntityPrototype(rowClass);

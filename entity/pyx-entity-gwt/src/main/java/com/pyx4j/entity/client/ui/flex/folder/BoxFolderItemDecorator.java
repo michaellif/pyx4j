@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName;
 import com.pyx4j.entity.shared.IEntity;
 
 public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
@@ -49,6 +50,8 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     public BoxFolderItemDecorator(EntityFolderImages images, String removeLabel, boolean removable) {
         super(images, removeLabel, removable);
 
+        setStyleName(StyleName.EntityFolderBoxDecorator.name());
+
 //        getContent().getElement().getStyle().setMarginTop(10, Unit.PX);
 //        getContent().getElement().getStyle().setMarginLeft(10, Unit.PX);
 //        getContent().getElement().getStyle().setPadding(10, Unit.PX);
@@ -57,12 +60,14 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 //        getContent().getElement().getStyle().setBorderColor("#999");
 
         VerticalPanel mainPanel = new VerticalPanel();
+        mainPanel.setWidth("100%");
         setWidget(mainPanel);
 
         toolbar = new BoxFolderItemToolbar(this);
         mainPanel.add(toolbar);
 
         contentHolder = new SimplePanel();
+        contentHolder.setStyleName(StyleName.EntityFolderBoxItem.name());
 
         mainPanel.add(contentHolder);
 

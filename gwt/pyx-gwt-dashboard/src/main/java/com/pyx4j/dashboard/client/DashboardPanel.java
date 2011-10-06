@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.dashboard.client.images.DashboardImages;
 import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 /**
  * Dashboard panel.
@@ -44,7 +44,7 @@ public class DashboardPanel extends SimplePanel {
     // CSS style names: 
     public static String BASE_NAME = "pyx4j_DashboardPanel";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Column, ColumnHeading, ColumnSpacer, Holder, HolderSetup, HolderCaption, HolderHeading, HolderMenu, DndPositioner, DndRowPositioner
     }
 

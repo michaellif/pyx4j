@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageButton;
 
@@ -50,6 +51,8 @@ public class ItemActionsBar extends HorizontalPanel {
     private final Image downCommand;
 
     public ItemActionsBar(boolean removable, Direction direction, EntityFolderImages images) {
+
+        setStyleName(StyleName.EntityFolderActionsBar.name());
 
         upCommand = new ImageButton(images.moveUp(), images.moveUpHover(), i18n.tr("Move up"));
         upCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
