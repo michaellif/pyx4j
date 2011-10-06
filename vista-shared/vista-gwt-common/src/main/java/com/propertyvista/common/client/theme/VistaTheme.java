@@ -13,6 +13,7 @@
  */
 package com.propertyvista.common.client.theme;
 
+import com.pyx4j.entity.client.ui.flex.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeComboBox;
 import com.pyx4j.forms.client.ui.NativeTextBox;
 import com.pyx4j.widgets.client.ImageFactory;
@@ -32,6 +33,9 @@ public class VistaTheme extends Theme {
     }
 
     protected void initStyles() {
+
+        addTheme(new DefaultEntityFolderTheme());
+
         initGeneralStyles();
         initBodyStyles();
         initSectionStyles();
