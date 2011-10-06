@@ -23,7 +23,7 @@ import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.CircleOverlay;
 import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
@@ -44,7 +44,7 @@ public class PropertiesMapWidget extends AbstractMapWidget {
 
     private DefaultAsyncCallback<LatLngBounds> callback;
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         CardLeft, CardLeftItem, CardContent, CardContentItem, CardImage, CardMenuItem
     }
 

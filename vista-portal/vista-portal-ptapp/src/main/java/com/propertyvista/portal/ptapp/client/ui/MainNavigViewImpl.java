@@ -35,7 +35,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
@@ -46,7 +46,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
     public static String DEFAULT_STYLE_PREFIX = "vista_Steps";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Holder, Tab, LabelHolder, StatusHolder, Label
     }
 

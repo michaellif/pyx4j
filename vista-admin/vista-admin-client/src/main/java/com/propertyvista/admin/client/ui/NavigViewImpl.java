@@ -42,7 +42,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 import com.propertyvista.admin.client.activity.NavigFolder;
 
@@ -52,7 +52,7 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
     private final static double HEADER_SIZE = 3;
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Item, NoBottomMargin
     }
 

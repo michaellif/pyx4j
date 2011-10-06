@@ -188,7 +188,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<ServiceItemType> createItem() {
+            protected CEntityFolderRowEditor<ServiceItemType> createItem() {
                 return new CEntityFolderRowEditor<ServiceItemType>(ServiceItemType.class, columns()) {
                     @Override
                     public IFolderItemDecorator<ServiceItemType> createDecorator() {

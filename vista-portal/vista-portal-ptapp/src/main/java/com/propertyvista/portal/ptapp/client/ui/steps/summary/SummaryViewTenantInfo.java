@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
@@ -236,13 +237,13 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
             }
 
             @Override
-            protected CEntityFolderItemEditor<EmergencyContact> createItem() {
+            protected CEntityFolderBoxEditor<EmergencyContact> createItem() {
                 return createEmergencyContactItem();
             }
 
-            private CEntityFolderItemEditor<EmergencyContact> createEmergencyContactItem() {
+            private CEntityFolderBoxEditor<EmergencyContact> createEmergencyContactItem() {
 
-                return new CEntityFolderItemEditor<EmergencyContact>(EmergencyContact.class) {
+                return new CEntityFolderBoxEditor<EmergencyContact>(EmergencyContact.class) {
                     @Override
                     public IsWidget createContent() {
                         FlowPanel contactPanel = new FlowPanel();

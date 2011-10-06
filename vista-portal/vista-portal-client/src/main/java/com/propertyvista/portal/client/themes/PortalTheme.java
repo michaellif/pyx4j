@@ -60,7 +60,7 @@ public class PortalTheme extends VistaTheme {
     @Override
     protected void initListBoxStyle() {
         super.initListBoxStyle();
-        Style style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX), " option");
+        Style style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX) + " option");
         style.addProperty("background-color", "white");
         addStyle(style);
     }

@@ -20,14 +20,14 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 
 public class PortalListDecorator extends FlowPanel {
     public static String DEFAULT_STYLE_PREFIX = "PortalListDecorator";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         List, ListElement
     }
 

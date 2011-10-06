@@ -23,7 +23,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.AppSiteView;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 import com.pyx4j.widgets.client.style.StyleManger;
 
 import com.propertyvista.portal.ptapp.client.mvp.ActionsActivityMapper;
@@ -35,19 +35,19 @@ import com.propertyvista.portal.ptapp.client.mvp.MainNavigActivityMapper;
 import com.propertyvista.portal.ptapp.client.mvp.MessageActivityMapper;
 import com.propertyvista.portal.ptapp.client.mvp.SecondNavigActivityMapper;
 import com.propertyvista.portal.ptapp.client.themes.GainsboroPalette;
-import com.propertyvista.portal.ptapp.client.themes.VistaTheme;
+import com.propertyvista.portal.ptapp.client.themes.PtAppTheme;
 
 public class PtAppSiteView extends FlowPanel {
 
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Header, MainNavig, Caption, SecondaryNavig, Message, Content, Center, Main, Left, Right, Footer, Display
     }
 
     public PtAppSiteView() {
 
-        StyleManger.installTheme(new VistaTheme(), new GainsboroPalette());
+        StyleManger.installTheme(new PtAppTheme(), new GainsboroPalette());
 
         EventBus eventBus = AppSite.getEventBus();
 

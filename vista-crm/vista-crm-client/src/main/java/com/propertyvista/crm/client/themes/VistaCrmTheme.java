@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.themes;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.site.client.ui.crud.ListerBase;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColors;
@@ -49,7 +49,7 @@ public class VistaCrmTheme extends VistaTheme {
 
     public static double defaultTabHeight = 2.6;
 
-    public static enum StyleSuffixEx implements IStyleSuffix {
+    public static enum StyleSuffixEx implements IStyleName {
         SaveButton, CancelButton, EditButton, ActionButton;
     }
 

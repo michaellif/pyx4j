@@ -26,7 +26,7 @@ import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IList;
@@ -164,8 +164,8 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<EmergencyContact> createItem() {
-                return new CEntityFolderItemEditor<EmergencyContact>(EmergencyContact.class) {
+            protected CEntityFolderBoxEditor<EmergencyContact> createItem() {
+                return new CEntityFolderBoxEditor<EmergencyContact>(EmergencyContact.class) {
                     @Override
                     public IsWidget createContent() {
                         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable());

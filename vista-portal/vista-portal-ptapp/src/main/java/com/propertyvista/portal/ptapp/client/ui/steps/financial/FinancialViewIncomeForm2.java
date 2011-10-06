@@ -34,7 +34,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CPolymorphicEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IDiscriminator;
 import com.pyx4j.entity.client.ui.flex.editor.IPolymorphicEditorDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -54,7 +54,7 @@ import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
-public class FinancialViewIncomeForm2 extends CEntityFolderItemEditor<IIncomeInfo> {
+public class FinancialViewIncomeForm2 extends CEntityFolderBoxEditor<IIncomeInfo> {
 
     private static I18n i18n = I18nFactory.getI18n(FinancialViewIncomeForm2.class);
 

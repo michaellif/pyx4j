@@ -16,13 +16,13 @@ package com.propertyvista.portal.ptapp.client.ui;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 public class CaptionViewImpl extends SimplePanel implements CaptionView {
 
     public static String DEFAULT_STYLE_PREFIX = "vista_CaptionView";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Label
     }
 

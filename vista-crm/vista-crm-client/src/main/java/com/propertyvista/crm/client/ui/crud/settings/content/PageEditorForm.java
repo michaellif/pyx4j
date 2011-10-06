@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
@@ -88,8 +89,8 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<PageContent> createItem() {
-                return new CEntityFolderItemEditor<PageContent>(PageContent.class) {
+            protected CEntityFolderBoxEditor<PageContent> createItem() {
+                return new CEntityFolderBoxEditor<PageContent>(PageContent.class) {
 
                     @Override
                     public IsWidget createContent() {

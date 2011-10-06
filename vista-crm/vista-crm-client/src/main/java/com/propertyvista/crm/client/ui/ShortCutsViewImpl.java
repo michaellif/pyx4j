@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
 
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 import com.propertyvista.crm.client.activity.NavigFolder;
 
@@ -33,7 +33,7 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
 
     public static String DEFAULT_STYLE_PREFIX = "vistaCrm_ShortCuts";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Item, SearchBar
     }
 

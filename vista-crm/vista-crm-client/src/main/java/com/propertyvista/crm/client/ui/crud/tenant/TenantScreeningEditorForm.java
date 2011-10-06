@@ -32,6 +32,7 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
@@ -340,7 +341,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<PersonalIncome> createItem() {
+            protected CEntityFolderBoxEditor<PersonalIncome> createItem() {
                 return new TenantFinancialViewIncomeForm(!TenantScreeningEditorForm.this.isEditable());
             }
         };
@@ -418,8 +419,8 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<TenantGuarantor> createItem() {
-                return new CEntityFolderItemEditor<TenantGuarantor>(TenantGuarantor.class) {
+            protected CEntityFolderBoxEditor<TenantGuarantor> createItem() {
+                return new CEntityFolderBoxEditor<TenantGuarantor>(TenantGuarantor.class) {
 
                     @Override
                     public IsWidget createContent() {

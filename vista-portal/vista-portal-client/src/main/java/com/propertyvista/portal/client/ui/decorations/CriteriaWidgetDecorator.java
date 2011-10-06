@@ -36,13 +36,13 @@ import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.NativeCheckBox;
 import com.pyx4j.forms.client.ui.decorators.SpaceHolder;
 import com.pyx4j.widgets.client.Tooltip;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 public class CriteriaWidgetDecorator extends VerticalPanel {
 
     public static String DEFAULT_STYLE_PREFIX = "CriteriaWidgetDecorator";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Label, Component
     }
 

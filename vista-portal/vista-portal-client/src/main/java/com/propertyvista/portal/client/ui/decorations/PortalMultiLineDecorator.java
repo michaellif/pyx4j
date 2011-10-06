@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 
@@ -29,7 +29,7 @@ public class PortalMultiLineDecorator extends FlowPanel {
 
     public static final String DEFAULT_SEAPATOR = ",";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Label, Value
     }
 

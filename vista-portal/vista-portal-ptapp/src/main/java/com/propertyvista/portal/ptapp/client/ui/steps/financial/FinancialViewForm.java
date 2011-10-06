@@ -36,6 +36,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
@@ -169,7 +170,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<IIncomeInfo> createItem() {
+            protected CEntityFolderBoxEditor<IIncomeInfo> createItem() {
                 return new FinancialViewIncomeForm2(summaryViewMode);
             }
 
@@ -196,7 +197,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<PersonalIncome> createItem() {
+            protected CEntityFolderBoxEditor<PersonalIncome> createItem() {
                 return new FinancialViewIncomeForm(summaryViewMode);
             }
 
@@ -294,12 +295,12 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<TenantGuarantor> createItem() {
+            protected CEntityFolderBoxEditor<TenantGuarantor> createItem() {
                 return createGuarantorRowEditor();
             }
 
-            private CEntityFolderItemEditor<TenantGuarantor> createGuarantorRowEditor() {
-                return new CEntityFolderItemEditor<TenantGuarantor>(TenantGuarantor.class) {
+            private CEntityFolderBoxEditor<TenantGuarantor> createGuarantorRowEditor() {
+                return new CEntityFolderBoxEditor<TenantGuarantor>(TenantGuarantor.class) {
 
                     @Override
                     public IsWidget createContent() {

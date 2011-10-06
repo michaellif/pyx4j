@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
@@ -219,8 +220,8 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<Testimonial> createItem() {
-                return new CEntityFolderItemEditor<Testimonial>(Testimonial.class) {
+            protected CEntityFolderBoxEditor<Testimonial> createItem() {
+                return new CEntityFolderBoxEditor<Testimonial>(Testimonial.class) {
 
                     @Override
                     public IsWidget createContent() {
@@ -256,8 +257,8 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<News> createItem() {
-                return new CEntityFolderItemEditor<News>(News.class) {
+            protected CEntityFolderBoxEditor<News> createItem() {
+                return new CEntityFolderBoxEditor<News>(News.class) {
 
                     @Override
                     public IsWidget createContent() {

@@ -31,13 +31,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 public class NavigViewImpl extends SimplePanel implements NavigView {
 
     public static String DEFAULT_STYLE_PREFIX = "MainMenu";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Holder, Tab, Label
     }
 

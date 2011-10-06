@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 
@@ -27,7 +27,7 @@ public class VistaReadOnlyDecorator extends FlowPanel {
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_VistatextPairDecorator";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Left, Right
     }
 

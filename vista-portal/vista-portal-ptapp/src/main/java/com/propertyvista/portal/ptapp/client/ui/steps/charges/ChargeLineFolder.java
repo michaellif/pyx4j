@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 
@@ -46,9 +46,9 @@ public class ChargeLineFolder extends CEntityFolder<ChargeLine> {
     }
 
     @Override
-    protected CEntityFolderItemEditor<ChargeLine> createItem() {
+    protected CEntityFolderBoxEditor<ChargeLine> createItem() {
 
-        return new CEntityFolderItemEditor<ChargeLine>(ChargeLine.class) {
+        return new CEntityFolderBoxEditor<ChargeLine>(ChargeLine.class) {
 
             @Override
             public IFolderItemDecorator<ChargeLine> createDecorator() {

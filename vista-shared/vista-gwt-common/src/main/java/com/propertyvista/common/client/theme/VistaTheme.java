@@ -322,15 +322,15 @@ public class VistaTheme extends Theme {
         style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPicker().getSafeUri().asString() + "') no-repeat 100%");
         addStyle(style);
 
-        style = new Style(CSSClass.pyx4j_Picker, "-hover");
+        style = new Style("." + CSSClass.pyx4j_Picker + "-hover");
         style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerHover().getSafeUri().asString() + "') no-repeat 100%");
         addStyle(style);
 
-        style = new Style(CSSClass.pyx4j_Picker, "-pushed");
+        style = new Style("." + CSSClass.pyx4j_Picker + "-pushed");
         style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerPushed().getSafeUri().asString() + "') no-repeat 100%");
         addStyle(style);
 
-        style = new Style(CSSClass.pyx4j_PickerPanel);
+        style = new Style("." + CSSClass.pyx4j_PickerPanel);
         style.addProperty("border-color", ThemeColors.BORDER);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
@@ -338,18 +338,18 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         addStyle(style);
-        style = new Style(CSSClass.pyx4j_PickerPanel, " td");
+        style = new Style("." + CSSClass.pyx4j_PickerPanel + " td");
         style.addProperty("padding", "0px");
 
-        style = new Style(CSSClass.pyx4j_PickerPanel, " table");
+        style = new Style("." + CSSClass.pyx4j_PickerPanel + " table");
         style.addProperty("border-collapse", "collapse");
         addStyle(style);
 
-        style = new Style(CSSClass.pyx4j_PickerLine, " .gwt-TreeItem-selected");
+        style = new Style("." + CSSClass.pyx4j_PickerLine + " .gwt-TreeItem-selected");
         style.addProperty("background", "transparent");
         addStyle(style);
 
-        style = new Style(CSSClass.pyx4j_PickerLine_Selected);
+        style = new Style("." + CSSClass.pyx4j_PickerLine_Selected);
         style.addProperty("background", "lightGray");
         addStyle(style);
 

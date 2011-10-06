@@ -35,7 +35,7 @@ import com.pyx4j.widgets.client.dashboard.BoardLayout;
 import com.pyx4j.widgets.client.dashboard.IBoard;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.gadgets.GadgetsFactory;
@@ -48,7 +48,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 
     public static String DEFAULT_STYLE_PREFIX = "vista_DashboardView";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         actionsPanel
     }
 

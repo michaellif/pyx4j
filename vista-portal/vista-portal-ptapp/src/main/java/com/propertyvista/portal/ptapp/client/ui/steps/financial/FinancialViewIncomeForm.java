@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -52,7 +52,7 @@ import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
-public class FinancialViewIncomeForm extends CEntityFolderItemEditor<PersonalIncome> {
+public class FinancialViewIncomeForm extends CEntityFolderBoxEditor<PersonalIncome> {
 
     private static I18n i18n = I18nFactory.getI18n(FinancialViewIncomeForm.class);
 

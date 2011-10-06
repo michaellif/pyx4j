@@ -31,9 +31,9 @@ import com.propertyvista.portal.ptapp.client.ui.SecondNavigViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentViewForm;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryViewForm;
 
-public class VistaTheme extends com.propertyvista.common.client.theme.VistaTheme {
+public class PtAppTheme extends com.propertyvista.common.client.theme.VistaTheme {
 
-    public VistaTheme() {
+    public PtAppTheme() {
         super();
     }
 
@@ -67,7 +67,7 @@ public class VistaTheme extends com.propertyvista.common.client.theme.VistaTheme
     @Override
     protected void initListBoxStyle() {
         super.initListBoxStyle();
-        Style style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX), " option");
+        Style style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX) + " option");
         style.addProperty("background-color", "white");
         addStyle(style);
     }

@@ -22,7 +22,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.client.ui.AppSiteView;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 import com.propertyvista.portal.client.mvp.CaptionActivityMapper;
 import com.propertyvista.portal.client.mvp.ContentActivityMapper;
@@ -32,7 +32,7 @@ public class PortalScreen extends SimplePanel {
 
     public static String DEFAULT_STYLE_PREFIX = "PortalView";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Content, Header, Footer, Navig, Center, Main, Left, Right, Display, StaticContent
     }
 

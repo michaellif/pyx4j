@@ -16,13 +16,13 @@ package com.propertyvista.crm.client.ui.decorations;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 public class CrmTitleBar extends HorizontalPanel {
 
     public static String DEFAULT_STYLE_PREFIX = "vista_CrmTitleBar";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Caption, Breadcrumb
     }
 

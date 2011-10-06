@@ -33,7 +33,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
@@ -363,8 +363,8 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<EmergencyContact> createItem() {
-                return new CEntityFolderItemEditor<EmergencyContact>(EmergencyContact.class) {
+            protected CEntityFolderBoxEditor<EmergencyContact> createItem() {
+                return new CEntityFolderBoxEditor<EmergencyContact>(EmergencyContact.class) {
                     @Override
                     public IsWidget createContent() {
                         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();

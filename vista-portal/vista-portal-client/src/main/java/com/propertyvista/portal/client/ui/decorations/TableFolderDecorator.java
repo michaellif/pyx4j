@@ -22,13 +22,13 @@ import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 public class TableFolderDecorator<E extends IEntity> extends SimplePanel implements IFolderDecorator<E> {
 
     public static String DEFAULT_STYLE_PREFIX = "TableFolderDecorator";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Header
     }
 

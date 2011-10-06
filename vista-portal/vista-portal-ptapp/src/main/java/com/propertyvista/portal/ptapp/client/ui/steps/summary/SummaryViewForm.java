@@ -42,7 +42,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -55,7 +55,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
@@ -81,7 +81,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
 
     public final static String DEFAULT_STYLE_PREFIX = "SummaryViewForm";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         DigitalSignature, DigitalSignatureLabel, DigitalSignatureEdit
     }
 
@@ -347,9 +347,9 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             return new CEntityFolder<TenantInLease>(TenantInLease.class) {
 
                 @Override
-                protected CEntityFolderItemEditor<TenantInLease> createItem() {
+                protected CEntityFolderBoxEditor<TenantInLease> createItem() {
 
-                    return new CEntityFolderItemEditor<TenantInLease>(TenantInLease.class) {
+                    return new CEntityFolderBoxEditor<TenantInLease>(TenantInLease.class) {
 
                         @Override
                         public IsWidget createContent() {
@@ -391,7 +391,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         return new CEntityFolder<TenantInLease>(TenantInLease.class) {
 
             @Override
-            protected CEntityFolderItemEditor<TenantInLease> createItem() {
+            protected CEntityFolderBoxEditor<TenantInLease> createItem() {
                 return new SummaryViewTenantInfo();
             }
 
@@ -410,7 +410,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         return new CEntityFolder<SummaryTenantFinancialDTO>(SummaryTenantFinancialDTO.class) {
 
             @Override
-            protected CEntityFolderItemEditor<SummaryTenantFinancialDTO> createItem() {
+            protected CEntityFolderBoxEditor<SummaryTenantFinancialDTO> createItem() {
                 return new SummaryViewTenantFinancial();
             }
 

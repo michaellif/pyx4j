@@ -48,6 +48,7 @@ import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
@@ -117,7 +118,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
         };
     }
 
-    protected void callSuperRemoveItem(final CEntityFolderItemEditor<ApplicationDocument> comp) {
+    protected void callSuperRemoveItem(final CEntityFolderBoxEditor<ApplicationDocument> comp) {
         super.removeItem(comp);
     }
 

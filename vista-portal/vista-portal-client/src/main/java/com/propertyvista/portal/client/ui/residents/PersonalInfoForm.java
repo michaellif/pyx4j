@@ -31,6 +31,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
@@ -111,7 +112,7 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
             }
 
             @Override
-            protected CEntityFolderItemEditor<EmergencyContact> createItem() {
+            protected CEntityFolderBoxEditor<EmergencyContact> createItem() {
                 return createEmergencyContactItem();
             }
 
@@ -125,9 +126,9 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
         };
     }
 
-    private CEntityFolderItemEditor<EmergencyContact> createEmergencyContactItem() {
+    private CEntityFolderBoxEditor<EmergencyContact> createEmergencyContactItem() {
 
-        return new CEntityFolderItemEditor<EmergencyContact>(EmergencyContact.class) {
+        return new CEntityFolderBoxEditor<EmergencyContact>(EmergencyContact.class) {
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();

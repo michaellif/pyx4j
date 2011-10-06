@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.TextBox;
 
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 
@@ -29,7 +29,7 @@ public class SearchBox extends Composite implements ClickHandler, KeyDownHandler
 
     public static final String DEFAULT_STYLE_NAME = "pyx4j-searchbox";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         Text, Trigger
     }
 

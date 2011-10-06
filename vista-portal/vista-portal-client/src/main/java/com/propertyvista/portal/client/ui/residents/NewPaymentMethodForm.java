@@ -40,7 +40,7 @@ import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleName;
 import com.pyx4j.widgets.client.style.Selector;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
@@ -66,7 +66,7 @@ public class NewPaymentMethodForm extends CEntityEditor<PaymentMethodGenericDTO>
 
     public static String PAYMENT_BUTTONS_STYLE_PREFIX = "PaymentRadioButtonGroup";
 
-    public static enum StyleSuffix implements IStyleSuffix {
+    public static enum StyleSuffix implements IStyleName {
         PaymentImages, PaymentFee, PaymentForm
     }
 

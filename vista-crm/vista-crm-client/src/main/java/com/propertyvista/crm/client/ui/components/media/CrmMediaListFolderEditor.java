@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.CEntityHyperlink;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -78,8 +78,8 @@ public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
     }
 
     @Override
-    protected CEntityFolderItemEditor<Media> createItem() {
-        return new CEntityFolderItemEditor<Media>(Media.class) {
+    protected CEntityFolderBoxEditor<Media> createItem() {
+        return new CEntityFolderBoxEditor<Media>(Media.class) {
 
             Image thumbnail;
 

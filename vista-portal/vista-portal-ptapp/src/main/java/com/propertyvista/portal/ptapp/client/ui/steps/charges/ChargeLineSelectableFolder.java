@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -51,9 +51,9 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
     }
 
     @Override
-    protected CEntityFolderItemEditor<ChargeLineSelectable> createItem() {
+    protected CEntityFolderBoxEditor<ChargeLineSelectable> createItem() {
 
-        return new CEntityFolderItemEditor<ChargeLineSelectable>(ChargeLineSelectable.class) {
+        return new CEntityFolderBoxEditor<ChargeLineSelectable>(ChargeLineSelectable.class) {
 
             @Override
             public IFolderItemDecorator<ChargeLineSelectable> createDecorator() {
