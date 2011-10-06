@@ -62,9 +62,6 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
         header = new HorizontalPanel();
         header.getElement().getStyle().setMarginBottom(3, Unit.PX);
         setHeaderVisible(false);
-        if (getAddImage() != null) {
-            header.getElement().getStyle().setPaddingLeft(getAddImage().getWidth(), Unit.PX);
-        }
 
         for (EntityFolderColumnDescriptor column : columns) {
             HorizontalPanel cellPanel = new HorizontalPanel();

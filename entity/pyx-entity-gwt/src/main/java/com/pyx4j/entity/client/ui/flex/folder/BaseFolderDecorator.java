@@ -20,9 +20,6 @@
  */
 package com.pyx4j.entity.client.ui.flex.folder;
 
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Float;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -31,6 +28,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
@@ -48,25 +46,20 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
 
     private boolean addable;
 
-    public BaseFolderDecorator(String title, boolean addable) {
-        this(EntityFolderImages.INSTANCE, title, addable);
-    }
-
     public BaseFolderDecorator(EntityFolderImages images, String title, boolean addable) {
         this.addable = addable && (images.add() != null);
 
         if (images.add() != null) {
-            addImage = new ImageButton(images.add(), images.addHover(), title);
-            addImage.getElement().getStyle().setFloat(Float.LEFT);
 
             actionsPanel = new FlowPanel();
-            actionsPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            actionsPanel.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
+            actionsPanel.setStyleName(StyleName.EntityFolderAddButton.name());
+
+            addImage = new ImageButton(images.add(), images.addHover(), title);
+            addImage.setStyleName(StyleName.EntityFolderAddButtonImage.name());
             actionsPanel.add(addImage);
 
             addButtonLabel = new Label(title);
-            addButtonLabel.getElement().getStyle().setPaddingLeft(3, Unit.PX);
-            addButtonLabel.getElement().getStyle().setFloat(Float.LEFT);
+            addButtonLabel.setStyleName(StyleName.EntityFolderAddButtonLabel.name());
             actionsPanel.add(addButtonLabel);
         }
     }

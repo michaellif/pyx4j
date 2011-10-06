@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.entity.client.images.EntityFolderImages;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -52,6 +53,8 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
 
     public TableFolderItemDecorator(EntityFolderImages images, String title, boolean removable) {
         super(images, title, removable);
+
+        setStyleName(StyleName.EntityFolderRowDecorator.name());
 
         DockPanel mainPanel = new DockPanel();
         setWidget(mainPanel);

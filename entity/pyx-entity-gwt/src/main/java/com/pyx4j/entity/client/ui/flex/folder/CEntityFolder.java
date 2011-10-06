@@ -49,7 +49,6 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleName;
 
 /**
@@ -60,11 +59,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
     public static enum StyleName implements IStyleName {
-        EntityFolder, EntityFolderBoxItem, EntityFolderBoxDecorator, EntityFolderRowItem, EntityFolderActionsBar
-    }
-
-    public static enum StyleDependent implements IStyleDependent {
-        selected, disabled, hover
+        EntityFolder, EntityFolderBoxItem, EntityFolderBoxDecorator, EntityFolderRowItem, EntityFolderRowDecorator, EntityFolderActionsBar, EntityFolderAddButton, EntityFolderAddButtonImage, EntityFolderAddButtonLabel
     }
 
     private IFolderDecorator<E> folderDecorator;

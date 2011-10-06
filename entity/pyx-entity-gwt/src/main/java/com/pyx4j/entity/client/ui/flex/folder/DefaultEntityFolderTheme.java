@@ -35,10 +35,16 @@ public class DefaultEntityFolderTheme extends Theme {
         Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolder);
         style.addProperty("margin-top", "2px");
         style.addProperty("margin-left", "6px");
+        style.addProperty("width", "80em");
+        addStyle(style);
+
+        style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderBoxItem);
+        style.addProperty("padding", "6px");
         addStyle(style);
 
         style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderBoxDecorator);
         style.addProperty("margin", "6px");
+        style.addProperty("width", "100%");
         style.addProperty("border", "dotted 1px");
         style.addProperty("border-color", "#333");
         addStyle(style);
@@ -48,6 +54,10 @@ public class DefaultEntityFolderTheme extends Theme {
         style.addProperty("border-color", "#333");
         addStyle(style);
 
+        style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderRowDecorator);
+        style.addProperty("margin", "6px");
+        addStyle(style);
+
         style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderActionsBar).build());
         style.addProperty("opacity", "0.2");
         addStyle(style);
@@ -55,6 +65,25 @@ public class DefaultEntityFolderTheme extends Theme {
         style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderActionsBar).discriminator(
                 new Selector.Builder(CEntityFolder.StyleName.EntityFolderBoxDecorator).hover().build().toString()).build());
         style.addProperty("opacity", "1");
+        addStyle(style);
+
+        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderActionsBar).discriminator(
+                new Selector.Builder(CEntityFolder.StyleName.EntityFolderRowDecorator).hover().build().toString()).build());
+        style.addProperty("opacity", "1");
+        addStyle(style);
+
+        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderAddButton).build());
+        style.addProperty("display", "inline-block");
+        style.addProperty("margin", "6px");
+        addStyle(style);
+
+        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderAddButtonImage).build());
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderAddButtonLabel).build());
+        style.addProperty("padding-left", "3px");
+        style.addProperty("float", "left");
         addStyle(style);
 
     }

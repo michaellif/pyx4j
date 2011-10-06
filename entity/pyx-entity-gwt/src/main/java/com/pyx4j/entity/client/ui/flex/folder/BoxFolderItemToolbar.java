@@ -36,7 +36,7 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
 
     private final BoxFolderItemDecorator<?> decorator;
 
-    private final ItemActionsBar actionsPanel;
+    private ItemActionsBar actionsPanel;
 
     private final Image collapseImage;
 
@@ -96,11 +96,13 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         imageWarn.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         add(imageWarn);
 
-        actionsPanel = new ItemActionsBar(true, Direction.LTR, decorator.getImages());
-        add(actionsPanel);
-        actionsPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        if (BrowserType.isIE7()) {
-            actionsPanel.getElement().getStyle().setMarginRight(40, Unit.PX);
+        if (decorator.isRemovable()) {
+            actionsPanel = new ItemActionsBar(true, Direction.LTR, decorator.getImages());
+            add(actionsPanel);
+            actionsPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+            if (BrowserType.isIE7()) {
+                actionsPanel.getElement().getStyle().setMarginRight(40, Unit.PX);
+            }
         }
 
         onExpended(decorator.isExpended());

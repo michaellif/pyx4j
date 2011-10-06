@@ -52,13 +52,6 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
         setStyleName(StyleName.EntityFolderBoxDecorator.name());
 
-//        getContent().getElement().getStyle().setMarginTop(10, Unit.PX);
-//        getContent().getElement().getStyle().setMarginLeft(10, Unit.PX);
-//        getContent().getElement().getStyle().setPadding(10, Unit.PX);
-//        getContent().getElement().getStyle().setBorderStyle(BorderStyle.DASHED);
-//        getContent().getElement().getStyle().setBorderWidth(1, Unit.PX);
-//        getContent().getElement().getStyle().setBorderColor("#999");
-
         VerticalPanel mainPanel = new VerticalPanel();
         mainPanel.setWidth("100%");
         setWidget(mainPanel);
@@ -113,12 +106,18 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
     @Override
     public HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
-        return toolbar.getActionsPanel().addRowUpClickHandler(handler);
+        if (isRemovable()) {
+            return toolbar.getActionsPanel().addRowUpClickHandler(handler);
+        }
+        return null;
     }
 
     @Override
     public HandlerRegistration addRowDownClickHandler(ClickHandler handler) {
-        return toolbar.getActionsPanel().addRowDownClickHandler(handler);
+        if (isRemovable()) {
+            return toolbar.getActionsPanel().addRowDownClickHandler(handler);
+        }
+        return null;
     }
 
 }
