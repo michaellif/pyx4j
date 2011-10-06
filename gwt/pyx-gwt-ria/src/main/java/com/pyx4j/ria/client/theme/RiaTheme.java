@@ -70,13 +70,15 @@ public abstract class RiaTheme extends WindowsTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SectionPanel.StyleSuffix.Root));
-        style.addProperty("border", "1px solid {}", ThemeColors.BORDER);
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColors.BORDER);
         style.addProperty("margin", "0px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SectionPanel.StyleSuffix.Content));
-        style.addProperty("border", "2px solid {}", ThemeColors.SELECTION);
-        style.addProperty("border-top", "4px solid {}", ThemeColors.SELECTION);
+        style.addProperty("border", "2px solid");
+        style.addProperty("border-color", ThemeColors.SELECTION);
+        style.addProperty("border-top", "4px solid");
         style.addProperty("background-color", "white");
         addStyle(style);
 
@@ -84,7 +86,8 @@ public abstract class RiaTheme extends WindowsTheme {
 
     private void initHeaderPanelStyles(String prefix) {
         Style style = new Style(Selector.valueOf(prefix));
-        style.addGradientBackground(ThemeColors.OBJECT_TONE5);
+        style.addGradient(ThemeColors.OBJECT_TONE10, ThemeColors.OBJECT_TONE60);
+
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, HeaderPanel.StyleSuffix.Label));

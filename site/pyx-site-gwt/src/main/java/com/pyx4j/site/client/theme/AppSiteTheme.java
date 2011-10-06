@@ -137,7 +137,7 @@ public abstract class AppSiteTheme extends Theme {
 
         //style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
 
-        style.addGradientBackground(ThemeColors.OBJECT_TONE2);
+        style.addGradient(ThemeColors.OBJECT_TONE10, ThemeColors.OBJECT_TONE30);
 
         addStyle(style);
     }
@@ -151,7 +151,8 @@ public abstract class AppSiteTheme extends Theme {
 
     protected void initBarSeparatorStyle() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_BarSeparator));
-        style.addProperty("border-left", "2px ridge {}", ThemeColors.OBJECT_TONE2);
+        style.addProperty("border-left", "2px ridge");
+        style.addProperty("border-left-color", ThemeColors.OBJECT_TONE2);
 
         style.addProperty("margin-left", "3px");
         addStyle(style);
@@ -189,7 +190,8 @@ public abstract class AppSiteTheme extends Theme {
         style.addProperty("margin-top", "0px");
         style.addProperty("margin-left", "0px");
         style.addProperty("background", ThemeColors.TEXT_BACKGROUND);
-        style.addProperty("border", "1px solid {}", ThemeColors.SELECTION);
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColors.SELECTION);
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical .gwt-MenuItem");
@@ -208,7 +210,8 @@ public abstract class AppSiteTheme extends Theme {
     protected void initDialogBoxStyles() {
 
         Style style = new Style(".gwt-DialogBox");
-        style.addProperty("border", "2px outset {}", ThemeColors.BORDER);
+        style.addProperty("border", "2px outset");
+        style.addProperty("border-color", ThemeColors.BORDER);
         style.addProperty("background-color", ThemeColors.OBJECT_TONE4);
         addStyle(style);
 
@@ -269,10 +272,14 @@ public abstract class AppSiteTheme extends Theme {
         style.addProperty("text-align", "center");
         style.addProperty("margin-right", "1px");
         style.addProperty("margin-left", "1px");
-        style.addProperty("border-right", "1px solid {}", ThemeColors.SELECTION);
-        style.addProperty("border-left", "1px solid {}", ThemeColors.SELECTION);
-        style.addProperty("border-top", "1px solid {}", ThemeColors.SELECTION);
-        style.addGradientBackground(ThemeColors.OBJECT_TONE3);
+        style.addProperty("border-right", "1px solid");
+        style.addProperty("border-right-color", ThemeColors.SELECTION);
+        style.addProperty("border-left", "1px solid");
+        style.addProperty("border-left-color", ThemeColors.SELECTION);
+        style.addProperty("border-top", "1px solid");
+        style.addProperty("border-top-color", ThemeColors.SELECTION);
+        style.addGradient(ThemeColors.OBJECT_TONE10, ThemeColors.OBJECT_TONE30);
+
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected));
@@ -296,7 +303,8 @@ public abstract class AppSiteTheme extends Theme {
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.List));
         style.addProperty("background-color", "white");
-        style.addProperty("border", "1px solid {}", ThemeColors.SELECTION);
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColors.SELECTION);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.ListItem));

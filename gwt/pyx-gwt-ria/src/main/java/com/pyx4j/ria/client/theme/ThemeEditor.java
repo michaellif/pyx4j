@@ -121,7 +121,7 @@ public class ThemeEditor extends AbstractView {
                 if (styleSelected == null) {
                     styleEditor.setText("");
                 } else {
-                    styleEditor.setText(styleSelected.toEditableString());
+                    // styleEditor.setText(styleSelected.toEditableString());
                 }
             }
         });
@@ -138,7 +138,7 @@ public class ThemeEditor extends AbstractView {
             @Override
             public void onBlur(BlurEvent event) {
                 if (styleSelected != null) {
-                    styleSelected.updateProperties(styleEditor.getText());
+                    //styleSelected.updateProperties(styleEditor.getText());
                 }
             }
         });
@@ -333,7 +333,7 @@ public class ThemeEditor extends AbstractView {
         if (styleSelected == null) {
             styleEditor.setText("");
         } else {
-            styleEditor.setText(styleSelected.toEditableString());
+            // styleEditor.setText(styleSelected.toEditableString());
         }
     }
 

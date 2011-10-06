@@ -56,63 +56,15 @@ public class Style {
     }
 
     public void addProperty(String name, String value) {
-        properties.add(new Property(name, value));
-    }
-
-    public void addProperty(String name, String value, ThemeColors color) {
-        properties.add(new Property(name, value, color));
-    }
-
-    public void addGradientBackground(ThemeColors color) {
-
-        addProperty("filter", "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='{}')", color);
-
-        addProperty("background", "-webkit-gradient(linear, left top, left bottom, from(#ffffff), to({}))", color);
-
-        addProperty("background", "-moz-linear-gradient(top,  #ffffff,  {})", color);
-
+        properties.add(new StringProperty(name, value));
     }
 
     public void addProperty(String name, ThemeColors color) {
-        properties.add(new Property(name, color));
+        properties.add(new ColorProperty(name, color));
     }
 
-    public void removeProperty(String name) {
-        for (Property property : properties) {
-            if (property.getName().equals(name)) {
-                properties.remove(property);
-                break;
-            }
-        }
-    }
-
-    public void replaceProperty(String name, String value) {
-        removeProperty(name);
-        addProperty(name, value);
-    }
-
-    public void addProperties(String styleText) {
-        String[] lines = styleText.split(";");
-        for (String line : lines) {
-            line = line.trim();
-            if (line.length() == 0) {
-                continue;
-            }
-            addProperty(new Property(line));
-        }
-    }
-
-    public void updateProperties(String styleText) {
-        properties.clear();
-        addProperties(styleText);
-    }
-
-    public String toEditableString() {
-        StringBuilder builder = new StringBuilder();
-        for (Property property : properties) {
-            builder.append(property.toString()).append("\n");
-        }
-        return builder.toString();
+    public void addGradient(ThemeColors startColor, ThemeColors endColor) {
+        properties.add(new GradientProperty(startColor, endColor));
     }
 
     public String toString(Theme theme, Palette palette) {

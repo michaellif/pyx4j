@@ -22,87 +22,29 @@ package com.pyx4j.widgets.client.style;
 
 import com.google.gwt.core.client.GWT;
 
-public class Property {
-
-    public static final String COLOR_REF_PREFIX = "$";
+public abstract class Property {
 
     private final String name;
 
-    private final String value;
-
-    private final ThemeColors color;
-
-    public Property(String name, String value) {
-        this(name, value, null);
-    }
-
-    public Property(String name, ThemeColors color) {
-        this(name, null, color);
-    }
-
-    public Property(String name, String value, ThemeColors color) {
+    public Property(String name) {
         this.name = name;
-        this.value = value;
-        this.color = color;
-    }
-
-    public Property(String editableValue) {
-        String[] nameValue = editableValue.split(":");
-        if (nameValue.length != 2) {
-            throw new Error("Invalid style property " + editableValue);
-        }
-        name = nameValue[0].trim();
-        String v = nameValue[1].trim();
-        if (v.startsWith(COLOR_REF_PREFIX)) {
-            color = ThemeColors.valueOf(v.substring(1));
-            value = null;
-        } else {
-            value = v;
-            color = null;
-        }
     }
 
     public String getName() {
         return name;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public ThemeColors getColor() {
-        return color;
-    }
-
-    @Override
-    public String toString() {
-        if (value == null) {
-            return name + ": " + COLOR_REF_PREFIX + color.name() + ";";
-        } else {
-            return name + ": " + value + ";";
-        }
-    }
-
     public String toString(Theme theme, Palette palette) {
-        if (value == null) {
-            if (color == null) {
-                throw new RuntimeException("theme property " + name + " should be set with value or color");
-            }
-            return name + ": " + palette.getThemeColorString(color) + ";";
+        return injectForwardingToAlternativeHost(convertToString(theme, palette));
+    }
+
+    protected abstract String convertToString(Theme theme, Palette palette);
+
+    protected String injectForwardingToAlternativeHost(String value) {
+        int urlIdx = value.indexOf("url(");
+        if ((urlIdx != -1) && (value.indexOf("url('data:image/") == -1) && (value.indexOf("url('http://") == -1)) {
+            value = value.substring(0, urlIdx) + " url(" + StyleManger.getAlternativeHostname() + GWT.getModuleName() + "/" + value.substring(urlIdx + 4);
         }
-
-        String retVal = name + ": " + value + ";";
-
-        int urlIdx = retVal.indexOf("url(");
-        if ((urlIdx != -1) && (retVal.indexOf("url('data:image/") == -1) && (retVal.indexOf("url('http://") == -1)) {
-            retVal = retVal.substring(0, urlIdx) + " url(" + StyleManger.getAlternativeHostname() + GWT.getModuleName() + "/" + retVal.substring(urlIdx + 4);
-        }
-
-        int colorIdx = retVal.indexOf("{}");
-        if (colorIdx != -1) {
-            retVal = retVal.substring(0, colorIdx) + palette.getThemeColorString(color) + retVal.substring(colorIdx + 2);
-        }
-
-        return retVal;
+        return value;
     }
 }
