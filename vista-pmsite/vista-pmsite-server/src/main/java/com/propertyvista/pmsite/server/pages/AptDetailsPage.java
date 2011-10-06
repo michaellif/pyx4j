@@ -36,6 +36,7 @@ import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class AptDetailsPage extends BasePage {
 
@@ -63,7 +64,7 @@ public class AptDetailsPage extends BasePage {
         if (propInfo.media().size() > 0) {
             mediaId = propInfo.media().get(0).getPrimaryKey().asLong();
         }
-        SimpleImage pic = new SimpleImage("picture", PMSiteContentManager.getMediaImgUrl(mediaId, "large"));
+        SimpleImage pic = new SimpleImage("picture", PMSiteContentManager.getMediaImgUrl(mediaId, ThumbnailSize.large));
         final String picId = "largeView";
         add(pic.add(AttributeModifier.replace("id", picId)));
         add(new ListView<Media>("gallery", propInfo.media()) {
@@ -72,8 +73,8 @@ public class AptDetailsPage extends BasePage {
             @Override
             protected void populateItem(ListItem<Media> item) {
                 long mediaId = item.getModelObject().getPrimaryKey().asLong();
-                String largeSrc = PMSiteContentManager.getMediaImgUrl(mediaId, "large");
-                SimpleImage tn = new SimpleImage("thumbnail", PMSiteContentManager.getMediaImgUrl(mediaId, "small"));
+                String largeSrc = PMSiteContentManager.getMediaImgUrl(mediaId, ThumbnailSize.large);
+                SimpleImage tn = new SimpleImage("thumbnail", PMSiteContentManager.getMediaImgUrl(mediaId, ThumbnailSize.small));
                 item.add(tn.add(AttributeModifier.replace("onClick", "setImgSrc('" + picId + "','" + largeSrc + "')")));
             }
         });

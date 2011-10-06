@@ -21,7 +21,6 @@ import java.util.Map;
 
 import javax.servlet.http.Cookie;
 
-import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
@@ -46,6 +45,7 @@ import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.pmsite.server.model.PromoDataModel;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
 import com.propertyvista.shared.CompiledLocale;
@@ -333,8 +333,9 @@ public class PMSiteContentManager implements Serializable {
         return descriptor.name().getValue();
     }
 
-    public static String getMediaImgUrl(long mediaId, String size) {
-        return WebApplication.get().getServletContext().getContextPath() + "/media/" + mediaId + "/" + size + ".png";
+    public static String getMediaImgUrl(long mediaId, ThumbnailSize size) {
+        String realtivepathToRoot = com.pyx4j.server.contexts.Context.getRequest().getServletPath().replaceAll("/\\w*", "./");
+        return realtivepathToRoot + "media/" + mediaId + "/" + size.name() + ".jpg";
     }
 
     public static List<PromoDataModel> getPromotions() {
@@ -348,7 +349,7 @@ public class PMSiteContentManager implements Serializable {
             if (bld.media().isEmpty() || bld.info().address().isEmpty()) {
                 continue;
             }
-            item.setImg(getMediaImgUrl(bld.media().get(0).getPrimaryKey().asLong(), "medium"));
+            item.setImg(getMediaImgUrl(bld.media().get(0).getPrimaryKey().asLong(), ThumbnailSize.medium));
             item.setAddress(bld.info().address().streetNumber().getValue() + " " + bld.info().address().streetName().getValue() + ", "
                     + bld.info().address().city().getValue());
             promo.add(item);

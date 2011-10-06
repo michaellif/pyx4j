@@ -35,6 +35,7 @@ import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.model.WicketUtils.AttributeClassModifier;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class AptListPanel extends Panel {
     private static final long serialVersionUID = 1L;
@@ -56,7 +57,7 @@ public class AptListPanel extends Panel {
                 if (propInfo.media().size() > 0) {
                     mediaId = propInfo.media().get(0).getPrimaryKey().asLong();
                 }
-                item.add(new SimpleImage("picture", PMSiteContentManager.getMediaImgUrl(mediaId, "small")));
+                item.add(new SimpleImage("picture", PMSiteContentManager.getMediaImgUrl(mediaId, ThumbnailSize.small)));
                 item.add(new BookmarkablePageLink<Void>("aptDetails", AptDetailsPage.class, new PageParameters().add("propId", propInfo.id().getValue())));
                 Address addr = propInfo.info().address();
                 String addrFmt = "";
