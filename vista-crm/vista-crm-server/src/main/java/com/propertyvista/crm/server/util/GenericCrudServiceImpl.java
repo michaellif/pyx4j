@@ -16,23 +16,17 @@ package com.propertyvista.crm.server.util;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.EntityServicesImpl;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 /**
  * DBO - Data Base Object
  */
-public abstract class GenericCrudServiceImpl<DBO extends IEntity> implements AbstractCrudService<DBO> {
-
-    protected Class<DBO> dboClass;
+public abstract class GenericCrudServiceImpl<DBO extends IEntity> extends GenericListServiceImpl<DBO> implements AbstractCrudService<DBO> {
 
     protected GenericCrudServiceImpl(Class<DBO> dboClass) {
-        this.dboClass = dboClass;
+        super(dboClass);
     }
 
     protected void persistDBO(DBO dbo) {
@@ -43,9 +37,6 @@ public abstract class GenericCrudServiceImpl<DBO extends IEntity> implements Abs
     public void create(AsyncCallback<DBO> callback, DBO entity) {
         persistDBO(entity);
         callback.onSuccess(entity);
-    }
-
-    protected void enhanceRetrieve(DBO entity, boolean fromList) {
     }
 
     @Override
@@ -63,20 +54,5 @@ public abstract class GenericCrudServiceImpl<DBO extends IEntity> implements Abs
         persistDBO(entity);
         enhanceSave(entity);
         callback.onSuccess(entity);
-    }
-
-    @Override
-    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        Persistence.service().delete(dboClass, entityId);
-        callback.onSuccess(true);
-    }
-
-    @Override
-    public void list(AsyncCallback<EntitySearchResult<DBO>> callback, EntityListCriteria<DBO> criteria) {
-        EntitySearchResult<DBO> result = EntityLister.secureQuery(criteria);
-        for (DBO entity : result.getData()) {
-            enhanceRetrieve(entity, true);
-        }
-        callback.onSuccess(result);
     }
 }
