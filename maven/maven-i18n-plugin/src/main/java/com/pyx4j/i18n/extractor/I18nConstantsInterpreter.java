@@ -21,7 +21,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.i18n.maven;
+package com.pyx4j.i18n.extractor;
 
 import java.util.List;
 
@@ -55,7 +55,13 @@ abstract class I18nConstantsInterpreter extends BasicInterpreter {
         }
     }
 
-    protected abstract void i18nString(String text);
+    private int currentLineNr;
+
+    public void setCurrentLineNr(int currentLineNr) {
+        this.currentLineNr = currentLineNr;
+    }
+
+    protected abstract void i18nString(int currentLineNr, String text);
 
     @Override
     public Value naryOperation(AbstractInsnNode insn, @SuppressWarnings("rawtypes") List values) throws AnalyzerException {
@@ -64,7 +70,7 @@ abstract class I18nConstantsInterpreter extends BasicInterpreter {
             if (I18N_CLASS.equals(methodInsn.owner) && "tr".equals(methodInsn.name)) {
                 Value arg = (Value) values.get(1);
                 if (arg instanceof StringConstantValue) {
-                    i18nString(((StringConstantValue) arg).string);
+                    i18nString(currentLineNr, ((StringConstantValue) arg).string);
                 }
             }
         }

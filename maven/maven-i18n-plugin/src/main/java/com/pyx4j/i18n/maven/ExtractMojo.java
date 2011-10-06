@@ -39,6 +39,8 @@ import org.apache.maven.shared.artifact.filter.StrictPatternExcludesArtifactFilt
 import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
 import org.objectweb.asm.tree.analysis.AnalyzerException;
 
+import com.pyx4j.i18n.extractor.ConstantEntry;
+import com.pyx4j.i18n.extractor.ConstantExtractor;
 import com.pyx4j.i18n.gettext.POEntry;
 import com.pyx4j.i18n.gettext.POFile;
 import com.pyx4j.i18n.gettext.POFileWriter;
@@ -146,6 +148,13 @@ public class ExtractMojo extends AbstractMojo {
      * @parameter default-value="true"
      */
     public boolean poWrapLines = true;
+
+    /**
+     * Write source code location
+     * 
+     * @parameter default-value="true"
+     */
+    public boolean poSaveLocation = true;
 
     /**
      * File to save extracted strings, you may use it to run spell checker.
@@ -295,11 +304,16 @@ public class ExtractMojo extends AbstractMojo {
 
         Pattern javaFormatPattern = Pattern.compile(".*\\{\\d(,.*)*\\}.*", Pattern.DOTALL);
 
-        for (String str : extractor.strings) {
+        for (ConstantEntry entry : extractor.getConstants()) {
             POEntry pe = new POEntry();
-            pe.untranslated = str;
+            pe.untranslated = entry.text;
 
-            Matcher m = javaFormatPattern.matcher(str);
+            if (poSaveLocation) {
+                pe.reference = entry.reference;
+                Collections.sort(pe.reference);
+            }
+
+            Matcher m = javaFormatPattern.matcher(pe.untranslated);
             if (m.matches()) {
                 pe.addFalg("java-format");
             }
@@ -330,7 +344,7 @@ public class ExtractMojo extends AbstractMojo {
             writer.flush();
             writer.close();
 
-            getLog().info("Extracted " + extractor.strings.size() + " strings for i18n");
+            getLog().info("Extracted " + po.entries.size() + " strings for i18n");
         } catch (IOException e) {
             throw new MojoExecutionException("POFile " + file.getAbsolutePath() + " write error", e);
         } finally {
@@ -342,8 +356,8 @@ public class ExtractMojo extends AbstractMojo {
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(extractedStrings, "UTF-8");
-            for (String str : extractor.strings) {
-                writer.println(str);
+            for (ConstantEntry entry : extractor.getConstants()) {
+                writer.println(entry.text);
                 writer.println();
             }
             writer.flush();

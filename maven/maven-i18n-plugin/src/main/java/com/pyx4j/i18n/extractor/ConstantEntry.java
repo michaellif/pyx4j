@@ -14,30 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Sep 24, 2011
+ * Created on Oct 6, 2011
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.i18n.gettext;
+package com.pyx4j.i18n.extractor;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.List;
+import java.util.Vector;
 
-import org.objectweb.asm.tree.analysis.AnalyzerException;
+public class ConstantEntry {
 
-import com.pyx4j.i18n.extractor.ConstantExtractor;
+    public String text;
 
-public class Verify {
+    public List<String> reference;
 
-    public static void main(String[] args) throws IOException, AnalyzerException {
-        InputStream in;
-        System.out.println("--i18n tests --");
-        in = Verify.class.getResourceAsStream("/com/ut/MainClass.class");
-        try {
-            new ConstantExtractor().readClass(in);
-        } finally {
-            in.close();
-        }
+    public ConstantEntry(String className, int lineNr, String text) {
+        this.text = text;
+        this.reference = new Vector<String>();
+        addReference(className, lineNr);
+    }
+
+    public void addReference(String className, int lineNr) {
+        this.reference.add(className + ":" + lineNr);
     }
 
 }
