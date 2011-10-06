@@ -22,9 +22,11 @@ package com.pyx4j.i18n.gettext;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 
 import org.objectweb.asm.tree.analysis.AnalyzerException;
 
+import com.pyx4j.i18n.extractor.ConstantEntry;
 import com.pyx4j.i18n.extractor.ConstantExtractor;
 
 public class Verify {
@@ -34,10 +36,41 @@ public class Verify {
         System.out.println("--i18n tests --");
         in = Verify.class.getResourceAsStream("/com/ut/MainClass.class");
         try {
-            new ConstantExtractor().readClass(in);
+            ConstantExtractor ce = new ConstantExtractor();
+            ce.readClass(in);
+            ce.analyzeTranslatableHierarchy();
+            print(ce.getConstants());
+        } finally {
+            in.close();
+        }
+
+        in = Verify.class.getResourceAsStream("/com/ut/EnumTranslatable.class");
+        try {
+            ConstantExtractor ce = new ConstantExtractor();
+            ce.readClass(in);
+            ce.analyzeTranslatableHierarchy();
+            print(ce.getConstants());
+        } finally {
+            in.close();
+        }
+
+        in = Verify.class.getResourceAsStream("/com/ut/EnumWithTranslations.class");
+        try {
+            ConstantExtractor ce = new ConstantExtractor();
+            ce.readClass(in);
+            ce.analyzeTranslatableHierarchy();
+            print(ce.getConstants());
         } finally {
             in.close();
         }
     }
 
+    private static void print(Collection<ConstantEntry> constants) {
+        for (ConstantEntry entry : constants) {
+            for (String line : entry.reference) {
+                System.out.println("#: " + line);
+            }
+            System.out.println(entry.text);
+        }
+    }
 }

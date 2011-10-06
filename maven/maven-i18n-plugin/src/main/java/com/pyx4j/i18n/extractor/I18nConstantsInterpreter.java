@@ -35,11 +35,7 @@ import org.xnap.commons.i18n.I18n;
 
 abstract class I18nConstantsInterpreter extends BasicInterpreter {
 
-    static String I18N_CLASS = codeName(I18n.class);
-
-    private static String codeName(Class<?> klass) {
-        return klass.getName().replace('.', '/');
-    }
+    static String I18N_CLASS = AsmUtils.codeName(I18n.class);
 
     static final class StringConstantValue implements Value {
 

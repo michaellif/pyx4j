@@ -14,29 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Oct 6, 2011
+ * Created on 2011-05-09
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.i18n.extractor;
+package com.ut;
 
-import java.util.List;
-import java.util.Vector;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translation;
 
-public class ConstantEntry {
+public enum EnumWithTranslations {
 
-    public String text;
+    @Translation("Puppy")
+    dog,
 
-    public List<String> reference;
+    @Translation("Kitty")
+    cat,
 
-    public ConstantEntry(String classSourceFileName, int lineNr, String text) {
-        this.text = text;
-        this.reference = new Vector<String>();
-        addReference(classSourceFileName, lineNr);
+    ferret;
+
+    @Override
+    public String toString() {
+        return I18nEnum.tr(this);
     }
-
-    public void addReference(String classSourceFileName, int lineNr) {
-        this.reference.add(classSourceFileName + ":" + lineNr);
-    }
-
 }

@@ -223,6 +223,8 @@ public class ExtractMojo extends AbstractMojo {
 
         processClassesDirectory(extractor);
 
+        extractor.analyzeTranslatableHierarchy();
+
         writePOFile(extractor);
         writeTextFile(extractor);
     }
