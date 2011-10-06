@@ -155,16 +155,18 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 
     @Override
     public DashboardMetadata getData() {
-        dashboardMetadata.layoutType().setValue(translateLayout(board.getLayout()));
-        dashboardMetadata.gadgets().clear();
+        if (dashboardMetadata != null) {
+            dashboardMetadata.layoutType().setValue(translateLayout(board.getLayout()));
+            dashboardMetadata.gadgets().clear();
 
-        IGadgetIterator it = board.getGadgetIterator();
-        while (it.hasNext()) {
-            IGadget gadget = it.next();
-            if (gadget instanceof IGadgetBase) {
-                GadgetMetadata gmd = ((IGadgetBase) gadget).getGadgetMetadata(); // gadget meta should be up to date!.. 
-                gmd.column().setValue(it.getColumn()); // update current gadget column...
-                dashboardMetadata.gadgets().add(gmd);
+            IGadgetIterator it = board.getGadgetIterator();
+            while (it.hasNext()) {
+                IGadget gadget = it.next();
+                if (gadget instanceof IGadgetBase) {
+                    GadgetMetadata gmd = ((IGadgetBase) gadget).getGadgetMetadata(); // gadget meta should be up to date!.. 
+                    gmd.column().setValue(it.getColumn()); // update current gadget column...
+                    dashboardMetadata.gadgets().add(gmd);
+                }
             }
         }
 
@@ -251,18 +253,14 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
     protected abstract LayoutType translateLayout(BoardLayout layout);
 
     protected abstract void setLayout(LayoutType layout);
-    
-//    @Override
-//    protected void onUnload() {
-//        try {
-//            if (presenter != null) {
-//                presenter.save();
-//            } 
-//        } catch (NullPointerException e) {
-//            // ignore: it looks like for some mystical reason onUnload() is called when the object is not totally constructed yet and somewhere on the way this gets to NullPointerException when trying to access some of the fields 
-//        }
-//        
-//        super.onUnload();
-//    }
+
+    @Override
+    protected void onUnload() {
+        if (presenter != null && dashboardMetadata != null) {
+            presenter.save();
+        }
+
+        super.onUnload();
+    }
 
 }
