@@ -296,6 +296,9 @@ public class ExtractMojo extends AbstractMojo {
             poWriter.write(writer, po);
 
             writer.flush();
+            writer.close();
+
+            getLog().info("Extracted " + extractor.strings.size() + " strings for i18n");
         } catch (IOException e) {
             throw new MojoExecutionException("POFile " + file.getAbsolutePath() + " write error", e);
         } finally {
