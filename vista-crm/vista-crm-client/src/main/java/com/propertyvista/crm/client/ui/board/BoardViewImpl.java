@@ -17,11 +17,17 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
+
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
 public class BoardViewImpl extends DockLayoutPanel implements BoardView {
 
@@ -31,12 +37,21 @@ public class BoardViewImpl extends DockLayoutPanel implements BoardView {
 
     protected CrmTitleBar header = null;
 
+    protected final Button setupBuildingAction;
+
     public BoardViewImpl() {
         super(Unit.EM);
+
+        setupBuildingAction = new Button("Building&nbsp;Setup", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                MessageDialog.info(i18n.tr("Setup"), i18n.tr("Selection of Building goes here!.."));
+            }
+        });
     }
 
     public BoardViewImpl(BoardBase board) {
-        super(Unit.EM);
+        this();
         this.board = board;
 
         addNorth(header = new CrmTitleBar(""), VistaCrmTheme.defaultHeaderHeight);
@@ -48,19 +63,27 @@ public class BoardViewImpl extends DockLayoutPanel implements BoardView {
 
     @Override
     public void setPresenter(Presenter presenter) {
+        assert (board != null);
         board.setPresenter(presenter);
     }
 
     @Override
     public void fill(DashboardMetadata dashboardMetadata) {
+        assert (board != null);
         board.fill(dashboardMetadata);
+        board.remAction(setupBuildingAction);
+
         if (dashboardMetadata != null) {
             header.setCaption(dashboardMetadata.name().getStringView());
+            if (dashboardMetadata.type().getValue() == DashboardType.building) {
+                board.addAction(setupBuildingAction);
+            }
         }
     }
 
     @Override
     public DashboardMetadata getData() {
+        assert (board != null);
         return board.getData();
     }
 

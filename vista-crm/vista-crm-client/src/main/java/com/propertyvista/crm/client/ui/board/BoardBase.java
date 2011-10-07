@@ -84,7 +84,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
         addNorth(actionsPanel, 2);
 
         if (showSaveButton) {
-            addActionButton(btnSave);
+            addAction(btnSave);
             btnSave.setEnabled(false);
             btnSave.addStyleName(btnSave.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.SaveButton);
             btnSave.addClickHandler(new ClickHandler() {
@@ -192,11 +192,15 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
         return false;
     }
 
-    protected void addActionButton(Button action) {
+    protected void addAction(Widget action) {
         actionsPanel.setVisible(true);
         actionsPanel.insert(action, 1);
         actionsPanel.setCellWidth(action, "1%");
         action.getElement().getStyle().setMarginRight(1, Unit.EM);
+    }
+
+    protected void remAction(Widget action) {
+        actionsPanel.remove(action);
     }
 
 //

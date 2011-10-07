@@ -201,7 +201,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 @Override
                 public void onClick(ClickEvent event) {
                     if (getValue().selectedBuilding() == null || getValue().selectedBuilding().isNull()) {
-                        MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Select Building/Unit firs!"));
+                        MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Select Building/Unit first!"));
                     } else {
                         new ShowPopUpBox<SelectServiceItemBox>(new SelectServiceItemBox()) {
                             @Override
