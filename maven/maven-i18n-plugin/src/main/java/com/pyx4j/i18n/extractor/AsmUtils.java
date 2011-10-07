@@ -24,7 +24,9 @@ import java.lang.annotation.Annotation;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.objectweb.asm.tree.AnnotationNode;
+import org.objectweb.asm.tree.ClassNode;
 
 class AsmUtils {
 
@@ -34,6 +36,29 @@ class AsmUtils {
 
     static String annotationCodeName(Class<? extends Annotation> klass) {
         return "L" + klass.getName().replace('.', '/') + ";";
+    }
+
+    static String classSourceFileName(ClassNode classNode) {
+        if (classNode.sourceFile != null) {
+            return FilenameUtils.getPath(classNode.name) + classNode.sourceFile;
+        } else {
+            int nested = classNode.name.indexOf('$');
+            if (nested == -1) {
+                return classNode.name + ".java";
+            } else {
+                return classNode.name.substring(0, nested) + ".java";
+            }
+        }
+    }
+
+    static String getSimpleName(ClassNode classNode) {
+        int nested = classNode.name.lastIndexOf('$');
+        if (nested != -1) {
+            return classNode.name.substring(nested + 1);
+        } else {
+            int pkg = classNode.name.lastIndexOf('/');
+            return classNode.name.substring(pkg + 1);
+        }
     }
 
     static boolean hasAnnotation(String annotationClassName, List<?> visibleAnnotations) {

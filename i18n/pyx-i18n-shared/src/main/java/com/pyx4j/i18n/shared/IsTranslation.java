@@ -14,19 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 2, 2011
- * @author michaellif
+ * Created on Oct 7, 2011
+ * @author vlads
  * @version $Id$
  */
 package com.pyx4j.i18n.shared;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
+/**
+ * Marker for annotation that its 'element' value represents Translation for annotated element
+ */
+@Target({ ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@IsTranslation(element = "value")
-public @interface Translation {
+public @interface IsTranslation {
 
-    String value();
+    String element();
 
 }

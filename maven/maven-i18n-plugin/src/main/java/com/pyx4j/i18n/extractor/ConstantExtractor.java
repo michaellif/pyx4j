@@ -26,8 +26,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Vector;
 
-import org.apache.commons.io.FilenameUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -39,7 +39,9 @@ import org.objectweb.asm.tree.analysis.AnalyzerException;
 import org.objectweb.asm.tree.analysis.Frame;
 
 import com.pyx4j.commons.EnglishGrammar;
+import com.pyx4j.i18n.shared.IsTranslation;
 import com.pyx4j.i18n.shared.Translatable;
+import com.pyx4j.i18n.shared.TranslatableIgnore;
 import com.pyx4j.i18n.shared.Translation;
 
 public class ConstantExtractor {
@@ -48,9 +50,19 @@ public class ConstantExtractor {
 
     static String TRANSLATABLE_CLASS = AsmUtils.annotationCodeName(Translatable.class);
 
+    static String TRANSLATABLE_IGNORE_CLASS = AsmUtils.annotationCodeName(TranslatableIgnore.class);
+
     static String TRANSLATION_CLASS = AsmUtils.annotationCodeName(Translation.class);
 
+    static String IS_TRANSLATION_CLASS = AsmUtils.annotationCodeName(IsTranslation.class);
+
     private final Map<String, ConstantEntry> constants = new HashMap<String, ConstantEntry>();
+
+    private final Collection<ClassNode> translatableSuper = new Vector<ClassNode>();
+
+    private final Map<String, String> isTranslations = new HashMap<String, String>();
+
+    private final Collection<ClassNode> allClasses = new Vector<ClassNode>();
 
     private static class LineNumberAnalyzer extends Analyzer {
 
@@ -88,20 +100,10 @@ public class ConstantExtractor {
 
     public void readClass(InputStream in) throws IOException, AnalyzerException {
         ClassReader classReader = new ClassReader(in);
-        final ClassNode classNode = new ClassNode();
+        ClassNode classNode = new ClassNode();
         classReader.accept(classNode, 0);
 
-        final String classSourceFileName;
-        if (classNode.sourceFile != null) {
-            classSourceFileName = FilenameUtils.getPath(classNode.name) + classNode.sourceFile;
-        } else {
-            int nested = classNode.name.indexOf('$');
-            if (nested == -1) {
-                classSourceFileName = classNode.name + ".java";
-            } else {
-                classSourceFileName = classNode.name.substring(0, nested) + ".java";
-            }
-        }
+        final String classSourceFileName = AsmUtils.classSourceFileName(classNode);
 
         I18nConstantsInterpreter interpreter = new I18nConstantsInterpreter() {
 
@@ -121,6 +123,16 @@ public class ConstantExtractor {
 
         if (ENUM_CLASS.equals(classNode.superName)) {
             translateEnumClass(classSourceFileName, classNode);
+        } else {
+            allClasses.add(classNode);
+            if (Boolean.TRUE.equals(AsmUtils.getAnnotationValue(TRANSLATABLE_CLASS, "targetDerived", classNode.visibleAnnotations))) {
+                translatableSuper.add(classNode);
+            } else {
+                String element = (String) AsmUtils.getAnnotationValue(IS_TRANSLATION_CLASS, "element", classNode.visibleAnnotations);
+                if (element != null) {
+                    isTranslations.put("L" + classNode.name + ";", element);
+                }
+            }
         }
     }
 
@@ -174,7 +186,73 @@ public class ConstantExtractor {
         }
     }
 
+    /**
+     * This is the second pass for Translatable
+     */
     public void analyzeTranslatableHierarchy() {
-        // TODO Auto-generated method stub
+        for (ClassNode itf : translatableSuper) {
+            for (ClassNode classNode : allClasses) {
+                if (classNode.interfaces != null && classNode.interfaces.contains(itf.name)) {
+                    extractTranslatableMembers(classNode);
+                }
+            }
+        }
+    }
+
+    private void extractTranslatableMembers(ClassNode classNode) {
+        if (AsmUtils.hasAnnotation(TRANSLATABLE_IGNORE_CLASS, classNode.visibleAnnotations)) {
+            return;
+        }
+
+        final String classSourceFileName = AsmUtils.classSourceFileName(classNode);
+
+        boolean classNameFoound = false;
+        for (Map.Entry<String, String> ta : isTranslations.entrySet()) {
+            Object i18nValue = AsmUtils.getAnnotationValue(ta.getKey(), ta.getValue(), classNode.visibleAnnotations);
+            if (i18nValue != null) {
+                addEntry(classSourceFileName, -1, i18nValue.toString());
+                classNameFoound = true;
+            }
+            //TODO other e.g.  description, watermark
+        }
+        if (!classNameFoound) {
+            boolean capitalize = true;
+            if (Boolean.FALSE.equals(AsmUtils.getAnnotationValue(TRANSLATABLE_CLASS, "capitalize", classNode.visibleAnnotations))) {
+                capitalize = false;
+            }
+            if (capitalize) {
+                addEntry(classSourceFileName, -2, EnglishGrammar.capitalize(AsmUtils.getSimpleName(classNode)));
+            } else {
+                addEntry(classSourceFileName, -3, AsmUtils.getSimpleName(classNode));
+            }
+        }
+
+        for (@SuppressWarnings("rawtypes")
+        Iterator i = classNode.methods.iterator(); i.hasNext();) {
+            MethodNode methodNode = (MethodNode) i.next();
+            if (AsmUtils.hasAnnotation(TRANSLATABLE_IGNORE_CLASS, methodNode.visibleAnnotations)) {
+                continue;
+            }
+            boolean methodNameFoound = false;
+            for (Map.Entry<String, String> ta : isTranslations.entrySet()) {
+                Object i18nValue = AsmUtils.getAnnotationValue(ta.getKey(), ta.getValue(), methodNode.visibleAnnotations);
+                if (i18nValue != null) {
+                    addEntry(classSourceFileName, -4, i18nValue.toString());
+                    methodNameFoound = true;
+                }
+                //TODO other e.g.  description, watermark
+            }
+            if (!methodNameFoound) {
+                boolean capitalize = true;
+                if (Boolean.FALSE.equals(AsmUtils.getAnnotationValue(TRANSLATABLE_CLASS, "capitalize", methodNode.visibleAnnotations))) {
+                    capitalize = false;
+                }
+                if (capitalize) {
+                    addEntry(classSourceFileName, -5, EnglishGrammar.capitalize(methodNode.name));
+                } else {
+                    addEntry(classSourceFileName, -6, methodNode.name);
+                }
+            }
+        }
     }
 }

@@ -26,13 +26,20 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Optional annotation to include class to translation table
- * 
+ * Annotation to include interface or Enum members to translation table.
  */
-@Target({ ElementType.TYPE })
+@Target({ ElementType.TYPE, ElementType.FIELD, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Translatable {
 
     boolean capitalize() default true;
+
+    /**
+     * Only class, interface that are inherited from annotated one are translatable.
+     * This does not affect classes that implement the annotated interface.
+     * 
+     * We don't use @Inherited because we do bytecode level extraction of text and it does not affect the bytecode of child classes
+     */
+    boolean targetDerived() default false;
 
 }

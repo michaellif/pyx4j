@@ -25,8 +25,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.pyx4j.i18n.shared.IsTranslation;
+import com.pyx4j.i18n.shared.Translatable;
+
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@IsTranslation(element = "")
 public @interface ToStringFormat {
 
     /**
@@ -34,10 +38,12 @@ public @interface ToStringFormat {
      * 
      * @see java.text.MessageFormat.format
      */
+    @Translatable
     String value();
 
     /**
      * String presentations for 'isNull()' IEntity values
      */
+    @Translatable
     String nil() default "";
 }
