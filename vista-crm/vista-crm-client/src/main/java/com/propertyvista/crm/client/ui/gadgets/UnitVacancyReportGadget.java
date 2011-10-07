@@ -60,7 +60,9 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.vacancyStatus()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentedStatus()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isScoped()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentReady()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitRent()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketRent()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentDeltaAbsolute()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentDeltaRelative()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveOutDay()));
@@ -92,7 +94,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
             // TODO add some controls
             setupPanel = new VerticalPanel();
             setupPanel.add(new Label("FOO"));
-
+            // TODO create style?
             tabPanel = new TabLayoutPanel(1.5, Unit.EM);
             tabPanel.add(setupPanel.asWidget(), new Label(SETUP_TAB_NAME));
             tabPanel.add(parentSetup.asWidget(), new Label(PARENT_SETUP_TAB_NAME));

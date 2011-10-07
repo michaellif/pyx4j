@@ -1,0 +1,205 @@
+propertyCode,buildingName,address,complexName,region,ownership,pm,unit,floorplan,unit rent,market rent,notice/vacant,scoped/not scoped,rentready,rented/not rented,move out,move in,rent from
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,101,1 Bedroom,870,900,notice,notscoped
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,102,1 Bedroom,840,900
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,103,1 Bedroom,900,900
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,104,1 Bedroom,840,900,vacant,scoped,rentready,rented,12/31/2005,2/1/2006,2/1/2006
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,105,1 Bedroom,880,900
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,106,1 Bedroom,900,900
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,107,2 Bedroom,1000,1150
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,108,2 Bedroom,1150,1150
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,109,2 Bedroom,1150,1150,vacant,scoped,reno in progress,off market,1/28/2006
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,110,2 Bedroom,980,1150
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,111,3 Bedroom,1250,1250
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,112,3 Bedroom,1250,1250
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,201,1 Bedroom,910,950
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,202,1 Bedroom,910,950
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,203,1 Bedroom,950,950
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,204,1 Bedroom,945,950
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,205,1 Bedroom,900,950,vacant,scoped,rentready,rented,1/15/2006,3/5/2006,3/1/2006
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,206,1 Bedroom,950,950
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,207,2 Bedroom,1180,1180
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,208,2 Bedroom,1180,1180
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,209,2 Bedroom,1000,1180
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,210,2 Bedroom,980,1180,vacant,scoped,rentready,not rented,1/31/2006
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,211,3 Bedroom,1280,1280
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,212,3 Bedroom,1200,1280
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,301,1 Bedroom,1000,1000
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,302,1 Bedroom,970,1000,notice,notscoped,,,2/28/2006
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,303,1 Bedroom,960,1000
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,304,1 Bedroom,1000,1000
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,305,1 Bedroom,1000,1000
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,306,1 Bedroom,1000,1000
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,307,2 Bedroom,1150,1200
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,308,2 Bedroom,1190,1200
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,309,2 Bedroom,1200,1200,notice,scoped,need repairs,,3/1/2006
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,310,2 Bedroom,1200,1200
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,311,3 Bedroom,1300,1300
+bath1650,1650 Bathurst,"1650 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,312,3 Bedroom,1110,1300
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,101,1 Bedroom,870,900
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,102,1 Bedroom,840,900
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,103,1 Bedroom,900,900,notice,notscoped,,not rented
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,104,1 Bedroom,840,900
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,105,1 Bedroom,880,900
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,106,1 Bedroom,900,900,vacant,scoped,rentready,rented,12/31/2005,2/1/2006,2/1/2006
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,107,2 Bedroom,1000,1150
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,108,2 Bedroom,1150,1150
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,109,2 Bedroom,1150,1150
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,110,2 Bedroom,980,1150
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,111,3 Bedroom,1250,1250,vacant,scoped,reno in progress,off market,1/10/2006
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,112,3 Bedroom,1250,1250
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,201,1 Bedroom,910,950
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,202,1 Bedroom,910,950
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,203,1 Bedroom,950,950
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,204,1 Bedroom,945,950
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,205,1 Bedroom,900,950
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,206,1 Bedroom,950,950
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,207,2 Bedroom,1180,1180,vacant,scoped,rentready,rented,1/15/2006,3/15/2006,3/15/2006
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,208,2 Bedroom,1180,1180
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,209,2 Bedroom,1000,1180
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,210,2 Bedroom,980,1180
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,211,3 Bedroom,1280,1280
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,212,3 Bedroom,1200,1280,vacant,scoped,rentready,not rented,1/31/2006
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,301,1 Bedroom,1000,1000
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,302,1 Bedroom,970,1000
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,303,1 Bedroom,960,1000
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,304,1 Bedroom,1000,1000,notice,notscoped,,not rented,1/20/2006
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,305,1 Bedroom,1000,1000
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,306,1 Bedroom,1000,1000
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,307,2 Bedroom,1150,1200
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,308,2 Bedroom,1190,1200
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,309,2 Bedroom,1200,1200
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,310,2 Bedroom,1200,1200
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,311,3 Bedroom,1300,1300,notice,scoped,need repairs,,3/1/2006
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,312,3 Bedroom,1110,1300
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,401,1 Bedroom,1020,1100
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,402,1 Bedroom,1100,1100
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,403,1 Bedroom,990,1100
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,404,1 Bedroom,1000,1100,notice,notscoped,,not rented,2/28/2006
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,405,1 Bedroom,1100,1100
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,406,1 Bedroom,1100,1100
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,407,2 Bedroom,1200,1250
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,408,2 Bedroom,1250,1250
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,409,2 Bedroom,1250,1250
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,410,2 Bedroom,1100,1250
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,411,3 Bedroom,1300,1350,notice,scoped,need repairs,,3/1/2006
+bath1652,1652 Bathurst,"1652 Bathurst Street, Toronto",Bathurst Towers,GTA,Erindale Ltd.,Jake DeSilva,412,3 Bedroom,1350,1350
+jean0200,200 Jean-Lesage,"200 Jean-Lesage boulevard, Quebec City",,East,Erindale Ltd.,Cris George,1,1 Bedroom,560,700
+jean0200,200 Jean-Lesage,"200 Jean-Lesage boulevard, Quebec City",,East,Erindale Ltd.,Cris George,2,1 Bedroom,700,700
+jean0200,200 Jean-Lesage,"200 Jean-Lesage boulevard, Quebec City",,East,Erindale Ltd.,Cris George,3,1 Bedroom,700,700
+jean0200,200 Jean-Lesage,"200 Jean-Lesage boulevard, Quebec City",,East,Erindale Ltd.,Cris George,4,1 Bedroom,600,700,vacant,scoped,rentready,not rented,1/31/2006
+jean0200,200 Jean-Lesage,"200 Jean-Lesage boulevard, Quebec City",,East,Erindale Ltd.,Cris George,5,3 Bedroom,800,850
+jean0200,200 Jean-Lesage,"200 Jean-Lesage boulevard, Quebec City",,East,Erindale Ltd.,Cris George,6,3 Bedroom,810,850
+jean0200,200 Jean-Lesage,"200 Jean-Lesage boulevard, Quebec City",,East,Erindale Ltd.,Cris George,7,3 Bedroom,850,850
+jean0200,200 Jean-Lesage,"200 Jean-Lesage boulevard, Quebec City",,East,Erindale Ltd.,Cris George,8,3 Bedroom,850,850,notice,scoped,,rented,2/15/2006,3/1/2006,3/1/2006
+jean0200,200 Jean-Lesage,"200 Jean-Lesage boulevard, Quebec City",,East,Erindale Ltd.,Cris George,21,1 Bedroom,600,700
+jean0200,200 Jean-Lesage,"200 Jean-Lesage boulevard, Quebec City",,East,Erindale Ltd.,Cris George,22,1 Bedroom,680,700
+jean0200,200 Jean-Lesage,"200 Jean-Lesage boulevard, Quebec City",,East,Erindale Ltd.,Cris George,23,1 Bedroom,700,700
+jean0200,200 Jean-Lesage,"200 Jean-Lesage boulevard, Quebec City",,East,Erindale Ltd.,Cris George,24,1 Bedroom,625,700
+jean0200,200 Jean-Lesage,"200 Jean-Lesage boulevard, Quebec City",,East,Erindale Ltd.,Cris George,25,3 Bedroom,810,850
+jean0200,200 Jean-Lesage,"200 Jean-Lesage boulevard, Quebec City",,East,Erindale Ltd.,Cris George,26,3 Bedroom,810,850,notice,scoped,,rented,3/15/2006,3/20/2006,3/20/2006
+jean0200,200 Jean-Lesage,"200 Jean-Lesage boulevard, Quebec City",,East,Erindale Ltd.,Cris George,27,3 Bedroom,800,850
+jean0200,200 Jean-Lesage,"200 Jean-Lesage boulevard, Quebec City",,East,Erindale Ltd.,Cris George,28,3 Bedroom,850,850
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,101,1 Bedroom + Den,1200,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,102,1 Bedroom + Den,1200,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,103,1 Bedroom + Den,1200,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,104,1 Bedroom + Den,1200,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,105,1 Bedroom + Den,1400,1400,vacant,scoped,rentready,not rented,12/15/2005
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,106,1 Bedroom + Den,1400,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,107,1 Bedroom + Den,1350,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,108,1 Bedroom + Den,1300,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,109,1 Bedroom + Den,1400,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,110,1 Bedroom + Den,1400,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,111,1 Bedroom + Den,1400,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,112,1 Bedroom + Den,1200,1400,notice,scoped,rentready,not rented,3/5/2006
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,113,1 Bedroom + Den,1200,1400,vacant,scoped,rentready,rented,1/5/2006,2/22/2006,2/22/2006
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,114,1 Bedroom + Den,1320,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,115,1 Bedroom + Den,1211,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,116,1 Bedroom + Den,1400,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,201,1 Bedroom + Den,1400,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,202,1 Bedroom + Den,1300,1400,vacant,scoped,rentready,rented,1/19/2006
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,203,1 Bedroom + Den,1300,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,204,1 Bedroom + Den,1300,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,205,1 Bedroom + Den,1140,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,206,1 Bedroom + Den,1300,1400,notice,scoped,needs repairs,not rented,2/28/2006
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,207,1 Bedroom + Den,1300,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,208,1 Bedroom + Den,1380,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,209,1 Bedroom + Den,1400,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,210,1 Bedroom + Den,1400,1400,notice,scoped,rentready,rented,2/16/2006,3/1/2006,3/1/2006
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,211,1 Bedroom + Den,1400,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,212,1 Bedroom + Den,1200,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,213,1 Bedroom + Den,1200,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,214,1 Bedroom + Den,1400,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,215,1 Bedroom + Den,1400,1400
+corn0164,164 Cornwall ,"164 Cornwall avenue, Vancouver",,West,Greenland,Gabe Gerardi,216,1 Bedroom + Den,1400,1400,vacant,scoped,rentready,rented,12/31/2005,2/10/2006,2/10/2006
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,101,2 Bedroom,1600,1600,vacant,scoped,repairs in progress,not rented,1/10/2006
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,102,1Bedroom,1400,1400
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,103,2 Bedroom,1500,1600
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,104,1Bedroom,1232,1400
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,105,2 Bedroom,1600,1600
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,106,1Bedroom,1300,1400
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,107,2 Bedroom,1500,1600
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,108,1Bedroom,1400,1400,notice,notscoped,,not rented,1/31/2006
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,109,2 Bedroom,1600,1600
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,110,1Bedroom,1136,1400
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,111,2 Bedroom,1450,1600
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,112,1Bedroom,1350,1400
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,201,2 Bedroom,1625,1625
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,202,1Bedroom,1425,1425,vacant,scoped,rentready,rented,1/31/2006,2/1/2006,2/1/2006
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,203,2 Bedroom,1525,1625
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,204,1Bedroom,1257,1425
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,205,2 Bedroom,1625,1625
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,206,1Bedroom,1270,1425
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,207,2 Bedroom,1525,1625
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,208,1Bedroom,1425,1425,notice,scoped,need repairs,not rented,12/31/2005
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,209,2 Bedroom,1625,1625
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,210,1Bedroom,1161,1425
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,211,2 Bedroom,1475,1625
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,212,1Bedroom,1375,1425
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,301,2 Bedroom,1480,1650
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,302,1Bedroom,1450,1450
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,303,2 Bedroom,1550,1650
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,304,1Bedroom,1282,1450
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,305,2 Bedroom,1650,1650
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,306,1Bedroom,1295,1450
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,307,2 Bedroom,1550,1650
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,308,1Bedroom,1450,1450
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,309,2 Bedroom,1650,1650
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,310,1Bedroom,1186,1450
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,311,2 Bedroom,1500,1650,notice,scoped,rentready,rented,12/20/2005,2/10/2006,2/10/2006
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,312,1Bedroom,1400,1450,vacant,scoped,need repairs,not rented,1/10/2006
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,401,2 Bedroom,1505,1675
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,402,1Bedroom,1475,1475
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,403,2 Bedroom,1575,1675
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,404,1Bedroom,1307,1475
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,405,2 Bedroom,1675,1675
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,406,1Bedroom,1320,1475
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,407,2 Bedroom,1575,1675
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,408,1Bedroom,1475,1475,vacant,scoped,rentready,rented,1/26/2006,3/1/2006,3/1/2006
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,409,2 Bedroom,1675,1675
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,410,1Bedroom,1211,1475
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,411,2 Bedroom,1525,1675
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,412,1Bedroom,1425,1475
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,501,2 Bedroom,1530,1700
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,502,1Bedroom,1500,1500
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,503,2 Bedroom,1600,1700
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,504,1Bedroom,1332,1500
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,505,2 Bedroom,1700,1700,notice,notscoped,,not rented,2/25/2006
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,506,1Bedroom,1345,1500
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,507,2 Bedroom,1600,1700
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,508,1Bedroom,1500,1500
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,509,2 Bedroom,1700,1700
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,510,1Bedroom,1236,1500
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,511,2 Bedroom,1550,1700
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,512,1Bedroom,1450,1500
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,601,2 Bedroom,1555,1725
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,602,1Bedroom,1525,1525
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,603,2 Bedroom,1625,1725,vacant,scoped,rentready,rented,1/12/2006,2/15/2006,2/15/2006
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,604,1Bedroom,1357,1525
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,605,2 Bedroom,1725,1725
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,606,1Bedroom,1370,1525
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,607,2 Bedroom,1625,1725,notice,scoped,need repairs,not rented,3/10/2006
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,608,1Bedroom,1525,1525
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,609,2 Bedroom,1725,1725
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,610,1Bedroom,1261,1525
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,611,2 Bedroom,1575,1725
+chel3126,3126 Chelsey,"3126 Chelsey Street, Vancouver",,West,Greenland,Gabe Gerardi,612,1Bedroom,1475,1525,vacant,scoped,rentready,not rented,1/20/2006
