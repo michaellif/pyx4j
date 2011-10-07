@@ -15,8 +15,8 @@ package com.propertyvista.crm.rpc.services.dashboard.gadgets;
 
 import com.pyx4j.site.rpc.services.AbstractListService;
 
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportDTO;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport;
 
-public interface UnitVacancyReportService extends AbstractListService<UnitVacancyReportDTO> {
+public interface UnitVacancyReportService extends AbstractListService<UnitVacancyReport> {
 
 }

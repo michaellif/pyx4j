@@ -29,13 +29,13 @@ import com.pyx4j.widgets.client.TabLayoutPanel;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitVacancyReportService;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportDTO;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport;
 
-public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReportDTO> {
+public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport> {
 
     @SuppressWarnings("unchecked")
     public UnitVacancyReportGadget(GadgetMetadata gmd) {
-        super(gmd, (AbstractCrudService<UnitVacancyReportDTO>) GWT.create(UnitVacancyReportService.class), UnitVacancyReportDTO.class);
+        super(gmd, (AbstractCrudService<UnitVacancyReport>) GWT.create(UnitVacancyReportService.class), UnitVacancyReport.class);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReportD
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<UnitVacancyReportDTO>> columnDescriptors, UnitVacancyReportDTO proto) {
+    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<UnitVacancyReport>> columnDescriptors, UnitVacancyReport proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingName()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address()));
@@ -60,9 +60,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReportD
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.vacancyStatus()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentedStatus()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isScoped()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isRentReady()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitRent()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitMarketRent()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentDeltaAbsolute()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentDeltaRelative()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveOutDay()));

@@ -20,12 +20,12 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitVacancyReportService;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportDTO;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport;
 
 public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
 
     @Override
-    public void list(AsyncCallback<EntitySearchResult<UnitVacancyReportDTO>> callback, EntityListCriteria<UnitVacancyReportDTO> criteria) {
+    public void list(AsyncCallback<EntitySearchResult<UnitVacancyReport>> callback, EntityListCriteria<UnitVacancyReport> criteria) {
         // TODO Auto-generated method stub
 
     }
