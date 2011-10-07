@@ -26,7 +26,7 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 import com.pyx4j.widgets.client.TabLayoutPanel;
 
-import com.propertyvista.crm.rpc.services.UnitVacancyReportCrudService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitVacancyReportService;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportDTO;
@@ -35,7 +35,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReportD
 
     @SuppressWarnings("unchecked")
     public UnitVacancyReportGadget(GadgetMetadata gmd) {
-        super(gmd, (AbstractCrudService<UnitVacancyReportDTO>) GWT.create(UnitVacancyReportCrudService.class), UnitVacancyReportDTO.class);
+        super(gmd, (AbstractCrudService<UnitVacancyReportDTO>) GWT.create(UnitVacancyReportService.class), UnitVacancyReportDTO.class);
     }
 
     @Override
