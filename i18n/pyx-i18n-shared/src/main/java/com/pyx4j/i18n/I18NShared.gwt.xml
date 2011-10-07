@@ -2,5 +2,10 @@
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
+    <source path="annotations"/>
+    <source path="shared"/>
+    
     <super-source path="super-source"/>
+    
+    <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.i18n.annotations.*" />
 </module>

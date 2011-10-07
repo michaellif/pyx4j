@@ -108,7 +108,7 @@ public class ExtractMojo extends AbstractMojo {
     /**
      * Filename of the created .pot file
      * 
-     * @parameter expression="keys1.pot"
+     * @parameter expression="keys.pot"
      */
     public String keysFile;
 
@@ -257,16 +257,19 @@ public class ExtractMojo extends AbstractMojo {
             } else {
                 scanner = new JarFileScanner(file);
             }
+            int count = 0;
             for (ScannerEntry source : scanner.getEntries()) {
                 if (!source.isDirectory() && source.getName().endsWith(".class")) {
                     InputStream in = source.getInputStream();
                     try {
                         extractor.readClass(in);
+                        count++;
                     } finally {
                         IOUtils.closeQuietly(in);
                     }
                 }
             }
+            getLog().debug("processed  " + artifact + "; classes " + count);
         } catch (IOException e) {
             throw new MojoExecutionException("Error sacanning dependency artifact " + artifact, e);
         } catch (AnalyzerException e) {
@@ -277,9 +280,11 @@ public class ExtractMojo extends AbstractMojo {
     }
 
     private void processClassesDirectory(ConstantExtractor extractor) throws MojoExecutionException {
+        getLog().debug("processing " + classesDirectory);
         Scanner scanner = null;
         try {
             scanner = new DirectoryScanner(classesDirectory);
+            int count = 0;
             for (ScannerEntry source : scanner.getEntries()) {
                 if (!source.isDirectory() && source.getName().endsWith(".class")) {
                     InputStream in = source.getInputStream();
@@ -290,6 +295,7 @@ public class ExtractMojo extends AbstractMojo {
                     }
                 }
             }
+            getLog().debug("processed  " + classesDirectory + "; classes " + count);
         } catch (IOException e) {
             throw new MojoExecutionException("Error sacanning classesDirectory " + classesDirectory, e);
         } catch (AnalyzerException e) {

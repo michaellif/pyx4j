@@ -26,20 +26,36 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation to include interface or Enum members to translation table.
+ * Annotation to include class , interface or enum members to translation table.
  */
 @Target({ ElementType.TYPE, ElementType.FIELD, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
+//TODO rename to I18n
 public @interface Translatable {
 
     boolean capitalize() default true;
 
+    public static enum I18nStrategy {
+
+        TranslateAll,
+
+        /**
+         * Only class and interface that are inherited from annotated one are translatable.
+         * This does not affect classes that implement the annotated interface.
+         * 
+         * We don't use @Inherited because we do bytecode level extraction of text and it does not affect the bytecode of child classes
+         */
+        DerivedOnly,
+
+        IgnoreMemeber,
+
+        IgnoreAll
+
+    }
+
     /**
-     * Only class, interface that are inherited from annotated one are translatable.
-     * This does not affect classes that implement the annotated interface.
-     * 
-     * We don't use @Inherited because we do bytecode level extraction of text and it does not affect the bytecode of child classes
+     * Extract and Translate strategy
      */
-    boolean targetDerived() default false;
+    I18nStrategy strategy() default I18nStrategy.TranslateAll;
 
 }

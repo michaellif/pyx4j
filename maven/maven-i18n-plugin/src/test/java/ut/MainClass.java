@@ -14,26 +14,37 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-05-09
+ * Created on Oct 5, 2011
  * @author vlads
  * @version $Id$
  */
-package com.ut;
+package ut;
 
-import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
-@Translatable
-public enum EnumTranslatable {
+public class MainClass {
 
-    FelisCatus,
+    private static I18n i18n = I18nFactory.getI18n(MainClass.class);
 
-    africanWildcat,
+    private static final String A_CONST = "A Constantant.";
 
-    ChineseMountainCat;
+    class NestedClass {
 
-    @Override
-    public String toString() {
-        return I18nEnum.tr(this);
+        public void goNested() {
+            System.out.println(i18n.tr("Go Nested"));
+        }
+
     }
+
+    public void go() {
+        System.out.println(i18n.tr("Go {0}", "500"));
+
+        System.out.println(i18n.tr(A_CONST));
+
+        System.out.println(i18n.tr("Inline " + "concatenation"));
+
+        System.out.println(i18n.tr("Finish {0}", 1800));
+    }
+
 }

@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.i18n.shared;
+package com.pyx4j.i18n.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -30,7 +30,9 @@ import java.lang.annotation.Target;
  */
 @Target({ ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface IsTranslation {
+public @interface I18nAnnotation {
+
+    public static String DEFAULT_VALUE = "#default#";
 
     String element();
 

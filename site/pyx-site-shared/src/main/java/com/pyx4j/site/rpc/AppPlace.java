@@ -36,14 +36,21 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.i18n.shared.Translatable;
+import com.pyx4j.i18n.shared.Translatable.I18nStrategy;
+
+@Translatable(strategy = I18nStrategy.DerivedOnly)
 public class AppPlace extends Place {
 
     private static final Logger log = LoggerFactory.getLogger(AppPlace.class);
 
     private Map<String, List<String>> args;
 
-    public static final AppPlace NOWHERE = new AppPlace() {
-    };
+    @Translatable(strategy = I18nStrategy.IgnoreAll)
+    private static class NoWhereAppPlace extends AppPlace {
+    }
+
+    public static final AppPlace NOWHERE = new NoWhereAppPlace();
 
     public AppPlace() {
     }

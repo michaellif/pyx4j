@@ -27,6 +27,7 @@ import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MemberNode;
 
 class AsmUtils {
 
@@ -61,42 +62,51 @@ class AsmUtils {
         }
     }
 
-    static boolean hasAnnotation(String annotationClassName, List<?> visibleAnnotations) {
-        if (visibleAnnotations == null) {
-            return false;
+    static AnnotationNode getAnnotation(String annotationClassName, MemberNode memberNode) {
+        AnnotationNode anode = getAnnotation(annotationClassName, memberNode.visibleAnnotations);
+        if (anode != null) {
+            return anode;
+        } else {
+            return getAnnotation(annotationClassName, memberNode.invisibleAnnotations);
         }
-        for (Object node : visibleAnnotations) {
-            if ((node instanceof AnnotationNode) && (annotationClassName.equals(((AnnotationNode) node).desc))) {
-                return true;
-            }
-        }
-        return false;
     }
 
-    static Object getAnnotationValue(String annotationClassName, String valueName, List<?> visibleAnnotations) {
-        if (visibleAnnotations == null) {
+    private static AnnotationNode getAnnotation(String annotationClassName, List<?> annotations) {
+        if (annotations == null) {
             return null;
         }
-        for (Object node : visibleAnnotations) {
-            if (node instanceof AnnotationNode) {
-                AnnotationNode anode = (AnnotationNode) node;
-                if (annotationClassName.equals(anode.desc)) {
-                    if (anode.values == null) {
-                        return null;
-                    } else {
-                        @SuppressWarnings("unchecked")
-                        Iterator<Object> it = anode.values.iterator();
-                        while (it.hasNext()) {
-                            Object name = it.next();
-                            if (valueName.equals(name)) {
-                                return it.next();
-                            } else {
-                                if (it.hasNext()) {
-                                    it.next();
-                                }
-                            }
-                        }
-                    }
+        for (Object node : annotations) {
+            if ((node instanceof AnnotationNode) && (annotationClassName.equals(((AnnotationNode) node).desc))) {
+                return (AnnotationNode) node;
+            }
+        }
+        return null;
+    }
+
+    static boolean hasAnnotation(String annotationClassName, MemberNode memberNode) {
+        return getAnnotation(annotationClassName, memberNode) != null;
+    }
+
+    static Object getAnnotationValue(String annotationClassName, String valueName, MemberNode memberNode) {
+        AnnotationNode anode = getAnnotation(annotationClassName, memberNode);
+        if ((anode == null) || (anode.values == null)) {
+            return null;
+        } else {
+            return getAnnotationValue(anode, valueName);
+        }
+
+    }
+
+    static Object getAnnotationValue(AnnotationNode anode, String valueName) {
+        @SuppressWarnings("unchecked")
+        Iterator<Object> it = anode.values.iterator();
+        while (it.hasNext()) {
+            Object name = it.next();
+            if (valueName.equals(name)) {
+                return it.next();
+            } else {
+                if (it.hasNext()) {
+                    it.next();
                 }
             }
         }

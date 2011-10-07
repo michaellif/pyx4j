@@ -23,8 +23,11 @@ package com.pyx4j.i18n.shared;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import com.pyx4j.i18n.annotations.I18nAnnotation;
+
 @Retention(RetentionPolicy.RUNTIME)
-@IsTranslation(element = "value")
+@I18nAnnotation(element = "value")
+//TODO rename to Translate
 public @interface Translation {
 
     String value();

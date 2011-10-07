@@ -56,9 +56,10 @@ import com.pyx4j.entity.shared.impl.SetHandler.ElementsComparator;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
-import com.pyx4j.i18n.shared.TranslatableIgnore;
+import com.pyx4j.i18n.shared.Translatable;
+import com.pyx4j.i18n.shared.Translatable.I18nStrategy;
 
-@TranslatableIgnore
+@Translatable(strategy = I18nStrategy.IgnoreAll)
 public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Object>> implements IEntity, IFullDebug, IHaveServiceCallMarker {
 
     protected static final Logger log = LoggerFactory.getLogger(SharedEntityHandler.class);

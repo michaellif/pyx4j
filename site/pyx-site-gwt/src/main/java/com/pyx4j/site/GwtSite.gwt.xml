@@ -19,4 +19,6 @@
     </generate-with>
 
 	<source path='client' />
+    
+    <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.site.client.*" />
 </module>

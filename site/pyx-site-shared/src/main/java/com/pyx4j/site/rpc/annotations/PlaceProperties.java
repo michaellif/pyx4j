@@ -23,11 +23,17 @@ package com.pyx4j.site.rpc.annotations;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-@Retention(RetentionPolicy.CLASS)
+import com.pyx4j.i18n.annotations.I18nAnnotation;
+import com.pyx4j.i18n.shared.Translatable;
+
+@Retention(RetentionPolicy.RUNTIME)
+@I18nAnnotation(element = "caption")
 public @interface PlaceProperties {
 
-    String caption() default "";
+    @Translatable
+    String caption() default I18nAnnotation.DEFAULT_VALUE;
 
+    @Translatable
     String staticContent() default "";
 
 }

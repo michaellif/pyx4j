@@ -14,27 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-05-09
+ * Created on Oct 7, 2011
  * @author vlads
  * @version $Id$
  */
-package com.ut;
+package ut.annotations;
 
-import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translation;
+public interface ChildToTranslate extends SuperNotToTranslate {
 
-public enum EnumWithTranslations {
+    public void extractedAsIs();
 
-    @Translation("Puppy")
-    dog,
+    public static final String DESCRIPTION1 = "Description ExtractedFromAnnotation";
 
-    @Translation("Kitty")
-    cat,
+    @I18nCaption(description = DESCRIPTION1)
+    public void extractedAsIsWithDescription();
 
-    ferret;
+    @I18nCaption(name = "", description = DESCRIPTION1)
+    public void extractedNoNameWithDescription();
 
-    @Override
-    public String toString() {
-        return I18nEnum.tr(this);
-    }
+    public static final String NAME2 = "Name ExtractedFromAnnotation";
+
+    @I18nCaption(name = NAME2)
+    public void extractedFromAnnotation();
+
 }

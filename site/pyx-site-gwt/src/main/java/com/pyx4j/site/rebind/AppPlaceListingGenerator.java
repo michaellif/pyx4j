@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.xnap.commons.i18n.I18n;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.core.ext.Generator;
@@ -39,6 +41,8 @@ import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
+import com.pyx4j.commons.EnglishGrammar;
+import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
@@ -71,6 +75,8 @@ public class AppPlaceListingGenerator extends Generator {
             composer.addImport(NavigationItem.class.getName());
             composer.addImport(PlaceProperties.class.getName());
             composer.addImport(SiteMap.class.getName());
+            composer.addImport(I18n.class.getName());
+            composer.addImport(I18nFactory.class.getName());
 
             PrintWriter printWriter = context.tryCreate(logger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
             if (printWriter == null) {
@@ -97,8 +103,27 @@ public class AppPlaceListingGenerator extends Generator {
         }
     }
 
+    static String escapeSourceString(String value) {
+        if (value == null) {
+            return "null";
+        } else {
+            return "\"" + value.replace("\"", "\\\"").replace("\n", "\\n") + "\"";
+        }
+    }
+
+    static String i18nEscapeSourceString(String value) {
+        String s = escapeSourceString(value);
+        if (s.equals("\"\"") || s.equals("null")) {
+            return s;
+        } else {
+            return "i18n.tr(" + s + ")";
+        }
+    }
+
     private void writeImpl(SourceWriter writer, List<JClassType> placeClasses) {
         writer.println();
+
+        writer.println("private static I18n i18n = I18nFactory.getI18n();");
 
         //getPlace()
         writer.println("@Override");
@@ -132,12 +157,27 @@ public class AppPlaceListingGenerator extends Generator {
             if (!jClassType.isAbstract()) {
                 writer.println("if (place.getClass() == " + jClassType.getQualifiedSourceName() + ".class) {");
                 writer.indent();
-                NavigationItem navigationItem = jClassType.getAnnotation(NavigationItem.class);
+
                 PlaceProperties placeProperties = jClassType.getAnnotation(PlaceProperties.class);
-                String navigLabel = navigationItem == null ? "" : navigationItem.navigLabel();
-                String caption = placeProperties == null ? "" : placeProperties.caption();
+                String caption;
+                if (placeProperties != null) {
+                    caption = placeProperties.caption();
+                } else {
+                    caption = EnglishGrammar.capitalize(jClassType.getSimpleSourceName());
+                }
                 String staticContent = placeProperties == null ? null : placeProperties.staticContent();
-                writer.println("return new AppPlaceInfo(\"" + navigLabel + "\", \"" + caption + "\", \"" + staticContent + "\");");
+
+                NavigationItem navigationItem = jClassType.getAnnotation(NavigationItem.class);
+                String navigLabel;
+                if (navigationItem != null) {
+                    navigLabel = navigationItem.navigLabel();
+                } else {
+                    navigLabel = EnglishGrammar.capitalize(jClassType.getSimpleSourceName());
+                }
+
+                writer.println("return new AppPlaceInfo(" + i18nEscapeSourceString(navigLabel) + ", " + i18nEscapeSourceString(caption) + ", "
+                        + i18nEscapeSourceString(staticContent) + ");");
+
                 writer.outdent();
                 writer.println("}");
             }

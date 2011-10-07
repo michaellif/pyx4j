@@ -25,12 +25,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.pyx4j.i18n.shared.IsTranslation;
+import com.pyx4j.i18n.annotations.I18nAnnotation;
 import com.pyx4j.i18n.shared.Translatable;
 
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-@IsTranslation(element = "name")
+@I18nAnnotation(element = "name")
 public @interface Caption {
 
     /**
@@ -39,7 +39,7 @@ public @interface Caption {
      * @return the display name of the column
      */
     @Translatable
-    String name();
+    String name() default I18nAnnotation.DEFAULT_VALUE;
 
     @Translatable
     String description() default "";

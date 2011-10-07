@@ -18,15 +18,24 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.i18n.shared;
+package ut.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ ElementType.TYPE, ElementType.FIELD, ElementType.METHOD })
+import com.pyx4j.i18n.annotations.I18nAnnotation;
+import com.pyx4j.i18n.shared.Translatable;
+
+@Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TranslatableIgnore {
+@I18nAnnotation(element = "name")
+public @interface I18nCaption {
+
+    String name() default I18nAnnotation.DEFAULT_VALUE;
+
+    @Translatable
+    String description() default "";
 
 }

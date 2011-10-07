@@ -31,8 +31,9 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 import com.pyx4j.i18n.shared.Translatable;
+import com.pyx4j.i18n.shared.Translatable.I18nStrategy;
 
-@Translatable(targetDerived = true)
+@Translatable(strategy = I18nStrategy.DerivedOnly)
 public interface IEntity extends IObject<Map<String, Object>>, Serializable, Printable {
 
     public static String PRIMARY_KEY = "id";

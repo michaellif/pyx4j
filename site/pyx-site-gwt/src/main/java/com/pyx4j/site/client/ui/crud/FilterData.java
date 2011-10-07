@@ -29,7 +29,8 @@ import com.pyx4j.i18n.shared.Translatable;
 public class FilterData {
 
     @Translatable
-    public enum Operands {
+    public static enum Operands {
+
         is,
 
         isNot,

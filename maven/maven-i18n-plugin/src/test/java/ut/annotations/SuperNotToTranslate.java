@@ -14,23 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-02-08
- * @author antonk
+ * Created on Oct 7, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.pyx4j.site.rpc.annotations;
+package ut.annotations;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-import com.pyx4j.i18n.annotations.I18nAnnotation;
 import com.pyx4j.i18n.shared.Translatable;
+import com.pyx4j.i18n.shared.Translatable.I18nStrategy;
 
-@Retention(RetentionPolicy.RUNTIME)
-@I18nAnnotation(element = "")
-public @interface NavigationItem {
+@Translatable(strategy = I18nStrategy.DerivedOnly)
+public interface SuperNotToTranslate {
 
-    @Translatable
-    String navigLabel() default "";
+    public void notExtracted();
 
 }

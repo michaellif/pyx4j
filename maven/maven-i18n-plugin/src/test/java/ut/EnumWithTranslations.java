@@ -14,23 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-02-08
- * @author antonk
+ * Created on 2011-05-09
+ * @author vlads
  * @version $Id$
  */
-package com.pyx4j.site.rpc.annotations;
+package ut;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.i18n.shared.Translation;
 
-import com.pyx4j.i18n.annotations.I18nAnnotation;
-import com.pyx4j.i18n.shared.Translatable;
+public enum EnumWithTranslations {
 
-@Retention(RetentionPolicy.RUNTIME)
-@I18nAnnotation(element = "")
-public @interface NavigationItem {
+    @Translation("Puppy")
+    dog,
 
-    @Translatable
-    String navigLabel() default "";
+    @Translation("Kitty")
+    cat,
 
+    ferret;
+
+    @Override
+    public String toString() {
+        return I18nEnum.tr(this);
+    }
 }
