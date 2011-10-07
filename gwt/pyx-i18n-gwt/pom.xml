@@ -13,9 +13,9 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>pyx-gettext-i18n-gwt</artifactId>
-    <name>pyx-gettext-i18n-gwt</name>
-    <description>pyx i18n for gwt using gettext-commons GWT port</description>
+    <artifactId>pyx-i18n-gwt</artifactId>
+    <name>pyx-i18n-gwt</name>
+    <description>pyx i18n for gwt</description>
 
 	<dependencies>
 

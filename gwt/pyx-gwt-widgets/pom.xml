@@ -45,7 +45,7 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-gettext-i18n-gwt</artifactId>
+            <artifactId>pyx-i18n-gwt</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -68,7 +68,7 @@
             <groupId>com.google.code.gwt-dnd</groupId>
             <artifactId>gwt-dnd</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
