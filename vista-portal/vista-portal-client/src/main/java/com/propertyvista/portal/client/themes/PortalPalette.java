@@ -14,10 +14,11 @@
 package com.propertyvista.portal.client.themes;
 
 import com.pyx4j.widgets.client.style.ColorFactory;
-import com.pyx4j.widgets.client.style.Palette;
 import com.pyx4j.widgets.client.style.ThemeColors;
 
-public class PortalPalette extends Palette {
+import com.propertyvista.common.client.theme.VistaPalette;
+
+public class PortalPalette extends VistaPalette {
 
     public PortalPalette() {
         float hue = (float) 213 / 360;

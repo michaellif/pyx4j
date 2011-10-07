@@ -31,7 +31,6 @@ import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.Style
 import com.propertyvista.portal.client.ui.NavigViewImpl;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
-import com.propertyvista.portal.client.ui.decorations.TableFolderDecorator;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.client.ui.residents.NewPaymentMethodForm;
 
@@ -51,7 +50,6 @@ public class PortalTheme extends VistaTheme {
         initDecoratorsStyles();
         initSiteViewStyles();
         initVistaNavigViewStyles();
-        initTableDecorators();
         initCriteriaWidgetDecoratorStyles();
         initPropertyMarkerStyle();
         initPaymentRadioButtonGroupStyles();
@@ -285,7 +283,6 @@ public class PortalTheme extends VistaTheme {
         style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Label));
         style.addProperty("height", "50px");
         style.addProperty("line-height", "50px");
-        style.addProperty("color", "white");
         style.addProperty("font-size", "14px");
         style.addProperty("font-style", "normal");
         //      style.addProperty("text-shadow", "0 -1px 0 #E6E6E6");
@@ -325,23 +322,6 @@ public class PortalTheme extends VistaTheme {
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("padding", "10px");
         addStyle(style);
-    }
-
-    private void initTableDecorators() {
-
-        String prefix = TableFolderDecorator.DEFAULT_STYLE_PREFIX;
-        Style style = new Style(Selector.valueOf(prefix));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TableFolderDecorator.StyleSuffix.Header));
-        style.addProperty("font-size", "12px");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("margin-top", "5px");
-        style.addProperty("padding-bottom", "10px");
-        style.addProperty("border-bottom", "solid 1px");
-        style.addProperty("border-color", ThemeColors.SEPARATOR);
-        addStyle(style);
-
     }
 
     private void initPropertyMarkerStyle() {

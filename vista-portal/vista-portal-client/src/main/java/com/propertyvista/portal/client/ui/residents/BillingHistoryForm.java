@@ -51,7 +51,7 @@ public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements Bi
         });
 
         container.add(header);
-        //container.add(inject(proto().bills(), createBillingHistoryViewer()));
+//        container.add(inject(proto().bills(), createBillingHistoryViewer()));
         return container;
     }
 
@@ -61,6 +61,30 @@ public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements Bi
 
     }
 
+//    private CEntityFolder<BillDTO> createBillingHistoryViewer() {
+//        return new PtAppEntityFolder<BillDTO>(BillDTO.class, false) {
+//            private final PtAppEntityFolder<BillDTO> parent = this;
+//
+//            @Override
+//            protected List<EntityFolderColumnDescriptor> columns() {
+//                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+//                columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
+//                columns.add(new EntityFolderColumnDescriptor(proto().value(), "7em"));
+//                columns.add(new EntityFolderColumnDescriptor(proto().term(), "10em"));
+//                columns.add(new EntityFolderColumnDescriptor(proto().condition(), "10em"));
+//                return columns;
+//            }
+//
+//            @Override
+//            protected IFolderDecorator<BillDTO> createDecorator() {
+//                PtAppTableFolderDecorator<BillDTO> decor = new PtAppTableFolderDecorator<Concession>(columns(), parent);
+////                decor.setShowHeader(false);
+//                return decor;
+//            }
+//        };
+//    }
+//
+//    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //    class TableFolderViewer<E extends IEntity> extends TableFolderDecorator<BillDTO> {
 //
 //        private final FlowPanel content;
@@ -79,7 +103,7 @@ public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements Bi
 //        }
 //
 //        @Override
-//        public void setFolder(CEntityFolderViewer<?> viewer) {
+//        public void setComponent(CEntityFolder<BillDTO> viewer) {
 //            content.add(viewer.getContainer());
 //            setWidget(content);
 //        }
@@ -90,26 +114,26 @@ public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements Bi
 //            parent.setCellWidth(item, width);
 //        }
 //    }
-
-//    private CEntityFolderViewer<BillDTO> createBillingHistoryViewer() {
-//        return new CEntityFolderViewer<BillDTO>(BillDTO.class) {
+//
+//    private CEntityFolder<BillDTO> createBillingHistoryViewer2() {
+//        return new CEntityFolder<BillDTO>(BillDTO.class) {
 //
 //            @Override
-//            protected IFolderViewerDecorator<BillDTO> createFolderDecorator() {
+//            protected IFolderDecorator<BillDTO> createDecorator() {
 //                return new TableFolderViewer<BillDTO>();
 //            }
 //
 //            @Override
-//            protected CEntityFolderItemViewer<BillDTO> createItem() {
+//            protected CEntityFolderItemEditor<BillDTO> createItem() {
 //                return createBillLineViewer();
 //            }
 //        };
 //
 //    }
-
-//    private CEntityFolderItemViewer<BillDTO> createBillLineViewer() {
 //
-//        return new CEntityFolderItemViewer<BillDTO>() {
+//    private CEntityFolderItemEditor<BillDTO> createBillLineViewer() {
+//
+//        return new CEntityFolderItemEditor<BillDTO>() {
 //
 //            @Override
 //            public IFolderItemViewerDecorator<BillDTO> createFolderItemDecorator() {
