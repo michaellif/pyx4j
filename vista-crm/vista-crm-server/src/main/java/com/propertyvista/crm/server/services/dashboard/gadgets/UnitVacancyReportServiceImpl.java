@@ -24,6 +24,8 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitVacancyReportService;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport.VacancyStatus;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportSummaryDTO;
 
 public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
 
@@ -36,10 +38,10 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         // fetch and calculate rentDeltaAbsolute, rentDeltaRelative, daysVacant,  revenueLost
         for (UnitVacancyReport unit : unitResult.getData()) {
             unit.rentDeltaAbsolute().setValue(unit.unitRent().getValue() - unit.marketRent().getValue());
-            unit.rentDeltaRelative().setValue((unit.unitRent().getValue() - unit.marketRent().getValue()) / unit.marketRent().getValue());
+            unit.rentDeltaRelative().setValue(100 * (unit.unitRent().getValue() - unit.marketRent().getValue()) / unit.marketRent().getValue());
 
-            if (unit.moveOutDay() != null) {
-                long availableFrom = unit.moveOutDay().getValue().getTime();
+            if (VacancyStatus.Vacant.equals(unit.vacancyStatus().getValue()) & unit.moveOutDay().getValue() != null) {
+                long availableFrom = 1 + unit.moveOutDay().getValue().getTime();
                 long now = (new Date()).getTime();
                 long millisecondsVacant = now - availableFrom;
                 int daysVacant = (int) (millisecondsVacant / (1000 * 60 * 60 * 24)); // some really heavy math :)
@@ -54,6 +56,32 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
     }
 
     @Override
+    public void getSummary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, EntityListCriteria<UnitVacancyReport> criteria) {
+        EntitySearchResult<UnitVacancyReport> unitResult = EntityLister.secureQuery(criteria);
+
+    }
+
+    @Override
+    public void create(AsyncCallback<UnitVacancyReport> callback, UnitVacancyReport editableEntity) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void retrieve(AsyncCallback<UnitVacancyReport> callback, Key entityId) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void save(AsyncCallback<UnitVacancyReport> callback, UnitVacancyReport editableEntity) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+        // TODO Auto-generated method stub
+
     }
 }

@@ -15,6 +15,7 @@ package com.propertyvista.domain.dashboard.gadgets;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -84,6 +85,7 @@ public interface UnitVacancyReport extends IEntity {
     /** (unitRent() - unitMarketRent())/unitMarketRent() */
     @Transient
     @Caption(name = "Delta, in %")
+    @Format("#0.00")
     IPrimitive<Double> rentDeltaRelative();
 
     /** @see AptUnit.availableForRent() - 1 */
@@ -102,5 +104,6 @@ public interface UnitVacancyReport extends IEntity {
     /** days vacant * marketRent / 30 */
     @Transient
     @Caption(name = "Revenue Lost, in $")
+    @Format("#0.00")
     IPrimitive<Double> revenueLost();
 }

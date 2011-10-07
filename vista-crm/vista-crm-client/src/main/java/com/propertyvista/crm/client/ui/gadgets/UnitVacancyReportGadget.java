@@ -17,6 +17,8 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -32,10 +34,35 @@ import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport;
 
 public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport> {
+    private final VerticalPanel gadgetPanel;
+
+    private Label totalUnits;
+
+    private Label vacant;
+
+    private Label vacantRented;
+
+    private Label noticeAbs;
+
+    private Label noticeRented;
+
+    private Label netExpousure;
+
+    private Label occupancyAbs;
+
+    private Label occupancyPct;
+
+    private Label vacancyAbs;
+
+    private Label vacancyPct;
 
     @SuppressWarnings("unchecked")
     public UnitVacancyReportGadget(GadgetMetadata gmd) {
         super(gmd, (AbstractCrudService<UnitVacancyReport>) GWT.create(UnitVacancyReportService.class), UnitVacancyReport.class);
+
+        gadgetPanel = new VerticalPanel();
+        gadgetPanel.add(createSummaryView());
+        gadgetPanel.add(super.getListerBase());
     }
 
     @Override
@@ -44,6 +71,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
         gmd.type().setValue(GadgetType.UnitVacancyReport);
         gmd.name().setValue(i18n.tr("Unit Vacancy Report"));
+
     }
 
     @Override
@@ -70,6 +98,73 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentedFromDate()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.daysVacant()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.revenueLost()));
+    }
+
+    private Widget createSummaryView() {
+        HorizontalPanel panel = new HorizontalPanel();
+
+        totalUnits = new Label("99951");
+        vacancyAbs = new Label("100");
+        vacancyPct = new Label("35");
+        vacantRented = new Label("15");
+
+        occupancyAbs = new Label("12451");
+        occupancyPct = new Label("86");
+
+        noticeAbs = new Label("500");
+        noticeRented = new Label("144");
+
+        netExpousure = new Label("14515501515");
+        //           #       %
+        // Occupied  5132   55%
+        // Vacant    55423  45%
+        // Total:    500043
+        FlexTable vacancyStatsTable = new FlexTable();
+        vacancyStatsTable.setText(0, 1, "#");
+        vacancyStatsTable.setText(0, 2, "%");
+
+        vacancyStatsTable.setText(1, 0, "Occupied");
+        vacancyStatsTable.setWidget(1, 1, occupancyAbs);
+        vacancyStatsTable.setWidget(1, 2, occupancyPct);
+
+        vacancyStatsTable.setText(2, 0, "Vacant");
+        vacancyStatsTable.setWidget(2, 1, vacancyAbs);
+        vacancyStatsTable.setWidget(2, 2, vacancyPct);
+
+        panel.add(vacancyStatsTable);
+
+        //           Vacant    Notice
+        // Total:
+        // Rented:
+        FlexTable rentedStatstable = new FlexTable();
+        rentedStatstable.setText(0, 1, "Vacant (#)");
+        rentedStatstable.setText(0, 2, "Notice (#)");
+
+        rentedStatstable.setText(1, 0, "Total");
+        rentedStatstable.setWidget(1, 1, vacancyAbs);
+        rentedStatstable.setWidget(1, 2, noticeAbs);
+
+        rentedStatstable.setText(2, 0, "Rented");
+        rentedStatstable.setWidget(2, 1, vacantRented);
+        rentedStatstable.setWidget(2, 2, noticeRented);
+
+        panel.add(rentedStatstable);
+
+        // Net Exposure: 
+        FlexTable netExposureTable = new FlexTable();
+        netExposureTable.setText(0, 0, "Net Exposure ($)");
+        netExposureTable.setWidget(0, 1, netExpousure);
+
+        panel.add(netExposureTable);
+        panel.setBorderWidth(1);
+
+        return panel;
+    }
+
+    @Override
+    public Widget asWidget() {
+
+        return gadgetPanel;
     }
 
     @Override
