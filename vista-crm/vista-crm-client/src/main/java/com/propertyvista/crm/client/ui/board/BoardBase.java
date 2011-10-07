@@ -253,14 +253,4 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
     protected abstract LayoutType translateLayout(BoardLayout layout);
 
     protected abstract void setLayout(LayoutType layout);
-
-    @Override
-    protected void onUnload() {
-        if (presenter != null && dashboardMetadata != null) {
-            presenter.save();
-        }
-
-        super.onUnload();
-    }
-
 }
