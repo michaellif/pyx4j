@@ -38,15 +38,15 @@ public class GadgetsFactory {
         GadgetType.LineChartDisplay,
         GadgetType.BarChartDisplay,
         GadgetType.PieChartDisplay,
-        GadgetType.GaugeDisplay,
-        GadgetType.UnitVacancyReport
+        GadgetType.GaugeDisplay
     };
     private static GadgetType[] buildingDashboardGadgets = 
     {
         GadgetType.Demo,
         GadgetType.BarChartDisplayBuilding,
         GadgetType.PieChartDisplayBuilding,
-        GadgetType.GaugeDisplay
+        GadgetType.GaugeDisplay,
+        GadgetType.UnitVacancyReport
     };
     //@formatter:on
 
@@ -100,6 +100,8 @@ public class GadgetsFactory {
             return "Gadget intended to demonstrate Pie Chart display (Building only!)";
         case GaugeDisplay:
             return "Gadget intended to demonstrate Gadget display functionality...";
+        case UnitVacancyReport:
+            return "Gadget intended to demonstrate Units Vacancy Report/Status...";
         }
         return "";
     }

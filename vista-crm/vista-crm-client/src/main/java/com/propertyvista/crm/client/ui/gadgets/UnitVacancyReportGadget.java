@@ -31,6 +31,7 @@ import com.pyx4j.widgets.client.TabLayoutPanel;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitVacancyReportService;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
+import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport;
 
 public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport> {
@@ -68,6 +69,9 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
     @Override
     protected void selfInit(GadgetMetadata gmd) {
         super.selfInit(gmd);
+
+        ListerGadgetBaseSettings settings = gmd.settings().cast();
+        settings.itemsPerPage().setValue(5);
 
         gmd.type().setValue(GadgetType.UnitVacancyReport);
         gmd.name().setValue(i18n.tr("Unit Vacancy Report"));
@@ -167,10 +171,10 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         return gadgetPanel;
     }
 
-    @Override
-    public ISetup getSetup() {
-        return new SetupUnitVacancyReport(super.getSetup());
-    }
+//    @Override
+//    public ISetup getSetup() {
+//        return new SetupUnitVacancyReport(super.getSetup());
+//    }
 
     class SetupUnitVacancyReport implements ISetup {
         private static final String PARENT_SETUP_TAB_NAME = "General";
@@ -193,6 +197,8 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
             tabPanel = new TabLayoutPanel(1.5, Unit.EM);
             tabPanel.add(setupPanel.asWidget(), new Label(SETUP_TAB_NAME));
             tabPanel.add(parentSetup.asWidget(), new Label(PARENT_SETUP_TAB_NAME));
+
+            tabPanel.setSize("100%", "100%");
         }
 
         @Override
