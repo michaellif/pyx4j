@@ -39,7 +39,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
 
     private final HTML validationMessageHolder;
 
-    private final ItemActionsBar actionsPanel;
+    private ItemActionsBar actionsPanel;
 
     private SimplePanel contentHolder;
 
@@ -63,8 +63,10 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
         validationMessageHolder.getElement().getStyle().setColor("red");
         mainPanel.add(validationMessageHolder, DockPanel.SOUTH);
 
-        actionsPanel = new ItemActionsBar(true, Direction.RTL, images);
-        mainPanel.add(actionsPanel, DockPanel.EAST);
+        if (isRemovable()) {
+            actionsPanel = new ItemActionsBar(true, Direction.RTL, images);
+            mainPanel.add(actionsPanel, DockPanel.EAST);
+        }
 
         contentHolder = new SimplePanel();
         mainPanel.add(contentHolder, DockPanel.CENTER);
@@ -107,12 +109,18 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
 
     @Override
     public HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
-        return actionsPanel.addRowUpClickHandler(handler);
+        if (isRemovable()) {
+            return actionsPanel.addRowUpClickHandler(handler);
+        }
+        return null;
     }
 
     @Override
     public HandlerRegistration addRowDownClickHandler(ClickHandler handler) {
-        return actionsPanel.addRowDownClickHandler(handler);
+        if (isRemovable()) {
+            return actionsPanel.addRowDownClickHandler(handler);
+        }
+        return null;
     }
 
     @Override
