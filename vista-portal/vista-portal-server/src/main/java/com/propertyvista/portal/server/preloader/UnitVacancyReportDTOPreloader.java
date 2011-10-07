@@ -18,7 +18,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.PreloadConfig;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportDTO;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport;
 
 public class UnitVacancyReportDTOPreloader extends BaseVistaDataPreloader {
 
@@ -29,7 +29,7 @@ public class UnitVacancyReportDTOPreloader extends BaseVistaDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(UnitVacancyReportDTO.class);
+            return deleteAll(UnitVacancyReport.class);
         } else {
             return "This is production";
         }
@@ -38,7 +38,7 @@ public class UnitVacancyReportDTOPreloader extends BaseVistaDataPreloader {
     @Override
     public String create() {
 
-        UnitVacancyReportDTO report = EntityFactory.create(UnitVacancyReportDTO.class);
+        UnitVacancyReport report = EntityFactory.create(UnitVacancyReport.class);
 
         // TODO fill it here...
 
