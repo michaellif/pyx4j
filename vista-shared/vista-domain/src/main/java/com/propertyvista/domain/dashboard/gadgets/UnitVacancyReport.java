@@ -15,12 +15,13 @@ package com.propertyvista.domain.dashboard.gadgets;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.contact.Address;
-
-public interface UnitVacancyReportDTO extends IEntity {
+// TODO don't forget to rename to DTO and enable the @Transient annotation when it's ready 
+// @Transient
+public interface UnitVacancyReport extends IEntity {
 
     // TODO ask Vlad about @Translatable and @XMLType
     public enum VacancyStatus {
@@ -31,15 +32,19 @@ public interface UnitVacancyReportDTO extends IEntity {
         Rented, Unrented, OffMarket;
     }
 
+    public enum RentReady {
+        RentReady, RenoInProgress, NeedRepairs
+    }
+
     @Caption(name = "Property")
     IPrimitive<String> propertyCode();
 
     IPrimitive<String> buildingName();
 
-    // TODO change to normal address (street number + city)
-    Address address();
+    // TODO change to normal Address Entity
+    IPrimitive<String> address();
 
-    // TODO ? region()
+    IPrimitive<String> region();
 
     IPrimitive<String> owner();
 
@@ -48,6 +53,7 @@ public interface UnitVacancyReportDTO extends IEntity {
     IPrimitive<String> complexName();
 
     // AptUnitInfo.number
+    // supposed to be String
     IPrimitive<String> unit();
 
     IPrimitive<String> floorplanName();
@@ -64,17 +70,19 @@ public interface UnitVacancyReportDTO extends IEntity {
     IPrimitive<Boolean> isScoped();
 
     @Caption(name = "Physical Condition")
-    IPrimitive<Boolean> isRentReady();
+    IPrimitive<RentReady> rentReady();
 
     IPrimitive<Double> unitRent();
 
-    IPrimitive<Double> unitMarketRent();
+    IPrimitive<Double> marketRent();
 
     /** <code>unitRent()</code> - <code>unitMarketRent()</code> */
+    @Transient
     @Caption(name = "Delta, in $")
     IPrimitive<Double> rentDeltaAbsolute();
 
     /** (unitRent() - unitMarketRent())/unitMarketRent() */
+    @Transient
     @Caption(name = "Delta, in %")
     IPrimitive<Double> rentDeltaRelative();
 
@@ -88,9 +96,11 @@ public interface UnitVacancyReportDTO extends IEntity {
     IPrimitive<LogicalDate> rentedFromDate();
 
     /** For Vacant units numberOfDays between today and availableForRent date */
+    @Transient
     IPrimitive<Integer> daysVacant();
 
     /** days vacant * marketRent / 30 */
+    @Transient
     @Caption(name = "Revenue Lost, in $")
     IPrimitive<Double> revenueLost();
 }
