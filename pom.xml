@@ -93,6 +93,7 @@
 
         <module>i18n/pyx-i18n-shared</module>
         <module>i18n/pyx-i18n-gettext</module>
+        <module>i18n/pyx-i18n-j2se</module>
 
         <module>gwt/pyx-gwt-commons</module>
         <module>i18n/pyx-i18n-gwt</module>
