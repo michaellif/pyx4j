@@ -20,11 +20,15 @@
  */
 package com.pyx4j.entity.client.ui.flex.editor;
 
+import java.util.Collection;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.CEntityContainer;
 import com.pyx4j.entity.client.ui.flex.NativeEntityPanel;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.ValidationResults;
 
 public abstract class CEntityViewer<E extends IEntity> extends CEntityContainer<E> {
 
@@ -43,5 +47,20 @@ public abstract class CEntityViewer<E extends IEntity> extends CEntityContainer<
 
     protected void setContent(IsWidget widget) {
         asWidget().setWidget(widget);
+    }
+
+    @Override
+    public IsWidget createContent() {
+        return null;
+    }
+
+    @Override
+    public Collection<? extends CEditableComponent<?, ?>> getComponents() {
+        return null;
+    }
+
+    @Override
+    public ValidationResults getValidationResults() {
+        return null;
     }
 }
