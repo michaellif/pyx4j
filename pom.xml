@@ -95,7 +95,7 @@
         <module>i18n/pyx-i18n-gettext</module>
 
         <module>gwt/pyx-gwt-commons</module>
-        <module>gwt/pyx-i18n-gwt</module>
+        <module>i18n/pyx-i18n-gwt</module>
         <module>rpc/pyx-rpc-gwt</module>
         <module>security/pyx-security-gwt</module>
         <module>log/pyx-log-gwt-rpcappender</module>
