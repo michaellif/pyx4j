@@ -21,13 +21,15 @@
 package com.pyx4j.jetty;
 
 import java.net.ServerSocket;
+import java.util.TimeZone;
 
 import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.security.HashLoginService;
-import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.NCSARequestLog;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.server.handler.RequestLogHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 public abstract class JettyLaunch {
@@ -46,6 +48,13 @@ public abstract class JettyLaunch {
         return "jetty-realm.properties";
     }
 
+    /**
+     * @see http://wiki.eclipse.org/Jetty/Tutorial/RequestLog#Configuring_Request_Log
+     */
+    public String getRequestLogFile() {
+        return "./logs/jetty.request.log";
+    }
+
     public static void launch(JettyLaunch jettyLaunch) throws Exception {
         int port = jettyLaunch.getServerPort();
         //see if port is available
@@ -57,14 +66,18 @@ public abstract class JettyLaunch {
         }
 
         Server server = new Server(port);
+        HandlerList handlers = new HandlerList();
 
-        RewriteHandler rewrite = new RewriteHandler();
-        rewrite.setRewriteRequestURI(false);
-
-        RedirectPatternRule redirect = new RedirectPatternRule();
-        redirect.setPattern("/");
-        redirect.setLocation(jettyLaunch.getContextPath());
-        rewrite.addRule(redirect);
+        if (jettyLaunch.getRequestLogFile() != null) {
+            NCSARequestLog requestLog = new NCSARequestLog(jettyLaunch.getRequestLogFile());
+            requestLog.setRetainDays(1);
+            requestLog.setAppend(true);
+            requestLog.setExtended(true);
+            requestLog.setLogTimeZone(TimeZone.getDefault().getID());
+            RequestLogHandler requestLogHandler = new RequestLogHandler();
+            requestLogHandler.setRequestLog(requestLog);
+            handlers.addHandler(requestLogHandler);
+        }
 
         WebAppContext webAppContext = new WebAppContext();
         webAppContext.setDescriptor(jettyLaunch.getWarResourceBase() + "/WEB-INF/web.xml");
@@ -76,9 +89,18 @@ public abstract class JettyLaunch {
         if (jettyLaunch.getHashLoginServiceConfig() != null) {
             webAppContext.getSecurityHandler().setLoginService(new HashLoginService("default", jettyLaunch.getHashLoginServiceConfig()));
         }
+        handlers.addHandler(webAppContext);
 
-        HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] { webAppContext, rewrite });
+        //handle default /
+        RewriteHandler rewrite = new RewriteHandler();
+        rewrite.setRewriteRequestURI(false);
+
+        RedirectPatternRule redirect = new RedirectPatternRule();
+        redirect.setPattern("/");
+        redirect.setLocation(jettyLaunch.getContextPath());
+        rewrite.addRule(redirect);
+        handlers.addHandler(rewrite);
+
         server.setHandler(handlers);
 
         server.start();
