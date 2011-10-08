@@ -30,6 +30,7 @@ import org.eclipse.jetty.server.NCSARequestLog;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.RequestLogHandler;
+import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 public abstract class JettyLaunch {
@@ -38,6 +39,15 @@ public abstract class JettyLaunch {
 
     public int getServerPort() {
         return 8080;
+    }
+
+    /**
+     * <pre>
+     *  keytool -genkey -keystore jetty.keystore -keyalg rsa -alias  jetty -storepass 123456 -keypass 123456 -keyalg RSA -keysize 1024 -validity 4386 -dname "cn=pyx4j Team, ou=Testing, o=pyx4j, c=CA"
+     * </pre>
+     */
+    public int getServerSslPort() {
+        return 0;
     }
 
     public String getWarResourceBase() {
@@ -66,6 +76,17 @@ public abstract class JettyLaunch {
         }
 
         Server server = new Server(port);
+
+        if (jettyLaunch.getServerSslPort() != 0) {
+            SslSelectChannelConnector connector = new SslSelectChannelConnector();
+            connector.setPort(jettyLaunch.getServerSslPort());
+            connector.setPassword("123456");
+            connector.setKeystoreType("JKS");
+            connector.setKeystore("./src/test/ssl/jetty.keystore");
+            connector.setKeyPassword("123456");
+            server.addConnector(connector);
+        }
+
         HandlerList handlers = new HandlerList();
 
         if (jettyLaunch.getRequestLogFile() != null) {
