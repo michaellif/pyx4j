@@ -42,6 +42,7 @@ import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
 import com.pyx4j.commons.EnglishGrammar;
+import com.pyx4j.i18n.annotations.I18nAnnotation;
 import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
 import com.pyx4j.site.rpc.AppPlace;
@@ -159,25 +160,26 @@ public class AppPlaceListingGenerator extends Generator {
                 writer.indent();
 
                 PlaceProperties placeProperties = jClassType.getAnnotation(PlaceProperties.class);
-                String caption;
+                String caption = I18nAnnotation.DEFAULT_VALUE;
+                String staticContent = null;
                 if (placeProperties != null) {
                     caption = placeProperties.caption();
-                } else {
+                    staticContent = placeProperties.staticContent();
+                }
+                if (I18nAnnotation.DEFAULT_VALUE.equals(caption)) {
                     caption = EnglishGrammar.capitalize(jClassType.getSimpleSourceName());
                 }
-                String staticContent = placeProperties == null ? null : placeProperties.staticContent();
 
                 NavigationItem navigationItem = jClassType.getAnnotation(NavigationItem.class);
-                String navigLabel;
+                String navigLabel = null;
                 if (navigationItem != null) {
                     navigLabel = navigationItem.navigLabel();
-                } else {
-                    navigLabel = EnglishGrammar.capitalize(jClassType.getSimpleSourceName());
                 }
 
-                writer.println("return new AppPlaceInfo(" + i18nEscapeSourceString(navigLabel) + ", " + i18nEscapeSourceString(caption) + ", "
-                        + i18nEscapeSourceString(staticContent) + ");");
-
+                writer.print("return new ");
+                writer.print(AppPlaceInfo.class.getSimpleName());
+                writer.println("(" + i18nEscapeSourceString(navigLabel) + ", " + i18nEscapeSourceString(caption) + ", " + i18nEscapeSourceString(staticContent)
+                        + ");");
                 writer.outdent();
                 writer.println("}");
             }

@@ -50,6 +50,7 @@ import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.impl.PrimitiveHandler;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
+import com.pyx4j.i18n.annotations.I18nAnnotation;
 
 public class MemberMetaImpl implements MemberMeta {
 
@@ -141,19 +142,20 @@ public class MemberMetaImpl implements MemberMeta {
         }
 
         Caption captionAnnotation = method.getAnnotation(Caption.class);
+        String captionValue = I18nAnnotation.DEFAULT_VALUE;
         if (captionAnnotation != null) {
-            caption = captionAnnotation.name();
-        } else {
-            caption = EnglishGrammar.capitalize(fieldName);
-        }
-        if (captionAnnotation != null) {
+            captionValue = captionAnnotation.name();
             description = captionAnnotation.description();
             watermark = captionAnnotation.watermark();
         } else {
             description = null;
             watermark = null;
         }
-
+        if (I18nAnnotation.DEFAULT_VALUE.equals(captionValue)) {
+            caption = EnglishGrammar.capitalize(fieldName);
+        } else {
+            caption = captionValue;
+        }
         persistenceTransient = (method.getAnnotation(Transient.class) != null);
         rpcTransient = (method.getAnnotation(RpcTransient.class) != null);
         Owned aOwned = method.getAnnotation(Owned.class);

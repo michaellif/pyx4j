@@ -48,6 +48,7 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.i18n.annotations.I18nAnnotation;
 
 public class EntityMetaImpl implements EntityMeta {
 
@@ -92,10 +93,9 @@ public class EntityMetaImpl implements EntityMeta {
         }
 
         Caption captionAnnotation = entityClass.getAnnotation(Caption.class);
+        String captionValue = I18nAnnotation.DEFAULT_VALUE;
         if (captionAnnotation != null) {
-            caption = captionAnnotation.name();
-        } else {
-            caption = EnglishGrammar.capitalize(entityClass.getSimpleName());
+            captionValue = captionAnnotation.name();
         }
         if (captionAnnotation != null) {
             description = captionAnnotation.description();
@@ -104,6 +104,12 @@ public class EntityMetaImpl implements EntityMeta {
             description = null;
             watermark = null;
         }
+        if (I18nAnnotation.DEFAULT_VALUE.equals(captionValue)) {
+            caption = EnglishGrammar.capitalize(entityClass.getSimpleName());
+        } else {
+            caption = captionValue;
+        }
+
         persistenceTransient = (entityClass.getAnnotation(Transient.class) != null);
         rpcTransient = (entityClass.getAnnotation(RpcTransient.class) != null) || (entityClass.getAnnotation(RpcBlacklist.class) != null);
     }

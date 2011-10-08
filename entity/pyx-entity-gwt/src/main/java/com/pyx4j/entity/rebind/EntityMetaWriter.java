@@ -64,6 +64,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.i18n.annotations.I18nAnnotation;
 
 public class EntityMetaWriter {
 
@@ -113,18 +114,17 @@ public class EntityMetaWriter {
     static int writeEntityMetaImpl(TreeLogger logger, ContextHelper contextHelper, SourceWriter writer, String simpleName, JClassType interfaceType)
             throws UnableToCompleteException {
 
-        String caption;
+        String caption = I18nAnnotation.DEFAULT_VALUE;
         String description = null;
         String watermark = null;
         Caption captionAnnotation = interfaceType.getAnnotation(Caption.class);
         if (captionAnnotation != null) {
             caption = captionAnnotation.name();
-        } else {
-            caption = EnglishGrammar.capitalize(interfaceType.getSimpleSourceName());
-        }
-        if (captionAnnotation != null) {
             description = captionAnnotation.description();
             watermark = captionAnnotation.watermark();
+        }
+        if (I18nAnnotation.DEFAULT_VALUE.equals(caption)) {
+            caption = EnglishGrammar.capitalize(interfaceType.getSimpleSourceName());
         }
         Boolean persistenceTransient = (interfaceType.getAnnotation(Transient.class) != null);
         Boolean rpcTransient = (interfaceType.getAnnotation(RpcTransient.class) != null) || (interfaceType.getAnnotation(RpcBlacklist.class) != null);
@@ -347,18 +347,17 @@ public class EntityMetaWriter {
                 throw new UnableToCompleteException();
             }
 
-            String memberCaption;
+            String memberCaption = I18nAnnotation.DEFAULT_VALUE;
             String memberDescription = null;
             String memberWatermark = null;
             Caption memberCaptionAnnotation = method.getAnnotation(Caption.class);
             if (memberCaptionAnnotation != null) {
                 memberCaption = memberCaptionAnnotation.name();
-            } else {
-                memberCaption = EnglishGrammar.capitalize(method.getName());
-            }
-            if (memberCaptionAnnotation != null) {
                 memberDescription = memberCaptionAnnotation.description();
                 memberWatermark = memberCaptionAnnotation.watermark();
+            }
+            if (I18nAnnotation.DEFAULT_VALUE.equals(memberCaption)) {
+                memberCaption = EnglishGrammar.capitalize(method.getName());
             }
 
             data.persistenceTransient = (method.getAnnotation(Transient.class) != null);

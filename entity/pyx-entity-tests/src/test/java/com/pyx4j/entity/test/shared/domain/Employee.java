@@ -94,11 +94,12 @@ public interface Employee extends IEntity {
     Department department();
 
     @Indexed
+    @Caption(description = "Boss")
     Employee manager();
 
     @Owned
     @NotNull
-    @Caption(name = "Home address")
+    @Caption(name = "Mail address")
     Address homeAddress();
 
     @Owned

@@ -32,6 +32,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface I18nAnnotation {
 
+    /**
+     * Value marker to proceed with default extraction procedure, e.g. Class or Member name
+     */
     public static String DEFAULT_VALUE = "#default#";
 
     String element();
