@@ -33,7 +33,8 @@ import com.pyx4j.i18n.shared.Translatable;
 @I18nAnnotation(element = "name")
 public @interface I18nCaption {
 
-    String name() default I18nAnnotation.DEFAULT_VALUE;
+    //TODO Java 7
+    String name() default "";//I18nAnnotation.DEFAULT_VALUE;
 
     @Translatable
     String description() default "";
