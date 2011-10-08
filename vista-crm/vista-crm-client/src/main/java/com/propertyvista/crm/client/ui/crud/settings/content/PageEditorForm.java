@@ -35,13 +35,13 @@ import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
+import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.crm.client.ui.components.CrmBoxFolderDecorator;
-import com.propertyvista.crm.client.ui.components.CrmBoxFolderItemDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
-import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
-import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
@@ -75,8 +75,8 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
     }
 
     private CEntityFolder<PageContent> createPageContentsList() {
-        return new CrmEntityFolder<PageContent>(PageContent.class, i18n.tr("PageContent"), isEditable()) {
-            private final CrmEntityFolder<PageContent> parent = this;
+        return new VistaEntityFolder<PageContent>(PageContent.class, i18n.tr("PageContent"), isEditable()) {
+            private final VistaEntityFolder<PageContent> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -85,7 +85,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
 
             @Override
             protected IFolderDecorator<PageContent> createDecorator() {
-                return new CrmBoxFolderDecorator<PageContent>(parent);
+                return new VistaBoxFolderDecorator<PageContent>(parent);
             }
 
             @Override
@@ -115,7 +115,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
 
                     @Override
                     public IFolderItemDecorator<PageContent> createDecorator() {
-                        return new CrmBoxFolderItemDecorator<PageContent>(parent);
+                        return new VistaBoxFolderItemDecorator<PageContent>(parent);
                     }
                 };
             }
@@ -129,8 +129,8 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
     }
 
     private CEntityFolder<PageDescriptor> createChildPagesList() {
-        return new CrmEntityFolder<PageDescriptor>(PageDescriptor.class, i18n.tr("Page"), !isEditable()) {
-            private final CrmEntityFolder<PageDescriptor> parent = this;
+        return new VistaEntityFolder<PageDescriptor>(PageDescriptor.class, i18n.tr("Page"), !isEditable()) {
+            private final VistaEntityFolder<PageDescriptor> parent = this;
 
             private final ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
             {
@@ -166,14 +166,14 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
 
                     @Override
                     public IFolderItemDecorator<PageDescriptor> createDecorator() {
-                        return new CrmTableFolderItemDecorator<PageDescriptor>(parent, !parent.isEditable());
+                        return new VistaTableFolderItemDecorator<PageDescriptor>(parent, !parent.isEditable());
                     }
                 };
             }
 
             @Override
             protected IFolderDecorator<PageDescriptor> createDecorator() {
-                CrmTableFolderDecorator<PageDescriptor> decor = new CrmTableFolderDecorator<PageDescriptor>(columns(), parent);
+                VistaTableFolderDecorator<PageDescriptor> decor = new VistaTableFolderDecorator<PageDescriptor>(columns(), parent);
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {

@@ -11,28 +11,29 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.components;
+package com.propertyvista.common.client.ui.decorations;
 
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.pyx4j.entity.client.ui.flex.folder.BoxFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.portal.ptapp.client.resources.PortalImages;
+import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.ui.VistaEntityFolder;
 
-public class PtAppBoxFolderItemDecorator<E extends IEntity> extends BoxFolderItemDecorator<E> {
-    protected static I18n i18n = I18nFactory.getI18n(PtAppBoxFolderItemDecorator.class);
+public class VistaTableFolderItemDecorator<E extends IEntity> extends TableFolderItemDecorator<E> {
+    protected static I18n i18n = I18nFactory.getI18n(VistaTableFolderItemDecorator.class);
 
-    public PtAppBoxFolderItemDecorator(String title, boolean editable) {
-        super(PortalImages.INSTANCE, title, editable);
+    public VistaTableFolderItemDecorator(String title, boolean editable) {
+        super(VistaImages.INSTANCE, title, editable);
     }
 
-    public PtAppBoxFolderItemDecorator(PtAppEntityFolder<E> parent, boolean editable) {
+    public VistaTableFolderItemDecorator(VistaEntityFolder<E> parent, boolean editable) {
         this(i18n.tr("Remove ") + parent.getItemName(), editable);
     }
 
-    public PtAppBoxFolderItemDecorator(PtAppEntityFolder<E> parent) {
+    public VistaTableFolderItemDecorator(VistaEntityFolder<E> parent) {
         this(parent, parent.isEditable());
     }
 

@@ -22,10 +22,10 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 
+import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaListFolderEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -71,7 +71,7 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
     }
 
     private CEntityFolder<FloorplanAmenity> createAmenitiesListEditor() {
-        return new CrmEntityFolder<FloorplanAmenity>(FloorplanAmenity.class, i18n.tr("Amenity"), isEditable()) {
+        return new VistaEntityFolder<FloorplanAmenity>(FloorplanAmenity.class, i18n.tr("Amenity"), isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();

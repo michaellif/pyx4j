@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.components;
+package com.propertyvista.common.client.ui;
 
 import java.util.List;
 
@@ -26,8 +26,11 @@ import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 
-public abstract class PtAppEntityFolder<E extends IEntity> extends CEntityFolder<E> {
-    protected static I18n i18n = I18nFactory.getI18n(PtAppEntityFolder.class);
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
+
+public abstract class VistaEntityFolder<E extends IEntity> extends CEntityFolder<E> {
+    protected static I18n i18n = I18nFactory.getI18n(VistaEntityFolder.class);
 
     private final Class<E> clazz;
 
@@ -35,19 +38,19 @@ public abstract class PtAppEntityFolder<E extends IEntity> extends CEntityFolder
 
     private final boolean editable;
 
-    public PtAppEntityFolder(Class<E> clazz) {
+    public VistaEntityFolder(Class<E> clazz) {
         this(clazz, true);
     }
 
-    public PtAppEntityFolder(Class<E> clazz, String itemName) {
+    public VistaEntityFolder(Class<E> clazz, String itemName) {
         this(clazz, itemName, true);
     }
 
-    public PtAppEntityFolder(Class<E> clazz, boolean editable) {
+    public VistaEntityFolder(Class<E> clazz, boolean editable) {
         this(clazz, null, editable);
     }
 
-    public PtAppEntityFolder(Class<E> clazz, String itemName, boolean editable) {
+    public VistaEntityFolder(Class<E> clazz, String itemName, boolean editable) {
         super(clazz);
         this.clazz = clazz;
         this.itemName = itemName;
@@ -61,14 +64,14 @@ public abstract class PtAppEntityFolder<E extends IEntity> extends CEntityFolder
         return new CEntityFolderRowEditor<E>(clazz, columns()) {
             @Override
             public IFolderItemDecorator<E> createDecorator() {
-                return new PtAppTableFolderItemDecorator<E>(i18n.tr("Remove ") + getItemName(), editable);
+                return new VistaTableFolderItemDecorator<E>(i18n.tr("Remove ") + getItemName(), editable);
             }
         };
     }
 
     @Override
     protected IFolderDecorator<E> createDecorator() {
-        return new PtAppTableFolderDecorator<E>(columns(), i18n.tr("Add ") + getItemName(), editable);
+        return new VistaTableFolderDecorator<E>(columns(), i18n.tr("Add ") + getItemName(), editable);
     }
 
     public String getItemName() {

@@ -35,16 +35,16 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
+import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
-import com.propertyvista.crm.client.ui.components.CrmBoxFolderDecorator;
-import com.propertyvista.crm.client.ui.components.CrmBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -155,12 +155,12 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
     }
 
     private CEntityFolder<EmergencyContact> createEmergencyContactFolderEditor() {
-        return new CrmEntityFolder<EmergencyContact>(EmergencyContact.class, i18n.tr("Contact"), isEditable()) {
-            private final CrmEntityFolder<EmergencyContact> parent = this;
+        return new VistaEntityFolder<EmergencyContact>(EmergencyContact.class, i18n.tr("Contact"), isEditable()) {
+            private final VistaEntityFolder<EmergencyContact> parent = this;
 
             @Override
             protected IFolderDecorator<EmergencyContact> createDecorator() {
-                return new CrmBoxFolderDecorator<EmergencyContact>(parent);
+                return new VistaBoxFolderDecorator<EmergencyContact>(parent);
             }
 
             @Override
@@ -197,7 +197,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
                     @Override
                     public IFolderItemDecorator<EmergencyContact> createDecorator() {
-                        return new CrmBoxFolderItemDecorator<EmergencyContact>(parent, !isFirst() && parent.isEditable());
+                        return new VistaBoxFolderItemDecorator<EmergencyContact>(parent, !isFirst() && parent.isEditable());
                     }
                 };
             }

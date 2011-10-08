@@ -42,15 +42,15 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
+import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.common.client.ui.validators.OldAgeValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.tenant.TenantIn;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.util.ValidationUtils;
-import com.propertyvista.portal.ptapp.client.ui.components.PtAppEntityFolder;
-import com.propertyvista.portal.ptapp.client.ui.components.PtAppTableFolderItemDecorator;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 
@@ -104,8 +104,8 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
     private CEntityFolder<TenantInApplicationDTO> createTenantsEditorColumns() {
 
-        return new PtAppEntityFolder<TenantInApplicationDTO>(TenantInApplicationDTO.class, i18n.tr("Person"), isEditable()) {
-            private final PtAppEntityFolder<TenantInApplicationDTO> parent = this;
+        return new VistaEntityFolder<TenantInApplicationDTO>(TenantInApplicationDTO.class, i18n.tr("Person"), isEditable()) {
+            private final VistaEntityFolder<TenantInApplicationDTO> parent = this;
 
             private List<EntityFolderColumnDescriptor> columns;
             {
@@ -232,7 +232,7 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
                     @Override
                     public IFolderItemDecorator<TenantInApplicationDTO> createDecorator() {
-                        return new PtAppTableFolderItemDecorator<TenantInApplicationDTO>(parent, parent.isEditable() && !isFirst());
+                        return new VistaTableFolderItemDecorator<TenantInApplicationDTO>(parent, parent.isEditable() && !isFirst());
                     }
 
                     private void setMandatoryDependant() {

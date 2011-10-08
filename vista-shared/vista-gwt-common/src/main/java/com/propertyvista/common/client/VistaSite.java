@@ -31,7 +31,7 @@ import com.pyx4j.site.shared.meta.SiteMap;
 import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.GlassPanel;
 
-import com.propertyvista.common.client.resources.FormImageBundle;
+import com.propertyvista.common.client.resources.VistaImages;
 
 public abstract class VistaSite extends AppSite {
 
@@ -47,7 +47,7 @@ public abstract class VistaSite extends AppSite {
 
     @Override
     public void onSiteLoad() {
-        ImageFactory.setImageBundle((FormImageBundle) GWT.create(FormImageBundle.class));
+        ImageFactory.setImageBundle((VistaImages) GWT.create(VistaImages.class));
         ApplicationCommon.initRpcGlassPanel();
         if (ApplicationMode.isDevelopment() && Window.Location.getParameter("trace") != null) {
             RPCAppender rpcAppender = new RPCAppender(Level.TRACE);

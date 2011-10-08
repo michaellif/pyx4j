@@ -41,17 +41,17 @@ import com.pyx4j.site.client.ui.crud.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.ListerBase.ItemSelectionHandler;
 
+import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
-import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
-import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
@@ -133,8 +133,8 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
     }
 
     private CEntityFolder<ServiceItem> createItemsFolderEditor() {
-        return new CrmEntityFolder<ServiceItem>(ServiceItem.class, i18n.tr("Item"), isEditable()) {
-            private final CrmEntityFolder<ServiceItem> parent = this;
+        return new VistaEntityFolder<ServiceItem>(ServiceItem.class, i18n.tr("Item"), isEditable()) {
+            private final VistaEntityFolder<ServiceItem> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -153,7 +153,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
 
                     @Override
                     public IFolderItemDecorator<ServiceItem> createDecorator() {
-                        return new CrmTableFolderItemDecorator<ServiceItem>(parent);
+                        return new VistaTableFolderItemDecorator<ServiceItem>(parent);
                     }
 
                     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -207,8 +207,8 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
     }
 
     private CEntityFolder<ServiceFeature> createFeaturesFolderEditor() {
-        return new CrmEntityFolder<ServiceFeature>(ServiceFeature.class, i18n.tr("Feature"), isEditable()) {
-            private final CrmEntityFolder<ServiceFeature> parent = this;
+        return new VistaEntityFolder<ServiceFeature>(ServiceFeature.class, i18n.tr("Feature"), isEditable()) {
+            private final VistaEntityFolder<ServiceFeature> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -219,7 +219,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
 
             @Override
             protected IFolderDecorator<ServiceFeature> createDecorator() {
-                CrmTableFolderDecorator<ServiceFeature> decor = new CrmTableFolderDecorator<ServiceFeature>(columns(), parent);
+                VistaTableFolderDecorator<ServiceFeature> decor = new VistaTableFolderDecorator<ServiceFeature>(columns(), parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
@@ -247,7 +247,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
                 return new CEntityFolderRowEditor<ServiceFeature>(ServiceFeature.class, columns()) {
                     @Override
                     public IFolderItemDecorator<ServiceFeature> createDecorator() {
-                        return new CrmTableFolderItemDecorator<ServiceFeature>(parent);
+                        return new VistaTableFolderItemDecorator<ServiceFeature>(parent);
                     }
 
                     @Override
@@ -263,8 +263,8 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
     }
 
     private CEntityFolder<ServiceConcession> createConcessionsFolderEditor() {
-        return new CrmEntityFolder<ServiceConcession>(ServiceConcession.class, i18n.tr("Concession"), isEditable()) {
-            private final CrmEntityFolder<ServiceConcession> parent = this;
+        return new VistaEntityFolder<ServiceConcession>(ServiceConcession.class, i18n.tr("Concession"), isEditable()) {
+            private final VistaEntityFolder<ServiceConcession> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -275,7 +275,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
 
             @Override
             protected IFolderDecorator<ServiceConcession> createDecorator() {
-                CrmTableFolderDecorator<ServiceConcession> decor = new CrmTableFolderDecorator<ServiceConcession>(columns(), parent);
+                VistaTableFolderDecorator<ServiceConcession> decor = new VistaTableFolderDecorator<ServiceConcession>(columns(), parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
@@ -303,7 +303,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
                 return new CEntityFolderRowEditor<ServiceConcession>(ServiceConcession.class, columns()) {
                     @Override
                     public IFolderItemDecorator<ServiceConcession> createDecorator() {
-                        return new CrmTableFolderItemDecorator<ServiceConcession>(parent);
+                        return new VistaTableFolderItemDecorator<ServiceConcession>(parent);
                     }
 
                     @Override

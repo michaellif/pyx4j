@@ -42,24 +42,24 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
+import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
-import com.propertyvista.crm.client.ui.components.CrmBoxFolderDecorator;
-import com.propertyvista.crm.client.ui.components.CrmBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
-import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
@@ -328,7 +328,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     }
 
     private CEntityFolder<PersonalIncome> createIncomeFolderEditor() {
-        return new CrmEntityFolder<PersonalIncome>(PersonalIncome.class, i18n.tr("Income source"), isEditable()) {
+        return new VistaEntityFolder<PersonalIncome>(PersonalIncome.class, i18n.tr("Income source"), isEditable()) {
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -337,7 +337,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
             @Override
             protected IFolderDecorator<PersonalIncome> createDecorator() {
-                return new CrmBoxFolderDecorator<PersonalIncome>(this);
+                return new VistaBoxFolderDecorator<PersonalIncome>(this);
             }
 
             @Override
@@ -348,8 +348,8 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     }
 
     private CEntityFolder<PersonalAsset> createAssetFolderEditorColumns() {
-        return new CrmEntityFolder<PersonalAsset>(PersonalAsset.class, i18n.tr("Asset"), isEditable()) {
-            private final CrmEntityFolder<PersonalAsset> parent = this;
+        return new VistaEntityFolder<PersonalAsset>(PersonalAsset.class, i18n.tr("Asset"), isEditable()) {
+            private final VistaEntityFolder<PersonalAsset> parent = this;
 
             private List<EntityFolderColumnDescriptor> columns;
             {
@@ -370,7 +370,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
                     @Override
                     public IFolderItemDecorator<PersonalAsset> createDecorator() {
-                        return new CrmTableFolderItemDecorator<PersonalAsset>(parent);
+                        return new VistaTableFolderItemDecorator<PersonalAsset>(parent);
                     }
 
                     @Override
@@ -384,7 +384,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
                             @Override
                             public String getValidationMessage(CEditableComponent<Double, ?> component, Double value) {
-                                return CrmEntityFolder.i18n.tr("Value can not increase 100%");
+                                return VistaEntityFolder.i18n.tr("Value can not increase 100%");
                             }
 
                         });
@@ -405,8 +405,8 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     }
 
     private CEntityFolder<TenantGuarantor> createGuarantorFolderEditorColumns() {
-        return new CrmEntityFolder<TenantGuarantor>(TenantGuarantor.class, i18n.tr("Guarantor"), isEditable()) {
-            private final CrmEntityFolder<TenantGuarantor> parent = this;
+        return new VistaEntityFolder<TenantGuarantor>(TenantGuarantor.class, i18n.tr("Guarantor"), isEditable()) {
+            private final VistaEntityFolder<TenantGuarantor> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -415,7 +415,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
             @Override
             protected IFolderDecorator<TenantGuarantor> createDecorator() {
-                return new CrmBoxFolderDecorator<TenantGuarantor>(parent);
+                return new VistaBoxFolderDecorator<TenantGuarantor>(parent);
             }
 
             @Override
@@ -445,7 +445,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
                     @Override
                     public IFolderItemDecorator<TenantGuarantor> createDecorator() {
-                        return new CrmBoxFolderItemDecorator<TenantGuarantor>(parent);
+                        return new VistaBoxFolderItemDecorator<TenantGuarantor>(parent);
                     }
 
                     @Override
@@ -462,7 +462,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
                             @Override
                             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                                return CrmEntityFolder.i18n.tr("Guarantor should be at least 18 years old");
+                                return VistaEntityFolder.i18n.tr("Guarantor should be at least 18 years old");
                             }
                         });
                     }

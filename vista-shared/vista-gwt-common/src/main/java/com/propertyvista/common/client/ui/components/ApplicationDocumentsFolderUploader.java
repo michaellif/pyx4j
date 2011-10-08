@@ -60,7 +60,7 @@ import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 
-import com.propertyvista.common.client.resources.FormImageBundle;
+import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.misc.ApplicationDocumentServletParameters;
@@ -113,7 +113,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
 
             @Override
             public IFolderItemDecorator createDecorator() {
-                return new TableFolderItemDecorator(FormImageBundle.INSTANCE, i18n.tr("Remove file"));
+                return new TableFolderItemDecorator(VistaImages.INSTANCE, i18n.tr("Remove file"));
             }
         };
     }
@@ -142,7 +142,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
             }
 
             add(new HTML("&nbsp;&nbsp;&nbsp;"));
-            add(new Image(FormImageBundle.INSTANCE.clip()));
+            add(new Image(VistaImages.INSTANCE.clip()));
 
             FlowPanel fp = new FlowPanel();
             fp.getElement().getStyle().setPaddingLeft(1, Unit.EM);

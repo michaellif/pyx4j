@@ -41,12 +41,12 @@ import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ClentNavigUtils;
+import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdValidator;
-import com.propertyvista.crm.client.ui.components.CrmBoxFolderDecorator;
-import com.propertyvista.crm.client.ui.components.CrmBoxFolderItemDecorator;
-import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
 import com.propertyvista.crm.client.ui.components.cms.FileUploadHyperlink;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -54,13 +54,13 @@ import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
-public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
+public class CrmMediaListFolderEditor extends VistaEntityFolder<Media> {
 
     protected static I18n i18n = I18nFactory.getI18n(CrmMediaListFolderEditor.class);
 
     private final ImageTarget imageTarget;
 
-    private final CrmEntityFolder<Media> parent = this;
+    private final VistaEntityFolder<Media> parent = this;
 
     public CrmMediaListFolderEditor(boolean editable, ImageTarget imageTarget) {
         super(Media.class, "", editable);
@@ -74,7 +74,7 @@ public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
 
     @Override
     protected IFolderDecorator<Media> createDecorator() {
-        return new CrmBoxFolderDecorator<Media>(this);
+        return new VistaBoxFolderDecorator<Media>(this);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class CrmMediaListFolderEditor extends CrmEntityFolder<Media> {
 
             @Override
             public IFolderItemDecorator<Media> createDecorator() {
-                return new CrmBoxFolderItemDecorator<Media>(parent, parent.isEditable());
+                return new VistaBoxFolderItemDecorator<Media>(parent, parent.isEditable());
             }
 
             @Override

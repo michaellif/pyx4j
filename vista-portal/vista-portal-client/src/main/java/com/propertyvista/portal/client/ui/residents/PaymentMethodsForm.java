@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
+import java.util.ArrayList;
+
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
@@ -29,6 +31,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.BoxReadOnlyFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
@@ -92,7 +95,7 @@ public class PaymentMethodsForm extends CEntityEditor<PaymentMethodListDTO> impl
         private final FlowPanel content;
 
         TableFolderViewer() {
-            super(null);
+            super(new ArrayList<EntityFolderColumnDescriptor>());
             content = new FlowPanel();
             content.setWidth("100%");
             content.add(new PortalHeaderBar(i18n.tr("Current Payment Methods"), "100%"));
@@ -113,7 +116,7 @@ public class PaymentMethodsForm extends CEntityEditor<PaymentMethodListDTO> impl
             content.add(viewer.getContainer());
 
             String lbl = i18n.tr("Add New Payment Method");
-            ;
+
             Image addImage = new ImageButton(PortalImages.INSTANCE.addRow(), PortalImages.INSTANCE.addRowHover(), lbl);
             addImage.getElement().getStyle().setFloat(Style.Float.LEFT);
             addImage.addClickHandler(new ClickHandler() {

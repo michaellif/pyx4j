@@ -45,11 +45,14 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
+import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.components.CEmailLabel;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
@@ -61,9 +64,6 @@ import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.misc.BusinessRules;
-import com.propertyvista.portal.ptapp.client.ui.components.PtAppBoxFolderDecorator;
-import com.propertyvista.portal.ptapp.client.ui.components.PtAppBoxFolderItemDecorator;
-import com.propertyvista.portal.ptapp.client.ui.components.PtAppEntityFolder;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 
 public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
@@ -349,8 +349,8 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
 
     private CEntityFolder<EmergencyContact> createEmergencyContactFolderEditor() {
 
-        return new PtAppEntityFolder<EmergencyContact>(EmergencyContact.class, i18n.tr("Contact")) {
-            private final PtAppEntityFolder<EmergencyContact> parent = this;
+        return new VistaEntityFolder<EmergencyContact>(EmergencyContact.class, i18n.tr("Contact")) {
+            private final VistaEntityFolder<EmergencyContact> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -359,7 +359,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
 
             @Override
             protected IFolderDecorator<EmergencyContact> createDecorator() {
-                return new PtAppBoxFolderDecorator<EmergencyContact>(parent);
+                return new VistaBoxFolderDecorator<EmergencyContact>(parent);
             }
 
             @Override
@@ -381,7 +381,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
 
                     @Override
                     public IFolderItemDecorator<EmergencyContact> createDecorator() {
-                        return new PtAppBoxFolderItemDecorator<EmergencyContact>(parent, !isFirst());
+                        return new VistaBoxFolderItemDecorator<EmergencyContact>(parent, !isFirst());
                     }
                 };
             }

@@ -46,21 +46,21 @@ import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
+import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
-import com.propertyvista.crm.client.ui.components.CrmBoxFolderDecorator;
-import com.propertyvista.crm.client.ui.components.CrmBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
-import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
-import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaListFolderEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -279,7 +279,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 //
 // List Viewers:
     private CEntityFolder<BuildingAmenity> createAmenitiesListEditor() {
-        return new CrmEntityFolder<BuildingAmenity>(BuildingAmenity.class, isEditable()) {
+        return new VistaEntityFolder<BuildingAmenity>(BuildingAmenity.class, isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
@@ -292,8 +292,8 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private CEntityFolder<ServiceItemType> createUtilitiesListEditor() {
-        return new CrmEntityFolder<ServiceItemType>(ServiceItemType.class, isEditable()) {
-            private final CrmEntityFolder<ServiceItemType> parent = this;
+        return new VistaEntityFolder<ServiceItemType>(ServiceItemType.class, isEditable()) {
+            private final VistaEntityFolder<ServiceItemType> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -304,7 +304,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
             @Override
             protected IFolderDecorator<ServiceItemType> createDecorator() {
-                CrmTableFolderDecorator<ServiceItemType> decor = new CrmTableFolderDecorator<ServiceItemType>(columns(), parent);
+                VistaTableFolderDecorator<ServiceItemType> decor = new VistaTableFolderDecorator<ServiceItemType>(columns(), parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
@@ -330,7 +330,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                 return new CEntityFolderRowEditor<ServiceItemType>(ServiceItemType.class, columns()) {
                     @Override
                     public IFolderItemDecorator<ServiceItemType> createDecorator() {
-                        return new CrmTableFolderItemDecorator<ServiceItemType>(parent);
+                        return new VistaTableFolderItemDecorator<ServiceItemType>(parent);
                     }
 
                     @Override
@@ -346,8 +346,8 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private CEntityFolder<OrganisationContact> createContactsListEditor() {
-        return new CrmEntityFolder<OrganisationContact>(OrganisationContact.class, isEditable()) {
-            private final CrmEntityFolder<OrganisationContact> parent = this;
+        return new VistaEntityFolder<OrganisationContact>(OrganisationContact.class, isEditable()) {
+            private final VistaEntityFolder<OrganisationContact> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -356,7 +356,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
             @Override
             protected IFolderDecorator<OrganisationContact> createDecorator() {
-                return new CrmBoxFolderDecorator<OrganisationContact>(parent);
+                return new VistaBoxFolderDecorator<OrganisationContact>(parent);
             }
 
             @Override
@@ -365,7 +365,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
                     @Override
                     public IFolderItemDecorator<OrganisationContact> createDecorator() {
-                        return new CrmBoxFolderItemDecorator<OrganisationContact>(parent);
+                        return new VistaBoxFolderItemDecorator<OrganisationContact>(parent);
                     }
 
                     @Override

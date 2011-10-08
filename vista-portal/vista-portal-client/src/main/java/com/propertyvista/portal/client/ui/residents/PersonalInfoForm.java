@@ -159,10 +159,10 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().plateNumber(), "8em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().year(), "5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().make(), "8em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().model(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().make(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().model(), "7em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().country(), "9em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().province(), "17em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().province(), "9em"));
             }
 
             @Override

@@ -44,6 +44,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
@@ -51,15 +52,14 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
-import com.propertyvista.portal.ptapp.client.ui.components.PtAppEntityFolder;
-import com.propertyvista.portal.ptapp.client.ui.components.PtAppTableFolderDecorator;
-import com.propertyvista.portal.ptapp.client.ui.components.PtAppTableFolderItemDecorator;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
 public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
@@ -170,8 +170,8 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 // List Viewers:
 
     private CEntityFolder<ServiceItemType> createUtilitiesFolderEditor() {
-        return new PtAppEntityFolder<ServiceItemType>(ServiceItemType.class, false) {
-            private final PtAppEntityFolder<ServiceItemType> parent = this;
+        return new VistaEntityFolder<ServiceItemType>(ServiceItemType.class, false) {
+            private final VistaEntityFolder<ServiceItemType> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -182,7 +182,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 
             @Override
             protected IFolderDecorator<ServiceItemType> createDecorator() {
-                PtAppTableFolderDecorator<ServiceItemType> decor = new PtAppTableFolderDecorator<ServiceItemType>(columns(), parent);
+                VistaTableFolderDecorator<ServiceItemType> decor = new VistaTableFolderDecorator<ServiceItemType>(columns(), parent);
                 decor.setShowHeader(false);
                 return decor;
             }
@@ -192,7 +192,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
                 return new CEntityFolderRowEditor<ServiceItemType>(ServiceItemType.class, columns()) {
                     @Override
                     public IFolderItemDecorator<ServiceItemType> createDecorator() {
-                        return new PtAppTableFolderItemDecorator<ServiceItemType>(parent);
+                        return new VistaTableFolderItemDecorator<ServiceItemType>(parent);
                     }
 
                     @Override
@@ -208,8 +208,8 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
     }
 
     private CEntityFolder<ChargeItem> createFeaturesFolderEditor(final Feature.Type type, boolean editable) {
-        return new PtAppEntityFolder<ChargeItem>(ChargeItem.class, editable) {
-            private final PtAppEntityFolder<ChargeItem> parent = this;
+        return new VistaEntityFolder<ChargeItem>(ChargeItem.class, editable) {
+            private final VistaEntityFolder<ChargeItem> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -222,7 +222,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 
             @Override
             protected IFolderDecorator<ChargeItem> createDecorator() {
-                PtAppTableFolderDecorator<ChargeItem> decor = new PtAppTableFolderDecorator<ChargeItem>(columns(), parent);
+                VistaTableFolderDecorator<ChargeItem> decor = new VistaTableFolderDecorator<ChargeItem>(columns(), parent);
                 setExternalAddItemProcessing(true);
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
@@ -268,8 +268,8 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
     }
 
     private CEntityFolder<Concession> createConcessionsFolderEditor() {
-        return new PtAppEntityFolder<Concession>(Concession.class, false) {
-            private final PtAppEntityFolder<Concession> parent = this;
+        return new VistaEntityFolder<Concession>(Concession.class, false) {
+            private final VistaEntityFolder<Concession> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -283,7 +283,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 
             @Override
             protected IFolderDecorator<Concession> createDecorator() {
-                PtAppTableFolderDecorator<Concession> decor = new PtAppTableFolderDecorator<Concession>(columns(), parent);
+                VistaTableFolderDecorator<Concession> decor = new VistaTableFolderDecorator<Concession>(columns(), parent);
 //                decor.setShowHeader(false);
                 return decor;
             }

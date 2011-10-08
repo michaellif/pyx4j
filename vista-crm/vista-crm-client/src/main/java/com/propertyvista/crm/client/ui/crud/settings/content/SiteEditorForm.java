@@ -38,15 +38,15 @@ import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
+import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
-import com.propertyvista.crm.client.ui.components.CrmBoxFolderDecorator;
-import com.propertyvista.crm.client.ui.components.CrmBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.CrmEntityFolder;
-import com.propertyvista.crm.client.ui.components.CrmTableFolderDecorator;
-import com.propertyvista.crm.client.ui.components.CrmTableFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
@@ -104,9 +104,9 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
     }
 
     private CEntityFolder<AvailableLocale> createLocalesList() {
-        return new CrmEntityFolder<AvailableLocale>(AvailableLocale.class, i18n.tr("SiteLocale"), isEditable()) {
+        return new VistaEntityFolder<AvailableLocale>(AvailableLocale.class, i18n.tr("SiteLocale"), isEditable()) {
 
-            private final CrmEntityFolder<AvailableLocale> parent = this;
+            private final VistaEntityFolder<AvailableLocale> parent = this;
 
             private final ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
             {
@@ -128,8 +128,8 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
     }
 
     private CEntityFolder<PageDescriptor> createChildPagesList() {
-        return new CrmEntityFolder<PageDescriptor>(PageDescriptor.class, i18n.tr("Page"), !isEditable()) {
-            private final CrmEntityFolder<PageDescriptor> parent = this;
+        return new VistaEntityFolder<PageDescriptor>(PageDescriptor.class, i18n.tr("Page"), !isEditable()) {
+            private final VistaEntityFolder<PageDescriptor> parent = this;
 
             private final ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
             {
@@ -165,14 +165,14 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
 
                     @Override
                     public IFolderItemDecorator<PageDescriptor> createDecorator() {
-                        return new CrmTableFolderItemDecorator<PageDescriptor>(parent, !parent.isEditable());
+                        return new VistaTableFolderItemDecorator<PageDescriptor>(parent, !parent.isEditable());
                     }
                 };
             }
 
             @Override
             protected IFolderDecorator<PageDescriptor> createDecorator() {
-                CrmTableFolderDecorator<PageDescriptor> decor = new CrmTableFolderDecorator<PageDescriptor>(columns(), parent);
+                VistaTableFolderDecorator<PageDescriptor> decor = new VistaTableFolderDecorator<PageDescriptor>(columns(), parent);
                 decor.addItemAddClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
@@ -205,8 +205,8 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
     }
 
     private CEntityFolder<Testimonial> createTestimonialsList() {
-        return new CrmEntityFolder<Testimonial>(Testimonial.class, i18n.tr("Testimonial"), isEditable()) {
-            private final CrmEntityFolder<Testimonial> parent = this;
+        return new VistaEntityFolder<Testimonial>(Testimonial.class, i18n.tr("Testimonial"), isEditable()) {
+            private final VistaEntityFolder<Testimonial> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -216,7 +216,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
 
             @Override
             protected IFolderDecorator<Testimonial> createDecorator() {
-                return new CrmBoxFolderDecorator<Testimonial>(parent);
+                return new VistaBoxFolderDecorator<Testimonial>(parent);
             }
 
             @Override
@@ -234,7 +234,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
 
                     @Override
                     public IFolderItemDecorator<Testimonial> createDecorator() {
-                        return new CrmBoxFolderItemDecorator<Testimonial>(parent);
+                        return new VistaBoxFolderItemDecorator<Testimonial>(parent);
                     }
                 };
             }
@@ -242,8 +242,8 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
     }
 
     private CEntityFolder<News> createNewsList() {
-        return new CrmEntityFolder<News>(News.class, i18n.tr("News"), isEditable()) {
-            private final CrmEntityFolder<News> parent = this;
+        return new VistaEntityFolder<News>(News.class, i18n.tr("News"), isEditable()) {
+            private final VistaEntityFolder<News> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -253,7 +253,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
 
             @Override
             protected IFolderDecorator<News> createDecorator() {
-                return new CrmBoxFolderDecorator<News>(parent);
+                return new VistaBoxFolderDecorator<News>(parent);
             }
 
             @Override
@@ -272,7 +272,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
 
                     @Override
                     public IFolderItemDecorator<News> createDecorator() {
-                        return new CrmBoxFolderItemDecorator<News>(parent);
+                        return new VistaBoxFolderItemDecorator<News>(parent);
                     }
                 };
             }

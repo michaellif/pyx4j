@@ -19,9 +19,9 @@ import com.google.gwt.resources.client.ImageResource;
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ImageFactory.FormsImageBundle;
 
-public interface FormImageBundle extends FormsImageBundle, EntityFolderImages {
+public interface VistaImages extends FormsImageBundle, EntityFolderImages {
 
-    FormImageBundle INSTANCE = GWT.create(FormImageBundle.class);
+    VistaImages INSTANCE = GWT.create(VistaImages.class);
 
     @Override
     @Source("date.png")
