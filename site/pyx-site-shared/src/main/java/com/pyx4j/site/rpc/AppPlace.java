@@ -47,7 +47,7 @@ public class AppPlace extends Place {
     private Map<String, List<String>> args;
 
     @Translatable(strategy = I18nStrategy.IgnoreAll)
-    private static class NoWhereAppPlace extends AppPlace {
+    public static class NoWhereAppPlace extends AppPlace {
     }
 
     public static final AppPlace NOWHERE = new NoWhereAppPlace();
