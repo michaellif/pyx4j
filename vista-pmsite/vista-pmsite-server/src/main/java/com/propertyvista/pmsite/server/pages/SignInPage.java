@@ -16,12 +16,12 @@ package com.propertyvista.pmsite.server.pages;
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.resource.TextTemplateResourceReference;
 
 import templates.TemplateResources;
 
 import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
+import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 
 public final class SignInPage extends BasePage {
 
@@ -36,8 +36,8 @@ public final class SignInPage extends BasePage {
     @Override
     public void renderHead(IHeaderResponse response) {
         String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
-        TextTemplateResourceReference refCSS = new TextTemplateResourceReference(TemplateResources.class, "signin" + getPmsiteStyle() + ".css", "text/css",
-                new StylesheetTemplateModel(baseColor));
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "signin" + getPmsiteStyle() + ".css",
+                "text/css", new StylesheetTemplateModel(baseColor));
         response.renderCSSReference(refCSS);
         super.renderHead(response);
 

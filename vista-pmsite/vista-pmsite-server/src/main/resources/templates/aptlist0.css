@@ -156,10 +156,10 @@
 	width: 744px;
 	vertical-align: top;
 }
-.vista-pmsite-aptListPage .apartment_listing_wrap {
+.vista-pmsite-aptListPage .apartmentListingWrap {
 	width:100%;
 }
-.vista-pmsite-aptListPage .apartment_listing_wrap .listing_listview {
+.vista-pmsite-aptListPage .apartmentListingWrap .listing_listview {
 	background:white;
 	padding-bottom:40px;
 }
@@ -185,7 +185,7 @@
 .switchMapList_List {
 	background-position:0px -60px;
 }
-.vista-pmsite-aptListPage .listing_mapview {
+.vista-pmsite-aptListPage .apartmentListingWrap .listing_mapview {
 	width:744px;
 	height:650px;
 }

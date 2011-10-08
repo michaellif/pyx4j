@@ -40,9 +40,9 @@ public class StylesheetTemplateModel extends LoadableDetachableModel<Map<String,
 
     public StylesheetTemplateModel(String baseColor) {
         //this.baseColor = baseColor;
-        this.primeColor = "#0000ff"; //-- H1
-        this.accentColor = "#ff0000"; //- H2
-        this.hlightColor = "#00ff00"; //- H3
+        this.primeColor = "#269bff"; //-- H1
+        this.accentColor = "#ff170f"; //- H2
+        this.hlightColor = "#6f5879"; //- H3
         this.bgColor = "#ffffff"; //----- H4
         this.fgColor = "#000000"; //----- H5
     }

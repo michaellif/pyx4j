@@ -1,4 +1,6 @@
 .vista-pmsite-aptDetailsPage {
+	font-size:14px;
+	color:#CCCCCC;
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-contentWrap {
 	background: url("images/template0/inner_content_bg.png") repeat-x #37393F;
@@ -8,8 +10,9 @@
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar {
 	display: inline-block;
-	width: 350px;
+	width: 318px;
 	vertical-align: top;
+	padding:20px 16px;
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-main {
 	display: inline-block;
@@ -20,12 +23,14 @@
 	color:#222;
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox {
-	padding:20px 16px;
-	width:318px;
+	width:100%;
 	text-align:center;
 } 
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox .picture {
 	width:100%;
+}
+.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox .gallery {
+	height:50px;
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox .gallery img {
 	width:57px;
@@ -38,20 +43,88 @@
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox .gallery span:first-child {
 	margin-left:0;
 }
-.apartmentDetailsWrap {
+.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .infoBox {
 	width:100%;
-	margin-top:20px;
+	font-weight:bold;
+	color:#CCC;
+} 
+.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .infoBoxEntry {
+	padding-top:15px;
+} 
+.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .infoBoxEntry .infoBoxCaption {
+	display:block;
+	padding-top:4px;
 }
-.apartmentDetailsWrap .infoBox {
+.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .infoBoxEntry .infoBoxText {
+	display:block;
+	padding-top:4px;
+}
+.apartmentDetailsWrap .detailBox {
+	color:#777;
+}
+.apartmentDetailsWrap .detailBox .detailBoxTitle {
+	padding: 20px 20px;
+	font-size:14px;
+	font-weight:bold;
+	text-transform:uppercase;
+	color:#555;
+}
+.apartmentDetailsWrap .detailBox .detailBoxEntry {
+	padding: 10px 0 20px 0;
+}
+.apartmentDetailsWrap .detailBox .detailBoxEntry .detailBoxCaption {
+	display:inline-block;
+	vertical-align:top;
+	width:80px;
+	padding: 0 20px 6px 20px;
+	font-size:12px;
+	font-weight:bold;
+	text-transform:uppercase;
+	text-align:right;
+	color:#888;
+}
+.apartmentDetailsWrap .detailBox .detailBoxEntry .detailBoxText {
+	display:inline-block;
+	vertical-align:top;
+	width:460px;'
+}
+.apartmentDetailsWrap .detailBox .detailBoxEntry ul.detailBoxText {
+	padding-left:10px;
+	margin:0;
+}
+.apartmentDetailsWrap .detailBox .detailBoxEntry ul.detailBoxText li {
+	float:left;
+	width:230px;
+}
+.apartmentDetailsWrap .unitDetails {
+	background: white;
+	padding:10px;
+	border-bottom: 1px solid #ccc;
+	color: #222;
+}
+.apartmentDetailsWrap .unitDetails:first-child {
+	border-top: 1px solid #ccc;
+}
+.apartmentDetailsWrap .unitDetails:hover {
+	background:#d8e7bc;
+}
+.apartmentDetailsWrap .unitDetails .picture {
 	display: inline-block;
 	vertical-align: top;
-	width:600px;
+	width:80px;
+	min-height:75px;
+	text-align:center;
+} 
+.apartmentDetailsWrap .unitDetails .details {
+	display: inline-block;
+	vertical-align: top;
+	width:320px;
 	padding:0 20px;
 } 
-.apartmentDetailsWrap .infoBoxEntry {
-	padding:4px 0;
+.apartmentDetailsWrap .unitDetails .unitEntry {
+	padding:2px 0;
 } 
-.apartmentDetailsWrap .infoBoxEntry .infoBoxCaption {
+.apartmentDetailsWrap .unitDetails .unitEntry .unitEntryCaption {
 	display: inline-block;
 	vertical-align: top;
 	width:80px;
@@ -59,28 +132,51 @@
 	padding-right:8px;
 	font-weight:normal;
 }
-.apartmentDetailsWrap .infoBoxEntry .infoBoxText {
+.apartmentDetailsWrap .unitDetails .unitEntry .unitEntryText {
 	display: inline-block;
 	vertical-align: top;
-	width:490px;
+	width:210px;
 	font-weight:bold;
 }
-.apartmentDetailsWrap .infoBox .description .infoBoxText {
-	font-weight:normal;
-}
-.apartmentDetailsWrap .infoBoxEntry ul.infoBoxText {
-	margin:0;
-	padding:0;
-}
-.apartmentDetailsWrap .infoBox .types li {
-	list-style:none;
-}
-.apartmentDetailsWrap .infoBox .amenities li {
+.apartmentDetailsWrap .unitDetails .infoBox .amenities li {
 	float: left;
 	margin: 0 10px;
 }
 
-.apartmentDetailsWrap .infoBox .amenities li:first-child {
+.apartmentDetailsWrap .unitDetails .infoBox .amenities li:first-child {
 	list-style: none;
 	margin-left: 0;
+}
+.apartmentDetailsWrap .unitDetails .controlBox {
+	display: inline-block;
+	vertical-align: top;
+	width:80px;
+	padding:0 5px;
+} 
+.apartmentDetailsWrap .unitDetails .controlButton {
+	float:right;
+	padding:6px 0;
+}
+.listingCtlButton {
+	background-image: url("images/template1/aptListIcons.png");
+	background-repeat: no-repeat;
+	display:block;
+	width:70px;
+	height:25px;
+	padding-top:5px;
+	padding-left:30px;
+	font-weight:bold;
+	cursor:pointer;
+	color:#6c6d6f;
+}
+a.listingCtlButton {
+	color:#6c6d6f !important;
+	text-decoration:none;
+}
+.apartmentDetailsWrap .unitDetails:hover .listingCtlButton {
+	background-image: url("images/template1/aptListIcons-hlight.png");
+	color:#339900 !important;
+}
+#btnViewDetails {
+	background-position:0px -30px;
 }

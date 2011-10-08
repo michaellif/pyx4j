@@ -24,7 +24,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.resource.TextTemplateResourceReference;
 
 import templates.TemplateResources;
 
@@ -37,6 +36,7 @@ import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
+import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.SecondaryNavigationPanel;
 
 public class StaticPage extends BasePage {
@@ -90,8 +90,8 @@ public class StaticPage extends BasePage {
     @Override
     public void renderHead(IHeaderResponse response) {
         String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
-        TextTemplateResourceReference refCSS = new TextTemplateResourceReference(TemplateResources.class, "static" + getPmsiteStyle() + ".css", "text/css",
-                new StylesheetTemplateModel(baseColor));
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "static" + getPmsiteStyle() + ".css",
+                "text/css", new StylesheetTemplateModel(baseColor));
         response.renderCSSReference(refCSS);
         super.renderHead(response);
 

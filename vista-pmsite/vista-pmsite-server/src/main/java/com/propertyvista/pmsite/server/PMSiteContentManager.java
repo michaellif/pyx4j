@@ -33,6 +33,8 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.domain.marketing.PublicVisibilityType;
+import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -180,7 +182,7 @@ public class PMSiteContentManager implements Serializable {
     }
 
     private void createPath(PageDescriptor parent) {
-        System.out.println(parent);
+//        System.out.println(parent);
         for (PageDescriptor descriptor : parent.childPages()) {
             descriptor._path().add(parent);
             createPath(descriptor);
@@ -284,6 +286,10 @@ public class PMSiteContentManager implements Serializable {
         return buildings;
     }
 
+    public static boolean isPublicFileMedia(Media m) {
+        return (m.type().getValue() == Media.Type.file && m.visibility().getValue() == PublicVisibilityType.global);
+    }
+
     public static Building getBuildingDetails(long propId) {
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().id(), propId));
@@ -333,9 +339,15 @@ public class PMSiteContentManager implements Serializable {
         return descriptor.name().getValue();
     }
 
+    /*
+     * Media images rendered by media servlet at /contextPath/media/{id}/{size}.jpg
+     * We want to build a relative! path from the current page down to the servlet root
+     */
     public static String getMediaImgUrl(long mediaId, ThumbnailSize size) {
-        String realtivepathToRoot = com.pyx4j.server.contexts.Context.getRequest().getServletPath().replaceAll("/\\w*", "./");
-        return realtivepathToRoot + "media/" + mediaId + "/" + size.name() + ".jpg";
+        String servletPath = com.pyx4j.server.contexts.Context.getRequest().getServletPath();
+        // shift back for every path segment; then remove one segment - for the script name
+        String servletRoot = servletPath.replaceAll("/+[^/]+", "../").replaceFirst("../", "");
+        return servletRoot + "media/" + mediaId + "/" + size.name() + ".jpg";
     }
 
     public static List<PromoDataModel> getPromotions() {

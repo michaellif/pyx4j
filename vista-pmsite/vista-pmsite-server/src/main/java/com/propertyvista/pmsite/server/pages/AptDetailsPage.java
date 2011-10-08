@@ -26,7 +26,9 @@ import org.apache.wicket.markup.html.list.ListView;
 import templates.TemplateResources;
 
 import com.propertyvista.domain.contact.Address;
+import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -85,21 +87,48 @@ public class AptDetailsPage extends BasePage {
                     + addr.province().code().getValue() + " " + addr.postalCode().getValue();
         }
         add(new Label("address", addrFmt));
-        add(new Label("description", propInfo.marketing().description().getValue()));
-
-        add(new ListView<Floorplan>("types", new ArrayList<Floorplan>(fpUnits.keySet())) {
+        // get price range
+        Double minPrice = null, maxPrice = null;
+        for (Floorplan fp : fpUnits.keySet()) {
+            for (AptUnit u : fpUnits.get(fp)) {
+                Double _prc = u.financial().unitRent().getValue();
+                if (minPrice == null || minPrice > _prc) {
+                    minPrice = _prc;
+                }
+                if (maxPrice == null || maxPrice < _prc) {
+                    maxPrice = _prc;
+                }
+            }
+        }
+        String priceFmt = "Not available";
+        if (minPrice != null && maxPrice != null) {
+            priceFmt = "$" + String.valueOf(Math.round(minPrice)) + " - $" + String.valueOf(Math.round(maxPrice));
+        }
+        add(new Label("priceRange", priceFmt));
+        // phone
+        String phone = "Not Available";
+        for (PropertyPhone ph : propInfo.contacts().phones()) {
+            if (ph.visibility().getValue() == PublicVisibilityType.global) {
+                phone = ph.number().getValue();
+                break;
+            }
+        }
+        add(new Label("phone", phone));
+        add(new ListView<Floorplan>("units", new ArrayList<Floorplan>(fpUnits.keySet())) {
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void populateItem(ListItem<Floorplan> item) {
                 Floorplan floorPlan = item.getModelObject();
-                String type = floorPlan.name().getValue();
-                if (type != null && type.length() > 0) {
-                    type += " - ";
-                } else {
-                    type = "";
+                String imgSrc = "";
+                if (floorPlan.media().size() > 0) {
+                    long mediaId = floorPlan.media().get(0).getPrimaryKey().asLong();
+                    imgSrc = PMSiteContentManager.getMediaImgUrl(mediaId, ThumbnailSize.small);
                 }
-                type += floorPlan.bedrooms().getValue() + " Bed, " + floorPlan.bathrooms().getValue() + " Bath";
+                item.add(new SimpleImage("plan", imgSrc));
+                item.add(new Label("name", floorPlan.name().getValue()));
+                item.add(new Label("beds", String.valueOf(floorPlan.bedrooms().getValue())));
+                item.add(new Label("bath", String.valueOf(floorPlan.bathrooms().getValue())));
                 String price = "price not available";
                 Double minPrice = null;
                 for (AptUnit u : fpUnits.get(floorPlan)) {
@@ -111,10 +140,10 @@ public class AptDetailsPage extends BasePage {
                 if (minPrice != null) {
                     price = "from $" + String.valueOf(Math.round(minPrice));
                 }
-                item.add(new Label("type", type + ", " + price));
+                item.add(new Label("price", price));
             }
         });
-
+        add(new Label("description", propInfo.marketing().description().getValue()));
         add(new ListView<BuildingAmenity>("amenities", amenities) {
             private static final long serialVersionUID = 1L;
 

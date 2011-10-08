@@ -16,12 +16,12 @@ package com.propertyvista.pmsite.server.pages;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.resource.TextTemplateResourceReference;
 
 import templates.TemplateResources;
 
 import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
+import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.GwtInclude;
 
 @AuthorizeInstantiation(Roles.USER)
@@ -38,8 +38,8 @@ public class ResidentsPage extends BasePage {
     @Override
     public void renderHead(IHeaderResponse response) {
         String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
-        TextTemplateResourceReference refCSS = new TextTemplateResourceReference(TemplateResources.class, "resident" + getPmsiteStyle() + ".css", "text/css",
-                new StylesheetTemplateModel(baseColor));
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "resident" + getPmsiteStyle() + ".css",
+                "text/css", new StylesheetTemplateModel(baseColor));
         response.renderCSSReference(refCSS);
         super.renderHead(response);
 

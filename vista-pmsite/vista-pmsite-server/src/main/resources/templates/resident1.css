@@ -1,0 +1,14 @@
+.vista-pmsite-residentPage {
+    color: ${fgColor_100};
+    font-size: 16px;
+}
+.vista-pmsite-residentPage .vista-pmsite-mainWrap {
+	width: 960px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+.vista-pmsite-residentPage .caption {
+	height: 80px;
+	overflow: hidden;
+	padding: 40px 0 0 30px;
+}

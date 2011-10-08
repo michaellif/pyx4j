@@ -60,16 +60,6 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
         mountPage("cnt" + PMSiteContentManager.PARAMETER_PATH, StaticPage.class);
 
-//        mountResource("js", new ResourceReference(JSResources.class, "js") {
-//            private static final long serialVersionUID = 1L;
-//
-//            JSResources jsResources = new JSResources();
-//
-//            @Override
-//            public IResource getResource() {
-//                return jsResources;
-//            }
-//        });
     }
 
     @Override

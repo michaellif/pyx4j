@@ -1,10 +1,10 @@
 .vista-pmsite-staticPage {
 }
 
-.vista-pmsite-staticPage .vista-pmsite-content {
-}
-
-.vista-pmsite-staticPage .vista-pmsite-contentWrap {
+.vista-pmsite-staticPage .vista-pmsite-mainWrap {
+	width: 960px;
+	margin: 0 auto;
+	overflow: hidden;
 }
 
 .vista-pmsite-staticPage .secondaryNavig {
@@ -12,6 +12,7 @@
 	width: 211px;
 	float: left;
 	min-height: 400px;
+	border-right:1px solid ${fgColor_20};
 }
 
 .vista-pmsite-staticPage .secondaryNavig ul {
@@ -21,8 +22,9 @@
 }
 
 .vista-pmsite-staticPage .secondaryNavig ul li {
-	color: #CCCCCC;
+	color: ${fgColor_100};
 	font-size: 17px;
+	font-weight:bold;
 	height: 38px;
 	line-height: 38px;
 	overflow: hidden;
@@ -30,20 +32,22 @@
 }
 
 .vista-pmsite-staticPage .secondaryNavig ul li.active {
+	background: url("images/template1/menu_active.png") no-repeat left center;
 }
 
 .vista-pmsite-staticPage .secondaryNavig ul li a {
-	color: #CCCCCC;
+	color: ${fgColor_100};
 }
 
 .vista-pmsite-staticPage .secondaryNavig ul li a:hover {
-	color: #B5E329;
+	color: ${hlightColor_100};
 	text-decoration: none;
 }
 
 .vista-pmsite-staticPage .content {
 	min-height: 396px;
-	color: #333333;
+	color: ${fgColor_100};
+	border-top:1px solid ${fgColor_20};
 	background-color: white;
 	line-height: 20px;
 	overflow: hidden;
@@ -51,7 +55,7 @@
 }
 
 .vista-pmsite-staticPagen .content  a {
-	color: #339900;
+	text-decoration:underline;
 }
 
 .vista-pmsite-staticPage .content  p {

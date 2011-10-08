@@ -195,6 +195,18 @@ select {
 	color: ${hlightColor_100};
 }
 
+.auth {
+	float: right;
+	padding: 0 10px;
+}
+
+.auth a {
+	color: ${fgColor_100};
+}
+
+.auth a:hover {
+	color: ${hlightColor_100};
+}
 /*
  * Footer
  */

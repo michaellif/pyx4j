@@ -9,9 +9,10 @@
 	display: inline-block;
 	width: 211px;
 	vertical-align: top;
+	border-right:1px solid ${fgColor_20};
 }
 .vista-pmsite-aptListPage .secondaryNavig {
-	color:#aaa;
+	color: ${fgColor_60};
 }
 .vista-pmsite-aptListPage .secondaryNavig h3 {
 	width:100%;
@@ -150,10 +151,10 @@
 	width: 744px;
 	vertical-align: top;
 }
-.vista-pmsite-aptListPage .apartment_listing_wrap {
+.vista-pmsite-aptListPage .apartmentListingWrap {
 	width:100%;
 }
-.vista-pmsite-aptListPage .apartment_listing_wrap .listing_listview {
+.vista-pmsite-aptListPage .apartmentListingWrap .listing_listview {
 	background:white;
 	padding-bottom:40px;
 }
@@ -179,21 +180,21 @@
 .switchMapList_List {
 	background-position:0px -60px;
 }
-.vista-pmsite-aptListPage .listing_mapview {
+.vista-pmsite-aptListPage .apartmentListingWrap .listing_mapview {
 	width:744px;
 	height:650px;
 }
 .apartmentListingWrap .listingEntry {
 	background: ${bgColor_100};
 	padding:20px;
-	border-bottom: 1px solid ${fgColor_60};
+	border-bottom: 1px solid ${fgColor_20};
 	color: #222;
 }
 .apartmentListingWrap .listingEntry:hover {
 	background:${accentColor_10};
 }
 .apartmentListingWrap .listingEntry:first-child {
-	border-top: 1px solid ${fgColor_60};
+	border-top: 1px solid ${fgColor_20};
 }
 .apartmentListingWrap .listingEntry .pictureBox {
 	display: inline-block;
@@ -256,7 +257,7 @@
 .apartmentListingWrap .listingEntry .controlButton {
 	float:right;
 	padding:6px 0;
-	border-bottom: 1px solid ${fgColor_60}
+	border-bottom: 1px solid ${fgColor_20}
 }
 .listingCtlButton {
 	background-image: url("images/template1/aptListIcons.png");

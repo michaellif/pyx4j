@@ -5,12 +5,6 @@
 </head>
 <body>
 	<wicket:extend>
-<script language="javascript">
-function setImgSrc(img, src) {
-	var el_img = document.getElementById(img);
-	el_img && el_img.setAttribute('src', src);
-}
-</script>
 	<div class="vista-pmsite-aptDetailsPage">
 		<div class="vista-pmsite-contentWrap">
 			<div class="vista-pmsite-content">
@@ -23,28 +17,66 @@ function setImgSrc(img, src) {
 									<span wicket:id="gallery"><img wicket:id="thumbnail"/></span>
 								</div>
 							</div>
+							<div class="infoBox">
+								<div class="infoBoxEntry address">
+									<label class="infoBoxCaption">Address:</label>
+									<span class="infoBoxText" wicket:id="address"/>
+								</div>
+								<div class="infoBoxEntry price">
+									<label class="infoBoxCaption">Price Range:</label>
+									<span class="infoBoxText" wicket:id="priceRange"/>
+								</div>
+								<div class="infoBoxEntry phone">
+									<label class="infoBoxCaption">Phone:</label>
+									<span class="infoBoxText" wicket:id="phone"/>
+								</div>
+							</div>
 						</div>
 						<div class="vista-pmsite-main">
 							<div class="caption2">
 								<h1>Apartment Details</h1>
 							</div>
 							<div class="apartmentDetailsWrap">
-								<div class="infoBox">
-									<div class="infoBoxEntry address">
-										<label class="infoBoxCaption">Address:</label>
-										<span class="infoBoxText" wicket:id="address"/>
+								<div class="detailBox">
+									<div class="detailBoxTitle">Available Units</div>
+									<div class="detailBoxEntry units">
+										<div class="unitDetails" wicket:id="units">
+											<img class="picture" wicket:id="plan"/>
+											<div class="details">
+												<div class="unitEntry">
+													<label class="unitEntryCaption">Name:</label>
+													<span class="unitEntryText" wicket:id="name"/>
+												</div>
+												<div class="unitEntry">
+													<label class="unitEntryCaption">Bedrooms:</label>
+													<span class="unitEntryText" wicket:id="beds"/>
+												</div>
+												<div class="unitEntry">
+													<label class="unitEntryCaption">Bathrooms:</label>
+													<span class="unitEntryText" wicket:id="bath"/>
+												</div>
+												<div class="unitEntry">
+													<label class="unitEntryCaption">Rent Price:</label>
+													<span class="unitEntryText" wicket:id="price"/>
+												</div>
+											</div>
+											<div class="controlBox">
+												<div class="controlButton">
+													<a id="btnViewDetails" class="listingCtlButton" wicket_id="aptDetails" href="">Details</a>
+												</div>
+											</div>
+										</div>
 									</div>
-									<div class="infoBoxEntry types">
-										<label class="infoBoxCaption">Types:</label>
-										<ul class="infoBoxText"><li wicket:id="types"><span wicket:id="type"/></li></ul>
+								</div>
+								<div class="detailBox">
+									<div class="detailBoxTitle">Additional Details</div>
+									<div class="detailBoxEntry description">
+										<label class="detailBoxCaption">Notes:</label>
+										<span class="detailBoxText" wicket:id="description"/>
 									</div>
-									<div class="infoBoxEntry amenities">
-										<label class="infoBoxCaption">Amenities:</label>
-										<ul class="infoBoxText"><li wicket:id="amenities"><span wicket:id="amenity"/></li></ul>
-									</div>
-									<div class="infoBoxEntry description">
-										<label class="infoBoxCaption">Notes:</label>
-										<span class="infoBoxText" wicket:id="description"/>
+									<div class="detailBoxEntry amenities">
+										<label class="detailBoxCaption">Amenities:</label>
+										<ul class="detailBoxText"><li wicket:id="amenities"><span wicket:id="amenity"/></li></ul>
 									</div>
 								</div>
 							</div>
