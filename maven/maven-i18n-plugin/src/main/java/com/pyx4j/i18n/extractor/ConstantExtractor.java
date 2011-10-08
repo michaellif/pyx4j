@@ -287,8 +287,11 @@ public class ConstantExtractor {
                 while (it.hasNext()) {
                     Object name = it.next();
                     if (ta.getValue().mainElement.equals(name)) {
-                        addEntry(classSourceFileName, -1, it.next().toString());
-                        classNameFoound = true;
+                        String mainValue = it.next().toString();
+                        if (!I18nAnnotation.DEFAULT_VALUE.equals(mainValue)) {
+                            addEntry(classSourceFileName, -1, mainValue);
+                            classNameFoound = true;
+                        }
                     } else if (ta.getValue().elements.contains(name)) {
                         addEntry(classSourceFileName, -2, it.next().toString());
                     } else {
@@ -332,8 +335,11 @@ public class ConstantExtractor {
                         while (it.hasNext()) {
                             Object name = it.next();
                             if (ta.getValue().mainElement.equals(name)) {
-                                addEntry(classSourceFileName, -5, it.next().toString());
-                                methodNameFoound = true;
+                                String mainValue = it.next().toString();
+                                if (!I18nAnnotation.DEFAULT_VALUE.equals(mainValue)) {
+                                    addEntry(classSourceFileName, -5, mainValue);
+                                    methodNameFoound = true;
+                                }
                             } else if (ta.getValue().elements.contains(name)) {
                                 addEntry(classSourceFileName, -6, it.next().toString());
                             } else {

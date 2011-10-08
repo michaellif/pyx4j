@@ -28,6 +28,7 @@ import ut.annotations.I18nCaption;
 import ut.annotations.SuperNotToTranslate;
 
 import com.pyx4j.commons.EnglishGrammar;
+import com.pyx4j.i18n.annotations.I18nAnnotation;
 
 public class AnnotationsExtractorTest extends TestCase {
 
@@ -38,7 +39,7 @@ public class AnnotationsExtractorTest extends TestCase {
         ce.readClass(I18nCaption.class);
         ce.analyzeTranslatableHierarchy();
 
-        print(ce.getConstants());
+        //print(ce.getConstants());
 
         Collection<String> extracted = ce.getConstantsText();
 
@@ -52,6 +53,7 @@ public class AnnotationsExtractorTest extends TestCase {
         assertTrue(extracted.contains(ChildToTranslate.DESCRIPTION1));
         assertTrue(extracted.contains(ChildToTranslate.NAME2));
 
+        assertFalse(extracted.contains(I18nAnnotation.DEFAULT_VALUE));
         assertFalse(extracted.contains(""));
         assertFalse(extracted.contains(EnglishGrammar.capitalize("extractedNoNameWithDescription")));
     }

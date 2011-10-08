@@ -20,6 +20,8 @@
  */
 package ut.annotations;
 
+import com.pyx4j.i18n.annotations.I18nAnnotation;
+
 public interface ChildToTranslate extends SuperNotToTranslate {
 
     public void extractedAsIs();
@@ -37,4 +39,6 @@ public interface ChildToTranslate extends SuperNotToTranslate {
     @I18nCaption(name = NAME2)
     public void extractedFromAnnotation();
 
+    @I18nCaption(name = I18nAnnotation.DEFAULT_VALUE)
+    public void extractedNameDefault();
 }
