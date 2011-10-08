@@ -58,3 +58,74 @@
 	padding: 30px 30px 0;
 }
 
+
+.pyx4j_TextBox {
+    -moz-box-sizing: border-box;
+    background-color: #FFFFFF;
+    border-color: #E7E7E7;
+    border-style: solid;
+    border-width: 1px;
+    color: #000000;
+    font: 12px Arial,Helvetica,sans-serif;
+    padding: 2px 5px;
+}
+.pyx4j_TextBox td {
+    padding: 0;
+}
+.pyx4j_TextBox-watermark {
+    color: gray;
+}
+.pyx4j_TextBox-disabled {
+    background-color: lightGray;
+}
+.pyx4j_TextBox-readOnly {
+    background-color: #E7EFF9;
+    border-style: none;
+    border-width: 1px;
+}
+.pyx4j_TextBox-invalid {
+    background-color: #F8D8D8;
+    border-color: #F79494;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.EntityFolder {
+    margin-left: 6px;
+    margin-top: 2px;
+    width: 650px;
+}
+.EntityFolderBoxItem {
+    padding: 6px;
+}
+.EntityFolderBoxDecorator {
+    border: 1px dotted #333333;
+    margin: 6px;
+    width: 100%;
+}
+.EntityFolderBoxDecorator:hover {
+    border: 1px solid #333333;
+}
+.EntityFolderRowDecorator {
+    margin: 6px;
+}
+.EntityFolderActionsBar {
+    opacity: 0.2;
+}
+.EntityFolderBoxDecorator:hover .EntityFolderActionsBar {
+    opacity: 1;
+}
+.EntityFolderRowDecorator:hover .EntityFolderActionsBar {
+    opacity: 1;
+}
+.EntityFolderAddButton {
+    display: inline-block;
+    margin: 6px;
+}
+.EntityFolderAddButtonImage {
+    float: left;
+}
+.EntityFolderAddButtonLabel {
+    float: left;
+    padding-left: 3px;
+}
