@@ -64,8 +64,5 @@ public interface Floorplan extends IEntity {
     @Detached
     IList<Media> media();
 
-    @Detached
-    Media florplanDrawing();
-
     FloorplanCounters counters();
 }
