@@ -73,6 +73,11 @@ public class PublicMediaServlet extends HttpServlet {
 
         //TODO deserialize key
         Media media = Persistence.service().retrieve(Media.class, new Key(id));
+        if ((media == null) || (media.file().blobKey().isNull())) {
+            log.trace("no image");
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
         if (!PublicVisibilityType.global.equals(media.visibility().getValue())) {
             if (!SecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -80,41 +85,35 @@ public class PublicMediaServlet extends HttpServlet {
             }
         }
 
-        if ((media == null) || (media.file().blobKey().isNull())) {
-            log.trace("no image");
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        } else {
-            String token = ETag.getEntityTag(media.file(), thumbnailSize);
-            response.setHeader("Etag", '"' + token + '"');
+        String token = ETag.getEntityTag(media.file(), thumbnailSize);
+        response.setHeader("Etag", '"' + token + '"');
 
-            if (!media.file().timestamp().isNull()) {
-                long since = request.getDateHeader("If-Modified-Since");
-                if ((since != -1) && (media.file().timestamp().getValue() < since)) {
-                    response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-                    return;
-                }
-                response.setDateHeader("Last-Modified", media.file().timestamp().getValue());
-                // HTTP 1.0
-                response.setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
-                // HTTP 1.1
-                response.setHeader("Cache-Control", "public, max-age=" + ((long) Consts.HOURS2SEC * cacheExpiresHours));
-
-            }
-            String previousToken = request.getHeader("If-None-Match");
-            if (previousToken != null && previousToken.equals(token)) {
+        if (!media.file().timestamp().isNull()) {
+            long since = request.getDateHeader("If-Modified-Since");
+            if ((since != -1) && (media.file().timestamp().getValue() < since)) {
                 response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                 return;
             }
+            response.setDateHeader("Last-Modified", media.file().timestamp().getValue());
+            // HTTP 1.0
+            response.setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
+            // HTTP 1.1
+            response.setHeader("Cache-Control", "public, max-age=" + ((long) Consts.HOURS2SEC * cacheExpiresHours));
 
-            if (thumbnailSize == null) {
-                if (!media.file().contentMimeType().isNull()) {
-                    response.setContentType(media.file().contentMimeType().getValue());
-                }
-                BlobService.serve(media.file().blobKey().getValue(), response);
-            } else {
-                ThumbnailService.serve(media.file().blobKey().getValue(), thumbnailSize, response);
+        }
+        String previousToken = request.getHeader("If-None-Match");
+        if (previousToken != null && previousToken.equals(token)) {
+            response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+            return;
+        }
+
+        if (thumbnailSize == null) {
+            if (!media.file().contentMimeType().isNull()) {
+                response.setContentType(media.file().contentMimeType().getValue());
             }
+            BlobService.serve(media.file().blobKey().getValue(), response);
+        } else {
+            ThumbnailService.serve(media.file().blobKey().getValue(), thumbnailSize, response);
         }
     }
 }
