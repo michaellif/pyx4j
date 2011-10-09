@@ -21,7 +21,6 @@
 package com.pyx4j.i18n.gettext;
 
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 public class POFileWriter {
@@ -31,55 +30,67 @@ public class POFileWriter {
     public boolean wrapLines = true;
 
     public void write(PrintWriter writer, POFile po) {
-        for (String comment : po.comments) {
-            writer.println(comment);
-        }
+        writeEntry(writer, po.header);
 
-        writer.println("msgid \"\"");
-        writer.println("msgstr \"\"");
-        for (Map.Entry<String, String> header : po.headers.entrySet()) {
-            writer.println("\"" + header.getKey() + ": " + header.getValue() + "\\n\"");
-        }
-        writer.println();
-
-        for (final POEntry entry : po.entries) {
-            if (entry.comments != null) {
-                for (final String str : entry.comments) {
-                    writer.println("# " + str);
-                }
-            }
-
-            if (entry.reference != null) {
-                for (final String str : entry.reference) {
-                    writer.println("#: " + str);
-                }
-            }
-
-            if (entry.flags != null) {
-                for (final String str : entry.flags) {
-                    writer.println("#, " + str);
-                }
-            }
-
-            if (entry.fuzzy) {
-                writer.println("#, fuzzy");
-            }
-
-            writer.print("msgid ");
-            writeString(writer, entry.untranslated, "msgid ".length());
-
-            writer.print("msgstr ");
-            writeString(writer, entry.translated, "msgstr ".length());
-
-            writer.println();
+        for (POEntry entry : po.entries) {
+            writeEntry(writer, entry);
         }
     }
 
-    private void writeString(PrintWriter writer, String str, int prefixLen) {
+    private void writeEntry(PrintWriter writer, POEntry entry) {
+        if (entry.comments != null) {
+            for (final String str : entry.comments) {
+                writer.println(("# " + str).trim());
+            }
+        }
+
+        if (entry.extractedComments != null) {
+            for (final String str : entry.extractedComments) {
+                writer.println(("#. " + str).trim());
+            }
+        }
+
+        if (entry.references != null) {
+            for (final String str : entry.references) {
+                writer.println("#: " + str);
+            }
+        }
+
+        if (entry.flags != null) {
+            for (final String str : entry.flags) {
+                writer.println("#, " + str);
+            }
+        }
+
+        if (entry.fuzzy) {
+            writer.println("#, fuzzy");
+        }
+
+        if (entry.unparsedComments != null) {
+            for (final String str : entry.unparsedComments) {
+                writer.println("#" + str);
+            }
+        }
+
+        if (entry.previousUntranslated != null) {
+            //TODO
+        }
+
+        writer.print("msgid ");
+        writeString(writer, entry.untranslated, "msgid ".length());
+
+        writer.print("msgstr ");
+        writeString(writer, entry.translated, "msgstr ".length());
+
+        writer.println();
+
+    }
+
+    private void writeString(PrintWriter writer, String str, int firstLnePrefixLen) {
         if (str == null) {
             writer.print("\"\"");
         } else {
-            if (str.contains("\n") || (wrapLines && (str.length() > pageWidth - 2 - prefixLen))) {
+            if (str.contains("\n") || (wrapLines && (str.length() > pageWidth - 2 - firstLnePrefixLen))) {
                 writer.print("\"\"");
 
                 int lineSize = 0;

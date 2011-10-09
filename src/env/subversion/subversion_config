@@ -145,6 +145,7 @@ Makefile = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Autho
 *.flv = svn:mime-type=video/x-flv
 *.txt = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
 *.php = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
+*.po = svn:mime-type=text/x-gettext-translation;;charset=utf-8;svn:eol-style=native;svn:keywords=Date Author Id Revision
 .htaccess = svn:mime-type=text/plain;svn:eol-style=native
 *.apt = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
 *.fml = svn:mime-type=text/xml;svn:eol-style=native;svn:keywords=Date Author Id Revision

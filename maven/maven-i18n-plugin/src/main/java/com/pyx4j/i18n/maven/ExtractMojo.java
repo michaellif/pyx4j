@@ -317,13 +317,13 @@ public class ExtractMojo extends AbstractMojo {
             pe.untranslated = entry.text;
 
             if (poSaveLocation) {
-                pe.reference = entry.reference;
-                Collections.sort(pe.reference);
+                pe.references = entry.reference;
+                Collections.sort(pe.references);
             }
 
             Matcher m = javaFormatPattern.matcher(pe.untranslated);
             if (m.matches()) {
-                pe.addFalg("java-format");
+                pe.addFlag("java-format");
             }
 
             po.entries.add(pe);

@@ -28,21 +28,55 @@ public class POEntry {
 
     public List<String> comments;
 
-    public List<String> reference;
+    public List<String> extractedComments;
+
+    public List<String> references;
 
     public List<String> flags;
 
     public boolean fuzzy;
 
+    public List<String> unparsedComments;
+
+    public String previousUntranslated;
+
     public String untranslated;
 
     public String translated;
 
-    public void addFalg(String flag) {
+    public void addFlag(String flag) {
         if (flags == null) {
             flags = new Vector<String>();
         }
         flags.add(flag);
+    }
+
+    public void referenceAdd(String reference) {
+        if (references == null) {
+            references = new Vector<String>();
+        }
+        references.add(reference);
+    }
+
+    public void addComment(String comment) {
+        if (comments == null) {
+            comments = new Vector<String>();
+        }
+        comments.add(comment);
+    }
+
+    public void addExtractedComment(String comment) {
+        if (extractedComments == null) {
+            extractedComments = new Vector<String>();
+        }
+        extractedComments.add(comment);
+    }
+
+    public void addUnparsedComment(String comment) {
+        if (unparsedComments == null) {
+            unparsedComments = new Vector<String>();
+        }
+        unparsedComments.add(comment);
     }
 
     public static class ByTextComparator implements Comparator<POEntry> {
@@ -59,12 +93,12 @@ public class POEntry {
         @Override
         public int compare(POEntry o1, POEntry o2) {
             String l1 = null;
-            if (o1.reference != null) {
-                l1 = o1.reference.get(0);
+            if (o1.references != null) {
+                l1 = o1.references.get(0);
             }
             String l2 = null;
-            if (o2.reference != null) {
-                l2 = o2.reference.get(0);
+            if (o2.references != null) {
+                l2 = o2.references.get(0);
             }
             // Null in Front
             if (l2 == null) {
