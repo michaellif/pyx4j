@@ -20,12 +20,13 @@
  */
 package ut;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
+
+import com.pyx4j.i18n.shared.I18n;
+
 
 public class MainClass {
 
-    private static I18n i18n = I18nFactory.getI18n(MainClass.class);
+    private static I18n i18n = I18n.get(MainClass.class);
 
     private static final String A_CONST = "A Constantant.";
 

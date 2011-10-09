@@ -40,23 +40,23 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.rpc.report.ReportColumn;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translation;
 
 public interface Order extends IEntity {
 
     public enum OrderStatus implements Serializable {
 
-        @Translation("Estimate")
+        @Translate("Estimate")
         ESTIMATE,
 
-        @Translation("Active")
+        @Translate("Active")
         ACTIVE,
 
-        @Translation("Completed")
+        @Translate("Completed")
         COMPLETED,
 
-        @Translation("Suspended")
+        @Translate("Suspended")
         SUSPENDED;
 
         @Override

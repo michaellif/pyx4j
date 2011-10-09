@@ -20,10 +20,9 @@
  */
 package com.pyx4j.essentials.client;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.pyx4j.gwt.commons.UncaughtHandler;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.widgets.client.dialog.Dialog.Type;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -31,7 +30,7 @@ import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 
 public class DefaultErrorHandlerDialog extends UnrecoverableErrorHandlerDialog {
 
-    private static I18n i18n = I18nFactory.getI18n(DefaultErrorHandlerDialog.class);
+    private static I18n i18n = I18n.get(DefaultErrorHandlerDialog.class);
 
     public static void register() {
         UncaughtHandler.setUnrecoverableErrorHandler(new DefaultErrorHandlerDialog());

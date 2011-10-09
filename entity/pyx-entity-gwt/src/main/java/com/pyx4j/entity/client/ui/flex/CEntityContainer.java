@@ -22,9 +22,6 @@ package com.pyx4j.entity.client.ui.flex;
 
 import java.util.Collection;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Panel;
@@ -33,10 +30,12 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
+import com.pyx4j.i18n.shared.I18n;
+
 
 public abstract class CEntityContainer<E extends IObject<?>> extends CEntityComponent<E, NativeEntityPanel<E>> {
 
-    private static I18n i18n = I18nFactory.getI18n(CEntityContainer.class);
+    private static I18n i18n = I18n.get(CEntityContainer.class);
 
     private IDecorator decorator;
 

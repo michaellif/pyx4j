@@ -26,9 +26,6 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
@@ -66,6 +63,7 @@ import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.NavigationIDs;
 import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.site.client.ui.crud.FilterData.Operands;
@@ -92,7 +90,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         void onSelect(E selectedItem);
     }
 
-    protected static I18n i18n = I18nFactory.getI18n(ListerBase.class);
+    protected static I18n i18n = I18n.get(ListerBase.class);
 
     protected Button btnNewItem;
 

@@ -34,8 +34,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
 @Caption(name = "Laborer")
 @Table(prefix = "test")
@@ -46,7 +46,7 @@ public interface Employee extends IEntity {
     public static String[] MEMBERS_ORDER = new String[] { "firstName", "from", "reliable", "holidays", "rating", "flagByte", "flagShort", "salary",
             "employmentStatus", "accessStatus", "tasks", "tasksSorted", "department", "manager", "homeAddress", "workAddress", "image" };
 
-    @Translatable
+    @I18n
     public static enum EmploymentStatus {
 
         DISMISSED, FULL_TIME, PART_TIME, CONTRACT;

@@ -20,10 +20,10 @@
  */
 package com.pyx4j.i18n.test.shared;
 
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
-@Translatable
+@I18n
 public enum Cats {
 
     FelisCatus,

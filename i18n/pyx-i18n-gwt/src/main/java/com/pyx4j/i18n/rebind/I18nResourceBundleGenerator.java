@@ -22,10 +22,6 @@ package com.pyx4j.i18n.rebind;
 
 import java.io.PrintWriter;
 import java.util.Enumeration;
-import java.util.Locale;
-
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.ext.BadPropertyValueException;
 import com.google.gwt.core.ext.Generator;
@@ -40,6 +36,7 @@ import com.google.gwt.user.rebind.SourceWriter;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.i18n.client.I18nResourceBundleImpl;
+import com.pyx4j.i18n.shared.I18n;
 
 public class I18nResourceBundleGenerator extends Generator {
 
@@ -107,9 +104,10 @@ public class I18nResourceBundleGenerator extends Generator {
 
         writer.println("super(new String[]{");
 
-        I18n i18n = I18nFactory.getI18n(getClass(), "Messages", new Locale(locale));
+        //TODO
+        I18n i18n = null;//I18n.get(getClass(), "Messages", new Locale(locale));
 
-        Enumeration<String> en = i18n.getResources().getKeys();
+        Enumeration<String> en = null;//i18n.getResources().getKeys();
         while (en.hasMoreElements()) {
             String key = en.nextElement();
             if (key.length() > 0) {

@@ -20,12 +20,10 @@
  */
 package com.pyx4j.essentials.server;
 
-import org.xnap.commons.i18n.I18n;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 
@@ -36,7 +34,7 @@ public abstract class AbstractAntiBot {
 
     public static final String GENERIC_LOGIN_FAILED_MESSAGE = "Invalid login/password";
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(AbstractAntiBot.class);
 
     public abstract void assertCaptcha(String challenge, String response);
 

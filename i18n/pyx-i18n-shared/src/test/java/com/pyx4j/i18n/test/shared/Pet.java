@@ -20,15 +20,15 @@
  */
 package com.pyx4j.i18n.test.shared;
 
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translation;
 
 public enum Pet {
 
-    @Translation("Dog")
+    @Translate("Dog")
     dog,
 
-    @Translation("Cat")
+    @Translate("Cat")
     cat,
 
     ferret;

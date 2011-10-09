@@ -27,12 +27,11 @@ import net.tanesha.recaptcha.ReCaptchaResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.Context;
 
@@ -40,7 +39,7 @@ public class ReCaptchaAntiBot extends LoginAttemptsCountAntiBot {
 
     private final static Logger log = LoggerFactory.getLogger(ReCaptchaAntiBot.class);
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(ReCaptchaAntiBot.class);
 
     @Override
     public void assertCaptcha(String challenge, String response) {

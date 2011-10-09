@@ -23,9 +23,6 @@ package com.pyx4j.forms.client.ui;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.dom.client.Style.FontStyle;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
@@ -42,12 +39,13 @@ import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.NativeForm.ToolbarMode;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public class NativeFormFolder<E> extends DockPanel implements INativeEditableComponent<List<E>> {
 
-    private static final I18n i18n = I18nFactory.getI18n(NativeFormFolder.class);
+    private static final I18n i18n = I18n.get(NativeFormFolder.class);
 
     private final CFormFolder<?> folder;
 

@@ -23,12 +23,12 @@ package com.pyx4j.forms.client.ui;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
+
 
 public class CRadioGroupBoolean extends CRadioGroup<Boolean> {
 
-    private static I18n i18n = I18nFactory.getI18n(CRadioGroupBoolean.class);
+    private static I18n i18n = I18n.get(CRadioGroupBoolean.class);
 
     private String trueText = i18n.tr("Yes");
 

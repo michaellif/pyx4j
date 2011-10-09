@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import org.xnap.commons.i18n.I18n;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.core.ext.Generator;
@@ -43,7 +41,7 @@ import com.google.gwt.user.rebind.SourceWriter;
 
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.i18n.annotations.I18nAnnotation;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
@@ -77,7 +75,6 @@ public class AppPlaceListingGenerator extends Generator {
             composer.addImport(PlaceProperties.class.getName());
             composer.addImport(SiteMap.class.getName());
             composer.addImport(I18n.class.getName());
-            composer.addImport(I18nFactory.class.getName());
 
             PrintWriter printWriter = context.tryCreate(logger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
             if (printWriter == null) {
@@ -124,7 +121,7 @@ public class AppPlaceListingGenerator extends Generator {
     private void writeImpl(SourceWriter writer, List<JClassType> placeClasses) {
         writer.println();
 
-        writer.println("private static I18n i18n = I18nFactory.getI18n();");
+        writer.println("private static I18n i18n = I18n.get(AppPlace.class);");
 
         //getPlace()
         writer.println("@Override");

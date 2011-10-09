@@ -25,8 +25,6 @@ import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
@@ -62,12 +60,13 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CForm.InfoImageAlignment;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.decorators.SpaceHolder;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Tooltip;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public class NativeForm extends FlowPanel implements INativeComponent {
 
-    private static final I18n i18n = I18nFactory.getI18n(NativeForm.class);
+    private static final I18n i18n = I18n.get(NativeForm.class);
 
     enum ToolbarMode {
         First, Last, Only, Inner

@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.pyx4j.i18n.annotations.I18nAnnotation;
-import com.pyx4j.i18n.shared.Translatable;
+import com.pyx4j.i18n.annotations.I18n;
 
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
@@ -38,7 +38,7 @@ public @interface Format {
      * 
      * @see java.text.MessageFormat.format
      */
-    @Translatable
+    @I18n
     String value();
 
     boolean messageFormat() default false;
@@ -46,7 +46,7 @@ public @interface Format {
     /**
      * String presentations for 'null' values
      */
-    @Translatable
+    @I18n
     String nil() default "";
 
 }

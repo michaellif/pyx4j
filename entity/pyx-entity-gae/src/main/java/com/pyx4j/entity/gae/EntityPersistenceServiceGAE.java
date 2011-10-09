@@ -38,7 +38,6 @@ import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Cursor;
@@ -88,7 +87,7 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.server.IOUtils;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityViolationException;
 
@@ -101,7 +100,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     private static final Logger log = LoggerFactory.getLogger(EntityPersistenceServiceGAE.class);
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(EntityPersistenceServiceGAE.class);
 
     private final int ORDINARY_STRING_LENGTH_MAX = com.pyx4j.config.shared.ApplicationBackend.GAE_ORDINARY_STRING_LENGTH_MAX;
 

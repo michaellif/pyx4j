@@ -18,17 +18,14 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.i18n.shared;
+package com.pyx4j.i18n.annotations;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import com.pyx4j.i18n.annotations.I18nAnnotation;
-
 @Retention(RetentionPolicy.RUNTIME)
 @I18nAnnotation(element = "value")
-//TODO rename to Translate
-public @interface Translation {
+public @interface Translate {
 
     String value();
 

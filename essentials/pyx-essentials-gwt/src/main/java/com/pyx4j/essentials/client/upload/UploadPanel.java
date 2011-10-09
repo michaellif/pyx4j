@@ -26,8 +26,6 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.FileUpload;
@@ -47,6 +45,7 @@ import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadId;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.IServiceBase;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -55,7 +54,7 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
 
     private final static Logger log = LoggerFactory.getLogger(UploadPanel.class);
 
-    private static I18n i18n = I18nFactory.getI18n(UploadPanel.class);
+    private static I18n i18n = I18n.get(UploadPanel.class);
 
     private final UploadService<E> service;
 

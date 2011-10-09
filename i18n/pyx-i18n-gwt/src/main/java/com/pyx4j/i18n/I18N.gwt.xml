@@ -22,7 +22,5 @@
         <when-type-assignable class="com.pyx4j.i18n.client.I18nEnumResourceBundle"/>
     </generate-with>
     
-    <super-source path="super-source"/>
-
     <source path="client"/>
 </module>

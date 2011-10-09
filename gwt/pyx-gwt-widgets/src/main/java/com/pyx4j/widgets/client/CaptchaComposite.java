@@ -22,8 +22,6 @@ package com.pyx4j.widgets.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -37,6 +35,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.AjaxJSLoader;
+import com.pyx4j.i18n.shared.I18n;
+
 
 /**
  * This class Injects reCAPTCHA Client API code.
@@ -49,7 +49,7 @@ public class CaptchaComposite extends SimplePanel {
 
     private static Logger log = LoggerFactory.getLogger(CaptchaComposite.class);
 
-    private static I18n i18n = I18nFactory.getI18n(CaptchaComposite.class);
+    private static I18n i18n = I18n.get(CaptchaComposite.class);
 
     private static int instanceId = 0;
 

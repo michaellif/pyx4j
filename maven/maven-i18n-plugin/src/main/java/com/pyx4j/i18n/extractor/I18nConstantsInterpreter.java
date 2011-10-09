@@ -31,7 +31,8 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.analysis.AnalyzerException;
 import org.objectweb.asm.tree.analysis.BasicInterpreter;
 import org.objectweb.asm.tree.analysis.Value;
-import org.xnap.commons.i18n.I18n;
+
+import com.pyx4j.i18n.shared.I18n;
 
 abstract class I18nConstantsInterpreter extends BasicInterpreter {
 

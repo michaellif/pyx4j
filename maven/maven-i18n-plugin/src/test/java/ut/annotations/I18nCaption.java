@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.pyx4j.i18n.annotations.I18nAnnotation;
-import com.pyx4j.i18n.shared.Translatable;
+import com.pyx4j.i18n.annotations.I18n;
 
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
@@ -38,7 +38,7 @@ public @interface I18nCaption {
 
     String name() default DEFAULT_VALUE;
 
-    @Translatable
+    @I18n
     String description() default "";
 
 }

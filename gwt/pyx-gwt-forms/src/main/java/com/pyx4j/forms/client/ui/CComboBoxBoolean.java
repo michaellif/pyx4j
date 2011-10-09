@@ -22,12 +22,12 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Arrays;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
+
 
 public class CComboBoxBoolean extends CComboBox<Boolean> {
 
-    private static I18n i18n = I18nFactory.getI18n(CComboBoxBoolean.class);
+    private static I18n i18n = I18n.get(CComboBoxBoolean.class);
 
     private String trueText = i18n.tr("Yes");
 

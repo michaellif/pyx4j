@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.Locale;
 
 import org.apache.commons.io.FilenameUtils;
-import org.xnap.commons.i18n.I18n;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -34,13 +33,13 @@ import com.pyx4j.essentials.rpc.upload.UploadId;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public abstract class UploadServiceImpl<E extends IEntity> implements UploadService<E>, UploadReciver {
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(UploadServiceImpl.class);
 
     protected void onpPepareUpload(E data, UploadId id) {
 

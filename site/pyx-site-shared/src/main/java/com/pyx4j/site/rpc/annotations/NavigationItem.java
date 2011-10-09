@@ -24,13 +24,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import com.pyx4j.i18n.annotations.I18nAnnotation;
-import com.pyx4j.i18n.shared.Translatable;
+import com.pyx4j.i18n.annotations.I18n;
 
 @Retention(RetentionPolicy.RUNTIME)
 @I18nAnnotation(element = "")
 public @interface NavigationItem {
 
-    @Translatable
+    @I18n
     String navigLabel() default "";
 
 }

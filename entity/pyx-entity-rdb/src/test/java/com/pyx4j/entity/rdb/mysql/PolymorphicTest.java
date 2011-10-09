@@ -20,8 +20,8 @@
  */
 package com.pyx4j.entity.rdb.mysql;
 
-import com.pyx4j.entity.rdb.PolymorphicTestCase;
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
+import com.pyx4j.entity.rdb.PolymorphicTestCase;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
 public class PolymorphicTest extends PolymorphicTestCase {

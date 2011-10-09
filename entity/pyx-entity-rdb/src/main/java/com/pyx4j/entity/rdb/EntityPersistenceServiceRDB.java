@@ -32,7 +32,6 @@ import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
@@ -67,7 +66,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.gwt.server.DateUtils;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 /**
@@ -79,7 +78,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     private static final Logger log = LoggerFactory.getLogger(EntityPersistenceServiceRDB.class);
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(EntityPersistenceServiceRDB.class);
 
     private final ConnectionProvider connectionProvider;
 

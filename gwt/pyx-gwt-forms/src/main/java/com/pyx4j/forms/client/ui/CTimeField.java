@@ -23,16 +23,15 @@ package com.pyx4j.forms.client.ui;
 import java.sql.Time;
 import java.text.ParseException;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.i18n.client.DateTimeFormat;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.i18n.shared.I18n;
+
 
 public class CTimeField extends CTextFieldBase<Time, NativeTextBox<Time>> {
 
-    protected static I18n i18n = I18nFactory.getI18n(CTimeField.class);
+    protected static I18n i18n = I18n.get(CTimeField.class);
 
     public static final String defaultTimeFormat = i18n.tr("h:mm a");
 

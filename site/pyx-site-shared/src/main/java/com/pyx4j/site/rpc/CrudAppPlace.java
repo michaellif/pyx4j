@@ -21,10 +21,10 @@
 package com.pyx4j.site.rpc;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.i18n.shared.Translatable;
-import com.pyx4j.i18n.shared.Translatable.I18nStrategy;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 
-@Translatable(strategy = I18nStrategy.IgnoreAll)
+@I18n(strategy = I18nStrategy.IgnoreAll)
 public abstract class CrudAppPlace extends AppPlace {
 
     public static final String ARG_NAME_CRUD_TYPE = "crud";

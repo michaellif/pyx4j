@@ -22,8 +22,6 @@ package com.pyx4j.essentials.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.storage.client.Storage;
@@ -40,6 +38,7 @@ import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.ValidationResults;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
@@ -57,7 +56,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
     private static final Logger log = LoggerFactory.getLogger(BaseLogInPanel.class);
 
-    private static I18n i18n = I18nFactory.getI18n(BaseLogInPanel.class);
+    private static I18n i18n = I18n.get(BaseLogInPanel.class);
 
     private final CEntityForm<AuthenticationRequest> form;
 

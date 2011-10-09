@@ -20,15 +20,15 @@
  */
 package ut;
 
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translation;
 
 public enum EnumWithTranslations {
 
-    @Translation("Puppy")
+    @Translate("Puppy")
     dog,
 
-    @Translation("Kitty")
+    @Translate("Kitty")
     cat,
 
     ferret;

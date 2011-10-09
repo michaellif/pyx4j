@@ -26,19 +26,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.i18n.shared.I18n;
+
 
 public abstract class ClientEntityMetaImpl implements EntityMeta {
 
-    protected static I18n i18n = I18nFactory.getI18n(ClientEntityMetaImpl.class);
+    protected static I18n i18n = I18n.get(ClientEntityMetaImpl.class);
 
     private final Class<? extends IEntity> entityClass;
 

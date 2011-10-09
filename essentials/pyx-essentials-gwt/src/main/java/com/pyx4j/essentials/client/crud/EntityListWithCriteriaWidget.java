@@ -27,8 +27,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -46,6 +44,7 @@ import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.essentials.client.ReportDialog;
 import com.pyx4j.essentials.rpc.report.ReportServices;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
@@ -58,7 +57,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
 
     private static Logger log = LoggerFactory.getLogger(EntityListWithCriteriaWidget.class);
 
-    private static I18n i18n = I18nFactory.getI18n(EntityListWithCriteriaWidget.class);
+    private static I18n i18n = I18n.get(EntityListWithCriteriaWidget.class);
 
     private final EntitySearchCriteriaPanel<E> searchCriteriaPanel;
 

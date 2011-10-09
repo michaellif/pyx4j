@@ -20,8 +20,6 @@
  */
 package com.pyx4j.widgets.client;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -31,11 +29,12 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.Window;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class PopupWindow {
 
-    private static I18n i18n = I18nFactory.getI18n(PopupWindow.class);
+    private static I18n i18n = I18n.get(PopupWindow.class);
 
     private static EventBus eventBus;
 

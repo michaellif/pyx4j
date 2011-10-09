@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.i18n.shared;
+package com.pyx4j.i18n.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -30,8 +30,7 @@ import java.lang.annotation.Target;
  */
 @Target({ ElementType.TYPE, ElementType.FIELD, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-//TODO rename to I18n
-public @interface Translatable {
+public @interface I18n {
 
     boolean capitalize() default true;
 

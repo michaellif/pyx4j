@@ -24,8 +24,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -44,6 +42,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
@@ -56,7 +55,7 @@ import com.pyx4j.widgets.client.event.shared.PageLeavingHandler;
 
 public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel implements InlineWidget, PageLeavingHandler {
 
-    private static I18n i18n = I18nFactory.getI18n(EntityEditorWidget.class);
+    private static I18n i18n = I18n.get(EntityEditorWidget.class);
 
     private static Logger log = LoggerFactory.getLogger(EntityEditorWidget.class);
 

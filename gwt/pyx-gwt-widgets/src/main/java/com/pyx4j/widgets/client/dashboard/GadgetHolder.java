@@ -20,8 +20,6 @@
  */
 package com.pyx4j.widgets.client.dashboard;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.allen_sauer.gwt.dnd.client.DragEndEvent;
 import com.allen_sauer.gwt.dnd.client.DragHandler;
@@ -52,6 +50,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dashboard.BoardEvent.Reason;
 import com.pyx4j.widgets.client.dashboard.CSSNames.StyleSuffix;
 import com.pyx4j.widgets.client.dashboard.IGadget.ISetup;
@@ -59,7 +58,7 @@ import com.pyx4j.widgets.client.dashboard.images.DashboardImages;
 
 final class GadgetHolder extends SimplePanel {
 
-    private static I18n i18n = I18nFactory.getI18n(GadgetHolder.class);
+    private static I18n i18n = I18n.get(GadgetHolder.class);
 
     private static DashboardImages images = (DashboardImages) GWT.create(DashboardImages.class);
 

@@ -20,14 +20,13 @@
  */
 package com.pyx4j.essentials.client;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.SessionInactiveHandler;
 import com.pyx4j.security.client.SessionMonitor;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -36,7 +35,7 @@ import com.pyx4j.widgets.client.dialog.OkOption;
 
 public class SessionInactiveDialog implements SessionInactiveHandler {
 
-    private static I18n i18n = I18nFactory.getI18n(SessionInactiveDialog.class);
+    private static I18n i18n = I18n.get(SessionInactiveDialog.class);
 
     private static boolean shown;
 

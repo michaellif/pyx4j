@@ -19,10 +19,12 @@
 
     <dependencies>
 
+        <!-- 
         <dependency>
             <groupId>org.xnap.commons</groupId>
             <artifactId>gettext-commons</artifactId>
         </dependency>
+        -->
 
         <dependency>
             <groupId>com.pyx4j</groupId>

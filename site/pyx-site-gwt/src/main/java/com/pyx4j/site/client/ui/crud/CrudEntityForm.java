@@ -20,16 +20,16 @@
  */
 package com.pyx4j.site.client.ui.crud;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.shared.I18n;
+
 
 public abstract class CrudEntityForm<E extends IEntity> extends CEntityEditor<E> {
 
-    protected static I18n i18n = I18nFactory.getI18n(CrudEntityForm.class);
+    protected static I18n i18n = I18n.get(CrudEntityForm.class);
 
     public CrudEntityForm(Class<E> rootClass) {
         super(rootClass);

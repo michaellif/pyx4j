@@ -95,17 +95,6 @@
             </releases>
         </repository>
 
-        <repository>
-            <id>gettext-commons-site</id>
-            <url>http://gettext-commons.googlecode.com/svn/maven-repository</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-
     </repositories>
 
     <pluginRepositories>
@@ -397,18 +386,6 @@
                 <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
                 <version>3.15.0-GA</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.xnap.commons</groupId>
-                <artifactId>gettext-commons</artifactId>
-                <version>0.9.6</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.xnap.commons</groupId>
-                        <artifactId>maven-gettext-plugin</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>

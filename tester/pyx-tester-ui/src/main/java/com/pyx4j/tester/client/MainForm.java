@@ -24,9 +24,6 @@ import static com.pyx4j.commons.HtmlUtils.h2;
 
 import java.util.ArrayList;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -45,13 +42,14 @@ import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
 import com.pyx4j.forms.client.ui.decorators.ElegantWidgetDecorator;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.EntityI;
 import com.pyx4j.tester.client.domain.EntityII;
 import com.pyx4j.tester.client.images.Images;
 
 public class MainForm extends CEntityEditor<EntityI> {
 
-    private static I18n i18n = I18nFactory.getI18n(MainForm.class);
+    private static I18n i18n = I18n.get(MainForm.class);
 
     public MainForm() {
         super(EntityI.class);

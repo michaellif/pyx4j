@@ -24,8 +24,6 @@ import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -49,6 +47,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -60,7 +59,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     private static final Logger log = LoggerFactory.getLogger(AbstractEntityEditorPanel.class);
 
-    private static I18n i18n = I18nFactory.getI18n(AbstractEntityEditorPanel.class);
+    private static I18n i18n = I18n.get(AbstractEntityEditorPanel.class);
 
     private final DelegatingEntityFormFactory<E> formFactory;
 

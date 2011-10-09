@@ -24,16 +24,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import com.pyx4j.i18n.annotations.I18nAnnotation;
-import com.pyx4j.i18n.shared.Translatable;
+import com.pyx4j.i18n.annotations.I18n;
 
 @Retention(RetentionPolicy.RUNTIME)
 @I18nAnnotation(element = "caption")
 public @interface PlaceProperties {
 
-    @Translatable
+    @I18n
     String caption() default I18nAnnotation.DEFAULT_VALUE;
 
-    @Translatable
+    @I18n
     String staticContent() default "";
 
 }

@@ -41,7 +41,6 @@ import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
@@ -52,7 +51,7 @@ import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus;
 import com.pyx4j.gwt.server.IOUtils;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
@@ -62,7 +61,7 @@ import com.pyx4j.server.contexts.Visit;
 @SuppressWarnings("serial")
 public abstract class AbstractUploadServlet extends HttpServlet {
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(AbstractUploadServlet.class);
 
     private final static Logger log = LoggerFactory.getLogger(AbstractUploadServlet.class);
 

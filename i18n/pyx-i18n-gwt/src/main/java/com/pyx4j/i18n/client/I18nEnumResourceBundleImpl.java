@@ -23,13 +23,11 @@ package com.pyx4j.i18n.client;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.xnap.commons.i18n.I18n;
-
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 
 public abstract class I18nEnumResourceBundleImpl implements I18nEnumResourceBundle {
 
-    protected static I18n i18n = I18nFactory.getI18n();
+    protected static I18n i18n = I18n.get(I18nEnumResourceBundleImpl.class);
 
     private final Map<Enum<?>, String> translationsMap = new HashMap<Enum<?>, String>();
 

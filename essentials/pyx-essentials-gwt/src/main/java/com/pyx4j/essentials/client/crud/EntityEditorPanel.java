@@ -20,8 +20,6 @@
  */
 package com.pyx4j.essentials.client.crud;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -36,11 +34,12 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.ConfirmActionClickHandler;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.ValidationResults;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntityEditorPanel<E> {
 
-    private static I18n i18n = I18nFactory.getI18n(EntityEditorPanel.class);
+    private static I18n i18n = I18n.get(EntityEditorPanel.class);
 
     private EntityEditorWidget<E> parentWidget;
 

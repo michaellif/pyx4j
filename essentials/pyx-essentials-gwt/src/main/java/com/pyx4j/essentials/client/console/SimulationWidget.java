@@ -22,9 +22,6 @@ package com.pyx4j.essentials.client.console;
 
 import java.util.Map;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -41,6 +38,7 @@ import com.pyx4j.essentials.rpc.admin.AdminServices;
 import com.pyx4j.essentials.rpc.admin.NetworkSimulation;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.InlineWidget;
@@ -48,7 +46,7 @@ import com.pyx4j.widgets.client.GroupBoxPanel;
 
 class SimulationWidget extends VerticalPanel implements InlineWidget {
 
-    private static I18n i18n = I18nFactory.getI18n(SimulationWidget.class);
+    private static I18n i18n = I18n.get(SimulationWidget.class);
 
     private final AbstractEntityEditorPanel<NetworkSimulation> editorPanel;
 

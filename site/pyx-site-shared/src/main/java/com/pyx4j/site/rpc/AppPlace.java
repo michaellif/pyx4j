@@ -36,17 +36,17 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.i18n.shared.Translatable;
-import com.pyx4j.i18n.shared.Translatable.I18nStrategy;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 
-@Translatable(strategy = I18nStrategy.DerivedOnly)
+@I18n(strategy = I18nStrategy.DerivedOnly)
 public class AppPlace extends Place {
 
     private static final Logger log = LoggerFactory.getLogger(AppPlace.class);
 
     private Map<String, List<String>> args;
 
-    @Translatable(strategy = I18nStrategy.IgnoreAll)
+    @I18n(strategy = I18nStrategy.IgnoreAll)
     public static class NoWhereAppPlace extends AppPlace {
     }
 

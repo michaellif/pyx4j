@@ -22,22 +22,21 @@ package com.pyx4j.i18n.shared;
 
 import java.lang.reflect.Field;
 
-import org.xnap.commons.i18n.I18n;
-
 import com.pyx4j.commons.EnglishGrammar;
+import com.pyx4j.i18n.annotations.Translate;
 
 public class I18nEnum {
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(I18nEnum.class);
 
     public static String tr(Enum<?> enumValue) {
         if (enumValue == null) {
             return null;
         } else {
             try {
-                Translatable trCfg = enumValue.getClass().getAnnotation(Translatable.class);
+                com.pyx4j.i18n.annotations.I18n trCfg = enumValue.getClass().getAnnotation(com.pyx4j.i18n.annotations.I18n.class);
                 Field field = enumValue.getClass().getDeclaredField(enumValue.name());
-                Translation tr = field.getAnnotation(Translation.class);
+                Translate tr = field.getAnnotation(Translate.class);
                 if (tr != null) {
                     return i18n.tr(tr.value());
                 } else {

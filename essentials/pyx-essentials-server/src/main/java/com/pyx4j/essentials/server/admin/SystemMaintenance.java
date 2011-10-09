@@ -26,7 +26,6 @@ import java.util.GregorianCalendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
@@ -36,14 +35,14 @@ import com.pyx4j.essentials.rpc.SystemState;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.essentials.server.xml.XMLEntityConverter;
 import com.pyx4j.gwt.server.DateUtils;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.log4j.LoggerConfig;
 
 public class SystemMaintenance {
 
     private final static Logger log = LoggerFactory.getLogger(SystemMaintenance.class);
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(SystemMaintenance.class);
 
     private static final String STATE_FILE_NAME = "systemMaintenance.state.xml";
 

@@ -20,12 +20,13 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
+
+import com.pyx4j.i18n.shared.I18n;
+
 
 public class CBooleanLabel extends CAbstractLabel<Boolean> {
 
-    private static I18n i18n = I18nFactory.getI18n(CBooleanLabel.class);
+    private static I18n i18n = I18n.get(CBooleanLabel.class);
 
     private String trueText = i18n.tr("Yes");
 

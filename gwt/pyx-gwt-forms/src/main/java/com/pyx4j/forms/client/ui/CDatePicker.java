@@ -23,17 +23,16 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 import java.util.Date;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.i18n.client.DateTimeFormat;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.i18n.shared.I18n;
+
 
 public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
 
-    protected static I18n i18n = I18nFactory.getI18n(CDatePicker.class);
+    protected static I18n i18n = I18n.get(CDatePicker.class);
 
     public static final String defaultDateFormat = i18n.tr("MM/dd/yyyy");
 

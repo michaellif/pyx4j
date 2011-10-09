@@ -34,9 +34,9 @@ import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
 import com.pyx4j.commons.EnglishGrammar;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.client.I18nEnumResourceBundleImpl;
-import com.pyx4j.i18n.shared.Translatable;
-import com.pyx4j.i18n.shared.Translation;
 
 public class I18nEnumResourceBundleGenerator extends Generator {
 
@@ -73,13 +73,13 @@ public class I18nEnumResourceBundleGenerator extends Generator {
         for (JClassType type : context.getTypeOracle().getTypes()) {
             if (type instanceof JEnumType) {
 
-                Translatable trCfg = type.getAnnotation(Translatable.class);
+                I18n trCfg = type.getAnnotation(I18n.class);
                 boolean translationPresent = (trCfg != null);
 
                 if (!translationPresent) {
                     // Find if @Translation present on any declaration
                     for (JEnumConstant field : ((JEnumType) type).getEnumConstants()) {
-                        if (field.getAnnotation(Translation.class) != null) {
+                        if (field.getAnnotation(Translate.class) != null) {
                             translationPresent = true;
                             break;
                         }
@@ -101,7 +101,7 @@ public class I18nEnumResourceBundleGenerator extends Generator {
                         writer.print(", i18n.tr(");
 
                         String name;
-                        Translation tr = field.getAnnotation(Translation.class);
+                        Translate tr = field.getAnnotation(Translate.class);
                         if (tr != null) {
                             name = tr.value();
                         } else if ((trCfg == null) || ((trCfg != null) && trCfg.capitalize())) {

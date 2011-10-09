@@ -20,8 +20,6 @@
  */
 package com.pyx4j.essentials.geo;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.maps.client.geocode.LatLngCallback;
 import com.google.gwt.maps.client.geom.LatLng;
@@ -36,10 +34,12 @@ import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.NativeTextBox;
 import com.pyx4j.gwt.commons.UnrecoverableClientWarning;
 import com.pyx4j.gwt.geo.MapUtils;
+import com.pyx4j.i18n.shared.I18n;
+
 
 public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, NativeTextBox<GeoCriteria>> implements HasAsyncValue<GeoCriteria>, IAcceptText {
 
-    private static I18n i18n = I18nFactory.getI18n(CLocationCriteriaTextField.class);
+    private static I18n i18n = I18n.get(CLocationCriteriaTextField.class);
 
     public CLocationCriteriaTextField() {
         this(null);

@@ -46,17 +46,17 @@ import org.objectweb.asm.tree.analysis.Frame;
 
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.i18n.annotations.I18nAnnotation;
-import com.pyx4j.i18n.shared.Translatable;
-import com.pyx4j.i18n.shared.Translatable.I18nStrategy;
-import com.pyx4j.i18n.shared.Translation;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
+import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 
 public class ConstantExtractor {
 
     static String ENUM_CLASS = AsmUtils.codeName(Enum.class);
 
-    static String TRANSLATABLE_CLASS = AsmUtils.annotationCodeName(Translatable.class);
+    static String TRANSLATABLE_CLASS = AsmUtils.annotationCodeName(I18n.class);
 
-    static String TRANSLATION_CLASS = AsmUtils.annotationCodeName(Translation.class);
+    static String TRANSLATION_CLASS = AsmUtils.annotationCodeName(Translate.class);
 
     static String TRANSLATABLE_ANNOTATION_CLASS = AsmUtils.annotationCodeName(I18nAnnotation.class);
 

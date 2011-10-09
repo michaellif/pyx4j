@@ -26,8 +26,6 @@ import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -65,6 +63,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ResizibleScrollPanel;
@@ -77,7 +76,7 @@ public class Dialog extends DialogPanel {
 
     private static final Logger log = LoggerFactory.getLogger(Dialog.class);
 
-    private static I18n i18n = I18nFactory.getI18n(Dialog.class);
+    private static I18n i18n = I18n.get(Dialog.class);
 
     public static enum Type {
         Error, Warning, Info, Confirm

@@ -22,15 +22,14 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
+import com.pyx4j.i18n.shared.I18n;
+
 
 public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, NativeTextBox<E>> {
 
-    protected static I18n i18n = I18nFactory.getI18n(CNumberField.class);
+    protected static I18n i18n = I18n.get(CNumberField.class);
 
     private TextBoxParserValidator<E> validator;
 

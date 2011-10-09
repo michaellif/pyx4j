@@ -22,18 +22,17 @@ package com.pyx4j.site.client.ui.crud;
 
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.i18n.shared.I18n;
+
 
 public class ListerInternalViewImplBase<E extends IEntity> extends ScrollPanel implements IListerView<E> {
 
-    protected static I18n i18n = I18nFactory.getI18n(ListerInternalViewImplBase.class);
+    protected static I18n i18n = I18n.get(ListerInternalViewImplBase.class);
 
     protected ListerBase<E> lister = null;
 

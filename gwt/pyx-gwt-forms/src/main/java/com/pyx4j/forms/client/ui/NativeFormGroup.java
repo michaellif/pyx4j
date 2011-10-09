@@ -20,8 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
@@ -34,11 +32,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public class NativeFormGroup<E> extends DockPanel implements INativeEditableComponent<E> {
 
-    private static final I18n i18n = I18nFactory.getI18n(NativeFormGroup.class);
+    private static final I18n i18n = I18n.get(NativeFormGroup.class);
 
     private final CFormGroup<?> group;
 

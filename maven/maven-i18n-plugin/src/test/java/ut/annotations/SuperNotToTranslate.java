@@ -20,10 +20,10 @@
  */
 package ut.annotations;
 
-import com.pyx4j.i18n.shared.Translatable;
-import com.pyx4j.i18n.shared.Translatable.I18nStrategy;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 
-@Translatable(strategy = I18nStrategy.DerivedOnly)
+@I18n(strategy = I18nStrategy.DerivedOnly)
 public interface SuperNotToTranslate {
 
     public void notExtracted();

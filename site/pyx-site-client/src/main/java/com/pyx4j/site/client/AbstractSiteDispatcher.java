@@ -25,8 +25,6 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -47,6 +45,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.gwt.commons.GoogleAnalytics;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
@@ -67,7 +66,7 @@ public abstract class AbstractSiteDispatcher {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractSiteDispatcher.class);
 
-    private static I18n i18n = I18nFactory.getI18n(AbstractSiteDispatcher.class);
+    private static I18n i18n = I18n.get(AbstractSiteDispatcher.class);
 
     private final HashMap<String, SitePanel> sitePanels = new HashMap<String, SitePanel>();
 

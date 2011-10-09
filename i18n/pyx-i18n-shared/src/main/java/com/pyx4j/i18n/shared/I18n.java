@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,29 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jun 7, 2010
+ * Created on Oct 9, 2011
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.i18n.client;
+package com.pyx4j.i18n.shared;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 
-/**
- * Port of gettext-commons to GWT.
- * 
- * N.B. Plural forms of gettext not supported, use java.text.MessageFormat choice format.
- */
-class I18nImpl {
+public class I18n {
 
-    private final I18nResourceBundle bundle;
+    private static I18n i18n;
 
-    public I18nImpl(I18nResourceBundle bundle) {
-        this.bundle = bundle;
-    }
-
-    public String tr(String text) {
-        String value = bundle.getString(text);
+    public final String tr(String text) {
+        String value = text;//bundle.getString(text);
         if (value == null) {
             return text;
         } else {
@@ -44,16 +35,16 @@ class I18nImpl {
         }
     }
 
-    public String tr(String text, Object... objects) {
+    public final String tr(String text, Object... objects) {
         return SimpleMessageFormat.format(tr(text), objects);
     }
 
-    //    public String trn(String text, String pluralText, long n) {
-    //        //TODO
-    //        return null;
-    //    }
-    //
-    //    public final String trn(String text, String pluralText, long n, Object... objects) {
-    //        return MessageFormat.format(trn(text, pluralText, n), objects);
-    //    }
+    public static final I18n get(final Class<?> clazz) {
+        if (i18n == null) {
+            synchronized (I18n.class) {
+                i18n = new I18n();
+            }
+        }
+        return i18n;
+    }
 }

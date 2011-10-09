@@ -23,12 +23,12 @@ package com.pyx4j.site.client.ui.crud;
 import java.io.Serializable;
 
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
 public class FilterData {
 
-    @Translatable
+    @I18n
     public static enum Operands {
 
         is,
