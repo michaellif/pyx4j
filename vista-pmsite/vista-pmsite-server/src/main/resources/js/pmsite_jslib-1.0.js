@@ -14,3 +14,10 @@ function setSelectionOptions(selId, optArr, defOpt, selOpt) {
 		sel.options[sel.options.length] = new Option(v,v,selected,selected);
 	}
 }
+/*
+ * Sets src property for img element identified by imgId
+ */
+function setImgSrc(imgId, src) {
+	var el_img = document.getElementById(imgId);
+	el_img && el_img.setAttribute('src', src);
+}

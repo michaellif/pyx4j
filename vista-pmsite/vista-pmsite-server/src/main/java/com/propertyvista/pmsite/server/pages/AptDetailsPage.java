@@ -18,10 +18,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import templates.TemplateResources;
 
@@ -50,19 +53,18 @@ public class AptDetailsPage extends BasePage {
         Long propId = null;
         try {
             propId = getRequest().getRequestParameters().getParameterValue("propId").toLong();
-        } catch (java.lang.NumberFormatException ignore) {
-            // do nothing
-        }
-        if (propId == null) {
-            setResponsePage(AptListPage.class);
-            return;
+        } catch (java.lang.NumberFormatException e) {
+            throw new RestartResponseException(AptListPage.class);
         }
 
         final Building propInfo = PMSiteContentManager.getBuildingDetails(propId);
+        if (propInfo == null) {
+            throw new RestartResponseException(AptListPage.class);
+        }
         final Map<Floorplan, List<AptUnit>> fpUnits = PMSiteContentManager.getBuildingFloorplans(propInfo);
         final List<BuildingAmenity> amenities = PMSiteContentManager.getBuildingAmenities(propInfo);
 
-        long mediaId = 1;
+        long mediaId = 0;
         if (propInfo.media().size() > 0) {
             mediaId = propInfo.media().get(0).getPrimaryKey().asLong();
         }
@@ -120,12 +122,11 @@ public class AptDetailsPage extends BasePage {
             @Override
             protected void populateItem(ListItem<Floorplan> item) {
                 Floorplan floorPlan = item.getModelObject();
-                String imgSrc = "";
+                long mediaId = 0;
                 if (floorPlan.media().size() > 0) {
-                    long mediaId = floorPlan.media().get(0).getPrimaryKey().asLong();
-                    imgSrc = PMSiteContentManager.getMediaImgUrl(mediaId, ThumbnailSize.small);
+                    mediaId = floorPlan.media().get(0).getPrimaryKey().asLong();
                 }
-                item.add(new SimpleImage("plan", imgSrc));
+                item.add(new SimpleImage("plan", PMSiteContentManager.getMediaImgUrl(mediaId, ThumbnailSize.small)));
                 item.add(new Label("name", floorPlan.name().getValue()));
                 item.add(new Label("beds", String.valueOf(floorPlan.bedrooms().getValue())));
                 item.add(new Label("bath", String.valueOf(floorPlan.bathrooms().getValue())));
@@ -141,6 +142,7 @@ public class AptDetailsPage extends BasePage {
                     price = "from $" + String.valueOf(Math.round(minPrice));
                 }
                 item.add(new Label("price", price));
+                item.add(new BookmarkablePageLink<Void>("unitDetails", UnitDetailsPage.class, new PageParameters().add("fpId", floorPlan.id().getValue())));
             }
         });
         add(new Label("description", propInfo.marketing().description().getValue()));

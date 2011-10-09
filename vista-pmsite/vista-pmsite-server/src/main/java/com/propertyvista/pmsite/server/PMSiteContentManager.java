@@ -275,10 +275,15 @@ public class PMSiteContentManager implements Serializable {
         }
         final List<Building> buildings = Persistence.service().query(dbCriteria);
         ArrayList<Building> remove = new ArrayList<Building>();
-        for (Building building : buildings) {
+        for (Building bld : buildings) {
             // do some sanity check
-            if (building.info().address().location().isNull() || building.info().address().location().getValue().getLat() == 0) {
-                remove.add(building);
+            if (bld.info().address().location().isNull() || bld.info().address().location().getValue().getLat() == 0) {
+                remove.add(bld);
+                continue;
+            }
+            if (getBuildingFloorplans(bld).size() < 1) {
+                remove.add(bld);
+                continue;
             }
         }
         buildings.removeAll(remove);
@@ -297,11 +302,18 @@ public class PMSiteContentManager implements Serializable {
         if (buildings.size() != 1) {
             return null;
         }
-        return buildings.get(0);
+        Building bld = buildings.get(0);
+        // check if we have any valid floorplans
+        if (getBuildingFloorplans(bld).size() < 1) {
+            return null;
+        }
+        // attach phone info
+        Persistence.service().retrieve(bld.contacts().phones());
+        return bld;
     }
 
     public static Map<Floorplan, List<AptUnit>> getBuildingFloorplans(Building bld) {
-        final HashMap<Floorplan, List<AptUnit>> floorplans = new HashMap<Floorplan, List<AptUnit>>();
+        final Map<Floorplan, List<AptUnit>> floorplans = new HashMap<Floorplan, List<AptUnit>>();
         EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().building(), bld));
         for (Floorplan fp : Persistence.service().query(criteria)) {

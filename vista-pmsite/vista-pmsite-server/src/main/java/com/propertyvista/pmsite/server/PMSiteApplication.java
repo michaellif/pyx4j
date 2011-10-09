@@ -34,6 +34,7 @@ import com.propertyvista.pmsite.server.pages.LandingPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.SignInPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
+import com.propertyvista.pmsite.server.pages.UnitDetailsPage;
 
 public class PMSiteApplication extends AuthenticatedWebApplication {
 
@@ -55,6 +56,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         mountPage("aptlist", AptListPage.class);
 
         mountPage("aptinfo", AptDetailsPage.class);
+        mountPage("unitinfo", UnitDetailsPage.class);
 
         mountPage("residents", ResidentsPage.class);
 

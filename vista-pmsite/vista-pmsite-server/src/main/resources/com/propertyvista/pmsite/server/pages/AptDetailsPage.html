@@ -38,11 +38,24 @@
 							</div>
 							<div class="apartmentDetailsWrap">
 								<div class="detailBox">
+									<div class="detailBoxTitle">General Information</div>
+									<div class="detailBoxContent">
+										<div class="detailBoxEntry description">
+											<label class="detailBoxCaption">Notes:</label>
+											<span class="detailBoxText" wicket:id="description"/>
+										</div>
+										<div class="detailBoxEntry amenities">
+											<label class="detailBoxCaption">Amenities:</label>
+											<ul class="detailBoxText"><li wicket:id="amenities"><span wicket:id="amenity"/></li></ul>
+										</div>
+									</div>
+								</div>
+								<div class="detailBox">
 									<div class="detailBoxTitle">Available Units</div>
-									<div class="detailBoxEntry units">
-										<div class="unitDetails" wicket:id="units">
+									<div class="detailBoxContent">
+										<div class="detailBoxEntry units" wicket:id="units">
 											<img class="picture" wicket:id="plan"/>
-											<div class="details">
+											<div class="unitDetails">
 												<div class="unitEntry">
 													<label class="unitEntryCaption">Name:</label>
 													<span class="unitEntryText" wicket:id="name"/>
@@ -62,21 +75,10 @@
 											</div>
 											<div class="controlBox">
 												<div class="controlButton">
-													<a id="btnViewDetails" class="listingCtlButton" wicket_id="aptDetails" href="">Details</a>
+													<a id="btnViewDetails" class="listingCtlButton" wicket:id="unitDetails" href="">Details</a>
 												</div>
 											</div>
 										</div>
-									</div>
-								</div>
-								<div class="detailBox">
-									<div class="detailBoxTitle">Additional Details</div>
-									<div class="detailBoxEntry description">
-										<label class="detailBoxCaption">Notes:</label>
-										<span class="detailBoxText" wicket:id="description"/>
-									</div>
-									<div class="detailBoxEntry amenities">
-										<label class="detailBoxCaption">Amenities:</label>
-										<ul class="detailBoxText"><li wicket:id="amenities"><span wicket:id="amenity"/></li></ul>
 									</div>
 								</div>
 							</div>

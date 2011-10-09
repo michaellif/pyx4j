@@ -61,16 +61,21 @@
 }
 .apartmentDetailsWrap .detailBox {
 	color:#777;
+	padding-bottom:20px;
 }
 .apartmentDetailsWrap .detailBox .detailBoxTitle {
-	padding: 20px 20px;
+	padding: 30px 20px;
 	font-size:14px;
 	font-weight:bold;
 	text-transform:uppercase;
 	color:#555;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry {
-	padding: 10px 0 20px 0;
+	padding: 10px 0;
+	border-bottom: 1px solid #ccc;
+}
+.apartmentDetailsWrap .detailBox .detailBoxEntry:first-child {
+	border-top: 1px solid #ccc;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry .detailBoxCaption {
 	display:inline-block;
@@ -96,25 +101,24 @@
 	float:left;
 	width:230px;
 }
-.apartmentDetailsWrap .unitDetails {
-	background: white;
-	padding:10px;
-	border-bottom: 1px solid #ccc;
-	color: #222;
-}
-.apartmentDetailsWrap .unitDetails:first-child {
-	border-top: 1px solid #ccc;
-}
-.apartmentDetailsWrap .unitDetails:hover {
+.apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover {
 	background:#d8e7bc;
 }
-.apartmentDetailsWrap .unitDetails .picture {
+.apartmentDetailsWrap .detailBox .detailBoxEntry .picture {
 	display: inline-block;
 	vertical-align: top;
 	width:80px;
 	min-height:75px;
 	text-align:center;
+	padding-left:10px;
 } 
+.apartmentDetailsWrap .unitDetails {
+	display: inline-block;
+	vertical-align: top;
+	width:370px;
+	padding:0 10px;
+	color: #222;
+}
 .apartmentDetailsWrap .unitDetails .details {
 	display: inline-block;
 	vertical-align: top;
@@ -147,13 +151,13 @@
 	list-style: none;
 	margin-left: 0;
 }
-.apartmentDetailsWrap .unitDetails .controlBox {
+.apartmentDetailsWrap .detailBox .detailBoxEntry .controlBox {
 	display: inline-block;
 	vertical-align: top;
-	width:80px;
-	padding:0 5px;
+	width:100px;
+	padding:0;
 } 
-.apartmentDetailsWrap .unitDetails .controlButton {
+.apartmentDetailsWrap .controlBox .controlButton {
 	float:right;
 	padding:6px 0;
 }
@@ -173,7 +177,7 @@ a.listingCtlButton {
 	color:#6c6d6f !important;
 	text-decoration:none;
 }
-.apartmentDetailsWrap .unitDetails:hover .listingCtlButton {
+.apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover .listingCtlButton {
 	background-image: url("images/template1/aptListIcons-hlight.png");
 	color:#339900 !important;
 }
