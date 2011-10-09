@@ -29,9 +29,12 @@ public class ConstantEntry {
 
     public List<String> reference;
 
-    public ConstantEntry(String classSourceFileName, int lineNr, String text) {
+    public boolean javaFormatFlag;
+
+    public ConstantEntry(String classSourceFileName, int lineNr, String text, boolean javaFormatFlag) {
         this.text = text;
         this.reference = new Vector<String>();
+        this.javaFormatFlag = javaFormatFlag;
         addReference(classSourceFileName, lineNr);
     }
 

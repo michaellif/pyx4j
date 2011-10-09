@@ -37,9 +37,13 @@ public class POFileReaderTest extends TestCase {
         Assert.assertEquals("''{0}''n'est pas valide. {1}", po.entries.get(0).translated);
         Assert.assertTrue(po.entries.get(0).references.contains("com/pyx4j/entity/client/ui/flex/CEntityContainer.java:87"));
 
+        Assert.assertTrue(po.entries.get(0).flags.contains("java-format"));
+
         Assert.assertEquals("Application is in read-only due to short maintenance.\nPlease try again in one hour", po.entries.get(1).untranslated);
         Assert.assertEquals("L'application est en lecture seule pour cause de maintenance courts.\nS'il vous plaît essayez de nouveau en une heure",
                 po.entries.get(1).translated);
 
+        Assert.assertTrue(po.entries.get(1).flags.contains("java-format"));
+        Assert.assertTrue(po.entries.get(1).flags.contains("fuzzy"));
     }
 }

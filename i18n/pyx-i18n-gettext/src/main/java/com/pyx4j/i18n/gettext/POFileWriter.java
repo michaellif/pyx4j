@@ -57,13 +57,15 @@ public class POFileWriter {
         }
 
         if (entry.flags != null) {
+            writer.print("#, ");
+            boolean first = true;
             for (final String str : entry.flags) {
-                writer.println("#, " + str);
+                if (!first) {
+                    writer.print(", ");
+                }
+                writer.print(str);
             }
-        }
-
-        if (entry.fuzzy) {
-            writer.println("#, fuzzy");
+            writer.println();
         }
 
         if (entry.unparsedComments != null) {

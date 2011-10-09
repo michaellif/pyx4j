@@ -58,7 +58,7 @@ abstract class I18nConstantsInterpreter extends BasicInterpreter {
         this.currentLineNr = currentLineNr;
     }
 
-    protected abstract void i18nString(int currentLineNr, String text);
+    protected abstract void i18nString(int currentLineNr, String text, boolean javaFormatFlag);
 
     @Override
     public Value naryOperation(AbstractInsnNode insn, @SuppressWarnings("rawtypes") List values) throws AnalyzerException {
@@ -67,7 +67,8 @@ abstract class I18nConstantsInterpreter extends BasicInterpreter {
             if (I18N_CLASS.equals(methodInsn.owner) && "tr".equals(methodInsn.name)) {
                 Value arg = (Value) values.get(1);
                 if (arg instanceof StringConstantValue) {
-                    i18nString(currentLineNr, ((StringConstantValue) arg).string);
+                    boolean javaFormatFlag = (values.size() > 2);
+                    i18nString(currentLineNr, ((StringConstantValue) arg).string, javaFormatFlag);
                 }
             }
         }

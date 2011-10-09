@@ -45,10 +45,10 @@ import org.objectweb.asm.tree.analysis.AnalyzerException;
 import org.objectweb.asm.tree.analysis.Frame;
 
 import com.pyx4j.commons.EnglishGrammar;
-import com.pyx4j.i18n.annotations.I18nAnnotation;
 import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
+import com.pyx4j.i18n.annotations.I18nAnnotation;
+import com.pyx4j.i18n.annotations.Translate;
 
 public class ConstantExtractor {
 
@@ -151,8 +151,8 @@ public class ConstantExtractor {
         I18nConstantsInterpreter interpreter = new I18nConstantsInterpreter() {
 
             @Override
-            protected void i18nString(int lineNr, String text) {
-                addEntry(classSourceFileName, lineNr, text);
+            protected void i18nString(int lineNr, String text, boolean javaFormatFlag) {
+                addEntry(classSourceFileName, lineNr, text, javaFormatFlag);
             }
         };
 
@@ -184,11 +184,16 @@ public class ConstantExtractor {
         }
     }
 
+    //TODO
     public void addEntry(String classSourceFileName, int lineNr, String text) {
+        this.addEntry(classSourceFileName, lineNr, text, false);
+    }
+
+    public void addEntry(String classSourceFileName, int lineNr, String text, boolean javaFormatFlag) {
         if (text.length() != 0) {
             ConstantEntry entry = constants.get(text);
             if (entry == null) {
-                constants.put(text, new ConstantEntry(classSourceFileName, lineNr, text));
+                constants.put(text, new ConstantEntry(classSourceFileName, lineNr, text, javaFormatFlag));
             } else {
                 entry.addReference(classSourceFileName, lineNr);
             }
@@ -233,12 +238,12 @@ public class ConstantExtractor {
 
             Object translationValue = AsmUtils.getAnnotationValue(TRANSLATION_CLASS, "value", fieldNode);
             if (translationValue != null) {
-                addEntry(classSourceFileName, -10, translationValue.toString());
+                addEntry(classSourceFileName, -10, translationValue.toString(), false);
             } else {
                 if (capitalize) {
-                    addEntry(classSourceFileName, -11, EnglishGrammar.capitalize(fieldNode.name));
+                    addEntry(classSourceFileName, -11, EnglishGrammar.capitalize(fieldNode.name), false);
                 } else {
-                    addEntry(classSourceFileName, -12, fieldNode.name);
+                    addEntry(classSourceFileName, -12, fieldNode.name, false);
                 }
             }
 

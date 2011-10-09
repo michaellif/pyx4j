@@ -74,8 +74,6 @@ public class POFileReader {
                 if (line.startsWith("#")) {
                     if (line.startsWith("#: ")) {
                         currentEntry.referenceAdd(line.substring(2).trim());
-                    } else if (line.startsWith("#, fuzzy")) {
-                        currentEntry.fuzzy = true;
                     } else if (line.startsWith("#, ")) {
                         currentEntry.addFlag(line.substring(3).trim());
                     } else if (line.startsWith("#. ")) {

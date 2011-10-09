@@ -22,6 +22,7 @@ msgid "''{0}'' is not valid. {1}"
 msgstr "''{0}''n'est pas valide. {1}"
 
 #: com/pyx4j/essentials/client/BaseLogInPanel.java:175
+#, fuzzy, java-format
 msgid ""
 "Application is in read-only due to short maintenance.\n"
 "Please try again in one hour"

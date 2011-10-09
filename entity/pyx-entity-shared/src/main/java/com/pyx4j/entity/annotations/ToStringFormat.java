@@ -25,8 +25,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.pyx4j.i18n.annotations.I18nAnnotation;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.I18nAnnotation;
 
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
@@ -38,7 +38,7 @@ public @interface ToStringFormat {
      * 
      * @see java.text.MessageFormat.format
      */
-    @I18n
+    @I18n(javaFormatFlag = true)
     String value();
 
     /**

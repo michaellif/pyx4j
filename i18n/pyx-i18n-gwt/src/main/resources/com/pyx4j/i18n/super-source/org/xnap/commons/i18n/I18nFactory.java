@@ -28,16 +28,17 @@ import com.google.gwt.core.client.GWT;
  * 
  * Only single Locale is supported at runtime.
  */
-public class I18nFactory {
+class I18nFactory {
 
-    private static I18n i18n;
-
-    public static I18n getI18n(final Class<?> clazz) {
-        if (i18n == null) {
-            synchronized (I18nFactory.class) {
-                i18n = new I18n((I18nResourceBundle) GWT.create(I18nResourceBundle.class));
-            }
-        }
-        return i18n;
-    }
+//    private static I18n i18n;
+//
+//    public static I18n getI18n(final Class<?> clazz) {
+//        if (i18n == null) {
+//            synchronized (I18nFactory.class) {
+//                i18n = new I18n((I18nResourceBundle) GWT.create(I18nResourceBundle.class));
+//            }
+//        }
+//        return i18n;
+//    }
+    
 }

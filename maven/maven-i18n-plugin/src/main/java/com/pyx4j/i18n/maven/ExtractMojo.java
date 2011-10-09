@@ -41,9 +41,11 @@ import org.objectweb.asm.tree.analysis.AnalyzerException;
 
 import com.pyx4j.i18n.extractor.ConstantEntry;
 import com.pyx4j.i18n.extractor.ConstantExtractor;
+import com.pyx4j.i18n.gettext.POCatalog;
 import com.pyx4j.i18n.gettext.POEntry;
 import com.pyx4j.i18n.gettext.POFile;
 import com.pyx4j.i18n.gettext.POFileWriter;
+import com.pyx4j.i18n.translate.GoogleTranslate;
 import com.pyx4j.scanner.DirectoryScanner;
 import com.pyx4j.scanner.JarFileScanner;
 import com.pyx4j.scanner.Scanner;
@@ -115,7 +117,7 @@ public class ExtractMojo extends AbstractMojo {
     /**
      * PO directory
      * 
-     * @parameter expression="${basedir}/src/main/po"
+     * @parameter expression="${basedir}/src/main/resources/translations"
      */
     public File poDirectory;
 
@@ -162,6 +164,34 @@ public class ExtractMojo extends AbstractMojo {
      * @parameter expression="${project.build.directory}/i18n.txt"
      */
     public File extractedStrings;
+
+    /**
+     * Java Source language
+     * 
+     * @parameter default-value="en"
+     */
+    public String sourceLanguage = "en";
+
+    /**
+     * Enable auto translate.
+     * 
+     * @parameter expression="${i18n.autoTranslate}" default-value="false"
+     */
+    public boolean autoTranslate = false;
+
+    /**
+     * Used for auto translate.
+     * 
+     * @parameter expression="${google.translate.apiKey}"
+     */
+    public String googleApiKey;
+
+    /**
+     * Use Google Translate to create translation for languages
+     * 
+     * @parameter
+     */
+    public List<String> autoTranslates = null;
 
     /**
      * The directory containing generated classes.
@@ -225,8 +255,11 @@ public class ExtractMojo extends AbstractMojo {
 
         extractor.analyzeTranslatableHierarchy();
 
-        writePOFile(extractor);
+        POFile po = writePOFile(extractor);
         writeTextFile(extractor);
+        if (autoTranslate && (autoTranslates != null) && (this.googleApiKey != null) && (this.googleApiKey.length() > 0)) {
+            autoTranslate(po);
+        }
     }
 
     private File getArtifactFile(Artifact artifact) throws MojoExecutionException {
@@ -306,7 +339,7 @@ public class ExtractMojo extends AbstractMojo {
 
     }
 
-    private void writePOFile(ConstantExtractor extractor) throws MojoExecutionException {
+    private POFile writePOFile(ConstantExtractor extractor) throws MojoExecutionException {
         POFile po = new POFile();
         po.createDefaultHeader();
 
@@ -321,9 +354,13 @@ public class ExtractMojo extends AbstractMojo {
                 Collections.sort(pe.references);
             }
 
-            Matcher m = javaFormatPattern.matcher(pe.untranslated);
-            if (m.matches()) {
+            if (entry.javaFormatFlag) {
                 pe.addFlag("java-format");
+            } else {
+                Matcher m = javaFormatPattern.matcher(pe.untranslated);
+                if (m.matches()) {
+                    pe.addFlag("java-format");
+                }
             }
 
             po.entries.add(pe);
@@ -338,8 +375,12 @@ public class ExtractMojo extends AbstractMojo {
                 throw new MojoExecutionException("Unable to create poDirectory " + poDirectory);
             }
         }
+        writePO(po, new File(poDirectory, keysFile));
+        getLog().info("Extracted " + po.entries.size() + " strings for i18n");
+        return po;
+    }
 
-        File file = new File(poDirectory, keysFile);
+    private void writePO(POFile po, File file) throws MojoExecutionException {
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(file, "UTF-8");
@@ -352,7 +393,6 @@ public class ExtractMojo extends AbstractMojo {
             writer.flush();
             writer.close();
 
-            getLog().info("Extracted " + po.entries.size() + " strings for i18n");
         } catch (IOException e) {
             throw new MojoExecutionException("POFile " + file.getAbsolutePath() + " write error", e);
         } finally {
@@ -373,6 +413,35 @@ public class ExtractMojo extends AbstractMojo {
             throw new MojoExecutionException("text file " + extractedStrings.getAbsolutePath() + " write error", e);
         } finally {
             IOUtils.closeQuietly(writer);
+        }
+    }
+
+    private void autoTranslate(POFile po) throws MojoExecutionException {
+        for (String lang : autoTranslates) {
+            GoogleTranslate gt = new GoogleTranslate(this.googleApiKey);
+
+            POCatalog catalog = new POCatalog(lang);
+            POFile poTransl = po.cloneForTranslation();
+            getLog().info("Translating " + sourceLanguage + " -> " + lang);
+            int translated = 0;
+            int apiCalls = 0;
+            for (POEntry entry : poTransl.entries) {
+                entry.translated = catalog.translate(entry.untranslated);
+                //TODO add proper java format handling
+                if ((entry.translated == null) && (!entry.contanisFlag("java-format"))) {
+                    try {
+                        entry.translated = gt.translate(entry.untranslated, sourceLanguage, lang);
+                    } catch (Throwable e) {
+                        throw new MojoExecutionException("translate error", e);
+                    }
+                    catalog.update(entry.untranslated, entry.translated);
+                    apiCalls++;
+                }
+                translated++;
+            }
+            getLog().info("Translated " + translated + "; api calls:" + apiCalls);
+            catalog.write();
+            writePO(poTransl, new File(poDirectory, lang + ".po"));
         }
     }
 }

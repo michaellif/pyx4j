@@ -19,10 +19,11 @@
 
     <dependencies>
 
-        <!-- 
+        <!--
         <dependency>
             <groupId>org.xnap.commons</groupId>
             <artifactId>gettext-commons</artifactId>
+            <version>0.9.6</version>
         </dependency>
         -->
 

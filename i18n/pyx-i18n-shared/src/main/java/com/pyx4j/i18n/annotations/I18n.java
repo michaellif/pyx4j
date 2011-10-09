@@ -34,6 +34,11 @@ public @interface I18n {
 
     boolean capitalize() default true;
 
+    /**
+     * Set gettext flag: java-format for extracted text
+     */
+    boolean javaFormatFlag() default false;
+
     public static enum I18nStrategy {
 
         TranslateAll,

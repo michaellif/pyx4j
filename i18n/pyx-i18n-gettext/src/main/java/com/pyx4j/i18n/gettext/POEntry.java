@@ -22,6 +22,7 @@ package com.pyx4j.i18n.gettext;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 public class POEntry {
@@ -33,8 +34,6 @@ public class POEntry {
     public List<String> references;
 
     public List<String> flags;
-
-    public boolean fuzzy;
 
     public List<String> unparsedComments;
 
@@ -48,7 +47,22 @@ public class POEntry {
         if (flags == null) {
             flags = new Vector<String>();
         }
-        flags.add(flag);
+        StringTokenizer t = new StringTokenizer(flag, ",");
+        if (t.hasMoreTokens()) {
+            while (t.hasMoreTokens()) {
+                flags.add(t.nextToken().trim());
+            }
+        } else {
+            flags.add(flag.trim());
+        }
+    }
+
+    public boolean contanisFlag(String flag) {
+        if (flags == null) {
+            return false;
+        } else {
+            return flags.contains(flag);
+        }
     }
 
     public void referenceAdd(String reference) {
@@ -77,6 +91,54 @@ public class POEntry {
             unparsedComments = new Vector<String>();
         }
         unparsedComments.add(comment);
+    }
+
+    public POEntry cloneEntry() {
+        POEntry pe = new POEntry();
+        pe.untranslated = this.untranslated;
+        pe.translated = this.translated;
+
+        if (this.comments != null) {
+            for (final String str : this.comments) {
+                pe.addComment(str);
+            }
+        }
+
+        if (this.extractedComments != null) {
+            for (final String str : this.extractedComments) {
+                pe.addExtractedComment(str);
+            }
+        }
+
+        if (this.flags != null) {
+            for (final String str : this.flags) {
+                pe.addFlag(str);
+            }
+        }
+
+        if (this.references != null) {
+            for (final String str : this.references) {
+                pe.referenceAdd(str);
+            }
+        }
+
+        if (this.unparsedComments != null) {
+            for (final String str : this.unparsedComments) {
+                pe.addUnparsedComment(str);
+            }
+        }
+
+        if (this.previousUntranslated != null) {
+            //TODO
+        }
+
+        return pe;
+    }
+
+    public POEntry cloneForTranslation() {
+        POEntry pe = cloneEntry();
+        pe.translated = null;
+        return pe;
     }
 
     public static class ByTextComparator implements Comparator<POEntry> {

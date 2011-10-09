@@ -35,6 +35,9 @@ public class POFile {
 
     public List<POEntry> entries = new Vector<POEntry>();
 
+    public POFile() {
+    }
+
     public void createDefaultHeader() {
         header.untranslated = "";
         header.translated = "";
@@ -58,5 +61,14 @@ public class POFile {
 
     public void addHeader(String name, String value) {
         header.translated += name + ": " + value + "\n";
+    }
+
+    public POFile cloneForTranslation() {
+        POFile po = new POFile();
+        po.header = this.header.cloneEntry();
+        for (POEntry entry : this.entries) {
+            po.entries.add(entry.cloneForTranslation());
+        }
+        return po;
     }
 }
