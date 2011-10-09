@@ -13,14 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.components.cms;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.forms.client.ui.CAbstractHyperlink;
 import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.components.media.MediaUploadDialog;
 import com.propertyvista.domain.File;
@@ -28,7 +27,7 @@ import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
 public class FileUploadHyperlink extends CAbstractHyperlink<File> {
 
-    protected static I18n i18n = I18nFactory.getI18n(FileUploadHyperlink.class);
+    protected static I18n i18n = I18n.get(FileUploadHyperlink.class);
 
     public FileUploadHyperlink(final boolean editable, final ImageTarget imageTarget) {
         super((String) null);

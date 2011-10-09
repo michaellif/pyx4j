@@ -17,9 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -46,6 +43,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
@@ -67,7 +65,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.AddOnsDTO;
 
 public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
 
-    private static I18n i18n = I18nFactory.getI18n(AddonsViewForm.class);
+    private static I18n i18n = I18n.get(AddonsViewForm.class);
 
     private boolean summaryViewMode = false;
 

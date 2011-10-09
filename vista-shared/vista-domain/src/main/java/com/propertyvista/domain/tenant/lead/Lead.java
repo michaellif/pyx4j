@@ -21,9 +21,9 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
-import com.pyx4j.i18n.shared.Translation;
 
 import com.propertyvista.domain.RangeGroup;
 import com.propertyvista.domain.person.Person;
@@ -31,7 +31,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 
 public interface Lead extends IEntity {
 
-    @Translatable
+    @I18n
     public enum InformedFrom {
 
         internet,
@@ -54,16 +54,16 @@ public interface Lead extends IEntity {
         }
     }
 
-    @Translatable
+    @I18n
     public enum Term {
 
-        @Translation("6 months")
+        @Translate("6 months")
         months6,
 
-        @Translation("12 months")
+        @Translate("12 months")
         months12,
 
-        @Translation("18 months")
+        @Translate("18 months")
         months18,
 
         other;
@@ -74,7 +74,7 @@ public interface Lead extends IEntity {
         }
     }
 
-    @Translatable
+    @I18n
     public enum Source {
 
         toBeProvided;
@@ -85,7 +85,7 @@ public interface Lead extends IEntity {
         }
     }
 
-    @Translatable
+    @I18n
     public enum Status {
 
         active,

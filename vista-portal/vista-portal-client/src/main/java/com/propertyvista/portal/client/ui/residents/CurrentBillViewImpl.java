@@ -13,10 +13,10 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.ui.FlowPanel;
+
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.portal.domain.dto.BillDTO;
@@ -25,7 +25,7 @@ public class CurrentBillViewImpl extends FlowPanel implements CurrentBillView {
 
     private final CurrentBillForm billForm;
 
-    private static I18n i18n = I18nFactory.getI18n(PaymentMethodsForm.class);
+    private static I18n i18n = I18n.get(PaymentMethodsForm.class);
 
     public CurrentBillViewImpl() {
         billForm = new CurrentBillForm();

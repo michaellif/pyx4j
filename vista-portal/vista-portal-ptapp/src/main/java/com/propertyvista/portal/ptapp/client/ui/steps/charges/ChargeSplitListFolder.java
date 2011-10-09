@@ -16,9 +16,6 @@ package com.propertyvista.portal.ptapp.client.ui.steps.charges;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -46,6 +43,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
@@ -53,7 +51,7 @@ import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
 public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
 
-    private static I18n i18n = I18nFactory.getI18n(ChargeSplitListFolder.class);
+    private static I18n i18n = I18n.get(ChargeSplitListFolder.class);
 
     private final boolean summaryViewMode;
 

@@ -24,9 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.BorderStyle;
@@ -59,6 +56,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.media.ApplicationDocument;
@@ -68,7 +66,7 @@ import com.propertyvista.misc.ServletMapping;
 
 public class ApplicationDocumentsFolderUploader extends CEntityFolder<ApplicationDocument> {
 
-    private static I18n i18n = I18nFactory.getI18n(ApplicationDocumentsFolderUploader.class);
+    private static I18n i18n = I18n.get(ApplicationDocumentsFolderUploader.class);
 
     private final DocumentType documentType;
 

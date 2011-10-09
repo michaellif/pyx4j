@@ -24,13 +24,13 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
 @ToStringFormat("{0} {1}")
 public interface AptUnitItem extends IEntity {
 
-    @Translatable
+    @I18n
     public enum Type {
 
         bedroom,
@@ -63,7 +63,7 @@ public interface AptUnitItem extends IEntity {
         }
     }
 
-    @Translatable
+    @I18n
     public enum FlooringType {
 
         hardwood,
@@ -82,7 +82,7 @@ public interface AptUnitItem extends IEntity {
         }
     }
 
-    @Translatable
+    @I18n
     public enum CounterTopType {
 
         granite,
@@ -111,7 +111,7 @@ public interface AptUnitItem extends IEntity {
         }
     }
 
-    @Translatable
+    @I18n
     public enum CabinetsType {
 
         wood,

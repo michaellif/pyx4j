@@ -16,9 +16,6 @@ package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -42,6 +39,7 @@ import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.VistaEntityFolder;
@@ -64,7 +62,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
 public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 
-    private static I18n i18n = I18nFactory.getI18n(ApartmentViewForm.class);
+    private static I18n i18n = I18n.get(ApartmentViewForm.class);
 
     private VistaDecoratorsFlowPanel consessionPanel;
 

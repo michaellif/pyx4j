@@ -15,15 +15,13 @@ package com.propertyvista.common.client;
 
 import java.util.Date;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.user.client.rpc.StatusCodeException;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.DefaultUnrecoverableErrorHandler;
 import com.pyx4j.gwt.commons.UncaughtHandler;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.util.BrowserType;
@@ -33,7 +31,7 @@ import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 
 public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHandler {
 
-    private static I18n i18n = I18nFactory.getI18n(VistaUnrecoverableErrorHandler.class);
+    private static I18n i18n = I18n.get(VistaUnrecoverableErrorHandler.class);
 
     public VistaUnrecoverableErrorHandler() {
         UncaughtHandler.setUnrecoverableErrorHandler(this);

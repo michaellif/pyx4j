@@ -18,12 +18,11 @@ import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.company.Employee;
@@ -54,7 +53,7 @@ import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 
 public class BuildingImporter {
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(BuildingImporter.class);
 
     private final static Logger log = LoggerFactory.getLogger(BuildingImporter.class);
 

@@ -15,11 +15,10 @@ package com.propertyvista.server.common.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
@@ -30,7 +29,7 @@ public class VistaContext {
 
     private final static Logger log = LoggerFactory.getLogger(VistaContext.class);
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(VistaContext.class);
 
     public static Key getCurrentUserPrimaryKey() {
         Visit v = Context.getVisit();

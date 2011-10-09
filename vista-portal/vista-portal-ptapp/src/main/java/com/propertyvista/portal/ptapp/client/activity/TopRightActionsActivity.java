@@ -26,8 +26,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.style.StyleManger;
 
 import com.propertyvista.portal.ptapp.client.themes.GainsboroPalette;
-import com.propertyvista.portal.ptapp.client.themes.VillageGreenPalette;
 import com.propertyvista.portal.ptapp.client.themes.PtAppTheme;
+import com.propertyvista.portal.ptapp.client.themes.VillageGreenPalette;
 import com.propertyvista.portal.ptapp.client.ui.TopRightActionsView;
 import com.propertyvista.portal.ptapp.client.ui.TopRightActionsViewImpl.Theme;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;

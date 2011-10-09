@@ -14,8 +14,8 @@
 package com.propertyvista.portal.ptapp.client.ui.steps.financial;
 
 import com.pyx4j.entity.client.ui.flex.editor.IDiscriminator;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translation;
 
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
@@ -25,40 +25,40 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSocialServices;
 
 public enum IncomeSource implements IDiscriminator<IIncomeInfo> {
 
-    @Translation("Full time")
+    @Translate("Full time")
     fulltime(IncomeInfoEmployer.class),
 
-    @Translation("Part time")
+    @Translate("Part time")
     parttime(IncomeInfoEmployer.class),
 
-    @Translation("Self employed")
+    @Translate("Self employed")
     selfemployed(IncomeInfoSelfEmployed.class),
 
-    @Translation("Seasonally Employed")
+    @Translate("Seasonally Employed")
     seasonallyEmployed(IncomeInfoSeasonallyEmployed.class),
 
-    @Translation("Social Services")
+    @Translate("Social Services")
     socialServices(IncomeInfoSocialServices.class),
 
-    @Translation("Pension")
+    @Translate("Pension")
     pension(IncomeInfoEmployer.class),
 
-    @Translation("Retired")
+    @Translate("Retired")
     retired(IncomeInfoEmployer.class),
 
-    @Translation("Student")
+    @Translate("Student")
     student(IncomeInfoEmployer.class),
 
-    @Translation("Unemployment")
+    @Translate("Unemployment")
     unemployment(IncomeInfoEmployer.class),
 
-    @Translation("ODSP")
+    @Translate("ODSP")
     odsp(IncomeInfoEmployer.class),
 
-    @Translation("Dividends")
+    @Translate("Dividends")
     dividends(IncomeInfoEmployer.class),
 
-    @Translation("Other")
+    @Translate("Other")
     other(IncomeInfoEmployer.class);
 
     private final Class<? extends IIncomeInfo> type;

@@ -16,13 +16,13 @@ package com.propertyvista.domain.property.vendor;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.company.Company;
 
 public interface Vendor extends Company {
-    @Translatable
+    @I18n
     public enum Type {
 
         regularMaintenance,

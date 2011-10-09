@@ -17,9 +17,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
@@ -52,6 +49,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
@@ -77,7 +75,7 @@ import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 
 public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
 
-    private static I18n i18n = I18nFactory.getI18n(SummaryViewForm.class);
+    private static I18n i18n = I18n.get(SummaryViewForm.class);
 
     public final static String DEFAULT_STYLE_PREFIX = "SummaryViewForm";
 

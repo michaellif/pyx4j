@@ -27,13 +27,13 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
 @ToStringFormat("Type: {0}, Name: {1}")
 public interface Feature extends IEntity {
 
-    @Translatable
+    @I18n
     @XmlType(name = "FeatureType")
     public enum Type {
 
@@ -65,7 +65,7 @@ public interface Feature extends IEntity {
         }
     }
 
-    @Translatable
+    @I18n
     enum PriceType {
         percentageFromServicePrice, fixed;
 

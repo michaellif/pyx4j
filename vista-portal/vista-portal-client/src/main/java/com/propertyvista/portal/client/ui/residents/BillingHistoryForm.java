@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -22,6 +20,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.client.ui.decorations.PortalHeaderBar;
 import com.propertyvista.portal.domain.dto.BillListDTO;
@@ -29,7 +28,7 @@ import com.propertyvista.portal.domain.dto.BillListDTO.SearchType;
 
 public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements BillingHistoryView {
 
-    protected static I18n i18n = I18nFactory.getI18n(BillingHistoryForm.class);
+    protected static I18n i18n = I18n.get(BillingHistoryForm.class);
 
     private Presenter presenter;
 

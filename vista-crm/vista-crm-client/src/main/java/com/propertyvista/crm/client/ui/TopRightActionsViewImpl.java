@@ -1,7 +1,5 @@
 package com.propertyvista.crm.client.ui;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
@@ -19,6 +17,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -31,7 +30,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     public static String BACK_TO_CRM = "vista_Back2CRM";
 
-    private static I18n i18n = I18nFactory.getI18n(TopRightActionsViewImpl.class);
+    private static I18n i18n = I18n.get(TopRightActionsViewImpl.class);
 
     private Presenter presenter;
 

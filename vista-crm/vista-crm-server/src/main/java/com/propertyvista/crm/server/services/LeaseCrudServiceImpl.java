@@ -15,8 +15,6 @@ package com.propertyvista.crm.server.services;
 
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -24,7 +22,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.mail.Mail;
@@ -50,7 +48,7 @@ import com.propertyvista.server.common.security.UserAccessUtils;
 
 public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, LeaseDTO> implements LeaseCrudService {
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(LeaseCrudServiceImpl.class);
 
     public LeaseCrudServiceImpl() {
         super(Lease.class, LeaseDTO.class);

@@ -13,17 +13,16 @@
  */
 package com.propertyvista.common.client.ui.components;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.contact.Phone;
 
 public class CPhone extends CEditableComponent<Phone, NativePhone> {
 
-    protected static I18n i18n = I18nFactory.getI18n(CPhone.class);
+    protected static I18n i18n = I18n.get(CPhone.class);
 
     private IFormat<Phone> format;
 

@@ -13,12 +13,11 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.client.ui.ListerViewImplBasePanel;
 import com.propertyvista.portal.client.ui.decorations.PortalHeaderBar;
@@ -26,7 +25,7 @@ import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 
 public class MaintenanceListerViewImpl extends ListerViewImplBasePanel<MaintenanceRequestDTO> implements MaintenanceListerView {
 
-    private static I18n i18n = I18nFactory.getI18n(MaintenanceListerViewImpl.class);
+    private static I18n i18n = I18n.get(MaintenanceListerViewImpl.class);
 
     public MaintenanceListerViewImpl() {
         super();

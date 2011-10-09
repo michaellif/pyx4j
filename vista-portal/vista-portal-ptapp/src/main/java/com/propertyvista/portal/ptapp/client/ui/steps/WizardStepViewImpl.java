@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -27,6 +25,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.client.AppSite;
 
@@ -34,7 +33,7 @@ import com.propertyvista.common.client.events.UserMessageEvent;
 
 public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter<E>> extends FlowPanel implements WizardStepView<E, T> {
 
-    private static I18n i18n = I18nFactory.getI18n(WizardStepViewImpl.class);
+    private static I18n i18n = I18n.get(WizardStepViewImpl.class);
 
     private T presenter;
 

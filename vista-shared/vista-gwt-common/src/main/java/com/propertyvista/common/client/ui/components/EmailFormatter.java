@@ -15,19 +15,17 @@ package com.propertyvista.common.client.ui.components;
 
 import java.text.ParseException;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.contact.Email;
 
 public class EmailFormatter implements IFormat<Email> {
 
-    private static I18n i18n = I18nFactory.getI18n(EmailFormatter.class);
+    private static I18n i18n = I18n.get(EmailFormatter.class);
 
     public EmailFormatter() {
     }

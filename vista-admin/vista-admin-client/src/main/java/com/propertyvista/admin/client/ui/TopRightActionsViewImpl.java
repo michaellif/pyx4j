@@ -1,7 +1,5 @@
 package com.propertyvista.admin.client.ui;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
@@ -19,6 +17,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.client.resources.AdminImages;
 
@@ -28,7 +27,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         Gainsboro, VillageGreen, BlueCold, BrownWarm
     }
 
-    private static I18n i18n = I18nFactory.getI18n(TopRightActionsViewImpl.class);
+    private static I18n i18n = I18n.get(TopRightActionsViewImpl.class);
 
     private Presenter presenter;
 

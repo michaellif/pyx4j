@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.activity;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -26,6 +24,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -41,7 +40,7 @@ import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 
 public class ResetPasswordActivity extends AbstractActivity implements NewPasswordView.Presenter {
 
-    private static I18n i18n = I18nFactory.getI18n(ResetPasswordActivity.class);
+    private static I18n i18n = I18n.get(ResetPasswordActivity.class);
 
     private final NewPasswordView view;
 

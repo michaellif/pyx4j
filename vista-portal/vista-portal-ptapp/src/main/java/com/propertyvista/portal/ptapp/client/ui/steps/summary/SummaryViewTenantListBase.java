@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.summary;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
@@ -32,13 +30,14 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
 public abstract class SummaryViewTenantListBase<E extends IEntity> extends CEntityFolderBoxEditor<E> {
 
-    protected final I18n i18n = I18nFactory.getI18n(SummaryViewTenantListBase.class);
+    protected final I18n i18n = I18n.get(SummaryViewTenantListBase.class);
 
     protected IsWidget fullView;
 

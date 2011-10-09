@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.payment;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
+
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.domain.ptapp.PaymentInfo;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepViewImpl;
@@ -22,7 +22,7 @@ import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentView.Paymen
 
 public class PaymentViewImpl extends WizardStepViewImpl<PaymentInfo, PaymentPresenter> implements PaymentView {
 
-    private static I18n i18n = I18nFactory.getI18n(PaymentViewImpl.class);
+    private static I18n i18n = I18n.get(PaymentViewImpl.class);
 
     public PaymentViewImpl() {
         super(new PaymentViewForm());

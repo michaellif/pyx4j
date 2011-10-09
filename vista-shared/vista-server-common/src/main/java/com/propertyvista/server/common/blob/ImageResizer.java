@@ -29,14 +29,13 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
 
 import com.mortennobel.imagescaling.AdvancedResizeOp;
 import com.mortennobel.imagescaling.ThumpnailRescaleOp;
 
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.gwt.server.IOUtils;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.shared.Dimension;
 
@@ -46,7 +45,7 @@ public class ImageResizer {
 
     public static final Collection<String> imageExtensions = DownloadFormat.getExtensions(MediaUploadService.supportedFormats);
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(ImageResizer.class);
 
     private final static Logger log = LoggerFactory.getLogger(ImageResizer.class);
 

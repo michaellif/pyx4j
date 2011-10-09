@@ -15,9 +15,8 @@ package com.propertyvista.portal.client.ui.maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkOption;
 
@@ -27,7 +26,7 @@ public class MapDialog extends Dialog {
 
     private static final Logger log = LoggerFactory.getLogger(MapDialog.class);
 
-    private static I18n i18n = I18nFactory.getI18n(MapDialog.class);
+    private static I18n i18n = I18n.get(MapDialog.class);
 
     public MapDialog(PropertyDTO property) {
         super(i18n.tr("Location"), new OkOption() {

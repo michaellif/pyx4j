@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
@@ -24,6 +22,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
@@ -33,7 +32,7 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
         Gainsboro, VillageGreen
     }
 
-    private static I18n i18n = I18nFactory.getI18n(TopRightActionsViewImpl.class);
+    private static I18n i18n = I18n.get(TopRightActionsViewImpl.class);
 
     private final HorizontalPanel topLinksPanel;
 

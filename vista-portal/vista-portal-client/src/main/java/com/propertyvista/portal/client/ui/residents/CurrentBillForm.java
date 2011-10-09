@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
@@ -41,6 +39,7 @@ import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
@@ -54,7 +53,7 @@ import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 
 public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBillView {
 
-    private static I18n i18n = I18nFactory.getI18n(CurrentBillForm.class);
+    private static I18n i18n = I18n.get(CurrentBillForm.class);
 
     private Presenter presenter;
 

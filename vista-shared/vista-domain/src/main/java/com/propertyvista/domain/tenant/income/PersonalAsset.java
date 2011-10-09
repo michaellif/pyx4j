@@ -18,8 +18,8 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translation;
 
 import com.propertyvista.domain.financial.Money;
 
@@ -27,28 +27,28 @@ public interface PersonalAsset extends IEntity {
 
     public enum AssetType {
 
-        @Translation("Bank Accounts")
+        @Translate("Bank Accounts")
         bankAccounts,
 
-        @Translation("Real Estate Properties")
+        @Translate("Real Estate Properties")
         realEstateProperties,
 
-        @Translation("Insurance Policies")
+        @Translate("Insurance Policies")
         insurancePolicies,
 
-        @Translation("Shares")
+        @Translate("Shares")
         shares,
 
-        @Translation("Unit Trusts")
+        @Translate("Unit Trusts")
         unitTrusts,
 
-        @Translation("Businesses")
+        @Translate("Businesses")
         businesses,
 
-        @Translation("Cars")
+        @Translate("Cars")
         cars,
 
-        @Translation("Other")
+        @Translate("Other")
         other;
 
         @Override

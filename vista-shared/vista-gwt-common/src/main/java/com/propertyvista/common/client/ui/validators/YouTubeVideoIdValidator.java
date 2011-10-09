@@ -13,15 +13,15 @@
  */
 package com.propertyvista.common.client.ui.validators;
 
-import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
+
 
 public class YouTubeVideoIdValidator implements EditableValueValidator<String> {
 
-    private static I18n i18n = I18nFactory.getI18n(YouTubeVideoIdValidator.class);
+    private static I18n i18n = I18n.get(YouTubeVideoIdValidator.class);
 
     @Override
     public boolean isValid(CEditableComponent<String, ?> component, String value) {

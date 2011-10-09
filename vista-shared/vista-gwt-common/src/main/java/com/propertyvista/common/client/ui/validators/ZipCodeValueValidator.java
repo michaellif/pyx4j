@@ -13,20 +13,19 @@
  */
 package com.propertyvista.common.client.ui.validators;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.ref.Country;
 
 public class ZipCodeValueValidator implements EditableValueValidator<String> {
 
-    private static I18n i18n = I18nFactory.getI18n(ZipCodeValueValidator.class);
+    private static I18n i18n = I18n.get(ZipCodeValueValidator.class);
 
     private final CEntityEditor<?> editor;
 

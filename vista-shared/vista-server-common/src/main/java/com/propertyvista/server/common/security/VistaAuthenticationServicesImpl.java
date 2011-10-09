@@ -20,7 +20,6 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -30,7 +29,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -49,7 +48,7 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
 
     private final static Logger log = LoggerFactory.getLogger(VistaAuthenticationServicesImpl.class);
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(VistaAuthenticationServicesImpl.class);
 
     @Override
     @IgnoreSessionToken

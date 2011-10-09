@@ -16,14 +16,12 @@ package com.propertyvista.crm.client.ui.components;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -45,7 +43,7 @@ import com.propertyvista.domain.property.vendor.WarrantyItem;
 
 public class SubtypeInjectors {
 
-    protected static I18n i18n = I18nFactory.getI18n(SubtypeInjectors.class);
+    protected static I18n i18n = I18n.get(SubtypeInjectors.class);
 
     public static void injectPhones(VistaDecoratorsFlowPanel main, IList<Phone> proto, CEntityEditor<?> parent) {
         injectPhones(main, proto, parent, true, false);

@@ -15,11 +15,10 @@ package com.propertyvista.portal.server.ptapp;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.Context;
@@ -34,7 +33,7 @@ public class PtAppContext extends VistaContext {
 
     private final static Logger log = LoggerFactory.getLogger(PtAppContext.class);
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(PtAppContext.class);
 
     public static void setCurrentUserApplication(Application application) {
         Visit v = Context.getVisit();

@@ -3,9 +3,6 @@ package com.propertyvista.portal.tester.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -30,6 +27,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.tester.domain.Department;
 import com.propertyvista.portal.tester.domain.Employee;
@@ -37,7 +35,7 @@ import com.propertyvista.portal.tester.resources.SiteImages;
 
 public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentView {
 
-    private static I18n i18n = I18nFactory.getI18n(EditDepartmentViewImpl.class);
+    private static I18n i18n = I18n.get(EditDepartmentViewImpl.class);
 
     private Presenter presenter;
 

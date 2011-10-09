@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Display;
@@ -37,6 +35,7 @@ import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.forms.client.ui.CCaptcha;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
@@ -46,7 +45,7 @@ import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
 public class CreateAccountViewImpl extends FlowPanel implements CreateAccountView {
 
-    private static I18n i18n = I18nFactory.getI18n(CreateAccountViewImpl.class);
+    private static I18n i18n = I18n.get(CreateAccountViewImpl.class);
 
     private Presenter presenter;
 

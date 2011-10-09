@@ -15,18 +15,16 @@ package com.propertyvista.common.client.ui.components;
 
 import java.text.ParseException;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.contact.Phone;
 
 public class PhoneFormatter implements IFormat<Phone> {
 
-    private static I18n i18n = I18nFactory.getI18n(PhoneFormatter.class);
+    private static I18n i18n = I18n.get(PhoneFormatter.class);
 
     private final static String regex = "^\\s*(\\+?1\\s?)?(\\(?\\d{3}\\)?\\s?[\\s-]?){1,2}(\\d{4})$";
 

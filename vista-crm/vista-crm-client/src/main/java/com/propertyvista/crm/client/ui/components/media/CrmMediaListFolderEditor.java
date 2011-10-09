@@ -15,9 +15,6 @@ package com.propertyvista.crm.client.ui.components.media;
 
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -38,6 +35,7 @@ import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ClentNavigUtils;
@@ -56,7 +54,7 @@ import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class CrmMediaListFolderEditor extends VistaEntityFolder<Media> {
 
-    protected static I18n i18n = I18nFactory.getI18n(CrmMediaListFolderEditor.class);
+    protected static I18n i18n = I18n.get(CrmMediaListFolderEditor.class);
 
     private final ImageTarget imageTarget;
 

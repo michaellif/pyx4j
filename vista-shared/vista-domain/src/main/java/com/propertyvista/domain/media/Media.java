@@ -21,15 +21,15 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.File;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 
 public interface Media extends IEntity {
 
-    @Translatable
+    @I18n
     @XmlType(name = "MediaType")
     public enum Type {
 

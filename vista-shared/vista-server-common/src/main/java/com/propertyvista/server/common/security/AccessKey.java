@@ -17,15 +17,14 @@ import java.nio.charset.Charset;
 import java.util.Random;
 
 import org.apache.commons.codec.binary.Base64;
-import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 
 public class AccessKey {
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(AccessKey.class);
 
     public static final int ACCESS_KEY_LEN = 16;
 

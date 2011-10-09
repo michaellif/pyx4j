@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -23,11 +21,12 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
 
-    private static I18n i18n = I18nFactory.getI18n(NewPasswordViewImpl.class);
+    private static I18n i18n = I18n.get(NewPasswordViewImpl.class);
 
     private Presenter presenter;
 

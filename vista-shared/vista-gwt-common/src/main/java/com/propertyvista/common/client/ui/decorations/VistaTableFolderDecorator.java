@@ -15,18 +15,16 @@ package com.propertyvista.common.client.ui.decorations;
 
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.VistaEntityFolder;
 
 public class VistaTableFolderDecorator<E extends IEntity> extends TableFolderDecorator<E> {
-    protected static I18n i18n = I18nFactory.getI18n(VistaTableFolderDecorator.class);
+    protected static I18n i18n = I18n.get(VistaTableFolderDecorator.class);
 
     public VistaTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, String title, boolean editable) {
         super(columns, VistaImages.INSTANCE, title, editable);

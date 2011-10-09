@@ -13,14 +13,12 @@
  */
 package com.propertyvista.portal.server.ptapp.services;
 
-import org.xnap.commons.i18n.I18n;
-
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.IBoundToApplication;
@@ -29,7 +27,7 @@ import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class ApplicationEntityServiceImpl extends EntityServicesImpl {
 
-    protected static I18n i18n = I18nFactory.getI18n();
+    protected static I18n i18n = I18n.get(ApplicationEntityServiceImpl.class);
 
     public static <E extends IEntity & IBoundToApplication> void saveApplicationEntity(E entity) {
         // app specific security stuff

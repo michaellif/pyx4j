@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.login;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -24,13 +22,14 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.crm.rpc.PasswordRetrievalRequest;
 
 public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePasswordView {
 
-    private static I18n i18n = I18nFactory.getI18n(RetrievePasswordViewImpl.class);
+    private static I18n i18n = I18n.get(RetrievePasswordViewImpl.class);
 
     private Presenter presenter;
 

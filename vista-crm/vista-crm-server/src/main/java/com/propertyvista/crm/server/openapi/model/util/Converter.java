@@ -14,13 +14,11 @@ package com.propertyvista.crm.server.openapi.model.util;
 
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.server.openapi.model.AddressRS;
 import com.propertyvista.crm.server.openapi.model.AdvertisingBlurbRS;
@@ -57,7 +55,7 @@ import com.propertyvista.server.common.reference.SharedData;
 
 public class Converter {
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(Converter.class);
 
     public static final String DATE_PATTERN = "yyyy-MM-dd";
 

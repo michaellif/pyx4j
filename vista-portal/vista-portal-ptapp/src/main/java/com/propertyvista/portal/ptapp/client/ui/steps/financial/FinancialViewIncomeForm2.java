@@ -17,9 +17,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -39,6 +36,7 @@ import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -56,7 +54,7 @@ import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderIte
 
 public class FinancialViewIncomeForm2 extends CEntityFolderBoxEditor<IIncomeInfo> {
 
-    private static I18n i18n = I18nFactory.getI18n(FinancialViewIncomeForm2.class);
+    private static I18n i18n = I18n.get(FinancialViewIncomeForm2.class);
 
     private final boolean summaryViewMode;
 

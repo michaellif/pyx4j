@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -24,12 +22,13 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.Message;
 
 public class GenericMessageViewImpl extends FlowPanel implements GenericMessageView {
 
-    private static I18n i18n = I18nFactory.getI18n(GenericMessageViewImpl.class);
+    private static I18n i18n = I18n.get(GenericMessageViewImpl.class);
 
     private Presenter presenter;
 

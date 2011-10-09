@@ -17,8 +17,8 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translation;
 
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.StringHolder;
@@ -28,19 +28,19 @@ public interface ListerGadgetBaseSettings extends AbstractGadgetSettings {
 
     public enum RefreshInterval {
 
-        @Translation("Never")
+        @Translate("Never")
         Never(-1),
 
-        @Translation("15 min")
+        @Translate("15 min")
         min15L(15),
 
-        @Translation("30 min")
+        @Translate("30 min")
         min30(30),
 
-        @Translation("1 hours")
+        @Translate("1 hours")
         hour1(60),
 
-        @Translation("2 hours")
+        @Translate("2 hours")
         hour2(120);
 
         RefreshInterval(int value) {

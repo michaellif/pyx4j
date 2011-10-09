@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.BorderStyle;
@@ -31,6 +29,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
@@ -39,7 +38,7 @@ import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
 public class AddGadgetBox extends DialogPanel {
 
-    private final I18n i18n = I18nFactory.getI18n(AddGadgetBox.class);
+    private final I18n i18n = I18n.get(AddGadgetBox.class);
 
     private final ListBox gadgetsList = new ListBox();
 

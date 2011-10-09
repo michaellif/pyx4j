@@ -13,14 +13,13 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
@@ -32,7 +31,7 @@ import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 
 public class EditPaymentMethodForm extends CEntityEditor<PaymentMethodDTO> {
 
-    private static I18n i18n = I18nFactory.getI18n(EditPaymentMethodForm.class);
+    private static I18n i18n = I18n.get(EditPaymentMethodForm.class);
 
     public static final String SUBTITLE_STYLE_PREFIX = "EditPaymentMethodFormSubtitle";
 

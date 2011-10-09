@@ -17,9 +17,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -46,6 +43,7 @@ import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.CMoney;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
@@ -66,7 +64,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 
 public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
-    private static I18n i18n = I18nFactory.getI18n(FinancialViewForm.class);
+    private static I18n i18n = I18n.get(FinancialViewForm.class);
 
     private boolean summaryViewMode = false;
 

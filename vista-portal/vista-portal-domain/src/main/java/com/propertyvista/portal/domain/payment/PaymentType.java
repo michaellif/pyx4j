@@ -13,12 +13,12 @@
  */
 package com.propertyvista.portal.domain.payment;
 
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translation;
 
 public enum PaymentType {
 
-    @Translation("eCheck")
+    @Translate("eCheck")
     Echeck,
 
     Visa,

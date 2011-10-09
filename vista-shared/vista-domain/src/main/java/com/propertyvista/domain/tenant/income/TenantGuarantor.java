@@ -23,15 +23,15 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.person.Person;
 
 public interface TenantGuarantor extends IEntity, Person {
 
-    @Translatable
+    @I18n
     public enum Relationship {
 
         Mother, Father, Grandfather, Grandmother, Uncle, Aunt, Friend, Other;

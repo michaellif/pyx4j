@@ -24,16 +24,16 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
-import com.pyx4j.i18n.shared.Translation;
 
 import com.propertyvista.domain.contact.Address;
 
 @ToStringFormat("{0} {1}")
 public interface BuildingInfo extends IEntity {
 
-    @Translatable
+    @I18n
     @XmlType(name = "BuildingInfoType")
     public enum Type {
 
@@ -59,18 +59,18 @@ public interface BuildingInfo extends IEntity {
         }
     }
 
-    @Translatable
+    @I18n
     public enum Shape {
 
         regular,
 
-        @Translation("L-shape")
+        @Translate("L-shape")
         lShape,
 
-        @Translation("T-shape")
+        @Translate("T-shape")
         tShape,
 
-        @Translation("U-shape")
+        @Translate("U-shape")
         uShape,
 
         irregular;
@@ -81,7 +81,7 @@ public interface BuildingInfo extends IEntity {
         }
     }
 
-    @Translatable
+    @I18n
     public enum ConstructionType {
 
         brick,
@@ -100,7 +100,7 @@ public interface BuildingInfo extends IEntity {
         }
     }
 
-    @Translatable
+    @I18n
     public enum FoundationType {
 
         pile,
@@ -119,7 +119,7 @@ public interface BuildingInfo extends IEntity {
         }
     }
 
-    @Translatable
+    @I18n
     public enum FloorType {
 
         hardwood,
@@ -140,19 +140,19 @@ public interface BuildingInfo extends IEntity {
         }
     }
 
-    @Translatable
+    @I18n
     public enum StructureType {
 
-        @Translation("Low-Rise")
+        @Translate("Low-Rise")
         lowRise,
 
-        @Translation("High-Rise")
+        @Translate("High-Rise")
         highRise,
 
-        @Translation("Mid-Rise")
+        @Translate("Mid-Rise")
         midRise,
 
-        @Translation("Walk-up")
+        @Translate("Walk-up")
         walkUp,
 
         townhouse,
@@ -167,7 +167,7 @@ public interface BuildingInfo extends IEntity {
         }
     }
 
-    @Translatable
+    @I18n
     public enum WaterSupply {
 
         municipal,

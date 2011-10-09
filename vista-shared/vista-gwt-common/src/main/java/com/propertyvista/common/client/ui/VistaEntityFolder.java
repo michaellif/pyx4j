@@ -15,9 +15,6 @@ package com.propertyvista.common.client.ui;
 
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
@@ -25,12 +22,13 @@ import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
 
 public abstract class VistaEntityFolder<E extends IEntity> extends CEntityFolder<E> {
-    protected static I18n i18n = I18nFactory.getI18n(VistaEntityFolder.class);
+    protected static I18n i18n = I18n.get(VistaEntityFolder.class);
 
     private final Class<E> clazz;
 

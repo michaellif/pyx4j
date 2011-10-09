@@ -21,8 +21,8 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translation;
 
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.financial.offering.ChargeItemExtraData;
@@ -32,10 +32,10 @@ public interface Pet extends ChargeItemExtraData {
 
     public enum WeightUnit {
 
-        @Translation("LB")
+        @Translate("LB")
         lb,
 
-        @Translation("KG")
+        @Translate("KG")
         kg;
 
         @Override

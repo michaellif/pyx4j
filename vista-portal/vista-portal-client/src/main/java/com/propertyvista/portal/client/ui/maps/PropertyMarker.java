@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.maps;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -39,6 +37,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.gwt.geo.MapUtils;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.client.MediaUtils;
 import com.propertyvista.portal.client.resources.PortalImages;
@@ -51,7 +50,7 @@ import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class PropertyMarker extends Marker {
 
-    private static I18n i18n = I18nFactory.getI18n(PropertyMarker.class);
+    private static I18n i18n = I18n.get(PropertyMarker.class);
 
     private final PropertyDTO property;
 

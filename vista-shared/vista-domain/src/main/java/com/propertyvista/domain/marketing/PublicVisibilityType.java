@@ -15,18 +15,18 @@ package com.propertyvista.domain.marketing;
 
 import java.io.Serializable;
 
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
-import com.pyx4j.i18n.shared.Translation;
 
-@Translatable
+@I18n
 public enum PublicVisibilityType implements Serializable {
 
     internal,
 
     tenant,
 
-    @Translation("Public")
+    @Translate("Public")
     global;
 
     @Override

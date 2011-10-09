@@ -23,8 +23,8 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.ref.PhoneProvider;
@@ -33,7 +33,7 @@ import com.propertyvista.domain.ref.PhoneProviderReferenceAdapter;
 @ToStringFormat("{0}{1,choice,null#|!null# ex.{1}}")
 public interface PropertyPhone extends IEntity {
 
-    @Translatable
+    @I18n
     @XmlType(name = "PropertyPhoneType")
     public enum Type {
 
@@ -53,7 +53,7 @@ public interface PropertyPhone extends IEntity {
         }
     }
 
-    @Translatable
+    @I18n
     @XmlType(name = "PhoneDesignation")
     public enum DesignationType {
 

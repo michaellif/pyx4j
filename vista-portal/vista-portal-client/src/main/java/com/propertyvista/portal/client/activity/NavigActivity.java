@@ -16,14 +16,12 @@ package com.propertyvista.portal.client.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -37,7 +35,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
 
     private final AppPlace place;
 
-    private static I18n i18n = I18nFactory.getI18n(NavigActivity.class);
+    private static I18n i18n = I18n.get(NavigActivity.class);
 
     public NavigActivity(Place place) {
         this.view = (NavigView) PortalViewFactory.instance(NavigView.class);

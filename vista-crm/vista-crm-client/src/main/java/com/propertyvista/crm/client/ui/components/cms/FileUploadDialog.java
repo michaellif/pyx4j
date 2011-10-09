@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.components.cms;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
@@ -24,6 +22,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
@@ -33,7 +32,7 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public abstract class FileUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText {
 
-    private static I18n i18n = I18nFactory.getI18n(FileUploadDialog.class);
+    private static I18n i18n = I18n.get(FileUploadDialog.class);
 
     private final UploadPanel<IEntity> uploadPanel;
 

@@ -17,13 +17,13 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
 @EmbeddedEntity
 public interface Address extends IEntity, IAddressFull {
 
-    @Translatable
+    @I18n
     public enum AddressType {
 
         property,

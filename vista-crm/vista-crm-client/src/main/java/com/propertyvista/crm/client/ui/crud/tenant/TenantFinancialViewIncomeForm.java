@@ -15,9 +15,6 @@ package com.propertyvista.crm.client.ui.crud.tenant;
 
 import java.util.Date;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -33,6 +30,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
@@ -55,7 +53,7 @@ import com.propertyvista.domain.tenant.income.PersonalIncome;
 
 public class TenantFinancialViewIncomeForm extends CEntityFolderBoxEditor<PersonalIncome> {
 
-    private static I18n i18n = I18nFactory.getI18n(TenantFinancialViewIncomeForm.class);
+    private static I18n i18n = I18n.get(TenantFinancialViewIncomeForm.class);
 
     private final boolean readOnlyMode;
 

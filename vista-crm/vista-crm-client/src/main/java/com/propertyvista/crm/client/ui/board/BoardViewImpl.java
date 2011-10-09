@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.board;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -22,6 +20,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
@@ -31,7 +30,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
 public class BoardViewImpl extends DockLayoutPanel implements BoardView {
 
-    protected static I18n i18n = I18nFactory.getI18n(BoardViewImpl.class);
+    protected static I18n i18n = I18n.get(BoardViewImpl.class);
 
     protected BoardBase board = null;
 

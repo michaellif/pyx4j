@@ -15,9 +15,6 @@ package com.propertyvista.portal.client.ui.residents;
 
 import java.util.Date;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Position;
@@ -39,6 +36,7 @@ import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleName;
 import com.pyx4j.widgets.client.style.Selector;
@@ -58,7 +56,7 @@ import com.propertyvista.portal.domain.payment.PaymentType;
 
 public class NewPaymentMethodForm extends CEntityEditor<PaymentMethodGenericDTO> {
 
-    private static I18n i18n = I18nFactory.getI18n(NewPaymentMethodForm.class);
+    private static I18n i18n = I18n.get(NewPaymentMethodForm.class);
 
     private FlowPanel paymentTypeImagesPanel;
 

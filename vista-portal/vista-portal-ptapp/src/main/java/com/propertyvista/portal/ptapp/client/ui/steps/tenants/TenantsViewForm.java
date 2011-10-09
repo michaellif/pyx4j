@@ -19,9 +19,6 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -41,6 +38,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
@@ -56,7 +54,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 
 public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
-    static I18n i18n = I18nFactory.getI18n(TenantsViewForm.class);
+    static I18n i18n = I18n.get(TenantsViewForm.class);
 
     private int maxTenants;
 

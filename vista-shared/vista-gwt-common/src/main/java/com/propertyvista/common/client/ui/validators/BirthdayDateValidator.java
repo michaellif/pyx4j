@@ -15,15 +15,14 @@ package com.propertyvista.common.client.ui.validators;
 
 import java.util.Date;
 
-import org.xnap.commons.i18n.I18n;
-
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
+
 
 public class BirthdayDateValidator implements EditableValueValidator<Date> {
 
-    private static I18n i18n = I18nFactory.getI18n(BirthdayDateValidator.class);
+    private static I18n i18n = I18n.get(BirthdayDateValidator.class);
 
     @Override
     public boolean isValid(CEditableComponent<Date, ?> component, Date value) {

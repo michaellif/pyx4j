@@ -19,14 +19,14 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
-import com.pyx4j.i18n.shared.Translation;
 
 @ToStringFormat("{0} {1}")
 public interface ChargeLine extends Charge {
 
-    @Translatable
+    @I18n
     public enum ChargeType {
 
         deposit,
@@ -39,7 +39,7 @@ public interface ChargeLine extends Charge {
 
         parking,
 
-        @Translation("Second Parking")
+        @Translate("Second Parking")
         parking2,
 
         locker,

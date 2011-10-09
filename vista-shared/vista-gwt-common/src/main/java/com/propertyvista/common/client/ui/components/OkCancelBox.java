@@ -13,8 +13,6 @@
  */
 package com.propertyvista.common.client.ui.components;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -24,6 +22,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 /**
@@ -35,7 +34,7 @@ import com.pyx4j.widgets.client.dialog.DialogPanel;
  */
 public abstract class OkCancelBox extends DialogPanel {
 
-    protected final static I18n i18n = I18nFactory.getI18n(OkCancelBox.class);
+    protected final static I18n i18n = I18n.get(OkCancelBox.class);
 
     protected Button okButton;
 

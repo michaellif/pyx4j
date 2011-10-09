@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -33,6 +31,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dashboard.BoardLayout;
 import com.pyx4j.widgets.client.dashboard.Dashboard;
 import com.pyx4j.widgets.client.dashboard.IBoard;
@@ -45,7 +44,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
 public class DashboardPanel extends BoardBase implements DashboardView {
 
-    private static I18n i18n = I18nFactory.getI18n(DashboardPanel.class);
+    private static I18n i18n = I18n.get(DashboardPanel.class);
 
     private LayoutsSet layouts;
 

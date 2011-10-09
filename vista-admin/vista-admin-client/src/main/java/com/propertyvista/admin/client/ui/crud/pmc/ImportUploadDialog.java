@@ -13,8 +13,6 @@
  */
 package com.propertyvista.admin.client.ui.crud.pmc;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
@@ -25,6 +23,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
@@ -38,7 +37,7 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class ImportUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText {
 
-    private static I18n i18n = I18nFactory.getI18n(ImportUploadDialog.class);
+    private static I18n i18n = I18n.get(ImportUploadDialog.class);
 
     private final CEntityEditor<PmcImportDTO> form;
 

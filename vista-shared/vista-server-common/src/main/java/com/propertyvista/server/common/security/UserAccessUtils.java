@@ -16,10 +16,8 @@ package com.propertyvista.server.common.security;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import org.xnap.commons.i18n.I18n;
-
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.User;
@@ -27,7 +25,7 @@ import com.propertyvista.server.domain.UserCredential;
 
 public class UserAccessUtils {
 
-    protected static I18n i18n = I18nFactory.getI18n();
+    protected static I18n i18n = I18n.get(UserAccessUtils.class);
 
     public static String createAccessToken(User user, int ttlDays) {
         UserCredential credential = Persistence.service().retrieve(UserCredential.class, user.getPrimaryKey());

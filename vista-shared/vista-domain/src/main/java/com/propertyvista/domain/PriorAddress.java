@@ -23,8 +23,8 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.contact.IAddressFull;
 import com.propertyvista.domain.contact.Phone;
@@ -32,7 +32,7 @@ import com.propertyvista.domain.contact.Phone;
 @Table(name = "pt_address")
 public interface PriorAddress extends IEntity, IAddressFull {
 
-    @Translatable
+    @I18n
     public enum OwnedRented {
 
         owned,

@@ -15,22 +15,20 @@ package com.propertyvista.portal.ptapp.client.ui;
 
 import static com.pyx4j.commons.HtmlUtils.h2;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 
 public class LoginViewForm extends CEntityEditor<AuthenticationRequest> {
 
-    private static I18n i18n = I18nFactory.getI18n(LoginViewForm.class);
+    private static I18n i18n = I18n.get(LoginViewForm.class);
 
     public LoginViewForm() {
         super(AuthenticationRequest.class);

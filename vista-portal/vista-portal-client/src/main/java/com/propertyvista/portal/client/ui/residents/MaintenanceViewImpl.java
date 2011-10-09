@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -22,6 +20,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
@@ -31,7 +30,7 @@ public class MaintenanceViewImpl extends FlowPanel implements MaintenanceView {
 
     private final MaintenanceForm form;
 
-    private static I18n i18n = I18nFactory.getI18n(MaintenanceViewImpl.class);
+    private static I18n i18n = I18n.get(MaintenanceViewImpl.class);
 
     public MaintenanceViewImpl() {
         form = new MaintenanceForm();

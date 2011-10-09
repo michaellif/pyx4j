@@ -20,8 +20,8 @@ import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.CountryReferenceAdapter;
@@ -39,7 +39,7 @@ public interface IAddressFull extends IEntity {
     @NotNull
     IPrimitive<String> streetName();
 
-    @Translatable
+    @I18n
     public enum StreetType {
 
         street,
@@ -75,7 +75,7 @@ public interface IAddressFull extends IEntity {
     @NotNull
     IPrimitive<StreetType> streetType();
 
-    @Translatable
+    @I18n
     public enum StreetDirection {
 
         east,

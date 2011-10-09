@@ -19,8 +19,8 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translation;
 
 import com.propertyvista.domain.contact.IAddressFull;
 import com.propertyvista.domain.financial.Money;
@@ -34,10 +34,10 @@ public interface IncomeInfoStudentIncome extends IEntity, IAddressFull, IIncomeI
 
     public enum Program {
 
-        @Translation("Undergraduate")
+        @Translate("Undergraduate")
         undergraduate,
 
-        @Translation("Graduate")
+        @Translate("Graduate")
         graduate;
 
         @Override

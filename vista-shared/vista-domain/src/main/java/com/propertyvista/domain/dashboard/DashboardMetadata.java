@@ -19,15 +19,15 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
-import com.pyx4j.i18n.shared.Translation;
 
 import com.propertyvista.domain.ISharedUserEntity;
 
 public interface DashboardMetadata extends ISharedUserEntity {
 
-    @Translatable
+    @I18n
     public enum DashboardType {
         system, building;
 
@@ -39,19 +39,19 @@ public interface DashboardMetadata extends ISharedUserEntity {
 
     public enum LayoutType {
 
-        @Translation("One whole width column")
+        @Translate("One whole width column")
         One,
 
-        @Translation("Two equal columns")
+        @Translate("Two equal columns")
         Two11,
 
-        @Translation("Two columns (33/67)")
+        @Translate("Two columns (33/67)")
         Two12,
 
-        @Translation("Two columns (67/33)")
+        @Translate("Two columns (67/33)")
         Two21,
 
-        @Translation("Three equal columns")
+        @Translate("Three equal columns")
         Three,
 
         Report;

@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
 
 import com.mortennobel.imagescaling.AdvancedResizeOp;
 import com.mortennobel.imagescaling.ThumpnailRescaleOp;
@@ -33,7 +32,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.shared.Dimension;
 
@@ -50,7 +49,7 @@ public class ThumbnailService {
 
     private final static Logger log = LoggerFactory.getLogger(ThumbnailService.class);
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(ThumbnailService.class);
 
     public static void persist(Key key, String fileName, byte[] originalContent, ImageTarget imageTarget) {
         switch (imageTarget) {

@@ -22,14 +22,13 @@ import java.util.Collection;
 import java.util.Locale;
 
 import org.apache.commons.io.FilenameUtils;
-import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.essentials.j2se.util.FileIOUtils;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.gwt.server.IOUtils;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.crm.rpc.services.MediaUploadService;
@@ -41,7 +40,7 @@ import com.propertyvista.server.common.blob.ThumbnailService;
 
 public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
 
-    private static I18n i18n = I18nFactory.getI18n();
+    private static I18n i18n = I18n.get(MediaConverter.class);
 
     private final String baseFolder;
 

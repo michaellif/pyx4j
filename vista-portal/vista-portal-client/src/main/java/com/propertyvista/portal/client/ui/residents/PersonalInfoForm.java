@@ -16,9 +16,6 @@ package com.propertyvista.portal.client.ui.residents;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.view.client.Range;
@@ -41,6 +38,7 @@ import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
@@ -62,7 +60,7 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
 
     private PersonalInfoView.Presenter presenter;
 
-    private static I18n i18n = I18nFactory.getI18n(PersonalInfoForm.class);
+    private static I18n i18n = I18n.get(PersonalInfoForm.class);
 
     public PersonalInfoForm() {
         super(ResidentDTO.class, new VistaEditorsComponentFactory());

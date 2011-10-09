@@ -21,12 +21,12 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
 public interface Email extends IEntity {
 
-    @Translatable
+    @I18n
     @XmlType(name = "EmailType")
     public enum Type {
         home, work, other;

@@ -13,21 +13,20 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 
 public abstract class GadgetBase implements IGadgetBase {
 
-    protected static I18n i18n = I18nFactory.getI18n(GadgetBase.class);
+    protected static I18n i18n = I18n.get(GadgetBase.class);
 
     protected final GadgetMetadata gadgetMetadata;
 

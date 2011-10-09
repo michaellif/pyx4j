@@ -13,45 +13,45 @@
  */
 package com.propertyvista.domain.tenant.income;
 
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translation;
 
 public enum IncomeSource {
 
-    @Translation("Full time")
+    @Translate("Full time")
     fulltime,
 
-    @Translation("Part time")
+    @Translate("Part time")
     parttime,
 
-    @Translation("Self employed")
+    @Translate("Self employed")
     selfemployed,
 
-    @Translation("Seasonally Employed")
+    @Translate("Seasonally Employed")
     seasonallyEmployed,
 
-    @Translation("Social Services")
+    @Translate("Social Services")
     socialServices,
 
-    @Translation("Pension")
+    @Translate("Pension")
     pension,
 
-    @Translation("Retired")
+    @Translate("Retired")
     retired,
 
-    @Translation("Student")
+    @Translate("Student")
     student,
 
-    @Translation("Unemployment")
+    @Translate("Unemployment")
     unemployment,
 
-    @Translation("ODSP")
+    @Translate("ODSP")
     odsp,
 
-    @Translation("Dividends")
+    @Translate("Dividends")
     dividends,
 
-    @Translation("Other")
+    @Translate("Other")
     other;
 
     @Override

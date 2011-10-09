@@ -20,14 +20,14 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface AptUnitOccupancy extends IEntity {
 
-    @Translatable
+    @I18n
     public enum Status {
 
         leased,
@@ -46,7 +46,7 @@ public interface AptUnitOccupancy extends IEntity {
         }
     }
 
-    @Translatable
+    @I18n
     public enum OffMarketType {
 
         down,

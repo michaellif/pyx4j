@@ -16,8 +16,6 @@ package com.propertyvista.common.client.theme;
 import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.ThemeColors;
 
-import com.propertyvista.common.client.theme.VistaPalette;
-
 public class BownWarmPalette extends VistaPalette {
 
     public BownWarmPalette() {

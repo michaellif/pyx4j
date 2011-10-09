@@ -13,17 +13,16 @@
  */
 package com.propertyvista.common.client.ui.decorations;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderDecorator;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.VistaEntityFolder;
 
 public class VistaBoxFolderDecorator<E extends IEntity> extends BoxFolderDecorator<E> {
-    protected static I18n i18n = I18nFactory.getI18n(VistaBoxFolderDecorator.class);
+    protected static I18n i18n = I18n.get(VistaBoxFolderDecorator.class);
 
     public VistaBoxFolderDecorator(String title, boolean editable) {
         super(VistaImages.INSTANCE, title, editable);

@@ -17,9 +17,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -44,6 +41,7 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.components.AddressUtils;
@@ -68,7 +66,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 
 public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
 
-    private static I18n i18n = I18nFactory.getI18n(InfoViewForm.class);
+    private static I18n i18n = I18n.get(InfoViewForm.class);
 
     private Widget previousAddressHeader;
 

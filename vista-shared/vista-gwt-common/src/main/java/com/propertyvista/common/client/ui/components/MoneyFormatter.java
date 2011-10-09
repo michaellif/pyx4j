@@ -15,20 +15,18 @@ package com.propertyvista.common.client.ui.components;
 
 import java.text.ParseException;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.i18n.client.NumberFormat;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.domain.util.DomainUtil;
 
 public class MoneyFormatter implements IFormat<Money> {
 
-    private static I18n i18n = I18nFactory.getI18n(MoneyFormatter.class);
+    private static I18n i18n = I18n.get(MoneyFormatter.class);
 
     public static enum ShowCurrency {
         hide, show, use$

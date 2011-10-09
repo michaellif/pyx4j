@@ -15,31 +15,31 @@ package com.propertyvista.shared;
 
 import java.io.Serializable;
 
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translation;
 
 //TODO Use compiler do define available in compiled GWT locales  
 public enum CompiledLocale implements Serializable {
 
-    @Translation(value = "English")
+    @Translate(value = "English")
     en,
 
-    @Translation(value = "English (Canada)")
+    @Translate(value = "English (Canada)")
     en_CA,
 
-    @Translation(value = "English (United States)")
+    @Translate(value = "English (United States)")
     en_US,
 
-    @Translation(value = "French")
+    @Translate(value = "French")
     fr,
 
-    @Translation(value = "French (Canada)")
+    @Translate(value = "French (Canada)")
     fr_CA,
 
-    @Translation(value = "Spanish")
+    @Translate(value = "Spanish")
     sp,
 
-    @Translation(value = "Russian")
+    @Translate(value = "Russian")
     ru;
 
     @Override

@@ -15,9 +15,6 @@ package com.propertyvista.crm.client.ui.crud.building.catalog;
 
 import java.util.EnumSet;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -26,6 +23,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
@@ -52,7 +50,7 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
 
     private class SelectTypeBox extends DialogPanel {
 
-        private final I18n i18n = I18nFactory.getI18n(SelectTypeBox.class);
+        private final I18n i18n = I18n.get(SelectTypeBox.class);
 
         private final CComboBox<Feature.Type> types = new CComboBox<Feature.Type>(i18n.tr("Types"), true);
 

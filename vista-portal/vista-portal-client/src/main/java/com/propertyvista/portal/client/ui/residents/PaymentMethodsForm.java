@@ -16,9 +16,6 @@ package com.propertyvista.portal.client.ui.residents;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -26,6 +23,7 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
@@ -34,7 +32,7 @@ import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
 
 public class PaymentMethodsForm extends CEntityEditor<PaymentMethodListDTO> implements PaymentMethodsView {
 
-    private static I18n i18n = I18nFactory.getI18n(PaymentMethodsForm.class);
+    private static I18n i18n = I18n.get(PaymentMethodsForm.class);
 
     private PaymentMethodsView.Presenter presenter;
 

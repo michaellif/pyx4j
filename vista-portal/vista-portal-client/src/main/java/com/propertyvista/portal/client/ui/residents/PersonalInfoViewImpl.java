@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -24,6 +22,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.portal.domain.dto.ResidentDTO;
@@ -34,7 +33,7 @@ public class PersonalInfoViewImpl extends FlowPanel implements PersonalInfoView 
 
     private PersonalInfoView.Presenter presenter;
 
-    private static I18n i18n = I18nFactory.getI18n(PersonalInfoViewImpl.class);
+    private static I18n i18n = I18n.get(PersonalInfoViewImpl.class);
 
     public PersonalInfoViewImpl() {
         form = new PersonalInfoForm();

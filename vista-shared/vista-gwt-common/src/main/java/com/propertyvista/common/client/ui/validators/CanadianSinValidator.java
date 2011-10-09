@@ -13,18 +13,17 @@
  */
 package com.propertyvista.common.client.ui.validators;
 
-import org.xnap.commons.i18n.I18n;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.util.ValidationUtils;
 
 public class CanadianSinValidator implements EditableValueValidator<String> {
 
-    private static I18n i18n = I18nFactory.getI18n(CanadianSinValidator.class);
+    private static I18n i18n = I18n.get(CanadianSinValidator.class);
 
     @Override
     public boolean isValid(CEditableComponent<String, ?> component, String value) {

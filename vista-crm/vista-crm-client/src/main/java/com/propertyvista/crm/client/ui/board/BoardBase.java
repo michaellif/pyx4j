@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.board;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
@@ -29,6 +26,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dashboard.BoardEvent;
 import com.pyx4j.widgets.client.dashboard.BoardEvent.Reason;
 import com.pyx4j.widgets.client.dashboard.BoardLayout;
@@ -52,7 +50,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
         actionsPanel
     }
 
-    private static I18n i18n = I18nFactory.getI18n(BoardViewImpl.class);
+    private static I18n i18n = I18n.get(BoardBase.class);
 
     private final HorizontalPanel actionsPanel;
 

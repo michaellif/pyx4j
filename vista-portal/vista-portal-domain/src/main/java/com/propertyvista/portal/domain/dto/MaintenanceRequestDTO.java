@@ -20,13 +20,13 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.i18n.shared.Translatable;
 
 @Transient
 public interface MaintenanceRequestDTO extends IEntity {
 
-    @Translatable
+    @I18n
     public enum MaintenanceType {
 
         Plumbing, Electrical, Heating, Cooling, Other;
@@ -37,7 +37,7 @@ public interface MaintenanceRequestDTO extends IEntity {
         }
     }
 
-    @Translatable
+    @I18n
     public enum StatusType {
 
         New, Pending, Scheduled, Resolved;
