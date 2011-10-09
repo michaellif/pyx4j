@@ -1,5 +1,6 @@
 package com.propertyvista.crm.client.ui;
 
+import java.util.List;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
@@ -13,6 +14,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.StringDebugId;
@@ -21,6 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.shared.CompiledLocale;
 
 public class TopRightActionsViewImpl extends FlowPanel implements TopRightActionsView {
 
@@ -45,6 +48,8 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
     private final CHyperlink account;
 
     private final CHyperlink settings;
+
+    private final HorizontalPanel locales;
 
     private final Image message;
 
@@ -131,6 +136,9 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         themes.setDebugId(new StringDebugId("themes"));
         themes.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
+        locales = new HorizontalPanel();
+        locales.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
+
         alert = new Image(CrmImages.INSTANCE.alert());
         alert.addClickHandler(new ClickHandler() {
             @Override
@@ -179,6 +187,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         container.add(searchwr);
         container.add(messagewr);
         container.add(alertwr);
+        container.add(locales);
 
         add(container);
     }
@@ -219,5 +228,24 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         settings.setVisible(true);
         search.setVisible(true);
         greetings.setHTML("Welcome &nbsp;" + userName);
+    }
+
+    @Override
+    public void setAvailableLocales(List<CompiledLocale> localeList) {
+        locales.clear();
+        for (final CompiledLocale compiledLocale : localeList) {
+            CHyperlink link = new CHyperlink(null, new Command() {
+                @Override
+                public void execute() {
+                    presenter.setLocale(compiledLocale);
+                }
+            });
+            link.setValue(compiledLocale.name());
+            locales.add(link);
+            locales.add(new Label("/"));
+        }
+        if (locales.getWidgetCount() > 0) {
+            locales.remove(locales.getWidgetCount() - 1);
+        }
     }
 }

@@ -1,41 +1,48 @@
 package com.propertyvista.crm.client.ui;
 
+import java.util.List;
+
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl.Theme;
+import com.propertyvista.shared.CompiledLocale;
 
 public interface TopRightActionsView extends IsWidget {
 
-    public void setPresenter(Presenter presenter);
+    void setPresenter(Presenter presenter);
 
-    public interface Presenter {
+    interface Presenter {
 
-        public PlaceController getPlaceController();
+        PlaceController getPlaceController();
 
-        public Place getWhere();
+        Place getWhere();
 
-        public void setTheme(Theme theme);
+        void setTheme(Theme theme);
 
-        public void logout();
+        void logout();
 
-        public void login();
+        void login();
 
-        public void showAccount();
+        void showAccount();
 
-        public void showAlerts();
+        void showAlerts();
 
-        public void showMessages();
+        void showMessages();
 
-        public void showSettings();
+        void showSettings();
 
-        public void back2CrmView();
+        void back2CrmView();
 
-        public void SwitchCrmAndSettings();
+        void SwitchCrmAndSettings();
+
+        void setLocale(CompiledLocale locale);
     }
 
-    public void onLogedOut();
+    void onLogedOut();
 
-    public void onLogedIn(String userName);
+    void onLogedIn(String userName);
+
+    void setAvailableLocales(List<CompiledLocale> locales);
 }

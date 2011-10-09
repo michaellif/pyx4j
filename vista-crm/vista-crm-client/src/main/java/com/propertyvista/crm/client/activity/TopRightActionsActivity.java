@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -34,6 +37,7 @@ import com.propertyvista.crm.client.ui.TopRightActionsView;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl.Theme;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.shared.CompiledLocale;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
 
@@ -56,6 +60,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
                 updateAuthenticatedView();
             }
         });
+        obtainAvailableLocales();
     }
 
     private void updateAuthenticatedView() {
@@ -102,6 +107,21 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
             StyleManger.installTheme(new VistaCrmTheme(), new BownWarmPalette());
             break;
         }
+    }
+
+    private void obtainAvailableLocales() {
+        //TODO - VLAD obtain available locale here
+        List<CompiledLocale> locales = new ArrayList<CompiledLocale>();
+        locales.add(CompiledLocale.en);
+        locales.add(CompiledLocale.ru);
+        locales.add(CompiledLocale.fr);
+        view.setAvailableLocales(locales);
+    }
+
+    @Override
+    public void setLocale(CompiledLocale locale) {
+        //TODO - VLAD get locale here
+        System.out.println("locale = " + locale.name());
     }
 
     public TopRightActionsActivity withPlace(Place place) {
