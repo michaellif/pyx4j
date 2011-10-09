@@ -37,7 +37,13 @@
             <artifactId>pyx-i18n-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+        
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-i18n-gettext</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-gwt-commons</artifactId>

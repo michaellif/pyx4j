@@ -14,6 +14,10 @@
     <!--  Locale used in Java code e.g. No translation required -->
 	<set-configuration-property name="pyx.locale.default" value="default"/>
 
+    <replace-with class="com.pyx4j.i18n.client.ClientI18nFactory">
+        <when-type-is class="com.pyx4j.i18n.shared.II18nFactory"/>
+    </replace-with>
+  
     <generate-with class="com.pyx4j.i18n.rebind.I18nResourceBundleGenerator">
         <when-type-assignable class="com.pyx4j.i18n.client.I18nResourceBundle"/>
     </generate-with>

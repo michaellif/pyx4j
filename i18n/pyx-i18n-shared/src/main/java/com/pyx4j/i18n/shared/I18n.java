@@ -20,19 +20,34 @@
  */
 package com.pyx4j.i18n.shared;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.shared.ApplicationMode;
 
 public class I18n {
 
-    private static I18n i18n;
+    private static II18nFactory factory;
 
-    public final String tr(String text) {
-        String value = text;//bundle.getString(text);
-        if (value == null) {
-            return text;
+    static {
+        if (ApplicationMode.hasGWT()) {
+            if (GWT.isClient()) {
+                factory = GWT.create(II18nFactory.class);
+            } else {
+                factory = ServerSideFactory.create(II18nFactory.class);
+            }
         } else {
-            return value;
+            factory = ServerSideFactory.create(II18nFactory.class);
         }
+    }
+
+    public I18n() {
+
+    }
+
+    public String tr(String text) {
+        return text;
     }
 
     public final String tr(String text, Object... objects) {
@@ -40,11 +55,7 @@ public class I18n {
     }
 
     public static final I18n get(final Class<?> clazz) {
-        if (i18n == null) {
-            synchronized (I18n.class) {
-                i18n = new I18n();
-            }
-        }
-        return i18n;
+        return factory.get(clazz);
     }
+
 }

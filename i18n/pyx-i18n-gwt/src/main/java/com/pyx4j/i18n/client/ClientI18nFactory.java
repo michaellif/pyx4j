@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,31 +14,32 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jun 8, 2010
+ * Created on Oct 9, 2011
  * @author vlads
  * @version $Id$
  */
-package org.xnap.commons.i18n;
+package com.pyx4j.i18n.client;
 
-import com.pyx4j.i18n.client.I18nResourceBundle;
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.i18n.shared.II18nFactory;
+
 /**
- * Port of gettext-commons to GWT.
- * 
  * Only single Locale is supported at runtime.
  */
-class I18nFactory {
+public class ClientI18nFactory implements II18nFactory {
 
-//    private static I18n i18n;
-//
-//    public static I18n getI18n(final Class<?> clazz) {
-//        if (i18n == null) {
-//            synchronized (I18nFactory.class) {
-//                i18n = new I18n((I18nResourceBundle) GWT.create(I18nResourceBundle.class));
-//            }
-//        }
-//        return i18n;
-//    }
-    
+    private static I18n i18n;
+
+    @Override
+    public I18n get(Class<?> clazz) {
+        if (i18n == null) {
+            synchronized (I18n.class) {
+                i18n = new I18nImpl((I18nResourceBundle) GWT.create(I18nResourceBundle.class));
+            }
+        }
+        return i18n;
+    }
+
 }

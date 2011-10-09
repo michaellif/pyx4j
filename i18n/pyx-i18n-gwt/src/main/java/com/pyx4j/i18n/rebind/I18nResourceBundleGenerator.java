@@ -20,8 +20,10 @@
  */
 package com.pyx4j.i18n.rebind;
 
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gwt.core.ext.BadPropertyValueException;
 import com.google.gwt.core.ext.Generator;
@@ -36,7 +38,9 @@ import com.google.gwt.user.rebind.SourceWriter;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.i18n.client.I18nResourceBundleImpl;
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.i18n.gettext.POEntry;
+import com.pyx4j.i18n.gettext.POFile;
+import com.pyx4j.i18n.gettext.POFileReader;
 
 public class I18nResourceBundleGenerator extends Generator {
 
@@ -87,7 +91,7 @@ public class I18nResourceBundleGenerator extends Generator {
             logger.log(TreeLogger.Type.INFO, "Adding gettext for locale '" + locale + "'");
 
             SourceWriter writer = composer.createSourceWriter(context, printWriter);
-            writeImpl(writer, simpleName, locale);
+            writeImpl(logger, writer, simpleName, locale);
             writer.commit(logger);
             return composer.getCreatedClassName();
         } catch (NotFoundException e) {
@@ -96,7 +100,7 @@ public class I18nResourceBundleGenerator extends Generator {
         }
     }
 
-    private void writeImpl(SourceWriter writer, String simpleName, String locale) {
+    private void writeImpl(TreeLogger logger, SourceWriter writer, String simpleName, String locale) throws UnableToCompleteException {
         writer.println();
         writer.indent();
         writer.println("public " + simpleName + "() { ");
@@ -104,15 +108,23 @@ public class I18nResourceBundleGenerator extends Generator {
 
         writer.println("super(new String[]{");
 
-        //TODO
-        I18n i18n = null;//I18n.get(getClass(), "Messages", new Locale(locale));
+        POFile po;
+        try {
+            po = new POFileReader().readResource("translations/" + locale + ".po");
+        } catch (IOException e) {
+            logger.log(TreeLogger.ERROR, "Could load locale resources", e);
+            throw new UnableToCompleteException();
+        }
 
-        Enumeration<String> en = null;//i18n.getResources().getKeys();
-        while (en.hasMoreElements()) {
-            String key = en.nextElement();
+        Map<String, String> translations = new HashMap<String, String>();
+        for (POEntry entry : po.entries) {
+            translations.put(entry.untranslated, entry.translated);
+        }
+        for (Map.Entry<String, String> entry : translations.entrySet()) {
+            String key = entry.getKey();
             if (key.length() > 0) {
-                String value = i18n.tr(key);
-                if (value.length() > 0) {
+                String value = entry.getValue();
+                if ((value != null) && (value.length() > 0)) {
                     writer.print(escapeSourceString(key));
                     writer.print(", ");
                     writer.print(escapeSourceString(value));

@@ -14,35 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jun 7, 2010
+ * Created on 2010-06-08
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.i18n.client;
-
-import com.pyx4j.i18n.shared.I18n;
+package com.pyx4j.i18n.shared;
 
 /**
- * Only single Locale is supported at GWT runtime.
- * 
- * N.B. Plural forms of gettext not supported, use java.text.MessageFormat choice format.
+ * Replaced on the client or server side with different implementations.
  */
-class I18nImpl extends I18n {
+public interface II18nFactory {
 
-    private final I18nResourceBundle bundle;
-
-    public I18nImpl(I18nResourceBundle bundle) {
-        this.bundle = bundle;
-    }
-
-    @Override
-    public String tr(String text) {
-        String value = bundle.getString(text);
-        if (value == null) {
-            return text;
-        } else {
-            return value;
-        }
-    }
+    public I18n get(final Class<?> clazz);
 
 }
