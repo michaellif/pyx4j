@@ -58,18 +58,22 @@
         	<artifactId>pyx-site-gwt</artifactId>
         	<version>${pyxVersion}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>pl.rmalinowski.gwt2swf</groupId>
             <artifactId>gwt2swf</artifactId>
         </dependency>
-        
+
     </dependencies>
 
     <properties>
         <gwtModule>crm</gwtModule>
         <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
         <gwtDestinationWarFolder>${basedir}/../../vista-server/src/main/webapp</gwtDestinationWarFolder>
+
+        <poSaveLocation>true</poSaveLocation>
+        <poSufix>with_location</poSufix>
+        <gettextArg></gettextArg>
     </properties>
 
     <profiles>
@@ -101,6 +105,58 @@
                             <compileReport>${gwtCompileReport}</compileReport>
                             <!-- disableCastChecking>true</disableCastChecking -->
                             <!-- disableClassMetadata>true</disableClassMetadata -->
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>i18n-auto</id>
+            <properties>
+                <i18n.autoTranslate>true</i18n.autoTranslate>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>nl</id>
+            <properties>
+                <poSaveLocation>false</poSaveLocation>
+                <gettextArg>--no-location</gettextArg>
+                <poSufix>no_location</poSufix>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>i18n</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.pyx4j</groupId>
+                        <artifactId>maven-i18n-plugin</artifactId>
+                        <version>${pyxVersion}</version>
+                        <executions>
+                            <execution>
+                                <id>extract-i18n</id>
+                                <goals>
+                                    <goal>extract</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <poSaveLocation>${poSaveLocation}</poSaveLocation>
+                            <keysFile>${poSufix}-keys-pyx.pot</keysFile>
+                            <excludes>
+                                <exclude>com.google.*</exclude>
+                            </excludes>
+                            <includes>
+                                <include>com.pyx4j*</include>
+                                <include>com.propertyvista*</include>
+                            </includes>
+                            <autoTranslates>
+                                <autoTranslate>ru</autoTranslate>
+                                <autoTranslate>fr</autoTranslate>
+                            </autoTranslates>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -179,6 +235,8 @@
                         </executions>
                         <configuration>
                             <targetBundle>Messages</targetBundle>
+                            <keysFile>${poSufix}-keys-gettext.pot</keysFile>
+                            <keywords>-ktrc:1c,2 -ktrnc:1c,2,3 -ktr -kmarktr -ktrn:1,2 -k ${gettextArg} --sort-output</keywords>
                             <poDirectory>${basedir}/src/main/po</poDirectory>
                             <sourceDirectory>${project.build.directory}/source-4i18n</sourceDirectory>
                         </configuration>
