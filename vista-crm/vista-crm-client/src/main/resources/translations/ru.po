@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-10 15:31-0400\n"
+"POT-Creation-Date: 2011-10-10 15:54-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3066,6 +3066,7 @@ msgstr "LogIn"
 msgid "LogOut"
 msgstr "Выйти"
 
+#: com/propertyvista/crm/client/ui/login/LoginViewImpl.java:70
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:-1
 msgid "Login"
 msgstr "Войти"
@@ -4155,6 +4156,10 @@ msgstr "Платформа"
 msgid "Play Ground"
 msgstr "Детская площадка"
 
+#: com/propertyvista/crm/client/activity/login/RetrievePasswordActivity.java:59
+msgid "Please check your email"
+msgstr "Пожалуйста, проверьте свою электронную почту"
+
 #: com/propertyvista/crm/client/ui/crud/CrmEditorViewImplBase.java:188
 msgid "Please confurm"
 msgstr "Пожалуйста, confurm"
@@ -4630,7 +4635,7 @@ msgstr "В отставке"
 msgid "Retrieve Password"
 msgstr "Забыли пароль?"
 
-#: com/propertyvista/crm/client/ui/login/LoginViewImpl.java:95
+#: com/propertyvista/crm/client/ui/login/LoginViewImpl.java:94
 msgid "Retrieve password"
 msgstr "Восстановить пароль"
 
@@ -4701,11 +4706,11 @@ msgstr "Сауна"
 #: com/pyx4j/essentials/client/console/SimulationWidget.java:84
 #: com/pyx4j/essentials/client/crud/EntityEditorPanel.java:68
 msgid "Save"
-msgstr "Экономить"
+msgstr "Сохранить"
 
 #: com/propertyvista/portal/domain/payment/EcheckInfo.java:-11
 msgid "Saving"
-msgstr "Экономия"
+msgstr "Сохраняем"
 
 #: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:-11
 msgid "Scheduled"
@@ -4725,11 +4730,11 @@ msgstr "Скрининг"
 
 #: com/propertyvista/domain/tenant/TenantScreening.java:-7
 msgid "Screening Date"
-msgstr "Скрининг дате"
+msgstr "Дата Скрининга"
 
 #: com/propertyvista/portal/domain/dto/BillListDTO.java:-7
 msgid "Search Type"
-msgstr "Поиск Тип"
+msgstr "Тип Поиска"
 
 #: com/propertyvista/domain/tenant/income/IncomeSource.java:-10
 #: com/propertyvista/domain/tenant/income/PersonalIncome.java:-7
@@ -5269,10 +5274,6 @@ msgstr "System Report"
 msgid "System error"
 msgstr "Системная ошибка"
 
-#: com/propertyvista/domain/tenant/lead/Lead.java:-11
-msgid "T V"
-msgstr "Телевизор"
-
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:-10
 msgid "T-shape"
 msgstr "Т-образный"
@@ -5582,6 +5583,10 @@ msgstr "Транзитные Нет"
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:-11
 msgid "Transportation"
 msgstr "Транспорт"
+
+#: com/propertyvista/domain/tenant/lead/Lead.java:-11
+msgid "Tv"
+msgstr "Телевизор"
 
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:-11
 msgid "Tv Lounge"
@@ -6191,4 +6196,3 @@ msgstr "{0}-{1} из {2}"
 #, java-format
 msgid "{0}{1,choice,null#|!null# ex.{1}}"
 msgstr ""
-

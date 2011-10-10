@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-10 15:31-0400\n"
+"POT-Creation-Date: 2011-10-10 15:54-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3066,6 +3066,7 @@ msgstr "LogIn"
 msgid "LogOut"
 msgstr "LogOut"
 
+#: com/propertyvista/crm/client/ui/login/LoginViewImpl.java:70
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:-1
 msgid "Login"
 msgstr "Connectez-vous"
@@ -4156,6 +4157,10 @@ msgstr "Platform"
 msgid "Play Ground"
 msgstr "Play Ground"
 
+#: com/propertyvista/crm/client/activity/login/RetrievePasswordActivity.java:59
+msgid "Please check your email"
+msgstr "S&#39;il vous plaît vérifier votre email"
+
 #: com/propertyvista/crm/client/ui/crud/CrmEditorViewImplBase.java:188
 msgid "Please confurm"
 msgstr "S&#39;il vous plaît confurm"
@@ -4631,7 +4636,7 @@ msgstr "Retraite"
 msgid "Retrieve Password"
 msgstr "Récupérer Mot de passe"
 
-#: com/propertyvista/crm/client/ui/login/LoginViewImpl.java:95
+#: com/propertyvista/crm/client/ui/login/LoginViewImpl.java:94
 msgid "Retrieve password"
 msgstr "Récupérer le mot de passe"
 
@@ -5270,10 +5275,6 @@ msgstr "Report System"
 msgid "System error"
 msgstr "Erreur système"
 
-#: com/propertyvista/domain/tenant/lead/Lead.java:-11
-msgid "T V"
-msgstr "TV"
-
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:-10
 msgid "T-shape"
 msgstr "Forme en T"
@@ -5584,6 +5585,10 @@ msgstr "Transit Aucune"
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:-11
 msgid "Transportation"
 msgstr "Transport"
+
+#: com/propertyvista/domain/tenant/lead/Lead.java:-11
+msgid "Tv"
+msgstr "Tv"
 
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:-11
 msgid "Tv Lounge"
