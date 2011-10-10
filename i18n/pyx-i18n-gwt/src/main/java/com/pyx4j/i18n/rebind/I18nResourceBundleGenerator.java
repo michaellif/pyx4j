@@ -70,7 +70,7 @@ public class I18nResourceBundleGenerator extends Generator {
             throw new UnableToCompleteException();
         }
 
-        if (locale.equals(localeDefault)) {
+        if (locale.equals(localeDefault) || locale.equals("default")) {
             return null;
         }
 
