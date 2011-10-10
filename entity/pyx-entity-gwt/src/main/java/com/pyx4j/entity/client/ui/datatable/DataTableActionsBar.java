@@ -34,10 +34,13 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.TargetLabel;
 
 public class DataTableActionsBar extends HorizontalPanel implements DataTableModelListener {
+
+    private static I18n i18n = I18n.get(DataTableActionsBar.class);
 
     private DataTableModel<?> model;
 
@@ -68,12 +71,12 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         pageSizeContentPanel.getElement().getStyle().setMarginRight(10, Unit.PX);
         pageSizeContentPanel.setVisible(false);
         pageSizeSelector = new ListBox();
-        pageSizeContentPanel.add(new TargetLabel("Page Size:", pageSizeSelector));
+        pageSizeContentPanel.add(new TargetLabel(i18n.tr("Page Size:"), pageSizeSelector));
         pageSizeContentPanel.add(pageSizeSelector);
         pageSizeSelector.getElement().getStyle().setMarginLeft(3, Unit.PX);
         contentPanel.add(pageSizeContentPanel);
 
-        prevAnchor = new Anchor("&lt;&nbsp;Prev", true);
+        prevAnchor = new Anchor(i18n.tr("&lt;&nbsp;Prev"), true);
         prevAnchor.setVisible(false);
         prevAnchor.getElement().getStyle().setMarginRight(10, Unit.PX);
         contentPanel.add(prevAnchor);
@@ -83,7 +86,7 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         countLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         contentPanel.add(countLabel);
 
-        nextAnchor = new Anchor("Next&nbsp;&gt;", true);
+        nextAnchor = new Anchor(i18n.tr("Next&nbsp;&gt;"), true);
         nextAnchor.setVisible(false);
         contentPanel.add(nextAnchor);
 
@@ -156,7 +159,7 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         } else if (from == to) {
             countLabel.setText(String.valueOf(from));
         } else {
-            countLabel.setText(from + "-" + to + " of " + model.getTotalRows());
+            countLabel.setText(i18n.tr("{0}-{1} of {2}", from, to, model.getTotalRows()));
         }
 
         nextAnchor.setVisible(nextActionHandlerRegistration != null && model.hasMoreData());
