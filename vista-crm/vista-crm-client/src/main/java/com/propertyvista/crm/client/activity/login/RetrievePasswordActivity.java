@@ -19,6 +19,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -30,6 +31,8 @@ import com.propertyvista.crm.rpc.ActivationServices;
 import com.propertyvista.crm.rpc.PasswordRetrievalRequest;
 
 public class RetrievePasswordActivity extends AbstractActivity implements RetrievePasswordView.Presenter {
+
+    private static I18n i18n = I18n.get(RetrievePasswordActivity.class);
 
     private final RetrievePasswordView view;
 
@@ -53,7 +56,7 @@ public class RetrievePasswordActivity extends AbstractActivity implements Retrie
         AsyncCallback<VoidSerializable> callback = new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                CrmSite.instance().showMessageDialog("Please check your email", "", null, null);
+                CrmSite.instance().showMessageDialog(i18n.tr("Please check your email"), "", null, null);
             }
         };
         RPCManager.execute(ActivationServices.PasswordReminder.class, request, callback);
