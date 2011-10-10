@@ -45,11 +45,6 @@ public class BoxReadOnlyFolderItemDecorator<E extends IEntity> extends FlowPanel
     }
 
     @Override
-    public HandlerRegistration addItemClickHandler(ClickHandler handler) {
-        return null;
-    }
-
-    @Override
     public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
         return null;
     }

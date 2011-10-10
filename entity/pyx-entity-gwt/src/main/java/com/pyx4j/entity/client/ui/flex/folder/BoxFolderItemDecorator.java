@@ -100,11 +100,6 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     }
 
     @Override
-    public HandlerRegistration addItemClickHandler(ClickHandler handler) {
-        return null;
-    }
-
-    @Override
     public HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
         if (isRemovable()) {
             return toolbar.getActionsPanel().addRowUpClickHandler(handler);

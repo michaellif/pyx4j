@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.client.ui.flex.folder;
 
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.HasDirection.Direction;
@@ -85,18 +84,6 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
                 }
             }
         });
-    }
-
-    @Override
-    public HandlerRegistration addItemClickHandler(final ClickHandler handler) {
-        //TODO add proper handler removal
-        return contentHolder.addDomHandler(new ClickHandler() {
-
-            @Override
-            public void onClick(ClickEvent event) {
-                handler.onClick(event);
-            }
-        }, ClickEvent.getType());
     }
 
     @Override

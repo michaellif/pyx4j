@@ -86,17 +86,7 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
         return handlerRegistration;
     }
 
-    public HandlerRegistration addItemClickHandler(ClickHandler handler) {
-        if (getDecorator() instanceof IFolderItemDecorator) {
-            HandlerRegistration handlerRegistration = ((IFolderItemDecorator<?>) getDecorator()).addItemClickHandler(handler);
-            handlerRegistrations.add(handlerRegistration);
-            return handlerRegistration;
-        } else {
-            return null;
-        }
-    }
-
-    public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
+    HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
         if (getDecorator() instanceof IFolderItemDecorator) {
             HandlerRegistration handlerRegistration = ((IFolderItemDecorator<?>) getDecorator()).addItemRemoveClickHandler(handler);
             handlerRegistrations.add(handlerRegistration);
@@ -106,7 +96,7 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
         }
     }
 
-    public HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
+    HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
         if (getDecorator() instanceof IFolderItemDecorator) {
             HandlerRegistration handlerRegistration = ((IFolderItemDecorator<?>) getDecorator()).addRowUpClickHandler(handler);
             handlerRegistrations.add(handlerRegistration);
@@ -116,7 +106,7 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
         }
     }
 
-    public HandlerRegistration addRowDownClickHandler(ClickHandler handler) {
+    HandlerRegistration addRowDownClickHandler(ClickHandler handler) {
         if (getDecorator() instanceof IFolderItemDecorator) {
             HandlerRegistration handlerRegistration = ((IFolderItemDecorator<?>) getDecorator()).addRowDownClickHandler(handler);
             handlerRegistrations.add(handlerRegistration);
@@ -126,13 +116,13 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
         }
     }
 
-    public void onAbandon() {
+    protected void onAbandon() {
         for (HandlerRegistration handlerRegistration : handlerRegistrations) {
             handlerRegistration.removeHandler();
         }
     }
 
-    public void onAdopt() {
+    protected void onAdopt() {
         // TODO Auto-generated method stub
 
     }

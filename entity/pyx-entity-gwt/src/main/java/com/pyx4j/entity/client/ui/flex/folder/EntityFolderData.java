@@ -14,27 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 12, 2011
- * @author Misha
+ * Created on Oct 9, 2011
+ * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.entity.client.ui.flex.folder;
 
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
+public class EntityFolderData {
 
-import com.pyx4j.entity.client.ui.flex.IDecorator;
-import com.pyx4j.entity.shared.IEntity;
+    enum Multiplicity {
+        zeroOrMore, oneOrMore
+    }
 
-public interface IFolderItemDecorator<E extends IEntity> extends IDecorator<CEntityFolderItemEditor<E>> {
+    //if false Collape/Expand are hidden
+    public boolean collapsible = true;
 
-    HandlerRegistration addItemRemoveClickHandler(ClickHandler handler);
+    // if false Up/Down buttons
+    public boolean orderable = true;
 
-    HandlerRegistration addRowUpClickHandler(ClickHandler handler);
+    // if false Add/Remove/Up/Down are hidden
+    public boolean folderEditable = true;
 
-    HandlerRegistration addRowDownClickHandler(ClickHandler handler);
-
-    @Override
-    void setComponent(CEntityFolderItemEditor<E> item);
+    public Multiplicity multiplicity = Multiplicity.zeroOrMore;
 
 }

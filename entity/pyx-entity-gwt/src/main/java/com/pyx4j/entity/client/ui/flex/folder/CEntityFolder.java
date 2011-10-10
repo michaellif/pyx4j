@@ -72,8 +72,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     private final E entityPrototype;
 
-    private boolean externalAddItemProcessing = false;
-
     public CEntityFolder(Class<E> rowClass) {
         container = new FlowPanel();
         asWidget().setStyleName(StyleName.EntityFolder.name());
@@ -160,27 +158,21 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         return item;
     }
 
-    public void setExternalAddItemProcessing(boolean externalAddItemProcessing) {
-        this.externalAddItemProcessing = externalAddItemProcessing;
-    }
-
     @Override
     public void initContent() {
         super.initContent();
         addValueChangeHandler((IFolderDecorator) getDecorator());
-
-        if (!externalAddItemProcessing) {
-            ((IFolderDecorator) getDecorator()).addItemAddClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    addItem();
-                }
-            });
-        }
         //TODO use components inheritance
         if (this.getDebugId() != null) {
             getDecorator().asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
         }
+
+        ((IFolderDecorator) getDecorator()).addItemAddClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                addItem();
+            }
+        });
     }
 
     @Override
