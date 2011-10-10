@@ -36,6 +36,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -336,6 +337,33 @@ public class PMSiteContentManager implements Serializable {
     public static List<BuildingAmenity> getBuildingAmenities(Building bld) {
         EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), bld));
+        return Persistence.service().query(criteria);
+    }
+
+    public static Floorplan getFloorplanDetails(long planId) {
+        EntityQueryCriteria<Floorplan> dbCriteria = EntityQueryCriteria.create(Floorplan.class);
+        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().id(), planId));
+        List<Floorplan> plans = Persistence.service().query(dbCriteria);
+        if (plans.size() != 1) {
+            return null;
+        }
+        Floorplan fp = plans.get(0);
+        if (getFloorplanUnits(fp).size() < 1) {
+            return null;
+        }
+        return fp;
+    }
+
+    public static List<AptUnit> getFloorplanUnits(Floorplan fp) {
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), fp.building().getPrimaryKey().asLong()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), fp));
+        return Persistence.service().query(criteria);
+    }
+
+    public static List<FloorplanAmenity> getFloorplanAmenities(Floorplan fp) {
+        EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), fp));
         return Persistence.service().query(criteria);
     }
 

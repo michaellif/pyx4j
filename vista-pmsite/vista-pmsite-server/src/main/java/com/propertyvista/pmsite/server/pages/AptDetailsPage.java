@@ -53,13 +53,13 @@ public class AptDetailsPage extends BasePage {
         Long propId = null;
         try {
             propId = getRequest().getRequestParameters().getParameterValue("propId").toLong();
-        } catch (java.lang.NumberFormatException e) {
-            throw new RestartResponseException(AptListPage.class);
+        } catch (Exception e) {
+            throw new RestartResponseException(FindAptPage.class);
         }
 
         final Building propInfo = PMSiteContentManager.getBuildingDetails(propId);
         if (propInfo == null) {
-            throw new RestartResponseException(AptListPage.class);
+            throw new RestartResponseException(FindAptPage.class);
         }
         final Map<Floorplan, List<AptUnit>> fpUnits = PMSiteContentManager.getBuildingFloorplans(propInfo);
         final List<BuildingAmenity> amenities = PMSiteContentManager.getBuildingAmenities(propInfo);

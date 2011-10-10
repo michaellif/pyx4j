@@ -31,6 +31,7 @@ import com.propertyvista.pmsite.server.pages.FindAptPage;
 import com.propertyvista.pmsite.server.pages.InquiryPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
+import com.propertyvista.pmsite.server.pages.UnitDetailsPage;
 
 public class MainNavigationPanel extends Panel {
 
@@ -80,6 +81,8 @@ public class MainNavigationPanel extends Panel {
                 || (MainNavigationPanel.this.getPage() instanceof InquiryPage)
 
                 || (MainNavigationPanel.this.getPage() instanceof AptDetailsPage)
+
+                || (MainNavigationPanel.this.getPage() instanceof UnitDetailsPage)
 
                 || (MainNavigationPanel.this.getPage() instanceof AptListPage))) {
 

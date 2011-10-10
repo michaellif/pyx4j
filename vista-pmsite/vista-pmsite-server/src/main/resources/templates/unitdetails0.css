@@ -1,0 +1,110 @@
+.vista-pmsite-unitDetailsPage {
+	font-size:14px;
+	color:#CCCCCC;
+}
+.vista-pmsite-unitDetailsPage .vista-pmsite-contentWrap {
+	background: url("images/template0/inner_content_bg.png") repeat-x #37393F;
+}
+.vista-pmsite-unitDetailsPage .vista-pmsite-content {
+	background: url("images/template0/inner_bg.png") no-repeat;
+}
+.vista-pmsite-unitDetailsPage .vista-pmsite-sidebar {
+	display: inline-block;
+	width: 318px;
+	vertical-align: top;
+	padding:20px 16px;
+}
+.vista-pmsite-unitDetailsPage .vista-pmsite-main {
+	display: inline-block;
+	width: 605px;
+	vertical-align: top;
+	min-height:400px;
+	background:white;
+	color:#222;
+}
+.vista-pmsite-unitDetailsPage .vista-pmsite-sidebar .pictureBox {
+	width:100%;
+	text-align:center;
+} 
+.vista-pmsite-unitDetailsPage .vista-pmsite-sidebar .pictureBox .picture {
+	width:100%;
+}
+.vista-pmsite-unitDetailsPage .vista-pmsite-sidebar .pictureBox .gallery {
+	height:50px;
+}
+.vista-pmsite-unitDetailsPage .vista-pmsite-sidebar .pictureBox .gallery img {
+	width:57px;
+	height:40px;
+	cursor:pointer;
+}
+.vista-pmsite-unitDetailsPage .vista-pmsite-sidebar .pictureBox .gallery span {
+	float:left;
+	margin:5px 0 5px 8px;
+}
+.vista-pmsite-unitDetailsPage .vista-pmsite-sidebar .pictureBox .gallery span:first-child {
+	margin-left:0;
+}
+.vista-pmsite-unitDetailsPage .vista-pmsite-sidebar .infoBox {
+	width:100%;
+	font-weight:bold;
+	color:#CCC;
+} 
+.vista-pmsite-unitDetailsPage .vista-pmsite-sidebar .infoBoxEntry {
+	padding-top:15px;
+} 
+.vista-pmsite-unitDetailsPage .vista-pmsite-sidebar .infoBoxEntry .infoBoxCaption {
+	display:block;
+	padding-top:4px;
+}
+.vista-pmsite-unitDetailsPage .vista-pmsite-sidebar .infoBoxEntry .infoBoxText {
+	display:block;
+	padding-top:4px;
+}
+.apartmentDetailsWrap .detailBox {
+	color:#777;
+	padding-bottom:20px;
+}
+.apartmentDetailsWrap .detailBox .detailBoxTitle {
+	padding: 30px 20px;
+	font-size:14px;
+	font-weight:bold;
+	text-transform:uppercase;
+	color:#555;
+}
+.apartmentDetailsWrap .detailBox .detailBoxEntry {
+	padding: 10px 0;
+}
+.apartmentDetailsWrap .detailBox .detailBoxEntry:first-child {
+}
+.apartmentDetailsWrap .detailBox .detailBoxEntry .detailBoxCaption {
+	display:inline-block;
+	vertical-align:top;
+	width:80px;
+	padding: 0 20px 6px 20px;
+	font-size:12px;
+	font-weight:bold;
+	text-transform:uppercase;
+	text-align:right;
+	color:#888;
+}
+.apartmentDetailsWrap .detailBox .detailBoxEntry .detailBoxText {
+	display:inline-block;
+	vertical-align:top;
+	width:460px;'
+}
+.apartmentDetailsWrap .detailBox .detailBoxEntry ul.detailBoxText {
+	padding-left:10px;
+	margin:0;
+}
+.apartmentDetailsWrap .detailBox .detailBoxEntry ul.detailBoxText li {
+	float:left;
+	width:230px;
+}
+.apartmentDetailsWrap .detailBox .detailBoxEntry .picture {
+	display: inline-block;
+	vertical-align: top;
+	width:80px;
+	min-height:75px;
+	text-align:center;
+	padding-left:10px;
+} 

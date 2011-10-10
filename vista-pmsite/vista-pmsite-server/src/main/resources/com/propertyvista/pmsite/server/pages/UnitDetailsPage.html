@@ -5,9 +5,65 @@
 </head>
 <body>
 	<wicket:extend>
-
-       Unit Details Page
-
-      </wicket:extend>
+	<div class="vista-pmsite-unitDetailsPage">
+		<div class="vista-pmsite-contentWrap">
+			<div class="vista-pmsite-content">
+				<div class="vista-pmsite-mainWrap">
+					<div class="vista-pmsite-sidebarWrap">
+						<div class="vista-pmsite-sidebar">
+							<div class="pictureBox">
+								<img class="picture" wicket:id="picture"/>
+								<div class="gallery">
+									<span wicket:id="gallery"><img wicket:id="thumbnail"/></span>
+								</div>
+							</div>
+							<div class="infoBox">
+								<div class="infoBoxEntry address">
+									<label class="infoBoxCaption">Address:</label>
+									<span class="infoBoxText" wicket:id="address"/>
+								</div>
+								<div class="infoBoxEntry price">
+									<label class="infoBoxCaption">Price Range:</label>
+									<span class="infoBoxText" wicket:id="priceRange"/>
+								</div>
+								<div class="infoBoxEntry phone">
+									<label class="infoBoxCaption">Phone:</label>
+									<span class="infoBoxText" wicket:id="phone"/>
+								</div>
+							</div>
+						</div>
+						<div class="vista-pmsite-main">
+							<div class="caption2">
+								<h1>Unit Details</h1>
+							</div>
+							<div class="apartmentDetailsWrap">
+								<div class="detailBox">
+									<div class="detailBoxContent">
+										<div class="detailBoxEntry name">
+											<label class="detailBoxCaption">Name:</label>
+											<span class="detailBoxText" wicket:id="name"/>
+										</div>
+										<div class="detailBoxEntry rooms">
+											<label class="detailBoxCaption">Rooms:</label>
+											<span class="detailBoxText" wicket:id="rooms"/>
+										</div>
+										<div class="detailBoxEntry description">
+											<label class="detailBoxCaption">Notes:</label>
+											<span class="detailBoxText" wicket:id="description"/>
+										</div>
+										<div class="detailBoxEntry amenities">
+											<label class="detailBoxCaption">Amenities:</label>
+											<ul class="detailBoxText"><li wicket:id="amenities"><span wicket:id="amenity"/></li></ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</wicket:extend>
 </body>
 </html>
