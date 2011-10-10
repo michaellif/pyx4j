@@ -834,7 +834,10 @@
                             <directory>${basedir}/logs</directory>
                         </fileset>
                         <fileset>
-                            <directory>${basedir}/.gwt-cache</directory>
+                            <directory>${basedir}/src/main/gwt-unitCache</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${basedir}/src/test/gwt-unitCache</directory>
                         </fileset>
                         <fileset>
                             <directory>${basedir}/war/test</directory>
