@@ -56,7 +56,7 @@ public class PaymentMethodsForm extends CEntityEditor<PaymentMethodListDTO> impl
 
     private CEntityFolder<PaymentMethodDTO> createPaymentMethodsViewer() {
 
-        return new VistaEntityFolder<PaymentMethodDTO>(PaymentMethodDTO.class, i18n.tr("Payment Method"), false) {
+        return new VistaEntityFolder<PaymentMethodDTO>(PaymentMethodDTO.class, i18n.tr("Payment Method"), true) {
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -67,6 +67,11 @@ public class PaymentMethodsForm extends CEntityEditor<PaymentMethodListDTO> impl
                 columns.add(new EntityFolderColumnDescriptor(proto().expiry(), "14em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().nameOnAccount(), "16em"));
                 return columns;
+            }
+
+            @Override
+            protected void addItem() {
+                presenter.addPaymentMethod();
             }
 
             @Override

@@ -138,7 +138,7 @@ public class NewPaymentMethodForm extends CEntityEditor<PaymentMethodGenericDTO>
         paymentFeesPanel.setStyleName(Selector.getStyleName(PAYMENT_BUTTONS_STYLE_PREFIX, NewPaymentMethodForm.StyleSuffix.PaymentFee));
         Label paymentFeesLabel;
         for (PaymentType type : PaymentType.values()) {
-            paymentFeesLabel = new Label("Convenience fee: $1.99");
+            paymentFeesLabel = new Label("");
             paymentFeesPanel.add(paymentFeesLabel);
         }
         paymentFeesPanel.asWidget().getElement().getStyle().setFloat(Float.LEFT);
