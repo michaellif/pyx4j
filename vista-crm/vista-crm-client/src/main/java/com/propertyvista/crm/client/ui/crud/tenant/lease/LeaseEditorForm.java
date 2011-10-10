@@ -263,25 +263,23 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }
 
             @Override
+            protected void addItem() {
+                new ShowPopUpBox<SelectTenantBox>(new SelectTenantBox()) {
+                    @Override
+                    protected void onClose(SelectTenantBox box) {
+                        if (box.getSelectedTenant() != null) {
+                            TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
+                            newTenantInLease.lease().setPrimaryKey(LeaseEditorForm.this.getValue().getPrimaryKey());
+                            newTenantInLease.tenant().set(box.getSelectedTenant());
+                            addItem(newTenantInLease);
+                        }
+                    }
+                };
+            }
+
+            @Override
             protected IFolderDecorator<TenantInLease> createDecorator() {
                 IFolderDecorator<TenantInLease> decor = new VistaTableFolderDecorator<TenantInLease>(columns(), parent);
-                setExternalAddItemProcessing(true);
-                decor.addItemAddClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        new ShowPopUpBox<SelectTenantBox>(new SelectTenantBox()) {
-                            @Override
-                            protected void onClose(SelectTenantBox box) {
-                                if (box.getSelectedTenant() != null) {
-                                    TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
-                                    newTenantInLease.lease().setPrimaryKey(LeaseEditorForm.this.getValue().getPrimaryKey());
-                                    newTenantInLease.tenant().set(box.getSelectedTenant());
-                                    addItem(newTenantInLease);
-                                }
-                            }
-                        };
-                    }
-                });
                 return decor;
             }
 
@@ -447,32 +445,30 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }
 
             @Override
+            protected void addItem() {
+                if (LeaseEditorForm.this.getValue().serviceAgreement().serviceItem().isNull()) {
+                    MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Select Service Item firs!"));
+                } else {
+                    new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox()) {
+                        @Override
+                        protected void onClose(SelectFeatureBox box) {
+                            if (box.getSelectedItems() != null) {
+                                for (ServiceItem item : box.getSelectedItems()) {
+                                    ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                                    newItem.item().set(item);
+                                    newItem.price().setValue(item.price().getValue());
+                                    newItem.adjustedPrice().setValue(item.price().getValue());
+                                    addItem(newItem);
+                                }
+                            }
+                        }
+                    };
+                }
+            }
+
+            @Override
             protected IFolderDecorator<ChargeItem> createDecorator() {
                 VistaBoxFolderDecorator<ChargeItem> decor = new VistaBoxFolderDecorator<ChargeItem>(parent);
-                setExternalAddItemProcessing(true);
-                decor.addItemAddClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        if (LeaseEditorForm.this.getValue().serviceAgreement().serviceItem().isNull()) {
-                            MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Select Service Item firs!"));
-                        } else {
-                            new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox()) {
-                                @Override
-                                protected void onClose(SelectFeatureBox box) {
-                                    if (box.getSelectedItems() != null) {
-                                        for (ServiceItem item : box.getSelectedItems()) {
-                                            ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                                            newItem.item().set(item);
-                                            newItem.price().setValue(item.price().getValue());
-                                            newItem.adjustedPrice().setValue(item.price().getValue());
-                                            addItem(newItem);
-                                        }
-                                    }
-                                }
-                            };
-                        }
-                    }
-                });
                 return decor;
             }
 
@@ -644,30 +640,28 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }
 
             @Override
+            protected void addItem() {
+                if (LeaseEditorForm.this.getValue().serviceAgreement().serviceItem().isNull()) {
+                    MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Select Service Item firs!"));
+                } else {
+                    new ShowPopUpBox<SelectConcessionBox>(new SelectConcessionBox()) {
+                        @Override
+                        protected void onClose(SelectConcessionBox box) {
+                            if (box.getSelectedItems() != null) {
+                                for (Concession item : box.getSelectedItems()) {
+                                    ServiceConcession newItem = EntityFactory.create(ServiceConcession.class);
+                                    newItem.concession().set(item);
+                                    addItem(newItem);
+                                }
+                            }
+                        }
+                    };
+                }
+            }
+
+            @Override
             protected IFolderDecorator<ServiceConcession> createDecorator() {
                 VistaTableFolderDecorator<ServiceConcession> decor = new VistaTableFolderDecorator<ServiceConcession>(columns(), parent);
-                setExternalAddItemProcessing(true);
-                decor.addItemAddClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        if (LeaseEditorForm.this.getValue().serviceAgreement().serviceItem().isNull()) {
-                            MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Select Service Item firs!"));
-                        } else {
-                            new ShowPopUpBox<SelectConcessionBox>(new SelectConcessionBox()) {
-                                @Override
-                                protected void onClose(SelectConcessionBox box) {
-                                    if (box.getSelectedItems() != null) {
-                                        for (Concession item : box.getSelectedItems()) {
-                                            ServiceConcession newItem = EntityFactory.create(ServiceConcession.class);
-                                            newItem.concession().set(item);
-                                            addItem(newItem);
-                                        }
-                                    }
-                                }
-                            };
-                        }
-                    }
-                });
                 decor.setShowHeader(false);
                 return decor;
             }

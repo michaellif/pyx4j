@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.ui.crud.settings.content;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -172,16 +170,15 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
             }
 
             @Override
+            protected void addItem() {
+                if (PageEditorForm.this.getValue().getPrimaryKey() != null) { // parent shouldn't be new unsaved value!..
+                    ((PageViewer) getParentView()).newChild(PageEditorForm.this.getValue().getPrimaryKey());
+                }
+            }
+
+            @Override
             protected IFolderDecorator<PageDescriptor> createDecorator() {
                 VistaTableFolderDecorator<PageDescriptor> decor = new VistaTableFolderDecorator<PageDescriptor>(columns(), parent);
-                decor.addItemAddClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        if (PageEditorForm.this.getValue().getPrimaryKey() != null) { // parent shouldn't be new unsaved value!..
-                            ((PageViewer) getParentView()).newChild(PageEditorForm.this.getValue().getPrimaryKey());
-                        }
-                    }
-                });
                 decor.setShowHeader(false);
                 return decor;
             }

@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -218,26 +216,24 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             }
 
             @Override
+            protected void addItem() {
+                new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox()) {
+                    @Override
+                    protected void onClose(SelectFeatureBox box) {
+                        if (box.getSelectedFeatures() != null) {
+                            for (Feature item : box.getSelectedFeatures()) {
+                                ServiceFeature newItem = EntityFactory.create(ServiceFeature.class);
+                                newItem.feature().set(item);
+                                addItem(newItem);
+                            }
+                        }
+                    }
+                };
+            }
+
+            @Override
             protected IFolderDecorator<ServiceFeature> createDecorator() {
                 VistaTableFolderDecorator<ServiceFeature> decor = new VistaTableFolderDecorator<ServiceFeature>(columns(), parent);
-                setExternalAddItemProcessing(true);
-                decor.addItemAddClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox()) {
-                            @Override
-                            protected void onClose(SelectFeatureBox box) {
-                                if (box.getSelectedFeatures() != null) {
-                                    for (Feature item : box.getSelectedFeatures()) {
-                                        ServiceFeature newItem = EntityFactory.create(ServiceFeature.class);
-                                        newItem.feature().set(item);
-                                        addItem(newItem);
-                                    }
-                                }
-                            }
-                        };
-                    }
-                });
                 decor.setShowHeader(false);
                 return decor;
             }
@@ -274,26 +270,24 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             }
 
             @Override
+            protected void addItem() {
+                new ShowPopUpBox<SelectConcessionBox>(new SelectConcessionBox()) {
+                    @Override
+                    protected void onClose(SelectConcessionBox box) {
+                        if (box.getSelectedConcessions() != null) {
+                            for (Concession item : box.getSelectedConcessions()) {
+                                ServiceConcession newItem = EntityFactory.create(ServiceConcession.class);
+                                newItem.concession().set(item);
+                                addItem(newItem);
+                            }
+                        }
+                    }
+                };
+            }
+
+            @Override
             protected IFolderDecorator<ServiceConcession> createDecorator() {
                 VistaTableFolderDecorator<ServiceConcession> decor = new VistaTableFolderDecorator<ServiceConcession>(columns(), parent);
-                setExternalAddItemProcessing(true);
-                decor.addItemAddClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        new ShowPopUpBox<SelectConcessionBox>(new SelectConcessionBox()) {
-                            @Override
-                            protected void onClose(SelectConcessionBox box) {
-                                if (box.getSelectedConcessions() != null) {
-                                    for (Concession item : box.getSelectedConcessions()) {
-                                        ServiceConcession newItem = EntityFactory.create(ServiceConcession.class);
-                                        newItem.concession().set(item);
-                                        addItem(newItem);
-                                    }
-                                }
-                            }
-                        };
-                    }
-                });
                 decor.setShowHeader(false);
                 return decor;
             }

@@ -19,8 +19,6 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
@@ -303,24 +301,22 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             }
 
             @Override
+            protected void addItem() {
+                new ShowPopUpBox<SelectUtilityBox>(new SelectUtilityBox()) {
+                    @Override
+                    protected void onClose(SelectUtilityBox box) {
+                        if (box.getSelectedItems() != null) {
+                            for (ServiceItemType item : box.getSelectedItems()) {
+                                addItem(item);
+                            }
+                        }
+                    }
+                };
+            }
+
+            @Override
             protected IFolderDecorator<ServiceItemType> createDecorator() {
                 VistaTableFolderDecorator<ServiceItemType> decor = new VistaTableFolderDecorator<ServiceItemType>(columns(), parent);
-                setExternalAddItemProcessing(true);
-                decor.addItemAddClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        new ShowPopUpBox<SelectUtilityBox>(new SelectUtilityBox()) {
-                            @Override
-                            protected void onClose(SelectUtilityBox box) {
-                                if (box.getSelectedItems() != null) {
-                                    for (ServiceItemType item : box.getSelectedItems()) {
-                                        addItem(item);
-                                    }
-                                }
-                            }
-                        };
-                    }
-                });
                 decor.setShowHeader(false);
                 return decor;
             }

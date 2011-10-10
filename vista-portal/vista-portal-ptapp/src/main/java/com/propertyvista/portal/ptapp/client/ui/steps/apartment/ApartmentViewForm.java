@@ -19,8 +19,6 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -219,28 +217,26 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
             }
 
             @Override
+            protected void addItem() {
+                new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox(type)) {
+                    @Override
+                    protected void onClose(SelectFeatureBox box) {
+                        if (box.getSelectedItems() != null) {
+                            for (ServiceItem item : box.getSelectedItems()) {
+                                ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                                newItem.item().set(item);
+                                newItem.price().setValue(item.price().getValue());
+                                newItem.adjustedPrice().setValue(item.price().getValue());
+                                addItem(newItem);
+                            }
+                        }
+                    }
+                };
+            }
+
+            @Override
             protected IFolderDecorator<ChargeItem> createDecorator() {
                 VistaTableFolderDecorator<ChargeItem> decor = new VistaTableFolderDecorator<ChargeItem>(columns(), parent);
-                setExternalAddItemProcessing(true);
-                decor.addItemAddClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox(type)) {
-                            @Override
-                            protected void onClose(SelectFeatureBox box) {
-                                if (box.getSelectedItems() != null) {
-                                    for (ServiceItem item : box.getSelectedItems()) {
-                                        ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                                        newItem.item().set(item);
-                                        newItem.price().setValue(item.price().getValue());
-                                        newItem.adjustedPrice().setValue(item.price().getValue());
-                                        addItem(newItem);
-                                    }
-                                }
-                            }
-                        };
-                    }
-                });
                 return decor;
             }
 

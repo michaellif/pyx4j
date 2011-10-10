@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -171,16 +169,15 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
 
             @Override
+            protected void addItem() {
+                if (SiteEditorForm.this.getValue().getPrimaryKey() != null) { // parent shouldn't be new unsaved value!..
+                    ((SiteViewer) getParentView()).newChild(SiteEditorForm.this.getValue().getPrimaryKey());
+                }
+            }
+
+            @Override
             protected IFolderDecorator<PageDescriptor> createDecorator() {
                 VistaTableFolderDecorator<PageDescriptor> decor = new VistaTableFolderDecorator<PageDescriptor>(columns(), parent);
-                decor.addItemAddClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        if (SiteEditorForm.this.getValue().getPrimaryKey() != null) { // parent shouldn't be new unsaved value!..
-                            ((SiteViewer) getParentView()).newChild(SiteEditorForm.this.getValue().getPrimaryKey());
-                        }
-                    }
-                });
                 decor.setShowHeader(false);
                 return decor;
             }
