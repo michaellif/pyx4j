@@ -25,6 +25,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -40,6 +41,8 @@ import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter, NavigationUpdateHandler {
+
+    private static I18n i18n = I18n.get(NavigActivity.class);
 
     private final NavigView view;
 
@@ -87,14 +90,14 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         ArrayList<NavigFolder> list = new ArrayList<NavigFolder>();
 
         //Properties
-        NavigFolder folder = new NavigFolder("Properties", CrmImages.INSTANCE.propertiesNormal(), CrmImages.INSTANCE.propertiesHover(),
+        NavigFolder folder = new NavigFolder(i18n.tr("Properties"), CrmImages.INSTANCE.propertiesNormal(), CrmImages.INSTANCE.propertiesHover(),
                 CrmImages.INSTANCE.propertiesActive());
         folder.addNavigItem(new CrmSiteMap.Properties.Building());
         folder.addNavigItem(new CrmSiteMap.Properties.Unit());
         list.add(folder);
 
         //Tenants
-        folder = new NavigFolder("Tenants", CrmImages.INSTANCE.tenantsNormal(), CrmImages.INSTANCE.tenantsHover(), CrmImages.INSTANCE.tenantsActive());
+        folder = new NavigFolder(i18n.tr("Tenants"), CrmImages.INSTANCE.tenantsNormal(), CrmImages.INSTANCE.tenantsHover(), CrmImages.INSTANCE.tenantsActive());
         folder.addNavigItem(new CrmSiteMap.Tenants.Lead());
         folder.addNavigItem(new CrmSiteMap.Tenants.Tenant());
         folder.addNavigItem(new CrmSiteMap.Tenants.Lease());
@@ -102,19 +105,22 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         list.add(folder);
 
         //Marketing
-        folder = new NavigFolder("Marketing", CrmImages.INSTANCE.marketingNormal(), CrmImages.INSTANCE.marketingHover(), CrmImages.INSTANCE.marketingActive());
+        folder = new NavigFolder(i18n.tr("Marketing"), CrmImages.INSTANCE.marketingNormal(), CrmImages.INSTANCE.marketingHover(),
+                CrmImages.INSTANCE.marketingActive());
         list.add(folder);
 
         //LegalAndCollections
-        folder = new NavigFolder("Legal & Collections", CrmImages.INSTANCE.legalNormal(), CrmImages.INSTANCE.legalHover(), CrmImages.INSTANCE.legalActive());
+        folder = new NavigFolder(i18n.tr("Legal & Collections"), CrmImages.INSTANCE.legalNormal(), CrmImages.INSTANCE.legalHover(),
+                CrmImages.INSTANCE.legalActive());
         list.add(folder);
 
         //Finance
-        folder = new NavigFolder("Finance", CrmImages.INSTANCE.financeNormal(), CrmImages.INSTANCE.financeHover(), CrmImages.INSTANCE.financeActive());
+        folder = new NavigFolder(i18n.tr("Finance"), CrmImages.INSTANCE.financeNormal(), CrmImages.INSTANCE.financeHover(), CrmImages.INSTANCE.financeActive());
         list.add(folder);
 
         //Organisation
-        folder = new NavigFolder("Organisation", CrmImages.INSTANCE.companyNormal(), CrmImages.INSTANCE.companyHover(), CrmImages.INSTANCE.companyActive());
+        folder = new NavigFolder(i18n.tr("Organisation"), CrmImages.INSTANCE.companyNormal(), CrmImages.INSTANCE.companyHover(),
+                CrmImages.INSTANCE.companyActive());
         folder.addNavigItem(new CrmSiteMap.Organisation.Employee());
         folder.addNavigItem(new CrmSiteMap.Organisation.Portfolio());
         list.add(folder);
@@ -127,7 +133,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         list.add(folder);
 
         //Dashboards
-        folder = new NavigFolder("Dashboards", CrmImages.INSTANCE.dashboardsNormal(), CrmImages.INSTANCE.dashboardsHover(),
+        folder = new NavigFolder(i18n.tr("Dashboards"), CrmImages.INSTANCE.dashboardsNormal(), CrmImages.INSTANCE.dashboardsHover(),
                 CrmImages.INSTANCE.dashboardsActive());
         folder.addNavigItem(new CrmSiteMap.Dashboard.Management());
 

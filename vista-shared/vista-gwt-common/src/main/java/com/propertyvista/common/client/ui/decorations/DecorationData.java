@@ -18,10 +18,24 @@ import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
+
 public class DecorationData {
 
+    @I18n
     public static enum ShowMandatory {
-        Mandatory, Optional, None
+
+        Mandatory,
+
+        Optional,
+
+        None;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
 
     public boolean readOnlyMode = false;

@@ -221,9 +221,9 @@ public class VistaWidgetDecorator extends VerticalPanel {
             CEditableComponent<?, ?> editableComponent = (CEditableComponent<?, ?>) component;
             if (editableComponent.isVisible() && editableComponent.isEnabled() && editableComponent.isEditable()) {
                 if (editableComponent.isMandatory() && DecorationData.ShowMandatory.Mandatory.equals(decorData.showMandatory)) {
-                    mandatoryLabel.setText(DecorationData.ShowMandatory.Mandatory.name());
+                    mandatoryLabel.setText(DecorationData.ShowMandatory.Mandatory.toString());
                 } else if (!editableComponent.isMandatory() && DecorationData.ShowMandatory.Optional.equals(decorData.showMandatory)) {
-                    mandatoryLabel.setText(DecorationData.ShowMandatory.Optional.name());
+                    mandatoryLabel.setText(DecorationData.ShowMandatory.Optional.toString());
                 } else {
                     mandatoryLabel.setText(null);
                 }

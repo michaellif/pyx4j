@@ -229,7 +229,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         account.setVisible(true);
         settings.setVisible(true);
         search.setVisible(true);
-        greetings.setHTML("Welcome &nbsp;" + userName);
+        greetings.setHTML(i18n.tr("Welcome &nbsp;{0}", userName));
     }
 
     @Override
