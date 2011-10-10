@@ -40,7 +40,7 @@ public interface Lead extends IEntity {
 
         radio,
 
-        tV,
+        tv,
 
         mail,
 
