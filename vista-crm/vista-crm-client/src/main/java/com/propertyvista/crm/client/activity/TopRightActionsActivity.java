@@ -13,13 +13,12 @@
  */
 package com.propertyvista.crm.client.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.security.client.ClientContext;
@@ -28,6 +27,7 @@ import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.style.StyleManger;
 
+import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.theme.BlueColdPalette;
 import com.propertyvista.common.client.theme.BownWarmPalette;
 import com.propertyvista.common.client.theme.GainsboroPalette;
@@ -110,18 +110,13 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     }
 
     private void obtainAvailableLocales() {
-        //TODO - VLAD obtain available locale here
-        List<CompiledLocale> locales = new ArrayList<CompiledLocale>();
-        locales.add(CompiledLocale.en);
-        locales.add(CompiledLocale.ru);
-        locales.add(CompiledLocale.fr);
-        view.setAvailableLocales(locales);
+        view.setAvailableLocales(ClentNavigUtils.obtainAvailableLocales());
     }
 
     @Override
     public void setLocale(CompiledLocale locale) {
-        //TODO - VLAD get locale here
-        System.out.println("locale = " + locale.name());
+        UrlBuilder builder = Window.Location.createUrlBuilder().setParameter("locale", locale.name());
+        Window.Location.replace(builder.buildString());
     }
 
     public TopRightActionsActivity withPlace(Place place) {

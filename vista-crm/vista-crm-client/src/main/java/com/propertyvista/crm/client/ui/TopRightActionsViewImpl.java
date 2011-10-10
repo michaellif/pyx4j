@@ -9,6 +9,7 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -20,6 +21,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Tooltip;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -241,6 +243,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
                 }
             });
             link.setValue(compiledLocale.name());
+            Tooltip.tooltip(link.asWidget(), LocaleInfo.getLocaleNativeDisplayName(compiledLocale.name()));
             locales.add(link);
             locales.add(new Label("/"));
         }

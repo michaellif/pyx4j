@@ -13,7 +13,13 @@
  */
 package com.propertyvista.common.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.i18n.client.LocaleInfo;
+
+import com.propertyvista.shared.CompiledLocale;
 
 public class ClentNavigUtils {
 
@@ -28,5 +34,27 @@ public class ClentNavigUtils {
             url = url.substring(0, url.length() - (module.length() + 1));
         }
         return url;
+    }
+
+    public static List<CompiledLocale> obtainAvailableLocales() {
+        List<CompiledLocale> locales = new ArrayList<CompiledLocale>();
+        for (String localeName : LocaleInfo.getAvailableLocaleNames()) {
+            if (localeName.equals("default")) {
+                localeName = "en_US";
+            }
+            CompiledLocale cl = CompiledLocale.valueOf(localeName);
+            if (!locales.contains(cl)) {
+                locales.add(cl);
+            }
+        }
+        return locales;
+    }
+
+    public static CompiledLocale getCurrentLocale() {
+        String currentLocale = LocaleInfo.getCurrentLocale().getLocaleName();
+        if (currentLocale.equals("default")) {
+            currentLocale = "en_US";
+        }
+        return CompiledLocale.valueOf(currentLocale);
     }
 }
