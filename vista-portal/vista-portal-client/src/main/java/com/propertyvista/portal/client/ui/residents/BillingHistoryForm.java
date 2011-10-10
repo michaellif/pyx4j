@@ -13,16 +13,25 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.portal.client.ui.decorations.PortalHeaderBar;
+import com.propertyvista.portal.domain.dto.BillDTO;
 import com.propertyvista.portal.domain.dto.BillListDTO;
 import com.propertyvista.portal.domain.dto.BillListDTO.SearchType;
 
@@ -33,7 +42,7 @@ public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements Bi
     private Presenter presenter;
 
     public BillingHistoryForm() {
-        super(BillListDTO.class);
+        super(BillListDTO.class, new VistaViewersComponentFactory());
     }
 
     @Override
@@ -50,7 +59,7 @@ public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements Bi
         });
 
         container.add(header);
-//        container.add(inject(proto().bills(), createBillingHistoryViewer()));
+        container.add(inject(proto().bills(), createBillingHistoryViewer()));
         return container;
     }
 
@@ -60,30 +69,27 @@ public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements Bi
 
     }
 
-//    private CEntityFolder<BillDTO> createBillingHistoryViewer() {
-//        return new PtAppEntityFolder<BillDTO>(BillDTO.class, false) {
-//            private final PtAppEntityFolder<BillDTO> parent = this;
-//
-//            @Override
-//            protected List<EntityFolderColumnDescriptor> columns() {
-//                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-//                columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
-//                columns.add(new EntityFolderColumnDescriptor(proto().value(), "7em"));
-//                columns.add(new EntityFolderColumnDescriptor(proto().term(), "10em"));
-//                columns.add(new EntityFolderColumnDescriptor(proto().condition(), "10em"));
-//                return columns;
-//            }
-//
-//            @Override
-//            protected IFolderDecorator<BillDTO> createDecorator() {
-//                PtAppTableFolderDecorator<BillDTO> decor = new PtAppTableFolderDecorator<Concession>(columns(), parent);
-////                decor.setShowHeader(false);
-//                return decor;
-//            }
-//        };
-//    }
-//
-//    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private CEntityFolder<BillDTO> createBillingHistoryViewer() {
+        return new VistaEntityFolder<BillDTO>(BillDTO.class, false) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().paidOn(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().total(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().transactionID(), "10em"));
+                return columns;
+            }
+
+            @Override
+            protected IFolderDecorator<BillDTO> createDecorator() {
+                VistaTableFolderDecorator<BillDTO> decor = new VistaTableFolderDecorator<BillDTO>(columns(), this);
+                return decor;
+            }
+        };
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //    class TableFolderViewer<E extends IEntity> extends TableFolderDecorator<BillDTO> {
 //
 //        private final FlowPanel content;
