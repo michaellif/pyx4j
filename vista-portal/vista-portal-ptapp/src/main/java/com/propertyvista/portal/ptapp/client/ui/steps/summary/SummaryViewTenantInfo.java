@@ -15,9 +15,6 @@ package com.propertyvista.portal.ptapp.client.ui.steps.summary;
 
 import static com.pyx4j.commons.HtmlUtils.h3;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
@@ -29,11 +26,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 
@@ -42,7 +36,6 @@ import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
@@ -94,8 +87,8 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
 //        panel.add(new VistaReadOnlyDecorator(inject(proto().driversLicense()), dd2ColumnsTable));
 //        panel.add(new VistaReadOnlyDecorator(inject(proto().driversLicenseState()), dd2ColumnsTable));
 //        panel.add(new VistaReadOnlyDecorator(inject(proto().secureIdentifier()), dd2ColumnsTable));
-        subviewPanel.add(panel);
-        subviewPanel.setCellWidth(panel, RIGHT_COLUMN_WIDTH);
+//        subviewPanel.add(panel);
+//        subviewPanel.setCellWidth(panel, RIGHT_COLUMN_WIDTH);
 
         subviewPanel.add(new FlowPanel()); // add empty cell just for proper resizing of the previous two ;)
         subviewPanel.setWidth("100%");
@@ -111,22 +104,22 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
         subviewPanel = new HorizontalPanel();
 
 //        subviewPanel.add(panel = bindAddress(proto().currentAddress(), dd2ColumnsTable));
-        subviewPanel.setCellWidth(panel, LEFT_COLUMN_WIDTH);
+//        subviewPanel.setCellWidth(panel, LEFT_COLUMN_WIDTH);
 
-        panel = new FlowPanel();
-        subviewPanel.add(panel);
-        subviewPanel.setCellWidth(panel, GAP_COLUMN_WIDTH);
+//        panel = new FlowPanel();
+//        subviewPanel.add(panel);
+//        subviewPanel.setCellWidth(panel, GAP_COLUMN_WIDTH);
 
 //        subviewPanel.add(panel = bindAddress(proto().previousAddress(), dd2ColumnsTable));
-        subviewPanel.setCellWidth(panel, RIGHT_COLUMN_WIDTH);
+//        subviewPanel.setCellWidth(panel, RIGHT_COLUMN_WIDTH);
 
-        subviewPanel.add(new FlowPanel()); // add empty cell just for proper resizing of the previous two ;)
-        subviewPanel.setWidth("100%");
-        fullViewPanel.add(subviewPanel);
+//        subviewPanel.add(new FlowPanel()); // add empty cell just for proper resizing of the previous two ;)
+//        subviewPanel.setWidth("100%");
+//        fullViewPanel.add(subviewPanel);
 
-        sp = new VistaLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
-        sp.getElement().getStyle().setPadding(0, Unit.EM);
-        fullViewPanel.add(sp);
+//        sp = new VistaLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
+//        sp.getElement().getStyle().setPadding(0, Unit.EM);
+//        fullViewPanel.add(sp);
 
         // ----------------------------------------------------------------------
         // legal Questions:
@@ -147,12 +140,12 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
 //        panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().convictedOfFelony()), ddQuestionay));
 //        panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().legalTroubles()), ddQuestionay));
 //        panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().filedBankruptcy()), ddQuestionay));
-        panel.setWidth("100%");
-        fullViewPanel.add(panel);
+//        panel.setWidth("100%");
+//        fullViewPanel.add(panel);
 
-        sp = new VistaLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
-        sp.getElement().getStyle().setPadding(0, Unit.EM);
-        fullViewPanel.add(sp);
+//        sp = new VistaLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
+//        sp.getElement().getStyle().setPadding(0, Unit.EM);
+//        fullViewPanel.add(sp);
 
         // ----------------------------------------------------------------------
         // Emergency:
@@ -186,45 +179,6 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.managerName()), dd2ColumnsTable));
 
         return addressPanel;
-    }
-
-    private CEntityFolder<Vehicle> createVehicleFolderEditorColumns() {
-        return new CEntityFolder<Vehicle>(Vehicle.class) {
-
-            private List<EntityFolderColumnDescriptor> columns;
-
-            {
-                columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().plateNumber(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto().year(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto().make(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto().model(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto().province(), "100px"));
-            }
-
-            @Override
-            protected IFolderDecorator<Vehicle> createDecorator() {
-                return new BoxReadOnlyFolderDecorator<Vehicle>();
-            }
-
-            @Override
-            protected CEntityFolderItemEditor<Vehicle> createItem() {
-                return createVechileRowEditor(columns);
-            }
-
-            private CEntityFolderItemEditor<Vehicle> createVechileRowEditor(final List<EntityFolderColumnDescriptor> columns) {
-                return new CEntityFolderRowEditor<Vehicle>(Vehicle.class, columns) {
-
-                    @Override
-                    public IFolderItemDecorator<Vehicle> createDecorator() {
-                        return new BoxReadOnlyFolderItemDecorator<Vehicle>(false);
-                    }
-
-                };
-            }
-
-        };
-
     }
 
     private CEntityFolder<EmergencyContact> createEmergencyContactsFolder() {

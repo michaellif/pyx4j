@@ -169,11 +169,6 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         }
     }
 
-    @Override
-    public void populate(SummaryDTO value) {
-        super.populate(value);
-    }
-
     private Widget createHeaderWithEditLink(String captionTxt, final AppPlace link) {
 
         Button edit = new Button(i18n.tr("Edit"));
