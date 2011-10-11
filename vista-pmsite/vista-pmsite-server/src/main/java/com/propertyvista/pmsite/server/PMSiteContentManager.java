@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
@@ -386,7 +387,7 @@ public class PMSiteContentManager implements Serializable {
     public static String getMediaImgUrl(long mediaId, ThumbnailSize size) {
         String servletPath = com.pyx4j.server.contexts.Context.getRequest().getServletPath();
         // shift back for every path segment; then remove one segment - for the script name
-        String servletRoot = servletPath.replaceAll("/+[^/]+", "../").replaceFirst("../", "");
+        String servletRoot = servletPath.replaceAll("/+[^/]*", "../").replaceFirst("../", "");
         return servletRoot + "media/" + mediaId + "/" + size.name() + ".jpg";
     }
 
@@ -395,6 +396,7 @@ public class PMSiteContentManager implements Serializable {
 
         // do promo building lookup
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
+        dbCriteria.add(new PropertyCriterion(dbCriteria.proto().id(), Restriction.GREATER_THAN, 10));
         List<Building> buildings = Persistence.service().query(dbCriteria);
         for (Building bld : buildings) {
             PromoDataModel item = new PromoDataModel();

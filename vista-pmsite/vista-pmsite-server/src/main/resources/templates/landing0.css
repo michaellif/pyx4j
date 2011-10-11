@@ -119,7 +119,6 @@
 
 
 .vista-pmsite-landingPage .promoBox {
-	width:600px;
 	height:240px;
 	padding:20px 10px;
 	float:left;
@@ -127,7 +126,7 @@
 }
 
 .vista-pmsite-landingPage .promoBox .infobox_content {
-	width:130px;
+	width:140px;
 	height:200px;
 	float:left;
 	margin-left:20px;
@@ -138,7 +137,7 @@
 }
 
 .vista-pmsite-landingPage .promoBox .picture {
-	width:130px;
+	width:140px;
 	background:grey;
 }
 
