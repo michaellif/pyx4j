@@ -19,6 +19,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.ConstructionType;
@@ -30,6 +31,7 @@ import com.propertyvista.domain.property.asset.building.BuildingInfo.Type;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.WaterSupply;
 
 @Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface BuildingIO extends IEntity {
 
     IPrimitive<String> propertyCode();

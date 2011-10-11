@@ -18,9 +18,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @XmlRootElement(name = "import")
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface ImportIO extends IEntity {
 
     IList<BuildingIO> buildings();

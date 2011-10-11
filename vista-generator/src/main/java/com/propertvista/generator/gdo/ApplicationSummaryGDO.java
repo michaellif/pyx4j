@@ -16,10 +16,12 @@ package com.propertvista.generator.gdo;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 //Generator/Preloader Data OBject only!
 public interface ApplicationSummaryGDO extends IEntity {
 

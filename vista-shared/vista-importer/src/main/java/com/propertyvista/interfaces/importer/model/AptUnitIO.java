@@ -17,10 +17,12 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 
 @Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface AptUnitIO extends IEntity {
 
     IPrimitive<String> number();
