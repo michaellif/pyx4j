@@ -75,8 +75,8 @@ public class PtAppTheme extends com.propertyvista.common.client.theme.VistaTheme
     protected void initSiteViewStyles() {
         String prefix = PtAppSiteView.DEFAULT_STYLE_PREFIX;
 
-        int minWidth = 960;
-        int maxWidth = 960;
+        int minWidth = 930;
+        int maxWidth = 930;
         int leftColumnWidth = 0;
         int rightColumnWidth = 0;
 
@@ -143,7 +143,7 @@ public class PtAppTheme extends com.propertyvista.common.client.theme.VistaTheme
         style = new Style(Selector.valueOf(VistaHeaderBar.DEFAULT_STYLE_PREFIX));
         style.addProperty("background-color", ThemeColors.OBJECT_TONE4);
         style.addProperty("margin", "0.4em 0 0.4em 0");
-        style.addProperty("width", "960px");
+        style.addProperty("width", maxWidth + "px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(VistaHeaderBar.DEFAULT_STYLE_PREFIX, VistaHeaderBar.StyleSuffix.Caption));
