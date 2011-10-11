@@ -207,7 +207,7 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
 
         main.add(new VistaHeaderBar(i18n.tr("Pre-Authorized Payment")));
         HorizontalPanel preauthorisedNotes = new HorizontalPanel();
-        preauthorisedNotes.add(new HTML(PortalResources.INSTANCE.paymentPreauthorisedNotes().getText()));
+        preauthorisedNotes.add(new HTML(PortalResources.INSTANCE.paymentPreauthorisedNotes_VISA().getText()));
         main.add(preauthorisedNotes);
 
         main.add(inject(proto().preauthorised()), 12);

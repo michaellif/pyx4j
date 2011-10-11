@@ -40,8 +40,11 @@ public interface PortalResources extends ClientBundleWithLookup {
     @Source("paymentApprovalNotes.html")
     TextResource paymentApprovalNotes();
 
-    @Source("paymentPreauthorisedNotes.html")
-    TextResource paymentPreauthorisedNotes();
+    @Source("paymentPreauthorisedNotes_MC.html")
+    TextResource paymentPreauthorisedNotes_MC();
+
+    @Source("paymentPreauthorisedNotes_VISA.html")
+    TextResource paymentPreauthorisedNotes_VISA();
 
     @Source("stub.html")
     TextResource paymentTermsNotes();
