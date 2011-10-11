@@ -47,6 +47,7 @@ public class FooterPanel extends Panel {
                     PageParameters params = new PageParameters();
                     params.add("city", _city);
                     params.add("province", _prov);
+                    params.add("searchType", "city");
                     BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", AptListPage.class, params);
                     link.add(new Label("city", _city + " (" + _prov2 + ")"));
                     item.add(link);
