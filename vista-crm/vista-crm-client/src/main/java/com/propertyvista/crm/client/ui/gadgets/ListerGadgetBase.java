@@ -66,8 +66,11 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     private final ListerActivityBase<E> listerActivity;
 
+    protected final AbstractCrudService<E> service;
+
     public ListerGadgetBase(GadgetMetadata gmd, AbstractCrudService<E> service, Class<E> entityClass) {
         super(gmd);
+        this.service = service;
 
         // TODO add more civilised (use isSettingsOk() method) when IEntity.isInstance() works well
         try {
@@ -79,6 +82,18 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         }
 
         refreshTimer = new RefreshTimer();
+        refreshTimer.registerEventHandler(new RefreshTimerEventHandler() {
+            @Override
+            public void onTime() {
+                storeSettings();
+
+                // try to reload the page and if the page is empty try to load the previous one
+                int pageToReload = getListerBase().getPageNumber();
+                do {
+                    listerActivity.populate(pageToReload--);
+                } while ((listerBase.getPageNumber() > 0) && (listerBase.getPageSize() == 0));
+            }
+        });
 
         listerBase = new EnhancedListerBase<E>(entityClass, null);
         listerActivity = new ListerActivityBase<E>(listerBase, service, entityClass);
@@ -101,6 +116,10 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
                 }
             }
         });
+    }
+
+    protected RefreshTimer getRefreshTimer() {
+        return refreshTimer;
     }
 
     @Override
@@ -280,7 +299,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         // TODO: apply filtering
     }
 
-    private class EnhancedListerBase<T> extends ListerBase<E> {
+    protected class EnhancedListerBase<T> extends ListerBase<E> {
 
         public EnhancedListerBase(Class<E> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass) {
             super(clazz, itemOpenPlaceClass);
@@ -326,31 +345,40 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     }
 
+    public static interface RefreshTimerEventHandler {
+        public void onTime();
+    }
+
     /**
      * This class provides refresh logic
      */
-    private class RefreshTimer {
+    public static class RefreshTimer {
         private final Timer timer;
+
+        private final ArrayList<RefreshTimerEventHandler> handlers;
 
         private boolean isActive;
 
         private int refreshInterval;
 
         RefreshTimer() {
+            handlers = new ArrayList<ListerGadgetBase.RefreshTimerEventHandler>();
             isActive = false;
             refreshInterval = 0;
+
             timer = new Timer() {
                 @Override
                 public void run() {
-                    storeSettings();
+                    for (RefreshTimerEventHandler handler : handlers) {
+                        handler.onTime();
+                    }
 
-                    // try to reload the page and if the page is empty try to load the previous one
-                    int pageToReload = getListerBase().getPageNumber();
-                    do {
-                        listerActivity.populate(pageToReload--);
-                    } while ((listerBase.getPageNumber() > 0) && (listerBase.getPageSize() == 0));
                 }
             };
+        }
+
+        public void registerEventHandler(RefreshTimerEventHandler timerEventHandler) {
+            handlers.add(timerEventHandler);
         }
 
         /**

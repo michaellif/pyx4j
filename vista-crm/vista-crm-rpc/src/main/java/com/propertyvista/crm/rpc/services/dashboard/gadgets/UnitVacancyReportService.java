@@ -15,13 +15,13 @@ package com.propertyvista.crm.rpc.services.dashboard.gadgets;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportSummaryDTO;
 
 public interface UnitVacancyReportService extends AbstractCrudService<UnitVacancyReport> {
-    public void getSummary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, EntityListCriteria<UnitVacancyReport> criteria);
+    public void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, EntityQueryCriteria<UnitVacancyReport> criteria);
 
 }

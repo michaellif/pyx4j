@@ -14,40 +14,57 @@
 package com.propertyvista.domain.dashboard.gadgets;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 @Transient
 public interface UnitVacancyReportSummaryDTO extends IEntity {
     public enum SummarySubject {
-        Complex, Region, Ownership, PropertyManager
+        Complex, Region, Ownership, PropertyManager;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
 
     public IPrimitive<SummarySubject> summarySubject();
 
     /** could be complex, Property Manager, ownership or region */
-    IEntity summarySubjectValue();
+//    IEntity summarySubjectValue();
 
-    public IPrimitive<Integer> vacant();
+    @Format("#0.00")
+    public IPrimitive<Double> netExposure();
 
-    public IPrimitive<Integer> notice();
+    @Caption(name = "Notice #")
+    public IPrimitive<Integer> noticeAbsolute();
 
-    public IPrimitive<Integer> vacantRented();
+    @Caption(name = "Notice %")
+    @Format("#0.00")
+    public IPrimitive<Double> noticeRelative();
 
     public IPrimitive<Integer> noticeRented();
-
-    public IPrimitive<Integer> netExposure();
 
     @Caption(name = "Occupancy #")
     public IPrimitive<Integer> occupancyAbsolute();
 
+    @Caption(name = "Occupancy %")
+    @Format("#0.00")
+    public IPrimitive<Double> occupancyRelative();
+
     @Caption(name = "Vacancy #")
     public IPrimitive<Integer> vacancyAbsolute();
 
-    @Caption(name = "Occupancy %")
-    public IPrimitive<Integer> occupancyRelative();
-
     @Caption(name = "Vacancy %")
-    public IPrimitive<Integer> vacancyRelative();
+    @Format("#0.00")
+    public IPrimitive<Double> vacancyRelative();
+
+    public IPrimitive<Integer> vacantRented();
+
+    @Caption(name = "Total Units")
+    public IPrimitive<Integer> total();
+
 }

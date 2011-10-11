@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 // TODO don't forget to rename to DTO and enable the @Transient annotation when it's ready 
 // @Transient
@@ -27,14 +28,28 @@ public interface UnitVacancyReport extends IEntity {
     // TODO ask Vlad about @Translatable and @XMLType
     public enum VacancyStatus {
         Vacant, Notice;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
 
     public enum RentedStatus {
         Rented, Unrented, OffMarket;
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
 
     public enum RentReady {
-        RentReady, RenoInProgress, NeedRepairs
+        RentReady, RenoInProgress, NeedRepairs;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
 
     @Caption(name = "Property")

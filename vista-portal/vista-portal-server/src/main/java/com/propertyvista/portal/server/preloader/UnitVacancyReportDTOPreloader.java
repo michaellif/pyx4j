@@ -94,8 +94,9 @@ public class UnitVacancyReportDTOPreloader extends BaseVistaDataPreloader {
                     VacancyStatus vacancyStatus = "vacant".equals(strValue) ? VacancyStatus.Vacant : "notice".equals(strValue) ? VacancyStatus.Notice : null;
                     record.vacancyStatus().setValue(vacancyStatus);
 
-                    RentedStatus rentedStatus = "rented".equals(values[memberToIndexMap.get("rented/not rented")]) ? RentedStatus.Rented : "not rented"
-                            .equals(values[memberToIndexMap.get("rented/not rented")]) ? RentedStatus.Unrented : null;
+                    strValue = values[memberToIndexMap.get("rented/not rented")];
+                    RentedStatus rentedStatus = "rented".equals(strValue) ? RentedStatus.Rented : "not rented".equals(strValue) ? RentedStatus.Unrented
+                            : "off market".equals(strValue) ? RentedStatus.OffMarket : null;
                     record.rentedStatus().setValue(rentedStatus);
 
                     strValue = values[memberToIndexMap.get("scoped/not scoped")];

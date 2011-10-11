@@ -13,57 +13,73 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
-import com.pyx4j.site.rpc.services.AbstractCrudService;
-import com.pyx4j.widgets.client.TabLayoutPanel;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.client.ui.crud.IListerView;
 
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
+import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitVacancyReportService;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportSummaryDTO;
+import com.propertyvista.domain.property.asset.building.Building;
 
-public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport> {
+public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport> implements IBuildingGadget {
     private final VerticalPanel gadgetPanel;
 
-    private Label totalUnits;
+    private final UnitVacancyReportSummaryForm unitVacancyReportSummaryForm;
 
-    private Label vacant;
+    private final UnitVacancyReportGadgetActivity activity;
 
-    private Label vacantRented;
+    private List<Key> buildings;
 
-    private Label noticeAbs;
-
-    private Label noticeRented;
-
-    private Label netExpousure;
-
-    private Label occupancyAbs;
-
-    private Label occupancyPct;
-
-    private Label vacancyAbs;
-
-    private Label vacancyPct;
-
-    @SuppressWarnings("unchecked")
     public UnitVacancyReportGadget(GadgetMetadata gmd) {
-        super(gmd, (AbstractCrudService<UnitVacancyReport>) GWT.create(UnitVacancyReportService.class), UnitVacancyReport.class);
+        super(gmd, (UnitVacancyReportService) GWT.create(UnitVacancyReportService.class), UnitVacancyReport.class);
+
+        unitVacancyReportSummaryForm = new UnitVacancyReportSummaryForm();
+        unitVacancyReportSummaryForm.initContent();
 
         gadgetPanel = new VerticalPanel();
-        gadgetPanel.add(createSummaryView());
-        gadgetPanel.add(super.getListerBase());
+
+        gadgetPanel.add(getListerBase());
+        gadgetPanel.add(unitVacancyReportSummaryForm.asWidget());
+
+        activity = new UnitVacancyReportGadgetActivity(this, (UnitVacancyReportService) service);
+
+        getListerView().setPresenter(activity);
+        getRefreshTimer().registerEventHandler(new RefreshTimerEventHandler() {
+
+            @Override
+            public void onTime() {
+                activity.populateSummary();
+
+            }
+        });
     }
 
     @Override
@@ -76,6 +92,103 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         gmd.type().setValue(GadgetType.UnitVacancyReport);
         gmd.name().setValue(i18n.tr("Unit Vacancy Report"));
 
+    }
+
+    public IListerView<UnitVacancyReport> getListerView() {
+        return getListerBase();
+    }
+
+    public UnitVacancyReportSummaryForm getUnitVacancyReportSummaryForm() {
+        return unitVacancyReportSummaryForm;
+    }
+
+    @Override
+    public Widget asWidget() {
+
+        return gadgetPanel;
+    }
+
+    @Override
+    public void start() {
+        super.start();
+        activity.populateSummary();
+    }
+
+    public class UnitVacancyReportSummaryForm extends CrmEntityForm<UnitVacancyReportSummaryDTO> {
+
+        public UnitVacancyReportSummaryForm() {
+            super(UnitVacancyReportSummaryDTO.class, new CrmViewersComponentFactory());
+        }
+
+        @Override
+        public IsWidget createContent() {
+            final int WIDTH = 10;
+            VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(true);
+
+            main.add(inject(proto().total()), WIDTH);
+            main.add(inject(proto().netExposure()), WIDTH);
+            main.add(new VistaLineSeparator());
+
+            VistaDecoratorsSplitFlowPanel sp = new VistaDecoratorsSplitFlowPanel(true);
+
+            sp.getLeftPanel().add(inject(proto().vacancyAbsolute()), WIDTH);
+            sp.getLeftPanel().add(inject(proto().vacancyRelative()), WIDTH);
+            sp.getLeftPanel().add(inject(proto().vacantRented()), WIDTH);
+            sp.getLeftPanel().add(new VistaLineSeparator());
+            sp.getLeftPanel().add(inject(proto().occupancyAbsolute()), WIDTH);
+            sp.getLeftPanel().add(inject(proto().occupancyRelative()), WIDTH);
+
+            sp.getRightPanel().add(inject(proto().noticeAbsolute()), WIDTH);
+            sp.getRightPanel().add(inject(proto().noticeRelative()), WIDTH);
+            sp.getRightPanel().add(inject(proto().noticeRented()), WIDTH);
+
+            main.add(sp);
+
+            return new CrmScrollPanel(main);
+        }
+    }
+
+    public class UnitVacancyReportGadgetActivity extends ListerActivityBase<UnitVacancyReport> {
+
+        private final UnitVacancyReportService serivce;
+
+        private final UnitVacancyReportGadget gadget;
+
+        // TODO create interface for the gadget? pass interface to the constructor
+        public UnitVacancyReportGadgetActivity(UnitVacancyReportGadget gadget, UnitVacancyReportService service) {
+            super(gadget.getListerView(), service, UnitVacancyReport.class);
+            this.serivce = service;
+            this.gadget = gadget;
+        }
+
+        @Override
+        protected EntityListCriteria<UnitVacancyReport> constructSearchCriteria() {
+            // TODO: construct the search criteria according to the user query propagated from gadget view/dashboard view;
+            EntityListCriteria<UnitVacancyReport> criteria = super.constructSearchCriteria();
+
+            if (buildings != null && !buildings.isEmpty()) {
+                Building building = EntityFactory.create(Building.class);
+                criteria.add(new PropertyCriterion(building.id().getPath().toString(), Restriction.IN, (Serializable) buildings));
+                //criteria.add(new PropertyCriterion(getListerBase().proto().propertyCode().getPath().toString(), Restriction.IN, (Serializable) buildings));
+            }
+
+            return criteria;
+
+        }
+
+        public void populateSummary() {
+            serivce.summary(new AsyncCallback<UnitVacancyReportSummaryDTO>() {
+                @Override
+                public void onSuccess(UnitVacancyReportSummaryDTO result) {
+                    gadget.getUnitVacancyReportSummaryForm().populate(result);
+                }
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    throw new UnrecoverableClientError(caught);
+                }
+            }, constructSearchCriteria());
+        }
     }
 
     @Override
@@ -104,122 +217,24 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.revenueLost()));
     }
 
-    private Widget createSummaryView() {
-        HorizontalPanel panel = new HorizontalPanel();
-
-        totalUnits = new Label("99951");
-        vacancyAbs = new Label("100");
-        vacancyPct = new Label("35");
-        vacantRented = new Label("15");
-
-        occupancyAbs = new Label("12451");
-        occupancyPct = new Label("86");
-
-        noticeAbs = new Label("500");
-        noticeRented = new Label("144");
-
-        netExpousure = new Label("14515501515");
-        //           #       %
-        // Occupied  5132   55%
-        // Vacant    55423  45%
-        // Total:    500043
-        FlexTable vacancyStatsTable = new FlexTable();
-        vacancyStatsTable.setText(0, 1, "#");
-        vacancyStatsTable.setText(0, 2, "%");
-
-        vacancyStatsTable.setText(1, 0, "Occupied");
-        vacancyStatsTable.setWidget(1, 1, occupancyAbs);
-        vacancyStatsTable.setWidget(1, 2, occupancyPct);
-
-        vacancyStatsTable.setText(2, 0, "Vacant");
-        vacancyStatsTable.setWidget(2, 1, vacancyAbs);
-        vacancyStatsTable.setWidget(2, 2, vacancyPct);
-
-        panel.add(vacancyStatsTable);
-
-        //           Vacant    Notice
-        // Total:
-        // Rented:
-        FlexTable rentedStatstable = new FlexTable();
-        rentedStatstable.setText(0, 1, "Vacant (#)");
-        rentedStatstable.setText(0, 2, "Notice (#)");
-
-        rentedStatstable.setText(1, 0, "Total");
-        rentedStatstable.setWidget(1, 1, vacancyAbs);
-        rentedStatstable.setWidget(1, 2, noticeAbs);
-
-        rentedStatstable.setText(2, 0, "Rented");
-        rentedStatstable.setWidget(2, 1, vacantRented);
-        rentedStatstable.setWidget(2, 2, noticeRented);
-
-        panel.add(rentedStatstable);
-
-        // Net Exposure: 
-        FlexTable netExposureTable = new FlexTable();
-        netExposureTable.setText(0, 0, "Net Exposure ($)");
-        netExposureTable.setWidget(0, 1, netExpousure);
-
-        panel.add(netExposureTable);
-        panel.setBorderWidth(1);
-
-        return panel;
+    @Override
+    public void setBuilding(Key id) {
+        List<Key> ids = new ArrayList<Key>(1);
+        ids.add(id);
+        setBuildings(ids);
     }
 
     @Override
-    public Widget asWidget() {
+    public void setBuildings(List<Key> ids) {
 
-        return gadgetPanel;
-    }
-
-//    @Override
-//    public ISetup getSetup() {
-//        return new SetupUnitVacancyReport(super.getSetup());
-//    }
-
-    class SetupUnitVacancyReport implements ISetup {
-        private static final String PARENT_SETUP_TAB_NAME = "General";
-
-        private static final String SETUP_TAB_NAME = "Report Settings";
-
-        private final ISetup parentSetup;
-
-        private final TabLayoutPanel tabPanel;
-
-        private final VerticalPanel setupPanel;
-
-        public SetupUnitVacancyReport(ISetup parentSetup) {
-            this.parentSetup = parentSetup;
-
-            // TODO add some controls
-            setupPanel = new VerticalPanel();
-            setupPanel.add(new Label("FOO"));
-            // TODO create style?
-            tabPanel = new TabLayoutPanel(1.5, Unit.EM);
-            tabPanel.add(setupPanel.asWidget(), new Label(SETUP_TAB_NAME));
-            tabPanel.add(parentSetup.asWidget(), new Label(PARENT_SETUP_TAB_NAME));
-
-            tabPanel.setSize("100%", "100%");
+        List<Key> my = new ArrayList<Key>(1);
+        for (Key id : ids) {
+            my.add(id);
         }
+        buildings = my;
 
-        @Override
-        public Widget asWidget() {
-            return tabPanel;
-        }
-
-        @Override
-        public boolean onStart() {
-            return parentSetup.onStart();
-        }
-
-        @Override
-        public boolean onOk() {
-            return parentSetup.onOk();
-        }
-
-        @Override
-        public void onCancel() {
-            parentSetup.onCancel();
-        }
-
+        // TODO maybe remove this
+        stop();
+        start();
     }
 }
