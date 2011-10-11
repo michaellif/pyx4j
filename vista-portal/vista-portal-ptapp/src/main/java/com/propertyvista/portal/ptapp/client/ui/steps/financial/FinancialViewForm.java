@@ -172,7 +172,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
             @Override
             protected CEntityFolderBoxEditor<IIncomeInfo> createItem() {
-                return new FinancialViewIncomeForm2(summaryViewMode);
+                return new FinancialViewIncomeForm2(parent, summaryViewMode);
             }
 
             @Override
@@ -204,7 +204,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
             @Override
             protected CEntityFolderBoxEditor<PersonalIncome> createItem() {
-                return new FinancialViewIncomeForm(summaryViewMode);
+                return new FinancialViewIncomeForm(parent, summaryViewMode);
             }
 
             @Override

@@ -124,9 +124,6 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Financial"), new PtSiteMap.Financial())));
         main.add(inject(proto().tenantFinancials(), createFinancialView()));
 
-//        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Addons"), new PtSiteMap.Addons())));
-//        main.add(inject(proto().addons(), new AddonsViewForm(this)));
-
         main.add(alignWidth(new VistaHeaderBar(i18n.tr("Lease Terms"))));
         main.add(new LeaseTermsCheck());
 
@@ -385,7 +382,6 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
      * Tenants detailed information view implementation
      */
     public CEntityFolder<TenantInLease> createTenantView() {
-
         return new CEntityFolder<TenantInLease>(TenantInLease.class) {
 
             @Override
@@ -404,7 +400,6 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
      * Financial detailed information view implementation
      */
     public CEntityFolder<SummaryTenantFinancialDTO> createFinancialView() {
-
         return new CEntityFolder<SummaryTenantFinancialDTO>(SummaryTenantFinancialDTO.class) {
 
             @Override

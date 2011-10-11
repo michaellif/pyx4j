@@ -30,7 +30,6 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CPolymorphicEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.IDiscriminator;
 import com.pyx4j.entity.client.ui.flex.editor.IPolymorphicEditorDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -38,7 +37,9 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.components.AddressUtils;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
@@ -49,19 +50,21 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSeasonallyEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoSocialServices;
 import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
-import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
 public class FinancialViewIncomeForm2 extends CEntityFolderBoxEditor<IIncomeInfo> {
 
     private static I18n i18n = I18n.get(FinancialViewIncomeForm2.class);
 
+    private final VistaEntityFolder<IIncomeInfo> parent;
+
     private final boolean summaryViewMode;
 
     private CPolymorphicEntityEditor<IIncomeInfo> editor;
 
-    public FinancialViewIncomeForm2(boolean summaryViewMode) {
+    public FinancialViewIncomeForm2(VistaEntityFolder<IIncomeInfo> parent, boolean summaryViewMode) {
         super(IIncomeInfo.class);
+        this.parent = parent;
         this.summaryViewMode = summaryViewMode;
     }
 
@@ -137,7 +140,7 @@ public class FinancialViewIncomeForm2 extends CEntityFolderBoxEditor<IIncomeInfo
         if (summaryViewMode) {
             return new BoxReadOnlyFolderItemDecorator<IIncomeInfo>(!isFirst());
         } else {
-            return new BoxFolderItemDecorator<IIncomeInfo>(PortalImages.INSTANCE);
+            return new VistaBoxFolderItemDecorator<IIncomeInfo>(parent);
         }
     }
 

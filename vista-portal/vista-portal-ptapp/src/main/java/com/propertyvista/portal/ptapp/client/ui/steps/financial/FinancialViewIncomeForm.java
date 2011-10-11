@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
@@ -32,8 +31,10 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
@@ -47,19 +48,21 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSocialServices;
 import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.IncomeSource;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
-import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
 public class FinancialViewIncomeForm extends CEntityFolderBoxEditor<PersonalIncome> {
 
     private static I18n i18n = I18n.get(FinancialViewIncomeForm.class);
 
+    private final VistaEntityFolder<PersonalIncome> parent;
+
     private final boolean summaryViewMode;
 
     private ApplicationDocumentsFolderUploader fileUpload;
 
-    public FinancialViewIncomeForm(boolean summaryViewMode) {
+    public FinancialViewIncomeForm(VistaEntityFolder<PersonalIncome> parent, boolean summaryViewMode) {
         super(PersonalIncome.class);
+        this.parent = parent;
         this.summaryViewMode = summaryViewMode;
     }
 
@@ -103,7 +106,7 @@ public class FinancialViewIncomeForm extends CEntityFolderBoxEditor<PersonalInco
         if (summaryViewMode) {
             return new BoxReadOnlyFolderItemDecorator<PersonalIncome>(!isFirst());
         } else {
-            return new BoxFolderItemDecorator<PersonalIncome>(PortalImages.INSTANCE);
+            return new VistaBoxFolderItemDecorator<PersonalIncome>(parent);
         }
     }
 
