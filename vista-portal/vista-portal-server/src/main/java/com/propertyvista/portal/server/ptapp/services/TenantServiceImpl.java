@@ -24,8 +24,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.security.shared.SecurityViolationException;
 
@@ -36,6 +34,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
+import com.propertyvista.portal.server.ptapp.util.TenantRetriever;
 
 public class TenantServiceImpl extends ApplicationEntityServiceImpl implements TenantService {
 
@@ -44,7 +43,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
     @Override
     public void retrieve(AsyncCallback<TenantInApplicationListDTO> callback, Key tenantId) {
         Lease lease = PtAppContext.getCurrentUserLease();
-        UpdateLeaseTenants(lease);
+        TenantRetriever.UpdateLeaseTenants(lease);
 
         TenantInApplicationListDTO tenants = EntityFactory.create(TenantInApplicationListDTO.class);
         for (TenantInLease tenantInLease : lease.tenants()) {
@@ -61,7 +60,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
     @Override
     public void save(AsyncCallback<TenantInApplicationListDTO> callback, TenantInApplicationListDTO tenants) {
         Lease lease = PtAppContext.getCurrentUserLease();
-        UpdateLeaseTenants(lease);
+        TenantRetriever.UpdateLeaseTenants(lease);
 
         List<TenantInLease> existingTenants = new Vector<TenantInLease>(lease.tenants());
         lease.tenants().clear();
@@ -122,13 +121,5 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
 //        CampaignManager.fireEvent(CampaignTriger.Registration, tenants);
 
         callback.onSuccess(currentTenants);
-    }
-
-    private void UpdateLeaseTenants(Lease lease) {
-        // update Tenants double links:
-        EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
-        lease.tenants().clear();
-        lease.tenants().addAll(Persistence.service().query(criteria));
     }
 }

@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.ptapp.services;
+package com.propertyvista.portal.server.ptapp.util;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
@@ -22,33 +22,36 @@ import com.pyx4j.security.shared.SecurityViolationException;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class TenantRetriever {
 
-    Tenant tenant;
+    public Tenant tenant;
 
-    TenantScreening tenantScreening;
+    public TenantScreening tenantScreening;
 
-    TenantInLease tenantInLease;
+    public TenantInLease tenantInLease;
 
+    // Construction:
     public TenantRetriever() {
     }
 
-    public TenantRetriever(Key tenantId) {
-        retrieve(tenantId, false);
+    public TenantRetriever(Key tenanInLeasetId) {
+        retrieve(tenanInLeasetId, false);
     }
 
-    public TenantRetriever(Key tenantId, boolean financial) {
-        retrieve(tenantId, financial);
+    public TenantRetriever(Key tenanInLeasetId, boolean financial) {
+        retrieve(tenanInLeasetId, financial);
     }
 
-    void retrieve(Key tenantId) {
-        retrieve(tenantId, false);
+    // Manipulation:
+    public void retrieve(Key tenanInLeasetId) {
+        retrieve(tenanInLeasetId, false);
     }
 
-    void retrieve(Key tenantId, boolean financial) {
-        tenantInLease = Persistence.service().retrieve(TenantInLease.class, tenantId);
+    public void retrieve(Key tenanInLeasetId, boolean financial) {
+        tenantInLease = Persistence.service().retrieve(TenantInLease.class, tenanInLeasetId);
         if ((tenantInLease == null) || (!tenantInLease.lease().getPrimaryKey().equals(PtAppContext.getCurrentUserLeasePrimaryKey()))) {
             throw new SecurityViolationException("Invalid data access");
         }
@@ -66,5 +69,14 @@ public class TenantRetriever {
 
         tenant = Persistence.service().retrieve(Tenant.class, tenantInLease.tenant().getPrimaryKey());
         Persistence.service().retrieve(tenant.emergencyContacts());
+    }
+
+    // Lease management:
+    static public void UpdateLeaseTenants(Lease lease) {
+        // update Tenants double links:
+        EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
+        lease.tenants().clear();
+        lease.tenants().addAll(Persistence.service().query(criteria));
     }
 }

@@ -28,6 +28,7 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
+import com.propertyvista.portal.server.ptapp.util.TenantRetriever;
 import com.propertyvista.server.common.reference.SharedData;
 
 public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl implements TenantFinancialService {

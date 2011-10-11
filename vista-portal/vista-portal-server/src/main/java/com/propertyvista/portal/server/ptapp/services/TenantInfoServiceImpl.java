@@ -24,6 +24,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
+import com.propertyvista.portal.server.ptapp.util.TenantRetriever;
 
 public class TenantInfoServiceImpl implements TenantInfoService {
 

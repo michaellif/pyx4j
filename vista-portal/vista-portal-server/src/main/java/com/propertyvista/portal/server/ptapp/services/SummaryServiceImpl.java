@@ -45,6 +45,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.SummaryTenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.ptapp.util.TenantRetriever;
 import com.propertyvista.portal.server.report.SummaryReport;
 
 public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements SummaryService {
@@ -86,7 +87,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         summary.selectedUnit().set(new ApartmentServiceImpl().retrieveData());
 
         Lease lease = PtAppContext.getCurrentUserLease();
-        UpdateLeaseTenants(lease);
+        TenantRetriever.UpdateLeaseTenants(lease);
 
         for (TenantInLease tenantInLease : lease.tenants()) {
             Persistence.service().retrieve(tenantInLease);
@@ -168,13 +169,5 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         } finally {
             IOUtils.closeQuietly(bos);
         }
-    }
-
-    private void UpdateLeaseTenants(Lease lease) {
-        // update Tenants double links:
-        EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
-        lease.tenants().clear();
-        lease.tenants().addAll(Persistence.service().query(criteria));
     }
 }
