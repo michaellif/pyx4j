@@ -191,7 +191,7 @@
 	color: #222;
 }
 .apartmentListingWrap .listingEntry:hover {
-	background:${accentColor_10};
+	background-color:${primeColor_10};
 }
 .apartmentListingWrap .listingEntry:first-child {
 	border-top: 1px solid ${fgColor_20};

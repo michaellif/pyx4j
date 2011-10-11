@@ -68,8 +68,8 @@ a:hover {
 select {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
-	background-color: #eee;
-	color: #333;
+	background-color: ${bgColor_100};
+	color: ${fgColor_100};
 }
 
 .header {
@@ -160,16 +160,15 @@ select {
 }
 
 .navigation a:hover {
-	background-color: ${accentColor_60};
-	color: ${primeColor_100};
+	color: ${accentColor_100};
 }
 
 .navigation .active a {
+	color: ${bgColor_100};
 	background-color: ${accentColor_100};
 }
 
 .navigation .active a:hover {
-	color: ${primeColor_60};
 }
 
 .locale {
@@ -233,7 +232,7 @@ ul.footer_locations li {
 }
 
 .footer_locations a {
-	color: ${hlightColor_60};
+	color: ${primeColor_100};
 }
 
 .footer_locations a:hover {

@@ -102,7 +102,7 @@
 	width:230px;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover {
-	background:${accentColor_10};
+	background-color:${primeColor_10};
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry .picture {
 	display: inline-block;
