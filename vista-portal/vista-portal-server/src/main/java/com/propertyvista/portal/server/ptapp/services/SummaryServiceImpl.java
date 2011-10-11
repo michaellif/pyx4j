@@ -58,10 +58,12 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
     }
 
     @Override
-    public void save(AsyncCallback<SummaryDTO> callback, SummaryDTO summary) {
+    public void save(AsyncCallback<SummaryDTO> callback, SummaryDTO summaryDTO) {
+        Summary summary = EntityFactory.create(Summary.class);
+        summary.setValue(summaryDTO.getValue());
         saveApplicationEntity(summary);
         createSummaryDTO(summary);
-        callback.onSuccess(summary);
+        callback.onSuccess(summaryDTO);
     }
 
     public SummaryDTO retrieveSummary() {
@@ -79,7 +81,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
     public SummaryDTO createSummaryDTO(Summary dbo) {
 
         SummaryDTO summary = EntityFactory.create(SummaryDTO.class);
-        summary.set(dbo.cast());
+        summary.setValue(dbo.getValue());
 
         summary.selectedUnit().set(new ApartmentServiceImpl().retrieveData());
 
