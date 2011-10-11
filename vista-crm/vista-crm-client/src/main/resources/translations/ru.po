@@ -1,4 +1,4 @@
-# SOME DESCRIPTIVE TITLE.
+﻿# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-10 15:54-0400\n"
+"POT-Creation-Date: 2011-10-11 14:32-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -446,7 +446,7 @@ msgstr "Ошибка приложения"
 msgid "Application is in read-only"
 msgstr "Приложение только для чтения"
 
-#: com/pyx4j/essentials/client/BaseLogInPanel.java:174
+#: com/pyx4j/essentials/client/BaseLogInPanel.java:175
 msgid ""
 "Application is in read-only due to short maintenance.\n"
 "Please try again in one hour"
@@ -3057,7 +3057,7 @@ msgstr "Шкафы"
 msgid "Log In"
 msgstr "Войдите"
 
-#: com/propertyvista/crm/client/activity/login/ResetPasswordActivity.java:64
+#: com/propertyvista/crm/client/activity/login/ResetPasswordActivity.java:65
 #: com/propertyvista/crm/client/ui/TopRightActionsViewImpl.java:95
 msgid "LogIn"
 msgstr "LogIn"
@@ -4173,8 +4173,8 @@ msgstr "Пожалуйста, Войти снова."
 msgid "Please make sure you are connected to internet."
 msgstr "Пожалуйста, убедитесь, что вы подключены к интернету."
 
-#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:95
-#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:173
+#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:97
+#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:175
 msgid ""
 "Please report the incident to technical support,\n"
 "describing the steps taken prior to the error.\n"
@@ -4897,7 +4897,7 @@ msgstr "Услуги"
 msgid "Services:"
 msgstr "Услуги:"
 
-#: com/pyx4j/essentials/client/SessionInactiveDialog.java:81
+#: com/pyx4j/essentials/client/SessionInactiveDialog.java:82
 #, java-format
 msgid "Session duration {0}, inactive for {1}"
 msgstr ""
@@ -5968,7 +5968,7 @@ msgid "We're sorry"
 msgstr "Приносим извинения"
 
 #: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:66
-#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:128
+#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:129
 msgid ""
 "We're sorry but your requests look similar to automated requests initiated "
 "by computer virus or spyware applications. To protect our users, we can't "
