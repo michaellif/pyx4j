@@ -60,7 +60,12 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
-        
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+                
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-i18n-gettext</artifactId>
@@ -73,12 +78,20 @@
             <version>4.1.2</version>
         </dependency>
         
+        <!-- 
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20090211</version>
         </dependency>
+        -->
         
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+
         <!-- 
         <dependency>
             <groupId>com.google.api-client</groupId>

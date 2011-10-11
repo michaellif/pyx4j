@@ -20,6 +20,8 @@
  */
 package com.pyx4j.i18n.gettext;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -28,6 +30,24 @@ import java.io.Reader;
 import java.nio.charset.Charset;
 
 public class POFileReader {
+
+    public POFile read(File file) throws IOException {
+        InputStream is = null;
+        POFile po;
+        try {
+            is = new FileInputStream(file);
+            POFileReader r = new POFileReader();
+            po = r.read(new InputStreamReader(is, "UTF-8"));
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException ignore) {
+                }
+            }
+        }
+        return po;
+    }
 
     public POFile readResource(String name) throws IOException {
         return readResource(Thread.currentThread().getContextClassLoader(), name);

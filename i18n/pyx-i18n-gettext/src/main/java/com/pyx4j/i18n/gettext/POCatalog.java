@@ -21,11 +21,7 @@
 package com.pyx4j.i18n.gettext;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,21 +51,12 @@ public class POCatalog {
         if (!file.canRead()) {
             return;
         }
-        InputStream is = null;
         POFile po;
         try {
-            is = new FileInputStream(file);
             POFileReader r = new POFileReader();
-            po = r.read(new InputStreamReader(is, "UTF-8"));
+            po = r.read(file);
         } catch (IOException e) {
             throw new RuntimeException("POFile " + mainLandFile().getAbsolutePath() + " read error", e);
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException ignore) {
-                }
-            }
         }
         for (POEntry entry : po.entries) {
             translations.put(entry.untranslated, entry.translated);
@@ -105,20 +92,11 @@ public class POCatalog {
             po.entries.add(pe);
         }
         Collections.sort(po.entries, new POEntry.ByTextComparator());
-        PrintWriter writer = null;
         try {
-            writer = new PrintWriter(mainLandFile(), "UTF-8");
             POFileWriter poWriter = new POFileWriter();
-
-            poWriter.write(writer, po);
-
-            writer.flush();
-            writer.close();
-
+            poWriter.write(mainLandFile(), po);
         } catch (IOException e) {
             throw new RuntimeException("POFile " + mainLandFile().getAbsolutePath() + " write error", e);
-        } finally {
-            writer.close();
         }
     }
 

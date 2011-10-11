@@ -381,22 +381,14 @@ public class ExtractMojo extends AbstractMojo {
     }
 
     private void writePO(POFile po, File file) throws MojoExecutionException {
-        PrintWriter writer = null;
         try {
-            writer = new PrintWriter(file, "UTF-8");
             POFileWriter poWriter = new POFileWriter();
             poWriter.pageWidth = poPageWidth;
             poWriter.wrapLines = poWrapLines;
 
-            poWriter.write(writer, po);
-
-            writer.flush();
-            writer.close();
-
+            poWriter.write(file, po);
         } catch (IOException e) {
             throw new MojoExecutionException("POFile " + file.getAbsolutePath() + " write error", e);
-        } finally {
-            IOUtils.closeQuietly(writer);
         }
     }
 

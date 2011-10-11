@@ -20,6 +20,8 @@
  */
 package com.pyx4j.i18n.gettext;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
@@ -29,10 +31,30 @@ public class POFileWriter {
 
     public boolean wrapLines = true;
 
+    public void write(File file, POFile po) throws IOException {
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(file, "UTF-8");
+            //Write BOM
+            writer.write("\uFEFF");
+            this.write(writer, po);
+            writer.flush();
+            writer.close();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (Throwable ignore) {
+                }
+            }
+        }
+    }
+
     public void write(PrintWriter writer, POFile po) {
         writeEntry(writer, po.header);
 
         for (POEntry entry : po.entries) {
+            writer.println();
             writeEntry(writer, entry);
         }
     }
@@ -83,9 +105,6 @@ public class POFileWriter {
 
         writer.print("msgstr ");
         writeString(writer, entry.translated, "msgstr ".length());
-
-        writer.println();
-
     }
 
     private void writeString(PrintWriter writer, String str, int firstLnePrefixLen) {
