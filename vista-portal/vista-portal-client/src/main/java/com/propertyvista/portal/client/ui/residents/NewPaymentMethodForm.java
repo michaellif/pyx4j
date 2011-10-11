@@ -15,10 +15,7 @@ package com.propertyvista.portal.client.ui.residents;
 
 import java.util.Date;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Float;
-import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.ComplexPanel;
@@ -144,20 +141,7 @@ public class NewPaymentMethodForm extends CEntityEditor<PaymentMethodGenericDTO>
         paymentFeesPanel.asWidget().getElement().getStyle().setFloat(Float.LEFT);
 
         ComplexPanel instrumentsPanel = new FlowPanel();
-        instrumentsPanel.asWidget().getElement().getStyle().setFloat(Float.LEFT);
         instrumentsPanel.asWidget().getElement().addClassName(Selector.getStyleName(PAYMENT_BUTTONS_STYLE_PREFIX, StyleSuffix.PaymentForm));
-        instrumentsPanel.getElement().getStyle().setHeight(184, Unit.PX);
-        instrumentsPanel.getElement().getStyle().setWidth(363, Unit.PX);
-        instrumentsPanel.getElement().getStyle().setPaddingRight(50, Unit.PX);
-        instrumentsPanel.getElement().getStyle().setPaddingLeft(50, Unit.PX);
-        instrumentsPanel.getElement().getStyle().setPaddingTop(10, Unit.PX);
-        instrumentsPanel.getElement().getStyle().setPaddingBottom(10, Unit.PX);
-        instrumentsPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        instrumentsPanel.getElement().getStyle().setBorderColor("#bbb");
-        instrumentsPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        instrumentsPanel.getElement().getStyle().setBackgroundColor("white");
-        instrumentsPanel.getElement().getStyle().setPosition(Position.RELATIVE);
-        instrumentsPanel.getElement().getStyle().setLeft(-1, Unit.PX);
 
         instrumentsPanel.add(inject(proto().echeck(), createEcheckInfoEditor()));
         instrumentsPanel.add(inject(proto().creditCard(), createCreditCardInfoEditor()));
