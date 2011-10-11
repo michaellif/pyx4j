@@ -21,7 +21,9 @@
 package com.pyx4j.i18n.gettext;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
@@ -33,10 +35,12 @@ public class POFileWriter {
 
     public void write(File file, POFile po) throws IOException {
         PrintWriter writer = null;
+        FileOutputStream fos = null;
         try {
-            writer = new PrintWriter(file, "UTF-8");
+            fos = new FileOutputStream(file);
             //Write BOM
-            writer.write("\uFEFF");
+            fos.write(new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF });
+            writer = new PrintWriter(new OutputStreamWriter(fos, "UTF-8"));
             this.write(writer, po);
             writer.flush();
             writer.close();
@@ -118,7 +122,8 @@ public class POFileWriter {
                 StringTokenizer t = new StringTokenizer(str, wrapLines ? " \n" : "\n", true);
                 while (t.hasMoreTokens()) {
                     if (lineSize == 0) {
-                        writer.print("\n\"");
+                        writer.println();
+                        writer.print("\"");
                     }
                     String token = t.nextToken();
                     if (token.equals("\n")) {
