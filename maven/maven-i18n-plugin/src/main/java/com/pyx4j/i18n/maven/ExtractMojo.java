@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -251,7 +252,9 @@ public class ExtractMojo extends AbstractMojo {
             processArtifact(extractor, artifact);
         }
 
-        processClassesDirectory(extractor);
+        if (classesDirectory.exists()) {
+            processClassesDirectory(extractor);
+        }
 
         extractor.analyzeTranslatableHierarchy();
 
@@ -395,9 +398,19 @@ public class ExtractMojo extends AbstractMojo {
     private void writeTextFile(ConstantExtractor extractor) throws MojoExecutionException {
         PrintWriter writer = null;
         try {
+            if (!extractedStrings.getParentFile().isDirectory()) {
+                if (!extractedStrings.getParentFile().mkdirs()) {
+                    throw new MojoExecutionException("Unable to create directory " + extractedStrings.getParentFile());
+                }
+            }
             writer = new PrintWriter(extractedStrings, "UTF-8");
+            List<String> text = new Vector<String>();
             for (ConstantEntry entry : extractor.getConstants()) {
-                writer.println(entry.text);
+                text.add(entry.text);
+            }
+            Collections.sort(text);
+            for (String line : text) {
+                writer.println(line);
                 writer.println();
             }
             writer.flush();
