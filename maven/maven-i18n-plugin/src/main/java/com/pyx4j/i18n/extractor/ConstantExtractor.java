@@ -212,11 +212,6 @@ public class ConstantExtractor {
         }
     }
 
-    //TODO
-    public void addEntry(String classSourceFileName, int lineNr, String text) {
-        this.addEntry(classSourceFileName, lineNr, text, false);
-    }
-
     public void addEntry(String classSourceFileName, int lineNr, String text, boolean javaFormatFlag) {
         if (text.length() != 0) {
             ConstantEntry entry = constants.get(text);
@@ -342,9 +337,9 @@ public class ConstantExtractor {
                 capitalize = false;
             }
             if (capitalize) {
-                addEntry(classSourceFileName, -3, EnglishGrammar.capitalize(AsmUtils.getSimpleName(classNode)));
+                addEntry(classSourceFileName, -3, EnglishGrammar.capitalize(AsmUtils.getSimpleName(classNode)), false);
             } else {
-                addEntry(classSourceFileName, -4, AsmUtils.getSimpleName(classNode));
+                addEntry(classSourceFileName, -4, AsmUtils.getSimpleName(classNode), false);
             }
         }
 
@@ -391,9 +386,9 @@ public class ConstantExtractor {
                         capitalize = false;
                     }
                     if (capitalize) {
-                        addEntry(classSourceFileName, -7, EnglishGrammar.capitalize(methodNode.name));
+                        addEntry(classSourceFileName, -7, EnglishGrammar.capitalize(methodNode.name), false);
                     } else {
-                        addEntry(classSourceFileName, -8, methodNode.name);
+                        addEntry(classSourceFileName, -8, methodNode.name, false);
                     }
                 }
             }
