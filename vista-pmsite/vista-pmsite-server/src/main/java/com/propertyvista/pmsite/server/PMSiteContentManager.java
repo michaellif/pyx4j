@@ -403,6 +403,7 @@ public class PMSiteContentManager implements Serializable {
             if (bld.media().isEmpty() || bld.info().address().isEmpty()) {
                 continue;
             }
+            item.setPropId(bld.id().getValue().asLong());
             item.setImg(getMediaImgUrl(bld.media().get(0).getPrimaryKey().asLong(), ThumbnailSize.medium));
             item.setAddress(bld.info().address().streetNumber().getValue() + " " + bld.info().address().streetName().getValue() + ", "
                     + bld.info().address().city().getValue());

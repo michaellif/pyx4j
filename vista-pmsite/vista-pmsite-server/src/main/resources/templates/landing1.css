@@ -182,6 +182,13 @@
 	background:grey;
 }
 
+.vista-pmsite-landingPage .promoBox a .picture {
+	border:1px solid ${bgColor_100};
+}
+.vista-pmsite-landingPage .promoBox a:hover .picture {
+	border:1px solid ${hlightColor_100};
+}
+
 .vista-pmsite-landingPage .promoBox .read_more {
 	color: ${hlightColor_100};
 	font-size:16px;
