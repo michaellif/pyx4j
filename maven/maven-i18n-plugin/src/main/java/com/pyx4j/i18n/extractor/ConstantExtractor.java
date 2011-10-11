@@ -261,12 +261,12 @@ public class ConstantExtractor {
 
             Object translationValue = AsmUtils.getAnnotationValue(TRANSLATION_CLASS, "value", fieldNode);
             if (translationValue != null) {
-                addEntry(classSourceFileName, -10, translationValue.toString(), false);
+                addEntry(classSourceFileName, 0, translationValue.toString(), false);
             } else {
                 if (capitalize) {
-                    addEntry(classSourceFileName, -11, EnglishGrammar.capitalize(fieldNode.name), false);
+                    addEntry(classSourceFileName, 0, EnglishGrammar.capitalize(fieldNode.name), false);
                 } else {
-                    addEntry(classSourceFileName, -12, fieldNode.name, false);
+                    addEntry(classSourceFileName, 0, fieldNode.name, false);
                 }
             }
 
@@ -321,7 +321,7 @@ public class ConstantExtractor {
                             if (elementDefintition.isMainElement) {
                                 classNameFoound = true;
                             }
-                            addEntry(classSourceFileName, -1, value, elementDefintition.javaFormatFlag);
+                            addEntry(classSourceFileName, 0, value, elementDefintition.javaFormatFlag);
                         }
                     } else {
                         if (it.hasNext()) {
@@ -337,9 +337,9 @@ public class ConstantExtractor {
                 capitalize = false;
             }
             if (capitalize) {
-                addEntry(classSourceFileName, -3, EnglishGrammar.capitalize(AsmUtils.getSimpleName(classNode)), false);
+                addEntry(classSourceFileName, 0, EnglishGrammar.capitalize(AsmUtils.getSimpleName(classNode)), false);
             } else {
-                addEntry(classSourceFileName, -4, AsmUtils.getSimpleName(classNode), false);
+                addEntry(classSourceFileName, 0, AsmUtils.getSimpleName(classNode), false);
             }
         }
 
@@ -370,7 +370,7 @@ public class ConstantExtractor {
                                     if (elementDefintition.isMainElement) {
                                         methodNameFoound = true;
                                     }
-                                    addEntry(classSourceFileName, -5, value, elementDefintition.javaFormatFlag);
+                                    addEntry(classSourceFileName, 0, value, elementDefintition.javaFormatFlag);
                                 }
                             } else {
                                 if (it.hasNext()) {
@@ -386,9 +386,9 @@ public class ConstantExtractor {
                         capitalize = false;
                     }
                     if (capitalize) {
-                        addEntry(classSourceFileName, -7, EnglishGrammar.capitalize(methodNode.name), false);
+                        addEntry(classSourceFileName, 0, EnglishGrammar.capitalize(methodNode.name), false);
                     } else {
-                        addEntry(classSourceFileName, -8, methodNode.name, false);
+                        addEntry(classSourceFileName, 0, methodNode.name, false);
                     }
                 }
             }
