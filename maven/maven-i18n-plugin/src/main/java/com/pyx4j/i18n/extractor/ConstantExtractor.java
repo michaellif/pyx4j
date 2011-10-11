@@ -26,7 +26,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -68,22 +67,50 @@ public class ConstantExtractor {
 
     private final Collection<ClassNode> allClasses = new Vector<ClassNode>();
 
+    private static class I18nAnnotationElementDefintition {
+
+        boolean isMainElement = false;
+
+        String name;
+
+        boolean capitalize = true;
+
+        boolean javaFormatFlag = false;
+
+        I18nStrategy strategy = I18nStrategy.TranslateAll;
+    }
+
     private static class I18nAnnotationDefintition {
 
-        String mainElement;
-
-        List<String> elements;
+        Map<String, I18nAnnotationElementDefintition> elements;
 
         I18nAnnotationDefintition(AnnotationNode anode, ClassNode classNode) {
-            mainElement = (String) AsmUtils.getAnnotationValue(anode, "element");
-            elements = new Vector<String>();
+            String mainElementName = (String) AsmUtils.getAnnotationValue(anode, "element");
+            elements = new HashMap<String, I18nAnnotationElementDefintition>();
             for (@SuppressWarnings("rawtypes")
             Iterator i = classNode.methods.iterator(); i.hasNext();) {
                 MethodNode methodNode = (MethodNode) i.next();
-                if (!methodNode.name.equals(mainElement)) {
-                    if (AsmUtils.hasAnnotation(TRANSLATABLE_CLASS, methodNode)) {
-                        elements.add(methodNode.name);
+
+                if (methodNode.name.equals(mainElementName) || AsmUtils.hasAnnotation(TRANSLATABLE_CLASS, methodNode)) {
+                    I18nAnnotationElementDefintition elementDefintition = new I18nAnnotationElementDefintition();
+                    elementDefintition.name = methodNode.name;
+                    if (methodNode.name.equals(mainElementName)) {
+                        elementDefintition.isMainElement = true;
                     }
+                    elementDefintition.strategy = getStrategyAnnotationValue(methodNode);
+                    if ((elementDefintition.strategy == I18nStrategy.IgnoreAll) || (elementDefintition.strategy == I18nStrategy.IgnoreMemeber)) {
+                        continue;
+                    }
+                    AnnotationNode mnode = AsmUtils.getAnnotation(TRANSLATABLE_CLASS, methodNode);
+                    if (mnode != null) {
+                        if (Boolean.TRUE.equals(AsmUtils.getAnnotationValue(mnode, "javaFormatFlag"))) {
+                            elementDefintition.javaFormatFlag = true;
+                        }
+                        if (Boolean.FALSE.equals(AsmUtils.getAnnotationValue(mnode, "capitalize"))) {
+                            elementDefintition.capitalize = false;
+                        }
+                    }
+                    elements.put(elementDefintition.name, elementDefintition);
                 }
             }
         }
@@ -112,6 +139,7 @@ public class ConstantExtractor {
             if (insnNode instanceof LineNumberNode) {
                 interpreter.setCurrentLineNr(((LineNumberNode) insnNode).line);
             }
+            super.newControlFlowEdge(instructionIndex, nextInstructionIndex);
         }
     }
 
@@ -200,7 +228,7 @@ public class ConstantExtractor {
         }
     }
 
-    I18nStrategy getStrategyAnnotationValue(MemberNode memberNode) {
+    static I18nStrategy getStrategyAnnotationValue(MemberNode memberNode) {
         Object strategy = AsmUtils.getAnnotationValue(TRANSLATABLE_CLASS, "strategy", memberNode);
         if (strategy != null) {
             return I18nStrategy.valueOf(((String[]) strategy)[1]);
@@ -291,14 +319,15 @@ public class ConstantExtractor {
                 Iterator<Object> it = anode.values.iterator();
                 while (it.hasNext()) {
                     Object name = it.next();
-                    if (ta.getValue().mainElement.equals(name)) {
-                        String mainValue = it.next().toString();
-                        if (!I18nAnnotation.DEFAULT_VALUE.equals(mainValue)) {
-                            addEntry(classSourceFileName, -1, mainValue);
-                            classNameFoound = true;
+                    I18nAnnotationElementDefintition elementDefintition = ta.getValue().elements.get(name);
+                    if (elementDefintition != null) {
+                        String value = it.next().toString();
+                        if (!I18nAnnotation.DEFAULT_VALUE.equals(value)) {
+                            if (elementDefintition.isMainElement) {
+                                classNameFoound = true;
+                            }
+                            addEntry(classSourceFileName, -1, value, elementDefintition.javaFormatFlag);
                         }
-                    } else if (ta.getValue().elements.contains(name)) {
-                        addEntry(classSourceFileName, -2, it.next().toString());
                     } else {
                         if (it.hasNext()) {
                             it.next();
@@ -339,14 +368,15 @@ public class ConstantExtractor {
                         Iterator<Object> it = anode.values.iterator();
                         while (it.hasNext()) {
                             Object name = it.next();
-                            if (ta.getValue().mainElement.equals(name)) {
-                                String mainValue = it.next().toString();
-                                if (!I18nAnnotation.DEFAULT_VALUE.equals(mainValue)) {
-                                    addEntry(classSourceFileName, -5, mainValue);
-                                    methodNameFoound = true;
+                            I18nAnnotationElementDefintition elementDefintition = ta.getValue().elements.get(name);
+                            if (elementDefintition != null) {
+                                String value = it.next().toString();
+                                if (!I18nAnnotation.DEFAULT_VALUE.equals(value)) {
+                                    if (elementDefintition.isMainElement) {
+                                        methodNameFoound = true;
+                                    }
+                                    addEntry(classSourceFileName, -5, value, elementDefintition.javaFormatFlag);
                                 }
-                            } else if (ta.getValue().elements.contains(name)) {
-                                addEntry(classSourceFileName, -6, it.next().toString());
                             } else {
                                 if (it.hasNext()) {
                                     it.next();
@@ -369,4 +399,5 @@ public class ConstantExtractor {
             }
         }
     }
+
 }

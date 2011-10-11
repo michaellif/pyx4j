@@ -98,6 +98,9 @@ class AsmUtils {
     }
 
     static Object getAnnotationValue(AnnotationNode anode, String valueName) {
+        if ((anode == null) || (anode.values == null)) {
+            return null;
+        }
         @SuppressWarnings("unchecked")
         Iterator<Object> it = anode.values.iterator();
         while (it.hasNext()) {

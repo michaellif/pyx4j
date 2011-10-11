@@ -14,55 +14,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Sep 24, 2011
+ * Created on Oct 11, 2011
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.i18n.gettext;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
 
 import org.objectweb.asm.tree.analysis.AnalyzerException;
 
+import ut.annotations.ChildToTranslate;
+import ut.annotations.I18nCaption;
+import ut.annotations.SuperNotToTranslate;
+
 import com.pyx4j.i18n.extractor.ConstantEntry;
 import com.pyx4j.i18n.extractor.ConstantExtractor;
 
-public class Verify {
-
+public class VerifyAddotations {
     public static void main(String[] args) throws IOException, AnalyzerException {
-        InputStream in;
         System.out.println("--i18n tests --");
-        in = Verify.class.getResourceAsStream("/ut/MainClass.class");
-        try {
-            ConstantExtractor ce = new ConstantExtractor();
-            ce.readClass(in);
-            ce.analyzeTranslatableHierarchy();
-            print(ce.getConstants());
-        } finally {
-            in.close();
-        }
-
-        in = Verify.class.getResourceAsStream("/ut/EnumTranslatable.class");
-        try {
-            ConstantExtractor ce = new ConstantExtractor();
-            ce.readClass(in);
-            ce.analyzeTranslatableHierarchy();
-            print(ce.getConstants());
-        } finally {
-            in.close();
-        }
-
-        in = Verify.class.getResourceAsStream("/ut/EnumWithTranslations.class");
-        try {
-            ConstantExtractor ce = new ConstantExtractor();
-            ce.readClass(in);
-            ce.analyzeTranslatableHierarchy();
-            print(ce.getConstants());
-        } finally {
-            in.close();
-        }
+        ConstantExtractor ce = new ConstantExtractor();
+        ce.readClass(ChildToTranslate.class);
+        ce.readClass(SuperNotToTranslate.class);
+        ce.readClass(I18nCaption.class);
+        ce.analyzeTranslatableHierarchy();
+        print(ce.getConstants());
     }
 
     private static void print(Collection<ConstantEntry> constants) {
