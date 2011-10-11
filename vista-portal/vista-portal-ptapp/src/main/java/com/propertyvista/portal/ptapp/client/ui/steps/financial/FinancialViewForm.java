@@ -31,25 +31,27 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.components.CMoney;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
@@ -148,9 +150,10 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
         });
     }
 
-    private CEntityFolder<IIncomeInfo> createIncomeFolderEditor2() {
+    private VistaEntityFolder<IIncomeInfo> createIncomeFolderEditor2() {
 
-        return new CEntityFolder<IIncomeInfo>(IIncomeInfo.class) {
+        return new VistaEntityFolder<IIncomeInfo>(IIncomeInfo.class) {
+            private final VistaEntityFolder<IIncomeInfo> parent = this;
 
             @Override
             protected IFolderDecorator<IIncomeInfo> createDecorator() {
@@ -163,7 +166,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
                         }
                     };
                 } else {
-                    return new BoxFolderDecorator<IIncomeInfo>(PortalImages.INSTANCE, i18n.tr("Add an income source"));
+                    return new VistaBoxFolderDecorator<IIncomeInfo>(parent);
                 }
             }
 
@@ -172,12 +175,17 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
                 return new FinancialViewIncomeForm2(summaryViewMode);
             }
 
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                return null;
+            }
         };
     }
 
-    private CEntityFolder<PersonalIncome> createIncomeFolderEditor() {
+    private VistaEntityFolder<PersonalIncome> createIncomeFolderEditor() {
 
-        return new CEntityFolder<PersonalIncome>(PersonalIncome.class) {
+        return new VistaEntityFolder<PersonalIncome>(PersonalIncome.class) {
+            private final VistaEntityFolder<PersonalIncome> parent = this;
 
             @Override
             protected IFolderDecorator<PersonalIncome> createDecorator() {
@@ -190,7 +198,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
                         }
                     };
                 } else {
-                    return new BoxFolderDecorator<PersonalIncome>(PortalImages.INSTANCE, i18n.tr("Add an income source"));
+                    return new VistaBoxFolderDecorator<PersonalIncome>(parent);
                 }
             }
 
@@ -199,11 +207,16 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
                 return new FinancialViewIncomeForm(summaryViewMode);
             }
 
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                return null;
+            }
         };
     }
 
-    private CEntityFolder<PersonalAsset> createAssetFolderEditorColumns() {
-        return new CEntityFolder<PersonalAsset>(PersonalAsset.class) {
+    private VistaEntityFolder<PersonalAsset> createAssetFolderEditorColumns() {
+        return new VistaEntityFolder<PersonalAsset>(PersonalAsset.class) {
+            private final VistaEntityFolder<PersonalAsset> parent = this;
 
             private List<EntityFolderColumnDescriptor> columns;
             {
@@ -224,7 +237,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
                         }
                     };
                 } else {
-                    return new TableFolderDecorator<PersonalAsset>(columns, PortalImages.INSTANCE, i18n.tr("Add an asset"));
+                    return new VistaTableFolderDecorator<PersonalAsset>(columns, parent);
                 }
             }
 
@@ -237,7 +250,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator<PersonalAsset>(false);
                         } else {
-                            return new TableFolderItemDecorator<PersonalAsset>(PortalImages.INSTANCE, i18n.tr("Remove asset"));
+                            return new VistaTableFolderItemDecorator<PersonalAsset>(parent);
                         }
                     }
 
@@ -252,7 +265,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
                             @Override
                             public String getValidationMessage(CEditableComponent<Double, ?> component, Double value) {
-                                return i18n.tr("Value can not increase 100%");
+                                return VistaEntityFolder.i18n.tr("Value can not increase 100%");
                             }
 
                         });
@@ -264,18 +277,23 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
                                 if (get(proto().percent()).getValue() == null) {
                                     get(proto().percent()).setValue(100d);
                                 }
-
                             }
                         });
                     }
                 };
             }
+
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                return columns;
+            }
         };
 
     }
 
-    private CEntityFolder<TenantGuarantor> createGuarantorFolderEditorColumns() {
-        return new CEntityFolder<TenantGuarantor>(TenantGuarantor.class) {
+    private VistaEntityFolder<TenantGuarantor> createGuarantorFolderEditorColumns() {
+        return new VistaEntityFolder<TenantGuarantor>(TenantGuarantor.class) {
+            private final VistaEntityFolder<TenantGuarantor> parent = this;
 
             @Override
             protected IFolderDecorator<TenantGuarantor> createDecorator() {
@@ -327,7 +345,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator<TenantGuarantor>(false);
                         } else {
-                            return new BoxFolderItemDecorator<TenantGuarantor>(PortalImages.INSTANCE, i18n.tr("Remove guarantor"));
+                            return new VistaBoxFolderItemDecorator<TenantGuarantor>(parent);
                         }
                     }
 
@@ -345,14 +363,17 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
                             @Override
                             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                                return i18n.tr("Guarantor should be at least 18 years old");
+                                return VistaEntityFolder.i18n.tr("Guarantor should be at least 18 years old");
                             }
                         });
                     }
                 };
             }
 
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                return null;
+            }
         };
-
     }
 }
