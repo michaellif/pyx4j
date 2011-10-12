@@ -114,11 +114,15 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public Class<? extends IEntity> getInstanceValueClass() {
-        Map<String, Object> entityValue = getValue();
-        if ((entityValue == null) || (!entityValue.containsKey(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR))) {
+        if (isTemplateEntity) {
             return getObjectClass();
         } else {
-            return ((IEntity) entityValue.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR)).getObjectClass();
+            Map<String, Object> entityValue = getValue();
+            if ((entityValue == null) || (!entityValue.containsKey(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR))) {
+                return getObjectClass();
+            } else {
+                return ((IEntity) entityValue.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR)).getObjectClass();
+            }
         }
     }
 
@@ -129,7 +133,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public boolean isInstanceOf(Class<? extends IEntity> targetType) {
-        return EntityFactory.getEntityMeta(targetType).isEntityClassAssignableFrom(this);
+        return EntityFactory.getEntityMeta(targetType).isEntityClassAssignableFrom(EntityFactory.getEntityPrototype(getInstanceValueClass()));
     }
 
     protected abstract IObject<?> lazyCreateMember(String name);

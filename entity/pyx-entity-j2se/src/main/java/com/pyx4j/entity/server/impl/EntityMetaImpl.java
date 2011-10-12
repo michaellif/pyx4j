@@ -124,7 +124,7 @@ public class EntityMetaImpl implements EntityMeta {
         if (targetInstance == null) {
             return false;
         }
-        return entityClass.isAssignableFrom(targetInstance.getClass());
+        return entityClass.isAssignableFrom(targetInstance.getInstanceValueClass());
     }
 
     @Override
