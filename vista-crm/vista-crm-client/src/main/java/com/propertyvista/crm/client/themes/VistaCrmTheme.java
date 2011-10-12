@@ -502,9 +502,15 @@ public class VistaCrmTheme extends VistaTheme {
         Style style = new Style(Selector.valueOf(prefix));
         addStyle(style);
 
+        style = new Style(Selector.valueOf(prefix, BoardBase.StyleSuffix.filtersDescription));
+        style.addProperty("color", ThemeColors.OBJECT_TONE95);
+        style.addProperty("font-weight", "bold");
+        style.addProperty("font-size", "1.1em");
+        addStyle(style);
+
         style = new Style(Selector.valueOf(prefix, BoardBase.StyleSuffix.filtersPanel));
         style.addProperty("background-color", ThemeColors.OBJECT_TONE40);
-        style.addProperty("color", ThemeColors.SELECTION_TEXT);
+        style.addProperty("color", ThemeColors.TEXT);
         style.addProperty("border-bottom", "1px solid #ccc");
         addStyle(style);
 

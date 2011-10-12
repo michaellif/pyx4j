@@ -128,6 +128,7 @@ public class BoardViewImpl extends DockLayoutPanel implements BoardView {
             HorizontalPanel main = new HorizontalPanel();
 
             HTML description = new HTML("Filtering : Show all Buiildings");
+            description.setStyleName(BoardBase.DEFAULT_STYLE_PREFIX + BoardBase.StyleSuffix.filtersDescription);
             main.add(description);
             main.setCellVerticalAlignment(description, HasVerticalAlignment.ALIGN_MIDDLE);
             main.setCellHorizontalAlignment(description, HasHorizontalAlignment.ALIGN_CENTER);

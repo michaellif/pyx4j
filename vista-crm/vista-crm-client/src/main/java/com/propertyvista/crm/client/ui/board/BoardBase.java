@@ -47,7 +47,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
     public static String DEFAULT_STYLE_PREFIX = "vista_DashboardView";
 
     public static enum StyleSuffix implements IStyleName {
-        filtersPanel, actionsPanel
+        filtersPanel, actionsPanel, filtersDescription
     }
 
     private static I18n i18n = I18n.get(BoardBase.class);
