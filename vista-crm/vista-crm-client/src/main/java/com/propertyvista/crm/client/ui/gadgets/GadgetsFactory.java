@@ -66,9 +66,9 @@ public class GadgetsFactory {
         case PieChartDisplay:
             return new PieChart2DGadget(metaData);
         case BarChartDisplayBuilding:
-            return new BarChartDisplayGadget(metaData);
+            return new BarChart2DGadget(metaData);
         case PieChartDisplayBuilding:
-            return new PieChartDisplayGadget(metaData);
+            return new PieChart2DGadget(metaData);
         case GaugeDisplay:
             return new GaugeGadget(metaData);
         case UnitVacancyReport:
