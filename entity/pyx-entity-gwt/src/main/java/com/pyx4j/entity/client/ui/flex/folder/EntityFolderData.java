@@ -32,8 +32,11 @@ public class EntityFolderData {
     // if false Up/Down buttons
     public boolean orderable = true;
 
+    //First item can be ordered or deleted
+    public boolean firstFixed = true;
+
     // if false Add/Remove/Up/Down are hidden
-    public boolean folderEditable = true;
+    public boolean editable = true;
 
     public Multiplicity multiplicity = Multiplicity.zeroOrMore;
 

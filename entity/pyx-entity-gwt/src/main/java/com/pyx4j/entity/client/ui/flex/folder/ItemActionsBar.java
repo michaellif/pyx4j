@@ -20,9 +20,6 @@
  */
 package com.pyx4j.entity.client.ui.flex.folder;
 
-
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.HasDirection.Direction;
@@ -55,35 +52,16 @@ public class ItemActionsBar extends HorizontalPanel {
 
         upCommand = new ImageButton(images.moveUp(), images.moveUpHover(), i18n.tr("Move up"));
         upCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
-        upCommand.getElement().getStyle().setMargin(2, Unit.PX);
-        upCommand.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-//                    ((CFormFolder) getCComponent().getParentContainer()).moveItem(getCComponent(), true);
-//                    mouseOver = false;
-//                    installMouseOverStyles();
-            }
-        });
         add(upCommand);
 
         downCommand = new ImageButton(images.moveDown(), images.moveDownHover(), i18n.tr("Move down"));
         downCommand.setResource(ImageFactory.getImages().moveDown());
         downCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
-        downCommand.getElement().getStyle().setMargin(2, Unit.PX);
-        downCommand.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-//                    ((CFormFolder) getCComponent().getParentContainer()).moveItem(getCComponent(), false);
-//                    mouseOver = false;
-//                    installMouseOverStyles();
-            }
-        });
         add(downCommand);
 
         removeCommand = new ImageButton(images.del(), images.delHover(), i18n.tr("Delete Item"));
         removeCommand.setVisible(removable);
         removeCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
-        removeCommand.getElement().getStyle().setMargin(2, Unit.PX);
         add(removeCommand);
     }
 
