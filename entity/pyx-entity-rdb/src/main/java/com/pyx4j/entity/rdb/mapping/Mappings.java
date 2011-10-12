@@ -169,6 +169,9 @@ public class Mappings {
         }
         usedTableNames.remove(model.getTableName().toLowerCase(Locale.ENGLISH));
         tables.remove(entityMeta.getEntityClass());
+        for (MemberOperationsMeta member : model.operationsMeta().getCollectionMembers()) {
+            usedTableNames.remove(member.sqlName().toLowerCase(Locale.ENGLISH));
+        }
 
         if (dialect.isSequencesBaseIdentity()) {
             if (model.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
