@@ -34,8 +34,8 @@ public class DefaultEntityFolderTheme extends Theme {
     }
 
     public DefaultEntityFolderTheme(String width) {
-        initStyles();
         this.width = width;
+        initStyles();
     }
 
     protected void initStyles() {
