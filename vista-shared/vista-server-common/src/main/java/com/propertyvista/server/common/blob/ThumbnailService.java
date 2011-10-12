@@ -115,8 +115,8 @@ public class ThumbnailService {
         resampleOp.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.Normal);
         BufferedImage rescaled = resampleOp.filter(image, null);
         if (clipThumpnailBorders != 0) {
-            rescaled = rescaled.getSubimage(clipThumpnailBorders, clipThumpnailBorders, rescaled.getWidth() - clipThumpnailBorders, rescaled.getHeight()
-                    - clipThumpnailBorders);
+            rescaled = rescaled.getSubimage(clipThumpnailBorders, clipThumpnailBorders, rescaled.getWidth() - 2 * clipThumpnailBorders, rescaled.getHeight()
+                    - 2 * clipThumpnailBorders);
         }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
