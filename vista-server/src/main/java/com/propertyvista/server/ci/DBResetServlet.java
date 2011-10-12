@@ -65,6 +65,7 @@ public class DBResetServlet extends HttpServlet {
         synchronized (DBResetServlet.class) {
             long start = System.currentTimeMillis();
             StringBuilder buf = new StringBuilder();
+            String contentType = "text/plain";
             try {
                 VistaServerSideConfiguration conf = (VistaServerSideConfiguration) ServerSideConfiguration.instance();
                 if (!conf.openDBReset()) {
@@ -72,22 +73,25 @@ public class DBResetServlet extends HttpServlet {
                         throw new Error("permission denied");
                     }
                 }
-                if (req.getParameter("help") != null) {
-                    buf.append("\nUsage:\n");
+                ResetType type = null;
+                String tp = req.getParameter("type");
+                if (CommonsStringUtils.isStringSet(tp)) {
+                    try {
+                        type = ResetType.valueOf(tp);
+                    } catch (IllegalArgumentException e) {
+                        buf.append("Invalid requests type=").append(tp).append("\n");
+                    }
+                }
+                if ((req.getParameter("help") != null) || (type == null)) {
+                    contentType = "text/html";
+                    buf.append("Usage:</br>");
                     for (ResetType t : EnumSet.allOf(ResetType.class)) {
-                        buf.append("?type=").append(t.name()).append("\n");
+                        buf.append("<a href=\"");
+                        buf.append("?type=").append(t.name()).append("\">");
+                        buf.append("?type=").append(t.name());
+                        buf.append("</a></br>");
                     }
                 } else {
-                    if (req.getParameter("param") != null) {
-                        throw new Error("Invalid request param");
-                    }
-
-                    ResetType type = ResetType.all;
-                    String tp = req.getParameter("type");
-                    if (CommonsStringUtils.isStringSet(tp)) {
-                        type = ResetType.valueOf(tp);
-                    }
-
                     if (EnumSet.of(ResetType.all, ResetType.clear).contains(type)) {
                         RDBUtils.dropAllEntityTables();
                     }
@@ -151,7 +155,7 @@ public class DBResetServlet extends HttpServlet {
             response.setDateHeader("Expires", System.currentTimeMillis());
             response.setHeader("Pragma", "no-cache");
             response.setHeader("Cache-control", "no-cache, no-store, must-revalidate");
-            response.setContentType("text/plain");
+            response.setContentType(contentType);
             OutputStream output = response.getOutputStream();
             try {
                 output.write(buf.toString().getBytes());
