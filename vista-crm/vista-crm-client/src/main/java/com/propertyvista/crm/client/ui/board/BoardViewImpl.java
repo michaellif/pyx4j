@@ -13,15 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.board;
 
-
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
@@ -34,30 +32,45 @@ public class BoardViewImpl extends DockLayoutPanel implements BoardView {
 
     protected BoardBase board = null;
 
-    protected CrmTitleBar header = null;
+    protected final CrmTitleBar header = new CrmTitleBar("");
 
-    protected final Button setupBuildingAction;
+    protected final SimplePanel filter = new SimplePanel(new HTML("... Building filters go here ..."));
 
     public BoardViewImpl() {
         super(Unit.EM);
-
-        setupBuildingAction = new Button("Building&nbsp;Setup", new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                MessageDialog.info(i18n.tr("Setup"), i18n.tr("Selection of Building goes here!.."));
-            }
-        });
     }
 
     public BoardViewImpl(BoardBase board) {
         this();
-        this.board = board;
 
-        addNorth(header = new CrmTitleBar(""), VistaCrmTheme.defaultHeaderHeight);
+        addNorth(header, VistaCrmTheme.defaultHeaderHeight);
         header.setHeight("100%"); // fill all that defaultHeaderHeight!..
 
-        add(board);
-        setSize("100%", "100%");
+        addNorth(filter, 0);
+        filter.setStyleName(BoardBase.DEFAULT_STYLE_PREFIX + BoardBase.StyleSuffix.filtersPanel);
+
+        setBoard(board);
+    }
+
+    /*
+     * Should be called by descendant upon initialisation.
+     */
+    protected void setBoard(BoardBase board) {
+
+        if (getCenter() == null) { // finalise UI here:
+            add(new LayoutPanel());
+            setSize("100%", "100%");
+        }
+
+        if (this.board == board) {
+            return; // already!?.
+        }
+
+        this.board = board;
+
+        LayoutPanel center = (LayoutPanel) getCenter();
+        center.clear(); // remove current board...
+        center.add(board.asWidget());
     }
 
     @Override
@@ -70,12 +83,13 @@ public class BoardViewImpl extends DockLayoutPanel implements BoardView {
     public void fill(DashboardMetadata dashboardMetadata) {
         assert (board != null);
         board.fill(dashboardMetadata);
-        board.remAction(setupBuildingAction);
 
         if (dashboardMetadata != null) {
             header.setCaption(dashboardMetadata.name().getStringView());
+
+            setWidgetSize(filter, 0);
             if (dashboardMetadata.type().getValue() == DashboardType.building) {
-                board.addAction(setupBuildingAction);
+                setWidgetSize(filter, VistaCrmTheme.defaultTabHeight);
             }
         }
     }

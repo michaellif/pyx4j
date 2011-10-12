@@ -502,13 +502,16 @@ public class VistaCrmTheme extends VistaTheme {
         Style style = new Style(Selector.valueOf(prefix));
         addStyle(style);
 
+        style = new Style(Selector.valueOf(prefix, BoardBase.StyleSuffix.filtersPanel));
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE45);
+        style.addProperty("color", ThemeColors.SELECTION_TEXT);
+        addStyle(style);
+
         style = new Style(Selector.valueOf(prefix, BoardBase.StyleSuffix.actionsPanel));
         style.addProperty("background-color", ThemeColors.OBJECT_TONE40);
         style.addProperty("color", ThemeColors.SELECTION_TEXT);
-        style.addProperty("height", defaultActionBarHeight + "em");
         style.addProperty("margin-bottom", "0.2em");
         addStyle(style);
-
     }
 
     protected void initDashboardReport() {
