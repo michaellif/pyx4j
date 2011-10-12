@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ImageFactory;
@@ -58,6 +59,8 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
 
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, EntityFolderImages images, String title, boolean addable) {
         super(images, title, addable);
+
+        asWidget().setStyleName(StyleName.EntityFolderTableDecorator.name());
 
         header = new HorizontalPanel();
         header.getElement().getStyle().setMarginBottom(3, Unit.PX);

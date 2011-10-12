@@ -50,7 +50,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     public BoxFolderItemDecorator(EntityFolderImages images, String removeLabel, boolean removable) {
         super(images, removeLabel, removable);
 
-        setStyleName(StyleName.EntityFolderBoxDecorator.name());
+        setStyleName(StyleName.EntityFolderBoxItemDecorator.name());
 
         VerticalPanel mainPanel = new VerticalPanel();
         mainPanel.setWidth("100%");

@@ -59,7 +59,13 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
     public static enum StyleName implements IStyleName {
-        EntityFolder, EntityFolderBoxItem, EntityFolderBoxDecorator, EntityFolderRowItem, EntityFolderRowDecorator, EntityFolderActionsBar, EntityFolderAddButton, EntityFolderAddButtonImage, EntityFolderAddButtonLabel
+        EntityFolder, EntityFolderActionsBar, EntityFolderAddButton, EntityFolderAddButtonImage, EntityFolderAddButtonLabel,
+
+        //Box
+        EntityFolderBoxItem, EntityFolderBoxDecorator, EntityFolderBoxItemDecorator,
+
+        //Table
+        EntityFolderRowItem, EntityFolderTableDecorator, EntityFolderRowItemDecorator
     }
 
     private IFolderDecorator<E> folderDecorator;

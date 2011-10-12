@@ -39,29 +39,35 @@ public class DefaultEntityFolderTheme extends Theme {
     }
 
     protected void initStyles() {
-        Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolder);
+        Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderBoxDecorator);
         style.addProperty("margin-top", "2px");
         style.addProperty("margin-left", "6px");
         style.addProperty("width", width);
+        addStyle(style);
+
+        style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderTableDecorator);
+        style.addProperty("margin-top", "2px");
+        style.addProperty("margin-left", "6px");
+        style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderBoxItem);
         style.addProperty("padding", "6px");
         addStyle(style);
 
-        style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderBoxDecorator);
+        style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderBoxItemDecorator);
         style.addProperty("margin", "6px");
         style.addProperty("width", "100%");
         style.addProperty("border", "dotted 1px");
         style.addProperty("border-color", "#333");
         addStyle(style);
 
-        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderBoxDecorator).hover().build());
+        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderBoxItemDecorator).hover().build());
         style.addProperty("border", "solid 1px");
         style.addProperty("border-color", "#333");
         addStyle(style);
 
-        style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderRowDecorator);
+        style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderTableDecorator);
         style.addProperty("margin", "6px");
         addStyle(style);
 
@@ -70,12 +76,12 @@ public class DefaultEntityFolderTheme extends Theme {
         addStyle(style);
 
         style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderActionsBar).discriminator(
-                new Selector.Builder(CEntityFolder.StyleName.EntityFolderBoxDecorator).hover().build().toString()).build());
+                new Selector.Builder(CEntityFolder.StyleName.EntityFolderBoxItemDecorator).hover().build().toString()).build());
         style.addProperty("opacity", "1");
         addStyle(style);
 
         style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderActionsBar).discriminator(
-                new Selector.Builder(CEntityFolder.StyleName.EntityFolderRowDecorator).hover().build().toString()).build());
+                new Selector.Builder(CEntityFolder.StyleName.EntityFolderTableDecorator).hover().build().toString()).build());
         style.addProperty("opacity", "1");
         addStyle(style);
 
