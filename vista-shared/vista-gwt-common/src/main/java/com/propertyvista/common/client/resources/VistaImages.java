@@ -18,8 +18,9 @@ import com.google.gwt.resources.client.ImageResource;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ImageFactory.FormsImageBundle;
+import com.pyx4j.widgets.client.images.WidgetsImages;
 
-public interface VistaImages extends FormsImageBundle, EntityFolderImages {
+public interface VistaImages extends FormsImageBundle, EntityFolderImages, WidgetsImages {
 
     VistaImages INSTANCE = GWT.create(VistaImages.class);
 
@@ -41,18 +42,6 @@ public interface VistaImages extends FormsImageBundle, EntityFolderImages {
 
     @Source("clip.png")
     ImageResource clip();
-
-    @Source("add.png")
-    ImageResource addRow();
-
-    @Source("add_hover.png")
-    ImageResource addRowHover();
-
-    @Source("del.png")
-    ImageResource delRow();
-
-    @Source("del_hover.png")
-    ImageResource delRowHover();
 
     @Override
     @Source("qv.png")

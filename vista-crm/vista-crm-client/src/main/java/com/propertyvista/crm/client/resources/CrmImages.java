@@ -14,12 +14,11 @@
 package com.propertyvista.crm.client.resources;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
-import com.pyx4j.entity.client.images.EntityFolderImages;
+import com.propertyvista.common.client.resources.VistaImages;
 
-public interface CrmImages extends ClientBundle, EntityFolderImages {
+public interface CrmImages extends VistaImages {
 
     CrmImages INSTANCE = GWT.create(CrmImages.class);
 
@@ -43,22 +42,6 @@ public interface CrmImages extends ClientBundle, EntityFolderImages {
 
     @Source("search.png")
     ImageResource search();
-
-    @Override
-    @Source("add.png")
-    ImageResource add();
-
-    @Override
-    @Source("add_hover.png")
-    ImageResource addHover();
-
-    @Override
-    @Source("del.png")
-    ImageResource del();
-
-    @Override
-    @Source("del_hover.png")
-    ImageResource delHover();
 
     @Source("DashboardLayout1-0.png")
     ImageResource dashboardLayout1_0();
