@@ -167,6 +167,8 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
      */
     protected abstract void fillDefaultColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto);
 
+    protected abstract void fillAvailableColumnDescripors(List<ColumnDescriptor<E>> columnDescriptors, E proto);
+
     protected void setRefreshInterval(RefreshInterval refreshInterval) {
         settings.refreshInterval().setValue(refreshInterval);
         int refreshIntervalMillis;
@@ -246,6 +248,9 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         return new SetupLister();
     }
 
+    /**
+     * Gather the state of the lister and store it into to the settings member (note: this method doens't persist the settings to the DB)
+     */
     private void storeSettings() {
         // COLUMNS:
         settings.columnPaths().clear();
@@ -332,6 +337,11 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         }
 
         @Override
+        protected void fillAvailableColumnDescriptors(java.util.List<com.pyx4j.entity.client.ui.datatable.ColumnDescriptor<E>> columnDescriptors, E proto) {
+            ListerGadgetBase.this.fillAvailableColumnDescripors(columnDescriptors, proto);
+        };
+
+        @Override
         protected void onPrevPage() {
             super.onPrevPage();
             refreshTimer.reactivate();
@@ -345,6 +355,11 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     }
 
+    /**
+     * Interface for creating procedures that get executed periodically when RefreshTimer 'ticks'
+     * 
+     * @author ArtyomB
+     */
     public static interface RefreshTimerEventHandler {
         public void onTime();
     }
@@ -372,7 +387,6 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
                     for (RefreshTimerEventHandler handler : handlers) {
                         handler.onTime();
                     }
-
                 }
             };
         }
@@ -382,6 +396,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         }
 
         /**
+         * Set interval to be used in order to execute the refresh handlers.
          * 
          * @param refreshInterval
          *            refresh interval in milliseconds (if the interval is not positive, the timer stops)
@@ -398,7 +413,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         }
 
         /**
-         * Restart the count down if the refresh interval of the timer is greater than 0, else stop
+         * Restart the count down if the refresh interval of the timer is greater than 0, else stop.
          */
         public void reactivate() {
             deactivate();
@@ -408,6 +423,9 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             }
         }
 
+        /**
+         * Shut down the timer: the handlers will not be launched.
+         */
         public void deactivate() {
             timer.cancel();
             isActive = false;

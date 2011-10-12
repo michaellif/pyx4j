@@ -26,7 +26,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
@@ -47,7 +46,6 @@ import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportSummaryDTO;
-import com.propertyvista.domain.property.asset.building.Building;
 
 public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport> implements IBuildingGadget {
     private final VerticalPanel gadgetPanel;
@@ -77,7 +75,6 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
             @Override
             public void onTime() {
                 activity.populateSummary();
-
             }
         });
     }
@@ -154,7 +151,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
         private final UnitVacancyReportGadget gadget;
 
-        // TODO create interface for the gadget? pass interface to the constructor
+        // TODO create interface for the gadget and pass interface to the constructor?
         public UnitVacancyReportGadgetActivity(UnitVacancyReportGadget gadget, UnitVacancyReportService service) {
             super(gadget.getListerView(), service, UnitVacancyReport.class);
             this.serivce = service;
@@ -163,13 +160,24 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
         @Override
         protected EntityListCriteria<UnitVacancyReport> constructSearchCriteria() {
-            // TODO: construct the search criteria according to the user query propagated from gadget view/dashboard view;
             EntityListCriteria<UnitVacancyReport> criteria = super.constructSearchCriteria();
 
             if (buildings != null && !buildings.isEmpty()) {
-                Building building = EntityFactory.create(Building.class);
-                criteria.add(new PropertyCriterion(building.id().getPath().toString(), Restriction.IN, (Serializable) buildings));
-                //criteria.add(new PropertyCriterion(getListerBase().proto().propertyCode().getPath().toString(), Restriction.IN, (Serializable) buildings));
+                // FIXME this is the the part that should construct search criteria based on user selection in dashboard, but it's currently disabled because this gadget has only demo functionality 
+                //Building building = EntityFactory.create(Building.class);
+                //criteria.add(new PropertyCriterion(building.id().getPath().toString(), Restriction.IN, (Serializable) buildings));
+
+                // TODO these are fake buildings for use with fake unit property report table, for demonstration purposes only
+                final List<String> fakeBuildings = new ArrayList<String>();
+                if (buildings.size() == 1) {
+                    fakeBuildings.add("bath1650");
+                } else {
+                    fakeBuildings.add("jean0200");
+                    fakeBuildings.add("com0164");
+                    fakeBuildings.add("chel3126");
+                }
+
+                criteria.add(new PropertyCriterion(getListerBase().proto().propertyCode().getPath().toString(), Restriction.IN, (Serializable) fakeBuildings));
             }
 
             return criteria;
@@ -193,6 +201,21 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<UnitVacancyReport>> columnDescriptors, UnitVacancyReport proto) {
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.owner()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManager()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.complexName()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.vacancyStatus()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitRent()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketRent()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.daysVacant()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.revenueLost()));
+    }
+
+    @Override
+    protected void fillAvailableColumnDescripors(List<ColumnDescriptor<UnitVacancyReport>> columnDescriptors, UnitVacancyReport proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingName()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address()));
@@ -226,15 +249,15 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
     @Override
     public void setBuildings(List<Key> ids) {
-
         List<Key> my = new ArrayList<Key>(1);
         for (Key id : ids) {
             my.add(id);
         }
         buildings = my;
 
-        // TODO maybe remove this
+        // TODO maybe the following should be removed, depends on the dashboard logic
         stop();
         start();
     }
+
 }
