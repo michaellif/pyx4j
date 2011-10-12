@@ -21,30 +21,13 @@
 package com.pyx4j.entity.client.images;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.resources.client.ImageResource.ImageOptions;
-import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
-public interface EntityFolderImages extends ClientBundle {
+import com.pyx4j.widgets.client.images.WidgetsImages;
+
+public interface EntityFolderImages extends WidgetsImages {
 
     EntityFolderImages INSTANCE = GWT.create(EntityFolderImages.class);
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("add.png")
-    ImageResource add();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("add_hover.png")
-    ImageResource addHover();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("del.png")
-    ImageResource del();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("del_hover.png")
-    ImageResource delHover();
 
     @Source("arrow_up.png")
     ImageResource moveUp();
@@ -57,10 +40,6 @@ public interface EntityFolderImages extends ClientBundle {
 
     @Source("arrow_down_hover.png")
     ImageResource moveDownHover();
-
-    ImageResource expand();
-
-    ImageResource collapse();
 
     ImageResource warn();
 }

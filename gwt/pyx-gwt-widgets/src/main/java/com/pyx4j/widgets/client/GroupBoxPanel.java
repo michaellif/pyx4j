@@ -138,9 +138,9 @@ public class GroupBoxPanel extends FieldSetPanel {
         }
 
         if (expended) {
-            collapseButton.setResource(ImageFactory.getImages().groupBoxOpen());
+            collapseButton.setResource(ImageFactory.getImages().expand());
         } else {
-            collapseButton.setResource(ImageFactory.getImages().groupBoxClose());
+            collapseButton.setResource(ImageFactory.getImages().collapse());
         }
         collapseButtonTooltip.setTooltipText(tooltipText());
     }

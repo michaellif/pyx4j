@@ -21,23 +21,11 @@
 package com.pyx4j.site.client.resources;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.ImageResource;
 
-public interface SiteImages extends ClientBundle {
+import com.pyx4j.widgets.client.images.WidgetsImages;
+
+public interface SiteImages extends WidgetsImages {
 
     SiteImages INSTANCE = GWT.create(SiteImages.class);
-
-    @Source("add.png")
-    ImageResource add();
-
-    @Source("add_hover.png")
-    ImageResource addHover();
-
-    @Source("del.png")
-    ImageResource del();
-
-    @Source("del_hover.png")
-    ImageResource delHover();
 
 }
