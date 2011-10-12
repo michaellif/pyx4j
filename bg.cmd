@@ -5,7 +5,7 @@ rem
 
 for /f "tokens=*" %%I in ('CD') do @set CurDir=%%~nI
 title *%CurDir% - mvn with pyx and GWT Compile
-call mvn install -P pyx,gwtc %*
+call mvn install -P pyx,gwtc,draft %*
 @if errorlevel 1 goto errormark
 title %CurDir%
 
