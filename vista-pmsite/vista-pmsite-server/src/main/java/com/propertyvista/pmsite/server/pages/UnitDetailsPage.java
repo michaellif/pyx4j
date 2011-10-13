@@ -40,6 +40,7 @@ import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourc
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class UnitDetailsPage extends BasePage {
+    private static final long serialVersionUID = 1L;
 
     public UnitDetailsPage() {
         super();

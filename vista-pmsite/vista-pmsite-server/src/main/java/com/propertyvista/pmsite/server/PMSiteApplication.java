@@ -20,8 +20,13 @@ import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSessio
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.handler.PageProvider;
+import org.apache.wicket.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
 import org.apache.wicket.util.time.Duration;
 
@@ -30,6 +35,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.pmsite.server.pages.FindAptPage;
+import com.propertyvista.pmsite.server.pages.InternalErrorPage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.SignInPage;
@@ -62,6 +68,15 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
         mountPage("cnt" + PMSiteContentManager.PARAMETER_PATH, StaticPage.class);
 
+        mountPage("error", InternalErrorPage.class);
+
+        // set exception listener
+        getRequestCycleListeners().add(new AbstractRequestCycleListener() {
+            @Override
+            public IRequestHandler onException(RequestCycle cycle, java.lang.Exception e) {
+                return new RenderPageRequestHandler(new PageProvider(new InternalErrorPage(e)));
+            }
+        });
     }
 
     @Override
