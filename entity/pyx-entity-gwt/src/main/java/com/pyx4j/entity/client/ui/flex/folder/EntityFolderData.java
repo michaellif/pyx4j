@@ -22,24 +22,16 @@ package com.pyx4j.entity.client.ui.flex.folder;
 
 public class EntityFolderData {
 
-    enum Multiplicity {
-        zeroOrMore, oneOrMore
-    }
-
     //if false Collape/Expand are hidden
     public boolean collapsible = true;
 
     public boolean collapsed = true;
 
-    // if false Up/Down buttons
+    // if false Up/Down buttons are hidden
     public boolean orderable = true;
 
-    //First item can be ordered or deleted
-    public boolean firstFixed = true;
-
     // if false Add/Remove/Up/Down are hidden
-    public boolean editable = true;
+    public boolean modifiable = true;
 
-    public Multiplicity multiplicity = Multiplicity.zeroOrMore;
-
+    // item can be - removable, movable
 }
