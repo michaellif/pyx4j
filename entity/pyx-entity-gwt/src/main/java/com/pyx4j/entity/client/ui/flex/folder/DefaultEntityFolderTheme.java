@@ -39,16 +39,20 @@ public class DefaultEntityFolderTheme extends Theme {
     }
 
     protected void initStyles() {
-        Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderBoxDecorator);
-        style.addProperty("margin-top", "2px");
-        style.addProperty("margin-left", "6px");
+        Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolder);
         style.addProperty("width", width);
+        addStyle(style);
+
+        style = new Style("." + CEntityFolder.StyleName.EntityFolderBoxItem.name(), CEntityFolder.StyleName.EntityFolder);
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderBoxDecorator);
         addStyle(style);
 
         style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderTableDecorator);
         style.addProperty("margin-top", "2px");
         style.addProperty("margin-left", "6px");
-        style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderBoxItem);
@@ -57,7 +61,6 @@ public class DefaultEntityFolderTheme extends Theme {
 
         style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderBoxItemDecorator);
         style.addProperty("margin", "6px");
-        style.addProperty("width", "100%");
         style.addProperty("border", "dotted 1px");
         style.addProperty("border-color", "#333");
         addStyle(style);
