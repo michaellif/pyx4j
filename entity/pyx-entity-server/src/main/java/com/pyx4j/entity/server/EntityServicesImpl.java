@@ -20,7 +20,9 @@
  */
 package com.pyx4j.entity.server;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -33,11 +35,16 @@ import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
+import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.server.search.IndexedEntitySearch;
 import com.pyx4j.entity.server.search.SearchResultIterator;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.entity.shared.criterion.PathSearch;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
@@ -162,6 +169,37 @@ public class EntityServicesImpl {
         }
 
         return r;
+    }
+
+    public static class SearchListerImpl implements EntityServices.SearchLister {
+
+        @Override
+        public EntitySearchResult<?> execute(EntitySearchCriteria<?> request) {
+            EntityListCriteria<?> c = EntityListCriteria.create(request.getEntityClass());
+            c.setPageNumber(request.getPageNumber());
+            c.setPageSize(request.getPageSize());
+
+            if ((request.getFilters() != null) && (!request.getFilters().isEmpty())) {
+                for (Map.Entry<PathSearch, Serializable> me : request.getFilters().entrySet()) {
+                    Serializable value = me.getValue();
+                    if (me.getValue() == null) {
+                        continue;
+                    }
+                    PathSearch path = me.getKey();
+                    if (value instanceof PropertyCriterion) {
+                        c.add((PropertyCriterion) me.getValue());
+                        continue;
+                    } else if ((value instanceof IEntity) || (value instanceof Enum)) {
+                        c.add(PropertyCriterion.eq(path.getPathString(), value));
+                    } else if ((value instanceof String)) {
+                        c.add(new PropertyCriterion(path.getPathString(), Restriction.RDB_LIKE, value));
+                    } else {
+                        log.warn("Unsupport SearchCriteria filter");
+                    }
+                }
+            }
+            return EntityLister.secureQuery(c);
+        }
     }
 
     public static class RetrieveImpl implements EntityServices.Retrieve {

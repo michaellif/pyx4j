@@ -45,6 +45,9 @@ public interface EntityServices {
     public interface Search extends Service<EntitySearchCriteria<?>, EntitySearchResult<? extends IEntity>> {
     };
 
+    public interface SearchLister extends EntityServices.Search {
+    };
+
     public interface Retrieve extends Service<EntityQueryCriteria<?>, IEntity> {
     };
 
