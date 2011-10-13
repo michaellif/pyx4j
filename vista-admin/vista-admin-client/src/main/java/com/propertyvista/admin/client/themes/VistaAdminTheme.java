@@ -14,7 +14,7 @@
 package com.propertyvista.admin.client.themes;
 
 import com.pyx4j.entity.client.ui.datatable.DataTable;
-import com.pyx4j.site.client.ui.crud.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.style.IStyleName;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;

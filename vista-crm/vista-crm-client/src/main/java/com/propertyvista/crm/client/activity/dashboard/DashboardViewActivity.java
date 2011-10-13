@@ -32,6 +32,8 @@ public class DashboardViewActivity extends BoardViewActivity<DashboardView> impl
 
     private final DashboardMetadataService service = GWT.create(DashboardMetadataService.class);
 
+    protected DashboardType dashboardType;
+
     public DashboardViewActivity(Place place) {
         this((DashboardView) DashboardViewFactory.instance(DashboardView.class), place);
     }

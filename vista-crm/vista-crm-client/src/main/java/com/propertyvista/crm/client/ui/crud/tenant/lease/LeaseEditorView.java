@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.crud.IEditorView;
-import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.ServiceItem;

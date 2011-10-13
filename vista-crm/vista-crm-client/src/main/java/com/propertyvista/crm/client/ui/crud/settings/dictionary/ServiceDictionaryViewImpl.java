@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.dictionary;
 
-import com.pyx4j.site.client.ui.crud.IListerView;
-import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;

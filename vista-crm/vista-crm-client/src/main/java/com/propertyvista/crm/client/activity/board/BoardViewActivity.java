@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.activity.board;
 
-import java.util.Vector;
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -28,15 +26,12 @@ import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.rpc.services.dashboard.BoardMetadataServiceBase;
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
 public abstract class BoardViewActivity<V extends BoardView> extends AbstractActivity implements BoardView.Presenter {
 
     protected final V view;
 
     protected Key entityId;
-
-    protected DashboardType dashboardType;
 
     public BoardViewActivity(V view, Place place) {
         this.view = view;
@@ -60,36 +55,17 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
 
     @Override
     public void populate() {
-        if (isTypedDashboard()) {
-            getService().listMetadata(new AsyncCallback<Vector<DashboardMetadata>>() {
-                @Override
-                public void onSuccess(Vector<DashboardMetadata> result) {
-                    for (DashboardMetadata dmd : result) {
-                        if (dmd.type().getValue().equals(dashboardType)) {
-                            view.fill(dmd);
-                            break;
-                        }
-                    }
-                }
+        getService().retrieveMetadata(new AsyncCallback<DashboardMetadata>() {
+            @Override
+            public void onSuccess(DashboardMetadata result) {
+                view.fill(result);
+            }
 
-                @Override
-                public void onFailure(Throwable caught) {
-                    throw new UnrecoverableClientError(caught);
-                }
-            });
-        } else {
-            getService().retrieveMetadata(new AsyncCallback<DashboardMetadata>() {
-                @Override
-                public void onSuccess(DashboardMetadata result) {
-                    view.fill(result);
-                }
-
-                @Override
-                public void onFailure(Throwable caught) {
-                    throw new UnrecoverableClientError(caught);
-                }
-            }, entityId);
-        }
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+        }, entityId);
     }
 
     @Override

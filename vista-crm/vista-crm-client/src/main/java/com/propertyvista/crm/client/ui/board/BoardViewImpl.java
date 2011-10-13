@@ -28,12 +28,17 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
+import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class BoardViewImpl extends DockLayoutPanel implements BoardView {
 
@@ -152,6 +157,16 @@ public class BoardViewImpl extends DockLayoutPanel implements BoardView {
         public Widget getSetupVeiw() {
             VerticalPanel main = new VerticalPanel();
 
+            IListerView<Building> buildingLister;
+            buildingLister = new ListerInternalViewImplBase<Building>(new SelectedBuildingLister(/* readOnly */));
+            buildingLister.getLister().addItemSelectionHandler(new ItemSelectionHandler<Building>() {
+                @Override
+                public void onSelect(Building selectedItem) {
+//                    ((ShowingEditorView.Presenter) presenter).setSelectedBuilding(selectedItem);
+//                    enableButtons(true);
+                }
+            });
+
             HTML description = new HTML("Buiilding filters setup goes here...");
             main.add(description);
             main.setCellVerticalAlignment(description, HasVerticalAlignment.ALIGN_MIDDLE);
@@ -176,7 +191,6 @@ public class BoardViewImpl extends DockLayoutPanel implements BoardView {
                 }
             });
             buttons.add(cancel);
-
             buttons.setCellWidth(cancel, "60px");
             buttons.setCellHorizontalAlignment(cancel, HasHorizontalAlignment.ALIGN_CENTER);
             buttons.setCellVerticalAlignment(cancel, HasVerticalAlignment.ALIGN_MIDDLE);

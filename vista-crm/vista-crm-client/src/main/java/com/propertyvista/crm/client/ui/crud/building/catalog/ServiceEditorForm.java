@@ -35,9 +35,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.site.client.ui.crud.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.IFormView;
-import com.pyx4j.site.client.ui.crud.ListerBase.ItemSelectionHandler;
+import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.components.OkCancelBox;

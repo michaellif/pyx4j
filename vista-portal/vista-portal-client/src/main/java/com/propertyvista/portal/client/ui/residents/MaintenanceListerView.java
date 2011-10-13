@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 

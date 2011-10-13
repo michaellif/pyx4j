@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lead;
 
-import com.pyx4j.site.client.ui.crud.IListerView;
-import com.pyx4j.site.client.ui.crud.ListerBase.ItemSelectionHandler;
-import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;

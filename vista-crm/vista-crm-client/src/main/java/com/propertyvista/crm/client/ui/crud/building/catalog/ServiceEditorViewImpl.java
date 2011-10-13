@@ -24,8 +24,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IListerView;
-import com.pyx4j.site.client.ui.crud.ListerInternalViewImplBase;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;

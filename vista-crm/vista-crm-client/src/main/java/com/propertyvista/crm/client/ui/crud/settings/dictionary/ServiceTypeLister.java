@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.Button;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
-import com.pyx4j.site.client.ui.crud.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.rpc.CrmSiteMap;

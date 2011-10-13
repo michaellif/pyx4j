@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.forms.client.ui.NativeRadioGroup;
-import com.pyx4j.site.client.ui.crud.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;

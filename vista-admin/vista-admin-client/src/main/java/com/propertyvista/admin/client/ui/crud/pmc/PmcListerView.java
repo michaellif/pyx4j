@@ -13,7 +13,7 @@
  */
 package com.propertyvista.admin.client.ui.crud.pmc;
 
-import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.admin.rpc.PmcDTO;
 

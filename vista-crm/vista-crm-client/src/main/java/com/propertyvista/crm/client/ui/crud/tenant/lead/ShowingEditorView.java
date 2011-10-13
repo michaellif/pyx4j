@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.tenant.lead;
 
 import com.pyx4j.site.client.ui.crud.IEditorView;
-import com.pyx4j.site.client.ui.crud.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;

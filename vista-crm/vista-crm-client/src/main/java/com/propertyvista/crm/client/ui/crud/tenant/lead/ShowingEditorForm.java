@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.site.client.ui.crud.IFormView;
-import com.pyx4j.site.client.ui.crud.ListerBase.ItemSelectionHandler;
+import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;

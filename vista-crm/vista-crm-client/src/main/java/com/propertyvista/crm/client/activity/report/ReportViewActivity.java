@@ -32,6 +32,8 @@ public class ReportViewActivity extends BoardViewActivity<ReportView> implements
 
     private final ReportMetadataService service = GWT.create(ReportMetadataService.class);
 
+    protected DashboardType dashboardType;
+
     public ReportViewActivity(Place place) {
         this((ReportView) DashboardViewFactory.instance(ReportView.class), place);
     }
