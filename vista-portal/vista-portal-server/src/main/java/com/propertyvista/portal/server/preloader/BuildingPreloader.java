@@ -129,6 +129,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         List<Complex> complexesWithBuildins = new Vector<Complex>();
 
         for (Building building : buildings) {
+            Persistence.service().persist(building.dashboard());
             Persistence.service().persist(building);
 
             if (DataGenerator.randomBoolean()) {

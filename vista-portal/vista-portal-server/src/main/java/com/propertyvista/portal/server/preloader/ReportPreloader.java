@@ -13,18 +13,13 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import java.util.Random;
+import com.propertvista.generator.ReportGenerator;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
-import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
-import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
 public class ReportPreloader extends AbstractDataPreloader {
 
@@ -32,98 +27,9 @@ public class ReportPreloader extends AbstractDataPreloader {
     public String create() {
 
 // first demo report:        
-        DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.type().setValue(DashboardType.system);
-        dmd.layoutType().setValue(LayoutType.Report);
-        dmd.name().setValue("System Report");
-
-        for (int i = 0; i < 3; ++i) {
-            GadgetMetadata gmd = EntityFactory.create(GadgetMetadata.class);
-            gmd.type().setValue(GadgetType.Demo);
-            gmd.name().setValue("Gadget #" + i);
-            gmd.column().setValue(new Random().nextInt(2));
-
-            gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage
-            dmd.gadgets().add(gmd);
-        }
-
-        GadgetMetadata gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.BuildingLister);
-        gmd.name().setValue("Building lister");
-        gmd.column().setValue(-1);
-
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.BarChartDisplay);
-        gmd.name().setValue("Bar Chart Demo");
-        gmd.column().setValue(-1);
-
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.PieChartDisplay);
-        gmd.name().setValue("Pie Chart Demo");
-        gmd.column().setValue(0);
-
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.GaugeDisplay);
-        gmd.name().setValue("Gauge Demo");
-        gmd.column().setValue(0);
-
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        dmd.gadgets().add(gmd);
-
-        dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        Persistence.service().persist(dmd);
-
+        Persistence.service().persist(ReportGenerator.DefaultSystem1());
 // the second one:
-        dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.type().setValue(DashboardType.system);
-        dmd.layoutType().setValue(LayoutType.Report);
-        dmd.name().setValue("Test Report");
-
-        for (int i = 0; i < 3; ++i) {
-            gmd = EntityFactory.create(GadgetMetadata.class);
-            gmd.type().setValue(GadgetType.Demo);
-            gmd.name().setValue("Gadget #" + i);
-            gmd.column().setValue(new Random().nextInt(2));
-
-            gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage
-            dmd.gadgets().add(gmd);
-        }
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.BarChartDisplay);
-        gmd.name().setValue("Bar Chart Demo");
-        gmd.column().setValue(-1);
-
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.PieChartDisplay);
-        gmd.name().setValue("Pie Chart Demo");
-        gmd.column().setValue(0);
-
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.GaugeDisplay);
-        gmd.name().setValue("Gauge Demo");
-        gmd.column().setValue(0);
-
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        dmd.gadgets().add(gmd);
-
-        dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        Persistence.service().persist(dmd);
+        Persistence.service().persist(ReportGenerator.DefaultSystem2());
 
         return "Created " + 2 + " demo reports";
     }

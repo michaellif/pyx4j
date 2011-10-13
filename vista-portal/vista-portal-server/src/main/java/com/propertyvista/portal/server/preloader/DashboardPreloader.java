@@ -13,16 +13,13 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import com.pyx4j.commons.Key;
+import com.propertvista.generator.DashboardGenerator;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
-import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
-import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
 public class DashboardPreloader extends AbstractDataPreloader {
 
@@ -30,94 +27,9 @@ public class DashboardPreloader extends AbstractDataPreloader {
     public String create() {
 
 // first demo dashboard:        
-        DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.type().setValue(DashboardType.system);
-        dmd.isShared().setValue(true);
-        dmd.name().setValue("System Dashboard");
-        dmd.description().setValue("Shows default system data");
-        dmd.layoutType().setValue(LayoutType.One);
-
-        GadgetMetadata gmd;
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.BuildingLister);
-        gmd.name().setValue("Building lister");
-        gmd.column().setValue(0);
-
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.BarChartDisplay);
-        gmd.name().setValue("Bar Chart Demo");
-        gmd.column().setValue(0);
-
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.LineChartDisplay);
-        gmd.name().setValue("Line Chart Demo");
-        gmd.column().setValue(0);
-
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        dmd.gadgets().add(gmd);
-
-        dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        Persistence.service().persist(dmd);
-
+        Persistence.service().persist(DashboardGenerator.DefaultSystem());
 // the second one:
-        dmd = EntityFactory.create(DashboardMetadata.class);
-        dmd.type().setValue(DashboardType.building);
-        dmd.isShared().setValue(true);
-        dmd.name().setValue("Building dashboard");
-        dmd.description().setValue("Shows default building data");
-        dmd.layoutType().setValue(LayoutType.Two21);
-
-        for (int i = 0; i < 1; ++i) {
-            gmd = EntityFactory.create(GadgetMetadata.class);
-            gmd.type().setValue(GadgetType.Demo);
-            gmd.name().setValue("Gadget #" + i);
-            gmd.column().setValue(1);
-
-            gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage
-            dmd.gadgets().add(gmd);
-        }
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.BarChartDisplay);
-        gmd.name().setValue("Bar Chart Demo");
-        gmd.column().setValue(0);
-
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.LineChartDisplay);
-        gmd.name().setValue("Line Chart Demo");
-        gmd.column().setValue(0);
-
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.PieChartDisplay);
-        gmd.name().setValue("Pie Chart Demo");
-        gmd.column().setValue(1);
-
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.type().setValue(GadgetType.GaugeDisplay);
-        gmd.name().setValue("Gauge Demo");
-        gmd.column().setValue(1);
-
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        dmd.gadgets().add(gmd);
-
-        dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        Persistence.service().persist(dmd);
+        Persistence.service().persist(DashboardGenerator.DefaultBuilding());
 
         return "Created " + 2 + " demo dashboards";
     }

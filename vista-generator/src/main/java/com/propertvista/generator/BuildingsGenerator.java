@@ -116,6 +116,8 @@ public class BuildingsGenerator {
         Building building = createBuilding(propertyCode, buildingType, website, address, email);
         // log.info("Created: " + building);
 
+        building.dashboard().set(DashboardGenerator.DefaultBuildingEmbeded());
+
         return building;
     }
 
@@ -161,7 +163,6 @@ public class BuildingsGenerator {
         building.contacts().website().setValue(website);
         building.contacts().email().set(email); // not sure yet what to do about
                                                 // the email and its type
-
         return building;
     }
 

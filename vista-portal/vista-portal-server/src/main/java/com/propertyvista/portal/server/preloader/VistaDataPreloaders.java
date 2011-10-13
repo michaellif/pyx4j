@@ -31,12 +31,16 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             add(new RefferenceDataPreloader());
             add(new UserPreloader(config));
             add(new CampaignPreloader(config));
+
+            add(new DashboardPreloader());
+            add(new ReportPreloader());
+
             add(new BuildingPreloader(config));
             add(new PreloadTenants(config));
             add(new PtPreloader(config));
+
             add(new DevelopmentSecurityPreloader());
-            add(new DashboardPreloader());
-            add(new ReportPreloader());
+
             // DEMO - temporary!!!
             add(new UnitVacancyReportDTOPreloader(config));
         }
@@ -46,5 +50,4 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
     public static VistaDataPreloaders productionPmcPreloaders() {
         return new VistaDataPreloaders(null, true);
     }
-
 }
