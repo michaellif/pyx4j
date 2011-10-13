@@ -26,7 +26,6 @@ import com.propertvista.generator.MediaGenerator;
 import com.propertvista.generator.util.PictureUtil;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
@@ -166,7 +165,7 @@ public class Importer {
 
             ThumbnailService.persist(m.file().blobKey().getValue(), m.file().filename().getValue(), me.getValue(), ImageTarget.Building);
 
-            persist(m);
+            Persistence.service().persist(m);
             building.media().add(m);
         }
     }
@@ -177,14 +176,6 @@ public class Importer {
         geo();
         generate();
         save();
-    }
-
-    /**
-     * @deprecated Use Persistence.service().persist(..)
-     */
-    @Deprecated
-    private static void persist(IEntity entity) {
-        Persistence.service().persist(entity);
     }
 
     public Model getModel() {
