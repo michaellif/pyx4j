@@ -142,8 +142,8 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
             }
 
             @Override
-            public IFolderItemDecorator createDecorator() {
-                return new BoxFolderItemDecorator(PortalImages.INSTANCE, i18n.tr("Remove contact"), !isFirst());
+            public IFolderItemDecorator<EmergencyContact> createDecorator() {
+                return new BoxFolderItemDecorator<EmergencyContact>(PortalImages.INSTANCE, i18n.tr("Remove contact"), !isFirst());
             }
         };
     }
