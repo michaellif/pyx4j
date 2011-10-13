@@ -21,6 +21,10 @@
 package com.pyx4j.entity.client.ui.flex.folder;
 
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.HasDirection.Direction;
 import com.google.gwt.user.client.ui.DockPanel;
@@ -54,6 +58,21 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
         super(images, title, removable);
 
         setStyleName(StyleName.EntityFolderRowItemDecorator.name());
+
+        addDomHandler(new MouseOverHandler() {
+            @Override
+            public void onMouseOver(MouseOverEvent event) {
+                actionsPanel.setHover(true);
+            }
+        }, MouseOverEvent.getType());
+
+        addDomHandler(new MouseOutHandler() {
+
+            @Override
+            public void onMouseOut(MouseOutEvent event) {
+                actionsPanel.setHover(false);
+            }
+        }, MouseOutEvent.getType());
 
         DockPanel mainPanel = new DockPanel();
         setWidget(mainPanel);

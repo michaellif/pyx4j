@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleDependent;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.i18n.shared.I18n;
@@ -98,5 +99,14 @@ public class ItemActionsBar extends HorizontalPanel {
         default:
             break;
         }
+    }
+
+    public void setHover(boolean hover) {
+        if (hover) {
+            addStyleDependentName(StyleDependent.hover.name());
+        } else {
+            removeStyleDependentName(StyleDependent.hover.name());
+        }
+
     }
 }

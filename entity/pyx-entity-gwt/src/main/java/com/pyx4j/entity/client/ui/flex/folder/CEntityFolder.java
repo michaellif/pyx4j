@@ -49,6 +49,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleName;
 
 /**
@@ -66,6 +67,10 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
         //Table
         EntityFolderRowItem, EntityFolderTableDecorator, EntityFolderRowItemDecorator
+    }
+
+    public static enum StyleDependent implements IStyleDependent {
+        hover
     }
 
     private IFolderDecorator<E> folderDecorator;
@@ -240,7 +245,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
                 getValue().remove(indexBefore);
                 getValue().add(indexAfter, value);
 
-                LinkedHashMap<E, CEntityFolderItemEditor<E>> oldMap = new LinkedHashMap<E, CEntityFolderItemEditor<E>>(itemsMap);
+                HashMap<E, CEntityFolderItemEditor<E>> oldMap = new HashMap<E, CEntityFolderItemEditor<E>>(itemsMap);
                 itemsMap.clear();
                 container.clear();
                 for (E entity : getValue()) {

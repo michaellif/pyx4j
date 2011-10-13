@@ -21,6 +21,10 @@
 package com.pyx4j.entity.client.ui.flex.folder;
 
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -51,6 +55,21 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         super(images, removeLabel, removable);
 
         setStyleName(StyleName.EntityFolderBoxItemDecorator.name());
+
+        addDomHandler(new MouseOverHandler() {
+            @Override
+            public void onMouseOver(MouseOverEvent event) {
+                toolbar.getActionsPanel().setHover(true);
+            }
+        }, MouseOverEvent.getType());
+
+        addDomHandler(new MouseOutHandler() {
+
+            @Override
+            public void onMouseOut(MouseOutEvent event) {
+                toolbar.getActionsPanel().setHover(false);
+            }
+        }, MouseOutEvent.getType());
 
         VerticalPanel mainPanel = new VerticalPanel();
         mainPanel.setWidth("100%");

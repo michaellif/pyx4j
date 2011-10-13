@@ -82,13 +82,7 @@ public class DefaultEntityFolderTheme extends Theme {
         style.addProperty("opacity", "0.2");
         addStyle(style);
 
-        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderActionsBar).discriminator(
-                new Selector.Builder(CEntityFolder.StyleName.EntityFolderBoxItemDecorator).hover().build().toString()).build());
-        style.addProperty("opacity", "1");
-        addStyle(style);
-
-        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderActionsBar).discriminator(
-                new Selector.Builder(CEntityFolder.StyleName.EntityFolderRowItemDecorator).hover().build().toString()).build());
+        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderActionsBar).dependent(CEntityFolder.StyleDependent.hover).build());
         style.addProperty("opacity", "1");
         addStyle(style);
 

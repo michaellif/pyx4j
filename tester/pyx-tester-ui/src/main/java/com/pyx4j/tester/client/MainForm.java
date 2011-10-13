@@ -45,6 +45,7 @@ import com.pyx4j.forms.client.ui.decorators.ElegantWidgetDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.EntityI;
 import com.pyx4j.tester.client.domain.EntityII;
+import com.pyx4j.tester.client.domain.EntityIII;
 import com.pyx4j.tester.client.images.Images;
 
 public class MainForm extends CEntityEditor<EntityI> {
@@ -94,6 +95,10 @@ public class MainForm extends CEntityEditor<EntityI> {
                         FlowPanel main = new FlowPanel();
                         main.add(new ElegantWidgetDecorator(inject(proto().stringMember())));
                         main.add(new ElegantWidgetDecorator(inject(proto().integerMember())));
+                        main.add(new HTML("---------------- Box Folder ----------------"));
+                        main.add(inject(proto().entityIIIList1(), createEntityIIIFolder1()));
+                        main.add(new HTML("---------------- Table Folder ----------------"));
+                        main.add(inject(proto().entityIIIList1(), createEntityIIIFolder2()));
                         return main;
                     }
 
@@ -139,4 +144,74 @@ public class MainForm extends CEntityEditor<EntityI> {
 
         };
     }
+
+    private CEntityFolder<EntityIII> createEntityIIIFolder1() {
+
+        return new CEntityFolder<EntityIII>(EntityIII.class) {
+
+            @Override
+            protected IFolderDecorator<EntityIII> createDecorator() {
+                return new BoxFolderDecorator<EntityIII>(Images.INSTANCE, i18n.tr("Add EntityII"));
+
+            }
+
+            @Override
+            protected CEntityFolderBoxEditor<EntityIII> createItem() {
+                return createEntityIIISetRow();
+            }
+
+            private CEntityFolderBoxEditor<EntityIII> createEntityIIISetRow() {
+                return new CEntityFolderBoxEditor<EntityIII>(EntityIII.class) {
+
+                    @Override
+                    public IsWidget createContent() {
+                        FlowPanel main = new FlowPanel();
+                        main.add(new ElegantWidgetDecorator(inject(proto().stringMember())));
+                        main.add(new ElegantWidgetDecorator(inject(proto().integerMember())));
+                        return main;
+                    }
+
+                    @Override
+                    public IFolderItemDecorator<EntityIII> createDecorator() {
+                        return new BoxFolderItemDecorator<EntityIII>(Images.INSTANCE, i18n.tr("Remove EntityIII"));
+                    }
+
+                };
+            }
+
+        };
+    }
+
+    private CEntityFolder<EntityIII> createEntityIIIFolder2() {
+
+        return new CEntityFolder<EntityIII>(EntityIII.class) {
+
+            private final ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+
+            {
+                columns.add(new EntityFolderColumnDescriptor(proto().stringMember(), "15em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().integerMember(), "15em"));
+            }
+
+            @Override
+            protected IFolderDecorator<EntityIII> createDecorator() {
+                return new TableFolderDecorator<EntityIII>(columns, Images.INSTANCE, i18n.tr("Add EntityII"));
+
+            }
+
+            @Override
+            protected CEntityFolderItemEditor<EntityIII> createItem() {
+                // TODO Auto-generated method stub
+                return new CEntityFolderRowEditor<EntityIII>(EntityIII.class, columns) {
+
+                    @Override
+                    protected IFolderItemDecorator<EntityIII> createDecorator() {
+                        return new TableFolderItemDecorator<EntityIII>(Images.INSTANCE, i18n.tr("Remove EntityII"));
+                    }
+                };
+            }
+
+        };
+    }
+
 }
