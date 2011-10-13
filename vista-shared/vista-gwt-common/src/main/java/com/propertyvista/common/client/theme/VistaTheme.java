@@ -34,7 +34,7 @@ public class VistaTheme extends Theme {
 
     protected void initStyles() {
 
-        addTheme(new DefaultEntityFolderTheme("930px"));
+        addTheme(new DefaultEntityFolderTheme("980px"));
 
         initGeneralStyles();
         initBodyStyles();
