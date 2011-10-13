@@ -204,16 +204,19 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             return;
         }
 
-        final CEntityFolderItemEditor<E> comp = createItemPrivate(container.getWidgetCount() == 0);
+        final CEntityFolderItemEditor<E> item = createItemPrivate(container.getWidgetCount() == 0);
         createNewEntity(newEntity, new DefaultAsyncCallback<E>() {
             @Override
             public void onSuccess(E result) {
                 getValue().add(result);
-                comp.populate(result);
-                adoptItem(comp);
+                item.populate(result);
+                if (container.getWidgetIndex(item) == -1) {
+                    container.add(item);
+                }
+                itemsMap.put(item.getValue(), item);
+                adoptItem(item);
                 ValueChangeEvent.fire(CEntityFolder.this, getValue());
             }
-
         });
 
     }
@@ -245,6 +248,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         container.insert(itemsMap.get(entity), indexAfter);
 
         setNativeValue(getValue());
+
         ValueChangeEvent.fire(CEntityFolder.this, getValue());
         return;
 
@@ -280,18 +284,23 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         currentRowDebugId = 0;
 
         boolean first = true;
-        for (E item : value) {
-            if (isFolderItemAllowed(item)) {
-                CEntityFolderItemEditor<E> comp = null;
-                if (oldMap.containsKey(item)) {
-                    comp = oldMap.remove(item);
-                    comp.setFirst(first);
+        for (E entity : value) {
+            if (isFolderItemAllowed(entity)) {
+                CEntityFolderItemEditor<E> item = null;
+                if (oldMap.containsKey(entity)) {
+                    item = oldMap.remove(entity);
+                    item.setFirst(first);
                 } else {
-                    comp = createItemPrivate(first);
+                    item = createItemPrivate(first);
                 }
 
-                comp.populate(item);
-                adoptItem(comp);
+                item.populate(entity);
+                if (container.getWidgetIndex(item) == -1) {
+                    container.add(item);
+                }
+                itemsMap.put(item.getValue(), item);
+
+                adoptItem(item);
                 first = false;
             }
         }
@@ -321,11 +330,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     private void adoptItem(final CEntityFolderItemEditor<E> item) {
 
-        if (container.getWidgetIndex(item) == -1) {
-            container.add(item);
-        }
-        itemsMap.put(item.getValue(), item);
-
         item.addAccessAdapter(this);
 
         IDebugId rowDebugId = new CompositeDebugId(this.getDebugId(), "row", currentRowDebugId);
@@ -352,14 +356,13 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         });
 
         item.onAdopt();
-        ValueChangeEvent.fire(this, getValue());
+
     }
 
     private void abandonItem(final CEntityFolderItemEditor<E> item) {
         container.remove(item);
         itemsMap.remove(item.getValue());
         item.onAbandon();
-        ValueChangeEvent.fire(this, getValue());
     }
 
     @Override
