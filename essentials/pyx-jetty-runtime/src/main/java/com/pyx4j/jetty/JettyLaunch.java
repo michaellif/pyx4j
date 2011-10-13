@@ -20,6 +20,7 @@
  */
 package com.pyx4j.jetty;
 
+import java.io.File;
 import java.net.ServerSocket;
 import java.util.TimeZone;
 
@@ -90,6 +91,11 @@ public abstract class JettyLaunch {
         HandlerList handlers = new HandlerList();
 
         if (jettyLaunch.getRequestLogFile() != null) {
+            File logFile = new File(jettyLaunch.getRequestLogFile());
+            if (!logFile.getParentFile().isDirectory()) {
+                logFile.getParentFile().mkdirs();
+            }
+
             NCSARequestLog requestLog = new NCSARequestLog(jettyLaunch.getRequestLogFile());
             requestLog.setRetainDays(1);
             requestLog.setAppend(true);
