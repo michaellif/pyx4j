@@ -13,25 +13,24 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
 public class InternalErrorPage extends ErrorPage {
     private static final long serialVersionUID = 1L;
 
-    public InternalErrorPage(java.lang.Exception e) {
+    public InternalErrorPage(PageParameters params) {
         super();
 
-        StringWriter writer = new StringWriter();
-        e.printStackTrace(new PrintWriter(writer));
-        add(new Label("errorContent", writer.toString()));
+        add(new Label("errorContent", params.get("error").toString()));
+        setStatelessHint(true);
     }
 
     @Override
@@ -49,6 +48,7 @@ public class InternalErrorPage extends ErrorPage {
         super.onBeforeRender();
 
         if (!isPageStateless()) {
+            String message = "===> Page not stateless " + new Date().toString();
             // find out why
             final List<Component> statefulComponents = new ArrayList<Component>();
             visitChildren(Component.class, new IVisitor<Component, Object>() {
@@ -61,7 +61,6 @@ public class InternalErrorPage extends ErrorPage {
                 }
 
             });
-            String message = "===> Page not stateless\n";
             if (statefulComponents.size() > 0) {
                 message += "===>  Stateful components found: ";
                 for (Component c : statefulComponents) {

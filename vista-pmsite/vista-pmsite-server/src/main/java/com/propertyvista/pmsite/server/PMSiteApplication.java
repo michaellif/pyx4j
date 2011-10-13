@@ -27,6 +27,7 @@ import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.PageProvider;
 import org.apache.wicket.request.handler.RenderPageRequestHandler;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
 import org.apache.wicket.util.time.Duration;
 
@@ -74,7 +75,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         getRequestCycleListeners().add(new AbstractRequestCycleListener() {
             @Override
             public IRequestHandler onException(RequestCycle cycle, java.lang.Exception e) {
-                return new RenderPageRequestHandler(new PageProvider(new InternalErrorPage(e)));
+                return new RenderPageRequestHandler(new PageProvider(new InternalErrorPage(new PageParameters().add("error", e))));
             }
         });
     }

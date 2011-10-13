@@ -49,7 +49,8 @@ public class UnitDetailsPage extends BasePage {
         try {
             planId = getRequest().getRequestParameters().getParameterValue("fpId").toLong();
         } catch (Exception e) {
-            throw new RestartResponseException(FindAptPage.class);
+            throw new RuntimeException();
+//            throw new RestartResponseException(FindAptPage.class);
         }
 
         final Floorplan fp = PMSiteContentManager.getFloorplanDetails(planId);
