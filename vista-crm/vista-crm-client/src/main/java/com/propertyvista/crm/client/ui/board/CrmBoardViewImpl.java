@@ -20,13 +20,13 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
@@ -37,7 +37,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class CrmBoardViewImpl extends BoardViewImpl {
+public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
 
     protected static I18n i18n = I18n.get(CrmBoardViewImpl.class);
 
@@ -45,7 +45,7 @@ public class CrmBoardViewImpl extends BoardViewImpl {
 
     protected final SimplePanel filtersPanel = new SimplePanel();
 
-    protected final BuildingFilters filters = new BuildingFilters();
+    private BuildingFilters filters;
 
     public CrmBoardViewImpl() {
         super();
@@ -67,18 +67,37 @@ public class CrmBoardViewImpl extends BoardViewImpl {
     public void fill(DashboardMetadata dashboardMetadata) {
         super.fill(dashboardMetadata);
 
+        filters = null;
+        filtersPanel.setWidget(null);
+        setWidgetSize(filtersPanel, 0);
         if (dashboardMetadata != null) {
             header.setCaption(dashboardMetadata.name().getStringView());
 
-            setWidgetSize(filtersPanel, 0);
             if (dashboardMetadata.type().getValue() == DashboardType.building) {
-                setWidgetSize(filtersPanel, VistaCrmTheme.defaultActionBarHeight);
+                filters = new BuildingFilters();
                 filtersPanel.setWidget(filters.getCompactVeiw());
+                setWidgetSize(filtersPanel, VistaCrmTheme.defaultActionBarHeight);
             }
         }
     }
 
+    @Override
+    public IListerView<Building> getBuildingListerView() {
+        return (filters != null ? filters.getBuildingListerView() : null);
+    }
+
     private class BuildingFilters {
+
+        private final IListerView<Building> buildingLister;
+
+        public BuildingFilters() {
+            buildingLister = new ListerInternalViewImplBase<Building>(new SelectedBuildingLister());
+            buildingLister.getLister().setMultiSelect(true);
+        }
+
+        public IListerView<Building> getBuildingListerView() {
+            return buildingLister;
+        }
 
         public Widget getCompactVeiw() {
             HorizontalPanel main = new HorizontalPanel();
@@ -92,7 +111,7 @@ public class CrmBoardViewImpl extends BoardViewImpl {
             Button setup = new Button("Setup", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    setWidgetSize(filtersPanel, 10);
+                    setWidgetSize(filtersPanel, 30);
                     filtersPanel.setWidget(filters.getSetupVeiw());
                 }
             });
@@ -108,26 +127,16 @@ public class CrmBoardViewImpl extends BoardViewImpl {
         public Widget getSetupVeiw() {
             VerticalPanel main = new VerticalPanel();
 
-            IListerView<Building> buildingLister;
-            buildingLister = new ListerInternalViewImplBase<Building>(new SelectedBuildingLister(/* readOnly */));
-            buildingLister.getLister().addItemSelectionHandler(new ItemSelectionHandler<Building>() {
-                @Override
-                public void onSelect(Building selectedItem) {
-//                    ((ShowingEditorView.Presenter) presenter).setSelectedBuilding(selectedItem);
-//                    enableButtons(true);
-                }
-            });
-
-            HTML description = new HTML("Buiilding filters setup goes here...");
-            main.add(description);
-            main.setCellVerticalAlignment(description, HasVerticalAlignment.ALIGN_MIDDLE);
-            main.setCellHorizontalAlignment(description, HasHorizontalAlignment.ALIGN_CENTER);
+            main.add(new ScrollPanel(buildingLister.asWidget()));
 
             HorizontalPanel buttons = new HorizontalPanel();
 
             Button apply = new Button("Apply", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
+
+                    // TODO retrieve and apply filters here...
+
                     setWidgetSize(filtersPanel, VistaCrmTheme.defaultActionBarHeight);
                     filtersPanel.setWidget(filters.getCompactVeiw());
                 }

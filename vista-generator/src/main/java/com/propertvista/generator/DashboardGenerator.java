@@ -22,9 +22,17 @@ import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
-public class DashboardGenerator {
+public class DashboardGenerator extends Dashboards {
 
-    static public DashboardMetadata DefaultSystem() {
+    public DashboardGenerator() {
+
+        systemDashboards.add(DefaultSystem());
+
+        buildingDashboards.add(DefaultBuilding1());
+        buildingDashboards.add(DefaultBuilding2());
+    }
+
+    private DashboardMetadata DefaultSystem() {
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
         dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.type().setValue(DashboardType.system);
@@ -61,29 +69,32 @@ public class DashboardGenerator {
         return dmd;
     }
 
-    static public DashboardMetadata DefaultBuilding() {
+    private DashboardMetadata DefaultBuilding1() {
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
         dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.type().setValue(DashboardType.building);
         dmd.isShared().setValue(true);
-        dmd.name().setValue("Building Dashboard");
-        dmd.description().setValue("Displays default building data");
+        dmd.name().setValue("Building Dashboard #1");
+        dmd.description().setValue("Displays some building data");
         dmd.layoutType().setValue(LayoutType.Two21);
 
         GadgetMetadata gmd;
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.UnitVacancyReport);
-        gmd.name().setValue("UnitVacancyReport Demo");
-        gmd.column().setValue(0);
 
-        dmd.gadgets().add(gmd);
+        for (int i = 0; i < 2; ++i) {
+            gmd = EntityFactory.create(GadgetMetadata.class);
+            gmd.type().setValue(GadgetType.Demo);
+            gmd.name().setValue("Gadget #" + i);
+            gmd.column().setValue(0);
+
+            gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage
+            dmd.gadgets().add(gmd);
+        }
 
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         gmd.type().setValue(GadgetType.BarChartDisplay);
         gmd.name().setValue("Bar Chart Demo");
-        gmd.column().setValue(1);
+        gmd.column().setValue(0);
 
         dmd.gadgets().add(gmd);
 
@@ -91,7 +102,7 @@ public class DashboardGenerator {
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         gmd.type().setValue(GadgetType.LineChartDisplay);
         gmd.name().setValue("Line Chart Demo");
-        gmd.column().setValue(1);
+        gmd.column().setValue(0);
 
         dmd.gadgets().add(gmd);
 
@@ -114,13 +125,13 @@ public class DashboardGenerator {
         return dmd;
     }
 
-    static public DashboardMetadata DefaultBuildingEmbeded() {
+    private DashboardMetadata DefaultBuilding2() {
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
         dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        dmd.type().setValue(DashboardType.embedded);
+        dmd.type().setValue(DashboardType.building);
         dmd.isShared().setValue(true);
-        dmd.name().setValue("Embedded Building Dashboard");
-        dmd.description().setValue("Displays building data for one building");
+        dmd.name().setValue("Building Dashboard #2");
+        dmd.description().setValue("Displays some building data");
         dmd.layoutType().setValue(LayoutType.One);
 
         GadgetMetadata gmd;

@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertvista.generator.BuildingsGenerator;
+import com.propertvista.generator.Dashboards;
 import com.propertvista.generator.MediaGenerator;
 import com.propertvista.generator.ServiceCatalogGenerator;
 import com.propertvista.generator.gdo.ServiceItemTypes;
@@ -36,6 +37,7 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
@@ -108,6 +110,13 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         LeaseTerms leaseTerms = generator.createLeaseTerms();
         Persistence.service().persist(leaseTerms);
 
+        Dashboards availableDashboards = new Dashboards();
+        {
+            EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.building));
+            availableDashboards.buildingDashboards.addAll(Persistence.service().query(criteria));
+        }
+
         // create some complexes:
         List<Complex> complexes = new Vector<Complex>();
         complexes.add(generator.createComplex("Complex #1"));
@@ -129,7 +138,6 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         List<Complex> complexesWithBuildins = new Vector<Complex>();
 
         for (Building building : buildings) {
-            Persistence.service().persist(building.dashboard());
             Persistence.service().persist(building);
 
             if (DataGenerator.randomBoolean()) {
@@ -172,6 +180,8 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
                 }
                 Persistence.service().persist(building.media());
             }
+
+            building.dashboard().set(DataGenerator.random(availableDashboards.buildingDashboards));
 
             Persistence.service().merge(building);
 

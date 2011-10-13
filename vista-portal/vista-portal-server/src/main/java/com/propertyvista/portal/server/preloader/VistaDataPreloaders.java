@@ -28,12 +28,15 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         add(new ServiceCatalogPreloader());
 
         if (!production) {
+
+            // TODO - these two should be moved to production preload when structure has been agreed!..  
+            add(new DashboardPreloader());
+            add(new ReportPreloader());
+            // end TODO
+
             add(new RefferenceDataPreloader());
             add(new UserPreloader(config));
             add(new CampaignPreloader(config));
-
-            add(new DashboardPreloader());
-            add(new ReportPreloader());
 
             add(new BuildingPreloader(config));
             add(new PreloadTenants(config));

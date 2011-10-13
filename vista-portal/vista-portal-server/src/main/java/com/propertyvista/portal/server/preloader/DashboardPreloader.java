@@ -25,13 +25,13 @@ public class DashboardPreloader extends AbstractDataPreloader {
 
     @Override
     public String create() {
+        DashboardGenerator generator = new DashboardGenerator();
+        Persistence.service().persist(generator.systemDashboards);
+        Persistence.service().persist(generator.buildingDashboards);
 
-// first demo dashboard:        
-        Persistence.service().persist(DashboardGenerator.DefaultSystem());
-// the second one:
-        Persistence.service().persist(DashboardGenerator.DefaultBuilding());
-
-        return "Created " + 2 + " demo dashboards";
+        StringBuilder sb = new StringBuilder();
+        sb.append("Created ").append(generator.systemDashboards.size() + generator.buildingDashboards.size()).append(" dashboards");
+        return sb.toString();
     }
 
     @SuppressWarnings("unchecked")

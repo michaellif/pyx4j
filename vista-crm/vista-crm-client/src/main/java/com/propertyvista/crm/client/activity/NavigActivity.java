@@ -39,7 +39,6 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter, NavigationUpdateHandler {
 
@@ -176,11 +175,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
             @Override
             public void onSuccess(Vector<DashboardMetadata> result) {
                 for (DashboardMetadata dmd : result) {
-                    if (dmd.type().getValue() != DashboardType.embedded) {
-                        CrudAppPlace place = new CrmSiteMap.Dashboard();
-                        place.formDashboardPlace(dmd.getPrimaryKey(), dmd.name().getStringView());
-                        folder.addNavigItem(place);
-                    }
+                    CrudAppPlace place = new CrmSiteMap.Dashboard();
+                    place.formDashboardPlace(dmd.getPrimaryKey(), dmd.name().getStringView());
+                    folder.addNavigItem(place);
                 }
                 // update UI:
                 view.setNavigFolders(currentfolders);

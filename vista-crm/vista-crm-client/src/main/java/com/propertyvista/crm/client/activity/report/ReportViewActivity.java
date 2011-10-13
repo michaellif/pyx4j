@@ -16,18 +16,15 @@ package com.propertyvista.crm.client.activity.report;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.crm.client.activity.board.BoardViewActivity;
+import com.propertyvista.crm.client.activity.board.CrmBoardViewActivity;
 import com.propertyvista.crm.client.ui.report.ReportView;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.services.dashboard.BoardMetadataServiceBase;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
-import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
-public class ReportViewActivity extends BoardViewActivity<ReportView> implements ReportView.Presenter {
+public class ReportViewActivity extends CrmBoardViewActivity<ReportView> implements ReportView.Presenter {
 
     private final ReportMetadataService service = GWT.create(ReportMetadataService.class);
-
-    protected DashboardType dashboardType;
 
     public ReportViewActivity(Place place) {
         this((ReportView) DashboardViewFactory.instance(ReportView.class), place);

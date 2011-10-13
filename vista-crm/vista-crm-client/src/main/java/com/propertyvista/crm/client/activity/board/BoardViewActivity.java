@@ -72,7 +72,7 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
         getService().retrieveMetadata(new AsyncCallback<DashboardMetadata>() {
             @Override
             public void onSuccess(DashboardMetadata result) {
-                view.fill(result);
+                onPopulateSuccess(result);
             }
 
             @Override
@@ -84,7 +84,11 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
 
     @Override
     public void populate(DashboardMetadata boardData) {
-        view.fill(boardData);
+        onPopulateSuccess(boardData);
+    }
+
+    public void onPopulateSuccess(DashboardMetadata result) {
+        view.fill(result);
     }
 
     @Override
