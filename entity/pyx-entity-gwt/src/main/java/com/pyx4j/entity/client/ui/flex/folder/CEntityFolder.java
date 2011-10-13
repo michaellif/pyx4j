@@ -210,7 +210,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             public void onSuccess(E result) {
                 getValue().add(result);
                 comp.populate(result);
-                adoptFolderItem(comp);
+                adoptItem(comp);
                 ValueChangeEvent.fire(CEntityFolder.this, getValue());
             }
 
@@ -220,7 +220,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     protected void removeItem(CEntityFolderItemEditor<E> item) {
         getValue().remove(item.getValue());
-        abandonFolderItem(item);
+        abandonItem(item);
         ValueChangeEvent.fire(CEntityFolder.this, getValue());
     }
 
@@ -239,13 +239,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         if (indexAfter < 0 || indexAfter > getValue().size()) {
             return;
         }
-        getValue().remove(indexBefore);
+        E entity = getValue().remove(indexBefore);
+        container.remove(itemsMap.get(entity));
         getValue().add(indexAfter, item.getValue());
+        container.insert(itemsMap.get(entity), indexAfter);
 
-        container.clear();
-        for (E entity : getValue()) {
-            container.add(itemsMap.get(entity));
-        }
         setNativeValue(getValue());
         ValueChangeEvent.fire(CEntityFolder.this, getValue());
         return;
@@ -293,7 +291,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
                 }
 
                 comp.populate(item);
-                adoptFolderItem(comp);
+                adoptItem(comp);
                 first = false;
             }
         }
@@ -321,13 +319,14 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     @Override
     protected abstract IFolderDecorator<E> createDecorator();
 
-    private void adoptFolderItem(final CEntityFolderItemEditor<E> item) {
+    private void adoptItem(final CEntityFolderItemEditor<E> item) {
 
-        item.addAccessAdapter(this);
         if (container.getWidgetIndex(item) == -1) {
             container.add(item);
         }
         itemsMap.put(item.getValue(), item);
+
+        item.addAccessAdapter(this);
 
         IDebugId rowDebugId = new CompositeDebugId(this.getDebugId(), "row", currentRowDebugId);
         item.setDebugId(rowDebugId);
@@ -356,7 +355,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         ValueChangeEvent.fire(this, getValue());
     }
 
-    private void abandonFolderItem(final CEntityFolderItemEditor<E> item) {
+    private void abandonItem(final CEntityFolderItemEditor<E> item) {
         container.remove(item);
         itemsMap.remove(item.getValue());
         item.onAbandon();
