@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud;
+package com.pyx4j.site.client.ui.crud.misc;
 
 import java.util.HashMap;
 

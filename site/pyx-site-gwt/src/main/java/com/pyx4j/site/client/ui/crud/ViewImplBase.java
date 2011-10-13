@@ -31,6 +31,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.misc.IMemento;
+import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
 
 
 public class ViewImplBase<E extends IEntity> extends DockLayoutPanel implements IFormView<E> {

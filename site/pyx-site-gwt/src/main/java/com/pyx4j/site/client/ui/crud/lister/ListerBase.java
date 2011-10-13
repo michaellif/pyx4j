@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud;
+package com.pyx4j.site.client.ui.crud.lister;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -66,7 +66,9 @@ import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.NavigationIDs;
 import com.pyx4j.site.client.resources.SiteImages;
-import com.pyx4j.site.client.ui.crud.FilterData.Operands;
+import com.pyx4j.site.client.ui.crud.lister.FilterData.Operands;
+import com.pyx4j.site.client.ui.crud.misc.IMemento;
+import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.ImageButton;
 import com.pyx4j.widgets.client.style.IStyleName;

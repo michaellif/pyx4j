@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud;
+package com.pyx4j.site.client.ui.crud.lister;
 
 import java.util.List;
 
@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.misc.IMemento;
 
 
 public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel implements IListerView<E> {
