@@ -22,7 +22,6 @@ package com.pyx4j.entity.client.ui.flex.folder;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,14 +78,14 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     protected int currentRowDebugId = 0;
 
-    private final LinkedHashMap<E, CEntityFolderItemEditor<E>> itemsMap;
+    private final HashMap<E, CEntityFolderItemEditor<E>> itemsMap;
 
     private final E entityPrototype;
 
     public CEntityFolder(Class<E> rowClass) {
         container = new FlowPanel();
         asWidget().setStyleName(StyleName.EntityFolder.name());
-        itemsMap = new LinkedHashMap<E, CEntityFolderItemEditor<E>>();
+        itemsMap = new HashMap<E, CEntityFolderItemEditor<E>>();
         if (rowClass != null) {
             entityPrototype = EntityFactory.getEntityPrototype(rowClass);
         } else {
@@ -235,28 +234,21 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     protected void moveItem(CEntityFolderItemEditor<E> item, boolean up) {
-        for (E value : itemsMap.keySet()) {
-            if (item.equals(itemsMap.get(value))) {
-                int indexBefore = getValue().indexOf(value);
-                int indexAfter = indexBefore + (up ? -1 : +1);
-                if (indexAfter < 0 || indexAfter > getValue().size()) {
-                    return;
-                }
-                getValue().remove(indexBefore);
-                getValue().add(indexAfter, value);
-
-                HashMap<E, CEntityFolderItemEditor<E>> oldMap = new HashMap<E, CEntityFolderItemEditor<E>>(itemsMap);
-                itemsMap.clear();
-                container.clear();
-                for (E entity : getValue()) {
-                    itemsMap.put(entity, oldMap.get(entity));
-                    container.add(oldMap.get(entity));
-                }
-                setNativeValue(getValue());
-                ValueChangeEvent.fire(CEntityFolder.this, getValue());
-                return;
-            }
+        int indexBefore = getValue().indexOf(item.getValue());
+        int indexAfter = indexBefore + (up ? -1 : +1);
+        if (indexAfter < 0 || indexAfter > getValue().size()) {
+            return;
         }
+        getValue().remove(indexBefore);
+        getValue().add(indexAfter, item.getValue());
+
+        container.clear();
+        for (E entity : getValue()) {
+            container.add(itemsMap.get(entity));
+        }
+        setNativeValue(getValue());
+        ValueChangeEvent.fire(CEntityFolder.this, getValue());
+        return;
 
     }
 
