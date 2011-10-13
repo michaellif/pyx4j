@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.board;
 
+import java.util.List;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -102,7 +104,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         public Widget getCompactVeiw() {
             HorizontalPanel main = new HorizontalPanel();
 
-            HTML description = new HTML("Filtering : Show all Buiildings");
+            HTML description = new HTML(getFilteringDescription());
             description.setStyleName(BoardBase.DEFAULT_STYLE_PREFIX + BoardBase.StyleSuffix.filtersDescription);
             main.add(description);
             main.setCellVerticalAlignment(description, HasVerticalAlignment.ALIGN_MIDDLE);
@@ -127,7 +129,8 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         public Widget getSetupVeiw() {
             VerticalPanel main = new VerticalPanel();
 
-            main.add(new ScrollPanel(buildingLister.asWidget()));
+            Widget w;
+            main.add(w = new ScrollPanel(buildingLister.asWidget()));
 
             HorizontalPanel buttons = new HorizontalPanel();
 
@@ -158,10 +161,28 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
 
             main.add(buttons);
             main.setCellHeight(buttons, "1%"); // resize it to buttons height!..
+            buttons.setCellVerticalAlignment(buttons, HasVerticalAlignment.ALIGN_MIDDLE);
             main.setCellHorizontalAlignment(buttons, HasHorizontalAlignment.ALIGN_RIGHT);
 
             main.setSize("100%", "100%");
             return main;
         }
+
+        private String getFilteringDescription() {
+            String filterDescription = i18n.tr("Data for Buildings : ");
+
+            List<Building> selectedBuildings = buildingLister.getLister().getSelectedItems();
+            if (!selectedBuildings.isEmpty()) {
+                for (Building building : selectedBuildings) {
+                    filterDescription += building.propertyCode().getStringView();
+                    filterDescription += "; ";
+                }
+            } else {
+                filterDescription = i18n.tr("Data for all Buildings");
+            }
+
+            return filterDescription;
+        }
+
     }
 }
