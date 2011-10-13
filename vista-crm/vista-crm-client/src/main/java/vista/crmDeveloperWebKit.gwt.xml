@@ -3,5 +3,6 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module rename-to="crm">
     <inherits name='vista.crm'/>
+    <set-property name="locale" value="en_US"/>
     <set-property name="user.agent" value="safari"/>
 </module>

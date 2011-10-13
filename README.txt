@@ -19,7 +19,7 @@ maven profiles used in build:
         Additional profile to use with 'gwtc'
 
         * draft
-            Do GWT compilation in 'draft' mode (runs faster)
+            Do GWT compilation in 'draft' mode for "safari,gecko1_8,ie9" only and single locale (runs faster)
 
         * soyc
             Generate soyc reports for created GWT modules
