@@ -38,6 +38,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
+import com.pyx4j.entity.client.ui.flex.folder.BoxReadOnlyFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
@@ -66,7 +67,6 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
-import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesViewForm;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
@@ -360,7 +360,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
 
                         @Override
                         public IFolderItemDecorator<TenantInLease> createDecorator() {
-                            return new BoxReadOnlyFolderItemDecorator<TenantInLease>(false);
+                            return new BoxReadOnlyFolderItemDecorator<TenantInLease>();
                         }
                     };
                 }

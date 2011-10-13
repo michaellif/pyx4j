@@ -50,7 +50,6 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSeasonallyEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoSocialServices;
 import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
-import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
 public class FinancialViewIncomeForm2 extends CEntityFolderBoxEditor<IIncomeInfo> {
 
@@ -137,11 +136,7 @@ public class FinancialViewIncomeForm2 extends CEntityFolderBoxEditor<IIncomeInfo
 
     @Override
     public IFolderItemDecorator<IIncomeInfo> createDecorator() {
-        if (summaryViewMode) {
-            return new BoxReadOnlyFolderItemDecorator<IIncomeInfo>(!isFirst());
-        } else {
-            return new VistaBoxFolderItemDecorator<IIncomeInfo>(parent);
-        }
+        return new VistaBoxFolderItemDecorator<IIncomeInfo>(parent);
     }
 
     @Override

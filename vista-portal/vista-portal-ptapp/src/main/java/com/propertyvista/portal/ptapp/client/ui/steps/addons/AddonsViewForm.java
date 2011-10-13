@@ -59,7 +59,6 @@ import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
-import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.ptapp.dto.AddOnsDTO;
 
@@ -190,11 +189,7 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
 
                     @Override
                     public IFolderItemDecorator<Pet> createDecorator() {
-                        if (isSummaryViewMode()) {
-                            return new BoxReadOnlyFolderItemDecorator<Pet>(false);
-                        } else {
-                            return new TableFolderItemDecorator<Pet>(PortalImages.INSTANCE, i18n.tr("Remove pet"));
-                        }
+                        return new TableFolderItemDecorator<Pet>(PortalImages.INSTANCE, i18n.tr("Remove pet"));
                     }
 
                     @Override
@@ -278,11 +273,7 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
 
                     @Override
                     public IFolderItemDecorator<Vehicle> createDecorator() {
-                        if (isSummaryViewMode()) {
-                            return new BoxReadOnlyFolderItemDecorator<Vehicle>(false);
-                        } else {
-                            return new TableFolderItemDecorator<Vehicle>(PortalImages.INSTANCE, i18n.tr("Remove vehicle"));
-                        }
+                        return new TableFolderItemDecorator<Vehicle>(PortalImages.INSTANCE, i18n.tr("Remove vehicle"));
                     }
 
                     @Override

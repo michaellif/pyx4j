@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.summary;
 
-
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
@@ -27,13 +26,13 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.client.ui.flex.folder.BoxReadOnlyFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
-import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
 public abstract class SummaryViewTenantListBase<E extends IEntity> extends CEntityFolderBoxEditor<E> {
 
@@ -74,7 +73,7 @@ public abstract class SummaryViewTenantListBase<E extends IEntity> extends CEnti
 
     @Override
     public IFolderItemDecorator<E> createDecorator() {
-        return new BoxReadOnlyFolderItemDecorator<E>(false);
+        return new BoxReadOnlyFolderItemDecorator<E>();
     }
 
     public IsWidget bindCompactView() {

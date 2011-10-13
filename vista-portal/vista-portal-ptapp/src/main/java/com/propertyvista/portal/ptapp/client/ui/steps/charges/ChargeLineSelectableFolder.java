@@ -17,6 +17,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.client.ui.flex.folder.BoxReadOnlyFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
@@ -27,7 +28,6 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.domain.charges.ChargeLineSelectable;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
-import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 
 public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectable> {
 
@@ -57,7 +57,7 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
 
             @Override
             public IFolderItemDecorator<ChargeLineSelectable> createDecorator() {
-                return new BoxReadOnlyFolderItemDecorator<ChargeLineSelectable>(!isFirst(), "400px");
+                return new BoxReadOnlyFolderItemDecorator<ChargeLineSelectable>();
             }
 
             @Override

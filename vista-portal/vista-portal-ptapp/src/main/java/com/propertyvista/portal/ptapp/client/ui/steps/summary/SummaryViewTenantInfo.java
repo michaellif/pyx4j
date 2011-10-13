@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.flex.folder.BoxReadOnlyFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
@@ -38,7 +39,6 @@ import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
-import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.ptapp.client.ui.decorations.VistaReadOnlyDecorator;
 
 public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLease> {
@@ -229,7 +229,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
 
                     @Override
                     public IFolderItemDecorator<EmergencyContact> createDecorator() {
-                        return new BoxReadOnlyFolderItemDecorator<EmergencyContact>(!isFirst());
+                        return new BoxReadOnlyFolderItemDecorator<EmergencyContact>();
                     }
                 };
             }

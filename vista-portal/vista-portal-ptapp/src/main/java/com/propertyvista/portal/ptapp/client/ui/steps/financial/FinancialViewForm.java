@@ -61,7 +61,6 @@ import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
-import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 
 public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
@@ -247,11 +246,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
                     @Override
                     public IFolderItemDecorator<PersonalAsset> createDecorator() {
-                        if (isSummaryViewMode()) {
-                            return new BoxReadOnlyFolderItemDecorator<PersonalAsset>(false);
-                        } else {
-                            return new VistaTableFolderItemDecorator<PersonalAsset>(parent);
-                        }
+                        return new VistaTableFolderItemDecorator<PersonalAsset>(parent);
                     }
 
                     @Override
@@ -342,11 +337,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
                     @Override
                     public IFolderItemDecorator<TenantGuarantor> createDecorator() {
-                        if (isSummaryViewMode()) {
-                            return new BoxReadOnlyFolderItemDecorator<TenantGuarantor>(false);
-                        } else {
-                            return new VistaBoxFolderItemDecorator<TenantGuarantor>(parent);
-                        }
+                        return new VistaBoxFolderItemDecorator<TenantGuarantor>(parent);
                     }
 
                     @Override
