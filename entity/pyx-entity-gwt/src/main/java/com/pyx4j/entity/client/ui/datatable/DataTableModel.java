@@ -192,7 +192,10 @@ public class DataTableModel<E extends IEntity> {
     }
 
     public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
+        if (pageSize != 0) {
+            this.pageNumber = (this.pageNumber * this.pageSize) / pageSize;
+            this.pageSize = pageSize;
+        }
     }
 
     public boolean hasMoreData() {

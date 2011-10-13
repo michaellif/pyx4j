@@ -93,6 +93,13 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
             }
         });
 
+        searchResultsPanel.setPageSizeActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                show(searchResultsPanel.getPageNumber());
+            }
+        });
+
         SimplePanel actionsHolderPanel = new SimplePanel();
         actionsHolderPanel.setWidth("220px");
         actionsHolderPanel.getElement().getStyle().setMarginRight(5, Unit.PX);
@@ -134,12 +141,14 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
     protected void show(int pageNumber) {
         NavigationUri uri = new NavigationUri(serachPage);
         uri.addArg("pageNumber", String.valueOf(pageNumber));
+        uri.addArg("pageSize", String.valueOf(searchResultsPanel.getPageSize()));
         AbstractSiteDispatcher.show(uri);
     }
 
     @Override
     public void populate(Map<String, String> args) {
         int pageNumber = 0;
+        int pageSize = searchResultsPanel.getPageSize();
         if (args != null) {
             String pageNumberStr = args.get("pageNumber");
             if (pageNumberStr != null) {
@@ -149,14 +158,22 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
                     log.warn("Failed to convert pageNumber to int", e);
                 }
             }
+            String pageSizeStr = args.get("pageSize");
+            if (pageSizeStr != null) {
+                try {
+                    pageSize = Integer.parseInt(pageSizeStr);
+                } catch (Exception e) {
+                    log.warn("Failed to convert pageSize to int", e);
+                }
+            }
         }
-        populate(pageNumber);
+        populate(pageNumber, pageSize);
     }
 
-    protected void populate(int pageNumber) {
+    protected void populate(int pageNumber, int pageSize) {
         final long start = System.currentTimeMillis();
         log.debug("Show page " + pageNumber);
-        criteria.setPageSize(searchResultsPanel.getPageSize());
+        criteria.setPageSize(pageSize);
         criteria.setPageNumber(pageNumber);
 
         AsyncCallback<EntitySearchResult<? extends IEntity>> callback = new RecoverableAsyncCallback<EntitySearchResult<? extends IEntity>>() {

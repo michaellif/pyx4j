@@ -60,6 +60,8 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
 
     private HandlerRegistration nextActionHandlerRegistration;
 
+    private ClickHandler pageSizeClickHandler;
+
     public DataTableActionsBar() {
         setStyleName(DataTable.BASE_NAME + DataTable.StyleSuffix.ActionsBar);
         setWidth("100%");
@@ -99,7 +101,10 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
             public void onChange(ChangeEvent event) {
                 if (model != null) {
                     model.setPageSize(Integer.valueOf(pageSizeSelector.getValue(pageSizeSelector.getSelectedIndex())));
-                    //TODO make it work, Actually fire event
+                    // Actually fire event
+                    if (pageSizeClickHandler != null) {
+                        pageSizeClickHandler.onClick(null);
+                    }
                 }
             }
         });
@@ -126,6 +131,10 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         } else {
             nextActionHandlerRegistration = null;
         }
+    }
+
+    public void setPageSizeActionHandler(ClickHandler clickHandler) {
+        pageSizeClickHandler = clickHandler;
     }
 
     public Anchor insertActionItem(String name, IDebugId debugId, ClickHandler handler) {
@@ -165,7 +174,7 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         nextAnchor.setVisible(nextActionHandlerRegistration != null && model.hasMoreData());
 
         if (pageSizeOptions != null) {
-            //TODO make it work
+            pageSizeSelector.setSelectedIndex(pageSizeOptions.indexOf(model.getPageSize()));
         }
     }
 

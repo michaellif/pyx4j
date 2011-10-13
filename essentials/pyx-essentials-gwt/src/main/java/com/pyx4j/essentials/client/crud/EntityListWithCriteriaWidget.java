@@ -112,6 +112,13 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
             }
         });
 
+        searchResultsPanel.setPageSizeActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                show(searchResultsPanel.getPageNumber());
+            }
+        });
+
         leftPanel = new VerticalPanel();
         leftPanel.setWidth("220px");
         leftPanel.getElement().getStyle().setMarginRight(5, Unit.PX);
@@ -187,12 +194,14 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
         NavigationUri uri = new NavigationUri(serachPage);
         uri.setArgs(searchCriteriaPanel.getHistory());
         uri.addArg("pageNumber", String.valueOf(pageNumber));
+        uri.addArg("pageSize", String.valueOf(searchResultsPanel.getPageSize()));
         AbstractSiteDispatcher.show(uri);
     }
 
     @Override
     public void populate(Map<String, String> args) {
         searchCriteriaPanel.populateHistory(args);
+        int pageSize = searchResultsPanel.getPageSize();
         int pageNumber = 0;
         if (args != null) {
             String pageNumberStr = args.get("pageNumber");
@@ -204,10 +213,10 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
                 }
             }
         }
-        populate(pageNumber);
+        populate(pageNumber, pageSize);
     }
 
-    protected void populate(final int pageNumber) {
+    protected void populate(final int pageNumber, final int pageSize) {
         log.debug("Show page " + pageNumber);
         searchCriteriaPanel.obtainEntitySearchCriteria(new AsyncCallback<EntitySearchCriteria<E>>() {
             @Override
@@ -217,7 +226,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
 
             @Override
             public void onSuccess(EntitySearchCriteria<E> criteria) {
-                criteria.setPageSize(searchResultsPanel.getPageSize());
+                criteria.setPageSize(pageSize);
                 criteria.setPageNumber(pageNumber);
                 loadData(criteria);
             }
