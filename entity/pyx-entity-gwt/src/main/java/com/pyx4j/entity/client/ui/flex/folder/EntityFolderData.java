@@ -29,6 +29,8 @@ public class EntityFolderData {
     //if false Collape/Expand are hidden
     public boolean collapsible = true;
 
+    public boolean collapsed = true;
+
     // if false Up/Down buttons
     public boolean orderable = true;
 
