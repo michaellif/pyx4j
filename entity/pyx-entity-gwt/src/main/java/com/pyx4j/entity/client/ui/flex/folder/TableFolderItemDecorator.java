@@ -53,7 +53,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
     public TableFolderItemDecorator(EntityFolderImages images, String title, boolean removable) {
         super(images, title, removable);
 
-        setStyleName(StyleName.EntityFolderTableDecorator.name());
+        setStyleName(StyleName.EntityFolderRowItemDecorator.name());
 
         DockPanel mainPanel = new DockPanel();
         setWidget(mainPanel);

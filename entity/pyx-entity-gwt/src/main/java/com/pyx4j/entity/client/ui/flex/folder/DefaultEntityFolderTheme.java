@@ -43,7 +43,7 @@ public class DefaultEntityFolderTheme extends Theme {
         style.addProperty("width", width);
         addStyle(style);
 
-        style = new Style("." + CEntityFolder.StyleName.EntityFolderBoxItem.name(), CEntityFolder.StyleName.EntityFolder);
+        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderBoxItem).toString(), CEntityFolder.StyleName.EntityFolder);
         style.addProperty("width", "100%");
         addStyle(style);
 
@@ -70,6 +70,10 @@ public class DefaultEntityFolderTheme extends Theme {
         style.addProperty("border-color", "#333");
         addStyle(style);
 
+        style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderRowItemDecorator);
+        style.addProperty("width", "0");
+        addStyle(style);
+
         style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderTableDecorator);
         style.addProperty("margin", "6px");
         addStyle(style);
@@ -84,7 +88,7 @@ public class DefaultEntityFolderTheme extends Theme {
         addStyle(style);
 
         style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderActionsBar).discriminator(
-                new Selector.Builder(CEntityFolder.StyleName.EntityFolderTableDecorator).hover().build().toString()).build());
+                new Selector.Builder(CEntityFolder.StyleName.EntityFolderRowItemDecorator).hover().build().toString()).build());
         style.addProperty("opacity", "1");
         addStyle(style);
 
