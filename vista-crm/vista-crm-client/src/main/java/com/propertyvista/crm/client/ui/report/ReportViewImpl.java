@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.report;
 
-import com.propertyvista.crm.client.ui.board.BoardViewImpl;
+import com.propertyvista.crm.client.ui.board.CrmBoardViewImpl;
 
-public class ReportViewImpl extends BoardViewImpl implements ReportView {
+public class ReportViewImpl extends CrmBoardViewImpl implements ReportView {
 
     public ReportViewImpl() {
         super(new ReportPanel());

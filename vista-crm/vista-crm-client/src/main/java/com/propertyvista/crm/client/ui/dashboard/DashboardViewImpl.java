@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
-import com.propertyvista.crm.client.ui.board.BoardViewImpl;
+import com.propertyvista.crm.client.ui.board.CrmBoardViewImpl;
 
-public class DashboardViewImpl extends BoardViewImpl implements DashboardView {
+public class DashboardViewImpl extends CrmBoardViewImpl implements DashboardView {
 
     public DashboardViewImpl() {
         super(new DashboardPanel());
