@@ -15,6 +15,8 @@ package com.propertyvista.crm.client.ui.board;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.Key;
+
 import com.propertyvista.crm.client.ui.gadgets.IGadgetPresenter;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
@@ -22,7 +24,11 @@ public interface BoardView extends IsWidget {
 
     public interface Presenter extends IGadgetPresenter {
 
-        public void populate();
+        void populate();
+
+        void populate(Key boardId);
+
+        void populate(DashboardMetadata boardData);
 
         void save();
     }

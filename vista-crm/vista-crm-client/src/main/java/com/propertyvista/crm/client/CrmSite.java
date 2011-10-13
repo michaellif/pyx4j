@@ -14,10 +14,12 @@
 package com.propertyvista.crm.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.essentials.client.DefaultErrorHandlerDialog;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -26,6 +28,7 @@ import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
@@ -46,7 +49,7 @@ public class CrmSite extends VistaSite {
 
         DefaultErrorHandlerDialog.register();
 
-        getHistoryHandler().register(getPlaceController(), getEventBus(), new CrmSiteMap.Dashboard.System());
+        getHistoryHandler().register(getPlaceController(), getEventBus(), getSystemFashboardPlace());
 
         RootPanel.get().add(RootLayoutPanel.get());
 
@@ -77,7 +80,7 @@ public class CrmSite extends VistaSite {
     private void init() {
         if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
             if (CrmSiteMap.Login.class.equals(AppSite.getPlaceController().getWhere().getClass())) {
-                AppSite.getPlaceController().goTo(new CrmSiteMap.Dashboard.System());
+                AppSite.getPlaceController().goTo(getSystemFashboardPlace());
             } else {
                 CrmSite.getHistoryHandler().handleCurrentHistory();
             }
@@ -101,5 +104,11 @@ public class CrmSite extends VistaSite {
                 super.onFailure(caught);
             }
         });
+    }
+
+    static public Place getSystemFashboardPlace() {
+        CrudAppPlace place = new CrmSiteMap.Dashboard();
+        place.formDashboardPlace(new Key(1)); // assume system dashboard is first one populated!?.
+        return place;
     }
 }

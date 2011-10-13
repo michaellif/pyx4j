@@ -21,6 +21,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.rpc.services.dashboard.BoardMetadataServiceBase;
@@ -37,13 +39,20 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
         this.view = view;
         assert (view != null);
         view.setPresenter(this);
-        withPlace(place);
+        if (place != null) {
+            setPlace(place);
+        }
     }
 
-    /*
-     * Implement those meaningful in derived classes:
-     */
-    public abstract BoardViewActivity<V> withPlace(Place place);
+    public void setPlace(Place place) {
+        entityId = null;
+
+        String val;
+        assert (place instanceof AppPlace);
+        if ((val = ((AppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
+            entityId = new Key(val);
+        }
+    }
 
     protected abstract BoardMetadataServiceBase getService();
 
@@ -55,6 +64,11 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
 
     @Override
     public void populate() {
+        populate(entityId);
+    }
+
+    @Override
+    public void populate(Key boardId) {
         getService().retrieveMetadata(new AsyncCallback<DashboardMetadata>() {
             @Override
             public void onSuccess(DashboardMetadata result) {
@@ -65,7 +79,12 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
             public void onFailure(Throwable caught) {
                 throw new UnrecoverableClientError(caught);
             }
-        }, entityId);
+        }, boardId);
+    }
+
+    @Override
+    public void populate(DashboardMetadata boardData) {
+        view.fill(boardData);
     }
 
     @Override

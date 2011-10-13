@@ -218,11 +218,6 @@ public class CrmSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Edit")
         public static class Edit extends CrudAppPlace {
         }
-
-        @PlaceProperties(caption = "System Report")
-        @NavigationItem(navigLabel = "System Report")
-        public static class System extends AppPlace {
-        }
     }
 
     @PlaceProperties(caption = "Dashboard")
@@ -237,16 +232,6 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(caption = "Edit")
         @NavigationItem(navigLabel = "Edit")
         public static class Edit extends CrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "System Dashboard")
-        @NavigationItem(navigLabel = "System Dashboard")
-        public static class System extends AppPlace {
-        }
-
-        @PlaceProperties(caption = "Building Dashboard")
-        @NavigationItem(navigLabel = "Building Dashboard")
-        public static class Building extends AppPlace {
         }
     }
 

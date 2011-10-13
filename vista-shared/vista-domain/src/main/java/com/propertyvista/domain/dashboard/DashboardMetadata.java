@@ -29,7 +29,7 @@ public interface DashboardMetadata extends ISharedUserEntity {
 
     @I18n
     public enum DashboardType {
-        system, building;
+        system, building, embedded;
 
         @Override
         public String toString() {

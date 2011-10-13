@@ -27,7 +27,6 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.building.BuildingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.ConcessionCrudService;
@@ -80,7 +79,7 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
         super((BuildingViewerView) BuildingViewFactory.instance(BuildingViewerView.class), (AbstractCrudService<BuildingDTO>) GWT
                 .create(BuildingCrudService.class));
 
-        dashboard = new DashboardViewActivity(((BuildingViewerView) view).getDashboardView(), new CrmSiteMap.Dashboard.Building());
+        dashboard = new DashboardViewActivity(((BuildingViewerView) view).getDashboardView());
 
         floorplanLister = new ListerActivityBase<FloorplanDTO>(((BuildingViewerView) view).getFloorplanListerView(),
                 (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class), FloorplanDTO.class);
@@ -182,7 +181,7 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
     public void onPopulateSuccess(BuildingDTO result) {
         super.onPopulateSuccess(result);
 
-        dashboard.populate();
+        dashboard.populate(result.dashboard());
 
         // -------------------------------------------------------
 

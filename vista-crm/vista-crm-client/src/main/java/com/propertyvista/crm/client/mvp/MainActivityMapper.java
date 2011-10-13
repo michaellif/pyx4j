@@ -417,8 +417,6 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new ReportEditorActivity(place);
                 } else if (place instanceof CrmSiteMap.Report.Management) {
                     activity = new ReportManagementActivity(place);
-                } else if (place instanceof CrmSiteMap.Report.System) {
-                    activity = new ReportViewActivity(place);
 // Dashboards:
                 } else if (place instanceof CrmSiteMap.Dashboard) {
                     activity = new DashboardViewActivity(place);
@@ -426,10 +424,6 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new DashboardEditorActivity(place);
                 } else if (place instanceof CrmSiteMap.Dashboard.Management) {
                     activity = new DashboardManagementActivity(place);
-                } else if (place instanceof CrmSiteMap.Dashboard.System) {
-                    activity = new DashboardViewActivity(place);
-                } else if (place instanceof CrmSiteMap.Dashboard.Building) {
-                    activity = new DashboardViewActivity(place);
 // - Other:
                 } else if (place instanceof CrmSiteMap.Account) {
                     activity = new AccountActivity(place);

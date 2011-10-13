@@ -32,6 +32,7 @@ import com.propertyvista.common.client.theme.BlueColdPalette;
 import com.propertyvista.common.client.theme.BownWarmPalette;
 import com.propertyvista.common.client.theme.GainsboroPalette;
 import com.propertyvista.common.client.theme.VillageGreenPalette;
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.TopRightActionsView;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl.Theme;
@@ -145,7 +146,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void back2CrmView() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Dashboard.System());
+        AppSite.getPlaceController().goTo(CrmSite.getSystemFashboardPlace());
     }
 
     @Override

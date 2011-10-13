@@ -16,14 +16,9 @@ package com.propertyvista.crm.client.activity.report;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.CrudAppPlace;
-
 import com.propertyvista.crm.client.activity.board.BoardViewActivity;
 import com.propertyvista.crm.client.ui.report.ReportView;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.BoardMetadataServiceBase;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
@@ -40,22 +35,6 @@ public class ReportViewActivity extends BoardViewActivity<ReportView> implements
 
     public ReportViewActivity(ReportView view, Place place) {
         super(view, place);
-    }
-
-    @Override
-    public ReportViewActivity withPlace(Place place) {
-        entityId = null;
-        dashboardType = null;
-
-        String id;
-        if ((id = ((AppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
-            entityId = new Key(id);
-        } else if (place instanceof CrmSiteMap.Report.System) {
-            dashboardType = DashboardType.system;
-        }
-
-        assert (entityId != null || dashboardType != null);
-        return this;
     }
 
     @Override

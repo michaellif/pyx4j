@@ -16,14 +16,9 @@ package com.propertyvista.crm.client.activity.dashboard;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.CrudAppPlace;
-
 import com.propertyvista.crm.client.activity.board.BoardViewActivity;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.BoardMetadataServiceBase;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
@@ -38,26 +33,12 @@ public class DashboardViewActivity extends BoardViewActivity<DashboardView> impl
         this((DashboardView) DashboardViewFactory.instance(DashboardView.class), place);
     }
 
-    public DashboardViewActivity(DashboardView view, Place place) {
-        super(view, place);
+    public DashboardViewActivity(DashboardView view) {
+        this(view, null);
     }
 
-    @Override
-    public DashboardViewActivity withPlace(Place place) {
-        entityId = null;
-        dashboardType = null;
-
-        String id;
-        if ((id = ((AppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
-            entityId = new Key(id);
-        } else if (place instanceof CrmSiteMap.Dashboard.System) {
-            dashboardType = DashboardType.system;
-        } else if (place instanceof CrmSiteMap.Dashboard.Building) {
-            dashboardType = DashboardType.building;
-        }
-
-        assert (entityId != null || dashboardType != null);
-        return this;
+    public DashboardViewActivity(DashboardView view, Place place) {
+        super(view, place);
     }
 
     @Override

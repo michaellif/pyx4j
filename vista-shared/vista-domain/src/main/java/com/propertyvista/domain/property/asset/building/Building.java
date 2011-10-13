@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.media.Media;
@@ -71,4 +72,7 @@ public interface Building extends IEntity {
 
     @Detached
     ServiceCatalog serviceCatalog();
+
+    @Detached
+    DashboardMetadata dashboard();
 }
