@@ -290,11 +290,11 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<TenantInLease> createItem() {
+            protected CEntityFolderItemEditor<TenantInLease> createItem(final boolean first) {
                 return new CEntityFolderRowEditor<TenantInLease>(TenantInLease.class, columns()) {
                     @Override
                     public IsWidget createContent() {
-                        if (isFirst()) {
+                        if (first) {
                             HorizontalPanel main = new HorizontalPanel();
                             for (EntityFolderColumnDescriptor column : columns) {
                                 CComponent<?> component = createCell(column);
@@ -315,7 +315,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
                         CComponent<?> comp = null;
-                        if (isFirst() && proto().status() == column.getObject()) {
+                        if (first && proto().status() == column.getObject()) {
                             CTextField textComp = new CTextField();
                             textComp.setEditable(false);
                             textComp.setValue(TenantInLease.Status.Applicant.name());
@@ -342,7 +342,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     public void populate(TenantInLease value) {
                         super.populate(value);
 
-                        if (!isFirst() && !value.tenant().person().birthDate().isNull()) {
+                        if (!first && !value.tenant().person().birthDate().isNull()) {
                             if (ValidationUtils.isOlderThen18(value.tenant().person().birthDate().getValue())) {
                                 enableStatusAndOwnership();
                             } else {
@@ -374,7 +374,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                             }
                         });
 
-                        if (!isFirst()) { // all this stuff isn't for primary applicant:  
+                        if (!first) { // all this stuff isn't for primary applicant:  
                             get(proto().tenant().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
 
                                 @Override
@@ -401,7 +401,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                     @Override
                     public IFolderItemDecorator<TenantInLease> createDecorator() {
-                        return new VistaTableFolderItemDecorator<TenantInLease>(parent, parent.isEditable() && !isFirst());
+                        return new VistaTableFolderItemDecorator<TenantInLease>(parent, parent.isEditable() && !first);
                     }
 
                     private void setMandatoryDependant() {
@@ -473,7 +473,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<ChargeItem> createItem() {
+            protected CEntityFolderItemEditor<ChargeItem> createItem(boolean first) {
                 return new CEntityFolderRowEditor<ChargeItem>(ChargeItem.class, columns()) {
                     private final CEntityFolderRowEditor<ChargeItem> chargeItemEditor = this;
 
@@ -667,7 +667,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<ServiceConcession> createItem() {
+            protected CEntityFolderItemEditor<ServiceConcession> createItem(boolean first) {
                 return new CEntityFolderRowEditor<ServiceConcession>(ServiceConcession.class, columns()) {
                     @Override
                     public IFolderItemDecorator<ServiceConcession> createDecorator() {

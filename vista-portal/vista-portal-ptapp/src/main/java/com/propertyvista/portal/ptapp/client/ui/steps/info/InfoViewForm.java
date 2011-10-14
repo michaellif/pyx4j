@@ -361,7 +361,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
             }
 
             @Override
-            protected CEntityFolderBoxEditor<EmergencyContact> createItem() {
+            protected CEntityFolderBoxEditor<EmergencyContact> createItem(final boolean first) {
                 return new CEntityFolderBoxEditor<EmergencyContact>(EmergencyContact.class) {
                     @Override
                     public IsWidget createContent() {
@@ -379,7 +379,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
 
                     @Override
                     public IFolderItemDecorator<EmergencyContact> createDecorator() {
-                        return new VistaBoxFolderItemDecorator<EmergencyContact>(parent, !isFirst());
+                        return new VistaBoxFolderItemDecorator<EmergencyContact>(parent, !first);
                     }
                 };
             }

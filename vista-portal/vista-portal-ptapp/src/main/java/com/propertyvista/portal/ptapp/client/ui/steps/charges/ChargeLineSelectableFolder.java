@@ -51,7 +51,7 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
     }
 
     @Override
-    protected CEntityFolderBoxEditor<ChargeLineSelectable> createItem() {
+    protected CEntityFolderBoxEditor<ChargeLineSelectable> createItem(boolean first) {
 
         return new CEntityFolderBoxEditor<ChargeLineSelectable>(ChargeLineSelectable.class) {
 

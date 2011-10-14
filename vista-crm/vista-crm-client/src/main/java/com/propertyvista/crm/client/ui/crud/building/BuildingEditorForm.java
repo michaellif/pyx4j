@@ -322,7 +322,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<ServiceItemType> createItem() {
+            protected CEntityFolderItemEditor<ServiceItemType> createItem(boolean first) {
                 return new CEntityFolderRowEditor<ServiceItemType>(ServiceItemType.class, columns()) {
                     @Override
                     public IFolderItemDecorator<ServiceItemType> createDecorator() {
@@ -356,7 +356,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<OrganizationContact> createItem() {
+            protected CEntityFolderItemEditor<OrganizationContact> createItem(boolean first) {
                 return new CEntityFolderRowEditor<OrganizationContact>(OrganizationContact.class, columns()) {
 
                     @Override

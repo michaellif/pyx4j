@@ -145,7 +145,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<ServiceItem> createItem() {
+            protected CEntityFolderItemEditor<ServiceItem> createItem(boolean first) {
                 return new CEntityFolderRowEditor<ServiceItem>(ServiceItem.class, columns()) {
 //                    private CEntityComboBox<AptUnit> combo;
 
@@ -239,7 +239,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<ServiceFeature> createItem() {
+            protected CEntityFolderItemEditor<ServiceFeature> createItem(boolean first) {
                 return new CEntityFolderRowEditor<ServiceFeature>(ServiceFeature.class, columns()) {
                     @Override
                     public IFolderItemDecorator<ServiceFeature> createDecorator() {
@@ -293,7 +293,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<ServiceConcession> createItem() {
+            protected CEntityFolderItemEditor<ServiceConcession> createItem(boolean first) {
                 return new CEntityFolderRowEditor<ServiceConcession>(ServiceConcession.class, columns()) {
                     @Override
                     public IFolderItemDecorator<ServiceConcession> createDecorator() {

@@ -87,7 +87,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
             }
 
             @Override
-            protected CEntityFolderBoxEditor<PageContent> createItem() {
+            protected CEntityFolderBoxEditor<PageContent> createItem(boolean first) {
                 return new CEntityFolderBoxEditor<PageContent>(PageContent.class) {
 
                     @Override
@@ -141,7 +141,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<PageDescriptor> createItem() {
+            protected CEntityFolderItemEditor<PageDescriptor> createItem(boolean first) {
                 return new CEntityFolderRowEditor<PageDescriptor>(PageDescriptor.class, columns()) {
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {

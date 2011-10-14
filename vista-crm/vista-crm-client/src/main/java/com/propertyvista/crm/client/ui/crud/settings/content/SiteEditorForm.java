@@ -140,7 +140,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<PageDescriptor> createItem() {
+            protected CEntityFolderItemEditor<PageDescriptor> createItem(boolean first) {
                 return new CEntityFolderRowEditor<PageDescriptor>(PageDescriptor.class, columns()) {
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
@@ -217,7 +217,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
 
             @Override
-            protected CEntityFolderBoxEditor<Testimonial> createItem() {
+            protected CEntityFolderBoxEditor<Testimonial> createItem(boolean first) {
                 return new CEntityFolderBoxEditor<Testimonial>(Testimonial.class) {
 
                     @Override
@@ -254,7 +254,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
 
             @Override
-            protected CEntityFolderBoxEditor<News> createItem() {
+            protected CEntityFolderBoxEditor<News> createItem(boolean first) {
                 return new CEntityFolderBoxEditor<News>(News.class) {
 
                     @Override

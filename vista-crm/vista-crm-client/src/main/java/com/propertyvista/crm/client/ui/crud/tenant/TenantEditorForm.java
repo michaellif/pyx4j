@@ -164,7 +164,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
             }
 
             @Override
-            protected CEntityFolderBoxEditor<EmergencyContact> createItem() {
+            protected CEntityFolderBoxEditor<EmergencyContact> createItem(final boolean first) {
                 return new CEntityFolderBoxEditor<EmergencyContact>(EmergencyContact.class) {
                     @Override
                     public IsWidget createContent() {
@@ -197,7 +197,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
                     @Override
                     public IFolderItemDecorator<EmergencyContact> createDecorator() {
-                        return new VistaBoxFolderItemDecorator<EmergencyContact>(parent, !isFirst() && parent.isEditable());
+                        return new VistaBoxFolderItemDecorator<EmergencyContact>(parent, !first && parent.isEditable());
                     }
                 };
             }

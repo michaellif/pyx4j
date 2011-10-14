@@ -337,7 +337,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             return new CEntityFolder<TenantInLease>(TenantInLease.class) {
 
                 @Override
-                protected CEntityFolderBoxEditor<TenantInLease> createItem() {
+                protected CEntityFolderBoxEditor<TenantInLease> createItem(final boolean first) {
 
                     return new CEntityFolderBoxEditor<TenantInLease>(TenantInLease.class) {
 
@@ -349,7 +349,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
                             addCell(tableLayout, content, "Name", DecorationUtils.formFullName(this, proto().tenant().person()));
                             addCell(tableLayout, content, "Date of Birht", inject(proto().tenant().person().birthDate()).asWidget());
                             addCell(tableLayout, content, "Email", inject(proto().tenant().person().email()).asWidget());
-                            if (isFirst()) {
+                            if (first) {
                                 addCell(tableLayout, content, "Relationship", new HTML("&nbsp;"));
                             } else {
                                 addCell(tableLayout, content, "Relationship", inject(proto().relationship()).asWidget());
@@ -380,7 +380,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         return new CEntityFolder<TenantInLease>(TenantInLease.class) {
 
             @Override
-            protected CEntityFolderBoxEditor<TenantInLease> createItem() {
+            protected CEntityFolderBoxEditor<TenantInLease> createItem(boolean first) {
                 return new SummaryViewTenantInfo();
             }
 
@@ -398,7 +398,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         return new CEntityFolder<SummaryTenantFinancialDTO>(SummaryTenantFinancialDTO.class) {
 
             @Override
-            protected CEntityFolderBoxEditor<SummaryTenantFinancialDTO> createItem() {
+            protected CEntityFolderBoxEditor<SummaryTenantFinancialDTO> createItem(boolean first) {
                 return new SummaryViewTenantFinancial();
             }
 

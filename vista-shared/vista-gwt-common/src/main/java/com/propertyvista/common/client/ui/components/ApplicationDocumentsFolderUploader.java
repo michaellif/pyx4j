@@ -89,7 +89,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
     }
 
     @Override
-    protected CEntityFolderItemEditor<ApplicationDocument> createItem() {
+    protected CEntityFolderItemEditor<ApplicationDocument> createItem(boolean first) {
         return new CEntityFolderRowEditor<ApplicationDocument>(ApplicationDocument.class, columns) {
 
             @Override

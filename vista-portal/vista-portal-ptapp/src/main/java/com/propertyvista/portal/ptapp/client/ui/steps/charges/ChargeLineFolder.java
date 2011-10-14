@@ -46,7 +46,7 @@ public class ChargeLineFolder extends CEntityFolder<ChargeLine> {
     }
 
     @Override
-    protected CEntityFolderBoxEditor<ChargeLine> createItem() {
+    protected CEntityFolderBoxEditor<ChargeLine> createItem(boolean first) {
 
         return new CEntityFolderBoxEditor<ChargeLine>(ChargeLine.class) {
 

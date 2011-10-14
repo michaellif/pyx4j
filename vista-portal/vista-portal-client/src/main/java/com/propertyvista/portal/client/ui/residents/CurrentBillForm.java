@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -214,7 +213,7 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
         }
 
         @Override
-        protected CEntityFolderBoxEditor<ChargeLine> createItem() {
+        protected CEntityFolderBoxEditor<ChargeLine> createItem(boolean first) {
 
             return new CEntityFolderBoxEditor<ChargeLine>(ChargeLine.class) {
 

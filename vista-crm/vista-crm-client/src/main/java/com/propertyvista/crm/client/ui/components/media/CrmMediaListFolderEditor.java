@@ -76,7 +76,7 @@ public class CrmMediaListFolderEditor extends VistaEntityFolder<Media> {
     }
 
     @Override
-    protected CEntityFolderBoxEditor<Media> createItem() {
+    protected CEntityFolderBoxEditor<Media> createItem(boolean first) {
         return new CEntityFolderBoxEditor<Media>(Media.class) {
 
             Image thumbnail;

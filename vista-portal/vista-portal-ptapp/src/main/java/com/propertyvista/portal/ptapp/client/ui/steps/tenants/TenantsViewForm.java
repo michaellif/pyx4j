@@ -124,13 +124,13 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<TenantInApplicationDTO> createItem() {
+            protected CEntityFolderItemEditor<TenantInApplicationDTO> createItem(final boolean first) {
                 return new CEntityFolderRowEditor<TenantInApplicationDTO>(TenantInApplicationDTO.class, columns()) {
 
                     @SuppressWarnings("rawtypes")
                     @Override
                     public IsWidget createContent() {
-                        if (isFirst()) {
+                        if (first) {
                             HorizontalPanel main = new HorizontalPanel();
                             for (EntityFolderColumnDescriptor column : columns) {
                                 CComponent<?> component = createCell(column);
@@ -172,7 +172,7 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
                             }
                         });
 
-                        if (!isFirst()) { // all this stuff isn't for primary applicant:  
+                        if (!first) { // all this stuff isn't for primary applicant:  
                             get(proto().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
                                 @Override
                                 public void onValueChange(ValueChangeEvent<LogicalDate> event) {
@@ -199,7 +199,7 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
                     public void populate(TenantInApplicationDTO value) {
                         super.populate(value);
 
-                        if (!isFirst() && !value.person().birthDate().isNull()) {
+                        if (!first && !value.person().birthDate().isNull()) {
                             if (ValidationUtils.isOlderThen18(value.person().birthDate().getValue())) {
                                 enableStatusAndOwnership();
                             } else {
@@ -212,7 +212,7 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
                         CComponent<?> comp = null;
-                        if (isFirst() && proto().status() == column.getObject()) {
+                        if (first && proto().status() == column.getObject()) {
                             CTextField textComp = new CTextField();
                             textComp.setEditable(false);
                             textComp.setValue(TenantInLease.Status.Applicant.name());
@@ -230,7 +230,7 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
                     @Override
                     public IFolderItemDecorator<TenantInApplicationDTO> createDecorator() {
-                        return new VistaTableFolderItemDecorator<TenantInApplicationDTO>(parent, parent.isEditable() && !isFirst());
+                        return new VistaTableFolderItemDecorator<TenantInApplicationDTO>(parent, parent.isEditable() && !first);
                     }
 
                     private void setMandatoryDependant() {

@@ -341,7 +341,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             }
 
             @Override
-            protected CEntityFolderBoxEditor<PersonalIncome> createItem() {
+            protected CEntityFolderBoxEditor<PersonalIncome> createItem(boolean first) {
                 return new TenantFinancialViewIncomeForm(!TenantScreeningEditorForm.this.isEditable());
             }
         };
@@ -365,7 +365,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<PersonalAsset> createItem() {
+            protected CEntityFolderItemEditor<PersonalAsset> createItem(boolean first) {
                 return new CEntityFolderRowEditor<PersonalAsset>(PersonalAsset.class, columns) {
 
                     @Override
@@ -419,7 +419,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             }
 
             @Override
-            protected CEntityFolderBoxEditor<TenantGuarantor> createItem() {
+            protected CEntityFolderBoxEditor<TenantGuarantor> createItem(boolean first) {
                 return new CEntityFolderBoxEditor<TenantGuarantor>(TenantGuarantor.class) {
 
                     @Override

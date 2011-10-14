@@ -170,7 +170,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
             }
 
             @Override
-            protected CEntityFolderBoxEditor<IIncomeInfo> createItem() {
+            protected CEntityFolderBoxEditor<IIncomeInfo> createItem(boolean first) {
                 return new FinancialViewIncomeForm2(parent, summaryViewMode);
             }
 
@@ -202,7 +202,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
             }
 
             @Override
-            protected CEntityFolderBoxEditor<PersonalIncome> createItem() {
+            protected CEntityFolderBoxEditor<PersonalIncome> createItem(boolean first) {
                 return new FinancialViewIncomeForm(parent, summaryViewMode);
             }
 
@@ -241,7 +241,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<PersonalAsset> createItem() {
+            protected CEntityFolderItemEditor<PersonalAsset> createItem(boolean first) {
                 return new CEntityFolderRowEditor<PersonalAsset>(PersonalAsset.class, columns) {
 
                     @Override
@@ -306,7 +306,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
             }
 
             @Override
-            protected CEntityFolderBoxEditor<TenantGuarantor> createItem() {
+            protected CEntityFolderBoxEditor<TenantGuarantor> createItem(boolean first) {
                 return createGuarantorRowEditor();
             }
 

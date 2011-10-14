@@ -110,8 +110,8 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
             }
 
             @Override
-            protected CEntityFolderBoxEditor<EmergencyContact> createItem() {
-                return createEmergencyContactItem();
+            protected CEntityFolderBoxEditor<EmergencyContact> createItem(boolean first) {
+                return createEmergencyContactItem(first);
             }
 
             @Override
@@ -124,7 +124,7 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
         };
     }
 
-    private CEntityFolderBoxEditor<EmergencyContact> createEmergencyContactItem() {
+    private CEntityFolderBoxEditor<EmergencyContact> createEmergencyContactItem(final boolean first) {
 
         return new CEntityFolderBoxEditor<EmergencyContact>(EmergencyContact.class) {
             @Override
@@ -143,7 +143,7 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
 
             @Override
             public IFolderItemDecorator<EmergencyContact> createDecorator() {
-                return new BoxFolderItemDecorator<EmergencyContact>(PortalImages.INSTANCE, i18n.tr("Remove contact"), !isFirst());
+                return new BoxFolderItemDecorator<EmergencyContact>(PortalImages.INSTANCE, i18n.tr("Remove contact"), !first);
             }
         };
     }
@@ -169,7 +169,7 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
             }
 
             @Override
-            protected CEntityFolderItemEditor<Vehicle> createItem() {
+            protected CEntityFolderItemEditor<Vehicle> createItem(boolean first) {
                 return createVehicleRowEditor(columns);
             }
 

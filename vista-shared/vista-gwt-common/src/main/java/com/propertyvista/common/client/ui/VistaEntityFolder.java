@@ -58,7 +58,7 @@ public abstract class VistaEntityFolder<E extends IEntity> extends CEntityFolder
     protected abstract List<EntityFolderColumnDescriptor> columns();
 
     @Override
-    protected CEntityFolderItemEditor<E> createItem() {
+    protected CEntityFolderItemEditor<E> createItem(boolean first) {
         return new CEntityFolderRowEditor<E>(clazz, columns()) {
             @Override
             public IFolderItemDecorator<E> createDecorator() {

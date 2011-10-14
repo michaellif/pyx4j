@@ -110,13 +110,13 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
     }
 
     @Override
-    protected CEntityFolderItemEditor<TenantCharge> createItem() {
+    protected CEntityFolderItemEditor<TenantCharge> createItem(final boolean first) {
         return new CEntityFolderRowEditor<TenantCharge>(TenantCharge.class, columns) {
 
             @Override
             public IFolderItemDecorator<TenantCharge> createDecorator() {
                 TableFolderItemDecorator<TenantCharge> dec = new TableFolderItemDecorator<TenantCharge>(null);
-                if (!isFirst()) {
+                if (!first) {
                     Widget sp = new VistaLineSeparator(400, Unit.PX, 0.5, Unit.EM, 0.5, Unit.EM);
                     sp.getElement().getStyle().setPadding(0, Unit.EM);
                     ((VerticalPanel) dec.getWidget()).insert(sp, 0);
@@ -126,7 +126,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
 
             @Override
             protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-                if (isFirst() && (column.getObject() == proto().percentage())) {
+                if (first && (column.getObject() == proto().percentage())) {
                     return inject(column.getObject(), new CNumberLabel());
                 }
                 return super.createCell(column);

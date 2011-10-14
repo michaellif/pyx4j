@@ -184,7 +184,7 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<Pet> createItem() {
+            protected CEntityFolderItemEditor<Pet> createItem(boolean first) {
                 return new CEntityFolderRowEditor<Pet>(Pet.class, columns) {
 
                     @Override
@@ -264,7 +264,7 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<Vehicle> createItem() {
+            protected CEntityFolderItemEditor<Vehicle> createItem(boolean first) {
                 return createVehicleRowEditor(columns);
             }
 

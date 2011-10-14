@@ -91,7 +91,7 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<ServiceItem> createItem() {
+            protected CEntityFolderItemEditor<ServiceItem> createItem(boolean first) {
                 return new CEntityFolderRowEditor<ServiceItem>(ServiceItem.class, columns()) {
                     @Override
                     public IFolderItemDecorator<ServiceItem> createDecorator() {

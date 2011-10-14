@@ -106,7 +106,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                 }
 
                 @Override
-                protected CEntityFolderItemEditor<Employee> createItem() {
+                protected CEntityFolderItemEditor<Employee> createItem(boolean first) {
                     return createEmployeeRowEditor(columns);
                 }
 
@@ -135,7 +135,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                 }
 
                 @Override
-                protected CEntityFolderBoxEditor<Employee> createItem() {
+                protected CEntityFolderBoxEditor<Employee> createItem(boolean first) {
 
                     return new CEntityFolderBoxEditor<Employee>(Employee.class) {
 

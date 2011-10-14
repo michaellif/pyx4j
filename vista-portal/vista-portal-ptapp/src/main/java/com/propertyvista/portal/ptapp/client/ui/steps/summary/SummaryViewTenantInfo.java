@@ -191,7 +191,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
             }
 
             @Override
-            protected CEntityFolderBoxEditor<EmergencyContact> createItem() {
+            protected CEntityFolderBoxEditor<EmergencyContact> createItem(boolean first) {
                 return createEmergencyContactItem();
             }
 
