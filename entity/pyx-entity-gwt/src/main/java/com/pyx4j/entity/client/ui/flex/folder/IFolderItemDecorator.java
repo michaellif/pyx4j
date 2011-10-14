@@ -37,4 +37,6 @@ public interface IFolderItemDecorator<E extends IEntity> extends IDecorator<CEnt
     @Override
     void setComponent(CEntityFolderItemEditor<E> item);
 
+    void setActionsState(boolean remove, boolean up, boolean down);
+
 }

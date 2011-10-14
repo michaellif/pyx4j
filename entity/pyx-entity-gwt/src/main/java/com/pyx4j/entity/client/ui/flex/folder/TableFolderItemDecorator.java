@@ -81,10 +81,8 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
         validationMessageHolder.getElement().getStyle().setColor("red");
         mainPanel.add(validationMessageHolder, DockPanel.SOUTH);
 
-        if (isRemovable()) {
-            actionsPanel = new ItemActionsBar(true, Direction.RTL, images);
-            mainPanel.add(actionsPanel, DockPanel.EAST);
-        }
+        actionsPanel = new ItemActionsBar(true, Direction.RTL, images);
+        mainPanel.add(actionsPanel, DockPanel.EAST);
 
         contentHolder = new SimplePanel();
         mainPanel.add(contentHolder, DockPanel.CENTER);
@@ -107,32 +105,28 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
 
     @Override
     public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
-        if (isRemovable()) {
-            return actionsPanel.addItemRemoveClickHandler(handler);
-        }
-        return null;
+        return actionsPanel.addItemRemoveClickHandler(handler);
     }
 
     @Override
     public HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
-        if (isRemovable()) {
-            return actionsPanel.addRowUpClickHandler(handler);
-        }
-        return null;
+        return actionsPanel.addRowUpClickHandler(handler);
     }
 
     @Override
     public HandlerRegistration addRowDownClickHandler(ClickHandler handler) {
-        if (isRemovable()) {
-            return actionsPanel.addRowDownClickHandler(handler);
-        }
-        return null;
+        return actionsPanel.addRowDownClickHandler(handler);
     }
 
     @Override
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
         validationMessageHolder.ensureDebugId(new CompositeDebugId(baseID, IFolderDecorator.DecoratorsIds.Label).debugId());
+    }
+
+    @Override
+    public void setActionsState(boolean removable, boolean up, boolean down) {
+        actionsPanel.setActionsState(removable, up, down);
     }
 
 }

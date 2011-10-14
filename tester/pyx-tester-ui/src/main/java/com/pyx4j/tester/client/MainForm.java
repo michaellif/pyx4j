@@ -83,7 +83,7 @@ public class MainForm extends CEntityEditor<EntityI> {
             }
 
             @Override
-            protected CEntityFolderBoxEditor<EntityII> createItem() {
+            protected CEntityFolderBoxEditor<EntityII> createItem(boolean first) {
                 return createEntityIISetRow();
             }
 
@@ -131,7 +131,7 @@ public class MainForm extends CEntityEditor<EntityI> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<EntityII> createItem() {
+            protected CEntityFolderItemEditor<EntityII> createItem(boolean first) {
                 // TODO Auto-generated method stub
                 return new CEntityFolderRowEditor<EntityII>(EntityII.class, columns) {
 
@@ -156,7 +156,7 @@ public class MainForm extends CEntityEditor<EntityI> {
             }
 
             @Override
-            protected CEntityFolderBoxEditor<EntityIII> createItem() {
+            protected CEntityFolderBoxEditor<EntityIII> createItem(boolean first) {
                 return createEntityIIISetRow();
             }
 
@@ -200,7 +200,7 @@ public class MainForm extends CEntityEditor<EntityI> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<EntityIII> createItem() {
+            protected CEntityFolderItemEditor<EntityIII> createItem(boolean first) {
                 // TODO Auto-generated method stub
                 return new CEntityFolderRowEditor<EntityIII>(EntityIII.class, columns) {
 

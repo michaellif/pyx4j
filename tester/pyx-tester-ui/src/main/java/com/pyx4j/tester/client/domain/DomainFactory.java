@@ -24,10 +24,12 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 public class DomainFactory {
 
+    private static int counter = 0;
+
     public static EntityI createEntityI() {
         EntityI retVal = EntityFactory.create(EntityI.class);
         retVal.stringMember().setValue("== EntityI Value ==");
-        retVal.integerMember().setValue(11);
+        retVal.integerMember().setValue(counter++);
         retVal.entityIIList1().add(createEntityII());
         retVal.entityIIList1().add(createEntityII());
         retVal.entityIIList2().add(createEntityII());
@@ -39,7 +41,7 @@ public class DomainFactory {
     public static EntityII createEntityII() {
         EntityII retVal = EntityFactory.create(EntityII.class);
         retVal.stringMember().setValue("== EntityII Value ==");
-        retVal.integerMember().setValue(11);
+        retVal.integerMember().setValue(counter++);
         return retVal;
     }
 

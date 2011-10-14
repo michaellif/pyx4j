@@ -20,8 +20,9 @@
  */
 package com.pyx4j.entity.client.ui.flex.folder;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,14 +79,14 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     protected int currentRowDebugId = 0;
 
-    private final HashMap<E, CEntityFolderItemEditor<E>> itemsMap;
+    private final List<CEntityFolderItemEditor<E>> itemsList;
 
     private final E entityPrototype;
 
     public CEntityFolder(Class<E> rowClass) {
         container = new FlowPanel();
         asWidget().setStyleName(StyleName.EntityFolder.name());
-        itemsMap = new HashMap<E, CEntityFolderItemEditor<E>>();
+        itemsList = new ArrayList<CEntityFolderItemEditor<E>>();
         if (rowClass != null) {
             entityPrototype = EntityFactory.getEntityPrototype(rowClass);
         } else {
@@ -113,14 +114,14 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         return null;
     }
 
-    protected abstract CEntityFolderItemEditor<E> createItem();
+    protected abstract CEntityFolderItemEditor<E> createItem(boolean first);
 
-    private CEntityFolderItemEditor<E> createItemPrivate(boolean first) {
+    private CEntityFolderItemEditor<E> createItemPrivate() {
 
-        CEntityFolderItemEditor<E> item = createItem();
+        boolean first = container.getWidgetCount() == 0;
 
-        //Call setFirst before onBound()
-        item.setFirst(first);
+        CEntityFolderItemEditor<E> item = createItem(first);
+
         item.onBound(this);
 
         item.addValueChangeHandler(new ValueChangeHandler<E>() {
@@ -204,16 +205,12 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             return;
         }
 
-        final CEntityFolderItemEditor<E> item = createItemPrivate(container.getWidgetCount() == 0);
+        final CEntityFolderItemEditor<E> item = createItemPrivate();
         createNewEntity(newEntity, new DefaultAsyncCallback<E>() {
             @Override
             public void onSuccess(E result) {
                 getValue().add(result);
                 item.populate(result);
-                if (container.getWidgetIndex(item) == -1) {
-                    container.add(item);
-                }
-                itemsMap.put(item.getValue(), item);
                 adoptItem(item);
                 ValueChangeEvent.fire(CEntityFolder.this, getValue());
             }
@@ -242,10 +239,14 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         if (indexAfter < 0 || indexAfter > getValue().size()) {
             return;
         }
-        E entity = getValue().remove(indexBefore);
-        container.remove(itemsMap.get(entity));
+
+        getValue().remove(indexBefore);
+        itemsList.remove(indexBefore);
+        container.remove(item);
+
         getValue().add(indexAfter, item.getValue());
-        container.insert(itemsMap.get(entity), indexAfter);
+        itemsList.add(indexAfter, item);
+        container.insert(item, indexAfter);
 
         setNativeValue(getValue());
 
@@ -278,35 +279,37 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     protected void repopulate(IList<E> value) {
-        HashMap<E, CEntityFolderItemEditor<E>> oldMap = new HashMap<E, CEntityFolderItemEditor<E>>(itemsMap);
+        ArrayList<CEntityFolderItemEditor<E>> previousList = new ArrayList<CEntityFolderItemEditor<E>>(itemsList);
 
-        itemsMap.clear();
+        for (CEntityFolderItemEditor<E> item : itemsList) {
+            abandonItem(item);
+        }
+
         currentRowDebugId = 0;
 
-        boolean first = true;
         for (E entity : value) {
+            System.out.println("++++++++" + entity);
             if (isFolderItemAllowed(entity)) {
                 CEntityFolderItemEditor<E> item = null;
-                if (oldMap.containsKey(entity)) {
-                    item = oldMap.remove(entity);
-                    item.setFirst(first);
-                } else {
-                    item = createItemPrivate(first);
+                for (CEntityFolderItemEditor<E> itemFromCahe : previousList) {
+                    if (itemFromCahe.getValue().equals(entity)) {
+                        previousList.remove(itemFromCahe);
+                        item = itemFromCahe;
+                        break;
+                    }
                 }
-
-                item.populate(entity);
-                if (container.getWidgetIndex(item) == -1) {
-                    container.add(item);
+                if (item == null) {
+                    item = createItemPrivate();
                 }
-                itemsMap.put(item.getValue(), item);
-
                 adoptItem(item);
-                first = false;
+                item.populate(entity);
+                System.out.println("!++++++++" + item);
+
             }
         }
 
-        for (CEntityFolderItemEditor<E> item : oldMap.values()) {
-            container.remove(item);
+        for (CEntityFolderItemEditor<E> item : itemsList) {
+            item.setActionsState(this);
         }
 
         if (folderDecorator instanceof TableFolderDecorator) {
@@ -329,46 +332,30 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     protected abstract IFolderDecorator<E> createDecorator();
 
     private void adoptItem(final CEntityFolderItemEditor<E> item) {
-
+        itemsList.add(item);
+        container.add(item);
         item.addAccessAdapter(this);
 
         IDebugId rowDebugId = new CompositeDebugId(this.getDebugId(), "row", currentRowDebugId);
         item.setDebugId(rowDebugId);
         currentRowDebugId++;
 
-        item.addItemRemoveClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                removeItem(item);
-            }
-        });
-        item.addRowUpClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                moveUpItem(item);
-            }
-        });
-        item.addRowDownClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                moveDownItem(item);
-            }
-        });
-
-        item.onAdopt();
+        item.onAdopt(this);
 
     }
 
     private void abandonItem(final CEntityFolderItemEditor<E> item) {
         container.remove(item);
-        itemsMap.remove(item.getValue());
+        itemsList.remove(item.getValue());
+        item.removeAccessAdapter(this);
+
         item.onAbandon();
     }
 
     @Override
     public Collection<? extends CEditableComponent<?, ?>> getComponents() {
-        if (itemsMap != null) {
-            return itemsMap.values();
+        if (itemsList != null) {
+            return itemsList;
         } else {
             return null;
         }
@@ -377,10 +364,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     @Override
     public ValidationResults getValidationResults() {
         return getAllValidationResults();
-    }
-
-    protected CEntityFolderItemEditor<E> getFolderRow(E value) {
-        return itemsMap.get(value);
     }
 
     @Override
@@ -418,4 +401,21 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             }
         }
     }
+
+    public int getItemCount() {
+        return itemsList.size();
+    }
+
+    public int getItemIndex(CEntityFolderItemEditor item) {
+        return itemsList.indexOf(item);
+    }
+
+    public CEntityFolderItemEditor getItem(int index) {
+        if (itemsList.size() > 0 && index > -1 && index < itemsList.size()) {
+            return itemsList.get(index);
+        } else {
+            return null;
+        }
+    }
+
 }

@@ -59,4 +59,9 @@ public class BoxReadOnlyFolderItemDecorator<E extends IEntity> extends FlowPanel
         return null;
     }
 
+    @Override
+    public void setActionsState(boolean removable, boolean up, boolean down) {
+
+    }
+
 }

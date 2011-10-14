@@ -112,26 +112,22 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
     @Override
     public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
-        if (isRemovable()) {
-            return toolbar.getActionsPanel().addItemRemoveClickHandler(handler);
-        }
-        return null;
+        return toolbar.getActionsPanel().addItemRemoveClickHandler(handler);
     }
 
     @Override
     public HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
-        if (isRemovable()) {
-            return toolbar.getActionsPanel().addRowUpClickHandler(handler);
-        }
-        return null;
+        return toolbar.getActionsPanel().addRowUpClickHandler(handler);
     }
 
     @Override
     public HandlerRegistration addRowDownClickHandler(ClickHandler handler) {
-        if (isRemovable()) {
-            return toolbar.getActionsPanel().addRowDownClickHandler(handler);
-        }
-        return null;
+        return toolbar.getActionsPanel().addRowDownClickHandler(handler);
+    }
+
+    @Override
+    public void setActionsState(boolean removable, boolean up, boolean down) {
+        toolbar.getActionsPanel().setActionsState(removable, up, down);
     }
 
 }
