@@ -190,14 +190,14 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
         return false;
     }
 
-    protected void addAction(Widget action) {
+    public void addAction(Widget action) {
         actionsPanel.setVisible(true);
         actionsPanel.insert(action, 1);
         actionsPanel.setCellWidth(action, "1%");
         action.getElement().getStyle().setMarginRight(1, Unit.EM);
     }
 
-    protected void remAction(Widget action) {
+    public void remAction(Widget action) {
         actionsPanel.remove(action);
     }
 
