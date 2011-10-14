@@ -261,12 +261,12 @@ public class ConstantExtractor {
 
             Object translationValue = AsmUtils.getAnnotationValue(TRANSLATION_CLASS, "value", fieldNode);
             if (translationValue != null) {
-                addEntry(classSourceFileName, 0, translationValue.toString(), false);
+                addEntry(classSourceFileName, 1, translationValue.toString(), false);
             } else {
                 if (capitalize) {
-                    addEntry(classSourceFileName, 0, EnglishGrammar.capitalize(fieldNode.name), false);
+                    addEntry(classSourceFileName, 1, EnglishGrammar.capitalize(fieldNode.name), false);
                 } else {
-                    addEntry(classSourceFileName, 0, fieldNode.name, false);
+                    addEntry(classSourceFileName, 1, fieldNode.name, false);
                 }
             }
 
@@ -295,6 +295,14 @@ public class ConstantExtractor {
         }
         if (!newTranslatable.isEmpty()) {
             analyzeHierarchy(unprocessed, newTranslatable);
+        }
+    }
+
+    private String classNameCorrections(String className) {
+        if (className.endsWith("DTO")) {
+            return className.substring(0, className.length() - 1);
+        } else {
+            return className;
         }
     }
 
@@ -331,15 +339,15 @@ public class ConstantExtractor {
                 }
             }
         }
-        if (!classNameFoound) {
+        if ((!classNameFoound) && (strategy != I18nStrategy.IgnoreThis)) {
             boolean capitalize = true;
             if (Boolean.FALSE.equals(AsmUtils.getAnnotationValue(TRANSLATABLE_CLASS, "capitalize", classNode))) {
                 capitalize = false;
             }
             if (capitalize) {
-                addEntry(classSourceFileName, 0, EnglishGrammar.capitalize(AsmUtils.getSimpleName(classNode)), false);
+                addEntry(classSourceFileName, 0, EnglishGrammar.capitalize(classNameCorrections(AsmUtils.getSimpleName(classNode))), false);
             } else {
-                addEntry(classSourceFileName, 0, AsmUtils.getSimpleName(classNode), false);
+                addEntry(classSourceFileName, 0, classNameCorrections(AsmUtils.getSimpleName(classNode)), false);
             }
         }
 
@@ -370,7 +378,7 @@ public class ConstantExtractor {
                                     if (elementDefintition.isMainElement) {
                                         methodNameFoound = true;
                                     }
-                                    addEntry(classSourceFileName, 0, value, elementDefintition.javaFormatFlag);
+                                    addEntry(classSourceFileName, 2, value, elementDefintition.javaFormatFlag);
                                 }
                             } else {
                                 if (it.hasNext()) {
@@ -386,13 +394,12 @@ public class ConstantExtractor {
                         capitalize = false;
                     }
                     if (capitalize) {
-                        addEntry(classSourceFileName, 0, EnglishGrammar.capitalize(methodNode.name), false);
+                        addEntry(classSourceFileName, 2, EnglishGrammar.capitalize(methodNode.name), false);
                     } else {
-                        addEntry(classSourceFileName, 0, methodNode.name, false);
+                        addEntry(classSourceFileName, 2, methodNode.name, false);
                     }
                 }
             }
         }
     }
-
 }

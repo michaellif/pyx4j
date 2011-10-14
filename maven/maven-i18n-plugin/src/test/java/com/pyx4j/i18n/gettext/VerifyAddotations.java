@@ -33,6 +33,7 @@ import com.pyx4j.i18n.extractor.ConstantEntry;
 import com.pyx4j.i18n.extractor.ConstantExtractor;
 
 public class VerifyAddotations {
+
     public static void main(String[] args) throws IOException, AnalyzerException {
         System.out.println("--i18n tests --");
         ConstantExtractor ce = new ConstantExtractor();

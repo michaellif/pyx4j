@@ -51,6 +51,11 @@ public @interface I18n {
          */
         DerivedOnly,
 
+        /**
+         * Ignore the class name but extract all its members
+         */
+        IgnoreThis,
+
         IgnoreMemeber,
 
         IgnoreAll

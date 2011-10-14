@@ -39,7 +39,10 @@ public class ConstantEntry {
     }
 
     public void addReference(String classSourceFileName, int lineNr) {
-        this.reference.add(classSourceFileName + ":" + lineNr);
+        String fmt = classSourceFileName + ":" + lineNr;
+        if (!this.reference.contains(fmt)) {
+            this.reference.add(fmt);
+        }
     }
 
 }
