@@ -21,8 +21,8 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
-
 public class FutureDateValidation {
+
     private static I18n i18n = I18n.get(FutureDateValidation.class);
 
     public FutureDateValidation(CEditableComponent<LogicalDate, ?> value) {
@@ -34,7 +34,7 @@ public class FutureDateValidation {
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The date can not be equal today or in the future.");
+                return i18n.tr("The Date cannot be earlier than Today Date");
             }
         });
     }

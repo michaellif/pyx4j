@@ -121,7 +121,7 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
                                         for (ServiceItemType item : FeatureEditorForm.this.getValue().catalog().includedUtilities()) {
                                             if (item.equals(event.getValue())) {
                                                 MessageDialog.warn(VistaEntityFolder.i18n.tr("Note"),
-                                                        VistaEntityFolder.i18n.tr("This utility type is selected as included in price!"));
+                                                        VistaEntityFolder.i18n.tr("The selected Utility Type is included in price!"));
                                             }
                                         }
 

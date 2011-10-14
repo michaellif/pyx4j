@@ -81,9 +81,9 @@ public class ChargesViewForm extends CEntityEditor<Charges> {
 
         main.add(createTotal(proto().monthlyCharges().total()));
 
-        main.add(new VistaHeaderBar(proto().proRatedCharges(), "700px"));
-        main.add(inject(proto().proRatedCharges().charges()));
-        main.add(createTotal(proto().proRatedCharges().total()));
+        main.add(new VistaHeaderBar(proto().proratedCharges(), "700px"));
+        main.add(inject(proto().proratedCharges().charges()));
+        main.add(createTotal(proto().proratedCharges().total()));
 
         main.add(new VistaHeaderBar(proto().applicationCharges(), "700px"));
         main.add(inject(proto().applicationCharges().charges()));

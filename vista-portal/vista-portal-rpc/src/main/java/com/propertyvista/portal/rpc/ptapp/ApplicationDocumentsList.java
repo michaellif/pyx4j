@@ -16,6 +16,7 @@ package com.propertyvista.portal.rpc.ptapp;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.media.ApplicationDocument;
 
@@ -23,6 +24,7 @@ import com.propertyvista.domain.media.ApplicationDocument;
  * This class in created because we don't have instance of IList by itself
  */
 @Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface ApplicationDocumentsList extends IEntity {
 
     IList<ApplicationDocument> documents();

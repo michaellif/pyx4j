@@ -36,7 +36,7 @@ public interface IncomeInfoSocialServices extends IEntity, IEmploymentInfo {
     IPrimitive<String> supervisorName();
 
     @Override
-    @Caption(name = "Social Service Agent's or Case Worker's phone")
+    @Caption(name = "Social Service Agent's or Case Worker's Phone")
     @Editor(type = EditorType.phone)
     IPrimitive<String> supervisorPhone();
 

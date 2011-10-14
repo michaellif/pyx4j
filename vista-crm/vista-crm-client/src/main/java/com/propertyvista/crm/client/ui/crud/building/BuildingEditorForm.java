@@ -430,7 +430,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                 list.setWidth("100%");
                 return list.asWidget();
             } else {
-                return new HTML(i18n.tr("There are no items available!.."));
+                return new HTML(i18n.tr("There are no items available!"));
             }
         }
 

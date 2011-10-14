@@ -93,9 +93,9 @@ public class ChargesSharedCalculation {
         proratedCharge.label().setValue(sb.toString());
         proratedCharge.charge().set(DomainUtil.createMoney(proratedTotal));
 
-        charges.proRatedCharges().charges().clear();
-        charges.proRatedCharges().charges().add(proratedCharge);
-        charges.proRatedCharges().total().set(DomainUtil.createMoney(proratedTotal));
+        charges.proratedCharges().charges().clear();
+        charges.proratedCharges().charges().add(proratedCharge);
+        charges.proratedCharges().total().set(DomainUtil.createMoney(proratedTotal));
         return true;
     }
 

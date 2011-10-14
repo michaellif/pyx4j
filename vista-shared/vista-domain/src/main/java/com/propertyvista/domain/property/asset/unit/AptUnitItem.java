@@ -72,7 +72,7 @@ public interface AptUnitItem extends IEntity {
 
         laminate,
 
-        parcket,
+        parquet,
 
         other;
 

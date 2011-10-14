@@ -44,7 +44,7 @@ public interface Lead extends IEntity {
 
         mail,
 
-        referal,
+        referral,
 
         other;
 

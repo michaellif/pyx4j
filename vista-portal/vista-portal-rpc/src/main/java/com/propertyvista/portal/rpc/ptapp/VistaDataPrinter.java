@@ -286,8 +286,8 @@ public class VistaDataPrinter {
         sb.append(charges.monthlyCharges().total().amount().getStringView());
         sb.append("\n");
 
-        sb.append("\nPro-Rated ").append(charges.proRatedCharges().total().amount().getStringView()).append("\n");
-        for (ChargeLine line : charges.proRatedCharges().charges()) {
+        sb.append("\nPro-Rated ").append(charges.proratedCharges().total().amount().getStringView()).append("\n");
+        for (ChargeLine line : charges.proratedCharges().charges()) {
             sb.append("\t$");
             sb.append(line.charge().amount().getStringView());
             sb.append(" \t").append(line.label().getStringView());

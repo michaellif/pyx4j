@@ -823,7 +823,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 combo.setWidth("100%");
                 return combo.asWidget();
             } else {
-                return new HTML(i18n.tr("There are no Service Items!.."));
+                return new HTML(i18n.tr("There are no Service Items"));
             }
 
         }

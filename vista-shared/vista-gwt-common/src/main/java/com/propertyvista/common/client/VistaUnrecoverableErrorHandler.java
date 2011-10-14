@@ -52,7 +52,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
     @Override
     protected void showUnauthorized() {
         ClientContext.terminateSession();
-        showMessage(i18n.tr("This session has been terminated ."), UserMessageType.FAILURE);
+        showMessage(i18n.tr("This session has been terminated."), UserMessageType.FAILURE);
 
     }
 
@@ -69,7 +69,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
     @Override
     protected void showInternetConnectionError() {
-        showMessage(i18n.tr("Please make sure you are connected to internet."), UserMessageType.FAILURE);
+        showMessage(i18n.tr("Please make sure you are connected to Internet."), UserMessageType.FAILURE);
 
     }
 

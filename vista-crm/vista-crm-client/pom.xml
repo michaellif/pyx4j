@@ -72,7 +72,7 @@
         <gwtDestinationWarFolder>${basedir}/../../vista-server/src/main/webapp</gwtDestinationWarFolder>
 
         <poSaveLocation>true</poSaveLocation>
-        <poSufix>with_location</poSufix>
+        <poSufix></poSufix>
         <gettextArg></gettextArg>
     </properties>
 
@@ -123,7 +123,7 @@
             <properties>
                 <poSaveLocation>false</poSaveLocation>
                 <gettextArg>--no-location</gettextArg>
-                <poSufix>no_location</poSufix>
+                <poSufix>-no_location</poSufix>
             </properties>
         </profile>
 
@@ -145,7 +145,7 @@
                         </executions>
                         <configuration>
                             <poSaveLocation>${poSaveLocation}</poSaveLocation>
-                            <keysFile>${poSufix}-keys-pyx.pot</keysFile>
+                            <keysFile>keys${poSufix}.pot</keysFile>
                             <excludes>
                                 <exclude>com.google.*</exclude>
                             </excludes>
@@ -235,7 +235,7 @@
                         </executions>
                         <configuration>
                             <targetBundle>Messages</targetBundle>
-                            <keysFile>${poSufix}-keys-gettext.pot</keysFile>
+                            <keysFile>keys-gettext-${poSufix}.pot</keysFile>
                             <keywords>-ktrc:1c,2 -ktrnc:1c,2,3 -ktr -kmarktr -ktrn:1,2 -k ${gettextArg} --sort-output</keywords>
                             <poDirectory>${basedir}/src/main/po</poDirectory>
                             <sourceDirectory>${project.build.directory}/source-4i18n</sourceDirectory>
