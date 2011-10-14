@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Table(name = "_ah_SESSION", disableGlobalPrefix = true)
-@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface GaeStoredSession extends IEntity {
 
     /**
