@@ -29,12 +29,12 @@ public class FutureDateValidation {
         value.addValueValidator(new EditableValueValidator<Date>() {
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                return (value != null) && value.before(TimeUtils.today());
+                return (value != null) && value.after(TimeUtils.today());
             }
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The Date cannot be earlier than Today Date");
+                return i18n.tr("The Date cannot be before Today Date");
             }
         });
     }

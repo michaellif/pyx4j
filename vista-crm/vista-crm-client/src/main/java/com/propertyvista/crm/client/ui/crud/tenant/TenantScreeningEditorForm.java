@@ -140,15 +140,15 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             }
         });
 
-        new FutureDateValidation(currentAddressForm.get(currentAddressForm.proto().moveInDate()));
-        new PastDateValidation(currentAddressForm.get(currentAddressForm.proto().moveOutDate()));
+        new PastDateValidation(currentAddressForm.get(currentAddressForm.proto().moveInDate()));
+        new FutureDateValidation(currentAddressForm.get(currentAddressForm.proto().moveOutDate()));
 
         // ------------------------------------------------------------------------------------------------        
 
         @SuppressWarnings("unchecked")
         final CEntityEditor<PriorAddress> previousAddressForm = ((CEntityEditor<PriorAddress>) getRaw(proto().previousAddress()));
 
-        new FutureDateValidation(previousAddressForm.get(previousAddressForm.proto().moveInDate()));
+        new PastDateValidation(previousAddressForm.get(previousAddressForm.proto().moveInDate()));
 
         previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
@@ -159,7 +159,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("Move In Date must be before than Move Out Date");
+                return i18n.tr("Move In Date must be before Move Out Date");
             }
         });
 
@@ -168,7 +168,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
         // ------------------------------------------------------------------------------------------------        
 
-        new FutureDateValidation(previousAddressForm.get(previousAddressForm.proto().moveOutDate()));
+        new PastDateValidation(previousAddressForm.get(previousAddressForm.proto().moveOutDate()));
 
         previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
 
@@ -180,7 +180,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("Move Out Date must be greater than Move In Date");
+                return i18n.tr("Move Out Date must be after Move In Date");
             }
         });
 
@@ -384,7 +384,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
                             @Override
                             public String getValidationMessage(CEditableComponent<Double, ?> component, Double value) {
-                                return VistaEntityFolder.i18n.tr("Value cannot increase 100%");
+                                return VistaEntityFolder.i18n.tr("Value should be in range 0-100%");
                             }
 
                         });

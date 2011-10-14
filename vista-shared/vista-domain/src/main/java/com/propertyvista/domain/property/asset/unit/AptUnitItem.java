@@ -91,7 +91,7 @@ public interface AptUnitItem extends IEntity {
 
         laminate,
 
-        euartz,
+        quartz,
 
         solidSurface,
 

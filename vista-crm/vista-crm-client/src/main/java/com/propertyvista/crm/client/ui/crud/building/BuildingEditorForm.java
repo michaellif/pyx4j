@@ -56,7 +56,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPa
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
-import com.propertyvista.common.client.ui.validators.FutureDateValidation;
+import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
@@ -138,9 +138,9 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
     @Override
     public void addValidations() {
-        new FutureDateValidation(get(proto().info().structureBuildYear()));
-        new FutureDateValidation(get(proto().financial().dateAcquired()));
-        new FutureDateValidation(get(proto().financial().lastAppraisalDate()));
+        new PastDateValidation(get(proto().info().structureBuildYear()));
+        new PastDateValidation(get(proto().financial().dateAcquired()));
+        new PastDateValidation(get(proto().financial().lastAppraisalDate()));
 
         get(proto().complex()).addValueChangeHandler(new ValueChangeHandler<Complex>() {
 
