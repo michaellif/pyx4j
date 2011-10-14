@@ -18,7 +18,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.server.domain.CampaignHistory;
-import com.propertyvista.server.domain.CampaignTriger;
+import com.propertyvista.server.domain.CampaignTrigger;
 import com.propertyvista.server.domain.PhoneCallCampaign;
 
 public class CampaignPreloader extends BaseVistaDataPreloader {
@@ -34,7 +34,7 @@ public class CampaignPreloader extends BaseVistaDataPreloader {
         //campaign.triger().setValue(CampaignTriger.Registration);
         //campaign.message().setValue("Hello ${b}, thank you for registering as Potential Tenant. Property Vista will call you later.");
 
-        campaign.triger().setValue(CampaignTriger.ApplicationCompleated);
+        campaign.trigger().setValue(CampaignTrigger.ApplicationCompleated);
         campaign.message().setValue("Hello ${b}, at this point our presentation is concluded. Thank you very much for your time.");
 
         Persistence.service().persist(campaign);

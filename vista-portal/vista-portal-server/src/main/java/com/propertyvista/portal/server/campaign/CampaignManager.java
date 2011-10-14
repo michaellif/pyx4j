@@ -31,14 +31,14 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.domain.CampaignHistory;
-import com.propertyvista.server.domain.CampaignTriger;
+import com.propertyvista.server.domain.CampaignTrigger;
 import com.propertyvista.server.domain.PhoneCallCampaign;
 
 public class CampaignManager {
 
     private final static Logger log = LoggerFactory.getLogger(CampaignManager.class);
 
-    public static void fireEvent(CampaignTriger trigger, TenantInLeaseListDTO tenants) {
+    public static void fireEvent(CampaignTrigger trigger, TenantInLeaseListDTO tenants) {
         for (TenantInLease tenantInfo : tenants.tenants()) {
             Status status = tenantInfo.status().getValue();
 
@@ -56,7 +56,7 @@ public class CampaignManager {
         }
     }
 
-    public static void fireEvent(CampaignTriger trigger, TenantInLease tenant) {
+    public static void fireEvent(CampaignTrigger trigger, TenantInLease tenant) {
         EntityQueryCriteria<CampaignHistory> criteria = EntityQueryCriteria.create(CampaignHistory.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
         criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), trigger));
@@ -94,9 +94,9 @@ public class CampaignManager {
         log.info("sendCalls result {}", rc);
     }
 
-    public static PhoneCallCampaign getCampaign(CampaignTriger trigger) {
+    public static PhoneCallCampaign getCampaign(CampaignTrigger trigger) {
         EntityQueryCriteria<PhoneCallCampaign> criteria = EntityQueryCriteria.create(PhoneCallCampaign.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().triger(), trigger));
+        criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), trigger));
         PhoneCallCampaign phoneCallCampaign = Persistence.service().retrieve(criteria);
         if (phoneCallCampaign == null) {
             return null;

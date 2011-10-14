@@ -25,7 +25,7 @@ import com.propertyvista.domain.tenant.Tenant;
 public interface CampaignHistory extends IEntity {
 
     @MemberColumn(name = "trg")
-    IPrimitive<CampaignTriger> trigger();
+    IPrimitive<CampaignTrigger> trigger();
 
     Tenant tenant();
 

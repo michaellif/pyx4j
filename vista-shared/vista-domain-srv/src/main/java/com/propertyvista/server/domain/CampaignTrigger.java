@@ -13,7 +13,7 @@
  */
 package com.propertyvista.server.domain;
 
-public enum CampaignTriger {
+public enum CampaignTrigger {
 
     Registration,
 

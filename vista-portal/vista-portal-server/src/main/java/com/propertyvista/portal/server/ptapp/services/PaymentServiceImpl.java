@@ -38,7 +38,7 @@ import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
 import com.propertyvista.portal.server.campaign.CampaignManager;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.util.TenantRetriever;
-import com.propertyvista.server.domain.CampaignTriger;
+import com.propertyvista.server.domain.CampaignTrigger;
 
 public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements PaymentService {
 
@@ -73,7 +73,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
         if (callFireDemo) {
             EntityQueryCriteria<TenantInLeaseListDTO> criteria = EntityQueryCriteria.create(TenantInLeaseListDTO.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
-            CampaignManager.fireEvent(CampaignTriger.ApplicationCompleated, secureRetrieve(criteria));
+            CampaignManager.fireEvent(CampaignTrigger.ApplicationCompleated, secureRetrieve(criteria));
         }
 
         if ((EnumSet.of(PaymentType.Amex, PaymentType.Visa, PaymentType.MasterCard, PaymentType.Discover).contains(payment.type().getValue()))

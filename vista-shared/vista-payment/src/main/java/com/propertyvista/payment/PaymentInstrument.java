@@ -14,7 +14,9 @@
 package com.propertyvista.payment;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.annotations.I18n;
 
-public interface PaymentInstrument  extends IEntity {
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+public interface PaymentInstrument extends IEntity {
 
 }

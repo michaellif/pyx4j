@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface PhoneCallCampaign extends IEntity {
 
     @MemberColumn(name = "trg")
-    IPrimitive<CampaignTriger> triger();
+    IPrimitive<CampaignTrigger> trigger();
 
     IPrimitive<String> campaignid();
 
