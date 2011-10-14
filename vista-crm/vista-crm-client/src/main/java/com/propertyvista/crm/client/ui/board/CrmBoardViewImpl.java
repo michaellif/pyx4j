@@ -144,11 +144,10 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             Button apply = new Button("Apply", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-
-                    // TODO retrieve and apply filters here...
-
                     setWidgetSize(filtersPanel, VistaCrmTheme.defaultActionBarHeight);
                     filtersPanel.setWidget(filters.getCompactVeiw());
+
+                    applyFiltering();
                 }
             });
             buttons.add(apply);
