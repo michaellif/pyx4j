@@ -13,10 +13,13 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
+import java.util.List;
+
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.portal.ptapp.client.ui.TopRightActionsViewImpl.Theme;
+import com.propertyvista.shared.CompiledLocale;
 
 public interface TopRightActionsView extends IsWidget {
 
@@ -32,10 +35,14 @@ public interface TopRightActionsView extends IsWidget {
 
         public void login();
 
+        void setLocale(CompiledLocale locale);
+
     }
 
     public void onLogedOut();
 
     public void onLogedIn(String userName);
+
+    void setAvailableLocales(List<CompiledLocale> locales);
 
 }

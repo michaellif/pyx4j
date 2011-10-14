@@ -13,18 +13,23 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
+import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Tooltip;
 
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
+import com.propertyvista.shared.CompiledLocale;
 
 public class TopRightActionsViewImpl extends VerticalPanel implements TopRightActionsView {
 
@@ -47,6 +52,8 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
     private final CHyperlink login;
 
     private final CHyperlink themes;
+
+    private final HorizontalPanel locales;
 
     private Theme otherTheme = Theme.VillageGreen;
 
@@ -100,6 +107,12 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
         themes.setDebugId(new StringDebugId("themes"));
         topLinksPanel.add(themes);
+
+        topLinksPanel.add(new HTML("&nbsp;-&nbsp;"));
+
+        locales = new HorizontalPanel();
+        locales.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
+        topLinksPanel.add(locales);
     }
 
     @Override
@@ -119,5 +132,25 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
         logout.setVisible(true);
         login.setVisible(false);
         greetings.setHTML("Hello " + userName + "&nbsp;-&nbsp;");
+    }
+
+    @Override
+    public void setAvailableLocales(List<CompiledLocale> localeList) {
+        locales.clear();
+        for (final CompiledLocale compiledLocale : localeList) {
+            CHyperlink link = new CHyperlink(null, new Command() {
+                @Override
+                public void execute() {
+                    presenter.setLocale(compiledLocale);
+                }
+            });
+            link.setValue(compiledLocale.name());
+            Tooltip.tooltip(link.asWidget(), LocaleInfo.getLocaleNativeDisplayName(compiledLocale.name()));
+            locales.add(link);
+            locales.add(new Label("/"));
+        }
+        if (locales.getWidgetCount() > 0) {
+            locales.remove(locales.getWidgetCount() - 1);
+        }
     }
 }

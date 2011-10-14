@@ -28,6 +28,26 @@ public class GainsboroPalette extends Palette {
         putThemeColor(ThemeColors.OBJECT_TONE3, 0xC8C8C8);
         putThemeColor(ThemeColors.OBJECT_TONE4, 0xB5B5B5);
         putThemeColor(ThemeColors.OBJECT_TONE5, 0xE6E6E6);
+
+        putThemeColor(ThemeColors.OBJECT_TONE10, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.02));
+        putThemeColor(ThemeColors.OBJECT_TONE15, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.06));
+        putThemeColor(ThemeColors.OBJECT_TONE20, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.12));
+        putThemeColor(ThemeColors.OBJECT_TONE25, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.14));
+        putThemeColor(ThemeColors.OBJECT_TONE30, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.16));
+        putThemeColor(ThemeColors.OBJECT_TONE35, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.18));
+        putThemeColor(ThemeColors.OBJECT_TONE40, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.20));
+        putThemeColor(ThemeColors.OBJECT_TONE45, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.45));
+        putThemeColor(ThemeColors.OBJECT_TONE50, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.50));
+        putThemeColor(ThemeColors.OBJECT_TONE55, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.55));
+        putThemeColor(ThemeColors.OBJECT_TONE60, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.60));
+        putThemeColor(ThemeColors.OBJECT_TONE65, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.65));
+        putThemeColor(ThemeColors.OBJECT_TONE70, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.70));
+        putThemeColor(ThemeColors.OBJECT_TONE75, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.75));
+        putThemeColor(ThemeColors.OBJECT_TONE80, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.80));
+        putThemeColor(ThemeColors.OBJECT_TONE85, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.85));
+        putThemeColor(ThemeColors.OBJECT_TONE90, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.90));
+        putThemeColor(ThemeColors.OBJECT_TONE95, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.95));
+
         putThemeColor(ThemeColors.BORDER, 0xe7e7e7);
         putThemeColor(ThemeColors.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
         putThemeColor(ThemeColors.SELECTION_TEXT, 0xffffff);

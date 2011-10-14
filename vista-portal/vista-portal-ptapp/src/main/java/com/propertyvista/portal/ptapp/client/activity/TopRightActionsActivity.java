@@ -15,8 +15,10 @@ package com.propertyvista.portal.ptapp.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.security.client.ClientContext;
@@ -25,6 +27,7 @@ import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.style.StyleManger;
 
+import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.portal.ptapp.client.themes.GainsboroPalette;
 import com.propertyvista.portal.ptapp.client.themes.PtAppTheme;
 import com.propertyvista.portal.ptapp.client.themes.VillageGreenPalette;
@@ -32,6 +35,7 @@ import com.propertyvista.portal.ptapp.client.ui.TopRightActionsView;
 import com.propertyvista.portal.ptapp.client.ui.TopRightActionsViewImpl.Theme;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.shared.CompiledLocale;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
 
@@ -58,6 +62,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
                 updateAuthenticatedView();
             }
         });
+        obtainAvailableLocales();
     }
 
     private void updateAuthenticatedView() {
@@ -84,6 +89,16 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
             break;
         }
 
+    }
+
+    private void obtainAvailableLocales() {
+        view.setAvailableLocales(ClentNavigUtils.obtainAvailableLocales());
+    }
+
+    @Override
+    public void setLocale(CompiledLocale locale) {
+        UrlBuilder builder = Window.Location.createUrlBuilder().setParameter("locale", locale.name());
+        Window.Location.replace(builder.buildString());
     }
 
     @Override
