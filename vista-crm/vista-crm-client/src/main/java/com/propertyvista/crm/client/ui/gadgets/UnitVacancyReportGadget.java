@@ -44,7 +44,6 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitVacancyReportService;
-import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings;
@@ -81,10 +80,10 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
     }
 
     @Override
-    protected void initDefaultSettings(AbstractGadgetSettings abstractSettings) {
-        super.initDefaultSettings(abstractSettings);
-        ListerGadgetBaseSettings settings = abstractSettings.cast();
+    protected ListerGadgetBaseSettings createSettings() {
+        ListerGadgetBaseSettings settings = super.createSettings();
         settings.itemsPerPage().setValue(5);
+        return settings;
     }
 
     public IListerView<UnitVacancyReport> getListerView() {
@@ -275,8 +274,8 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
     }
 
     @Override
-    protected void executeOnTimer() {
-        super.executeOnTimer();
+    protected void onRefreshTimer() {
+        super.onRefreshTimer();
         activity.populateSummary();
     }
 }

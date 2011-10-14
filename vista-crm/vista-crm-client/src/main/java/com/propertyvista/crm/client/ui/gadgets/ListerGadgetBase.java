@@ -59,7 +59,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     private final EnhancedListerBase<E> listerBase;
 
-    private ListerGadgetBaseSettings settings = null;
+    private ListerGadgetBaseSettings settings;
 
     protected final AbstractListService<E> service;
 
@@ -71,8 +71,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         if (isSettingsInstanceOk(gadgetMetadata.settings())) {
             settings = gadgetMetadata.settings().cast();
         } else {
-            settings = EntityFactory.create(ListerGadgetBaseSettings.class);
-            resetToDefault(settings);
+            settings = createSettings();
             gadgetMetadata.settings().set(settings);
         }
 
@@ -104,28 +103,14 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     }
 
     @Override
-    protected AbstractGadgetSettings createSettings() {
+    protected ListerGadgetBaseSettings createSettings() {
         ListerGadgetBaseSettings settings = EntityFactory.create(ListerGadgetBaseSettings.class);
         assert settings != null : "Failed to instantiate ListerGadgetBaseSettings class";
-        return settings;
-    }
-
-    @Override
-    protected void initDefaultSettings(AbstractGadgetSettings abstractSettings) {
-        ListerGadgetBaseSettings settings = null;
-        if (abstractSettings.isInstanceOf(ListerGadgetBaseSettings.class)) {
-            settings = abstractSettings.cast();
-            resetToDefault(settings);
-        } else {
-            throw new RuntimeException("failed to get cast settings");
-        }
-    }
-
-    private void resetToDefault(ListerGadgetBaseSettings settings) {
         settings.refreshInterval().setValue(DEFAULT_REFRESH_INTERVAL);
         settings.itemsPerPage().setValue(DEFAULT_ITEMS_PER_PAGE);
         settings.currentPage().setValue(0);
         settings.columnPaths().clear();
+        return settings;
     }
 
     protected EnhancedListerBase<E> getListerBase() {
@@ -133,7 +118,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     }
 
     @Override
-    protected void executeOnTimer() {
+    protected void onRefreshTimer() {
         storeSettings();
 
         // try to reload the page and if the page is empty try to load the previous one

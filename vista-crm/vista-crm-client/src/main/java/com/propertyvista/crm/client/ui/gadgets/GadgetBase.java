@@ -32,130 +32,40 @@ public abstract class GadgetBase implements IGadgetBase {
 
     protected IGadgetPresenter presenter;
 
-    private final RefreshTimer refreshTimer;
-
-    /**
-     * This class provides refresh support for the gadget. A gadget that wishes to perform refresh operations has to override
-     * {@link GadgetBase#executeOnTimer()}.
-     */
-    protected class RefreshTimer {
-        private final Timer timer;
-
-        private boolean isActive;
-
-        private int refreshInterval;
-
-        RefreshTimer() {
-            isActive = false;
-            refreshInterval = 0;
-
-            timer = new Timer() {
-                @Override
-                public void run() {
-                    GadgetBase.this.executeOnTimer();
-                }
-            };
-        }
-
-        /**
-         * Set interval to be used in order to execute the refresh method <code>.executeOnTimer()</code> that have to be overridden in a subclass in order to
-         * provide desired functionality.
-         * 
-         * @param refreshInterval
-         *            refresh interval in milliseconds (if the interval is not positive, the timer stops)
-         */
-        public void setRefreshInterval(int refreshInterval) {
-            this.refreshInterval = refreshInterval;
-            if (isActive()) {
-                reactivate();
-            }
-        }
-
-        /**
-         * Return if the timer is supposed to launch {@link GadgetBase#executeOnTimer()} periodically as was set using
-         * {@link RefreshTimer#setRefreshInterval(int)}.
-         * 
-         * @return <code>true</code> if timer executes periodically {@link GadgetBase#executeOnTimer()}, <code>false</code> if it doesn't.
-         */
-        public boolean isActive() {
-            return isActive;
-        }
-
-        /**
-         * Restart the count down if the refresh interval of the timer is greater than 0, else stop.
-         */
-        public void reactivate() {
-            deactivate();
-            if (refreshInterval > 0) {
-                timer.scheduleRepeating(refreshInterval);
-                isActive = true;
-            }
-        }
-
-        /**
-         * Shut down the timer: the handlers will not be launched.
-         */
-        public void deactivate() {
-            timer.cancel();
-            isActive = false;
-        }
-    }
+    private final RefreshTimer refreshTimer = new RefreshTimer();
 
     public GadgetBase(GadgetMetadata gmd) {
+
         if (gmd == null) {
             gmd = EntityFactory.create(GadgetMetadata.class);
             assert (gmd != null);
             selfInit(gmd);
         }
+
         if (gmd.settings().isNull()) {
-            AbstractGadgetSettings settings = createSettings();
-            if (settings != null) {
-                initDefaultSettings(settings);
-                gmd.settings().set(settings);
-            }
+            gmd.settings().set(createSettings());
         }
+
         gadgetMetadata = gmd;
-        refreshTimer = new RefreshTimer();
     }
 
     /**
-     * Override in child in order to perform recurring actions bound to refresh timer interval.
-     */
-    protected void executeOnTimer() {
-    }
-
-    protected RefreshTimer getRefreshTimer() {
-        return refreshTimer;
-    }
-
-    /**
-     * This method is called in case of null GadgetMetadata in constructor.
-     * That means on-the-fly gadget creation (Add Gadget), without storage.
-     * implement it in derived class in order to set meaningful gadget
-     * name/description/type/etc...
+     * This method is called in case of null GadgetMetadata in constructor. That means on-the-fly gadget creation (Add Gadget), without storage.
+     * implement it in derived class in order to set meaningful gadget name/description/type/etc...
      * Note, that it's called from within constructor!
      */
     protected abstract void selfInit(GadgetMetadata gmd);
 
     /**
-     * Construct instance of class that supposed to store the settings. This method is called from the constructor of {@link GadgetBase} when no gadget metadata
-     * is supplied or gadget metadata doens't contain settings. The settings created by this class are stored in gadget metadata. Subclasses of
-     * {@link GadgetBase} have to override this method when they wish to provide their
-     * own settings class.
+     * Construct instance of class that supposed to store Gadget settings and initializes it with default values. This method is called from the constructor of
+     * {@link GadgetBase} when no gadget metadata is supplied or gadget metadata doesn't contain settings. The settings created by this class are stored in
+     * gadget metadata. Subclasses of {@link GadgetBase} have to override this method when they wish to provide their own settings class.
      * 
      * @return instance of settings (can be <code>null</code>)
      */
     protected AbstractGadgetSettings createSettings() {
         return null;
     };
-
-    /**
-     * Initialise default settings. Must be overridden in subclass. Called from the base class constructor.
-     * 
-     * @param settings
-     */
-    protected void initDefaultSettings(AbstractGadgetSettings settings) {
-    }
 
     @Override
     public void setPresenter(IGadgetPresenter presenter) {
@@ -184,6 +94,16 @@ public abstract class GadgetBase implements IGadgetBase {
                 throw new UnrecoverableClientError(caught);
             }
         });
+    }
+
+    /**
+     * Override in child in order to perform recurring actions bound to refresh timer interval.
+     */
+    protected void onRefreshTimer() {
+    }
+
+    protected RefreshTimer getRefreshTimer() {
+        return refreshTimer;
     }
 
     // info:
@@ -272,5 +192,76 @@ public abstract class GadgetBase implements IGadgetBase {
 
     @Override
     public void onDelete() {
+    }
+
+    //
+    // Internal classes:
+    //
+
+    /**
+     * This class provides refresh support for the gadget. A gadget that wishes to perform refresh operations has to override
+     * {@link GadgetBase#onRefreshTimer()}.
+     */
+    protected class RefreshTimer {
+        private final Timer timer;
+
+        private boolean isActive;
+
+        private int refreshInterval;
+
+        RefreshTimer() {
+            isActive = false;
+            refreshInterval = 0;
+
+            timer = new Timer() {
+                @Override
+                public void run() {
+                    GadgetBase.this.onRefreshTimer();
+                }
+            };
+        }
+
+        /**
+         * Set interval to be used in order to execute the refresh method <code>.executeOnTimer()</code> that have to be overridden in a subclass in order to
+         * provide desired functionality.
+         * 
+         * @param refreshInterval
+         *            refresh interval in milliseconds (if the interval is not positive, the timer stops)
+         */
+        public void setRefreshInterval(int refreshInterval) {
+            this.refreshInterval = refreshInterval;
+            if (isActive()) {
+                reactivate();
+            }
+        }
+
+        /**
+         * Return if the timer is supposed to launch {@link GadgetBase#onRefreshTimer()} periodically as was set using
+         * {@link RefreshTimer#setRefreshInterval(int)}.
+         * 
+         * @return <code>true</code> if timer executes periodically {@link GadgetBase#onRefreshTimer()}, <code>false</code> if it doesn't.
+         */
+        public boolean isActive() {
+            return isActive;
+        }
+
+        /**
+         * Restart the count down if the refresh interval of the timer is greater than 0, else stop.
+         */
+        public void reactivate() {
+            deactivate();
+            if (refreshInterval > 0) {
+                timer.scheduleRepeating(refreshInterval);
+                isActive = true;
+            }
+        }
+
+        /**
+         * Shut down the timer: the handlers will not be launched.
+         */
+        public void deactivate() {
+            timer.cancel();
+            isActive = false;
+        }
     }
 }
