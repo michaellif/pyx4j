@@ -333,7 +333,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     }
 
     // EntityListPanel access:
-    protected EntityListPanel<E> getListPanel() {
+    public EntityListPanel<E> getListPanel() {
         return listPanel;
     }
 
