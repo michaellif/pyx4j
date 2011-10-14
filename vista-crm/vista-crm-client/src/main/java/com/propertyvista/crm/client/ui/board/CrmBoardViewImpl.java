@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.board;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -27,14 +28,18 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.widgets.client.dashboard.IGadget;
+import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
+import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -95,6 +100,8 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         public BuildingFilters() {
             buildingLister = new ListerInternalViewImplBase<Building>(new SelectedBuildingLister());
             buildingLister.getLister().setMultiSelect(true);
+            buildingLister.getLister().getListPanel().setPageSize(10);
+
         }
 
         public IListerView<Building> getBuildingListerView() {
@@ -184,5 +191,23 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             return filterDescription;
         }
 
+        private void applyFiltering() {
+            List<Building> selectedBuildings = buildingLister.getLister().getSelectedItems();
+            List<Key> selectedBuildingKeys = new ArrayList<Key>(selectedBuildings.size());
+            if (!selectedBuildings.isEmpty()) {
+                for (Building building : selectedBuildings) {
+                    selectedBuildingKeys.add(building.getPrimaryKey());
+                }
+            }
+
+            // notify gadgets:
+            IGadgetIterator it = board.getBoard().getGadgetIterator();
+            if (it.hasNext()) {
+                IGadget gadget = it.next();
+                if (gadget instanceof IBuildingGadget) {
+                    ((IBuildingGadget) gadget).setBuildings(selectedBuildingKeys);
+                }
+            }
+        }
     }
 }
