@@ -197,7 +197,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
             folder.addPropertyChangeHandler(new PropertyChangeHandler() {
                 @Override
                 public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
-                    if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VALIDITY) {
+                    if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.valid) {
                         validationMessageHolder.setHTML(folder.getContainerValidationResults().getMessagesText(true));
                     }
                 }

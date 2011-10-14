@@ -78,9 +78,9 @@ public class CriteriaWidgetDecorator extends VerticalPanel {
         infoImageHolder.getElement().getStyle().setPaddingLeft(5, Unit.PX);
         infoImageHolder.getElement().getStyle().setFloat(Float.RIGHT);
 
-        if (component.getToolTip() != null && component.getToolTip().trim().length() > 0) {
+        if (component.getTooltip() != null && component.getTooltip().trim().length() > 0) {
             Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
-            Tooltip.tooltip(infoImage, component.getToolTip());
+            Tooltip.tooltip(infoImage, component.getTooltip());
             infoImageHolder.setWidget(infoImage);
         }
 
@@ -134,10 +134,10 @@ public class CriteriaWidgetDecorator extends VerticalPanel {
         component.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
-                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
+                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.visible) {
                     setVisible(component.isVisible());
                 }
-                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VALIDITY) {
+                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.valid) {
                     renderValidationMessage();
                 }
 

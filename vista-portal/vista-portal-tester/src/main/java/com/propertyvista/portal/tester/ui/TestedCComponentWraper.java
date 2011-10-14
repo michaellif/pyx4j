@@ -185,7 +185,7 @@ public class TestedCComponentWraper extends LayoutPanel implements Comparable<Te
 
         //TODO Tooltips do not work
         this.component.setTitle("This is " + componentid.debugId());
-        this.component.setToolTip("Tooltip for " + componentid.debugId());
+        this.component.setTooltip("Tooltip for " + componentid.debugId());
 
         //Enable disable
         CheckBox chk = null;

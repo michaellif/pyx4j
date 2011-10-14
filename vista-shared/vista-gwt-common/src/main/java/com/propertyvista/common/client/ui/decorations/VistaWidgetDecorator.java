@@ -106,9 +106,9 @@ public class VistaWidgetDecorator extends VerticalPanel {
         infoImageHolder.getElement().getStyle().setPaddingTop(2, Unit.PX);
         infoImageHolder.getElement().getStyle().setPaddingLeft(5, Unit.PX);
 
-        if (component.getToolTip() != null && component.getToolTip().trim().length() > 0) {
+        if (component.getTooltip() != null && component.getTooltip().trim().length() > 0) {
             Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
-            Tooltip.tooltip(infoImage, component.getToolTip());
+            Tooltip.tooltip(infoImage, component.getTooltip());
             infoImageHolder.setWidget(infoImage);
         }
 
@@ -190,10 +190,10 @@ public class VistaWidgetDecorator extends VerticalPanel {
             component.addPropertyChangeHandler(new PropertyChangeHandler() {
                 @Override
                 public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
-                    if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
+                    if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.visible) {
                         setVisible(component.isVisible());
                     }
-                    if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VALIDITY) {
+                    if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.valid) {
                         renderValidationMessage();
                     }
                     renderMandatoryMessage();
@@ -208,7 +208,7 @@ public class VistaWidgetDecorator extends VerticalPanel {
             component.addPropertyChangeHandler(new PropertyChangeHandler() {
                 @Override
                 public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
-                    if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
+                    if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.visible) {
                         setVisible(component.isVisible());
                     }
                 }
