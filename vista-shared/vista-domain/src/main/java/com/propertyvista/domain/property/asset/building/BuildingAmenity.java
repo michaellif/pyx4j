@@ -62,7 +62,7 @@ public interface BuildingAmenity extends Amenity {
 
         gate,
 
-        groupExcercise,
+        groupExercise,
 
         guestRoom,
 

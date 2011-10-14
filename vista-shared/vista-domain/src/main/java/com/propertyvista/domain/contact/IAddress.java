@@ -20,12 +20,14 @@ import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.CountryReferenceAdapter;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.ref.ProvinceReferenceAdapter;
 
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface IAddress extends IEntity {
 
     @Caption(name = "Address 1")

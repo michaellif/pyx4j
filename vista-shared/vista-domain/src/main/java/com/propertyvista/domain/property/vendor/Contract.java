@@ -39,7 +39,7 @@ public interface Contract extends IEntity {
     @MemberColumn(name = "contractStart")
     IPrimitive<LogicalDate> start();
 
-    @Caption(name = "Expirty Date")
+    @Caption(name = "Expiry Date")
     @MemberColumn(name = "contractEnd")
     IPrimitive<LogicalDate> end();
 

@@ -23,11 +23,11 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.Notes;
-import com.propertyvista.domain.property.vendor.LicencedWarrantedMaintained;
+import com.propertyvista.domain.property.vendor.LicensedWarrantedMaintained;
 
 @ToStringFormat("{0} {1}")
 @DiscriminatorValue("Roof_BuildingElement")
-public interface Roof extends LicencedWarrantedMaintained, Notes, BuildingElement {
+public interface Roof extends LicensedWarrantedMaintained, Notes, BuildingElement {
 
     @ToString(index = 0)
     @MemberColumn(name = "roofType")

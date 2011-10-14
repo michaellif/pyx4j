@@ -139,7 +139,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     @Override
     public void addValidations() {
         new FutureDateValidation(get(proto().info().structureBuildYear()));
-        new FutureDateValidation(get(proto().financial().dateAquired()));
+        new FutureDateValidation(get(proto().financial().dateAcquired()));
         new FutureDateValidation(get(proto().financial().lastAppraisalDate()));
 
         get(proto().complex()).addValueChangeHandler(new ValueChangeHandler<Complex>() {
@@ -234,7 +234,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
         main.add(split);
 
-        split.getLeftPanel().add(inject(proto().financial().dateAquired()), 8.2);
+        split.getLeftPanel().add(inject(proto().financial().dateAcquired()), 8.2);
         split.getLeftPanel().add(inject(proto().financial().purchasePrice()), 10);
         split.getLeftPanel().add(inject(proto().financial().marketPrice()), 10);
 

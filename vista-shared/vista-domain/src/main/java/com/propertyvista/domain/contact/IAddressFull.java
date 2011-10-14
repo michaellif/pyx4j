@@ -28,6 +28,7 @@ import com.propertyvista.domain.ref.CountryReferenceAdapter;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.ref.ProvinceReferenceAdapter;
 
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface IAddressFull extends IEntity {
 
     IPrimitive<String> unitNumber();

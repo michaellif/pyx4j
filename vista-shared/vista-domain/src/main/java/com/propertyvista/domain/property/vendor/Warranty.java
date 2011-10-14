@@ -29,7 +29,7 @@ public interface Warranty extends Contract {
 
         parts,
 
-        labour,
+        labor,
 
         partsAndLabour,
 

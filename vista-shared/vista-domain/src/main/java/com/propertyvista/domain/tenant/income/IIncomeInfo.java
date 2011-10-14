@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.financial.Money;
 
@@ -28,6 +29,7 @@ import com.propertyvista.domain.financial.Money;
  */
 @AbstractEntity
 @Inheritance
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface IIncomeInfo extends IEntity {
 
     @Caption(name = "Description")

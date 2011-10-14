@@ -25,10 +25,10 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.vendor.LicencedWarrantedMaintained;
+import com.propertyvista.domain.property.vendor.LicensedWarrantedMaintained;
 
 @ToStringFormat("{0} {1}")
-public interface Equipment extends LicencedWarrantedMaintained {
+public interface Equipment extends LicensedWarrantedMaintained {
 
     @Owner
     @Detached

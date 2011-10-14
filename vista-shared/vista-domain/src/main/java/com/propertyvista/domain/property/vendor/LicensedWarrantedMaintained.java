@@ -19,10 +19,10 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.shared.IEntity;
 
 @AbstractEntity
-public interface LicencedWarrantedMaintained extends IEntity {
+public interface LicensedWarrantedMaintained extends IEntity {
 
     @EmbeddedEntity
-    Licence licence();
+    License license();
 
     @EmbeddedEntity
     Warranty warranty();

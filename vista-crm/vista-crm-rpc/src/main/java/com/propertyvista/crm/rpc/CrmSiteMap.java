@@ -178,7 +178,7 @@ public class CrmSiteMap implements SiteMap {
         }
 
         @PlaceProperties(caption = "Inquiry")
-        @NavigationItem(navigLabel = "Inquies")
+        @NavigationItem(navigLabel = "Inquiry")
         public static class Inquiry extends CrudAppPlace {
 
         }

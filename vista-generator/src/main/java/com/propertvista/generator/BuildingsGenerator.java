@@ -139,7 +139,7 @@ public class BuildingsGenerator {
         building.info().centralAir().setValue(RandomUtil.randomBoolean());
         building.info().centralHeat().setValue(RandomUtil.randomBoolean());
 
-        building.financial().dateAquired().setValue(RandomUtil.randomLogicalDate(1950, 2011));
+        building.financial().dateAcquired().setValue(RandomUtil.randomLogicalDate(1950, 2011));
         building.financial().purchasePrice().setValue(100d + RandomUtil.randomDouble(2000000));
         building.financial().marketPrice().setValue(100d + RandomUtil.randomDouble(2000000));
         building.financial().lastAppraisalDate().setValue(RandomUtil.randomLogicalDate(2000, 2011));
@@ -178,9 +178,9 @@ public class BuildingsGenerator {
             item.description().setValue("Elevator description here...");
             item.notes().setValue(CommonsGenerator.lipsum());
 
-            item.licence().number().setValue(String.valueOf(RandomUtil.randomInt(8)));
-            item.licence().expiration().setValue(RandomUtil.randomLogicalDate());
-            item.licence().renewal().setValue(RandomUtil.randomLogicalDate());
+            item.license().number().setValue(String.valueOf(RandomUtil.randomInt(8)));
+            item.license().expiration().setValue(RandomUtil.randomLogicalDate());
+            item.license().renewal().setValue(RandomUtil.randomLogicalDate());
 
             item.warranty().set(CompanyVendor.createWarranty());
             item.maintenance().set(CompanyVendor.createMaintenance());
@@ -205,9 +205,9 @@ public class BuildingsGenerator {
             item.description().setValue("Boiler description here...");
             item.notes().setValue(CommonsGenerator.lipsum());
 
-            item.licence().number().setValue(String.valueOf(RandomUtil.randomInt(8)));
-            item.licence().expiration().setValue(RandomUtil.randomLogicalDate());
-            item.licence().renewal().setValue(RandomUtil.randomLogicalDate());
+            item.license().number().setValue(String.valueOf(RandomUtil.randomInt(8)));
+            item.license().expiration().setValue(RandomUtil.randomLogicalDate());
+            item.license().renewal().setValue(RandomUtil.randomLogicalDate());
 
             item.warranty().set(CompanyVendor.createWarranty());
             item.maintenance().set(CompanyVendor.createMaintenance());

@@ -27,9 +27,9 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.property.vendor.LicencedWarrantedMaintained;
+import com.propertyvista.domain.property.vendor.LicensedWarrantedMaintained;
 
-public abstract class MechlBaseEditorForm<E extends LicencedWarrantedMaintained> extends CrmEntityForm<E> {
+public abstract class MechlBaseEditorForm<E extends LicensedWarrantedMaintained> extends CrmEntityForm<E> {
 
     protected final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 

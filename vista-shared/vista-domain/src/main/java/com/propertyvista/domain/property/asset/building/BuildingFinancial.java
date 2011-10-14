@@ -22,7 +22,7 @@ import com.propertyvista.domain.financial.Currency;
 
 public interface BuildingFinancial extends IEntity {
 
-    IPrimitive<LogicalDate> dateAquired();
+    IPrimitive<LogicalDate> dateAcquired();
 
     @Format("#0.00")
     IPrimitive<Double> purchasePrice();

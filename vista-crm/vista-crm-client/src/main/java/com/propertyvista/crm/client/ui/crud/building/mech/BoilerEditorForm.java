@@ -52,7 +52,7 @@ public class BoilerEditorForm extends MechlBaseEditorForm<BoilerDTO> {
 
         main.add(new CrmSectionSeparator("Licence"));
         VistaDecoratorsSplitFlowPanel split2 = new VistaDecoratorsSplitFlowPanel(!isEditable());
-        SubtypeInjectors.injectLicence(main, split2, proto().licence(), this);
+        SubtypeInjectors.injectLicence(main, split2, proto().license(), this);
         main.add(split2);
 
         main.add(new VistaLineSeparator());

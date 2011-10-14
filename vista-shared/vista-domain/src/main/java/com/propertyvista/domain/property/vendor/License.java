@@ -22,7 +22,7 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Licence extends IEntity {
+public interface License extends IEntity {
 
     @ToString(index = 1)
     @MemberColumn(name = "licenceNumber")

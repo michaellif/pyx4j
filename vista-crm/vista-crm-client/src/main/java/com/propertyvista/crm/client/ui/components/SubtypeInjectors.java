@@ -35,7 +35,7 @@ import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.vendor.Contract;
-import com.propertyvista.domain.property.vendor.Licence;
+import com.propertyvista.domain.property.vendor.License;
 import com.propertyvista.domain.property.vendor.Maintenance;
 import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.domain.property.vendor.Warranty;
@@ -128,7 +128,7 @@ public class SubtypeInjectors {
         injectCompany(main, proto, parent);
     }
 
-    public static void injectLicence(VistaDecoratorsFlowPanel main, VistaDecoratorsSplitFlowPanel split, Licence proto, CEntityEditor<?> parent) {
+    public static void injectLicence(VistaDecoratorsFlowPanel main, VistaDecoratorsSplitFlowPanel split, License proto, CEntityEditor<?> parent) {
 
         split.getLeftPanel().add(parent.inject(proto.number()), 15);
 

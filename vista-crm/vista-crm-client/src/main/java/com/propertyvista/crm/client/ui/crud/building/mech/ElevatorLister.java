@@ -50,9 +50,9 @@ public class ElevatorLister extends ListerBase<ElevatorDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.make()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.model()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.build()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.licence().number()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.licence().expiration()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.licence().renewal()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.license().number()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.license().expiration()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.license().renewal()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.warranty().type()));
     }
 }
