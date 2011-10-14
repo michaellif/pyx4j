@@ -34,7 +34,7 @@ public class FutureDateValidation {
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The Date cannot be before Today Date");
+                return i18n.tr("The Date must be greater then Today Date");
             }
         });
     }

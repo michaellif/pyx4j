@@ -159,7 +159,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("Move In Date must be before Move Out Date");
+                return i18n.tr("Move In Date must be less then Move Out Date");
             }
         });
 
@@ -180,7 +180,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("Move Out Date must be after Move In Date");
+                return i18n.tr("Move Out Date must be greater then Move In Date");
             }
         });
 
