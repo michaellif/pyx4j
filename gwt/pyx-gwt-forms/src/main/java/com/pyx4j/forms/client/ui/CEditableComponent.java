@@ -77,7 +77,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         if (!newValid || (newValid != valid)) {
             valid = newValid;
             asWidget().setValid(valid);
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.valid);
         }
     }
 
@@ -175,7 +175,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     public void setMandatory(boolean mandatory) {
         if (this.mandatory != mandatory) {
             this.mandatory = mandatory;
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.MANDATORY_PROPERTY);
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.mandatory);
         }
     }
 
@@ -256,7 +256,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         }
 
         return "Type:" + this.getClass() + ";\n Title: " + getTitle() + ";\n value:" + getValue() + "; isMandatory=" + isMandatory() + ";\n isEnabled="
-                + isEnabled() + "; isEditable=" + isEditable() + "; isVisible=" + isVisible() + "; isValid=" + isValid() + "; toolTip=" + getToolTip()
+                + isEnabled() + "; isEditable=" + isEditable() + "; isVisible=" + isVisible() + "; isValid=" + isValid() + "; toolTip=" + getTooltip()
                 + "; size=" + getWidth() + ":" + getHeight() + "; adapters=[" + adaptersReport.toString() + "]";
     }
 
@@ -292,7 +292,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         boolean editable = isEditable();
         if (isWidgetCreated() && asWidget().isEditable() != editable) {
             asWidget().setEditable(editable);
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.READONLY_PROPERTY);
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editable);
         }
     }
 

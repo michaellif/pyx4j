@@ -164,10 +164,10 @@ public class EntityBinder<E extends IEntity> {
                     Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
                         @Override
                         public void execute() {
-                            if (PropertyChangeEvent.PropertyName.VALIDITY.equals(event.getPropertyName())) {
+                            if (PropertyChangeEvent.PropertyName.valid.equals(event.getPropertyName())) {
                                 log.trace("CEntityEditor.onPropertyChange fired from {}. Changed property is {}.", editor.getTitle(), event.getPropertyName());
                                 editor.revalidate();
-                                PropertyChangeEvent.fire(editor, PropertyChangeEvent.PropertyName.VALIDITY);
+                                PropertyChangeEvent.fire(editor, PropertyChangeEvent.PropertyName.valid);
 
                             }
                             sheduled = false;
@@ -217,7 +217,7 @@ public class EntityBinder<E extends IEntity> {
             }
         }
         if (mm.getDescription() != null) {
-            component.setToolTip(mm.getDescription());
+            component.setTooltip(mm.getDescription());
         }
         component.setTitle(mm.getCaption());
         component.setDebugId(member.getPath());

@@ -142,7 +142,7 @@ public class NativeGroupBoxPanel extends FieldSetPanel implements INativeSimpleP
         panel.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
-                if (PropertyChangeEvent.PropertyName.TITLE_PROPERTY == propertyChangeEvent.getPropertyName()) {
+                if (PropertyChangeEvent.PropertyName.title == propertyChangeEvent.getPropertyName()) {
                     setCaption(panel.getTitle());
                 }
             }

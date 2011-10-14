@@ -590,15 +590,15 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             component.addPropertyChangeHandler(new PropertyChangeHandler() {
                 @Override
                 public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
-                    if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
+                    if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.visible) {
                         label.setVisible(component.isVisible());
                         setVisible(component.isVisible());
-                    } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.TITLE_PROPERTY) {
+                    } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.title) {
                         label.setText(component.getTitle() + ":");
-                    } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.MANDATORY_PROPERTY) {
+                    } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.mandatory) {
                         renderMandatoryStar();
-                    } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY
-                            || propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VALIDITY) {
+                    } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.tooltip
+                            || propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.valid) {
                         renderToolTip();
                     }
 
@@ -641,7 +641,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             if (!InfoImageAlignment.HIDDEN.equals(infoImageAlignment)) {
                 String message = null;
                 ImageResource imageResource = null;
-                String tooltipText = component.getToolTip();
+                String tooltipText = component.getTooltip();
                 if (tooltipText == null) {
                     tooltipText = "";
                 } else {
@@ -650,10 +650,10 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 if (component instanceof CEditableComponent<?, ?> && ((CEditableComponent<?, ?>) component).isMandatoryConditionMet()
                         && !((CEditableComponent<?, ?>) component).isValid()) {
                     message = "<div style='color:red'>" + ((CEditableComponent<?, ?>) component).getValidationMessage() + "</div>"
-                            + (tooltipText.equals("") ? "" : ("<br/><div>" + component.getToolTip() + "</div>"));
+                            + (tooltipText.equals("") ? "" : ("<br/><div>" + component.getTooltip() + "</div>"));
                     imageResource = ImageFactory.getImages().formTooltipWarn();
                 } else if (!tooltipText.trim().equals("")) {
-                    message = component.getToolTip();
+                    message = component.getTooltip();
                     imageResource = ImageFactory.getImages().formTooltipInfo();
                 }
 

@@ -26,21 +26,23 @@ public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
 
     public static enum PropertyName {
 
-        TOOLTIP_PROPERTY,
+        tooltip,
 
-        TITLE_PROPERTY,
+        title,
 
-        ENABLED_PROPERTY,
+        enabled,
 
-        VISIBILITY_PROPERTY,
+        visible,
 
-        MANDATORY_PROPERTY,
+        mandatory,
 
-        READONLY_PROPERTY,
+        editable,
 
-        EXPENDED_PROPERTY,
+        modifiable, //Relates to property of component representing collection. If true collection's add/remove/up/down actions are enabled
 
-        VALIDITY
+        expanded,
+
+        valid
 
     };
 

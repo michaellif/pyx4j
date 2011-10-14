@@ -174,8 +174,8 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
         first = index == 0;
         last = index == parent.getItemCount() - 1;
 
-        CEntityFolderItemEditor previousSibling = parent.getItem(index - 1);
-        CEntityFolderItemEditor nextSibling = parent.getItem(index + 1);
+        CEntityFolderItemEditor<?> previousSibling = parent.getItem(index - 1);
+        CEntityFolderItemEditor<?> nextSibling = parent.getItem(index + 1);
 
         ((IFolderItemDecorator<?>) getDecorator()).setActionsState(remoovable, !first && previousSibling.isMoovable(), !last && nextSibling.isMoovable());
 

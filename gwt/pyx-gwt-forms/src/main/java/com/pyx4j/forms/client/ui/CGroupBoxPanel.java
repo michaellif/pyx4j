@@ -160,7 +160,7 @@ public class CGroupBoxPanel extends CContainer<NativeGroupBoxPanel> {
         if (expended && isWidgetCreated()) {
             initInnerComponent();
         }
-        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.EXPENDED_PROPERTY);
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.expanded);
         if ((layout == Layout.CHECKBOX_TOGGLE) && (component != null)) {
             component.applyVisibilityRules();
         }

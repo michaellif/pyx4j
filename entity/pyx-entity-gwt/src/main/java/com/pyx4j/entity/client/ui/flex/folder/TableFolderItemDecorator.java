@@ -96,7 +96,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
-                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VALIDITY) {
+                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.valid) {
                     validationMessageHolder.setHTML(folderItem.getValidationResults().getMessagesText(true));
                 }
             }

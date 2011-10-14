@@ -65,10 +65,10 @@ public class NativeFormGroup<E> extends DockPanel implements INativeEditableComp
         group.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
-                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
+                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.visible) {
                     label.setVisible(group.isVisible());
                     setVisible(group.isVisible());
-                } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.TITLE_PROPERTY) {
+                } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.title) {
                     label.setText(group.getTitle() + ":");
                 }
             }

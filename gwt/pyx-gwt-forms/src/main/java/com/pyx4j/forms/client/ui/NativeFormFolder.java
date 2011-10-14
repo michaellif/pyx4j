@@ -94,10 +94,10 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
         folder.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
-                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
+                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.visible) {
                     label.setVisible(folder.isVisible());
                     setVisible(folder.isVisible());
-                } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.TITLE_PROPERTY) {
+                } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.title) {
                     label.setText(folder.getTitle() + ":");
                 }
             }

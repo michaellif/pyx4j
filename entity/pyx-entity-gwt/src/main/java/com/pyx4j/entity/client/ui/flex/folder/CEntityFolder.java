@@ -77,6 +77,17 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     private final FlowPanel container;
 
+    //if false Collape/Expand are hidden
+    public boolean collapsible = true;
+
+    public boolean collapsed = true;
+
+    // if false Up/Down buttons are hidden
+    public boolean orderable = true;
+
+    // if false Add/Remove/Up/Down are hidden
+    public boolean modifiable = true;
+
     protected int currentRowDebugId = 0;
 
     private final List<CEntityFolderItemEditor<E>> itemsList;
@@ -158,7 +169,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
                             log.debug("CEntityFolder.onPropertyChange fired from {}. Changed property is {}.", CEntityFolder.this.getTitle(),
                                     event.getPropertyName());
                             revalidate();
-                            ValueChangeEvent.fire(CEntityFolder.this, getValue());
+                            PropertyChangeEvent.fire(CEntityFolder.this, PropertyChangeEvent.PropertyName.enabled);
                             sheduled = false;
                         }
                     });
@@ -288,7 +299,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         currentRowDebugId = 0;
 
         for (E entity : value) {
-            System.out.println("++++++++" + entity);
             if (isFolderItemAllowed(entity)) {
                 CEntityFolderItemEditor<E> item = null;
                 for (CEntityFolderItemEditor<E> itemFromCahe : previousList) {
@@ -303,8 +313,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
                 }
                 adoptItem(item);
                 item.populate(entity);
-                System.out.println("!++++++++" + item);
-
             }
         }
 

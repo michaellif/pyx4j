@@ -42,7 +42,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     private String title;
 
-    private String toolTip;
+    private String tooltip;
 
     private CContainer<?> parent;
 
@@ -103,7 +103,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     public void setTitle(String title) {
         this.title = title;
-        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TITLE_PROPERTY);
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.title);
     }
 
     public String getWidth() {
@@ -214,13 +214,13 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
         return accessAdapters.contains(adapter);
     }
 
-    public String getToolTip() {
-        return toolTip;
+    public String getTooltip() {
+        return tooltip;
     }
 
-    public void setToolTip(String toolTip) {
-        this.toolTip = toolTip;
-        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
+    public void setTooltip(String tooltip) {
+        this.tooltip = tooltip;
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.tooltip);
     }
 
     protected abstract WIDGET_TYPE createWidget();
@@ -268,7 +268,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
         boolean visible = isVisible();
         if (isWidgetCreated() && asWidget().isVisible() != visible) {
             asWidget().setVisible(visible);
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY);
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.visible);
         }
     }
 
@@ -276,7 +276,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
         boolean enabled = isEnabled();
         if (isWidgetCreated() && asWidget().isEnabled() != enabled) {
             asWidget().setEnabled(enabled);
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.ENABLED_PROPERTY);
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.enabled);
         }
     }
 

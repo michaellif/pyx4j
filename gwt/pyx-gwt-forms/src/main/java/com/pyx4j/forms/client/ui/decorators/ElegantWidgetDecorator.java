@@ -106,10 +106,10 @@ public class ElegantWidgetDecorator extends DockPanel {
         component.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
-                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
+                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.visible) {
                     label.setVisible(component.isVisible());
                     setVisible(component.isVisible());
-                } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.TITLE_PROPERTY) {
+                } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.title) {
                     label.setText(component.getTitle() + ":");
                 }
                 renderToolTip();
@@ -143,7 +143,7 @@ public class ElegantWidgetDecorator extends DockPanel {
     }
 
     private void renderToolTip() {
-        if (component.getToolTip() == null || component.getToolTip().trim().length() == 0) {
+        if (component.getTooltip() == null || component.getTooltip().trim().length() == 0) {
             imageInfoWarnHolder.clear();
         } else {
             if (imageInfoWarn == null) {
@@ -157,7 +157,7 @@ public class ElegantWidgetDecorator extends DockPanel {
                 imageInfoWarn.setResource(ImageFactory.getImages().formTooltipInfo());
             }
             imageInfoWarnHolder.setWidget(imageInfoWarn);
-            tooltip.setTooltipText(component.getToolTip());
+            tooltip.setTooltipText(component.getTooltip());
 
         }
     }

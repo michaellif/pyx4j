@@ -103,7 +103,7 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
                     }
 
                     if (mm.getDescription() != null) {
-                        components[i][j].setToolTip(mm.getDescription());
+                        components[i][j].setTooltip(mm.getDescription());
                     }
                     components[i][j].setTitle(mm.getCaption());
                     components[i][j].setDebugId(member.getPath());

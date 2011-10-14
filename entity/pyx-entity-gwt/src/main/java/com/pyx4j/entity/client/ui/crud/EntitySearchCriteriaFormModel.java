@@ -79,8 +79,8 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
 
         @Override
         public void onPropertyChange(PropertyChangeEvent event) {
-            if ((event.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY)
-                    || (event.getPropertyName() == PropertyChangeEvent.PropertyName.ENABLED_PROPERTY)) {
+            if ((event.getPropertyName() == PropertyChangeEvent.PropertyName.visible)
+                    || (event.getPropertyName() == PropertyChangeEvent.PropertyName.enabled)) {
                 PathSearch path = binding.get(event.getSource());
                 if ((path != null) && (editableCriteria != null)) {
                     CEditableComponent<?, ?> component = (CEditableComponent<?, ?>) event.getSource();

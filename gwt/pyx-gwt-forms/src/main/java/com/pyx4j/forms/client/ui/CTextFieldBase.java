@@ -55,7 +55,7 @@ public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INa
     @Override
     public void setValue(DATA_TYPE value) {
         if (getValue() == null && value == null) {
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.tooltip);
         } else {
             super.setValue(value);
         }
