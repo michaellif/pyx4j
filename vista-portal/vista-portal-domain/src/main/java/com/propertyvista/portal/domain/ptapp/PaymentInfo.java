@@ -55,7 +55,7 @@ public interface PaymentInfo extends IEntity, IBoundToApplication {
 
     InteracInfo interac();
 
-    @Caption(name = "Yes please enrol me")
+    @Caption(name = "Yes please enroll me")
     IPrimitive<Boolean> preauthorised();
 
     IPrimitive<Boolean> sameAsCurrent();

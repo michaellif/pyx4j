@@ -151,7 +151,7 @@ public interface AptUnitItem extends IEntity {
 
     // ----------- Details -----------------------
 
-    IPrimitive<String> wallColour();
+    IPrimitive<String> wallColor();
 
     IPrimitive<FlooringType> flooringType();
 

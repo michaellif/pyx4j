@@ -309,7 +309,7 @@ public class FinancialViewIncomeForm2 extends CEntityFolderBoxEditor<IIncomeInfo
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The start date can not be equal or after end date.");
+                return i18n.tr("The start date cannot be equal or after end date.");
             }
         });
 
@@ -324,7 +324,7 @@ public class FinancialViewIncomeForm2 extends CEntityFolderBoxEditor<IIncomeInfo
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The end date can not be before of equal to start date.");
+                return i18n.tr("The end date cannot be before of equal to start date.");
             }
         });
 

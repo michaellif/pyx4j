@@ -193,7 +193,7 @@ public class CrmMediaListFolderEditor extends VistaEntityFolder<Media> {
                 switch (type) {
                 case file:
                     if (getValue().id().isNull()) {
-                        MessageDialog.error(i18n.tr("Upload error"), i18n.tr("Plase save this first"));
+                        MessageDialog.error(i18n.tr("Upload error"), i18n.tr("Please save this first"));
                     } else {
                         MediaFileViewDialog dialog = new MediaFileViewDialog();
                         dialog.title = getValue().caption().getValue();

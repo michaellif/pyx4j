@@ -27,7 +27,7 @@ public interface Application extends IEntity, IUserEntity {
     @Owned
     IList<ApplicationWizardStep> steps();
 
-    IPrimitive<Boolean> submited();
+    IPrimitive<Boolean> submitted();
 
     @Detached
     Lease lease();

@@ -398,7 +398,7 @@ public class TenantFinancialViewIncomeForm extends CEntityFolderBoxEditor<Person
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The start date can not be equal or after end date.");
+                return i18n.tr("The start date cannot be equal or after end date.");
             }
         });
 

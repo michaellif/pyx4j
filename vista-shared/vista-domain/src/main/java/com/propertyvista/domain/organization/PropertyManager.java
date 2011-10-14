@@ -19,7 +19,7 @@ import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.organization.portal.PortalPreferences;
 
 
-public interface ProperyManager extends Company {
+public interface PropertyManager extends Company {
 
     @Owned
     PortalPreferences portalPreferences();

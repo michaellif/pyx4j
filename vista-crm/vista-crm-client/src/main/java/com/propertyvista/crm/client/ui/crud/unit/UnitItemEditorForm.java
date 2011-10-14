@@ -47,7 +47,7 @@ public class UnitItemEditorForm extends CrmEntityForm<AptUnitItem> {
         main.add(new CrmSectionSeparator(i18n.tr("Details")));
         main.add(split = new VistaDecoratorsSplitFlowPanel(!isEditable(), 15));
 
-        split.getLeftPanel().add(inject(proto().wallColour()), 10);
+        split.getLeftPanel().add(inject(proto().wallColor()), 10);
         split.getLeftPanel().add(inject(proto().flooringType()), 10);
         split.getLeftPanel().add(inject(proto().flooringInstallDate()), 8.2);
         split.getLeftPanel().add(inject(proto().flooringValue()), 8.2);

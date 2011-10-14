@@ -185,7 +185,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         private boolean yes;
 
         public YesNoBox() {
-            super(i18n.tr("Please confurm"));
+            super(i18n.tr("Please confirm"));
 
             okButton.setText(i18n.tr("Yes"));
             clButton.setText(i18n.tr("No"));

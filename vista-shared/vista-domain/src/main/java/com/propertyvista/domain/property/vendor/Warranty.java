@@ -31,7 +31,7 @@ public interface Warranty extends Contract {
 
         labor,
 
-        partsAndLabour,
+        partsAndLabor,
 
         full,
 
@@ -47,7 +47,7 @@ public interface Warranty extends Contract {
         }
     }
 
-    // ----------- Infromation -------------
+    // ----------- Information -------------
 
     @ToString(index = 1)
     IPrimitive<String> title();

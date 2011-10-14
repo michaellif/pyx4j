@@ -384,7 +384,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
                             @Override
                             public String getValidationMessage(CEditableComponent<Double, ?> component, Double value) {
-                                return VistaEntityFolder.i18n.tr("Value can not increase 100%");
+                                return VistaEntityFolder.i18n.tr("Value cannot increase 100%");
                             }
 
                         });

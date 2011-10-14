@@ -45,6 +45,6 @@ public class MediaItemValidator implements EditableValueValidator<Media> {
 
     @Override
     public String getValidationMessage(CEditableComponent<Media, ?> component, Media value) {
-        return i18n.tr("Media source can not be empty!");
+        return i18n.tr("Media source cannot be empty!");
     }
 }
