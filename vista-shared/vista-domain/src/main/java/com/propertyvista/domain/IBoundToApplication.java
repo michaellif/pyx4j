@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.tenant.ptapp.Application;
 
@@ -38,6 +39,7 @@ import com.propertyvista.domain.tenant.ptapp.Application;
  * </pre>
  */
 @AbstractEntity
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface IBoundToApplication extends IEntity {
 
     @NotNull

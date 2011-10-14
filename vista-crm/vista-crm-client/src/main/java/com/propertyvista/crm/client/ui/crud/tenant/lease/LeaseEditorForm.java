@@ -940,7 +940,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         protected Widget createContent() {
             okButton.setEnabled(false);
 
-            if (!getValue().selectedConcesions().isEmpty()) {
+            if (!getValue().selectedConcessions().isEmpty()) {
                 list = new ListBox(true);
                 list.addChangeHandler(new ChangeHandler() {
                     @Override
@@ -954,7 +954,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     alreadySelected.add(item.concession());
                 }
 
-                for (Concession item : getValue().selectedConcesions()) {
+                for (Concession item : getValue().selectedConcessions()) {
                     if (!alreadySelected.contains(item)) {
                         list.addItem(item.getStringView());
                         list.setValue(list.getItemCount() - 1, item.id().toString());
@@ -983,7 +983,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             selectedItems = new ArrayList<Concession>(4);
             for (int i = 0; i < list.getItemCount(); ++i) {
                 if (list.isItemSelected(i)) {
-                    for (Concession item : getValue().selectedConcesions()) {
+                    for (Concession item : getValue().selectedConcessions()) {
                         if (list.getValue(i).contentEquals(item.id().toString())) {
                             selectedItems.add(item);
                         }

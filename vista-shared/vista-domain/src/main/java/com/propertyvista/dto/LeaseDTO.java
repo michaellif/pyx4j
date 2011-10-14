@@ -37,7 +37,7 @@ public interface LeaseDTO extends Lease {
 
     IList<ServiceItem> selectedUtilityItems();
 
-    IList<Concession> selectedConcesions();
+    IList<Concession> selectedConcessions();
 
     // -----------------------------------------------------
 

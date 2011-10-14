@@ -214,7 +214,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         // fill related features and concession:
         currentValue.selectedFeatureItems().clear();
         currentValue.selectedUtilityItems().clear();
-        currentValue.selectedConcesions().clear();
+        currentValue.selectedConcessions().clear();
 
         if (selectedService != null) {
             ServiceCatalog catalog = currentValue.selectedBuilding().serviceCatalog();
@@ -239,7 +239,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             }
             // fill concessions:
             for (ServiceConcession consession : selectedService.concessions()) {
-                currentValue.selectedConcesions().add(consession.concession());
+                currentValue.selectedConcessions().add(consession.concession());
             }
         }
 
