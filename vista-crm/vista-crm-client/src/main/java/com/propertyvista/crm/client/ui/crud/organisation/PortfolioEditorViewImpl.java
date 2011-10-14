@@ -20,6 +20,6 @@ import com.propertyvista.domain.company.Portfolio;
 public class PortfolioEditorViewImpl extends CrmEditorViewImplBase<Portfolio> implements PortfolioEditorView {
 
     public PortfolioEditorViewImpl() {
-        super(CrmSiteMap.Organisation.Portfolio.class, new PortfolioEditorForm());
+        super(CrmSiteMap.Organization.Portfolio.class, new PortfolioEditorForm());
     }
 }

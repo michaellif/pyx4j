@@ -113,7 +113,7 @@ public interface Lead extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> moveInDate();
 
-    @Caption(name = "Desired monthly rent range: MIN and MAX")
+    @Caption(name = "Desired Monthly Rent Range: MIN and MAX")
     @EmbeddedEntity
     RangeGroup rent();
 

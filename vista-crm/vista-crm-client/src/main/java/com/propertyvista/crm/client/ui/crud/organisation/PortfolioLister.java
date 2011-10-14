@@ -25,11 +25,11 @@ import com.propertyvista.domain.company.Portfolio;
 public class PortfolioLister extends ListerBase<Portfolio> {
 
     public PortfolioLister() {
-        super(Portfolio.class, CrmSiteMap.Organisation.Portfolio.class);
+        super(Portfolio.class, CrmSiteMap.Organization.Portfolio.class);
     }
 
     public PortfolioLister(boolean readOnly) {
-        super(Portfolio.class, CrmSiteMap.Organisation.Portfolio.class, readOnly);
+        super(Portfolio.class, CrmSiteMap.Organization.Portfolio.class, readOnly);
     }
 
     @Override

@@ -193,7 +193,7 @@ public class CrmSiteMap implements SiteMap {
     public static class Finance extends AppPlace {
     }
 
-    public static class Organisation extends AppPlace {
+    public static class Organization extends AppPlace {
 
         @PlaceProperties(caption = "Employee")
         @NavigationItem(navigLabel = "Employees")
@@ -263,7 +263,7 @@ public class CrmSiteMap implements SiteMap {
         }
 
         @PlaceProperties(caption = "Feature Item Type")
-        @NavigationItem(navigLabel = "Featrue Item Type")
+        @NavigationItem(navigLabel = "Feature Item Type")
         public static class FeatureItemType extends CrudAppPlace {
 
         }

@@ -64,7 +64,7 @@ import com.propertyvista.crm.client.ui.components.media.CrmMediaListFolderEditor
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
-import com.propertyvista.domain.company.OrganisationContact;
+import com.propertyvista.domain.company.OrganizationContact;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -341,9 +341,9 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         };
     }
 
-    private CEntityFolder<OrganisationContact> createContactsListEditor() {
-        return new VistaEntityFolder<OrganisationContact>(OrganisationContact.class, isEditable()) {
-            private final VistaEntityFolder<OrganisationContact> parent = this;
+    private CEntityFolder<OrganizationContact> createContactsListEditor() {
+        return new VistaEntityFolder<OrganizationContact>(OrganizationContact.class, isEditable()) {
+            private final VistaEntityFolder<OrganizationContact> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -351,17 +351,17 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             }
 
             @Override
-            protected IFolderDecorator<OrganisationContact> createDecorator() {
-                return new VistaBoxFolderDecorator<OrganisationContact>(parent);
+            protected IFolderDecorator<OrganizationContact> createDecorator() {
+                return new VistaBoxFolderDecorator<OrganizationContact>(parent);
             }
 
             @Override
-            protected CEntityFolderItemEditor<OrganisationContact> createItem() {
-                return new CEntityFolderRowEditor<OrganisationContact>(OrganisationContact.class, columns()) {
+            protected CEntityFolderItemEditor<OrganizationContact> createItem() {
+                return new CEntityFolderRowEditor<OrganizationContact>(OrganizationContact.class, columns()) {
 
                     @Override
-                    public IFolderItemDecorator<OrganisationContact> createDecorator() {
-                        return new VistaBoxFolderItemDecorator<OrganisationContact>(parent);
+                    public IFolderItemDecorator<OrganizationContact> createDecorator() {
+                        return new VistaBoxFolderItemDecorator<OrganizationContact>(parent);
                     }
 
                     @Override

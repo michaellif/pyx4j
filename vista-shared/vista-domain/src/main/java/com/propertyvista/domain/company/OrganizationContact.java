@@ -13,12 +13,14 @@
  */
 package com.propertyvista.domain.company;
 
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public interface OrganisationContacts extends IEntity {
+public interface OrganizationContact extends IEntity {
 
-    CompanyRole companyRole();
+    @Editor(type = Editor.EditorType.textarea)
+    IPrimitive<String> description();
 
-    IList<OrganisationContact> contactList();
+    Employee person();
 }

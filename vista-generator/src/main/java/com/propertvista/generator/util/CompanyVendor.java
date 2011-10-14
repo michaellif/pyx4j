@@ -17,8 +17,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Company;
-import com.propertyvista.domain.company.OrganisationContact;
-import com.propertyvista.domain.company.OrganisationContacts;
+import com.propertyvista.domain.company.OrganizationContact;
+import com.propertyvista.domain.company.OrganizationContacts;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.property.vendor.Contract;
 import com.propertyvista.domain.property.vendor.Maintenance;
@@ -51,7 +51,7 @@ public class CompanyVendor {
         }
 
         for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-            OrganisationContacts contacts = createOrganizationContacts();
+            OrganizationContacts contacts = createOrganizationContacts();
             company.contacts().add(contacts);
         }
 
@@ -104,20 +104,20 @@ public class CompanyVendor {
     }
 
     // internals:
-    private static OrganisationContacts createOrganizationContacts() {
-        OrganisationContacts contacts = EntityFactory.create(OrganisationContacts.class);
+    private static OrganizationContacts createOrganizationContacts() {
+        OrganizationContacts contacts = EntityFactory.create(OrganizationContacts.class);
 
         contacts.companyRole().name().setValue(RandomUtil.random(DemoData.COMPANY_ROLES));
 
         for (int i = 0; i < RandomUtil.randomInt(2); i++) {
-            OrganisationContact contact = createOrganizationContact();
+            OrganizationContact contact = createOrganizationContact();
             contacts.contactList().add(contact);
         }
         return contacts;
     }
 
-    private static OrganisationContact createOrganizationContact() {
-        OrganisationContact contact = EntityFactory.create(OrganisationContact.class);
+    private static OrganizationContact createOrganizationContact() {
+        OrganizationContact contact = EntityFactory.create(OrganizationContact.class);
 
         contact.description().setValue(RandomUtil.random(DemoData.CONTACT_ROLES));
         contact.person().set(CommonsGenerator.createPerson());

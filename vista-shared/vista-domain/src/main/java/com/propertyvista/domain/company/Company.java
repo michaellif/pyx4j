@@ -37,7 +37,7 @@ public interface Company extends IEntity {
 
     IList<Email> emails();
 
-    IList<OrganisationContacts> contacts();
+    IList<OrganizationContacts> contacts();
 
     @EmbeddedEntity
     Media logo();

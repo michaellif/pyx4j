@@ -61,9 +61,9 @@ public interface TenantIn extends IEntity {
 
         Father,
 
-        GrandMother,
+        Grandmother,
 
-        GrandFather,
+        Grandfather,
 
         Uncle,
 

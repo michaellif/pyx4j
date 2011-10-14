@@ -15,9 +15,11 @@ package com.propertyvista.domain.tenant.ptapp;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep.Status;
 
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface ApplicationWizardSubstep extends IEntity {
 
     IPrimitive<String> name();

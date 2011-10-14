@@ -370,7 +370,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                             @Override
                             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                                return LeaseEditorForm.i18n.tr("Applicant and co-applicant should be at least 18 years old");
+                                return LeaseEditorForm.i18n.tr("Applicant and Co-applicant must be at least 18 years old");
                             }
                         });
 
@@ -447,7 +447,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             @Override
             protected void addItem() {
                 if (LeaseEditorForm.this.getValue().serviceAgreement().serviceItem().isNull()) {
-                    MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Select Service Item firs!"));
+                    MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Select Service Item first!"));
                 } else {
                     new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox()) {
                         @Override
@@ -642,7 +642,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             @Override
             protected void addItem() {
                 if (LeaseEditorForm.this.getValue().serviceAgreement().serviceItem().isNull()) {
-                    MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Select Service Item firs!"));
+                    MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Select Service Item first!"));
                 } else {
                     new ShowPopUpBox<SelectConcessionBox>(new SelectConcessionBox()) {
                         @Override
@@ -889,10 +889,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     list.setWidth("100%");
                     return list.asWidget();
                 } else {
-                    return new HTML(i18n.tr("All features have been selected already!.."));
+                    return new HTML(i18n.tr("All features have been already selected!"));
                 }
             } else {
-                return new HTML(i18n.tr("There are no features for this service!.."));
+                return new HTML(i18n.tr("There are no features for this service!"));
             }
         }
 
@@ -966,10 +966,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     list.setWidth("100%");
                     return list.asWidget();
                 } else {
-                    return new HTML(i18n.tr("All concessions have been selected already!.."));
+                    return new HTML(i18n.tr("All concessions have been already selected!"));
                 }
             } else {
-                return new HTML(i18n.tr("There are no concessions for this service!.."));
+                return new HTML(i18n.tr("There are no concessions for this service!"));
             }
         }
 

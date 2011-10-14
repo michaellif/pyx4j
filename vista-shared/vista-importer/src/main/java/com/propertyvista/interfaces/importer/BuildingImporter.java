@@ -26,7 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.company.OrganisationContact;
+import com.propertyvista.domain.company.OrganizationContact;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Parking;
@@ -126,7 +126,7 @@ public class BuildingImporter {
         // Save building
         Building building = new BuildingConverter().createDBO(buildingIO);
         // Save Employee or find existing one
-        for (OrganisationContact organisationContact : building.contacts().contacts()) {
+        for (OrganizationContact organisationContact : building.contacts().contacts()) {
             if (!organisationContact.person().isNull()) {
                 // Find existing Employee
                 EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);

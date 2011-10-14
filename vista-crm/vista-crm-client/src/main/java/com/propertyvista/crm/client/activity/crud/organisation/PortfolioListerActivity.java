@@ -20,7 +20,7 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.organisation.PortfolioListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.OrganisationViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
 import com.propertyvista.crm.rpc.services.PortfolioCrudService;
 import com.propertyvista.domain.company.Portfolio;
 
@@ -28,7 +28,7 @@ public class PortfolioListerActivity extends ListerActivityBase<Portfolio> {
 
     @SuppressWarnings("unchecked")
     public PortfolioListerActivity(Place place) {
-        super((PortfolioListerView) OrganisationViewFactory.instance(PortfolioListerView.class), (AbstractCrudService<Portfolio>) GWT
+        super((PortfolioListerView) OrganizationViewFactory.instance(PortfolioListerView.class), (AbstractCrudService<Portfolio>) GWT
                 .create(PortfolioCrudService.class), Portfolio.class);
         setPlace(place);
     }

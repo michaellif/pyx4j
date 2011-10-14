@@ -15,13 +15,13 @@ package com.propertyvista.interfaces.importer.converter;
 
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
-import com.propertyvista.domain.company.OrganisationContact;
+import com.propertyvista.domain.company.OrganizationContact;
 import com.propertyvista.interfaces.importer.model.ContactIO;
 
-public class OrganisationContactConverter extends EntityDtoBinder<OrganisationContact, ContactIO> {
+public class OrganizationContactConverter extends EntityDtoBinder<OrganizationContact, ContactIO> {
 
-    public OrganisationContactConverter() {
-        super(OrganisationContact.class, ContactIO.class, false);
+    public OrganizationContactConverter() {
+        super(OrganizationContact.class, ContactIO.class, false);
     }
 
     @Override

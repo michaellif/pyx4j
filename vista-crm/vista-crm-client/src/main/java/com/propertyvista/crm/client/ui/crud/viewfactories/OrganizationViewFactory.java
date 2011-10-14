@@ -29,7 +29,7 @@ import com.propertyvista.crm.client.ui.crud.organisation.PortfolioListerViewImpl
 import com.propertyvista.crm.client.ui.crud.organisation.PortfolioViewerView;
 import com.propertyvista.crm.client.ui.crud.organisation.PortfolioViewerViewImpl;
 
-public class OrganisationViewFactory extends ViewFactoryBase {
+public class OrganizationViewFactory extends ViewFactoryBase {
 
     public static IView<? extends IEntity> instance(Class<? extends IView<? extends IEntity>> type) {
         if (!map.containsKey(type)) {

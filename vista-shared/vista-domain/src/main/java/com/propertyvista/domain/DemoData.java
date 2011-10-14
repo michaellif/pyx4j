@@ -40,7 +40,7 @@ public class DemoData {
     public final static String REGISTRATION_DEFAULT_FLOORPLAN = "Luxury 2-bedroom";
 
     public final static Relationship[] RELATIONSHIPS = { Relationship.Spouse, Relationship.Daughter, Relationship.Son, Relationship.Mother,
-            Relationship.Father, Relationship.Aunt, Relationship.Uncle, Relationship.GrandFather, Relationship.GrandMother, Relationship.Other };
+            Relationship.Father, Relationship.Aunt, Relationship.Uncle, Relationship.Grandfather, Relationship.Grandmother, Relationship.Other };
 
     public final static String[] PET_BREEDS = { "Colly", "German Sheppard", "Schnautzer", "Labrador" };
 

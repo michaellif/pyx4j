@@ -25,11 +25,11 @@ import com.propertyvista.domain.company.Employee;
 public class EmployeeLister extends ListerBase<Employee> {
 
     public EmployeeLister() {
-        super(Employee.class, CrmSiteMap.Organisation.Employee.class);
+        super(Employee.class, CrmSiteMap.Organization.Employee.class);
     }
 
     public EmployeeLister(boolean readOnly) {
-        super(Employee.class, CrmSiteMap.Organisation.Employee.class, readOnly);
+        super(Employee.class, CrmSiteMap.Organization.Employee.class, readOnly);
     }
 
     @Override

@@ -21,6 +21,6 @@ import com.propertyvista.domain.company.Employee;
 public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<Employee> implements EmployeeViewerView {
 
     public EmployeeViewerViewImpl() {
-        super(CrmSiteMap.Organisation.Employee.class, new EmployeeEditorForm(new CrmViewersComponentFactory()));
+        super(CrmSiteMap.Organization.Employee.class, new EmployeeEditorForm(new CrmViewersComponentFactory()));
     }
 }

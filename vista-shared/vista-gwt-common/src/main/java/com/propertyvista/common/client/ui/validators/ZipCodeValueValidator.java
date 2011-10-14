@@ -13,7 +13,6 @@
  */
 package com.propertyvista.common.client.ui.validators;
 
-
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.Path;
@@ -57,7 +56,7 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
     public String getValidationMessage(CEditableComponent<String, ?> component, String value) {
         String c = countryName();
         if ("Canada".equals(c)) {
-            return i18n.tr("Invalid Canadian Postal code.");
+            return i18n.tr("Invalid Canadian Postal Code.");
         } else if ("United States".equals(c)) {
             return i18n.tr("Invalid US Zip code.");
         } else {

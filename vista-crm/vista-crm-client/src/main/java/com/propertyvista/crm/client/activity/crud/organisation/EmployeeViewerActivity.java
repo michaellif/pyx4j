@@ -20,7 +20,7 @@ import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.organisation.EmployeeViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.OrganisationViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
 import com.propertyvista.crm.rpc.services.EmployeeCrudService;
 import com.propertyvista.domain.company.Employee;
 
@@ -28,7 +28,7 @@ public class EmployeeViewerActivity extends ViewerActivityBase<Employee> {
 
     @SuppressWarnings("unchecked")
     public EmployeeViewerActivity(Place place) {
-        super((EmployeeViewerView) OrganisationViewFactory.instance(EmployeeViewerView.class), (AbstractCrudService<Employee>) GWT
+        super((EmployeeViewerView) OrganizationViewFactory.instance(EmployeeViewerView.class), (AbstractCrudService<Employee>) GWT
                 .create(EmployeeCrudService.class));
         setPlace(place);
     }

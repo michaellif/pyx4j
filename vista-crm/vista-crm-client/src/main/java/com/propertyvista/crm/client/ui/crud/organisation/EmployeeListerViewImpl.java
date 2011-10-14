@@ -20,7 +20,7 @@ import com.propertyvista.domain.company.Employee;
 public class EmployeeListerViewImpl extends CrmListerViewImplBase<Employee> implements EmployeeListerView {
 
     public EmployeeListerViewImpl() {
-        super(CrmSiteMap.Organisation.Employee.class);
+        super(CrmSiteMap.Organization.Employee.class);
         setLister(new EmployeeLister());
     }
 }

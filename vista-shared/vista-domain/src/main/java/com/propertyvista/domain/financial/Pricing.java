@@ -26,6 +26,6 @@ public interface Pricing extends IEntity {
     IPrimitive<PaymentTerm> paymentTerm();
 
     @Format("#0.00")
-    IPrimitive<Double> ammount();
+    IPrimitive<Double> amount();
 
 }

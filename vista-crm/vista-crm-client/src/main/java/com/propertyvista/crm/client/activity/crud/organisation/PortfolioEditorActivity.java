@@ -20,7 +20,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.ui.crud.organisation.PortfolioEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.OrganisationViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
 import com.propertyvista.crm.rpc.services.PortfolioCrudService;
 import com.propertyvista.domain.company.Portfolio;
 
@@ -28,7 +28,7 @@ public class PortfolioEditorActivity extends EditorActivityBase<Portfolio> {
 
     @SuppressWarnings("unchecked")
     public PortfolioEditorActivity(Place place) {
-        super((PortfolioEditorView) OrganisationViewFactory.instance(PortfolioEditorView.class), (AbstractCrudService<Portfolio>) GWT
+        super((PortfolioEditorView) OrganizationViewFactory.instance(PortfolioEditorView.class), (AbstractCrudService<Portfolio>) GWT
                 .create(PortfolioCrudService.class), Portfolio.class);
         setPlace(place);
     }

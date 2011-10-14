@@ -20,7 +20,7 @@ import com.propertyvista.domain.company.Portfolio;
 public class PortfolioListerViewImpl extends CrmListerViewImplBase<Portfolio> implements PortfolioListerView {
 
     public PortfolioListerViewImpl() {
-        super(CrmSiteMap.Organisation.Portfolio.class);
+        super(CrmSiteMap.Organization.Portfolio.class);
         setLister(new PortfolioLister());
     }
 }

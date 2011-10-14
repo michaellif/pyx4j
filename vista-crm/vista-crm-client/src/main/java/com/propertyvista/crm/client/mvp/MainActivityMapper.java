@@ -385,7 +385,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 // - Organisation-related:
-                } else if (place instanceof CrmSiteMap.Organisation.Employee) {
+                } else if (place instanceof CrmSiteMap.Organization.Employee) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         activity = new EmployeeEditorActivity(place);
@@ -398,7 +398,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-                } else if (place instanceof CrmSiteMap.Organisation.Portfolio) {
+                } else if (place instanceof CrmSiteMap.Organization.Portfolio) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         activity = new PortfolioEditorActivity(place);

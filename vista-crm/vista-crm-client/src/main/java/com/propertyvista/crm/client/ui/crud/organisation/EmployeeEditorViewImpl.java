@@ -20,6 +20,6 @@ import com.propertyvista.domain.company.Employee;
 public class EmployeeEditorViewImpl extends CrmEditorViewImplBase<Employee> implements EmployeeEditorView {
 
     public EmployeeEditorViewImpl() {
-        super(CrmSiteMap.Organisation.Employee.class, new EmployeeEditorForm());
+        super(CrmSiteMap.Organization.Employee.class, new EmployeeEditorForm());
     }
 }
