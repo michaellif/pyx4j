@@ -104,7 +104,7 @@
         </profile>
 
         <profile>
-            <id>build-full</id>
+            <id>i18n-old</id>
             <build>
 
                 <plugins>

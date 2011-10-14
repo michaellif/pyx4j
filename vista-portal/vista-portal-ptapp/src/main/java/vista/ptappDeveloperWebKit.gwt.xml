@@ -3,5 +3,6 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module rename-to="ptapp">
     <inherits name='vista.ptapp'/>
+    <set-property name="locale" value="en_US"/>
     <set-property name="user.agent" value="safari"/>
 </module>

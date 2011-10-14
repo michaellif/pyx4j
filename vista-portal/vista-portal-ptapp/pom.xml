@@ -98,7 +98,43 @@
         </profile>
 
         <profile>
-            <id>build-full</id>
+            <id>i18n</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.pyx4j</groupId>
+                        <artifactId>maven-i18n-plugin</artifactId>
+                        <version>${pyxVersion}</version>
+                        <executions>
+                            <execution>
+                                <id>extract-i18n</id>
+                                <goals>
+                                    <goal>extract</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <poSaveLocation>${poSaveLocation}</poSaveLocation>
+                            <keysFile>keys${poSufix}.pot</keysFile>
+                            <excludes>
+                                <exclude>com.google.*</exclude>
+                            </excludes>
+                            <includes>
+                                <include>com.pyx4j*</include>
+                                <include>com.propertyvista*</include>
+                            </includes>
+                            <autoTranslates>
+                                <autoTranslate>ru</autoTranslate>
+                                <autoTranslate>fr</autoTranslate>
+                            </autoTranslates>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>i18n-old</id>
             <build>
 
                 <plugins>
@@ -169,7 +205,9 @@
                         </executions>
                         <configuration>
                             <targetBundle>Messages</targetBundle>
-                            <poDirectory>${basedir}/src/main/po</poDirectory>
+                            <keysFile>keys-gettext-${poSufix}.pot</keysFile>
+                            <keywords>-ktrc:1c,2 -ktrnc:1c,2,3 -ktr -kmarktr -ktrn:1,2 -k ${gettextArg} --sort-output</keywords>
+                            <poDirectory>${basedir}/src/main/resources/translations</poDirectory>
                             <sourceDirectory>${project.build.directory}/source-4i18n</sourceDirectory>
                         </configuration>
                     </plugin>

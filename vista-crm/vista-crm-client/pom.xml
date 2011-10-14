@@ -112,22 +112,6 @@
         </profile>
 
         <profile>
-            <id>i18n-auto</id>
-            <properties>
-                <i18n.autoTranslate>true</i18n.autoTranslate>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>nl</id>
-            <properties>
-                <poSaveLocation>false</poSaveLocation>
-                <gettextArg>--no-location</gettextArg>
-                <poSufix>-no_location</poSufix>
-            </properties>
-        </profile>
-
-        <profile>
             <id>i18n</id>
             <build>
                 <plugins>
@@ -164,7 +148,7 @@
         </profile>
 
         <profile>
-            <id>build-full</id>
+            <id>i18n-old</id>
             <build>
 
                 <plugins>
@@ -237,7 +221,7 @@
                             <targetBundle>Messages</targetBundle>
                             <keysFile>keys-gettext-${poSufix}.pot</keysFile>
                             <keywords>-ktrc:1c,2 -ktrnc:1c,2,3 -ktr -kmarktr -ktrn:1,2 -k ${gettextArg} --sort-output</keywords>
-                            <poDirectory>${basedir}/src/main/po</poDirectory>
+                            <poDirectory>${basedir}/src/main/resources/translations</poDirectory>
                             <sourceDirectory>${project.build.directory}/source-4i18n</sourceDirectory>
                         </configuration>
                     </plugin>
