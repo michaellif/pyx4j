@@ -298,14 +298,6 @@ public class ConstantExtractor {
         }
     }
 
-    private String classNameCorrections(String className) {
-        if (className.endsWith("DTO")) {
-            return className.substring(0, className.length() - 1);
-        } else {
-            return className;
-        }
-    }
-
     private void extractTranslatableMembers(ClassNode classNode) {
         I18nStrategy strategy = getStrategyAnnotationValue(classNode);
         if ((strategy == I18nStrategy.IgnoreAll) || (strategy == I18nStrategy.DerivedOnly)) {
@@ -345,9 +337,9 @@ public class ConstantExtractor {
                 capitalize = false;
             }
             if (capitalize) {
-                addEntry(classSourceFileName, 0, EnglishGrammar.capitalize(classNameCorrections(AsmUtils.getSimpleName(classNode))), false);
+                addEntry(classSourceFileName, 0, EnglishGrammar.capitalize(EnglishGrammar.classNameToEnglish(AsmUtils.getSimpleName(classNode))), false);
             } else {
-                addEntry(classSourceFileName, 0, classNameCorrections(AsmUtils.getSimpleName(classNode)), false);
+                addEntry(classSourceFileName, 0, EnglishGrammar.classNameToEnglish(AsmUtils.getSimpleName(classNode)), false);
             }
         }
 

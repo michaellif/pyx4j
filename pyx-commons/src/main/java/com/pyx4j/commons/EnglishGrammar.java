@@ -22,6 +22,14 @@ package com.pyx4j.commons;
 
 public class EnglishGrammar {
 
+    public static String classNameToEnglish(String className) {
+        if (className.endsWith("DTO")) {
+            return className.substring(0, className.length() - 3);
+        } else {
+            return className;
+        }
+    }
+
     public static String prefixArticleIndefinite(String word, boolean capital) {
         return articleIndefinite(word, capital) + " " + word;
     }

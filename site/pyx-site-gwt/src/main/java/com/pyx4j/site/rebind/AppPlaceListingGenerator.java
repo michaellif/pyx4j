@@ -164,7 +164,7 @@ public class AppPlaceListingGenerator extends Generator {
                     staticContent = placeProperties.staticContent();
                 }
                 if (I18nAnnotation.DEFAULT_VALUE.equals(caption)) {
-                    caption = EnglishGrammar.capitalize(jClassType.getSimpleSourceName());
+                    caption = EnglishGrammar.capitalize(EnglishGrammar.classNameToEnglish(jClassType.getSimpleSourceName()));
                 }
 
                 NavigationItem navigationItem = jClassType.getAnnotation(NavigationItem.class);

@@ -105,7 +105,7 @@ public class EntityMetaImpl implements EntityMeta {
             watermark = null;
         }
         if (I18nAnnotation.DEFAULT_VALUE.equals(captionValue)) {
-            caption = EnglishGrammar.capitalize(entityClass.getSimpleName());
+            caption = EnglishGrammar.capitalize(EnglishGrammar.classNameToEnglish(entityClass.getSimpleName()));
         } else {
             caption = captionValue;
         }

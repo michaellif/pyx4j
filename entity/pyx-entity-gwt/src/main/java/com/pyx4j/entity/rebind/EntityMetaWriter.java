@@ -124,7 +124,7 @@ public class EntityMetaWriter {
             watermark = captionAnnotation.watermark();
         }
         if (I18nAnnotation.DEFAULT_VALUE.equals(caption)) {
-            caption = EnglishGrammar.capitalize(interfaceType.getSimpleSourceName());
+            caption = EnglishGrammar.capitalize(EnglishGrammar.classNameToEnglish(interfaceType.getSimpleSourceName()));
         }
         Boolean persistenceTransient = (interfaceType.getAnnotation(Transient.class) != null);
         Boolean rpcTransient = (interfaceType.getAnnotation(RpcTransient.class) != null) || (interfaceType.getAnnotation(RpcBlacklist.class) != null);
