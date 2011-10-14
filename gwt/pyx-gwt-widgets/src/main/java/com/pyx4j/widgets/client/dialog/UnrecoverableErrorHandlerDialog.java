@@ -20,7 +20,6 @@
  */
 package com.pyx4j.widgets.client.dialog;
 
-
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.logical.shared.CloseEvent;
@@ -132,12 +131,12 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
 
     @Override
     protected void showUnauthorized() {
-        MessageDialog.show(i18n.tr("We're sorry"), i18n.tr("This session has been terminated ."), Type.Error, new ShowOnceDialogOptions());
+        MessageDialog.show(i18n.tr("We're sorry"), i18n.tr("This session has been terminated."), Type.Error, new ShowOnceDialogOptions());
     }
 
     @Override
     protected void showInternetConnectionError() {
-        showWarning(i18n.tr("Please make sure you are connected to internet."));
+        showWarning(i18n.tr("Please make sure you are connected to Internet."));
 
     }
 
