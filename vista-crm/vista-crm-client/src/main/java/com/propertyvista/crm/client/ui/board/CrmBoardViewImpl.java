@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -120,7 +121,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             Button setup = new Button("Setup", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    setWidgetSize(filtersPanel, 30);
+                    setWidgetSize(filtersPanel, 35);
                     filtersPanel.setWidget(filters.getSetupVeiw());
                 }
             });
@@ -136,8 +137,12 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         public Widget getSetupVeiw() {
             VerticalPanel main = new VerticalPanel();
 
-            Widget w;
-            main.add(w = new ScrollPanel(buildingLister.asWidget()));
+//            LayoutPanel wrap = new LayoutPanel();
+//            wrap.add(new ScrollPanel(buildingLister.asWidget()));
+//            wrap.setSize("100%", "32em");
+//            main.add(wrap);
+
+            main.add(new ScrollPanel(buildingLister.asWidget()));
 
             HorizontalPanel buttons = new HorizontalPanel();
 
@@ -169,9 +174,12 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             main.setCellHeight(buttons, "1%"); // resize it to buttons height!..
             buttons.setCellVerticalAlignment(buttons, HasVerticalAlignment.ALIGN_MIDDLE);
             main.setCellHorizontalAlignment(buttons, HasHorizontalAlignment.ALIGN_RIGHT);
+            main.setWidth("100%");
 
-            main.setSize("100%", "100%");
-            return main;
+            LayoutPanel wrap = new LayoutPanel();
+            wrap.add(new ScrollPanel(main));
+            wrap.setSize("100%", "100%");
+            return wrap;
         }
 
         private String getFilteringDescription() {
