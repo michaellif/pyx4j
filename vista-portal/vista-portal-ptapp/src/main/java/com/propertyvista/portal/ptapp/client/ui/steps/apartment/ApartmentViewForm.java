@@ -298,7 +298,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
         private SimplePanel content;
 
         public SelectFeatureBox(Feature.Type type) {
-            super("Select " + type.toString() + "(s)");
+            super(i18n.tr("Select {0}(s)", type));
             this.type = type;
 
             // createContent called from within surper's constructor but we need to use our constructor parameters...
@@ -336,10 +336,10 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
                     list.setWidth("100%");
                     return list.asWidget();
                 } else {
-                    return new HTML(i18n.tr("All ") + type.toString() + i18n.tr("(s) have been selected already!.."));
+                    return new HTML(i18n.tr("All {0}(s) have been selected already!..", type));
                 }
             } else {
-                return new HTML(i18n.tr("There are no ") + type.toString() + i18n.tr("(s) available!.."));
+                return new HTML(i18n.tr("There are no {0}(s) available!..", type));
             }
         }
 
