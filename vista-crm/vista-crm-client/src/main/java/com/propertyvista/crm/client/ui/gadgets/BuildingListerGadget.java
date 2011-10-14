@@ -35,7 +35,6 @@ public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
 
     @Override
     protected void selfInit(GadgetMetadata gmd) {
-        super.selfInit(gmd);
         gmd.type().setValue(GadgetType.BuildingLister);
         gmd.name().setValue(i18n.tr("Building Lister"));
     }

@@ -15,6 +15,8 @@ package com.propertyvista.crm.client.ui.gadgets;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -24,6 +26,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
@@ -41,6 +44,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitVacancyReportService;
+import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings;
@@ -68,27 +72,19 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         gadgetPanel.add(unitVacancyReportSummaryForm.asWidget());
 
         activity = new UnitVacancyReportGadgetActivity(this, (UnitVacancyReportService) service);
-
-        getListerView().setPresenter(activity);
-        getRefreshTimer().registerEventHandler(new RefreshTimerEventHandler() {
-
-            @Override
-            public void onTime() {
-                activity.populateSummary();
-            }
-        });
     }
 
     @Override
     protected void selfInit(GadgetMetadata gmd) {
-        super.selfInit(gmd);
-
-        ListerGadgetBaseSettings settings = gmd.settings().cast();
-        settings.itemsPerPage().setValue(5);
-
         gmd.type().setValue(GadgetType.UnitVacancyReport);
         gmd.name().setValue(i18n.tr("Unit Vacancy Report"));
+    }
 
+    @Override
+    protected void initDefaultSettings(AbstractGadgetSettings abstractSettings) {
+        super.initDefaultSettings(abstractSettings);
+        ListerGadgetBaseSettings settings = abstractSettings.cast();
+        settings.itemsPerPage().setValue(5);
     }
 
     public IListerView<UnitVacancyReport> getListerView() {
@@ -168,7 +164,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
                 //criteria.add(new PropertyCriterion(building.id().getPath().toString(), Restriction.IN, (Serializable) buildings));
 
                 // TODO these are fake buildings for use with fake unit property report table, for demonstration purposes only
-                final List<String> fakeBuildings = new ArrayList<String>();
+                final Collection<String> fakeBuildings = new HashSet<String>();
                 if (buildings.size() == 1) {
                     fakeBuildings.add("bath1650");
                 } else {
@@ -178,7 +174,10 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
                 }
 
                 criteria.add(new PropertyCriterion(getListerBase().proto().propertyCode().getPath().toString(), Restriction.IN, (Serializable) fakeBuildings));
+
             }
+            criteria.add(new PropertyCriterion(getListerBase().proto().fromDate().getPath().toString(), Restriction.GREATER_THAN_OR_EQUAL, getFromDate()));
+            criteria.add(new PropertyCriterion(getListerBase().proto().toDate().getPath().toString(), Restriction.LESS_THAN_OR_EQUAL, getToDate()));
 
             return criteria;
 
@@ -195,8 +194,9 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
                 public void onFailure(Throwable caught) {
                     throw new UnrecoverableClientError(caught);
                 }
-            }, constructSearchCriteria());
+            }, constructSearchCriteria(), getFromDate(), getToDate());
         }
+
     }
 
     @Override
@@ -243,15 +243,19 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
     @Override
     public void setBuilding(Key id) {
         List<Key> ids = new ArrayList<Key>(1);
-        ids.add(id);
+        if (id != null) {
+            ids.add(id);
+        }
         setBuildings(ids);
     }
 
     @Override
     public void setBuildings(List<Key> ids) {
-        List<Key> my = new ArrayList<Key>(1);
-        for (Key id : ids) {
-            my.add(id);
+        List<Key> my = new ArrayList<Key>();
+        if (ids != null) {
+            for (Key id : ids) {
+                my.add(id);
+            }
         }
         buildings = my;
 
@@ -260,4 +264,19 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         start();
     }
 
+    private LogicalDate getToDate() {
+        // FIXME must get date the from the dashboard
+        return new LogicalDate();
+    }
+
+    private LogicalDate getFromDate() {
+        // FIXME must get the date from the dashboard
+        return new LogicalDate(0);
+    }
+
+    @Override
+    protected void executeOnTimer() {
+        super.executeOnTimer();
+        activity.populateSummary();
+    }
 }

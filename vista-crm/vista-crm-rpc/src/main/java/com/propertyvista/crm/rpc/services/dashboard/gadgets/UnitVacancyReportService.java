@@ -15,13 +15,15 @@ package com.propertyvista.crm.rpc.services.dashboard.gadgets;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.site.rpc.services.AbstractCrudService;
+import com.pyx4j.site.rpc.services.AbstractListService;
 
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportSummaryDTO;
 
-public interface UnitVacancyReportService extends AbstractCrudService<UnitVacancyReport> {
-    public void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, EntityQueryCriteria<UnitVacancyReport> criteria);
+public interface UnitVacancyReportService extends AbstractListService<UnitVacancyReport> {
+    public void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, EntityQueryCriteria<UnitVacancyReport> criteria, LogicalDate fromDate,
+            LogicalDate toDate);
 
 }

@@ -46,6 +46,7 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
 
             // DEMO - temporary!!!
             add(new UnitVacancyReportDTOPreloader(config));
+            add(new UnitVacancyReportEventPreloader(config));
         }
         add(new PortalSitePreloader());
     }

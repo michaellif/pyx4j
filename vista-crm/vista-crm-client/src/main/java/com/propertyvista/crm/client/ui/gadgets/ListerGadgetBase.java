@@ -21,7 +21,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -40,7 +39,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.site.rpc.services.AbstractCrudService;
+import com.pyx4j.site.rpc.services.AbstractListService;
 
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
@@ -58,45 +57,27 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     private static final int DEFAULT_ITEMS_PER_PAGE = 10;
 
-    protected final EnhancedListerBase<E> listerBase;
+    private final EnhancedListerBase<E> listerBase;
 
-    protected ListerGadgetBaseSettings settings = null;
+    private ListerGadgetBaseSettings settings = null;
 
-    private final RefreshTimer refreshTimer;
+    protected final AbstractListService<E> service;
 
-    private final ListerActivityBase<E> listerActivity;
-
-    protected final AbstractCrudService<E> service;
-
-    public ListerGadgetBase(GadgetMetadata gmd, AbstractCrudService<E> service, Class<E> entityClass) {
+    public ListerGadgetBase(GadgetMetadata gmd, AbstractListService<E> service, Class<E> entityClass) {
         super(gmd);
         this.service = service;
 
-        // TODO add more civilised (use isSettingsOk() method) when IEntity.isInstance() works well
-        try {
+        // validate that we got correct settings class 'cause our subclasses could not be trusted (they may have messed something) 
+        if (isSettingsInstanceOk(gadgetMetadata.settings())) {
             settings = gadgetMetadata.settings().cast();
-        } catch (Throwable eh) {
+        } else {
             settings = EntityFactory.create(ListerGadgetBaseSettings.class);
             resetToDefault(settings);
             gadgetMetadata.settings().set(settings);
         }
 
-        refreshTimer = new RefreshTimer();
-        refreshTimer.registerEventHandler(new RefreshTimerEventHandler() {
-            @Override
-            public void onTime() {
-                storeSettings();
-
-                // try to reload the page and if the page is empty try to load the previous one
-                int pageToReload = getListerBase().getPageNumber();
-                do {
-                    listerActivity.populate(pageToReload--);
-                } while ((listerBase.getPageNumber() > 0) && (listerBase.getPageSize() == 0));
-            }
-        });
-
         listerBase = new EnhancedListerBase<E>(entityClass, null);
-        listerActivity = new ListerActivityBase<E>(listerBase, service, entityClass);
+        new ListerActivityBase<E>(listerBase, service, entityClass);
 
         // TODO enable filters when they can be persisted
         listerBase.setFiltersVisible(false);
@@ -118,35 +99,25 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         });
     }
 
-    protected RefreshTimer getRefreshTimer() {
-        return refreshTimer;
-    }
-
-    @Override
-    protected void selfInit(GadgetMetadata gmd) {
-        AbstractGadgetSettings settings = createSettings();
-        initDefaultSettings(settings);
-        gmd.settings().set(settings);
-    }
-
     protected boolean isSettingsInstanceOk(AbstractGadgetSettings abstractSettings) {
-        // TODO warning! not to be used because it looks like isInstanceOf doesn't work properly
         return abstractSettings.isInstanceOf(ListerGadgetBaseSettings.class);
     }
 
+    @Override
     protected AbstractGadgetSettings createSettings() {
         ListerGadgetBaseSettings settings = EntityFactory.create(ListerGadgetBaseSettings.class);
         assert settings != null : "Failed to instantiate ListerGadgetBaseSettings class";
         return settings;
     }
 
+    @Override
     protected void initDefaultSettings(AbstractGadgetSettings abstractSettings) {
         ListerGadgetBaseSettings settings = null;
         if (abstractSettings.isInstanceOf(ListerGadgetBaseSettings.class)) {
             settings = abstractSettings.cast();
             resetToDefault(settings);
         } else {
-            // TODO maybe better to throw an exception?
+            throw new RuntimeException("failed to get cast settings");
         }
     }
 
@@ -159,6 +130,17 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     protected EnhancedListerBase<E> getListerBase() {
         return listerBase;
+    }
+
+    @Override
+    protected void executeOnTimer() {
+        storeSettings();
+
+        // try to reload the page and if the page is empty try to load the previous one
+        int pageToReload = getListerBase().getPageNumber();
+        do {
+            getListerBase().getPresenter().populate(pageToReload--);
+        } while ((getListerBase().getPageNumber() > 0) && (getListerBase().getPageSize() == 0));
     }
 
     /*
@@ -182,7 +164,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         } else {
             refreshIntervalMillis = -1;
         }
-        refreshTimer.setRefreshInterval(refreshIntervalMillis);
+        getRefreshTimer().setRefreshInterval(refreshIntervalMillis);
     }
 
     @Override
@@ -210,32 +192,14 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     // IGadget:
     @Override
     public Widget asWidget() {
-        return listerBase.asWidget();
+        return getListerBase().asWidget();
     }
 
     @Override
     public void start() {
         super.start();
         applySettings();
-        listerActivity.populate(settings.currentPage().getValue());
-    }
-
-    @Override
-    public void stop() {
-        super.stop();
-        refreshTimer.deactivate();
-    }
-
-    @Override
-    public void suspend() {
-        super.suspend();
-        refreshTimer.deactivate();
-    }
-
-    @Override
-    public void resume() {
-        super.resume();
-        refreshTimer.reactivate();
+        getListerBase().getPresenter().populate(settings.currentPage().getValue());
     }
 
     @Override
@@ -249,7 +213,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     }
 
     /**
-     * Gather the state of the lister and store it into to the settings member (note: this method doens't persist the settings to the DB)
+     * Gather the state of the lister and store it into the settings member (note: this method doens't persist the settings to the DB)
      */
     private void storeSettings() {
         // COLUMNS:
@@ -278,7 +242,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     private void applySettings() {
         getListerBase().setPageSize(settings.itemsPerPage().getValue());
         setRefreshInterval(settings.refreshInterval().getValue());
-        refreshTimer.reactivate();
+        getRefreshTimer().reactivate();
 
         // apply columns
         ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
@@ -344,92 +308,15 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         @Override
         protected void onPrevPage() {
             super.onPrevPage();
-            refreshTimer.reactivate();
+            getRefreshTimer().reactivate();
         }
 
         @Override
         protected void onNextPage() {
             super.onNextPage();
-            refreshTimer.reactivate();
+            getRefreshTimer().reactivate();
         }
 
-    }
-
-    /**
-     * Interface for creating procedures that get executed periodically when RefreshTimer 'ticks'
-     * 
-     * @author ArtyomB
-     */
-    public static interface RefreshTimerEventHandler {
-        public void onTime();
-    }
-
-    /**
-     * This class provides refresh logic
-     */
-    public static class RefreshTimer {
-        private final Timer timer;
-
-        private final ArrayList<RefreshTimerEventHandler> handlers;
-
-        private boolean isActive;
-
-        private int refreshInterval;
-
-        RefreshTimer() {
-            handlers = new ArrayList<ListerGadgetBase.RefreshTimerEventHandler>();
-            isActive = false;
-            refreshInterval = 0;
-
-            timer = new Timer() {
-                @Override
-                public void run() {
-                    for (RefreshTimerEventHandler handler : handlers) {
-                        handler.onTime();
-                    }
-                }
-            };
-        }
-
-        public void registerEventHandler(RefreshTimerEventHandler timerEventHandler) {
-            handlers.add(timerEventHandler);
-        }
-
-        /**
-         * Set interval to be used in order to execute the refresh handlers.
-         * 
-         * @param refreshInterval
-         *            refresh interval in milliseconds (if the interval is not positive, the timer stops)
-         */
-        public void setRefreshInterval(int refreshInterval) {
-            this.refreshInterval = refreshInterval;
-            if (isActive()) {
-                reactivate();
-            }
-        }
-
-        public boolean isActive() {
-            return isActive;
-        }
-
-        /**
-         * Restart the count down if the refresh interval of the timer is greater than 0, else stop.
-         */
-        public void reactivate() {
-            deactivate();
-            if (refreshInterval > 0) {
-                timer.scheduleRepeating(refreshInterval);
-                isActive = true;
-            }
-        }
-
-        /**
-         * Shut down the timer: the handlers will not be launched.
-         */
-        public void deactivate() {
-            timer.cancel();
-            isActive = false;
-        }
     }
 
     //

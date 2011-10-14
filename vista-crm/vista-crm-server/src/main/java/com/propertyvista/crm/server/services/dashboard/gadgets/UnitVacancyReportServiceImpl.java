@@ -13,7 +13,9 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
@@ -25,11 +27,13 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitVacancyReportService;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport;
@@ -38,35 +42,82 @@ import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport.RentedStatus
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport.VacancyStatus;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportEvent;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportSummaryDTO;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO;
 
 public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
+
+//    private static final class Counter {
+//        private int initialValue;
+//
+//        public Counter(int initialValue) {
+//            this.initialValue = initialValue;
+//        }
+//
+//        public Counter() {
+//            this(0);
+//        }
+//
+//        public void inc() {
+//            ++initialValue;
+//        }
+//
+//        public void dec() {
+//            --initialValue;
+//        }
+//
+//        public void assign(int newValue) {
+//            initialValue = 0;
+//        }
+//
+//        public int getValue() {
+//            return initialValue;
+//        }
+//
+//        @Override
+//        public String toString() {
+//            return Integer.toString(initialValue);
+//        }
+//
+//    }
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<UnitVacancyReport>> callback, EntityListCriteria<UnitVacancyReport> criteria) {
 
+        LogicalDate[] dateConstraints = null;
+        dateConstraints = extractDatesFromCriteria(criteria);
+        if (dateConstraints == null) {
+            callback.onFailure(new Exception("no date constrains provided"));
+            return;
+        }
+
         EntitySearchResult<UnitVacancyReport> unitResult = EntityLister.secureQuery(criteria);
-        long now = (new Date()).getTime();
+
+        long toReportTime = dateConstraints[1].getTime();
 
         for (UnitVacancyReport unit : unitResult.getData()) {
-            calculateRentDelta(unit);
+            computeState(unit, dateConstraints[0], dateConstraints[1]);
+            computeRentDelta(unit);
             if (isRevenueLost(unit)) {
-                calclulateDaysVacantAndRevenueLost(unit, now);
+                computeDaysVacantAndRevenueLost(unit, toReportTime);
             }
         }
 
         callback.onSuccess(unitResult);
+
     }
 
     @Override
-    public void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, EntityQueryCriteria<UnitVacancyReport> criteria) {
+    public void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, EntityQueryCriteria<UnitVacancyReport> criteria, LogicalDate fromDate,
+            LogicalDate toDate) {
         // TODO: think about using another type of query that returns something better than just a list
+        extractDatesFromCriteria(criteria);
         List<UnitVacancyReport> units = Persistence.service().query(criteria);
 
         UnitVacancyReportSummaryDTO summary = EntityFactory.create(UnitVacancyReportSummaryDTO.class);
 
-        long now = (new Date()).getTime();
+        long toTime = toDate.getTime();
 
-        int total = units.size(); // TODO: I hope that units is an ArrayList otherwise it might be better to count this in the following loop
+        int total = 0;
 
         int vacant = 0;
         int vacantRented = 0;
@@ -79,16 +130,19 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         double netExposure = 0.0;
 
         for (UnitVacancyReport unit : units) {
+            ++total;
+            computeState(unit, fromDate, toDate);
+
             VacancyStatus vacancyStatus = unit.vacancyStatus().getValue();
 
-            // check that we can get vacancy status, and don't waste the cpu cycles if we can't            
+            // check that we have vacancy status, and don't waste the cpu cycles if we don't            
             if (vacancyStatus == null)
                 continue;
 
             if (VacancyStatus.Vacant.equals(vacancyStatus)) {
                 ++vacant;
                 if (isRevenueLost(unit)) {
-                    calclulateDaysVacantAndRevenueLost(unit, now);
+                    computeDaysVacantAndRevenueLost(unit, toTime);
                     netExposure += unit.revenueLost().getValue();
                 }
                 if (RentedStatus.Rented.equals(unit.rentedStatus().getValue())) {
@@ -120,33 +174,100 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         callback.onSuccess(summary);
     }
 
-    /**
-     * Set unit state as it should be on specified date deducting it from the event table (creepy demo mode implementation)
-     * 
-     * @param unit
-     * @param when
-     */
-    private static void updateState(UnitVacancyReport unit, LogicalDate when) {
-        String unitNumber = unit.unit().getValue();
-        String propertyCode = unit.propertyCode().getValue();
+    // TODO update the interface
+    // TODO maybe enum for specyfinying an interval? currently suppose 0 - months, 1 - years.
+    // TODO interval 
+    public void turnoverAnalysis(AsyncCallback<List<UnitVacancyReportTurnoverAnalysisDTO>> callback, LogicalDate fromDate, LogicalDate toDate, int intervalSize) {
+        List<UnitVacancyReportTurnoverAnalysisDTO> result = new ArrayList<UnitVacancyReportTurnoverAnalysisDTO>();
 
-        // I miss SQL :`(
-        // TODO:  this procedure is real waste of CPU cycles!!! think about better implementation!
         EntityQueryCriteria<UnitVacancyReportEvent> criteria = new EntityQueryCriteria<UnitVacancyReportEvent>(UnitVacancyReportEvent.class);
 
-        criteria.add(new PropertyCriterion(criteria.proto().eventDate(), Restriction.LESS_THAN_OR_EQUAL, when));
-        criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.EQUAL, propertyCode));
-        criteria.add(new PropertyCriterion(criteria.proto().unit(), Restriction.EQUAL, unitNumber));
+        criteria.add(new PropertyCriterion(criteria.proto().eventDate(), Restriction.GREATER_THAN_OR_EQUAL, fromDate));
+        criteria.add(new PropertyCriterion(criteria.proto().eventDate(), Restriction.LESS_THAN, toDate));
+        criteria.add(new PropertyCriterion(criteria.proto().eventType(), Restriction.EQUAL, "movein"));
         criteria.sort(new Sort(criteria.proto().eventDate().getPath().toString(), false));
 
         List<UnitVacancyReportEvent> events = Persistence.service().query(criteria);
 
-        // TODO: not sure how to treat scoping events:
-        // TODO: is 'reno in progress' automatically renders "rented" as 'off market'?
+        long intervalStart = fromDate.getTime();
+        long intervalEnd = intervalEnd(intervalStart, intervalSize);
+        int turnovers = 0;
+        int overall = 0; // I don't use events.size() because it can be a linked list :(
 
-        // I have trouble thinking about events in the reverse way, hence i'm getting them back into the normal order
-        // this algorithm assumes that "rented" events can come only after "notice";
-        // TODO: consider using priority queue for ordering events that might happen on the same day
+        for (UnitVacancyReportEvent event : events) {
+            long eventTime = event.eventDate().getValue().getTime();
+            if (eventTime >= intervalEnd) {
+                UnitVacancyReportTurnoverAnalysisDTO analysis = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
+                analysis.fromDate().setValue(new LogicalDate(intervalStart));
+                analysis.toDate().setValue(new LogicalDate(intervalEnd));
+                analysis.unitsTurnedOverAbs().setValue(turnovers);
+                result.add(analysis);
+
+                intervalStart = intervalEnd;
+                intervalEnd = intervalEnd(intervalStart, intervalSize);
+                turnovers = 0;
+            }
+            ++turnovers;
+            ++overall;
+        }
+        if (overall > 0) {
+            UnitVacancyReportTurnoverAnalysisDTO analysis = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
+            analysis.fromDate().setValue(new LogicalDate(intervalStart));
+            analysis.toDate().setValue(new LogicalDate(intervalEnd));
+            analysis.unitsTurnedOverAbs().setValue(turnovers);
+            result.add(analysis);
+        }
+        for (UnitVacancyReportTurnoverAnalysisDTO analysis : result) {
+            analysis.unitsTurnedOverPct().setValue((analysis.unitsTurnedOverPct().getValue() / overall));
+        }
+
+    }
+
+    private static long intervalEnd(long startTime, int intervalSize) {
+        // TODO think if there could be issues with locale and time zone
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(startTime);
+        if (intervalSize == 0) {
+            // add month
+            c.set(Calendar.MONTH, (c.get(Calendar.MONTH) + 1) % 12);
+        } else {
+            // add year
+            c.set(Calendar.YEAR, c.get(Calendar.YEAR));
+        }
+        return c.getTimeInMillis();
+    }
+
+    /**
+     * Set unit state as it should be on specified date deducting it from the event table (creepy demo mode implementation)
+     * 
+     * @param unit
+     * @param fromDate
+     * @param toDate
+     */
+    private static void computeState(UnitVacancyReport unit, LogicalDate fromDate, LogicalDate toDate) {
+        // I miss SQL :`(
+        // TODO: this procedure is real waste of CPU cycles!!! think about better implementation!
+        // consider the following:
+        //      - maybe its worth to limit a query (i.e. we need at most 10 events (maybe even less)
+        //      - real implementation should probably have a real key for the unit - no need to use ('propertyCode', 'unitNumber') as key.
+        EntityQueryCriteria<UnitVacancyReportEvent> criteria = new EntityQueryCriteria<UnitVacancyReportEvent>(UnitVacancyReportEvent.class);
+
+        String unitNumber = unit.unit().getValue();
+        String propertyCode = unit.propertyCode().getValue();
+
+        criteria.add(new PropertyCriterion(criteria.proto().eventDate(), Restriction.LESS_THAN_OR_EQUAL, toDate));
+        criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.EQUAL, propertyCode));
+        criteria.add(new PropertyCriterion(criteria.proto().unit(), Restriction.EQUAL, unitNumber));
+        criteria.sort(new Sort(criteria.proto().eventDate().getPath().toString(), true));
+
+        List<UnitVacancyReportEvent> events = Persistence.service().query(criteria);
+
+        // assumptions:
+        //      moved in state is the initial state of a unit;
+        //      no more than one event on the same day;
+        //      'reno in progress' automatically renders "rentedStatus" as 'off market';
+
+        // accumulate events until the most recent "movein" event, then compute the state based on them        
         Stack<UnitVacancyReportEvent> eventStack = new Stack<UnitVacancyReportEvent>();
 
         for (UnitVacancyReportEvent event : events) {
@@ -155,57 +276,58 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
             if (eventType == null) {
                 continue;
             }
-            eventStack.push(event);
-            if ("notice".equals(eventType)) {
+
+            if ("movein".equals(eventType)) {
                 break;
             }
+            eventStack.push(event);
         }
 
         while (!eventStack.isEmpty()) {
             UnitVacancyReportEvent event = eventStack.pop();
-            String eventType = event.eventType().getValue();
-            // TODO: we almost know for sure the stack starts with "notice"... get it out of the loop"
-            // TODO: if not they should be added (fake events to start the timeline: i.e. brand new unit should have "notice" and then concequent "vacant" attached to it)
-            if ("notice".equals(eventType)) {
-                unit.moveOutDay().setValue(event.moveOutDate().getValue());
-                unit.moveInDay().setValue(null);
-                unit.rentedFromDate().setValue(null);
-                unit.isScoped().setValue(false);
-                unit.rentReady().setValue(null);
-                unit.rentedStatus().setValue(RentedStatus.Unrented);
 
+            String eventType = event.eventType().getValue();
+
+            if ("notice".equals(eventType)) {
+                unit.vacancyStatus().setValue(VacancyStatus.Notice);
+                unit.rentedStatus().setValue(RentedStatus.Unrented);
+                unit.isScoped().setValue(false);
+                unit.moveOutDay().setValue(event.moveOutDate().getValue());
             } else if ("scoped".equals(eventType)) {
                 unit.isScoped().setValue(true);
+
                 String strVal = event.rentReady().getValue();
-                RentReady rentReady = "rentready".equals(strVal) ? RentReady.RentReady : "need repairs".equals(strVal) ? RentReady.NeedRepairs
-                        : "reno in progress".equals(strVal) ? RentReady.RenoInProgress : null;
+                RentReady rentReady = rentReadyValueOf(strVal);
                 unit.rentReady().setValue(rentReady);
-                if (rentReady.equals(RentReady.RenoInProgress)) {
+
+                if (RentReady.RenoInProgress.equals(rentReady)) {
                     unit.rentedStatus().setValue(RentedStatus.OffMarket);
+                }
+
+            } else if ("moveout".equals(eventType)) {
+                unit.moveOutDay().setValue(event.eventDate().getValue());
+                unit.vacancyStatus().setValue(VacancyStatus.Vacant);
+                if (unit.rentedStatus().isNull()) {
+                    unit.rentedStatus().setValue(RentedStatus.Unrented);
+                }
+                if (unit.isScoped().isNull()) {
+                    unit.isScoped().setValue(false);
                 }
 
             } else if ("vacant".equals(eventType)) {
                 unit.moveOutDay().setValue(event.moveOutDate().getValue());
+                unit.vacancyStatus().setValue(VacancyStatus.Vacant);
 
             } else if ("rented".equals(eventType)) {
-                if (when.compareTo(event.moveInDate().getValue()) < 0) {
-                    unit.moveInDay().setValue(event.moveInDate().getValue());
-                    unit.rentedStatus().setValue(RentedStatus.Rented);
-                } else {
-                    // someone lives in the apartment
-                    unit.vacancyStatus().setValue(null);
-                    unit.isScoped().setValue(null);
-                    unit.rentedStatus().setValue(null);
-                    unit.moveOutDay().setValue(null);
-                    unit.moveInDay().setValue(null);
-                    unit.rentedFromDate().setValue(null);
-                }
+                unit.rentedStatus().setValue(RentedStatus.Rented);
+                unit.moveInDay().setValue(event.moveInDate().getValue());
+                unit.rentedFromDate().setValue(event.rentFromDate().getValue());
 
             }
         } // while
     }
 
-    private static void calculateRentDelta(UnitVacancyReport unit) {
+    private static void computeRentDelta(UnitVacancyReport unit) {
         double unitMarketRent = unit.marketRent().getValue();
         double unitRent = unit.unitRent().getValue();
 
@@ -220,7 +342,8 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         return VacancyStatus.Vacant.equals(unit.vacancyStatus().getValue()) & unit.moveOutDay().getValue() != null;
     }
 
-    private static void calclulateDaysVacantAndRevenueLost(UnitVacancyReport unit, final long endOfTime) {
+    private static void computeDaysVacantAndRevenueLost(UnitVacancyReport unit, final long endOfTime) {
+        // TODO if we have start of time : do we have to count the days vacant from the startoftime or the possible history? 
         long availableFrom = 1 + unit.moveOutDay().getValue().getTime();
         long millisecondsVacant = endOfTime - availableFrom;
 
@@ -232,30 +355,53 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         unit.revenueLost().setValue(revenueLost);
     }
 
-    @Override
-    public void create(AsyncCallback<UnitVacancyReport> callback, UnitVacancyReport editableEntity) {
-        // TODO Auto-generated method stub
-
+    private static RentReady rentReadyValueOf(String strVal) {
+        return "rentready".equals(strVal) ? RentReady.RentReady : "need repairs".equals(strVal) ? RentReady.NeedRepairs
+                : "reno in progress".equals(strVal) ? RentReady.RenoInProgress : null;
     }
 
-    @Override
-    public void retrieve(AsyncCallback<UnitVacancyReport> callback, Key entityId) {
-        // TODO Auto-generated method stub
+    /**
+     * VICIOUS HACK in order to be able to use ListerBase (it has to use {@link AbstractCrudService} in order to function :( )
+     * 
+     * @param criteria
+     * @return tuple of dates in from <code>{fromDate, startDate}</code>, or <code>null</code> if criteria doesn't contain at least on of the dates
+     */
+    private static LogicalDate[] extractDatesFromCriteria(EntityQueryCriteria<UnitVacancyReport> criteria) {
 
-    }
+        LogicalDate fromReportDate = null;
+        LogicalDate toReportDate = null;
+        List<Criterion> criterionList = criteria.getFilters();
+        List<Criterion> filteredList = new LinkedList<Criterion>();
 
-    @Override
-    public void save(AsyncCallback<UnitVacancyReport> callback, UnitVacancyReport editableEntity) {
-        // TODO Auto-generated method stub
+        if (criterionList == null)
+            return null;
 
+        for (Criterion c : criterionList) {
+            PropertyCriterion pc = (PropertyCriterion) c;
+            if (pc.getPropertyName().endsWith("fromDate/")) {
+                fromReportDate = (LogicalDate) pc.getValue();
+            } else if (pc.getPropertyName().endsWith("toDate/")) {
+                toReportDate = (LogicalDate) pc.getValue();
+            } else {
+                filteredList.add(pc);
+            }
+        }
+        criteria.getFilters().clear();
+
+        for (Criterion c : filteredList) {
+            criteria.add(c);
+        }
+
+        if (fromReportDate == null | toReportDate == null) {
+            return null;
+        } else {
+            return new LogicalDate[] { fromReportDate, toReportDate };
+        }
     }
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        // Not Required
+        // Not Used
     }
 
-    private enum UnitEventParserState {
-        INITIAL, VT_NF_RF_SF, VF_NT_RF_SF, VF_NF_RT_SF;
-    }
 }

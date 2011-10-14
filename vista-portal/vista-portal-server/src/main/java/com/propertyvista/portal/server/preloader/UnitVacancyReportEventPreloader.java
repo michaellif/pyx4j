@@ -47,8 +47,12 @@ public class UnitVacancyReportEventPreloader extends BaseVistaDataPreloader {
                 public void onRow(String[] rawValues) {
                     String[] values = new String[headersLength];
                     // make all the fields exist (even if some of them are null
-                    for (int i = 0; i < rawValues.length; ++i) {
+                    int minLength = rawValues.length < headersLength ? rawValues.length : headersLength;
+                    for (int i = 0; i < minLength; ++i) {
                         values[i] = rawValues[i];
+                        if ("".equals(values[i])) {
+                            values[i] = null;
+                        }
                     }
 
                     UnitVacancyReportEvent event = EntityFactory.create(UnitVacancyReportEvent.class);

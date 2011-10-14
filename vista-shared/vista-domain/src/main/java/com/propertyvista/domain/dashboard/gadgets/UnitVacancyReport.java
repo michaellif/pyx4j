@@ -21,6 +21,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+
 // TODO don't forget to rename to DTO and enable the @Transient annotation when it's ready 
 // @Transient
 public interface UnitVacancyReport extends IEntity {
@@ -76,15 +78,19 @@ public interface UnitVacancyReport extends IEntity {
 
     IPrimitive<String> floorplanMarketingName();
 
+    @Transient
     @Caption(name = "Vacant/Notice")
     IPrimitive<VacancyStatus> vacancyStatus();
 
+    @Transient
     @Caption(name = "Rented/Unrented/OffMarket")
     IPrimitive<RentedStatus> rentedStatus();
 
+    @Transient
     @Caption(name = "Scoping")
     IPrimitive<Boolean> isScoped();
 
+    @Transient
     @Caption(name = "Physical Condition")
     IPrimitive<RentReady> rentReady();
 
@@ -92,24 +98,27 @@ public interface UnitVacancyReport extends IEntity {
 
     IPrimitive<Double> marketRent();
 
-    /** <code>unitRent()</code> - <code>unitMarketRent()</code> */
+    /** <code>{@link #unitRent()} - {@link #unitMarketRent()} </code> */
     @Transient
     @Caption(name = "Delta, in $")
     IPrimitive<Double> rentDeltaAbsolute();
 
-    /** (unitRent() - unitMarketRent())/unitMarketRent() */
+    /** <code>({@link #unitRent()} - {@link #unitMarketRent()})/{@link #unitMarketRent()}</code> */
     @Transient
     @Caption(name = "Delta, in %")
     @Format("#0.00")
     IPrimitive<Double> rentDeltaRelative();
 
-    /** @see AptUnit.availableForRent() - 1 */
+    /** {@link AptUnit#availableForRent()} - 1 */
+    @Transient
     IPrimitive<LogicalDate> moveOutDay();
 
     /** Applicable only for rented */
+    @Transient
     IPrimitive<LogicalDate> moveInDay();
 
     /** Applicable only for rented; maybe different than move out date */
+    @Transient
     IPrimitive<LogicalDate> rentedFromDate();
 
     /** For Vacant units numberOfDays between today and availableForRent date */
@@ -121,4 +130,13 @@ public interface UnitVacancyReport extends IEntity {
     @Caption(name = "Revenue Lost, in $")
     @Format("#0.00")
     IPrimitive<Double> revenueLost();
+
+    /** this is hack to use the lister service interface */
+    @Transient
+    IPrimitive<LogicalDate> fromDate();
+
+    /** this is hack to use the lister service interface */
+    @Transient
+    IPrimitive<LogicalDate> toDate();
+
 }
