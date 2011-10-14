@@ -171,8 +171,8 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
             @Override
             public void onSuccess(Boolean result) {
                 if (result) {
-                    MessageDialog.warn(i18n.tr("Application is in read-only"),
-                            i18n.tr("Application is in read-only due to short maintenance.\nPlease try again in one hour"));
+                    MessageDialog.warn(i18n.tr("Application is in Read Only Mode"),
+                            i18n.tr("Application is in Read Only Mode due to short maintenance.\nPlease retry in few minutes"));
                 }
             }
 

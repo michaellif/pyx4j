@@ -29,7 +29,6 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
-
 public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
 
     protected static I18n i18n = I18n.get(CDatePicker.class);
@@ -79,7 +78,7 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
         @Override
         public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
             if (dateConditionValidationMessage == null) {
-                return i18n.tr("Date must be future date or equal to today's date");
+                return i18n.tr("Date must be equal or greater than today's date");
             } else {
                 return dateConditionValidationMessage;
             }
