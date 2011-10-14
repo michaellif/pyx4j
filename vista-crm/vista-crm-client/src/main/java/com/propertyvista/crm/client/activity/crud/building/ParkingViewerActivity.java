@@ -22,10 +22,8 @@ import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
-import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.rpc.services.ParkingCrudService;
 import com.propertyvista.crm.rpc.services.ParkingSpotCrudService;
 import com.propertyvista.domain.property.asset.ParkingSpot;
@@ -33,26 +31,17 @@ import com.propertyvista.dto.ParkingDTO;
 
 public class ParkingViewerActivity extends ViewerActivityBase<ParkingDTO> implements ParkingViewerView.Presenter {
 
-    private final DashboardView.Presenter dashboard;
-
     private final IListerView.Presenter spotLister;
 
     @SuppressWarnings("unchecked")
     public ParkingViewerActivity(Place place) {
         super((ParkingViewerView) BuildingViewFactory.instance(ParkingViewerView.class), (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class));
 
-        dashboard = new DashboardViewActivity(((ParkingViewerView) view).getDashboardView(), place);
-
         spotLister = new ListerActivityBase<ParkingSpot>(((ParkingViewerView) view).getSpotView(),
                 (AbstractCrudService<ParkingSpot>) GWT.create(ParkingSpotCrudService.class), ParkingSpot.class);
 
         setPlace(place);
         spotLister.setPlace(place);
-    }
-
-    @Override
-    public DashboardView.Presenter getDashboardPresenter() {
-        return dashboard;
     }
 
     @Override
@@ -63,8 +52,6 @@ public class ParkingViewerActivity extends ViewerActivityBase<ParkingDTO> implem
     @Override
     public void onPopulateSuccess(ParkingDTO result) {
         super.onPopulateSuccess(result);
-
-        dashboard.populate();
 
         spotLister.setParentFiltering(result.getPrimaryKey());
         spotLister.populate();
