@@ -14,11 +14,12 @@
 package com.propertyvista.domain.organization;
 
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Table;
 
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.organization.portal.PortalPreferences;
 
-
+@Table(name = "PropertyManagerOrg")
 public interface PropertyManager extends Company {
 
     @Owned

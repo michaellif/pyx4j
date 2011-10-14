@@ -89,6 +89,13 @@
     <profiles>
 
         <profile>
+            <id>i18n-auto</id>
+            <properties>
+                <i18n.autoTranslate>true</i18n.autoTranslate>
+            </properties>
+        </profile>
+
+        <profile>
             <id>full</id>
             <build>
                 <plugins>
@@ -112,10 +119,10 @@
                                 <include>com.pyx4j*</include>
                                 <include>com.propertyvista*</include>
                             </includes>
-                            <!--autoTranslates>
+                            <autoTranslates>
                                 <autoTranslate>ru</autoTranslate>
                                 <autoTranslate>fr</autoTranslate>
-                            </autoTranslates-->
+                            </autoTranslates>
                         </configuration>
                     </plugin>
 

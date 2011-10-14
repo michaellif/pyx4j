@@ -48,7 +48,6 @@ public interface Pet extends ChargeItemExtraData {
     @BusinessEqualValue
     public IPrimitive<String> name();
 
-    @Caption(name = "Colour")
     @NotNull
     public IPrimitive<String> color();
 
