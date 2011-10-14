@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-14 02:12-0400\n"
+"POT-Creation-Date: 2011-10-14 17:07-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -859,7 +859,7 @@ msgstr "Построение Финансовых"
 msgid "Building Info"
 msgstr "Строительство информация"
 
-#: com/propertyvista/crm/client/ui/gadgets/BuildingListerGadget.java:40
+#: com/propertyvista/crm/client/ui/gadgets/BuildingListerGadget.java:39
 msgid "Building Lister"
 msgstr "Строительство Листер"
 
@@ -905,7 +905,7 @@ msgid "Cache Version"
 msgstr "Кэш версия"
 
 #: com/propertyvista/common/client/ui/components/OkCancelBox.java:61
-#: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:149
+#: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:160
 #: com/propertyvista/crm/client/ui/crud/CrmEditorViewImplBase.java:135
 #: com/propertyvista/crm/client/ui/gadgets/AddGadgetBox.java:83
 #: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:328
@@ -1445,11 +1445,11 @@ msgstr "Панели"
 msgid "Data Id"
 msgstr "Данные Id"
 
-#: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:172
+#: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:186
 msgid "Data for Buildings : "
 msgstr "Данные для зданий:"
 
-#: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:181
+#: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:195
 msgid "Data for all Buildings"
 msgstr "Данные для всех зданий"
 
@@ -1887,10 +1887,6 @@ msgstr "Оборудование"
 msgid "Error"
 msgstr "Ошибка"
 
-#: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:1
-msgid "Euartz"
-msgstr "Euartz"
-
 #: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportEvent.java:2
 msgid "Event Date"
 msgstr "Дата события"
@@ -2196,6 +2192,8 @@ msgstr "Французский (Канада)"
 msgid "Friend"
 msgstr "Друг"
 
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReport.java:2
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportTurnoverAnalysisDTO.java:2
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
 msgid "From Date"
 msgstr "С даты"
@@ -2660,7 +2658,7 @@ msgstr "Элементы"
 msgid "Items Per Page"
 msgstr "Товаров на странице"
 
-#: com/propertyvista/crm/client/ui/gadgets/ListerGadgetBase.java:452
+#: com/propertyvista/crm/client/ui/gadgets/ListerGadgetBase.java:339
 msgid "Items per page:"
 msgstr "Товаров на странице:"
 
@@ -3331,8 +3329,8 @@ msgid "Move In Date"
 msgstr "Переместить в дате"
 
 #: com/propertyvista/crm/client/ui/crud/tenant/TenantScreeningEditorForm.java:162
-msgid "Move In Date must be before than Move Out Date"
-msgstr "Переместить в Дата должна быть прежде, чем выйти дате"
+msgid "Move In Date must be less then Move Out Date"
+msgstr "Переместить в Дата должна быть меньше, чем выйти дате"
 
 #: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReport.java:2
 msgid "Move In Day"
@@ -3344,8 +3342,8 @@ msgid "Move Out Date"
 msgstr "Выйти Дата"
 
 #: com/propertyvista/crm/client/ui/crud/tenant/TenantScreeningEditorForm.java:183
-msgid "Move Out Date must be greater than Move In Date"
-msgstr "Выйти Дата должна быть больше, чем Переместить в дате"
+msgid "Move Out Date must be greater then Move In Date"
+msgstr "Выйти Дата должна быть больше, далее двигаться по дате"
 
 #: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReport.java:2
 msgid "Move Out Day"
@@ -4076,7 +4074,6 @@ msgstr "Бассейн"
 msgid "Popup window blocked"
 msgstr "Всплывающие окна заблокированы"
 
-#: com/propertyvista/domain/organization/PropertyManager.java:2
 #: com/propertyvista/domain/organization/portal/PortalPreferences.java:0
 msgid "Portal Preferences"
 msgstr "Портал предпочтения"
@@ -4232,7 +4229,6 @@ msgid "Property List"
 msgstr "Перечень недвижимости"
 
 #: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReport.java:2
-#: com/propertyvista/domain/organization/PropertyManager.java:0
 #: com/propertyvista/domain/property/PropertyManager.java:0
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 msgid "Property Manager"
@@ -4299,6 +4295,10 @@ msgstr "Заказы"
 msgid "Purchase Price"
 msgstr "Покупная цена"
 
+#: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:1
+msgid "Quartz"
+msgstr "Кварцевый"
+
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 msgid "Questions/Comments"
 msgstr "Вопросы / комментарии"
@@ -4343,7 +4343,7 @@ msgstr "Направление"
 msgid "Refresh Interval"
 msgstr "Интервал обновления"
 
-#: com/propertyvista/crm/client/ui/gadgets/ListerGadgetBase.java:464
+#: com/propertyvista/crm/client/ui/gadgets/ListerGadgetBase.java:351
 msgid "Refresh interval:"
 msgstr "Интервал обновления:"
 
@@ -4755,7 +4755,7 @@ msgstr "Услуги"
 msgid "Services:"
 msgstr "Услуги:"
 
-#: com/pyx4j/essentials/client/SessionInactiveDialog.java:82
+#: com/pyx4j/essentials/client/SessionInactiveDialog.java:81
 #, java-format
 msgid "Session duration {0}, inactive for {1}"
 msgstr ""
@@ -5250,9 +5250,12 @@ msgid "Text"
 msgstr "Текст"
 
 #: com/propertyvista/common/client/ui/validators/FutureDateValidation.java:37
+msgid "The Date must be greater then Today Date"
+msgstr "Дата должна быть не менее Сегодня Дата"
+
 #: com/propertyvista/common/client/ui/validators/PastDateValidation.java:37
-msgid "The Date cannot be earlier than Today Date"
-msgstr "Дата не может быть ранее, чем сегодня Дата"
+msgid "The Date must be less then Today Date"
+msgstr "Дата должна быть меньше, чем сегодня Дата"
 
 #: com/propertyvista/crm/client/activity/login/ResetPasswordActivity.java:64
 msgid "The URL you tried to use is either incorrect or no longer valid."
@@ -5327,6 +5330,8 @@ msgstr "Название"
 msgid "To Be Provided"
 msgstr "Должны быть предоставлены"
 
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReport.java:2
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportTurnoverAnalysisDTO.java:2
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
 msgid "To Date"
 msgstr "До даты"
@@ -5532,7 +5537,7 @@ msgstr "Группа Аренда"
 msgid "Unit Trusts"
 msgstr "Паевые фонды"
 
-#: com/propertyvista/crm/client/ui/gadgets/UnitVacancyReportGadget.java:90
+#: com/propertyvista/crm/client/ui/gadgets/UnitVacancyReportGadget.java:80
 #: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReport.java:0
 msgid "Unit Vacancy Report"
 msgstr "Отчет об Вакансии"
@@ -5545,10 +5550,22 @@ msgstr "Группа Вакансия докладе события"
 msgid "Unit Vacancy Report Summary"
 msgstr "Группа Вакансии Резюме отчета"
 
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportTurnoverAnalysisDTO.java:0
+msgid "Unit Vacancy Report Turnover Analysis"
+msgstr "Группа Вакансия докладе Оборот Анализ"
+
 #: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:101
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Units"
 msgstr "Единицы"
+
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportTurnoverAnalysisDTO.java:2
+msgid "Units Turned Over Abs"
+msgstr "Единицы перевернулся Abs"
+
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportTurnoverAnalysisDTO.java:2
+msgid "Units Turned Over Pct"
+msgstr "Единицы перевернулся Pct"
 
 #: com/pyx4j/essentials/client/upload/UploadPanel.java:192
 #, java-format
@@ -5649,8 +5666,8 @@ msgid "Value"
 msgstr "Значение"
 
 #: com/propertyvista/crm/client/ui/crud/tenant/TenantScreeningEditorForm.java:387
-msgid "Value cannot increase 100%"
-msgstr "Значение не может увеличиться на 100%"
+msgid "Value should be in range 0-100%"
+msgstr "Значение должно быть в диапазоне 0-100%"
 
 #: com/propertyvista/domain/financial/offering/extradata/Vehicle.java:0
 msgid "Vehicle"
