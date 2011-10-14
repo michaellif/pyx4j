@@ -956,8 +956,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                 for (Concession item : getValue().selectedConcessions()) {
                     if (!alreadySelected.contains(item)) {
-                        list.addItem(item.getStringView());
-                        list.setValue(list.getItemCount() - 1, item.id().toString());
+                        list.addItem(item.getStringView(), item.id().toString());
                     }
                 }
 

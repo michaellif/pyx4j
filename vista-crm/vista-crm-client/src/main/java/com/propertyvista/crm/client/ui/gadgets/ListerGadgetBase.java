@@ -301,7 +301,6 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             super.onNextPage();
             getRefreshTimer().reactivate();
         }
-
     }
 
     //
@@ -336,8 +335,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             refresh.add(new Label(i18n.tr("Refresh interval:")));
 
             for (RefreshInterval i : RefreshInterval.values()) {
-                intervalList.addItem(i.toString());
-                intervalList.setValue(intervalList.getItemCount() - 1, i.name());
+                intervalList.addItem(i.toString(), i.name());
                 if (settings.refreshInterval().getValue() == i) {
                     intervalList.setSelectedIndex(intervalList.getItemCount() - 1);
                 }

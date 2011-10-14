@@ -16,11 +16,14 @@ package com.propertyvista.domain.dashboard;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.ISharedUserEntity;
 
 public interface GadgetMetadata extends ISharedUserEntity {
 
+    @I18n
     public static enum GadgetType {
         Test,
 
@@ -40,7 +43,12 @@ public interface GadgetMetadata extends ISharedUserEntity {
 
         GaugeDisplay,
 
-        UnitVacancyReport
+        UnitVacancyReport;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
 
     @MemberColumn(name = "gadgetType")

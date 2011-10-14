@@ -76,7 +76,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
     @Override
     protected void selfInit(GadgetMetadata gmd) {
         gmd.type().setValue(GadgetType.UnitVacancyReport);
-        gmd.name().setValue(i18n.tr("Unit Vacancy Report"));
+        gmd.name().setValue(GadgetType.UnitVacancyReport.toString());
     }
 
     @Override

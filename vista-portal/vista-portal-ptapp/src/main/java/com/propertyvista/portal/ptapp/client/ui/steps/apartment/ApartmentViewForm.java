@@ -326,8 +326,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 
                 for (ServiceItem item : getAvailableList()) {
                     if (isCompatible(item) && !getAgreedList().contains(item)) {
-                        list.addItem(item.getStringView());
-                        list.setValue(list.getItemCount() - 1, item.id().toString());
+                        list.addItem(item.getStringView(), item.id().toString());
                     }
                 }
 

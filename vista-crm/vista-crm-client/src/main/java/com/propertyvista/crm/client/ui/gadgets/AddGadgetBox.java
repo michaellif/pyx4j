@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
-
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
@@ -107,7 +106,7 @@ public class AddGadgetBox extends DialogPanel {
         gadgetsList.clear();
         for (GadgetType gadgetType : GadgetType.values()) {
             if (GadgetsFactory.isGadgetAllowed(gadgetType, dashboardType)) {
-                gadgetsList.addItem(gadgetType.name());
+                gadgetsList.addItem(gadgetType.toString(), gadgetType.name());
             }
         }
         gadgetsList.setSelectedIndex(-1);
@@ -116,7 +115,7 @@ public class AddGadgetBox extends DialogPanel {
             @Override
             public void onChange(ChangeEvent event) {
                 if (gadgetsList.getSelectedIndex() >= 0) {
-                    gadgetDesc.setText(GadgetsFactory.getGadgetDescription(GadgetType.valueOf(gadgetsList.getItemText(gadgetsList.getSelectedIndex()))));
+                    gadgetDesc.setText(GadgetsFactory.getGadgetDescription(GadgetType.valueOf(gadgetsList.getValue(gadgetsList.getSelectedIndex()))));
                 }
             }
         });
@@ -125,7 +124,7 @@ public class AddGadgetBox extends DialogPanel {
     private void createSelectedGadget() {
         selectedGadget = null;
         if (gadgetsList.getSelectedIndex() >= 0) {
-            selectedGadget = GadgetsFactory.createGadget(GadgetType.valueOf(gadgetsList.getItemText(gadgetsList.getSelectedIndex())), null);
+            selectedGadget = GadgetsFactory.createGadget(GadgetType.valueOf(gadgetsList.getValue(gadgetsList.getSelectedIndex())), null);
         }
     }
 }
