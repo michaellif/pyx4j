@@ -33,7 +33,7 @@ public class POFileWriterTest extends TestCase {
         po.createDefaultHeader();
 
         POEntry entry1 = new POEntry();
-        entry1.untranslated = "Text";
+        entry1.untranslated = "Text \"\t\" /A\\";
         entry1.translated = "\u0422\u0435\u043a\u0441\u0442";
         po.entries.add(entry1);
 

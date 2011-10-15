@@ -115,6 +115,7 @@ public class POFileWriter {
         if (str == null) {
             writer.print("\"\"");
         } else {
+            str = str.replace("\\", "\\\\").replace("\"", "\\\"").replace("\t", "\\t");
             if (str.contains("\n") || (wrapLines && (str.length() > pageWidth - 2 - firstLnePrefixLen))) {
                 writer.print("\"\"");
 

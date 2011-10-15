@@ -155,6 +155,6 @@ public class POFileReader {
                 break;
             }
         }
-        return b.toString();
+        return b.toString().replace("\\t", "\t").replace("\\\"", "\"").replace("\\\\", "\\");
     }
 }

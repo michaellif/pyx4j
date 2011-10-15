@@ -31,7 +31,7 @@ public class POFileReaderTest extends TestCase {
         POFile po = new POFileReader().readResource(this.getClass().getClassLoader(), "sample1.po");
         Assert.assertNotNull(po);
 
-        Assert.assertEquals(2, po.entries.size());
+        Assert.assertEquals(3, po.entries.size());
 
         Assert.assertEquals("''{0}'' is not valid. {1}", po.entries.get(0).untranslated);
         Assert.assertEquals("''{0}''n'est pas valide. {1}", po.entries.get(0).translated);
@@ -45,5 +45,8 @@ public class POFileReaderTest extends TestCase {
 
         Assert.assertTrue(po.entries.get(1).flags.contains("java-format"));
         Assert.assertTrue(po.entries.get(1).flags.contains("fuzzy"));
+
+        Assert.assertEquals("Click the link <a style=\"color:#929733\" href=\"{1}{2}\">Link</a>", po.entries.get(2).untranslated);
+        Assert.assertEquals("Cliquez sur le lien <a style=\"color:\"#929733\" href=\"{1}{2}\">Lien</a>", po.entries.get(2).translated);
     }
 }
