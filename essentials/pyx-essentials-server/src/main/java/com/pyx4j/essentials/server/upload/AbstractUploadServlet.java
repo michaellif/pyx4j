@@ -80,7 +80,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 return;
             }
         }
-        throw new Error("Can't find inteface UploadService");
+        throw new Error("Can't find interface UploadService");
     }
 
     private static class UploadCanceled extends RuntimeException {
@@ -161,7 +161,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                             IOUtils.copyStream(in, os, 1024);
                             uploadData.data = os.toByteArray();
                             if (uploadData.data.length >= maxSize) {
-                                out.println(i18n.tr("File upload size exceed {0} megabyte maximum", (maxSize / (1024 * 1024))));
+                                out.println(i18n.tr("File upload size exceeds maximum of {0} megabytes", (maxSize / (1024 * 1024))));
                                 return;
                             }
                         } finally {
@@ -185,7 +185,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                     process.status().setError();
                 }
                 if (e.getCause() instanceof FileUploadBase.FileSizeLimitExceededException) {
-                    out.println(i18n.tr("File upload size exceed {0} megabyte maximum", (maxSize / (1024 * 1024))));
+                    out.println(i18n.tr("File upload size exceeds maximum of {0} megabytes", (maxSize / (1024 * 1024))));
                 } else {
                     if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
                         out.println("Error " + e.getMessage());
@@ -208,7 +208,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 if (process != null) {
                     process.status().setCompleted();
                 }
-                log.debug("Upload processing compleated");
+                log.debug("Upload processing completed");
                 out.println(UploadService.ResponseOk);
                 break;
             case processWillContinue:
