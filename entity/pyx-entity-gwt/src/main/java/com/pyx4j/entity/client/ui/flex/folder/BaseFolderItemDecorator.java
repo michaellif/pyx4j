@@ -27,15 +27,12 @@ import com.pyx4j.entity.shared.IEntity;
 
 public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimplePanel implements IFolderItemDecorator<E> {
 
-    private boolean removable = true;
-
     private final EntityFolderImages images;
 
     private CEntityFolderItemEditor<E> folderItem;
 
-    public BaseFolderItemDecorator(EntityFolderImages images, String removeLabel, boolean removable) {
+    public BaseFolderItemDecorator(EntityFolderImages images, String removeLabel) {
         this.images = images;
-        this.removable = removable;
     }
 
     @Override
@@ -51,11 +48,4 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
         return images;
     }
 
-    public boolean isRemovable() {
-        return removable;
-    }
-
-    public void setRemovable(boolean removable) {
-        this.removable = removable;
-    }
 }

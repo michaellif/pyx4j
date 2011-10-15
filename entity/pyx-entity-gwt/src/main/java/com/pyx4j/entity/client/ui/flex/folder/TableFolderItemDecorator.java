@@ -51,11 +51,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
     }
 
     public TableFolderItemDecorator(EntityFolderImages images, String title) {
-        this(images, title, true);
-    }
-
-    public TableFolderItemDecorator(EntityFolderImages images, String title, boolean removable) {
-        super(images, title, removable);
+        super(images, title);
 
         setStyleName(StyleName.EntityFolderRowItemDecorator.name());
 

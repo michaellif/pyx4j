@@ -40,8 +40,12 @@ public class BoxReadOnlyFolderDecorator<E extends IEntity> extends SimplePanel i
     }
 
     @Override
-    public void setComponent(CEntityFolder w) {
+    public void setComponent(CEntityFolder<E> w) {
         super.setWidget(w.getContainer());
+    }
+
+    @Override
+    public void setAddButtonVisible(boolean show) {
     }
 
 }

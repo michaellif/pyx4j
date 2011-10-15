@@ -65,8 +65,11 @@ public class MainForm extends CEntityEditor<EntityI> {
         main.add(header);
         main.add(new ElegantWidgetDecorator(inject(proto().stringMember())));
         main.add(new ElegantWidgetDecorator(inject(proto().integerMember())));
+
         main.add(new HTML("---------------- Box Folder ----------------"));
-        main.add(inject(proto().entityIIList1(), createEntityIIFolder1()));
+        CEntityFolder<EntityII> entityIIFolder1 = createEntityIIFolder1();
+        main.add(inject(proto().entityIIList1(), entityIIFolder1));
+
         main.add(new HTML("---------------- Table Folder ----------------"));
         main.add(inject(proto().entityIIList2(), createEntityIIFolder2()));
         return main;
@@ -83,11 +86,7 @@ public class MainForm extends CEntityEditor<EntityI> {
             }
 
             @Override
-            protected CEntityFolderBoxEditor<EntityII> createItem(boolean first) {
-                return createEntityIISetRow();
-            }
-
-            private CEntityFolderBoxEditor<EntityII> createEntityIISetRow() {
+            protected CEntityFolderBoxEditor<EntityII> createItem(final boolean first) {
                 return new CEntityFolderBoxEditor<EntityII>(EntityII.class) {
 
                     @Override
@@ -104,7 +103,8 @@ public class MainForm extends CEntityEditor<EntityI> {
 
                     @Override
                     public IFolderItemDecorator<EntityII> createDecorator() {
-                        return new BoxFolderItemDecorator<EntityII>(Images.INSTANCE, i18n.tr("Remove EntityII"));
+                        BoxFolderItemDecorator<EntityII> decorator = new BoxFolderItemDecorator<EntityII>(Images.INSTANCE, i18n.tr("Remove EntityII"));
+                        return decorator;
                     }
 
                 };

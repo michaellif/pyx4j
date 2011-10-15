@@ -115,4 +115,8 @@ public class ItemActionsBar extends HorizontalPanel {
         upCommand.setVisible(up);
         downCommand.setVisible(down);
     }
+
+    public void setRemoveButtonVisible(boolean show) {
+        removeCommand.setVisible(show);
+    }
 }

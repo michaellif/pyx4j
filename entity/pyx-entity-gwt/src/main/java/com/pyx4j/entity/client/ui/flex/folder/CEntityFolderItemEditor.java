@@ -43,21 +43,23 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
 
     private boolean last;
 
-    private boolean moovable = true;
+    private boolean movable = true;
 
-    private boolean remoovable = true;
+    private boolean removable = true;
 
     private final List<HandlerRegistration> handlerRegistrations;
+
+    private CEntityFolder<E> parent;
 
     public CEntityFolderItemEditor(Class<E> clazz) {
         this(clazz, true, true);
     }
 
-    public CEntityFolderItemEditor(Class<E> clazz, boolean moovable, boolean remoovable) {
+    public CEntityFolderItemEditor(Class<E> clazz, boolean movable, boolean removable) {
         super(clazz);
         container = new SimplePanel();
-        this.moovable = moovable;
-        this.remoovable = remoovable;
+        this.movable = movable;
+        this.removable = removable;
 
         handlerRegistrations = new ArrayList<HandlerRegistration>();
     }
@@ -73,12 +75,20 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
         return last;
     }
 
-    public boolean isMoovable() {
-        return moovable;
+    public void setMovable(boolean movable) {
+        this.movable = movable;
     }
 
-    public boolean isRemoovable() {
-        return remoovable;
+    public boolean isMovable() {
+        return movable;
+    }
+
+    public void setRemovable(boolean removable) {
+        this.removable = removable;
+    }
+
+    public boolean isRemovable() {
+        return removable;
     }
 
     @Override
@@ -134,15 +144,19 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
         for (HandlerRegistration handlerRegistration : handlerRegistrations) {
             handlerRegistration.removeHandler();
         }
+        handlerRegistrations.clear();
     }
 
     protected void onAdopt(final CEntityFolder<E> parent) {
+
+        this.parent = parent;
+        handlerRegistrations.clear();
 
         HandlerRegistration handlerRegistration = parent.addValueChangeHandler(new ValueChangeHandler<IList<E>>() {
 
             @Override
             public void onValueChange(ValueChangeEvent<IList<E>> event) {
-                setActionsState(parent);
+                calculateActionsState();
             }
         });
         handlerRegistrations.add(handlerRegistration);
@@ -168,7 +182,7 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
 
     }
 
-    protected void setActionsState(CEntityFolder<E> parent) {
+    protected void calculateActionsState() {
         int index = parent.getItemIndex(CEntityFolderItemEditor.this);
 
         first = index == 0;
@@ -177,7 +191,8 @@ public abstract class CEntityFolderItemEditor<E extends IEntity> extends CEntity
         CEntityFolderItemEditor<?> previousSibling = parent.getItem(index - 1);
         CEntityFolderItemEditor<?> nextSibling = parent.getItem(index + 1);
 
-        ((IFolderItemDecorator<?>) getDecorator()).setActionsState(remoovable, !first && previousSibling.isMoovable(), !last && nextSibling.isMoovable());
+        ((IFolderItemDecorator<?>) getDecorator()).setActionsState(removable, movable && !first && previousSibling.isMovable(),
+                movable && !last && nextSibling.isMovable());
 
     }
 

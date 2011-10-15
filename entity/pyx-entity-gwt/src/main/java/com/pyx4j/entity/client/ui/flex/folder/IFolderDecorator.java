@@ -35,6 +35,8 @@ public interface IFolderDecorator<E extends IEntity> extends IDecorator<CEntityF
 
     HandlerRegistration addItemAddClickHandler(ClickHandler handler);
 
+    void setAddButtonVisible(boolean show);
+
     @Override
     void setComponent(CEntityFolder<E> w);
 

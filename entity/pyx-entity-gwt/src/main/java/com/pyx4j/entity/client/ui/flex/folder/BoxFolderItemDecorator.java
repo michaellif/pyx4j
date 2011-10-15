@@ -43,16 +43,12 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
     private SimplePanel contentHolder;
 
-    public BoxFolderItemDecorator(EntityFolderImages images, String title) {
-        this(images, title, true);
-    }
-
     public BoxFolderItemDecorator(EntityFolderImages images) {
         this(images, null);
     }
 
-    public BoxFolderItemDecorator(EntityFolderImages images, String removeLabel, boolean removable) {
-        super(images, removeLabel, removable);
+    public BoxFolderItemDecorator(EntityFolderImages images, String removeLabel) {
+        super(images, removeLabel);
 
         setStyleName(StyleName.EntityFolderBoxItemDecorator.name());
 
@@ -100,6 +96,10 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
     public void setCollapsible(boolean collapsible) {
         this.collapsible = collapsible;
+        toolbar.setCollapseButtonVisible(collapsible);
+        if (collapsible == false) {
+            setExpended(true);
+        }
     }
 
     public boolean isCollapsible() {

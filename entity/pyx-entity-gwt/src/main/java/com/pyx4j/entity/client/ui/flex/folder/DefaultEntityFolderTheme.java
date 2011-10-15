@@ -27,20 +27,13 @@ import com.pyx4j.widgets.client.style.Theme;
 
 public class DefaultEntityFolderTheme extends Theme {
 
-    private String width = "100%";
-
     public DefaultEntityFolderTheme() {
-        initStyles();
-    }
-
-    public DefaultEntityFolderTheme(String width) {
-        this.width = width;
         initStyles();
     }
 
     protected void initStyles() {
         Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolder);
-        style.addProperty("width", width);
+        style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderBoxItem).toString(), CEntityFolder.StyleName.EntityFolder);

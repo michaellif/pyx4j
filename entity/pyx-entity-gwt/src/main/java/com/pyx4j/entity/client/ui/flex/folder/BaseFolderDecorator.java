@@ -113,4 +113,10 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
             addButtonLabel.ensureDebugId(baseID + "-" + FormNavigationDebugId.Form_Add.debugId() + "-label");
         }
     }
+
+    @Override
+    public void setAddButtonVisible(boolean visible) {
+        addImage.setVisible(visible);
+        addButtonLabel.setVisible(visible);
+    }
 }

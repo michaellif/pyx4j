@@ -129,4 +129,8 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         caption.setText(text);
     }
 
+    public void setCollapseButtonVisible(boolean collapsible) {
+        collapseImage.setVisible(collapsible);
+    }
+
 }

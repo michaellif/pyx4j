@@ -53,4 +53,5 @@ public class BoxFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E
     public void onValueChange(ValueChangeEvent<IList<E>> event) {
         // TODO Auto-generated method stub
     }
+
 }

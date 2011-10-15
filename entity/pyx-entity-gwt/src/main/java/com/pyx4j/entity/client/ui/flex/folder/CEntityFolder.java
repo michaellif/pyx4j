@@ -77,15 +77,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     private final FlowPanel container;
 
-    //if false Collape/Expand are hidden
-    public boolean collapsible = true;
-
-    public boolean collapsed = true;
-
-    // if false Up/Down buttons are hidden
     public boolean orderable = true;
 
-    // if false Add/Remove/Up/Down are hidden
     public boolean modifiable = true;
 
     protected int currentRowDebugId = 0;
@@ -102,6 +95,33 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             entityPrototype = EntityFactory.getEntityPrototype(rowClass);
         } else {
             entityPrototype = null;
+        }
+    }
+
+    public boolean isOrderable() {
+        return orderable;
+    }
+
+    public void setOrderable(boolean orderable) {
+        this.orderable = orderable;
+        for (CEntityFolderItemEditor<E> item : itemsList) {
+            item.setMovable(orderable);
+            item.calculateActionsState();
+        }
+    }
+
+    public boolean isModifiable() {
+        return modifiable;
+    }
+
+    public void setModifiable(boolean modifiable) {
+        this.modifiable = modifiable;
+        if (getDecorator() != null) {
+            ((IFolderDecorator) getDecorator()).setAddButtonVisible(modifiable);
+        }
+        for (CEntityFolderItemEditor<E> item : itemsList) {
+            item.setRemovable(modifiable);
+            item.calculateActionsState();
         }
     }
 
@@ -134,6 +154,14 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         CEntityFolderItemEditor<E> item = createItem(first);
 
         item.onBound(this);
+
+        if (modifiable == false) {
+            item.setRemovable(false);
+        }
+
+        if (orderable == false) {
+            item.setMovable(false);
+        }
 
         item.addValueChangeHandler(new ValueChangeHandler<E>() {
             boolean sheduled = false;
@@ -183,6 +211,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     @Override
     public void initContent() {
         super.initContent();
+
+        ((IFolderDecorator) getDecorator()).setAddButtonVisible(modifiable);
+
         addValueChangeHandler((IFolderDecorator) getDecorator());
         //TODO use components inheritance
         if (this.getDebugId() != null) {
@@ -317,7 +348,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         }
 
         for (CEntityFolderItemEditor<E> item : itemsList) {
-            item.setActionsState(this);
+            item.calculateActionsState();
         }
 
         if (folderDecorator instanceof TableFolderDecorator) {
@@ -342,6 +373,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     private void adoptItem(final CEntityFolderItemEditor<E> item) {
         itemsList.add(item);
         container.add(item);
+
         item.addAccessAdapter(this);
 
         IDebugId rowDebugId = new CompositeDebugId(this.getDebugId(), "row", currentRowDebugId);
@@ -354,7 +386,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     private void abandonItem(final CEntityFolderItemEditor<E> item) {
         container.remove(item);
-        itemsList.remove(item.getValue());
+        itemsList.remove(item);
         item.removeAccessAdapter(this);
 
         item.onAbandon();
