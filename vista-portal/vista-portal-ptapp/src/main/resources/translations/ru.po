@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-14 17:08-0400\n"
+"POT-Creation-Date: 2011-10-14 23:32-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -266,7 +266,7 @@ msgstr "Кондиционер"
 msgid "Alarm"
 msgstr "Тревога"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:339
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:338
 #, java-format
 msgid "All {0}(s) have been selected already!.."
 msgstr ""
@@ -326,7 +326,7 @@ msgstr "Заявитель информация"
 
 #: com/propertyvista/portal/ptapp/client/ui/steps/tenants/TenantsViewForm.java:171
 msgid "Applicant and co-applicant should be at least 18 years old"
-msgstr "Заявитель и со-претендент должен быть не менее 18 лет"
+msgstr "Заявитель и со-заявителя должно быть не менее 18 лет"
 
 #: com/propertyvista/domain/IBoundToApplication.java:2
 #: com/propertyvista/domain/tenant/ptapp/Application.java:0
@@ -581,6 +581,14 @@ msgstr "Банк не"
 msgid "Bank Phone"
 msgstr "Банк Телефон"
 
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Bar Chart Display"
+msgstr "Гистограмма дисплей"
+
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Bar Chart Display Building"
+msgstr "Гистограмма Показать Строительство"
+
 #: com/propertyvista/domain/site/SiteDescriptor.java:2
 msgid "Base Color"
 msgstr "Основной цвет"
@@ -758,6 +766,10 @@ msgstr "Построение Финансовых"
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:0
 msgid "Building Info"
 msgstr "Строительство информация"
+
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Building Lister"
+msgstr "Строительство Листер"
 
 #: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReport.java:2
 msgid "Building Name"
@@ -1355,6 +1367,10 @@ msgstr "Дельта, в $"
 #: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReport.java:2
 msgid "Delta, in %"
 msgstr "Дельта, в%"
+
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Demo"
+msgstr "Демонстрация"
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:1
 msgid "Den"
@@ -2032,6 +2048,10 @@ msgstr "Гараж лота"
 msgid "Gate"
 msgstr "Ворота"
 
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Gauge Display"
+msgstr "Калибровочных дисплей"
+
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:86
 msgid "General Info"
 msgstr "Общая информация"
@@ -2634,6 +2654,10 @@ msgstr "Лицензированные Гарантийный Поддержко
 msgid "Like"
 msgstr "Подобно"
 
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Line Chart Display"
+msgstr "Line Chart дисплей"
+
 #: com/propertyvista/dto/PetsDTO.java:2
 #: com/propertyvista/dto/VehiclesDTO.java:2
 msgid "List"
@@ -2683,11 +2707,11 @@ msgid "Log In"
 msgstr "Войдите"
 
 #: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:66
-#: com/propertyvista/portal/ptapp/client/ui/TopRightActionsViewImpl.java:85
+#: com/propertyvista/portal/ptapp/client/ui/TopRightActionsViewImpl.java:92
 msgid "LogIn"
 msgstr "LogIn"
 
-#: com/propertyvista/portal/ptapp/client/ui/TopRightActionsViewImpl.java:74
+#: com/propertyvista/portal/ptapp/client/ui/TopRightActionsViewImpl.java:81
 msgid "LogOut"
 msgstr "Выйти"
 
@@ -3607,6 +3631,14 @@ msgstr "Телефоны"
 msgid "Physical Condition"
 msgstr "Физическое состояние"
 
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Pie Chart Display"
+msgstr "Показать Круговая диаграмма"
+
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Pie Chart Display Building"
+msgstr "Круговая диаграмма Показать Строительство"
+
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "Pile"
 msgstr "Свая"
@@ -4297,7 +4329,7 @@ msgstr "Тип службы"
 msgid "Services"
 msgstr "Услуги"
 
-#: com/pyx4j/essentials/client/SessionInactiveDialog.java:81
+#: com/pyx4j/essentials/client/SessionInactiveDialog.java:82
 #, java-format
 msgid "Session duration {0}, inactive for {1}"
 msgstr ""
@@ -4341,11 +4373,6 @@ msgstr "Должно быть числовое значение"
 #: com/pyx4j/forms/client/ui/CIntegerField.java:30
 msgid "Should be an integer"
 msgstr "Должно быть целым"
-
-#: com/pyx4j/forms/client/ui/CNumberField.java:86
-#, java-format
-msgid "Should be {0} in range from {1} to {2}"
-msgstr ""
 
 #: com/propertyvista/domain/tenant/lead/Showing.java:0
 msgid "Showing"
@@ -4743,6 +4770,10 @@ msgstr "Срок Тип"
 msgid "Termination Notice"
 msgstr "Уведомление о прекращении действия"
 
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Test"
+msgstr "Тест"
+
 #: com/propertyvista/domain/site/Testimonial.java:0
 msgid "Testimonial"
 msgstr "Свидетельство"
@@ -4800,7 +4831,7 @@ msgstr "Выйти дата не может быть равным или пос�
 msgid "The start date cannot be equal or after end date."
 msgstr "Дата начала не может быть равен или после даты окончания."
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:342
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:341
 #, java-format
 msgid "There are no {0}(s) available!.."
 msgstr ""
@@ -5030,6 +5061,7 @@ msgstr "Группа Аренда"
 msgid "Unit Trusts"
 msgstr "Паевые фонды"
 
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 #: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReport.java:0
 msgid "Unit Vacancy Report"
 msgstr "Отчет об Вакансии"
@@ -5408,7 +5440,7 @@ msgstr "миллисекунды"
 msgid "month"
 msgstr "месяц"
 
-#: com/pyx4j/forms/client/ui/CNumberField.java:76
+#: com/pyx4j/forms/client/ui/CNumberField.java:75
 msgid "numeric"
 msgstr "числовой"
 
@@ -5431,6 +5463,11 @@ msgstr "{0} (Спальные места: {1} Ванные: {2})"
 #, java-format
 msgid "{0} is saved."
 msgstr "{0} сохранилась"
+
+#: com/pyx4j/forms/client/ui/CNumberField.java:85
+#, java-format
+msgid "{0} should be in range between {1} and {2}"
+msgstr ""
 
 #: com/propertyvista/domain/File.java:0
 #, java-format

@@ -152,3 +152,5 @@ spyware
 resizable
 expiry
 arrear
+msgid
+msgstr

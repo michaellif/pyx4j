@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-14 17:08-0400\n"
+"POT-Creation-Date: 2011-10-14 23:32-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -266,7 +266,7 @@ msgstr "Climatiseur"
 msgid "Alarm"
 msgstr "Alarme"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:339
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:338
 #, java-format
 msgid "All {0}(s) have been selected already!.."
 msgstr ""
@@ -581,6 +581,14 @@ msgstr "Aucune banque"
 msgid "Bank Phone"
 msgstr "Téléphone de la Banque"
 
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Bar Chart Display"
+msgstr "Affichage graphique à barres"
+
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Bar Chart Display Building"
+msgstr "Bâtiment Bar de visualisation des cartes"
+
 #: com/propertyvista/domain/site/SiteDescriptor.java:2
 msgid "Base Color"
 msgstr "Couleur de base"
@@ -758,6 +766,10 @@ msgstr "Financial Building"
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:0
 msgid "Building Info"
 msgstr "Infos bâtiment"
+
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Building Lister"
+msgstr "Bâtiment Lister"
 
 #: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReport.java:2
 msgid "Building Name"
@@ -1355,6 +1367,10 @@ msgstr "Delta, en $"
 #: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReport.java:2
 msgid "Delta, in %"
 msgstr "Delta, en%"
+
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Demo"
+msgstr "Démo"
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:1
 msgid "Den"
@@ -2032,6 +2048,10 @@ msgstr "Lot de garage"
 msgid "Gate"
 msgstr "Porte"
 
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Gauge Display"
+msgstr "Jauge d'affichage"
+
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:86
 msgid "General Info"
 msgstr "Informations générales"
@@ -2633,6 +2653,10 @@ msgstr "Licensed Garantie Maintien"
 msgid "Like"
 msgstr "Comme"
 
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Line Chart Display"
+msgstr "Visualisation des cartes en ligne"
+
 #: com/propertyvista/dto/PetsDTO.java:2
 #: com/propertyvista/dto/VehiclesDTO.java:2
 msgid "List"
@@ -2682,11 +2706,11 @@ msgid "Log In"
 msgstr "Connexion"
 
 #: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:66
-#: com/propertyvista/portal/ptapp/client/ui/TopRightActionsViewImpl.java:85
+#: com/propertyvista/portal/ptapp/client/ui/TopRightActionsViewImpl.java:92
 msgid "LogIn"
 msgstr "LogIn"
 
-#: com/propertyvista/portal/ptapp/client/ui/TopRightActionsViewImpl.java:74
+#: com/propertyvista/portal/ptapp/client/ui/TopRightActionsViewImpl.java:81
 msgid "LogOut"
 msgstr "LogOut"
 
@@ -3607,6 +3631,14 @@ msgstr "Mobiles"
 msgid "Physical Condition"
 msgstr "Condition physique"
 
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Pie Chart Display"
+msgstr "Affichage graphique circulaire"
+
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Pie Chart Display Building"
+msgstr "Bâtiment d'affichage Pie Chart"
+
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "Pile"
 msgstr "Pile"
@@ -4297,7 +4329,7 @@ msgstr "Type de service"
 msgid "Services"
 msgstr "Services"
 
-#: com/pyx4j/essentials/client/SessionInactiveDialog.java:81
+#: com/pyx4j/essentials/client/SessionInactiveDialog.java:82
 #, java-format
 msgid "Session duration {0}, inactive for {1}"
 msgstr ""
@@ -4341,11 +4373,6 @@ msgstr "Doit être une valeur numérique"
 #: com/pyx4j/forms/client/ui/CIntegerField.java:30
 msgid "Should be an integer"
 msgstr "Doit être un entier"
-
-#: com/pyx4j/forms/client/ui/CNumberField.java:86
-#, java-format
-msgid "Should be {0} in range from {1} to {2}"
-msgstr ""
 
 #: com/propertyvista/domain/tenant/lead/Showing.java:0
 msgid "Showing"
@@ -4743,6 +4770,10 @@ msgstr "Type du terme"
 msgid "Termination Notice"
 msgstr "Avis de résiliation"
 
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Test"
+msgstr "Test"
+
 #: com/propertyvista/domain/site/Testimonial.java:0
 msgid "Testimonial"
 msgstr "Témoignage"
@@ -4800,7 +4831,7 @@ msgstr "Le déménagement à date ne peut être égale ou après passer à un."
 msgid "The start date cannot be equal or after end date."
 msgstr "La date de début ne peut pas être égale ou après la date de fin."
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:342
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:341
 #, java-format
 msgid "There are no {0}(s) available!.."
 msgstr ""
@@ -5030,6 +5061,7 @@ msgstr "De loyer"
 msgid "Unit Trusts"
 msgstr "Unit Trusts"
 
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 #: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReport.java:0
 msgid "Unit Vacancy Report"
 msgstr "Signaler vacance Unité"
@@ -5409,7 +5441,7 @@ msgstr "millisecondes"
 msgid "month"
 msgstr "mois"
 
-#: com/pyx4j/forms/client/ui/CNumberField.java:76
+#: com/pyx4j/forms/client/ui/CNumberField.java:75
 msgid "numeric"
 msgstr "numérique"
 
@@ -5431,6 +5463,11 @@ msgstr ""
 #: com/pyx4j/essentials/client/crud/EntityEditorPanel.java:138
 #, java-format
 msgid "{0} is saved."
+msgstr ""
+
+#: com/pyx4j/forms/client/ui/CNumberField.java:85
+#, java-format
+msgid "{0} should be in range between {1} and {2}"
 msgstr ""
 
 #: com/propertyvista/domain/File.java:0

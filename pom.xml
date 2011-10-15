@@ -455,22 +455,6 @@
         </profile>
 
         <profile>
-            <id>i18n-auto</id>
-            <properties>
-                <i18n.autoTranslate>true</i18n.autoTranslate>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>i18n-nl</id>
-            <properties>
-                <poSaveLocation>false</poSaveLocation>
-                <gettextArg>--no-location</gettextArg>
-                <poSufix>-no_location</poSufix>
-            </properties>
-        </profile>
-
-        <profile>
             <id>maven3</id>
             <activation>
                 <file>

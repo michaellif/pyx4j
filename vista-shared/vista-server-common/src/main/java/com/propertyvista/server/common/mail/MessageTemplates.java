@@ -58,7 +58,7 @@ public class MessageTemplates {
     }
 
     public static String createMasterApplicationInvitationEmail(String name, String token) {
-        return wrapHtml(i18n.tr("Dear {0},<br/>\n" + "This email was sent to you in response to your request to apply your Property Vista appartemts.<br/>\n"
+        return wrapHtml(i18n.tr("Dear {0},<br/>\n" + "This email was sent to you in response to your request to apply for Property Vista apartments.<br/>\n"
                 + "Click the link below to go to the Property Vista site:<br/>\n" + "    <a style=\"color:#929733\" href=\"{1}{2}\">Application</a>", name,
 
         ServerSideConfiguration.instance().getMainApplicationURL(),

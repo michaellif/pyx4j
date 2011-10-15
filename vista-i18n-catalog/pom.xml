@@ -96,7 +96,14 @@
         </profile>
 
         <profile>
-            <id>full</id>
+            <id>i18n-nl</id>
+            <properties>
+                <poSaveLocation>false</poSaveLocation>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>i18n</id>
             <build>
                 <plugins>
 
