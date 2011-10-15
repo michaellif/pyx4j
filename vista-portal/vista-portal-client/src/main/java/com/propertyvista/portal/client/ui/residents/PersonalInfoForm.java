@@ -126,7 +126,7 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
 
     private CEntityFolderBoxEditor<EmergencyContact> createEmergencyContactItem(final boolean first) {
 
-        return new CEntityFolderBoxEditor<EmergencyContact>(EmergencyContact.class) {
+        CEntityFolderBoxEditor<EmergencyContact> item = new CEntityFolderBoxEditor<EmergencyContact>(EmergencyContact.class) {
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
@@ -143,9 +143,12 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
 
             @Override
             public IFolderItemDecorator<EmergencyContact> createDecorator() {
-                return new BoxFolderItemDecorator<EmergencyContact>(PortalImages.INSTANCE, i18n.tr("Remove contact"), !first);
+                return new BoxFolderItemDecorator<EmergencyContact>(PortalImages.INSTANCE, i18n.tr("Remove contact"));
             }
         };
+        item.setRemovable(!first);
+        item.setMovable(!first);
+        return item;
     }
 
     private CEntityFolder<Vehicle> createVehicleFolderEditorColumns() {

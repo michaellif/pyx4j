@@ -230,7 +230,8 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
                     @Override
                     public IFolderItemDecorator<TenantInApplicationDTO> createDecorator() {
-                        return new VistaTableFolderItemDecorator<TenantInApplicationDTO>(parent, parent.isEditable() && !first);
+                        //TODO , parent.isEditable() && !first
+                        return new VistaTableFolderItemDecorator<TenantInApplicationDTO>(parent);
                     }
 
                     private void setMandatoryDependant() {

@@ -178,11 +178,6 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
             return null;
         }
 
-        @Override
-        public void setComponent(CEntityFolder w) {
-            appDocsListHolder.setWidget(w.getContainer());
-        }
-
         private final IUploader.OnStartUploaderHandler onStartUploaderHandler = new IUploader.OnStartUploaderHandler() {
 
             private Hidden tenantIdParam;
@@ -243,6 +238,18 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
                 reuse();
                 assignNewNameToFileInput();
             }
+        }
+
+        @Override
+        public void setAddButtonVisible(boolean show) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void setComponent(CEntityFolder<ApplicationDocument> w) {
+            // TODO Auto-generated method stub
+
         }
     }
 }

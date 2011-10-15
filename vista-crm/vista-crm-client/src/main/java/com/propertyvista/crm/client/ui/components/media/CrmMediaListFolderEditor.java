@@ -77,13 +77,13 @@ public class CrmMediaListFolderEditor extends VistaEntityFolder<Media> {
 
     @Override
     protected CEntityFolderBoxEditor<Media> createItem(boolean first) {
-        return new CEntityFolderBoxEditor<Media>(Media.class) {
+        CEntityFolderBoxEditor<Media> item = new CEntityFolderBoxEditor<Media>(Media.class) {
 
             Image thumbnail;
 
             @Override
             public IFolderItemDecorator<Media> createDecorator() {
-                return new VistaBoxFolderItemDecorator<Media>(parent, parent.isEditable());
+                return new VistaBoxFolderItemDecorator<Media>(parent);
             }
 
             @Override
@@ -219,5 +219,8 @@ public class CrmMediaListFolderEditor extends VistaEntityFolder<Media> {
                 }
             }
         };
+
+        item.setRemovable(parent.isEditable());
+        return item;
     }
 }

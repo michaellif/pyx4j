@@ -26,15 +26,12 @@ import com.propertyvista.common.client.ui.VistaEntityFolder;
 public class VistaTableFolderDecorator<E extends IEntity> extends TableFolderDecorator<E> {
     protected static I18n i18n = I18n.get(VistaTableFolderDecorator.class);
 
-    public VistaTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, String title, boolean editable) {
-        super(columns, VistaImages.INSTANCE, title, editable);
-    }
-
-    public VistaTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, VistaEntityFolder<E> parent, boolean editable) {
-        this(columns, i18n.tr("Add ") + parent.getItemName(), editable);
+    public VistaTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, String title) {
+        super(columns, VistaImages.INSTANCE, title);
     }
 
     public VistaTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, VistaEntityFolder<E> parent) {
-        this(columns, parent, parent.isEditable());
+        this(columns, i18n.tr("Add ") + parent.getItemName());
     }
+
 }

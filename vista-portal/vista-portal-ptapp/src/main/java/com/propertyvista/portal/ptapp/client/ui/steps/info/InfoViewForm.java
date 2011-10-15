@@ -362,7 +362,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
 
             @Override
             protected CEntityFolderBoxEditor<EmergencyContact> createItem(final boolean first) {
-                return new CEntityFolderBoxEditor<EmergencyContact>(EmergencyContact.class) {
+                CEntityFolderBoxEditor<EmergencyContact> item = new CEntityFolderBoxEditor<EmergencyContact>(EmergencyContact.class) {
                     @Override
                     public IsWidget createContent() {
                         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
@@ -379,9 +379,12 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
 
                     @Override
                     public IFolderItemDecorator<EmergencyContact> createDecorator() {
-                        return new VistaBoxFolderItemDecorator<EmergencyContact>(parent, !first);
+                        return new VistaBoxFolderItemDecorator<EmergencyContact>(parent);
                     }
                 };
+                item.setMovable(!first);
+                item.setRemovable(!first);
+                return item;
             }
 
             @Override
@@ -391,6 +394,8 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
                     addItem(); // at least one Emergency Contact should be present!..
                 }
             }
+
         };
+
     }
 }

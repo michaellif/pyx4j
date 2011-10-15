@@ -13,6 +13,7 @@
  */
 package com.propertyvista.common.client.theme;
 
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeComboBox;
 import com.pyx4j.forms.client.ui.NativeTextBox;
@@ -20,6 +21,7 @@ import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.style.CSSClass;
+import com.pyx4j.widgets.client.style.IStyleName;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.Theme;
@@ -34,7 +36,7 @@ public class VistaTheme extends Theme {
 
     protected void initStyles() {
 
-        addTheme(new DefaultEntityFolderTheme("980px"));
+        initEntityFolderStyles();
 
         initGeneralStyles();
         initBodyStyles();
@@ -64,6 +66,14 @@ public class VistaTheme extends Theme {
         initSlideshowActionStyle();
         initSuggestBoxStyle();
         initBannerStyle();
+    }
+
+    protected void initEntityFolderStyles() {
+        addTheme(new DefaultEntityFolderTheme());
+
+        Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolder);
+        style.addProperty("width", "980px");
+        addStyle(style);
     }
 
     protected void initGeneralStyles() {

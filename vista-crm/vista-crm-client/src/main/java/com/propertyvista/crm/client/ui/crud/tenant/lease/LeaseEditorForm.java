@@ -401,7 +401,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                     @Override
                     public IFolderItemDecorator<TenantInLease> createDecorator() {
-                        return new VistaTableFolderItemDecorator<TenantInLease>(parent, parent.isEditable() && !first);
+                        //TODO , parent.isEditable() && !first
+                        return new VistaTableFolderItemDecorator<TenantInLease>(parent);
                     }
 
                     private void setMandatoryDependant() {
@@ -521,7 +522,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         super.populate(value);
 
                         if (value.item().type().featureType().getValue() == Feature.Type.utility) {
-                            decor.setRemovable(false);
+                            setRemovable(false);
                         }
 
                         if (!parent.isEditable()) {

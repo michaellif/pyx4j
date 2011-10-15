@@ -13,7 +13,6 @@
  */
 package com.propertyvista.common.client.ui.decorations;
 
-
 import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
@@ -24,16 +23,12 @@ import com.propertyvista.common.client.ui.VistaEntityFolder;
 public class VistaTableFolderItemDecorator<E extends IEntity> extends TableFolderItemDecorator<E> {
     protected static I18n i18n = I18n.get(VistaTableFolderItemDecorator.class);
 
-    public VistaTableFolderItemDecorator(String title, boolean editable) {
-        super(VistaImages.INSTANCE, title, editable);
-    }
-
-    public VistaTableFolderItemDecorator(VistaEntityFolder<E> parent, boolean editable) {
-        this(i18n.tr("Remove ") + parent.getItemName(), editable);
+    public VistaTableFolderItemDecorator(String title) {
+        super(VistaImages.INSTANCE, title);
     }
 
     public VistaTableFolderItemDecorator(VistaEntityFolder<E> parent) {
-        this(parent, parent.isEditable());
+        this(i18n.tr("Remove ") + parent.getItemName());
     }
 
 }

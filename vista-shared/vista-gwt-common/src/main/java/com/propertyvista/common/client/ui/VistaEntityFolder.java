@@ -62,14 +62,14 @@ public abstract class VistaEntityFolder<E extends IEntity> extends CEntityFolder
         return new CEntityFolderRowEditor<E>(clazz, columns()) {
             @Override
             public IFolderItemDecorator<E> createDecorator() {
-                return new VistaTableFolderItemDecorator<E>(i18n.tr("Remove ") + getItemName(), editable);
+                return new VistaTableFolderItemDecorator<E>(i18n.tr("Remove ") + getItemName());
             }
         };
     }
 
     @Override
     protected IFolderDecorator<E> createDecorator() {
-        return new VistaTableFolderDecorator<E>(columns(), i18n.tr("Add ") + getItemName(), editable);
+        return new VistaTableFolderDecorator<E>(columns(), i18n.tr("Add ") + getItemName());
     }
 
     public String getItemName() {

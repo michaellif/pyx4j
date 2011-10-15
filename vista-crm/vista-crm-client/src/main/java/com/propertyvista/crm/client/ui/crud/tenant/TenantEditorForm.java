@@ -197,7 +197,9 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
                     @Override
                     public IFolderItemDecorator<EmergencyContact> createDecorator() {
-                        return new VistaBoxFolderItemDecorator<EmergencyContact>(parent, !first && parent.isEditable());
+                        //TODO
+                        // return new VistaBoxFolderItemDecorator<EmergencyContact>(parent, !first && parent.isEditable());
+                        return new VistaBoxFolderItemDecorator<EmergencyContact>(parent);
                     }
                 };
             }

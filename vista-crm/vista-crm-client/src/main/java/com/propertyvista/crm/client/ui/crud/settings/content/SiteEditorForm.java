@@ -163,7 +163,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
 
                     @Override
                     public IFolderItemDecorator<PageDescriptor> createDecorator() {
-                        return new VistaTableFolderItemDecorator<PageDescriptor>(parent, !parent.isEditable());
+                        return new VistaTableFolderItemDecorator<PageDescriptor>(parent);
                     }
                 };
             }

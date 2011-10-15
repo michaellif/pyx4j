@@ -13,12 +13,16 @@
  */
 package com.propertyvista.portal.ptapp.client.themes;
 
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.style.IStyleName;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColors;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
@@ -31,7 +35,7 @@ import com.propertyvista.portal.ptapp.client.ui.SecondNavigViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentViewForm;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryViewForm;
 
-public class PtAppTheme extends com.propertyvista.common.client.theme.VistaTheme {
+public class PtAppTheme extends VistaTheme {
 
     public PtAppTheme() {
         super();
@@ -50,6 +54,15 @@ public class PtAppTheme extends com.propertyvista.common.client.theme.VistaTheme
         initVistaMainNavigViewStyles();
         initVistaSecondNavigViewStyles();
         initPaymentRadioButtonGroupStyles();
+    }
+
+    @Override
+    protected void initEntityFolderStyles() {
+        addTheme(new DefaultEntityFolderTheme());
+
+        Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolder);
+        style.addProperty("width", "930px");
+        addStyle(style);
     }
 
     @Override

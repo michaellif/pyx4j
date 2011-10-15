@@ -204,5 +204,12 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
             });
 
         }
+
+        @Override
+        public void setAddButtonVisible(boolean show) {
+            // TODO Auto-generated method stub
+
+        }
+
     }
 }
