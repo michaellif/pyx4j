@@ -171,7 +171,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                     }
                 }
             } catch (UploadCanceled e) {
-                out.println(i18n.tr("File Upload canceled"));
+                out.println(i18n.tr("File upload cancelled"));
                 return;
             } catch (UserRuntimeException e) {
                 if (process != null) {

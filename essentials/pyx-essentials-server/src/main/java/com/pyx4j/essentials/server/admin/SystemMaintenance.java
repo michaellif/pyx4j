@@ -117,7 +117,7 @@ public class SystemMaintenance {
             switch (systemMaintenanceState.type().getValue()) {
             case ReadOnly:
                 //TODO calculate time period
-                return i18n.tr("Application is in read-only due to short maintenance.\nPlease try again in one hour");
+                return i18n.tr("Application is in Read Only Mode due to short maintenance.\nPlease try again in one hour");
             default:
                 return i18n.tr("Application is Unavailable due to short maintenance.\nPlease try again in one hour");
             }

@@ -192,7 +192,7 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEvent.Hand
             timer.cancel();
         }
         timer = null;
-        log.debug("session monitoring stoped ");
+        log.debug("session monitoring stopped");
     }
 
     protected void onSessionInactive(boolean timeout) {
