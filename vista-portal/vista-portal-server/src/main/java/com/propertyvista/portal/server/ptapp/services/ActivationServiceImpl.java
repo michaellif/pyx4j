@@ -159,7 +159,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
             throw new RuntimeException(i18n.tr("Invalid request"));
         }
         if ((new Date().after(cr.accessKeyExpire().getValue()))) {
-            throw new RuntimeExceptionSerializable(i18n.tr("Token has expired."));
+            throw new RuntimeExceptionSerializable(i18n.tr("Token has expired"));
         }
         cr.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
         cr.accessKey().setValue(null);

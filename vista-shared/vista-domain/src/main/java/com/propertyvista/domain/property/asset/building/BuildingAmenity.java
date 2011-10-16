@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.marketing.yield.Amenity;
@@ -80,8 +81,10 @@ public interface BuildingAmenity extends Amenity {
 
         nightPatrol,
 
+        @Translate("On-Site Maintenance")
         onSiteMaintenance,
 
+        @Translate("On-Site Management")
         onSiteManagement,
 
         packageReceiving,

@@ -15,6 +15,7 @@ package com.propertyvista.domain.media;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
@@ -22,6 +23,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.File;
@@ -35,8 +37,10 @@ public interface Media extends IEntity {
 
         file,
 
+        @Translate("YouTube")
         youTube,
 
+        @Translate("External URL")
         externalUrl;
 
         @Override
@@ -56,8 +60,10 @@ public interface Media extends IEntity {
     @MemberColumn(name = "mediaFile")
     File file();
 
+    @Caption(name = "YouTube Video ID")
     IPrimitive<String> youTubeVideoID();
 
+    @Caption(name = "URL")
     IPrimitive<String> url();
 
     IPrimitive<PublicVisibilityType> visibility();

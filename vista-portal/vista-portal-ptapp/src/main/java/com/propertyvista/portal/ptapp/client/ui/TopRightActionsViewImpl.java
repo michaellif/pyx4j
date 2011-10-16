@@ -89,7 +89,7 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
             }
         });
         login.setDebugId(new StringDebugId("login"));
-        login.setValue(i18n.tr("LogIn"));
+        login.setValue(i18n.tr("Log In"));
         login.setDebugId(VistaFormsDebugId.Auth_LoginTop);
         topLinksPanel.add(login);
 

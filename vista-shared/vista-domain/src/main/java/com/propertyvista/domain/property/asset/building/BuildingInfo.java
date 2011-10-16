@@ -146,7 +146,7 @@ public interface BuildingInfo extends IEntity {
         @Translate("Low-Rise")
         lowRise,
 
-        @Translate("High-Rise")
+        @Translate("Highrise")
         highRise,
 
         @Translate("Mid-Rise")

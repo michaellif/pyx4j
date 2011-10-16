@@ -228,7 +228,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The move out date cannot be equal or after move out one.");
+                return i18n.tr("Move Out Date should be greater than Move In Date");
             }
         });
 
@@ -260,7 +260,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The move out date cannot be before or equal move in one.");
+                return i18n.tr("Move Out Date should be greater than Move In Date");
             }
         });
 

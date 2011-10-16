@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.domain.admin;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -20,6 +21,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Table(prefix = "admin")
+@Caption(name = "PMC")
 public interface Pmc extends IEntity {
 
     public static final String adminNamespace = "-vista\u0010-";

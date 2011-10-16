@@ -34,7 +34,7 @@ public class PastDateValidation {
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The Date must be less then Today Date");
+                return i18n.tr("The Date must be earlier than Today Date");
             }
         });
     }

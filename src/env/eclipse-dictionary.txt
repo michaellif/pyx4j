@@ -154,3 +154,6 @@ expiry
 arrear
 msgid
 msgstr
+floorplans
+highrise
+admin

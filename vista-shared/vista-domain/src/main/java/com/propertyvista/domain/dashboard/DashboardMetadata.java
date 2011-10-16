@@ -39,7 +39,7 @@ public interface DashboardMetadata extends ISharedUserEntity {
 
     public enum LayoutType {
 
-        @Translate("One whole width column")
+        @Translate("One full width column")
         One,
 
         @Translate("Two equal columns")

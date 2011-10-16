@@ -1,6 +1,5 @@
 package com.propertyvista.admin.client.ui;
 
-
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
@@ -82,7 +81,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
             }
         });
         login.setDebugId(new StringDebugId("login"));
-        login.setValue(i18n.tr("LogIn"));
+        login.setValue(i18n.tr("Log In"));
         login.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
         account = new CHyperlink(null, new Command() {

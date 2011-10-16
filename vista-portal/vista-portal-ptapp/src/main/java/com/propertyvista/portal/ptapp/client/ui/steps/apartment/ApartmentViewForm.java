@@ -248,7 +248,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
             protected void removeItem(final CEntityFolderItemEditor<ChargeItem> item) {
                 if (!item.getValue().adjustments().isEmpty()) {
                     MessageDialog.confirm(i18n.tr("Warning!"),
-                            i18n.tr("Removing this item you will lost price adjustment agreed in the office! Are you sure to remove it?"), new Runnable() {
+                            i18n.tr("By removing this item you will lose the agreed price adjustment! Are you sure you want to remove it?"), new Runnable() {
                                 @Override
                                 public void run() {
                                     unconditionalRemoveItem(item);

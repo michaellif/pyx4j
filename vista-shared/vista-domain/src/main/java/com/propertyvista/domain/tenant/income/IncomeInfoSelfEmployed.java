@@ -35,11 +35,11 @@ public interface IncomeInfoSelfEmployed extends IEntity, IEmploymentInfo {
     @Caption(name = "Is fully owned")
     IPrimitive<Boolean> fullyOwned();
 
-    @Caption(name = "Monthly revenue")
+    @Caption(name = "Monthly Revenue")
     Money monthlyRevenue();
 
     @Override
-    @Caption(name = "Monthly salary/dividend")
+    @Caption(name = "Monthly salary/Dividend")
     @NotNull
     Money monthlyAmount();
 

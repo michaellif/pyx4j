@@ -890,7 +890,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     list.setWidth("100%");
                     return list.asWidget();
                 } else {
-                    return new HTML(i18n.tr("All features have been already selected!"));
+                    return new HTML(i18n.tr("All features have already been selected!"));
                 }
             } else {
                 return new HTML(i18n.tr("There are no features for this service!"));
@@ -966,7 +966,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     list.setWidth("100%");
                     return list.asWidget();
                 } else {
-                    return new HTML(i18n.tr("All concessions have been already selected!"));
+                    return new HTML(i18n.tr("All concessions have already been selected!"));
                 }
             } else {
                 return new HTML(i18n.tr("There are no concessions for this service!"));

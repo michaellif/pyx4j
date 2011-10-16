@@ -56,9 +56,9 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
     public String getValidationMessage(CEditableComponent<String, ?> component, String value) {
         String c = countryName();
         if ("Canada".equals(c)) {
-            return i18n.tr("Invalid Canadian Postal Code.");
+            return i18n.tr("Invalid Canadian Postal Code");
         } else if ("United States".equals(c)) {
-            return i18n.tr("Invalid US Zip code.");
+            return i18n.tr("Invalid US Zip code");
         } else {
             return null;
         }

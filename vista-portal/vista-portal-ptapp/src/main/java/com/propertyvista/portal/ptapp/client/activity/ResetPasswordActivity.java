@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.activity;
 
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -63,7 +62,7 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
         token = Window.Location.getParameter(ActivationService.PASSWORD_TOKEN);
         if (CommonsStringUtils.isEmpty(token)) {
             PtAppSite.instance().showMessageDialog(i18n.tr("The URL you tried to use is either incorrect or no longer valid."), i18n.tr("Error"),
-                    i18n.tr("LogIn"), new Command() {
+                    i18n.tr("Log In"), new Command() {
                         @Override
                         public void execute() {
                             AppSite.getPlaceController().goTo(new PtSiteMap.Login());

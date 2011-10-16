@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
+@Caption(name = "PMC")
 public interface PmcDTO extends IEntity {
 
     @NotNull

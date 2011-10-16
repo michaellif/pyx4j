@@ -24,10 +24,10 @@ public interface YardiConnection extends IEntity {
         SQL, Oracle
     }
 
-    @Caption(name = "Web service Url")
+    @Caption(name = "Web service URL")
     IPrimitive<String> serveviceURL();
 
-    @Caption(name = "Web service user")
+    @Caption(name = "Web service User")
     IPrimitive<String> username();
 
     @Caption(name = "Password")

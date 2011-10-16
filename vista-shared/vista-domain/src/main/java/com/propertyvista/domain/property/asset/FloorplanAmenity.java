@@ -49,7 +49,7 @@ public interface FloorplanAmenity extends Amenity {
 
         courtyard,
 
-        dishWasher,
+        dishwasher,
 
         disposal,
 

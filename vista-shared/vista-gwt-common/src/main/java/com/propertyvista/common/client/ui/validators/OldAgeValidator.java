@@ -23,6 +23,7 @@ public class OldAgeValidator implements EditableValueValidator<Date> {
 
     private static I18n i18n = I18n.get(EditableValueValidator.class);
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
         Date current = new Date();
@@ -31,6 +32,6 @@ public class OldAgeValidator implements EditableValueValidator<Date> {
 
     @Override
     public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-        return i18n.tr("Age Filed cannot be greater than 150 years");
+        return i18n.tr("Age cannot be greater than 150 years");
     }
 }

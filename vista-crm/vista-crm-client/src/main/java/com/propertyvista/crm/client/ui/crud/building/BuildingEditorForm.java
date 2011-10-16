@@ -96,7 +96,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         tabPanel.add(createDetailsTab(), i18n.tr("Details"));
 
         tabPanel.addDisable(isEditable() ? new HTML() : new ScrollPanel(((BuildingViewerView) getParentView()).getFloorplanListerView().asWidget()),
-                i18n.tr("Floor plans"));
+                i18n.tr("Floorplans"));
         tabPanel.addDisable(isEditable() ? new HTML() : new ScrollPanel(((BuildingViewerView) getParentView()).getUnitListerView().asWidget()),
                 i18n.tr("Units"));
 

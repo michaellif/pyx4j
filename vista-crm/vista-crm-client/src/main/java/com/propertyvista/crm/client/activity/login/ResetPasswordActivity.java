@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.activity.login;
 
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -62,7 +61,7 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
         token = Window.Location.getParameter(ActivationServices.PASSWORD_TOKEN);
         if (CommonsStringUtils.isEmpty(token)) {
             CrmSite.instance().showMessageDialog(i18n.tr("The URL you tried to use is either incorrect or no longer valid."), i18n.tr("Error"),
-                    i18n.tr("LogIn"), new Command() {
+                    i18n.tr("Log In"), new Command() {
                         @Override
                         public void execute() {
                             AppSite.getPlaceController().goTo(new CrmSiteMap.Login());

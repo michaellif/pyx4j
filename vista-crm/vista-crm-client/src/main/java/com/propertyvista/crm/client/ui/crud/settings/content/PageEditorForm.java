@@ -73,7 +73,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
     }
 
     private CEntityFolder<PageContent> createPageContentsList() {
-        return new VistaEntityFolder<PageContent>(PageContent.class, i18n.tr("PageContent"), isEditable()) {
+        return new VistaEntityFolder<PageContent>(PageContent.class, i18n.tr("Page Content"), isEditable()) {
             private final VistaEntityFolder<PageContent> parent = this;
 
             @Override

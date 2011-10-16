@@ -25,6 +25,7 @@ public enum PaymentType {
 
     Amex,
 
+    @Translate("MasterCard")
     MasterCard,
 
     Discover,

@@ -92,7 +92,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
             }
         });
         login.setDebugId(new StringDebugId("login"));
-        login.setValue(i18n.tr("LogIn"));
+        login.setValue(i18n.tr("Log In"));
         login.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
         account = new CHyperlink(null, new Command() {

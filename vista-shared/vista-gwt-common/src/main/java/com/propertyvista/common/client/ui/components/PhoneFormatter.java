@@ -68,7 +68,7 @@ public class PhoneFormatter implements IFormat<Phone> {
             return null; // empty value case
         }
         if (!string.matches(regex)) {
-            throw new ParseException(i18n.tr("Not a valid phone number. Must be in the format 123-4567 or 123-456-7890 (dashes optional)"), 0);
+            throw new ParseException(i18n.tr("Not a valid phone number. Please use the following formats: 123-4567 or 123-456-7890 (dashes optional)"), 0);
         }
 
         Phone phone = EntityFactory.create(Phone.class);
