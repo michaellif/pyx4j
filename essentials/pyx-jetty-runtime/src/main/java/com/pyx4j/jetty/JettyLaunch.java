@@ -66,6 +66,10 @@ public abstract class JettyLaunch {
         return "./logs/jetty.request.log";
     }
 
+    public boolean isRunningInDeveloperEnviroment() {
+        return true;
+    }
+
     public static void launch(JettyLaunch jettyLaunch) throws Exception {
         int port = jettyLaunch.getServerPort();
         //see if port is available
@@ -76,7 +80,9 @@ public abstract class JettyLaunch {
             throw new RuntimeException("Port already in use", e);
         }
 
-        System.setProperty("com.pyx4j.DeveloperEnviroment", Boolean.TRUE.toString());
+        if (jettyLaunch.isRunningInDeveloperEnviroment()) {
+            System.setProperty("com.pyx4j.DeveloperEnviroment", Boolean.TRUE.toString());
+        }
 
         Server server = new Server(port);
 
