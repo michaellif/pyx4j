@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-14 23:32-0400\n"
+"POT-Creation-Date: 2011-10-16 24:25-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -226,9 +226,9 @@ msgstr "Корректировки"
 msgid "Advertising Blurb"
 msgstr "Реклама Blurb"
 
-#: com/propertyvista/common/client/ui/validators/OldAgeValidator.java:34
-msgid "Age Filed cannot be greater than 150 years"
-msgstr "Возраст Поданный не может быть больше чем 150 лет"
+#: com/propertyvista/common/client/ui/validators/OldAgeValidator.java:35
+msgid "Age cannot be greater than 150 years"
+msgstr "Возраст не может быть больше чем 150 лет"
 
 #: com/propertyvista/domain/tenant/lead/Appointment.java:2
 msgid "Agent"
@@ -325,8 +325,8 @@ msgid "Applicant Info"
 msgstr "Заявитель информация"
 
 #: com/propertyvista/portal/ptapp/client/ui/steps/tenants/TenantsViewForm.java:171
-msgid "Applicant and co-applicant should be at least 18 years old"
-msgstr "Заявитель и со-заявителя должно быть не менее 18 лет"
+msgid "Applicant and Co-applicant must be at least 18 years old"
+msgstr "Заявитель и сотрудничеству заявитель должен быть не менее 18 лет"
 
 #: com/propertyvista/domain/IBoundToApplication.java:2
 #: com/propertyvista/domain/tenant/ptapp/Application.java:0
@@ -786,6 +786,14 @@ msgstr "Деловой центр"
 #: com/propertyvista/domain/tenant/income/PersonalAsset.java:1
 msgid "Businesses"
 msgstr "Бизнесы"
+
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:251
+msgid ""
+"By removing this item you will lose the agreed price adjustment! Are you "
+"sure you want to remove it?"
+msgstr ""
+"Удалив этот пункт вы потеряете согласился корректировки цен! Вы уверены, что"
+" хотите удалить?"
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:2
 msgid "Cabinets Install Date"
@@ -1490,7 +1498,7 @@ msgid "Discover"
 msgstr "Открыть"
 
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
-msgid "Dish Washer"
+msgid "Dishwasher"
 msgstr "Посудомоечная машина"
 
 #: com/propertyvista/dto/TenantDTO.java:2
@@ -1712,7 +1720,7 @@ msgstr "Введите код"
 msgid "Equipment"
 msgstr "Оборудование"
 
-#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:65
+#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:64
 #: com/pyx4j/essentials/client/DefaultErrorHandlerDialog.java:42
 msgid "Error"
 msgstr "Ошибка"
@@ -1771,7 +1779,7 @@ msgid "Extension"
 msgstr "Расширение"
 
 #: com/propertyvista/domain/media/Media.java:1
-msgid "External Url"
+msgid "External URL"
 msgstr "Внешний URL"
 
 #: com/propertyvista/domain/financial/offering/ServiceCatalog.java:2
@@ -2137,6 +2145,10 @@ msgstr "Комната для гостей"
 msgid "HH:mm"
 msgstr "HH:mm"
 
+#: com/propertyvista/domain/property/vendor/Vendor.java:1
+msgid "HVAC"
+msgstr "HVAC"
+
 #: com/propertyvista/domain/property/asset/Floorplan.java:2
 msgid "Half Bath"
 msgstr "Сидячая ванна"
@@ -2210,7 +2222,7 @@ msgid "High Speed"
 msgstr "Высокоскоростные"
 
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
-msgid "High-Rise"
+msgid "Highrise"
 msgstr "Высотный"
 
 #: com/propertyvista/domain/contact/IAddressFull.java:1
@@ -2237,10 +2249,6 @@ msgstr "Домашнее хозяйство"
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 msgid "How did you hear about us"
 msgstr "Как вы узнали о нас"
-
-#: com/propertyvista/domain/property/vendor/Vendor.java:1
-msgid "Hvac"
-msgstr "Hvac"
 
 #: com/propertyvista/portal/domain/ptapp/Summary.java:2
 msgid "I Agree"
@@ -2377,20 +2385,20 @@ msgid "Internet"
 msgstr "Интернет"
 
 #: com/propertyvista/common/client/ui/validators/ZipCodeValueValidator.java:59
-msgid "Invalid Canadian Postal Code."
-msgstr "Недопустимые канадского почтового индекса."
+msgid "Invalid Canadian Postal Code"
+msgstr "Недопустимые канадской Почтовый индекс"
 
 #: com/propertyvista/common/client/ui/validators/CanadianSinValidator.java:39
 msgid "Invalid SIN."
 msgstr "Недопустимые SIN."
 
 #: com/propertyvista/common/client/ui/validators/ZipCodeValueValidator.java:61
-msgid "Invalid US Zip code."
-msgstr "Неверный код США Zip."
+msgid "Invalid US Zip code"
+msgstr "Неверный код США Zip"
 
-#: com/propertyvista/common/client/ui/validators/CreditCardNumberValidator.java:39
-msgid "Invalid credit card number."
-msgstr "Неверный номер кредитной карты."
+#: com/propertyvista/common/client/ui/validators/CreditCardNumberValidator.java:38
+msgid "Invalid credit card number"
+msgstr "Неверный номер кредитной карты"
 
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "Irregular"
@@ -2702,14 +2710,11 @@ msgstr "Рундук"
 msgid "Locker Area"
 msgstr "Площадь Locker"
 
+#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:65
+#: com/propertyvista/portal/ptapp/client/ui/TopRightActionsViewImpl.java:92
 #: com/pyx4j/essentials/client/BaseLogInPanel.java:159
 msgid "Log In"
 msgstr "Войдите"
-
-#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:66
-#: com/propertyvista/portal/ptapp/client/ui/TopRightActionsViewImpl.java:92
-msgid "LogIn"
-msgstr "LogIn"
 
 #: com/propertyvista/portal/ptapp/client/ui/TopRightActionsViewImpl.java:81
 msgid "LogOut"
@@ -2727,10 +2732,6 @@ msgstr "Войти в аккаунт"
 #: com/propertyvista/domain/site/SiteDescriptor.java:2
 msgid "Logo"
 msgstr "Логотип"
-
-#: com/pyx4j/security/rpc/AuthenticationRequest.java:2
-msgid "Logout Application Url"
-msgstr "Выход приложений Url"
 
 #: com/propertyvista/domain/GeoLocation.java:2
 msgid "Longitude"
@@ -2860,8 +2861,8 @@ msgid "Master Application Status"
 msgstr "Мастер Статус заявки"
 
 #: com/propertyvista/portal/domain/payment/PaymentType.java:1
-msgid "Master Card"
-msgstr "Master Card"
+msgid "MasterCard"
+msgstr "MasterCard"
 
 #: com/propertyvista/domain/RangeGroup.java:2
 msgid "Max"
@@ -3005,17 +3006,17 @@ msgstr "Ежемесячный платеж"
 msgid "Monthly Rent"
 msgstr "Месячная арендная плата"
 
+#: com/propertyvista/domain/tenant/income/IncomeInfoSelfEmployed.java:2
+msgid "Monthly Revenue"
+msgstr "Ежемесячный доход"
+
 #: com/propertyvista/domain/tenant/income/IEmploymentInfo.java:2
 msgid "Monthly Salary"
 msgstr "Месячная зарплата"
 
 #: com/propertyvista/domain/tenant/income/IncomeInfoSelfEmployed.java:2
-msgid "Monthly revenue"
-msgstr "Ежемесячный доход"
-
-#: com/propertyvista/domain/tenant/income/IncomeInfoSelfEmployed.java:2
-msgid "Monthly salary/dividend"
-msgstr "Ежемесячная заработная плата / дивиденды"
+msgid "Monthly salary/Dividend"
+msgstr "Ежемесячная заработная плата / Дивиденды"
 
 #: com/propertyvista/domain/tenant/TenantIn.java:1
 #: com/propertyvista/domain/tenant/income/TenantGuarantor.java:1
@@ -3035,6 +3036,11 @@ msgstr "Переместить в день"
 #: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportEvent.java:2
 msgid "Move Out Date"
 msgstr "Выйти Дата"
+
+#: com/propertyvista/portal/ptapp/client/ui/steps/info/InfoViewForm.java:231
+#: com/propertyvista/portal/ptapp/client/ui/steps/info/InfoViewForm.java:263
+msgid "Move Out Date should be greater than Move In Date"
+msgstr "Выйти Дата должна быть больше, чем Переместить в дате"
 
 #: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReport.java:2
 msgid "Move Out Day"
@@ -3220,11 +3226,11 @@ msgstr "Не действующий адрес электронной почты
 
 #: com/propertyvista/common/client/ui/components/PhoneFormatter.java:71
 msgid ""
-"Not a valid phone number. Must be in the format 123-4567 or 123-456-7890 "
-"(dashes optional)"
+"Not a valid phone number. Please use the following formats: 123-4567 or "
+"123-456-7890 (dashes optional)"
 msgstr ""
-"Не правильный номер телефона. Должен быть в формате 123-4567 или "
-"123-456-7890 (тире опционально)"
+"Не правильный номер телефона. Пожалуйста, используйте следующие форматы: "
+"123-4567 или 123-456-7890 (тире опция)"
 
 #: com/propertyvista/domain/Notes.java:0
 #: com/propertyvista/domain/property/asset/Equipment.java:2
@@ -3251,13 +3257,13 @@ msgstr "Обратите внимание Арендованные"
 msgid "Number"
 msgstr "Номер"
 
-#: com/propertyvista/dto/AptUnitDTO.java:2
-msgid "Number Of Occupants"
-msgstr "Число жильцов"
-
 #: com/propertyvista/domain/tenant/income/IncomeInfoSelfEmployed.java:2
 msgid "Number of employees"
 msgstr "Количество сотрудников"
+
+#: com/propertyvista/dto/AptUnitDTO.java:2
+msgid "Number of occupants"
+msgstr "Число жильцов"
 
 #: com/propertyvista/domain/property/asset/FloorplanCounters.java:2
 msgid "Number of units "
@@ -3302,16 +3308,16 @@ msgid "Ok"
 msgstr "Ok"
 
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
-msgid "On Site Maintenance"
-msgstr "На сайте Техническое обслуживание"
+msgid "On-Site Maintenance"
+msgstr "On-Site обслуживание"
 
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
-msgid "On Site Management"
-msgstr "На Управление сайтом"
+msgid "On-Site Management"
+msgstr "On-Site Management"
 
 #: com/propertyvista/domain/dashboard/DashboardMetadata.java:1
-msgid "One whole width column"
-msgstr "Целый ширину столбцов"
+msgid "One full width column"
+msgstr "Одна полная ширина колонки"
 
 #: com/pyx4j/essentials/client/SessionInactiveDialog.java:79
 msgid "Open another browser instance to keep multiple active sessions."
@@ -4010,8 +4016,8 @@ msgid "Remember my ID"
 msgstr "Запомнить логин"
 
 #: com/propertyvista/common/client/ui/VistaEntityFolder.java:65
-#: com/propertyvista/common/client/ui/decorations/VistaBoxFolderItemDecorator.java:32
-#: com/propertyvista/common/client/ui/decorations/VistaTableFolderItemDecorator.java:32
+#: com/propertyvista/common/client/ui/decorations/VistaBoxFolderItemDecorator.java:31
+#: com/propertyvista/common/client/ui/decorations/VistaTableFolderItemDecorator.java:31
 msgid "Remove "
 msgstr "Удаление"
 
@@ -4031,14 +4037,6 @@ msgstr "Удалить животных"
 msgid "Remove vehicle"
 msgstr "Удалить автомобиля"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:251
-msgid ""
-"Removing this item you will lost price adjustment agreed in the office! Are "
-"you sure to remove it?"
-msgstr ""
-"Удаление этого пункта вы потеряли корректировки цен, согласованных в офисе! "
-"Вы действительно хотите удалить?"
-
 #: com/propertyvista/domain/marketing/MarketRent.java:2
 msgid "Rent"
 msgstr "Аренда"
@@ -4052,12 +4050,12 @@ msgid "Rent Ready"
 msgstr "Аренда Готовый"
 
 #: com/propertyvista/portal/domain/ptapp/Charges.java:2
-msgid "Rent Start"
-msgstr "Аренда Начало"
+msgid "Rent Related Charges"
+msgstr "Аренда связанных с этим сборов"
 
 #: com/propertyvista/portal/domain/ptapp/Charges.java:2
-msgid "Rent related Charges"
-msgstr "Аренда связанных с этим сборов"
+msgid "Rent Start"
+msgstr "Аренда Начало"
 
 #: com/propertyvista/domain/PriorAddress.java:1
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
@@ -4786,15 +4784,15 @@ msgstr "Отзывы"
 msgid "Text"
 msgstr "Текст"
 
+#: com/propertyvista/common/client/ui/validators/PastDateValidation.java:37
+msgid "The Date must be earlier than Today Date"
+msgstr "Дата должна быть установлена ​​ранее даты сегодня"
+
 #: com/propertyvista/common/client/ui/validators/FutureDateValidation.java:37
 msgid "The Date must be greater then Today Date"
 msgstr "Дата должна быть не менее Сегодня Дата"
 
-#: com/propertyvista/common/client/ui/validators/PastDateValidation.java:37
-msgid "The Date must be less then Today Date"
-msgstr "Дата должна быть меньше, чем сегодня Дата"
-
-#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:65
+#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:64
 msgid "The URL you tried to use is either incorrect or no longer valid."
 msgstr ""
 "URL вы пытались использовать либо неправильные или больше не действует."
@@ -4817,14 +4815,6 @@ msgstr "Дата окончания не может быть до равного
 #: com/pyx4j/essentials/client/upload/UploadPanel.java:189
 msgid "The file name must not be empty"
 msgstr "Имя файла не должно быть пустым"
-
-#: com/propertyvista/portal/ptapp/client/ui/steps/info/InfoViewForm.java:263
-msgid "The move out date cannot be before or equal move in one."
-msgstr "Выйти дата не может быть раньше или равно двигаться в одном."
-
-#: com/propertyvista/portal/ptapp/client/ui/steps/info/InfoViewForm.java:231
-msgid "The move out date cannot be equal or after move out one."
-msgstr "Выйти дата не может быть равным или после выйти один."
 
 #: com/propertyvista/portal/ptapp/client/ui/steps/financial/FinancialViewIncomeForm.java:341
 #: com/propertyvista/portal/ptapp/client/ui/steps/financial/FinancialViewIncomeForm2.java:312
@@ -5024,6 +5014,10 @@ msgstr ""
 msgid "U-shape"
 msgstr "П-образная"
 
+#: com/propertyvista/domain/media/Media.java:2
+msgid "URL"
+msgstr "URL"
+
 #: com/propertyvista/domain/tenant/TenantIn.java:1
 #: com/propertyvista/domain/tenant/income/TenantGuarantor.java:1
 msgid "Uncle"
@@ -5098,10 +5092,6 @@ msgstr "Обновленный"
 #: com/pyx4j/essentials/client/upload/UploadPanel.java:198
 msgid "Upload error"
 msgstr "Ошибка при загрузке"
-
-#: com/propertyvista/domain/media/Media.java:2
-msgid "Url"
-msgstr "Url"
 
 #: com/propertyvista/domain/ISharedUserEntity.java:2
 #: com/propertyvista/domain/IUserEntity.java:2
@@ -5285,12 +5275,12 @@ msgstr ""
 "момент."
 
 #: com/propertyvista/domain/settings/YardiConnection.java:2
-msgid "Web service Url"
-msgstr "Веб-служба Url"
+msgid "Web service URL"
+msgstr "URL веб-службы"
 
 #: com/propertyvista/domain/settings/YardiConnection.java:2
-msgid "Web service user"
-msgstr "Веб-служба пользователь"
+msgid "Web service User"
+msgstr "Пользователь веб-службы"
 
 #: com/propertyvista/domain/company/Company.java:2
 #: com/propertyvista/domain/property/asset/building/BuildingContactInfo.java:2
@@ -5376,14 +5366,6 @@ msgstr "Да"
 msgid "Yes please enroll me"
 msgstr "Да, пожалуйста зачислить меня"
 
-#: com/propertyvista/domain/media/Media.java:1
-msgid "You Tube"
-msgstr "You Tube"
-
-#: com/propertyvista/domain/media/Media.java:2
-msgid "You Tube Video ID"
-msgstr "You Tube Video ID"
-
 #: com/pyx4j/essentials/client/SessionInactiveDialog.java:71
 msgid "You have been logged out due to inactivity."
 msgstr "Вы вышли из-за неактивности."
@@ -5391,6 +5373,14 @@ msgstr "Вы вышли из-за неактивности."
 #: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:457
 msgid "You should agree to terms"
 msgstr "Вы должны принять условия,"
+
+#: com/propertyvista/domain/media/Media.java:1
+msgid "YouTube"
+msgstr "YouTube"
+
+#: com/propertyvista/domain/media/Media.java:2
+msgid "YouTube Video ID"
+msgstr "YouTube Video ID"
 
 #: com/propertyvista/portal/rpc/ptapp/PasswordRetrievalRequest.java:2
 msgid "Your Email"
