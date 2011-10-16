@@ -37,7 +37,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
-import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
@@ -158,9 +157,9 @@ public class AptDetailsPage extends BasePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
-        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "aptdetails" + getPmsiteStyle() + ".css",
-                "text/css", new StylesheetTemplateModel(baseColor));
+        String baseColor = PMSiteContentManager.getSiteDescriptor().baseColor().getValue();
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "aptdetails"
+                + PMSiteContentManager.getSiteStyle() + ".css", "text/css", new StylesheetTemplateModel(baseColor));
         response.renderCSSReference(refCSS);
         super.renderHead(response);
 

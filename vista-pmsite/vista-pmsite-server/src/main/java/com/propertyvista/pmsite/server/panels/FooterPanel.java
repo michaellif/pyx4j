@@ -32,8 +32,6 @@ public class FooterPanel extends Panel {
     public FooterPanel() {
         super("footer");
 
-        final PMSiteContentManager contentManager = ((PMSiteSession) getSession()).getContentManager();
-
         add(new ListView<City>("footer_locations_city", PMSiteContentManager.getCities()) {
             private static final long serialVersionUID = 1L;
 
@@ -62,11 +60,11 @@ public class FooterPanel extends Panel {
             protected void populateItem(ListItem<NavigationItem> item) {
                 NavigationItem navItem = item.getModelObject();
                 BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", navItem.getDestination(), navItem.getPageParameters());
-                link.add(new Label("caption", PMSiteContentManager.getCaption(navItem.getPageDescriptor(), contentManager.getLocale())));
+                link.add(new Label("caption", PMSiteContentManager.getCaption(navItem.getPageDescriptor(), PMSiteContentManager.getLocale())));
                 item.add(link);
             }
         });
 
-        add(new Label("footer_legal", "© Starlight Apartments 2011"));
+        add(new Label("footer_legal", PMSiteContentManager.getCopyrightInfo()));
     }
 }

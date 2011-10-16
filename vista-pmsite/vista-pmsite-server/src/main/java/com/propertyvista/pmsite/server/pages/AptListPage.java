@@ -33,7 +33,6 @@ import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
-import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
@@ -92,9 +91,9 @@ public class AptListPage extends BasePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
-        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "aptlist" + getPmsiteStyle() + ".css",
-                "text/css", new StylesheetTemplateModel(baseColor));
+        String baseColor = PMSiteContentManager.getSiteDescriptor().baseColor().getValue();
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "aptlist"
+                + PMSiteContentManager.getSiteStyle() + ".css", "text/css", new StylesheetTemplateModel(baseColor));
         response.renderCSSReference(refCSS);
         super.renderHead(response);
 

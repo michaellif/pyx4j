@@ -40,8 +40,6 @@ public class MainNavigationPanel extends Panel {
     public MainNavigationPanel(String id) {
         super(id);
 
-        final PMSiteContentManager contentManager = ((PMSiteSession) getSession()).getContentManager();
-
         ListView<NavigationItem> listView = new ListView<NavigationItem>("navigationItem", ((PMSiteSession) getSession()).getMainNavigItems()) {
             private static final long serialVersionUID = 1L;
 
@@ -49,14 +47,14 @@ public class MainNavigationPanel extends Panel {
             protected void populateItem(ListItem<NavigationItem> item) {
                 NavigationItem navItem = item.getModelObject();
                 BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("destination", navItem.getDestination(), navItem.getPageParameters());
-                link.add(new Label("caption", PMSiteContentManager.getCaption(navItem.getPageDescriptor(), contentManager.getLocale())) {
+                link.add(new Label("caption", PMSiteContentManager.getCaption(navItem.getPageDescriptor(), PMSiteContentManager.getLocale())) {
 
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     protected void onComponentTag(final ComponentTag tag) {
                         super.onComponentTag(tag);
-                        tag.put("lang", contentManager.getLocale().lang().getValue().name());
+                        tag.put("lang", PMSiteContentManager.getLocale().lang().getValue().name());
                     }
                 });
                 item.add(link);
@@ -64,7 +62,7 @@ public class MainNavigationPanel extends Panel {
                 boolean active = false;
 
                 if (MainNavigationPanel.this.getPage() instanceof StaticPage) {
-                    PageDescriptor currentPage = contentManager.getStaticPageDescriptor(MainNavigationPanel.this.getPage().getPageParameters());
+                    PageDescriptor currentPage = PMSiteContentManager.getStaticPageDescriptor(MainNavigationPanel.this.getPage().getPageParameters());
                     if (currentPage.equals(navItem.getPageDescriptor())) {
                         active = true;
                     } else if (!currentPage._path().isNull() && !currentPage._path().isEmpty()) {

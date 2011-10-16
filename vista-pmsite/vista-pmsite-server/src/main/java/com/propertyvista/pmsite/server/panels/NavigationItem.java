@@ -35,12 +35,12 @@ public class NavigationItem implements Serializable {
 
     private PageParameters params;
 
-    public NavigationItem(PageDescriptor descriptor, PMSiteContentManager contentManager) {
+    public NavigationItem(PageDescriptor descriptor) {
         this.descriptor = descriptor;
         switch (descriptor.type().getValue()) {
         case staticContent:
             this.destination = StaticPage.class;
-            params = contentManager.getStaticPageParams(descriptor);
+            params = PMSiteContentManager.getStaticPageParams(descriptor);
             break;
         case findApartment:
             this.destination = FindAptPage.class;

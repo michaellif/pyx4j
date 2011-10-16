@@ -38,12 +38,10 @@ public class SecondaryNavigationPanel extends Panel {
     public SecondaryNavigationPanel(String id, StaticPage page) {
         super(id);
 
-        final PMSiteContentManager contentManager = ((PMSiteSession) getSession()).getContentManager();
-
         PageParameters mainNavigParams = new PageParameters();
         mainNavigParams.add(PMSiteContentManager.PARAMETER_NAMES[0], page.getPageParameters().get(PMSiteContentManager.PARAMETER_NAMES[0]));
 
-        PageDescriptor descriptor = contentManager.getStaticPageDescriptor(mainNavigParams);
+        PageDescriptor descriptor = PMSiteContentManager.getStaticPageDescriptor(mainNavigParams);
 
         List<NavigationItem> items = ((PMSiteSession) getSession()).getNavigItems(descriptor);
 
@@ -54,12 +52,12 @@ public class SecondaryNavigationPanel extends Panel {
             protected void populateItem(ListItem<NavigationItem> item) {
                 NavigationItem navItem = item.getModelObject();
                 BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("destination", navItem.getDestination(), navItem.getPageParameters());
-                link.add(new Label("caption", PMSiteContentManager.getCaption(navItem.getPageDescriptor(), contentManager.getLocale())));
+                link.add(new Label("caption", PMSiteContentManager.getCaption(navItem.getPageDescriptor(), PMSiteContentManager.getLocale())));
                 item.add(link);
 
                 boolean active = false;
 
-                PageDescriptor currentPage = contentManager.getStaticPageDescriptor(SecondaryNavigationPanel.this.getPage().getPageParameters());
+                PageDescriptor currentPage = PMSiteContentManager.getStaticPageDescriptor(SecondaryNavigationPanel.this.getPage().getPageParameters());
                 if (currentPage.equals(navItem.getPageDescriptor())) {
                     active = true;
                 } else if (!currentPage._path().isNull() && !currentPage._path().isEmpty()) {

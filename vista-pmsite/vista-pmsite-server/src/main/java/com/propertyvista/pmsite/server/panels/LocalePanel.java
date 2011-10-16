@@ -22,7 +22,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import com.propertyvista.domain.site.AvailableLocale;
-import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 
 public class LocalePanel extends Panel {
 
@@ -31,8 +31,8 @@ public class LocalePanel extends Panel {
     public LocalePanel(String id) {
         super(id);
 
-        ListView<AvailableLocale> listView = new ListView<AvailableLocale>("langItem", new ArrayList<AvailableLocale>(((PMSiteSession) getSession())
-                .getContentManager().getAllAvailableLocale())) {
+        ListView<AvailableLocale> listView = new ListView<AvailableLocale>("langItem", new ArrayList<AvailableLocale>(
+                PMSiteContentManager.getAllAvailableLocale())) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -46,7 +46,7 @@ public class LocalePanel extends Panel {
 
                     @Override
                     public void onClick() {
-                        ((PMSiteSession) getSession()).getContentManager().setLocale(locale);
+                        PMSiteContentManager.setLocale(locale);
                         setResponsePage(getPage().getPageClass(), getPage().getPageParameters());
                     }
                 };

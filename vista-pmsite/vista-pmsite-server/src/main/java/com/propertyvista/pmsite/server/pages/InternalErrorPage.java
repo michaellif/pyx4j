@@ -13,24 +13,26 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
+
+import com.propertyvista.pmsite.server.PMSiteApplication;
 
 public class InternalErrorPage extends ErrorPage {
     private static final long serialVersionUID = 1L;
 
-    public InternalErrorPage(PageParameters params) {
-        super();
-
-        add(new Label("errorContent", params.get("error").toString()));
-        setStatelessHint(true);
+    public InternalErrorPage() {
+        // get exception from session
+        StringWriter err = new StringWriter();
+        Exception e = PMSiteApplication.get().getInternalError();
+        if (e == null) {
+            err.write("Unknown Error");
+        } else {
+            e.printStackTrace(new PrintWriter(err));
+        }
+        add(new Label("errorContent", err.toString()));
     }
 
     @Override
@@ -41,33 +43,5 @@ public class InternalErrorPage extends ErrorPage {
     @Override
     public boolean isErrorPage() {
         return true;
-    }
-
-    @Override
-    protected void onBeforeRender() {
-        super.onBeforeRender();
-
-        if (!isPageStateless()) {
-            String message = "===> Page not stateless " + new Date().toString();
-            // find out why
-            final List<Component> statefulComponents = new ArrayList<Component>();
-            visitChildren(Component.class, new IVisitor<Component, Object>() {
-
-                @Override
-                public void component(Component paramT, IVisit<Object> paramIVisit) {
-                    if (!paramT.isStateless()) {
-                        statefulComponents.add(paramT);
-                    }
-                }
-
-            });
-            if (statefulComponents.size() > 0) {
-                message += "===>  Stateful components found: ";
-                for (Component c : statefulComponents) {
-                    message += "\n" + c.getMarkupId();
-                }
-            }
-            System.out.println(message);
-        }
     }
 }

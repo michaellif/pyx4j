@@ -36,21 +36,16 @@ public class PMSiteSession extends AuthenticatedWebSession {
 
     private final static Logger log = LoggerFactory.getLogger(PMSiteSession.class);
 
-    private final PMSiteContentManager contentManager;
-
     public PMSiteSession(Request request) {
         super(request);
-
-        contentManager = new PMSiteContentManager();
-
     }
 
     public List<NavigationItem> getMainNavigItems() {
         List<NavigationItem> list = new ArrayList<NavigationItem>();
-        for (int i = 0; i < 4 && i < contentManager.getSiteDescriptor().childPages().size(); i++) {
-            PageDescriptor descriptor = contentManager.getSiteDescriptor().childPages().get(i);
+        for (int i = 0; i < 4 && i < PMSiteContentManager.getSiteDescriptor().childPages().size(); i++) {
+            PageDescriptor descriptor = PMSiteContentManager.getSiteDescriptor().childPages().get(i);
             if (descriptor != null) {
-                list.add(new NavigationItem(descriptor, contentManager));
+                list.add(new NavigationItem(descriptor));
             } else {
                 break;
             }
@@ -60,10 +55,10 @@ public class PMSiteSession extends AuthenticatedWebSession {
 
     public List<NavigationItem> getFooterNavigItems() {
         List<NavigationItem> list = new ArrayList<NavigationItem>();
-        for (int i = 4; i < contentManager.getSiteDescriptor().childPages().size(); i++) {
-            PageDescriptor descriptor = contentManager.getSiteDescriptor().childPages().get(i);
+        for (int i = 4; i < PMSiteContentManager.getSiteDescriptor().childPages().size(); i++) {
+            PageDescriptor descriptor = PMSiteContentManager.getSiteDescriptor().childPages().get(i);
             if (descriptor != null) {
-                list.add(new NavigationItem(descriptor, contentManager));
+                list.add(new NavigationItem(descriptor));
             } else {
                 break;
             }
@@ -75,14 +70,10 @@ public class PMSiteSession extends AuthenticatedWebSession {
         List<NavigationItem> list = new ArrayList<NavigationItem>();
         if (content != null) {
             for (PageDescriptor descriptor : content.childPages()) {
-                list.add(new NavigationItem(descriptor, contentManager));
+                list.add(new NavigationItem(descriptor));
             }
         }
         return list;
-    }
-
-    public PMSiteContentManager getContentManager() {
-        return contentManager;
     }
 
     @Override

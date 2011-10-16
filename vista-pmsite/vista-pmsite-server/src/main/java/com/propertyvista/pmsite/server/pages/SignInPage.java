@@ -19,7 +19,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import templates.TemplateResources;
 
-import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 
@@ -35,9 +35,9 @@ public final class SignInPage extends BasePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
-        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "signin" + getPmsiteStyle() + ".css",
-                "text/css", new StylesheetTemplateModel(baseColor));
+        String baseColor = PMSiteContentManager.getSiteDescriptor().baseColor().getValue();
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "signin"
+                + PMSiteContentManager.getSiteStyle() + ".css", "text/css", new StylesheetTemplateModel(baseColor));
         response.renderCSSReference(refCSS);
         super.renderHead(response);
 

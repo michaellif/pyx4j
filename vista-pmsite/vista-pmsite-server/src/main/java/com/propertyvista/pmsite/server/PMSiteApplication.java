@@ -27,7 +27,6 @@ import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.PageProvider;
 import org.apache.wicket.request.handler.RenderPageRequestHandler;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
 import org.apache.wicket.util.time.Duration;
 
@@ -44,6 +43,8 @@ import com.propertyvista.pmsite.server.pages.StaticPage;
 import com.propertyvista.pmsite.server.pages.UnitDetailsPage;
 
 public class PMSiteApplication extends AuthenticatedWebApplication {
+
+    private Exception internalError;
 
     @Override
     protected void init() {
@@ -71,13 +72,19 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
         mountPage("error", InternalErrorPage.class);
 
-        // set exception listener
+        // set exception listener to provide custom error handling
         getRequestCycleListeners().add(new AbstractRequestCycleListener() {
             @Override
             public IRequestHandler onException(RequestCycle cycle, java.lang.Exception e) {
-                return new RenderPageRequestHandler(new PageProvider(new InternalErrorPage(new PageParameters().add("error", e))));
+                // store exception for further use by InternalErrorPage
+                internalError = e;
+                return new RenderPageRequestHandler(new PageProvider(InternalErrorPage.class));
             }
         });
+    }
+
+    public Exception getInternalError() {
+        return internalError;
     }
 
     @Override

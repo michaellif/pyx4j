@@ -13,19 +13,14 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
-import java.util.List;
-
-import javax.servlet.http.Cookie;
-
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.request.http.WebRequest;
 
 import templates.TemplateResources;
 
-import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.LocalePanel;
@@ -40,35 +35,15 @@ public class ErrorPage extends WebPage {
 
         add(new BookmarkablePageLink<Void>("titleLogo", LandingPage.class));
         add(new LocalePanel("locale"));
-        add(new Label("footer_legal", "© Starlight Apartments 2011"));
+        add(new Label("footer_legal", PMSiteContentManager.getCopyrightInfo()));
 
-        String baseColor = ((PMSiteSession) getSession()).getContentManager().getSiteDescriptor().baseColor().getValue();
-        refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "error" + getPmsiteStyle() + ".css", "text/css", new StylesheetTemplateModel(
-                baseColor));
+        String baseColor = PMSiteContentManager.getSiteDescriptor().baseColor().getValue();
+        refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "error" + PMSiteContentManager.getSiteStyle() + ".css", "text/css",
+                new StylesheetTemplateModel(baseColor));
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderCSSReference(refCSS);
-    }
-
-    // TODO this method is a temporary plug
-    protected int getPmsiteStyle() {
-        Cookie pmsiteStyleCookie = null;
-        List<Cookie> cookies = ((WebRequest) getRequest()).getCookies();
-        if (cookies == null) {
-            return 0;
-        }
-        for (Cookie cookie : cookies) {
-            if ("pmsiteStyle".equals(cookie.getName())) {
-                pmsiteStyleCookie = cookie;
-                break;
-            }
-        }
-        int styleId = 0;
-        if (pmsiteStyleCookie != null) {
-            styleId = Integer.valueOf(pmsiteStyleCookie.getValue());
-        }
-        return styleId;
     }
 }

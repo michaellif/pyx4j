@@ -19,7 +19,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import com.propertyvista.domain.site.News;
-import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 
 public class NewsPanel extends Panel {
     private static final long serialVersionUID = 1L;
@@ -27,7 +27,7 @@ public class NewsPanel extends Panel {
     public NewsPanel(String id) {
         super(id);
 
-        add(new ListView<News>("newsItem", ((PMSiteSession) getSession()).getContentManager().getNews()) {
+        add(new ListView<News>("newsItem", PMSiteContentManager.getNews()) {
             private static final long serialVersionUID = 1L;
 
             @Override
