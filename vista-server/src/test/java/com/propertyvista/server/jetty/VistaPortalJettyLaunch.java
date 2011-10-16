@@ -35,4 +35,11 @@ public class VistaPortalJettyLaunch extends JettyLaunch {
     public String getContextPath() {
         return "/vista";
     }
+
+    @Override
+    public boolean isRunningInDeveloperEnviroment() {
+        // return false to test wicket applications as in Tomcat
+        return true;
+
+    }
 }
