@@ -31,7 +31,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
 import org.apache.wicket.util.time.Duration;
 
-import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.config.server.ServerSideConfiguration;
 
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
@@ -50,7 +50,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
         super.init();
 
-        if (ApplicationMode.isDevelopment()) {
+        if (ServerSideConfiguration.isRunningInDeveloperEnviroment()) {
             getResourceSettings().setResourcePollFrequency(Duration.ONE_SECOND);
             getResourceSettings().setCachingStrategy(NoOpResourceCachingStrategy.INSTANCE);
         }
@@ -101,7 +101,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
     @Override
     public RuntimeConfigurationType getConfigurationType() {
-        if (ApplicationMode.isDevelopment()) {
+        if (ServerSideConfiguration.isRunningInDeveloperEnviroment()) {
             return RuntimeConfigurationType.DEVELOPMENT;
         } else {
             return RuntimeConfigurationType.DEPLOYMENT;
