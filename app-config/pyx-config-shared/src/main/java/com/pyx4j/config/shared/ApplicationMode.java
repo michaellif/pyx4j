@@ -85,6 +85,13 @@ public class ApplicationMode {
     /**
      * Used as dev/prod switch. For production build include GWT module
      * com.pyx4j.gwt.ApplicationProductionMode
+     * 
+     * Affects:
+     * - error message visibility to application user
+     * - login Ctrl+Q helpers
+     * - data preloaded to application
+     * - encryption algorithms are intentionally incompatibly with production
+     * - enables JavaScrip debug messages in browser
      */
     public final static boolean isDevelopment() {
         return impl.isDevelopment();
