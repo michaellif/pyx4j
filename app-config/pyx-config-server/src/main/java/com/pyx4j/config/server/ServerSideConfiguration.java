@@ -30,6 +30,7 @@ import javax.servlet.ServletContext;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.rpc.IServiceFactory;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.security.shared.AclCreator;
 import com.pyx4j.security.shared.AclRevalidator;
@@ -200,6 +201,13 @@ public class ServerSideConfiguration {
         StackTraceElement[] ste = new Throwable().getStackTrace();
         String firstRunnableClass = (ste[ste.length - 1]).getClassName();
         return firstRunnableClass.startsWith("org.eclipse.jdt") || firstRunnableClass.startsWith("org.eclipse.jetty");
+    }
+
+    /**
+     * @return true when Web Application started in Eclipse development environment using our JettyLaunch
+     */
+    public static boolean isRunningInDeveloperEnviroment() {
+        return ApplicationMode.isDevelopment() && Boolean.valueOf(System.getProperty("com.pyx4j.DeveloperEnviroment"));
     }
 
     public String getSessionCookieName() {

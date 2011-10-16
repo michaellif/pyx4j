@@ -76,6 +76,8 @@ public abstract class JettyLaunch {
             throw new RuntimeException("Port already in use", e);
         }
 
+        System.setProperty("com.pyx4j.DeveloperEnviroment", Boolean.TRUE.toString());
+
         Server server = new Server(port);
 
         if (jettyLaunch.getServerSslPort() != 0) {
