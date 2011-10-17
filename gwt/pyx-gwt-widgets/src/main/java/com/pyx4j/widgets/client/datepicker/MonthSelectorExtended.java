@@ -24,6 +24,8 @@ package com.pyx4j.widgets.client.datepicker;
 
 import java.util.Date;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.datepicker.client.CalendarModel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
@@ -47,6 +49,14 @@ public abstract class MonthSelectorExtended extends MonthSelector {
     public MonthSelectorExtended(Date minDate, Date maxDate) {
         this.minDate = minDate;
         this.maxDate = maxDate;
+    }
+
+    protected DateTimeFormat getMonthFormatter() {
+        return DateTimeFormat.getFormat(PredefinedFormat.MONTH);
+    }
+
+    protected DateTimeFormat geYearFormatter() {
+        return DateTimeFormat.getFormat(PredefinedFormat.YEAR);
     }
 
     public Date getMinDate() {

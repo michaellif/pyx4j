@@ -42,7 +42,4 @@ public enum DatePickerIDs implements IDebugId {
         return name();
     }
 
-    public static String[] monthName = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
-            "December" };
-
 }

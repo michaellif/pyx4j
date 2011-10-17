@@ -63,10 +63,7 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
     protected void refresh() {
         if (this.model != null) {
             Date currentDate = this.model.getCurrentMonth();
-            int monthIndex = currentDate.getMonth();
-            int year = currentDate.getYear() + 1900;
-            String month = DatePickerIDs.monthName[monthIndex];
-            HTML monthWidget = new HTML(month + " " + year);
+            HTML monthWidget = new HTML(getMonthFormatter().format(currentDate) + " " + geYearFormatter().format(currentDate));
 
             monthWidget.setStyleName("headerCenter");
             grid.setWidget(0, monthColumn, monthWidget);

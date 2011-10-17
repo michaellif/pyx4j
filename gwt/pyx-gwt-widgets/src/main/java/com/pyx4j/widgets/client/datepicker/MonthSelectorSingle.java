@@ -76,8 +76,8 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
         if (this.model != null) {
             Date current = this.model.getCurrentMonth();
             if (current != null && lblMonth != null && lblYear != null) {
-                lblMonth.setText(DatePickerIDs.monthName[current.getMonth()]);
-                lblYear.setText(String.valueOf(current.getYear() + 1900));
+                lblMonth.setText(getMonthFormatter().format(current));
+                lblYear.setText(geYearFormatter().format(current));
             }
         }
     }
