@@ -166,7 +166,7 @@
         <module>vista-pmsite</module>
         <module>vista-server</module>
         <module>vista-i18n-catalog</module>
-        <module>vista-tester</module>
+        <!--module>vista-tester</module-->
     </modules>
 
     <properties>
