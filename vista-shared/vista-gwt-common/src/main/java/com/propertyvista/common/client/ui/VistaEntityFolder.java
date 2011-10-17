@@ -34,8 +34,6 @@ public abstract class VistaEntityFolder<E extends IEntity> extends CEntityFolder
 
     private final String itemName;
 
-    private final boolean editable;
-
     public VistaEntityFolder(Class<E> clazz) {
         this(clazz, true);
     }
@@ -52,7 +50,8 @@ public abstract class VistaEntityFolder<E extends IEntity> extends CEntityFolder
         super(clazz);
         this.clazz = clazz;
         this.itemName = itemName;
-        this.editable = editable;
+        setModifiable(editable);
+        setOrderable(editable);
     }
 
     protected abstract List<EntityFolderColumnDescriptor> columns();
@@ -76,8 +75,4 @@ public abstract class VistaEntityFolder<E extends IEntity> extends CEntityFolder
         return (itemName != null ? itemName : "");
     }
 
-    @Override
-    public boolean isEditable() {
-        return editable;
-    }
 }

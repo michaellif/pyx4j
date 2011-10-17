@@ -65,7 +65,7 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
     @Override
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
-        main.add(inject(proto().tenants(), createTenantsEditorColumns()));
+        main.add(inject(proto().tenants(), createTenantsFolder()));
         return main;
     }
 
@@ -100,7 +100,7 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
         });
     }
 
-    private CEntityFolder<TenantInApplicationDTO> createTenantsEditorColumns() {
+    private CEntityFolder<TenantInApplicationDTO> createTenantsFolder() {
 
         return new VistaEntityFolder<TenantInApplicationDTO>(TenantInApplicationDTO.class, i18n.tr("Person"), isEditable()) {
             private final VistaEntityFolder<TenantInApplicationDTO> parent = this;
@@ -125,7 +125,8 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
             @Override
             protected CEntityFolderItemEditor<TenantInApplicationDTO> createItem(final boolean first) {
-                return new CEntityFolderRowEditor<TenantInApplicationDTO>(TenantInApplicationDTO.class, columns()) {
+                CEntityFolderRowEditor<TenantInApplicationDTO> item = new CEntityFolderRowEditor<TenantInApplicationDTO>(TenantInApplicationDTO.class,
+                        columns()) {
 
                     @SuppressWarnings("rawtypes")
                     @Override
@@ -247,6 +248,9 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
                         get(proto().takeOwnership()).setEnabled(true);
                     }
                 };
+                item.setRemovable(!first);
+                item.setMovable(!first);
+                return item;
             }
         };
     }
