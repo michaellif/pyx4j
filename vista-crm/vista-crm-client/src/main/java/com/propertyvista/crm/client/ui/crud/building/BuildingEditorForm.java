@@ -42,6 +42,7 @@ import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.VistaEntityFolder;
@@ -72,6 +73,8 @@ import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
 public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
+
+    private static I18n i18n = I18n.get(BuildingEditorForm.class);
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
@@ -396,7 +399,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         private List<ServiceItemType> selectedItems;
 
         public SelectUtilityBox() {
-            super("Select Utilities");
+            super(i18n.tr("Select Utilities"));
         }
 
         @Override

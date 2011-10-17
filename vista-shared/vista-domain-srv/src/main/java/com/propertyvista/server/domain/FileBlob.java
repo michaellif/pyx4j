@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 /**
  * This file would be stored in file system or in database.
@@ -29,6 +30,7 @@ import com.pyx4j.entity.shared.IPrimitive;
  */
 @RpcTransient
 @Deprecated
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface FileBlob extends IEntity {
 
     IPrimitive<String> name();

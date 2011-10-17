@@ -13,6 +13,9 @@
  */
 package com.propertyvista.server.domain;
 
+import com.pyx4j.i18n.annotations.I18n;
+
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public enum CampaignTrigger {
 
     Registration,

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-16 24:25-0400\n"
+"POT-Creation-Date: 2011-10-17 02:54-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2749,14 +2749,27 @@ msgid "MM/dd/yy"
 msgstr "MM/dd/yy"
 
 #: com/propertyvista/domain/PriorAddress.java:2
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReport.java:2
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportEvent.java:2
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportTurnoverAnalysisDTO.java:2
+#: com/propertyvista/domain/financial/offering/Concession.java:2
 #: com/propertyvista/domain/financial/offering/extradata/Pet.java:2
 #: com/propertyvista/domain/person/Person.java:2
+#: com/propertyvista/domain/property/asset/Owner.java:2
+#: com/propertyvista/domain/property/asset/building/BuildingFinancial.java:2
 #: com/propertyvista/domain/property/asset/unit/AptUnit.java:2
+#: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:2
+#: com/propertyvista/domain/property/asset/unit/AptUnitOccupancy.java:2
+#: com/propertyvista/domain/property/vendor/Contract.java:2
+#: com/propertyvista/domain/property/vendor/Maintenance.java:2
 #: com/propertyvista/domain/site/News.java:2
 #: com/propertyvista/domain/tenant/TenantScreening.java:2
+#: com/propertyvista/domain/tenant/income/IIncomeInfo.java:2
+#: com/propertyvista/domain/tenant/income/IncomeInfoStudentIncome.java:2
 #: com/propertyvista/domain/tenant/income/TenantGuarantor.java:2
 #: com/propertyvista/domain/tenant/lead/Appointment.java:2
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
+#: com/propertyvista/domain/tenant/lease/Lease.java:2
 #: com/propertyvista/portal/domain/dto/AptUnitDTO.java:2
 #: com/pyx4j/forms/client/ui/CDatePicker.java:36
 msgid "MM/dd/yyyy"
@@ -5440,7 +5453,10 @@ msgid "or login using Google Accounts"
 msgstr "ou de vous connecter en utilisant un compte Google"
 
 #: com/propertyvista/domain/financial/offering/extradata/Vehicle.java:2
+#: com/propertyvista/domain/property/asset/Equipment.java:2
+#: com/propertyvista/domain/property/asset/Roof.java:2
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:2
+#: com/propertyvista/domain/property/vendor/License.java:2
 #, java-format
 msgid "yyyy"
 msgstr "yyyy"

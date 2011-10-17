@@ -21,6 +21,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -29,6 +30,8 @@ import com.propertyvista.crm.client.ui.ShortCutsView.ShortCutsPresenter;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 
 public class ShortCutsActivity extends AbstractActivity implements ShortCutsPresenter {
+
+    private static I18n i18n = I18n.get(ShortCutsActivity.class);
 
     private final ShortCutsView view;
 
@@ -65,7 +68,7 @@ public class ShortCutsActivity extends AbstractActivity implements ShortCutsPres
 
         ArrayList<NavigFolder> list = new ArrayList<NavigFolder>();
         //ShortCuts
-        NavigFolder folder = new NavigFolder("ShortCuts");
+        NavigFolder folder = new NavigFolder(i18n.tr("ShortCuts"));
         list.add(folder);
 
         return list;

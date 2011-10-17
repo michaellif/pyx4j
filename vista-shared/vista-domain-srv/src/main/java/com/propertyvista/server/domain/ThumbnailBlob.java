@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 /**
  * This file would be stored in file system or in database.
@@ -31,6 +32,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 @RpcTransient
 @Deprecated
 @Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = FileBlob.class)
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface ThumbnailBlob extends IEntity {
 
     @Length(32 * 1024)

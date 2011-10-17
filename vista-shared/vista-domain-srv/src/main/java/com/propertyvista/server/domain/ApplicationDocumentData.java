@@ -21,11 +21,13 @@ import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.tenant.Tenant;
 
 @RpcTransient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface ApplicationDocumentData extends IEntity, IBoundToApplication {
 
     @Detached

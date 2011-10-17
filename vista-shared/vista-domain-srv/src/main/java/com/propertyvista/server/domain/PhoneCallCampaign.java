@@ -16,7 +16,9 @@ package com.propertyvista.server.domain;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PhoneCallCampaign extends IEntity {
 
     @MemberColumn(name = "trg")
