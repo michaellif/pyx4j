@@ -36,7 +36,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
@@ -287,9 +286,9 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             }
 
             if (useDates.getValue()) {
-                String format = DateTimeFormat.getFormat(PredefinedFormat.DATE_SHORT).toString();
-                filterDescription += i18n.tr(", from: ") + TimeUtils.simpleFormat(fromDate.getValue(), format);
-                filterDescription += i18n.tr(" to: ") + TimeUtils.simpleFormat(toDate.getValue(), format);
+                DateTimeFormat format = DateTimeFormat.getFormat(PredefinedFormat.DATE_SHORT);
+                filterDescription += i18n.tr(", from: ") + format.format(fromDate.getValue());
+                filterDescription += i18n.tr(" to: ") + format.format(toDate.getValue());
             }
 
             return filterDescription;
