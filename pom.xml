@@ -166,6 +166,8 @@
         <module>incubator/tester/tester-client</module>
         <module>incubator/tester/tester-gae-server</module>
 
+        <module>tester/pyx-tester-selenium</module>
+
         <module>examples/examples-domain</module>
         <module>examples/examples-site</module>
 
