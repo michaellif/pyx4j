@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.maps;
 
-
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
@@ -123,6 +122,7 @@ public class PropertyMarker extends Marker {
             //address
             Label item = new Label(Formatter.formatAddress(property.address()));
             item.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardContentItem);
+            item.addStyleName("address");
             item.setWidth("100%");
             content.add(item);
 
@@ -131,6 +131,7 @@ public class PropertyMarker extends Marker {
             if (floorString != null && !floorString.isEmpty()) {
                 item = new Label(floorString);
                 item.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardContentItem);
+                item.addStyleName("types");
                 content.add(item);
             }
 
@@ -139,6 +140,7 @@ public class PropertyMarker extends Marker {
             if (amenityString != null && !amenityString.isEmpty()) {
                 item = new Label(amenityString);
                 item.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardContentItem);
+                item.addStyleName("amenities");
                 content.add(item);
             }
 
@@ -171,18 +173,13 @@ public class PropertyMarker extends Marker {
             imageHolder.setWidget(MediaUtils.createPublicMediaImage(property.mainMedia(), ThumbnailSize.small));
             left.add(imageHolder);
 
-            //from date
-            item = new Label(i18n.tr("Starting from"));
-            left.add(item);
-            item = new Label(property.availableForRent().getStringView());
-            item.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardLeftItem);
-            left.add(item);
-
             //from price
-            item = new Label(i18n.tr("from"));
+            item = new Label(i18n.tr("Starting from"));
+            item.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardLeftLabel);
             left.add(item);
             item = new Label("$" + property.price().min().getStringView());
             item.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardLeftItem);
+            item.addStyleName("price");
             left.add(item);
 
             add(content, DockPanel.CENTER);

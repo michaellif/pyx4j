@@ -24,8 +24,8 @@ public class InternalErrorPage extends ErrorPage {
     private static final long serialVersionUID = 1L;
 
     public InternalErrorPage() {
-        // get exception from session
         StringWriter err = new StringWriter();
+        // get internal exception if available
         Exception e = PMSiteApplication.get().getInternalError();
         if (e == null) {
             err.write("Unknown Error");

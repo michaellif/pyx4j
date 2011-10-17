@@ -45,7 +45,7 @@ public class PropertiesMapWidget extends AbstractMapWidget {
     private DefaultAsyncCallback<LatLngBounds> callback;
 
     public static enum StyleSuffix implements IStyleName {
-        CardLeft, CardLeftItem, CardContent, CardContentItem, CardImage, CardMenuItem
+        CardLeft, CardLeftItem, CardLeftLabel, CardContent, CardContentItem, CardImage, CardMenuItem
     }
 
     public static enum MarkerType {

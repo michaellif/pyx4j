@@ -55,7 +55,8 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
             getResourceSettings().setResourcePollFrequency(Duration.ONE_SECOND);
             getResourceSettings().setCachingStrategy(NoOpResourceCachingStrategy.INSTANCE);
         }
-//        getPageSettings().addComponentResolver(new I18nMessageResolver());
+        getPageSettings().addComponentResolver(new I18nMessageResolver());
+//        getMarkupSettings().setStripWicketTags(true);
 
         mountPage("signin", SignInPage.class);
 

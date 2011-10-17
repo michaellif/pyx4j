@@ -17,8 +17,11 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.parser.filter.WicketTagIdentifier;
 import org.apache.wicket.markup.resolver.IComponentResolver;
+
+import com.pyx4j.i18n.shared.I18n;
 
 @SuppressWarnings("serial")
 public class I18nMessageResolver implements IComponentResolver {
@@ -31,40 +34,19 @@ public class I18nMessageResolver implements IComponentResolver {
 
     @Override
     public Component resolve(MarkupContainer container, MarkupStream markupStream, ComponentTag tag) {
-        // TODO Auto-generated method stub
-        return null;
+        return new I18nMessage();
     }
 
-//TODO    @Override
-//    public boolean resolve(MarkupContainer container, MarkupStream markupStream, ComponentTag tag) {
-//        if (tag instanceof WicketTag) {
-//            WicketTag wtag = (WicketTag) tag;
-//            if (TAG.equalsIgnoreCase(wtag.getName())) {
-//                MessageContainer label = new MessageContainer("_i18n_" + container.getPage().getAutoIndex());
-//                label.setRenderBodyOnly(container.getApplication().getMarkupSettings().getStripWicketTags());
-//                container.autoAdd(label, markupStream);
-//                // Yes, we handled the tag
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+    private static class I18nMessage extends WebComponent {
 
-    private static class MessageContainer extends MarkupContainer {
-
-        public MessageContainer(String id) {
-            super(id);
+        public I18nMessage() {
+            super("_i18n_");
         }
 
         @Override
         public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
-            //TODO renderComponentTagBody(markupStream, openTag);
+            String message = markupStream.get().toCharSequence().toString();
+            replaceComponentTagBody(markupStream, openTag, I18n.get(this.getClass()).tr(message));
         }
-
-//        @Override
-//        public boolean isTransparentResolver() {
-//            return true;
-//        }
     }
-
 }
