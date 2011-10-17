@@ -24,8 +24,9 @@
         <module>vista-portal-ptapp</module>
         <!-- for Alpha -->
         <!--module>vista-portal-corp</module-->
-        <module>vista-portal-tester</module>
-        <!--module>vista-portal-admin</module-->
+
+        <!--module>vista-portal-tester</module-->
+
         <module>vista-portal-server</module>
     </modules>
 
