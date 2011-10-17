@@ -16,10 +16,13 @@ package com.propertyvista.crm.client.ui.crud.building;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.widgets.client.dashboard.IGadget;
+import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -36,6 +39,7 @@ import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
 import com.propertyvista.crm.client.ui.dashboard.DashboardPanel;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
+import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
@@ -86,6 +90,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
             @Override
             public void onValueChange(ValueChangeEvent<DashboardMetadata> event) {
                 dashboardView.fill(event.getValue());
+                applyFiltering(form.getValue().getPrimaryKey());
             }
         });
 
@@ -172,5 +177,20 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         super.populate(value);
 
         dashboardSelect.setValue(value.dashboard());
+        applyFiltering(value.getPrimaryKey());
+    }
+
+    private void applyFiltering(Key buildingId) {
+        IBuildingGadget.FilterData filterData = new IBuildingGadget.FilterData();
+        filterData.buildings.add(buildingId);
+
+        // notify gadgets:
+        IGadgetIterator it = dashboardView.getBoard().getGadgetIterator();
+        if (it.hasNext()) {
+            IGadget gadget = it.next();
+            if (gadget instanceof IBuildingGadget) {
+                ((IBuildingGadget) gadget).setFiltering(filterData);
+            }
+        }
     }
 }

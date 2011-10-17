@@ -44,5 +44,24 @@ public interface IBuildingGadget {
          * Use all current/future records if null.
          */
         public Date toDate = null;
+
+        public FilterData() {
+        }
+
+        public FilterData(Key buildingId) {
+            this(buildingId, null, null);
+        }
+
+        public FilterData(Date from, Date to) {
+            this(null, from, to);
+        }
+
+        public FilterData(Key buildingId, Date from, Date to) {
+            if (buildingId != null) {
+                buildings.add(buildingId);
+            }
+            fromDate = from;
+            toDate = to;
+        }
     }
 }

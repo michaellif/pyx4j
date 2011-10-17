@@ -146,7 +146,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         new PastDateValidation(get(proto().financial().lastAppraisalDate()));
 
         get(proto().complex()).addValueChangeHandler(new ValueChangeHandler<Complex>() {
-
             @Override
             public void onValueChange(ValueChangeEvent<Complex> event) {
                 get(proto().complexPrimary()).setEditable(!get(proto().complex()).isValueEmpty());
