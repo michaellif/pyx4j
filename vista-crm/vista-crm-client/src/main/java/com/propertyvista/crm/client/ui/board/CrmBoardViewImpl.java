@@ -273,25 +273,35 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         }
 
         private String getFilteringDescription() {
-            String filterDescription = i18n.tr("Data for Buildings : ");
+            String description = i18n.tr("Buildings: ");
 
             List<Building> selectedBuildings = buildingLister.getLister().getCheckedItems();
             if (!selectedBuildings.isEmpty()) {
+                String delimiter = ",";
                 for (Building building : selectedBuildings) {
-                    filterDescription += building.propertyCode().getStringView();
-                    filterDescription += "; ";
+                    description += building.propertyCode().getStringView();
+                    description += delimiter;
                 }
+                description = description.substring(0, description.lastIndexOf(delimiter));
             } else {
-                filterDescription = i18n.tr("Data for all Buildings");
+                description = i18n.tr("All Buildings");
             }
 
             if (useDates.getValue()) {
                 DateTimeFormat format = DateTimeFormat.getFormat(PredefinedFormat.DATE_SHORT);
-                filterDescription += i18n.tr(", from: ") + format.format(fromDate.getValue());
-                filterDescription += i18n.tr(" to: ") + format.format(toDate.getValue());
+
+                String from = format.format(fromDate.getValue());
+                String to = format.format(toDate.getValue());
+
+                if (from.compareTo(to) == 0) {
+                    description += i18n.tr(" of ") + from;
+                } else {
+                    description += i18n.tr(" from: ") + from;
+                    description += i18n.tr(" to: ") + to;
+                }
             }
 
-            return filterDescription;
+            return description;
         }
 
         private void applyFiltering() {
