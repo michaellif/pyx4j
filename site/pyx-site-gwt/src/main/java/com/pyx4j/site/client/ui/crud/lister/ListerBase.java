@@ -260,6 +260,16 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         }
     }
 
+    // selection/checking stuff:
+
+    public boolean isSelectable() {
+        return listPanel.getDataTable().isMarkSelectedRow();
+    }
+
+    public void setSelectable(boolean isSelectable) {
+        listPanel.getDataTable().setMarkSelectedRow(isSelectable);
+    }
+
     public boolean isMultiSelect() {
         return listPanel.getDataTable().isMultiSelect();
     }
@@ -302,6 +312,18 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         });
     }
 
+    public boolean hasCheckboxColumn() {
+        return listPanel.getDataTable().hasCheckboxColumn();
+    }
+
+    public void setHasCheckboxColumn(boolean hasCheckboxColumn) {
+        listPanel.getDataTable().setHasCheckboxColumn(hasCheckboxColumn);
+    }
+
+    public List<E> getCheckedItems() {
+        return listPanel.getDataTable().getCheckedItems();
+    }
+
     // Memento:
     @Override
     public void storeState(Place place) {
@@ -330,6 +352,17 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         getLister().setSorting(sorts);
         // should be called last:
         getPresenter().populate(pageNumber);
+    }
+
+    public void resetState() {
+
+        getLister().setFiltering(null);
+        getLister().setSorting(null);
+
+        getLister().getListPanel().getDataTable().clearTable();
+
+        // should be called last:
+        getPresenter().populate(0);
     }
 
     // EntityListPanel access:

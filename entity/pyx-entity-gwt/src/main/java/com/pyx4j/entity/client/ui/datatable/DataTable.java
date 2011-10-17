@@ -195,6 +195,12 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         return checked;
     }
 
+    public void releaseCheckedItems() {
+        for (SelectionCheckBox selectionCheckBox : selectionCheckBoxes) {
+            selectionCheckBox.setValue(false, true);
+        }
+    }
+
 // Events connection:
 
     public void addItemSelectionHandler(ItemSelectionHandler handler) {
@@ -254,8 +260,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             selectedRows.clear();
         } else {
             markRow(getSelectedRow(), false);
-            selectedRow = -1;
         }
+        selectedRow = -1;
     }
 
     public boolean isAutoColumnsWidth() {
@@ -320,8 +326,11 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         renderBody();
     }
 
-    public void clearTableData() {
+    public void clearTable() {
         selectedRow = -1;
+        if (selectedRows != null) {
+            selectedRows.clear();
+        }
         selectionCheckBoxes.clear();
         for (int row = getRowCount() - 1; row > 0; row--) {
             removeRow(row);
@@ -383,7 +392,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     }
 
     private void renderBody() {
-        clearTableData();
+        clearTable();
 
         List<DataItem<E>> data = model.getData();
         List<ColumnDescriptor<E>> columnDescriptors = model.getColumnDescriptors();
