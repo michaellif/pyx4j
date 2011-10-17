@@ -14,32 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Oct 9, 2011
+ * Created on Oct 17, 2011
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.i18n.client;
+package com.pyx4j.i18n.gettext;
 
-import com.google.gwt.core.client.GWT;
+public interface Translator {
 
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.i18n.shared.II18nFactory;
-
-/**
- * Only single Locale is supported at runtime.
- */
-public class ClientI18nFactory implements II18nFactory {
-
-    private static I18n i18n;
-
-    @Override
-    public I18n get(Class<?> clazz) {
-        if (i18n == null) {
-            synchronized (I18n.class) {
-                i18n = new ClientI18nImpl((I18nResourceBundle) GWT.create(I18nResourceBundle.class));
-            }
-        }
-        return i18n;
-    }
+    public String translate(String text);
 
 }

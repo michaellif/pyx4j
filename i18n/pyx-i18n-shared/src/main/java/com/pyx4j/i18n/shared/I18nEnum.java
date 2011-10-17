@@ -30,6 +30,10 @@ public class I18nEnum {
     private static I18n i18n = I18n.get(I18nEnum.class);
 
     public static String tr(Enum<?> enumValue) {
+        /**
+         * This is actually server side code.
+         * It is replaced on the client side with different implementations, see "super-source" in pyx-i18n-gwt.
+         */
         if (enumValue == null) {
             return null;
         } else {

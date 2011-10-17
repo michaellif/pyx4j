@@ -19,14 +19,6 @@
 
     <dependencies>
 
-        <!--
-        <dependency>
-            <groupId>org.xnap.commons</groupId>
-            <artifactId>gettext-commons</artifactId>
-            <version>0.9.6</version>
-        </dependency>
-        -->
-
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-commons</artifactId>

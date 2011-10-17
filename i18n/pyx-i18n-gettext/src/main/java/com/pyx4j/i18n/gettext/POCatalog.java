@@ -24,9 +24,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
-public class POCatalog {
+public class POCatalog implements Translator {
 
     final String lang;
 
@@ -42,11 +43,22 @@ public class POCatalog {
         read();
     }
 
+    public POCatalog(Locale locale) throws IOException {
+        this.lang = locale.getLanguage();
+        poDirectory = null;
+        POFile po;
+        po = new POFileReader().readResource("translations/" + this.lang + ".po");
+        if (po == null) {
+            throw new IOException();
+        }
+        buildTranslations(po);
+    }
+
     private File mainLandFile() {
         return new File(poDirectory, lang + ".po");
     }
 
-    public void read() {
+    private void read() {
         File file = mainLandFile();
         if (!file.canRead()) {
             return;
@@ -58,11 +70,16 @@ public class POCatalog {
         } catch (IOException e) {
             throw new RuntimeException("POFile " + mainLandFile().getAbsolutePath() + " read error", e);
         }
+        buildTranslations(po);
+    }
+
+    private void buildTranslations(POFile po) {
         for (POEntry entry : po.entries) {
             translations.put(entry.untranslated, entry.translated);
         }
     }
 
+    @Override
     public String translate(String text) {
         return translations.get(text);
     }

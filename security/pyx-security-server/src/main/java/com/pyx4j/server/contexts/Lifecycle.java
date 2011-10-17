@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.i18n.server.I18nManager;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
@@ -115,6 +116,7 @@ public class Lifecycle {
         } finally {
             Context.remove();
             NamespaceManager.remove();
+            I18nManager.removeThreadLocale();
         }
     }
 

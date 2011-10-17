@@ -20,11 +20,18 @@
  */
 package com.pyx4j.essentials.server;
 
+import com.pyx4j.config.server.LocaleResolver;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
+import com.pyx4j.i18n.server.CookieLocaleResolver;
 
 public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
+
+    @Override
+    public LocaleResolver getLocaleResolver() {
+        return new CookieLocaleResolver();
+    }
 
     public DataPreloaderCollection getDataPreloaders() {
         return new DataPreloaderCollection();

@@ -132,6 +132,10 @@ public class ServerSideConfiguration {
         return new EmptyNamespaceResolver();
     }
 
+    public LocaleResolver getLocaleResolver() {
+        return null;
+    }
+
     public ThrottleConfig getThrottleConfig() {
         return new ThrottleConfig();
     }

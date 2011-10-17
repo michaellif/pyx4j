@@ -20,10 +20,11 @@
  */
 package com.pyx4j.i18n.server;
 
+import java.util.Locale;
+
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.II18nFactory;
 
-//TODO
 public class ServerI18nFactory implements II18nFactory {
 
     private static I18n i18n;
@@ -32,21 +33,13 @@ public class ServerI18nFactory implements II18nFactory {
     public I18n get(Class<?> clazz) {
         if (i18n == null) {
             synchronized (I18n.class) {
-                i18n = new I18n();
+                i18n = new ServerI18nImpl();
             }
         }
         return i18n;
     }
 
-//  private static final ThreadLocal<Locale> threadLocale = new ThreadLocal<Locale>() {
-//  @Override
-//  protected Locale initialValue() {
-//      return Locale.getDefault();
-//  }
-//
-//
-//public static void setThreadLocale(final Locale locale) {
-//  threadLocale.set(locale);
-//}
-
+    public static I18n get(Class<?> clazz, Locale locale) {
+        return new ServerI18nLocaleImpl(I18nManager.getTranslator(locale));
+    }
 }

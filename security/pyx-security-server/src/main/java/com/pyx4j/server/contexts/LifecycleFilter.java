@@ -35,9 +35,11 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.LocaleResolver;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.server.RequestDebug;
+import com.pyx4j.i18n.server.I18nManager;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.server.contexts.AntiDoS.AccessCounter;
 
@@ -85,6 +87,10 @@ public class LifecycleFilter implements Filter {
                 }
                 try {
                     NamespaceManager.setNamespace(ServerSideConfiguration.instance().getNamespaceResolver().getNamespace(httprequest));
+                    LocaleResolver lr = ServerSideConfiguration.instance().getLocaleResolver();
+                    if (lr != null) {
+                        I18nManager.setThreadLocale(lr.getRequestLocale(httprequest));
+                    }
 
                     Lifecycle.beginRequest(httprequest, httpresponse);
 
