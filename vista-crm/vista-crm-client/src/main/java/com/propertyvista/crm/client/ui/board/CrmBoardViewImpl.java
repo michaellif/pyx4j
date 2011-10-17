@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.board;
 
-import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +22,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTML;
@@ -35,6 +36,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
@@ -285,8 +287,9 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             }
 
             if (useDates.getValue()) {
-                filterDescription += i18n.tr(", from: ") + DateFormat.getDateInstance().format(fromDate.getValue());
-                filterDescription += i18n.tr(" to: ") + DateFormat.getDateInstance().format(toDate.getValue());
+                String format = DateTimeFormat.getFormat(PredefinedFormat.DATE_SHORT).toString();
+                filterDescription += i18n.tr(", from: ") + TimeUtils.simpleFormat(fromDate.getValue(), format);
+                filterDescription += i18n.tr(" to: ") + TimeUtils.simpleFormat(toDate.getValue(), format);
             }
 
             return filterDescription;
