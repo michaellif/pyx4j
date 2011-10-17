@@ -102,7 +102,6 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         }
 
         for (TenantInLease tenantInLease : lease.tenants()) {
-
             EntityQueryCriteria<TenantScreening> criteria = EntityQueryCriteria.create(TenantScreening.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenantInLease.tenant()));
             TenantScreening tenantScreening = Persistence.service().retrieve(criteria);

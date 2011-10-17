@@ -303,7 +303,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             setCellWidth(main, "100%");
 
             tableLayout.put("Name", "29%");
-            tableLayout.put("Date of Birht", "15%");
+            tableLayout.put("Date of Birth", "15%");
             tableLayout.put("Email", "30%");
             tableLayout.put("Relationship", "15%");
             tableLayout.put("Status", "11%");
@@ -347,7 +347,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
                             content.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                             content.getElement().getStyle().setPaddingRight(1, Unit.EM);
                             addCell(tableLayout, content, "Name", DecorationUtils.formFullName(this, proto().tenant().person()));
-                            addCell(tableLayout, content, "Date of Birht", inject(proto().tenant().person().birthDate()).asWidget());
+                            addCell(tableLayout, content, "Date of Birth", inject(proto().tenant().person().birthDate()).asWidget());
                             addCell(tableLayout, content, "Email", inject(proto().tenant().person().email()).asWidget());
                             if (first) {
                                 addCell(tableLayout, content, "Relationship", new HTML("&nbsp;"));

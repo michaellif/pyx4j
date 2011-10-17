@@ -16,6 +16,7 @@ package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -37,6 +38,7 @@ import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -44,6 +46,8 @@ import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
@@ -55,6 +59,8 @@ import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.extradata.Pet;
+import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
@@ -124,12 +130,12 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 
         main.add(petsPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         petsPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Pets:"))));
-        petsPanel.add(inject(proto().agreedPets(), createFeaturesFolderEditor(Feature.Type.pet, true)));
+        petsPanel.add(inject(proto().agreedPets(), createFeaturesFolderEditorEx(Feature.Type.pet, true)));
 
         main.add(parkingPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         parkingPanel.add(new VistaLineSeparator(100, Unit.PCT));
         parkingPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Parking:"))));
-        parkingPanel.add(inject(proto().agreedParking(), createFeaturesFolderEditor(Feature.Type.parking, true)));
+        parkingPanel.add(inject(proto().agreedParking(), createFeaturesFolderEditorEx(Feature.Type.parking, true)));
 
         main.add(storagePanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         storagePanel.add(new VistaLineSeparator(100, Unit.PCT));
@@ -257,6 +263,142 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
                 } else {
                     super.removeItem(item);
                 }
+            }
+        };
+    }
+
+    private CEntityFolder<ChargeItem> createFeaturesFolderEditorEx(final Feature.Type type, boolean editable) {
+        return new VistaEntityFolder<ChargeItem>(ChargeItem.class, editable) {
+            private final VistaEntityFolder<ChargeItem> parent = this;
+
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                return null;
+            }
+
+            @Override
+            protected void addItem() {
+                new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox(type)) {
+                    @Override
+                    protected void onClose(SelectFeatureBox box) {
+                        if (box.getSelectedItems() != null) {
+                            for (ServiceItem item : box.getSelectedItems()) {
+                                ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                                newItem.item().set(item);
+                                newItem.price().setValue(item.price().getValue());
+                                newItem.adjustedPrice().setValue(item.price().getValue());
+                                addItem(newItem);
+                            }
+                        }
+                    }
+                };
+            }
+
+            @Override
+            protected IFolderDecorator<ChargeItem> createDecorator() {
+                VistaBoxFolderDecorator<ChargeItem> decor = new VistaBoxFolderDecorator<ChargeItem>(parent);
+                return decor;
+            }
+
+            @Override
+            protected CEntityFolderItemEditor<ChargeItem> createItem(boolean first) {
+                return new CEntityFolderRowEditor<ChargeItem>(ChargeItem.class, columns()) {
+                    private final CEntityFolderRowEditor<ChargeItem> chargeItemEditor = this;
+
+                    private final SimplePanel extraDataPanel = new SimplePanel();
+
+                    private final VistaBoxFolderItemDecorator<ChargeItem> decor = new VistaBoxFolderItemDecorator<ChargeItem>(parent);
+
+                    @Override
+                    public IsWidget createContent() {
+                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
+                        VistaDecoratorsSplitFlowPanel split;
+
+                        CLabel lb;
+                        main.add(split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 22));
+                        split.getLeftPanel().add(inject(proto().item().type().name(), lb = new CLabel()));
+                        lb.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+
+                        CNumberLabel nl;
+                        split.getRightPanel().add(inject(proto().price(), nl = new CNumberLabel()), 6);
+                        nl.setNumberFormat(proto().price().getMeta().getFormat());
+
+                        split.getRightPanel().add(inject(proto().adjustedPrice(), nl = new CNumberLabel()), 6);
+                        nl.setNumberFormat(proto().adjustedPrice().getMeta().getFormat());
+                        nl.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+
+                        main.add(extraDataPanel);
+
+                        return main;
+                    }
+
+                    @Override
+                    public IFolderItemDecorator<ChargeItem> createDecorator() {
+                        return decor;
+                    }
+
+                    @SuppressWarnings({ "unchecked", "rawtypes" })
+                    @Override
+                    public void populate(ChargeItem value) {
+                        super.populate(value);
+
+                        if (value.item().type().featureType().getValue() == Feature.Type.utility) {
+                            setRemovable(false);
+                        }
+
+                        get(proto().adjustedPrice()).setVisible(!value.adjustments().isEmpty());
+
+                        CEntityEditor editor = null;
+                        switch (value.item().type().featureType().getValue()) {
+                        case parking:
+                            editor = new CEntityEditor<Vehicle>(Vehicle.class) {
+                                @Override
+                                public IsWidget createContent() {
+                                    VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
+                                    panel.add(new HTML(HtmlUtils.h5(VistaEntityFolder.i18n.tr("Vehicle data:"))));
+                                    panel.add(inject(proto().plateNumber()), 8);
+                                    panel.add(inject(proto().year()), 5);
+                                    panel.add(inject(proto().make()), 8);
+                                    panel.add(inject(proto().model()), 8);
+                                    panel.add(inject(proto().country()), 9);
+                                    panel.add(inject(proto().province()), 16);
+                                    return panel;
+                                }
+                            };
+
+                            if (value.extraData().isNull()) {
+                                value.extraData().set(EntityFactory.create(Vehicle.class));
+                            }
+                            break;
+                        case pet:
+                            editor = new CEntityEditor<Pet>(Pet.class) {
+                                @Override
+                                public IsWidget createContent() {
+                                    VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
+                                    panel.add(new HTML(HtmlUtils.h5(VistaEntityFolder.i18n.tr("Pet data:"))));
+                                    panel.add(inject(proto().name()), 14);
+                                    panel.add(inject(proto().color()), 6);
+                                    panel.add(inject(proto().breed()), 13);
+                                    panel.add(inject(proto().weight()), 4);
+                                    panel.add(inject(proto().weightUnit()), 4);
+                                    panel.add(inject(proto().birthDate()), 8.2);
+                                    return panel;
+                                }
+                            };
+
+                            if (value.extraData().isNull()) {
+                                value.extraData().set(EntityFactory.create(Pet.class));
+                            }
+                            break;
+                        }
+
+                        if (editor != null) {
+                            editor.onBound(chargeItemEditor);
+                            editor.populate(value.extraData().cast());
+                            extraDataPanel.setWidget(editor);
+                        }
+                    }
+                };
             }
         };
     }

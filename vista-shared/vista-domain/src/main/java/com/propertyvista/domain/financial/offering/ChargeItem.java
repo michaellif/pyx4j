@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@ToStringFormat("{0}, Price: {1}")
+@ToStringFormat("{0}, Base Price: {1}, Adjusted Price: {2}")
 public interface ChargeItem extends IEntity {
 
     @ToString(index = 0)
@@ -41,6 +41,7 @@ public interface ChargeItem extends IEntity {
      * should be recalculated by service when necessary (use @link PriceCalculationHelpers.calculateChargeItemAdjustments(ChargeItem item))!..
      */
     @Transient
+    @ToString(index = 2)
     @Format("#0.00")
     IPrimitive<Double> adjustedPrice();
 
