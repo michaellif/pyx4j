@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.board;
 
 import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -109,11 +110,20 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
 
         private final CDatePicker toDate = new CDatePicker();
 
+        private final HTML filterDescription = new HTML();
+
+        private final Widget compactView;
+
+        private final Widget setupView;
+
         public BuildingFilters() {
             buildingLister = new ListerInternalViewImplBase<Building>(new SelectedBuildingLister());
-            buildingLister.getLister().setMultiSelect(true);
+            buildingLister.getLister().setSelectable(false);
+            buildingLister.getLister().setHasCheckboxColumn(true);
             buildingLister.getLister().getListPanel().setPageSize(10);
 
+            compactView = createCompactVeiw();
+            setupView = createSetupVeiw();
         }
 
         public IListerView<Building> getBuildingListerView() {
@@ -121,13 +131,29 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         }
 
         public Widget getCompactVeiw() {
+            // update UI state:
+            filterDescription.setHTML(getFilteringDescription());
+
+            return compactView;
+        }
+
+        public Widget getSetupVeiw() {
+            // reset UI state:
+            buildingLister.restoreState();
+            fromDate.setValue(new Date());
+            toDate.setValue(new Date());
+            useDates.setValue(false, true);
+
+            return setupView;
+        }
+
+        public Widget createCompactVeiw() {
             HorizontalPanel main = new HorizontalPanel();
 
-            HTML description = new HTML(getFilteringDescription());
-            description.setStyleName(BoardBase.DEFAULT_STYLE_PREFIX + BoardBase.StyleSuffix.filtersDescription);
-            main.add(description);
-            main.setCellVerticalAlignment(description, HasVerticalAlignment.ALIGN_MIDDLE);
-            main.setCellHorizontalAlignment(description, HasHorizontalAlignment.ALIGN_CENTER);
+            filterDescription.setStyleName(BoardBase.DEFAULT_STYLE_PREFIX + BoardBase.StyleSuffix.filtersDescription);
+            main.add(filterDescription);
+            main.setCellVerticalAlignment(filterDescription, HasVerticalAlignment.ALIGN_MIDDLE);
+            main.setCellHorizontalAlignment(filterDescription, HasHorizontalAlignment.ALIGN_CENTER);
 
             Button setup = new Button(i18n.tr("Setup"), new ClickHandler() {
                 @Override
@@ -145,7 +171,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             return main;
         }
 
-        public Widget getSetupVeiw() {
+        private Widget createSetupVeiw() {
             VerticalPanel main = new VerticalPanel();
 
 //            LayoutPanel wrap = new LayoutPanel();
@@ -248,7 +274,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         private String getFilteringDescription() {
             String filterDescription = i18n.tr("Data for Buildings : ");
 
-            List<Building> selectedBuildings = buildingLister.getLister().getSelectedItems();
+            List<Building> selectedBuildings = buildingLister.getLister().getCheckedItems();
             if (!selectedBuildings.isEmpty()) {
                 for (Building building : selectedBuildings) {
                     filterDescription += building.propertyCode().getStringView();
@@ -269,7 +295,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         private void applyFiltering() {
             IBuildingGadget.FilterData filterData = new IBuildingGadget.FilterData();
 
-            List<Building> selectedBuildings = buildingLister.getLister().getSelectedItems();
+            List<Building> selectedBuildings = buildingLister.getLister().getCheckedItems();
             if (!selectedBuildings.isEmpty()) {
                 for (Building building : selectedBuildings) {
                     filterData.buildings.add(building.getPrimaryKey());
