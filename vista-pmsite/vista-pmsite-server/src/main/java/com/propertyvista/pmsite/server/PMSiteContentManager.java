@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -33,6 +34,7 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.i18n.server.I18nManager;
 
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
@@ -189,34 +191,23 @@ public class PMSiteContentManager implements Serializable {
         }
 
         private static AvailableLocale readLocaleFromCookie() {
-            Cookie localeCookie = null;
-            List<Cookie> cookies = ((WebRequest) RequestCycle.get().getRequest()).getCookies();
-            if (cookies == null) {
-                return getAllAvailableLocale().get(0);
-            }
-            for (Cookie cookie : cookies) {
-                if ("locale".equals(cookie.getName())) {
-                    localeCookie = cookie;
-                    break;
-                }
-            }
 
-            if ((localeCookie != null) && (localeCookie.getValue() != null)) {
-                CompiledLocale lang = null;
-                try {
-                    lang = CompiledLocale.valueOf(localeCookie.getValue());
-                } catch (IllegalArgumentException ignore) {
-                }
-
-                if (lang != null) {
-                    for (AvailableLocale l : getAllAvailableLocale()) {
-                        if (lang.equals(l.lang().getValue())) {
-                            return l;
-                        }
+            Locale locale = I18nManager.getThreadLocale();
+            try {
+                CompiledLocale lang = CompiledLocale.valueOf(locale.getLanguage() + "_" + locale.getCountry());
+                for (AvailableLocale l : getAllAvailableLocale()) {
+                    if (lang.equals(l.lang().getValue())) {
+                        return l;
                     }
                 }
+            } catch (IllegalArgumentException ignore) {
             }
 
+            for (AvailableLocale l : getAllAvailableLocale()) {
+                if (locale.getLanguage().equals(l.lang().getValue().name())) {
+                    return l;
+                }
+            }
             // Locale not found, select the first one.
             return getAllAvailableLocale().get(0);
         }

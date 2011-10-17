@@ -18,6 +18,7 @@ import java.io.IOException;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -39,6 +40,8 @@ public class PortalSitePreloader extends AbstractDataPreloader {
 
     private AvailableLocale frLocale;
 
+    private AvailableLocale ruLocale;
+
     @SuppressWarnings("unchecked")
     @Override
     public String delete() {
@@ -55,6 +58,12 @@ public class PortalSitePreloader extends AbstractDataPreloader {
             frLocale = EntityFactory.create(AvailableLocale.class);
             frLocale.lang().setValue(CompiledLocale.fr);
             Persistence.service().persist(frLocale);
+
+            if (ApplicationMode.isDevelopment()) {
+                ruLocale = EntityFactory.create(AvailableLocale.class);
+                ruLocale.lang().setValue(CompiledLocale.ru);
+                //Persistence.service().persist(ruLocale);
+            }
 
             SiteDescriptor site = EntityFactory.create(SiteDescriptor.class);
             site.skin().setValue(Skin.skin1);

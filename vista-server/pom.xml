@@ -243,6 +243,55 @@
     <profiles>
 
         <profile>
+            <id>i18n-auto</id>
+            <properties>
+                <i18n.autoTranslate>true</i18n.autoTranslate>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>i18n-nl</id>
+            <properties>
+                <poSaveLocation>false</poSaveLocation>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>i18n</id>
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <groupId>com.pyx4j</groupId>
+                        <artifactId>maven-i18n-plugin</artifactId>
+                        <version>${pyxVersion}</version>
+                        <executions>
+                            <execution>
+                                <id>extract-i18n</id>
+                                <goals>
+                                    <goal>extract</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <poSaveLocation>true</poSaveLocation>
+                            <keysFile>vista-server-keys.pot</keysFile>
+                            <includes>
+                                <include>com.pyx4j*</include>
+                                <include>com.propertyvista*</include>
+                            </includes>
+                            <autoTranslates>
+                                <autoTranslate>ru</autoTranslate>
+                                <autoTranslate>fr</autoTranslate>
+                            </autoTranslates>
+                        </configuration>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
             <id>full</id>
             <properties>
                 <warSourceExcludes></warSourceExcludes>
