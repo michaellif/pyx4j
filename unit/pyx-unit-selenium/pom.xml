@@ -81,7 +81,7 @@
     <profiles>
 
         <profile>
-            <id>selenium</id>
+            <id>selenium-example</id>
             <build>
                 <plugins>
                     <plugin>
