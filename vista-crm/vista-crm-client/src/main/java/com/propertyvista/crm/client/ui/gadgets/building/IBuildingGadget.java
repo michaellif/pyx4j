@@ -13,13 +13,36 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.building;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.pyx4j.commons.Key;
 
 public interface IBuildingGadget {
 
+    @Deprecated
     void setBuilding(Key id);
 
+    @Deprecated
     void setBuildings(List<Key> ids);
+
+    void setFiltering(FilterData filterData);
+
+    class FilterData {
+        /**
+         * Process all buildings if list is empty.
+         */
+        public final List<Key> buildings = new ArrayList<Key>();
+
+        /**
+         * Use all past records if null.
+         */
+        public Date fromDate = null;
+
+        /**
+         * Use all current/future records if null.
+         */
+        public Date toDate = null;
+    }
 }

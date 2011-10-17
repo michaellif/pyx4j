@@ -263,6 +263,12 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         start();
     }
 
+    @Override
+    public void setFiltering(FilterData filter) {
+        // TODO Auto-generated method stub
+
+    }
+
     private LogicalDate getToDate() {
         // FIXME must get date the from the dashboard
         return new LogicalDate();

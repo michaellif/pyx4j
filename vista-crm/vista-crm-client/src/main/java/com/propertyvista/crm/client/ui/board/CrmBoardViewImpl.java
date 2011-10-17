@@ -13,12 +13,17 @@
  */
 package com.propertyvista.crm.client.ui.board;
 
-import java.util.ArrayList;
+import java.text.DateFormat;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -29,7 +34,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.Key;
+import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
@@ -98,6 +103,12 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
 
         private final IListerView<Building> buildingLister;
 
+        CheckBox useDates = new CheckBox(i18n.tr("Use date interval"));
+
+        private final CDatePicker fromDate = new CDatePicker();
+
+        private final CDatePicker toDate = new CDatePicker();
+
         public BuildingFilters() {
             buildingLister = new ListerInternalViewImplBase<Building>(new SelectedBuildingLister());
             buildingLister.getLister().setMultiSelect(true);
@@ -144,6 +155,56 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
 
             main.add(new ScrollPanel(buildingLister.asWidget()));
 
+            // ------------------------------------------------------------------------------------
+
+            final HorizontalPanel dates = new HorizontalPanel();
+
+            Widget w;
+            dates.add(w = new HTML(i18n.tr("From")));
+            dates.setCellVerticalAlignment(w, HasVerticalAlignment.ALIGN_MIDDLE);
+            dates.add(fromDate);
+            dates.add(w = new HTML(i18n.tr("To")));
+            dates.setCellVerticalAlignment(w, HasVerticalAlignment.ALIGN_MIDDLE);
+            dates.add(toDate);
+
+            dates.setVisible(false);
+            useDates.setValue(false);
+            useDates.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Boolean> event) {
+                    dates.setVisible(event.getValue());
+                }
+            });
+
+            HorizontalPanel dateUsage = new HorizontalPanel();
+            dateUsage.add(useDates);
+            dateUsage.setCellVerticalAlignment(useDates, HasVerticalAlignment.ALIGN_MIDDLE);
+
+            HorizontalPanel dateInterval = new HorizontalPanel();
+            dateInterval.add(dateUsage);
+            dateInterval.add(dates);
+            main.add(dateInterval);
+
+            // Alignment/styling:
+            final int spacing = 7;
+            final String height = "3em";
+
+            dates.setSpacing(spacing);
+            dateUsage.setSpacing(spacing);
+
+            useDates.getElement().getStyle().setMarginLeft(1, Unit.EM);
+            useDates.getElement().getStyle().setMarginRight(2, Unit.EM);
+            useDates.getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+
+            fromDate.setWidth("8.5em");
+            toDate.setWidth("8.5em");
+
+            dates.setHeight(height);
+            dateUsage.setHeight(height);
+            dateInterval.setHeight(height);
+
+            // ------------------------------------------------------------------------------------
+
             HorizontalPanel buttons = new HorizontalPanel();
 
             Button apply = new Button(i18n.tr("Apply"), new ClickHandler() {
@@ -176,6 +237,8 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             main.setCellHorizontalAlignment(buttons, HasHorizontalAlignment.ALIGN_RIGHT);
             main.setWidth("100%");
 
+            // ------------------------------------------------------------------------------------
+
             LayoutPanel wrap = new LayoutPanel();
             wrap.add(new ScrollPanel(main));
             wrap.setSize("100%", "100%");
@@ -195,16 +258,27 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
                 filterDescription = i18n.tr("Data for all Buildings");
             }
 
+            if (useDates.getValue()) {
+                filterDescription += i18n.tr(", from: ") + DateFormat.getDateInstance().format(fromDate.getValue());
+                filterDescription += i18n.tr(" to: ") + DateFormat.getDateInstance().format(toDate.getValue());
+            }
+
             return filterDescription;
         }
 
         private void applyFiltering() {
+            IBuildingGadget.FilterData filterData = new IBuildingGadget.FilterData();
+
             List<Building> selectedBuildings = buildingLister.getLister().getSelectedItems();
-            List<Key> selectedBuildingKeys = new ArrayList<Key>(selectedBuildings.size());
             if (!selectedBuildings.isEmpty()) {
                 for (Building building : selectedBuildings) {
-                    selectedBuildingKeys.add(building.getPrimaryKey());
+                    filterData.buildings.add(building.getPrimaryKey());
                 }
+            }
+
+            if (useDates.getValue()) {
+                filterData.fromDate = fromDate.getValue();
+                filterData.toDate = toDate.getValue();
             }
 
             // notify gadgets:
@@ -212,7 +286,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             if (it.hasNext()) {
                 IGadget gadget = it.next();
                 if (gadget instanceof IBuildingGadget) {
-                    ((IBuildingGadget) gadget).setBuildings(selectedBuildingKeys);
+                    ((IBuildingGadget) gadget).setFiltering(filterData);
                 }
             }
         }
