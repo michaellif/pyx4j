@@ -109,10 +109,6 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
         return header;
     }
 
-    public boolean isShowHeader() {
-        return showHeader;
-    }
-
     public void setShowHeader(boolean showHeader) {
         this.showHeader = showHeader;
     }
@@ -123,7 +119,7 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
     }
 
     protected void setHeaderVisible(boolean visible) {
-        if (visible && isShowHeader()) {
+        if (visible && showHeader) {
             header.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         } else {
             header.getElement().getStyle().setDisplay(Display.NONE);

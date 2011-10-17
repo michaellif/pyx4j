@@ -73,8 +73,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         hover
     }
 
-    private IFolderDecorator<E> folderDecorator;
-
     private final FlowPanel container;
 
     public boolean orderable = true;
@@ -231,8 +229,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     @Override
     public void setDebugId(IDebugId debugId) {
         super.setDebugId(debugId);
-        if ((debugId != null) && (folderDecorator != null)) {
-            folderDecorator.asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
+        if ((debugId != null) && (getDecorator() != null)) {
+            getDecorator().asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
         }
     }
 
@@ -323,7 +321,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     protected void repopulate(IList<E> value) {
         ArrayList<CEntityFolderItemEditor<E>> previousList = new ArrayList<CEntityFolderItemEditor<E>>(itemsList);
 
-        for (CEntityFolderItemEditor<E> item : itemsList) {
+        for (CEntityFolderItemEditor<E> item : previousList) {
             abandonItem(item);
         }
 
@@ -351,8 +349,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             item.calculateActionsState();
         }
 
-        if (folderDecorator instanceof TableFolderDecorator) {
-            ((TableFolderDecorator<E>) folderDecorator).setHeaderVisible(container.getWidgetCount() > 0);
+        if (getDecorator() instanceof TableFolderDecorator) {
+            ((TableFolderDecorator<E>) getDecorator()).setHeaderVisible(container.getWidgetCount() > 0);
         }
     }
 
