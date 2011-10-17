@@ -22,6 +22,7 @@ import com.propertyvista.domain.financial.Currency;
 
 public interface BuildingFinancial extends IEntity {
 
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> dateAcquired();
 
     @Format("#0.00")
@@ -30,6 +31,7 @@ public interface BuildingFinancial extends IEntity {
     @Format("#0.00")
     IPrimitive<Double> marketPrice();
 
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> lastAppraisalDate();
 
     @Format("#0.00")
