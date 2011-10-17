@@ -193,7 +193,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
 
         @Override
         protected Widget createContent() {
-            return new HTML("Do you really want to cancel?");
+            return new HTML(i18n.tr("Do you really want to cancel?"));
         }
 
         @Override
