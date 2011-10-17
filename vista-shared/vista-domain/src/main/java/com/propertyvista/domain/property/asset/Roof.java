@@ -17,6 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -36,6 +37,7 @@ public interface Roof extends LicensedWarrantedMaintained, Notes, BuildingElemen
     @ToString(index = 1)
     @MemberColumn(name = "roofYear")
     @Editor(type = EditorType.yearpicker)
+    @Format("yyyy")
     IPrimitive<LogicalDate> year();
 
     // TODO create some notes object/domain which defines list of notes with dates and creators (one user can't delete notes of the others)...

@@ -16,6 +16,7 @@ package com.propertyvista.domain.tenant.income;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -42,8 +43,10 @@ public interface IIncomeInfo extends IEntity {
      * Start of income period. For employment that would be employment start date.
      */
     @Caption(name = "Start On")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> starts();
 
     @Caption(name = "Stop On")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> ends();
 }

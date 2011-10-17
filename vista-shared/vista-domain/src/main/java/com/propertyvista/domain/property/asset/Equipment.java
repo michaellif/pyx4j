@@ -17,6 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -48,6 +49,7 @@ public interface Equipment extends LicensedWarrantedMaintained {
     IPrimitive<String> model();
 
     @Editor(type = EditorType.yearpicker)
+    @Format("yyyy")
     IPrimitive<LogicalDate> build();
 
 // TODO create some notes object/domain which defines list of notes with dates and creators (one user can't delete notes of the others)...

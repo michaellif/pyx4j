@@ -19,6 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -87,20 +88,28 @@ public interface Lease extends IEntity {
     IList<TenantInLease> tenants();
 
     // Dates:
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> leaseFrom();
 
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> leaseTo();
 
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> expectedMoveIn();
 
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> expectedMoveOut();
 
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> actualMoveIn();
 
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> actualMoveOut();
 
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> moveOutNotice();
 
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> signDate();
 
     @EmbeddedEntity

@@ -16,6 +16,7 @@ package com.propertyvista.domain.property.asset.unit;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
@@ -72,11 +73,13 @@ public interface AptUnitOccupancy extends IEntity {
     @ReadOnly
     AptUnit unit();
 
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> dateFrom();
 
     /**
      * What if there is no limit to this date, what should it be then?
      */
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> dateTo();
 
     IPrimitive<Status> status();

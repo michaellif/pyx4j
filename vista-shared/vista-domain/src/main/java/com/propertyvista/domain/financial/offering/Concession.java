@@ -16,7 +16,6 @@ package com.propertyvista.domain.financial.offering;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
@@ -108,10 +107,10 @@ public interface Concession extends IEntity {
      */
     @ToString(index = 1)
     @Format("#0.00")
-    @MemberColumn(name = "concessionValue")
+    @MemberColumn(name = "val")
     IPrimitive<Double> value();
 
-    @MemberColumn(name = "concessionondition")
+    @MemberColumn(name = "cond")
     IPrimitive<Condition> condition();
 
 // ----------------------------------------------
@@ -120,11 +119,9 @@ public interface Concession extends IEntity {
 
     IPrimitive<String> approvedBy();
 
-    @Caption(name = "Effective Date")
-    @MemberColumn(name = "effectiveDate")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> effectiveDate();
 
-    @Caption(name = "Expiration Date")
-    @MemberColumn(name = "expirationDate")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> expirationDate();
 }

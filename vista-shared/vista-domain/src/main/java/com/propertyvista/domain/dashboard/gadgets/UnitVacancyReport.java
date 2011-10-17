@@ -111,14 +111,17 @@ public interface UnitVacancyReport extends IEntity {
 
     /** {@link AptUnit#availableForRent()} - 1 */
     @Transient
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> moveOutDay();
 
     /** Applicable only for rented */
     @Transient
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> moveInDay();
 
     /** Applicable only for rented; maybe different than move out date */
     @Transient
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> rentedFromDate();
 
     /** For Vacant units numberOfDays between today and availableForRent date */
@@ -133,10 +136,12 @@ public interface UnitVacancyReport extends IEntity {
 
     /** this is hack to use the lister service interface */
     @Transient
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> fromDate();
 
     /** this is hack to use the lister service interface */
     @Transient
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> toDate();
 
 }

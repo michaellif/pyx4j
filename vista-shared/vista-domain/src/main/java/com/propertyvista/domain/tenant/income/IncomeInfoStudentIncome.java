@@ -16,6 +16,7 @@ package com.propertyvista.domain.tenant.income;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -57,10 +58,12 @@ public interface IncomeInfoStudentIncome extends IEntity, IAddressFull, IIncomeI
 
     @Override
     @Caption(name = "Program Start")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> starts();
 
     @Override
     @Caption(name = "Program (Planned) to be completed on")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> ends();
 
     @Caption(name = "Program")

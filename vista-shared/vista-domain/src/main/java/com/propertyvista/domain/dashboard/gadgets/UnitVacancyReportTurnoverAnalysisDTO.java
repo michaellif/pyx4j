@@ -14,6 +14,7 @@
 package com.propertyvista.domain.dashboard.gadgets;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -26,8 +27,11 @@ import com.pyx4j.entity.shared.IPrimitive;
  */
 @Transient
 public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
+
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> fromDate();
 
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> toDate();
 
     /**

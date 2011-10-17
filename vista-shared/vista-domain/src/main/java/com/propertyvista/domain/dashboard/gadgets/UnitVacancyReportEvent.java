@@ -14,10 +14,13 @@
 package com.propertyvista.domain.dashboard.gadgets;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface UnitVacancyReportEvent extends IEntity {
+
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> eventDate();
 
     IPrimitive<String> propertyCode();
@@ -28,10 +31,13 @@ public interface UnitVacancyReportEvent extends IEntity {
 
     IPrimitive<String> rentReady();
 
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> moveOutDate();
 
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> moveInDate();
 
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> rentFromDate();
 
 }
