@@ -36,7 +36,7 @@ public class DefaultEntityFolderTheme extends Theme {
         style.addProperty("width", "100%");
         addStyle(style);
 
-        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderBoxItem).toString(), CEntityFolder.StyleName.EntityFolder);
+        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderBoxItem).build().toString(), CEntityFolder.StyleName.EntityFolder);
         style.addProperty("width", "100%");
         addStyle(style);
 
