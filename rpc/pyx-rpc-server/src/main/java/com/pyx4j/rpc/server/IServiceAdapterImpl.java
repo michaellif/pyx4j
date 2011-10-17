@@ -35,6 +35,8 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.IServiceAdapter;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
@@ -50,6 +52,8 @@ import com.pyx4j.server.contexts.Visit;
 public class IServiceAdapterImpl implements IServiceAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(IServiceAdapterImpl.class);
+
+    protected static I18n i18n = I18n.get(IServiceAdapterImpl.class);
 
     @Override
     public Serializable execute(IServiceRequest request) {
@@ -77,10 +81,10 @@ public class IServiceAdapterImpl implements IServiceAdapter {
             throw new RuntimeException("Service " + serviceInterfaceClassName + " not found");
         } catch (Throwable t) {
             log.error("Service call error", t);
-            throw new UnRecoverableRuntimeException("Fatal system error");
+            throw new UnRecoverableRuntimeException(i18n.tr("Fatal system error"));
         }
         if (!IService.class.isAssignableFrom(serviceInterfaceClass)) {
-            throw new UnRecoverableRuntimeException("Fatal system error");
+            throw new UnRecoverableRuntimeException(i18n.tr("Fatal system error"));
         }
 
         IService serviceInstance;
@@ -178,28 +182,28 @@ public class IServiceAdapterImpl implements IServiceAdapter {
                 if (callback.caught instanceof RuntimeException) {
                     throw (RuntimeException) callback.caught;
                 }
-                throw new UnRecoverableRuntimeException("Fatal system error");
+                throw new UnRecoverableRuntimeException(i18n.tr("Fatal system error"));
             }
             if (!callback.onSuccessCalled) {
                 log.error("Error forgot to call \"onSuccess\" from method {} in class {}", method.getName(), serviceInstance.getClass().getName());
-                throw new UnRecoverableRuntimeException("Fatal system error");
+                throw new UnRecoverableRuntimeException(i18n.tr("Fatal system error"));
             }
             return callback.result;
         } catch (IllegalArgumentException e) {
             log.error("Error", e);
-            throw new UnRecoverableRuntimeException("Fatal system error");
+            throw new UnRecoverableRuntimeException(i18n.tr("Fatal system error"));
         } catch (IllegalAccessException e) {
             log.error("Error", e);
-            throw new UnRecoverableRuntimeException("Fatal system error");
+            throw new UnRecoverableRuntimeException(i18n.tr("Fatal system error"));
         } catch (InvocationTargetException e) {
             if (e.getCause() instanceof RuntimeException) {
                 throw (RuntimeException) e.getCause();
             } else {
                 log.error("Error", e.getCause());
                 if (ApplicationMode.isDevelopment()) {
-                    throw new UnRecoverableRuntimeException(ApplicationMode.DEV + e.getCause().getMessage());
+                    throw new DevInfoUnRecoverableRuntimeException(e.getCause());
                 } else {
-                    throw new UnRecoverableRuntimeException("Fatal system error");
+                    throw new UnRecoverableRuntimeException(i18n.tr("Fatal system error"));
                 }
             }
         }

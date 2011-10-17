@@ -26,7 +26,7 @@ public class UnRecoverableRuntimeException extends RuntimeExceptionSerializable 
 
     private static final long serialVersionUID = 1L;
 
-    public UnRecoverableRuntimeException() {
+    protected UnRecoverableRuntimeException() {
         super();
     }
 

@@ -32,6 +32,8 @@ import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.IServiceAdapter;
 import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
 import com.pyx4j.rpc.shared.IsWarningException;
@@ -52,6 +54,8 @@ public class RemoteServiceImpl implements RemoteService {
 
     private static final Logger log = LoggerFactory.getLogger(RemoteServiceImpl.class);
 
+    protected static I18n i18n = I18n.get(RemoteServiceImpl.class);
+
     private final IServiceFactory serviceFactory;
 
     public RemoteServiceImpl(String name, IServiceFactory serviceFactory) {
@@ -69,11 +73,19 @@ public class RemoteServiceImpl implements RemoteService {
                 try {
                     clazz = serviceFactory.getServiceClass(serviceInterfaceClassName);
                 } catch (ClassNotFoundException e) {
-                    throw new RuntimeException("Service " + serviceInterfaceClassName + " not found");
+                    if (ApplicationMode.isDevelopment()) {
+                        throw new DevInfoUnRecoverableRuntimeException("Service " + serviceInterfaceClassName + " not found");
+                    } else {
+                        throw new UnRecoverableRuntimeException(i18n.tr("Fatal system error"));
+                    }
                 } catch (Throwable t) {
                     logOnce = false;
                     log.error("Service call error", t);
-                    throw new UnRecoverableRuntimeException("Fatal system error");
+                    if (ApplicationMode.isDevelopment()) {
+                        throw new DevInfoUnRecoverableRuntimeException(t);
+                    } else {
+                        throw new UnRecoverableRuntimeException(i18n.tr("Fatal system error"));
+                    }
                 }
                 ServiceRegistry.register(serviceInterfaceClassName, clazz);
             }
@@ -144,18 +156,16 @@ public class RemoteServiceImpl implements RemoteService {
                 }
                 if (e instanceof RuntimeExceptionSerializable) {
                     throw (RuntimeExceptionSerializable) e;
-                } else if (e.getMessage() == null) {
-                    throw new UnRecoverableRuntimeException("System error, contact support");
                 } else {
                     if (e.getClass().getName().endsWith("DeadlineExceededException")) {
                         // Allow client to recover from GAE startup timeouts
                         throw new RuntimeExceptionSerializable("Request has exceeded the 30 second request deadline. Please try again shortly.");
                     } else {
                         if (ApplicationMode.isDevelopment()) {
-                            throw new UnRecoverableRuntimeException(e.getMessage());
+                            throw new DevInfoUnRecoverableRuntimeException(e);
                         } else {
                             // Don't show the actual error to customers.
-                            throw new UnRecoverableRuntimeException("System error, contact support");
+                            throw new UnRecoverableRuntimeException(i18n.tr("System error, contact support"));
                         }
                     }
                 }
