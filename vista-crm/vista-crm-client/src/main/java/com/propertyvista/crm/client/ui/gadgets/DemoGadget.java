@@ -38,7 +38,7 @@ public class DemoGadget extends GadgetBase {
     @Override
     protected void selfInit(GadgetMetadata gmd) {
         gmd.type().setValue(GadgetType.Demo);
-        gmd.name().setValue("Demo gadget");
+        gmd.name().setValue(GadgetType.Demo.toString());
     }
 
     // info:

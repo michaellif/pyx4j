@@ -118,7 +118,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             main.setCellVerticalAlignment(description, HasVerticalAlignment.ALIGN_MIDDLE);
             main.setCellHorizontalAlignment(description, HasHorizontalAlignment.ALIGN_CENTER);
 
-            Button setup = new Button("Setup", new ClickHandler() {
+            Button setup = new Button(i18n.tr("Setup"), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     setWidgetSize(filtersPanel, 35);
@@ -146,7 +146,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
 
             HorizontalPanel buttons = new HorizontalPanel();
 
-            Button apply = new Button("Apply", new ClickHandler() {
+            Button apply = new Button(i18n.tr("Apply"), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     setWidgetSize(filtersPanel, VistaCrmTheme.defaultActionBarHeight);

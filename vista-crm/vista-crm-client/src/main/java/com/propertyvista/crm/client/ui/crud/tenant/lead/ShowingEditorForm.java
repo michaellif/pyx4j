@@ -97,7 +97,7 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
         private AptUnit selectedUnit;
 
         public SelectUnitBox() {
-            super("Unit Selection");
+            super(i18n.tr("Unit Selection"));
         }
 
         @Override

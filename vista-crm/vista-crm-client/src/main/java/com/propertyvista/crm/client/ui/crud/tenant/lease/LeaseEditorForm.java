@@ -752,7 +752,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         private Tenant selectedTenant;
 
         public SelectTenantBox() {
-            super("Select Tenant");
+            super(i18n.tr("Select Tenant"));
         }
 
         @Override
@@ -794,7 +794,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         private ServiceItem selectedItem;
 
         public SelectServiceItemBox() {
-            super("Service Item Selection");
+            super(i18n.tr("Service Item Selection"));
         }
 
         @Override
@@ -857,7 +857,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         private List<ServiceItem> selectedItems;
 
         public SelectFeatureBox() {
-            super("Select Features");
+            super(i18n.tr("Select Features"));
         }
 
         @Override
@@ -934,7 +934,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         private List<Concession> selectedItems;
 
         public SelectConcessionBox() {
-            super("Select Concessions");
+            super(i18n.tr("Select Concessions"));
         }
 
         @Override
