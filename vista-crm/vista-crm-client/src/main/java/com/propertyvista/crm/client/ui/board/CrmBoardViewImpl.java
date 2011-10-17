@@ -296,8 +296,8 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
                 if (from.compareTo(to) == 0) {
                     description += i18n.tr(" of ") + from;
                 } else {
-                    description += i18n.tr(" from: ") + from;
-                    description += i18n.tr(" to: ") + to;
+                    description += i18n.tr(" from ") + from;
+                    description += i18n.tr(" to ") + to;
                 }
             }
 
