@@ -45,6 +45,9 @@ public class DatePickerTestBase extends WizardSeleniumTestBase {
 
     private final IDebugId forwardYear = DatePickerIDs.MonthSelectorButton_ForwardYear;
 
+    public static String[] monthName = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
+            "December" };
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -72,7 +75,7 @@ public class DatePickerTestBase extends WizardSeleniumTestBase {
     }
 
     protected String getMonth(Calendar calendar) {
-        return DatePickerIDs.monthName[calendar.get(Calendar.MONTH)];
+        return monthName[calendar.get(Calendar.MONTH)];
     }
 
     protected void typeInDate(IDebugId id, Calendar calendar) {
@@ -103,7 +106,7 @@ public class DatePickerTestBase extends WizardSeleniumTestBase {
 
         button = backMonth;
         currentMonth = selenium.getText(DatePickerIDs.MonthSelectorLabel_Month);
-        while (!currentMonth.equals(DatePickerIDs.monthName[month])) {
+        while (!currentMonth.equals(monthName[month])) {
             selenium.click(button);
             currentMonth = selenium.getText(DatePickerIDs.MonthSelectorLabel_Month);
         }
