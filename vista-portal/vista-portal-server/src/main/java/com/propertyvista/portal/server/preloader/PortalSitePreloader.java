@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.preloader;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import com.propertvista.generator.util.RandomUtil;
 
@@ -23,6 +24,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.i18n.server.ServerI18nFactory;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.News;
@@ -59,10 +62,14 @@ public class PortalSitePreloader extends AbstractDataPreloader {
             frLocale.lang().setValue(CompiledLocale.fr);
             Persistence.service().persist(frLocale);
 
+            I18n frI18n = ServerI18nFactory.get(PortalSitePreloader.class, Locale.FRENCH);
+
+            I18n riI18n = null;
             if (ApplicationMode.isDevelopment()) {
                 ruLocale = EntityFactory.create(AvailableLocale.class);
                 ruLocale.lang().setValue(CompiledLocale.ru);
-                //Persistence.service().persist(ruLocale);
+                Persistence.service().persist(ruLocale);
+                riI18n = ServerI18nFactory.get(PortalSitePreloader.class, new Locale("ru", "RU"));
             }
 
             SiteDescriptor site = EntityFactory.create(SiteDescriptor.class);
@@ -141,15 +148,54 @@ public class PortalSitePreloader extends AbstractDataPreloader {
                             "Just6 by one star and get another two for free! Absolutely free! Just do not forget to pay property tax.",
                             RandomUtil.randomLogicalDate()));
 
-            site.childPages().add(createDynamicPage("Find an Apartment", "Trouver un appartement", PageDescriptor.Type.findApartment));
-            site.childPages().add(createDynamicPage("Residents", "Les résidents", PageDescriptor.Type.residents));
             {
-                PageDescriptor page = createStaticPage("About us", "site-about.html", "A propos de nous", "site-about-fr.html");
-                page.childPages().add(createStaticPage("Overview", "site-overview.html", "Vue d'ensemble", "site-overview-fr.html"));
-                page.childPages().add(createStaticPage("Team", "site-team.html", "Team", "site-team.html"));
+                final String caption = "Find an Apartment";
+                PageDescriptor page = createDynamicPage(caption, frI18n.tr(caption), PageDescriptor.Type.findApartment);
+
+                if (ruLocale != null) {
+                    addCaption(page, riI18n.tr(caption), ruLocale);
+                }
                 site.childPages().add(page);
             }
-            site.childPages().add(createStaticPage("Customer Care", "site-customer-care.html", "Assistance Clientèle", "site-customer-care.html"));
+
+            {
+                final String caption = "Residents";
+                PageDescriptor page = createDynamicPage(caption, frI18n.tr(caption), PageDescriptor.Type.residents);
+
+                if (ruLocale != null) {
+                    addCaption(page, riI18n.tr(caption), ruLocale);
+                }
+                site.childPages().add(page);
+            }
+
+            {
+                final String caption = "About us";
+                PageDescriptor page = createStaticPage(caption, "site-about.html", frI18n.tr(caption), "site-about_fr.html");
+                page.childPages().add(createStaticPage("Overview", "site-overview.html", "Vue d'ensemble", "site-overview_fr.html"));
+                page.childPages().add(createStaticPage("Team", "site-team.html", "Team", "site-team.html"));
+
+                if (ruLocale != null) {
+                    addCaption(page, riI18n.tr(caption), ruLocale);
+
+                    PageContent pageContent = EntityFactory.create(PageContent.class);
+                    pageContent.locale().set(ruLocale);
+                    pageContent.content().setValue(IOUtils.getUTF8TextResource("site-about_ru.html", this.getClass()));
+                    page.content().add(pageContent);
+                }
+
+                site.childPages().add(page);
+            }
+
+            {
+                final String caption = "Customer Care";
+                PageDescriptor page = createStaticPage(caption, "site-customer-care.html", frI18n.tr(caption), "site-customer-care.html");
+                if (ruLocale != null) {
+                    addCaption(page, riI18n.tr(caption), ruLocale);
+                    addContent(page, "site-customer-care_ru.html", ruLocale);
+                }
+                site.childPages().add(page);
+            }
+
             site.childPages().add(createStaticPage("Terms Of Use", "site-customer-care.html", "Mentions légales", "site-customer-care.html"));
             site.childPages().add(createStaticPage("Privacy", "site-customer-care.html", "Politique de confidentialité", "site-customer-care.html"));
 
@@ -189,26 +235,22 @@ public class PortalSitePreloader extends AbstractDataPreloader {
         return createPage(enCaption, frCaption, type);
     }
 
-    private PageDescriptor createStaticPage(String enCaption, String enResource, String frCaption, String frResource) throws ClassCastException, IOException {
+    private PageDescriptor createStaticPage(String enCaption, String enResource, String frCaption, String frResource) throws IOException {
 
         PageDescriptor page = createPage(enCaption, frCaption, PageDescriptor.Type.staticContent);
         Persistence.service().persist(page);
 
-        if (enResource != null) {
-            PageContent pageContent = EntityFactory.create(PageContent.class);
-            pageContent.locale().set(enLocale);
-            pageContent.content().setValue(IOUtils.getUTF8TextResource(enResource, this.getClass()));
-            page.content().add(pageContent);
-        }
-
-        if (frResource != null) {
-            PageContent pageContent = EntityFactory.create(PageContent.class);
-            pageContent.locale().set(frLocale);
-            pageContent.content().setValue(IOUtils.getUTF8TextResource(frResource, this.getClass()));
-            page.content().add(pageContent);
-        }
+        addContent(page, enResource, enLocale);
+        addContent(page, frResource, frLocale);
 
         return page;
+    }
+
+    private void addContent(PageDescriptor page, String resource, AvailableLocale locale) throws IOException {
+        PageContent pageContent = EntityFactory.create(PageContent.class);
+        pageContent.locale().set(locale);
+        pageContent.content().setValue(IOUtils.getUTF8TextResource(resource, this.getClass()));
+        page.content().add(pageContent);
     }
 
     private PageDescriptor createPage(String enCaption, String frCaption, PageDescriptor.Type type) throws ClassCastException, IOException {
@@ -217,17 +259,17 @@ public class PortalSitePreloader extends AbstractDataPreloader {
         page.type().setValue(type);
         page.name().setValue(enCaption);
 
-        PageCaption pageCaption = EntityFactory.create(PageCaption.class);
-        pageCaption.caption().setValue(enCaption);
-        pageCaption.locale().set(enLocale);
-        page.caption().add(pageCaption);
-
-        pageCaption = EntityFactory.create(PageCaption.class);
-        pageCaption.caption().setValue(frCaption);
-        pageCaption.locale().set(frLocale);
-        page.caption().add(pageCaption);
+        addCaption(page, enCaption, enLocale);
+        addCaption(page, frCaption, frLocale);
 
         return page;
+    }
+
+    private void addCaption(PageDescriptor page, String caption, AvailableLocale locale) {
+        PageCaption pageCaption = EntityFactory.create(PageCaption.class);
+        pageCaption.caption().setValue(caption);
+        pageCaption.locale().set(locale);
+        page.caption().add(pageCaption);
     }
 
 }

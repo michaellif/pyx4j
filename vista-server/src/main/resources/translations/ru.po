@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-17 18:42-0400\n"
+"POT-Creation-Date: 2011-10-18 01:15-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,6 +86,11 @@ msgstr "30 мин"
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 msgid "6 months"
 msgstr "6 месяцев"
+
+#: com/propertyvista/portal/server/preloader/PortalSitePreloader.java:173
+#: com/propertyvista/portal/server/preloader/PortalSitePreloader.java:178
+msgid "About us"
+msgstr "О компании"
 
 #: com/propertyvista/domain/dashboard/AbstractGadgetSettings.java:0
 msgid "Abstract Gadget Settings"
@@ -1242,6 +1247,11 @@ msgstr "Текущее значение"
 msgid "Current password"
 msgstr "Текущий пароль"
 
+#: com/propertyvista/portal/server/preloader/PortalSitePreloader.java:191
+#: com/propertyvista/portal/server/preloader/PortalSitePreloader.java:193
+msgid "Customer Care"
+msgstr "Обслуживание клиентов"
+
 #: com/propertyvista/admin/rpc/PmcDTO.java:2
 #: com/propertyvista/portal/rpc/corp/PmcAccountCreationRequest.java:2
 msgid "DNS name"
@@ -1833,6 +1843,11 @@ msgstr "Финансовый"
 
 #: com/propertyvista/domain/site/PageDescriptor.java:1
 msgid "Find Apartment"
+msgstr "Найти квартиры"
+
+#: com/propertyvista/portal/server/preloader/PortalSitePreloader.java:153
+#: com/propertyvista/portal/server/preloader/PortalSitePreloader.java:156
+msgid "Find an Apartment"
 msgstr "Найти квартиры"
 
 #: com/propertyvista/domain/property/PropertyPhone.java:1
@@ -4032,6 +4047,8 @@ msgstr "Малина"
 
 #: com/propertyvista/domain/site/PageDescriptor.java:1
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
+#: com/propertyvista/portal/server/preloader/PortalSitePreloader.java:163
+#: com/propertyvista/portal/server/preloader/PortalSitePreloader.java:166
 msgid "Residents"
 msgstr "Жители"
 
@@ -5332,8 +5349,8 @@ msgstr ""
 
 #: com/propertyvista/domain/financial/offering/ChargeItem.java:0
 #, java-format
-msgid "{0}, Price: {1}"
-msgstr "{0}, цена: {1}"
+msgid "{0}, Base Price: {1}, Adjusted Price: {2}"
+msgstr ""
 
 #: com/propertyvista/domain/contact/Phone.java:0
 #: com/propertyvista/domain/property/PropertyPhone.java:0
