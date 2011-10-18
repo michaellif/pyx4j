@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.board;
 
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -40,6 +39,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18n;
@@ -172,8 +172,8 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         public Widget getSetupVeiw() {
             // reset UI state:
             buildingLister.restoreState();
-            fromDate.setValue(new Date());
-            toDate.setValue(new Date());
+            fromDate.setValue(TimeUtils.today());
+            toDate.setValue(TimeUtils.today());
             useDates.setValue(false, true);
 
             return setupView;
@@ -375,8 +375,29 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             }
 
             if (useDates.getValue()) {
-                filterData.fromDate = fromDate.getValue();
-                filterData.toDate = toDate.getValue();
+                DateIntervals interval = DateIntervals.valueOf(dateIntervals.getValue(dateIntervals.getSelectedIndex()));
+                switch (interval) {
+                case custom:
+                    filterData.fromDate = fromDate.getValue();
+                    filterData.toDate = toDate.getValue();
+                    break;
+                case last31days:
+                    filterData.toDate = TimeUtils.today();
+                    filterData.fromDate = TimeUtils.today();
+                    break;
+                case currentMonth:
+                    filterData.fromDate = fromDate.getValue();
+                    filterData.toDate = TimeUtils.today();
+                    break;
+                case currentWeek:
+                    filterData.fromDate = fromDate.getValue();
+                    filterData.toDate = TimeUtils.today();
+                    break;
+                case today:
+                    filterData.fromDate = TimeUtils.today();
+                    filterData.toDate = TimeUtils.today();
+                    break;
+                }
             }
 
             // notify gadgets:
