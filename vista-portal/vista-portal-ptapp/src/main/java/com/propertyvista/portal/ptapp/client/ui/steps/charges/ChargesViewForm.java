@@ -43,6 +43,8 @@ public class ChargesViewForm extends CEntityEditor<Charges> {
 
     private boolean summaryViewMode = false;
 
+    private final String width = "700px";
+
     @SuppressWarnings("rawtypes")
     public ChargesViewForm() {
         super(Charges.class, new VistaEditorsComponentFactory());
@@ -72,7 +74,7 @@ public class ChargesViewForm extends CEntityEditor<Charges> {
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
-        main.add(new VistaHeaderBar(proto().monthlyCharges(), "700px"));
+        main.add(new VistaHeaderBar(proto().monthlyCharges(), width));
         main.add(inject(proto().monthlyCharges().charges()));
         if (!summaryViewMode) {
             main.add(createHeader2(proto().monthlyCharges().upgradeCharges()));
@@ -81,22 +83,22 @@ public class ChargesViewForm extends CEntityEditor<Charges> {
 
         main.add(createTotal(proto().monthlyCharges().total()));
 
-        main.add(new VistaHeaderBar(proto().proratedCharges(), "700px"));
+        main.add(new VistaHeaderBar(proto().proratedCharges(), width));
         main.add(inject(proto().proratedCharges().charges()));
         main.add(createTotal(proto().proratedCharges().total()));
 
-        main.add(new VistaHeaderBar(proto().applicationCharges(), "700px"));
+        main.add(new VistaHeaderBar(proto().applicationCharges(), width));
         main.add(inject(proto().applicationCharges().charges()));
         main.add(createTotal(proto().applicationCharges().total()));
 
         // could be hided from resulting form:
-        splitCharges.add(new VistaHeaderBar(proto().paymentSplitCharges(), "700px"));
+        splitCharges.add(new VistaHeaderBar(proto().paymentSplitCharges(), width));
 
         splitCharges.add(inject(proto().paymentSplitCharges().charges(), new ChargeSplitListFolder(summaryViewMode)));
         splitCharges.add(createTotal(proto().paymentSplitCharges().total()));
         main.add(splitCharges);
 
-        main.setWidth("700px");
+        main.setWidth(width);
 
         if (isSummaryViewMode()) {
             return main;
