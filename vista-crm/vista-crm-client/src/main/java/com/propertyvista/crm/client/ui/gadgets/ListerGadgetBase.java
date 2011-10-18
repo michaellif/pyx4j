@@ -21,13 +21,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -307,7 +304,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     // Setup UI implementation:
     class SetupLister implements ISetup {
 
-        protected final HorizontalPanel setupPanel = new HorizontalPanel();
+        protected final FlexTable setupPanel = new FlexTable();
 
         protected final TextBox itemsPerPage = new TextBox();
 
@@ -316,23 +313,13 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         protected SetupLister() {
             super();
 
-            VerticalPanel addition = new VerticalPanel();
-
-            addition.add(new HTML("&nbsp"));
-            HorizontalPanel items = new HorizontalPanel();
-            items.add(new Label(i18n.tr("Items per page:")));
+            setupPanel.setWidget(0, 0, new Label(i18n.tr("Items per page:")));
 
             itemsPerPage.setText(String.valueOf(getListerBase().getPageSize()));
             itemsPerPage.setWidth("100%");
-            items.add(itemsPerPage);
-            items.setCellHorizontalAlignment(itemsPerPage, HasHorizontalAlignment.ALIGN_RIGHT);
+            setupPanel.setWidget(0, 1, itemsPerPage);
 
-            items.setSpacing(4);
-            items.setWidth("100%");
-            addition.add(items);
-
-            HorizontalPanel refresh = new HorizontalPanel();
-            refresh.add(new Label(i18n.tr("Refresh interval:")));
+            setupPanel.setWidget(1, 0, new Label(i18n.tr("Refresh interval:")));
 
             for (RefreshInterval i : RefreshInterval.values()) {
                 intervalList.addItem(i.toString(), i.name());
@@ -341,17 +328,9 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
                 }
             }
             intervalList.setWidth("100%");
+            setupPanel.setWidget(1, 1, intervalList);
 
-            refresh.add(intervalList);
-            refresh.setCellHorizontalAlignment(intervalList, HasHorizontalAlignment.ALIGN_RIGHT);
-
-            refresh.setSpacing(4);
-            refresh.setWidth("100%");
-            addition.add(refresh);
-            addition.getElement().getStyle().setPaddingLeft(10, Unit.PX);
-
-            setupPanel.add(addition);
-            setupPanel.getElement().getStyle().setPadding(3, Unit.PX);
+            setupPanel.getElement().getStyle().setPaddingLeft(2, Unit.EM);
         }
 
         @Override

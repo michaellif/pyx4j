@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -43,6 +43,7 @@ import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport.VacancyStatu
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportEvent;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 
 public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
 
@@ -174,11 +175,28 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         callback.onSuccess(summary);
     }
 
-    // TODO update the interface
     // TODO maybe enum for specyfinying an interval? currently suppose 0 - months, 1 - years.
-    // TODO interval 
-    public void turnoverAnalysis(AsyncCallback<List<UnitVacancyReportTurnoverAnalysisDTO>> callback, LogicalDate fromDate, LogicalDate toDate, int intervalSize) {
-        List<UnitVacancyReportTurnoverAnalysisDTO> result = new ArrayList<UnitVacancyReportTurnoverAnalysisDTO>();
+    // TODO interval
+
+    @Override
+    public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, LogicalDate fromDate, LogicalDate toDate,
+            AnalysisResolution resolution) {
+        // FIXME potential for server denial of service with too big range and too small resolution, have to filter really evil data        
+        if (callback == null | fromDate == null || toDate == null | resolution == null) {
+            callback.onFailure(new Exception("at least one of the required parameters is null."));
+            return;
+        }
+        if (toDate.getTime() < fromDate.getTime()) {
+            callback.onFailure(new Exception("end date is greater than from date."));
+            return;
+        }
+
+        if ((toDate.getTime() - fromDate.getTime()) > MAX_DATE_RANGE) {
+            callback.onFailure(new Exception("the date range that was specified is too big"));
+            return;
+        }
+
+        Vector<UnitVacancyReportTurnoverAnalysisDTO> result = new Vector<UnitVacancyReportTurnoverAnalysisDTO>();
 
         EntityQueryCriteria<UnitVacancyReportEvent> criteria = new EntityQueryCriteria<UnitVacancyReportEvent>(UnitVacancyReportEvent.class);
 
@@ -190,13 +208,13 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         List<UnitVacancyReportEvent> events = Persistence.service().query(criteria);
 
         long intervalStart = fromDate.getTime();
-        long intervalEnd = intervalEnd(intervalStart, intervalSize);
+        long intervalEnd = intervalEnd(intervalStart, resolution);
         int turnovers = 0;
-        int overall = 0; // I don't use events.size() because it can be a linked list :(
+        int total = 0; // I don't use events.size() because it can be a linked list :(
 
         for (UnitVacancyReportEvent event : events) {
             long eventTime = event.eventDate().getValue().getTime();
-            if (eventTime >= intervalEnd) {
+            while (eventTime >= intervalEnd) {
                 UnitVacancyReportTurnoverAnalysisDTO analysis = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
                 analysis.fromDate().setValue(new LogicalDate(intervalStart));
                 analysis.toDate().setValue(new LogicalDate(intervalEnd));
@@ -204,36 +222,61 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
                 result.add(analysis);
 
                 intervalStart = intervalEnd;
-                intervalEnd = intervalEnd(intervalStart, intervalSize);
+                intervalEnd = intervalEnd(intervalStart, resolution);
                 turnovers = 0;
             }
             ++turnovers;
-            ++overall;
+            ++total;
         }
-        if (overall > 0) {
+
+        final long endReportTime = toDate.getTime();
+        intervalEnd = endReportTime > intervalEnd ? intervalEnd : endReportTime;
+
+        UnitVacancyReportTurnoverAnalysisDTO lastAnalysis = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
+        lastAnalysis.fromDate().setValue(new LogicalDate(intervalStart));
+        lastAnalysis.toDate().setValue(new LogicalDate(intervalEnd));
+        lastAnalysis.unitsTurnedOverAbs().setValue(turnovers);
+        result.add(lastAnalysis);
+
+        intervalStart = intervalEnd;
+        intervalEnd = intervalEnd(intervalStart, resolution);
+
+        // now add some data if we don't have more events but still haven't reached till the end of the rest of time time 
+        while (endReportTime > intervalEnd) {
             UnitVacancyReportTurnoverAnalysisDTO analysis = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
             analysis.fromDate().setValue(new LogicalDate(intervalStart));
             analysis.toDate().setValue(new LogicalDate(intervalEnd));
-            analysis.unitsTurnedOverAbs().setValue(turnovers);
+            analysis.unitsTurnedOverAbs().setValue(0);
             result.add(analysis);
-        }
-        for (UnitVacancyReportTurnoverAnalysisDTO analysis : result) {
-            analysis.unitsTurnedOverPct().setValue((analysis.unitsTurnedOverPct().getValue() / overall));
+
+            intervalStart = intervalEnd;
+            intervalEnd = intervalEnd(intervalStart, resolution);
         }
 
+        for (UnitVacancyReportTurnoverAnalysisDTO analysis : result) {
+            if (total > 0) {
+                analysis.unitsTurnedOverPct().setValue(((double) analysis.unitsTurnedOverAbs().getValue()) / total * 100);
+            } else {
+                analysis.unitsTurnedOverPct().setValue(0d);
+            }
+        }
+
+        callback.onSuccess(result);
     }
 
-    private static long intervalEnd(long startTime, int intervalSize) {
+    private static long intervalEnd(long startTime, AnalysisResolution resolution) {
         // TODO think if there could be issues with locale and time zone
         Calendar c = Calendar.getInstance();
+        int param;
         c.setTimeInMillis(startTime);
-        if (intervalSize == 0) {
-            // add month
-            c.set(Calendar.MONTH, (c.get(Calendar.MONTH) + 1) % 12);
+        if (resolution == AnalysisResolution.Month) {
+            param = Calendar.MONTH;
+        } else if (resolution == AnalysisResolution.Year) {
+            param = Calendar.YEAR;
         } else {
-            // add year
-            c.set(Calendar.YEAR, c.get(Calendar.YEAR));
+            throw new RuntimeException("the requested resolution handling has not yet been defined (" + resolution.toString() + ")");
         }
+        c.add(param, 1);
         return c.getTimeInMillis();
     }
 

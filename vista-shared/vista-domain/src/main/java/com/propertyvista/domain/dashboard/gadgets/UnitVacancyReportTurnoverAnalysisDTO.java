@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 /**
  * Contains analysis of for a single interval for all events between {@link #fromDate()} until (exclusively) {@link #toDate()}.
@@ -27,6 +28,25 @@ import com.pyx4j.entity.shared.IPrimitive;
  */
 @Transient
 public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
+    public enum AnalysisResolution {
+        Month, Year;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+
+        public static AnalysisResolution representationToValue(String representation) {
+            AnalysisResolution[] values = AnalysisResolution.values();
+            for (AnalysisResolution val : values) {
+                if (val.toString().equals(representation)) {
+                    return val;
+                }
+            }
+            return null;
+        }
+
+    }
 
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> fromDate();
