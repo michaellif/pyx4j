@@ -37,6 +37,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -537,13 +538,19 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                 @Override
                                 public IsWidget createContent() {
                                     VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
-                                    panel.add(new CrmSectionSeparator(VistaEntityFolder.i18n.tr("Vehicle data:")));
-                                    panel.add(inject(proto().plateNumber()), 8);
-                                    panel.add(inject(proto().year()), 5);
-                                    panel.add(inject(proto().make()), 8);
-                                    panel.add(inject(proto().model()), 8);
-                                    panel.add(inject(proto().country()), 9);
-                                    panel.add(inject(proto().province()), 16);
+                                    VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 30);
+
+                                    panel.add(new HTML(HtmlUtils.h5(VistaEntityFolder.i18n.tr("Vehicle data:"))));
+                                    panel.add(split);
+
+                                    split.getLeftPanel().add(inject(proto().year()), 5);
+                                    split.getLeftPanel().add(inject(proto().make()), 10);
+                                    split.getLeftPanel().add(inject(proto().model()), 10);
+
+                                    split.getRightPanel().add(inject(proto().plateNumber()), 10);
+                                    split.getRightPanel().add(inject(proto().country()), 10);
+                                    split.getRightPanel().add(inject(proto().province()), 17);
+
                                     return panel;
                                 }
                             };
@@ -557,13 +564,19 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                 @Override
                                 public IsWidget createContent() {
                                     VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
-                                    panel.add(new CrmSectionSeparator(VistaEntityFolder.i18n.tr("Pet data:")));
-                                    panel.add(inject(proto().name()), 14);
-                                    panel.add(inject(proto().color()), 6);
-                                    panel.add(inject(proto().breed()), 13);
-                                    panel.add(inject(proto().weight()), 4);
-                                    panel.add(inject(proto().weightUnit()), 4);
-                                    panel.add(inject(proto().birthDate()), 8.2);
+                                    VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 30);
+
+                                    panel.add(new HTML(HtmlUtils.h5(VistaEntityFolder.i18n.tr("Pet data:"))));
+                                    panel.add(split);
+
+                                    split.getLeftPanel().add(inject(proto().name()), 15);
+                                    split.getLeftPanel().add(inject(proto().color()), 10);
+                                    split.getLeftPanel().add(inject(proto().breed()), 15);
+
+                                    split.getRightPanel().add(inject(proto().weight()), 4);
+                                    split.getRightPanel().add(inject(proto().weightUnit()), 4);
+                                    split.getRightPanel().add(inject(proto().birthDate()), 8.2);
+
                                     return panel;
                                 }
                             };

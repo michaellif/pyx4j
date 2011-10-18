@@ -15,6 +15,7 @@ package com.propertyvista.common.client.ui.decorations;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -221,7 +222,11 @@ public class VistaWidgetDecorator extends VerticalPanel {
             CEditableComponent<?, ?> editableComponent = (CEditableComponent<?, ?>) component;
             if (editableComponent.isVisible() && editableComponent.isEnabled() && editableComponent.isEditable()) {
                 if (editableComponent.isMandatory() && DecorationData.ShowMandatory.Mandatory.equals(decorData.showMandatory)) {
-                    mandatoryLabel.setText(DecorationData.ShowMandatory.Mandatory.toString());
+//                    mandatoryLabel.setText(DecorationData.ShowMandatory.Mandatory.toString());
+                    mandatoryLabel.setText("*");
+                    mandatoryLabel.getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+                    mandatoryLabel.getElement().getStyle().setFontSize(1.7, Unit.EM);
+                    mandatoryLabel.getElement().getStyle().setColor("red");
                 } else if (!editableComponent.isMandatory() && DecorationData.ShowMandatory.Optional.equals(decorData.showMandatory)) {
                     mandatoryLabel.setText(DecorationData.ShowMandatory.Optional.toString());
                 } else {
