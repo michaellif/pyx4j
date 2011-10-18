@@ -343,14 +343,21 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             if (useDates.getValue()) {
                 DateTimeFormat format = DateTimeFormat.getFormat(PredefinedFormat.DATE_SHORT);
 
-                String from = format.format(fromDate.getValue());
-                String to = format.format(toDate.getValue());
-
-                if (from.compareTo(to) == 0) {
-                    description += i18n.tr(" of ") + from;
-                } else {
-                    description += i18n.tr(" from ") + from;
-                    description += i18n.tr(" to ") + to;
+                DateIntervals interval = DateIntervals.valueOf(dateIntervals.getValue(dateIntervals.getSelectedIndex()));
+                switch (interval) {
+                case today:
+                case custom:
+                    String from = format.format(fromDate.getValue());
+                    String to = format.format(toDate.getValue());
+                    if (from.compareTo(to) == 0) {
+                        description += i18n.tr(" of ") + from;
+                    } else {
+                        description += i18n.tr(" from ") + from;
+                        description += i18n.tr(" to ") + to;
+                    }
+                    break;
+                default:
+                    description += i18n.tr(" of ") + interval.toString();
                 }
             }
 
