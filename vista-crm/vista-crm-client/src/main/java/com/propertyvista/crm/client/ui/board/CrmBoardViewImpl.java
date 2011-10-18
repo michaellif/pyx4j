@@ -399,7 +399,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
                 case currentMonth:
                     filterData.fromDate = new Date();
                     filterData.toDate = TimeUtils.today();
-                    filterData.fromDate.setTime(filterData.toDate.getTime() - (filterData.toDate.getDate() + 1) * dayMlsecs); // note: days 1-based!..
+                    filterData.fromDate.setTime(filterData.toDate.getTime() - (filterData.toDate.getDate() - 1) * dayMlsecs); // note: days 1-based!..
                     break;
                 case currentWeek:
                     filterData.fromDate = new Date();
