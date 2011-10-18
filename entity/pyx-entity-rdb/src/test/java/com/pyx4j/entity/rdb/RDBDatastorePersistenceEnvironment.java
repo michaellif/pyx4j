@@ -23,6 +23,7 @@ package com.pyx4j.entity.rdb;
 import org.junit.After;
 import org.junit.Before;
 
+import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
@@ -35,6 +36,11 @@ public class RDBDatastorePersistenceEnvironment extends PersistenceEnvironment {
 
     public RDBDatastorePersistenceEnvironment(Configuration cfg) {
         configuration = cfg;
+    }
+
+    @Override
+    public ApplicationBackendType getBackendType() {
+        return ApplicationBackendType.RDB;
     }
 
     @Override

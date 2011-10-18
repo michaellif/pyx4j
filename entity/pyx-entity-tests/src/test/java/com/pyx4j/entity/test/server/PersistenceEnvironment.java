@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.server;
 
+import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 
 /**
@@ -30,6 +31,8 @@ public abstract class PersistenceEnvironment {
     public enum EnvironmentType {
         LocalJVM, GAEDevelopment, GAESandbox
     }
+
+    public abstract ApplicationBackendType getBackendType();
 
     public abstract IEntityPersistenceService setupDatastore();
 

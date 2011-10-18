@@ -28,6 +28,7 @@ import com.google.appengine.tools.development.testing.LocalMemcacheServiceTestCo
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.apphosting.api.ApiProxy;
 
+import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
@@ -78,5 +79,10 @@ public class LocalDatastorePersistenceEnvironment extends PersistenceEnvironment
 
     protected synchronized String uniqueString() {
         return Integer.toHexString(++uniqueCount) + "_" + Long.toHexString(System.currentTimeMillis());
+    }
+
+    @Override
+    public ApplicationBackendType getBackendType() {
+        return ApplicationBackendType.GAE;
     }
 }

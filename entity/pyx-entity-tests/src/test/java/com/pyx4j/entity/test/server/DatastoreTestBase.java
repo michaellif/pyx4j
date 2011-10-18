@@ -30,6 +30,7 @@ import java.util.Vector;
 import junit.framework.TestCase;
 
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -72,6 +73,10 @@ public abstract class DatastoreTestBase extends TestCase {
         if (srv == null) {
             srv = PersistenceServicesFactory.getPersistenceService();
         }
+    }
+
+    protected ApplicationBackendType getBackendType() {
+        return persistenceEnvironment.getBackendType();
     }
 
     @Override

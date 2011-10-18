@@ -22,6 +22,7 @@ package com.pyx4j.entity.test.server;
 
 import junit.framework.Assert;
 
+import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
@@ -220,7 +221,9 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Owned value 0", task44, emp6r.tasksSorted().get(0));
         Assert.assertEquals("Owned value 1", task11, emp6r.tasksSorted().get(1));
 
-        Assert.assertNull("Owned entity removed?", srv.retrieve(Task.class, task22.getPrimaryKey()));
+        if (getBackendType() == ApplicationBackendType.RDB) {
+            Assert.assertNull("Owned entity removed?", srv.retrieve(Task.class, task22.getPrimaryKey()));
+        }
 
         // Just cleanup
         srv.delete(emp6r);
