@@ -24,6 +24,7 @@ import junit.framework.Assert;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
+import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
@@ -225,4 +226,113 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Assert.assertEquals("Proper value", ent2.nameC2().getValue(), ent2r2.nameC2().getValue());
 
     }
+
+    public void testOwnedSetUpdate() {
+        testOwnedSetUpdate(TestCaseMethod.Persist);
+    }
+
+    public void testOwnedSetMerge() {
+        testOwnedSetUpdate(TestCaseMethod.Merge);
+    }
+
+    public void testOwnedSetUpdate(TestCaseMethod testCaseMethod) {
+
+        RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
+
+        Concrete1Entity ent1 = EntityFactory.create(Concrete1Entity.class);
+        ent1.nameC1().setValue("c1:" + uniqueString());
+        ent1.nameB1().setValue("n1:" + uniqueString());
+        ent.refference().set(ent1);
+
+        Task task11 = EntityFactory.create(Task.class);
+        task11.description().setValue("Do Nothing");
+        ent1.tasksSorted().add(task11);
+
+        Task task21 = EntityFactory.create(Task.class);
+        task21.description().setValue("Do Something");
+        ent1.tasksSorted().add(task21);
+
+        srv.persist(ent);
+
+        RefferenceEntity entr1 = srv.retrieve(RefferenceEntity.class, ent.getPrimaryKey());
+        Base1Entity ent1br1 = entr1.refference();
+        Concrete1Entity ent1r1 = ent1br1.cast();
+
+        Assert.assertEquals("retrieved Set size", 2, ent1r1.tasksSorted().size());
+        Task task1r1 = ent1r1.tasksSorted().get(0);
+        Assert.assertEquals("Owned value Pk", task11.getPrimaryKey(), task1r1.getPrimaryKey());
+        Assert.assertFalse("Values retrieved", task1r1.isValuesDetached());
+
+        String description = "Work " + uniqueString();
+        task1r1.description().setValue(description);
+
+        ent1r1.tasksSorted().remove(task21);
+
+        srvSave(entr1, testCaseMethod);
+
+        RefferenceEntity entr2 = srv.retrieve(RefferenceEntity.class, ent.getPrimaryKey());
+        Base1Entity ent1br2 = entr2.refference();
+        Concrete1Entity ent1r2 = ent1br2.cast();
+
+        Assert.assertEquals("retrieved Set size", 1, ent1r2.tasksSorted().size());
+        Task task1r2 = ent1r2.tasksSorted().get(0);
+        Assert.assertEquals("Owned value Pk", task11.getPrimaryKey(), task1r2.getPrimaryKey());
+        Assert.assertEquals("description update", description, task1r2.description().getValue());
+
+    }
+
+    public void testInSetOwnedSetUpdate() {
+        testOwnedSetUpdate(TestCaseMethod.Persist);
+    }
+
+    public void testInSetOwnedSetMerge() {
+        testInSetOwnedSetUpdate(TestCaseMethod.Merge);
+    }
+
+    public void testInSetOwnedSetUpdate(TestCaseMethod testCaseMethod) {
+
+        RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
+
+        Concrete1Entity ent1 = EntityFactory.create(Concrete1Entity.class);
+        ent1.nameC1().setValue("c1:" + uniqueString());
+        ent1.nameB1().setValue("n1:" + uniqueString());
+        ent.refferences().add(ent1);
+
+        Task task11 = EntityFactory.create(Task.class);
+        task11.description().setValue("Do Nothing");
+        ent1.tasksSorted().add(task11);
+
+        Task task21 = EntityFactory.create(Task.class);
+        task21.description().setValue("Do Something");
+        ent1.tasksSorted().add(task21);
+
+        srv.persist(ent);
+
+        RefferenceEntity entr1 = srv.retrieve(RefferenceEntity.class, ent.getPrimaryKey());
+        Base1Entity ent1br1 = entr1.refferences().get(0);
+        Concrete1Entity ent1r1 = ent1br1.cast();
+
+        Assert.assertEquals("retrieved Set size", 2, ent1r1.tasksSorted().size());
+        Task task1r1 = ent1r1.tasksSorted().get(0);
+        Assert.assertEquals("Owned value Pk", task11.getPrimaryKey(), task1r1.getPrimaryKey());
+        Assert.assertFalse("Values retrieved", task1r1.isValuesDetached());
+
+        String description = "Work " + uniqueString();
+        task1r1.description().setValue(description);
+
+        ent1r1.tasksSorted().remove(task21);
+
+        srvSave(entr1, testCaseMethod);
+
+        RefferenceEntity entr2 = srv.retrieve(RefferenceEntity.class, ent.getPrimaryKey());
+        Base1Entity ent1br2 = entr2.refferences().get(0);
+        Concrete1Entity ent1r2 = ent1br2.cast();
+
+        Assert.assertEquals("retrieved Set size", 1, ent1r2.tasksSorted().size());
+        Task task1r2 = ent1r2.tasksSorted().get(0);
+        Assert.assertEquals("Owned value Pk", task11.getPrimaryKey(), task1r2.getPrimaryKey());
+        Assert.assertEquals("description update", description, task1r2.description().getValue());
+
+    }
+
 }
