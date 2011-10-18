@@ -886,16 +886,17 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
                 });
 
-                List<ServiceItem> alreadySelected = new ArrayList<ServiceItem>();
-                for (ChargeItem item : getValue().serviceAgreement().featureItems()) {
-                    alreadySelected.add(item.item());
-                }
+//  TODO not sure if we need duplicate item restriction:                
+//                List<ServiceItem> alreadySelected = new ArrayList<ServiceItem>();
+//                for (ChargeItem item : getValue().serviceAgreement().featureItems()) {
+//                    alreadySelected.add(item.item());
+//                }
 
                 for (ServiceItem item : getValue().selectedFeatureItems()) {
-                    if (!alreadySelected.contains(item)) {
-                        list.addItem(item.getStringView());
-                        list.setValue(list.getItemCount() - 1, item.id().toString());
-                    }
+//                    if (!alreadySelected.contains(item)) {
+                    list.addItem(item.getStringView());
+                    list.setValue(list.getItemCount() - 1, item.id().toString());
+//                    }
                 }
 
                 if (list.getItemCount() > 0) {

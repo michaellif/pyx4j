@@ -491,8 +491,14 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
                     }
                 });
 
+//  TODO not sure if we need duplicate item restriction:                
+//                List<ServiceItem> alreadySelected = new ArrayList<ServiceItem>();
+//                for (ChargeItem item : getAgreedList()) {
+//                    alreadySelected.add(item.item());
+//                }
+
                 for (ServiceItem item : getAvailableList()) {
-                    if (isCompatible(item) && !getAgreedList().contains(item)) {
+                    if (isCompatible(item) /* && !alreadySelected.contains(item) */) {
                         list.addItem(item.getStringView(), item.id().toString());
                     }
                 }
