@@ -14,10 +14,13 @@
 package com.propertyvista.crm.client.ui.board;
 
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -31,13 +34,16 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CDatePicker;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.dashboard.IGadget;
@@ -101,11 +107,32 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         return (filters != null ? filters.getBuildingListerView() : null);
     }
 
+    @com.pyx4j.i18n.annotations.I18n
+    public enum DateIntervals {
+        today,
+
+        currentWeek,
+
+        currentMonth,
+
+        @Translate("Last 31 days")
+        last31days,
+
+        custom;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+    }
+
     private class BuildingFilters {
 
         private final IListerView<Building> buildingLister;
 
-        CheckBox useDates = new CheckBox(i18n.tr("Use date interval"));
+        private final CheckBox useDates = new CheckBox(i18n.tr("Use date interval"));
+
+        private final ListBox dateIntervals = new ListBox();
 
         private final CDatePicker fromDate = new CDatePicker();
 
@@ -122,6 +149,10 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             buildingLister.getLister().setSelectable(false);
             buildingLister.getLister().setHasCheckboxColumn(true);
             buildingLister.getLister().getListPanel().setPageSize(10);
+
+            for (DateIntervals interval : EnumSet.allOf(DateIntervals.class)) {
+                dateIntervals.addItem(interval.toString(), interval.name());
+            }
 
             compactView = createCompactVeiw();
             setupView = createSetupVeiw();
@@ -184,15 +215,36 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
 
             // ------------------------------------------------------------------------------------
 
-            final HorizontalPanel dates = new HorizontalPanel();
+            final HorizontalPanel custom = new HorizontalPanel();
 
             Widget w;
-            dates.add(w = new HTML(i18n.tr("From")));
-            dates.setCellVerticalAlignment(w, HasVerticalAlignment.ALIGN_MIDDLE);
-            dates.add(fromDate);
-            dates.add(w = new HTML(i18n.tr("To")));
-            dates.setCellVerticalAlignment(w, HasVerticalAlignment.ALIGN_MIDDLE);
-            dates.add(toDate);
+            custom.add(w = new HTML(i18n.tr("From")));
+            custom.setCellVerticalAlignment(w, HasVerticalAlignment.ALIGN_MIDDLE);
+            custom.add(fromDate);
+            custom.add(w = new HTML(i18n.tr("To")));
+            custom.setCellVerticalAlignment(w, HasVerticalAlignment.ALIGN_MIDDLE);
+            custom.add(toDate);
+
+            custom.setVisible(false);
+            dateIntervals.addChangeHandler(new ChangeHandler() {
+                @Override
+                public void onChange(ChangeEvent event) {
+                    switch (DateIntervals.valueOf(dateIntervals.getValue(dateIntervals.getSelectedIndex()))) {
+                    case custom:
+                        custom.setVisible(true);
+                        break;
+                    default:
+                        custom.setVisible(false);
+                    }
+                }
+            });
+            HorizontalPanel intervals = new HorizontalPanel();
+            intervals.add(dateIntervals);
+
+            final HorizontalPanel dates = new HorizontalPanel();
+
+            dates.add(intervals);
+            dates.add(custom);
 
             dates.setVisible(false);
             useDates.setValue(false);
@@ -203,12 +255,12 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
                 }
             });
 
-            HorizontalPanel dateUsage = new HorizontalPanel();
-            dateUsage.add(useDates);
-            dateUsage.setCellVerticalAlignment(useDates, HasVerticalAlignment.ALIGN_MIDDLE);
+            HorizontalPanel usage = new HorizontalPanel();
+            usage.add(useDates);
+            usage.setCellVerticalAlignment(useDates, HasVerticalAlignment.ALIGN_MIDDLE);
 
             HorizontalPanel dateInterval = new HorizontalPanel();
-            dateInterval.add(dateUsage);
+            dateInterval.add(usage);
             dateInterval.add(dates);
             main.add(dateInterval);
 
@@ -216,8 +268,9 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             final int spacing = 7;
             final String height = "3em";
 
-            dates.setSpacing(spacing);
-            dateUsage.setSpacing(spacing);
+            custom.setSpacing(spacing);
+            intervals.setSpacing(spacing);
+            usage.setSpacing(spacing);
 
             useDates.getElement().getStyle().setMarginLeft(1, Unit.EM);
             useDates.getElement().getStyle().setMarginRight(2, Unit.EM);
@@ -227,7 +280,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             toDate.setWidth("8.5em");
 
             dates.setHeight(height);
-            dateUsage.setHeight(height);
+            usage.setHeight(height);
             dateInterval.setHeight(height);
 
             // ------------------------------------------------------------------------------------
