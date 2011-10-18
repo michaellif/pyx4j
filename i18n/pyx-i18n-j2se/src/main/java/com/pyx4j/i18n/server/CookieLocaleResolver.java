@@ -30,7 +30,7 @@ import com.pyx4j.config.server.LocaleResolver;
 
 public class CookieLocaleResolver implements LocaleResolver {
 
-    static public final Locale RU = new Locale("ru_RU");
+    static public final Locale RU = new Locale("ru", "RU");
 
     protected Iterable<Locale> getAvailableLocale() {
         return Arrays.asList(Locale.ENGLISH, Locale.FRENCH, RU);

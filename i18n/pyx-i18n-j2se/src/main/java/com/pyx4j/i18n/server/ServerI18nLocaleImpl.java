@@ -34,7 +34,12 @@ class ServerI18nLocaleImpl extends I18n {
 
     @Override
     public String tr(String text) {
-        return translator.translate(text);
+        String value = translator.translate(text);
+        if (value == null) {
+            return text;
+        } else {
+            return value;
+        }
     }
 
 }

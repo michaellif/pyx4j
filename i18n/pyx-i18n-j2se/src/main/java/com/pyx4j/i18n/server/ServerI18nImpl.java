@@ -26,6 +26,11 @@ class ServerI18nImpl extends I18n {
 
     @Override
     public String tr(String text) {
-        return I18nManager.getThreadLocaleTranslator().translate(text);
+        String value = I18nManager.getThreadLocaleTranslator().translate(text);
+        if (value == null) {
+            return text;
+        } else {
+            return value;
+        }
     }
 }
