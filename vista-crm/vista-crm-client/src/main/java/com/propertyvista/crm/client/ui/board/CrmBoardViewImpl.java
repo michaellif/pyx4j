@@ -13,8 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.board;
 
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
@@ -128,6 +132,8 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
 
     private class BuildingFilters {
 
+        private final Logger log = LoggerFactory.getLogger(BuildingFilters.class);
+
         private final IListerView<Building> buildingLister;
 
         private final CheckBox useDates = new CheckBox(i18n.tr("Use date interval"));
@@ -174,6 +180,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             buildingLister.restoreState();
             fromDate.setValue(TimeUtils.today());
             toDate.setValue(TimeUtils.today());
+            dateIntervals.setItemSelected(0, true);
             useDates.setValue(false, true);
 
             return setupView;
@@ -375,6 +382,9 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             }
 
             if (useDates.getValue()) {
+
+                final long dayMlsecs = 24 * 60 * 60 * 1000;
+
                 DateIntervals interval = DateIntervals.valueOf(dateIntervals.getValue(dateIntervals.getSelectedIndex()));
                 switch (interval) {
                 case custom:
@@ -382,22 +392,30 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
                     filterData.toDate = toDate.getValue();
                     break;
                 case last31days:
+                    filterData.fromDate = new Date();
                     filterData.toDate = TimeUtils.today();
-                    filterData.fromDate = TimeUtils.today();
+                    filterData.fromDate.setTime(filterData.toDate.getTime() - 31 * dayMlsecs);
                     break;
                 case currentMonth:
-                    filterData.fromDate = fromDate.getValue();
+                    filterData.fromDate = new Date();
                     filterData.toDate = TimeUtils.today();
+                    filterData.fromDate.setTime(filterData.toDate.getTime() - (filterData.toDate.getDate() + 1) * dayMlsecs); // note: days 1-based!..
                     break;
                 case currentWeek:
-                    filterData.fromDate = fromDate.getValue();
+                    filterData.fromDate = new Date();
                     filterData.toDate = TimeUtils.today();
+                    filterData.fromDate.setTime(filterData.toDate.getTime() - filterData.toDate.getDay() * dayMlsecs); // note: weekdays 0-based (from Sunday)!..
                     break;
                 case today:
-                    filterData.fromDate = TimeUtils.today();
-                    filterData.toDate = TimeUtils.today();
+                    filterData.fromDate = filterData.toDate = TimeUtils.today();
                     break;
                 }
+
+                // log date calculation:
+                DateTimeFormat format = DateTimeFormat.getFormat(PredefinedFormat.DATE_SHORT);
+                String from = format.format(filterData.fromDate);
+                String to = format.format(filterData.toDate);
+                log.info("calculated dates: " + from + " - " + to);
             }
 
             // notify gadgets:
