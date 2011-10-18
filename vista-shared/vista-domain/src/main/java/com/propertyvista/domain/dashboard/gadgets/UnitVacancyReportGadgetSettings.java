@@ -16,9 +16,17 @@ package com.propertyvista.domain.dashboard.gadgets;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
+
 @DiscriminatorValue("UnitVacancyReportGadgetSettings")
 public interface UnitVacancyReportGadgetSettings extends ListerGadgetBaseSettings {
+    IPrimitive<Boolean> showUnits();
+
+    IPrimitive<Boolean> showSummary();
+
     IPrimitive<Boolean> showTurnoverAnalysis();
 
     IPrimitive<Boolean> isTurnoverMeasuredByPercent();
+
+    IPrimitive<AnalysisResolution> turnoverAnalysisResolution();
 }

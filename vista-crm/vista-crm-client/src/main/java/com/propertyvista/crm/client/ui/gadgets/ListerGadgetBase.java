@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.gadgets;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -200,7 +201,8 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     private void storeSettings() {
         // COLUMNS:
         settings.columnPaths().clear();
-        for (ColumnDescriptor<E> columnDescriptor : getListerBase().getSelectedColumnDescriptors()) {
+        Collection<ColumnDescriptor<E>> descriptors = getListerBase().getSelectedColumnDescriptors();
+        for (ColumnDescriptor<E> columnDescriptor : descriptors) {
             StringHolder columnName = EntityFactory.create(StringHolder.class);
             columnName.stringValue().setValue(columnDescriptor.getColumnName());
             settings.columnPaths().add(columnName);

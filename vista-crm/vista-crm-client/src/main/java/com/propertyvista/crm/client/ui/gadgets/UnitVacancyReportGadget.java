@@ -82,13 +82,15 @@ import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnaly
 public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport> implements IBuildingGadget {
     public static final String TURNOVER_ANALYSIS_CAPTION = "Turnover Analysis";
 
+    public static final String RESOLUTION_SELECTOR_LABEL = "Resolution";
+
+    public static final String SUMMARY_CAPTION = "Summary";
+
     private static final RefreshInterval DEFAULT_REFRESH_INTERVAL = RefreshInterval.Never;
 
     private static final int DEFAULT_ITEMS_PER_PAGE = 5;
 
-    private static final boolean DEFAULT_ANALYSIS_VISIBILITY = false;
-
-    private static final int DEFAULT_ANALYSIS_INTERVALS_PER_PAGE = 10;
+    private static final boolean DEFAULT_ANALYSIS_VISIBILITY = true;
 
     private static final boolean DEFAULT_ANALYSIS_SHOW_PERCENT = false;
 
@@ -122,7 +124,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         gadgetPanel.add(getListerBase());
         gadgetPanel.add(summaryView.asWidget());
 
-        analysisView = new AnalysisView();
+        analysisView = new AnalysisView(settings);
         gadgetPanel.add(analysisView.asWidget());
         activity = new UnitVacancyReportGadgetActivity(this, (UnitVacancyReportService) service);
 
@@ -145,18 +147,14 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         settings.columnPaths().clear();
 
         settings.showTurnoverAnalysis().setValue(DEFAULT_ANALYSIS_VISIBILITY);
+        settings.isTurnoverMeasuredByPercent().setValue(DEFAULT_ANALYSIS_SHOW_PERCENT);
+        settings.turnoverAnalysisResolution().setValue(DEFAULT_ANALYSIS_RESOLUTION);
         return settings;
     }
 
     public UnitVacancyReportGadgetSettings getSettings() {
         return settings;
     }
-
-//    @Override
-//    public GadgetMetadata getGadgetMetadata() {
-//        GadgetMetadata gmd = super.getGadgetMetadata();
-//        sett
-//    }
 
     public IListerView<UnitVacancyReport> getListerView() {
         return getListerBase();
@@ -388,10 +386,6 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
         private final VerticalPanel layoutPanel;
 
-        int intervalsPerPage;
-
-        boolean showPercents;
-
         ListBox resolutionSelector;
 
         RadioButton percent;
@@ -402,12 +396,11 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
         UnitVacancyReportGadgetActivity presenter;
 
-        private AnalysisResolution resolution;
+        private final UnitVacancyReportGadgetSettings settings;
 
-        public AnalysisView() {
-            intervalsPerPage = DEFAULT_ANALYSIS_INTERVALS_PER_PAGE;
-            showPercents = DEFAULT_ANALYSIS_SHOW_PERCENT;
-
+        public AnalysisView(UnitVacancyReportGadgetSettings settings) {
+            this.settings = settings;
+            validateSettings();
             layoutPanel = new VerticalPanel();
             layoutPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
             layoutPanel.setWidth("100%");
@@ -419,44 +412,43 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
             resolutionSelector = new ListBox(false);
 
             AnalysisResolution[] analysisValues = AnalysisResolution.values();
-            int defaultResolutionIndex = 0;
+            int selectedResolutionIndex = 0;
             for (int i = 0; i < analysisValues.length; ++i) {
                 AnalysisResolution resolution = analysisValues[i];
                 resolutionSelector.addItem(resolution.toString(), resolution.toString());
-                if (resolution == DEFAULT_ANALYSIS_RESOLUTION) {
-                    defaultResolutionIndex = i;
-                    this.resolution = resolution;
+                if (resolution.equals(settings.turnoverAnalysisResolution().getValue())) {
+                    selectedResolutionIndex = i;
                 }
             }
-            resolutionSelector.setItemSelected(defaultResolutionIndex, true);
+            resolutionSelector.setItemSelected(selectedResolutionIndex, true);
             resolutionSelector.addChangeHandler(new ChangeHandler() {
 
                 @Override
                 public void onChange(ChangeEvent event) {
                     if (presenter != null) {
-
-                        resolution = AnalysisResolution.representationToValue(resolutionSelector.getValue(resolutionSelector.getSelectedIndex()));
+                        AnalysisResolution r = AnalysisResolution.representationToValue(resolutionSelector.getValue(resolutionSelector.getSelectedIndex()));
+                        AnalysisView.this.settings.turnoverAnalysisResolution().setValue(r);
                         presenter.populateTurnoverAnalysis();
                     }
                 }
 
             });
-            controls.setWidget(0, 0, new Label(i18n.tr("Resolution")));
+            controls.setWidget(0, 0, new Label(i18n.tr(RESOLUTION_SELECTOR_LABEL)));
             controls.setWidget(0, 1, resolutionSelector);
 
             ValueChangeHandler<Boolean> measureChangeHandler = new ValueChangeHandler<Boolean>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
-                    showPercents = percent.getValue();
+                    AnalysisView.this.settings.isTurnoverMeasuredByPercent().setValue(percent.getValue());
                     redraw();
                 }
             };
             percent = new RadioButton("measureSelector", i18n.tr("%"));
             percent.addValueChangeHandler(measureChangeHandler);
-            percent.setValue(showPercents, false);
+            percent.setValue(getShowPercents(), false);
             number = new RadioButton("measureSelector", i18n.tr("#"));
             number.addValueChangeHandler(measureChangeHandler);
-            number.setValue(!showPercents, false);
+            number.setValue(!getShowPercents(), false);
 
             measureSelection = new FlowPanel();
             measureSelection.add(percent);
@@ -471,13 +463,26 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
             layoutPanel.add(measureSelection);
         }
 
+        public void validateSettings() {
+            if (settings.isTurnoverMeasuredByPercent().isNull()) {
+                settings.isTurnoverMeasuredByPercent().setValue(DEFAULT_ANALYSIS_SHOW_PERCENT);
+            }
+            if (settings.turnoverAnalysisResolution().isNull()) {
+                settings.turnoverAnalysisResolution().setValue(DEFAULT_ANALYSIS_RESOLUTION);
+            }
+        }
+
         @Override
         public Widget asWidget() {
             return layoutPanel;
         }
 
         public AnalysisResolution getResolution() {
-            return resolution;
+            return settings.turnoverAnalysisResolution().getValue();
+        }
+
+        public boolean getShowPercents() {
+            return settings.isTurnoverMeasuredByPercent().getValue();
         }
 
         public void setPresenter(UnitVacancyReportGadgetActivity presenter) {
@@ -490,7 +495,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         }
 
         private void redraw() {
-            if (data == null) {
+            if (data == null || data.size() == 0) {
                 graph.clear();
                 return;
             }
@@ -498,7 +503,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
             for (UnitVacancyReportTurnoverAnalysisDTO intervalData : data) {
                 ArrayList<Double> values = new ArrayList<Double>();
-                if (!showPercents) {
+                if (!getShowPercents()) {
                     values.add((double) intervalData.unitsTurnedOverAbs().getValue().intValue());
                 } else {
                     values.add(intervalData.unitsTurnedOverPct().getValue());
@@ -546,7 +551,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
             VerticalPanel p = new VerticalPanel();
             p.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
             p.setWidth("100%");
-            Label caption = new Label(i18n.tr("Summary"));
+            Label caption = new Label(i18n.tr(SUMMARY_CAPTION));
             caption.setWidth("100%");
             p.add(caption);
             main.add(p);
@@ -613,7 +618,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
         @Override
         public boolean onStart() {
-            // PARENT should restart the Gadget (calls stop() and start())
+            // restarts the Gadget (calls stop() and start())
             return parentSetup.onStart();
         }
 

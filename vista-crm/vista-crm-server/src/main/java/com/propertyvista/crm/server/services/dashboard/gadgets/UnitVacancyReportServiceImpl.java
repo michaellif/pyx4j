@@ -110,7 +110,6 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
     @Override
     public void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, EntityQueryCriteria<UnitVacancyReport> criteria, LogicalDate fromDate,
             LogicalDate toDate) {
-        // TODO: think about using another type of query that returns something better than just a list
         extractDatesFromCriteria(criteria);
         List<UnitVacancyReport> units = Persistence.service().query(criteria);
 
@@ -136,7 +135,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
 
             VacancyStatus vacancyStatus = unit.vacancyStatus().getValue();
 
-            // check that we have vacancy status, and don't waste the cpu cycles if we don't            
+            // check that we have vacancy status, and don't waste the cpu cycles if we don't have it            
             if (vacancyStatus == null)
                 continue;
 
@@ -175,13 +174,10 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         callback.onSuccess(summary);
     }
 
-    // TODO maybe enum for specyfinying an interval? currently suppose 0 - months, 1 - years.
-    // TODO interval
-
     @Override
     public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, LogicalDate fromDate, LogicalDate toDate,
             AnalysisResolution resolution) {
-        // FIXME potential for server denial of service with too big range and too small resolution, have to filter really evil data        
+
         if (callback == null | fromDate == null || toDate == null | resolution == null) {
             callback.onFailure(new Exception("at least one of the required parameters is null."));
             return;
@@ -191,6 +187,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
             return;
         }
 
+        // DOS attack protection
         if ((toDate.getTime() - fromDate.getTime()) > MAX_DATE_RANGE) {
             callback.onFailure(new Exception("the date range that was specified is too big"));
             return;
@@ -210,7 +207,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         long intervalStart = fromDate.getTime();
         long intervalEnd = intervalEnd(intervalStart, resolution);
         int turnovers = 0;
-        int total = 0; // I don't use events.size() because it can be a linked list :(
+        int total = 0; // I don't use events.size() because it can be a linked list
 
         for (UnitVacancyReportEvent event : events) {
             long eventTime = event.eventDate().getValue().getTime();
@@ -374,7 +371,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         double unitMarketRent = unit.marketRent().getValue();
         double unitRent = unit.unitRent().getValue();
 
-        double rentDeltaAbsoute = unitRent - unitMarketRent;
+        double rentDeltaAbsoute = unitMarketRent - unitRent;
         double rentDeltaRelative = rentDeltaAbsoute / unitMarketRent * 100;
 
         unit.rentDeltaAbsolute().setValue(rentDeltaAbsoute);
