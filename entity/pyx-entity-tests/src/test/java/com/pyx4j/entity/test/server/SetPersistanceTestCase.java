@@ -220,8 +220,10 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Owned value 0", task44, emp6r.tasksSorted().get(0));
         Assert.assertEquals("Owned value 1", task11, emp6r.tasksSorted().get(1));
 
+        Assert.assertNull("Owned entity removed?", srv.retrieve(Task.class, task22.getPrimaryKey()));
+
         // Just cleanup
-        srv.delete(emp3);
+        srv.delete(emp6r);
     }
 
     public void testOwnedListUpdate() {

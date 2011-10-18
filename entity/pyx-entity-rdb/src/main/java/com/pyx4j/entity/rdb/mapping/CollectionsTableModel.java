@@ -158,7 +158,7 @@ public class CollectionsTableModel {
     }
 
     @SuppressWarnings("unchecked")
-    public static void update(Connection connection, Dialect dialect, IEntity entity, MemberOperationsMeta member) {
+    public static void update(Connection connection, Dialect dialect, IEntity entity, MemberOperationsMeta member, List<IEntity> cascadeRemove) {
         ObjectClassType type = member.getMemberMeta().getObjectClassType();
         boolean isList = (type == ObjectClassType.EntityList);
 
@@ -198,7 +198,7 @@ public class CollectionsTableModel {
             rs = stmt.executeQuery();
             while (rs.next()) {
                 if ((dialect.isMultitenant()) && !rs.getString("ns").equals(NamespaceManager.getNamespace())) {
-                    throw new RuntimeException("namespace acess error");
+                    throw new RuntimeException("namespace access error");
                 }
                 Object value = member.getValueAdapter().retrieveValue(rs, "value");
                 int valueIdx = allData.indexOf(value);
@@ -216,6 +216,9 @@ public class CollectionsTableModel {
                     }
                 } else {
                     rs.deleteRow();
+                    if ((value instanceof IEntity) && (member.getMemberMeta().isOwnedRelationships())) {
+                        //cascadeRemove.add((IEntity) value);
+                    }
                 }
             }
         } catch (SQLException e) {

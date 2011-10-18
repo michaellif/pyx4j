@@ -352,7 +352,7 @@ public class TableModel {
         }
     }
 
-    public boolean update(Connection connection, IEntity entity) {
+    public boolean update(Connection connection, IEntity entity, List<IEntity> cascadeRemove) {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement(sqlUpdate());
@@ -365,7 +365,7 @@ public class TableModel {
             boolean updated = (stmt.executeUpdate() == 1);
             if (updated) {
                 for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
-                    CollectionsTableModel.update(connection, dialect, entity, member);
+                    CollectionsTableModel.update(connection, dialect, entity, member, cascadeRemove);
                 }
             }
             return updated;

@@ -196,7 +196,7 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Assert.assertEquals("Proper value", ent2.nameB2().getValue(), ent2r1.nameB2().getValue());
         Assert.assertEquals("Proper value", ent2.nameC2().getValue(), ent2r1.nameC2().getValue());
 
-        assertFalse("Items of diferent type are diferent", ent1br1.equals(ent2br1));
+        assertFalse("Items of different type are different", ent1br1.equals(ent2br1));
 
         // test change order
         entr1.refferences().remove(ent1r1);
@@ -227,15 +227,15 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
     }
 
-    public void testOwnedSetUpdate() {
-        testOwnedSetUpdate(TestCaseMethod.Persist);
+    public void testOwnedListUpdate() {
+        testOwnedListUpdate(TestCaseMethod.Persist);
     }
 
-    public void testOwnedSetMerge() {
-        testOwnedSetUpdate(TestCaseMethod.Merge);
+    public void testOwnedListMerge() {
+        testOwnedListUpdate(TestCaseMethod.Merge);
     }
 
-    public void testOwnedSetUpdate(TestCaseMethod testCaseMethod) {
+    public void testOwnedListUpdate(TestCaseMethod testCaseMethod) {
 
         RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
 
@@ -258,7 +258,7 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Base1Entity ent1br1 = entr1.refference();
         Concrete1Entity ent1r1 = ent1br1.cast();
 
-        Assert.assertEquals("retrieved Set size", 2, ent1r1.tasksSorted().size());
+        Assert.assertEquals("retrieved List size", 2, ent1r1.tasksSorted().size());
         Task task1r1 = ent1r1.tasksSorted().get(0);
         Assert.assertEquals("Owned value Pk", task11.getPrimaryKey(), task1r1.getPrimaryKey());
         Assert.assertFalse("Values retrieved", task1r1.isValuesDetached());
@@ -274,22 +274,24 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Base1Entity ent1br2 = entr2.refference();
         Concrete1Entity ent1r2 = ent1br2.cast();
 
-        Assert.assertEquals("retrieved Set size", 1, ent1r2.tasksSorted().size());
+        Assert.assertEquals("retrieved List size", 1, ent1r2.tasksSorted().size());
         Task task1r2 = ent1r2.tasksSorted().get(0);
         Assert.assertEquals("Owned value Pk", task11.getPrimaryKey(), task1r2.getPrimaryKey());
         Assert.assertEquals("description update", description, task1r2.description().getValue());
 
+        Assert.assertNull("Owned entity removed?", srv.retrieve(Task.class, task21.getPrimaryKey()));
+
     }
 
-    public void testInSetOwnedSetUpdate() {
-        testOwnedSetUpdate(TestCaseMethod.Persist);
+    public void testInListOwnedListUpdate() {
+        testInListOwnedListUpdate(TestCaseMethod.Persist);
     }
 
-    public void testInSetOwnedSetMerge() {
-        testInSetOwnedSetUpdate(TestCaseMethod.Merge);
+    public void testIListOwnedListMerge() {
+        testInListOwnedListUpdate(TestCaseMethod.Merge);
     }
 
-    public void testInSetOwnedSetUpdate(TestCaseMethod testCaseMethod) {
+    public void testInListOwnedListUpdate(TestCaseMethod testCaseMethod) {
 
         RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
 
@@ -312,7 +314,7 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Base1Entity ent1br1 = entr1.refferences().get(0);
         Concrete1Entity ent1r1 = ent1br1.cast();
 
-        Assert.assertEquals("retrieved Set size", 2, ent1r1.tasksSorted().size());
+        Assert.assertEquals("retrieved List size", 2, ent1r1.tasksSorted().size());
         Task task1r1 = ent1r1.tasksSorted().get(0);
         Assert.assertEquals("Owned value Pk", task11.getPrimaryKey(), task1r1.getPrimaryKey());
         Assert.assertFalse("Values retrieved", task1r1.isValuesDetached());
@@ -328,10 +330,12 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Base1Entity ent1br2 = entr2.refferences().get(0);
         Concrete1Entity ent1r2 = ent1br2.cast();
 
-        Assert.assertEquals("retrieved Set size", 1, ent1r2.tasksSorted().size());
+        Assert.assertEquals("retrieved List size", 1, ent1r2.tasksSorted().size());
         Task task1r2 = ent1r2.tasksSorted().get(0);
         Assert.assertEquals("Owned value Pk", task11.getPrimaryKey(), task1r2.getPrimaryKey());
         Assert.assertEquals("description update", description, task1r2.description().getValue());
+
+        Assert.assertNull("Owned entity removed?", srv.retrieve(Task.class, task21.getPrimaryKey()));
 
     }
 

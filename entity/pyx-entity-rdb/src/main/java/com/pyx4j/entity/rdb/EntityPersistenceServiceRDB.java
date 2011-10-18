@@ -280,7 +280,14 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     }
                 }
             }
-            return tm.update(connection, entity);
+            List<IEntity> cascadeRemove = new Vector<IEntity>();
+            boolean updated = tm.update(connection, entity, cascadeRemove);
+
+            for (IEntity ce : cascadeRemove) {
+                cascadeDelete(connection, ce.getEntityMeta(), ce.getPrimaryKey(), ce);
+            }
+
+            return updated;
         } finally {
             if (trace) {
                 log.info(Trace.returns() + "update {} id={}", tm.getTableName(), entity.getPrimaryKey());
@@ -516,8 +523,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     @SuppressWarnings("rawtypes")
                     MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
                     if (!adapter.allowModifications(entity, memberMeta, null, value)) {
-                        log.error("Forbiden change -> [{}]", value);
-                        throw new Error("Forbiden change " + memberMeta.getCaption() + " of " + entity.getEntityMeta().getCaption());
+                        log.error("Forbidden change -> [{}]", value);
+                        throw new Error("Forbidden change " + memberMeta.getCaption() + " of " + entity.getEntityMeta().getCaption());
                     }
                 }
             }
@@ -526,8 +533,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     @SuppressWarnings("rawtypes")
                     MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
                     if (!adapter.allowModifications(entity, memberMeta, null, value)) {
-                        log.error("Forbiden change -> [{}]", value);
-                        throw new Error("Forbiden change " + memberMeta.getCaption() + " of " + entity.getEntityMeta().getCaption());
+                        log.error("Forbidden change -> [{}]", value);
+                        throw new Error("Forbidden change " + memberMeta.getCaption() + " of " + entity.getEntityMeta().getCaption());
                     }
                 }
             }
@@ -571,7 +578,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         throw new SecurityViolationException("Permission denied");
                     } else if (baseChildEntity.getPrimaryKey() != null) {
                         // Cascade delete
-                        delete(baseChildEntity);
+                        cascadeDelete(connection, baseChildEntity.getEntityMeta(), baseChildEntity.getPrimaryKey(), baseChildEntity);
                     }
                 }
                 if (!childEntity.isValuesDetached() && (!childEntity.isNull())) {
@@ -644,12 +651,20 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
             if (memberMeta.isEntity()) {
                 IEntity childEntity = ((IEntity) member.getMember(entity)).cast();
-                cascadeRetrieve(connection, childEntity);
+                if (childEntity.getPrimaryKey() != null) {
+                    if (cascadeRetrieve(connection, childEntity) == null) {
+                        throw new RuntimeException("Entity " + memberMeta.getCaption() + " " + childEntity.getPrimaryKey() + " " + childEntity.getPath()
+                                + " NotFound");
+                    }
+                }
             } else {
                 @SuppressWarnings("unchecked")
                 ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
                 for (IEntity childEntity : iCollectionMember) {
-                    cascadeRetrieve(connection, childEntity);
+                    if (cascadeRetrieve(connection, childEntity) == null) {
+                        throw new RuntimeException("Entity " + memberMeta.getCaption() + " " + childEntity.getPrimaryKey() + " " + childEntity.getPath()
+                                + " NotFound");
+                    }
                 }
             }
         }
