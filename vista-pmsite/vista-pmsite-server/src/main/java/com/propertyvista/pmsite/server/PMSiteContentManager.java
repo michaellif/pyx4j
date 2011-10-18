@@ -115,6 +115,11 @@ public class PMSiteContentManager implements Serializable {
             return styleId;
         }
 
+        public static void setStyleId(int id) {
+            styleId = id;
+            ((WebResponse) RequestCycle.get().getResponse()).addCookie(new Cookie("pmsiteStyle", String.valueOf(styleId)));
+        }
+
         public static AvailableLocale getLocale() {
             if (locale == null) {
                 locale = readLocaleFromCookie();
@@ -216,6 +221,10 @@ public class PMSiteContentManager implements Serializable {
 
     public static int getSiteStyle() {
         return PMSiteContent.getStyleId();
+    }
+
+    public static void setSiteStyle(int id) {
+        PMSiteContent.setStyleId(id);
     }
 
     public static AvailableLocale getLocale() {

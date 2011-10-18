@@ -16,8 +16,6 @@ package com.propertyvista.pmsite.server.pages;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.Cookie;
-
 import js.JSResources;
 
 import org.apache.wicket.Component;
@@ -25,7 +23,6 @@ import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.StatelessLink;
-import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.visit.IVisit;
@@ -59,21 +56,8 @@ public abstract class BasePage extends WebPage {
 
             @Override
             public void onClick() {
-
                 int style = PMSiteContentManager.getSiteStyle();
-
-                if (style == 0) {
-                    style = 1;
-                } else {
-                    style = 0;
-                }
-
-                Cookie cookie = new Cookie("pmsiteStyle", String.valueOf(style));
-                cookie.setPath("/");
-
-                ((WebResponse) getResponse()).addCookie(cookie);
-
-                setResponsePage(getPageClass(), getPageParameters());
+                PMSiteContentManager.setSiteStyle((style + 1) % 2);
             }
 
         };

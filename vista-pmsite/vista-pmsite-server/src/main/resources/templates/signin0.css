@@ -29,3 +29,22 @@
 	padding: 0 0 20px;
 }
 
+.vista-pmsite-signInPage .signInFormWrap {
+	padding:20px;
+}
+
+.vista-pmsite-signInPage .signInFormWrap .signInFormInput {
+	padding:40px 0 0 60px;
+}
+
+.vista-pmsite-signInPage .signInFormWrap .signInFormInput label {
+	display:block;
+	padding-bottom:4px;
+}
+.vista-pmsite-signInPage .signInFormWrap .signInFormInput.remember label {
+	display:inline;
+}
+.vista-pmsite-signInPage .signInFormWrap .signInFormInput input[type=text],
+.vista-pmsite-signInPage .signInFormWrap .signInFormInput input[type=password] {
+	width:300px;
+}

@@ -1,0 +1,23 @@
+<wicket:panel>
+	<span wicket:id="feedback"/>
+	<form wicket:id="signInForm">
+		<div class="signInFormWrap">
+			<div class="signInFormInput username">
+				<label>Username:</label>
+				<input wicket:id="username" type="text"/>
+			</div>
+			<div class="signInFormInput password">
+				<label>Password:</label>
+				<input wicket:id="password" type="password"/>
+			</div>
+			<div class="signInFormInput remember">
+				<input wicket:id="rememberMe" type="checkbox" />
+				<label>Remember Me</label>
+			</div>
+			<div class="signInFormInput submit">
+				<input type="submit" name="submit" value="Sign In"/>
+				<input type="reset" value="Reset"/>
+			</div>
+		</div>
+	</form>
+</wicket:panel>

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
-import org.apache.wicket.authroles.authentication.panel.SignInPanel;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -22,8 +21,10 @@ import templates.TemplateResources;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
+import com.propertyvista.pmsite.server.panels.SignInPanel;
 
 public final class SignInPage extends BasePage {
+    private static final long serialVersionUID = 1L;
 
     public SignInPage() {
         this(null);
