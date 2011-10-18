@@ -165,7 +165,13 @@ public class CollectionsTableModel {
         Collection<Object> collectionMember = (Collection<Object>) member.getMember(entity);
 
         List<Object> allData = new Vector<Object>();
-        allData.addAll(collectionMember);
+        if (type == ObjectClassType.PrimitiveSet) {
+            allData.addAll(collectionMember);
+        } else {
+            for (Object ent : collectionMember) {
+                allData.add(((IEntity) ent).cast());
+            }
+        }
 
         List<Object> insertData = new Vector<Object>();
         insertData.addAll(allData);
@@ -217,7 +223,7 @@ public class CollectionsTableModel {
                 } else {
                     rs.deleteRow();
                     if ((value instanceof IEntity) && (member.getMemberMeta().isOwnedRelationships())) {
-                        //cascadeRemove.add((IEntity) value);
+                        cascadeRemove.add((IEntity) value);
                     }
                 }
             }

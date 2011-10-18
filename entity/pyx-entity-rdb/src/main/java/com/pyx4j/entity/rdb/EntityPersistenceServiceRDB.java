@@ -662,8 +662,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
                 for (IEntity childEntity : iCollectionMember) {
                     if (cascadeRetrieve(connection, childEntity) == null) {
-                        throw new RuntimeException("Entity " + memberMeta.getCaption() + " " + childEntity.getPrimaryKey() + " " + childEntity.getPath()
-                                + " NotFound");
+                        throw new RuntimeException("Entity " + childEntity.getEntityMeta().getCaption() + " " + childEntity.getPrimaryKey() + " "
+                                + childEntity.getPath() + " NotFound");
                     }
                 }
             }
