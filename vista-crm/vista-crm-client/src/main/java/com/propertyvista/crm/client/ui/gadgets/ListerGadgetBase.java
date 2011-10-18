@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.gadgets;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,10 +28,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
@@ -41,7 +38,6 @@ import com.pyx4j.site.rpc.services.AbstractListService;
 
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
-import com.propertyvista.domain.dashboard.StringHolder;
 import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings;
 import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings.RefreshInterval;
 import com.propertyvista.domain.dashboard.gadgets.SortEntity;
@@ -201,12 +197,14 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     private void storeSettings() {
         // COLUMNS:
         settings.columnPaths().clear();
-        Collection<ColumnDescriptor<E>> descriptors = getListerBase().getSelectedColumnDescriptors();
-        for (ColumnDescriptor<E> columnDescriptor : descriptors) {
-            StringHolder columnName = EntityFactory.create(StringHolder.class);
-            columnName.stringValue().setValue(columnDescriptor.getColumnName());
-            settings.columnPaths().add(columnName);
-        }
+        // FIXME currently pollutes db with strings on each save hence we are not going to enable this feature
+        // don't forget to fix applySettings() when enableing this
+//        Collection<ColumnDescriptor<E>> descriptors = getListerBase().getSelectedColumnDescriptors();
+//        for (ColumnDescriptor<E> columnDescriptor : descriptors) {
+//            StringHolder columnName = EntityFactory.create(StringHolder.class);
+//            columnName.stringValue().setValue(columnDescriptor.getColumnName());
+//            settings.columnPaths().add(columnName);
+//        }
 
         // SORTING:
         settings.sorting().clear();
@@ -229,18 +227,20 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         getRefreshTimer().reactivate();
 
         // apply columns
+        // FIXME see storeSettings for more info
         ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
-        if (settings.columnPaths().isEmpty()) {
-            this.fillDefaultColumnDescriptors(columnDescriptors, getListerBase().proto());
-        } else {
-            for (StringHolder columnName : settings.columnPaths()) {
-                ColumnDescriptor<E> columnDescriptor = ColumnDescriptorFactory.createColumnDescriptor(getListerBase().proto(), getListerBase().proto()
-                        .getMember(new Path(columnName.stringValue().getValue())));
-                columnDescriptors.add(columnDescriptor);
-            }
-
-        }
-        getListerBase().setColumnDescriptors(columnDescriptors);
+        fillDefaultColumnDescriptors(columnDescriptors, getListerBase().proto());
+//        if (settings.columnPaths().isEmpty()) {
+//            this.fillDefaultColumnDescriptors(columnDescriptors, getListerBase().proto());
+//        } else {
+//            for (StringHolder columnName : settings.columnPaths()) {
+//                ColumnDescriptor<E> columnDescriptor = ColumnDescriptorFactory.createColumnDescriptor(getListerBase().proto(), getListerBase().proto()
+//                        .getMember(new Path(columnName.stringValue().getValue())));
+//                columnDescriptors.add(columnDescriptor);
+//            }
+//
+//        }
+//        getListerBase().setColumnDescriptors(columnDescriptors);
 
         // apply sorting
         List<Sort> sorting = new LinkedList<Sort>();

@@ -13,7 +13,9 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -46,7 +48,7 @@ import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnaly
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 
 public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
-
+// Candidate for efficient boxed counter (i.e. for storing in HashMap)
 //    private static final class Counter {
 //        private int initialValue;
 //
@@ -93,13 +95,14 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
 
         EntitySearchResult<UnitVacancyReport> unitResult = EntityLister.secureQuery(criteria);
 
-        long toReportTime = dateConstraints[1].getTime();
+        long from = dateConstraints[0].getTime();
+        long to = dateConstraints[1].getTime();
 
         for (UnitVacancyReport unit : unitResult.getData()) {
             computeState(unit, dateConstraints[0], dateConstraints[1]);
             computeRentDelta(unit);
             if (isRevenueLost(unit)) {
-                computeDaysVacantAndRevenueLost(unit, toReportTime);
+                computeDaysVacantAndRevenueLost(unit, from, to);
             }
         }
 
@@ -115,6 +118,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
 
         UnitVacancyReportSummaryDTO summary = EntityFactory.create(UnitVacancyReportSummaryDTO.class);
 
+        long fromTime = fromDate.getTime();
         long toTime = toDate.getTime();
 
         int total = 0;
@@ -142,7 +146,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
             if (VacancyStatus.Vacant.equals(vacancyStatus)) {
                 ++vacant;
                 if (isRevenueLost(unit)) {
-                    computeDaysVacantAndRevenueLost(unit, toTime);
+                    computeDaysVacantAndRevenueLost(unit, fromTime, toTime);
                     netExposure += unit.revenueLost().getValue();
                 }
                 if (RentedStatus.Rented.equals(unit.rentedStatus().getValue())) {
@@ -199,19 +203,25 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
 
         criteria.add(new PropertyCriterion(criteria.proto().eventDate(), Restriction.GREATER_THAN_OR_EQUAL, fromDate));
         criteria.add(new PropertyCriterion(criteria.proto().eventDate(), Restriction.LESS_THAN, toDate));
-        criteria.add(new PropertyCriterion(criteria.proto().eventType(), Restriction.EQUAL, "movein"));
+        ArrayList<String> eventsFilter = new ArrayList<String>();
+        eventsFilter.add("movein");
+        eventsFilter.add("moveout");
+        criteria.add(new PropertyCriterion(criteria.proto().eventType(), Restriction.IN, eventsFilter));
         criteria.sort(new Sort(criteria.proto().eventDate().getPath().toString(), false));
 
         List<UnitVacancyReportEvent> events = Persistence.service().query(criteria);
+        // TODO consider using ordering of results by unitKey and then date (if possible) instead of hashmap 
+        HashMap<String, Boolean> someoneMovedOut = new HashMap<String, Boolean>();
 
         long intervalStart = fromDate.getTime();
         long intervalEnd = intervalEnd(intervalStart, resolution);
         int turnovers = 0;
-        int total = 0; // I don't use events.size() because it can be a linked list
+        int total = 0;
 
         for (UnitVacancyReportEvent event : events) {
             long eventTime = event.eventDate().getValue().getTime();
             while (eventTime >= intervalEnd) {
+                someoneMovedOut = new HashMap<String, Boolean>();
                 UnitVacancyReportTurnoverAnalysisDTO analysis = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
                 analysis.fromDate().setValue(new LogicalDate(intervalStart));
                 analysis.toDate().setValue(new LogicalDate(intervalEnd));
@@ -222,8 +232,16 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
                 intervalEnd = intervalEnd(intervalStart, resolution);
                 turnovers = 0;
             }
-            ++turnovers;
-            ++total;
+            // FIXME Really Slow: hope there will be unique key someday !!!
+            String unitKey = "" + event.propertyCode() + event.unit();
+            String eventType = event.eventType().getValue();
+            Boolean isMovedOut = someoneMovedOut.get(unitKey);
+            if (isMovedOut == null && eventType.equals("moveout")) {
+                someoneMovedOut.put(unitKey, Boolean.TRUE);
+            } else if (isMovedOut == Boolean.TRUE & eventType.equals("movein")) {
+                ++turnovers;
+                ++total;
+            }
         }
 
         final long endReportTime = toDate.getTime();
@@ -382,9 +400,11 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         return VacancyStatus.Vacant.equals(unit.vacancyStatus().getValue()) & unit.moveOutDay().getValue() != null;
     }
 
-    private static void computeDaysVacantAndRevenueLost(UnitVacancyReport unit, final long endOfTime) {
-        // TODO if we have start of time : do we have to count the days vacant from the startoftime or the possible history? 
+    private static void computeDaysVacantAndRevenueLost(UnitVacancyReport unit, final long startOfTime, final long endOfTime) {
+        // TODO ask Arthur what if we have start of time: do we have to count the days vacant frin 'fromTime' or the possible history
+        // currently we do it from the fromTime
         long availableFrom = 1 + unit.moveOutDay().getValue().getTime();
+        availableFrom = Math.max(startOfTime, availableFrom);
         long millisecondsVacant = endOfTime - availableFrom;
 
         int daysVacant = (int) (millisecondsVacant / (1000 * 60 * 60 * 24)); // some really heavy math :)            

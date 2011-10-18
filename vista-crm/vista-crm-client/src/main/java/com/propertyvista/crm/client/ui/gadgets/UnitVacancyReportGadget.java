@@ -42,6 +42,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -128,7 +129,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         gadgetPanel.add(analysisView.asWidget());
         activity = new UnitVacancyReportGadgetActivity(this, (UnitVacancyReportService) service);
 
-        toDate = new LogicalDate();
+        toDate = new LogicalDate(TimeUtils.dayEnd(TimeUtils.today()));
         fromDate = new LogicalDate(toDate.getTime() - UnitVacancyReportService.MAX_DATE_RANGE);
     }
 
@@ -255,7 +256,9 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
     @Override
     public void setFiltering(FilterData filter) {
         fromDate = new LogicalDate(filter.fromDate.getTime());
-        toDate = new LogicalDate(filter.toDate.getTime());
+        // we are making non inclusive range [,), but we think it's more intuitive to make it inclusive
+        // hence we fix the to date to point to the beggining of the next day
+        toDate = new LogicalDate(TimeUtils.dayEnd(filter.toDate));
         setBuildings(filter.buildings);
         stop();
         start();
@@ -285,10 +288,9 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
         // TODO use lazy initalization to create the translated list of the months only once
 
-        final String[] months = new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
-                "December" };
+        // TODO the someone to add MONTH_NAMES_LONG to the Time Utils
+        String monthRepr = i18n.tr(TimeUtils.MONTH_NAMES_SHORT[date.getDay()]);
 
-        String monthRepr = i18n.tr(months[date.getMonth()]);
         return monthRepr.substring(0, Math.min(3, monthRepr.length()));
     }
 
