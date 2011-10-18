@@ -25,6 +25,7 @@ import java.io.Serializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.rpc.test.client.TestServices;
 
 public class TestServicesImpl {
@@ -56,7 +57,7 @@ public class TestServicesImpl {
             if ((request == null) || (request.length() == 0)) {
                 return request;
             } else {
-                throw new RuntimeException(request);
+                throw new RuntimeExceptionSerializable(request);
             }
         }
 
