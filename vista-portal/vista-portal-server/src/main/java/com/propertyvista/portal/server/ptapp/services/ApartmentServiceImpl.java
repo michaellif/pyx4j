@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.ptapp.services;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -51,8 +52,43 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
-    public void save(AsyncCallback<ApartmentInfoDTO> callback, ApartmentInfoDTO editableEntity) {
-        callback.onSuccess(null); // this PT App. step is read-only!..
+    public void save(AsyncCallback<ApartmentInfoDTO> callback, ApartmentInfoDTO entity) {
+
+        // update agreed items:
+
+        Lease lease = PtAppContext.getCurrentUserLease();
+        for (Iterator<ChargeItem> iter = lease.serviceAgreement().featureItems().iterator(); iter.hasNext();) {
+            ChargeItem item = iter.next();
+            if (item.item().type().type().getValue().equals(ServiceItemType.Type.feature)) {
+                switch (item.item().type().featureType().getValue()) {
+                case utility:
+                    break;
+                case pet:
+                case parking:
+                case locker:
+                default:
+                    iter.remove(); // remove all non-utility items
+                }
+            }
+        }
+
+        // add user-selected ones: 
+        lease.serviceAgreement().featureItems().addAll(entity.agreedPets());
+        lease.serviceAgreement().featureItems().addAll(entity.agreedParking());
+        lease.serviceAgreement().featureItems().addAll(entity.agreedStorage());
+        lease.serviceAgreement().featureItems().addAll(entity.agreedOther());
+
+        // save changes: 
+        for (ChargeItem item : lease.serviceAgreement().featureItems()) {
+            if (!item.extraData().isNull()) {
+                Persistence.service().merge(item.extraData());
+            }
+        }
+
+// actually, just feature list should be saved:        
+//        Persistence.service().merge(lease.serviceAgreement().featureItems());
+        Persistence.service().merge(lease);
+        callback.onSuccess(entity);
     }
 
     public ApartmentInfoDTO retrieveData() {
@@ -61,7 +97,7 @@ public class ApartmentServiceImpl implements ApartmentService {
             throw new UserRuntimeException("There is no Unit selected!?.");
         }
         if (!Persistence.service().retrieve(lease.unit().floorplan())) {
-            throw new UserRuntimeException("There is no unit Floorplan data!?.");
+            throw new UserRuntimeException("There is no unit Floor plan data!?.");
         }
         if (!Persistence.service().retrieve(lease.unit().belongsTo())) {
             throw new UserRuntimeException("There is no unit building data!?.");

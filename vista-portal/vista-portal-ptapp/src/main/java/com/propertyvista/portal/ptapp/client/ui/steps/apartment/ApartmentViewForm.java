@@ -36,7 +36,9 @@ import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.i18n.shared.I18n;
@@ -45,6 +47,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
+import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
@@ -351,18 +354,29 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
                         CEntityEditor editor = null;
                         switch (value.item().type().featureType().getValue()) {
                         case parking:
-                            editor = new CEntityEditor<Vehicle>(Vehicle.class) {
+                            editor = new CEntityEditor<Vehicle>(Vehicle.class, new VistaEditorsComponentFactory()) {
                                 @Override
                                 public IsWidget createContent() {
                                     VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
+                                    VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 30);
+
                                     panel.add(new HTML(HtmlUtils.h5(VistaEntityFolder.i18n.tr("Vehicle data:"))));
-                                    panel.add(inject(proto().plateNumber()), 8);
-                                    panel.add(inject(proto().year()), 5);
-                                    panel.add(inject(proto().make()), 8);
-                                    panel.add(inject(proto().model()), 8);
-                                    panel.add(inject(proto().country()), 9);
-                                    panel.add(inject(proto().province()), 16);
+                                    panel.add(split);
+
+                                    split.getLeftPanel().add(inject(proto().year()), 5);
+                                    split.getLeftPanel().add(inject(proto().make()), 10);
+                                    split.getLeftPanel().add(inject(proto().model()), 10);
+
+                                    split.getRightPanel().add(inject(proto().plateNumber()), 10);
+                                    split.getRightPanel().add(inject(proto().country()), 10);
+                                    split.getRightPanel().add(inject(proto().province()), 17);
+
                                     return panel;
+                                }
+
+                                @Override
+                                public CEditableComponent<?, ?> create(IObject<?> member) {
+                                    return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
                                 }
                             };
 
@@ -371,18 +385,29 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
                             }
                             break;
                         case pet:
-                            editor = new CEntityEditor<Pet>(Pet.class) {
+                            editor = new CEntityEditor<Pet>(Pet.class, new VistaEditorsComponentFactory()) {
                                 @Override
                                 public IsWidget createContent() {
                                     VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
+                                    VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 30);
+
                                     panel.add(new HTML(HtmlUtils.h5(VistaEntityFolder.i18n.tr("Pet data:"))));
-                                    panel.add(inject(proto().name()), 14);
-                                    panel.add(inject(proto().color()), 6);
-                                    panel.add(inject(proto().breed()), 13);
-                                    panel.add(inject(proto().weight()), 4);
-                                    panel.add(inject(proto().weightUnit()), 4);
-                                    panel.add(inject(proto().birthDate()), 8.2);
+                                    panel.add(split);
+
+                                    split.getLeftPanel().add(inject(proto().name()), 15);
+                                    split.getLeftPanel().add(inject(proto().color()), 10);
+                                    split.getLeftPanel().add(inject(proto().breed()), 15);
+
+                                    split.getRightPanel().add(inject(proto().weight()), 4);
+                                    split.getRightPanel().add(inject(proto().weightUnit()), 4);
+                                    split.getRightPanel().add(inject(proto().birthDate()), 8.2);
+
                                     return panel;
+                                }
+
+                                @Override
+                                public CEditableComponent<?, ?> create(IObject<?> member) {
+                                    return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
                                 }
                             };
 
