@@ -81,7 +81,7 @@ public class Formatter {
         StringBuffer strbuffer = new StringBuffer();
         for (AmenityDTO amenity : amenities) {
             if (!amenity.isNull() && !amenity.isEmpty()) {
-                strbuffer.append(formatListItem(amenity.getStringView()));
+                strbuffer.append(formatListItem(amenity.name().getStringView()));
             }
         }
         String finalString = strbuffer.toString();

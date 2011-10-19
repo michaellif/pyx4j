@@ -30,6 +30,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
@@ -89,6 +90,7 @@ public class Converter {
 
         to.location().setValue(from.info().address().location().getValue());
 
+        Double minPrice = null, maxPrice = null;
         // List of Floorplans
         for (Floorplan fp : floorplans) {
             FloorplanPropertyDTO fpto = EntityFactory.create(FloorplanPropertyDTO.class);
@@ -97,7 +99,23 @@ public class Converter {
             fpto.bathrooms().set(fp.bathrooms());
             fpto.price().set(CommonsGenerator.createRange(600d, 1600d));
             to.floorplansProperty().add(fpto);
+
+            // list floorplan units
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), fp.building().getPrimaryKey().asLong()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), fp));
+            for (AptUnit unit : Persistence.service().query(criteria)) {
+                Double _prc = unit.financial().unitRent().getValue();
+                if (minPrice == null || minPrice > _prc) {
+                    minPrice = _prc;
+                }
+                if (maxPrice == null || maxPrice < _prc) {
+                    maxPrice = _prc;
+                }
+            }
         }
+        to.price().min().setValue(minPrice);
+        to.price().max().setValue(maxPrice);
 
         if (!from.media().isEmpty()) {
             to.mainMedia().setValue(from.media().get(0).getPrimaryKey());

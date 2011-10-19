@@ -19,6 +19,8 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 @Transient
 public interface PropertySearchCriteria extends IEntity {
@@ -31,6 +33,7 @@ public interface PropertySearchCriteria extends IEntity {
         map, list
     }
 
+    @I18n
     public static enum PriceRange {
 
         Any(null), lt600(0), gt600(600), gt800(800), gt1000(1000), gt1200(1200);
@@ -72,10 +75,11 @@ public interface PropertySearchCriteria extends IEntity {
                     result = "$" + minPrice + " - $" + maxPrice;
                 }
             }
-            return result;
+            return com.pyx4j.i18n.shared.I18n.get(PriceRange.class).tr(result);
         }
     }
 
+    @I18n
     public static enum BedroomRange {
         Any(null, null), One(1, 1), OneOrMore(1), Two(2, 2), TwoOrMore(2), Three(3, 3), ThreeOrMore(3), Four(4, 4), FourOrMore(4);
 
@@ -102,13 +106,17 @@ public interface PropertySearchCriteria extends IEntity {
 
         @Override
         public String toString() {
+            String result;
             if (minBeds == null) {
-                return super.toString();
+                result = super.toString();
+            } else {
+                result = minBeds + (maxBeds == null ? " or more" : "");
             }
-            return minBeds + (maxBeds == null ? " or more" : "");
+            return com.pyx4j.i18n.shared.I18n.get(BedroomRange.class).tr(result);
         }
     }
 
+    @I18n
     public static enum BedroomChoice {
         Any(0), One(1), Two(2), Three(3), Four(4);
         Integer beds = 0;
@@ -127,8 +135,14 @@ public interface PropertySearchCriteria extends IEntity {
             }
             return choice;
         }
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
 
+    @I18n
     public static enum BathroomChoice {
         Any(0), One(1), Two(2), Three(3), Four(4), Five(5);
         Integer bath = 0;
@@ -146,6 +160,11 @@ public interface PropertySearchCriteria extends IEntity {
                 }
             }
             return choice;
+        }
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
         }
     }
 
