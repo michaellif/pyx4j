@@ -16,22 +16,18 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
-import com.propertyvista.crm.client.ui.crud.tenant.InquiryEditorView;
-import com.propertyvista.crm.client.ui.crud.tenant.InquiryEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.InquiryListerView;
-import com.propertyvista.crm.client.ui.crud.tenant.InquiryListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.InquiryViewerView;
-import com.propertyvista.crm.client.ui.crud.tenant.InquiryViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantEditorView;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantListerView;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.TenantScreeningEditorView;
-import com.propertyvista.crm.client.ui.crud.tenant.TenantScreeningEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.tenant.TenantScreeningViewerView;
-import com.propertyvista.crm.client.ui.crud.tenant.TenantScreeningViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.inquiry.InquiryEditorView;
+import com.propertyvista.crm.client.ui.crud.tenant.inquiry.InquiryEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.inquiry.InquiryListerView;
+import com.propertyvista.crm.client.ui.crud.tenant.inquiry.InquiryListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.inquiry.InquiryViewerView;
+import com.propertyvista.crm.client.ui.crud.tenant.inquiry.InquiryViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.lead.AppointmentEditorView;
 import com.propertyvista.crm.client.ui.crud.tenant.lead.AppointmentEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.lead.AppointmentListerView;
@@ -56,6 +52,10 @@ import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseListerView;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.TenantScreeningEditorView;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.TenantScreeningEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.TenantScreeningViewerView;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.TenantScreeningViewerViewImpl;
 
 public class TenantViewFactory extends ViewFactoryBase {
 

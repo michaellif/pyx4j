@@ -19,6 +19,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.TenantScreeningLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.dto.TenantDTO;

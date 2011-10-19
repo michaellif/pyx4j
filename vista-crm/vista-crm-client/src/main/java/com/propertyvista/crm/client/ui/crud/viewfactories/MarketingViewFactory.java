@@ -16,18 +16,18 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
-import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionEditorView;
-import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionViewerView;
-import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureEditorView;
-import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureViewerView;
-import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceEditorView;
-import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceViewerView;
-import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorView;
+import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionViewerView;
+import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.building.catalog.feature.FeatureEditorView;
+import com.propertyvista.crm.client.ui.crud.building.catalog.feature.FeatureEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.building.catalog.feature.FeatureViewerView;
+import com.propertyvista.crm.client.ui.crud.building.catalog.feature.FeatureViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceEditorView;
+import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceViewerView;
+import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceViewerViewImpl;
 
 public class MarketingViewFactory extends ViewFactoryBase {
 

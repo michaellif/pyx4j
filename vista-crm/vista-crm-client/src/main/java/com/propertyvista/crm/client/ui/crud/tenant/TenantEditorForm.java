@@ -24,31 +24,18 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
-import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
@@ -98,7 +85,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         SubtypeInjectors.injectPhones(company, proto().company().phones(), this);
         SubtypeInjectors.injectEmails(company, proto().company().emails(), this);
 
-        contacts.add(inject(proto().emergencyContacts(), createEmergencyContactFolderEditor()));
+        contacts.add(inject(proto().emergencyContacts(), new EmergencyContactFolder()));
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;
@@ -152,70 +139,5 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
         tabPanel.add(new ScrollPanel(contacts), proto().emergencyContacts().getMeta().getCaption());
         tabPanel.setDisableMode(isEditable());
-    }
-
-    private CEntityFolder<EmergencyContact> createEmergencyContactFolderEditor() {
-        return new VistaTableFolder<EmergencyContact>(EmergencyContact.class, i18n.tr("Contact"), isEditable()) {
-            private final VistaTableFolder<EmergencyContact> parent = this;
-
-            @Override
-            protected IFolderDecorator<EmergencyContact> createDecorator() {
-                return new VistaBoxFolderDecorator<EmergencyContact>(parent);
-            }
-
-            @Override
-            protected CEntityFolderItem<EmergencyContact> createItem(final boolean first) {
-                return new CEntityFolderItem<EmergencyContact>(EmergencyContact.class) {
-                    @Override
-                    public IsWidget createContent() {
-                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable());
-                        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable());
-                        main.add(split);
-
-                        if (parent.isEditable()) {
-                            split.getLeftPanel().add(inject(proto().name().namePrefix()), 6);
-                            split.getLeftPanel().add(inject(proto().name().firstName()), 12);
-                            split.getLeftPanel().add(inject(proto().name().middleName()), 12);
-                            split.getLeftPanel().add(inject(proto().name().lastName()), 20);
-                        } else {
-                            split.getLeftPanel().add(inject(proto().name(), new CEntityLabel()), 20, "Contactee");
-                            get(proto().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-                        }
-
-                        split.getRightPanel().add(inject(proto().homePhone()), 15);
-                        split.getRightPanel().add(inject(proto().mobilePhone()), 15);
-                        split.getRightPanel().add(inject(proto().workPhone()), 15);
-
-                        VistaDecoratorsSplitFlowPanel split2 = new VistaDecoratorsSplitFlowPanel(!parent.isEditable());
-                        main.add(new VistaLineSeparator());
-                        main.add(split2);
-
-                        AddressUtils.injectIAddress(split2, proto().address(), this);
-
-                        return main;
-                    }
-
-                    @Override
-                    public IFolderItemDecorator<EmergencyContact> createDecorator() {
-                        //TODO
-                        // return new VistaBoxFolderItemDecorator<EmergencyContact>(parent, !first && parent.isEditable());
-                        return new VistaBoxFolderItemDecorator<EmergencyContact>(parent);
-                    }
-                };
-            }
-
-            @Override
-            public void populate(IList<EmergencyContact> value) {
-                super.populate(value);
-                if (parent.isEditable() && value.isEmpty()) {
-                    addItem(); // at least one Emergency Contact should be present!..
-                }
-            }
-
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                return null;
-            }
-        };
     }
 }

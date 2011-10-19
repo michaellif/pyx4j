@@ -22,7 +22,7 @@ import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.settings.content.PageViewer;
+import com.propertyvista.crm.client.ui.crud.settings.content.page.PageViewer;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.domain.site.PageDescriptor;

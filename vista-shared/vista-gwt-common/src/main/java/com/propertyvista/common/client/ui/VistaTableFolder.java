@@ -29,8 +29,6 @@ import com.propertyvista.common.client.resources.VistaImages;
 public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<E> {
     protected static I18n i18n = I18n.get(VistaTableFolder.class);
 
-    private final Class<E> clazz;
-
     private final String itemName;
 
     public VistaTableFolder(Class<E> clazz) {
@@ -47,7 +45,6 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
 
     public VistaTableFolder(Class<E> clazz, String itemName, boolean editable) {
         super(clazz);
-        this.clazz = clazz;
         this.itemName = itemName;
         setModifiable(editable);
         setOrderable(editable);

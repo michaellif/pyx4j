@@ -20,7 +20,7 @@ import com.pyx4j.entity.client.ReferenceDataManager;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.settings.content.SiteEditor;
+import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteEditor;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.SiteDescriptorCrudService;
 import com.propertyvista.domain.site.AvailableLocale;

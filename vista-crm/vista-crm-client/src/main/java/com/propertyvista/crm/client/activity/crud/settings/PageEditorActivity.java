@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.settings.content.PageEditor;
+import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditor;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.domain.site.PageDescriptor;

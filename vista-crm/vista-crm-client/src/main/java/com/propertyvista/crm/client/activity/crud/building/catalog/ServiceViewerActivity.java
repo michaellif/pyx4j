@@ -19,7 +19,7 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceViewerView;
+import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.ServiceCrudService;
 import com.propertyvista.domain.financial.offering.Service;
