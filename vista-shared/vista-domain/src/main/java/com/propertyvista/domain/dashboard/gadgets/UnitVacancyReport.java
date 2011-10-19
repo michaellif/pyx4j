@@ -101,37 +101,44 @@ public interface UnitVacancyReport extends IEntity {
     /** <code>{@link #unitRent()} - {@link #unitMarketRent()} </code> */
     @Transient
     @Caption(name = "Delta, in $")
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<Double> rentDeltaAbsolute();
 
     /** <code>({@link #unitRent()} - {@link #unitMarketRent()})/{@link #unitMarketRent()}</code> */
     @Transient
     @Caption(name = "Delta, in %")
     @Format("#0.00")
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<Double> rentDeltaRelative();
 
     /** {@link AptUnit#availableForRent()} - 1 */
     @Transient
     @Format("MM/dd/yyyy")
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> moveOutDay();
 
     /** Applicable only for rented */
     @Transient
     @Format("MM/dd/yyyy")
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> moveInDay();
 
     /** Applicable only for rented; maybe different than move out date */
     @Transient
     @Format("MM/dd/yyyy")
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> rentedFromDate();
 
     /** For Vacant units numberOfDays between today and availableForRent date */
     @Transient
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<Integer> daysVacant();
 
     /** days vacant * marketRent / 30 */
     @Transient
     @Caption(name = "Revenue Lost, in $")
     @Format("#0.00")
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<Double> revenueLost();
 
     /** this is hack to use the lister service interface */

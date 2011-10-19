@@ -15,9 +15,13 @@ package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -25,19 +29,25 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitVacancyReportService;
+import com.propertyvista.domain.dashboard.gadgets.CustomComparator;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport.RentReady;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport.RentedStatus;
@@ -48,40 +58,10 @@ import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnaly
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 
 public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
-// Candidate for efficient boxed counter (i.e. for storing in HashMap)
-//    private static final class Counter {
-//        private int initialValue;
-//
-//        public Counter(int initialValue) {
-//            this.initialValue = initialValue;
-//        }
-//
-//        public Counter() {
-//            this(0);
-//        }
-//
-//        public void inc() {
-//            ++initialValue;
-//        }
-//
-//        public void dec() {
-//            --initialValue;
-//        }
-//
-//        public void assign(int newValue) {
-//            initialValue = 0;
-//        }
-//
-//        public int getValue() {
-//            return initialValue;
-//        }
-//
-//        @Override
-//        public String toString() {
-//            return Integer.toString(initialValue);
-//        }
-//
-//    }
+
+    private static final Object TRANSIENT_PROPERTIES_MUTEX = new Object();
+
+    private static TransientPropertySortEngine<UnitVacancyReport> TRANSIENT_PROPERTY_SORT_ENGINE = null;
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<UnitVacancyReport>> callback, EntityListCriteria<UnitVacancyReport> criteria) {
@@ -93,12 +73,16 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
             return;
         }
 
-        EntitySearchResult<UnitVacancyReport> unitResult = EntityLister.secureQuery(criteria);
+        // some of the fields in records are transient (in the IEntity sense), hence we have to extract them from the criteria and sorts the results for ourselves
+        List<Sort> transientSorts = null;
+        transientSorts = getTransientPropertySortEngine().extractSortCriteriaForTransientProperties(criteria);
+
+        EntitySearchResult<UnitVacancyReport> units = EntityLister.secureQuery(criteria);
 
         long from = dateConstraints[0].getTime();
         long to = dateConstraints[1].getTime();
 
-        for (UnitVacancyReport unit : unitResult.getData()) {
+        for (UnitVacancyReport unit : units.getData()) {
             computeState(unit, dateConstraints[0], dateConstraints[1]);
             computeRentDelta(unit);
             if (isRevenueLost(unit)) {
@@ -106,8 +90,17 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
             }
         }
 
-        callback.onSuccess(unitResult);
+        // now we are going to have to sort this: really fun and amazing stuff
+        if (!transientSorts.isEmpty()) {
+            getTransientPropertySortEngine().sort(units.getData(), transientSorts);
+        }
+        callback.onSuccess(units);
 
+    }
+
+    @Override
+    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+        // Not Used
     }
 
     @Override
@@ -459,9 +452,196 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         }
     }
 
-    @Override
-    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        // Not Used
+//    private static Set<String> getTransientPropertiesOfUnitVacancyReportClass() {
+//        Set<String> transientProperties = TRANSIENT_PROPERTIES;
+//
+//        if (transientProperties == null) {
+//            synchronized (TRANSIENT_PROPERTIES_MUTEX) {
+//                transientProperties = TRANSIENT_PROPERTIES;
+//                if (transientProperties == null) {
+//                    HashSet<String> temp = new HashSet<String>();
+//
+//                    for (Method method : UnitVacancyReport.class.getMethods()) {
+//                        if (method.getAnnotation(Transient.class) != null) {
+//                            temp.add(UnitVacancyReport.class.getName() + "/" + method.getName() + "/");
+//                        }
+//                    }
+//                    transientProperties = TRANSIENT_PROPERTIES = Collections.unmodifiableSet(temp);
+//                }
+//            } // end of synchronized block
+//        }
+//
+//        return transientProperties;
+//    }
+
+    // Candidate for efficient boxed counter (i.e. for storing in HashMap)    
+//  private static final class Counter {
+//      private int initialValue;
+//
+//      public Counter(int initialValue) {
+//          this.initialValue = initialValue;
+//      }
+//
+//      public Counter() {
+//          this(0);
+//      }
+//
+//      public void inc() {
+//          ++initialValue;
+//      }
+//
+//      public void dec() {
+//          --initialValue;
+//      }
+//
+//      public void assign(int newValue) {
+//          initialValue = 0;
+//      }
+//
+//      public int getValue() {
+//          return initialValue;
+//      }
+//
+//      @Override
+//      public String toString() {
+//          return Integer.toString(initialValue);
+//      }
+//
+//  }
+
+    private static TransientPropertySortEngine<UnitVacancyReport> getTransientPropertySortEngine() {
+        TransientPropertySortEngine<UnitVacancyReport> sortEngine = TRANSIENT_PROPERTY_SORT_ENGINE;
+        if (sortEngine == null) {
+            synchronized (TRANSIENT_PROPERTIES_MUTEX) {
+                if (sortEngine == null) {
+                    sortEngine = TRANSIENT_PROPERTY_SORT_ENGINE = new TransientPropertySortEngine<UnitVacancyReport>(UnitVacancyReport.class);
+                }
+            }
+        }
+        return sortEngine;
+    }
+
+    /** This is supposed to be thread safe sort engine for transient fields. Maybe I'm going to write detailed usage information when it works */
+    public static class TransientPropertySortEngine<X extends IEntity> {
+        @SuppressWarnings("rawtypes")
+        private final Map<String, Comparator> transientProperties;
+
+        @SuppressWarnings("rawtypes")
+        public TransientPropertySortEngine(Class<X> clazz) {
+            Map<String, Comparator> temp = new HashMap<String, Comparator>();
+            IEntity proto = EntityFactory.create(clazz);
+
+            for (String memberName : proto.getEntityMeta().getMemberNames()) {
+                String propertyName;
+                Comparator propertyComparator = null;
+                MemberMeta memberMeta = proto.getMember(memberName).getMeta();
+
+                if (memberMeta.getAnnotation(Transient.class) != null) {
+                    IObject<?> member = proto.getMember(memberName);
+                    propertyName = member.getPath().toString();
+                    CustomComparator customComparatorAnnotation = memberMeta.getAnnotation(CustomComparator.class);
+                    if (customComparatorAnnotation != null) {
+                        try {
+                            propertyComparator = customComparatorAnnotation.clazz().newInstance();
+                        } catch (InstantiationException e) {
+                            // TODO do something (log maybe)
+                        } catch (IllegalAccessException e) {
+                            // TODO do something (log maybe)
+                        }
+                    }
+                    temp.put(propertyName, propertyComparator);
+                }
+            }
+            transientProperties = Collections.unmodifiableMap(temp);
+        }
+
+        public List<Sort> extractSortCriteriaForTransientProperties(EntityListCriteria<X> criteria) {
+            List<Sort> sorts = criteria.getSorts();
+            List<Sort> filteredSorts = new LinkedList<Sort>();
+            List<Sort> extractedSorts = new LinkedList<Sort>();
+
+            for (Sort s : sorts) {
+                if (getTransientProperties().containsKey(s.getPropertyName())) {
+                    extractedSorts.add(s);
+                } else {
+                    filteredSorts.add(s);
+                }
+            }
+            criteria.setSorts(filteredSorts);
+            return extractedSorts;
+        }
+
+        @SuppressWarnings("rawtypes")
+        public void sort(List<X> unsortedList, List<Sort> sortCriteria) {
+            List<Sort> relevantSortCriteria = new LinkedList<Sort>();
+            List<Comparator> comparators = new LinkedList<Comparator>();
+
+            for (Sort sortCriterion : sortCriteria) {
+                Comparator comparator = getTransientProperties().get(sortCriterion.getPropertyName());
+                if (comparator != null) {
+                    relevantSortCriteria.add(sortCriterion);
+                    comparators.add(comparator);
+                }
+            }
+            CombinedComparator combinedComparator = new CombinedComparator(relevantSortCriteria);
+            Collections.sort(unsortedList, combinedComparator);
+        }
+
+        @SuppressWarnings("rawtypes")
+        public Map<String, Comparator> getTransientProperties() {
+            return transientProperties;
+        }
+
+        private class CombinedComparator implements Comparator<X> {
+            @SuppressWarnings("rawtypes")
+            final List<Comparator> comps;
+
+            final List<Sort> sortCriteria;
+
+            public CombinedComparator(List<Sort> relevantSortCriteria) {
+                comps = new LinkedList<Comparator>();
+                sortCriteria = relevantSortCriteria;
+
+                for (Sort sortCriterion : sortCriteria) {
+                    final Comparator cmp = getTransientProperties().get(sortCriterion.getPropertyName());
+                    if (cmp == null) {
+                        // TODO maybe throw exception (someone is trying to sort something that has no associated comparator)
+                        continue;
+                    }
+                    if (sortCriterion.isDescending()) {
+                        comps.add(new Comparator() {
+
+                            @SuppressWarnings("unchecked")
+                            @Override
+                            public int compare(Object paramT1, Object paramT2) {
+                                return -cmp.compare(paramT1, paramT2);
+                            }
+
+                        });
+                    } else {
+                        comps.add(cmp);
+                    }
+                }
+            }
+
+            @Override
+            public int compare(X paramT1, X paramT2) {
+                @SuppressWarnings("rawtypes")
+                Iterator<Comparator> ci = comps.iterator();
+                Iterator<Sort> si = sortCriteria.iterator();
+                while (ci.hasNext() & si.hasNext()) {
+                    Sort sortCriterion = si.next();
+                    Comparator cmp = ci.next();
+                    Object val1 = paramT1.getMember(new Path(sortCriterion.getPropertyName())).getValue();
+                    Object val2 = paramT2.getMember(new Path(sortCriterion.getPropertyName())).getValue();
+                    int result = cmp.compare(val1, val2);
+                    if (result != 0) {
+                        return result;
+                    }
+                }
+                return 0;
+            }
+        }
     }
 
 }
