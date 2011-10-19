@@ -39,9 +39,10 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.artifact.filter.StrictPatternExcludesArtifactFilter;
 import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
 import org.objectweb.asm.tree.analysis.AnalyzerException;
+import org.xml.sax.SAXException;
 
 import com.pyx4j.i18n.extractor.ConstantEntry;
-import com.pyx4j.i18n.extractor.ConstantExtractor;
+import com.pyx4j.i18n.extractor.Extractor;
 import com.pyx4j.i18n.gettext.POCatalog;
 import com.pyx4j.i18n.gettext.POEntry;
 import com.pyx4j.i18n.gettext.POFile;
@@ -239,7 +240,7 @@ public class ExtractMojo extends AbstractMojo {
             includeFilter = new StrictPatternIncludesArtifactFilter(includes);
         }
 
-        ConstantExtractor extractor = new ConstantExtractor();
+        Extractor extractor = new Extractor();
         for (@SuppressWarnings("rawtypes")
         Iterator i = dependancy.iterator(); i.hasNext();) {
             Artifact artifact = (Artifact) i.next();
@@ -256,7 +257,7 @@ public class ExtractMojo extends AbstractMojo {
             processClassesDirectory(extractor);
         }
 
-        extractor.analyzeTranslatableHierarchy();
+        extractor.complete();
 
         POFile po = writePOFile(extractor);
         writeTextFile(extractor);
@@ -282,7 +283,7 @@ public class ExtractMojo extends AbstractMojo {
         }
     }
 
-    private void processArtifact(ConstantExtractor extractor, Artifact artifact) throws MojoExecutionException {
+    private void processArtifact(Extractor extractor, Artifact artifact) throws MojoExecutionException {
         getLog().debug("processing " + artifact);
 
         File file = getArtifactFile(artifact);
@@ -295,19 +296,30 @@ public class ExtractMojo extends AbstractMojo {
             }
             int count = 0;
             for (ScannerEntry source : scanner.getEntries()) {
-                if (!source.isDirectory() && source.getName().endsWith(".class")) {
-                    InputStream in = source.getInputStream();
-                    try {
-                        extractor.readClass(in);
-                        count++;
-                    } finally {
-                        IOUtils.closeQuietly(in);
+                if (!source.isDirectory()) {
+                    if (source.getName().endsWith(".class")) {
+                        InputStream in = source.getInputStream();
+                        try {
+                            extractor.readClass(in);
+                        } finally {
+                            IOUtils.closeQuietly(in);
+                        }
+                    } else if (source.getName().endsWith(".html")) {
+                        InputStream in = source.getInputStream();
+                        try {
+                            extractor.readXMLFile(in, source.getName());
+                        } catch (SAXException e) {
+                            getLog().info("file pars error " + e.getMessage());
+                            getLog().info("ignore rest of the file " + source.getName());
+                        } finally {
+                            IOUtils.closeQuietly(in);
+                        }
                     }
                 }
             }
             getLog().debug("processed  " + artifact + "; classes " + count);
         } catch (IOException e) {
-            throw new MojoExecutionException("Error sacanning dependency artifact " + artifact, e);
+            throw new MojoExecutionException("Error scanning dependency artifact " + artifact, e);
         } catch (AnalyzerException e) {
             throw new MojoExecutionException("Error reading dependency artifact " + artifact, e);
         } finally {
@@ -315,25 +327,37 @@ public class ExtractMojo extends AbstractMojo {
         }
     }
 
-    private void processClassesDirectory(ConstantExtractor extractor) throws MojoExecutionException {
+    private void processClassesDirectory(Extractor extractor) throws MojoExecutionException {
         getLog().debug("processing " + classesDirectory);
         Scanner scanner = null;
         try {
             scanner = new DirectoryScanner(classesDirectory);
             int count = 0;
             for (ScannerEntry source : scanner.getEntries()) {
-                if (!source.isDirectory() && source.getName().endsWith(".class")) {
-                    InputStream in = source.getInputStream();
-                    try {
-                        extractor.readClass(in);
-                    } finally {
-                        IOUtils.closeQuietly(in);
+                if (!source.isDirectory()) {
+                    if (source.getName().endsWith(".class")) {
+                        InputStream in = source.getInputStream();
+                        try {
+                            extractor.readClass(in);
+                        } finally {
+                            IOUtils.closeQuietly(in);
+                        }
+                    } else if (source.getName().endsWith(".html")) {
+                        InputStream in = source.getInputStream();
+                        try {
+                            extractor.readXMLFile(in, source.getName());
+                        } catch (SAXException e) {
+                            getLog().info("file pars error " + e.getMessage());
+                            getLog().info("ignore rest of the file " + source.getName());
+                        } finally {
+                            IOUtils.closeQuietly(in);
+                        }
                     }
                 }
             }
             getLog().debug("processed  " + classesDirectory + "; classes " + count);
         } catch (IOException e) {
-            throw new MojoExecutionException("Error sacanning classesDirectory " + classesDirectory, e);
+            throw new MojoExecutionException("Error scanning classesDirectory " + classesDirectory, e);
         } catch (AnalyzerException e) {
             throw new MojoExecutionException("Error reading classesDirectory " + classesDirectory, e);
         } finally {
@@ -342,7 +366,7 @@ public class ExtractMojo extends AbstractMojo {
 
     }
 
-    private POFile writePOFile(ConstantExtractor extractor) throws MojoExecutionException {
+    private POFile writePOFile(Extractor extractor) throws MojoExecutionException {
         POFile po = new POFile();
         po.createDefaultHeader();
 
@@ -395,7 +419,7 @@ public class ExtractMojo extends AbstractMojo {
         }
     }
 
-    private void writeTextFile(ConstantExtractor extractor) throws MojoExecutionException {
+    private void writeTextFile(Extractor extractor) throws MojoExecutionException {
         PrintWriter writer = null;
         try {
             if (!extractedStrings.getParentFile().isDirectory()) {

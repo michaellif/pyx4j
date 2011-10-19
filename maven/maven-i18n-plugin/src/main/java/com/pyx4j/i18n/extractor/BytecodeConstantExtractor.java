@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
@@ -49,7 +48,7 @@ import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 import com.pyx4j.i18n.annotations.I18nAnnotation;
 import com.pyx4j.i18n.annotations.Translate;
 
-public class ConstantExtractor {
+public class BytecodeConstantExtractor {
 
     static String ENUM_CLASS = AsmUtils.codeName(Enum.class);
 
@@ -59,13 +58,13 @@ public class ConstantExtractor {
 
     static String TRANSLATABLE_ANNOTATION_CLASS = AsmUtils.annotationCodeName(I18nAnnotation.class);
 
-    private final Map<String, ConstantEntry> constants = new HashMap<String, ConstantEntry>();
-
     private final Collection<ClassNode> translatableSuper = new Vector<ClassNode>();
 
     private final Map<String, I18nAnnotationDefintition> isTranslations = new HashMap<String, I18nAnnotationDefintition>();
 
     private final Collection<ClassNode> allClasses = new Vector<ClassNode>();
+
+    private final Extractor extractor;
 
     private static class I18nAnnotationElementDefintition {
 
@@ -143,20 +142,8 @@ public class ConstantExtractor {
         }
     }
 
-    public ConstantExtractor() {
-
-    }
-
-    public Collection<ConstantEntry> getConstants() {
-        return constants.values();
-    }
-
-    public Collection<String> getConstantsText() {
-        Collection<String> r = new HashSet<String>();
-        for (ConstantEntry entry : this.getConstants()) {
-            r.add(entry.text);
-        }
-        return r;
+    public BytecodeConstantExtractor(Extractor extractor) {
+        this.extractor = extractor;
     }
 
     public void readClass(Class<?> in) throws IOException, AnalyzerException {
@@ -180,7 +167,7 @@ public class ConstantExtractor {
 
             @Override
             protected void i18nString(int lineNr, String text, boolean javaFormatFlag) {
-                addEntry(classSourceFileName, lineNr, text, javaFormatFlag);
+                extractor.addEntry(classSourceFileName, lineNr, text, javaFormatFlag);
             }
         };
 
@@ -208,17 +195,6 @@ public class ConstantExtractor {
                     }
                     allClasses.add(classNode);
                 }
-            }
-        }
-    }
-
-    public void addEntry(String classSourceFileName, int lineNr, String text, boolean javaFormatFlag) {
-        if (text.length() != 0) {
-            ConstantEntry entry = constants.get(text);
-            if (entry == null) {
-                constants.put(text, new ConstantEntry(classSourceFileName, lineNr, text, javaFormatFlag));
-            } else {
-                entry.addReference(classSourceFileName, lineNr);
             }
         }
     }
@@ -261,12 +237,12 @@ public class ConstantExtractor {
 
             Object translationValue = AsmUtils.getAnnotationValue(TRANSLATION_CLASS, "value", fieldNode);
             if (translationValue != null) {
-                addEntry(classSourceFileName, 1, translationValue.toString(), false);
+                extractor.addEntry(classSourceFileName, 1, translationValue.toString(), false);
             } else {
                 if (capitalize) {
-                    addEntry(classSourceFileName, 1, EnglishGrammar.capitalize(fieldNode.name), false);
+                    extractor.addEntry(classSourceFileName, 1, EnglishGrammar.capitalize(fieldNode.name), false);
                 } else {
-                    addEntry(classSourceFileName, 1, fieldNode.name, false);
+                    extractor.addEntry(classSourceFileName, 1, fieldNode.name, false);
                 }
             }
 
@@ -321,7 +297,7 @@ public class ConstantExtractor {
                             if (elementDefintition.isMainElement) {
                                 classNameFoound = true;
                             }
-                            addEntry(classSourceFileName, 0, value, elementDefintition.javaFormatFlag);
+                            extractor.addEntry(classSourceFileName, 0, value, elementDefintition.javaFormatFlag);
                         }
                     } else {
                         if (it.hasNext()) {
@@ -337,9 +313,10 @@ public class ConstantExtractor {
                 capitalize = false;
             }
             if (capitalize) {
-                addEntry(classSourceFileName, 0, EnglishGrammar.capitalize(EnglishGrammar.classNameToEnglish(AsmUtils.getSimpleName(classNode))), false);
+                extractor.addEntry(classSourceFileName, 0, EnglishGrammar.capitalize(EnglishGrammar.classNameToEnglish(AsmUtils.getSimpleName(classNode))),
+                        false);
             } else {
-                addEntry(classSourceFileName, 0, EnglishGrammar.classNameToEnglish(AsmUtils.getSimpleName(classNode)), false);
+                extractor.addEntry(classSourceFileName, 0, EnglishGrammar.classNameToEnglish(AsmUtils.getSimpleName(classNode)), false);
             }
         }
 
@@ -370,7 +347,7 @@ public class ConstantExtractor {
                                     if (elementDefintition.isMainElement) {
                                         methodNameFoound = true;
                                     }
-                                    addEntry(classSourceFileName, 2, value, elementDefintition.javaFormatFlag);
+                                    extractor.addEntry(classSourceFileName, 2, value, elementDefintition.javaFormatFlag);
                                 }
                             } else {
                                 if (it.hasNext()) {
@@ -386,9 +363,9 @@ public class ConstantExtractor {
                         capitalize = false;
                     }
                     if (capitalize) {
-                        addEntry(classSourceFileName, 2, EnglishGrammar.capitalize(methodNode.name), false);
+                        extractor.addEntry(classSourceFileName, 2, EnglishGrammar.capitalize(methodNode.name), false);
                     } else {
-                        addEntry(classSourceFileName, 2, methodNode.name, false);
+                        extractor.addEntry(classSourceFileName, 2, methodNode.name, false);
                     }
                 }
             }

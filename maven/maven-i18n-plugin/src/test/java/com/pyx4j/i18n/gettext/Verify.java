@@ -27,7 +27,7 @@ import java.util.Collection;
 import org.objectweb.asm.tree.analysis.AnalyzerException;
 
 import com.pyx4j.i18n.extractor.ConstantEntry;
-import com.pyx4j.i18n.extractor.ConstantExtractor;
+import com.pyx4j.i18n.extractor.Extractor;
 
 public class Verify {
 
@@ -36,9 +36,9 @@ public class Verify {
         System.out.println("--i18n tests --");
         in = Verify.class.getResourceAsStream("/ut/MainClass.class");
         try {
-            ConstantExtractor ce = new ConstantExtractor();
+            Extractor ce = new Extractor();
             ce.readClass(in);
-            ce.analyzeTranslatableHierarchy();
+            ce.complete();
             print(ce.getConstants());
         } finally {
             in.close();
@@ -46,9 +46,9 @@ public class Verify {
 
         in = Verify.class.getResourceAsStream("/ut/EnumTranslatable.class");
         try {
-            ConstantExtractor ce = new ConstantExtractor();
+            Extractor ce = new Extractor();
             ce.readClass(in);
-            ce.analyzeTranslatableHierarchy();
+            ce.complete();
             print(ce.getConstants());
         } finally {
             in.close();
@@ -56,9 +56,9 @@ public class Verify {
 
         in = Verify.class.getResourceAsStream("/ut/EnumWithTranslations.class");
         try {
-            ConstantExtractor ce = new ConstantExtractor();
+            Extractor ce = new Extractor();
             ce.readClass(in);
-            ce.analyzeTranslatableHierarchy();
+            ce.complete();
             print(ce.getConstants());
         } finally {
             in.close();

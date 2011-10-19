@@ -31,11 +31,11 @@ public class ConstantEntry {
 
     public boolean javaFormatFlag;
 
-    public ConstantEntry(String classSourceFileName, int lineNr, String text, boolean javaFormatFlag) {
+    public ConstantEntry(String sourceFileName, int lineNr, String text, boolean javaFormatFlag) {
         this.text = text;
         this.reference = new Vector<String>();
         this.javaFormatFlag = javaFormatFlag;
-        addReference(classSourceFileName, lineNr);
+        addReference(sourceFileName, lineNr);
     }
 
     public void addReference(String classSourceFileName, int lineNr) {

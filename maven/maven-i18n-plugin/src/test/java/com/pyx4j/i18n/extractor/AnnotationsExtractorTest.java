@@ -33,11 +33,11 @@ import com.pyx4j.i18n.annotations.I18nAnnotation;
 public class AnnotationsExtractorTest extends TestCase {
 
     public void testAnnotations() throws Exception {
-        ConstantExtractor ce = new ConstantExtractor();
+        Extractor ce = new Extractor();
         ce.readClass(ChildToTranslate.class);
         ce.readClass(SuperNotToTranslate.class);
         ce.readClass(I18nCaption.class);
-        ce.analyzeTranslatableHierarchy();
+        ce.complete();
 
         //print(ce.getConstants());
 
