@@ -5,7 +5,13 @@
     <inherits name='com.propertyvista.portal.Client'/>
     
     <extend-property name="locale" values="en_US"/>
-	<set-property name="locale" value="en_US"/>
+
+    <extend-property name="locale" values="ru"/>
+    <extend-property name="locale" values="fr"/>
+
+    <set-property-fallback name="locale" value="en_US"/>
+    <set-property name="locale" value="en_US,fr,ru"/>
+    
 	<set-configuration-property name="pyx.locale.default" value="en_US"/>
 	
     <inherits name='com.google.gwt.user.Debug'/>

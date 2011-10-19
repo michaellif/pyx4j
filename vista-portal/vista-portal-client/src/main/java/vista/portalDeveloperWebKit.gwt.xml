@@ -3,5 +3,6 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module rename-to="portal">
     <inherits name='vista.portal'/>
+    <set-property name="locale" value="en_US"/>
     <set-property name="user.agent" value="safari"/>
 </module>
