@@ -107,6 +107,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
     public void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, EntityQueryCriteria<UnitVacancyReport> criteria, LogicalDate fromDate,
             LogicalDate toDate) {
         extractDatesFromCriteria(criteria);
+        getTransientPropertySortEngine().extractSortCriteriaForTransientProperties(criteria);
         List<UnitVacancyReport> units = Persistence.service().query(criteria);
 
         UnitVacancyReportSummaryDTO summary = EntityFactory.create(UnitVacancyReportSummaryDTO.class);
@@ -555,7 +556,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
             transientProperties = Collections.unmodifiableMap(temp);
         }
 
-        public List<Sort> extractSortCriteriaForTransientProperties(EntityListCriteria<X> criteria) {
+        public List<Sort> extractSortCriteriaForTransientProperties(EntityQueryCriteria<X> criteria) {
             List<Sort> sorts = criteria.getSorts();
             List<Sort> filteredSorts = new LinkedList<Sort>();
             List<Sort> extractedSorts = new LinkedList<Sort>();

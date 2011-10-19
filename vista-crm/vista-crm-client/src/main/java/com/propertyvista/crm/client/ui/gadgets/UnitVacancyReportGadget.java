@@ -91,6 +91,10 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
     private static final int DEFAULT_ITEMS_PER_PAGE = 5;
 
+    private static final boolean DEFAULT_UNTIS_VISIBILITY = true;
+
+    private static final boolean DEFAULT_SUMMARY_VISIBLITY = true;
+
     private static final boolean DEFAULT_ANALYSIS_VISIBILITY = true;
 
     private static final boolean DEFAULT_ANALYSIS_SHOW_PERCENT = false;
@@ -99,7 +103,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
     private final VerticalPanel gadgetPanel;
 
-    private final AnalysisView analysisView;
+    private final AnalysisView turnoverAnalysisView;
 
     private final SummaryView summaryView;
 
@@ -125,8 +129,8 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         gadgetPanel.add(getListerBase());
         gadgetPanel.add(summaryView.asWidget());
 
-        analysisView = new AnalysisView(settings);
-        gadgetPanel.add(analysisView.asWidget());
+        turnoverAnalysisView = new AnalysisView(settings);
+        gadgetPanel.add(turnoverAnalysisView.asWidget());
         activity = new UnitVacancyReportGadgetActivity(this, (UnitVacancyReportService) service);
 
         toDate = new LogicalDate(TimeUtils.dayEnd(TimeUtils.today()));
@@ -147,7 +151,10 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         settings.currentPage().setValue(0);
         settings.columnPaths().clear();
 
+        settings.showUnits().setValue(DEFAULT_UNTIS_VISIBILITY);
+        settings.showSummary().setValue(DEFAULT_SUMMARY_VISIBLITY);
         settings.showTurnoverAnalysis().setValue(DEFAULT_ANALYSIS_VISIBILITY);
+
         settings.isTurnoverMeasuredByPercent().setValue(DEFAULT_ANALYSIS_SHOW_PERCENT);
         settings.turnoverAnalysisResolution().setValue(DEFAULT_ANALYSIS_RESOLUTION);
         return settings;
@@ -166,7 +173,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
     }
 
     public AnalysisView getAnalysisView() {
-        return analysisView;
+        return turnoverAnalysisView;
     }
 
     @Override
@@ -182,8 +189,10 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
     @Override
     public void start() {
+        getListerBase().asWidget().setVisible(getSettings().showUnits().getValue());
+        summaryView.asWidget().setVisible(getSettings().showSummary().getValue());
+        turnoverAnalysisView.asWidget().setVisible(getSettings().showTurnoverAnalysis().getValue());
         super.start();
-        analysisView.asWidget().setVisible(settings.showTurnoverAnalysis().getValue());
         populate();
     }
 
@@ -337,11 +346,18 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
         }
 
+        @Override
+        public void populate(int pageNumber) {
+            if (gadget != null && gadget.getSettings().showUnits().getValue()) {
+                super.populate(pageNumber);
+            }
+        }
+
         public void populateSummary() {
             if (gadget == null || (gadget.getFromDate() == null | gadget.getToDate() == null)) {
                 return;
             }
-            if (!gadget.getSettings().showTurnoverAnalysis().getValue()) {
+            if (!gadget.getSettings().showSummary().getValue()) {
                 return;
             }
 
@@ -360,6 +376,9 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
         public void populateTurnoverAnalysis() {
             if (gadget.getFromDate() == null | gadget.getToDate() == null) {
+                return;
+            }
+            if (!gadget.getSettings().showTurnoverAnalysis().getValue()) {
                 return;
             }
 
@@ -589,6 +608,10 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
         private final TabLayoutPanel combinedSetup;
 
+        private final CheckBox showUnits;
+
+        private final CheckBox showSummary;
+
         private final CheckBox showTurnoverAnalysis;
 
         public SetupView() {
@@ -598,17 +621,25 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
             parentSetup = UnitVacancyReportGadget.super.getSetup();
             combinedSetup.add(parentSetup.asWidget(), i18n.tr("General Settings"));
 
-            showTurnoverAnalysis = new CheckBox(i18n.tr("Show turnover analysis"));
-            showTurnoverAnalysis.setValue(UnitVacancyReportGadget.this.settings.showTurnoverAnalysis().getValue());
+            showUnits = new CheckBox(i18n.tr("units"));
+            showUnits.setValue(UnitVacancyReportGadget.this.getSettings().showUnits().getValue());
+
+            showSummary = new CheckBox(i18n.tr("summary"));
+            showSummary.setValue(UnitVacancyReportGadget.this.getSettings().showSummary().getValue());
+
+            showTurnoverAnalysis = new CheckBox(i18n.tr("turnover analysis"));
+            showTurnoverAnalysis.setValue(UnitVacancyReportGadget.this.getSettings().showTurnoverAnalysis().getValue());
 
             mySetup = new VerticalPanel();
             mySetup.setWidth("100%");
             mySetup.setHeight("100%");
+            mySetup.add(showUnits);
+            mySetup.add(showSummary);
             mySetup.add(showTurnoverAnalysis);
             mySetup.getElement().getStyle().setPaddingLeft(2, Unit.EM);
             mySetup.getElement().getStyle().setPaddingTop(1, Unit.EM);
 
-            combinedSetup.add(mySetup, i18n.tr("Turnover Analysis Settings"));
+            combinedSetup.add(mySetup, i18n.tr("Show/Hide"));
             combinedSetup.setWidth("100%");
             combinedSetup.setHeight("10em");
         }
@@ -620,15 +651,16 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
         @Override
         public boolean onStart() {
-            // restarts the Gadget (calls stop() and start())
+            // parent restarts the Gadget (calls stop() and start())
             return parentSetup.onStart();
         }
 
         @Override
         public boolean onOk() {
-            settings.showTurnoverAnalysis().setValue(showTurnoverAnalysis.getValue());
-            boolean parentStatus = parentSetup.onOk();
-            return parentStatus;
+            getSettings().showUnits().setValue(showUnits.getValue());
+            getSettings().showSummary().setValue(showSummary.getValue());
+            getSettings().showTurnoverAnalysis().setValue(showTurnoverAnalysis.getValue());
+            return parentSetup.onOk();
         }
 
         @Override
@@ -637,5 +669,4 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         }
 
     }
-
 }
