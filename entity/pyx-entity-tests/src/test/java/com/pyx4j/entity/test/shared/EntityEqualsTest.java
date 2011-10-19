@@ -52,7 +52,7 @@ public class EntityEqualsTest extends InitializerTestCase {
         Task task1 = EntityFactory.create(Task.class);
 
         Task task2 = EntityFactory.create(Task.class);
-        assertNotEquals("new Items should have diferent hashCode", task1.hashCode(), task2.hashCode());
+        assertNotEquals("new Items should have different hashCode", task1.hashCode(), task2.hashCode());
 
         long nullEntityHashCode = task1.hashCode();
         task1.status().setValue(Status.ACTIVE);
@@ -60,8 +60,8 @@ public class EntityEqualsTest extends InitializerTestCase {
 
         task2.status().setValue(Status.ACTIVE);
 
-        assertFalse("new Items are diferent", task1.equals(task2));
-        assertNotEquals("new Items should have diferent hashCode", task1.hashCode(), task2.hashCode());
+        assertFalse("new Items are different", task1.equals(task2));
+        assertNotEquals("new Items should have different hashCode", task1.hashCode(), task2.hashCode());
     }
 
     public void testSameValue() {
@@ -91,10 +91,10 @@ public class EntityEqualsTest extends InitializerTestCase {
         ent2.setPrimaryKey(new Key(1));
         ent2b.set(ent2);
 
-        assertFalse("Items of diferent type are diferent", ent1b.equals(ent2b));
+        assertFalse("Items of different type are different", ent1b.equals(ent2b));
 
         // N.B. Value comparison result is undefined in general case!
-        assertFalse("Items of diferent type are diferent", ent1b.getValue().equals(ent2b.getValue()));
+        assertFalse("Items of different type are different", ent1b.getValue().equals(ent2b.getValue()));
     }
 
     public void testEqualsWithSet() {
@@ -187,7 +187,7 @@ public class EntityEqualsTest extends InitializerTestCase {
 
     public void testIsEmpty() {
         Task t1 = EntityFactory.create(Task.class);
-        assertTrue("Initialy Empty", t1.isEmpty());
+        assertTrue("Initially Empty", t1.isEmpty());
 
         t1.setPrimaryKey(new Key(22));
         assertTrue("still Empty when just PK is set", t1.isEmpty());
@@ -208,6 +208,18 @@ public class EntityEqualsTest extends InitializerTestCase {
         ent2.setPrimaryKey(new Key(22));
         ent1.refference().set(ent2);
         assertTrue("should be still Empty", ent1.isEmpty());
+    }
+
+    public void testEqualAbstractSetMember() {
+        RefferenceEntity ent = EntityFactory.create(RefferenceEntity.class);
+        Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
+        ent1.setPrimaryKey(new Key(11));
+        ent.refferences().add(ent1);
+
+        Concrete2Entity ent1dup = EntityFactory.create(Concrete2Entity.class);
+        ent1dup.setPrimaryKey(new Key(11));
+
+        assertTrue("should be Equals", ent1dup.equals(ent.refferences().get(0)));
     }
 
 }

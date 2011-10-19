@@ -343,11 +343,21 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             return (other != null) && this.getClass().equals(other.getClass());
         }
         Map<String, Object> thisValue = this.getValue(false);
-        if ((other == null) || (thisValue == null) || (!(other instanceof IEntity))
-                || (!this.getInstanceValueClass().equals(((IEntity) other).getInstanceValueClass()))) {
+        if ((other == null) || (thisValue == null) || (!(other instanceof SharedEntityHandler)) || (((SharedEntityHandler) other).isTemplateEntity)) {
             return false;
         }
-        return thisValue.equals(((SharedEntityHandler) other).getValue(false));
+        Map<String, Object> otherValue = ((SharedEntityHandler) other).getValue(false);
+        if (otherValue == null) {
+            return false;
+        }
+        if (otherValue == thisValue) {
+            return true;
+        }
+        Object pk = thisValue.get(IEntity.PRIMARY_KEY);
+        if (pk == null) {
+            return false;
+        }
+        return EqualsHelper.equals(pk, otherValue.get(IEntity.PRIMARY_KEY)) && (this.getInstanceValueClass().equals(((IEntity) other).getInstanceValueClass()));
     }
 
     @Override

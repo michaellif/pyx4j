@@ -148,13 +148,11 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
     }
 
     public void testListMemeberPersist() {
-        //TODO
-        //testListMemeber(TestCaseMethod.Persist);
+        testListMemeber(TestCaseMethod.Persist);
     }
 
     public void testListMemeberMerge() {
-        //TODO
-        //testListMemeber(TestCaseMethod.Merge);
+        testListMemeber(TestCaseMethod.Merge);
     }
 
     private void testListMemeber(TestCaseMethod testCaseMethod) {
@@ -286,13 +284,11 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
     }
 
     public void testInListOwnedListUpdate() {
-        //TODO
-        //testInListOwnedListUpdate(TestCaseMethod.Persist);
+        testInListOwnedListUpdate(TestCaseMethod.Persist);
     }
 
     public void testInListOwnedListMerge() {
-        //TODO
-        //testInListOwnedListUpdate(TestCaseMethod.Merge);
+        testInListOwnedListUpdate(TestCaseMethod.Merge);
     }
 
     public void testInListOwnedListUpdate(TestCaseMethod testCaseMethod) {
