@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
@@ -27,46 +25,37 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
+import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.AddressUtils;
-import com.propertyvista.common.client.ui.components.OkCancelBox;
-import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
-import com.propertyvista.crm.client.ui.components.media.CrmMediaListFolderEditor;
+import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.company.OrganizationContact;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
@@ -191,7 +180,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.add(new HTML("&nbsp"));
 
         main.add(new CrmSectionSeparator(i18n.tr("Amenities:")));
-        main.add(inject(proto().amenities(), createAmenitiesListEditor()));
+        main.add(inject(proto().amenities(), new BuildingAmenityFolder()));
 
         return new CrmScrollPanel(main);
     }
@@ -245,9 +234,9 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         split.getRightPanel().add(inject(proto().financial().currency().name()), split.getRightPanel().getDefaultLabelWidth(), 10, i18n.tr("Currency Name"));
 
         main.add(new CrmSectionSeparator(i18n.tr("Included Utilities/Add-ons:")));
-        main.add(inject(proto().serviceCatalog().includedUtilities(), createUtilitiesListEditor()));
+        main.add(inject(proto().serviceCatalog().includedUtilities(), new UtilityFolder(this)));
         main.add(new CrmSectionSeparator(i18n.tr("Excluded Utilities/Add-ons:")));
-        main.add(inject(proto().serviceCatalog().externalUtilities(), createUtilitiesListEditor()));
+        main.add(inject(proto().serviceCatalog().externalUtilities(), new UtilityFolder(this)));
 
         return new CrmScrollPanel(main);
     }
@@ -263,7 +252,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         SubtypeInjectors.injectPropertyPhones(main, proto().contacts().phones(), this);
 
         main.add(new CrmSectionSeparator(i18n.tr("Media:")));
-        main.add(inject(proto().media(), new CrmMediaListFolderEditor(isEditable(), ImageTarget.Building)));
+        main.add(inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Building)));
 
         return new CrmScrollPanel(main);
     }
@@ -271,198 +260,85 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     private Widget createContactTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
-        main.add(inject(proto().contacts().contacts(), createContactsListEditor()));
+        main.add(inject(proto().contacts().contacts(), new OrganizationContactFolder()));
 
         return new CrmScrollPanel(main);
     }
 
-//
-// List Viewers:
-    private CEntityFolder<BuildingAmenity> createAmenitiesListEditor() {
-        return new VistaTableFolder<BuildingAmenity>(BuildingAmenity.class, isEditable()) {
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
-                return columns;
-            }
-        };
-    }
+    static class BuildingAmenityFolder extends VistaTableFolder<BuildingAmenity> {
 
-    private CEntityFolder<ServiceItemType> createUtilitiesListEditor() {
-        return new VistaTableFolder<ServiceItemType>(ServiceItemType.class, isEditable()) {
-            private final VistaTableFolder<ServiceItemType> parent = this;
+        public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
+        static {
+            BuildingAmenity proto = EntityFactory.getEntityPrototype(BuildingAmenity.class);
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.type(), "15em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.name(), "15em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.description(), "25em"));
+        }
 
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().name(), "30"));
-                return columns;
-            }
-
-            @Override
-            protected void addItem() {
-                new ShowPopUpBox<SelectUtilityBox>(new SelectUtilityBox()) {
-                    @Override
-                    protected void onClose(SelectUtilityBox box) {
-                        if (box.getSelectedItems() != null) {
-                            for (ServiceItemType item : box.getSelectedItems()) {
-                                addItem(item);
-                            }
-                        }
-                    }
-                };
-            }
-
-            @Override
-            protected IFolderDecorator<ServiceItemType> createDecorator() {
-                VistaTableFolderDecorator<ServiceItemType> decor = new VistaTableFolderDecorator<ServiceItemType>(columns(), parent);
-                decor.setShowHeader(false);
-                return decor;
-            }
-
-            @Override
-            protected CEntityFolderItem<ServiceItemType> createItem(boolean first) {
-                return new CEntityFolderRowEditor<ServiceItemType>(ServiceItemType.class, columns()) {
-                    @Override
-                    public IFolderItemDecorator<ServiceItemType> createDecorator() {
-                        return new VistaTableFolderItemDecorator<ServiceItemType>(parent);
-                    }
-
-                    @Override
-                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-                        if (column.getObject() == proto().name()) {
-                            return inject(column.getObject(), new CLabel());
-                        }
-                        return super.createCell(column);
-                    }
-                };
-            }
-        };
-    }
-
-    private CEntityFolder<OrganizationContact> createContactsListEditor() {
-        return new VistaTableFolder<OrganizationContact>(OrganizationContact.class, isEditable()) {
-            private final VistaTableFolder<OrganizationContact> parent = this;
-
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                return null;
-            }
-
-            @Override
-            protected IFolderDecorator<OrganizationContact> createDecorator() {
-                return new VistaBoxFolderDecorator<OrganizationContact>(parent);
-            }
-
-            @Override
-            protected CEntityFolderItem<OrganizationContact> createItem(boolean first) {
-                return new CEntityFolderRowEditor<OrganizationContact>(OrganizationContact.class, columns()) {
-
-                    @Override
-                    public IFolderItemDecorator<OrganizationContact> createDecorator() {
-                        return new VistaBoxFolderItemDecorator<OrganizationContact>(parent);
-                    }
-
-                    @Override
-                    public IsWidget createContent() {
-                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable());
-
-                        main.add(inject(proto().description()), 35);
-                        if (parent.isEditable()) {
-                            main.add(inject(proto().person()), 35);
-                        } else {
-                            main.add(inject(proto().person()), 35);
-                            main.add(inject(proto().person().workPhone()), 10);
-                            main.add(inject(proto().person().mobilePhone()), 10);
-                            main.add(inject(proto().person().homePhone()), 10);
-                            main.add(inject(proto().person().email()), 20);
-                        }
-
-                        return main;
-                    }
-                };
-            }
-        };
-    }
-
-//
-// Selection Boxes:
-
-    private class SelectUtilityBox extends OkCancelBox {
-
-        private ListBox list;
-
-        private List<ServiceItemType> selectedItems;
-
-        public SelectUtilityBox() {
-            super(i18n.tr("Select Utilities"));
+        public BuildingAmenityFolder() {
+            super(BuildingAmenity.class);
         }
 
         @Override
-        protected Widget createContent() {
-            okButton.setEnabled(false);
-
-            if (!getValue().availableUtilities().isEmpty()) {
-                list = new ListBox(true);
-                list.addChangeHandler(new ChangeHandler() {
-                    @Override
-                    public void onChange(ChangeEvent event) {
-                        okButton.setEnabled(list.getSelectedIndex() >= 0);
-                    }
-                });
-
-                List<ServiceItemType> alreadySelected = new ArrayList<ServiceItemType>();
-                for (ServiceItemType item : getValue().serviceCatalog().includedUtilities()) {
-                    alreadySelected.add(item);
-                }
-                for (ServiceItemType item : getValue().serviceCatalog().externalUtilities()) {
-                    alreadySelected.add(item);
-                }
-
-                for (ServiceItemType item : getValue().availableUtilities()) {
-                    if (!alreadySelected.contains(item)) {
-                        list.addItem(item.getStringView());
-                        list.setValue(list.getItemCount() - 1, item.id().toString());
-                    }
-                }
-                list.setVisibleItemCount(8);
-                list.setWidth("100%");
-                return list.asWidget();
+        public CEditableComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof BuildingAmenity) {
+                return new BuildingAmenityEditor();
             } else {
-                return new HTML(i18n.tr("There are no items available!"));
+                return super.create(member);
             }
         }
 
         @Override
-        protected void setSize() {
-            setSize("350px", "100px");
+        protected List<EntityFolderColumnDescriptor> columns() {
+            return COLUMNS;
         }
 
-        @Override
-        protected boolean onOk() {
-            selectedItems = new ArrayList<ServiceItemType>(4);
-            for (int i = 0; i < list.getItemCount(); ++i) {
-                if (list.isItemSelected(i)) {
-                    for (ServiceItemType item : getValue().availableUtilities()) {
-                        if (list.getValue(i).contentEquals(item.id().toString())) {
-                            selectedItems.add(item);
-                        }
-                    }
-                }
+        static class BuildingAmenityEditor extends CEntityFolderRowEditor<BuildingAmenity> {
+            public BuildingAmenityEditor() {
+                super(BuildingAmenity.class, BuildingAmenityFolder.COLUMNS);
             }
-            return super.onOk();
-        }
-
-        @Override
-        protected void onCancel() {
-            selectedItems = null;
-        }
-
-        protected List<ServiceItemType> getSelectedItems() {
-            return selectedItems;
         }
     }
+
+    static class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
+        public OrganizationContactFolder() {
+            super(OrganizationContact.class);
+        }
+
+        @Override
+        public CEditableComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof OrganizationContact) {
+                return new OrganizationContactEditor();
+            } else {
+                return super.create(member);
+            }
+        }
+
+        static class OrganizationContactEditor extends CEntityEditor<OrganizationContact> {
+
+            public OrganizationContactEditor() {
+                super(OrganizationContact.class);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+                main.add(inject(proto().description()), 35);
+                //TODO
+//                if (parent.isEditable()) {
+//                    main.add(inject(proto().person()), 35);
+//                } else {
+                main.add(inject(proto().person()), 35);
+                main.add(inject(proto().person().workPhone()), 10);
+                main.add(inject(proto().person().mobilePhone()), 10);
+                main.add(inject(proto().person().homePhone()), 10);
+                main.add(inject(proto().person().email()), 20);
+//                }
+
+                return main;
+            }
+
+        }
+    }
+
 }
