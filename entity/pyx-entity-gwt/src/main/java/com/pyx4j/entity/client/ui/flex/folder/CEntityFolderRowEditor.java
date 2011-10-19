@@ -34,7 +34,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 
-public abstract class CEntityFolderRowEditor<E extends IEntity> extends CEntityEditor<E> {
+public class CEntityFolderRowEditor<E extends IEntity> extends CEntityEditor<E> {
 
     protected final List<EntityFolderColumnDescriptor> columns;
 
