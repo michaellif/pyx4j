@@ -30,7 +30,6 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -102,20 +101,6 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
     static class TenantFolder extends VistaTableFolder<TenantInApplicationDTO> {
 
-        public static List<EntityFolderColumnDescriptor> COLUMNS;
-        static {
-            TenantInApplicationDTO proto = EntityFactory.getEntityPrototype(TenantInApplicationDTO.class);
-            COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.person().name().firstName(), "10em"));
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.person().name().middleName(), "5em"));
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.person().name().lastName(), "12em"));
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.person().birthDate(), "8.2em"));
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.person().email(), "15em"));
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.relationship(), "9em"));
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.status(), "8.5em"));
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.takeOwnership(), "5em"));
-        }
-
         public TenantFolder() {
             super(TenantInApplicationDTO.class, i18n.tr("Person"));
         }
@@ -139,131 +124,139 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
         @Override
         protected List<EntityFolderColumnDescriptor> columns() {
-            return COLUMNS;
+            ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            columns.add(new EntityFolderColumnDescriptor(proto().person().name().firstName(), "10em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().person().name().middleName(), "5em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().person().name().lastName(), "12em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().person().birthDate(), "8.2em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().person().email(), "15em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().status(), "8.5em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().takeOwnership(), "5em"));
+            return columns;
         }
-    }
 
-    static class TenantEditor extends CEntityFolderRowEditor<TenantInApplicationDTO> {
+        class TenantEditor extends CEntityFolderRowEditor<TenantInApplicationDTO> {
 
-        private final boolean first = false;
+            private final boolean first = false;
 
-        public TenantEditor() {
-            super(TenantInApplicationDTO.class, TenantFolder.COLUMNS);
-        }
-
-        @SuppressWarnings("rawtypes")
-        @Override
-        public IsWidget createContent() {
-            if (first) {
-                HorizontalPanel main = new HorizontalPanel();
-                for (EntityFolderColumnDescriptor column : columns) {
-                    CComponent<?> component = createCell(column);
-                    // Don't show relation and takeOwnership 
-                    if (column.getObject() == proto().relationship() || column.getObject() == proto().takeOwnership()) {
-                        component.setVisible(false);
-                    } else if (column.getObject() == proto().person().email()) {
-                        ((CEditableComponent) component).setEditable(false);
-                    }
-                    main.add(createCellDecorator(column, component, column.getWidth()));
-                }
-                main.setWidth("100%");
-                return main;
-            } else {
-                return super.createContent();
+            public TenantEditor() {
+                super(TenantInApplicationDTO.class, columns());
             }
-        }
 
-        @Override
-        public void addValidations() {
-
-            get(proto().person().birthDate()).addValueValidator(new OldAgeValidator());
-            get(proto().person().birthDate()).addValueValidator(new BirthdayDateValidator());
-            get(proto().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
-                @Override
-                public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                    TenantInLease.Status status = getValue().status().getValue();
-                    if ((status == TenantInLease.Status.Applicant) || (status == TenantInLease.Status.CoApplicant)) {
-                        // TODO I Believe that this is not correct, this logic has to be applied to Dependents as well, as per VISTA-273
-                        return ValidationUtils.isOlderThen18(value);
-                    } else {
-                        return true;
-                    }
-                }
-
-                @Override
-                public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                    return TenantsViewForm.i18n.tr("Applicant and Co-applicant must be at least 18 years old");
-                }
-            });
-
-            if (!first) { // all this stuff isn't for primary applicant:  
-                get(proto().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                        TenantIn.Status status = getValue().status().getValue();
-                        if ((status == null) || (status == TenantInLease.Status.Dependant)) {
-                            if (ValidationUtils.isOlderThen18(event.getValue())) {
-                                boolean currentEditableState = get(proto().status()).isEditable();
-                                enableStatusAndOwnership();
-                                if (!currentEditableState) {
-                                    get(proto().status()).setValue(null);
-                                }
-                            } else {
-                                setMandatoryDependant();
-                            }
+            @SuppressWarnings("rawtypes")
+            @Override
+            public IsWidget createContent() {
+                if (first) {
+                    HorizontalPanel main = new HorizontalPanel();
+                    for (EntityFolderColumnDescriptor column : columns) {
+                        CComponent<?> component = createCell(column);
+                        // Don't show relation and takeOwnership 
+                        if (column.getObject() == proto().relationship() || column.getObject() == proto().takeOwnership()) {
+                            component.setVisible(false);
+                        } else if (column.getObject() == proto().person().email()) {
+                            ((CEditableComponent) component).setEditable(false);
                         }
+                        main.add(createCellDecorator(column, component, column.getWidth()));
+                    }
+                    main.setWidth("100%");
+                    return main;
+                } else {
+                    return super.createContent();
+                }
+            }
+
+            @Override
+            public void addValidations() {
+
+                get(proto().person().birthDate()).addValueValidator(new OldAgeValidator());
+                get(proto().person().birthDate()).addValueValidator(new BirthdayDateValidator());
+                get(proto().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
+                    @Override
+                    public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                        TenantInLease.Status status = getValue().status().getValue();
+                        if ((status == TenantInLease.Status.Applicant) || (status == TenantInLease.Status.CoApplicant)) {
+                            // TODO I Believe that this is not correct, this logic has to be applied to Dependents as well, as per VISTA-273
+                            return ValidationUtils.isOlderThen18(value);
+                        } else {
+                            return true;
+                        }
+                    }
+
+                    @Override
+                    public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                        return TenantsViewForm.i18n.tr("Applicant and Co-applicant must be at least 18 years old");
                     }
                 });
 
-                get(proto().status()).addValueChangeHandler(new RevalidationTrigger<TenantInLease.Status>(get(proto().person().birthDate())));
-            }
-        }
+                if (!first) { // all this stuff isn't for primary applicant:  
+                    get(proto().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+                        @Override
+                        public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                            TenantIn.Status status = getValue().status().getValue();
+                            if ((status == null) || (status == TenantInLease.Status.Dependant)) {
+                                if (ValidationUtils.isOlderThen18(event.getValue())) {
+                                    boolean currentEditableState = get(proto().status()).isEditable();
+                                    enableStatusAndOwnership();
+                                    if (!currentEditableState) {
+                                        get(proto().status()).setValue(null);
+                                    }
+                                } else {
+                                    setMandatoryDependant();
+                                }
+                            }
+                        }
+                    });
 
-        @Override
-        public void populate(TenantInApplicationDTO value) {
-            super.populate(value);
-            boolean applicant = Status.Applicant.equals(value.status().getValue());
-            if (!applicant && !value.person().birthDate().isNull()) {
-                if (ValidationUtils.isOlderThen18(value.person().birthDate().getValue())) {
-                    enableStatusAndOwnership();
+                    get(proto().status()).addValueChangeHandler(new RevalidationTrigger<TenantInLease.Status>(get(proto().person().birthDate())));
+                }
+            }
+
+            @Override
+            public void populate(TenantInApplicationDTO value) {
+                super.populate(value);
+                boolean applicant = Status.Applicant.equals(value.status().getValue());
+                if (!applicant && !value.person().birthDate().isNull()) {
+                    if (ValidationUtils.isOlderThen18(value.person().birthDate().getValue())) {
+                        enableStatusAndOwnership();
+                    } else {
+                        setMandatoryDependant();
+                    }
+                }
+            }
+
+            @SuppressWarnings({ "unchecked", "rawtypes" })
+            @Override
+            protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                CComponent<?> comp = null;
+                if (first && proto().status() == column.getObject()) {
+                    CTextField textComp = new CTextField();
+                    textComp.setEditable(false);
+                    textComp.setValue(TenantInLease.Status.Applicant.name());
+                    comp = textComp;
                 } else {
-                    setMandatoryDependant();
+                    comp = super.createCell(column);
+                    if (proto().status() == column.getObject()) {
+                        Collection<TenantInLease.Status> status = EnumSet.allOf(TenantInLease.Status.class);
+                        status.remove(TenantInLease.Status.Applicant);
+                        ((CComboBox) comp).setOptions(status);
+                    }
                 }
+                return comp;
             }
-        }
 
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        @Override
-        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?> comp = null;
-            if (first && proto().status() == column.getObject()) {
-                CTextField textComp = new CTextField();
-                textComp.setEditable(false);
-                textComp.setValue(TenantInLease.Status.Applicant.name());
-                comp = textComp;
-            } else {
-                comp = super.createCell(column);
-                if (proto().status() == column.getObject()) {
-                    Collection<TenantInLease.Status> status = EnumSet.allOf(TenantInLease.Status.class);
-                    status.remove(TenantInLease.Status.Applicant);
-                    ((CComboBox) comp).setOptions(status);
-                }
+            private void setMandatoryDependant() {
+                get(proto().status()).setValue(TenantInLease.Status.Dependant);
+                get(proto().status()).setEditable(false);
+
+                get(proto().takeOwnership()).setValue(true);
+                get(proto().takeOwnership()).setEnabled(false);
             }
-            return comp;
-        }
 
-        private void setMandatoryDependant() {
-            get(proto().status()).setValue(TenantInLease.Status.Dependant);
-            get(proto().status()).setEditable(false);
-
-            get(proto().takeOwnership()).setValue(true);
-            get(proto().takeOwnership()).setEnabled(false);
-        }
-
-        private void enableStatusAndOwnership() {
-            get(proto().status()).setEditable(true);
-            get(proto().takeOwnership()).setEnabled(true);
+            private void enableStatusAndOwnership() {
+                get(proto().status()).setEditable(true);
+                get(proto().takeOwnership()).setEnabled(true);
+            }
         }
     }
-
 }

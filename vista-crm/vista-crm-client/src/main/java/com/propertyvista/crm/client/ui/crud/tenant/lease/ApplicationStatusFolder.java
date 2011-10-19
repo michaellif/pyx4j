@@ -17,9 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.dto.ApplicationStatusDTO;
@@ -39,11 +36,4 @@ class ApplicationStatusFolder extends VistaTableFolder<ApplicationStatusDTO> {
         return columns;
     }
 
-    @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ApplicationStatusDTO) {
-            return new CEntityFolderRowEditor<ApplicationStatusDTO>(ApplicationStatusDTO.class, columns());
-        }
-        return super.create(member);
-    }
 }

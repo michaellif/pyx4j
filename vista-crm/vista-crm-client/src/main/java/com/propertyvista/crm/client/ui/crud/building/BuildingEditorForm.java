@@ -32,8 +32,6 @@ import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
@@ -267,37 +265,19 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
     static class BuildingAmenityFolder extends VistaTableFolder<BuildingAmenity> {
 
-        public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
-        static {
-            BuildingAmenity proto = EntityFactory.getEntityPrototype(BuildingAmenity.class);
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.type(), "15em"));
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.name(), "15em"));
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.description(), "25em"));
-        }
-
         public BuildingAmenityFolder() {
             super(BuildingAmenity.class);
         }
 
         @Override
-        public CEditableComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof BuildingAmenity) {
-                return new BuildingAmenityEditor();
-            } else {
-                return super.create(member);
-            }
-        }
-
-        @Override
         protected List<EntityFolderColumnDescriptor> columns() {
-            return COLUMNS;
+            ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
+            return columns;
         }
 
-        static class BuildingAmenityEditor extends CEntityFolderRowEditor<BuildingAmenity> {
-            public BuildingAmenityEditor() {
-                super(BuildingAmenity.class, BuildingAmenityFolder.COLUMNS);
-            }
-        }
     }
 
     static class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {

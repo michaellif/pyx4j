@@ -222,14 +222,6 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 
     static class FeatureFolder extends VistaTableFolder<ChargeItem> {
 
-        public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
-        static {
-            ChargeItem proto = EntityFactory.getEntityPrototype(ChargeItem.class);
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.item().type(), "10em"));
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.adjustedPrice(), "7em"));
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.item().description(), "30em"));
-        }
-
         private final Feature.Type type;
 
         private final ApartmentViewForm apartmentViewForm;
@@ -241,17 +233,13 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
         }
 
         @Override
-        public CEditableComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof ChargeItem) {
-                return new FeatureEditor();
-            } else {
-                return super.create(member);
-            }
-        }
-
-        @Override
         protected List<EntityFolderColumnDescriptor> columns() {
-            return COLUMNS;
+            ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            columns.add(new EntityFolderColumnDescriptor(proto().item().type(), "10em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().adjustedPrice(), "7em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().item().description(), "30em"));
+            return columns;
+
         }
 
         @Override
@@ -291,11 +279,6 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
             }
         }
 
-        static class FeatureEditor extends CEntityFolderRowEditor<ChargeItem> {
-            public FeatureEditor() {
-                super(ChargeItem.class, FeatureFolder.COLUMNS);
-            }
-        }
     }
 
     static class FeatureExFolder extends VistaBoxFolder<ChargeItem> {

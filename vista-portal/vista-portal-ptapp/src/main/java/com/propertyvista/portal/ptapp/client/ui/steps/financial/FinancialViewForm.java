@@ -31,23 +31,20 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.CMoney;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
-import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
@@ -55,7 +52,6 @@ import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
-import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 
 public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
@@ -75,11 +71,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof PersonalIncome) {
-            return new FinancialViewIncomeForm(summaryViewMode);
-        } else if (member instanceof PersonalAsset) {
-            return new PersonalAssetEditor();
-        } else if (member instanceof TenantGuarantor) {
+        if (member instanceof TenantGuarantor) {
             return new TenantGuarantorEditor(summaryViewMode);
         } else if ((!isSummaryViewMode()) && member.getValueClass().equals(Money.class)) {
             return new CMoney();
@@ -148,88 +140,77 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
         });
     }
 
-    class PersonalIncomeFolder extends VistaTableFolder<PersonalIncome> {
+    class PersonalIncomeFolder extends VistaBoxFolder<PersonalIncome> {
 
         public PersonalIncomeFolder() {
             super(PersonalIncome.class);
         }
 
         @Override
-        protected IFolderDecorator<PersonalIncome> createDecorator() {
-            if (isSummaryViewMode()) {
-                return new BoxReadOnlyFolderDecorator<PersonalIncome>() {
-                    @Override
-                    public void setComponent(CEntityFolder w) {
-                        super.setComponent(w);
-                        this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-                    }
-                };
+        public CEditableComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof PersonalIncome) {
+                return new FinancialViewIncomeForm(summaryViewMode);
             } else {
-                return new VistaBoxFolderDecorator<PersonalIncome>(this);
+                return super.create(member);
             }
-        }
-
-        @Override
-        protected List<EntityFolderColumnDescriptor> columns() {
-            return null;
         }
     }
 
     static class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
-
-        public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
-        static {
-            PersonalAsset proto = EntityFactory.getEntityPrototype(PersonalAsset.class);
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.assetType(), "15em"));
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.percent(), "7em"));
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.assetValue(), "15em"));
-        }
 
         public PersonalAssetFolder() {
             super(PersonalAsset.class);
         }
 
         @Override
-        protected IFolderDecorator<PersonalAsset> createDecorator() {
-            return new VistaTableFolderDecorator<PersonalAsset>(COLUMNS, this);
+        public CEditableComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof PersonalAsset) {
+                return new PersonalAssetEditor();
+            } else {
+                return super.create(member);
+            }
         }
 
         @Override
         protected List<EntityFolderColumnDescriptor> columns() {
-            return null;
-        }
-    }
-
-    static class PersonalAssetEditor extends CEntityFolderRowEditor<PersonalAsset> {
-        public PersonalAssetEditor() {
-            super(PersonalAsset.class, PersonalAssetFolder.COLUMNS);
+            ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            columns.add(new EntityFolderColumnDescriptor(proto().assetType(), "15em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().percent(), "7em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().assetValue(), "15em"));
+            return columns;
         }
 
-        @Override
-        public void addValidations() {
-            get(proto().percent()).addValueValidator(new EditableValueValidator<Double>() {
+        class PersonalAssetEditor extends CEntityFolderRowEditor<PersonalAsset> {
+            public PersonalAssetEditor() {
+                super(PersonalAsset.class, columns());
+            }
 
-                @Override
-                public boolean isValid(CEditableComponent<Double, ?> component, Double value) {
-                    return (value == null) || ((value >= 0) && (value <= 100));
-                }
+            @Override
+            public void addValidations() {
+                get(proto().percent()).addValueValidator(new EditableValueValidator<Double>() {
 
-                @Override
-                public String getValidationMessage(CEditableComponent<Double, ?> component, Double value) {
-                    return i18n.tr("Value cannot increase 100%");
-                }
-
-            });
-
-            get(proto().assetType()).addValueChangeHandler(new ValueChangeHandler<PersonalAsset.AssetType>() {
-
-                @Override
-                public void onValueChange(ValueChangeEvent<AssetType> event) {
-                    if (get(proto().percent()).getValue() == null) {
-                        get(proto().percent()).setValue(100d);
+                    @Override
+                    public boolean isValid(CEditableComponent<Double, ?> component, Double value) {
+                        return (value == null) || ((value >= 0) && (value <= 100));
                     }
-                }
-            });
+
+                    @Override
+                    public String getValidationMessage(CEditableComponent<Double, ?> component, Double value) {
+                        return FinancialViewForm.i18n.tr("Value cannot increase 100%");
+                    }
+
+                });
+
+                get(proto().assetType()).addValueChangeHandler(new ValueChangeHandler<PersonalAsset.AssetType>() {
+
+                    @Override
+                    public void onValueChange(ValueChangeEvent<AssetType> event) {
+                        if (get(proto().percent()).getValue() == null) {
+                            get(proto().percent()).setValue(100d);
+                        }
+                    }
+                });
+            }
         }
     }
 

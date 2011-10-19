@@ -17,11 +17,14 @@ import java.util.List;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
@@ -30,6 +33,8 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
     protected static I18n i18n = I18n.get(VistaTableFolder.class);
 
     private final String itemName;
+
+    private Class<E> clazz;
 
     public VistaTableFolder(Class<E> clazz) {
         this(clazz, true);
@@ -45,6 +50,7 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
 
     public VistaTableFolder(Class<E> clazz, String itemName, boolean editable) {
         super(clazz);
+        this.clazz = clazz;
         this.itemName = itemName;
         setModifiable(editable);
         setOrderable(editable);
@@ -64,6 +70,15 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
 
     public String getItemName() {
         return (itemName != null ? itemName : "");
+    }
+
+    @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        if (clazz.equals(member.getObjectClass())) {
+            return new CEntityFolderRowEditor<E>(clazz, columns());
+        } else {
+            return super.create(member);
+        }
     }
 
 }

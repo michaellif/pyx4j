@@ -31,11 +31,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.i18n.shared.I18n;
@@ -266,13 +263,6 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                 return columns;
             }
 
-            @Override
-            public CEditableComponent<?, ?> create(IObject<?> member) {
-                if (member instanceof ChargeItemAdjustment) {
-                    return new CEntityFolderRowEditor<ChargeItemAdjustment>(ChargeItemAdjustment.class, columns());
-                }
-                return super.create(member);
-            }
         }
     }
 

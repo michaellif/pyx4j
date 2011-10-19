@@ -27,6 +27,9 @@ public class CrmViewersComponentFactory extends VistaViewersComponentFactory {
 
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
+        if (member.getOwner() == null) {
+            throw new Error("Factory doesn't have editor for " + member);
+        }
         MemberMeta mm = member.getMeta();
         if (mm.isEntity() && !mm.isOwnedRelationships()) {
             @SuppressWarnings("unchecked")

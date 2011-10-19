@@ -89,6 +89,7 @@ public class SubtypeInjectors {
                 columns.add(new EntityFolderColumnDescriptor(proto().visibility(), "7em"));
                 return columns;
             }
+
         }));
         main.add(new HTML());
     }
