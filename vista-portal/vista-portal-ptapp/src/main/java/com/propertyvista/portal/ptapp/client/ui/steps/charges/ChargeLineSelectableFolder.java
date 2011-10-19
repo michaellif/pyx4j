@@ -17,9 +17,8 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.flex.folder.BoxReadOnlyFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -51,36 +50,38 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
     }
 
     @Override
-    protected CEntityFolderBoxEditor<ChargeLineSelectable> createItem(boolean first) {
+    protected IFolderItemDecorator<ChargeLineSelectable> createItemDecorator() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-        return new CEntityFolderBoxEditor<ChargeLineSelectable>(ChargeLineSelectable.class) {
+    static class ChargeLineSelectableEditor extends CEntityEditor<ChargeLineSelectable> {
+        public ChargeLineSelectableEditor() {
+            super(ChargeLineSelectable.class);
+        }
 
-            @Override
-            public IFolderItemDecorator<ChargeLineSelectable> createDecorator() {
-                return new BoxReadOnlyFolderItemDecorator<ChargeLineSelectable>();
+        @Override
+        public IsWidget createContent() {
+
+            FlowPanel main = new FlowPanel();
+
+            String width = "300px";
+            //TODO
+            //if (!summaryViewMode) {
+            main.add(DecorationUtils.inline(inject(proto().selected()), "25px"));
+            CEditableComponent<Boolean, ?> cb = get(proto().selected());
+            if (cb instanceof CCheckBox) {
+                //TODO this is hack for Misha to fix.
+                cb.asWidget().setStyleName(null);
             }
+            width = "275px";
+            //}
 
-            @Override
-            public IsWidget createContent() {
+            main.add(DecorationUtils.inline(inject(proto().label()), width));
+            main.add(DecorationUtils.inline(inject(proto().charge()), "100px", "right"));
 
-                FlowPanel main = new FlowPanel();
+            return main;
+        }
 
-                String width = "300px";
-                if (!summaryViewMode) {
-                    main.add(DecorationUtils.inline(inject(proto().selected()), "25px"));
-                    CEditableComponent<Boolean, ?> cb = get(proto().selected());
-                    if (cb instanceof CCheckBox) {
-                        //TODO this is hack for Misha to fix.
-                        cb.asWidget().setStyleName(null);
-                    }
-                    width = "275px";
-                }
-
-                main.add(DecorationUtils.inline(inject(proto().label()), width));
-                main.add(DecorationUtils.inline(inject(proto().charge()), "100px", "right"));
-
-                return main;
-            }
-        };
     }
 }

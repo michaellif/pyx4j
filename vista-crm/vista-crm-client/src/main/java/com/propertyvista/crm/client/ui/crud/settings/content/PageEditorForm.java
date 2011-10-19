@@ -23,8 +23,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
@@ -33,7 +32,7 @@ import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -73,8 +72,8 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
     }
 
     private CEntityFolder<PageContent> createPageContentsList() {
-        return new VistaEntityFolder<PageContent>(PageContent.class, i18n.tr("Page Content"), isEditable()) {
-            private final VistaEntityFolder<PageContent> parent = this;
+        return new VistaTableFolder<PageContent>(PageContent.class, i18n.tr("Page Content"), isEditable()) {
+            private final VistaTableFolder<PageContent> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -87,8 +86,8 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
             }
 
             @Override
-            protected CEntityFolderBoxEditor<PageContent> createItem(boolean first) {
-                return new CEntityFolderBoxEditor<PageContent>(PageContent.class) {
+            protected CEntityFolderItem<PageContent> createItem(boolean first) {
+                return new CEntityFolderItem<PageContent>(PageContent.class) {
 
                     @Override
                     public IsWidget createContent() {
@@ -127,8 +126,8 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
     }
 
     private CEntityFolder<PageDescriptor> createChildPagesList() {
-        return new VistaEntityFolder<PageDescriptor>(PageDescriptor.class, i18n.tr("Page"), !isEditable()) {
-            private final VistaEntityFolder<PageDescriptor> parent = this;
+        return new VistaTableFolder<PageDescriptor>(PageDescriptor.class, i18n.tr("Page"), !isEditable()) {
+            private final VistaTableFolder<PageDescriptor> parent = this;
 
             private final ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
             {
@@ -141,7 +140,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<PageDescriptor> createItem(boolean first) {
+            protected CEntityFolderItem<PageDescriptor> createItem(boolean first) {
                 return new CEntityFolderRowEditor<PageDescriptor>(PageDescriptor.class, columns()) {
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {

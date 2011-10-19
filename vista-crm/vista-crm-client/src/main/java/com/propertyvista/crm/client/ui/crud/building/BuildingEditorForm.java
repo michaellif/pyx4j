@@ -35,7 +35,7 @@ import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
@@ -45,7 +45,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
@@ -279,7 +279,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 //
 // List Viewers:
     private CEntityFolder<BuildingAmenity> createAmenitiesListEditor() {
-        return new VistaEntityFolder<BuildingAmenity>(BuildingAmenity.class, isEditable()) {
+        return new VistaTableFolder<BuildingAmenity>(BuildingAmenity.class, isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
@@ -292,8 +292,8 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private CEntityFolder<ServiceItemType> createUtilitiesListEditor() {
-        return new VistaEntityFolder<ServiceItemType>(ServiceItemType.class, isEditable()) {
-            private final VistaEntityFolder<ServiceItemType> parent = this;
+        return new VistaTableFolder<ServiceItemType>(ServiceItemType.class, isEditable()) {
+            private final VistaTableFolder<ServiceItemType> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -324,7 +324,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<ServiceItemType> createItem(boolean first) {
+            protected CEntityFolderItem<ServiceItemType> createItem(boolean first) {
                 return new CEntityFolderRowEditor<ServiceItemType>(ServiceItemType.class, columns()) {
                     @Override
                     public IFolderItemDecorator<ServiceItemType> createDecorator() {
@@ -344,8 +344,8 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private CEntityFolder<OrganizationContact> createContactsListEditor() {
-        return new VistaEntityFolder<OrganizationContact>(OrganizationContact.class, isEditable()) {
-            private final VistaEntityFolder<OrganizationContact> parent = this;
+        return new VistaTableFolder<OrganizationContact>(OrganizationContact.class, isEditable()) {
+            private final VistaTableFolder<OrganizationContact> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -358,7 +358,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<OrganizationContact> createItem(boolean first) {
+            protected CEntityFolderItem<OrganizationContact> createItem(boolean first) {
                 return new CEntityFolderRowEditor<OrganizationContact>(OrganizationContact.class, columns()) {
 
                     @Override

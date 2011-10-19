@@ -17,36 +17,35 @@ import java.util.List;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
+import com.propertyvista.common.client.resources.VistaImages;
 
-public abstract class VistaEntityFolder<E extends IEntity> extends CEntityFolder<E> {
-    protected static I18n i18n = I18n.get(VistaEntityFolder.class);
+public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<E> {
+    protected static I18n i18n = I18n.get(VistaTableFolder.class);
 
     private final Class<E> clazz;
 
     private final String itemName;
 
-    public VistaEntityFolder(Class<E> clazz) {
+    public VistaTableFolder(Class<E> clazz) {
         this(clazz, true);
     }
 
-    public VistaEntityFolder(Class<E> clazz, String itemName) {
+    public VistaTableFolder(Class<E> clazz, String itemName) {
         this(clazz, itemName, true);
     }
 
-    public VistaEntityFolder(Class<E> clazz, boolean editable) {
+    public VistaTableFolder(Class<E> clazz, boolean editable) {
         this(clazz, null, editable);
     }
 
-    public VistaEntityFolder(Class<E> clazz, String itemName, boolean editable) {
+    public VistaTableFolder(Class<E> clazz, String itemName, boolean editable) {
         super(clazz);
         this.clazz = clazz;
         this.itemName = itemName;
@@ -57,18 +56,13 @@ public abstract class VistaEntityFolder<E extends IEntity> extends CEntityFolder
     protected abstract List<EntityFolderColumnDescriptor> columns();
 
     @Override
-    protected CEntityFolderItemEditor<E> createItem(boolean first) {
-        return new CEntityFolderRowEditor<E>(clazz, columns()) {
-            @Override
-            public IFolderItemDecorator<E> createDecorator() {
-                return new VistaTableFolderItemDecorator<E>(i18n.tr("Remove ") + getItemName());
-            }
-        };
+    protected IFolderDecorator<E> createDecorator() {
+        return new TableFolderDecorator<E>(columns(), VistaImages.INSTANCE, i18n.tr("Add ") + getItemName());
     }
 
     @Override
-    protected IFolderDecorator<E> createDecorator() {
-        return new VistaTableFolderDecorator<E>(columns(), i18n.tr("Add ") + getItemName());
+    protected IFolderItemDecorator<E> createItemDecorator() {
+        return new TableFolderItemDecorator<E>(VistaImages.INSTANCE, i18n.tr("Remove ") + getItemName());
     }
 
     public String getItemName() {

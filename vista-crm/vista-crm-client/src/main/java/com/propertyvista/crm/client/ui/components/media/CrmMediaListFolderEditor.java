@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.CEntityHyperlink;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -39,7 +39,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ClentNavigUtils;
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -52,13 +52,13 @@ import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
-public class CrmMediaListFolderEditor extends VistaEntityFolder<Media> {
+public class CrmMediaListFolderEditor extends VistaTableFolder<Media> {
 
     protected static I18n i18n = I18n.get(CrmMediaListFolderEditor.class);
 
     private final ImageTarget imageTarget;
 
-    private final VistaEntityFolder<Media> parent = this;
+    private final VistaTableFolder<Media> parent = this;
 
     public CrmMediaListFolderEditor(boolean editable, ImageTarget imageTarget) {
         super(Media.class, "", editable);
@@ -76,8 +76,8 @@ public class CrmMediaListFolderEditor extends VistaEntityFolder<Media> {
     }
 
     @Override
-    protected CEntityFolderBoxEditor<Media> createItem(boolean first) {
-        CEntityFolderBoxEditor<Media> item = new CEntityFolderBoxEditor<Media>(Media.class) {
+    protected CEntityFolderItem<Media> createItem(boolean first) {
+        CEntityFolderItem<Media> item = new CEntityFolderItem<Media>(Media.class) {
 
             Image thumbnail;
 

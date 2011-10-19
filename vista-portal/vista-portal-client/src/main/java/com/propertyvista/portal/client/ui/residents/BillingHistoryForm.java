@@ -27,7 +27,7 @@ import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.portal.client.ui.decorations.PortalHeaderBar;
@@ -70,7 +70,7 @@ public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements Bi
     }
 
     private CEntityFolder<BillDTO> createBillingHistoryViewer() {
-        return new VistaEntityFolder<BillDTO>(BillDTO.class, false) {
+        return new VistaTableFolder<BillDTO>(BillDTO.class, false) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();

@@ -25,7 +25,7 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
@@ -111,8 +111,8 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
     }
 
     private CEditableComponent<?, ?> createPortfolioListView() {
-        return new VistaEntityFolder<AssignedPortfolio>(AssignedPortfolio.class, i18n.tr("Portfolio"), isEditable()) {
-            private final VistaEntityFolder<AssignedPortfolio> parent = this;
+        return new VistaTableFolder<AssignedPortfolio>(AssignedPortfolio.class, i18n.tr("Portfolio"), isEditable()) {
+            private final VistaTableFolder<AssignedPortfolio> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -134,8 +134,8 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
     }
 
     private CEditableComponent<?, ?> createEmpoloyeeListView() {
-        return new VistaEntityFolder<ManagedEmployee>(ManagedEmployee.class, i18n.tr("Employee"), isEditable()) {
-            private final VistaEntityFolder<ManagedEmployee> parent = this;
+        return new VistaTableFolder<ManagedEmployee>(ManagedEmployee.class, i18n.tr("Employee"), isEditable()) {
+            private final VistaTableFolder<ManagedEmployee> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {

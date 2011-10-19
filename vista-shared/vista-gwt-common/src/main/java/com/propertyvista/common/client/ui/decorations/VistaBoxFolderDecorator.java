@@ -19,7 +19,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 
 public class VistaBoxFolderDecorator<E extends IEntity> extends BoxFolderDecorator<E> {
     protected static I18n i18n = I18n.get(VistaBoxFolderDecorator.class);
@@ -28,11 +28,11 @@ public class VistaBoxFolderDecorator<E extends IEntity> extends BoxFolderDecorat
         super(VistaImages.INSTANCE, title, editable);
     }
 
-    public VistaBoxFolderDecorator(VistaEntityFolder<E> parent, boolean editable) {
+    public VistaBoxFolderDecorator(VistaTableFolder<E> parent, boolean editable) {
         this(i18n.tr("Add ") + parent.getItemName(), editable);
     }
 
-    public VistaBoxFolderDecorator(VistaEntityFolder<E> parent) {
+    public VistaBoxFolderDecorator(VistaTableFolder<E> parent) {
         this(parent, parent.isEditable());
     }
 }

@@ -44,7 +44,7 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
@@ -61,7 +61,7 @@ import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.CEmailLabel;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
@@ -247,8 +247,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 // List Viewers:
 
     private CEntityFolder<TenantInLease> createTenantsListViewer() {
-        return new VistaEntityFolder<TenantInLease>(TenantInLease.class, isEditable()) {
-            private final VistaEntityFolder<TenantInLease> parent = this;
+        return new VistaTableFolder<TenantInLease>(TenantInLease.class, isEditable()) {
+            private final VistaTableFolder<TenantInLease> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -285,13 +285,13 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }
 
             @Override
-            protected void removeItem(CEntityFolderItemEditor<TenantInLease> item) {
+            protected void removeItem(CEntityFolderItem<TenantInLease> item) {
                 ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).removeTenat(item.getValue());
                 super.removeItem(item);
             }
 
             @Override
-            protected CEntityFolderItemEditor<TenantInLease> createItem(final boolean first) {
+            protected CEntityFolderItem<TenantInLease> createItem(final boolean first) {
                 return new CEntityFolderRowEditor<TenantInLease>(TenantInLease.class, columns()) {
                     @Override
                     public IsWidget createContent() {
@@ -424,7 +424,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     }
 
     private CEntityFolder<ApplicationStatusDTO> createAppStatusListViewer() {
-        return new VistaEntityFolder<ApplicationStatusDTO>(ApplicationStatusDTO.class, i18n.tr("Status"), false) {
+        return new VistaTableFolder<ApplicationStatusDTO>(ApplicationStatusDTO.class, i18n.tr("Status"), false) {
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -438,8 +438,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     }
 
     private CEntityFolder<ChargeItem> createFeaturesFolderEditor() {
-        return new VistaEntityFolder<ChargeItem>(ChargeItem.class, isEditable()) {
-            private final VistaEntityFolder<ChargeItem> parent = this;
+        return new VistaTableFolder<ChargeItem>(ChargeItem.class, isEditable()) {
+            private final VistaTableFolder<ChargeItem> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -475,7 +475,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<ChargeItem> createItem(boolean first) {
+            protected CEntityFolderItem<ChargeItem> createItem(boolean first) {
                 return new CEntityFolderRowEditor<ChargeItem>(ChargeItem.class, columns()) {
                     private final CEntityFolderRowEditor<ChargeItem> chargeItemEditor = this;
 
@@ -506,7 +506,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         main.add(extraDataPanel);
 
                         adjustmentPanel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
-                        adjustmentPanel.add(new CrmSectionSeparator(VistaEntityFolder.i18n.tr("Adjustments:")));
+                        adjustmentPanel.add(new CrmSectionSeparator(VistaTableFolder.i18n.tr("Adjustments:")));
                         adjustmentPanel.add(inject(proto().adjustments(), createItemAdjustmentListView(chargeItemEditor)));
                         main.add(adjustmentPanel);
                         return main;
@@ -540,7 +540,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                     VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
                                     VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 30);
 
-                                    panel.add(new HTML(HtmlUtils.h5(VistaEntityFolder.i18n.tr("Vehicle data:"))));
+                                    panel.add(new HTML(HtmlUtils.h5(VistaTableFolder.i18n.tr("Vehicle data:"))));
                                     panel.add(split);
 
                                     split.getLeftPanel().add(inject(proto().year()), 5);
@@ -566,7 +566,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                     VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
                                     VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 30);
 
-                                    panel.add(new HTML(HtmlUtils.h5(VistaEntityFolder.i18n.tr("Pet data:"))));
+                                    panel.add(new HTML(HtmlUtils.h5(VistaTableFolder.i18n.tr("Pet data:"))));
                                     panel.add(split);
 
                                     split.getLeftPanel().add(inject(proto().name()), 15);
@@ -643,8 +643,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     }
 
     private CEntityFolder<ServiceConcession> createConcessionsFolderEditor() {
-        return new VistaEntityFolder<ServiceConcession>(ServiceConcession.class, isEditable()) {
-            private final VistaEntityFolder<ServiceConcession> parent = this;
+        return new VistaTableFolder<ServiceConcession>(ServiceConcession.class, isEditable()) {
+            private final VistaTableFolder<ServiceConcession> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -681,7 +681,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<ServiceConcession> createItem(boolean first) {
+            protected CEntityFolderItem<ServiceConcession> createItem(boolean first) {
                 return new CEntityFolderRowEditor<ServiceConcession>(ServiceConcession.class, columns()) {
                     @Override
                     public IFolderItemDecorator<ServiceConcession> createDecorator() {
@@ -701,7 +701,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     }
 
     private CEntityFolder<ChargeItemAdjustment> createItemAdjustmentListView(final CEntityFolderRowEditor<ChargeItem> chargeItemEditor) {
-        return new VistaEntityFolder<ChargeItemAdjustment>(ChargeItemAdjustment.class, isEditable()) {
+        return new VistaTableFolder<ChargeItemAdjustment>(ChargeItemAdjustment.class, isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();

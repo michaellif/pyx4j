@@ -18,7 +18,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 
 public class VistaTableFolderItemDecorator<E extends IEntity> extends TableFolderItemDecorator<E> {
     protected static I18n i18n = I18n.get(VistaTableFolderItemDecorator.class);
@@ -27,7 +27,7 @@ public class VistaTableFolderItemDecorator<E extends IEntity> extends TableFolde
         super(VistaImages.INSTANCE, title);
     }
 
-    public VistaTableFolderItemDecorator(VistaEntityFolder<E> parent) {
+    public VistaTableFolderItemDecorator(VistaTableFolder<E> parent) {
         this(i18n.tr("Remove ") + parent.getItemName());
     }
 

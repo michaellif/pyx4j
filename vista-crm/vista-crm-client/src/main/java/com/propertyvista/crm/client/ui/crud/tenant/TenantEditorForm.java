@@ -26,7 +26,7 @@ import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IList;
@@ -35,7 +35,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
@@ -155,8 +155,8 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
     }
 
     private CEntityFolder<EmergencyContact> createEmergencyContactFolderEditor() {
-        return new VistaEntityFolder<EmergencyContact>(EmergencyContact.class, i18n.tr("Contact"), isEditable()) {
-            private final VistaEntityFolder<EmergencyContact> parent = this;
+        return new VistaTableFolder<EmergencyContact>(EmergencyContact.class, i18n.tr("Contact"), isEditable()) {
+            private final VistaTableFolder<EmergencyContact> parent = this;
 
             @Override
             protected IFolderDecorator<EmergencyContact> createDecorator() {
@@ -164,8 +164,8 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
             }
 
             @Override
-            protected CEntityFolderBoxEditor<EmergencyContact> createItem(final boolean first) {
-                return new CEntityFolderBoxEditor<EmergencyContact>(EmergencyContact.class) {
+            protected CEntityFolderItem<EmergencyContact> createItem(final boolean first) {
+                return new CEntityFolderItem<EmergencyContact>(EmergencyContact.class) {
                     @Override
                     public IsWidget createContent() {
                         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable());

@@ -25,8 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
@@ -36,7 +35,7 @@ import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
@@ -102,9 +101,9 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
     }
 
     private CEntityFolder<AvailableLocale> createLocalesList() {
-        return new VistaEntityFolder<AvailableLocale>(AvailableLocale.class, i18n.tr("SiteLocale"), isEditable()) {
+        return new VistaTableFolder<AvailableLocale>(AvailableLocale.class, i18n.tr("SiteLocale"), isEditable()) {
 
-            private final VistaEntityFolder<AvailableLocale> parent = this;
+            private final VistaTableFolder<AvailableLocale> parent = this;
 
             private final ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
             {
@@ -126,8 +125,8 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
     }
 
     private CEntityFolder<PageDescriptor> createChildPagesList() {
-        return new VistaEntityFolder<PageDescriptor>(PageDescriptor.class, i18n.tr("Page"), !isEditable()) {
-            private final VistaEntityFolder<PageDescriptor> parent = this;
+        return new VistaTableFolder<PageDescriptor>(PageDescriptor.class, i18n.tr("Page"), !isEditable()) {
+            private final VistaTableFolder<PageDescriptor> parent = this;
 
             private final ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
             {
@@ -140,7 +139,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<PageDescriptor> createItem(boolean first) {
+            protected CEntityFolderItem<PageDescriptor> createItem(boolean first) {
                 return new CEntityFolderRowEditor<PageDescriptor>(PageDescriptor.class, columns()) {
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
@@ -202,8 +201,8 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
     }
 
     private CEntityFolder<Testimonial> createTestimonialsList() {
-        return new VistaEntityFolder<Testimonial>(Testimonial.class, i18n.tr("Testimonial"), isEditable()) {
-            private final VistaEntityFolder<Testimonial> parent = this;
+        return new VistaTableFolder<Testimonial>(Testimonial.class, i18n.tr("Testimonial"), isEditable()) {
+            private final VistaTableFolder<Testimonial> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -239,8 +238,8 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
     }
 
     private CEntityFolder<News> createNewsList() {
-        return new VistaEntityFolder<News>(News.class, i18n.tr("News"), isEditable()) {
-            private final VistaEntityFolder<News> parent = this;
+        return new VistaTableFolder<News>(News.class, i18n.tr("News"), isEditable()) {
+            private final VistaTableFolder<News> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {

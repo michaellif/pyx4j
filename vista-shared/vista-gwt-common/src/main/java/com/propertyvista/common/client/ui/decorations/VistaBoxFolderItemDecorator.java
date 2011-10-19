@@ -18,17 +18,16 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.VistaEntityFolder;
 
 public class VistaBoxFolderItemDecorator<E extends IEntity> extends BoxFolderItemDecorator<E> {
     protected static I18n i18n = I18n.get(VistaBoxFolderItemDecorator.class);
 
-    public VistaBoxFolderItemDecorator(String title) {
-        super(VistaImages.INSTANCE, title);
+    public VistaBoxFolderItemDecorator() {
+        super(VistaImages.INSTANCE);
     }
 
-    public VistaBoxFolderItemDecorator(VistaEntityFolder<E> parent) {
-        this(i18n.tr("Remove ") + parent.getItemName());
+    public VistaBoxFolderItemDecorator(String title) {
+        super(VistaImages.INSTANCE, title);
     }
 
 }

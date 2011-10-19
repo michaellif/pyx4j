@@ -26,7 +26,7 @@ import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
@@ -39,7 +39,7 @@ import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -131,8 +131,8 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
     }
 
     private CEntityFolder<ServiceItem> createItemsFolderEditor() {
-        return new VistaEntityFolder<ServiceItem>(ServiceItem.class, i18n.tr("Item"), isEditable()) {
-            private final VistaEntityFolder<ServiceItem> parent = this;
+        return new VistaTableFolder<ServiceItem>(ServiceItem.class, i18n.tr("Item"), isEditable()) {
+            private final VistaTableFolder<ServiceItem> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -145,7 +145,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<ServiceItem> createItem(boolean first) {
+            protected CEntityFolderItem<ServiceItem> createItem(boolean first) {
                 return new CEntityFolderRowEditor<ServiceItem>(ServiceItem.class, columns()) {
 //                    private CEntityComboBox<AptUnit> combo;
 
@@ -205,8 +205,8 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
     }
 
     private CEntityFolder<ServiceFeature> createFeaturesFolderEditor() {
-        return new VistaEntityFolder<ServiceFeature>(ServiceFeature.class, i18n.tr("Feature"), isEditable()) {
-            private final VistaEntityFolder<ServiceFeature> parent = this;
+        return new VistaTableFolder<ServiceFeature>(ServiceFeature.class, i18n.tr("Feature"), isEditable()) {
+            private final VistaTableFolder<ServiceFeature> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -239,7 +239,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<ServiceFeature> createItem(boolean first) {
+            protected CEntityFolderItem<ServiceFeature> createItem(boolean first) {
                 return new CEntityFolderRowEditor<ServiceFeature>(ServiceFeature.class, columns()) {
                     @Override
                     public IFolderItemDecorator<ServiceFeature> createDecorator() {
@@ -259,8 +259,8 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
     }
 
     private CEntityFolder<ServiceConcession> createConcessionsFolderEditor() {
-        return new VistaEntityFolder<ServiceConcession>(ServiceConcession.class, i18n.tr("Concession"), isEditable()) {
-            private final VistaEntityFolder<ServiceConcession> parent = this;
+        return new VistaTableFolder<ServiceConcession>(ServiceConcession.class, i18n.tr("Concession"), isEditable()) {
+            private final VistaTableFolder<ServiceConcession> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -293,7 +293,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<ServiceConcession> createItem(boolean first) {
+            protected CEntityFolderItem<ServiceConcession> createItem(boolean first) {
                 return new CEntityFolderRowEditor<ServiceConcession>(ServiceConcession.class, columns()) {
                     @Override
                     public IFolderItemDecorator<ServiceConcession> createDecorator() {

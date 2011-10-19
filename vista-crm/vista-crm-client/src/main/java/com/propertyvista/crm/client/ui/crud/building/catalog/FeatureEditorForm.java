@@ -25,14 +25,14 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
@@ -77,8 +77,8 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
     }
 
     private CEntityFolder<ServiceItem> createItemsFolderEditor() {
-        return new VistaEntityFolder<ServiceItem>(ServiceItem.class, i18n.tr("Item"), isEditable()) {
-            private final VistaEntityFolder<ServiceItem> thisRef = this;
+        return new VistaTableFolder<ServiceItem>(ServiceItem.class, i18n.tr("Item"), isEditable()) {
+            private final VistaTableFolder<ServiceItem> thisRef = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -91,7 +91,7 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<ServiceItem> createItem(boolean first) {
+            protected CEntityFolderItem<ServiceItem> createItem(boolean first) {
                 return new CEntityFolderRowEditor<ServiceItem>(ServiceItem.class, columns()) {
                     @Override
                     public IFolderItemDecorator<ServiceItem> createDecorator() {
@@ -120,8 +120,8 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
                                     public void onValueChange(ValueChangeEvent<ServiceItemType> event) {
                                         for (ServiceItemType item : FeatureEditorForm.this.getValue().catalog().includedUtilities()) {
                                             if (item.equals(event.getValue())) {
-                                                MessageDialog.warn(VistaEntityFolder.i18n.tr("Note"),
-                                                        VistaEntityFolder.i18n.tr("The selected Utility Type is included in price!"));
+                                                MessageDialog.warn(VistaTableFolder.i18n.tr("Note"),
+                                                        VistaTableFolder.i18n.tr("The selected Utility Type is included in price!"));
                                             }
                                         }
 

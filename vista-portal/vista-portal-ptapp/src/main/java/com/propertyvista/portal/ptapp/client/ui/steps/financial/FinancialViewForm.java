@@ -32,28 +32,23 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.CMoney;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
 import com.propertyvista.domain.financial.Money;
-import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
@@ -78,6 +73,21 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
         summaryViewMode = true;
     }
 
+    @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        if (member instanceof PersonalIncome) {
+            return new FinancialViewIncomeForm(summaryViewMode);
+        } else if (member instanceof PersonalAsset) {
+            return new PersonalAssetEditor();
+        } else if (member instanceof TenantGuarantor) {
+            return new TenantGuarantorEditor(summaryViewMode);
+        } else if ((!isSummaryViewMode()) && member.getValueClass().equals(Money.class)) {
+            return new CMoney();
+        } else {
+            return super.create(member);
+        }
+    }
+
     public boolean isSummaryViewMode() {
         return summaryViewMode;
     }
@@ -87,18 +97,16 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
         FlowPanel main = new FlowPanel();
 
-//        main.add(createHeader(proto().incomes()));
-//        main.add(inject(proto().incomes2(), createIncomeFolderEditor2()));
         main.add(createHeader(proto().incomes()));
-        main.add(inject(proto().incomes(), createIncomeFolderEditor()));
+        main.add(inject(proto().incomes(), new PersonalIncomeFolder()));
         main.add(new HTML());
 
         main.add(createHeader(proto().assets()));
-        main.add(inject(proto().assets(), createAssetFolderEditorColumns()));
+        main.add(inject(proto().assets(), new PersonalAssetFolder()));
         main.add(new HTML());
 
         main.add(createHeader(proto().guarantors()));
-        main.add(inject(proto().guarantors(), createGuarantorFolderEditorColumns()));
+        main.add(inject(proto().guarantors(), new TenantGuarantorFolder()));
         main.add(new HTML());
 
         if (isSummaryViewMode()) {
@@ -116,15 +124,6 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
             return header;
         } else {
             return new VistaHeaderBar(member);
-        }
-    }
-
-    @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
-        if ((!isSummaryViewMode()) && member.getValueClass().equals(Money.class)) {
-            return new CMoney();
-        } else {
-            return super.create(member);
         }
     }
 
@@ -149,222 +148,156 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
         });
     }
 
-    private VistaEntityFolder<IIncomeInfo> createIncomeFolderEditor2() {
+    class PersonalIncomeFolder extends VistaTableFolder<PersonalIncome> {
 
-        return new VistaEntityFolder<IIncomeInfo>(IIncomeInfo.class) {
-            private final VistaEntityFolder<IIncomeInfo> parent = this;
+        public PersonalIncomeFolder() {
+            super(PersonalIncome.class);
+        }
 
-            @Override
-            protected IFolderDecorator<IIncomeInfo> createDecorator() {
-                if (isSummaryViewMode()) {
-                    return new BoxReadOnlyFolderDecorator<IIncomeInfo>() {
-                        @Override
-                        public void setComponent(CEntityFolder w) {
-                            super.setComponent(w);
-                            this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-                        }
-                    };
-                } else {
-                    return new VistaBoxFolderDecorator<IIncomeInfo>(parent);
-                }
-            }
-
-            @Override
-            protected CEntityFolderBoxEditor<IIncomeInfo> createItem(boolean first) {
-                return new FinancialViewIncomeForm2(parent, summaryViewMode);
-            }
-
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                return null;
-            }
-        };
-    }
-
-    private VistaEntityFolder<PersonalIncome> createIncomeFolderEditor() {
-
-        return new VistaEntityFolder<PersonalIncome>(PersonalIncome.class) {
-            private final VistaEntityFolder<PersonalIncome> parent = this;
-
-            @Override
-            protected IFolderDecorator<PersonalIncome> createDecorator() {
-                if (isSummaryViewMode()) {
-                    return new BoxReadOnlyFolderDecorator<PersonalIncome>() {
-                        @Override
-                        public void setComponent(CEntityFolder w) {
-                            super.setComponent(w);
-                            this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-                        }
-                    };
-                } else {
-                    return new VistaBoxFolderDecorator<PersonalIncome>(parent);
-                }
-            }
-
-            @Override
-            protected CEntityFolderBoxEditor<PersonalIncome> createItem(boolean first) {
-                return new FinancialViewIncomeForm(parent, summaryViewMode);
-            }
-
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                return null;
-            }
-        };
-    }
-
-    private VistaEntityFolder<PersonalAsset> createAssetFolderEditorColumns() {
-        return new VistaEntityFolder<PersonalAsset>(PersonalAsset.class) {
-            private final VistaEntityFolder<PersonalAsset> parent = this;
-
-            private List<EntityFolderColumnDescriptor> columns;
-            {
-                columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().assetType(), "15em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().percent(), "7em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().assetValue(), "15em"));
-            }
-
-            @Override
-            protected IFolderDecorator<PersonalAsset> createDecorator() {
-                if (isSummaryViewMode()) {
-                    return new BoxReadOnlyFolderDecorator<PersonalAsset>() {
-                        @Override
-                        public void setComponent(CEntityFolder w) {
-                            super.setComponent(w);
-                            this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-                        }
-                    };
-                } else {
-                    return new VistaTableFolderDecorator<PersonalAsset>(columns, parent);
-                }
-            }
-
-            @Override
-            protected CEntityFolderItemEditor<PersonalAsset> createItem(boolean first) {
-                return new CEntityFolderRowEditor<PersonalAsset>(PersonalAsset.class, columns) {
-
+        @Override
+        protected IFolderDecorator<PersonalIncome> createDecorator() {
+            if (isSummaryViewMode()) {
+                return new BoxReadOnlyFolderDecorator<PersonalIncome>() {
                     @Override
-                    public IFolderItemDecorator<PersonalAsset> createDecorator() {
-                        return new VistaTableFolderItemDecorator<PersonalAsset>(parent);
-                    }
-
-                    @Override
-                    public void addValidations() {
-                        get(proto().percent()).addValueValidator(new EditableValueValidator<Double>() {
-
-                            @Override
-                            public boolean isValid(CEditableComponent<Double, ?> component, Double value) {
-                                return (value == null) || ((value >= 0) && (value <= 100));
-                            }
-
-                            @Override
-                            public String getValidationMessage(CEditableComponent<Double, ?> component, Double value) {
-                                return VistaEntityFolder.i18n.tr("Value cannot increase 100%");
-                            }
-
-                        });
-
-                        get(proto().assetType()).addValueChangeHandler(new ValueChangeHandler<PersonalAsset.AssetType>() {
-
-                            @Override
-                            public void onValueChange(ValueChangeEvent<AssetType> event) {
-                                if (get(proto().percent()).getValue() == null) {
-                                    get(proto().percent()).setValue(100d);
-                                }
-                            }
-                        });
+                    public void setComponent(CEntityFolder w) {
+                        super.setComponent(w);
+                        this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                     }
                 };
+            } else {
+                return new VistaBoxFolderDecorator<PersonalIncome>(this);
             }
+        }
 
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                return columns;
-            }
-        };
-
+        @Override
+        protected List<EntityFolderColumnDescriptor> columns() {
+            return null;
+        }
     }
 
-    private VistaEntityFolder<TenantGuarantor> createGuarantorFolderEditorColumns() {
-        return new VistaEntityFolder<TenantGuarantor>(TenantGuarantor.class) {
-            private final VistaEntityFolder<TenantGuarantor> parent = this;
+    static class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
 
-            @Override
-            protected IFolderDecorator<TenantGuarantor> createDecorator() {
-                if (isSummaryViewMode()) {
-                    return new BoxReadOnlyFolderDecorator<TenantGuarantor>() {
-                        @Override
-                        public void setComponent(CEntityFolder w) {
-                            super.setComponent(w);
-                            this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-                        }
-                    };
-                } else {
-                    return new BoxFolderDecorator<TenantGuarantor>(PortalImages.INSTANCE, i18n.tr("Add guarantor"));
+        public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
+        static {
+            PersonalAsset proto = EntityFactory.getEntityPrototype(PersonalAsset.class);
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.assetType(), "15em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.percent(), "7em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.assetValue(), "15em"));
+        }
+
+        public PersonalAssetFolder() {
+            super(PersonalAsset.class);
+        }
+
+        @Override
+        protected IFolderDecorator<PersonalAsset> createDecorator() {
+            return new VistaTableFolderDecorator<PersonalAsset>(COLUMNS, this);
+        }
+
+        @Override
+        protected List<EntityFolderColumnDescriptor> columns() {
+            return null;
+        }
+    }
+
+    static class PersonalAssetEditor extends CEntityFolderRowEditor<PersonalAsset> {
+        public PersonalAssetEditor() {
+            super(PersonalAsset.class, PersonalAssetFolder.COLUMNS);
+        }
+
+        @Override
+        public void addValidations() {
+            get(proto().percent()).addValueValidator(new EditableValueValidator<Double>() {
+
+                @Override
+                public boolean isValid(CEditableComponent<Double, ?> component, Double value) {
+                    return (value == null) || ((value >= 0) && (value <= 100));
                 }
-            }
 
-            @Override
-            protected CEntityFolderBoxEditor<TenantGuarantor> createItem(boolean first) {
-                return createGuarantorRowEditor();
-            }
+                @Override
+                public String getValidationMessage(CEditableComponent<Double, ?> component, Double value) {
+                    return i18n.tr("Value cannot increase 100%");
+                }
 
-            private CEntityFolderBoxEditor<TenantGuarantor> createGuarantorRowEditor() {
-                return new CEntityFolderBoxEditor<TenantGuarantor>(TenantGuarantor.class) {
+            });
 
-                    @Override
-                    public IsWidget createContent() {
-                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
-                        if (isSummaryViewMode()) {
-                            FlowPanel person = DecorationUtils.formFullName(this, proto());
-                            person.getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-                            person.getElement().getStyle().setFontSize(1.1, Unit.EM);
-                            main.add(person);
-                        } else {
-                            main.add(inject(proto().name().firstName()), 12);
-                            main.add(inject(proto().name().middleName()), 12);
-                            main.add(inject(proto().name().lastName()), 20);
-                        }
-                        main.add(inject(proto().homePhone()), 15);
-                        main.add(inject(proto().mobilePhone()), 15);
-                        main.add(inject(proto().workPhone()), 15);
-                        main.add(inject(proto().birthDate()), 8);
-                        main.add(inject(proto().email()), 15);
-                        main.add(new HTML());
-                        return main;
+            get(proto().assetType()).addValueChangeHandler(new ValueChangeHandler<PersonalAsset.AssetType>() {
+
+                @Override
+                public void onValueChange(ValueChangeEvent<AssetType> event) {
+                    if (get(proto().percent()).getValue() == null) {
+                        get(proto().percent()).setValue(100d);
                     }
-
-                    @Override
-                    public IFolderItemDecorator<TenantGuarantor> createDecorator() {
-                        return new VistaBoxFolderItemDecorator<TenantGuarantor>(parent);
-                    }
-
-                    @Override
-                    public void addValidations() {
-
-                        get(proto().email()).setMandatory(true);
-
-                        get(proto().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
-
-                            @Override
-                            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
-                                return ValidationUtils.isOlderThen18(value);
-                            }
-
-                            @Override
-                            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                                return VistaEntityFolder.i18n.tr("Guarantor should be at least 18 years old");
-                            }
-                        });
-                    }
-                };
-            }
-
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                return null;
-            }
-        };
+                }
+            });
+        }
     }
+
+    static class TenantGuarantorFolder extends VistaTableFolder<TenantGuarantor> {
+        public TenantGuarantorFolder() {
+            super(TenantGuarantor.class);
+        }
+
+        @Override
+        protected IFolderDecorator<TenantGuarantor> createDecorator() {
+            return new BoxFolderDecorator<TenantGuarantor>(PortalImages.INSTANCE, i18n.tr("Add guarantor"));
+        }
+
+        @Override
+        protected List<EntityFolderColumnDescriptor> columns() {
+            return null;
+        }
+    }
+
+    static class TenantGuarantorEditor extends CEntityEditor<TenantGuarantor> {
+
+        private final boolean summaryViewMode;
+
+        public TenantGuarantorEditor(boolean summaryViewMode) {
+            super(TenantGuarantor.class);
+            this.summaryViewMode = summaryViewMode;
+        }
+
+        @Override
+        public IsWidget createContent() {
+            VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
+            if (summaryViewMode) {
+                FlowPanel person = DecorationUtils.formFullName(this, proto());
+                person.getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+                person.getElement().getStyle().setFontSize(1.1, Unit.EM);
+                main.add(person);
+            } else {
+                main.add(inject(proto().name().firstName()), 12);
+                main.add(inject(proto().name().middleName()), 12);
+                main.add(inject(proto().name().lastName()), 20);
+            }
+            main.add(inject(proto().homePhone()), 15);
+            main.add(inject(proto().mobilePhone()), 15);
+            main.add(inject(proto().workPhone()), 15);
+            main.add(inject(proto().birthDate()), 8);
+            main.add(inject(proto().email()), 15);
+            main.add(new HTML());
+            return main;
+        }
+
+        @Override
+        public void addValidations() {
+
+            get(proto().email()).setMandatory(true);
+
+            get(proto().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
+
+                @Override
+                public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                    return ValidationUtils.isOlderThen18(value);
+                }
+
+                @Override
+                public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                    return i18n.tr("Guarantor should be at least 18 years old");
+                }
+            });
+        }
+    }
+
 }

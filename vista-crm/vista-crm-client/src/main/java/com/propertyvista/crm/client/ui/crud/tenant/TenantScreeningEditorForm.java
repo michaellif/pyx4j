@@ -32,8 +32,7 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
@@ -42,7 +41,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -328,7 +327,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     }
 
     private CEntityFolder<PersonalIncome> createIncomeFolderEditor() {
-        return new VistaEntityFolder<PersonalIncome>(PersonalIncome.class, i18n.tr("Income source"), isEditable()) {
+        return new VistaTableFolder<PersonalIncome>(PersonalIncome.class, i18n.tr("Income source"), isEditable()) {
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -341,15 +340,15 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             }
 
             @Override
-            protected CEntityFolderBoxEditor<PersonalIncome> createItem(boolean first) {
+            protected CEntityFolderItem<PersonalIncome> createItem(boolean first) {
                 return new TenantFinancialViewIncomeForm(!TenantScreeningEditorForm.this.isEditable());
             }
         };
     }
 
     private CEntityFolder<PersonalAsset> createAssetFolderEditorColumns() {
-        return new VistaEntityFolder<PersonalAsset>(PersonalAsset.class, i18n.tr("Asset"), isEditable()) {
-            private final VistaEntityFolder<PersonalAsset> parent = this;
+        return new VistaTableFolder<PersonalAsset>(PersonalAsset.class, i18n.tr("Asset"), isEditable()) {
+            private final VistaTableFolder<PersonalAsset> parent = this;
 
             private List<EntityFolderColumnDescriptor> columns;
             {
@@ -365,7 +364,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             }
 
             @Override
-            protected CEntityFolderItemEditor<PersonalAsset> createItem(boolean first) {
+            protected CEntityFolderItem<PersonalAsset> createItem(boolean first) {
                 return new CEntityFolderRowEditor<PersonalAsset>(PersonalAsset.class, columns) {
 
                     @Override
@@ -384,7 +383,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
                             @Override
                             public String getValidationMessage(CEditableComponent<Double, ?> component, Double value) {
-                                return VistaEntityFolder.i18n.tr("Value should be in range 0-100%");
+                                return VistaTableFolder.i18n.tr("Value should be in range 0-100%");
                             }
 
                         });
@@ -405,8 +404,8 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     }
 
     private CEntityFolder<TenantGuarantor> createGuarantorFolderEditorColumns() {
-        return new VistaEntityFolder<TenantGuarantor>(TenantGuarantor.class, i18n.tr("Guarantor"), isEditable()) {
-            private final VistaEntityFolder<TenantGuarantor> parent = this;
+        return new VistaTableFolder<TenantGuarantor>(TenantGuarantor.class, i18n.tr("Guarantor"), isEditable()) {
+            private final VistaTableFolder<TenantGuarantor> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -419,8 +418,8 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             }
 
             @Override
-            protected CEntityFolderBoxEditor<TenantGuarantor> createItem(boolean first) {
-                return new CEntityFolderBoxEditor<TenantGuarantor>(TenantGuarantor.class) {
+            protected CEntityFolderItem<TenantGuarantor> createItem(boolean first) {
+                return new CEntityFolderItem<TenantGuarantor>(TenantGuarantor.class) {
 
                     @Override
                     public IsWidget createContent() {
@@ -462,7 +461,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
                             @Override
                             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                                return VistaEntityFolder.i18n.tr("Guarantor should be at least 18 years old");
+                                return VistaTableFolder.i18n.tr("Guarantor should be at least 18 years old");
                             }
                         });
                     }

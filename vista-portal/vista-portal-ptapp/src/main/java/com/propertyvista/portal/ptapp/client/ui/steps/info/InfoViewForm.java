@@ -27,14 +27,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.utils.EntityGraph;
@@ -43,21 +37,18 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.VistaEntityFolder;
 import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.components.CEmailLabel;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
-import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.common.client.ui.editors.EmergencyContactFolder;
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
-import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
@@ -145,7 +136,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().filedBankruptcy()), decor));
 
         main.add(new VistaHeaderBar(proto().emergencyContacts()));
-        main.add(inject(proto().emergencyContacts(), createEmergencyContactFolderEditor()));
+        main.add(inject(proto().emergencyContacts(), new EmergencyContactFolder()));
 
         main.setWidth("800px");
 
@@ -345,57 +336,4 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
 
     }
 
-    private CEntityFolder<EmergencyContact> createEmergencyContactFolderEditor() {
-
-        return new VistaEntityFolder<EmergencyContact>(EmergencyContact.class, i18n.tr("Contact")) {
-            private final VistaEntityFolder<EmergencyContact> parent = this;
-
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                return null;
-            }
-
-            @Override
-            protected IFolderDecorator<EmergencyContact> createDecorator() {
-                return new VistaBoxFolderDecorator<EmergencyContact>(parent);
-            }
-
-            @Override
-            protected CEntityFolderBoxEditor<EmergencyContact> createItem(final boolean first) {
-                CEntityFolderBoxEditor<EmergencyContact> item = new CEntityFolderBoxEditor<EmergencyContact>(EmergencyContact.class) {
-                    @Override
-                    public IsWidget createContent() {
-                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-                        main.add(inject(proto().name().firstName()), 12);
-                        main.add(inject(proto().name().middleName()), 12);
-                        main.add(inject(proto().name().lastName()), 20);
-                        main.add(inject(proto().homePhone()), 15);
-                        main.add(inject(proto().mobilePhone()), 15);
-                        main.add(inject(proto().workPhone()), 15);
-                        AddressUtils.injectIAddress(main, proto().address(), this);
-                        main.add(new HTML());
-                        return main;
-                    }
-
-                    @Override
-                    public IFolderItemDecorator<EmergencyContact> createDecorator() {
-                        return new VistaBoxFolderItemDecorator<EmergencyContact>(parent);
-                    }
-                };
-                item.setMovable(!first);
-                item.setRemovable(!first);
-                return item;
-            }
-
-            @Override
-            public void populate(IList<EmergencyContact> value) {
-                super.populate(value);
-                if (value.isEmpty()) {
-                    addItem(); // at least one Emergency Contact should be present!..
-                }
-            }
-
-        };
-
-    }
 }

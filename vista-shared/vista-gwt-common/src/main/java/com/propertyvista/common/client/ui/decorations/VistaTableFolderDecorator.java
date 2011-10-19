@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 
 public class VistaTableFolderDecorator<E extends IEntity> extends TableFolderDecorator<E> {
     protected static I18n i18n = I18n.get(VistaTableFolderDecorator.class);
@@ -30,7 +30,7 @@ public class VistaTableFolderDecorator<E extends IEntity> extends TableFolderDec
         super(columns, VistaImages.INSTANCE, title);
     }
 
-    public VistaTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, VistaEntityFolder<E> parent) {
+    public VistaTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, VistaTableFolder<E> parent) {
         this(columns, i18n.tr("Add ") + parent.getItemName());
     }
 

@@ -14,7 +14,6 @@
 package com.propertyvista.portal.ptapp.client.ui.steps.charges;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -28,11 +27,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -45,25 +44,27 @@ import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
 public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
 
     private static I18n i18n = I18n.get(ChargeSplitListFolder.class);
 
-    private final boolean summaryViewMode;
+    public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
+    static {
+        TenantCharge proto = EntityFactory.getEntityPrototype(TenantCharge.class);
+        COLUMNS.add(new EntityFolderColumnDescriptor(proto.tenantFullName(), "260px"));
+        COLUMNS.add(new EntityFolderColumnDescriptor(proto.percentage(), "35px"));
+        COLUMNS.add(new EntityFolderColumnDescriptor(proto.charge(), "80px"));
+    }
 
-    private final List<EntityFolderColumnDescriptor> columns;
+    private final boolean summaryViewMode;
 
     ChargeSplitListFolder(boolean summaryViewMode) {
         super(TenantCharge.class);
         this.summaryViewMode = summaryViewMode;
-        columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().tenantFullName(), "260px"));
-        columns.add(new EntityFolderColumnDescriptor(proto().percentage(), "35px"));
-        columns.add(new EntityFolderColumnDescriptor(proto().charge(), "80px"));
     }
 
     @Override
@@ -110,62 +111,60 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
     }
 
     @Override
-    protected CEntityFolderItemEditor<TenantCharge> createItem(final boolean first) {
-        return new CEntityFolderRowEditor<TenantCharge>(TenantCharge.class, columns) {
+    protected IFolderItemDecorator<TenantCharge> createItemDecorator() {
+        return new TableFolderItemDecorator<TenantCharge>(VistaImages.INSTANCE);
+    }
 
-            @Override
-            public IFolderItemDecorator<TenantCharge> createDecorator() {
-                TableFolderItemDecorator<TenantCharge> dec = new TableFolderItemDecorator<TenantCharge>(null);
-                if (!first) {
-                    Widget sp = new VistaLineSeparator(400, Unit.PX, 0.5, Unit.EM, 0.5, Unit.EM);
-                    sp.getElement().getStyle().setPadding(0, Unit.EM);
-                    ((VerticalPanel) dec.getWidget()).insert(sp, 0);
-                }
-                return dec;
+    static class TenantChargeEditor extends CEntityFolderRowEditor<TenantCharge> {
+
+        public TenantChargeEditor() {
+            super(TenantCharge.class, COLUMNS);
+        }
+
+        @Override
+        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+            //TODO - handle first - if (first && (column.getObject() == proto().percentage())) {
+            if ((column.getObject() == proto().percentage())) {
+                return inject(column.getObject(), new CNumberLabel());
+            }
+            return super.createCell(column);
+        }
+
+        @Override
+        protected Widget createCellDecorator(EntityFolderColumnDescriptor column, CComponent<?> component, String width) {
+            Widget w = super.createCellDecorator(column, component, width);
+            if (column.getObject() != proto().tenantFullName()) {
+                w.getElement().getStyle().setProperty("textAlign", "right");
+                component.asWidget().getElement().getStyle().setProperty("textAlign", "right");
             }
 
-            @Override
-            protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-                if (first && (column.getObject() == proto().percentage())) {
-                    return inject(column.getObject(), new CNumberLabel());
-                }
-                return super.createCell(column);
+            if (column.getObject() == proto().percentage()) {
+                FlowPanel wrap = new FlowPanel();
+                wrap.add(DecorationUtils.inline(w, "35px"));
+                // Add $ label before or after Input
+                IsWidget lable = DecorationUtils.inline(new HTML("%"), "10px");
+                //TODO
+                //if (!summaryViewMode) {
+                //    wrap.insert(lable, 0);
+                // } else {
+                wrap.add(lable);
+                //}
+                return wrap;
             }
+            return w;
+        }
 
-            @Override
-            protected Widget createCellDecorator(EntityFolderColumnDescriptor column, CComponent<?> component, String width) {
-                Widget w = super.createCellDecorator(column, component, width);
-                if (column.getObject() != proto().tenantFullName()) {
-                    w.getElement().getStyle().setProperty("textAlign", "right");
-                    component.asWidget().getElement().getStyle().setProperty("textAlign", "right");
-                }
-
-                if (column.getObject() == proto().percentage()) {
-                    FlowPanel wrap = new FlowPanel();
-                    wrap.add(DecorationUtils.inline(w, "35px"));
-                    // Add $ label before or after Input
-                    IsWidget lable = DecorationUtils.inline(new HTML("%"), "10px");
-                    if (!summaryViewMode) {
-                        wrap.insert(lable, 0);
-                    } else {
-                        wrap.add(lable);
-                    }
-                    return wrap;
-                }
-                return w;
+        @SuppressWarnings("unchecked")
+        @Override
+        public void addValidations() {
+            //TODO
+            // if (!summaryViewMode) {
+            CEditableComponent<Integer, ?> prc = get(proto().percentage());
+            if (prc instanceof CNumberField) {
+                ((CNumberField<Integer>) prc).setRange(0, 100);
             }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public void addValidations() {
-                if (!summaryViewMode) {
-                    CEditableComponent<Integer, ?> prc = get(proto().percentage());
-                    if (prc instanceof CNumberField) {
-                        ((CNumberField<Integer>) prc).setRange(0, 100);
-                    }
-                }
-            }
-        };
+            // }
+        }
     }
 
     public class ChargeSplitListFolderDecorator extends VerticalPanel implements IFolderDecorator<TenantCharge> {
@@ -212,4 +211,5 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
         }
 
     }
+
 }

@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -30,13 +29,8 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -45,6 +39,7 @@ import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
@@ -57,8 +52,7 @@ import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.util.DomainUtil;
-import com.propertyvista.portal.ptapp.client.resources.PortalImages;
-import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
+import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.ptapp.dto.AddOnsDTO;
 
@@ -88,10 +82,10 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
         FlowPanel main = new FlowPanel();
 
         main.add(new VistaHeaderBar(proto().pets()));
-        main.add(inject(proto().pets().list(), createPetsEditorColumns()));
+        main.add(inject(proto().pets().list(), new PetFolder(this)));
 
         main.add(new VistaHeaderBar(proto().vehicles()));
-        main.add(inject(proto().vehicles().list(), createVehicleEditorColumns()));
+        main.add(inject(proto().vehicles().list(), new VehicleFolder()));
 
         return main;
     }
@@ -140,168 +134,144 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
         });
     }
 
-    private CEntityFolder<Pet> createPetsEditorColumns() {
+    static class PetFolder extends VistaTableFolder<Pet> {
 
-        return new CEntityFolder<Pet>(Pet.class) {
+        public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
+        static {
+            Pet proto = EntityFactory.getEntityPrototype(Pet.class);
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.name(), "14em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.color(), "6em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.breed(), "13em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.weight(), "4em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.weightUnit(), "4em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.birthDate(), "8.2em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.chargeLine(), "7em"));
+        }
 
-            private List<EntityFolderColumnDescriptor> columns;
-            {
-                columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().name(), "14em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().color(), "6em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().breed(), "13em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().weight(), "4em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().weightUnit(), "4em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().birthDate(), "8.2em"));
-                if (!isSummaryViewMode()) {
-                    columns.add(new EntityFolderColumnDescriptor(proto().chargeLine(), "7em"));
-                }
+        private final AddonsViewForm form;
+
+        public PetFolder(AddonsViewForm form) {
+            super(Pet.class);
+            this.form = form;
+        }
+
+        @Override
+        public CEditableComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof ChargeLine) {
+                return new CEntityLabel();
+            } else if (member instanceof Pet) {
+                return new PetEditor(form.getValue().pets());
+            } else {
+                return super.create(member);
+            }
+        }
+
+        @Override
+        protected List<EntityFolderColumnDescriptor> columns() {
+            return COLUMNS;
+        }
+
+        @Override
+        protected void createNewEntity(Pet newEntity, AsyncCallback<Pet> callback) {
+            newEntity.weightUnit().setValue(WeightUnit.lb);
+            ChargesSharedCalculation.calculatePetCharges(form.getValue().pets().chargeRule(), newEntity);
+            super.createNewEntity(newEntity, callback);
+        }
+
+        static class PetEditor extends CEntityFolderRowEditor<Pet> {
+
+            private final PetsDTO petsData;
+
+            public PetEditor(PetsDTO petsData) {
+                super(Pet.class, PetFolder.COLUMNS);
+                this.petsData = petsData;
             }
 
             @Override
-            protected IFolderDecorator<Pet> createDecorator() {
-                if (isSummaryViewMode()) {
-                    return new BoxReadOnlyFolderDecorator<Pet>() {
-                        @Override
-                        public void setComponent(CEntityFolder w) {
-                            super.setComponent(w);
-                            this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-                        }
-                    };
-                } else {
-                    return new TableFolderDecorator<Pet>(columns, PortalImages.INSTANCE, i18n.tr("Add a pet"));
-                }
-
-            }
-
-            @Override
-            public CEditableComponent<?, ?> create(IObject<?> member) {
-                if (member instanceof ChargeLine) {
-                    return new CEntityLabel();
-                } else {
-                    return super.create(member);
-                }
-            }
-
-            @Override
-            protected CEntityFolderItemEditor<Pet> createItem(boolean first) {
-                return new CEntityFolderRowEditor<Pet>(Pet.class, columns) {
+            public void addValidations() {
+                EditableValueValidator<Integer> weightValidator = new EditableValueValidator<Integer>() {
 
                     @Override
-                    public IFolderItemDecorator<Pet> createDecorator() {
-                        return new TableFolderItemDecorator<Pet>(PortalImages.INSTANCE, i18n.tr("Remove pet"));
+                    public boolean isValid(CEditableComponent<Integer, ?> component, Integer value) {
+                        return (value == null) || DomainUtil.getWeightKg(value, getValue().weightUnit().getValue()) <= petsData.maxPetWeight().getValue();
                     }
 
                     @Override
-                    public void addValidations() {
-                        EditableValueValidator<Integer> weightValidator = new EditableValueValidator<Integer>() {
-
-                            @Override
-                            public boolean isValid(CEditableComponent<Integer, ?> component, Integer value) {
-                                return (value == null)
-                                        || DomainUtil.getWeightKg(value, getValue().weightUnit().getValue()) <= AddonsViewForm.this.getValue().pets()
-                                                .maxPetWeight().getValue();
-                            }
-
-                            @Override
-                            public String getValidationMessage(CEditableComponent<Integer, ?> component, Integer value) {
-                                return i18n
-                                        .tr("Max allowed weight {0} {1} ",
-                                                DomainUtil.getWeightKgToUnit(AddonsViewForm.this.getValue().pets().maxPetWeight(), getValue().weightUnit()),
-                                                getValue().weightUnit().getStringView());
-                            }
-                        };
-
-                        get(proto().weight()).addValueValidator(weightValidator);
-                        get(proto().weightUnit()).addValueChangeHandler(new RevalidationTrigger<WeightUnit>(get(proto().weight())));
-
-                        get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
+                    public String getValidationMessage(CEditableComponent<Integer, ?> component, Integer value) {
+                        return AddonsViewForm.i18n.tr("Max allowed weight {0} {1} ",
+                                DomainUtil.getWeightKgToUnit(petsData.maxPetWeight(), getValue().weightUnit()), getValue().weightUnit().getStringView());
                     }
-
                 };
-            }
 
-            @Override
-            protected void createNewEntity(Pet newEntity, AsyncCallback<Pet> callback) {
-                newEntity.weightUnit().setValue(WeightUnit.lb);
-                ChargesSharedCalculation.calculatePetCharges(AddonsViewForm.this.getValue().pets().chargeRule(), newEntity);
-                super.createNewEntity(newEntity, callback);
+                get(proto().weight()).addValueValidator(weightValidator);
+                get(proto().weightUnit()).addValueChangeHandler(new RevalidationTrigger<WeightUnit>(get(proto().weight())));
+
+                get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
             }
-        };
+        }
     }
 
-    private CEntityFolder<Vehicle> createVehicleEditorColumns() {
-        return new CEntityFolder<Vehicle>(Vehicle.class) {
+    static class VehicleFolder extends VistaTableFolder<Vehicle> {
 
-            private List<EntityFolderColumnDescriptor> columns;
+        public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
+        static {
+            Vehicle proto = EntityFactory.getEntityPrototype(Vehicle.class);
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.plateNumber(), "8em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.year(), "5em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.make(), "8em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.model(), "8em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.country(), "9em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.province(), "16em"));
+        }
 
-            {
-                columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().plateNumber(), "8em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().year(), "5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().make(), "8em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().model(), "8em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().country(), "9em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().province(), "16em"));
-// TOSO not sure parking should be selected here !?                
-//                columns.add(new EntityFolderColumnDescriptor(proto().parkingSpot(), "13em"));
-                //  TODO : filter that parking spot on available spots only and from current building!..                  
+        public VehicleFolder() {
+            super(Vehicle.class);
+        }
+
+        @Override
+        public CEditableComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof Pet) {
+                return new VehicleEditor();
+            } else {
+                return super.create(member);
+            }
+        }
+
+        @Override
+        protected List<EntityFolderColumnDescriptor> columns() {
+            return COLUMNS;
+        }
+
+        static class VehicleEditor extends CEntityFolderRowEditor<Vehicle> {
+
+            public VehicleEditor() {
+                super(Vehicle.class, VehicleFolder.COLUMNS);
             }
 
             @Override
-            protected IFolderDecorator<Vehicle> createDecorator() {
-                if (isSummaryViewMode()) {
-                    return new BoxReadOnlyFolderDecorator<Vehicle>() {
-                        @Override
-                        public void setComponent(CEntityFolder w) {
-                            super.setComponent(w);
-                            this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-                        }
-                    };
-                } else {
-                    return new TableFolderDecorator<Vehicle>(columns, PortalImages.INSTANCE, i18n.tr("Add a vehicle"));
+            protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                CComponent<?> comp = super.createCell(column);
+                if (column.getObject() == proto().year() && comp instanceof CMonthYearPicker) {
+                    ((CMonthYearPicker) comp).setYearRange(new Range(1900, TimeUtils.today().getYear() + 1));
                 }
+                return comp;
             }
 
             @Override
-            protected CEntityFolderItemEditor<Vehicle> createItem(boolean first) {
-                return createVehicleRowEditor(columns);
-            }
-
-            private CEntityFolderItemEditor<Vehicle> createVehicleRowEditor(final List<EntityFolderColumnDescriptor> columns) {
-                return new CEntityFolderRowEditor<Vehicle>(Vehicle.class, columns) {
-
+            public void addValidations() {
+                ProvinceContryFilters.attachFilters(get(proto().province()), get(proto().country()), new OptionsFilter<Province>() {
                     @Override
-                    public IFolderItemDecorator<Vehicle> createDecorator() {
-                        return new TableFolderItemDecorator<Vehicle>(PortalImages.INSTANCE, i18n.tr("Remove vehicle"));
-                    }
-
-                    @Override
-                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-                        CComponent<?> comp = super.createCell(column);
-                        if (column.getObject() == proto().year() && comp instanceof CMonthYearPicker) {
-                            ((CMonthYearPicker) comp).setYearRange(new Range(1900, TimeUtils.today().getYear() + 1));
+                    public boolean acceptOption(Province entity) {
+                        if (getValue() == null) {
+                            return true;
+                        } else {
+                            Country country = getValue().country();
+                            return country.isNull() || EqualsHelper.equals(entity.country().name(), country.name());
                         }
-                        return comp;
                     }
-
-                    @Override
-                    public void addValidations() {
-                        ProvinceContryFilters.attachFilters(get(proto().province()), get(proto().country()), new OptionsFilter<Province>() {
-                            @Override
-                            public boolean acceptOption(Province entity) {
-                                if (getValue() == null) {
-                                    return true;
-                                } else {
-                                    Country country = getValue().country();
-                                    return country.isNull() || EqualsHelper.equals(entity.country().name(), country.name());
-                                }
-                            }
-                        });
-                    }
-
-                };
+                });
             }
-        };
+
+        }
     }
 }

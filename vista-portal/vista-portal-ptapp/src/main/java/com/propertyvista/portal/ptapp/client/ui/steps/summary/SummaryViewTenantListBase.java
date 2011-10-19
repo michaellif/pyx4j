@@ -26,15 +26,15 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.BoxReadOnlyFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 
-public abstract class SummaryViewTenantListBase<E extends IEntity> extends CEntityFolderBoxEditor<E> {
+public abstract class SummaryViewTenantListBase<E extends IEntity> extends CEntityEditor<E> {
 
     protected final I18n i18n = I18n.get(SummaryViewTenantListBase.class);
 

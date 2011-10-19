@@ -14,6 +14,7 @@
 package com.propertyvista.portal.ptapp.client.ui.steps.summary;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -37,12 +38,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.folder.BoxReadOnlyFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.client.DownloadFrame;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -56,6 +55,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleName;
 
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
@@ -70,7 +70,6 @@ import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDec
 import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesViewForm;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.SummaryTenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 
 public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
@@ -116,13 +115,14 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
 
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Tenants"), new PtSiteMap.Tenants())));
         main.add(tenantsTable = new TenantsTable());
-        main.add(inject(proto().tenantList().tenants(), tenantsTable.createTenantTable()));
+        main.add(inject(proto().tenantList().tenants(), new TenantInLeaseFolder()));
 
-        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Info"), new PtSiteMap.Info())));
-        main.add(inject(proto().tenantsWithInfo().tenants(), createTenantView()));
-
-        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Financial"), new PtSiteMap.Financial())));
-        main.add(inject(proto().tenantFinancials(), createFinancialView()));
+        //TODO
+//        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Info"), new PtSiteMap.Info())));
+//        main.add(inject(proto().tenantsWithInfo().tenants(), createTenantView()));
+//
+//        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Financial"), new PtSiteMap.Financial())));
+//        main.add(inject(proto().tenantFinancials(), createFinancialView()));
 
         main.add(alignWidth(new VistaHeaderBar(i18n.tr("Lease Terms"))));
         main.add(new LeaseTermsCheck());
@@ -191,7 +191,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         return new VistaHeaderBar(captionTxt, edit);
     }
 
-    private Widget alignWidth(Widget e) {
+    private static Widget alignWidth(Widget e) {
         e.setWidth("100%");
         return e;
     }
@@ -288,9 +288,16 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
     /*
      * Tenants information table implementation
      */
-    private class TenantsTable extends HorizontalPanel {
+    static private class TenantsTable extends HorizontalPanel {
 
-        private final Map<String, String> tableLayout = new LinkedHashMap<String, String>();
+        private static final Map<String, String> COLUMNS = new LinkedHashMap<String, String>();
+        static {
+            COLUMNS.put("Name", "29%");
+            COLUMNS.put("Date of Birth", "15%");
+            COLUMNS.put("Email", "30%");
+            COLUMNS.put("Relationship", "15%");
+            COLUMNS.put("Status", "11%");
+        }
 
         public TenantsTable() {
 
@@ -302,14 +309,8 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             add(main);
             setCellWidth(main, "100%");
 
-            tableLayout.put("Name", "29%");
-            tableLayout.put("Date of Birth", "15%");
-            tableLayout.put("Email", "30%");
-            tableLayout.put("Relationship", "15%");
-            tableLayout.put("Status", "11%");
-
             // fill header:
-            for (Entry<String, String> e : tableLayout.entrySet()) {
+            for (Entry<String, String> e : COLUMNS.entrySet()) {
                 HTML label = new HTML(i18n.tr(e.getKey()));
                 label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
                 label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
@@ -325,89 +326,114 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             main.add(sp);
         }
 
+    }
+
+    class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
+
+        public TenantInLeaseFolder() {
+            super(TenantInLease.class);
+        }
+
+        @Override
+        public CEditableComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof TenantInLease) {
+                return new TenantInLeaseEditor(TenantsTable.COLUMNS);
+            } else {
+                return super.create(member);
+            }
+        }
+
+        @Override
+        protected List<EntityFolderColumnDescriptor> columns() {
+            return null;
+        }
+
+    }
+
+    class TenantInLeaseEditor extends CEntityEditor<TenantInLease> {
+
+        public TenantInLeaseEditor(Map<String, String> tableLayout) {
+            super(TenantInLease.class);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            FlowPanel content = new FlowPanel();
+            content.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+            content.getElement().getStyle().setPaddingRight(1, Unit.EM);
+            addCell(TenantsTable.COLUMNS, content, "Name", DecorationUtils.formFullName(this, proto().tenant().person()));
+            addCell(TenantsTable.COLUMNS, content, "Date of Birth", inject(proto().tenant().person().birthDate()).asWidget());
+            addCell(TenantsTable.COLUMNS, content, "Email", inject(proto().tenant().person().email()).asWidget());
+            //TODO
+            // if (first) {
+            //      addCell(tableLayout, content, "Relationship", new HTML("&nbsp;"));
+            //  } else {
+            addCell(TenantsTable.COLUMNS, content, "Relationship", inject(proto().relationship()).asWidget());
+            //  }
+            addCell(TenantsTable.COLUMNS, content, "Status", inject(proto().status()).asWidget());
+            return content;
+        }
+
         private void addCell(Map<String, String> tableLayout, FlowPanel content, String cellName, Widget cellContent) {
             cellContent.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             cellContent.getElement().getStyle().setVerticalAlign(VerticalAlign.TEXT_TOP);
             cellContent.setWidth(tableLayout.get(cellName));
             content.add(cellContent);
         }
+    }
 
-        public CEntityFolder<TenantInLease> createTenantTable() {
+    static class TenantInfoFolder extends VistaTableFolder<TenantInLease> {
 
-            return new CEntityFolder<TenantInLease>(TenantInLease.class) {
+        public TenantInfoFolder() {
+            super(TenantInLease.class);
+        }
 
-                @Override
-                protected CEntityFolderBoxEditor<TenantInLease> createItem(final boolean first) {
+        @Override
+        protected IFolderDecorator<TenantInLease> createDecorator() {
+            return new BoxReadOnlyFolderDecorator<TenantInLease>();
+        }
 
-                    return new CEntityFolderBoxEditor<TenantInLease>(TenantInLease.class) {
-
-                        @Override
-                        public IsWidget createContent() {
-                            FlowPanel content = new FlowPanel();
-                            content.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-                            content.getElement().getStyle().setPaddingRight(1, Unit.EM);
-                            addCell(tableLayout, content, "Name", DecorationUtils.formFullName(this, proto().tenant().person()));
-                            addCell(tableLayout, content, "Date of Birth", inject(proto().tenant().person().birthDate()).asWidget());
-                            addCell(tableLayout, content, "Email", inject(proto().tenant().person().email()).asWidget());
-                            if (first) {
-                                addCell(tableLayout, content, "Relationship", new HTML("&nbsp;"));
-                            } else {
-                                addCell(tableLayout, content, "Relationship", inject(proto().relationship()).asWidget());
-                            }
-                            addCell(tableLayout, content, "Status", inject(proto().status()).asWidget());
-                            return content;
-                        }
-
-                        @Override
-                        public IFolderItemDecorator<TenantInLease> createDecorator() {
-                            return new BoxReadOnlyFolderItemDecorator<TenantInLease>();
-                        }
-                    };
-                }
-
-                @Override
-                protected IFolderDecorator<TenantInLease> createDecorator() {
-                    return new BoxReadOnlyFolderDecorator<TenantInLease>();
-                }
-            };
+        @Override
+        protected List<EntityFolderColumnDescriptor> columns() {
+            return null;
         }
     }
 
-    /*
-     * Tenants detailed information view implementation
-     */
-    public CEntityFolder<TenantInLease> createTenantView() {
-        return new CEntityFolder<TenantInLease>(TenantInLease.class) {
-
-            @Override
-            protected CEntityFolderBoxEditor<TenantInLease> createItem(boolean first) {
-                return new SummaryViewTenantInfo();
-            }
-
-            @Override
-            protected IFolderDecorator<TenantInLease> createDecorator() {
-                return new BoxReadOnlyFolderDecorator<TenantInLease>();
-            }
-        };
-    }
-
-    /*
-     * Financial detailed information view implementation
-     */
-    public CEntityFolder<SummaryTenantFinancialDTO> createFinancialView() {
-        return new CEntityFolder<SummaryTenantFinancialDTO>(SummaryTenantFinancialDTO.class) {
-
-            @Override
-            protected CEntityFolderBoxEditor<SummaryTenantFinancialDTO> createItem(boolean first) {
-                return new SummaryViewTenantFinancial();
-            }
-
-            @Override
-            protected IFolderDecorator<SummaryTenantFinancialDTO> createDecorator() {
-                return new BoxReadOnlyFolderDecorator<SummaryTenantFinancialDTO>();
-            }
-        };
-    }
+//    /*
+//     * Tenants detailed information view implementation
+//     */
+//    public CEntityFolder<TenantInLease> createTenantView() {
+//        return new CEntityFolder<TenantInLease>(TenantInLease.class) {
+//
+//            @Override
+//            protected CEntityFolderBoxEditor<TenantInLease> createItem(boolean first) {
+//                return new SummaryViewTenantInfo();
+//            }
+//
+//            @Override
+//            protected IFolderDecorator<TenantInLease> createDecorator() {
+//                return new BoxReadOnlyFolderDecorator<TenantInLease>();
+//            }
+//        };
+//    }
+//
+//    /*
+//     * Financial detailed information view implementation
+//     */
+//    public CEntityFolder<SummaryTenantFinancialDTO> createFinancialView() {
+//        return new CEntityFolder<SummaryTenantFinancialDTO>(SummaryTenantFinancialDTO.class) {
+//
+//            @Override
+//            protected CEntityFolderBoxEditor<SummaryTenantFinancialDTO> createItem(boolean first) {
+//                return new SummaryViewTenantFinancial();
+//            }
+//
+//            @Override
+//            protected IFolderDecorator<SummaryTenantFinancialDTO> createDecorator() {
+//                return new BoxReadOnlyFolderDecorator<SummaryTenantFinancialDTO>();
+//            }
+//        };
+//    }
 
     /*
      * Lease Terms view implementation

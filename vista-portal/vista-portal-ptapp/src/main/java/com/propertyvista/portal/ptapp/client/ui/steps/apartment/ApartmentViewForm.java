@@ -31,10 +31,10 @@ import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -44,19 +44,17 @@ import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaBoxFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
-import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -120,35 +118,35 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
         consessionPanel.add(inject(proto().concessions(), createConcessionsFolderEditor()));
 
         main.add(new VistaHeaderBar(i18n.tr("Included")));
-        main.add(inject(proto().includedUtilities(), createUtilitiesFolderEditor()));
+        main.add(inject(proto().includedUtilities(), new UtilityFolder()));
 
         main.add(new VistaHeaderBar(i18n.tr("Excluded")));
-        main.add(inject(proto().externalUtilities(), createUtilitiesFolderEditor()));
+        main.add(inject(proto().externalUtilities(), new UtilityFolder()));
 
         main.add(chargedPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         chargedPanel.add(new VistaHeaderBar(i18n.tr("Charged Utilities")));
-        chargedPanel.add(inject(proto().agreedUtilities(), createFeaturesFolderEditor(Feature.Type.utility, false)));
+        chargedPanel.add(inject(proto().agreedUtilities(), new FeatureFolder(Feature.Type.utility, this, false)));
 
         main.add(new VistaHeaderBar(i18n.tr("Add-ons")));
 
         main.add(petsPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         petsPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Pets:"))));
-        petsPanel.add(inject(proto().agreedPets(), createFeaturesFolderEditorEx(Feature.Type.pet, true)));
+        petsPanel.add(inject(proto().agreedPets(), new FeatureExFolder(Feature.Type.pet, this, true)));
 
         main.add(parkingPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         parkingPanel.add(new VistaLineSeparator(100, Unit.PCT));
         parkingPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Parking:"))));
-        parkingPanel.add(inject(proto().agreedParking(), createFeaturesFolderEditorEx(Feature.Type.parking, true)));
+        parkingPanel.add(inject(proto().agreedParking(), new FeatureExFolder(Feature.Type.parking, this, true)));
 
         main.add(storagePanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         storagePanel.add(new VistaLineSeparator(100, Unit.PCT));
         storagePanel.add(new HTML(HtmlUtils.h5(i18n.tr("Storage:"))));
-        storagePanel.add(inject(proto().agreedStorage(), createFeaturesFolderEditor(Feature.Type.locker, true)));
+        storagePanel.add(inject(proto().agreedStorage(), new FeatureFolder(Feature.Type.locker, this, true)));
 
         main.add(otherPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         otherPanel.add(new VistaLineSeparator(100, Unit.PCT));
         otherPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Other:"))));
-        otherPanel.add(inject(proto().agreedOther(), createFeaturesFolderEditor(Feature.Type.addOn, true)));
+        otherPanel.add(inject(proto().agreedOther(), new FeatureFolder(Feature.Type.addOn, this, true)));
 
         // last step - add building picture on the right:
         HorizontalPanel content = new HorizontalPanel();
@@ -171,266 +169,295 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
         otherPanel.setVisible(!value.agreedOther().isEmpty() || !value.availableOther().isEmpty());
     }
 
-//
-// List Viewers:
+    //TODO remove header
+    static class UtilityFolder extends VistaTableFolder<ServiceItemType> {
 
-    private CEntityFolder<ServiceItemType> createUtilitiesFolderEditor() {
-        return new VistaEntityFolder<ServiceItemType>(ServiceItemType.class, false) {
-            private final VistaEntityFolder<ServiceItemType> parent = this;
+        public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
+        static {
+            ServiceItemType proto = EntityFactory.getEntityPrototype(ServiceItemType.class);
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.name(), "30em"));
+        }
 
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().name(), "30"));
-                return columns;
+        public UtilityFolder() {
+            super(ServiceItemType.class, false);
+        }
+
+        @Override
+        public CEditableComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof ServiceItemType) {
+                return new UtilityEditor();
+            } else {
+                return super.create(member);
+            }
+        }
+
+        @Override
+        protected List<EntityFolderColumnDescriptor> columns() {
+            ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            columns.add(new EntityFolderColumnDescriptor(proto().name(), "30"));
+            return columns;
+        }
+
+        static class UtilityEditor extends CEntityFolderRowEditor<ServiceItemType> {
+            public UtilityEditor() {
+                super(ServiceItemType.class, UtilityFolder.COLUMNS);
             }
 
             @Override
-            protected IFolderDecorator<ServiceItemType> createDecorator() {
-                VistaTableFolderDecorator<ServiceItemType> decor = new VistaTableFolderDecorator<ServiceItemType>(columns(), parent);
-                decor.setShowHeader(false);
-                return decor;
+            protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                if (column.getObject() == proto().name()) {
+                    return inject(column.getObject(), new CLabel());
+                }
+                return super.createCell(column);
             }
+        }
 
-            @Override
-            protected CEntityFolderRowEditor<ServiceItemType> createItem(boolean first) {
-                return new CEntityFolderRowEditor<ServiceItemType>(ServiceItemType.class, columns()) {
-                    @Override
-                    public IFolderItemDecorator<ServiceItemType> createDecorator() {
-                        return new VistaTableFolderItemDecorator<ServiceItemType>(parent);
-                    }
-
-                    @Override
-                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-                        if (column.getObject() == proto().name()) {
-                            return inject(column.getObject(), new CLabel());
-                        }
-                        return super.createCell(column);
-                    }
-                };
-            }
-        };
+        @Override
+        protected IFolderDecorator<ServiceItemType> createDecorator() {
+            TableFolderDecorator<ServiceItemType> decotator = (TableFolderDecorator<ServiceItemType>) super.createDecorator();
+            decotator.setShowHeader(false);
+            return decotator;
+        }
     }
 
-    private CEntityFolder<ChargeItem> createFeaturesFolderEditor(final Feature.Type type, boolean editable) {
-        return new VistaEntityFolder<ChargeItem>(ChargeItem.class, editable) {
-            private final VistaEntityFolder<ChargeItem> parent = this;
+    static class FeatureFolder extends VistaTableFolder<ChargeItem> {
 
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().item().type(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().adjustedPrice(), "7em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().item().description(), "30em"));
-                return columns;
+        public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
+        static {
+            ChargeItem proto = EntityFactory.getEntityPrototype(ChargeItem.class);
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.item().type(), "10em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.adjustedPrice(), "7em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.item().description(), "30em"));
+        }
+
+        private final Feature.Type type;
+
+        private final ApartmentViewForm apartmentViewForm;
+
+        public FeatureFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean editable) {
+            super(ChargeItem.class, editable);
+            this.type = type;
+            this.apartmentViewForm = apartmentViewForm;
+        }
+
+        @Override
+        public CEditableComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof ChargeItem) {
+                return new FeatureEditor();
+            } else {
+                return super.create(member);
             }
+        }
 
-            @Override
-            protected void addItem() {
-                new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox(type)) {
-                    @Override
-                    protected void onClose(SelectFeatureBox box) {
-                        if (box.getSelectedItems() != null) {
-                            for (ServiceItem item : box.getSelectedItems()) {
-                                ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                                newItem.item().set(item);
-                                newItem.price().setValue(item.price().getValue());
-                                newItem.adjustedPrice().setValue(item.price().getValue());
-                                addItem(newItem);
-                            }
+        @Override
+        protected List<EntityFolderColumnDescriptor> columns() {
+            return COLUMNS;
+        }
+
+        @Override
+        protected void addItem() {
+            new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox(type, apartmentViewForm.getValue())) {
+                @Override
+                protected void onClose(SelectFeatureBox box) {
+                    if (box.getSelectedItems() != null) {
+                        for (ServiceItem item : box.getSelectedItems()) {
+                            ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                            newItem.item().set(item);
+                            newItem.price().setValue(item.price().getValue());
+                            newItem.adjustedPrice().setValue(item.price().getValue());
+                            addItem(newItem);
                         }
                     }
-                };
-            }
+                }
+            };
+        }
 
-            @Override
-            protected IFolderDecorator<ChargeItem> createDecorator() {
-                VistaTableFolderDecorator<ChargeItem> decor = new VistaTableFolderDecorator<ChargeItem>(columns(), parent);
-                return decor;
-            }
+        protected void unconditionalRemoveItem(CEntityFolderItem<ChargeItem> item) {
+            super.removeItem(item);
+        }
 
-            protected void unconditionalRemoveItem(CEntityFolderItemEditor<ChargeItem> item) {
+        @Override
+        protected void removeItem(final CEntityFolderItem<ChargeItem> item) {
+            if (!item.getValue().adjustments().isEmpty()) {
+                MessageDialog.confirm(i18n.tr("Warning!"),
+                        i18n.tr("By removing this item you will lose the agreed price adjustment! Are you sure you want to remove it?"), new Runnable() {
+                            @Override
+                            public void run() {
+                                unconditionalRemoveItem(item);
+                            }
+                        });
+            } else {
                 super.removeItem(item);
             }
+        }
 
-            @Override
-            protected void removeItem(final CEntityFolderItemEditor<ChargeItem> item) {
-                if (!item.getValue().adjustments().isEmpty()) {
-                    MessageDialog.confirm(i18n.tr("Warning!"),
-                            i18n.tr("By removing this item you will lose the agreed price adjustment! Are you sure you want to remove it?"), new Runnable() {
-                                @Override
-                                public void run() {
-                                    unconditionalRemoveItem(item);
-                                }
-                            });
-                } else {
-                    super.removeItem(item);
-                }
+        static class FeatureEditor extends CEntityFolderRowEditor<ChargeItem> {
+            public FeatureEditor() {
+                super(ChargeItem.class, FeatureFolder.COLUMNS);
             }
-        };
+        }
     }
 
-    private CEntityFolder<ChargeItem> createFeaturesFolderEditorEx(final Feature.Type type, boolean editable) {
-        return new VistaEntityFolder<ChargeItem>(ChargeItem.class, editable) {
-            private final VistaEntityFolder<ChargeItem> parent = this;
+    static class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
 
-            @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
-                return null;
+        private final Feature.Type type;
+
+        private final ApartmentViewForm apartmentViewForm;
+
+        public FeatureExFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean editable) {
+            super(ChargeItem.class, editable);
+            this.type = type;
+            this.apartmentViewForm = apartmentViewForm;
+        }
+
+        @Override
+        public CEditableComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof ChargeItem) {
+                return new FeatureExEditor();
+            } else {
+                return super.create(member);
             }
+        }
 
-            @Override
-            protected void addItem() {
-                new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox(type)) {
-                    @Override
-                    protected void onClose(SelectFeatureBox box) {
-                        if (box.getSelectedItems() != null) {
-                            for (ServiceItem item : box.getSelectedItems()) {
-                                ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                                newItem.item().set(item);
-                                newItem.price().setValue(item.price().getValue());
-                                newItem.adjustedPrice().setValue(item.price().getValue());
-                                addItem(newItem);
-                            }
+        @Override
+        protected void addItem() {
+            new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox(type, apartmentViewForm.getValue())) {
+                @Override
+                protected void onClose(SelectFeatureBox box) {
+                    if (box.getSelectedItems() != null) {
+                        for (ServiceItem item : box.getSelectedItems()) {
+                            ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                            newItem.item().set(item);
+                            newItem.price().setValue(item.price().getValue());
+                            newItem.adjustedPrice().setValue(item.price().getValue());
+                            addItem(newItem);
                         }
                     }
-                };
-            }
+                }
+            };
+        }
+    }
 
-            @Override
-            protected IFolderDecorator<ChargeItem> createDecorator() {
-                VistaBoxFolderDecorator<ChargeItem> decor = new VistaBoxFolderDecorator<ChargeItem>(parent);
-                return decor;
-            }
+    static class FeatureExEditor extends CEntityEditor<ChargeItem> {
 
-            @Override
-            protected CEntityFolderItemEditor<ChargeItem> createItem(boolean first) {
-                return new CEntityFolderRowEditor<ChargeItem>(ChargeItem.class, columns()) {
-                    private final CEntityFolderRowEditor<ChargeItem> chargeItemEditor = this;
+        public FeatureExEditor() {
+            super(ChargeItem.class);
+        }
 
-                    private final SimplePanel extraDataPanel = new SimplePanel();
+        private final SimplePanel extraDataPanel = new SimplePanel();
 
-                    private final VistaBoxFolderItemDecorator<ChargeItem> decor = new VistaBoxFolderItemDecorator<ChargeItem>(parent);
+        @Override
+        public IsWidget createContent() {
+            VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable(), 10);
+            VistaDecoratorsSplitFlowPanel split;
 
+            CLabel lb;
+            main.add(split = new VistaDecoratorsSplitFlowPanel(!isEditable(), 10, 22));
+            split.getLeftPanel().add(inject(proto().item().type().name(), lb = new CLabel()));
+            lb.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+
+            CNumberLabel nl = new CNumberLabel();
+            split.getRightPanel().add(inject(proto().price(), nl), 6);
+            nl.setNumberFormat(proto().price().getMeta().getFormat());
+
+            nl = new CNumberLabel();
+            split.getRightPanel().add(inject(proto().adjustedPrice(), nl), 6);
+            nl.setNumberFormat(proto().adjustedPrice().getMeta().getFormat());
+            nl.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+
+            main.add(extraDataPanel);
+
+            return main;
+        }
+
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        @Override
+        public void populate(ChargeItem value) {
+            super.populate(value);
+
+//          if (value.item().type().featureType().getValue() == Feature.Type.utility) {
+//              setRemovable(false);
+//          }
+
+            get(proto().adjustedPrice()).setVisible(!value.adjustments().isEmpty());
+
+            CEntityEditor editor = null;
+            switch (value.item().type().featureType().getValue()) {
+            case parking:
+                editor = new CEntityEditor<Vehicle>(Vehicle.class, new VistaEditorsComponentFactory()) {
                     @Override
                     public IsWidget createContent() {
-                        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
-                        VistaDecoratorsSplitFlowPanel split;
+                        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!isEditable(), 10);
+                        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable(), 10, 30);
 
-                        CLabel lb;
-                        main.add(split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 22));
-                        split.getLeftPanel().add(inject(proto().item().type().name(), lb = new CLabel()));
-                        lb.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+                        panel.add(new HTML(HtmlUtils.h5(ApartmentViewForm.i18n.tr("Vehicle data:"))));
+                        panel.add(split);
 
-                        CNumberLabel nl;
-                        split.getRightPanel().add(inject(proto().price(), nl = new CNumberLabel()), 6);
-                        nl.setNumberFormat(proto().price().getMeta().getFormat());
+                        split.getLeftPanel().add(inject(proto().year()), 5);
+                        split.getLeftPanel().add(inject(proto().make()), 10);
+                        split.getLeftPanel().add(inject(proto().model()), 10);
 
-                        split.getRightPanel().add(inject(proto().adjustedPrice(), nl = new CNumberLabel()), 6);
-                        nl.setNumberFormat(proto().adjustedPrice().getMeta().getFormat());
-                        nl.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+                        split.getRightPanel().add(inject(proto().plateNumber()), 10);
+                        split.getRightPanel().add(inject(proto().country()), 10);
+                        split.getRightPanel().add(inject(proto().province()), 17);
 
-                        main.add(extraDataPanel);
-
-                        return main;
+                        return panel;
                     }
 
                     @Override
-                    public IFolderItemDecorator<ChargeItem> createDecorator() {
-                        return decor;
-                    }
-
-                    @SuppressWarnings({ "unchecked", "rawtypes" })
-                    @Override
-                    public void populate(ChargeItem value) {
-                        super.populate(value);
-
-                        if (value.item().type().featureType().getValue() == Feature.Type.utility) {
-                            setRemovable(false);
-                        }
-
-                        get(proto().adjustedPrice()).setVisible(!value.adjustments().isEmpty());
-
-                        CEntityEditor editor = null;
-                        switch (value.item().type().featureType().getValue()) {
-                        case parking:
-                            editor = new CEntityEditor<Vehicle>(Vehicle.class, new VistaEditorsComponentFactory()) {
-                                @Override
-                                public IsWidget createContent() {
-                                    VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
-                                    VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 30);
-
-                                    panel.add(new HTML(HtmlUtils.h5(VistaEntityFolder.i18n.tr("Vehicle data:"))));
-                                    panel.add(split);
-
-                                    split.getLeftPanel().add(inject(proto().year()), 5);
-                                    split.getLeftPanel().add(inject(proto().make()), 10);
-                                    split.getLeftPanel().add(inject(proto().model()), 10);
-
-                                    split.getRightPanel().add(inject(proto().plateNumber()), 10);
-                                    split.getRightPanel().add(inject(proto().country()), 10);
-                                    split.getRightPanel().add(inject(proto().province()), 17);
-
-                                    return panel;
-                                }
-
-                                @Override
-                                public CEditableComponent<?, ?> create(IObject<?> member) {
-                                    return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
-                                }
-                            };
-
-                            if (value.extraData().isNull()) {
-                                value.extraData().set(EntityFactory.create(Vehicle.class));
-                            }
-                            break;
-                        case pet:
-                            editor = new CEntityEditor<Pet>(Pet.class, new VistaEditorsComponentFactory()) {
-                                @Override
-                                public IsWidget createContent() {
-                                    VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!parent.isEditable(), 10);
-                                    VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!parent.isEditable(), 10, 30);
-
-                                    panel.add(new HTML(HtmlUtils.h5(VistaEntityFolder.i18n.tr("Pet data:"))));
-                                    panel.add(split);
-
-                                    split.getLeftPanel().add(inject(proto().name()), 15);
-                                    split.getLeftPanel().add(inject(proto().color()), 10);
-                                    split.getLeftPanel().add(inject(proto().breed()), 15);
-
-                                    split.getRightPanel().add(inject(proto().weight()), 4);
-                                    split.getRightPanel().add(inject(proto().weightUnit()), 4);
-                                    split.getRightPanel().add(inject(proto().birthDate()), 8.2);
-
-                                    return panel;
-                                }
-
-                                @Override
-                                public CEditableComponent<?, ?> create(IObject<?> member) {
-                                    return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
-                                }
-                            };
-
-                            if (value.extraData().isNull()) {
-                                value.extraData().set(EntityFactory.create(Pet.class));
-                            }
-                            break;
-                        }
-
-                        if (editor != null) {
-                            editor.onBound(chargeItemEditor);
-                            editor.populate(value.extraData().cast());
-                            extraDataPanel.setWidget(editor);
-                        }
+                    public CEditableComponent<?, ?> create(IObject<?> member) {
+                        return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
                     }
                 };
+
+                if (value.extraData().isNull()) {
+                    value.extraData().set(EntityFactory.create(Vehicle.class));
+                }
+                break;
+            case pet:
+                editor = new CEntityEditor<Pet>(Pet.class, new VistaEditorsComponentFactory()) {
+                    @Override
+                    public IsWidget createContent() {
+                        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!isEditable(), 10);
+                        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable(), 10, 30);
+
+                        panel.add(new HTML(HtmlUtils.h5(ApartmentViewForm.i18n.tr("Pet data:"))));
+                        panel.add(split);
+
+                        split.getLeftPanel().add(inject(proto().name()), 15);
+                        split.getLeftPanel().add(inject(proto().color()), 10);
+                        split.getLeftPanel().add(inject(proto().breed()), 15);
+
+                        split.getRightPanel().add(inject(proto().weight()), 4);
+                        split.getRightPanel().add(inject(proto().weightUnit()), 4);
+                        split.getRightPanel().add(inject(proto().birthDate()), 8.2);
+
+                        return panel;
+                    }
+
+                    @Override
+                    public CEditableComponent<?, ?> create(IObject<?> member) {
+                        return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
+                    }
+                };
+
+                if (value.extraData().isNull()) {
+                    value.extraData().set(EntityFactory.create(Pet.class));
+                }
+                break;
             }
-        };
+
+            if (editor != null) {
+                editor.onBound(this);
+                editor.populate(value.extraData().cast());
+                extraDataPanel.setWidget(editor);
+            }
+        }
     }
 
     private CEntityFolder<Concession> createConcessionsFolderEditor() {
-        return new VistaEntityFolder<Concession>(Concession.class, false) {
-            private final VistaEntityFolder<Concession> parent = this;
+        return new VistaTableFolder<Concession>(Concession.class, false) {
+            private final VistaTableFolder<Concession> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -454,7 +481,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 //
 // Selection Boxes:
 
-    private class SelectFeatureBox extends OkCancelBox {
+    private static class SelectFeatureBox extends OkCancelBox {
 
         private ListBox list;
 
@@ -464,10 +491,12 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 
         private SimplePanel content;
 
-        public SelectFeatureBox(Feature.Type type) {
+        private final ApartmentInfoDTO apartmentInfo;
+
+        public SelectFeatureBox(Feature.Type type, ApartmentInfoDTO apartmentInfo) {
             super(i18n.tr("Select {0}(s)", type));
             this.type = type;
-
+            this.apartmentInfo = apartmentInfo;
             // createContent called from within surper's constructor but we need to use our constructor parameters...
             content.setWidget(createRealContent());
         }
@@ -547,30 +576,30 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
         private List<ChargeItem> getAgreedList() {
             switch (type) {
             case utility:
-                return getValue().agreedUtilities();
+                return apartmentInfo.agreedUtilities();
             case pet:
-                return getValue().agreedPets();
+                return apartmentInfo.agreedPets();
             case parking:
-                return getValue().agreedParking();
+                return apartmentInfo.agreedParking();
             case locker:
-                return getValue().agreedStorage();
+                return apartmentInfo.agreedStorage();
             default:
-                return getValue().agreedOther();
+                return apartmentInfo.agreedOther();
             }
         }
 
         private List<ServiceItem> getAvailableList() {
             switch (type) {
             case utility:
-                return getValue().availableUtilities();
+                return apartmentInfo.availableUtilities();
             case pet:
-                return getValue().availablePets();
+                return apartmentInfo.availablePets();
             case parking:
-                return getValue().availableParking();
+                return apartmentInfo.availableParking();
             case locker:
-                return getValue().availableStorage();
+                return apartmentInfo.availableStorage();
             default:
-                return getValue().availableOther();
+                return apartmentInfo.availableOther();
             }
         }
 

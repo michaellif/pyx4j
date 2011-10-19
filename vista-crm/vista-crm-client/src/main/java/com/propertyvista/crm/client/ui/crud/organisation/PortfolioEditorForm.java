@@ -23,7 +23,7 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
@@ -57,8 +57,8 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
     }
 
     private CEditableComponent<?, ?> createBuildingListView() {
-        return new VistaEntityFolder<AssignedBuilding>(AssignedBuilding.class, i18n.tr("Portfolio"), isEditable()) {
-            private final VistaEntityFolder<AssignedBuilding> parent = this;
+        return new VistaTableFolder<AssignedBuilding>(AssignedBuilding.class, i18n.tr("Portfolio"), isEditable()) {
+            private final VistaTableFolder<AssignedBuilding> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {

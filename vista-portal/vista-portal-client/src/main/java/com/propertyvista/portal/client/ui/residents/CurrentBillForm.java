@@ -30,12 +30,6 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityViewer;
-import com.pyx4j.entity.client.ui.flex.folder.BoxReadOnlyFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.BoxReadOnlyFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
@@ -43,7 +37,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.domain.charges.ChargeLine;
+import com.propertyvista.common.client.ui.editors.ChargeLineFolder;
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.util.Utils;
@@ -194,44 +188,4 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
         return container;
     }
 
-    class ChargeLineFolder extends CEntityFolder<ChargeLine> {
-
-        public ChargeLineFolder() {
-            super(ChargeLine.class);
-        }
-
-        @Override
-        protected IFolderDecorator<ChargeLine> createDecorator() {
-            return new BoxReadOnlyFolderDecorator<ChargeLine>() {
-
-                @Override
-                public void setComponent(CEntityFolder w) {
-                    super.setComponent(w);
-                    this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-                }
-            };
-        }
-
-        @Override
-        protected CEntityFolderBoxEditor<ChargeLine> createItem(boolean first) {
-
-            return new CEntityFolderBoxEditor<ChargeLine>(ChargeLine.class) {
-
-                @Override
-                public IFolderItemDecorator<ChargeLine> createDecorator() {
-                    return new BoxReadOnlyFolderItemDecorator<ChargeLine>();
-                }
-
-                @Override
-                public IsWidget createContent() {
-                    FlowPanel main = new FlowPanel();
-                    main.add(DecorationUtils.inline(inject(proto().type()), "300px", null));
-                    main.add(DecorationUtils.inline(inject(proto().label()), "100px", "right"));
-                    main.add(DecorationUtils.inline(inject(proto().charge()), "100px", "right"));
-                    return main;
-                }
-            };
-        }
-
-    }
 }

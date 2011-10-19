@@ -45,16 +45,17 @@ import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -77,10 +78,20 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
         this.documentType = documentType;
     }
 
-    private List<EntityFolderColumnDescriptor> columns;
-    {
-        columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().filename(), "25em"));
+    private static final List<EntityFolderColumnDescriptor> COLUMNS;
+    static {
+        ApplicationDocument proto = EntityFactory.getEntityPrototype(ApplicationDocument.class);
+        COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
+        COLUMNS.add(new EntityFolderColumnDescriptor(proto.filename(), "25em"));
+    }
+
+    @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        if (member instanceof ApplicationDocument) {
+            return new ApplicationDocumentEditor();
+        } else {
+            return super.create(member);
+        }
     }
 
     @Override
@@ -88,35 +99,40 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
         return new UploaderFolderDecorator();
     }
 
-    @Override
-    protected CEntityFolderItemEditor<ApplicationDocument> createItem(boolean first) {
-        return new CEntityFolderRowEditor<ApplicationDocument>(ApplicationDocument.class, columns) {
+    static class ApplicationDocumentEditor extends CEntityFolderRowEditor<ApplicationDocument> {
+        public ApplicationDocumentEditor() {
+            super(ApplicationDocument.class, ApplicationDocumentsFolderUploader.COLUMNS);
+        }
 
-            @Override
-            protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-                if (column.getObject() == proto().filename()) {
-                    CHyperlink link = new CHyperlink(new Command() {
-                        @Override
-                        public void execute() {
-                            String url = GWT.getModuleBaseURL() + ServletMapping.APPLICATIONDOCUMENT + "?" + ApplicationDocumentServletParameters.DATA_ID + "="
-                                    + getValue().dataId().getValue();
-                            Window.open(url, "_blank", null);
-                        }
-                    });
-                    return inject(column.getObject(), link);
-                } else {
-                    return super.createCell(column);
-                }
+        @Override
+        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+            if (column.getObject() == proto().filename()) {
+                CHyperlink link = new CHyperlink(new Command() {
+                    @Override
+                    public void execute() {
+                        String url = GWT.getModuleBaseURL() + ServletMapping.APPLICATIONDOCUMENT + "?" + ApplicationDocumentServletParameters.DATA_ID + "="
+                                + getValue().dataId().getValue();
+                        Window.open(url, "_blank", null);
+                    }
+                });
+                return inject(column.getObject(), link);
+            } else {
+                return super.createCell(column);
             }
+        }
 
-            @Override
-            public IFolderItemDecorator createDecorator() {
-                return new TableFolderItemDecorator(VistaImages.INSTANCE, i18n.tr("Remove file"));
-            }
-        };
+        @Override
+        public IFolderItemDecorator createDecorator() {
+            return new TableFolderItemDecorator(VistaImages.INSTANCE, i18n.tr("Remove file"));
+        }
     }
 
-    protected void callSuperRemoveItem(final CEntityFolderBoxEditor<ApplicationDocument> comp) {
+    @Override
+    protected IFolderItemDecorator<ApplicationDocument> createItemDecorator() {
+        return new TableFolderItemDecorator<ApplicationDocument>(VistaImages.INSTANCE);
+    }
+
+    protected void callSuperRemoveItem(final CEntityFolderItem<ApplicationDocument> comp) {
         super.removeItem(comp);
     }
 

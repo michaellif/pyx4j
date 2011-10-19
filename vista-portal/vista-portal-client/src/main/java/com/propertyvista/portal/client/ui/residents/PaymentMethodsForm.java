@@ -25,7 +25,7 @@ import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
@@ -56,7 +56,7 @@ public class PaymentMethodsForm extends CEntityEditor<PaymentMethodListDTO> impl
 
     private CEntityFolder<PaymentMethodDTO> createPaymentMethodsViewer() {
 
-        return new VistaEntityFolder<PaymentMethodDTO>(PaymentMethodDTO.class, i18n.tr("Payment Method"), true) {
+        return new VistaTableFolder<PaymentMethodDTO>(PaymentMethodDTO.class, i18n.tr("Payment Method"), true) {
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {

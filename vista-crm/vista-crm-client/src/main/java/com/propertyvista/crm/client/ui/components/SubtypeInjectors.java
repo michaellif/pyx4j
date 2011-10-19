@@ -23,7 +23,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.VistaEntityFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
@@ -53,7 +53,7 @@ public class SubtypeInjectors {
             final boolean showDescription) {
 
         main.add(new CrmSectionSeparator(proto.getMeta().getCaption()));
-        main.add(parent.inject(proto, new VistaEntityFolder<Phone>(Phone.class, i18n.tr("Phone"), parent.isEditable()) {
+        main.add(parent.inject(proto, new VistaTableFolder<Phone>(Phone.class, i18n.tr("Phone"), parent.isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 List<EntityFolderColumnDescriptor> columns;
@@ -75,7 +75,7 @@ public class SubtypeInjectors {
     public static void injectPropertyPhones(VistaDecoratorsFlowPanel main, IList<PropertyPhone> proto, CEntityEditor<?> parent) {
 
         main.add(new CrmSectionSeparator(proto.getMeta().getCaption()));
-        main.add(parent.inject(proto, new VistaEntityFolder<PropertyPhone>(PropertyPhone.class, i18n.tr("Phone"), parent.isEditable()) {
+        main.add(parent.inject(proto, new VistaTableFolder<PropertyPhone>(PropertyPhone.class, i18n.tr("Phone"), parent.isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 List<EntityFolderColumnDescriptor> columns;
@@ -96,7 +96,7 @@ public class SubtypeInjectors {
     public static void injectEmails(VistaDecoratorsFlowPanel main, IList<Email> proto, CEntityEditor<?> parent) {
 
         main.add(new CrmSectionSeparator(proto.getMeta().getCaption()));
-        main.add(parent.inject(proto, new VistaEntityFolder<Email>(Email.class, i18n.tr("Email"), parent.isEditable()) {
+        main.add(parent.inject(proto, new VistaTableFolder<Email>(Email.class, i18n.tr("Email"), parent.isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 List<EntityFolderColumnDescriptor> columns;
@@ -170,7 +170,7 @@ public class SubtypeInjectors {
         injectContract(main, split, proto, parent);
 
         main.add(new CrmSectionSeparator(proto.items().getMeta().getCaption()));
-        main.add(parent.inject(proto.items(), new VistaEntityFolder<WarrantyItem>(WarrantyItem.class, i18n.tr("Warranty Item"), parent.isEditable()) {
+        main.add(parent.inject(proto.items(), new VistaTableFolder<WarrantyItem>(WarrantyItem.class, i18n.tr("Warranty Item"), parent.isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 List<EntityFolderColumnDescriptor> columns;
@@ -188,7 +188,7 @@ public class SubtypeInjectors {
 
         main.add(new CrmSectionSeparator(proto.adBlurbs().getMeta().getCaption()));
         main.add(parent.inject(proto.adBlurbs(),
-                new VistaEntityFolder<AdvertisingBlurb>(AdvertisingBlurb.class, i18n.tr("Advertising Blurb"), parent.isEditable()) {
+                new VistaTableFolder<AdvertisingBlurb>(AdvertisingBlurb.class, i18n.tr("Advertising Blurb"), parent.isEditable()) {
                     @Override
                     protected List<EntityFolderColumnDescriptor> columns() {
                         List<EntityFolderColumnDescriptor> columns;
@@ -199,8 +199,8 @@ public class SubtypeInjectors {
                 }));
     }
 
-    public static VistaEntityFolder<Concession> injectConcessions(boolean isEditable) {
-        return new VistaEntityFolder<Concession>(Concession.class, "Concession", isEditable) {
+    public static VistaTableFolder<Concession> injectConcessions(boolean isEditable) {
+        return new VistaTableFolder<Concession>(Concession.class, "Concession", isEditable) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 List<EntityFolderColumnDescriptor> columns;
