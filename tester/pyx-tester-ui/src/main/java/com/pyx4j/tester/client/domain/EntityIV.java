@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,18 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 13, 2011
- * @author vlads
+ * Created on Oct 3, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.entity.client.ui.flex.folder;
+package com.pyx4j.tester.client.domain;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public abstract class CEntityFolderBoxEditor<E extends IEntity> extends CEntityFolderItemEditor<E> {
+public interface EntityIV extends IEntity {
 
-    public CEntityFolderBoxEditor(Class<E> clazz) {
-        super(clazz);
-    }
+    @ToString(index = 0)
+    IPrimitive<String> stringMember();
+
+    @ToString(index = 1)
+    IPrimitive<Integer> integerMember();
 
 }

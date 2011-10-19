@@ -29,11 +29,12 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 
-public abstract class CEntityFolderRowEditor<E extends IEntity> extends CEntityFolderItemEditor<E> {
+public abstract class CEntityFolderRowEditor<E extends IEntity> extends CEntityEditor<E> {
 
     protected final List<EntityFolderColumnDescriptor> columns;
 

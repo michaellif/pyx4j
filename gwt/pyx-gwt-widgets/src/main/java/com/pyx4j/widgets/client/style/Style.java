@@ -39,10 +39,6 @@ public class Style {
         this.selectorNew = new Selector.Builder(styleName).dependent(dependent).build();
     }
 
-    public Style(String discriminator, IStyleName styleName) {
-        this.selectorNew = new Selector.Builder(styleName).discriminator(discriminator).build();
-    }
-
     public Style(String discriminator, IStyleName styleName, IStyleDependent dependent) {
         this.selectorNew = new Selector.Builder(styleName).discriminator(discriminator).dependent(dependent).build();
     }
@@ -53,6 +49,14 @@ public class Style {
 
     public Style(String selector) {
         this.selectorNew = new Selector(selector);
+    }
+
+    public Style(Object... selector) {
+        StringBuilder builder = new StringBuilder();
+        for (Object object : selector) {
+            builder.append(object);
+        }
+        this.selectorNew = new Selector(builder.toString());
     }
 
     public void addProperty(Property propertie) {

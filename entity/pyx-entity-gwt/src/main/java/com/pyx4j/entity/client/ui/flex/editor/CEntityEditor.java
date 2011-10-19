@@ -39,6 +39,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
+//TODO to be renamed to CEntityForm
 public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityEditor.class);

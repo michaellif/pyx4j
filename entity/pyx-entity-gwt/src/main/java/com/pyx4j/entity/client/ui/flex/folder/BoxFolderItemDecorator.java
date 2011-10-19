@@ -44,11 +44,12 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     private SimplePanel contentHolder;
 
     public BoxFolderItemDecorator(EntityFolderImages images) {
-        this(images, null);
+        this(images, "Remove");
     }
 
+    //TODO propagate removeLabel
     public BoxFolderItemDecorator(EntityFolderImages images, String removeLabel) {
-        super(images, removeLabel);
+        super(images);
 
         setStyleName(StyleName.EntityFolderBoxItemDecorator.name());
 
@@ -82,7 +83,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     }
 
     @Override
-    public void setComponent(final CEntityFolderItemEditor<E> folderItem) {
+    public void setComponent(final CEntityFolderItem<E> folderItem) {
         super.setComponent(folderItem);
         contentHolder.setWidget(folderItem.getContainer());
         toolbar.setTitleIcon(folderItem.getIcon());

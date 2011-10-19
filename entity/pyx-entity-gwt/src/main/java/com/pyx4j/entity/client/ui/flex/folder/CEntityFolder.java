@@ -81,14 +81,17 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     protected int currentRowDebugId = 0;
 
-    private final List<CEntityFolderItemEditor<E>> itemsList;
+    private final List<CEntityFolderItem<E>> itemsList;
 
     private final E entityPrototype;
 
+    private final Class<E> rowClass;
+
     public CEntityFolder(Class<E> rowClass) {
+        this.rowClass = rowClass;
         container = new FlowPanel();
         asWidget().setStyleName(StyleName.EntityFolder.name());
-        itemsList = new ArrayList<CEntityFolderItemEditor<E>>();
+        itemsList = new ArrayList<CEntityFolderItem<E>>();
         if (rowClass != null) {
             entityPrototype = EntityFactory.getEntityPrototype(rowClass);
         } else {
@@ -102,7 +105,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     public void setOrderable(boolean orderable) {
         this.orderable = orderable;
-        for (CEntityFolderItemEditor<E> item : itemsList) {
+        for (CEntityFolderItem<E> item : itemsList) {
             item.setMovable(orderable);
             item.calculateActionsState();
         }
@@ -117,7 +120,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         if (getDecorator() != null) {
             ((IFolderDecorator) getDecorator()).setAddButtonVisible(modifiable);
         }
-        for (CEntityFolderItemEditor<E> item : itemsList) {
+        for (CEntityFolderItem<E> item : itemsList) {
             item.setRemovable(modifiable);
             item.calculateActionsState();
         }
@@ -143,13 +146,22 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         return null;
     }
 
-    protected abstract CEntityFolderItemEditor<E> createItem(boolean first);
+    protected abstract IFolderItemDecorator<E> createItemDecorator();
 
-    private CEntityFolderItemEditor<E> createItemPrivate() {
+    protected CEntityFolderItem<E> createItem(boolean first) {
+        return new CEntityFolderItem<E>(rowClass) {
+            @Override
+            public IFolderItemDecorator<E> createDecorator() {
+                return createItemDecorator();
+            }
+        };
+    }
+
+    private CEntityFolderItem<E> createItemPrivate() {
 
         boolean first = container.getWidgetCount() == 0;
 
-        CEntityFolderItemEditor<E> item = createItem(first);
+        CEntityFolderItem<E> item = createItem(first);
 
         item.onBound(this);
 
@@ -245,7 +257,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             return;
         }
 
-        final CEntityFolderItemEditor<E> item = createItemPrivate();
+        final CEntityFolderItem<E> item = createItemPrivate();
         createNewEntity(newEntity, new DefaultAsyncCallback<E>() {
             @Override
             public void onSuccess(E result) {
@@ -258,22 +270,22 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     }
 
-    protected void removeItem(CEntityFolderItemEditor<E> item) {
+    protected void removeItem(CEntityFolderItem<E> item) {
         getValue().remove(item.getValue());
         abandonItem(item);
         ValueChangeEvent.fire(CEntityFolder.this, getValue());
     }
 
-    protected void moveUpItem(CEntityFolderItemEditor<E> item) {
+    protected void moveUpItem(CEntityFolderItem<E> item) {
         moveItem(item, true);
 
     }
 
-    protected void moveDownItem(CEntityFolderItemEditor<E> item) {
+    protected void moveDownItem(CEntityFolderItem<E> item) {
         moveItem(item, false);
     }
 
-    protected void moveItem(CEntityFolderItemEditor<E> item, boolean up) {
+    protected void moveItem(CEntityFolderItem<E> item, boolean up) {
         int indexBefore = getValue().indexOf(item.getValue());
         int indexAfter = indexBefore + (up ? -1 : +1);
         if (indexAfter < 0 || indexAfter > getValue().size()) {
@@ -319,9 +331,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     protected void repopulate(IList<E> value) {
-        ArrayList<CEntityFolderItemEditor<E>> previousList = new ArrayList<CEntityFolderItemEditor<E>>(itemsList);
+        ArrayList<CEntityFolderItem<E>> previousList = new ArrayList<CEntityFolderItem<E>>(itemsList);
 
-        for (CEntityFolderItemEditor<E> item : previousList) {
+        for (CEntityFolderItem<E> item : previousList) {
             abandonItem(item);
         }
 
@@ -329,8 +341,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
         for (E entity : value) {
             if (isFolderItemAllowed(entity)) {
-                CEntityFolderItemEditor<E> item = null;
-                for (CEntityFolderItemEditor<E> itemFromCahe : previousList) {
+                CEntityFolderItem<E> item = null;
+                for (CEntityFolderItem<E> itemFromCahe : previousList) {
                     if (itemFromCahe.getValue().equals(entity)) {
                         previousList.remove(itemFromCahe);
                         item = itemFromCahe;
@@ -345,7 +357,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             }
         }
 
-        for (CEntityFolderItemEditor<E> item : itemsList) {
+        for (CEntityFolderItem<E> item : itemsList) {
             item.calculateActionsState();
         }
 
@@ -368,7 +380,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     @Override
     protected abstract IFolderDecorator<E> createDecorator();
 
-    private void adoptItem(final CEntityFolderItemEditor<E> item) {
+    private void adoptItem(final CEntityFolderItem<E> item) {
         itemsList.add(item);
         container.add(item);
 
@@ -382,7 +394,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     }
 
-    private void abandonItem(final CEntityFolderItemEditor<E> item) {
+    private void abandonItem(final CEntityFolderItem<E> item) {
         container.remove(item);
         itemsList.remove(item);
         item.removeAccessAdapter(this);
@@ -444,11 +456,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         return itemsList.size();
     }
 
-    public int getItemIndex(CEntityFolderItemEditor item) {
+    public int getItemIndex(CEntityFolderItem item) {
         return itemsList.indexOf(item);
     }
 
-    public CEntityFolderItemEditor getItem(int index) {
+    public CEntityFolderItem getItem(int index) {
         if (itemsList.size() > 0 && index > -1 && index < itemsList.size()) {
             return itemsList.get(index);
         } else {

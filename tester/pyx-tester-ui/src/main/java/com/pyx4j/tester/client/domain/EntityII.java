@@ -35,9 +35,9 @@ public interface EntityII extends IEntity {
     IPrimitive<Integer> integerMember();
 
     @Owned
-    IList<EntityIII> entityIIIList1();
+    IList<EntityIII> entityIIIList();
 
     @Owned
-    IList<EntityIII> entityIIIList2();
+    IList<EntityIV> entityIVList();
 
 }

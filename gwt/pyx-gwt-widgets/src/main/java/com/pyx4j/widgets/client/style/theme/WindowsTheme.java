@@ -20,6 +20,13 @@
  */
 package com.pyx4j.widgets.client.style.theme;
 
+import static com.pyx4j.widgets.client.tabpanel.TabPanel.StyleName.Tab;
+import static com.pyx4j.widgets.client.tabpanel.TabPanel.StyleName.TabBarItem;
+import static com.pyx4j.widgets.client.tabpanel.TabPanel.StyleName.TabBarItemLabel;
+import static com.pyx4j.widgets.client.tabpanel.TabPanel.StyleName.TabList;
+import static com.pyx4j.widgets.client.tabpanel.TabPanel.StyleName.TabListItem;
+import static com.pyx4j.widgets.client.tabpanel.TabPanel.StyleName.TabPanelBottom;
+
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.widgets.client.ImageFactory;
@@ -229,18 +236,18 @@ public class WindowsTheme extends Theme {
     }
 
     private void initTopTabPanelStyles() {
-        Style style = new Style((IStyleName) TabPanel.StyleName.Tab);
+        Style style = new Style((IStyleName) Tab);
         style.addProperty("margin-top", "2px");
         style.addProperty("margin-left", "6px");
         addStyle(style);
 
-        style = new Style((IStyleName) TabPanel.StyleName.TabPanelBottom);
+        style = new Style((IStyleName) TabPanelBottom);
         style.addProperty("padding", "2px");
         style.addProperty("margin", "0px");
         style.addProperty("background-color", ThemeColors.OBJECT_TONE1);
         addStyle(style);
 
-        style = new Style((IStyleName) TabPanel.StyleName.TabBarItem);
+        style = new Style((IStyleName) TabBarItem);
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("height", "2em");
@@ -256,37 +263,36 @@ public class WindowsTheme extends Theme {
         style.addGradient(ThemeColors.OBJECT_TONE10, ThemeColors.OBJECT_TONE30);
         addStyle(style);
 
-        style = new Style(TabPanel.StyleName.TabBarItem, TabPanel.StyleDependent.selected);
+        style = new Style(TabBarItem, "-", TabPanel.StyleDependent.selected);
         style.addProperty("cursor", "default");
         style.addProperty("background", ThemeColors.SELECTION);
         style.addProperty("color", "white");
         addStyle(style);
 
-        style = new Style(TabPanel.StyleName.TabBarItem, TabPanel.StyleDependent.hover);
+        style = new Style(TabBarItem, TabPanel.StyleDependent.hover);
         style.addProperty("background", ThemeColors.OBJECT_TONE3);
         addStyle(style);
 
-        style = new Style(new Selector.Builder(TabPanel.StyleName.TabBarItem).dependent(TabPanel.StyleDependent.selected).build().toString(),
-                TabPanel.StyleName.TabBarItemLabel);
+        style = new Style(".", TabBarItem, "-", TabPanel.StyleDependent.selected, " .", TabBarItemLabel);
         //style.addProperty("color", ThemeColor.SELECTION_TEXT);
         addStyle(style);
 
-        style = new Style((IStyleName) TabPanel.StyleName.TabBarItemLabel);
+        style = new Style((IStyleName) TabBarItemLabel);
         style.addProperty("margin", "3px");
         addStyle(style);
 
-        style = new Style((IStyleName) TabPanel.StyleName.TabList);
+        style = new Style((IStyleName) TabList);
         style.addProperty("background-color", "white");
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColors.SELECTION);
         addStyle(style);
 
-        style = new Style((IStyleName) TabPanel.StyleName.TabListItem);
+        style = new Style((IStyleName) TabListItem);
         style.addProperty("color", "black");
         style.addProperty("padding", "4px 14px 4px 1px");
         addStyle(style);
 
-        style = new Style(TabPanel.StyleName.TabListItem, TabPanel.StyleDependent.hover);
+        style = new Style(TabListItem, TabPanel.StyleDependent.hover);
         style.addProperty("background", ThemeColors.SELECTION);
         style.addProperty("color", ThemeColors.SELECTION_TEXT);
         addStyle(style);
@@ -295,16 +301,16 @@ public class WindowsTheme extends Theme {
 
     private void initBottomTabPanelStyles() {
         String discriminator = ".BottomTab";
-        Style style = new Style(discriminator, TabPanel.StyleName.Tab);
+        Style style = new Style(discriminator, " .", Tab);
         style.addProperty("background-color", ThemeColors.SELECTION);
         addStyle(style);
 
-        style = new Style(discriminator, TabPanel.StyleName.TabPanelBottom);
+        style = new Style(discriminator, " .", TabPanelBottom);
         style.addProperty("padding", "2px");
         style.addProperty("margin", "0px");
         addStyle(style);
 
-        style = new Style(discriminator, TabPanel.StyleName.TabBarItem);
+        style = new Style(discriminator, " .", TabBarItem);
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("text-align", "center");
@@ -313,19 +319,18 @@ public class WindowsTheme extends Theme {
         style.addProperty("background-color", ThemeColors.OBJECT_TONE3);
         addStyle(style);
 
-        style = new Style(discriminator, TabPanel.StyleName.TabBarItem, TabPanel.StyleDependent.selected);
+        style = new Style(discriminator, TabBarItem, TabPanel.StyleDependent.selected);
         style.addProperty("border-top", "1px solid");
         style.addProperty("border-top-color", ThemeColors.OBJECT_TONE1);
         style.addProperty("cursor", "default");
         style.addProperty("background-color", ThemeColors.OBJECT_TONE1);
         addStyle(style);
 
-        style = new Style(new Selector.Builder(TabPanel.StyleName.TabBarItem).discriminator(discriminator).dependent(TabPanel.StyleDependent.selected).build()
-                .toString(), TabPanel.StyleName.TabBarItemLabel);
+        style = new Style("." + TabBarItem, "-", TabPanel.StyleDependent.selected, " .", TabBarItemLabel);
         style.addProperty("color", "black");
         addStyle(style);
 
-        style = new Style(discriminator, TabPanel.StyleName.TabBarItemLabel);
+        style = new Style(discriminator, " .", TabBarItemLabel);
         style.addProperty("margin-left", "2px");
         style.addProperty("margin-right", "2px");
         addStyle(style);

@@ -34,18 +34,20 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderBoxEditor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItemEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.decorators.ElegantWidgetDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.EntityI;
 import com.pyx4j.tester.client.domain.EntityII;
 import com.pyx4j.tester.client.domain.EntityIII;
+import com.pyx4j.tester.client.domain.EntityIV;
 import com.pyx4j.tester.client.images.Images;
 
 public class MainForm extends CEntityEditor<EntityI> {
@@ -54,6 +56,19 @@ public class MainForm extends CEntityEditor<EntityI> {
 
     public MainForm() {
         super(EntityI.class);
+    }
+
+    @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        if (member instanceof EntityII) {
+            return new EntityIIEditor();
+        } else if (member instanceof EntityIII) {
+            return new EntityIIIEditor();
+        } else if (member instanceof EntityIV) {
+            return new EntityIVEditor();
+        } else {
+            return super.create(member);
+        }
     }
 
     @Override
@@ -67,151 +82,116 @@ public class MainForm extends CEntityEditor<EntityI> {
         main.add(new ElegantWidgetDecorator(inject(proto().integerMember())));
 
         main.add(new HTML("---------------- Box Folder ----------------"));
-        CEntityFolder<EntityII> entityIIFolder1 = createEntityIIFolder1();
-        main.add(inject(proto().entityIIList1(), entityIIFolder1));
+        main.add(inject(proto().entityIIList(), new EntityIIFolder()));
 
         main.add(new HTML("---------------- Table Folder ----------------"));
-        main.add(inject(proto().entityIIList2(), createEntityIIFolder2()));
+        main.add(inject(proto().entityIVList(), new EntityIVFolder()));
         return main;
     }
 
-    private CEntityFolder<EntityII> createEntityIIFolder1() {
+    static class EntityIIFolder extends CEntityFolder<EntityII> {
+        public EntityIIFolder() {
+            super(EntityII.class);
+        }
 
-        return new CEntityFolder<EntityII>(EntityII.class) {
+        @Override
+        protected IFolderDecorator<EntityII> createDecorator() {
+            return new BoxFolderDecorator<EntityII>(Images.INSTANCE, i18n.tr("Add EntityII"));
 
-            @Override
-            protected IFolderDecorator<EntityII> createDecorator() {
-                return new BoxFolderDecorator<EntityII>(Images.INSTANCE, i18n.tr("Add EntityII"));
+        }
 
-            }
+        @Override
+        public IFolderItemDecorator<EntityII> createItemDecorator() {
+            BoxFolderItemDecorator<EntityII> decorator = new BoxFolderItemDecorator<EntityII>(Images.INSTANCE);
+            return decorator;
+        }
 
-            @Override
-            protected CEntityFolderBoxEditor<EntityII> createItem(final boolean first) {
-                return new CEntityFolderBoxEditor<EntityII>(EntityII.class) {
-
-                    @Override
-                    public IsWidget createContent() {
-                        FlowPanel main = new FlowPanel();
-                        main.add(new ElegantWidgetDecorator(inject(proto().stringMember())));
-                        main.add(new ElegantWidgetDecorator(inject(proto().integerMember())));
-                        main.add(new HTML("---------------- Box Folder ----------------"));
-                        main.add(inject(proto().entityIIIList1(), createEntityIIIFolder1()));
-                        main.add(new HTML("---------------- Table Folder ----------------"));
-                        main.add(inject(proto().entityIIIList1(), createEntityIIIFolder2()));
-                        return main;
-                    }
-
-                    @Override
-                    public IFolderItemDecorator<EntityII> createDecorator() {
-                        BoxFolderItemDecorator<EntityII> decorator = new BoxFolderItemDecorator<EntityII>(Images.INSTANCE, i18n.tr("Remove EntityII"));
-                        return decorator;
-                    }
-
-                };
-            }
-
-        };
     }
 
-    private CEntityFolder<EntityII> createEntityIIFolder2() {
+    static class EntityIIEditor extends CEntityEditor<EntityII> {
 
-        return new CEntityFolder<EntityII>(EntityII.class) {
+        public EntityIIEditor() {
+            super(EntityII.class);
+        }
 
-            private final ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+        @Override
+        public IsWidget createContent() {
+            FlowPanel main = new FlowPanel();
+            main.add(new ElegantWidgetDecorator(inject(proto().stringMember())));
+            main.add(new ElegantWidgetDecorator(inject(proto().integerMember())));
+            main.add(new HTML("---------------- Box Folder ----------------"));
+            main.add(inject(proto().entityIIIList(), new EntityIIIFolder()));
+            main.add(new HTML("---------------- Table Folder ----------------"));
+            main.add(inject(proto().entityIVList(), new EntityIVFolder()));
+            return main;
+        }
 
-            {
-                columns.add(new EntityFolderColumnDescriptor(proto().stringMember(), "15em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().integerMember(), "15em"));
-            }
-
-            @Override
-            protected IFolderDecorator<EntityII> createDecorator() {
-                return new TableFolderDecorator<EntityII>(columns, Images.INSTANCE, i18n.tr("Add EntityII"));
-
-            }
-
-            @Override
-            protected CEntityFolderItemEditor<EntityII> createItem(boolean first) {
-                // TODO Auto-generated method stub
-                return new CEntityFolderRowEditor<EntityII>(EntityII.class, columns) {
-
-                    @Override
-                    protected IFolderItemDecorator<EntityII> createDecorator() {
-                        return new TableFolderItemDecorator<EntityII>(Images.INSTANCE, i18n.tr("Remove EntityII"));
-                    }
-                };
-            }
-
-        };
     }
 
-    private CEntityFolder<EntityIII> createEntityIIIFolder1() {
+    static class EntityIIIFolder extends CEntityFolder<EntityIII> {
 
-        return new CEntityFolder<EntityIII>(EntityIII.class) {
+        public EntityIIIFolder() {
+            super(EntityIII.class);
+        }
 
-            @Override
-            protected IFolderDecorator<EntityIII> createDecorator() {
-                return new BoxFolderDecorator<EntityIII>(Images.INSTANCE, i18n.tr("Add EntityII"));
+        @Override
+        protected IFolderDecorator<EntityIII> createDecorator() {
+            return new BoxFolderDecorator<EntityIII>(Images.INSTANCE, i18n.tr("Add EntityIII"));
 
-            }
+        }
 
-            @Override
-            protected CEntityFolderBoxEditor<EntityIII> createItem(boolean first) {
-                return createEntityIIISetRow();
-            }
+        @Override
+        public IFolderItemDecorator<EntityIII> createItemDecorator() {
+            return new BoxFolderItemDecorator<EntityIII>(Images.INSTANCE);
+        }
 
-            private CEntityFolderBoxEditor<EntityIII> createEntityIIISetRow() {
-                return new CEntityFolderBoxEditor<EntityIII>(EntityIII.class) {
-
-                    @Override
-                    public IsWidget createContent() {
-                        FlowPanel main = new FlowPanel();
-                        main.add(new ElegantWidgetDecorator(inject(proto().stringMember())));
-                        main.add(new ElegantWidgetDecorator(inject(proto().integerMember())));
-                        return main;
-                    }
-
-                    @Override
-                    public IFolderItemDecorator<EntityIII> createDecorator() {
-                        return new BoxFolderItemDecorator<EntityIII>(Images.INSTANCE, i18n.tr("Remove EntityIII"));
-                    }
-
-                };
-            }
-
-        };
     }
 
-    private CEntityFolder<EntityIII> createEntityIIIFolder2() {
+    static class EntityIIIEditor extends CEntityEditor<EntityIII> {
 
-        return new CEntityFolder<EntityIII>(EntityIII.class) {
+        public EntityIIIEditor() {
+            super(EntityIII.class);
+        }
 
-            private final ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+        @Override
+        public IsWidget createContent() {
+            FlowPanel main = new FlowPanel();
+            main.add(new ElegantWidgetDecorator(inject(proto().stringMember())));
+            main.add(new ElegantWidgetDecorator(inject(proto().integerMember())));
+            return main;
+        }
 
-            {
-                columns.add(new EntityFolderColumnDescriptor(proto().stringMember(), "15em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().integerMember(), "15em"));
-            }
+    }
 
-            @Override
-            protected IFolderDecorator<EntityIII> createDecorator() {
-                return new TableFolderDecorator<EntityIII>(columns, Images.INSTANCE, i18n.tr("Add EntityII"));
+    static class EntityIVFolder extends CEntityFolder<EntityIV> {
 
-            }
+        public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
+        static {
+            EntityIV proto = EntityFactory.getEntityPrototype(EntityIV.class);
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.stringMember(), "15em"));
+            COLUMNS.add(new EntityFolderColumnDescriptor(proto.integerMember(), "15em"));
+        }
 
-            @Override
-            protected CEntityFolderItemEditor<EntityIII> createItem(boolean first) {
-                // TODO Auto-generated method stub
-                return new CEntityFolderRowEditor<EntityIII>(EntityIII.class, columns) {
+        public EntityIVFolder() {
+            super(EntityIV.class);
+        }
 
-                    @Override
-                    protected IFolderItemDecorator<EntityIII> createDecorator() {
-                        return new TableFolderItemDecorator<EntityIII>(Images.INSTANCE, i18n.tr("Remove EntityII"));
-                    }
-                };
-            }
+        @Override
+        protected IFolderDecorator<EntityIV> createDecorator() {
+            return new TableFolderDecorator<EntityIV>(COLUMNS, Images.INSTANCE, i18n.tr("Add EntityIV"));
+        }
 
-        };
+        @Override
+        protected IFolderItemDecorator<EntityIV> createItemDecorator() {
+            return new TableFolderItemDecorator<EntityIV>(Images.INSTANCE);
+        }
+
+    }
+
+    static class EntityIVEditor extends CEntityFolderRowEditor<EntityIV> {
+        public EntityIVEditor() {
+            super(EntityIV.class, EntityIVFolder.COLUMNS);
+        }
     }
 
 }

@@ -30,11 +30,13 @@ public class DomainFactory {
         EntityI retVal = EntityFactory.create(EntityI.class);
         retVal.stringMember().setValue("== EntityI Value ==");
         retVal.integerMember().setValue(counter++);
-        retVal.entityIIList1().add(createEntityII());
-        retVal.entityIIList1().add(createEntityII());
-        retVal.entityIIList2().add(createEntityII());
-        retVal.entityIIList2().add(createEntityII());
-        retVal.entityIIList2().add(createEntityII());
+        retVal.entityIIList().add(createEntityII());
+        retVal.entityIIList().add(createEntityII());
+        retVal.entityIIList().add(createEntityII());
+        retVal.entityIVList().add(createEntityIV());
+        retVal.entityIVList().add(createEntityIV());
+        retVal.entityIVList().add(createEntityIV());
+        retVal.entityIVList().add(createEntityIV());
         return retVal;
     }
 
@@ -45,4 +47,17 @@ public class DomainFactory {
         return retVal;
     }
 
+    public static EntityIII createEntityIII() {
+        EntityIII retVal = EntityFactory.create(EntityIII.class);
+        retVal.stringMember().setValue("== EntityII Value ==");
+        retVal.integerMember().setValue(counter++);
+        return retVal;
+    }
+
+    public static EntityIV createEntityIV() {
+        EntityIV retVal = EntityFactory.create(EntityIV.class);
+        retVal.stringMember().setValue("== EntityII Value ==");
+        retVal.integerMember().setValue(counter++);
+        return retVal;
+    }
 }

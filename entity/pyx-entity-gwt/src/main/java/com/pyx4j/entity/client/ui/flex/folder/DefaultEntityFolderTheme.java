@@ -20,8 +20,18 @@
  */
 package com.pyx4j.entity.client.ui.flex.folder;
 
+import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolder;
+import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderActionsBar;
+import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderAddButton;
+import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderAddButtonImage;
+import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderAddButtonLabel;
+import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderBoxDecorator;
+import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderBoxItem;
+import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderBoxItemDecorator;
+import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderRowItemDecorator;
+import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderTableDecorator;
+
 import com.pyx4j.widgets.client.style.IStyleName;
-import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.Theme;
 
@@ -32,63 +42,63 @@ public class DefaultEntityFolderTheme extends Theme {
     }
 
     protected void initStyles() {
-        Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolder);
+        Style style = new Style((IStyleName) EntityFolder);
         style.addProperty("width", "100%");
         addStyle(style);
 
-        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderBoxItem).build().toString(), CEntityFolder.StyleName.EntityFolder);
+        style = new Style(".", EntityFolder, " img");
+        style.addProperty("display", "block");
+        addStyle(style);
+
+        style = new Style(".", EntityFolderBoxItem, " .", EntityFolder);
         style.addProperty("width", "100%");
         addStyle(style);
 
-        style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderBoxDecorator);
+        style = new Style(".", EntityFolderBoxDecorator);
         addStyle(style);
 
-        style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderTableDecorator);
+        style = new Style(".", EntityFolderTableDecorator);
         style.addProperty("margin-top", "2px");
-        style.addProperty("margin-left", "6px");
         addStyle(style);
 
-        style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderBoxItem);
+        style = new Style(".", EntityFolderBoxItem);
         style.addProperty("padding", "6px");
         addStyle(style);
 
-        style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderBoxItemDecorator);
+        style = new Style(".", EntityFolderBoxItemDecorator);
         style.addProperty("margin", "6px");
         style.addProperty("border", "dotted 1px");
         style.addProperty("border-color", "#333");
         addStyle(style);
 
-        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderBoxItemDecorator).hover().build());
+        style = new Style(".", EntityFolderBoxItemDecorator, ":hover");
         style.addProperty("border", "solid 1px");
         style.addProperty("border-color", "#333");
         addStyle(style);
 
-        style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderRowItemDecorator);
+        style = new Style(".", EntityFolderRowItemDecorator);
         style.addProperty("width", "0");
-        addStyle(style);
-
-        style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolderTableDecorator);
         style.addProperty("margin", "6px");
         addStyle(style);
 
-        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderActionsBar).build());
+        style = new Style(".", EntityFolderActionsBar);
         style.addProperty("opacity", "0.2");
         addStyle(style);
 
-        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderActionsBar).dependent(CEntityFolder.StyleDependent.hover).build());
+        style = new Style(".", EntityFolderActionsBar, "-", CEntityFolder.StyleDependent.hover);
         style.addProperty("opacity", "1");
         addStyle(style);
 
-        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderAddButton).build());
+        style = new Style(".", EntityFolderAddButton);
         style.addProperty("display", "inline-block");
         style.addProperty("margin", "6px");
         addStyle(style);
 
-        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderAddButtonImage).build());
+        style = new Style(".", EntityFolderAddButtonImage);
         style.addProperty("float", "left");
         addStyle(style);
 
-        style = new Style(new Selector.Builder(CEntityFolder.StyleName.EntityFolderAddButtonLabel).build());
+        style = new Style(".", EntityFolderAddButtonLabel);
         style.addProperty("padding-left", "3px");
         style.addProperty("float", "left");
         addStyle(style);

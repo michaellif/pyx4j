@@ -50,8 +50,9 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
         this(images, null);
     }
 
-    public TableFolderItemDecorator(EntityFolderImages images, String title) {
-        super(images, title);
+    //TODO propagate removeLabel to tooltip
+    public TableFolderItemDecorator(EntityFolderImages images, String removeLabel) {
+        super(images);
 
         setStyleName(StyleName.EntityFolderRowItemDecorator.name());
 
@@ -86,7 +87,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
     }
 
     @Override
-    public void setComponent(final CEntityFolderItemEditor<E> folderItem) {
+    public void setComponent(final CEntityFolderItem<E> folderItem) {
         super.setComponent(folderItem);
         contentHolder.setWidget(folderItem.getContainer());
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {

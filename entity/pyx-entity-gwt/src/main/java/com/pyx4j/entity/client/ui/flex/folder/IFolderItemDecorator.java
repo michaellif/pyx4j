@@ -26,7 +26,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.pyx4j.entity.client.ui.flex.IDecorator;
 import com.pyx4j.entity.shared.IEntity;
 
-public interface IFolderItemDecorator<E extends IEntity> extends IDecorator<CEntityFolderItemEditor<E>> {
+public interface IFolderItemDecorator<E extends IEntity> extends IDecorator<CEntityFolderItem<E>> {
 
     HandlerRegistration addItemRemoveClickHandler(ClickHandler handler);
 
@@ -35,7 +35,7 @@ public interface IFolderItemDecorator<E extends IEntity> extends IDecorator<CEnt
     HandlerRegistration addRowDownClickHandler(ClickHandler handler);
 
     @Override
-    void setComponent(CEntityFolderItemEditor<E> item);
+    void setComponent(CEntityFolderItem<E> item);
 
     void setActionsState(boolean remove, boolean up, boolean down);
 
