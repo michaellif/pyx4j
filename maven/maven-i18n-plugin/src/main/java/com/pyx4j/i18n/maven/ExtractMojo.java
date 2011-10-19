@@ -182,6 +182,13 @@ public class ExtractMojo extends AbstractMojo {
     public boolean autoTranslate = false;
 
     /**
+     * Use translation catalog for auto translate.
+     * 
+     * @parameter expression="${i18n.catalog}"
+     */
+    private File autoTranslateCatalog;
+
+    /**
      * Used for auto translate.
      * 
      * @parameter expression="${google.translate.apiKey}"
@@ -450,6 +457,9 @@ public class ExtractMojo extends AbstractMojo {
             GoogleTranslate gt = new GoogleTranslate(this.googleApiKey);
 
             POCatalog catalog = new POCatalog(lang);
+            if (autoTranslateCatalog != null) {
+                catalog.loadCatalog(autoTranslateCatalog);
+            }
             POFile poTransl = po.cloneForTranslation();
             getLog().info("Translating " + sourceLanguage + " -> " + lang);
             int translated = 0;

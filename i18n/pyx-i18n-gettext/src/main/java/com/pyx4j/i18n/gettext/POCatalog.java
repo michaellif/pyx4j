@@ -40,7 +40,7 @@ public class POCatalog implements Translator {
     public POCatalog(String lang) {
         this.lang = lang;
         poDirectory = new File(System.getProperty("user.home"), ".po-catalog");
-        read();
+        readMainFile();
     }
 
     public POCatalog(Locale locale) throws IOException {
@@ -58,19 +58,29 @@ public class POCatalog implements Translator {
         return new File(poDirectory, lang + ".po");
     }
 
-    private void read() {
+    private void readMainFile() {
         File file = mainLandFile();
-        if (!file.canRead()) {
-            return;
+        if (file.canRead()) {
+            readFile(file);
         }
+    }
+
+    private void readFile(File file) {
         POFile po;
         try {
             POFileReader r = new POFileReader();
             po = r.read(file);
         } catch (IOException e) {
-            throw new RuntimeException("POFile " + mainLandFile().getAbsolutePath() + " read error", e);
+            throw new RuntimeException("POFile " + file.getAbsolutePath() + " read error", e);
         }
         buildTranslations(po);
+    }
+
+    public void loadCatalog(File catalogDirectory) {
+        File file = new File(catalogDirectory, lang + ".po");
+        if (file.canRead()) {
+            readFile(file);
+        }
     }
 
     private void buildTranslations(POFile po) {
