@@ -13,6 +13,9 @@
  */
 package com.propertyvista.common.client.ui.editors;
 
+import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -24,6 +27,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.AddressUtils;
+import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.domain.EmergencyContact;
 
@@ -65,16 +69,40 @@ public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
 
         @Override
         public IsWidget createContent() {
-            VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-            main.add(inject(proto().name().firstName()), 12);
-            main.add(inject(proto().name().middleName()), 12);
-            main.add(inject(proto().name().lastName()), 20);
-            main.add(inject(proto().homePhone()), 15);
-            main.add(inject(proto().mobilePhone()), 15);
-            main.add(inject(proto().workPhone()), 15);
-            AddressUtils.injectIAddress(main, proto().address(), this);
-            main.add(new HTML());
-            return main;
+            if (isEditable()) {
+                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+                main.add(inject(proto().name().firstName()), 12);
+                main.add(inject(proto().name().middleName()), 12);
+                main.add(inject(proto().name().lastName()), 20);
+                main.add(inject(proto().homePhone()), 15);
+                main.add(inject(proto().mobilePhone()), 15);
+                main.add(inject(proto().workPhone()), 15);
+                AddressUtils.injectIAddress(main, proto().address(), this);
+                main.add(new HTML());
+                return main;
+            } else {
+                FlowPanel contactPanel = new FlowPanel();
+                FlowPanel person = DecorationUtils.formFullName(this, proto());
+                person.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+                person.getElement().getStyle().setFontSize(1.1, Unit.EM);
+                contactPanel.add(person);
+                contactPanel.add(inject(proto().homePhone()));
+                contactPanel.add(inject(proto().mobilePhone()));
+                contactPanel.add(inject(proto().workPhone()));
+                contactPanel.add(inject(proto().address().unitNumber()));
+                contactPanel.add(inject(proto().address().streetNumber()));
+                contactPanel.add(inject(proto().address().streetNumberSuffix()));
+                contactPanel.add(inject(proto().address().streetName()));
+                contactPanel.add(inject(proto().address().streetType()));
+                contactPanel.add(inject(proto().address().streetDirection()));
+                contactPanel.add(inject(proto().address().city()));
+                contactPanel.add(inject(proto().address().county()));
+                contactPanel.add(inject(proto().address().province()));
+                contactPanel.add(inject(proto().address().country()));
+                contactPanel.add(inject(proto().address().postalCode()));
+
+                return contactPanel;
+            }
         }
     }
 }

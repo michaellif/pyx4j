@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
@@ -26,14 +25,6 @@ import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.charges.ChargeLine;
 
 public class ChargeLineFolder extends VistaTableFolder<ChargeLine> {
-
-    public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
-    static {
-        ChargeLine proto = EntityFactory.getEntityPrototype(ChargeLine.class);
-        COLUMNS.add(new EntityFolderColumnDescriptor(proto.type(), "30em"));
-        COLUMNS.add(new EntityFolderColumnDescriptor(proto.label(), "15em"));
-        COLUMNS.add(new EntityFolderColumnDescriptor(proto.charge(), "15em"));
-    }
 
     public ChargeLineFolder() {
         super(ChargeLine.class);
@@ -43,7 +34,10 @@ public class ChargeLineFolder extends VistaTableFolder<ChargeLine> {
 
     @Override
     protected List<EntityFolderColumnDescriptor> columns() {
-        return COLUMNS;
+        ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+        columns.add(new EntityFolderColumnDescriptor(proto().type(), "30em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().label(), "15em"));
+        return columns;
     }
 
     @Override
@@ -58,7 +52,7 @@ public class ChargeLineFolder extends VistaTableFolder<ChargeLine> {
     class ChargeLineEditor extends CEntityFolderRowEditor<ChargeLine> {
 
         public ChargeLineEditor() {
-            super(ChargeLine.class, ChargeLineFolder.COLUMNS);
+            super(ChargeLine.class, columns());
         }
 
     }

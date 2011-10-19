@@ -15,10 +15,7 @@ package com.propertyvista.portal.ptapp.client.ui.steps.summary;
 
 import static com.pyx4j.commons.HtmlUtils.h3;
 
-import java.util.List;
-
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -28,16 +25,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
-
-import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.domain.EmergencyContact;
+import com.propertyvista.common.client.ui.editors.EmergencyContactFolder;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.ptapp.client.ui.decorations.VistaReadOnlyDecorator;
@@ -153,7 +144,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
 
         fullViewPanel.add(new HTML(h3(proto().tenant().emergencyContacts().getMeta().getCaption())));
 
-        bind(new EmergencyContactsFolder(), proto().tenant().emergencyContacts());
+        bind(new EmergencyContactFolder(), proto().tenant().emergencyContacts());
         fullViewPanel.add(get(proto().tenant().emergencyContacts()));
         return fullViewPanel;
     }
@@ -180,62 +171,6 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.managerName()), dd2ColumnsTable));
 
         return addressPanel;
-    }
-
-    static class EmergencyContactsFolder extends VistaTableFolder<EmergencyContact> {
-
-        public EmergencyContactsFolder() {
-            super(EmergencyContact.class);
-        }
-
-        @Override
-        public CEditableComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof EmergencyContact) {
-                return new EmergencyContactsEditor();
-            } else {
-                return super.create(member);
-            }
-        }
-
-        @Override
-        protected List<EntityFolderColumnDescriptor> columns() {
-            return null;
-        }
-
-        static class EmergencyContactsEditor extends CEntityEditor<EmergencyContact> {
-
-            public EmergencyContactsEditor() {
-                super(EmergencyContact.class);
-            }
-
-            @Override
-            public IsWidget createContent() {
-                FlowPanel contactPanel = new FlowPanel();
-
-                FlowPanel person = DecorationUtils.formFullName(this, proto());
-                person.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-                person.getElement().getStyle().setFontSize(1.1, Unit.EM);
-                contactPanel.add(person);
-
-                DecorationData dd = new DecorationData(40, Unit.PCT, HasHorizontalAlignment.ALIGN_LEFT, 60, Unit.PCT, HasHorizontalAlignment.ALIGN_RIGHT);
-                contactPanel.add(new VistaReadOnlyDecorator(inject(proto().homePhone()), dd));
-                contactPanel.add(new VistaReadOnlyDecorator(inject(proto().mobilePhone()), dd));
-                contactPanel.add(new VistaReadOnlyDecorator(inject(proto().workPhone()), dd));
-                contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().unitNumber()), dd));
-                contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().streetNumber()), dd));
-                contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().streetNumberSuffix()), dd));
-                contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().streetName()), dd));
-                contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().streetType()), dd));
-                contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().streetDirection()), dd));
-                contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().city()), dd));
-                contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().county()), dd));
-                contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().province()), dd));
-                contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().country()), dd));
-                contactPanel.add(new VistaReadOnlyDecorator(inject(proto().address().postalCode()), dd));
-
-                return contactPanel;
-            }
-        }
     }
 
 }
