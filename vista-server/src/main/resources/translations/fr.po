@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-18 01:15-0400\n"
+"POT-Creation-Date: 2011-10-19 02:34-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -166,10 +166,15 @@ msgstr "Addons"
 #: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReport.java:2
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:2
 #: com/propertyvista/domain/tenant/lead/Appointment.java:2
+#: com/propertyvista/pmsite/server/panels/AptListPanel.html:11
 #: com/propertyvista/portal/domain/dto/PropertyDTO.java:2
 #: com/propertyvista/portal/domain/dto/ResidentDTO.java:2
 msgid "Address"
 msgstr "Adresse"
+
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:63
+msgid "Address / Postal Code"
+msgstr "Adresse / Code postal"
 
 #: com/propertyvista/domain/contact/IAddress.java:2
 msgid "Address 1"
@@ -256,6 +261,8 @@ msgstr "Alertes"
 
 #: com/propertyvista/dto/BuildingDTO.java:2
 #: com/propertyvista/dto/FloorplanDTO.java:2
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:88
+#: com/propertyvista/pmsite/server/panels/AptListPanel.html:19
 #: com/propertyvista/portal/domain/dto/AptUnitDTO.java:2
 #: com/propertyvista/portal/domain/dto/FloorplanDTO.java:2
 #: com/propertyvista/portal/domain/dto/PropertyDTO.java:2
@@ -549,6 +556,7 @@ msgstr "Basketball Cour"
 msgid "Bathroom"
 msgstr "Salle de bains"
 
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:78
 #: com/propertyvista/portal/domain/dto/FloorplanPropertyDTO.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
 msgid "Bathrooms"
@@ -565,6 +573,8 @@ msgstr "Bains"
 msgid "Bedroom"
 msgstr "Chambre"
 
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:74
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:21
 #: com/propertyvista/portal/domain/dto/FloorplanPropertyDTO.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
 msgid "Bedrooms"
@@ -929,6 +939,9 @@ msgstr "Pages enfant:"
 #: com/propertyvista/domain/contact/IAddress.java:2
 #: com/propertyvista/domain/contact/IAddressFull.java:2
 #: com/propertyvista/domain/ref/City.java:0
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:42
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:56
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:18
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:2
 msgid "City"
 msgstr "Ville"
@@ -1471,6 +1484,7 @@ msgstr "Ordre d'affichage"
 msgid "Disposal"
 msgstr "Élimination"
 
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:67
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:2
 msgid "Distance"
 msgstr "Distance"
@@ -2404,6 +2418,10 @@ msgstr "Est récurrent"
 msgid "Is Shared"
 msgstr "Est partagée"
 
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:2
+msgid "Is Turnover Measured By Percent"
+msgstr "Le chiffre d'affaires est mesurée par le pourcentage"
+
 #: com/propertyvista/domain/tenant/income/IncomeInfoSelfEmployed.java:2
 msgid "Is fully owned"
 msgstr "Est entièrement détenue"
@@ -3202,6 +3220,7 @@ msgstr "Pas intéressé"
 #: com/propertyvista/domain/Notes.java:0
 #: com/propertyvista/domain/property/asset/Equipment.java:2
 #: com/propertyvista/domain/property/asset/Roof.java:2
+#: com/propertyvista/pmsite/server/panels/AptListPanel.html:23
 msgid "Notes"
 msgstr "Remarques"
 
@@ -3711,6 +3730,8 @@ msgid "Previous Address"
 msgstr "Adresse précédente"
 
 #: com/propertyvista/domain/financial/offering/ServiceItem.java:2
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:82
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:24
 #: com/propertyvista/portal/domain/dto/FloorplanPropertyDTO.java:2
 #: com/propertyvista/portal/domain/dto/PropertyDTO.java:2
 msgid "Price"
@@ -3852,6 +3873,8 @@ msgid "Provider"
 msgstr "Fournisseur"
 
 #: com/propertyvista/domain/ref/Province.java:0
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:52
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:15
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:2
 msgid "Province"
 msgstr "Province"
@@ -3867,6 +3890,10 @@ msgstr "Province / État"
 #: com/propertyvista/domain/tenant/TenantScreening.java:2
 msgid "Province/State, in which a license has been issued."
 msgstr "Province / État, dans lequel un permis a été délivré."
+
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:46
+msgid "Proximity"
+msgstr "Proximité"
 
 #: com/propertyvista/domain/marketing/PublicVisibilityType.java:1
 msgid "Public"
@@ -4285,6 +4312,18 @@ msgstr "Expédition"
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 msgid "Short Term Lease"
 msgstr "Location à court terme"
+
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:2
+msgid "Show Summary"
+msgstr "Voir sommaire"
+
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:2
+msgid "Show Turnover Analysis"
+msgstr "Voir Analyse Chiffre d'affaires"
+
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:2
+msgid "Show Units"
+msgstr "Afficher unités"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/tenant/lead/Showing.java:0
@@ -4820,9 +4859,17 @@ msgstr "Transférées"
 msgid "Transit No"
 msgstr "Transit Aucune"
 
+#: com/propertyvista/pmsite/server/pages/BasePage.html:11
+msgid "Translate this"
+msgstr "Traduire cette"
+
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 msgid "Transportation"
 msgstr "Transport"
+
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:2
+msgid "Turnover Analysis Resolution"
+msgstr "Résolution d'analyse CA"
 
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 msgid "Tv"
@@ -4899,6 +4946,10 @@ msgstr ""
 #, java-format
 msgid "Type: {0}, Value: {1}"
 msgstr ""
+
+#: com/propertyvista/pmsite/server/panels/AptListPanel.html:15
+msgid "Types"
+msgstr "Types"
 
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "U-shape"
@@ -4985,6 +5036,10 @@ msgstr "Signaler vacance Unité"
 #: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportEvent.java:0
 msgid "Unit Vacancy Report Event"
 msgstr "Event Report Unité de vacance"
+
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:0
+msgid "Unit Vacancy Report Gadget Settings"
+msgstr "Unité des paramètres de vacance Signaler Gadget"
 
 #: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportSummaryDTO.java:0
 msgid "Unit Vacancy Report Summary"
@@ -5319,7 +5374,7 @@ msgstr ""
 msgid "{0} Bedroom"
 msgstr ""
 
-#: com/pyx4j/entity/rdb/EntityPersistenceServiceRDB.java:486
+#: com/pyx4j/entity/rdb/EntityPersistenceServiceRDB.java:493
 #, java-format
 msgid "{0} updated externally"
 msgstr ""

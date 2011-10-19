@@ -101,6 +101,7 @@
             <id>i18n-auto</id>
             <properties>
                 <i18n.autoTranslate>true</i18n.autoTranslate>
+                <i18n.catalog>../../vista-i18n-catalog/src/main/resources/translations</i18n.catalog>
             </properties>
         </profile>
 

@@ -89,7 +89,7 @@
     <profiles>
 
         <profile>
-            <id>i18n-auto</id>
+            <id>i18n-auto-all</id>
             <properties>
                 <i18n.autoTranslate>true</i18n.autoTranslate>
             </properties>

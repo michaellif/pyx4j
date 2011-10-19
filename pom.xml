@@ -175,6 +175,7 @@
         <axis2Version>1.5.4</axis2Version>
         <wicket.version>1.5.0</wicket.version>
 
+        <google.translate.apiKey>AIzaSyD5Yfp-G4ynDKTZK6h_S8FJS3eE3TT_LFQ</google.translate.apiKey>
         <poSaveLocation>true</poSaveLocation>
         <poSufix></poSufix>
         <gettextArg></gettextArg>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-17 02:54-0400\n"
+"POT-Creation-Date: 2011-10-19 02:33-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -141,7 +141,7 @@ msgstr "Annonce Blurbs"
 msgid "Add"
 msgstr "Ajouter"
 
-#: com/propertyvista/common/client/ui/VistaEntityFolder.java:72
+#: com/propertyvista/common/client/ui/VistaEntityFolder.java:71
 #: com/propertyvista/common/client/ui/decorations/VistaBoxFolderDecorator.java:32
 #: com/propertyvista/common/client/ui/decorations/VistaTableFolderDecorator.java:34
 msgid "Add "
@@ -167,7 +167,7 @@ msgstr "Ajouter un animal"
 msgid "Add a vehicle"
 msgstr "Ajouter un véhicule"
 
-#: com/pyx4j/site/client/ui/crud/lister/ListerBase.java:491
+#: com/pyx4j/site/client/ui/crud/lister/ListerBase.java:524
 msgid "Add filter..."
 msgstr "Ajouter le filtre ..."
 
@@ -175,7 +175,7 @@ msgstr "Ajouter le filtre ..."
 msgid "Add guarantor"
 msgstr "Ajouter garant"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:123
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:132
 msgid "Add-ons"
 msgstr "Add-ons"
 
@@ -266,7 +266,7 @@ msgstr "Climatiseur"
 msgid "Alarm"
 msgstr "Alarme"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:338
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:511
 #, java-format
 msgid "All {0}(s) have been selected already!.."
 msgstr ""
@@ -324,7 +324,7 @@ msgstr "Demandeur"
 msgid "Applicant Info"
 msgstr "Infos demandeur"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/tenants/TenantsViewForm.java:171
+#: com/propertyvista/portal/ptapp/client/ui/steps/tenants/TenantsViewForm.java:172
 msgid "Applicant and Co-applicant must be at least 18 years old"
 msgstr "Demandeur et co-demandeur doit avoir au moins 18 ans"
 
@@ -368,7 +368,7 @@ msgstr "Erreur d'application"
 msgid "Application is in Read Only Mode"
 msgstr "L'application est en mode lecture seule"
 
-#: com/pyx4j/essentials/client/BaseLogInPanel.java:175
+#: com/pyx4j/essentials/client/BaseLogInPanel.java:174
 msgid ""
 "Application is in Read Only Mode due to short maintenance.\n"
 "Please retry in few minutes"
@@ -380,7 +380,7 @@ msgstr ""
 msgid "Applications"
 msgstr "Applications"
 
-#: com/pyx4j/site/client/ui/crud/lister/ListerBase.java:493
+#: com/pyx4j/site/client/ui/crud/lister/ListerBase.java:526
 msgid "Apply"
 msgstr "Appliquer"
 
@@ -787,7 +787,7 @@ msgstr "Centre d'affaires"
 msgid "Businesses"
 msgstr "Entreprises"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:251
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:260
 msgid ""
 "By removing this item you will lose the agreed price adjustment! Are you "
 "sure you want to remove it?"
@@ -946,7 +946,7 @@ msgstr "Règle de charge"
 msgid "Charge Type"
 msgstr "Charge de type"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:120
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:129
 msgid "Charged Utilities"
 msgstr "Utilitaires Charged"
 
@@ -1745,7 +1745,7 @@ msgstr "Nombre a dépassé d'animaux autorisés"
 msgid "Exceeded number of allowed tenants"
 msgstr "Nombre a dépassé de locataires a permis"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:116
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:125
 msgid "Excluded"
 msgstr "Exclus"
 
@@ -2060,7 +2060,7 @@ msgstr "Porte"
 msgid "Gauge Display"
 msgstr "Jauge d'affichage"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:86
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:95
 msgid "General Info"
 msgstr "Informations générales"
 
@@ -2269,7 +2269,7 @@ msgstr "Images"
 msgid "In Effect"
 msgstr "En effet"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:113
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:122
 msgid "Included"
 msgstr "Inclus"
 
@@ -2434,6 +2434,10 @@ msgstr "Est récurrent"
 #: com/propertyvista/domain/dashboard/DashboardMetadata.java:2
 msgid "Is Shared"
 msgstr "Est partagée"
+
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:2
+msgid "Is Turnover Measured By Percent"
+msgstr "Le chiffre d'affaires est mesurée par le pourcentage"
 
 #: com/propertyvista/domain/tenant/income/IncomeInfoSelfEmployed.java:2
 msgid "Is fully owned"
@@ -2600,7 +2604,7 @@ msgstr "Durée du bail"
 
 #: com/propertyvista/portal/domain/ptapp/LeaseTerms.java:0
 #: com/propertyvista/portal/domain/ptapp/Summary.java:2
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:102
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:111
 #: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:127
 msgid "Lease Terms"
 msgstr "Conditions de location"
@@ -2709,7 +2713,7 @@ msgstr "Locker"
 msgid "Locker Area"
 msgstr "Zone Locker"
 
-#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:65
+#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:64
 #: com/propertyvista/portal/ptapp/client/ui/TopRightActionsViewImpl.java:92
 #: com/pyx4j/essentials/client/BaseLogInPanel.java:159
 msgid "Log In"
@@ -3382,7 +3386,7 @@ msgstr "Autres"
 msgid "Other Income Info"
 msgstr "Infos Autres revenus"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:141
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:150
 msgid "Other:"
 msgstr "Autres:"
 
@@ -3459,7 +3463,7 @@ msgstr "Place de stationnement"
 msgid "Parking Storage"
 msgstr "Stockage de stationnement"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:131
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:140
 msgid "Parking:"
 msgstr "Parking:"
 
@@ -3616,6 +3620,10 @@ msgstr "Règle charge Animaux"
 msgid "Pet Deposit"
 msgstr "Animaux de dépôt"
 
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:394
+msgid "Pet data:"
+msgstr "Animaux de données:"
+
 #: com/propertyvista/dto/PetsDTO.java:0
 #: com/propertyvista/portal/rpc/ptapp/dto/AddOnsDTO.java:2
 msgid "Pets"
@@ -3625,7 +3633,7 @@ msgstr "Animaux"
 msgid "Pets Maximum"
 msgstr "Animaux maximale"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:126
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:135
 msgid "Pets:"
 msgstr "Animaux de compagnie:"
 
@@ -3696,8 +3704,8 @@ msgstr "S'il vous plaît vous connecter à nouveau."
 msgid "Please make sure you are connected to Internet."
 msgstr "S'il vous plaît assurez-vous que vous êtes connecté à Internet."
 
-#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:97
-#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:174
+#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:95
+#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:172
 msgid ""
 "Please report the incident to technical support,\n"
 "describing the steps taken prior to the error.\n"
@@ -3859,7 +3867,7 @@ msgstr "Progrès"
 msgid "Promotional Item"
 msgstr "Article promotionnel"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:110
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:119
 msgid "Promotions, Discounts and Concessions"
 msgstr "Promotions, Remises et réductions"
 
@@ -4028,7 +4036,7 @@ msgstr "Relation"
 msgid "Remember my ID"
 msgstr "Rappelez-vous mon ID"
 
-#: com/propertyvista/common/client/ui/VistaEntityFolder.java:65
+#: com/propertyvista/common/client/ui/VistaEntityFolder.java:64
 #: com/propertyvista/common/client/ui/decorations/VistaBoxFolderItemDecorator.java:31
 #: com/propertyvista/common/client/ui/decorations/VistaTableFolderItemDecorator.java:31
 msgid "Remove "
@@ -4038,7 +4046,7 @@ msgstr "Retirer"
 msgid "Remove file"
 msgstr "Supprimer le fichier"
 
-#: com/pyx4j/site/client/ui/crud/lister/ListerBase.java:584
+#: com/pyx4j/site/client/ui/crud/lister/ListerBase.java:617
 msgid "Remove filter"
 msgstr "Retirer le filtre"
 
@@ -4248,7 +4256,7 @@ msgstr "L'information sûre"
 msgid "Seen"
 msgstr "Visite"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:301
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:468
 #, java-format
 msgid "Select {0}(s)"
 msgstr ""
@@ -4340,7 +4348,7 @@ msgstr "Type de service"
 msgid "Services"
 msgstr "Services"
 
-#: com/pyx4j/essentials/client/SessionInactiveDialog.java:82
+#: com/pyx4j/essentials/client/SessionInactiveDialog.java:81
 #, java-format
 msgid "Session duration {0}, inactive for {1}"
 msgstr ""
@@ -4384,6 +4392,18 @@ msgstr "Doit être une valeur numérique"
 #: com/pyx4j/forms/client/ui/CIntegerField.java:30
 msgid "Should be an integer"
 msgstr "Doit être un entier"
+
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:2
+msgid "Show Summary"
+msgstr "Voir sommaire"
+
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:2
+msgid "Show Turnover Analysis"
+msgstr "Voir Analyse Chiffre d'affaires"
+
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:2
+msgid "Show Units"
+msgstr "Afficher unités"
 
 #: com/propertyvista/domain/tenant/lead/Showing.java:0
 msgid "Showing"
@@ -4554,7 +4574,7 @@ msgstr "Stockage"
 msgid "Storage Space"
 msgstr "Espace de stockage"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:136
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:145
 msgid "Storage:"
 msgstr "Stockage:"
 
@@ -4834,7 +4854,7 @@ msgstr "Le nom du fichier ne doit pas être vide"
 msgid "The start date cannot be equal or after end date."
 msgstr "La date de début ne peut pas être égale ou après la date de fin."
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:341
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:514
 #, java-format
 msgid "There are no {0}(s) available!.."
 msgstr ""
@@ -4946,6 +4966,10 @@ msgstr "Transit Aucune"
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 msgid "Transportation"
 msgstr "Transport"
+
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:2
+msgid "Turnover Analysis Resolution"
+msgstr "Résolution d'analyse CA"
 
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 msgid "Tv"
@@ -5077,6 +5101,10 @@ msgstr "Signaler vacance Unité"
 msgid "Unit Vacancy Report Event"
 msgstr "Event Report Unité de vacance"
 
+#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:0
+msgid "Unit Vacancy Report Gadget Settings"
+msgstr "Unité des paramètres de vacance Signaler Gadget"
+
 #: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportSummaryDTO.java:0
 msgid "Unit Vacancy Report Summary"
 msgstr "Rapport sommaire de l'Unité de vacance"
@@ -5163,6 +5191,10 @@ msgstr "Véhicule"
 msgid "Vehicle Charge Rule"
 msgstr "Règle de charge des véhicules"
 
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:363
+msgid "Vehicle data:"
+msgstr "Données du véhicule:"
+
 #: com/propertyvista/dto/VehiclesDTO.java:0
 #: com/propertyvista/portal/domain/dto/ResidentDTO.java:2
 msgid "Vehicles"
@@ -5213,7 +5245,7 @@ msgstr "Mur couleur"
 msgid "Warning"
 msgstr "Attention"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:250
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:259
 msgid "Warning!"
 msgstr "Attention!"
 
@@ -5276,7 +5308,7 @@ msgid "We're sorry"
 msgstr "Nous sommes désolés"
 
 #: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:66
-#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:128
+#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:127
 msgid ""
 "We're sorry but your requests look similar to automated requests initiated "
 "by computer virus or spyware applications. To protect our users, we can't "
@@ -5499,7 +5531,7 @@ msgstr ""
 
 #: com/propertyvista/domain/financial/offering/ChargeItem.java:0
 #, java-format
-msgid "{0}, Price: {1}"
+msgid "{0}, Base Price: {1}, Adjusted Price: {2}"
 msgstr ""
 
 #: com/pyx4j/entity/client/ui/datatable/DataTableActionsBar.java:171
