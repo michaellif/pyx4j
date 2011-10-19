@@ -84,7 +84,6 @@ public class XMLConstantExtractor {
             @Override
             public void characters(char[] ch, int start, int length) throws SAXException {
                 if (i18nTag) {
-                    System.out.println(new String(ch, start, length));
                     extractor.addEntry(name, locator.getLineNumber(), new String(ch, start, length), false);
                 }
             }
