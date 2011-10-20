@@ -14,7 +14,6 @@
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -22,6 +21,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -31,6 +31,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -65,6 +66,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<UnitVacancyReport>> callback, EntityListCriteria<UnitVacancyReport> criteria) {
+        EntitySearchResult<UnitVacancyReport> units = null;
 
         LogicalDate[] dateConstraints = null;
         dateConstraints = extractDatesFromCriteria(criteria);
@@ -72,30 +74,73 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
             callback.onFailure(new Error("no date constrains provided"));
             return;
         }
+        final LogicalDate from = dateConstraints[0];
+        final LogicalDate to = dateConstraints[1];
 
         // some of the fields in records are transient (in the IEntity sense), hence we have to extract them from the criteria and sorts the results for ourselves
-        List<Sort> transientSorts = null;
-        transientSorts = getTransientPropertySortEngine().extractSortCriteriaForTransientProperties(criteria);
+        List<Sort> transientSortCriteria = null;
+        transientSortCriteria = getTransientPropertySortEngine().extractSortCriteriaForTransientProperties(criteria);
 
-        EntitySearchResult<UnitVacancyReport> units = EntityLister.secureQuery(criteria);
+        if (!transientSortCriteria.isEmpty()) {
+            // here we have to filter and sort all the data 'manually'
+            // really fun and amazing stuff begins
+            final int pageSize = criteria.getPageSize();
+            final int pagenumber = criteria.getPageNumber();
 
-        long from = dateConstraints[0].getTime();
-        long to = dateConstraints[1].getTime();
+            // TODO which values to set to get everything?
+            criteria.setPageNumber(0);
+            criteria.setPageSize(0);
+            final ICursorIterator<UnitVacancyReport> unfiltered = Persistence.service().query(null, criteria);
 
-        for (UnitVacancyReport unit : units.getData()) {
-            computeState(unit, dateConstraints[0], dateConstraints[1]);
-            computeRentDelta(unit);
-            if (isRevenueLost(unit)) {
-                computeDaysVacantAndRevenueLost(unit, from, to);
+            PriorityQueue<UnitVacancyReport> queue = new PriorityQueue<UnitVacancyReport>(100, getTransientPropertySortEngine().getComparator(
+                    transientSortCriteria));
+            try {
+                while (unfiltered.hasNext()) {
+                    UnitVacancyReport unit = unfiltered.next();
+                    computeTransientFields(unit, from, to);
+                    // TODO apply filters/restrictions for Transient fields
+                    queue.add(unit);
+                }
+            } finally {
+                unfiltered.completeRetrieval();
+            }
+
+            final int totalRows = queue.size();
+
+            Vector<UnitVacancyReport> unitsData = new Vector<UnitVacancyReport>();
+            int currentPage = 0;
+            int currentPagePosition = 0;
+            boolean hasMoreRows = false;
+            while (!queue.isEmpty()) {
+                UnitVacancyReport unit = queue.poll();
+                ++currentPagePosition;
+                if (currentPagePosition > pageSize) {
+                    ++currentPage;
+                    currentPagePosition = 1;
+                }
+                if (currentPage < pagenumber) {
+                    continue;
+                } else if (currentPage == pagenumber) {
+                    unitsData.add(unit);
+                } else {
+                    hasMoreRows = true;
+                    break;
+                }
+            }
+            units = new EntitySearchResult<UnitVacancyReport>();
+            units.setData(unitsData);
+            units.setTotalRows(totalRows);
+            units.hasMoreData(hasMoreRows);
+            //units.setEncodedCursorReference(?);
+        } else {
+            units = EntityLister.secureQuery(criteria);
+
+            for (UnitVacancyReport unit : units.getData()) {
+                computeTransientFields(unit, from, to);
             }
         }
 
-        // now we are going to have to sort this: really fun and amazing stuff
-        if (!transientSorts.isEmpty()) {
-            getTransientPropertySortEngine().sort(units.getData(), transientSorts);
-        }
         callback.onSuccess(units);
-
     }
 
     @Override
@@ -175,6 +220,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
     @Override
     public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, LogicalDate fromDate, LogicalDate toDate,
             AnalysisResolution resolution) {
+        // FIXME refactor this one: separate generic aggregation and intervals creation from the actual computations
         if (callback == null | fromDate == null || toDate == null | resolution == null) {
             callback.onFailure(new Error("at least one of the required parameters is null."));
             return;
@@ -187,7 +233,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
             return;
         }
 
-        if ((toTime - fromTime) / (intervalEnd(fromTime, resolution) - fromTime) > MAX_SUPPORTED_INTERVALS) {
+        if ((toTime - fromTime) / (resolution.addTo(fromTime) - fromTime) > MAX_SUPPORTED_INTERVALS) {
             callback.onFailure(new Error("the date range that was specified is too big"));
             return;
         }
@@ -209,7 +255,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         HashMap<String, Boolean> someoneMovedOut = new HashMap<String, Boolean>();
 
         long intervalStart = fromDate.getTime();
-        long intervalEnd = intervalEnd(intervalStart, resolution);
+        long intervalEnd = resolution.addTo(intervalStart);
         int turnovers = 0;
         int total = 0;
 
@@ -224,7 +270,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
                 result.add(analysis);
 
                 intervalStart = intervalEnd;
-                intervalEnd = intervalEnd(intervalStart, resolution);
+                intervalEnd = resolution.addTo(intervalStart);
                 turnovers = 0;
             }
             // FIXME Really Slow: hope there will be unique key someday !!!
@@ -249,7 +295,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         result.add(lastAnalysis);
 
         intervalStart = intervalEnd;
-        intervalEnd = intervalEnd(intervalStart, resolution);
+        intervalEnd = resolution.addTo(intervalStart);
 
         // now add some data if we don't have more events but still haven't reached till the end of the rest of time time 
         while (endReportTime > intervalEnd) {
@@ -260,7 +306,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
             result.add(analysis);
 
             intervalStart = intervalEnd;
-            intervalEnd = intervalEnd(intervalStart, resolution);
+            intervalEnd = resolution.addTo(intervalStart);
         }
 
         for (UnitVacancyReportTurnoverAnalysisDTO analysis : result) {
@@ -274,35 +320,12 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         callback.onSuccess(result);
     }
 
-    private static long intervalEnd(final long startTime, final AnalysisResolution resolution) {
-        long endTime;
-
-        switch (resolution) {
-        case Day:
-            endTime = startTime + 1000L * 60L * 60L * 24L;
-            break;
-        case Week:
-            endTime = startTime + 1000L * 60L * 60L * 24L * 7L;
-            break;
-        case Month: {
-            Calendar c = Calendar.getInstance();
-            c.setTimeInMillis(startTime);
-            c.add(Calendar.MONTH, 1);
-            endTime = c.getTimeInMillis();
-            break;
+    private static void computeTransientFields(final UnitVacancyReport unit, final LogicalDate fromDate, final LogicalDate toDate) {
+        computeState(unit, fromDate, toDate);
+        computeRentDelta(unit);
+        if (isRevenueLost(unit)) {
+            computeDaysVacantAndRevenueLost(unit, fromDate.getTime(), toDate.getTime());
         }
-        case Year: {
-            Calendar c = Calendar.getInstance();
-            c.setTimeInMillis(startTime);
-            c.add(Calendar.MONTH, 1);
-            endTime = c.getTimeInMillis();
-            break;
-        }
-        default:
-            throw new RuntimeException("no handler for the requested resolution(" + resolution.toString() + ")");
-        }
-
-        return endTime;
     }
 
     /**
@@ -312,7 +335,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
      * @param fromDate
      * @param toDate
      */
-    private static void computeState(UnitVacancyReport unit, LogicalDate fromDate, LogicalDate toDate) {
+    private static void computeState(final UnitVacancyReport unit, final LogicalDate fromDate, final LogicalDate toDate) {
         // TODO: this procedure is real waste of CPU cycles!!! think about better implementation!
         // consider the following:
         //      - maybe its worth to limit a query (i.e. we need at most 10 events (maybe even less)
@@ -405,11 +428,11 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         unit.rentDeltaRelative().setValue(rentDeltaRelative);
     }
 
-    private static boolean isRevenueLost(UnitVacancyReport unit) {
+    private static boolean isRevenueLost(final UnitVacancyReport unit) {
         return VacancyStatus.Vacant.equals(unit.vacancyStatus().getValue()) & unit.moveOutDay().getValue() != null;
     }
 
-    private static void computeDaysVacantAndRevenueLost(UnitVacancyReport unit, final long startOfTime, final long endOfTime) {
+    private static void computeDaysVacantAndRevenueLost(final UnitVacancyReport unit, final long startOfTime, final long endOfTime) {
         // TODO ask Arthur what if we have start of time: do we have to count the days vacant frin 'fromTime' or the possible history
         // currently we do it from the fromTime
         long availableFrom = 1 + unit.moveOutDay().getValue().getTime();
@@ -514,6 +537,10 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
             transientProperties = Collections.unmodifiableMap(temp);
         }
 
+        public Comparator<? super X> getComparator(List<Sort> sortCriteria) {
+            return new CombinedComparator(sortCriteria);
+        }
+
         public List<Sort> extractSortCriteriaForTransientProperties(EntityQueryCriteria<X> criteria) {
             List<Sort> sorts = criteria.getSorts();
             List<Sort> filteredSorts = new LinkedList<Sort>();
@@ -542,8 +569,8 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
                     comparators.add(comparator);
                 }
             }
-            CombinedComparator combinedComparator = new CombinedComparator(relevantSortCriteria);
-            Collections.sort(unsortedList, combinedComparator);
+
+            Collections.sort(unsortedList, getComparator(relevantSortCriteria));
         }
 
         @SuppressWarnings("rawtypes")
@@ -568,7 +595,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
                         // TODO maybe throw exception (someone is trying to sort something that has no associated comparator)
                         continue;
                     }
-                    if (sortCriterion.isDescending()) {
+                    if (!sortCriterion.isDescending()) {
                         comps.add(new Comparator() {
 
                             @SuppressWarnings("unchecked")

@@ -16,10 +16,12 @@ package com.propertyvista.domain.dashboard.gadgets;
 import java.sql.Date;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 /**
@@ -41,6 +43,11 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
             public Date addTo(Date date) {
                 return new Date(addTo(date.getTime()));
             }
+
+            @Override
+            public String intervalLabelFormat(Date start, Date end) {
+                return TimeUtils.simpleFormat(end, "MMM-dd");
+            }
         },
         Week {
             @Override
@@ -51,6 +58,11 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
             @Override
             public Date addTo(Date date) {
                 return new Date(addTo(date.getTime()));
+            }
+
+            @Override
+            public String intervalLabelFormat(Date start, Date end) {
+                return "(" + TimeUtils.simpleFormat(start, "MM/dd") + ", " + TimeUtils.simpleFormat(end, "MM/dd") + ")";
             }
         },
         Month {
@@ -73,6 +85,13 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
                 updatedDate.setYear(updatedDate.getYear() + updatedMonth / 12);
                 return updatedDate;
             }
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public String intervalLabelFormat(Date start, Date end) {
+                I18n i18n = I18n.get(UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution.class);
+                return i18n.tr(TimeUtils.MONTH_NAMES_SHORT[end.getMonth()]) + "-" + Integer.toString(1900 + end.getYear());
+            }
         },
         Year {
             @Override
@@ -90,6 +109,12 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
                 Date date = new Date(time);
                 date.setYear(date.getYear() + 1);
                 return date;
+            }
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public String intervalLabelFormat(Date start, Date end) {
+                return Integer.toString(1900 + end.getYear());
             }
         };
 
@@ -118,7 +143,10 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
         public abstract long addTo(long time);
 
         public abstract Date addTo(Date date);
-        // TODO maybe add substractFrom
+
+        public String intervalLabelFormat(Date start, Date end) {
+            return "(" + start.toString() + ", " + end.toString() + ")";
+        }
     }
 
     @Format("MM/dd/yyyy")

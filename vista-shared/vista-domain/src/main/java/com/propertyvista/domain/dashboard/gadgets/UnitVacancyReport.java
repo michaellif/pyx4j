@@ -80,18 +80,22 @@ public interface UnitVacancyReport extends IEntity {
 
     @Transient
     @Caption(name = "Vacant/Notice")
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<VacancyStatus> vacancyStatus();
 
     @Transient
     @Caption(name = "Rented/Unrented/OffMarket")
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<RentedStatus> rentedStatus();
 
     @Transient
     @Caption(name = "Scoping")
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<Boolean> isScoped();
 
     @Transient
     @Caption(name = "Physical Condition")
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<RentReady> rentReady();
 
     IPrimitive<Double> unitRent();

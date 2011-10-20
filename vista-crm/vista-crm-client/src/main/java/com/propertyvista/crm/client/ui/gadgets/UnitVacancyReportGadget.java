@@ -580,27 +580,8 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
                 } else {
                     values.add(intervalData.unitsTurnedOverPct().getValue());
                 }
-                String label = "unknown resolution";
-                // TODO implement this conversion as an abstract method in the AnalysisResolution enum
-                switch (getResolution()) {
-                case Day:
-                    label = TimeUtils.simpleFormat(intervalData.toDate().getValue(), "MMM-dd");
-                    break;
-                case Week:
-                    label = TimeUtils.simpleFormat(intervalData.fromDate().getValue(), "MM-dd") + " to "
-                            + TimeUtils.simpleFormat(intervalData.toDate().getValue(), "MM-dd");
-                    break;
-                case Month:
-                    // FIXME normal month format
-                    // TODO localized month format?
-                    // TODO month converter should be an external utility
-                    label = toMonth(intervalData.fromDate().getValue()) + "-" + Integer.toString(1900 + intervalData.fromDate().getValue().getYear());
-                    break;
-                case Year:
-                    label = Integer.toString(1900 + intervalData.toDate().getValue().getYear());
-                    break;
-                }
-                ds.addDataSet(ds.new Metric(label), values);
+
+                ds.addDataSet(ds.new Metric(getResolution().intervalLabelFormat(intervalData.fromDate().getValue(), intervalData.toDate().getValue())), values);
             }
 
             SvgFactory factory = new SvgFactoryForGwt();
