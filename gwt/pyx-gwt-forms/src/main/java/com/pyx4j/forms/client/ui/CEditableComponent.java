@@ -243,7 +243,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     }
 
     public boolean isMandatoryConditionMet() {
-        return !isEnabled() || !isEditable() || !isMandatory() || !isVisited() || !isValueEmpty();
+        return !isEnabled() || !isEditable() || !isMandatory() || !isValueEmpty();
     }
 
     @Override

@@ -55,8 +55,6 @@ public class DefaultWidgetDecoratorTheme extends Theme {
 
         style = new Style((IStyleName) WidgetDecoratorLabel);
         style.addProperty("display", "inline");
-        style.addProperty("font-size", "0.9em");
-        style.addProperty("font-weight", "bold");
         style.addProperty("color", "#888888");
         addStyle(style);
 
@@ -72,9 +70,6 @@ public class DefaultWidgetDecoratorTheme extends Theme {
 
         style = new Style((IStyleName) WidgetDecoratorValidationLabel);
         style.addProperty("clear", "both");
-        style.addProperty("margin-left", "18em");
-        style.addProperty("font-size", "0.9em");
-        style.addProperty("font-weight", "bold");
         style.addProperty("color", "red");
         addStyle(style);
 

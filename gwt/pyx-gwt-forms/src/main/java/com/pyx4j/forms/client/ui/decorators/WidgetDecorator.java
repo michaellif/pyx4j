@@ -74,7 +74,7 @@ public class WidgetDecorator extends FlowPanel {
 
         this.component = component;
         final Widget nativeComponent = component.asWidget();
-        nativeComponent.setStyleName(StyleName.WidgetDecoratorComponent.name());
+        nativeComponent.addStyleName(StyleName.WidgetDecoratorComponent.name());
 
         label = new Label(component.getTitle() == null ? "" : component.getTitle());
         label.setStyleName(StyleName.WidgetDecoratorLabel.name());
@@ -141,15 +141,15 @@ public class WidgetDecorator extends FlowPanel {
         componentHolder.setStyleName(StyleName.WidgetDecoratorComponentHolder.name());
         componentHolder.add(nativeComponent);
 
+        validationLabel = new Label();
+        validationLabel.setStyleName(StyleName.WidgetDecoratorValidationLabel.name());
+
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.setStyleName(StyleName.WidgetDecoratorContentPanel.name());
         contentPanel.add(componentHolder);
         contentPanel.add(infoImageHolder);
+        contentPanel.add(validationLabel);
         add(contentPanel);
-
-        validationLabel = new Label();
-        validationLabel.setStyleName(StyleName.WidgetDecoratorValidationLabel.name());
-        add(validationLabel);
 
     }
 
