@@ -71,7 +71,7 @@ public class CriteriaWidgetDecorator extends VerticalPanel {
         label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
         Cursor.setDefault(label.getElement());
 
-        infoImageHolder = new SpaceHolder("16px");
+        infoImageHolder = new SpaceHolder();
         infoImageHolder.getElement().getStyle().setPaddingRight(5, Unit.PX);
 
         infoImageHolder.getElement().getStyle().setPaddingTop(2, Unit.PX);
@@ -81,7 +81,7 @@ public class CriteriaWidgetDecorator extends VerticalPanel {
         if (component.getTooltip() != null && component.getTooltip().trim().length() > 0) {
             Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
             Tooltip.tooltip(infoImage, component.getTooltip());
-            infoImageHolder.setWidget(infoImage);
+            infoImageHolder.add(infoImage);
         }
 
         FlowPanel labelLine = new FlowPanel();

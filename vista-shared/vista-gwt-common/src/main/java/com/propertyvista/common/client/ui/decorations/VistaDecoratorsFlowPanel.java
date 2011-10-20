@@ -73,7 +73,11 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
     }
 
     public WidgetDecorator createDecorator(final CComponent<?> component, double labelWidth, double componentWidth, String componentCaption) {
-        return new WidgetDecorator(component, labelWidth, componentWidth);
+        WidgetDecorator decorator = new WidgetDecorator(component, labelWidth, componentWidth);
+        if (readOnlyMode) {
+            decorator.addStyleDependentName(WidgetDecorator.StyleDependent.readOnly.name());
+        }
+        return decorator;
     }
 
     public double getDefaultLabelWidth() {

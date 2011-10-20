@@ -54,6 +54,9 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
         this.itemName = itemName;
         setModifiable(editable);
         setOrderable(editable);
+        if (!editable) {
+            asWidget().addStyleDependentName(CEntityFolder.StyleDependent.readOnly.name());
+        }
     }
 
     protected abstract List<EntityFolderColumnDescriptor> columns();

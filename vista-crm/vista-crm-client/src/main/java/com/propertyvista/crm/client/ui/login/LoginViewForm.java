@@ -21,9 +21,10 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
+
+import com.propertyvista.common.client.ui.decorations.LoginPanelWidgetDecorator;
 
 public class LoginViewForm extends CEntityEditor<AuthenticationRequest> {
 
@@ -40,11 +41,12 @@ public class LoginViewForm extends CEntityEditor<AuthenticationRequest> {
 
         FlowPanel main = new FlowPanel();
         main.add(header);
-        main.add(new WidgetDecorator(inject(proto().email()), 9, 16));
+        main.add(new LoginPanelWidgetDecorator(inject(proto().email())));
         main.add(new HTML());
-        main.add(new WidgetDecorator(inject(proto().password()), 9, 16));
+        main.add(new LoginPanelWidgetDecorator(inject(proto().password())));
         main.add(new HTML());
-        main.add(new WidgetDecorator(inject(proto().captcha()), 9, 16));
+        main.add(new LoginPanelWidgetDecorator(inject(proto().captcha())));
         return main;
     }
+
 }

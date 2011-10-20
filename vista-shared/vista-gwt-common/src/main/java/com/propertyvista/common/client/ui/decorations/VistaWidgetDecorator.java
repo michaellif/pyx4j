@@ -46,7 +46,10 @@ import com.propertyvista.common.client.ui.decorations.DecorationData.ShowMandato
 /**
  * Widget decorator helpful for representation of Label : [ edit field ] widgets pair in
  * various view forms with uniform project style.
+ * 
+ * @deprecated Use WidgetDecorator instead
  */
+@Deprecated
 public class VistaWidgetDecorator extends VerticalPanel {
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_VistaWidgetDecorator";
@@ -98,10 +101,10 @@ public class VistaWidgetDecorator extends VerticalPanel {
         Cursor.setDefault(label.getElement());
 
         if (decorData.hideInfoHolder) {
-            infoImageHolder = new SpaceHolder("1px");
+            infoImageHolder = new SpaceHolder();
 
         } else {
-            infoImageHolder = new SpaceHolder("16px");
+            infoImageHolder = new SpaceHolder();
             infoImageHolder.getElement().getStyle().setPaddingRight(5, Unit.PX);
         }
         infoImageHolder.getElement().getStyle().setPaddingTop(2, Unit.PX);
@@ -110,7 +113,7 @@ public class VistaWidgetDecorator extends VerticalPanel {
         if (component.getTooltip() != null && component.getTooltip().trim().length() > 0) {
             Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
             Tooltip.tooltip(infoImage, component.getTooltip());
-            infoImageHolder.setWidget(infoImage);
+            infoImageHolder.add(infoImage);
         }
 
         mandatoryLabel = new Label();
