@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -30,6 +31,7 @@ import templates.TemplateResources;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.utils.EntityArgsConverter;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
@@ -82,7 +84,7 @@ public class AptListPage extends BasePage {
         };
 
         form.add(new AdvancedSearchCriteriaInputPanel("searchCriteriaInput", model));
-        form.add(new Button("searchSubmit"));
+        form.add(new Button("searchSubmit").add(AttributeModifier.replace("value", I18n.get(BasePage.class).tr("Search"))));
 
         add(form);
 

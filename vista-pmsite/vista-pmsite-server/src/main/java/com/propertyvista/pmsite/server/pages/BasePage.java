@@ -75,6 +75,7 @@ public abstract class BasePage extends WebPage {
         response.renderCSSReference(refCSS);
         response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "jquery-1.6.3.min.js"));
         response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "pmsite_jslib-1.0.js"));
+        response.renderString("<meta name=\"gwt:property\" content=\"locale=" + PMSiteContentManager.getLocale().lang().getValue().name() + "\" />");
     }
 
     @Override
