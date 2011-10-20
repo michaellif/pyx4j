@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-19 14:26-0400\n"
+"POT-Creation-Date: 2011-10-20 02:39-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -141,7 +141,8 @@ msgstr "Объявление пояснений"
 msgid "Add"
 msgstr "Добавлять"
 
-#: com/propertyvista/common/client/ui/VistaEntityFolder.java:71
+#: com/propertyvista/common/client/ui/VistaBoxFolder.java:56
+#: com/propertyvista/common/client/ui/VistaTableFolder.java:63
 #: com/propertyvista/common/client/ui/decorations/VistaBoxFolderDecorator.java:32
 #: com/propertyvista/common/client/ui/decorations/VistaTableFolderDecorator.java:34
 msgid "Add "
@@ -289,6 +290,10 @@ msgstr "Непредвиденная ошибка"
 msgid "An Unexpected Error Has Occurred."
 msgstr "Непредвиденная ошибка."
 
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
+msgid "Any"
+msgstr "Любой"
+
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 msgid "Apartment"
 msgstr "Квартира"
@@ -346,7 +351,7 @@ msgstr "Ошибка приложения"
 msgid "Application is in Read Only Mode"
 msgstr "Приложение в режиме только для чтения"
 
-#: com/pyx4j/essentials/client/BaseLogInPanel.java:175
+#: com/pyx4j/essentials/client/BaseLogInPanel.java:174
 msgid ""
 "Application is in Read Only Mode due to short maintenance.\n"
 "Please retry in few minutes"
@@ -458,7 +463,7 @@ msgstr "Назначенный Портфолио"
 msgid "Assigned To"
 msgstr "Назначено"
 
-#: com/propertyvista/common/client/ui/components/ApplicationDocumentsFolderUploader.java:147
+#: com/propertyvista/common/client/ui/components/ApplicationDocumentsFolderUploader.java:163
 msgid "Attached Files:"
 msgstr "Прикрепленные файлы:"
 
@@ -694,7 +699,7 @@ msgstr "Кирпич"
 msgid "Broken"
 msgstr "Сломанный"
 
-#: com/propertyvista/common/client/ui/components/ApplicationDocumentsFolderUploader.java:161
+#: com/propertyvista/common/client/ui/components/ApplicationDocumentsFolderUploader.java:177
 msgid "Browse..."
 msgstr "Обзор ..."
 
@@ -1833,6 +1838,10 @@ msgstr "Фитнес"
 msgid "Fitness Center"
 msgstr "Фитнес-центр"
 
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
+msgid "Five"
+msgstr "Пять"
+
 #: com/propertyvista/domain/financial/offering/DepositType.java:1
 #: com/propertyvista/domain/financial/offering/Feature.java:1
 msgid "Fixed"
@@ -1913,6 +1922,14 @@ msgstr "Фонд типа"
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "Foundation Walls"
 msgstr "Фонд Стены"
+
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
+msgid "Four"
+msgstr "Четыре"
+
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
+msgid "Four Or More"
+msgstr "Четыре или более"
 
 #: com/propertyvista/domain/financial/offering/ChargeItemAdjustment.java:1
 #: com/propertyvista/domain/financial/offering/Concession.java:1
@@ -2049,6 +2066,22 @@ msgstr "Валовая сумма ежемесячных"
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 msgid "Group Exercise"
 msgstr "Групповое упражнение"
+
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
+msgid "Gt1000"
+msgstr "GT1000"
+
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
+msgid "Gt1200"
+msgstr "Gt1200"
+
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
+msgid "Gt600"
+msgstr "Gt600"
+
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
+msgid "Gt800"
+msgstr "Gt800"
 
 #: com/propertyvista/domain/tenant/TenantScreening.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/TenantFinancialDTO.java:2
@@ -2659,6 +2692,10 @@ msgstr "Долгота Тип"
 msgid "Low-Rise"
 msgstr "Малоэтажный"
 
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
+msgid "Lt600"
+msgstr "Lt600"
+
 #: com/pyx4j/forms/client/ui/CDatePicker.java:104
 msgid "MM/dd/yy"
 msgstr "dd/MM/yy"
@@ -3227,6 +3264,14 @@ msgstr "On-Site обслуживание"
 msgid "On-Site Management"
 msgstr "On-Site Management"
 
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
+msgid "One"
+msgstr "Один"
+
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
+msgid "One Or More"
+msgstr "Одному или нескольким"
+
 #: com/propertyvista/domain/dashboard/DashboardMetadata.java:1
 msgid "One full width column"
 msgstr "Одна полная ширина колонки"
@@ -3585,7 +3630,7 @@ msgid "Please make sure you are connected to Internet."
 msgstr "Пожалуйста, убедитесь, что вы подключены к Интернету."
 
 #: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:97
-#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:174
+#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:172
 msgid ""
 "Please report the incident to technical support,\n"
 "describing the steps taken prior to the error.\n"
@@ -3908,13 +3953,13 @@ msgstr "Связь"
 msgid "Remember my ID"
 msgstr "Запомнить логин"
 
-#: com/propertyvista/common/client/ui/VistaEntityFolder.java:64
-#: com/propertyvista/common/client/ui/decorations/VistaBoxFolderItemDecorator.java:31
+#: com/propertyvista/common/client/ui/VistaBoxFolder.java:62
+#: com/propertyvista/common/client/ui/VistaTableFolder.java:68
 #: com/propertyvista/common/client/ui/decorations/VistaTableFolderItemDecorator.java:31
 msgid "Remove "
 msgstr "Удаление"
 
-#: com/propertyvista/common/client/ui/components/ApplicationDocumentsFolderUploader.java:114
+#: com/propertyvista/common/client/ui/components/ApplicationDocumentsFolderUploader.java:126
 msgid "Remove file"
 msgstr "Удалить файл"
 
@@ -4194,7 +4239,7 @@ msgstr "Тип службы"
 msgid "Services"
 msgstr "Услуги"
 
-#: com/pyx4j/essentials/client/SessionInactiveDialog.java:82
+#: com/pyx4j/essentials/client/SessionInactiveDialog.java:81
 #, java-format
 msgid "Session duration {0}, inactive for {1}"
 msgstr "Сессия продолжительностью {0}, неактивна {1}"
@@ -4699,6 +4744,14 @@ msgstr "Эта сессия была прекращена, чтобы предо
 msgid "This session has been terminated."
 msgstr "Эта сессия была прервана."
 
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
+msgid "Three"
+msgstr "Три"
+
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
+msgid "Three Or More"
+msgstr "Три или больше"
+
 #: com/propertyvista/domain/dashboard/DashboardMetadata.java:1
 msgid "Three equal columns"
 msgstr "Три равных столбцов"
@@ -4804,6 +4857,14 @@ msgstr "Телевизор"
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 msgid "Tv Lounge"
 msgstr "ТВ-зал"
+
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
+msgid "Two"
+msgstr "Два"
+
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
+msgid "Two Or More"
+msgstr "Два или больше"
 
 #: com/propertyvista/domain/dashboard/DashboardMetadata.java:1
 msgid "Two columns (33/67)"
@@ -5121,7 +5182,7 @@ msgid "We're sorry"
 msgstr "Приносим извинения"
 
 #: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:66
-#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:128
+#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:127
 msgid ""
 "We're sorry but your requests look similar to automated requests initiated "
 "by computer virus or spyware applications. To protect our users, we can't "
