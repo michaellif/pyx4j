@@ -206,9 +206,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         public SelectUnitBox() {
             super("Unit Selection");
+            setContent(createContent());
         }
 
-        @Override
         protected Widget createContent() {
             okButton.setEnabled(false);
             ((LeaseEditorView) getParentView()).getUnitListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<AptUnit>() {
@@ -251,9 +251,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         public SelectServiceItemBox() {
             super(i18n.tr("Service Item Selection"));
+            setContent(createContent());
         }
 
-        @Override
         protected Widget createContent() {
             okButton.setEnabled(false);
 

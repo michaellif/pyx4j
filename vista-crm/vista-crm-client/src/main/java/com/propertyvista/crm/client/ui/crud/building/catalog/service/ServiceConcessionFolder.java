@@ -62,7 +62,7 @@ class ServiceConcessionFolder extends VistaTableFolder<ServiceConcession> {
 
     @Override
     protected void addItem() {
-        new ShowPopUpBox<SelectConcessionBox>(new SelectConcessionBox(concessionListerVeiw)) {
+        new ShowPopUpBox<SelectConcessionBox>(new SelectConcessionBox()) {
             @Override
             protected void onClose(SelectConcessionBox box) {
                 if (box.getSelectedConcessions() != null) {
@@ -95,15 +95,12 @@ class ServiceConcessionFolder extends VistaTableFolder<ServiceConcession> {
 
         private List<Concession> selectedConcessions;
 
-        private final IListerView<Concession> concessionListerVeiw;
-
-        public SelectConcessionBox(IListerView<Concession> concessionListerVeiw) {
+        public SelectConcessionBox() {
             super(i18n.tr("Select Concessions"));
-            this.concessionListerVeiw = concessionListerVeiw;
             concessionListerVeiw.getLister().releaseSelection();
+            setContent(createContent());
         }
 
-        @Override
         protected Widget createContent() {
             okButton.setEnabled(false);
             concessionListerVeiw.getLister().addItemSelectionHandler(new ItemSelectionHandler<Concession>() {

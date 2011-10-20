@@ -274,9 +274,9 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
 
         public SelectFeatureBox() {
             super(i18n.tr("Select Features"));
+            setContent(createContent());
         }
 
-        @Override
         protected Widget createContent() {
             okButton.setEnabled(false);
 

@@ -472,26 +472,16 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 
         private final Feature.Type type;
 
-        private SimplePanel content;
-
         private final ApartmentInfoDTO apartmentInfo;
 
         public SelectFeatureBox(Feature.Type type, ApartmentInfoDTO apartmentInfo) {
             super(i18n.tr("Select {0}(s)", type));
             this.type = type;
             this.apartmentInfo = apartmentInfo;
-            // createContent called from within surper's constructor but we need to use our constructor parameters...
-            content.setWidget(createRealContent());
+            setContent(createContent());
         }
 
-        @Override
         protected Widget createContent() {
-            okButton.setEnabled(false);
-            return (content = new SimplePanel());
-        }
-
-        // createContent called from within surper's constructor but we need to use our constructor parameters...
-        protected Widget createRealContent() {
             okButton.setEnabled(false);
 
             if (!getAvailableList().isEmpty()) {

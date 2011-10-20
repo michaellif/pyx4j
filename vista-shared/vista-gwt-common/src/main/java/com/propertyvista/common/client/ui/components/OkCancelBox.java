@@ -13,12 +13,12 @@
  */
 package com.propertyvista.common.client.ui.components;
 
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -36,9 +36,11 @@ public abstract class OkCancelBox extends DialogPanel {
 
     protected final static I18n i18n = I18n.get(OkCancelBox.class);
 
-    protected Button okButton;
+    protected final SimplePanel content;
 
-    protected Button clButton;
+    protected final Button okButton;
+
+    protected Button cancelButton;
 
     public OkCancelBox(String caption) {
         this(caption, false);
@@ -58,7 +60,7 @@ public abstract class OkCancelBox extends DialogPanel {
             }
         }));
         if (!hideCancel) {
-            buttons.add(clButton = new Button(i18n.tr("Cancel"), new ClickHandler() {
+            buttons.add(cancelButton = new Button(i18n.tr("Cancel"), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     onCancel();
@@ -69,7 +71,7 @@ public abstract class OkCancelBox extends DialogPanel {
         buttons.setSpacing(8);
 
         VerticalPanel vPanel = new VerticalPanel();
-        vPanel.add(createContent());
+        vPanel.add(content = new SimplePanel());
         vPanel.add(buttons);
         vPanel.setCellHorizontalAlignment(buttons, HasHorizontalAlignment.ALIGN_CENTER);
         vPanel.setSpacing(8);
@@ -80,12 +82,14 @@ public abstract class OkCancelBox extends DialogPanel {
     }
 
     /**
-     * Implement in derived class - your inner content of the box.
-     * Note: called from within parent's constructor!!!
+     * Call in derived class - supply your inner content of the box.
+     * Note: could be called from within constructor!!!
      * 
      * @return widget with user's content.
      */
-    protected abstract Widget createContent();
+    protected void setContent(Widget w) {
+        this.content.setWidget(w);
+    }
 
     /**
      * Override to set your desired size

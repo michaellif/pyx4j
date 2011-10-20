@@ -100,9 +100,9 @@ class ServiceFeatureFolder extends VistaTableFolder<ServiceFeature> {
             super(i18n.tr("Select Features"));
             this.featureListerVeiw = featureListerVeiw;
             featureListerVeiw.getLister().releaseSelection();
+            setContent(createContent());
         }
 
-        @Override
         protected Widget createContent() {
             okButton.setEnabled(false);
             featureListerVeiw.getLister().addItemSelectionHandler(new ItemSelectionHandler<Feature>() {

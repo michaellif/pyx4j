@@ -115,9 +115,9 @@ public class UtilityFolder extends VistaTableFolder<ServiceItemType> {
         public SelectUtilityBox(CEntityEditor<BuildingDTO> building) {
             super(i18n.tr("Select Utilities"));
             this.building = building;
+            setContent(createContent());
         }
 
-        @Override
         protected Widget createContent() {
             okButton.setEnabled(false);
 

@@ -188,10 +188,11 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
             super(i18n.tr("Please confirm"));
 
             okButton.setText(i18n.tr("Yes"));
-            clButton.setText(i18n.tr("No"));
+            cancelButton.setText(i18n.tr("No"));
+
+            setContent(createContent());
         }
 
-        @Override
         protected Widget createContent() {
             return new HTML(i18n.tr("Do you really want to cancel?"));
         }

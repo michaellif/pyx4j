@@ -53,9 +53,9 @@ public class TenantEditorViewImpl extends CrmEditorViewImplBase<TenantDTO> imple
 
         public SelectTypeBox() {
             super(i18n.tr("Select Tenant Type"), true);
+            setContent(createContent());
         }
 
-        @Override
         protected Widget createContent() {
             HorizontalPanel main = new HorizontalPanel();
             main.add(person = new RadioButton(i18n.tr("Type"), Tenant.Type.person.toString()));

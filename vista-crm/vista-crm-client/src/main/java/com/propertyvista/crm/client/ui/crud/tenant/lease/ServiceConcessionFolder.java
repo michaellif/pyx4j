@@ -96,9 +96,9 @@ class ServiceConcessionFolder extends VistaTableFolder<ServiceConcession> {
 
         public SelectConcessionBox() {
             super(i18n.tr("Select Concessions"));
+            setContent(createContent());
         }
 
-        @Override
         protected Widget createContent() {
             okButton.setEnabled(false);
 

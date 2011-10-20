@@ -250,9 +250,9 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         public SelectTenantBox(IListerView<Tenant> tenantListerView) {
             super(i18n.tr("Select Tenant"));
             this.tenantListerView = tenantListerView;
+            setContent(createContent());
         }
 
-        @Override
         protected Widget createContent() {
             okButton.setEnabled(false);
             tenantListerView.getLister().addItemSelectionHandler(new ItemSelectionHandler<Tenant>() {

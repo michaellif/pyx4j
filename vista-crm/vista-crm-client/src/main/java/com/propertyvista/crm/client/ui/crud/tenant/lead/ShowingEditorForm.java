@@ -98,9 +98,9 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
 
         public SelectUnitBox() {
             super(i18n.tr("Unit Selection"));
+            setContent(createContent());
         }
 
-        @Override
         protected Widget createContent() {
             okButton.setEnabled(false);
             ((ShowingEditorView) getParentView()).getBuildingListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<Building>() {

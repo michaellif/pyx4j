@@ -46,9 +46,9 @@ public class DashboardEditorImpl extends CrmEditorViewImplBase<DashboardMetadata
 
         public SelectTypeBox() {
             super(i18n.tr("Select Dashboard Type"), true);
+            setContent(createContent());
         }
 
-        @Override
         protected Widget createContent() {
             HorizontalPanel main = new HorizontalPanel();
             main.add(system = new RadioButton(i18n.tr("DashboardType"), DashboardType.system.toString()));
