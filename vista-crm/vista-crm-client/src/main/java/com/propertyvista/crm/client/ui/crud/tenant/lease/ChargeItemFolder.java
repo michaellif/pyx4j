@@ -46,6 +46,7 @@ import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.ChargeItemAdjustment;
@@ -59,17 +60,16 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
 
     private static I18n i18n = I18n.get(ChargeItemFolder.class);
 
-    private final CEntityEditor<LeaseDTO> parent;
+    private final CrmEntityForm<LeaseDTO> parent;
 
-    private final LeaseEditorView.Presenter presenter;
+    private LeaseEditorView.Presenter presenter;
 
-    public ChargeItemFolder(CEntityEditor<LeaseDTO> parent) {
-        this(parent, null); // view mode constructor
-    }
-
-    public ChargeItemFolder(CEntityEditor<LeaseDTO> parent, LeaseEditorView.Presenter presenter) {
+    public ChargeItemFolder(CrmEntityForm<LeaseDTO> parent) {
         super(ChargeItem.class);
         this.parent = parent;
+    }
+
+    public void setPresenter(LeaseEditorView.Presenter presenter) {
         this.presenter = presenter;
     }
 
@@ -245,9 +245,9 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
         }
 
         private void calculateAdjustments() {
-            if (isEditable()) {
+            if (parent.isEditable()) {
+                LeaseEditorView.Presenter presenter = (LeaseEditorView.Presenter) ((LeaseEditorView) parent.getParentView()).getPresenter();
                 presenter.calculateChargeItemAdjustments(new AsyncCallback<Double>() {
-
                     @Override
                     public void onSuccess(Double result) {
                         get(proto().adjustedPrice()).setValue(result);
@@ -276,7 +276,6 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                 columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
                 return columns;
             }
-
         }
     }
 

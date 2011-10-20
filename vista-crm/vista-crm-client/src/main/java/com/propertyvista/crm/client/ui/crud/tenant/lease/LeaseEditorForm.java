@@ -180,14 +180,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.add(serviceItemPanel);
 
         main.add(new CrmSectionSeparator(i18n.tr("Charge Items:")));
-
-        if (isEditable()) {
-            main.add(inject(proto().serviceAgreement().featureItems(), new ChargeItemFolder(this,
-                    (LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter())));
-        } else {
-            main.add(inject(proto().serviceAgreement().featureItems(), new ChargeItemFolder(this)));
-
-        }
+        main.add(inject(proto().serviceAgreement().featureItems(), new ChargeItemFolder(this)));
 
         main.add(new CrmSectionSeparator(i18n.tr("Concessions:")));
         main.add(inject(proto().serviceAgreement().concessions(), new ServiceConcessionFolder(this)));

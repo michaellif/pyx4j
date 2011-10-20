@@ -41,7 +41,7 @@ public abstract class CrmEntityForm<E extends IEntity> extends CrudEntityForm<E>
         this.parentView = parentView;
     }
 
-    protected IFormView<? extends IEntity> getParentView() {
+    public IFormView<? extends IEntity> getParentView() {
         return parentView;
     }
 }
