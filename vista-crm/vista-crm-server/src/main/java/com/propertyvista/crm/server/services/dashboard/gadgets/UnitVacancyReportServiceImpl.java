@@ -69,7 +69,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         LogicalDate[] dateConstraints = null;
         dateConstraints = extractDatesFromCriteria(criteria);
         if (dateConstraints == null) {
-            callback.onFailure(new Exception("no date constrains provided"));
+            callback.onFailure(new Error("no date constrains provided"));
             return;
         }
 
@@ -176,19 +176,19 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
     public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, LogicalDate fromDate, LogicalDate toDate,
             AnalysisResolution resolution) {
         if (callback == null | fromDate == null || toDate == null | resolution == null) {
-            callback.onFailure(new Exception("at least one of the required parameters is null."));
+            callback.onFailure(new Error("at least one of the required parameters is null."));
             return;
         }
         final long fromTime = fromDate.getTime();
         final long toTime = toDate.getTime();
 
         if (fromTime > toTime) {
-            callback.onFailure(new Exception("end date is greater than from date."));
+            callback.onFailure(new Error("end date is greater than from date."));
             return;
         }
 
         if ((toTime - fromTime) / (intervalEnd(fromTime, resolution) - fromTime) > MAX_SUPPORTED_INTERVALS) {
-            callback.onFailure(new Exception("the date range that was specified is too big"));
+            callback.onFailure(new Error("the date range that was specified is too big"));
             return;
         }
 

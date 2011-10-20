@@ -104,14 +104,14 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
     private static final long DEFAULT_ANALYSIS_RESOLUTION_PER_RANGE_KEYS[] = new long[] {
             // must be in ascending order
             7L * 24L * 60L * 60L * 1000L, // WEEK
-            2L * 30L * 24L * 60L * 60L * 1000L, // 2 MONTH
+            2L * 30L * 24L * 60L * 60L * 1000L, // 2 MONTHs
             365L * 24L * 60L * 60L * 1000L // YEAR                 
     };
 
     private static final AnalysisResolution DEFAULT_ANALYSIS_RESOLUTION_PER_RANGE_VALUES[] = new AnalysisResolution[] {
-            // must be the same length as KEYS array
+            // must be the same length as the KEYS array
             AnalysisResolution.Day, // WEEK -> DAY
-            AnalysisResolution.Week, // MONTH -> WEEK
+            AnalysisResolution.Week, // 2 MONTHs -> WEEK
             AnalysisResolution.Month // YEAR -> MONTH
     };
 
@@ -388,19 +388,24 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
                 return;
             }
 
-            serivce.turnoverAnalysis(new AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>>() {
+            // first clear the turnover analysis panel for the case if request fails - and update the resolution according to the dates
+            gadget.getAnalysisView().setData(null, gadget.getFromDate(), gadget.getToDate());
+            // ask the server for the data
+            if (gadget.getAnalysisView().isCurrentResolutionSupportedByServer()) {
+                serivce.turnoverAnalysis(new AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>>() {
 
-                @Override
-                public void onFailure(Throwable caught) {
-                    throw new UnrecoverableClientError(caught);
-                }
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        throw new UnrecoverableClientError(caught);
+                    }
 
-                @Override
-                public void onSuccess(Vector<UnitVacancyReportTurnoverAnalysisDTO> result) {
-                    gadget.getAnalysisView().setData(result, gadget.getFromDate(), gadget.getToDate());
+                    @Override
+                    public void onSuccess(Vector<UnitVacancyReportTurnoverAnalysisDTO> result) {
+                        gadget.getAnalysisView().setData(result, gadget.getFromDate(), gadget.getToDate());
 
-                }
-            }, gadget.getFromDate(), gadget.getToDate(), gadget.getSettings().turnoverAnalysisResolution().getValue());
+                    }
+                }, gadget.getFromDate(), gadget.getToDate(), gadget.getAnalysisView().getResolution());
+            }
         }
 
     }
@@ -453,8 +458,8 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
                 public void onChange(ChangeEvent event) {
 
                     AnalysisResolution r = AnalysisResolution.representationToValue(resolutionSelector.getValue(resolutionSelector.getSelectedIndex()));
-                    AnalysisView.this.settings.turnoverAnalysisResolution().setValue(r);
-                    // FIXME: move the following line to presenter (register handler during bind) and validate that the events happen in the correct order
+                    setResolution(r);
+                    // FIXME: this doesn't belong here! move the following line to presenter (register handler during bind) and validate that the events happen in the correct order
                     // so that presenter does populate with the updated settings 
                     if (presenter != null) {
                         presenter.populateTurnoverAnalysis();
@@ -468,8 +473,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
             ValueChangeHandler<Boolean> measureChangeHandler = new ValueChangeHandler<Boolean>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
-                    AnalysisView.this.settings.isTurnoverMeasuredByPercent().setValue(percent.getValue());
-                    redraw();
+                    setShowPercents(percent.getValue());
                 }
             };
             percent = new RadioButton("measureSelector", i18n.tr("%"));
@@ -509,11 +513,30 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
             return settings.turnoverAnalysisResolution().getValue();
         }
 
-        public boolean getShowPercents() {
+        public void setResolution(AnalysisResolution resolution) {
+            if (isResolutionAcceptable(resolution)) {
+                settings.turnoverAnalysisResolution().setValue(resolution);
+            } else {
+                // fall back to the safest default - note: it doesn't mean that server will accept this, depends on the dates range 
+                settings.turnoverAnalysisResolution().setValue(DEFAULT_ANALYSIS_RESOLUTION_MAX);
+            }
+        }
+
+        public boolean isCurrentResolutionSupportedByServer() {
+            return isResolutionAcceptable(getResolution());
+        }
+
+        public Boolean getShowPercents() {
             return settings.isTurnoverMeasuredByPercent().getValue();
         }
 
+        public void setShowPercents(boolean showPercents) {
+            settings.isTurnoverMeasuredByPercent().getValue();
+            redraw();
+        }
+
         public void setPresenter(UnitVacancyReportGadgetActivity presenter) {
+            // TODO to be removed when presenter is decoupled
             this.presenter = presenter;
         }
 
@@ -525,17 +548,17 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
             AnalysisResolution suggestedResolution = getDefaultResolutionForCurrentDateRange();
             if (suggestedResolution != currentDefaultResolution) {
                 currentDefaultResolution = suggestedResolution;
-                settings.turnoverAnalysisResolution().setValue(currentDefaultResolution);
+                setResolution(currentDefaultResolution);
             }
             redraw();
         }
 
         private void validateSettings() {
-            if (settings.isTurnoverMeasuredByPercent().isNull()) {
-                settings.isTurnoverMeasuredByPercent().setValue(DEFAULT_ANALYSIS_SHOW_PERCENT);
+            if (getShowPercents() == null) {
+                setShowPercents(DEFAULT_ANALYSIS_SHOW_PERCENT);
             }
-            if (settings.turnoverAnalysisResolution().isNull()) {
-                settings.turnoverAnalysisResolution().setValue(getDefaultResolutionForCurrentDateRange());
+            if (getResolution() == null) {
+                setResolution(getDefaultResolutionForCurrentDateRange());
             }
         }
 
@@ -559,7 +582,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
                 }
                 String label = "unknown resolution";
                 // TODO implement this conversion as an abstract method in the AnalysisResolution enum
-                switch (settings.turnoverAnalysisResolution().getValue()) {
+                switch (getResolution()) {
                 case Day:
                     label = TimeUtils.simpleFormat(intervalData.toDate().getValue(), "MMM-dd");
                     break;
@@ -606,7 +629,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
                 AnalysisResolution resolution = analysisValues[i];
                 if (isResolutionAcceptable(resolution)) {
                     resolutionSelector.addItem(resolution.toString(), resolution.toString());
-                    if (resolution.equals(settings.turnoverAnalysisResolution().getValue())) {
+                    if (resolution.equals(getResolution())) {
                         selectedResolutionIndex = addedCounter;
                     }
                     ++addedCounter;
@@ -634,7 +657,6 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
                 return DEFAULT_ANALYSIS_RESOLUTION_MAX;
             }
 
-            // if only this was lisp/python/any other normal programming language, life would be so much easier
             long range = toDate.getTime() - fromDate.getTime();
             for (int i = 0; i < DEFAULT_ANALYSIS_RESOLUTION_PER_RANGE_KEYS.length; ++i) {
                 if (range < DEFAULT_ANALYSIS_RESOLUTION_PER_RANGE_KEYS[i]) {
