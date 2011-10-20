@@ -406,6 +406,14 @@
         </profile>
 
         <profile>
+            <id>developer-env</id>
+            <properties>
+                <gwtDraftCompile>true</gwtDraftCompile>
+                <appGWTModuleSufix>Developer</appGWTModuleSufix>
+            </properties>
+        </profile>
+
+        <profile>
             <id>soyc</id>
             <properties>
                 <gwtCompileReport>true</gwtCompileReport>
