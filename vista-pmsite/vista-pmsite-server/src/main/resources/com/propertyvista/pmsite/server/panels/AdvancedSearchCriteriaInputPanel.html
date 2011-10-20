@@ -34,7 +34,7 @@
 		setSelectionOptions('citySelect', provCity[sel.options[sel.selectedIndex].text], 'Choose One', selCity);
 	});
 	</script>
-	<script wicket:id="jsCityList"/>
+	<script wicket:id="jsCityList"></script>
 
 	<div class="searchTypeSelBox">
 		<div wicket:id="searchType">
@@ -73,15 +73,15 @@
 	<div class="searchCommonBox inputBlockFrame">
 	    <div class="searchField">
 			<label><wicket:i18n>Bedrooms</wicket:i18n></label>
-			<select wicket:id="minBeds"></select><span class="inputJoinBox">to</span><select wicket:id="maxBeds"></select>
+			<select wicket:id="minBeds"></select><span class="inputJoinBox"><wicket:i18n>to</wicket:i18n></span><select wicket:id="maxBeds"></select>
 		</div>
 	    <div class="searchField">
 			<label><wicket:i18n>Bathrooms</wicket:i18n></label>
-			<select wicket:id="minBath"></select><span class="inputJoinBox">to</span><select wicket:id="maxBath"></select>
+			<select wicket:id="minBath"></select><span class="inputJoinBox"><wicket:i18n>to</wicket:i18n></span><select wicket:id="maxBath"></select>
 		</div>
 	    <div class="searchField">
 			<label><wicket:i18n>Price</wicket:i18n></label>
-			<input wicket:id="minPrice" type="text"/><span class="inputJoinBox">to</span><input wicket:id="maxPrice" type="text"/>
+			<input wicket:id="minPrice" type="text"/><span class="inputJoinBox"><wicket:i18n>to</wicket:i18n></span><input wicket:id="maxPrice" type="text"/>
 		</div>
 	</div>
 	<div class="searchAmenityBox inputBlockFrame">
