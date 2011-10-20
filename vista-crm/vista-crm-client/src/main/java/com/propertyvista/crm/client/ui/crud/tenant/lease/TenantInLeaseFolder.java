@@ -63,6 +63,10 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
     private final LeaseEditorView.Presenter presenter;
 
+    public TenantInLeaseFolder(CEntityEditor<? extends Lease> parent) {
+        this(parent, null, null); // view mode constructor
+    }
+
     public TenantInLeaseFolder(CEntityEditor<? extends Lease> parent, IListerView<Tenant> tenantListerView, LeaseEditorView.Presenter presenter) {
         super(TenantInLease.class);
         this.parent = parent;

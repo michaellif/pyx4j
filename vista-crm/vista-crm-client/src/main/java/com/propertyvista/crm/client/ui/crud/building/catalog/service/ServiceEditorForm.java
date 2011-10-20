@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -87,10 +86,11 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
         main.add(new CrmSectionSeparator(i18n.tr("Features:")));
-        main.add(inject(proto().features(), new ServiceFeatureFolder(((ServiceEditorView) getParentView()).getFeatureListerView())));
+        main.add(inject(proto().features(), new ServiceFeatureFolder(isEditable() ? ((ServiceEditorView) getParentView()).getFeatureListerView() : null)));
 
         main.add(new CrmSectionSeparator(i18n.tr("Concessions:")));
-        main.add(inject(proto().concessions(), new ServiceConcessionFolder(((ServiceEditorView) getParentView()).getConcessionListerView())));
+        main.add(inject(proto().concessions(), new ServiceConcessionFolder(isEditable() ? ((ServiceEditorView) getParentView()).getConcessionListerView()
+                : null)));
 
         return new CrmScrollPanel(main);
     }

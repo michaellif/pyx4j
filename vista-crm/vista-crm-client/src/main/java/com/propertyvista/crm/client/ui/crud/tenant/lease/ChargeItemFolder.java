@@ -33,6 +33,8 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.i18n.shared.I18n;
@@ -60,6 +62,10 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
     private final CEntityEditor<LeaseDTO> parent;
 
     private final LeaseEditorView.Presenter presenter;
+
+    public ChargeItemFolder(CEntityEditor<LeaseDTO> parent) {
+        this(parent, null); // view mode constructor
+    }
 
     public ChargeItemFolder(CEntityEditor<LeaseDTO> parent, LeaseEditorView.Presenter presenter) {
         super(ChargeItem.class);
@@ -102,6 +108,14 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                 addItem(newItem);
             }
         }
+    }
+
+    @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        if (member instanceof ChargeItem) {
+            return new ChargeItemEditor();
+        }
+        return super.create(member);
     }
 
     class ChargeItemEditor extends CEntityEditor<ChargeItem> {

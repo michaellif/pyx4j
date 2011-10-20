@@ -139,8 +139,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     private Widget createTenantsTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
 
-        main.add(inject(proto().tenants(), new TenantInLeaseFolder(this, ((LeaseEditorView) getParentView()).getTenantListerView(),
-                (LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter())));
+        if (isEditable()) {
+            main.add(inject(proto().tenants(), new TenantInLeaseFolder(this, ((LeaseEditorView) getParentView()).getTenantListerView(),
+                    (LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter())));
+        } else {
+            main.add(inject(proto().tenants(), new TenantInLeaseFolder(this)));
+        }
 
         return new CrmScrollPanel(main);
     }
@@ -176,8 +180,14 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.add(serviceItemPanel);
 
         main.add(new CrmSectionSeparator(i18n.tr("Charge Items:")));
-        main.add(inject(proto().serviceAgreement().featureItems(),
-                new ChargeItemFolder(this, (LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter())));
+
+        if (isEditable()) {
+            main.add(inject(proto().serviceAgreement().featureItems(), new ChargeItemFolder(this,
+                    (LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter())));
+        } else {
+            main.add(inject(proto().serviceAgreement().featureItems(), new ChargeItemFolder(this)));
+
+        }
 
         main.add(new CrmSectionSeparator(i18n.tr("Concessions:")));
         main.add(inject(proto().serviceAgreement().concessions(), new ServiceConcessionFolder(this)));
