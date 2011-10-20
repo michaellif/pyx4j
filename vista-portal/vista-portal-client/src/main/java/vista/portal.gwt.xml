@@ -12,6 +12,7 @@
     <set-property-fallback name="locale" value="en_US"/>
     <set-property name="locale" value="en_US,fr,ru"/>
     
+    <set-configuration-property name="locale.cookie" value="locale"/>
 	<set-configuration-property name="pyx.locale.default" value="en_US"/>
 	
     <inherits name='com.google.gwt.user.Debug'/>
