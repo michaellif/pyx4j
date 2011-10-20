@@ -22,6 +22,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -73,6 +75,13 @@ class ServiceFeatureFolder extends VistaTableFolder<ServiceFeature> {
                 }
             }
         };
+    }
+
+    @Override
+    protected IFolderDecorator<ServiceFeature> createDecorator() {
+        TableFolderDecorator<ServiceFeature> decor = (TableFolderDecorator<ServiceFeature>) super.createDecorator();
+        decor.setShowHeader(false);
+        return decor;
     }
 
     class ServiceFeatureEditor extends CEntityFolderRowEditor<ServiceFeature> {

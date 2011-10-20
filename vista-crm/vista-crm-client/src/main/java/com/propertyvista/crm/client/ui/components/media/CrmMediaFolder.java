@@ -84,9 +84,9 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
             split.getLeftPanel().add(inject(proto().type()), 15);
 
             if (CrmMediaFolder.this.isEditable()) {
-                split.getLeftPanel().add(inject(proto().youTubeVideoID()), 25);
-                split.getLeftPanel().add(inject(proto().url()), 25);
-                split.getLeftPanel().add(inject(proto().file(), new FileUploadHyperlink(CrmMediaFolder.this.isEditable(), imageTarget)), 25);
+                split.getLeftPanel().add(inject(proto().youTubeVideoID()), 22);
+                split.getLeftPanel().add(inject(proto().url()), 22);
+                split.getLeftPanel().add(inject(proto().file(), new FileUploadHyperlink(CrmMediaFolder.this.isEditable(), imageTarget)), 22);
             } else {
                 Command showMediaCommand = new Command() {
                     @Override
@@ -94,9 +94,9 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
                         showMedia();
                     }
                 };
-                split.getLeftPanel().add(inject(proto().youTubeVideoID(), new CHyperlink(showMediaCommand)), 25);
-                split.getLeftPanel().add(inject(proto().url(), new CHyperlink(showMediaCommand)), 25);
-                split.getLeftPanel().add(inject(proto().file(), new CEntityHyperlink(showMediaCommand)), 25);
+                split.getLeftPanel().add(inject(proto().youTubeVideoID(), new CHyperlink(showMediaCommand)), 22);
+                split.getLeftPanel().add(inject(proto().url(), new CHyperlink(showMediaCommand)), 22);
+                split.getLeftPanel().add(inject(proto().file(), new CEntityHyperlink(showMediaCommand)), 22);
             }
 
             split.getRightPanel().add(inject(proto().caption()), 15);

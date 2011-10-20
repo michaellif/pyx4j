@@ -20,6 +20,8 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
+import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -179,6 +181,13 @@ public class SubtypeInjectors {
                 columns.add(new EntityFolderColumnDescriptor(proto().name(), "30em"));
                 return columns;
             }
+
+            @Override
+            protected IFolderDecorator<WarrantyItem> createDecorator() {
+                TableFolderDecorator<WarrantyItem> decor = (TableFolderDecorator<WarrantyItem>) super.createDecorator();
+                decor.setShowHeader(false);
+                return decor;
+            }
         }));
     }
 
@@ -196,6 +205,13 @@ public class SubtypeInjectors {
                         columns = new ArrayList<EntityFolderColumnDescriptor>();
                         columns.add(new EntityFolderColumnDescriptor(proto().content(), "60em"));
                         return columns;
+                    }
+
+                    @Override
+                    protected IFolderDecorator<AdvertisingBlurb> createDecorator() {
+                        TableFolderDecorator<AdvertisingBlurb> decor = (TableFolderDecorator<AdvertisingBlurb>) super.createDecorator();
+                        decor.setShowHeader(false);
+                        return decor;
                     }
                 }));
     }
