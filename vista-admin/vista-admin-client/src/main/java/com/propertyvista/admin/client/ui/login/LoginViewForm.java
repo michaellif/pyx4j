@@ -21,12 +21,9 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
-
-import com.propertyvista.common.client.ui.decorations.DecorationData;
-import com.propertyvista.common.client.ui.decorations.DecorationData.ShowMandatory;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 
 public class LoginViewForm extends CEntityEditor<AuthenticationRequest> {
 
@@ -41,16 +38,13 @@ public class LoginViewForm extends CEntityEditor<AuthenticationRequest> {
         HTML header = new HTML(h2(i18n.tr("Login to Vista Administration")));
         header.getElement().getStyle().setMarginBottom(1, Unit.EM);
 
-        DecorationData decor = new DecorationData(90, 160);
-        decor.showMandatory = ShowMandatory.None;
-
         FlowPanel main = new FlowPanel();
         main.add(header);
-        main.add(new VistaWidgetDecorator(inject(proto().email()), decor));
+        main.add(new WidgetDecorator(inject(proto().email()), 9, 16));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(inject(proto().password()), decor));
+        main.add(new WidgetDecorator(inject(proto().password()), 9, 16));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(inject(proto().captcha()), decor));
+        main.add(new WidgetDecorator(inject(proto().captcha()), 9, 16));
         return main;
     }
 }

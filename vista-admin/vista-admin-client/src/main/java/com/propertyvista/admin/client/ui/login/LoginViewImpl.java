@@ -13,7 +13,6 @@
  */
 package com.propertyvista.admin.client.ui.login;
 
-
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -62,7 +61,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
         form.populate(null);
 
         add(form);
-        setWidth("300px");
+        setWidth("400px");
         setStyleName("pyx4j-horizontal-align-center", true);
         getElement().getStyle().setMarginTop(10, Unit.PCT);
 

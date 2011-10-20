@@ -14,11 +14,9 @@
 package com.propertyvista.common.client.ui.decorations;
 
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 import com.pyx4j.forms.client.ui.CComponent;
-
-import com.propertyvista.common.client.ui.decorations.DecorationData.ShowMandatory;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
 public class VistaDecoratorsFlowPanel extends FlowPanel {
 
@@ -28,7 +26,7 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
 
     private double defaultLabelWidth = 12;
 
-    private boolean showMandatory = true;
+    private final boolean showMandatory = true;
 
     public VistaDecoratorsFlowPanel() {
         setStyleName(DEFAULT_STYLE_NAME);
@@ -66,27 +64,16 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
         super.add(createDecorator(component, labelWidth, componentWidth, componentCaption));
     }
 
-    public VistaWidgetDecorator createDecorator(final CComponent<?> component, double componentWidth) {
+    public WidgetDecorator createDecorator(final CComponent<?> component, double componentWidth) {
         return this.createDecorator(component, defaultLabelWidth, componentWidth);
     }
 
-    public VistaWidgetDecorator createDecorator(final CComponent<?> component, double labelWidth, double componentWidth) {
+    public WidgetDecorator createDecorator(final CComponent<?> component, double labelWidth, double componentWidth) {
         return this.createDecorator(component, labelWidth, componentWidth, null);
     }
 
-    public VistaWidgetDecorator createDecorator(final CComponent<?> component, double labelWidth, double componentWidth, String componentCaption) {
-        DecorationData decorData = new DecorationData();
-        decorData.componentWidth = componentWidth;
-        decorData.componentCaption = componentCaption;
-        decorData.labelWidth = labelWidth;
-        decorData.readOnlyMode = readOnlyMode;
-        if (!showMandatory) {
-            decorData.showMandatory = ShowMandatory.None;
-        }
-        if (readOnlyMode) {
-            decorData.labelAlignment = HasHorizontalAlignment.ALIGN_LEFT;
-        }
-        return new VistaWidgetDecorator(component, decorData);
+    public WidgetDecorator createDecorator(final CComponent<?> component, double labelWidth, double componentWidth, String componentCaption) {
+        return new WidgetDecorator(component, labelWidth, componentWidth);
     }
 
     public double getDefaultLabelWidth() {
@@ -95,14 +82,6 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
 
     public void setDefaultLabelWidth(double defaultLabelWidth) {
         this.defaultLabelWidth = defaultLabelWidth;
-    }
-
-    public boolean isShowMandatory() {
-        return showMandatory;
-    }
-
-    public void setShowMandatory(boolean showMandatory) {
-        this.showMandatory = showMandatory;
     }
 
     public boolean isReadOnlyMode() {
