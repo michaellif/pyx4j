@@ -49,7 +49,7 @@ public class WidgetDecorator extends FlowPanel {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-
+        readOnly, noMandatoryStar
     }
 
     private final CComponent<?> component;
@@ -69,6 +69,10 @@ public class WidgetDecorator extends FlowPanel {
     }
 
     public WidgetDecorator(final CComponent<?> component, double labelWidth, double componentWidth) {
+        this(component, labelWidth, componentWidth, true);
+    }
+
+    public WidgetDecorator(final CComponent<?> component, double labelWidth, double componentWidth, boolean useLabelSemicolon) {
 
         setStyleName(StyleName.WidgetDecorator.name());
 
@@ -76,7 +80,7 @@ public class WidgetDecorator extends FlowPanel {
         final Widget nativeComponent = component.asWidget();
         nativeComponent.addStyleName(StyleName.WidgetDecoratorComponent.name());
 
-        label = new Label(component.getTitle() == null ? "" : component.getTitle());
+        label = new Label(component.getTitle() == null ? "" : component.getTitle() + ":");
         label.setStyleName(StyleName.WidgetDecoratorLabel.name());
 
         Cursor.setDefault(label.getElement());
@@ -103,7 +107,7 @@ public class WidgetDecorator extends FlowPanel {
         if (component.getTooltip() != null && component.getTooltip().trim().length() > 0) {
             Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
             infoImage.setTitle(component.getTooltip());
-            infoImageHolder.setWidget(infoImage);
+            infoImageHolder.add(infoImage);
         }
 
         mandatoryImageHolder = new SpaceHolder();
@@ -161,7 +165,7 @@ public class WidgetDecorator extends FlowPanel {
                     mandatoryImage.setResource(ImageFactory.getImages().mandatory());
                     mandatoryImage.setTitle("This field is mandatory");
                 }
-                mandatoryImageHolder.setWidget(mandatoryImage);
+                mandatoryImageHolder.add(mandatoryImage);
             } else {
                 mandatoryImageHolder.clear();
             }

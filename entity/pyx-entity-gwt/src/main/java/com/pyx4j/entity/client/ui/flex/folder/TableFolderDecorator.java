@@ -23,7 +23,6 @@ package com.pyx4j.entity.client.ui.flex.folder;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.ui.HTML;
@@ -63,15 +62,13 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
         asWidget().setStyleName(StyleName.EntityFolderTableDecorator.name());
 
         header = new HorizontalPanel();
-        header.getElement().getStyle().setMarginBottom(3, Unit.PX);
+        header.setStyleName(StyleName.EntityFolderTableHeader.name());
         setHeaderVisible(false);
 
         for (EntityFolderColumnDescriptor column : columns) {
-            HorizontalPanel cellPanel = new HorizontalPanel();
-            cellPanel.getElement().getStyle().setFloat(Float.LEFT);
-            cellPanel.setWidth(column.getWidth());
-            cellPanel.getElement().getStyle().setMarginLeft(3, Unit.PX);
-            cellPanel.getElement().getStyle().setMarginRight(3, Unit.PX);
+            HorizontalPanel headerLabelPanel = new HorizontalPanel();
+            headerLabelPanel.setWidth(column.getWidth());
+            headerLabelPanel.setStyleName(StyleName.EntityFolderTableHeaderLabel.name());
 
             String caption = column.getObject().getMeta().getCaption();
             if (caption == "") {
@@ -79,21 +76,21 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
             }
             HTML label = new HTML(caption);
             label.getElement().getStyle().setMarginLeft(3, Unit.PX);
-            cellPanel.add(label);
-            cellPanel.setCellVerticalAlignment(label, HorizontalPanel.ALIGN_BOTTOM);
+            headerLabelPanel.add(label);
+            headerLabelPanel.setCellVerticalAlignment(label, HorizontalPanel.ALIGN_BOTTOM);
 
             String descr = column.getObject().getMeta().getDescription();
             if ((descr != null) && !descr.trim().equals("")) {
                 Image info = new Image(ImageFactory.getImages().formTooltipInfo());
 
                 info.getElement().getStyle().setPaddingRight(2, Unit.PX);
-                cellPanel.add(info);
-                cellPanel.setCellVerticalAlignment(info, HorizontalPanel.ALIGN_BOTTOM);
+                headerLabelPanel.add(info);
+                headerLabelPanel.setCellVerticalAlignment(info, HorizontalPanel.ALIGN_BOTTOM);
                 Tooltip.tooltip(info, column.getObject().getMeta().getDescription());
             }
 
-            header.add(cellPanel);
-            header.setCellVerticalAlignment(cellPanel, HorizontalPanel.ALIGN_BOTTOM);
+            header.add(headerLabelPanel);
+            header.setCellVerticalAlignment(headerLabelPanel, HorizontalPanel.ALIGN_BOTTOM);
         }
 
         add(header);

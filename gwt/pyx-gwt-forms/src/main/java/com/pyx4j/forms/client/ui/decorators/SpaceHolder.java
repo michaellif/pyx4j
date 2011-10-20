@@ -20,45 +20,13 @@
  */
 package com.pyx4j.forms.client.ui.decorators;
 
-import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
-public class SpaceHolder extends SimplePanel {
-
-    private String width;
-
-    private HTML spaceHolder;
-
-    public SpaceHolder(double value, Unit unit) {
-        this.width = value + unit.getType();
-        clear();
-    }
-
-    public SpaceHolder(String width) {
-        this.width = width;
-        clear();
-    }
+public class SpaceHolder extends FlowPanel {
 
     public SpaceHolder() {
+        add(new HTML("&nbsp;"));
     }
 
-    @Override
-    public void setWidget(Widget w) {
-        super.setWidget(w);
-        if (width != null) {
-            w.setWidth(width);
-        }
-    }
-
-    @Override
-    public void clear() {
-        super.clear();
-        if (spaceHolder == null) {
-            spaceHolder = new HTML("&nbsp;");
-
-        }
-        setWidget(spaceHolder);
-    }
 }

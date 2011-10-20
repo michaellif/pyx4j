@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui.decorators;
 
+import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleDependent.noMandatoryStar;
+import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleDependent.readOnly;
 import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.WidgetDecorator;
 import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.WidgetDecoratorComponent;
 import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.WidgetDecoratorComponentHolder;
@@ -30,7 +32,6 @@ import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.Wid
 import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.WidgetDecoratorMandatoryImage;
 import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.WidgetDecoratorValidationLabel;
 
-import com.pyx4j.widgets.client.style.IStyleName;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.Theme;
 
@@ -41,49 +42,59 @@ public class DefaultWidgetDecoratorTheme extends Theme {
     }
 
     protected void initStyles() {
-        Style style = new Style((IStyleName) WidgetDecorator);
+        Style style = new Style(".", WidgetDecorator);
         style.addProperty("width", "100%");
         style.addProperty("display", "inline-block");
         addStyle(style);
 
-        style = new Style((IStyleName) WidgetDecoratorLabelHolder);
+        style = new Style(".", WidgetDecoratorLabelHolder);
         style.addProperty("text-align", "right");
         style.addProperty("float", "left");
         style.addProperty("display", "inline-block");
         style.addProperty("padding-right", "10px");
         addStyle(style);
 
-        style = new Style((IStyleName) WidgetDecoratorLabel);
+        style = new Style(".", WidgetDecoratorLabel);
         style.addProperty("display", "inline");
+        style.addProperty("color", "#333333");
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(".", WidgetDecorator, "-", readOnly, " .", WidgetDecoratorLabel);
         style.addProperty("color", "#888888");
         addStyle(style);
 
-        style = new Style((IStyleName) WidgetDecoratorInfoImage);
+        style = new Style(".", WidgetDecoratorInfoImage);
         style.addProperty("float", "left");
         addStyle(style);
 
-        style = new Style((IStyleName) WidgetDecoratorMandatoryImage);
+        style = new Style(".", WidgetDecoratorMandatoryImage);
         style.addProperty("float", "right");
         style.addProperty("display", "inline");
         style.addProperty("width", "5px");
+        style.addProperty("padding-left", "3px");
         addStyle(style);
 
-        style = new Style((IStyleName) WidgetDecoratorValidationLabel);
+        style = new Style(".", WidgetDecorator, "-", noMandatoryStar, " .", WidgetDecoratorMandatoryImage, " ", "img");
+        style.addProperty("display", "none");
+        addStyle(style);
+
+        style = new Style(".", WidgetDecoratorValidationLabel);
         style.addProperty("clear", "both");
         style.addProperty("color", "red");
         addStyle(style);
 
-        style = new Style((IStyleName) WidgetDecoratorContentPanel);
+        style = new Style(".", WidgetDecoratorContentPanel);
         style.addProperty("float", "left");
         addStyle(style);
 
-        style = new Style((IStyleName) WidgetDecoratorComponentHolder);
+        style = new Style(".", WidgetDecoratorComponentHolder);
         style.addProperty("float", "left");
         style.addProperty("padding-right", "10px");
         style.addProperty("display", "inline-block");
         addStyle(style);
 
-        style = new Style((IStyleName) WidgetDecoratorComponent);
+        style = new Style(".", WidgetDecoratorComponent);
         style.addProperty("float", "left");
         addStyle(style);
 

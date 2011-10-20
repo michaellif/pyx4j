@@ -66,11 +66,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         EntityFolderBoxItem, EntityFolderBoxDecorator, EntityFolderBoxItemDecorator,
 
         //Table
-        EntityFolderRowItem, EntityFolderTableDecorator, EntityFolderRowItemDecorator
+        EntityFolderRowItem, EntityFolderTableDecorator, EntityFolderRowItemDecorator, EntityFolderTableHeader, EntityFolderTableHeaderLabel
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        hover
+        hover, readOnly
     }
 
     private final FlowPanel container;

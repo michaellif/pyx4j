@@ -21,6 +21,7 @@
 package com.pyx4j.entity.client.ui.flex.folder;
 
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleDependent.hover;
+import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleDependent.readOnly;
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolder;
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderActionsBar;
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderAddButton;
@@ -31,8 +32,9 @@ import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.Ent
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderBoxItemDecorator;
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderRowItemDecorator;
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderTableDecorator;
+import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderTableHeader;
+import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderTableHeaderLabel;
 
-import com.pyx4j.widgets.client.style.IStyleName;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.Theme;
 
@@ -43,7 +45,7 @@ public class DefaultEntityFolderTheme extends Theme {
     }
 
     protected void initStyles() {
-        Style style = new Style((IStyleName) EntityFolder);
+        Style style = new Style(".", EntityFolder);
         style.addProperty("width", "100%");
         addStyle(style);
 
@@ -102,6 +104,22 @@ public class DefaultEntityFolderTheme extends Theme {
         style = new Style(".", EntityFolderAddButtonLabel);
         style.addProperty("padding-left", "3px");
         style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(".", EntityFolderTableHeader);
+        style.addProperty("border-bottom", "1px dotted #333");
+        addStyle(style);
+
+        style = new Style(".", EntityFolderTableHeaderLabel);
+        style.addProperty("color", "#333333");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("margin-left", "3px");
+        style.addProperty("margin-right", "3px");
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(".", EntityFolder, "-", readOnly, " .", EntityFolderTableHeaderLabel);
+        style.addProperty("color", "#888888");
         addStyle(style);
 
     }
