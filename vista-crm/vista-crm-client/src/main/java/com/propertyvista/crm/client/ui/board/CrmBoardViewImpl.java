@@ -43,6 +43,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.i18n.annotations.Translate;
@@ -348,23 +349,19 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             }
 
             if (useDates.getValue()) {
-                DateTimeFormat format = DateTimeFormat.getFormat(PredefinedFormat.DATE_SHORT);
-
+                description += " ";
                 DateIntervals interval = DateIntervals.valueOf(dateIntervals.getValue(dateIntervals.getSelectedIndex()));
                 switch (interval) {
                 case today:
                 case custom:
-                    String from = format.format(fromDate.getValue());
-                    String to = format.format(toDate.getValue());
-                    if (from.compareTo(to) == 0) {
-                        description += i18n.tr(" of ") + from;
+                    if (EqualsHelper.equals(fromDate.getValue(), toDate.getValue())) {
+                        description += i18n.tr("of {0:date:short}", fromDate.getValue());
                     } else {
-                        description += i18n.tr(" from ") + from;
-                        description += i18n.tr(" to ") + to;
+                        description += i18n.tr("from {0:date:short} to {1:date:short}", fromDate.getValue(), toDate.getValue());
                     }
                     break;
                 default:
-                    description += i18n.tr(" of ") + interval.toString();
+                    description += i18n.tr("of {0}", interval);
                 }
             }
 
