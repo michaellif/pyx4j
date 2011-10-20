@@ -30,8 +30,8 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -83,7 +83,7 @@ import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnaly
 public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport> implements IBuildingGadget {
     public static final String TURNOVER_ANALYSIS_CAPTION = "Turnover Analysis";
 
-    public static final String RESOLUTION_SELECTOR_LABEL = "Resolution";
+    public static final String RESOLUTION_SELECTOR_LABEL = "Scale";
 
     public static final String SUMMARY_CAPTION = "Summary";
 
@@ -99,7 +99,21 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
     private static final boolean DEFAULT_ANALYSIS_SHOW_PERCENT = false;
 
-    public static final AnalysisResolution DEFAULT_ANALYSIS_RESOLUTION = AnalysisResolution.Year;
+    private static final AnalysisResolution DEFAULT_ANALYSIS_RESOLUTION_MAX = AnalysisResolution.Year;
+
+    private static final long DEFAULT_ANALYSIS_RESOLUTION_PER_RANGE_KEYS[] = new long[] {
+            // must be in ascending order
+            7L * 24L * 60L * 60L * 1000L, // WEEK
+            2L * 30L * 24L * 60L * 60L * 1000L, // 2 MONTH
+            365L * 24L * 60L * 60L * 1000L // YEAR                 
+    };
+
+    private static final AnalysisResolution DEFAULT_ANALYSIS_RESOLUTION_PER_RANGE_VALUES[] = new AnalysisResolution[] {
+            // must be the same length as KEYS array
+            AnalysisResolution.Day, // WEEK -> DAY
+            AnalysisResolution.Week, // MONTH -> WEEK
+            AnalysisResolution.Month // YEAR -> MONTH
+    };
 
     private final VerticalPanel gadgetPanel;
 
@@ -134,7 +148,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         activity = new UnitVacancyReportGadgetActivity(this, (UnitVacancyReportService) service);
 
         toDate = new LogicalDate(TimeUtils.dayEnd(TimeUtils.today()));
-        fromDate = new LogicalDate(toDate.getTime() - UnitVacancyReportService.MAX_DATE_RANGE);
+        fromDate = new LogicalDate(toDate.getTime() - UnitVacancyReportService.MAX_SUPPORTED_INTERVALS);
     }
 
     @Override
@@ -156,7 +170,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         settings.showTurnoverAnalysis().setValue(DEFAULT_ANALYSIS_VISIBILITY);
 
         settings.isTurnoverMeasuredByPercent().setValue(DEFAULT_ANALYSIS_SHOW_PERCENT);
-        settings.turnoverAnalysisResolution().setValue(DEFAULT_ANALYSIS_RESOLUTION);
+        settings.turnoverAnalysisResolution().setValue(DEFAULT_ANALYSIS_RESOLUTION_MAX);
         return settings;
     }
 
@@ -191,7 +205,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
     public void start() {
         getListerBase().asWidget().setVisible(getSettings().showUnits().getValue());
         summaryView.asWidget().setVisible(getSettings().showSummary().getValue());
-        turnoverAnalysisView.asWidget().setVisible(getSettings().showTurnoverAnalysis().getValue());
+        getAnalysisView().asWidget().setVisible(getSettings().showTurnoverAnalysis().getValue());
         super.start();
         populate();
     }
@@ -265,8 +279,8 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
     @Override
     public void setFiltering(FilterData filter) {
         fromDate = new LogicalDate(filter.fromDate.getTime());
-        // we are making non inclusive range [,), but we think it's more intuitive to make it inclusive
-        // hence we fix the to date to point to the beggining of the next day
+        // we get non inclusive range [,) from the UI, but we think it's more intuitive to make it inclusive
+        // hence we fix the 'to date' so points to end of the next day
         toDate = new LogicalDate(TimeUtils.dayEnd(filter.toDate));
         setBuildings(filter.buildings);
         stop();
@@ -288,19 +302,11 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
     }
 
     private static String toMonth(Date date) {
-        // Since it seems that GWT doesn't include this awsome calendar classes
-        // we are going to have to improvise (I hope I remember all the months names)
-        // GregorianCalendar c = new GregorianCalendar();
-        // return i18n.tr(c.getDisplayName(Calendar.MONTH, c.get(Calendar.MONTH), Locale.CANADA));
-
         // TODO use GWT GregorianCalendar if and when possible
-
-        // TODO use lazy initalization to create the translated list of the months only once
-
-        // TODO the someone to add MONTH_NAMES_LONG to the Time Utils
+        // FIXME someone has to add MONTH_NAMES_LONG to the Time Utils
+        @SuppressWarnings("deprecation")
         String monthRepr = i18n.tr(TimeUtils.MONTH_NAMES_SHORT[date.getDay()]);
-
-        return monthRepr.substring(0, Math.min(3, monthRepr.length()));
+        return monthRepr;
     }
 
     public class UnitVacancyReportGadgetActivity extends ListerActivityBase<UnitVacancyReport> {
@@ -391,11 +397,12 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
                 @Override
                 public void onSuccess(Vector<UnitVacancyReportTurnoverAnalysisDTO> result) {
-                    gadget.getAnalysisView().setData(result);
+                    gadget.getAnalysisView().setData(result, gadget.getFromDate(), gadget.getToDate());
 
                 }
-            }, gadget.getFromDate(), gadget.getToDate(), gadget.getAnalysisView().getResolution());
+            }, gadget.getFromDate(), gadget.getToDate(), gadget.getSettings().turnoverAnalysisResolution().getValue());
         }
+
     }
 
     public static class AnalysisView implements IsWidget {
@@ -403,7 +410,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
         private final SimplePanel graph;
 
-        private final FlexTable controls;
+        private final HorizontalPanel controls;
 
         private final VerticalPanel layoutPanel;
 
@@ -419,43 +426,44 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
         private final UnitVacancyReportGadgetSettings settings;
 
+        private Date fromDate = null;
+
+        private Date toDate = null;
+
+        private AnalysisResolution currentDefaultResolution;
+
         public AnalysisView(UnitVacancyReportGadgetSettings settings) {
             this.settings = settings;
             validateSettings();
             layoutPanel = new VerticalPanel();
-            layoutPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+            layoutPanel.setHorizontalAlignment(VerticalPanel.ALIGN_LEFT);
             layoutPanel.setWidth("100%");
 
             graph = new SimplePanel();
 
-            controls = new FlexTable();
+            controls = new HorizontalPanel();
+            controls.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
+            controls.getElement().getStyle().setPaddingLeft(2, Unit.EM);
+            controls.setSpacing(10);
 
             resolutionSelector = new ListBox(false);
-
-            AnalysisResolution[] analysisValues = AnalysisResolution.values();
-            int selectedResolutionIndex = 0;
-            for (int i = 0; i < analysisValues.length; ++i) {
-                AnalysisResolution resolution = analysisValues[i];
-                resolutionSelector.addItem(resolution.toString(), resolution.toString());
-                if (resolution.equals(settings.turnoverAnalysisResolution().getValue())) {
-                    selectedResolutionIndex = i;
-                }
-            }
-            resolutionSelector.setItemSelected(selectedResolutionIndex, true);
             resolutionSelector.addChangeHandler(new ChangeHandler() {
 
                 @Override
                 public void onChange(ChangeEvent event) {
+
+                    AnalysisResolution r = AnalysisResolution.representationToValue(resolutionSelector.getValue(resolutionSelector.getSelectedIndex()));
+                    AnalysisView.this.settings.turnoverAnalysisResolution().setValue(r);
+                    // FIXME: move the following line to presenter (register handler during bind) and validate that the events happen in the correct order
+                    // so that presenter does populate with the updated settings 
                     if (presenter != null) {
-                        AnalysisResolution r = AnalysisResolution.representationToValue(resolutionSelector.getValue(resolutionSelector.getSelectedIndex()));
-                        AnalysisView.this.settings.turnoverAnalysisResolution().setValue(r);
                         presenter.populateTurnoverAnalysis();
                     }
                 }
 
             });
-            controls.setWidget(0, 0, new Label(i18n.tr(RESOLUTION_SELECTOR_LABEL)));
-            controls.setWidget(0, 1, resolutionSelector);
+            controls.add(new Label(i18n.tr(RESOLUTION_SELECTOR_LABEL)));
+            controls.add(resolutionSelector);
 
             ValueChangeHandler<Boolean> measureChangeHandler = new ValueChangeHandler<Boolean>() {
                 @Override
@@ -472,25 +480,24 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
             number.setValue(!getShowPercents(), false);
 
             measureSelection = new FlowPanel();
+            measureSelection.getElement().getStyle().setPaddingLeft(2, Unit.EM);
+            measureSelection.getElement().getStyle().setPaddingRight(2, Unit.EM);
             measureSelection.add(percent);
             measureSelection.add(number);
+            controls.add(measureSelection);
 
             Label caption = new Label(i18n.tr(TURNOVER_ANALYSIS_CAPTION));
-            caption.setWidth("100%");
+            HorizontalPanel captionPanel = new HorizontalPanel();
+            caption.setHorizontalAlignment(Label.ALIGN_CENTER);
+            captionPanel.add(caption);
+            captionPanel.setWidth("100%");
+            captionPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 
-            layoutPanel.add(caption);
+            layoutPanel.add(captionPanel);
             layoutPanel.add(graph);
             layoutPanel.add(controls);
-            layoutPanel.add(measureSelection);
-        }
 
-        public void validateSettings() {
-            if (settings.isTurnoverMeasuredByPercent().isNull()) {
-                settings.isTurnoverMeasuredByPercent().setValue(DEFAULT_ANALYSIS_SHOW_PERCENT);
-            }
-            if (settings.turnoverAnalysisResolution().isNull()) {
-                settings.turnoverAnalysisResolution().setValue(DEFAULT_ANALYSIS_RESOLUTION);
-            }
+            currentDefaultResolution = getDefaultResolutionForCurrentDateRange();
         }
 
         @Override
@@ -510,16 +517,37 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
             this.presenter = presenter;
         }
 
-        public void setData(List<UnitVacancyReportTurnoverAnalysisDTO> data) {
+        public void setData(List<UnitVacancyReportTurnoverAnalysisDTO> data, Date fromDate, Date toDate) {
             this.data = data;
+            this.fromDate = fromDate;
+            this.toDate = toDate;
+
+            AnalysisResolution suggestedResolution = getDefaultResolutionForCurrentDateRange();
+            if (suggestedResolution != currentDefaultResolution) {
+                currentDefaultResolution = suggestedResolution;
+                settings.turnoverAnalysisResolution().setValue(currentDefaultResolution);
+            }
             redraw();
         }
 
+        private void validateSettings() {
+            if (settings.isTurnoverMeasuredByPercent().isNull()) {
+                settings.isTurnoverMeasuredByPercent().setValue(DEFAULT_ANALYSIS_SHOW_PERCENT);
+            }
+            if (settings.turnoverAnalysisResolution().isNull()) {
+                settings.turnoverAnalysisResolution().setValue(getDefaultResolutionForCurrentDateRange());
+            }
+        }
+
         private void redraw() {
-            if (data == null || data.size() == 0) {
+            if (data == null || data.size() == 0 | fromDate == null | toDate == null) {
+                // TODO maybe show something like "no data provided"?)
                 graph.clear();
                 return;
             }
+
+            refillResolutionSelector();
+
             DataSource ds = new DataSource();
 
             for (UnitVacancyReportTurnoverAnalysisDTO intervalData : data) {
@@ -529,15 +557,27 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
                 } else {
                     values.add(intervalData.unitsTurnedOverPct().getValue());
                 }
-                if (getResolution() == AnalysisResolution.Month) {
+                String label = "unknown resolution";
+                // TODO implement this conversion as an abstract method in the AnalysisResolution enum
+                switch (settings.turnoverAnalysisResolution().getValue()) {
+                case Day:
+                    label = TimeUtils.simpleFormat(intervalData.toDate().getValue(), "MMM-dd");
+                    break;
+                case Week:
+                    label = TimeUtils.simpleFormat(intervalData.fromDate().getValue(), "MM-dd") + " to "
+                            + TimeUtils.simpleFormat(intervalData.toDate().getValue(), "MM-dd");
+                    break;
+                case Month:
                     // FIXME normal month format
                     // TODO localized month format?
                     // TODO month converter should be an external utility
-                    String label = toMonth(intervalData.fromDate().getValue()) + "-" + Integer.toString(1900 + intervalData.fromDate().getValue().getYear());
-                    ds.addDataSet(ds.new Metric(label), values);
-                } else if (getResolution() == AnalysisResolution.Year) {
-                    ds.addDataSet(ds.new Metric(Integer.toString(1900 + intervalData.toDate().getValue().getYear())), values);
+                    label = toMonth(intervalData.fromDate().getValue()) + "-" + Integer.toString(1900 + intervalData.fromDate().getValue().getYear());
+                    break;
+                case Year:
+                    label = Integer.toString(1900 + intervalData.toDate().getValue().getYear());
+                    break;
                 }
+                ds.addDataSet(ds.new Metric(label), values);
             }
 
             SvgFactory factory = new SvgFactoryForGwt();
@@ -555,6 +595,54 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
             graph.add((Widget) svgroot);
             graph.setSize("700px", "200px");
             graph.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+        }
+
+        private void refillResolutionSelector() {
+            resolutionSelector.clear();
+            AnalysisResolution[] analysisValues = AnalysisResolution.values();
+            int selectedResolutionIndex = -1;
+            int addedCounter = 0;
+            for (int i = 0; i < analysisValues.length; ++i) {
+                AnalysisResolution resolution = analysisValues[i];
+                if (isResolutionAcceptable(resolution)) {
+                    resolutionSelector.addItem(resolution.toString(), resolution.toString());
+                    if (resolution.equals(settings.turnoverAnalysisResolution().getValue())) {
+                        selectedResolutionIndex = addedCounter;
+                    }
+                    ++addedCounter;
+                }
+            }
+            if (selectedResolutionIndex >= 0) {
+                resolutionSelector.setItemSelected(selectedResolutionIndex, true);
+            }
+        }
+
+        private boolean isResolutionAcceptable(AnalysisResolution resolution) {
+            if (fromDate == null | toDate == null) {
+                return false;
+            }
+            long fromTime = fromDate.getTime();
+            long toTime = toDate.getTime();
+            long interval = resolution.addTo(fromTime) - fromTime;
+
+            return ((toTime - fromTime) / interval) < UnitVacancyReportService.MAX_SUPPORTED_INTERVALS;
+        }
+
+        private AnalysisResolution getDefaultResolutionForCurrentDateRange() {
+
+            if (fromDate == null | toDate == null) {
+                return DEFAULT_ANALYSIS_RESOLUTION_MAX;
+            }
+
+            // if only this was lisp/python/any other normal programming language, life would be so much easier
+            long range = toDate.getTime() - fromDate.getTime();
+            for (int i = 0; i < DEFAULT_ANALYSIS_RESOLUTION_PER_RANGE_KEYS.length; ++i) {
+                if (range < DEFAULT_ANALYSIS_RESOLUTION_PER_RANGE_KEYS[i]) {
+                    return DEFAULT_ANALYSIS_RESOLUTION_PER_RANGE_VALUES[i];
+                }
+            }
+
+            return DEFAULT_ANALYSIS_RESOLUTION_MAX;
         }
     }
 
@@ -621,13 +709,13 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
             parentSetup = UnitVacancyReportGadget.super.getSetup();
             combinedSetup.add(parentSetup.asWidget(), i18n.tr("General Settings"));
 
-            showUnits = new CheckBox(i18n.tr("units"));
+            showUnits = new CheckBox(i18n.tr("Units"));
             showUnits.setValue(UnitVacancyReportGadget.this.getSettings().showUnits().getValue());
 
-            showSummary = new CheckBox(i18n.tr("summary"));
+            showSummary = new CheckBox(i18n.tr("Summary"));
             showSummary.setValue(UnitVacancyReportGadget.this.getSettings().showSummary().getValue());
 
-            showTurnoverAnalysis = new CheckBox(i18n.tr("turnover analysis"));
+            showTurnoverAnalysis = new CheckBox(i18n.tr("Turnover analysis"));
             showTurnoverAnalysis.setValue(UnitVacancyReportGadget.this.getSettings().showTurnoverAnalysis().getValue());
 
             mySetup = new VerticalPanel();
@@ -639,7 +727,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
             mySetup.getElement().getStyle().setPaddingLeft(2, Unit.EM);
             mySetup.getElement().getStyle().setPaddingTop(1, Unit.EM);
 
-            combinedSetup.add(mySetup, i18n.tr("Show/Hide"));
+            combinedSetup.add(mySetup, i18n.tr("Show"));
             combinedSetup.setWidth("100%");
             combinedSetup.setHeight("10em");
         }

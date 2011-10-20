@@ -175,18 +175,19 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
     @Override
     public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, LogicalDate fromDate, LogicalDate toDate,
             AnalysisResolution resolution) {
-
         if (callback == null | fromDate == null || toDate == null | resolution == null) {
             callback.onFailure(new Exception("at least one of the required parameters is null."));
             return;
         }
-        if (toDate.getTime() < fromDate.getTime()) {
+        final long fromTime = fromDate.getTime();
+        final long toTime = toDate.getTime();
+
+        if (fromTime > toTime) {
             callback.onFailure(new Exception("end date is greater than from date."));
             return;
         }
 
-        // DOS attack protection
-        if ((toDate.getTime() - fromDate.getTime()) > MAX_DATE_RANGE) {
+        if ((toTime - fromTime) / (intervalEnd(fromTime, resolution) - fromTime) > MAX_SUPPORTED_INTERVALS) {
             callback.onFailure(new Exception("the date range that was specified is too big"));
             return;
         }
@@ -273,20 +274,35 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         callback.onSuccess(result);
     }
 
-    private static long intervalEnd(long startTime, AnalysisResolution resolution) {
-        // TODO think if there could be issues with locale and time zone
-        Calendar c = Calendar.getInstance();
-        int param;
-        c.setTimeInMillis(startTime);
-        if (resolution == AnalysisResolution.Month) {
-            param = Calendar.MONTH;
-        } else if (resolution == AnalysisResolution.Year) {
-            param = Calendar.YEAR;
-        } else {
-            throw new RuntimeException("the requested resolution handling has not yet been defined (" + resolution.toString() + ")");
+    private static long intervalEnd(final long startTime, final AnalysisResolution resolution) {
+        long endTime;
+
+        switch (resolution) {
+        case Day:
+            endTime = startTime + 1000L * 60L * 60L * 24L;
+            break;
+        case Week:
+            endTime = startTime + 1000L * 60L * 60L * 24L * 7L;
+            break;
+        case Month: {
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(startTime);
+            c.add(Calendar.MONTH, 1);
+            endTime = c.getTimeInMillis();
+            break;
         }
-        c.add(param, 1);
-        return c.getTimeInMillis();
+        case Year: {
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(startTime);
+            c.add(Calendar.MONTH, 1);
+            endTime = c.getTimeInMillis();
+            break;
+        }
+        default:
+            throw new RuntimeException("no handler for the requested resolution(" + resolution.toString() + ")");
+        }
+
+        return endTime;
     }
 
     /**
@@ -297,7 +313,6 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
      * @param toDate
      */
     private static void computeState(UnitVacancyReport unit, LogicalDate fromDate, LogicalDate toDate) {
-        // I miss SQL :`(
         // TODO: this procedure is real waste of CPU cycles!!! think about better implementation!
         // consider the following:
         //      - maybe its worth to limit a query (i.e. we need at most 10 events (maybe even less)
@@ -453,63 +468,6 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         }
     }
 
-//    private static Set<String> getTransientPropertiesOfUnitVacancyReportClass() {
-//        Set<String> transientProperties = TRANSIENT_PROPERTIES;
-//
-//        if (transientProperties == null) {
-//            synchronized (TRANSIENT_PROPERTIES_MUTEX) {
-//                transientProperties = TRANSIENT_PROPERTIES;
-//                if (transientProperties == null) {
-//                    HashSet<String> temp = new HashSet<String>();
-//
-//                    for (Method method : UnitVacancyReport.class.getMethods()) {
-//                        if (method.getAnnotation(Transient.class) != null) {
-//                            temp.add(UnitVacancyReport.class.getName() + "/" + method.getName() + "/");
-//                        }
-//                    }
-//                    transientProperties = TRANSIENT_PROPERTIES = Collections.unmodifiableSet(temp);
-//                }
-//            } // end of synchronized block
-//        }
-//
-//        return transientProperties;
-//    }
-
-    // Candidate for efficient boxed counter (i.e. for storing in HashMap)    
-//  private static final class Counter {
-//      private int initialValue;
-//
-//      public Counter(int initialValue) {
-//          this.initialValue = initialValue;
-//      }
-//
-//      public Counter() {
-//          this(0);
-//      }
-//
-//      public void inc() {
-//          ++initialValue;
-//      }
-//
-//      public void dec() {
-//          --initialValue;
-//      }
-//
-//      public void assign(int newValue) {
-//          initialValue = 0;
-//      }
-//
-//      public int getValue() {
-//          return initialValue;
-//      }
-//
-//      @Override
-//      public String toString() {
-//          return Integer.toString(initialValue);
-//      }
-//
-//  }
-
     private static TransientPropertySortEngine<UnitVacancyReport> getTransientPropertySortEngine() {
         TransientPropertySortEngine<UnitVacancyReport> sortEngine = TRANSIENT_PROPERTY_SORT_ENGINE;
         if (sortEngine == null) {
@@ -545,9 +503,9 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
                         try {
                             propertyComparator = customComparatorAnnotation.clazz().newInstance();
                         } catch (InstantiationException e) {
-                            // TODO do something (log maybe)
+                            // TODO do something (log maybe) (ask Vlad if how to access the logger)
                         } catch (IllegalAccessException e) {
-                            // TODO do something (log maybe)
+                            // TODO do something (log maybe) (ask Vlad if how to access the logger)
                         }
                     }
                     temp.put(propertyName, propertyComparator);
@@ -599,6 +557,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
 
             final List<Sort> sortCriteria;
 
+            @SuppressWarnings("rawtypes")
             public CombinedComparator(List<Sort> relevantSortCriteria) {
                 comps = new LinkedList<Comparator>();
                 sortCriteria = relevantSortCriteria;
@@ -625,6 +584,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
                 }
             }
 
+            @SuppressWarnings("unchecked")
             @Override
             public int compare(X paramT1, X paramT2) {
                 @SuppressWarnings("rawtypes")
@@ -632,6 +592,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
                 Iterator<Sort> si = sortCriteria.iterator();
                 while (ci.hasNext() & si.hasNext()) {
                     Sort sortCriterion = si.next();
+                    @SuppressWarnings("rawtypes")
                     Comparator cmp = ci.next();
                     Object val1 = paramT1.getMember(new Path(sortCriterion.getPropertyName())).getValue();
                     Object val2 = paramT2.getMember(new Path(sortCriterion.getPropertyName())).getValue();

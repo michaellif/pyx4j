@@ -27,8 +27,9 @@ import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnaly
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 
 public interface UnitVacancyReportService extends AbstractListService<UnitVacancyReport> {
-    // TODO maybe the service should provide RPC that returns the max range?
-    public static final long MAX_DATE_RANGE = 10L * 365L * 24L * 60L * 60L * 1000L; // get roughly 10 years of maximum range
+
+    /** This is used for DOS protection: {@link #turnoverAnalysis()} will refuse the request if it is to create too many intervals. */
+    public static final long MAX_SUPPORTED_INTERVALS = 20L;
 
     public void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, EntityQueryCriteria<UnitVacancyReport> criteria, LogicalDate fromDate,
             LogicalDate toDate);

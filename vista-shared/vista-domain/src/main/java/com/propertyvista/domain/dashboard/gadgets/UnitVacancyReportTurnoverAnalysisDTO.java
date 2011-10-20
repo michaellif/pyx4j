@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.dashboard.gadgets;
 
+import java.sql.Date;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
@@ -29,7 +31,67 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @Transient
 public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
     public enum AnalysisResolution {
-        Month, Year;
+        Day {
+            @Override
+            public long addTo(long time) {
+                return time + 1000L * 60L * 60L * 24L;
+            }
+
+            @Override
+            public Date addTo(Date date) {
+                return new Date(addTo(date.getTime()));
+            }
+        },
+        Week {
+            @Override
+            public long addTo(long time) {
+                return time + 1000L * 60L * 60L * 24L * 7L;
+            }
+
+            @Override
+            public Date addTo(Date date) {
+                return new Date(addTo(date.getTime()));
+            }
+        },
+        Month {
+
+            @Override
+            public long addTo(long time) {
+                return addToTimeAndReturnDate(time).getTime();
+            }
+
+            @Override
+            public Date addTo(Date date) {
+                return addToTimeAndReturnDate(date.getTime());
+            }
+
+            @SuppressWarnings("deprecation")
+            private Date addToTimeAndReturnDate(long time) {
+                Date updatedDate = new Date(time);
+                int updatedMonth = updatedDate.getMonth() + 1;
+                updatedDate.setMonth(updatedMonth % 12);
+                updatedDate.setYear(updatedDate.getYear() + updatedMonth / 12);
+                return updatedDate;
+            }
+        },
+        Year {
+            @Override
+            public long addTo(long time) {
+                return addToTimeAndReturnDate(time).getTime();
+            }
+
+            @Override
+            public Date addTo(Date date) {
+                return addToTimeAndReturnDate(date.getTime());
+            }
+
+            @SuppressWarnings("deprecation")
+            private Date addToTimeAndReturnDate(long time) {
+                Date date = new Date(time);
+                date.setYear(date.getYear() + 1);
+                return date;
+            }
+        };
 
         @Override
         public String toString() {
@@ -46,6 +108,17 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
             return null;
         }
 
+        /**
+         * Adds this interval to given time.
+         * 
+         * @param time
+         *            time that is to be increased by this interval
+         * @return
+         */
+        public abstract long addTo(long time);
+
+        public abstract Date addTo(Date date);
+        // TODO maybe add substractFrom
     }
 
     @Format("MM/dd/yyyy")
