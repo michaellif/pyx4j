@@ -24,7 +24,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.resources.VistaImages;
 
 public abstract class VistaBoxFolder<E extends IEntity> extends CEntityFolder<E> {
-    protected static I18n i18n = I18n.get(VistaBoxFolder.class);
+
+    private static I18n i18n = I18n.get(VistaBoxFolder.class);
 
     private final Class<E> clazz;
 

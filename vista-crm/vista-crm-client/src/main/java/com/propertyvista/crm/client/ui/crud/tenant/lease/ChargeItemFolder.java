@@ -55,6 +55,8 @@ import com.propertyvista.dto.LeaseDTO;
 
 class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
 
+    private static I18n i18n = I18n.get(ChargeItemFolder.class);
+
     private final CEntityEditor<LeaseDTO> parent;
 
     private final LeaseEditorView.Presenter presenter;
@@ -103,8 +105,6 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
     }
 
     class ChargeItemEditor extends CEntityEditor<ChargeItem> {
-
-        protected I18n i18n = I18n.get(ChargeItemEditor.class);
 
         private final SimplePanel extraDataPanel = new SimplePanel();
 
