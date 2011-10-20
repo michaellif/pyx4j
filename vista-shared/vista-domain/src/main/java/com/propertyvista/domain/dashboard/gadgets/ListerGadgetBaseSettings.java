@@ -37,7 +37,7 @@ public interface ListerGadgetBaseSettings extends AbstractGadgetSettings {
         @Translate("30 min")
         min30(30),
 
-        @Translate("1 hours")
+        @Translate("1 hour")
         hour1(60),
 
         @Translate("2 hours")

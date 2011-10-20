@@ -68,5 +68,6 @@ public interface PageDescriptor extends IEntity {
     // ================================
 
     @Transient
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     IList<PageDescriptor> _path();
 }
