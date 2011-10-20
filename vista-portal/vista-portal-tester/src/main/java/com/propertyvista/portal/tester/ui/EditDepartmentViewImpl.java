@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
-import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.tester.domain.Department;
@@ -32,7 +32,6 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
         @Override
         public IsWidget createContent() {
             FlowPanel main = new FlowPanel();
-            main.add(new BasicWidgetDecorator(inject(proto().name()), 140, 180));
             main.add(new Label("Manager:"));
             main.add(inject(proto().manager()));
             main.add(new Label("Employees:"));
@@ -47,9 +46,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                 @Override
                 public IsWidget createContent() {
                     FlowPanel main = new FlowPanel();
-                    main.add(new BasicWidgetDecorator(inject(proto().firstName()), 140, 180));
-                    main.add(new BasicWidgetDecorator(inject(proto().lastName()), 140, 180));
-                    main.add(new BasicWidgetDecorator(inject(proto().phone())));
+                    main.add(new WidgetDecorator(inject(proto().phone())));
                     return main;
                 }
             };
