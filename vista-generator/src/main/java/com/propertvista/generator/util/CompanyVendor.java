@@ -17,6 +17,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Company;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.OrganizationContact;
 import com.propertyvista.domain.company.OrganizationContacts;
 import com.propertyvista.domain.contact.Email;
@@ -91,8 +92,9 @@ public class CompanyVendor {
 
         item.contractID().setValue(RandomUtil.randomLetters(8));
 
+//TODO:  wait for down cast:        
         item.contractor().set(EntityFactory.create(Vendor.class));
-        item.contractor().set(createCompany());
+//        item.contractor().set(createCompany().clone(Vendor.class));
         item.contractor().type().setValue(RandomUtil.randomEnum(Vendor.Type.class));
 
         item.cost().setValue(RandomUtil.randomDouble(8000));
@@ -120,7 +122,9 @@ public class CompanyVendor {
         OrganizationContact contact = EntityFactory.create(OrganizationContact.class);
 
         contact.description().setValue(RandomUtil.random(DemoData.CONTACT_ROLES));
-        contact.person().set(CommonsGenerator.createPerson());
+//TODO:  wait for down cast:        
+        contact.person().set(EntityFactory.create(Employee.class));
+//        contact.person().set(CommonsGenerator.createPerson().clone(Employee.class));
         contact.person().title().setValue(RandomUtil.random(DemoData.CONTACT_ROLES));
         contact.person().description().setValue("Employee description here...");
 
