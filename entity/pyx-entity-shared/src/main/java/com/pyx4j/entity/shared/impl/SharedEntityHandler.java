@@ -686,19 +686,34 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     public <T extends IEntity> T clone(Class<T> entityClass) {
         Map<String, Object> entityValue = getValue();
         T entity = EntityFactory.create(entityClass);
-        if (!entity.getEntityMeta().isEntityClassAssignableFrom(this)) {
-            throw new ClassCastException(entity.getEntityMeta().getCaption() + " is not assignable from " + this.getEntityMeta().getCaption());
-        }
-        entity.setPrimaryKey(this.getPrimaryKey());
-        if (this.isValuesDetached()) {
-            entity.setValuesDetached();
-        } else {
-            Map<Object, Object> processed = new IdentityHashMap<Object, Object>();
-            for (String memberName : entity.getEntityMeta().getMemberNames()) {
-                if (entityValue.containsKey(memberName)) {
-                    entity.setMemberValue(memberName, cloneValue(entityValue.get(memberName), processed));
+        // Down cast
+        if (entity.getEntityMeta().isEntityClassAssignableFrom(this)) {
+            entity.setPrimaryKey(this.getPrimaryKey());
+            if (this.isValuesDetached()) {
+                entity.setValuesDetached();
+            } else {
+                Map<Object, Object> processed = new IdentityHashMap<Object, Object>();
+                for (String memberName : entity.getEntityMeta().getMemberNames()) {
+                    if (entityValue.containsKey(memberName)) {
+                        entity.setMemberValue(memberName, cloneValue(entityValue.get(memberName), processed));
+                    }
                 }
             }
+            // Up cast
+        } else if (this.getEntityMeta().isEntityClassAssignableFrom(entity)) {
+            entity.setPrimaryKey(this.getPrimaryKey());
+            if (this.isValuesDetached()) {
+                entity.setValuesDetached();
+            } else {
+                Map<Object, Object> processed = new IdentityHashMap<Object, Object>();
+                for (String memberName : this.getEntityMeta().getMemberNames()) {
+                    if (entityValue.containsKey(memberName)) {
+                        entity.setMemberValue(memberName, cloneValue(entityValue.get(memberName), processed));
+                    }
+                }
+            }
+        } else {
+            throw new ClassCastException(entity.getEntityMeta().getCaption() + " is not assignable from " + this.getEntityMeta().getCaption());
         }
         return entity;
     }

@@ -170,6 +170,20 @@ public class EntityMetaTest extends InitializerTestCase {
         }
     }
 
+    public void testUpCast() {
+        Base2Entity ent1 = EntityFactory.create(Base2Entity.class);
+        ent1.setPrimaryKey(new Key(10));
+        ent1.nameB1().setValue("v-name1");
+        ent1.nameB2().setValue("v-name2");
+
+        Concrete2Entity ent2 = ent1.clone(Concrete2Entity.class);
+        assertTrue("Members not removed", ent2.containsMemberValue(ent1.nameB2().getFieldName()));
+
+        assertEquals("value of name1", "v-name1", ent2.nameB1().getValue());
+        assertEquals("value of name2", "v-name2", ent2.nameB2().getValue());
+        assertEquals("PK preserved", ent1.getPrimaryKey(), ent2.getPrimaryKey());
+    }
+
     public void testAbstractMemberEquals() {
         Concrete2Entity root = EntityFactory.create(Concrete2Entity.class);
 
@@ -178,7 +192,7 @@ public class EntityMetaTest extends InitializerTestCase {
 
         root.refference().set(ent1);
 
-        assertTrue("Abstact member equals", ent1.equals(root.refference()));
+        assertTrue("Abstract member equals", ent1.equals(root.refference()));
     }
 
 }
