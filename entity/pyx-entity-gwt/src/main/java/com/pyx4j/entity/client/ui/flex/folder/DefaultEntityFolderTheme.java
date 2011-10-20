@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.client.ui.flex.folder;
 
+import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleDependent.hover;
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolder;
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderActionsBar;
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderAddButton;
@@ -85,7 +86,7 @@ public class DefaultEntityFolderTheme extends Theme {
         style.addProperty("opacity", "0.2");
         addStyle(style);
 
-        style = new Style(".", EntityFolderActionsBar, "-", CEntityFolder.StyleDependent.hover);
+        style = new Style(".", EntityFolderActionsBar, "-", hover);
         style.addProperty("opacity", "1");
         addStyle(style);
 

@@ -23,6 +23,7 @@ package com.pyx4j.tester.client.theme;
 import com.pyx4j.entity.client.ui.flex.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeComboBox;
 import com.pyx4j.forms.client.ui.NativeTextBox;
+import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.TextBox;
@@ -42,6 +43,8 @@ public class TesterTheme extends Theme {
     protected void initStyles() {
 
         addTheme(new DefaultEntityFolderTheme());
+
+        addTheme(new DefaultWidgetDecoratorTheme());
 
         initGeneralStyles();
         initBodyStyles();

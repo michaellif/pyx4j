@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class SpaceHolder extends SimplePanel {
 
-    private final String width;
+    private String width;
 
     private HTML spaceHolder;
 
@@ -41,10 +41,15 @@ public class SpaceHolder extends SimplePanel {
         clear();
     }
 
+    public SpaceHolder() {
+    }
+
     @Override
     public void setWidget(Widget w) {
         super.setWidget(w);
-        w.setWidth(width);
+        if (width != null) {
+            w.setWidth(width);
+        }
     }
 
     @Override

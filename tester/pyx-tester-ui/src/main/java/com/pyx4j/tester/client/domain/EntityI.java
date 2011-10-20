@@ -20,13 +20,17 @@
  */
 package com.pyx4j.tester.client.domain;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface EntityI extends IEntity {
 
+    @NotNull
+    @Caption(description = "Description")
     IPrimitive<String> stringMember();
 
     IPrimitive<Integer> integerMember();

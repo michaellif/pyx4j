@@ -42,7 +42,7 @@ import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.decorators.ElegantWidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.EntityI;
 import com.pyx4j.tester.client.domain.EntityII;
@@ -78,8 +78,8 @@ public class MainForm extends CEntityEditor<EntityI> {
 
         FlowPanel main = new FlowPanel();
         main.add(header);
-        main.add(new ElegantWidgetDecorator(inject(proto().stringMember())));
-        main.add(new ElegantWidgetDecorator(inject(proto().integerMember())));
+        main.add(new WidgetDecorator(inject(proto().stringMember())));
+        main.add(new WidgetDecorator(inject(proto().integerMember())));
 
         main.add(new HTML("---------------- Box Folder ----------------"));
         main.add(inject(proto().entityIIList(), new EntityIIFolder()));
@@ -117,8 +117,8 @@ public class MainForm extends CEntityEditor<EntityI> {
         @Override
         public IsWidget createContent() {
             FlowPanel main = new FlowPanel();
-            main.add(new ElegantWidgetDecorator(inject(proto().stringMember())));
-            main.add(new ElegantWidgetDecorator(inject(proto().integerMember())));
+            main.add(new WidgetDecorator(inject(proto().stringMember())));
+            main.add(new WidgetDecorator(inject(proto().integerMember())));
             main.add(new HTML("---------------- Box Folder ----------------"));
             main.add(inject(proto().entityIIIList(), new EntityIIIFolder()));
             main.add(new HTML("---------------- Table Folder ----------------"));
@@ -156,8 +156,8 @@ public class MainForm extends CEntityEditor<EntityI> {
         @Override
         public IsWidget createContent() {
             FlowPanel main = new FlowPanel();
-            main.add(new ElegantWidgetDecorator(inject(proto().stringMember())));
-            main.add(new ElegantWidgetDecorator(inject(proto().integerMember())));
+            main.add(new WidgetDecorator(inject(proto().stringMember())));
+            main.add(new WidgetDecorator(inject(proto().integerMember())));
             return main;
         }
 
