@@ -13,10 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
-import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Vector;
@@ -147,8 +145,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         gadgetPanel.add(turnoverAnalysisView.asWidget());
         activity = new UnitVacancyReportGadgetActivity(this, (UnitVacancyReportService) service);
 
-        toDate = new LogicalDate(TimeUtils.dayEnd(TimeUtils.today()));
-        fromDate = new LogicalDate(toDate.getTime() - UnitVacancyReportService.MAX_SUPPORTED_INTERVALS);
+        setFiltering(new FilterData());
     }
 
     @Override
@@ -278,10 +275,22 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
 
     @Override
     public void setFiltering(FilterData filter) {
-        fromDate = new LogicalDate(filter.fromDate.getTime());
+        if (filter.toDate != null) {
+            toDate = new LogicalDate(filter.toDate);
+        } else {
+            toDate = new LogicalDate();
+        }
         // we get non inclusive range [,) from the UI, but we think it's more intuitive to make it inclusive
-        // hence we fix the 'to date' so points to end of the next day
-        toDate = new LogicalDate(TimeUtils.dayEnd(filter.toDate));
+        // hence we fix the 'to date' so points to end of the next day        
+        toDate = new LogicalDate(TimeUtils.dayEnd(toDate));
+
+        if (filter.fromDate != null) {
+            fromDate = new LogicalDate(filter.fromDate.getTime());
+        } else {
+            long interval = DEFAULT_ANALYSIS_RESOLUTION_MAX.addTo(toDate.getTime()) - toDate.getTime();
+            fromDate = new LogicalDate(toDate.getTime() - UnitVacancyReportService.MAX_SUPPORTED_INTERVALS * interval);
+        }
+
         setBuildings(filter.buildings);
         stop();
         start();
@@ -301,14 +310,6 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         populate();
     }
 
-    private static String toMonth(Date date) {
-        // TODO use GWT GregorianCalendar if and when possible
-        // FIXME someone has to add MONTH_NAMES_LONG to the Time Utils
-        @SuppressWarnings("deprecation")
-        String monthRepr = i18n.tr(TimeUtils.MONTH_NAMES_SHORT[date.getDay()]);
-        return monthRepr;
-    }
-
     public class UnitVacancyReportGadgetActivity extends ListerActivityBase<UnitVacancyReport> {
 
         private final UnitVacancyReportService serivce;
@@ -323,6 +324,24 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
             this.gadget.getAnalysisView().setPresenter(this);
         }
 
+        private HashSet<String> fakeBuildings() {
+            final HashSet<String> fakeBuildings = new HashSet<String>();
+            if (buildings.size() == 1) {
+                fakeBuildings.add("jean0200");
+            } else if (buildings.size() > 1) {
+                fakeBuildings.add("bath1650");
+                fakeBuildings.add("com0164");
+                fakeBuildings.add("chel3126");
+            } else {
+                fakeBuildings.add("bath1650");
+                fakeBuildings.add("com0164");
+                fakeBuildings.add("chel3126");
+                fakeBuildings.add("jean0200");
+            }
+
+            return fakeBuildings;
+        };
+
         @Override
         protected EntityListCriteria<UnitVacancyReport> constructSearchCriteria() {
             EntityListCriteria<UnitVacancyReport> criteria = super.constructSearchCriteria();
@@ -333,16 +352,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
                 //criteria.add(new PropertyCriterion(building.id().getPath().toString(), Restriction.IN, (Serializable) buildings));
 
                 // TODO these are fake buildings for use with fake unit property report table, for demonstration purposes only
-                final Collection<String> fakeBuildings = new HashSet<String>();
-                if (buildings.size() == 1) {
-                    fakeBuildings.add("bath1650");
-                } else {
-                    fakeBuildings.add("jean0200");
-                    fakeBuildings.add("com0164");
-                    fakeBuildings.add("chel3126");
-                }
-
-                criteria.add(new PropertyCriterion(getListerBase().proto().propertyCode().getPath().toString(), Restriction.IN, (Serializable) fakeBuildings));
+                criteria.add(new PropertyCriterion(getListerBase().proto().propertyCode().getPath().toString(), Restriction.IN, fakeBuildings()));
 
             }
             criteria.add(new PropertyCriterion(getListerBase().proto().fromDate().getPath().toString(), Restriction.GREATER_THAN_OR_EQUAL, getFromDate()));
@@ -404,7 +414,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
                         gadget.getAnalysisView().setData(result, gadget.getFromDate(), gadget.getToDate());
 
                     }
-                }, gadget.getFromDate(), gadget.getToDate(), gadget.getAnalysisView().getResolution());
+                }, new Vector<String>(fakeBuildings()), gadget.getFromDate(), gadget.getToDate(), gadget.getAnalysisView().getResolution());
             }
         }
 
@@ -510,7 +520,13 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         }
 
         public AnalysisResolution getResolution() {
-            return settings.turnoverAnalysisResolution().getValue();
+
+            AnalysisResolution current = settings.turnoverAnalysisResolution().getValue();
+            if (!isResolutionAcceptable(current)) {
+                current = DEFAULT_ANALYSIS_RESOLUTION_MAX;
+                settings.turnoverAnalysisResolution().setValue(current);
+            }
+            return current;
         }
 
         public void setResolution(AnalysisResolution resolution) {
@@ -531,7 +547,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
         }
 
         public void setShowPercents(boolean showPercents) {
-            settings.isTurnoverMeasuredByPercent().getValue();
+            settings.isTurnoverMeasuredByPercent().setValue(showPercents);
             redraw();
         }
 
@@ -629,7 +645,7 @@ public class UnitVacancyReportGadget extends ListerGadgetBase<UnitVacancyReport>
             long toTime = toDate.getTime();
             long interval = resolution.addTo(fromTime) - fromTime;
 
-            return ((toTime - fromTime) / interval) < UnitVacancyReportService.MAX_SUPPORTED_INTERVALS;
+            return ((toTime - fromTime) / interval) <= UnitVacancyReportService.MAX_SUPPORTED_INTERVALS;
         }
 
         private AnalysisResolution getDefaultResolutionForCurrentDateRange() {

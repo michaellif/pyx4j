@@ -19,6 +19,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Comparator;
 
+// TODO move this class into correct package (what is the correct package?)
 @SuppressWarnings("rawtypes")
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)

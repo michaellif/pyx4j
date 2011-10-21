@@ -218,8 +218,8 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
     }
 
     @Override
-    public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, LogicalDate fromDate, LogicalDate toDate,
-            AnalysisResolution resolution) {
+    public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, Vector<String> buildings, LogicalDate fromDate,
+            LogicalDate toDate, AnalysisResolution resolution) {
         // FIXME refactor this one: separate generic aggregation and intervals creation from the actual computations
         if (callback == null | fromDate == null || toDate == null | resolution == null) {
             callback.onFailure(new Error("at least one of the required parameters is null."));
@@ -241,9 +241,12 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         Vector<UnitVacancyReportTurnoverAnalysisDTO> result = new Vector<UnitVacancyReportTurnoverAnalysisDTO>();
 
         EntityQueryCriteria<UnitVacancyReportEvent> criteria = new EntityQueryCriteria<UnitVacancyReportEvent>(UnitVacancyReportEvent.class);
-
+        if (!buildings.isEmpty()) {
+            criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.IN, buildings));
+        }
         criteria.add(new PropertyCriterion(criteria.proto().eventDate(), Restriction.GREATER_THAN_OR_EQUAL, fromDate));
         criteria.add(new PropertyCriterion(criteria.proto().eventDate(), Restriction.LESS_THAN, toDate));
+
         ArrayList<String> eventsFilter = new ArrayList<String>();
         eventsFilter.add("movein");
         eventsFilter.add("moveout");
@@ -298,7 +301,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         intervalEnd = resolution.addTo(intervalStart);
 
         // now add some data if we don't have more events but still haven't reached till the end of the rest of time time 
-        while (endReportTime > intervalEnd) {
+        while (endReportTime >= intervalEnd) {
             UnitVacancyReportTurnoverAnalysisDTO analysis = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
             analysis.fromDate().setValue(new LogicalDate(intervalStart));
             analysis.toDate().setValue(new LogicalDate(intervalEnd));
@@ -503,7 +506,9 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         return sortEngine;
     }
 
-    /** This is supposed to be thread safe sort engine for transient fields. Maybe I'm going to write detailed usage information when it works */
+    /**
+     * This is supposed to be thread safe sort engine/comparator factory for transient fields. Maybe I'm going to write detailed usage information when it works
+     */
     public static class TransientPropertySortEngine<X extends IEntity> {
         @SuppressWarnings("rawtypes")
         private final Map<String, Comparator> transientProperties;
@@ -511,7 +516,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         @SuppressWarnings("rawtypes")
         public TransientPropertySortEngine(Class<X> clazz) {
             Map<String, Comparator> temp = new HashMap<String, Comparator>();
-            IEntity proto = EntityFactory.create(clazz);
+            IEntity proto = EntityFactory.getEntityPrototype(clazz);
 
             for (String memberName : proto.getEntityMeta().getMemberNames()) {
                 String propertyName;

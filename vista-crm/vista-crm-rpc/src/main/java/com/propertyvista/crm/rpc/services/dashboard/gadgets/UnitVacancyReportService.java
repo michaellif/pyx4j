@@ -34,7 +34,7 @@ public interface UnitVacancyReportService extends AbstractListService<UnitVacanc
     public void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, EntityQueryCriteria<UnitVacancyReport> criteria, LogicalDate fromDate,
             LogicalDate toDate);
 
-    public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, LogicalDate fromDate, LogicalDate toDate,
-            AnalysisResolution resolution);
+    public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, Vector<String> buidlings, LogicalDate fromDate,
+            LogicalDate toDate, AnalysisResolution resolution);
 
 }

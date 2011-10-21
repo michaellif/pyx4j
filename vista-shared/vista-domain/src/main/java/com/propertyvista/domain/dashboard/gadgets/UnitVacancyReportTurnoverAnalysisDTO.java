@@ -46,7 +46,7 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
 
             @Override
             public String intervalLabelFormat(Date start, Date end) {
-                return TimeUtils.simpleFormat(end, "MMM-dd");
+                return TimeUtils.simpleFormat(start, "MMM-dd");
             }
         },
         Week {
