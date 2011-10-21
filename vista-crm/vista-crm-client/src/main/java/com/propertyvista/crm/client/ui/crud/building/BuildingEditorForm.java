@@ -263,10 +263,10 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         return new CrmScrollPanel(main);
     }
 
-    static class BuildingAmenityFolder extends VistaTableFolder<BuildingAmenity> {
+    class BuildingAmenityFolder extends VistaTableFolder<BuildingAmenity> {
 
         public BuildingAmenityFolder() {
-            super(BuildingAmenity.class);
+            super(BuildingAmenity.class, BuildingEditorForm.this.isEditable());
         }
 
         @Override

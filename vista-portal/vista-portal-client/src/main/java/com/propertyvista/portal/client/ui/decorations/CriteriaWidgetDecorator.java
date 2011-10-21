@@ -81,7 +81,7 @@ public class CriteriaWidgetDecorator extends VerticalPanel {
         if (component.getTooltip() != null && component.getTooltip().trim().length() > 0) {
             Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
             Tooltip.tooltip(infoImage, component.getTooltip());
-            infoImageHolder.add(infoImage);
+            infoImageHolder.setWidget(infoImage);
         }
 
         FlowPanel labelLine = new FlowPanel();
