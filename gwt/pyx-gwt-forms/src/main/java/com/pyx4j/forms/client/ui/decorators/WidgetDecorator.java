@@ -69,10 +69,10 @@ public class WidgetDecorator extends FlowPanel {
     }
 
     public WidgetDecorator(final CComponent<?> component, double labelWidth, double componentWidth) {
-        this(component, labelWidth, componentWidth, true);
+        this(component, labelWidth, componentWidth, null, true);
     }
 
-    public WidgetDecorator(final CComponent<?> component, double labelWidth, double componentWidth, boolean useLabelSemicolon) {
+    public WidgetDecorator(final CComponent<?> component, double labelWidth, double componentWidth, String componentCaption, boolean useLabelSemicolon) {
 
         setStyleName(StyleName.WidgetDecorator.name());
 
@@ -80,7 +80,7 @@ public class WidgetDecorator extends FlowPanel {
         final Widget nativeComponent = component.asWidget();
         nativeComponent.addStyleName(StyleName.WidgetDecoratorComponent.name());
 
-        label = new Label(component.getTitle() == null ? "" : component.getTitle() + ":");
+        label = new Label(componentCaption == null ? (component.getTitle() == null ? "" : component.getTitle() + ":") : componentCaption);
         label.setStyleName(StyleName.WidgetDecoratorLabel.name());
 
         Cursor.setDefault(label.getElement());
