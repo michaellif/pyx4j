@@ -194,7 +194,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                         split.getRightPanel().add(inject(proto().plateNumber()), 10);
 
                         CEditableComponent<Country, ?> country;
-                        split.getRightPanel().add(country = (CEditableComponent<Country, ?>) inject(proto().country()), 15);
+                        split.getRightPanel().add(country = (CEditableComponent<Country, ?>) inject(proto().country()), 13);
                         CEditableComponent<Province, ?> province;
                         split.getRightPanel().add(province = (CEditableComponent<Province, ?>) inject(proto().province()), 17);
 
