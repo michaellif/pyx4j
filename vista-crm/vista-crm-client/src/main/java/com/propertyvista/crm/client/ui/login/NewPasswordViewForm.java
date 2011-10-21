@@ -44,11 +44,11 @@ public class NewPasswordViewForm extends CEntityEditor<PasswordChangeRequest> {
         main.add(header);
 
         main.add(new HTML());
-        main.add(new WidgetDecorator(inject(proto().currentPassword()), 9, 16));
+        main.add(WidgetDecorator.build(inject(proto().currentPassword()), 9, 16));
         main.add(new HTML());
-        main.add(new WidgetDecorator(inject(proto().newPassword()), 9, 16));
+        main.add(WidgetDecorator.build(inject(proto().newPassword()), 9, 16));
         main.add(new HTML());
-        main.add(new WidgetDecorator(inject(proto().newPassword2()), 9, 16));
+        main.add(WidgetDecorator.build(inject(proto().newPassword2()), 9, 16));
         setWidget(main);
         return main;
     }

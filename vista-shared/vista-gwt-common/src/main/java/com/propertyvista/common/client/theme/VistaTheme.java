@@ -18,6 +18,7 @@ import com.pyx4j.entity.client.ui.flex.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeComboBox;
 import com.pyx4j.forms.client.ui.NativeTextBox;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.TextBox;
@@ -40,6 +41,8 @@ public class VistaTheme extends Theme {
         initEntityFolderStyles();
 
         addTheme(new DefaultWidgetDecoratorTheme());
+
+        addTheme(new DefaultFormFlexPanelTheme());
 
         initGeneralStyles();
         initBodyStyles();

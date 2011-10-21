@@ -40,11 +40,11 @@ public class LoginViewForm extends CEntityEditor<AuthenticationRequest> {
 
         FlowPanel main = new FlowPanel();
         main.add(header);
-        main.add(new WidgetDecorator(inject(proto().email()), 9, 16));
+        main.add(WidgetDecorator.build(inject(proto().email()), 9, 16));
         main.add(new HTML());
-        main.add(new WidgetDecorator(inject(proto().password()), 9, 16));
+        main.add(WidgetDecorator.build(inject(proto().password()), 9, 16));
         main.add(new HTML());
-        main.add(new WidgetDecorator(inject(proto().captcha()), 9, 16));
+        main.add(WidgetDecorator.build(inject(proto().captcha()), 9, 16));
         return main;
     }
 }

@@ -11,6 +11,7 @@
  * @author vlads
  * @version $Id$
  */
+
 package com.propertyvista.common.client.ui.decorations;
 
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -18,6 +19,10 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
+/*
+ * @deprecated use FormFlexPanel
+ */
+@Deprecated
 public class VistaDecoratorsFlowPanel extends FlowPanel {
 
     public static final String DEFAULT_STYLE_NAME = "vista_DecoratorsFlowPanel";
@@ -71,7 +76,7 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
     }
 
     public WidgetDecorator createDecorator(final CComponent<?> component, double labelWidth, double componentWidth, String componentCaption) {
-        WidgetDecorator decorator = new WidgetDecorator(component, labelWidth, componentWidth);
+        WidgetDecorator decorator = new WidgetDecorator.Builder(component).labelWidth(labelWidth).componentWidth(componentWidth).build();
         if (readOnlyMode) {
             decorator.addStyleDependentName(WidgetDecorator.StyleDependent.readOnly.name());
         }

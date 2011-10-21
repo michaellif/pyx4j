@@ -19,7 +19,7 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 public class LoginPanelWidgetDecorator extends WidgetDecorator {
 
     public LoginPanelWidgetDecorator(CComponent<?> component) {
-        super(component, 9, 16);
+        super(new Builder(component).labelWidth(9).componentWidth(16));
         addStyleDependentName(WidgetDecorator.StyleDependent.noMandatoryStar.name());
 
     }

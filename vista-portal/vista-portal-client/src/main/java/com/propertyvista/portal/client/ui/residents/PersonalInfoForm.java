@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ui.residents;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -40,18 +41,18 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
 
         int row = 0;
 
-        container.setHeader(row++, 0, i18n.tr("Contact Details"));
+        container.setHeader(row++, 0, 1, i18n.tr("Contact Details"));
 
-        container.setWidget(row++, 0, inject(proto().name().firstName()), 12);
-        container.setWidget(row++, 0, inject(proto().name().middleName()), 12);
-        container.setWidget(row++, 0, inject(proto().name().lastName()), 20);
-        container.setWidget(row++, 0, inject(proto().homePhone()), 15);
-        container.setWidget(row++, 0, inject(proto().mobilePhone()), 15);
-        container.setWidget(row++, 0, inject(proto().workPhone()), 15);
-        container.setWidget(row++, 0, inject(proto().email()), 20);
+        container.setWidget(row++, 0, WidgetDecorator.build(inject(proto().name().firstName()), 12));
+        container.setWidget(row++, 0, WidgetDecorator.build(inject(proto().name().middleName()), 12));
+        container.setWidget(row++, 0, WidgetDecorator.build(inject(proto().name().lastName()), 20));
+        container.setWidget(row++, 0, WidgetDecorator.build(inject(proto().homePhone()), 15));
+        container.setWidget(row++, 0, WidgetDecorator.build(inject(proto().mobilePhone()), 15));
+        container.setWidget(row++, 0, WidgetDecorator.build(inject(proto().workPhone()), 15));
+        container.setWidget(row++, 0, WidgetDecorator.build(inject(proto().email()), 20));
 
         //Emergency Contacts
-        container.setHeader(row++, 0, proto().emergencyContacts().getMeta().getCaption());
+        container.setHeader(row++, 0, 1, proto().emergencyContacts().getMeta().getCaption());
         container.setWidget(row++, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder()));
         return container;
     }

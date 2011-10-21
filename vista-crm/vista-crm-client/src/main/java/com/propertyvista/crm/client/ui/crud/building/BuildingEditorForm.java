@@ -28,24 +28,32 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
+import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
+import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
+import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
@@ -54,8 +62,12 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.company.OrganizationContact;
+import com.propertyvista.domain.contact.Address;
+import com.propertyvista.domain.contact.IAddressFull;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.Province;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
@@ -150,37 +162,113 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         return tabPanel.getSelectedIndex();
     }
 
+    private WidgetDecorator buildWidgetDecorator(CComponent<?> component, double componentWidth) {
+        return new WidgetDecorator(new Builder(component).componentWidth(componentWidth).readOnlyMode(!isEditable()));
+    }
+
     private Widget createGeneralTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
-        main.add(split);
+        FormFlexPanel main = new FormFlexPanel();
 
-        split.getLeftPanel().add(inject(proto().propertyCode()), 12);
-        split.getLeftPanel().add(inject(proto().info().name()), 15);
-        split.getLeftPanel().add(inject(proto().info().type()), 12);
-        split.getLeftPanel().add(inject(proto().propertyManager()), 15);
+        int row = 0;
 
-        split.getRightPanel().add(inject(proto().info().shape()), 7);
-        split.getRightPanel().add(inject(proto().info().totalStoreys()), 5);
-        split.getRightPanel().add(inject(proto().info().residentialStoreys()), 5);
-        split.getRightPanel().add(inject(proto().complex()), 15);
-        split.getRightPanel().add(inject(proto().complexPrimary()), 15);
+        main.setWidget(row, 0, buildWidgetDecorator(inject(proto().propertyCode()), 12));
+        main.setWidget(row++, 1, buildWidgetDecorator(inject(proto().info().shape()), 7));
 
-        main.add(new VistaLineSeparator());
+        main.setWidget(row, 0, buildWidgetDecorator(inject(proto().info().name()), 15));
+        main.setWidget(row++, 1, buildWidgetDecorator(inject(proto().info().totalStoreys()), 5));
 
-        main.add(split = new VistaDecoratorsSplitFlowPanel(!isEditable()));
-        AddressUtils.injectIAddress(split, proto().info().address(), this, false);
+        main.setWidget(row, 0, buildWidgetDecorator(inject(proto().info().type()), 12));
+        main.setWidget(row++, 1, buildWidgetDecorator(inject(proto().info().residentialStoreys()), 5));
 
-        main.add(new HTML("&nbsp"));
+        main.setWidget(row, 0, buildWidgetDecorator(inject(proto().propertyManager()), 15));
+        main.setWidget(row++, 1, buildWidgetDecorator(inject(proto().complexPrimary()), 15));
 
-        main.add(inject(proto().geoLocation()), 28);
+        main.setWidget(row++, 1, buildWidgetDecorator(inject(proto().complex()), 15));
 
-        main.add(new HTML("&nbsp"));
+        main.setHeader(row++, 0, 2, "");
+        main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().geoLocation()), 28));
 
-        main.add(new CrmSectionSeparator(i18n.tr("Amenities:")));
-        main.add(inject(proto().amenities(), new BuildingAmenityFolder()));
+        main.setHeader(row++, 0, 2, proto().info().address().getMeta().getCaption());
+        main.setWidget(row++, 0, inject(proto().info().address(), new AddressEditor(false, !isEditable())));
+
+        main.setHeader(row++, 0, 2, proto().amenities().getMeta().getCaption());
+        main.setWidget(row, 0, inject(proto().amenities(), new BuildingAmenityFolder()));
+        main.getFlexCellFormatter().setColSpan(row++, 0, 2);
+
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
+    }
+
+    class AddressEditor extends CEntityEditor<Address> {
+
+        private final boolean showUnit;
+
+        private final boolean readOnly;
+
+        public AddressEditor(boolean showUnit, boolean readOnly) {
+            super(Address.class);
+            this.showUnit = showUnit;
+            this.readOnly = readOnly;
+        }
+
+        @Override
+        public IsWidget createContent() {
+            FormFlexPanel main = new FormFlexPanel();
+
+            int row = 0;
+            if (showUnit) {
+                main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().unitNumber()), 12));
+            }
+
+            main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().streetNumber()), 5));
+            main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().streetNumberSuffix()), 5));
+            main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().streetName()), 15));
+            main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().streetType()), 10));
+            main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().streetDirection()), 10));
+
+            main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().city()), 15));
+            main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().county()), 15));
+
+            // Need local variables to avoid extended casting that make the code unreadable
+            CEditableComponent<Province, ?> province = (CEditableComponent<Province, ?>) inject(proto().province());
+            main.setWidget(row++, 0, buildWidgetDecorator(province, 17));
+
+            CEditableComponent<Country, ?> country = (CEditableComponent<Country, ?>) inject(proto().country());
+            main.setWidget(row++, 0, buildWidgetDecorator(country, 15));
+
+            CEditableComponent<String, ?> postalCode = (CEditableComponent<String, ?>) inject(proto().postalCode());
+            main.setWidget(row++, 0, buildWidgetDecorator(postalCode, 7));
+
+            attachFilters(proto(), province, country, postalCode);
+
+            return main;
+        }
+
+        private WidgetDecorator buildWidgetDecorator(CComponent<?> component, double componentWidth) {
+            return new WidgetDecorator(new Builder(component).componentWidth(componentWidth).readOnlyMode(readOnly));
+        }
+
+        private void attachFilters(final IAddressFull proto, CEditableComponent<Province, ?> province, CEditableComponent<Country, ?> country,
+                CEditableComponent<String, ?> postalCode) {
+            postalCode.addValueValidator(new ZipCodeValueValidator(this, proto.country()));
+            country.addValueChangeHandler(new RevalidationTrigger(postalCode));
+
+            // The filter does not use the CEditableComponent<Country, ?> and use Model directly. So it work fine on populate.
+            ProvinceContryFilters.attachFilters(province, country, new OptionsFilter<Province>() {
+                @Override
+                public boolean acceptOption(Province entity) {
+                    if (getValue() == null) {
+                        return true;
+                    } else {
+                        Country country = (Country) getValue().getMember(proto.country().getPath());
+                        return country.isNull() || EqualsHelper.equals(entity.country().name(), country.name());
+                    }
+                }
+            });
+        }
+
     }
 
     private Widget createDetailsTab() {

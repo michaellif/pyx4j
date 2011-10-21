@@ -10,12 +10,17 @@
  * Created on 2011-06-01
  * @author leon
  * @version $Id$
+ 
  */
 package com.propertyvista.common.client.ui.decorations;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
+/**
+ * @deprecated use FormFlexPanel
+ */
+@Deprecated
 public class VistaDecoratorsSplitFlowPanel extends HorizontalPanel {
 
     private final VistaDecoratorsFlowPanel right;
