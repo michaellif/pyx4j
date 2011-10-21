@@ -20,13 +20,28 @@
  */
 package com.pyx4j.forms.client.ui.decorators;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Widget;
 
 public class SpaceHolder extends FlowPanel {
 
     public SpaceHolder() {
-        add(new HTML("&nbsp;"));
+        HTML html = new HTML("&nbsp;");
+        html.getElement().getStyle().setHeight(1, Unit.PX);
+        add(html);
     }
 
+    public void setWidget(Widget widget) {
+        clear();
+        add(widget);
+    }
+
+    @Override
+    public void clear() {
+        for (int i = 1; i < getWidgetCount(); i++) {
+            remove(i);
+        }
+    }
 }

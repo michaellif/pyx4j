@@ -666,7 +666,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                     }
                     imageInfoWarn.setResource(imageResource);
 
-                    imageInfoWarnHolder.add(imageInfoWarn);
+                    imageInfoWarnHolder.setWidget(imageInfoWarn);
                     tooltip.setTooltipText(message);
                 }
 
@@ -681,7 +681,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                         imageMandatory.setResource(ImageFactory.getImages().mandatory());
                         imageMandatory.setTitle("This field is mandatory");
                     }
-                    imageMandatoryHolder.add(imageMandatory);
+                    imageMandatoryHolder.setWidget(imageMandatory);
                 } else {
                     imageMandatoryHolder.clear();
                 }

@@ -107,7 +107,7 @@ public class WidgetDecorator extends FlowPanel {
         if (component.getTooltip() != null && component.getTooltip().trim().length() > 0) {
             Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
             infoImage.setTitle(component.getTooltip());
-            infoImageHolder.add(infoImage);
+            infoImageHolder.setWidget(infoImage);
         }
 
         mandatoryImageHolder = new SpaceHolder();
