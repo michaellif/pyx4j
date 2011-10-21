@@ -242,8 +242,8 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             @SuppressWarnings({ "rawtypes", "unchecked" })
             @Override
             public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!TenantScreeningEditorForm.this.isEditable());
-                VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!TenantScreeningEditorForm.this.isEditable());
+                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+                VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
                 main.add(split);
 
                 AddressUtils.injectIAddress(split, proto(), this);

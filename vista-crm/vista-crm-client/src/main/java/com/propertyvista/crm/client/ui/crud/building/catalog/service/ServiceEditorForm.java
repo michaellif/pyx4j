@@ -65,8 +65,8 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
     }
 
     public IsWidget createGeneralTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
 
         main.add(split);
         split.getLeftPanel().add(inject(proto().type(), new CLabel()), 10);
