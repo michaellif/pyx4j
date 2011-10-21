@@ -52,8 +52,6 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
                 }
             }
         });
-        setWidth(datePicker.getWidth());
-        setHeight(datePicker.getHeight());
     }
 
     @Override

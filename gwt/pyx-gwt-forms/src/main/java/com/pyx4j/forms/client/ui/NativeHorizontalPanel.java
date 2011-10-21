@@ -30,8 +30,6 @@ public class NativeHorizontalPanel extends HorizontalPanel implements INativeSim
     public NativeHorizontalPanel(CPanelBase panel) {
         super();
         this.panel = panel;
-        setWidth(panel.getWidth());
-        setHeight(panel.getHeight());
     }
 
     @Override

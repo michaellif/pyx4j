@@ -107,9 +107,6 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeRichTex
 
         setTabIndex(editAction.getTabIndex());
 
-        setWidth(textArea.getWidth());
-        setHeight(textArea.getHeight());
-
         sinkEvents(Event.ONMOUSEOVER);
         sinkEvents(Event.ONMOUSEOUT);
 

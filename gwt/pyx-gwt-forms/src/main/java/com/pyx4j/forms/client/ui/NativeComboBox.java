@@ -68,7 +68,6 @@ public class NativeComboBox<E> extends ListBox implements INativeEditableCompone
                 comboBox.onEditingStop();
             }
         });
-        setWidth(comboBox.getWidth());
         setTabIndex(comboBox.getTabIndex());
 
     }

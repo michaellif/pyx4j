@@ -23,7 +23,6 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 
-
 public class CCaption extends CComponent<NativeCaption> implements SelfManagedComponent {
 
     private final String caption;
@@ -37,7 +36,6 @@ public class CCaption extends CComponent<NativeCaption> implements SelfManagedCo
     protected NativeCaption createWidget() {
         NativeCaption nativeCaption = new NativeCaption(this);
         nativeCaption.setWordWrap(true);
-        nativeCaption.setWidth(this.getWidth());
         nativeCaption.setText(caption);
         nativeCaption.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         nativeCaption.getElement().getStyle().setPaddingTop(10, Unit.PX);

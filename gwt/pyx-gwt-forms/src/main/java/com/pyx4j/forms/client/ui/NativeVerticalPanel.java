@@ -30,8 +30,6 @@ public class NativeVerticalPanel extends VerticalPanel implements INativeSimpleP
     public NativeVerticalPanel(CPanelBase panel) {
         super();
         this.panel = panel;
-        setWidth(panel.getWidth());
-        setHeight(panel.getHeight());
     }
 
     @Override

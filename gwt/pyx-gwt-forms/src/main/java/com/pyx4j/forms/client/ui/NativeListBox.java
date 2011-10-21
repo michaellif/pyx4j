@@ -47,9 +47,6 @@ public class NativeListBox<E> extends NativeTriggerComponent<List<E>> implements
         setTabIndex(cListBox.getTabIndex());
         setDisplayProperties(properties);
 
-        setWidth(cListBox.getWidth());
-        setHeight(cListBox.getHeight());
-
         nativeListBox.addChangeHandler(new ChangeHandler() {
 
             @Override

@@ -61,9 +61,6 @@ public class NativeRichTextArea extends DockPanel implements INativeRichTextComp
 
         setTabIndex(textArea.getTabIndex());
 
-        setWidth(textArea.getWidth());
-        setHeight(textArea.getHeight());
-
         toolbar.getElement().getStyle().setOpacity(0.3);
 
         sinkEvents(Event.ONMOUSEOVER);

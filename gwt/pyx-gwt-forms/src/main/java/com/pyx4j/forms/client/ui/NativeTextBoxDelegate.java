@@ -51,8 +51,6 @@ public class NativeTextBoxDelegate<E> {
 
         nativeTextBox.setTabIndex(cTextField.getTabIndex());
 
-        nativeTextBox.setWidth(cTextField.getWidth());
-        nativeTextBox.setHeight(cTextField.getHeight());
         setNativeValue(cTextField.getValue());
     }
 

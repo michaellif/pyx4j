@@ -36,9 +36,6 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
 
         setTabIndex(textArea.getTabIndex());
 
-        setWidth(textArea.getWidth());
-        setHeight(textArea.getHeight());
-
     }
 
     @Override

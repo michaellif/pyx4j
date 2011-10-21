@@ -39,7 +39,6 @@ public class NativeInLineListBox<E> extends NativeListSelectionComposite<E> {
             }
         });
 
-        setWidth(cListBox.getWidth());
         setListBoxHeight(cListBox.getHeight());
     }
 

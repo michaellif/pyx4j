@@ -151,9 +151,6 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             getElement().getStyle().setBorderColor("#5B7575");
         }
 
-        setWidth(form.getWidth());
-        setHeight(form.getHeight());
-
         sinkEvents(Event.ONMOUSEOVER);
         sinkEvents(Event.ONMOUSEOUT);
 

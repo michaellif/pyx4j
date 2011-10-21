@@ -44,7 +44,6 @@ public class NativeCheckBox extends CheckBox implements INativeEditableComponent
             }
         });
         setTabIndex(checkBox.getTabIndex());
-        setWidth(checkBox.getWidth());
         setAlignmet(checkBox.getAlignmet());
 
     }

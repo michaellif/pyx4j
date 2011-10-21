@@ -43,7 +43,6 @@ public class NativeButton extends com.google.gwt.user.client.ui.Button implement
                 }
             }
         });
-        setWidth(button.getWidth());
         setTabIndex(button.getTabIndex());
         setEnabled(button.isEnabled());
         ensureDebugId("Button." + html);

@@ -132,11 +132,6 @@ public class NativeGroupBoxPanel extends FieldSetPanel implements INativeSimpleP
             throw new IllegalArgumentException();
         }
 
-        this.setWidth(panel.getWidth());
-        if (panel.getHeight() != null) {
-            this.setHeight(panel.getHeight());
-        }
-
         setCaption(panel.getTitle());
 
         panel.addPropertyChangeHandler(new PropertyChangeHandler() {

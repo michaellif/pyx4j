@@ -227,6 +227,8 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     protected void onWidgetCreated() {
         applyAccessibilityRules();
+        asWidget().setWidth(getWidth());
+        asWidget().setHeight(getHeight());
     }
 
     public boolean isWidgetCreated() {
