@@ -24,8 +24,6 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleName;
 
@@ -39,53 +37,11 @@ public class FormFlexPanel extends FlexTable {
 
     }
 
-    private double defaultLabelWidth;
-
     public FormFlexPanel() {
-        this(12);
     }
 
-    public FormFlexPanel(double defaultLabelWidth) {
-        this.defaultLabelWidth = defaultLabelWidth;
-    }
-
-    public void setWidget(int row, int column, final CComponent<?> component, double componentWidth) {
-        this.setWidget(row, column, component, defaultLabelWidth, componentWidth);
-    }
-
-    public void add(int row, int column, final CComponent<?> component, double componentWidth, String componentCaption) {
-        this.setWidget(row, column, component, defaultLabelWidth, componentWidth, componentCaption);
-    }
-
-    public void setWidget(int row, int column, final CComponent<?> component, double labelWidth, double componentWidth) {
-        this.setWidget(row, column, component, labelWidth, componentWidth, null);
-    }
-
-    public void setWidget(int row, int column, final CComponent<?> component, double labelWidth, double componentWidth, String componentCaption) {
-        super.setWidget(row, column, createDecorator(component, labelWidth, componentWidth, componentCaption));
-    }
-
-    public WidgetDecorator createDecorator(final CComponent<?> component, double componentWidth) {
-        return this.createDecorator(component, defaultLabelWidth, componentWidth);
-    }
-
-    public WidgetDecorator createDecorator(final CComponent<?> component, double labelWidth, double componentWidth) {
-        return this.createDecorator(component, labelWidth, componentWidth, null);
-    }
-
-    public WidgetDecorator createDecorator(final CComponent<?> component, double labelWidth, double componentWidth, String componentCaption) {
-        return new WidgetDecorator(component, labelWidth, componentWidth, componentCaption, true);
-    }
-
-    public double getDefaultLabelWidth() {
-        return defaultLabelWidth;
-    }
-
-    public void setDefaultLabelWidth(double defaultLabelWidth) {
-        this.defaultLabelWidth = defaultLabelWidth;
-    }
-
-    public void setHeader(int row, int span, String caption) {
+    public void setHeader(int row, int col, int span, String caption) {
+        getFlexCellFormatter().setColSpan(row, col, span);
         Label label = new Label(caption);
         label.setStyleName(StyleName.FormFlexPanelHeaderLabel.name());
         SimplePanel header = new SimplePanel();

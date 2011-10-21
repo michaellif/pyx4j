@@ -64,23 +64,31 @@ public class WidgetDecorator extends FlowPanel {
 
     private final Label validationLabel;
 
-    public WidgetDecorator(final CComponent<?> component) {
-        this(component, 15, 25);
+    public WidgetDecorator(CComponent<?> component) {
+        this(new Builder(component));
     }
 
-    public WidgetDecorator(final CComponent<?> component, double labelWidth, double componentWidth) {
-        this(component, labelWidth, componentWidth, null, true);
-    }
-
-    public WidgetDecorator(final CComponent<?> component, double labelWidth, double componentWidth, String componentCaption, boolean useLabelSemicolon) {
+    public WidgetDecorator(Builder builder) {
 
         setStyleName(StyleName.WidgetDecorator.name());
 
-        this.component = component;
+        this.component = builder.component;
         final Widget nativeComponent = component.asWidget();
         nativeComponent.addStyleName(StyleName.WidgetDecoratorComponent.name());
 
-        label = new Label(componentCaption == null ? (component.getTitle() == null ? "" : component.getTitle() + ":") : componentCaption);
+        String caption = builder.componentCaption;
+
+        if (caption == null) {
+            caption = component.getTitle();
+        }
+
+        if (caption == null) {
+            caption = "";
+        } else {
+            caption += builder.useLabelSemicolon ? ":" : "";
+        }
+
+        label = new Label(caption);
         label.setStyleName(StyleName.WidgetDecoratorLabel.name());
 
         Cursor.setDefault(label.getElement());
@@ -134,14 +142,14 @@ public class WidgetDecorator extends FlowPanel {
         });
 
         FlowPanel labelHolder = new FlowPanel();
-        labelHolder.getElement().getStyle().setWidth(labelWidth, Unit.EM);
+        labelHolder.getElement().getStyle().setWidth(builder.labelWidth, Unit.EM);
         labelHolder.setStyleName(StyleName.WidgetDecoratorLabelHolder.name());
         labelHolder.add(label);
         labelHolder.add(mandatoryImageHolder);
         add(labelHolder);
 
         SimplePanel componentHolder = new SimplePanel();
-        componentHolder.getElement().getStyle().setWidth(componentWidth, Unit.EM);
+        componentHolder.getElement().getStyle().setWidth(builder.componentWidth, Unit.EM);
         componentHolder.setStyleName(StyleName.WidgetDecoratorComponentHolder.name());
         componentHolder.add(nativeComponent);
 
@@ -154,6 +162,10 @@ public class WidgetDecorator extends FlowPanel {
         contentPanel.add(infoImageHolder);
         contentPanel.add(validationLabel);
         add(contentPanel);
+
+        if (builder.readOnlyMode) {
+            addStyleDependentName(WidgetDecorator.StyleDependent.readOnly.name());
+        }
 
     }
 
@@ -187,5 +199,61 @@ public class WidgetDecorator extends FlowPanel {
                 validationLabel.setText(null);
             }
         }
+    }
+
+    public static class Builder {
+        private final CComponent<?> component;
+
+        private double labelWidth = 15;
+
+        private double componentWidth = 25;
+
+        private String componentCaption;
+
+        private boolean useLabelSemicolon = true;
+
+        private boolean readOnlyMode = false;
+
+        public Builder(final CComponent<?> component) {
+            this.component = component;
+        }
+
+        public WidgetDecorator build() {
+            return new WidgetDecorator(this);
+        }
+
+        public Builder labelWidth(double labelWidth) {
+            this.labelWidth = labelWidth;
+            return this;
+        }
+
+        public Builder componentWidth(double componentWidth) {
+            this.componentWidth = componentWidth;
+            return this;
+        }
+
+        public Builder componentCaption(String componentCaption) {
+            this.componentCaption = componentCaption;
+            return this;
+        }
+
+        public Builder useLabelSemicolon(boolean useLabelSemicolon) {
+            this.useLabelSemicolon = useLabelSemicolon;
+            return this;
+        }
+
+        public Builder readOnlyMode(boolean readOnlyMode) {
+            this.readOnlyMode = readOnlyMode;
+            return this;
+        }
+
+    }
+
+    public static WidgetDecorator build(CComponent<?> component, double componentWidth) {
+        return new WidgetDecorator(new Builder(component).componentWidth(componentWidth));
+    }
+
+    public static WidgetDecorator build(CComponent<?> component, double labelWidth, double componentWidth) {
+        return new WidgetDecorator(new Builder(component).labelWidth(labelWidth).componentWidth(componentWidth));
     }
 }
