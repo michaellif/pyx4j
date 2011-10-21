@@ -127,6 +127,7 @@ public class AddressUtils {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private static void attachFilters(final IAddressFull proto, final CEntityEditor<?> parent, CEditableComponent<Province, ?> province,
             CEditableComponent<Country, ?> country, CEditableComponent<String, ?> postalCode) {
+
         postalCode.addValueValidator(new com.propertyvista.common.client.ui.validators.ZipCodeValueValidator(parent, proto.country()));
         country.addValueChangeHandler(new com.propertyvista.common.client.ui.validators.RevalidationTrigger(postalCode));
 

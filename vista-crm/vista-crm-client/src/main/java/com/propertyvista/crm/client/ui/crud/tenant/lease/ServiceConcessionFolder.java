@@ -26,8 +26,12 @@ import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
@@ -71,6 +75,21 @@ class ServiceConcessionFolder extends VistaTableFolder<ServiceConcession> {
                 }
             };
         }
+    }
+
+    @Override
+    protected IFolderDecorator<ServiceConcession> createDecorator() {
+        TableFolderDecorator<ServiceConcession> decor = (TableFolderDecorator<ServiceConcession>) super.createDecorator();
+        decor.setShowHeader(false);
+        return decor;
+    }
+
+    @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        if (member instanceof ServiceConcession) {
+            return new ServiceConcessionEditor();
+        }
+        return super.create(member);
     }
 
     class ServiceConcessionEditor extends CEntityFolderRowEditor<ServiceConcession> {

@@ -107,7 +107,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.add(inject(proto().status()), 15);
 
         HorizontalPanel unitPanel = new HorizontalPanel();
-        unitPanel.add(main.createDecorator(inject(proto().unit(), new CEntityLabel()), 25));
+        unitPanel.add(main.createDecorator(inject(proto().unit(), new CEntityLabel()), 20));
         if (isEditable()) {
             unitPanel.add(new Button(i18n.tr("Select..."), new ClickHandler() {
                 @Override

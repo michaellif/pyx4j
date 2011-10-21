@@ -56,7 +56,7 @@ public interface Pet extends ChargeItemExtraData {
     @NotNull
     public IPrimitive<Integer> weight();
 
-    @Caption(name = "")
+    @Caption(name = "Units")
     @NotNull
     public IPrimitive<WeightUnit> weightUnit();
 

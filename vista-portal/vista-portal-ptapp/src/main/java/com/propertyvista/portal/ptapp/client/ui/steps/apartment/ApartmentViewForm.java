@@ -27,7 +27,9 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.HtmlUtils;
+import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
@@ -55,6 +57,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPa
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
+import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -62,6 +65,8 @@ import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.financial.offering.extradata.Vehicle;
+import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.Province;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
@@ -381,9 +386,23 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
                         split.getLeftPanel().add(inject(proto().model()), 10);
 
                         split.getRightPanel().add(inject(proto().plateNumber()), 10);
-                        split.getRightPanel().add(inject(proto().country()), 10);
-                        split.getRightPanel().add(inject(proto().province()), 17);
 
+                        CEditableComponent<Country, ?> country;
+                        split.getRightPanel().add(country = (CEditableComponent<Country, ?>) inject(proto().country()), 15);
+                        CEditableComponent<Province, ?> province;
+                        split.getRightPanel().add(province = (CEditableComponent<Province, ?>) inject(proto().province()), 17);
+
+                        ProvinceContryFilters.attachFilters(province, country, new OptionsFilter<Province>() {
+                            @Override
+                            public boolean acceptOption(Province entity) {
+                                if (getValue() == null) {
+                                    return true;
+                                } else {
+                                    Country country = (Country) getValue().getMember(proto().country().getPath());
+                                    return country.isNull() || EqualsHelper.equals(entity.country().name(), country.name());
+                                }
+                            }
+                        });
                         return panel;
                     }
 
@@ -408,7 +427,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
                         panel.add(split);
 
                         split.getLeftPanel().add(inject(proto().name()), 15);
-                        split.getLeftPanel().add(inject(proto().color()), 10);
+                        split.getLeftPanel().add(inject(proto().color()), 15);
                         split.getLeftPanel().add(inject(proto().breed()), 15);
 
                         split.getRightPanel().add(inject(proto().weight()), 4);
