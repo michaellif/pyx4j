@@ -16,21 +16,23 @@ package com.propertyvista.portal.client.themes;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.DataTable;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeRadioGroup;
+import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.style.IStyleName;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColors;
 
 import com.propertyvista.common.client.theme.VistaTheme;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
-import com.propertyvista.portal.client.ui.NavigViewImpl;
 import com.propertyvista.portal.client.ui.PortalScreen;
-import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.client.ui.residents.NewPaymentMethodForm;
 
@@ -42,17 +44,33 @@ public class PortalTheme extends VistaTheme {
 
     @Override
     protected void initStyles() {
-        super.initStyles();
-        initBodyStyles();
+
+        initEntityFolderStyles();
+
+        addTheme(new DefaultWidgetDecoratorTheme());
+
+        addTheme(new DefaultFormFlexPanelTheme());
+
+        initTextBoxStyle();
+        initCheckBoxStyle();
+        initDatePickerStyle();
+        initHyperlinkStyle();
+        initGroupBoxStyle();
         initListBoxStyle();
         initListerStyles();
         initEntityDataTableStyles();
-        initDecoratorsStyles();
         initSiteViewStyles();
-        initVistaNavigViewStyles();
-        initCriteriaWidgetDecoratorStyles();
         initPropertyMarkerStyle();
         initPaymentRadioButtonGroupStyles();
+    }
+
+    @Override
+    protected void initEntityFolderStyles() {
+        addTheme(new DefaultEntityFolderTheme());
+
+        Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolder);
+        style.addProperty("width", "690px");
+        addStyle(style);
     }
 
     @Override
@@ -241,86 +259,6 @@ public class PortalTheme extends VistaTheme {
         style.addProperty("background-color", ThemeColors.OBJECT_TONE30);
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColors.BORDER);
-        addStyle(style);
-    }
-
-    private void initVistaNavigViewStyles() {
-        String prefix = NavigViewImpl.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("width", "100%");
-        style.addProperty("overflow", "hidden");
-        style.addProperty("padding-bottom", "20px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Holder));
-        style.addProperty("margin", "0");
-        style.addProperty("padding", "0");
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE35);
-        style.addProperty("list-style", "none");
-        style.addProperty("overflow", "hidden");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Tab));
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE55);
-        style.addProperty("margin-right", "4px");
-        style.addProperty("border", "none");
-        style.addProperty("border-top-left-radius", "8px");
-        style.addProperty("border-top-right-radius", "8px");
-        style.addProperty("-moz-border-radius-topleft", "8px");
-        style.addProperty("-moz-border-radius-topright", "8px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Label, NavigViewImpl.StyleDependent.current));
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE95);
-        style.addProperty("color", "white");
-        style.addProperty("border-top-left-radius", "8px");
-        style.addProperty("border-top-right-radius", "8px");
-        style.addProperty("-moz-border-radius-topleft", "8px");
-        style.addProperty("-moz-border-radius-topright", "8px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Label));
-        style.addProperty("height", "50px");
-        style.addProperty("line-height", "50px");
-        style.addProperty("font-size", "14px");
-        style.addProperty("font-style", "normal");
-        //      style.addProperty("text-shadow", "0 -1px 0 #E6E6E6");
-        style.addProperty("padding-left", "29px");
-        style.addProperty("padding-right", "29px");
-        addStyle(style);
-
-    }
-
-    private void initDecoratorsStyles() {
-        String prefix = VistaHeaderBar.DEFAULT_STYLE_PREFIX;
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE25);
-        style.addProperty("margin-top", "10px");
-        style.addProperty("padding-top", "10px");
-        style.addProperty("padding-bottom", "10px");
-        style.addProperty("padding-left", "20px");
-        style.addProperty("margin-bottom", "10px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, VistaHeaderBar.StyleSuffix.Caption));
-        style.addProperty("font-size", "14px");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("color", "#888888");
-        style.addProperty("padding-left", "20px");
-        addStyle(style);
-
-        prefix = VistaWidgetDecorator.DEFAULT_STYLE_PREFIX;
-        style = new Style(Selector.valueOf(prefix));
-        addStyle(style);
-
-    }
-
-    private void initCriteriaWidgetDecoratorStyles() {
-        String prefix = CriteriaWidgetDecorator.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("padding", "10px");
         addStyle(style);
     }
 

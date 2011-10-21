@@ -26,8 +26,6 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
 
     private double defaultLabelWidth = 12;
 
-    private final boolean showMandatory = true;
-
     public VistaDecoratorsFlowPanel() {
         setStyleName(DEFAULT_STYLE_NAME);
     }
@@ -95,4 +93,5 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
     public void setReadOnlyMode(boolean readOnlyMode) {
         this.readOnlyMode = readOnlyMode;
     }
+
 }

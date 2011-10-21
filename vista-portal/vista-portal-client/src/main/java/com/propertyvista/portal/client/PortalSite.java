@@ -54,12 +54,13 @@ public class PortalSite extends VistaSite {
         } else if (RootPanel.get(RESIDENT_TEST_INSERTION_ID) != null) {
             getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.Landing());
             RootPanel.get(RESIDENT_TEST_INSERTION_ID).add(new PortalScreen());
-            StyleManger.installTheme(new PortalTheme(), new PortalPalette());
         } else {
             getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.Landing());
             RootPanel.get().add(new PortalScreen());
-            StyleManger.installTheme(new PortalTheme(), new PortalPalette());
+
         }
+
+        StyleManger.installTheme(new PortalTheme(), new PortalPalette());
 
         hideLoadingIndicator();
 
