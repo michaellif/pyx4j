@@ -162,7 +162,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         return tabPanel.getSelectedIndex();
     }
 
-    private WidgetDecorator buildWidgetDecorator(CComponent<?> component, double componentWidth) {
+    private WidgetDecorator decorate(CComponent<?> component, double componentWidth) {
         return new WidgetDecorator(new Builder(component).componentWidth(componentWidth).readOnlyMode(!isEditable()));
     }
 
@@ -171,22 +171,22 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         int row = 0;
 
-        main.setWidget(row, 0, buildWidgetDecorator(inject(proto().propertyCode()), 12));
-        main.setWidget(row++, 1, buildWidgetDecorator(inject(proto().info().shape()), 7));
+        main.setWidget(row, 0, decorate(inject(proto().propertyCode()), 12));
+        main.setWidget(row++, 1, decorate(inject(proto().info().shape()), 7));
 
-        main.setWidget(row, 0, buildWidgetDecorator(inject(proto().info().name()), 15));
-        main.setWidget(row++, 1, buildWidgetDecorator(inject(proto().info().totalStoreys()), 5));
+        main.setWidget(row, 0, decorate(inject(proto().info().name()), 15));
+        main.setWidget(row++, 1, decorate(inject(proto().info().totalStoreys()), 5));
 
-        main.setWidget(row, 0, buildWidgetDecorator(inject(proto().info().type()), 12));
-        main.setWidget(row++, 1, buildWidgetDecorator(inject(proto().info().residentialStoreys()), 5));
+        main.setWidget(row, 0, decorate(inject(proto().info().type()), 12));
+        main.setWidget(row++, 1, decorate(inject(proto().info().residentialStoreys()), 5));
 
-        main.setWidget(row, 0, buildWidgetDecorator(inject(proto().propertyManager()), 15));
-        main.setWidget(row++, 1, buildWidgetDecorator(inject(proto().complexPrimary()), 15));
+        main.setWidget(row, 0, decorate(inject(proto().propertyManager()), 15));
+        main.setWidget(row++, 1, decorate(inject(proto().complexPrimary()), 15));
 
-        main.setWidget(row++, 1, buildWidgetDecorator(inject(proto().complex()), 15));
+        main.setWidget(row++, 1, decorate(inject(proto().complex()), 15));
 
         main.setHeader(row++, 0, 2, "");
-        main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().geoLocation()), 28));
+        main.setWidget(row++, 0, decorate(inject(proto().geoLocation()), 28));
 
         main.setHeader(row++, 0, 2, proto().info().address().getMeta().getCaption());
         main.setWidget(row++, 0, inject(proto().info().address(), new AddressEditor(false, !isEditable())));
@@ -219,34 +219,34 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
             int row = 0;
             if (showUnit) {
-                main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().unitNumber()), 12));
+                main.setWidget(row++, 0, decorate(inject(proto().unitNumber()), 12));
             }
 
-            main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().streetNumber()), 5));
-            main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().streetNumberSuffix()), 5));
-            main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().streetName()), 15));
-            main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().streetType()), 10));
-            main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().streetDirection()), 10));
+            main.setWidget(row++, 0, decorate(inject(proto().streetNumber()), 5));
+            main.setWidget(row++, 0, decorate(inject(proto().streetNumberSuffix()), 5));
+            main.setWidget(row++, 0, decorate(inject(proto().streetName()), 15));
+            main.setWidget(row++, 0, decorate(inject(proto().streetType()), 10));
+            main.setWidget(row++, 0, decorate(inject(proto().streetDirection()), 10));
 
-            main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().city()), 15));
-            main.setWidget(row++, 0, buildWidgetDecorator(inject(proto().county()), 15));
+            main.setWidget(row++, 0, decorate(inject(proto().city()), 15));
+            main.setWidget(row++, 0, decorate(inject(proto().county()), 15));
 
             // Need local variables to avoid extended casting that make the code unreadable
             CEditableComponent<Province, ?> province = (CEditableComponent<Province, ?>) inject(proto().province());
-            main.setWidget(row++, 0, buildWidgetDecorator(province, 17));
+            main.setWidget(row++, 0, decorate(province, 17));
 
             CEditableComponent<Country, ?> country = (CEditableComponent<Country, ?>) inject(proto().country());
-            main.setWidget(row++, 0, buildWidgetDecorator(country, 15));
+            main.setWidget(row++, 0, decorate(country, 15));
 
             CEditableComponent<String, ?> postalCode = (CEditableComponent<String, ?>) inject(proto().postalCode());
-            main.setWidget(row++, 0, buildWidgetDecorator(postalCode, 7));
+            main.setWidget(row++, 0, decorate(postalCode, 7));
 
             attachFilters(proto(), province, country, postalCode);
 
             return main;
         }
 
-        private WidgetDecorator buildWidgetDecorator(CComponent<?> component, double componentWidth) {
+        private WidgetDecorator decorate(CComponent<?> component, double componentWidth) {
             return new WidgetDecorator(new Builder(component).componentWidth(componentWidth).readOnlyMode(readOnly));
         }
 
