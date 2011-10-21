@@ -28,10 +28,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
@@ -46,14 +44,12 @@ import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.common.client.ui.components.CAddress;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
-import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
-import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
-import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
@@ -62,12 +58,8 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.company.OrganizationContact;
-import com.propertyvista.domain.contact.Address;
-import com.propertyvista.domain.contact.IAddressFull;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
@@ -189,7 +181,9 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(row++, 0, decorate(inject(proto().geoLocation()), 28));
 
         main.setHeader(row++, 0, 2, proto().info().address().getMeta().getCaption());
-        main.setWidget(row++, 0, inject(proto().info().address(), new AddressEditor(false, !isEditable())));
+
+        main.setWidget(row, 0, inject(proto().info().address(), new CAddress(true, false, !isEditable())));
+        main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
         main.setHeader(row++, 0, 2, proto().amenities().getMeta().getCaption());
         main.setWidget(row, 0, inject(proto().amenities(), new BuildingAmenityFolder()));
@@ -199,76 +193,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
-    }
-
-    class AddressEditor extends CEntityEditor<Address> {
-
-        private final boolean showUnit;
-
-        private final boolean readOnly;
-
-        public AddressEditor(boolean showUnit, boolean readOnly) {
-            super(Address.class);
-            this.showUnit = showUnit;
-            this.readOnly = readOnly;
-        }
-
-        @Override
-        public IsWidget createContent() {
-            FormFlexPanel main = new FormFlexPanel();
-
-            int row = 0;
-            if (showUnit) {
-                main.setWidget(row++, 0, decorate(inject(proto().unitNumber()), 12));
-            }
-
-            main.setWidget(row++, 0, decorate(inject(proto().streetNumber()), 5));
-            main.setWidget(row++, 0, decorate(inject(proto().streetNumberSuffix()), 5));
-            main.setWidget(row++, 0, decorate(inject(proto().streetName()), 15));
-            main.setWidget(row++, 0, decorate(inject(proto().streetType()), 10));
-            main.setWidget(row++, 0, decorate(inject(proto().streetDirection()), 10));
-
-            main.setWidget(row++, 0, decorate(inject(proto().city()), 15));
-            main.setWidget(row++, 0, decorate(inject(proto().county()), 15));
-
-            // Need local variables to avoid extended casting that make the code unreadable
-            CEditableComponent<Province, ?> province = (CEditableComponent<Province, ?>) inject(proto().province());
-            main.setWidget(row++, 0, decorate(province, 17));
-
-            CEditableComponent<Country, ?> country = (CEditableComponent<Country, ?>) inject(proto().country());
-            main.setWidget(row++, 0, decorate(country, 15));
-
-            CEditableComponent<String, ?> postalCode = (CEditableComponent<String, ?>) inject(proto().postalCode());
-            main.setWidget(row++, 0, decorate(postalCode, 7));
-
-            attachFilters(proto(), province, country, postalCode);
-
-            return main;
-        }
-
-        private WidgetDecorator decorate(CComponent<?> component, double componentWidth) {
-            return new WidgetDecorator(new Builder(component).componentWidth(componentWidth).readOnlyMode(readOnly));
-        }
-
-        private void attachFilters(final IAddressFull proto, CEditableComponent<Province, ?> province, CEditableComponent<Country, ?> country,
-                CEditableComponent<String, ?> postalCode) {
-            postalCode.addValueValidator(new ZipCodeValueValidator(this, proto.country()));
-            country.addValueChangeHandler(new RevalidationTrigger(postalCode));
-
-            // The filter does not use the CEditableComponent<Country, ?> and use Model directly. So it work fine on populate.
-            ProvinceContryFilters.attachFilters(province, country, new OptionsFilter<Province>() {
-                @Override
-                public boolean acceptOption(Province entity) {
-                    if (getValue() == null) {
-                        return true;
-                    } else {
-                        Country country = (Country) getValue().getMember(proto.country().getPath());
-                        return country.isNull() || EqualsHelper.equals(entity.country().name(), country.name());
-                    }
-                }
-            });
-        }
-
     }
 
     private Widget createDetailsTab() {
