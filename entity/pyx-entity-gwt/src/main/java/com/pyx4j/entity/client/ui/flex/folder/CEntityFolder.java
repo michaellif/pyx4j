@@ -62,6 +62,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     public static enum StyleName implements IStyleName {
         EntityFolder, EntityFolderActionsBar, EntityFolderAddButton, EntityFolderAddButtonImage, EntityFolderAddButtonLabel,
 
+        EntityFolderRemoveButton, EntityFolderUpButton, EntityFolderDownButton,
+
         //Box
         EntityFolderBoxItem, EntityFolderBoxDecorator, EntityFolderBoxItemDecorator,
 

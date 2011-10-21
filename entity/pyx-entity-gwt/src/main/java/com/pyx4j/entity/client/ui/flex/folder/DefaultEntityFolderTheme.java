@@ -30,10 +30,13 @@ import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.Ent
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderBoxDecorator;
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderBoxItem;
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderBoxItemDecorator;
+import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderDownButton;
+import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderRemoveButton;
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderRowItemDecorator;
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderTableDecorator;
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderTableHeader;
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderTableHeaderLabel;
+import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderUpButton;
 
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.Theme;
@@ -86,6 +89,7 @@ public class DefaultEntityFolderTheme extends Theme {
 
         style = new Style(".", EntityFolderActionsBar);
         style.addProperty("opacity", "0.2");
+        style.addProperty("width", "63px");
         addStyle(style);
 
         style = new Style(".", EntityFolderActionsBar, "-", hover);
@@ -103,6 +107,26 @@ public class DefaultEntityFolderTheme extends Theme {
 
         style = new Style(".", EntityFolderAddButtonLabel);
         style.addProperty("padding-left", "3px");
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(".", EntityFolderRemoveButton);
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(".", EntityFolderUpButton);
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(".", EntityFolderDownButton);
+        style.addProperty("float", "right");
+        addStyle(style);
+
+        style = new Style(".", EntityFolderRemoveButton);
+        style.addProperty("float", "right");
+        addStyle(style);
+
+        style = new Style(".", EntityFolderRowItemDecorator, " .", EntityFolderRemoveButton);
         style.addProperty("float", "left");
         addStyle(style);
 
