@@ -20,6 +20,18 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
+            <artifactId>vista-integration</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-portal-tester</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.propertyvista</groupId>
             <artifactId>vista-tester-client</artifactId>
             <version>${project.version}</version>
         </dependency>

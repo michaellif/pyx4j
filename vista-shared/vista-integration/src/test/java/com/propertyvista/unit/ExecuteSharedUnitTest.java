@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;
 import com.pyx4j.selenium.UnitTestExecutionTestBase;
 
-import com.propertyvista.portal.tester.TesterDebugId;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
 
@@ -36,7 +35,7 @@ public class ExecuteSharedUnitTest extends UnitTestExecutionTestBase {
 
     public void testUnitTests() throws Exception {
         VistaDevLogin.login(selenium);
-        selenium.waitFor(TesterDebugId.TesterMainMenu.name() + "-text1").click();
+        //selenium.waitFor(TesterDebugId.TesterMainMenu.name() + "-text1").click();
         executeAllClientUnitTests(180);
         ExecutionStatus status = getExecutionStatus();
 
