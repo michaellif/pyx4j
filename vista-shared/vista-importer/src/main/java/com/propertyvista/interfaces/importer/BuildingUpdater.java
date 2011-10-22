@@ -23,13 +23,17 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.interfaces.importer.converter.AptUnitConverter;
+import com.propertyvista.interfaces.importer.converter.BuildingConverter;
+import com.propertyvista.interfaces.importer.converter.FloorplanConverter;
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
+import com.propertyvista.server.common.reference.PublicDataUpdater;
 
 public class BuildingUpdater {
 
-    public ImportCounters update(BuildingIO buildingIO, String imagesBaseFolder) {
+    public ImportCounters updateUnitAvailability(BuildingIO buildingIO, String imagesBaseFolder) {
         ImportCounters counters = new ImportCounters();
         Building building;
         {
@@ -87,6 +91,104 @@ public class BuildingUpdater {
                     Persistence.service().persist(unit);
                     counters.units += 1;
                     counters.buildings = 1;
+                }
+
+            }
+        }
+        return counters;
+    }
+
+    public ImportCounters updateData(BuildingIO buildingIO, String imagesBaseFolder, boolean ignoreMissingMedia) {
+        if (buildingIO.propertyCode().isNull()) {
+            throw new UserRuntimeException("propertyCode can't be empty");
+        }
+        ImportCounters counters = new ImportCounters();
+        boolean newBuilding = false;
+        Building building;
+        {
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), buildingIO.propertyCode().getValue()));
+            List<Building> buildings = Persistence.service().query(criteria);
+            if (buildings.size() == 0) {
+                newBuilding = true;
+                building = new BuildingConverter().createDBO(buildingIO);
+                Persistence.service().persist(building);
+                PublicDataUpdater.updateIndexData(building);
+                counters.buildings += 1;
+            } else if (buildings.size() > 1) {
+                throw new UserRuntimeException("More then one building '" + buildingIO.propertyCode().getValue() + "' found");
+            } else {
+                building = buildings.get(0);
+                boolean buildingUpdated = false;
+
+                buildingUpdated = new BuildingConverter().updateDBO(buildingIO, building);
+
+                if (buildingUpdated) {
+                    Persistence.service().persist(building);
+                    counters.buildings += 1;
+                }
+            }
+        }
+
+        for (FloorplanIO floorplanIO : buildingIO.floorplans()) {
+            if (floorplanIO.name().isNull()) {
+                throw new UserRuntimeException("Floorplan name in  building '" + buildingIO.propertyCode().getValue() + "' can't be empty");
+            }
+            boolean newFloorplan = false;
+            Floorplan floorplan = null;
+            if (!newBuilding) {
+                EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
+                criteria.add(PropertyCriterion.eq(criteria.proto().name(), floorplanIO.name().getValue()));
+                List<Floorplan> floorplans = Persistence.service().query(criteria);
+                if (floorplans.size() == 1) {
+                    floorplan = floorplans.get(0);
+                } else if (floorplans.size() > 1) {
+                    throw new UserRuntimeException("More then one Floorplan '" + floorplanIO.name().getValue() + "' in  building '"
+                            + buildingIO.propertyCode().getValue() + "' found");
+                }
+            }
+            boolean floorplanUpdated = false;
+            if (floorplan == null) {
+                newFloorplan = true;
+                floorplanUpdated = true;
+                floorplan = new FloorplanConverter().createDBO(floorplanIO);
+                floorplan.building().set(building);
+            } else {
+                floorplanUpdated = new FloorplanConverter().updateDBO(floorplanIO, floorplan);
+            }
+
+            if (floorplanUpdated) {
+                Persistence.service().persist(floorplan);
+                counters.floorplans += 1;
+            }
+
+            for (AptUnitIO aptUnitIO : floorplanIO.units()) {
+                AptUnit unit = null;
+                if (!newFloorplan) {
+                    EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+                    criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
+                    criteria.add(PropertyCriterion.eq(criteria.proto().info().number(), aptUnitIO.number().getValue()));
+                    List<AptUnit> units = Persistence.service().query(criteria);
+                    if (units.size() == 1) {
+                        unit = units.get(0);
+                    } else if (units.size() > 1) {
+                        throw new UserRuntimeException("More then one AptUnit '" + aptUnitIO.number().getValue() + "' in '" + floorplanIO.name().getValue()
+                                + "' in '" + buildingIO.propertyCode().getValue() + "' found");
+                    }
+                }
+                boolean unitUpdated = false;
+                if (unit == null) {
+                    unit = new AptUnitConverter().createDBO(aptUnitIO);
+                    unitUpdated = true;
+                } else {
+                    unitUpdated = new AptUnitConverter().updateDBO(aptUnitIO, unit);
+
+                }
+
+                if (unitUpdated) {
+                    Persistence.service().persist(unit);
+                    counters.units += 1;
                 }
 
             }

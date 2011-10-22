@@ -94,7 +94,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
             process.status().setProgressMaximum(importIO.buildings().size());
 
             int count = 0;
-            if (!importDTO.updateOnly().isBooleanTrue()) {
+            if (!importDTO.type().getValue().equals(PmcImportDTO.ImportType.updateUnitAvailability)) {
                 List<String> messages = new Vector<String>();
                 for (BuildingIO building : importIO.buildings()) {
                     messages.addAll(new BuildingImporter().verify(building, imagesBaseFolder));
@@ -114,19 +114,32 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
             ImportCounters counters = new ImportCounters();
             for (BuildingIO building : importIO.buildings()) {
                 log.debug("processing building {} {}", count + "/" + importIO.buildings().size(), building.propertyCode().getValue());
-                if (importDTO.updateOnly().isBooleanTrue()) {
-                    counters.add(new BuildingUpdater().update(building, imagesBaseFolder));
-                } else {
+                switch (importDTO.type().getValue()) {
+                case newData:
                     counters.add(new BuildingImporter().persist(building, imagesBaseFolder, importDTO.ignoreMissingMedia().isBooleanTrue()));
+                    break;
+                case updateUnitAvailability:
+                    counters.add(new BuildingUpdater().updateUnitAvailability(building, imagesBaseFolder));
+                    break;
+                case updateData:
+                    counters.add(new BuildingUpdater().updateData(building, imagesBaseFolder, importDTO.ignoreMissingMedia().isBooleanTrue()));
+                    break;
                 }
                 count++;
                 process.status().setProgress(count);
             }
-            if (importDTO.updateOnly().isBooleanTrue()) {
-                response.message = SimpleMessageFormat.format("Updated {0} units in {1} building(s)", counters.units, counters.buildings);
-            } else {
+            switch (importDTO.type().getValue()) {
+            case newData:
                 response.message = SimpleMessageFormat.format("Imported {0} building(s), {1} floorplan(s), {2} unit(s)", count, counters.floorplans,
                         counters.units);
+                break;
+            case updateData:
+                response.message = SimpleMessageFormat.format("Updated {0} building(s), {1} floorplan(s), {2} unit(s)", counters.buildings,
+                        counters.floorplans, counters.units);
+                break;
+            case updateUnitAvailability:
+                response.message = SimpleMessageFormat.format("Updated {0} units in {1} building(s)", counters.units, counters.buildings);
+                break;
             }
             log.info("import upload completed {}", response.message);
         } finally {

@@ -13,13 +13,13 @@
  */
 package com.propertyvista.admin.client.ui.crud.pmc;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
@@ -85,13 +85,16 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
                 main.add(uploadPanel);
-                main.add(inject(proto().updateOnly()), 10);
+                main.add(inject(proto().type()), 10);
                 main.add(inject(proto().ignoreMissingMedia()), 10);
                 return main;
             }
         };
-        form.populate(null);
-        form.getValue().setPrimaryKey(pmc.getPrimaryKey());
+        PmcImportDTO defaultSettings = EntityFactory.create(PmcImportDTO.class);
+        defaultSettings.setPrimaryKey(pmc.getPrimaryKey());
+        defaultSettings.type().setValue(PmcImportDTO.ImportType.newData);
+
+        form.populate(defaultSettings);
         form.initContent();
 
         dialog.setBody(form.asWidget());

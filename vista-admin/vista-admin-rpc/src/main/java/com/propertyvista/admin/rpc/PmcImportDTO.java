@@ -13,16 +13,34 @@
  */
 package com.propertyvista.admin.rpc;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 @Transient
 public interface PmcImportDTO extends IEntity {
 
-    @Caption(name = "Update Unit availability")
-    IPrimitive<Boolean> updateOnly();
+    @I18n
+    public static enum ImportType {
+
+        newData,
+
+        updateData,
+
+        updateUnitAvailability;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
+
+    }
+
+    @NotNull
+    IPrimitive<ImportType> type();
 
     IPrimitive<Boolean> ignoreMissingMedia();
 }

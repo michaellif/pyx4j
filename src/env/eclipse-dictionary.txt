@@ -157,3 +157,4 @@ msgstr
 floorplans
 highrise
 admin
+floorplan

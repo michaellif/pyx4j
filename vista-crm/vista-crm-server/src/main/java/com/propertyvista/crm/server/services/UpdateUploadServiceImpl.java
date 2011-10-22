@@ -78,7 +78,7 @@ public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO> 
         ImportCounters counters = new ImportCounters();
         for (BuildingIO building : importIO.buildings()) {
             log.debug("processing building {} {}", count + "/" + importIO.buildings().size(), building.propertyCode().getValue());
-            counters.add(new BuildingUpdater().update(building, imagesBaseFolder));
+            counters.add(new BuildingUpdater().updateUnitAvailability(building, imagesBaseFolder));
             count++;
             process.status().setProgress(count);
         }
