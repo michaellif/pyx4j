@@ -20,7 +20,7 @@
  */
 package com.pyx4j.dashboard.demo.client;
 
-import com.pyx4j.widgets.client.style.ColorFactory;
+import com.pyx4j.widgets.client.style.ColorUtil;
 import com.pyx4j.widgets.client.style.Palette;
 import com.pyx4j.widgets.client.style.ThemeColors;
 
@@ -30,14 +30,14 @@ public class DashboardPalette extends Palette {
         float hue = (float) 160 / 360;
         float saturation = 0;
         float brightness = (float) 0.3;
-        putThemeColor(ThemeColors.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.05));
-        putThemeColor(ThemeColors.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.1));
-        putThemeColor(ThemeColors.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.2));
-        putThemeColor(ThemeColors.OBJECT_TONE4, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
-        putThemeColor(ThemeColors.OBJECT_TONE5, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.8));
+        putThemeColor(ThemeColors.OBJECT_TONE1, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.05));
+        putThemeColor(ThemeColors.OBJECT_TONE2, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.1));
+        putThemeColor(ThemeColors.OBJECT_TONE3, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.2));
+        putThemeColor(ThemeColors.OBJECT_TONE4, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.4));
+        putThemeColor(ThemeColors.OBJECT_TONE5, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.8));
         putThemeColor(ThemeColors.BORDER, 0xf0f0f0);
-        putThemeColor(ThemeColors.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.6));
-        putThemeColor(ThemeColors.SELECTION_TEXT, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.025));
+        putThemeColor(ThemeColors.SELECTION, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.6));
+        putThemeColor(ThemeColors.SELECTION_TEXT, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.025));
         putThemeColor(ThemeColors.TEXT, 0x000000);
         putThemeColor(ThemeColors.TEXT_BACKGROUND, 0xffffff);
         putThemeColor(ThemeColors.DISABLED_TEXT_BACKGROUND, 0xfafafa);

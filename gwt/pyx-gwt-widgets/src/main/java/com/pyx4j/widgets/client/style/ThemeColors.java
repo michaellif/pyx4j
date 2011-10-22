@@ -22,19 +22,19 @@ package com.pyx4j.widgets.client.style;
 
 public enum ThemeColors {
 
-    object1("5B6E90"),
+    object1("#5B6E90"),
 
-    object2("A6D6E2"),
+    object2("#A6D6E2"),
 
-    contrast1("E7AB6B"),
+    contrast1("#E7AB6B"),
 
-    contrast2("E76B6B"),
+    contrast2("#E76B6B"),
 
-    background("F9EFD6"),
+    background("#F9EFD6"),
 
-    text("FFFFFF"),
+    text("#FFFFFF"),
 
-    form("FFFFFF"),
+    form("#FFFFFF"),
 
     //=================================== Old stuff
 

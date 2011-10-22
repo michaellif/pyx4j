@@ -24,9 +24,12 @@ public class ColorProperty extends Property {
 
     private final ThemeColors color;
 
-    public ColorProperty(String name, ThemeColors color) {
+    private final double vibrance;
+
+    public ColorProperty(String name, ThemeColors color, double vibrance) {
         super(name);
         this.color = color;
+        this.vibrance = vibrance;
     }
 
     public ThemeColors getColor() {
@@ -38,7 +41,7 @@ public class ColorProperty extends Property {
         if (color == null) {
             throw new RuntimeException("theme property " + getName() + " should be set with color");
         }
-        return getName() + ": " + palette.getThemeColorString(color) + ";";
+        return getName() + ": " + palette.getThemeColor(color, vibrance) + ";";
     }
 
 }

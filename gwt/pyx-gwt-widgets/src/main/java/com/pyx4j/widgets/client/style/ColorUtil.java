@@ -23,11 +23,11 @@ package com.pyx4j.widgets.client.style;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ColorFactory {
+public class ColorUtil {
 
-    private static final Logger log = LoggerFactory.getLogger(ColorFactory.class);
+    private static final Logger log = LoggerFactory.getLogger(ColorUtil.class);
 
-    public static int HSBtoRGB(float hue, float saturation, float brightness) {
+    public static int hsbToRgb(float hue, float saturation, float brightness) {
         int r = 0, g = 0, b = 0;
         if (saturation == 0) {
             r = g = b = (int) (brightness * 255.0f + 0.5f);
@@ -73,7 +73,7 @@ public class ColorFactory {
         return (r << 16) | (g << 8) | (b << 0);
     }
 
-    public static float[] RGBtoHSB(int rgb) {
+    public static float[] rgbToHsb(int rgb) {
         int r = (rgb >> 16) & 0xFF;
         int g = (rgb >> 8) & 0xFF;
         int b = (rgb >> 0) & 0xFF;
@@ -113,14 +113,48 @@ public class ColorFactory {
         return hsbvals;
     }
 
-    public static int HSBVtoRGB(float hue, float saturation, float brightness, float vibrance) {
+    public static int hsbvToRgb(float hue, float saturation, float brightness, float vibrance) {
         float ns = saturation * vibrance;
         float nb = 1 - (1 - brightness) * vibrance;
-        return HSBtoRGB(hue, ns, nb);
+        return hsbToRgb(hue, ns, nb);
     }
 
-    public static int RGBtoRGB(int rgb, float vibrance) {
-        float[] hsbvals = RGBtoHSB(rgb);
-        return HSBVtoRGB(hsbvals[0], hsbvals[1], hsbvals[2], vibrance);
+    public static int rgbToRgbv(int rgb, float vibrance) {
+        float[] hsbvals = rgbToHsb(rgb);
+        return hsbvToRgb(hsbvals[0], hsbvals[1], hsbvals[2], vibrance);
     }
+
+    public static String rgbToHex(int rgb) {
+        String colorString = Integer.toHexString(rgb);
+        for (int i = 0; i < (6 - colorString.length()); i++) {
+            colorString = "0" + colorString;
+        }
+        return "#" + colorString;
+    }
+
+    public static Integer parseToRgb(String color) {
+        Integer rgb = null;
+        if (color.startsWith("#")) {
+            String hex = color.substring(1, color.length());
+            if (hex.length() == 3) {
+                String shortHex = hex;
+                hex = "";
+                for (int i = 0; i < 6; i++) {
+                    hex += shortHex.charAt(i / 2);
+                }
+            }
+            if (hex.length() == 6) {
+                try {
+                    rgb = Integer.parseInt(hex, 16);
+                } catch (Exception e) {
+                    return null;
+                }
+
+            }
+        } else {
+            rgb = ColorName.getHexRGB(color);
+        }
+        return rgb;
+    }
+
 }

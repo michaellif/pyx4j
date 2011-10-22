@@ -136,7 +136,7 @@ public class TesterTheme extends Theme {
 
     protected void initBodyStyles() {
         Style style = new Style("body");
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE1);
+        style.addProperty("background-color", ThemeColors.background, 1);
         style.addProperty("color", ThemeColors.TEXT);
         style.addProperty("margin", "0");
         style.addProperty("border", "none");

@@ -30,31 +30,32 @@ public class Palette {
 
     private static final Logger log = LoggerFactory.getLogger(Palette.class);
 
-    private final Map<ThemeColors, Integer> themeColors;
+    private final Map<ThemeColors, String> themeColors;
 
     public Palette() {
-        themeColors = new HashMap<ThemeColors, Integer>();
+        themeColors = new HashMap<ThemeColors, String>();
     }
 
-    public Integer getThemeColor(ThemeColors color) {
-        if (themeColors.get(color) == null) {
-            log.warn("Theme color {} is not set", color.name());
-            return 0xffffff;
+    public String getThemeColor(ThemeColors themeColor, double vibrance) {
+        String color = themeColors.get(themeColor);
+        if (color == null) {
+            color = themeColor.getDefaultColor();
         }
-        return themeColors.get(color);
+        return ColorUtil.rgbToHex(ColorUtil.rgbToRgbv(ColorUtil.parseToRgb(color), (float) vibrance));
     }
 
-    public String getThemeColorString(ThemeColors color) {
-        String colorString = Integer.toHexString(getThemeColor(color));
-        int appendZeros = 6 - colorString.length();
-        for (int i = 0; i < appendZeros; i++) {
-            colorString = "0" + colorString;
-        }
+    // ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.08)
 
-        return "#" + colorString;
+    /**
+     * 
+     * @deprecated use putThemeColor(ThemeColors color, String value)
+     */
+    @Deprecated
+    public void putThemeColor(ThemeColors color, Integer rgb) {
+        themeColors.put(color, ColorUtil.rgbToHex(rgb));
     }
 
-    public void putThemeColor(ThemeColors color, Integer value) {
+    public void putThemeColor(ThemeColors color, String value) {
         themeColors.put(color, value);
     }
 }

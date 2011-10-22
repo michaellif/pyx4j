@@ -67,12 +67,20 @@ public class Style {
         properties.add(new StringProperty(name, value));
     }
 
+    public void addProperty(String name, ThemeColors color, double vibrance) {
+        properties.add(new ColorProperty(name, color, vibrance));
+    }
+
     public void addProperty(String name, ThemeColors color) {
-        properties.add(new ColorProperty(name, color));
+        properties.add(new ColorProperty(name, color, 1));
+    }
+
+    public void addGradient(ThemeColors startColor, double startVibrance, ThemeColors endColor, double endVibrance) {
+        properties.add(new GradientProperty(startColor, startVibrance, endColor, endVibrance));
     }
 
     public void addGradient(ThemeColors startColor, ThemeColors endColor) {
-        properties.add(new GradientProperty(startColor, endColor));
+        properties.add(new GradientProperty(startColor, 1, endColor, 1));
     }
 
     public String toString(Theme theme, Palette palette) {

@@ -26,25 +26,30 @@ public class GradientProperty extends Property {
 
     private final ThemeColors startColor;
 
+    private final double startVibrance;
+
     private final ThemeColors endColor;
 
-    public GradientProperty(ThemeColors startColor, ThemeColors endColor) {
+    private final double endVibrance;
+
+    public GradientProperty(ThemeColors startColor, double startVibrance, ThemeColors endColor, double endVibrance) {
         super(null);
         this.startColor = startColor;
+        this.startVibrance = startVibrance;
         this.endColor = endColor;
+        this.endVibrance = endVibrance;
     }
 
     @Override
     protected String convertToString(Theme theme, Palette palette) {
+        String color1 = palette.getThemeColor(startColor, startVibrance);
+        String color2 = palette.getThemeColor(endColor, endVibrance);
         if (BrowserType.isIE()) {
-            return "filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='" + palette.getThemeColorString(startColor) + "', endColorstr='"
-                    + palette.getThemeColorString(endColor) + "');";
+            return "filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='" + color1 + "', endColorstr='" + color2 + "');";
         } else if (BrowserType.isFirefox()) {
-            return "background:-moz-linear-gradient(top,  " + palette.getThemeColorString(startColor) + ",  " + palette.getThemeColorString(endColor) + ");";
+            return "background:-moz-linear-gradient(top,  " + color1 + ",  " + color2 + ");";
         } else {
-            return "background:-webkit-gradient(linear, left top, left bottom, from(" + palette.getThemeColorString(startColor) + "), to("
-                    + palette.getThemeColorString(endColor) + "));";
+            return "background:-webkit-gradient(linear, left top, left bottom, from(" + color1 + "), to(" + color2 + "));";
         }
     }
-
 }
