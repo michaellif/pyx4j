@@ -31,10 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
@@ -42,22 +39,18 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
-import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.CAddress;
+import com.propertyvista.common.client.ui.components.CMarketing;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
-import com.propertyvista.domain.company.OrganizationContact;
+import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
@@ -158,6 +151,10 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         return new WidgetDecorator(new Builder(component).componentWidth(componentWidth).readOnlyMode(!isEditable()));
     }
 
+    private WidgetDecorator decorate(CComponent<?> component, double componentWidth, String componentCaption) {
+        return new WidgetDecorator(new Builder(component).componentWidth(componentWidth).componentCaption(componentCaption).readOnlyMode(!isEditable()));
+    }
+
     private Widget createGeneralTab() {
         FormFlexPanel main = new FormFlexPanel();
 
@@ -172,13 +169,14 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(row, 0, decorate(inject(proto().info().type()), 12));
         main.setWidget(row++, 1, decorate(inject(proto().info().residentialStoreys()), 5));
 
-        main.setWidget(row, 0, decorate(inject(proto().propertyManager()), 15));
+        main.setWidget(row, 0, decorate(inject(proto().propertyManager()), 20));
         main.setWidget(row++, 1, decorate(inject(proto().complexPrimary()), 15));
 
         main.setWidget(row++, 1, decorate(inject(proto().complex()), 15));
 
         main.setHeader(row++, 0, 2, "");
         main.setWidget(row++, 0, decorate(inject(proto().geoLocation()), 28));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setHeader(row++, 0, 2, proto().info().address().getMeta().getCaption());
 
@@ -196,26 +194,26 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private Widget createDetailsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
-        main.add(split);
+        FormFlexPanel main = new FormFlexPanel();
 
-        split.getLeftPanel().add(inject(proto().info().structureType()), 15);
-        split.getLeftPanel().add(inject(proto().info().structureBuildYear()), 10);
-        split.getLeftPanel().add(inject(proto().info().constructionType()), 15);
-        split.getLeftPanel().add(inject(proto().info().foundationType()), 15);
-        split.getLeftPanel().add(inject(proto().info().floorType()), 15);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().info().structureType()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().info().structureBuildYear()), 10));
+        main.setWidget(++row, 0, decorate(inject(proto().info().constructionType()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().info().foundationType()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().info().floorType()), 15));
 
-        split.getRightPanel().add(inject(proto().info().landArea()), 15);
-        split.getRightPanel().add(inject(proto().info().waterSupply()), 15);
-        split.getRightPanel().add(inject(proto().info().centralAir()), 15);
-        split.getRightPanel().add(inject(proto().info().centralHeat()), 15);
+        row = -1;
+        main.setWidget(++row, 1, decorate(inject(proto().info().landArea()), 15));
+        main.setWidget(++row, 1, decorate(inject(proto().info().waterSupply()), 15));
+        main.setWidget(++row, 1, decorate(inject(proto().info().centralAir()), 15));
+        main.setWidget(++row, 1, decorate(inject(proto().info().centralHeat()), 15));
 
-        main.add(new VistaLineSeparator());
+        main.setHeader(++row, 0, 2, "");
         if (isEditable()) {
-            main.add(inject(proto().contacts().website()), 50);
+            main.setWidget(++row, 0, decorate(inject(proto().contacts().website()), 50));
         } else {
-            main.add(inject(proto().contacts().website(), new CHyperlink(new Command() {
+            main.setWidget(++row, 0, decorate(inject(proto().contacts().website(), new CHyperlink(new Command() {
                 @Override
                 public void execute() {
                     String url = getValue().contacts().website().getValue();
@@ -224,58 +222,89 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                     }
                     Window.open(url, proto().contacts().website().getMeta().getCaption(), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
                 }
-            })), 50);
+            })), 50));
         }
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
     }
 
     private Widget createFinancialTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
-        main.add(split);
+        FormFlexPanel main = new FormFlexPanel();
 
-        split.getLeftPanel().add(inject(proto().financial().dateAcquired()), 8.2);
-        split.getLeftPanel().add(inject(proto().financial().purchasePrice()), 10);
-        split.getLeftPanel().add(inject(proto().financial().marketPrice()), 10);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().financial().dateAcquired()), 8.2));
+        main.setWidget(++row, 0, decorate(inject(proto().financial().purchasePrice()), 10));
+        main.setWidget(++row, 0, decorate(inject(proto().financial().marketPrice()), 10));
 
-        split.getRightPanel().add(inject(proto().financial().lastAppraisalDate()), 8.2);
-        split.getRightPanel().add(inject(proto().financial().lastAppraisalValue()), 10);
-        split.getRightPanel().add(inject(proto().financial().currency().name()), split.getRightPanel().getDefaultLabelWidth(), 10, i18n.tr("Currency Name"));
+        row = -1;
+        main.setWidget(++row, 1, decorate(inject(proto().financial().lastAppraisalDate()), 8.2));
+        main.setWidget(++row, 1, decorate(inject(proto().financial().lastAppraisalValue()), 10));
+        main.setWidget(++row, 1, decorate(inject(proto().financial().currency().name()), 10, i18n.tr("Currency Name")));
 
-        main.add(new CrmSectionSeparator(i18n.tr("Included Utilities/Add-ons:")));
-        main.add(inject(proto().serviceCatalog().includedUtilities(), new UtilityFolder(this)));
-        main.add(new CrmSectionSeparator(i18n.tr("Excluded Utilities/Add-ons:")));
-        main.add(inject(proto().serviceCatalog().externalUtilities(), new UtilityFolder(this)));
+        main.setHeader(++row, 0, 2, i18n.tr("Included Utilities/Add-ons"));
+        main.setWidget(++row, 0, inject(proto().serviceCatalog().includedUtilities(), new UtilityFolder(this)));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        main.setHeader(++row, 0, 2, i18n.tr("Excluded Utilities/Add-ons"));
+        main.setWidget(++row, 0, inject(proto().serviceCatalog().externalUtilities(), new UtilityFolder(this)));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         return new CrmScrollPanel(main);
     }
 
     private Widget createMarketingTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        SubtypeInjectors.injectMarketing(main, proto().marketing(), this);
+        int row = -1;
+        main.setWidget(++row, 0, inject(proto().marketing(), new CMarketing()));
 
-        main.add(new VistaLineSeparator());
+        main.setHeader(++row, 0, 2, "");
+        main.setWidget(++row, 0, decorate(inject(proto().contacts().email().address()), 30, i18n.tr("Email Address")));
 
-        main.add(inject(proto().contacts().email().address()), main.getDefaultLabelWidth(), 30, i18n.tr("Email Address"));
-        SubtypeInjectors.injectPropertyPhones(main, proto().contacts().phones(), this);
+        main.setHeader(++row, 0, 2, proto().contacts().phones().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().contacts().phones(), new PropertyPhoneFolder()));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.add(new CrmSectionSeparator(i18n.tr("Media:")));
-        main.add(inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Building)));
+        main.setHeader(++row, 0, 2, i18n.tr("Media"));
+        main.setWidget(++row, 0, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Building)));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         return new CrmScrollPanel(main);
     }
 
     private Widget createContactTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(inject(proto().contacts().contacts(), new OrganizationContactFolder()));
+        main.setWidget(0, 0, inject(proto().contacts().contacts(), new OrganizationContactFolder()));
 
         return new CrmScrollPanel(main);
     }
 
-    class BuildingAmenityFolder extends VistaTableFolder<BuildingAmenity> {
+    private class PropertyPhoneFolder extends VistaTableFolder<PropertyPhone> {
+
+        public PropertyPhoneFolder() {
+            super(PropertyPhone.class, BuildingEditorForm.this.isEditable());
+        }
+
+        @Override
+        protected List<EntityFolderColumnDescriptor> columns() {
+            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            columns.add(new EntityFolderColumnDescriptor(proto().type(), "7em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().number(), "11em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().extension(), "5em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().designation(), "10em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().provider(), "10em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().visibility(), "7em"));
+            return columns;
+        }
+    }
+
+    private class BuildingAmenityFolder extends VistaTableFolder<BuildingAmenity> {
 
         public BuildingAmenityFolder() {
             super(BuildingAmenity.class, BuildingEditorForm.this.isEditable());
@@ -283,54 +312,11 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         @Override
         protected List<EntityFolderColumnDescriptor> columns() {
-            ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
             columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
             columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
             columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
             return columns;
         }
-
     }
-
-    static class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
-        public OrganizationContactFolder() {
-            super(OrganizationContact.class);
-        }
-
-        @Override
-        public CEditableComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof OrganizationContact) {
-                return new OrganizationContactEditor();
-            } else {
-                return super.create(member);
-            }
-        }
-
-        static class OrganizationContactEditor extends CEntityEditor<OrganizationContact> {
-
-            public OrganizationContactEditor() {
-                super(OrganizationContact.class);
-            }
-
-            @Override
-            public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-                main.add(inject(proto().description()), 35);
-                //TODO
-//                if (parent.isEditable()) {
-//                    main.add(inject(proto().person()), 35);
-//                } else {
-                main.add(inject(proto().person()), 35);
-                main.add(inject(proto().person().workPhone()), 10);
-                main.add(inject(proto().person().mobilePhone()), 10);
-                main.add(inject(proto().person().homePhone()), 10);
-                main.add(inject(proto().person().email()), 20);
-//                }
-
-                return main;
-            }
-
-        }
-    }
-
 }
