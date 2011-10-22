@@ -64,6 +64,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
     public BuildingEditorForm(IFormView<BuildingDTO> parentView) {
         this(new CrmEditorsComponentFactory(), parentView);
+        setEditable(true);
     }
 
     public BuildingEditorForm(IEditableComponentFactory factory, IFormView<BuildingDTO> parentView) {
