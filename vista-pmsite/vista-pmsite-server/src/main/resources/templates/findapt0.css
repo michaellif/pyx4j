@@ -1,5 +1,5 @@
 .vista-pmsite-findAptPage {
-    color: #CCCCCC;
+    color: #777;
     font-size: 16px;
 }
 
@@ -29,6 +29,7 @@
 	font-weight: normal;
 	line-height: 38px;
 	padding: 0 0 20px;
+	color:#ccc;
 }
 
 .advancedSearchWideWrap {
@@ -36,7 +37,6 @@
 	width:566px;
 	background-color:white;
 }
-
 
 .advancedSearchWideWrap input[type=submit] {
     background: url("images/template0/btn.png") no-repeat;
@@ -67,13 +67,14 @@
 	width:226px;
 	font-size:20px;
 	letter-spacing:3px;
-	box-shadow:-1px -1px 1px #404247, 1px 1px 1px #24262a;
+	box-shadow:-1px -1px 1px #eee, 1px 1px 1px #24262a;
 	border-radius:3px;
 	margin-left:30px;
 	padding:6px 20px;
-	background-color:#22242a;
+	background-color:#ccc;
 	text-align:center;
-	float:left; 
+	float:left;
+	color:#666;
 }
 .advancedSearchWideWrap .searchTypeSelButton:first-child {
 	margin-left:0px;
@@ -156,11 +157,12 @@
 	width:88px;
 }
 .advancedSearchWideWrap .typeselActiveHover {
-	background-color:#19181f !important;
+	background-color:#bbb !important;
 }
 .advancedSearchWideWrap .typeselActive {
-	background-color:#19181f !important;
-	box-shadow:-1px -1px 1px #000 inset, 1px 1px 1px #55565b;
-	padding-top:4px !important;
-	padding-bottom:8px !important;
+	background-color:#bbb !important;
+	color:#444 !important;
+	box-shadow:1px 1px 1px #000 inset, -1px -1px 1px #55565b;
+	padding-top:7px !important;
+	padding-bottom:5px !important;
 }

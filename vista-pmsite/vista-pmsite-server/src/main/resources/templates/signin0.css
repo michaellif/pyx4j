@@ -1,16 +1,14 @@
 .vista-pmsite-signInPage {
-    color: #CCCCCC;
+    color: #777;
     font-size: 16px;
 }
 
 .vista-pmsite-signInPage .vista-pmsite-contentWrap {
-	background: url("images/template0/inner_content_bg.png") repeat-x scroll
-		0 0 #37393F;
+	background: url("images/template0/inner_content_bg.png") repeat-x scroll 0 0 #37393F;
 }
 
 .vista-pmsite-signInPage .vista-pmsite-content {
-	background: url("images/template0/inner_bg.png") no-repeat scroll 50% 0
-		transparent;
+	background: url("images/template0/inner_bg.png") no-repeat scroll 50% 0 transparent;
 }
 
 .vista-pmsite-signInPage .caption {
@@ -27,19 +25,36 @@
 	font-weight: normal;
 	line-height: 38px;
 	padding: 0 0 20px;
+	color:#ccc;
 }
 
 .vista-pmsite-signInPage .signInFormWrap {
 	padding:20px;
+	background-color:white;
+	min-height:300px;
+}
+
+.vista-pmsite-signInPage .signInFormWrap input[type=submit] {
+    background: url("images/template0/btn.png") no-repeat;
+    border: none;
+    width: 128px;
+    height: 32px;
+    padding: 5px 0;
+    color: #000000;
+    font-size: 16px;
+    text-shadow: 0 1px 0 #CCCCCC;
+    text-transform: uppercase;
+    cursor: pointer;
 }
 
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput {
-	padding:40px 0 0 60px;
+	padding:20px 0 0 60px;
 }
 
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput label {
-	display:block;
-	padding-bottom:4px;
+	display:inline-block;
+	width:80px;
+	padding-right:4px;
 }
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput.remember label {
 	display:inline;
