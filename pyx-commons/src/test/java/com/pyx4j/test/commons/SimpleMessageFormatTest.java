@@ -109,6 +109,14 @@ public class SimpleMessageFormatTest extends TestCase {
         assertMessageFormat("Nil", "{0,choice,null#Nil|0#Zero|1#One}", (Object) null);
     }
 
+    public void testChoiceFormatNested() {
+        String nestedPattern = "{0,choice,0#{1,choice,0#Any|0<Less than {1}}|0<{1,choice,0#{0} or more|0<From {0} to {1}}}";
+        assertMessageFormat("Any", nestedPattern, 0, 0);
+        assertMessageFormat("Less than 1", nestedPattern, 0, 1);
+        assertMessageFormat("1 or more", nestedPattern, 1, 0);
+        assertMessageFormat("From 1 to 2", nestedPattern, 1, 2);
+    }
+
     public void testDateFormat() {
         @SuppressWarnings("deprecation")
         int offset = (new Date(0)).getTimezoneOffset();

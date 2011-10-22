@@ -31,6 +31,12 @@ public class SimpleMessageFormat {
 
     private static final char DELIM_STOP = '}';
 
+    private static String format = null;
+
+    private static int scanPos = 0;
+
+    private static int recursionLevel = 0;
+
     private SimpleMessageFormat() {
     }
 
@@ -43,18 +49,28 @@ public class SimpleMessageFormat {
         Ending
     }
 
-    public static String format(final String pattern, Object... arguments) {
+    public static String format(final String fmt, Object... arguments) {
+        format = fmt;
+        scanPos = 0;
+        recursionLevel = 0;
+        return argScan(arguments);
+    }
+
+    /*
+     * Recursive scan for Argument format {...}; the resulting string is resolved by calling argFormat().
+     * The inner arguments get resolved first, so there will be no curly brackets inside the parent's
+     * format pattern when calling argFormat.
+     */
+    private static String argScan(Object... arguments) {
         StringBuilder result = new StringBuilder();
+        StringBuilder formatPattern = new StringBuilder();
+        boolean done = false;
 
         QuotedString quotedString = null;
-        boolean formatElement = false;
 
-        StringBuilder formatPattern = null;
-
-        int formatRecursion = 0;
         char c;
-        nextChar: for (int index = 0; index < pattern.length(); index++) {
-            c = pattern.charAt(index);
+        nextChar: for (; scanPos < format.length(); scanPos++) {
+            c = format.charAt(scanPos);
             if (quotedString != null) {
                 switch (quotedString) {
                 case Start:
@@ -85,35 +101,35 @@ public class SimpleMessageFormat {
                     break;
                 }
             }
-            if (formatElement) {
-                if (c == DELIM_STOP) {
-                    if (formatRecursion > 0) {
-                        formatRecursion--;
-                        formatPattern.append(c);
-                    } else {
-                        format(result, formatPattern.toString(), arguments);
-                        formatElement = false;
-                        formatPattern = null;
-                    }
-                } else {
-                    formatPattern.append(c);
-                    if (c == DELIM_START) {
-                        formatRecursion++;
-                    }
-                }
-                continue;
-            }
 
             switch (c) {
             case '\'':
                 quotedString = QuotedString.Start;
                 break;
             case DELIM_START:
-                formatPattern = new StringBuilder();
-                formatElement = true;
+                scanPos++;
+                recursionLevel++;
+                String res = argScan(arguments);
+                recursionLevel--;
+                if (recursionLevel == 0) {
+                    result.append(res);
+                } else {
+                    formatPattern.append(res);
+                }
+                break;
+            case DELIM_STOP:
+                result.append(argFormat(formatPattern.toString(), arguments));
+                done = true;
                 break;
             default:
-                result.append(c);
+                if (recursionLevel == 0) {
+                    result.append(c);
+                } else {
+                    formatPattern.append(c);
+                }
+                break;
+            }
+            if (done) {
                 break;
             }
         }
@@ -121,7 +137,10 @@ public class SimpleMessageFormat {
         return result.toString();
     }
 
-    private static void format(StringBuilder result, final String formatPattern, Object... arguments) {
+    /*
+     * Format arguments according to pattern
+     */
+    private static String argFormat(final String formatPattern, Object... arguments) {
         int comaIdx = formatPattern.indexOf(',');
         int argumentIndex;
         String formatType = null;
@@ -138,114 +157,114 @@ public class SimpleMessageFormat {
         } else {
             argumentIndex = Integer.valueOf(formatPattern);
         }
-        Object value = arguments[argumentIndex];
-        Object formatedValue = null;
+        Object arg = arguments[argumentIndex];
+        Object formatedArg = null;
         if (formatType == null) {
-            if (value == null) {
-                formatedValue = "";
+            if (arg == null) {
+                formatedArg = "";
             } else {
-                formatedValue = value;
+                formatedArg = arg;
             }
         } else {
             if (formatType.equals("number")) {
-                if (value == null) {
-                    formatedValue = "";
+                if (arg == null) {
+                    formatedArg = "";
                 } else {
                     if ("integer".equals(formatStyle)) {
                         formatStyle = "#,###";
                     }
-                    formatedValue = SimpleNumberFormatImpl.format(formatStyle, toDouble(value));
+                    formatedArg = SimpleNumberFormatImpl.format(formatStyle, toDouble(arg));
                 }
             } else if (formatType.equals("size")) {
-                if (value == null) {
-                    formatedValue = "";
+                if (arg == null) {
+                    formatedArg = "";
                 } else {
-                    long length = Double.valueOf(toDouble(value)).longValue();
+                    long length = Double.valueOf(toDouble(arg)).longValue();
                     if (length < 1024) {
                         //TODO use i18n
-                        formatedValue = String.valueOf(length) + " B";
+                        formatedArg = String.valueOf(length) + " B";
                     } else if (length < 1024 * 1024) {
-                        formatedValue = String.valueOf(length / 1024) + " KB";
+                        formatedArg = String.valueOf(length / 1024) + " KB";
                     } else {
-                        formatedValue = String.valueOf(length / (1024 * 1024)) + " MB";
+                        formatedArg = String.valueOf(length / (1024 * 1024)) + " MB";
                     }
 
                 }
             } else if (formatType.equals("date")) {
-                formatedValue = SimpleDateFormatImpl.format(formatStyle, (Date) value);
+                formatedArg = SimpleDateFormatImpl.format(formatStyle, (Date) arg);
             } else if (formatType.equals("time")) {
-                formatedValue = SimpleDateFormatImpl.formatTime(formatStyle, (Date) value);
+                formatedArg = SimpleDateFormatImpl.formatTime(formatStyle, (Date) arg);
             } else if (formatType.equals("choice")) {
                 String[] choices = formatStyle.split("\\|");
                 Double selectorValue = null;
-                if (value == null) {
+                if (arg == null) {
                     selectorValue = Double.NaN;
                 } else {
-                    selectorValue = toDouble(value);
+                    selectorValue = toDouble(arg);
                 }
-                String prevFormat = null;
+                String prevResult = null;
                 for (String choice : choices) {
                     int comparatorIdx = choice.indexOf('#');
                     if (comparatorIdx > 0) {
                         String choiceValueText = choice.substring(0, comparatorIdx);
-                        String choiceFormat = choice.substring(comparatorIdx + 1, choice.length());
+                        String choiceResult = choice.substring(comparatorIdx + 1, choice.length());
                         if (choiceValueText.equals("null")) {
-                            if (value == null) {
-                                formatedValue = format(choiceFormat, arguments);
+                            if (arg == null) {
+                                formatedArg = choiceResult;
                                 break;
                             } else {
-                                prevFormat = choiceFormat;
+                                prevResult = choiceResult;
                                 continue;
                             }
                         } else if (choiceValueText.equals("!null")) {
-                            if (value != null) {
-                                formatedValue = format(choiceFormat, arguments);
+                            if (arg != null) {
+                                formatedArg = choiceResult;
                                 break;
                             } else {
-                                prevFormat = choiceFormat;
+                                prevResult = choiceResult;
                                 continue;
                             }
                         }
 
                         double choiceValue = Double.valueOf(choiceValueText).doubleValue();
                         if (selectorValue == choiceValue) {
-                            formatedValue = format(choiceFormat, arguments);
+                            formatedArg = choiceResult;
                             break;
                         } else if (selectorValue < choiceValue) {
-                            formatedValue = format(prevFormat == null ? choiceFormat : prevFormat, arguments);
+                            formatedArg = (prevResult == null ? choiceResult : prevResult);
                             break;
                         } else {
-                            prevFormat = choiceFormat;
+                            prevResult = choiceResult;
                             continue;
                         }
                     } else {
                         comparatorIdx = choice.indexOf('<');
                         if (comparatorIdx > 0) {
                             double choiceValue = Double.valueOf(choice.substring(0, comparatorIdx)).doubleValue();
-                            String choiceFormat = choice.substring(comparatorIdx + 1, choice.length());
+                            String choiceResult = choice.substring(comparatorIdx + 1, choice.length());
                             if (selectorValue <= choiceValue) {
-                                formatedValue = format(prevFormat == null ? choiceFormat : prevFormat, arguments);
+                                formatedArg = (prevResult == null ? choiceResult : prevResult);
                                 break;
                             } else {
-                                prevFormat = choiceFormat;
+                                prevResult = choiceResult;
                             }
                         } else {
                             throw new IllegalArgumentException();
                         }
                     }
                 }
-                if (formatedValue == null) {
-                    if (prevFormat != null) {
-                        formatedValue = format(prevFormat, arguments);
+                if (formatedArg == null) {
+                    if (prevResult != null) {
+                        formatedArg = prevResult;
                     } else {
                         throw new IllegalArgumentException();
                     }
                 }
             } else {
-                formatedValue = value;
+                formatedArg = arg;
             }
         }
-        result.append(formatedValue);
+        return formatedArg.toString();
     }
 
     private static double toDouble(Object value) {
