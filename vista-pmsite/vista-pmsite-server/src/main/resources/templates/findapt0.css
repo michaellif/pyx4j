@@ -12,7 +12,9 @@
 	background: url("images/template0/inner_bg.png") no-repeat scroll 50% 0
 		transparent;
 }
-
+.vista-pmsite-findAptPage .content {
+	background: url("images/template0/FreeCableTV.png") no-repeat right 40px;
+}
 .vista-pmsite-findAptPage .caption {
 	background: url("images/template0/title_bg.gif") repeat-y scroll 0 -40px
 		transparent;
@@ -30,8 +32,9 @@
 }
 
 .advancedSearchWideWrap {
-	padding: 30px 60px;
+	padding: 30px 50px;
 	width:566px;
+	background-color:white;
 }
 
 

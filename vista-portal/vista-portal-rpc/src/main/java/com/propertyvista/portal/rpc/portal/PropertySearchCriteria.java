@@ -33,10 +33,11 @@ public interface PropertySearchCriteria extends IEntity {
         map, list
     }
 
-    @I18n
     public static enum PriceRange {
 
         Any(null), lt600(0), gt600(600), gt800(800), gt1000(1000), gt1200(1200);
+
+        private static final com.pyx4j.i18n.shared.I18n i18n = com.pyx4j.i18n.shared.I18n.get(PriceRange.class);
 
         private final Integer minPrice;
 
@@ -62,26 +63,16 @@ public interface PropertySearchCriteria extends IEntity {
 
         @Override
         public String toString() {
-            String result = "";
             Integer maxPrice = getMaxPrice();
-            if (minPrice == null) {
-                result = "Any";
-            } else if (minPrice == 0) {
-                result = "Less than $" + maxPrice;
-            } else {
-                if (maxPrice == null) {
-                    result = "Over $" + minPrice;
-                } else {
-                    result = "$" + minPrice + " - $" + maxPrice;
-                }
-            }
-            return com.pyx4j.i18n.shared.I18n.get(PriceRange.class).tr(result);
+            String format = "{0,choice,null#Any|0#Less than ${1}|0<{1,choice,null#Over ${0}|0<${0} - ${1}}}";
+            return i18n.tr(format, minPrice, maxPrice);
         }
     }
 
-    @I18n
     public static enum BedroomRange {
         Any(null, null), One(1, 1), OneOrMore(1), Two(2, 2), TwoOrMore(2), Three(3, 3), ThreeOrMore(3), Four(4, 4), FourOrMore(4);
+
+        private static final com.pyx4j.i18n.shared.I18n i18n = com.pyx4j.i18n.shared.I18n.get(BedroomRange.class);
 
         private final Integer minBeds;
 
@@ -106,13 +97,8 @@ public interface PropertySearchCriteria extends IEntity {
 
         @Override
         public String toString() {
-            String result;
-            if (minBeds == null) {
-                result = super.toString();
-            } else {
-                result = minBeds + (maxBeds == null ? " or more" : "");
-            }
-            return com.pyx4j.i18n.shared.I18n.get(BedroomRange.class).tr(result);
+            String format = "{0,choice,null#Any|0#Less than {1}|0<{0}{1,choice,null# and more|0<}}";
+            return i18n.tr(format, minBeds, maxBeds);
         }
     }
 
@@ -168,8 +154,14 @@ public interface PropertySearchCriteria extends IEntity {
         }
     }
 
+    @I18n
     public static enum AmenityType {
-        Elevator, Fitness, Parking, Pool, Garage
+        Elevator, Fitness, Parking, Pool, Garage;
+
+        @Override
+        public String toString() {
+            return I18nEnum.tr(this);
+        }
     }
 
     @NotNull
@@ -198,15 +190,6 @@ public interface PropertySearchCriteria extends IEntity {
 
     IPrimitiveSet<AmenityType> amenities();
 
-/*
- * IPrimitive<Boolean> elevator();
- * 
- * IPrimitive<Boolean> fitness();
- * 
- * IPrimitive<Boolean> parking();
- * 
- * IPrimitive<Boolean> pool();
- */
     /**
      * don't use in criteria
      * 

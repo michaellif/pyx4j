@@ -27,7 +27,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.pages.AptListPage;
-import com.propertyvista.pmsite.server.pages.BasePage;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.BedroomChoice;
 
@@ -35,6 +34,8 @@ import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.BedroomChoice;
 public class QuickSearchCriteriaPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
+
+    private static final I18n i18n = I18n.get(QuickSearchCriteriaPanel.class);
 
     public QuickSearchCriteriaPanel() {
         super("quickSearchCriteriaPanel");
@@ -56,7 +57,7 @@ public class QuickSearchCriteriaPanel extends Panel {
 
         form.add(new FeedbackPanel("form_messages"));
         form.add(new QuickSearchCriteriaInputPanel("searchCriteriaInput", model));
-        form.add(new Button("searchSubmit").add(AttributeModifier.replace("value", I18n.get(BasePage.class).tr("Search"))));
+        form.add(new Button("searchSubmit").add(AttributeModifier.replace("value", i18n.tr("Search"))));
 
         add(form);
     }

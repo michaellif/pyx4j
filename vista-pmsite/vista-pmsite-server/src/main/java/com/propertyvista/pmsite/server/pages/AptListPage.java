@@ -47,6 +47,8 @@ public class AptListPage extends BasePage {
 
     private static final long serialVersionUID = 1L;
 
+    private static final I18n i18n = I18n.get(AptListPage.class);
+
     public AptListPage(PageParameters params) {
         super(params);
 
@@ -84,7 +86,7 @@ public class AptListPage extends BasePage {
         };
 
         form.add(new AdvancedSearchCriteriaInputPanel("searchCriteriaInput", model));
-        form.add(new Button("searchSubmit").add(AttributeModifier.replace("value", I18n.get(BasePage.class).tr("Search"))));
+        form.add(new Button("searchSubmit").add(AttributeModifier.replace("value", i18n.tr("Search"))));
 
         add(form);
 

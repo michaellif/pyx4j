@@ -27,11 +27,12 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.pages.AptListPage;
-import com.propertyvista.pmsite.server.pages.BasePage;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class AdvancedSearchCriteriaPanel extends Panel {
     private static final long serialVersionUID = 1L;
+
+    private static final I18n i18n = I18n.get(AdvancedSearchCriteriaPanel.class);
 
     public AdvancedSearchCriteriaPanel() {
         super("advancedSearchCriteriaPanel");
@@ -56,7 +57,7 @@ public class AdvancedSearchCriteriaPanel extends Panel {
         // add Error Message panel
         form.add(new FeedbackPanel("form_messages"));
         form.add(new AdvancedSearchCriteriaInputPanel("searchCriteriaInput", model));
-        form.add(new Button("searchSubmit").add(AttributeModifier.replace("value", I18n.get(BasePage.class).tr("Search"))));
+        form.add(new Button("searchSubmit").add(AttributeModifier.replace("value", i18n.tr("Search"))));
 
         add(form);
 
