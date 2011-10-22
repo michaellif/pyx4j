@@ -36,12 +36,13 @@
             <version>${project.version}</version>
         </dependency>
 
+<!--
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-portal-tester</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+-->
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-unit-selenium</artifactId>

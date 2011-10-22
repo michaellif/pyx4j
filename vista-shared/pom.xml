@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-         <groupId>com.propertyvista</groupId>
+        <groupId>com.propertyvista</groupId>
         <artifactId>vista</artifactId>
         <version>1.0.1-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
@@ -30,7 +30,7 @@
         <module>vista-equifax-gen</module>
         <module>vista-equifax</module>
         <module>vista-payment</module>
-        <!--module>vista-integration</module-->
+        <module>vista-integration</module>
     </modules>
 
 </project>
