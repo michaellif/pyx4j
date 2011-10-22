@@ -23,6 +23,7 @@ package com.pyx4j.entity.shared.utils;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
@@ -189,6 +190,65 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
                 }
             }
         }
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public boolean updateDBO(DTO dto, DBO dbo) {
+        init();
+        boolean updated = false;
+        for (Binding b : binding) {
+            IObject dtoM = dto.getMember(b.dtoMemberPath);
+            if (dtoM.isNull()) {
+                continue;
+            }
+            IObject dboM = dbo.getMember(b.dboMemberPath);
+            if (b.binder == null) {
+                if (dtoM instanceof ICollection) {
+                    ICollection<IEntity, ?> dboMc = (ICollection<IEntity, ?>) dboM;
+                    for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
+                        //find
+                        boolean found = false;
+                        for (IEntity dboMi : dboMc) {
+                            if (dtoMi.equals(dboMi) || dtoMi.businessEquals(dboMi)) {
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        if (!found) {
+                            ((ICollection<IEntity, ?>) dboM).add(dtoMi);
+                            updated = true;
+                        }
+                    }
+                } else {
+                    if (!EqualsHelper.equals(dboM.getValue(), dtoM.getValue())) {
+                        dboM.setValue(dtoM.getValue());
+                        updated = true;
+                    }
+                }
+            } else if (dtoM instanceof IEntity) {
+                updated |= b.binder.updateDBO((IEntity) dtoM, (IEntity) dboM);
+            } else if (dtoM instanceof ICollection) {
+                ICollection<IEntity, ?> dboMc = (ICollection<IEntity, ?>) dboM;
+                for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
+                    //find
+                    boolean found = false;
+                    for (IEntity dboMi : dboMc) {
+                        if (dtoMi.equals(dboMi) || dtoMi.businessEquals(dboMi)) {
+                            found = true;
+                            updated |= b.binder.updateDBO(dtoMi, dboMi);
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        ((ICollection<IEntity, ?>) dboM).add(b.binder.createDBO(dtoMi));
+                        updated = true;
+                    }
+                }
+            }
+        }
+        return updated;
     }
 
 }
