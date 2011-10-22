@@ -34,7 +34,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CEntityContainer<E extends IObject<?>> extends CEntityComponent<E, NativeEntityPanel<E>> {
 
-    private static I18n i18n = I18n.get(CEntityContainer.class);
+    protected static I18n i18n = I18n.get(CEntityContainer.class);
 
     private IDecorator decorator;
 
