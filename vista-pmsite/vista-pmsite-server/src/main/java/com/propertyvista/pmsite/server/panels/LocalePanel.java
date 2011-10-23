@@ -16,13 +16,13 @@ package com.propertyvista.pmsite.server.panels;
 import java.util.ArrayList;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.StatelessLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.model.WicketUtils.JSActionLink;
 
 public class LocalePanel extends Panel {
 
@@ -40,19 +40,8 @@ public class LocalePanel extends Panel {
 
                 final AvailableLocale locale = item.getModelObject();
 
-                StatelessLink<Void> link = new StatelessLink<Void>("langSelector") {
-
-                    private static final long serialVersionUID = 1L;
-
-                    @Override
-                    public void onClick() {
-                        PMSiteContentManager.setLocale(locale);
-                        setResponsePage(getPage().getPageClass(), getPage().getPageParameters());
-                    }
-                };
-                item.add(link);
-                link.add(new Label("caption", locale.lang().getValue().name()));
-
+                JSActionLink link = new JSActionLink("langSelector", "setSiteLocale('" + locale.lang().getValue().name() + "')", true);
+                item.add(link.add(new Label("caption", locale.lang().getValue().name())));
             }
         };
         add(listView);

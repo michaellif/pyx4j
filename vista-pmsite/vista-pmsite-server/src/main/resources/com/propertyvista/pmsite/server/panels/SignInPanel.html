@@ -3,19 +3,19 @@
 	<form wicket:id="signInForm">
 		<div class="signInFormWrap">
 			<div class="signInFormInput username">
-				<label>Username:</label>
+				<label><wicket:i18n>Username</wicket:i18n>:</label>
 				<input wicket:id="username" type="text"/>
 			</div>
 			<div class="signInFormInput password">
-				<label>Password:</label>
+				<label><wicket:i18n>Password</wicket:i18n>:</label>
 				<input wicket:id="password" type="password"/>
 			</div>
 			<div class="signInFormInput remember">
 				<input wicket:id="rememberMe" type="checkbox" />
-				<label>Remember Me</label>
+				<label><wicket:i18n>Remember Me</wicket:i18n></label>
 			</div>
 			<div class="signInFormInput submit">
-				<input type="submit" name="submit" value="Sign In"/>
+				<input wicket:id="signIn" type="submit" name="submit" value="Sign In"/>
 			</div>
 			<div class="signInFormInput hint">
 				<i>*) Username and password are both "cust001@pyx4j.com"</i>

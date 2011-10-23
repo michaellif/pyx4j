@@ -22,7 +22,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.link.StatelessLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.visit.IVisit;
@@ -34,6 +33,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
+import com.propertyvista.pmsite.server.model.WicketUtils.JSActionLink;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.FooterPanel;
 import com.propertyvista.pmsite.server.panels.HeaderPanel;
@@ -51,18 +51,7 @@ public abstract class BasePage extends WebPage {
     public BasePage(PageParameters parameters) {
         super(parameters);
 
-        StatelessLink<Void> switchStyleLink = new StatelessLink<Void>("switchStyle") {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onClick() {
-                int style = PMSiteContentManager.getSiteStyle();
-                PMSiteContentManager.setSiteStyle((style + 1) % 2);
-            }
-
-        };
-        add(switchStyleLink);
-
+        add(new JSActionLink("switchStyle", "switchSiteStyle()", true));
         add(new HeaderPanel());
         add(new FooterPanel());
     }

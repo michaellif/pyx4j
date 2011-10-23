@@ -95,22 +95,21 @@ public class PMSiteContentManager implements Serializable {
         private static AvailableLocale locale;
 
         public static int getStyleId() {
-            if (styleId == null) {
-                styleId = DEFAULT_STYLE_ID;
-                Cookie pmsiteStyleCookie = null;
-                List<Cookie> cookies = ((WebRequest) RequestCycle.get().getRequest()).getCookies();
-                if (cookies == null) {
-                    return styleId;
+            // no caching for style as it is stored on the client
+            styleId = DEFAULT_STYLE_ID;
+            Cookie pmsiteStyleCookie = null;
+            List<Cookie> cookies = ((WebRequest) RequestCycle.get().getRequest()).getCookies();
+            if (cookies == null) {
+                return styleId;
+            }
+            for (Cookie cookie : cookies) {
+                if ("pmsiteStyle".equals(cookie.getName())) {
+                    pmsiteStyleCookie = cookie;
+                    break;
                 }
-                for (Cookie cookie : cookies) {
-                    if ("pmsiteStyle".equals(cookie.getName())) {
-                        pmsiteStyleCookie = cookie;
-                        break;
-                    }
-                }
-                if (pmsiteStyleCookie != null) {
-                    styleId = Integer.valueOf(pmsiteStyleCookie.getValue());
-                }
+            }
+            if (pmsiteStyleCookie != null) {
+                styleId = Integer.valueOf(pmsiteStyleCookie.getValue());
             }
             return styleId;
         }
@@ -121,9 +120,8 @@ public class PMSiteContentManager implements Serializable {
         }
 
         public static AvailableLocale getLocale() {
-            if (locale == null) {
-                locale = readLocaleFromCookie();
-            }
+            // no caching for locale as it is stored on the client
+            locale = readLocaleFromCookie();
             return locale;
         }
 

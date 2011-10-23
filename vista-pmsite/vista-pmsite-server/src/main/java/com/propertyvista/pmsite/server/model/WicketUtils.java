@@ -17,10 +17,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.link.StatelessLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -167,6 +169,31 @@ public class WicketUtils {
             WebApplication.get().getResourceReferenceRegistry().unregisterResourceReference(rcKey);
             WebApplication.get().getResourceReferenceRegistry().registerResourceReference(this);
 
+        }
+    }
+
+    /*
+     * ActionLink is a version of a StatelessLink that is intended for doing something
+     * (an Action) on the server with sub-sequential redirect to a specific page.
+     * A subclass must implement the doAction() method to be useful.
+     */
+    public static class JSActionLink extends StatelessLink<Void> {
+        private static final long serialVersionUID = 1L;
+
+        public <C extends Page> JSActionLink(final String id, final String jsAction, final boolean reload) {
+            super(id);
+            String onClick = jsAction;
+            onClick += ";" + (reload ? "window.location.reload()" : "return false");
+            super.add(AttributeModifier.replace("onClick", onClick));
+        }
+
+        @Override
+        public final void onClick() {
+        }
+
+        @Override
+        protected CharSequence getURL() {
+            return "";
         }
     }
 }
