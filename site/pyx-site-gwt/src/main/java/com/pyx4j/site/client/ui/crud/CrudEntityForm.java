@@ -20,16 +20,16 @@
  */
 package com.pyx4j.site.client.ui.crud;
 
-
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
-
 public abstract class CrudEntityForm<E extends IEntity> extends CEntityEditor<E> {
 
     protected static I18n i18n = I18n.get(CrudEntityForm.class);
+
+    private IFormView<? extends IEntity> parentView;
 
     public CrudEntityForm(Class<E> rootClass) {
         super(rootClass);
@@ -37,11 +37,18 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityEditor<E>
 
     public CrudEntityForm(Class<E> rootClass, IEditableComponentFactory factory) {
         super(rootClass, factory);
-
     }
 
-// default active tab info implementation:
+    public void setParentView(IFormView<? extends IEntity> parentView) {
+        this.parentView = parentView;
+    }
 
+    public IFormView<? extends IEntity> getParentView() {
+        assert (parentView != null);
+        return parentView;
+    }
+
+    // default active tab mechanics:
     public void setActiveTab(int index) {
     }
 

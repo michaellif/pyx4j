@@ -20,7 +20,6 @@
  */
 package com.pyx4j.site.client.ui.crud;
 
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
@@ -33,7 +32,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
-
 
 public class ViewImplBase<E extends IEntity> extends DockLayoutPanel implements IFormView<E> {
 
@@ -49,7 +47,6 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel implements 
 
     public ViewImplBase(CrudEntityForm<E> form) {
         this();
-        form.initContent();
         setForm(form);
     }
 
@@ -60,7 +57,6 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel implements 
 
     public ViewImplBase(Widget header, double size, CrudEntityForm<E> form) {
         this(header, size);
-        form.initContent();
         setForm(form);
     }
 
@@ -80,6 +76,8 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel implements 
         }
 
         this.form = (CrudEntityForm<E>) form;
+        this.form.setParentView(this);
+        this.form.initContent();
 
         LayoutPanel center = (LayoutPanel) getCenter();
         center.clear(); // remove current form...
