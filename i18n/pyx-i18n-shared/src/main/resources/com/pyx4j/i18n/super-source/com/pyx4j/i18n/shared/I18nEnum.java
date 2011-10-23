@@ -28,11 +28,18 @@ public class I18nEnum {
 
     private static I18nEnumResourceBundle names = GWT.create(I18nEnumResourceBundle.class);
     
+    @Deprecated
     public static String tr(Enum<?> enumValue) {
+        return toString(enumValue);
+    }
+    
+    public static String toString(Enum<?> enumValue) {
         if (enumValue == null) {
             return null;
         } else {
             return names.getTranslatedString(enumValue);
         }
     }
+    
+    
 }
