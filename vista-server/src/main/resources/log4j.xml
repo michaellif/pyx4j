@@ -90,7 +90,13 @@
                 value="%-5p %d %6r\t [%c{1}.%M:%L] [%X{namespace}.%X{sessionNum}.%X{userID}.%x]\t %l [%t]\n\t%m\n" />
         </layout>
     </appender>
-    
+
+    <logger name="com.propertyvista.interfaces.importer" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="FileAppender.importer" />
+        <appender-ref ref="FileAppender.warn" />
+    </logger>
+        
 	<logger name="com.propertyvista">
 		<level value="debug" />
 	</logger>
@@ -99,12 +105,6 @@
 		<level value="debug" />
 	</logger>
 
-    <logger name="com.propertyvista.interfaces.importer" additivity="false">
-        <level value="debug" />
-        <appender-ref ref="FileAppender.warn.importer" />
-        <appender-ref ref="FileAppender.warn" />
-    </logger>
-    
 	<logger name="org.apache">
 		<level value="info" />
 	</logger>
