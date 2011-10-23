@@ -27,7 +27,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 public class MaintenanceEditorForm extends AdminEntityForm<SystemMaintenanceState> {
 
     public MaintenanceEditorForm() {
-        super(SystemMaintenanceState.class, new AdminEditorsComponentFactory());
+        this(new AdminEditorsComponentFactory());
     }
 
     public MaintenanceEditorForm(IEditableComponentFactory factory) {

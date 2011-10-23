@@ -26,7 +26,7 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 public class PmcEditorForm extends AdminEntityForm<PmcDTO> {
 
     public PmcEditorForm() {
-        super(PmcDTO.class, new AdminEditorsComponentFactory());
+        this(new AdminEditorsComponentFactory());
     }
 
     public PmcEditorForm(IEditableComponentFactory factory) {
