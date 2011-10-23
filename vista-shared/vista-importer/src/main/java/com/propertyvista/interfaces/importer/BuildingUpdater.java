@@ -195,6 +195,8 @@ public class BuildingUpdater {
                 boolean unitUpdated = false;
                 if (unit == null) {
                     unit = new AptUnitConverter().createDBO(aptUnitIO);
+                    unit.belongsTo().set(building);
+                    unit.floorplan().set(floorplan);
                     unitUpdated = true;
                     unitIsNew = true;
                 } else {
