@@ -15,6 +15,9 @@ package com.propertyvista.interfaces.importer;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -32,6 +35,8 @@ import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
 
 public class BuildingUpdater {
+
+    private final static Logger log = LoggerFactory.getLogger(BuildingUpdater.class);
 
     public ImportCounters updateUnitAvailability(BuildingIO buildingIO, String imagesBaseFolder) {
         ImportCounters counters = new ImportCounters();
@@ -91,6 +96,8 @@ public class BuildingUpdater {
                     Persistence.service().persist(unit);
                     counters.units += 1;
                     counters.buildings = 1;
+                    log.debug("updated AptUnit {} {}", buildingIO.propertyCode().getValue() + " " + floorplanIO.name().getValue(), aptUnitIO.number()
+                            .getValue());
                 }
 
             }
@@ -103,18 +110,19 @@ public class BuildingUpdater {
             throw new UserRuntimeException("propertyCode can't be empty");
         }
         ImportCounters counters = new ImportCounters();
-        boolean newBuilding = false;
+        boolean buildingIsNew = false;
         Building building;
         {
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), buildingIO.propertyCode().getValue()));
             List<Building> buildings = Persistence.service().query(criteria);
             if (buildings.size() == 0) {
-                newBuilding = true;
+                buildingIsNew = true;
                 building = new BuildingConverter().createDBO(buildingIO);
                 Persistence.service().persist(building);
                 PublicDataUpdater.updateIndexData(building);
                 counters.buildings += 1;
+                log.debug("created building {}", buildingIO.propertyCode().getValue());
             } else if (buildings.size() > 1) {
                 throw new UserRuntimeException("More then one building '" + buildingIO.propertyCode().getValue() + "' found");
             } else {
@@ -126,6 +134,7 @@ public class BuildingUpdater {
                 if (buildingUpdated) {
                     Persistence.service().persist(building);
                     counters.buildings += 1;
+                    log.debug("updated building {}", buildingIO.propertyCode().getValue());
                 }
             }
         }
@@ -134,9 +143,9 @@ public class BuildingUpdater {
             if (floorplanIO.name().isNull()) {
                 throw new UserRuntimeException("Floorplan name in  building '" + buildingIO.propertyCode().getValue() + "' can't be empty");
             }
-            boolean newFloorplan = false;
+            boolean floorplanIsNew = false;
             Floorplan floorplan = null;
-            if (!newBuilding) {
+            if (!buildingIsNew) {
                 EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
                 criteria.add(PropertyCriterion.eq(criteria.proto().name(), floorplanIO.name().getValue()));
@@ -150,7 +159,7 @@ public class BuildingUpdater {
             }
             boolean floorplanUpdated = false;
             if (floorplan == null) {
-                newFloorplan = true;
+                floorplanIsNew = true;
                 floorplanUpdated = true;
                 floorplan = new FloorplanConverter().createDBO(floorplanIO);
                 floorplan.building().set(building);
@@ -161,11 +170,16 @@ public class BuildingUpdater {
             if (floorplanUpdated) {
                 Persistence.service().persist(floorplan);
                 counters.floorplans += 1;
+                if (floorplanIsNew) {
+                    log.debug("created floorplan {} {}", buildingIO.propertyCode().getValue(), floorplanIO.name().getValue());
+                } else {
+                    log.debug("updated floorplan {} {}", buildingIO.propertyCode().getValue(), floorplanIO.name().getValue());
+                }
             }
 
             for (AptUnitIO aptUnitIO : floorplanIO.units()) {
                 AptUnit unit = null;
-                if (!newFloorplan) {
+                if (!floorplanIsNew) {
                     EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
                     criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
                     criteria.add(PropertyCriterion.eq(criteria.proto().info().number(), aptUnitIO.number().getValue()));
@@ -177,18 +191,26 @@ public class BuildingUpdater {
                                 + "' in '" + buildingIO.propertyCode().getValue() + "' found");
                     }
                 }
+                boolean unitIsNew = false;
                 boolean unitUpdated = false;
                 if (unit == null) {
                     unit = new AptUnitConverter().createDBO(aptUnitIO);
                     unitUpdated = true;
+                    unitIsNew = true;
                 } else {
                     unitUpdated = new AptUnitConverter().updateDBO(aptUnitIO, unit);
-
                 }
 
                 if (unitUpdated) {
                     Persistence.service().persist(unit);
                     counters.units += 1;
+                    if (unitIsNew) {
+                        log.debug("created AptUnit {} {}", buildingIO.propertyCode().getValue() + " " + floorplanIO.name().getValue(), aptUnitIO.number()
+                                .getValue());
+                    } else {
+                        log.debug("updated AptUnit {} {}", buildingIO.propertyCode().getValue() + " " + floorplanIO.name().getValue(), aptUnitIO.number()
+                                .getValue());
+                    }
                 }
 
             }

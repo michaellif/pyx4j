@@ -69,6 +69,28 @@
 		</layout>
 	</appender>
 	
+    <appender name="FileAppender.importer" class="com.pyx4j.log4j.RollingFileAppender">
+        <param name="Threshold" value="debug" />
+
+        <param name="File" value="%{container.home}/logs/%{contextName}/vista-importer.log" />
+        <param name="Append" value="false" />
+        <!-- start new file on every restart -->
+        <param name="MaxFileSize" value="3000KB" />
+        <param name="MaxBackupIndex" value="10" />
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <!--
+                Patterns %d event date %r Number of milliseconds elapsed since the
+                start of the application until the creation of the logging event. %p
+                event priority %c logger name %C Caller class %F Caller file %l
+                Caller full location information %L Caller Line number %M Caller
+                method %m message %n platform dependent line separator %x NDC %X MDC
+            -->
+            <param name="ConversionPattern"
+                value="%-5p %d %6r\t [%c{1}.%M:%L] [%X{namespace}.%X{sessionNum}.%X{userID}.%x]\t %l [%t]\n\t%m\n" />
+        </layout>
+    </appender>
+    
 	<logger name="com.propertyvista">
 		<level value="debug" />
 	</logger>
@@ -77,6 +99,12 @@
 		<level value="debug" />
 	</logger>
 
+    <logger name="com.propertyvista.interfaces.importer" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="FileAppender.warn.importer" />
+        <appender-ref ref="FileAppender.warn" />
+    </logger>
+    
 	<logger name="org.apache">
 		<level value="info" />
 	</logger>
