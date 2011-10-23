@@ -127,9 +127,14 @@ public class BuildingUpdater {
                 throw new UserRuntimeException("More then one building '" + buildingIO.propertyCode().getValue() + "' found");
             } else {
                 building = buildings.get(0);
-                boolean buildingUpdated = false;
+                if (building.marketing().adBlurbs().getMeta().isDetached()) {
+                    Persistence.service().retrieve(building.marketing().adBlurbs());
+                }
+                if (building.contacts().phones().getMeta().isDetached()) {
+                    Persistence.service().retrieve(building.contacts().phones());
+                }
 
-                buildingUpdated = new BuildingConverter().updateDBO(buildingIO, building);
+                boolean buildingUpdated = new BuildingConverter().updateDBO(buildingIO, building);
 
                 if (buildingUpdated) {
                     Persistence.service().persist(building);

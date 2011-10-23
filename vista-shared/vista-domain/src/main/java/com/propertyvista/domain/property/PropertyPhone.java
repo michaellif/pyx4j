@@ -15,6 +15,7 @@ package com.propertyvista.domain.property;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -90,6 +91,7 @@ public interface PropertyPhone extends IEntity {
     @ToString(index = 0)
     @MemberColumn(name = "phoneNumber")
     @Editor(type = EditorType.phone)
+    @BusinessEqualValue
     IPrimitive<String> number();
 
     /**
