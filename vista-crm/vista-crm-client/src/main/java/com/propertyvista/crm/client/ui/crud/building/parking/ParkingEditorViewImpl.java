@@ -20,11 +20,6 @@ import com.propertyvista.dto.ParkingDTO;
 public class ParkingEditorViewImpl extends CrmEditorViewImplBase<ParkingDTO> implements ParkingEditorView {
 
     public ParkingEditorViewImpl() {
-        super(CrmSiteMap.Properties.Parking.class);
-
-        // create/init/set main form here: 
-        ParkingEditorForm form = new ParkingEditorForm(this);
-        form.initContent();
-        setForm(form);
+        super(CrmSiteMap.Properties.Parking.class, new ParkingEditorForm());
     }
 }

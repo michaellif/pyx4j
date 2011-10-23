@@ -37,11 +37,13 @@ public abstract class AdminEntityForm<E extends IEntity> extends CrudEntityForm<
         return (this.factory instanceof AdminEditorsComponentFactory);
     }
 
+    @Override
     public void setParentView(IFormView<? extends IEntity> parentView) {
         this.parentView = parentView;
     }
 
-    protected IFormView<? extends IEntity> getParentView() {
+    @Override
+    public IFormView<? extends IEntity> getParentView() {
         return parentView;
     }
 }

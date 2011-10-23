@@ -17,7 +17,6 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
@@ -36,9 +35,8 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         unitItemsLister = new ListerInternalViewImplBase<AptUnitItem>(new UnitItemLister());
         OccupanciesLister = new ListerInternalViewImplBase<AptUnitOccupancy>(new UnitOccupancyLister());
 
-        CrmEntityForm<AptUnitDTO> form = new UnitEditorForm(new CrmViewersComponentFactory(), this);
-        form.initContent();
-        setForm(form);
+        // set main main form here:
+        setForm(new UnitEditorForm(new CrmViewersComponentFactory()));
     }
 
     @Override

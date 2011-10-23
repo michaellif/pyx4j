@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -36,13 +35,12 @@ public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
-    public LockerAreaEditorForm(IFormView<LockerAreaDTO> parentView) {
-        this(new CrmEditorsComponentFactory(), parentView);
+    public LockerAreaEditorForm() {
+        this(new CrmEditorsComponentFactory());
     }
 
-    public LockerAreaEditorForm(IEditableComponentFactory factory, IFormView<LockerAreaDTO> parentView) {
+    public LockerAreaEditorForm(IEditableComponentFactory factory) {
         super(LockerAreaDTO.class, factory);
-        setParentView(parentView);
     }
 
     @Override

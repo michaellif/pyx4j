@@ -14,18 +14,12 @@
 package com.propertyvista.crm.client.ui.crud.unit;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitEditorViewImpl extends CrmEditorViewImplBase<AptUnitDTO> implements UnitEditorView {
 
     public UnitEditorViewImpl() {
-        super(CrmSiteMap.Properties.Unit.class);
-
-        // create/init/set main form here: 
-        CrmEntityForm<AptUnitDTO> form = new UnitEditorForm(this);
-        form.initContent();
-        setForm(form);
+        super(CrmSiteMap.Properties.Unit.class, new UnitEditorForm());
     }
 }

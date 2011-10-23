@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.Button;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -41,10 +40,8 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         createApplicationButton.addStyleName(createApplicationButton.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.ActionButton);
         addActionButton(createApplicationButton);
 
-        // create/init/set main form here: 
-        CrmEntityForm<LeaseDTO> form = new LeaseEditorForm(new CrmViewersComponentFactory(), this);
-        form.initContent();
-        setForm(form);
+        // set main form here: 
+        setForm(new LeaseEditorForm(new CrmViewersComponentFactory()));
     }
 
     @Override

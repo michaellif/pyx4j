@@ -14,19 +14,12 @@
 package com.propertyvista.crm.client.ui.crud.building;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingEditorViewImpl extends CrmEditorViewImplBase<BuildingDTO> implements BuildingEditorView {
 
     public BuildingEditorViewImpl() {
-        super(CrmSiteMap.Properties.Building.class);
-
-        // create/init/set main form here: 
-        CrmEntityForm<BuildingDTO> form = new BuildingEditorForm(this);
-        form.initContent();
-        setForm(form);
+        super(CrmSiteMap.Properties.Building.class, new BuildingEditorForm());
     }
-
 }

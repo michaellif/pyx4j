@@ -29,7 +29,6 @@ import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -54,13 +53,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     private Widget appStatusTab;
 
-    public LeaseEditorForm(IFormView<LeaseDTO> parentView) {
-        this(new CrmEditorsComponentFactory(), parentView);
+    public LeaseEditorForm() {
+        this(new CrmEditorsComponentFactory());
     }
 
-    public LeaseEditorForm(IEditableComponentFactory factory, IFormView<LeaseDTO> parentView) {
+    public LeaseEditorForm(IEditableComponentFactory factory) {
         super(LeaseDTO.class, factory);
-        setParentView(parentView);
     }
 
     @Override

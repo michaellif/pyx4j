@@ -25,7 +25,6 @@ import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureLister;
@@ -111,10 +110,8 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         featureLister = new ListerInternalViewImplBase<Feature>(new FeatureLister(/* readOnly */));
         concessionLister = new ListerInternalViewImplBase<Concession>(new ConcessionLister(/* readOnly */));
 
-        // create/init/set main form here: 
-        CrmEntityForm<BuildingDTO> form = new BuildingEditorForm(new CrmViewersComponentFactory(), this);
-        form.initContent();
-        setForm(form);
+        // set main form here: 
+        setForm(new BuildingEditorForm(new CrmViewersComponentFactory()));
     }
 
     @Override

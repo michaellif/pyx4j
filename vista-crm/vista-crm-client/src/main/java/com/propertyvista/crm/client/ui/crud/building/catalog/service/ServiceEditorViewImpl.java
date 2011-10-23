@@ -30,7 +30,6 @@ import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -47,10 +46,8 @@ public class ServiceEditorViewImpl extends CrmEditorViewImplBase<Service> implem
         featureLister = new ListerInternalViewImplBase<Feature>(new SelectFeatrueLister());
         concessionLister = new ListerInternalViewImplBase<Concession>(new SelectConcessionLister());
 
-        // create/init/set main form here: 
-        CrmEntityForm<Service> form = new ServiceEditorForm(this);
-        form.initContent();
-        setForm(form);
+        // set main form here: 
+        setForm(new ServiceEditorForm());
     }
 
     @Override

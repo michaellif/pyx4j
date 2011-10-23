@@ -61,9 +61,8 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         header.setHeight("100%"); // fill all that defaultHeaderHeight!..
     }
 
-    public CrmEditorViewImplBase(Class<? extends AppPlace> placeClass, CrudEntityForm<E> form) {
+    public CrmEditorViewImplBase(Class<? extends AppPlace> placeClass, CrmEntityForm<E> form) {
         this(placeClass);
-        form.initContent();
         setForm(form);
     }
 

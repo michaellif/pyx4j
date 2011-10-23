@@ -13,14 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.content.site;
 
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -35,13 +33,12 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
-    public SiteEditorForm(IFormView<SiteDescriptorDTO> parentView) {
-        this(parentView, new CrmEditorsComponentFactory());
+    public SiteEditorForm() {
+        this(new CrmEditorsComponentFactory());
     }
 
-    public SiteEditorForm(IFormView<SiteDescriptorDTO> parentView, IEditableComponentFactory factory) {
+    public SiteEditorForm(IEditableComponentFactory factory) {
         super(SiteDescriptorDTO.class, factory);
-        setParentView(parentView);
     }
 
     @Override

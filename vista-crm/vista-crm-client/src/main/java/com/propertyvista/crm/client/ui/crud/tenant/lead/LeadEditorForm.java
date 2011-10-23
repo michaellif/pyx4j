@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -37,12 +36,11 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
     public LeadEditorForm() {
-        super(Lead.class, new CrmEditorsComponentFactory());
+        this(new CrmEditorsComponentFactory());
     }
 
-    public LeadEditorForm(IEditableComponentFactory factory, IFormView<Lead> parent) {
+    public LeadEditorForm(IEditableComponentFactory factory) {
         super(Lead.class, factory);
-        setParentView(parent);
     }
 
     @Override

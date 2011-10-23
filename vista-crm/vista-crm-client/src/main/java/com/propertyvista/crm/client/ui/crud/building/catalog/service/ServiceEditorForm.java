@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -34,13 +33,12 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
-    public ServiceEditorForm(IFormView<Service> parentView) {
-        this(new CrmEditorsComponentFactory(), parentView);
+    public ServiceEditorForm() {
+        this(new CrmEditorsComponentFactory());
     }
 
-    public ServiceEditorForm(IEditableComponentFactory factory, IFormView<Service> parentView) {
+    public ServiceEditorForm(IEditableComponentFactory factory) {
         super(Service.class, factory);
-        setParentView(parentView);
     }
 
     @Override

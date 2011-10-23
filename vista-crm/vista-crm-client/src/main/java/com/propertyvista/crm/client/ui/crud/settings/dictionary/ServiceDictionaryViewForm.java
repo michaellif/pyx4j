@@ -24,9 +24,8 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 public class ServiceDictionaryViewForm extends CrmEntityForm<ServiceItemType> {
 
-    public ServiceDictionaryViewForm(ServiceDictionaryView parentView) {
+    public ServiceDictionaryViewForm() {
         super(ServiceItemType.class, new CrmViewersComponentFactory());
-        setParentView(parentView);
     }
 
     @Override

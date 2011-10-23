@@ -13,11 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.content.page;
 
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
@@ -28,13 +26,12 @@ import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
 
-    public PageEditorForm(IFormView<PageDescriptor> parentView) {
-        this(parentView, new CrmEditorsComponentFactory());
+    public PageEditorForm() {
+        this(new CrmEditorsComponentFactory());
     }
 
-    public PageEditorForm(IFormView<PageDescriptor> parentView, IEditableComponentFactory factory) {
+    public PageEditorForm(IEditableComponentFactory factory) {
         super(PageDescriptor.class, factory);
-        setParentView(parentView);
     }
 
     @Override

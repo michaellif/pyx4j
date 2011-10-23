@@ -31,10 +31,8 @@ public class ParkingViewerViewImpl extends CrmViewerViewImplBase<ParkingDTO> imp
 
         spotLister = new ListerInternalViewImplBase<ParkingSpot>(new ParkingSpotLister(/* readOnly */));
 
-        // create/init/set main form here: 
-        ParkingEditorForm form = new ParkingEditorForm(new CrmViewersComponentFactory(), this);
-        form.initContent();
-        setForm(form);
+        // set main form here: 
+        setForm(new ParkingEditorForm(new CrmViewersComponentFactory()));
     }
 
     @Override

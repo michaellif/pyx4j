@@ -45,6 +45,7 @@ public class CMarketing extends CEntityEditor<Marketing> {
         int row = -1;
         main.setWidget(++row, 0, decorate(inject(proto().name()), 15));
         main.setWidget(++row, 0, decorate(inject(proto().description()), 45));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setHeader(++row, 0, 2, proto().adBlurbs().getMeta().getCaption());
         main.setWidget(++row, 0,

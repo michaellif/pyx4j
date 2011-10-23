@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -36,12 +35,11 @@ public class AppointmentEditorForm extends CrmEntityForm<Appointment> {
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
     public AppointmentEditorForm() {
-        super(Appointment.class, new CrmEditorsComponentFactory());
+        this(new CrmEditorsComponentFactory());
     }
 
-    public AppointmentEditorForm(IEditableComponentFactory factory, IFormView<Appointment> parentView) {
+    public AppointmentEditorForm(IEditableComponentFactory factory) {
         super(Appointment.class, factory);
-        setParentView(parentView);
     }
 
     @Override

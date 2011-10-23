@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.settings.dictionary;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
@@ -35,10 +34,8 @@ public class ServiceDictionaryViewImpl extends CrmViewerViewImplBase<ServiceItem
 
         remove(actionsWidget);
 
-        // create/init/set main form here: 
-        CrmEntityForm<ServiceItemType> form = new ServiceDictionaryViewForm(this);
-        form.initContent();
-        setForm(form);
+        // set main form here: 
+        setForm(new ServiceDictionaryViewForm());
     }
 
     @Override

@@ -37,7 +37,6 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.CAddress;
@@ -62,14 +61,12 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
-    public BuildingEditorForm(IFormView<BuildingDTO> parentView) {
-        this(new CrmEditorsComponentFactory(), parentView);
-        setEditable(true);
+    public BuildingEditorForm() {
+        this(new CrmEditorsComponentFactory());
     }
 
-    public BuildingEditorForm(IEditableComponentFactory factory, IFormView<BuildingDTO> parentView) {
+    public BuildingEditorForm(IEditableComponentFactory factory) {
         super(BuildingDTO.class, factory);
-        setParentView(parentView);
     }
 
     @Override

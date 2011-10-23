@@ -23,7 +23,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.lead.Appointment;
@@ -50,10 +49,8 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
         appointmentLister = new ListerInternalViewImplBase<Appointment>(new AppointmentLister());
 
-        // create/init/set main form here: 
-        CrmEntityForm<Lead> form = new LeadEditorForm(new CrmViewersComponentFactory(), this);
-        form.initContent();
-        setForm(form);
+        // set main form here: 
+        setForm(new LeadEditorForm(new CrmViewersComponentFactory()));
     }
 
     @Override

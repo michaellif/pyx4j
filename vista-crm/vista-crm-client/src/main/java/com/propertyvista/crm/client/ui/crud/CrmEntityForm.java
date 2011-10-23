@@ -16,13 +16,10 @@ package com.propertyvista.crm.client.ui.crud;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
-import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 
 public abstract class CrmEntityForm<E extends IEntity> extends CrudEntityForm<E> {
-
-    private IFormView<? extends IEntity> parentView;
 
     public CrmEntityForm(Class<E> rootClass) {
         super(rootClass, new CrmEditorsComponentFactory());
@@ -30,18 +27,6 @@ public abstract class CrmEntityForm<E extends IEntity> extends CrudEntityForm<E>
 
     public CrmEntityForm(Class<E> rootClass, IEditableComponentFactory factory) {
         super(rootClass, factory);
-    }
-
-    @Override
-    public boolean isEditable() {
-        return (this.factory instanceof CrmEditorsComponentFactory);
-    }
-
-    public void setParentView(IFormView<? extends IEntity> parentView) {
-        this.parentView = parentView;
-    }
-
-    public IFormView<? extends IEntity> getParentView() {
-        return parentView;
+        setEditable(this.factory instanceof CrmEditorsComponentFactory);
     }
 }

@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
@@ -29,12 +28,7 @@ import com.propertyvista.dto.TenantDTO;
 public class TenantEditorViewImpl extends CrmEditorViewImplBase<TenantDTO> implements TenantEditorView {
 
     public TenantEditorViewImpl() {
-        super(CrmSiteMap.Tenants.Tenant.class);
-
-        // create/init/set main form here: 
-        CrmEntityForm<TenantDTO> form = new TenantEditorForm(this);
-        form.initContent();
-        setForm(form);
+        super(CrmSiteMap.Tenants.Tenant.class, new TenantEditorForm());
     }
 
     @Override

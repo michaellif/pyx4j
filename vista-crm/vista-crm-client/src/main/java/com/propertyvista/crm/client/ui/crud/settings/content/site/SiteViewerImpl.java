@@ -16,18 +16,13 @@ package com.propertyvista.crm.client.ui.crud.settings.content.site;
 import com.pyx4j.commons.Key;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class SiteViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> implements SiteViewer {
     public SiteViewerImpl() {
-        super(CrmSiteMap.Settings.Content.class);
-        // create/init/set main form here: 
-        CrmEntityForm<SiteDescriptorDTO> form = new SiteEditorForm(this, new CrmViewersComponentFactory());
-        form.initContent();
-        setForm(form);
+        super(CrmSiteMap.Settings.Content.class, new SiteEditorForm(new CrmViewersComponentFactory()));
     }
 
     @Override

@@ -14,11 +14,10 @@
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
+import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
 import com.propertyvista.crm.client.ui.crud.tenant.SelectTenantLister;
 import com.propertyvista.crm.client.ui.crud.unit.SelectedUnitLister;
@@ -59,10 +58,8 @@ public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> impleme
 
         tenantLister = new ListerInternalViewImplBase<Tenant>(new SelectTenantLister(/* readOnly */));
 
-        // create/init/set main form here: 
-        CrmEntityForm<LeaseDTO> form = new LeaseEditorForm(this);
-        form.initContent();
-        setForm(form);
+        // set main form here: 
+        setForm(new LeaseEditorForm());
     }
 
     @Override

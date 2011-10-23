@@ -20,10 +20,6 @@ import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageEditorImpl extends CrmEditorViewImplBase<PageDescriptor> implements PageEditor {
     public PageEditorImpl() {
-        super(CrmSiteMap.Settings.Page.class);
-        // create/init/set main form here: 
-        CrmEntityForm<PageDescriptor> form = new PageEditorForm(this);
-        form.initContent();
-        setForm(form);
+        super(CrmSiteMap.Settings.Page.class, new PageEditorForm());
     }
 }

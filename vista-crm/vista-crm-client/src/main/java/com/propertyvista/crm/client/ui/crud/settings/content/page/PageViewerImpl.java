@@ -16,18 +16,13 @@ package com.propertyvista.crm.client.ui.crud.settings.content.page;
 import com.pyx4j.commons.Key;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageViewerImpl extends CrmViewerViewImplBase<PageDescriptor> implements PageViewer {
     public PageViewerImpl() {
-        super(CrmSiteMap.Settings.Page.class);
-        // create/init/set main form here: 
-        CrmEntityForm<PageDescriptor> form = new PageEditorForm(this, new CrmViewersComponentFactory());
-        form.initContent();
-        setForm(form);
+        super(CrmSiteMap.Settings.Page.class, new PageEditorForm(new CrmViewersComponentFactory()));
     }
 
     @Override
