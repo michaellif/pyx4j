@@ -13,6 +13,7 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
 import com.propertyvista.domain.contact.Address;
@@ -39,4 +40,13 @@ public class AddressConverter extends EntityDtoBinder<Address, AddressIO> {
         bind(dtoProto.postalCode(), dboProto.postalCode());
     }
 
+    @Override
+    protected void onUpdateDBOmember(AddressIO dto, Address dbo, IObject<?> dboM) {
+        if (dboM == dbo.country().name()) {
+            dbo.country().setPrimaryKey(null);
+        } else if (dboM == dbo.province().code()) {
+            dbo.province().setPrimaryKey(null);
+            dbo.province().name().setValue(null);
+        }
+    }
 }
