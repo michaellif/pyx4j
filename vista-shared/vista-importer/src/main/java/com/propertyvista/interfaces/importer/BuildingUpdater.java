@@ -209,7 +209,7 @@ public class BuildingUpdater {
                 }
 
                 if (unitUpdated) {
-                    Persistence.service().persist(unit);
+                    Persistence.service().merge(unit);
                     counters.units += 1;
                     if (unitIsNew) {
                         log.debug("created AptUnit {} {}", buildingIO.propertyCode().getValue() + " " + floorplanIO.name().getValue(), aptUnitIO.number()
