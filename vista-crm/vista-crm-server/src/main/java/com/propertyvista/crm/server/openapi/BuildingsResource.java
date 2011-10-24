@@ -35,7 +35,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.IEntityPersistenceService;
@@ -281,20 +280,30 @@ public class BuildingsResource {
             }
         }
 
-        log.info("BuildingRS Retrive time {} msec", TimeUtils.since(start));
+        log.info("BuildingRS Retrieve time {} msec", TimeUtils.since(start));
 
         return buildingsRS;
     }
 
     private FloorplanRS findSameFloorplan(List<FloorplanRS> floorplans, FloorplanRS convertedFloorplan) {
         for (FloorplanRS floorplanRS : floorplans) {
-            if (EqualsHelper.equals(floorplanRS.bedrooms, convertedFloorplan.bedrooms) && EqualsHelper.equals(floorplanRS.dens, convertedFloorplan.dens)
-                    && EqualsHelper.equals(floorplanRS.bathrooms, convertedFloorplan.bathrooms)) {
+            if (equalsInteger(floorplanRS.bedrooms, convertedFloorplan.bedrooms) && equalsInteger(floorplanRS.dens, convertedFloorplan.dens)
+                    && equalsInteger(floorplanRS.bathrooms, convertedFloorplan.bathrooms)) {
                 return floorplanRS;
             }
         }
         // Not found
         return null;
+    }
+
+    boolean equalsInteger(Integer value1, Integer value2) {
+        if (value1 == null) {
+            value1 = Integer.valueOf(0);
+        }
+        if (value2 == null) {
+            value2 = Integer.valueOf(0);
+        }
+        return value1.equals(value2);
     }
 
     Double min(Double a, Double b) {
