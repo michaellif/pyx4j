@@ -284,20 +284,22 @@ public class XMLEntityParser {
                 return new Base64().decode(str);
             } else if (Date.class.isAssignableFrom(valueClass)) {
                 if (valueClass.isAssignableFrom(java.sql.Time.class)) {
-                    SimpleDateFormat tFormat = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+                    final String timePattern = "HH:mm:ss";
+                    SimpleDateFormat tFormat = new SimpleDateFormat(timePattern, Locale.ENGLISH);
                     try {
                         return new java.sql.Time(tFormat.parse(str).getTime());
                     } catch (ParseException e) {
-                        throw new Error("Error parsing time [" + str + "]", e);
+                        throw new Error("Error parsing time [" + str + "] expected [" + timePattern + "]", e);
                     }
                 } else {
                     if (valueClass.equals(java.sql.Date.class) || valueClass.equals(LogicalDate.class)) {
-                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+                        final String datePattern = "yyyy-MM-dd";
+                        DateFormat df = new SimpleDateFormat(datePattern, Locale.ENGLISH);
                         Date date;
                         try {
                             date = df.parse(str);
                         } catch (ParseException e) {
-                            throw new Error("Error parsing time [" + str + "]", e);
+                            throw new Error("Error parsing date [" + str + "] expected [" + datePattern + "]", e);
                         }
                         if (valueClass.equals(java.sql.Date.class)) {
                             return new java.sql.Date(date.getTime());
