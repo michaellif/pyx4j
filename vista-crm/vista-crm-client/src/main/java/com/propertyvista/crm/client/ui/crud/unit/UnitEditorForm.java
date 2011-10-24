@@ -76,7 +76,10 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         if (isEditable() && comp instanceof CEntityComboBox<?>) {
             @SuppressWarnings("unchecked")
             CEntityComboBox<Floorplan> combo = (CEntityComboBox<Floorplan>) comp;
+            // reload options with new criteria:
+            combo.resetCriteria();
             combo.addCriterion(PropertyCriterion.eq(combo.proto().building(), value.belongsTo().detach()));
+            combo.retriveOptions(null);
         }
 
         super.populate(value);

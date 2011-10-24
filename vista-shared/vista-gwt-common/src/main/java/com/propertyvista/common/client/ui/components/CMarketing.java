@@ -39,9 +39,8 @@ public class CMarketing extends CDecoratableEntityEditor<Marketing> {
         main.setWidth("100%");
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().name()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().description()), 45));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        main.setWidget(++row, 0, decorate(inject(proto().name()), 30));
+        main.setWidget(++row, 0, decorate(inject(proto().description()), 30));
 
         main.setHeader(++row, 0, 2, proto().adBlurbs().getMeta().getCaption());
         main.setWidget(++row, 0,
@@ -61,10 +60,6 @@ public class CMarketing extends CDecoratableEntityEditor<Marketing> {
                         return decor;
                     }
                 }));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
-
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
 
         return main;
     }
