@@ -21,10 +21,9 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -68,19 +67,22 @@ public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
     }
 
     private Widget createDetailsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
-        main.add(split);
+        FormFlexPanel main = new FormFlexPanel();
 
-        split.getLeftPanel().add(inject(proto().name()), 15);
-        split.getLeftPanel().add(inject(proto().description()), 15);
-        split.getLeftPanel().add(inject(proto().isPrivate()), 7);
-        split.getLeftPanel().add(inject(proto().levels()), 7);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().name()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().description()), 25));
+        main.setWidget(++row, 0, decorate(inject(proto().isPrivate()), 3));
+        main.setWidget(++row, 0, decorate(inject(proto().levels()), 3));
 
-        split.getRightPanel().add(inject(proto().totalLockers()), 7);
-        split.getRightPanel().add(inject(proto().regularLockers()), 7);
-        split.getRightPanel().add(inject(proto().largeLockers()), 7);
-        split.getRightPanel().add(inject(proto().smallLockers()), 7);
+        row = -1;
+        main.setWidget(++row, 1, decorate(inject(proto().totalLockers()), 3));
+        main.setWidget(++row, 1, decorate(inject(proto().regularLockers()), 3));
+        main.setWidget(++row, 1, decorate(inject(proto().largeLockers()), 3));
+        main.setWidget(++row, 1, decorate(inject(proto().smallLockers()), 3));
+
+        main.getColumnFormatter().setWidth(0, "55%");
+        main.getColumnFormatter().setWidth(1, "45%");
 
         return new CrmScrollPanel(main);
     }

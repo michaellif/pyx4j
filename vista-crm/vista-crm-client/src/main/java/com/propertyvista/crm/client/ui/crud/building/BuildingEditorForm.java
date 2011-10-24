@@ -31,10 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -145,14 +142,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         return tabPanel.getSelectedIndex();
     }
 
-    private WidgetDecorator decorate(CComponent<?> component, double componentWidth) {
-        return new WidgetDecorator(new Builder(component).componentWidth(componentWidth).readOnlyMode(!isEditable()));
-    }
-
-    private WidgetDecorator decorate(CComponent<?> component, double componentWidth, String componentCaption) {
-        return new WidgetDecorator(new Builder(component).componentWidth(componentWidth).componentCaption(componentCaption).readOnlyMode(!isEditable()));
-    }
-
     private Widget createGeneralTab() {
         FormFlexPanel main = new FormFlexPanel();
 
@@ -178,7 +167,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         main.setHeader(row++, 0, 2, proto().info().address().getMeta().getCaption());
 
-        main.setWidget(row, 0, inject(proto().info().address(), new CAddress(true, false, !isEditable())));
+        main.setWidget(row, 0, inject(proto().info().address(), new CAddress(true, false)));
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
         main.setHeader(row++, 0, 2, proto().amenities().getMeta().getCaption());

@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.ui.dashboard;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -34,14 +34,14 @@ public class DashboardEditorForm extends CrmEntityForm<DashboardMetadata> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(inject(proto().name()), 15);
-        main.add(inject(proto().description()), 25);
-        main.add(inject(proto().isFavorite()), 3);
-        main.add(inject(proto().isShared()), 3);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().name()), 20));
+        main.setWidget(++row, 0, decorate(inject(proto().description()), 40));
+        main.setWidget(++row, 0, decorate(inject(proto().isFavorite()), 3));
+        main.setWidget(++row, 0, decorate(inject(proto().isShared()), 3));
 
-        main.setWidth("100%");
         return main;
     }
 }

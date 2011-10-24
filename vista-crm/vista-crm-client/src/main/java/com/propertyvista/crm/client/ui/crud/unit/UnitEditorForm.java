@@ -27,13 +27,14 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CNumberLabel;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
+import com.propertyvista.common.client.ui.components.CMarketing;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -124,18 +125,19 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     private Widget createFinancialsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(inject(proto().financial().unitRent(), new CNumberLabel()), 10);
-        main.add(inject(proto().financial().marketRent(), new CNumberLabel()), 10);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().financial().unitRent(), new CNumberLabel()), 10));
+        main.setWidget(++row, 0, decorate(inject(proto().financial().marketRent(), new CNumberLabel()), 10));
 
         return new CrmScrollPanel(main);
     }
 
     private Widget createMarketingTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        SubtypeInjectors.injectMarketing(main, proto().marketing(), this);
+        main.setWidget(0, 0, inject(proto().marketing(), new CMarketing()));
 
         return new CrmScrollPanel(main);
     }

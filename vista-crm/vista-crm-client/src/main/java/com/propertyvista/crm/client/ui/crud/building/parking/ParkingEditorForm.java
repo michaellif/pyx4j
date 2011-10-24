@@ -21,10 +21,9 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -67,19 +66,23 @@ public class ParkingEditorForm extends CrmEntityForm<ParkingDTO> {
     }
 
     private Widget createDetailsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
-        main.add(split);
+        FormFlexPanel main = new FormFlexPanel();
 
-        split.getLeftPanel().add(inject(proto().name()), 15);
-        split.getLeftPanel().add(inject(proto().description()), 15);
-        split.getLeftPanel().add(inject(proto().type()), 10);
-        split.getLeftPanel().add(inject(proto().levels()), 7);
-        split.getLeftPanel().add(inject(proto().totalSpaces()), 7);
-        split.getRightPanel().add(inject(proto().regularSpaces()), 7);
-        split.getRightPanel().add(inject(proto().disabledSpaces()), 7);
-        split.getRightPanel().add(inject(proto().wideSpaces()), 7);
-        split.getRightPanel().add(inject(proto().narrowSpaces()), 7);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().name()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().description()), 25));
+        main.setWidget(++row, 0, decorate(inject(proto().type()), 10));
+        main.setWidget(++row, 0, decorate(inject(proto().levels()), 3));
+        main.setWidget(++row, 0, decorate(inject(proto().totalSpaces()), 3));
+
+        row = -1;
+        main.setWidget(++row, 1, decorate(inject(proto().regularSpaces()), 3));
+        main.setWidget(++row, 1, decorate(inject(proto().disabledSpaces()), 3));
+        main.setWidget(++row, 1, decorate(inject(proto().wideSpaces()), 3));
+        main.setWidget(++row, 1, decorate(inject(proto().narrowSpaces()), 3));
+
+        main.getColumnFormatter().setWidth(0, "55%");
+        main.getColumnFormatter().setWidth(1, "45%");
 
         return new CrmScrollPanel(main);
     }

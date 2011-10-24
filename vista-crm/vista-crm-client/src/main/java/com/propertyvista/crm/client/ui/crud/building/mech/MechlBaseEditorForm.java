@@ -18,13 +18,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
+import com.propertyvista.common.client.ui.components.CMaintenance;
+import com.propertyvista.common.client.ui.components.CWarranty;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.vendor.LicensedWarrantedMaintained;
@@ -66,21 +66,17 @@ public abstract class MechlBaseEditorForm<E extends LicensedWarrantedMaintained>
     protected abstract Widget createGeneralTab();
 
     protected Widget createWarrantyTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
-        main.add(split);
+        FormFlexPanel main = new FormFlexPanel();
 
-        SubtypeInjectors.injectWarranty(main, split, proto().warranty(), this);
+        main.setWidget(0, 0, inject(proto().warranty(), new CWarranty()));
 
         return new CrmScrollPanel(main);
     }
 
     protected Widget createMaintenantceTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
-        main.add(split);
+        FormFlexPanel main = new FormFlexPanel();
 
-        SubtypeInjectors.injectMaintenance(main, split, proto().maintenance(), this);
+        main.setWidget(0, 0, inject(proto().maintenance(), new CMaintenance()));
 
         return new CrmScrollPanel(main);
     }

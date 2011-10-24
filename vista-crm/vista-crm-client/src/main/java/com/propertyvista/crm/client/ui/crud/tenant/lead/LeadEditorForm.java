@@ -20,11 +20,9 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -65,37 +63,40 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
     }
 
     private Widget createGeneralTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-        VistaDecoratorsSplitFlowPanel split;
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(split = new VistaDecoratorsSplitFlowPanel(!isEditable()));
-        split.getLeftPanel().add(inject(proto().person().name().firstName()), 15);
-        split.getLeftPanel().add(inject(proto().person().name().lastName()), 15);
-        split.getLeftPanel().add(inject(proto().person().email()), 20);
-        split.getLeftPanel().add(inject(proto().person().homePhone()), 15);
-        split.getLeftPanel().add(inject(proto().person().mobilePhone()), 15);
-        split.getLeftPanel().add(inject(proto().informedFrom()), 10);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().person().name().firstName()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().person().name().lastName()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().person().email()), 20));
+        main.setWidget(++row, 0, decorate(inject(proto().person().homePhone()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().person().mobilePhone()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().informedFrom()), 10));
 
-        split.getRightPanel().add(inject(proto().moveInDate()), 8);
+        row = -1;
+        main.setWidget(++row, 1, decorate(inject(proto().moveInDate()), 8.2));
 
-        split.getRightPanel().add(inject(proto().rent().min()), 5, i18n.tr("Min rent"));
-        split.getRightPanel().add(inject(proto().rent().max()), 5, i18n.tr("Max rent"));
+        main.setWidget(++row, 1, decorate(inject(proto().rent().min()), 5, i18n.tr("Min rent")));
+        main.setWidget(++row, 1, decorate(inject(proto().rent().max()), 5, i18n.tr("Max rent")));
 
-        split.getRightPanel().add(inject(proto().term()), 8);
-        split.getRightPanel().add(inject(proto().beds()), 4);
-        split.getRightPanel().add(inject(proto().baths()), 4);
-        split.getRightPanel().add(inject(proto().floorplan()), 15);
+        main.setWidget(++row, 1, decorate(inject(proto().term()), 8));
+        main.setWidget(++row, 1, decorate(inject(proto().beds()), 4));
+        main.setWidget(++row, 1, decorate(inject(proto().baths()), 4));
+        main.setWidget(++row, 1, decorate(inject(proto().floorplan()), 15));
 
-        main.add(inject(proto().comments()), 50);
+        main.setWidget(++row, 0, decorate(inject(proto().comments()), 57));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.add(new VistaLineSeparator());
+        main.setHeader(++row, 0, 2, "");
 
-        main.add(split = new VistaDecoratorsSplitFlowPanel(!isEditable()));
-        split.getLeftPanel().add(inject(proto().source()), 15);
-        split.getLeftPanel().add(inject(proto().assignedTo()), 15);
+        main.setWidget(++row, 0, decorate(inject(proto().source()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().assignedTo()), 15));
+        row -= 2;
+        main.setWidget(++row, 1, decorate(inject(proto().createDate()), 8.2));
+        main.setWidget(++row, 1, decorate(inject(proto().status()), 10));
 
-        split.getRightPanel().add(inject(proto().createDate()), 8.2);
-        split.getRightPanel().add(inject(proto().status()), 10);
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
     }

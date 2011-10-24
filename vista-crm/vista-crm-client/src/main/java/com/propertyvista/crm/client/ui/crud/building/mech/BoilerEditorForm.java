@@ -13,19 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
+import com.propertyvista.common.client.ui.components.CLicense;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.dto.BoilerDTO;
 
 public class BoilerEditorForm extends MechlBaseEditorForm<BoilerDTO> {
@@ -40,24 +36,27 @@ public class BoilerEditorForm extends MechlBaseEditorForm<BoilerDTO> {
 
     @Override
     protected Widget createGeneralTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
-        main.add(split);
+        FormFlexPanel main = new FormFlexPanel();
 
-        split.getLeftPanel().add(inject(proto().type()), 15);
-        split.getLeftPanel().add(inject(proto().make()), 15);
-        split.getLeftPanel().add(inject(proto().model()), 15);
-        split.getRightPanel().add(inject(proto().build()), 9);
-        split.getRightPanel().add(inject(proto().description()), 20);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().type()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().make()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().model()), 15));
 
-        main.add(new CrmSectionSeparator("Licence"));
-        VistaDecoratorsSplitFlowPanel split2 = new VistaDecoratorsSplitFlowPanel(!isEditable());
-        SubtypeInjectors.injectLicence(main, split2, proto().license(), this);
-        main.add(split2);
+        main.setHeader(++row, 0, 2, i18n.tr("License"));
+        main.setWidget(++row, 0, inject(proto().license(), new CLicense()));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.add(new VistaLineSeparator());
-        main.add(new HTML("&nbsp"));
-        main.add(inject(proto().notes()), 60);
+        main.setHeader(++row, 0, 2, "");
+        main.setWidget(++row, 0, decorate(inject(proto().notes()), 57));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        row = -1;
+        main.setWidget(++row, 1, decorate(inject(proto().build()), 9));
+        main.setWidget(++row, 1, decorate(inject(proto().description()), 20));
+
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
     }

@@ -28,11 +28,12 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
+import com.propertyvista.common.client.ui.components.EmailFolder;
+import com.propertyvista.common.client.ui.components.PhoneFolder;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.dto.TenantDTO;
@@ -80,8 +81,9 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         //Company
         company.add(inject(proto().company().name()), 25);
         company.add(inject(proto().company().website()), 25);
-        SubtypeInjectors.injectPhones(company, proto().company().phones(), this);
-        SubtypeInjectors.injectEmails(company, proto().company().emails(), this);
+
+        company.add(inject(proto().company().phones(), new PhoneFolder(isEditable())));
+        company.add(inject(proto().company().emails(), new EmailFolder(isEditable())));
 
         contacts.add(inject(proto().emergencyContacts(), new EmergencyContactFolder()));
 

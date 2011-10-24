@@ -13,18 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.feature;
 
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.financial.offering.Feature;
 
 public class FeatureEditorForm extends CrmEntityForm<Feature> {
@@ -39,23 +36,27 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(split);
-        split.getLeftPanel().add(inject(proto().type(), new CLabel()), 10);
-        split.getLeftPanel().add(inject(proto().name()), 10);
-        split.getLeftPanel().add(inject(proto().isMandatory()), 4);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().type(), new CLabel()), 10));
+        main.setWidget(++row, 0, decorate(inject(proto().name()), 10));
+        main.setWidget(++row, 0, decorate(inject(proto().isMandatory()), 4));
+        main.setWidget(++row, 0, decorate(inject(proto().description()), 50));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        split.getRightPanel().add(inject(proto().priceType()), 18);
-        split.getRightPanel().add(inject(proto().depositType()), 15);
-        split.getRightPanel().add(inject(proto().isRecurring()), 4);
+        main.setHeader(++row, 0, 2, i18n.tr("Items"));
 
-        main.add(inject(proto().description()), 50);
+        main.setWidget(++row, 0, inject(proto().items(), new FeatureItemFolder(this)));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.add(new CrmSectionSeparator(i18n.tr("Items:")));
+        row = -1;
+        main.setWidget(++row, 1, decorate(inject(proto().priceType()), 18));
+        main.setWidget(++row, 1, decorate(inject(proto().depositType()), 15));
+        main.setWidget(++row, 1, decorate(inject(proto().isRecurring()), 4));
 
-        main.add(inject(proto().items(), new FeatureItemFolder(this)));
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
     }

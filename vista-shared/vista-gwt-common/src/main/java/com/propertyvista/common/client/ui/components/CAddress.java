@@ -17,11 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.client.ui.OptionsFilter;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
@@ -32,19 +28,24 @@ import com.propertyvista.domain.contact.IAddressFull;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
-public class CAddress extends CEntityEditor<Address> {
+public class CAddress extends CDecoratableEntityEditor<Address> {
 
     private final boolean showUnit;
 
-    private final boolean readOnly;
-
     private final boolean twoColumns;
 
-    public CAddress(boolean twoColumns, boolean showUnit, boolean readOnly) {
+    public CAddress() {
+        this(true);
+    }
+
+    public CAddress(boolean twoColumns) {
+        this(twoColumns, true);
+    }
+
+    public CAddress(boolean twoColumns, boolean showUnit) {
         super(Address.class);
         this.twoColumns = twoColumns;
         this.showUnit = showUnit;
-        this.readOnly = readOnly;
     }
 
     @Override
@@ -87,10 +88,6 @@ public class CAddress extends CEntityEditor<Address> {
         main.getColumnFormatter().setWidth(1, "50%");
 
         return main;
-    }
-
-    private WidgetDecorator decorate(CComponent<?> component, double componentWidth) {
-        return new WidgetDecorator(new Builder(component).componentWidth(componentWidth).readOnlyMode(readOnly));
     }
 
     private void attachFilters(final IAddressFull proto, CEditableComponent<Province, ?> province, CEditableComponent<Country, ?> country,

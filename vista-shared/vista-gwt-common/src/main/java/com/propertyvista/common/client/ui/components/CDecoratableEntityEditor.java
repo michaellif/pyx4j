@@ -7,30 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on Oct 24, 2011
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud;
+package com.propertyvista.common.client.ui.components;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
-import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 
-import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
+abstract public class CDecoratableEntityEditor<E extends IEntity> extends CEntityEditor<E> {
 
-public abstract class CrmEntityForm<E extends IEntity> extends CrudEntityForm<E> {
-
-    public CrmEntityForm(Class<E> rootClass) {
-        super(rootClass, new CrmEditorsComponentFactory());
+    public CDecoratableEntityEditor(Class<E> clazz) {
+        super(clazz);
     }
 
-    public CrmEntityForm(Class<E> rootClass, IEditableComponentFactory factory) {
-        super(rootClass, factory);
-        setEditable(this.factory instanceof CrmEditorsComponentFactory);
+    public CDecoratableEntityEditor(Class<E> clazz, IEditableComponentFactory factory) {
+        super(clazz, factory);
     }
 
     // decoration stuff:

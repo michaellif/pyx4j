@@ -16,9 +16,8 @@ package com.propertyvista.crm.client.ui.crud.building.catalog.concession;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -36,21 +35,25 @@ public class ConcessionEditorForm extends CrmEntityForm<Concession> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(split);
-        split.getLeftPanel().add(inject(proto().type()), 12);
-        split.getLeftPanel().add(inject(proto().term()), 12);
-        split.getLeftPanel().add(inject(proto().value()), 6);
-        split.getLeftPanel().add(inject(proto().condition()), 8);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().type()), 12));
+        main.setWidget(++row, 0, decorate(inject(proto().term()), 12));
+        main.setWidget(++row, 0, decorate(inject(proto().value()), 6));
+        main.setWidget(++row, 0, decorate(inject(proto().condition()), 8));
 
-        split.getRightPanel().add(inject(proto().status()), 8);
-        split.getRightPanel().add(inject(proto().approvedBy()), 20);
-        split.getRightPanel().add(inject(proto().effectiveDate()), 8.2);
-        split.getRightPanel().add(inject(proto().expirationDate()), 8.2);
+        row = -1;
+        main.setWidget(++row, 1, decorate(inject(proto().status()), 8));
+        main.setWidget(++row, 1, decorate(inject(proto().approvedBy()), 20));
+        main.setWidget(++row, 1, decorate(inject(proto().effectiveDate()), 8.2));
+        main.setWidget(++row, 1, decorate(inject(proto().expirationDate()), 8.2));
 
-        main.add(inject(proto().description()), 50);
+        main.setWidget(++row, 0, decorate(inject(proto().description()), 50));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
     }

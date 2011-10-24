@@ -19,19 +19,15 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
 
-public class CMarketing extends CEntityEditor<Marketing> {
+public class CMarketing extends CDecoratableEntityEditor<Marketing> {
 
     public CMarketing() {
         super(Marketing.class);
@@ -71,9 +67,5 @@ public class CMarketing extends CEntityEditor<Marketing> {
         main.getColumnFormatter().setWidth(1, "50%");
 
         return main;
-    }
-
-    private WidgetDecorator decorate(CComponent<?> component, double componentWidth) {
-        return new WidgetDecorator(new Builder(component).componentWidth(componentWidth).readOnlyMode(!isEditable()));
     }
 }

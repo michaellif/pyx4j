@@ -20,10 +20,9 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -64,18 +63,21 @@ public class AppointmentEditorForm extends CrmEntityForm<Appointment> {
     }
 
     private Widget createGeneralTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-        VistaDecoratorsSplitFlowPanel split;
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(split = new VistaDecoratorsSplitFlowPanel(!isEditable()));
-        split.getLeftPanel().add(inject(proto().date()), 8);
-        split.getLeftPanel().add(inject(proto().time()), 6);
-        split.getLeftPanel().add(inject(proto().address()), 20);
-        split.getLeftPanel().add(inject(proto().status()), 8);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().date()), 8));
+        main.setWidget(++row, 0, decorate(inject(proto().time()), 6));
+        main.setWidget(++row, 0, decorate(inject(proto().address()), 20));
+        main.setWidget(++row, 0, decorate(inject(proto().status()), 8));
 
-        split.getRightPanel().add(inject(proto().agent()), 15);
-        split.getRightPanel().add(inject(proto().phone()), 15, i18n.tr("Agent Phone"));
-        split.getRightPanel().add(inject(proto().email()), 15, i18n.tr("Agent Email"));
+        row = -1;
+        main.setWidget(++row, 1, decorate(inject(proto().agent()), 15));
+        main.setWidget(++row, 1, decorate(inject(proto().phone()), 15, i18n.tr("Agent Phone")));
+        main.setWidget(++row, 1, decorate(inject(proto().email()), 15, i18n.tr("Agent Email")));
+
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
     }

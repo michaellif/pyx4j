@@ -16,11 +16,10 @@ package com.propertyvista.crm.client.ui.crud.tenant.inquiry;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.common.client.ui.components.PhoneFolder;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.SubtypeInjectors;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.dto.InquiryDTO;
@@ -37,17 +36,24 @@ public class InquiryEditorForm extends CrmEntityForm<InquiryDTO> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel();
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(split);
-        split.getLeftPanel().add(inject(proto().name()), 15);
-        split.getLeftPanel().add(inject(proto().email()), 15);
-        split.getLeftPanel().add(inject(proto().description()), 15);
-        split.getRightPanel().add(inject(proto().building()), 15);
-        split.getRightPanel().add(inject(proto().unit()), 15);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().name()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().email()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().description()), 57));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        SubtypeInjectors.injectPhones(main, proto().phones(), this);
+        main.setHeader(++row, 0, 2, proto().phones().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().phones(), new PhoneFolder(isEditable())));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        row = -1;
+        main.setWidget(++row, 1, decorate(inject(proto().building()), 15));
+        main.setWidget(++row, 1, decorate(inject(proto().unit()), 15));
+
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
     }

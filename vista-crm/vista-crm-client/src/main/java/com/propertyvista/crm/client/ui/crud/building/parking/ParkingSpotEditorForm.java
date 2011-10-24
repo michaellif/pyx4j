@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.ui.crud.building.parking;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -35,10 +35,11 @@ public class ParkingSpotEditorForm extends CrmEntityForm<ParkingSpot> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(inject(proto().name()), 10);
-        main.add(inject(proto().type()), 8);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().name()), 10));
+        main.setWidget(++row, 0, decorate(inject(proto().type()), 10));
 
         return new CrmScrollPanel(main);
     }
