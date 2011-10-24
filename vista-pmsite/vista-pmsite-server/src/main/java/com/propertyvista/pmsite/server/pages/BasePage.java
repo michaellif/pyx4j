@@ -59,10 +59,13 @@ public abstract class BasePage extends WebPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         String baseColor = PMSiteContentManager.getSiteDescriptor().baseColor().getValue();
-        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "main" + PMSiteContentManager.getSiteStyle()
-                + ".css", "text/css", new StylesheetTemplateModel(baseColor));
+        int styleId = PMSiteContentManager.getSiteStyle();
+        String fileCSS = "main" + styleId + ".css";
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
+                new StylesheetTemplateModel(String.valueOf(styleId)));
         response.renderCSSReference(refCSS);
         response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "jquery-1.6.3.min.js"));
+        response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "jquery-ui-1.8.16.min.js"));
         response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "pmsite_jslib-1.0.js"));
         response.renderString("<meta name=\"gwt:property\" content=\"locale=" + PMSiteContentManager.getLocale().lang().getValue().name() + "\" />");
     }

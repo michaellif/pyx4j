@@ -96,8 +96,10 @@ public class AptListPage extends BasePage {
     @Override
     public void renderHead(IHeaderResponse response) {
         String baseColor = PMSiteContentManager.getSiteDescriptor().baseColor().getValue();
-        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "aptlist"
-                + PMSiteContentManager.getSiteStyle() + ".css", "text/css", new StylesheetTemplateModel(baseColor));
+        int styleId = PMSiteContentManager.getSiteStyle();
+        String fileCSS = "aptlist" + styleId + ".css";
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
+                new StylesheetTemplateModel(String.valueOf(styleId)));
         response.renderCSSReference(refCSS);
         super.renderHead(response);
 

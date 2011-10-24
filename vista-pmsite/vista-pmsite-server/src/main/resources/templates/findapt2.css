@@ -1,0 +1,149 @@
+.vista-pmsite-findAptPage {
+    color: ${fgColor_100};
+    font-size: 16px;
+}
+
+.vista-pmsite-findAptPage .vista-pmsite-mainWrap {
+	width: 960px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+.vista-pmsite-findAptPage .caption {
+	background-size: 100% 100%;
+	height: 80px;
+	overflow: hidden;
+	padding: 40px 0 0 30px;
+}
+
+.vista-pmsite-findAptPage .caption h1 {
+	font-size: 36px;
+	font-weight: normal;
+	line-height: 38px;
+	padding: 0 0 20px;
+}
+
+.advancedSearchWideWrap {
+	padding: 0 0 30px 30px;
+	width:566px;
+}
+
+.advancedSearchWideWrap input[type=submit] {
+	background: url("images/template2/submit.png") no-repeat;
+	border: none;
+	color: ${bgColor_100};
+	cursor: pointer;
+	font-size: 16px;
+	margin: 15px auto 0;
+	text-transform: uppercase;
+	width: 128px;
+	height: 32px;
+}
+
+.advancedSearchWideWrap label {
+	display:block;
+	padding:6px 0;
+	white-space:nowrap;
+}
+.advancedSearchWideWrap .searchTypeSelBox {
+	float:left;
+	clear:both;
+	width:100%;
+	margin-top:30px;
+	height: 60px;
+}
+.advancedSearchWideWrap .searchTypeSelButton {
+	width:226px;
+	font-size:20px;
+	letter-spacing:3px;
+	margin-left:30px;
+	padding:6px 20px;
+	color:${fgColor_100};
+	background-color:${primeColor_20};
+	text-align:center;
+	float:left; 
+}
+.advancedSearchWideWrap .searchTypeSelButton:first-child {
+	margin-left:0px;
+}
+.advancedSearchWideWrap .searchTypeSelButton label {
+	display:inline-block;
+}
+.advancedSearchWideWrap .searchTypeSelButton input[type=radio] {
+	display:none;
+}
+.advancedSearchWideWrap .searchTypeBox {
+	float:left;
+	clear:both;
+	width:100%;
+	margin-top:30px;
+}
+.advancedSearchWideWrap .searchTypeBox .searchField {
+	float:left;
+	margin-left:25px;
+}
+.advancedSearchWideWrap .searchTypeBox .searchField:first-child {
+	margin-left:0;
+}
+.advancedSearchWideWrap .searchTypeBox select {
+	width:266px;
+	margin:1px;
+}
+.advancedSearchWideWrap .searchTypeBox input[type=text] {
+	width:262px;
+	margin:1px;
+}
+.advancedSearchWideWrap .searchCommonBox {
+	clear:both;
+	float:left;
+	width:100%;
+	margin-top:30px;
+}
+.advancedSearchWideWrap .searchCommonBox .searchField {
+	width:170px;
+	margin-left:22px;
+	display: inline-block;
+}
+.advancedSearchWideWrap .searchCommonBox .searchField:first-child {
+	margin-left:0px;
+}
+.advancedSearchWideWrap .searchCommonBox .searchField .inputJoinBox {
+	display:inline-block;
+	width:34px;
+	text-align:center;
+}
+.advancedSearchWideWrap .searchCommonBox select,
+.advancedSearchWideWrap .searchCommonBox input[type=text] {
+	width:60px;
+	margin:1px;
+}
+.advancedSearchWideWrap .searchAmenityBox {
+	float:left;
+	clear:both;
+	width:100%;
+	border-top:1px dotted ${fgColor_60};
+	padding-top:20px;
+	margin-top:30px;
+	margin-bottom:40px;
+}
+.advancedSearchWideWrap .searchAmenityBox br {
+	display:none;
+}
+.advancedSearchWideWrap .searchAmenityBox .amenityList {
+	float:left;
+	width:600px;
+	display: inline-block;
+}
+.advancedSearchWideWrap .searchAmenityBox .amenityList label {
+	display:inline-block;
+	width:88px;
+	font-size:12px;
+}
+.advancedSearchWideWrap .typeselActiveHover {
+	color:${primeColor_20} !important;
+	background-color:${fgColor_80} !important;
+}
+.advancedSearchWideWrap .typeselActive {
+	color:${primeColor_20} !important;
+	background-color:${fgColor_80} !important;
+}

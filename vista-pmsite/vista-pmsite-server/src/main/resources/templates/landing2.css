@@ -1,0 +1,196 @@
+.vista-pmsite-landingPage .vista-pmsite-contentWrap {
+}
+.vista-pmsite-landingPage .vista-pmsite-content {
+    margin: 0 auto;
+	width: 960px;
+	border:1px solid ${accentColor_40};
+//	border-width: 0 1px 0 1px;
+}
+.vista-pmsite-landingPage .banner {
+	height: 375px;
+	width: 280px;
+	background: ${accentColor_20};
+	display:inline-block;
+	vertical-align:top;
+}
+.vista-pmsite-landingPage .banner_img {
+}
+
+.vista-pmsite-landingPage .quickSearchPanel {
+	width: 200px;
+	height:335px;
+	padding:20px 40px;
+	background:#f4f4f4;
+}
+
+.vista-pmsite-landingPage .quickSearchPanel h3 {
+	color: #555555;
+	font-size: 16px;
+	padding: 20px 0;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.vista-pmsite-landingPage .quickSearchPanel label {
+	color: #555555;
+	display: block;
+	font-size: 13px;
+	padding: 0 0 3px;
+}
+
+.vista-pmsite-landingPage .quickSearchPanel select {
+	width: 100%;
+	margin-bottom: 15px;
+}
+
+.vista-pmsite-landingPage .quickSearchPanel input[type=submit] {
+	background: none repeat scroll 0 0 transparent;
+	border: medium none;
+	color: ${accentColor_100};
+	cursor: pointer;
+	font-size: 16px;
+	padding: 5px 0;
+	text-transform: uppercase;
+	width: 128px;
+}
+
+.vista-pmsite-landingPage .quickSearchPanel .submit {
+	background: url("images/template2/submit.png") no-repeat scroll 0 0
+		transparent;
+	height: 32px;
+	margin: 15px auto 0;
+	overflow: hidden;
+	width: 128px;
+}
+
+.vista-pmsite-landingPage .vista-pmsite-mainWrap {
+	width: 675px;
+	display:inline-block;
+}
+
+.vista-pmsite-landingPage .vista-pmsite-sidebarWrap {
+//	float: left;
+	position: relative;
+	width: 100%;
+	right: 680px;
+	border-right: 1px solid ${accentColor_10};
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;
+}
+
+.vista-pmsite-landingPage .vista-pmsite-sidebar {
+	position: relative;
+	float: left;
+	left: 680px;
+	display:inline-block;
+}
+
+.vista-pmsite-landingPage .vista-pmsite-main {
+	width: 320px;
+	position: relative;
+	float: left;
+	left: 680px;
+	background: ${bgC0lor_100};
+	display:inline-block;
+}
+
+.vista-pmsite-landingPage .testimBox {
+	padding: 20px 10px;
+	float: left;
+	height:310px;
+	overflow:hidden;
+}
+
+.vista-pmsite-landingPage .testimBox .infobox_content {
+	width: 260px;
+	height: 80px;
+	overflow: hidden;
+	float: left;
+	margin: 10px;
+	padding: 20px;
+	background: ${primeColor_10};
+}
+
+.vista-pmsite-landingPage .testimBox .name {
+	color: ${fgColor_100};
+	text-align: right;
+	padding: 10px 0 0 0;
+}
+
+.vista-pmsite-landingPage .testimBox .read_more {
+	color: ${hlightColor_100};
+	font-size: 16px;
+	padding-left: 10px;
+}
+
+.vista-pmsite-landingPage .newsBox {
+	width: 300px;
+	padding: 20px 20px;
+	display: inline-block;
+	min-height: 520px;
+	float: left;
+}
+
+.vista-pmsite-landingPage .newsBox .date {
+	color: ${fgColor_40};
+	padding-top: 10px;
+}
+
+.vista-pmsite-landingPage .newsBox .headline {
+	padding-top: 10px;
+	color: ${hlightColor_100};
+}
+
+.vista-pmsite-landingPage .newsBox .text {
+	padding-top: 10px;
+}
+
+.vista-pmsite-landingPage .newsBox .read_more {
+	color: ${hlightColor_100};
+	font-size: 20px;
+	line-height: 14px;
+	vertical-align: text-top;
+}
+
+.vista-pmsite-landingPage .infobox_heading {
+	font-size: 22px;
+	line-height: 40px;
+}
+
+
+.vista-pmsite-landingPage .promoBox {
+	height:180px;
+	padding:20px 10px;
+	float:left;
+	overflow:hidden;
+}
+
+.vista-pmsite-landingPage .promoBox .infobox_content {
+	width:140px;
+	height:200px;
+	float:left;
+	margin-left:20px;
+}
+
+.vista-pmsite-landingPage .promoBox .infobox_content:first-child {
+	margin-left:0px;
+}
+
+.vista-pmsite-landingPage .promoBox .picture {
+	width:140px;
+	background:grey;
+}
+
+.vista-pmsite-landingPage .promoBox a .picture {
+	border:1px solid ${bgColor_100};
+}
+.vista-pmsite-landingPage .promoBox a:hover .picture {
+	border:1px solid ${hlightColor_100};
+}
+
+.vista-pmsite-landingPage .promoBox .read_more {
+	color: ${hlightColor_100};
+	font-size:16px;
+	padding-left:10px;
+}

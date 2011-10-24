@@ -43,8 +43,10 @@ public class LandingPage extends BasePage {
     @Override
     public void renderHead(IHeaderResponse response) {
         String baseColor = PMSiteContentManager.getSiteDescriptor().baseColor().getValue();
-        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "landing"
-                + PMSiteContentManager.getSiteStyle() + ".css", "text/css", new StylesheetTemplateModel(baseColor));
+        int styleId = PMSiteContentManager.getSiteStyle();
+        String fileCSS = "landing" + styleId + ".css";
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
+                new StylesheetTemplateModel(String.valueOf(styleId)));
 
         response.renderCSSReference(refCSS);
 

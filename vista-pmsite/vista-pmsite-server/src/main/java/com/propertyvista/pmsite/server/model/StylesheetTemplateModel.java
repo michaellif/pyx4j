@@ -39,12 +39,23 @@ public class StylesheetTemplateModel extends LoadableDetachableModel<Map<String,
     private final String hlightColor;
 
     public StylesheetTemplateModel(String baseColor) {
-        //this.baseColor = baseColor;
-        this.primeColor = "#269bff"; //-- H1
-        this.accentColor = "#ff170f"; //- H2
-        this.hlightColor = "#6f5879"; //- H3
-        this.bgColor = "#ffffff"; //----- H4
-        this.fgColor = "#000000"; //----- H5
+        switch (Integer.parseInt(baseColor)) {
+        case 1:
+            this.primeColor = "#269bff"; //-- H1
+            this.accentColor = "#ff170f"; //- H2
+            this.hlightColor = "#6f5879"; //- H3
+            this.bgColor = "#ffffff"; //----- H4
+            this.fgColor = "#000000"; //----- H5
+            break;
+        case 2:
+        default:
+            this.primeColor = "#072255"; //-- H1
+            this.accentColor = "#8BAEDA"; //- H2
+            this.hlightColor = "#5177A6"; //- H3
+            this.bgColor = "#ffffff"; //----- H4
+            this.fgColor = "#444444"; //----- H5
+            break;
+        }
     }
 
     @Override

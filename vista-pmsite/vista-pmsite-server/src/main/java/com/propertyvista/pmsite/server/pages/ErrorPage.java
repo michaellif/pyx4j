@@ -38,8 +38,9 @@ public class ErrorPage extends WebPage {
         add(new Label("footer_legal", PMSiteContentManager.getCopyrightInfo()));
 
         String baseColor = PMSiteContentManager.getSiteDescriptor().baseColor().getValue();
-        refCSS = new VolatileTemplateResourceReference(TemplateResources.class, "error" + PMSiteContentManager.getSiteStyle() + ".css", "text/css",
-                new StylesheetTemplateModel(baseColor));
+        int styleId = PMSiteContentManager.getSiteStyle();
+        String fileCSS = "error" + styleId + ".css";
+        refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css", new StylesheetTemplateModel(String.valueOf(styleId)));
     }
 
     @Override

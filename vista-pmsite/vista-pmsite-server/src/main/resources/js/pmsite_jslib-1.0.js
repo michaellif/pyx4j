@@ -1,3 +1,25 @@
+var Cookie = {
+	setCookie: function(name, value, expire) {
+		document.cookie = name + "=" + escape(value) + (expire ? "; expires=" + expire.toGMTString() : "");
+	},
+
+	getCookie: function(Name) {
+		var search = Name + "="
+		if (document.cookie.length > 0) {
+			start = document.cookie.indexOf(search);
+			if (start != -1) {
+				start += search.length;
+				// set index of beginning of value
+				end = document.cookie.indexOf(";", start); 
+				// set index of end of cookie value
+				if (end == -1) 
+					end = document.cookie.length;
+				return unescape(document.cookie.substring(start, end));
+			} 
+		}
+	}
+}
+
 /*
  * Sets options for select field identified by selId
  */
@@ -22,32 +44,10 @@ function setImgSrc(imgId, src) {
 	el_img && el_img.setAttribute('src', src);
 }
 
-var Cookie = {
-	setCookie: function(name, value, expire) {
-		document.cookie = name + "=" + escape(value) + (expire ? "; expires=" + expire.toGMTString() : "");
-	},
-
-	getCookie: function(Name) {
-		var search = Name + "="
-		if (document.cookie.length > 0) {
-			start = document.cookie.indexOf(search);
-			if (start != -1) {
-				start += search.length;
-				// set index of beginning of value
-				end = document.cookie.indexOf(";", start); 
-				// set index of end of cookie value
-				if (end == -1) 
-					end = document.cookie.length;
-				return unescape(document.cookie.substring(start, end));
-			} 
-		}
-	}
-}
-
 function switchSiteStyle() {
 	var c = 'pmsiteStyle';
 	var style = Cookie.getCookie(c);
-	var newStyle = (parseInt(style) + 1) % 2;
+	var newStyle = (parseInt(style) + 1) % 3;
 	Cookie.setCookie(c, newStyle);
 }
 
