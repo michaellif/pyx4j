@@ -109,7 +109,11 @@ public class PMSiteContentManager implements Serializable {
                 }
             }
             if (pmsiteStyleCookie != null) {
-                styleId = Integer.valueOf(pmsiteStyleCookie.getValue());
+                try {
+                    styleId = Integer.valueOf(pmsiteStyleCookie.getValue());
+                } catch (NumberFormatException ignore) {
+                    // do nothing
+                }
             }
             return styleId;
         }
