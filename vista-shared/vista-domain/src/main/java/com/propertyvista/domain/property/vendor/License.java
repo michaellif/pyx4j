@@ -14,10 +14,6 @@
 package com.propertyvista.domain.property.vendor;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -30,13 +26,7 @@ public interface License extends IEntity {
     IPrimitive<String> number();
 
     @ToString(index = 2)
-    @Caption(name = "License Expiration")
-    @Editor(type = EditorType.yearpicker)
-    @Format("yyyy")
     IPrimitive<LogicalDate> expiration();
 
-    @Caption(name = "License Renewal")
-    @Editor(type = EditorType.yearpicker)
-    @Format("yyyy")
     IPrimitive<LogicalDate> renewal();
 }

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.property.asset;
 
-import com.propertyvista.domain.Notes;
 
-public interface Boiler extends Equipment, Notes {
+public interface Boiler extends Equipment {
 }

@@ -16,8 +16,6 @@ package com.propertyvista.domain.property.asset;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -25,11 +23,12 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.Notes;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.vendor.LicensedWarrantedMaintained;
 
 @ToStringFormat("{0} {1}")
-public interface Equipment extends LicensedWarrantedMaintained {
+public interface Equipment extends LicensedWarrantedMaintained, Notes {
 
     @Owner
     @Detached
@@ -48,10 +47,5 @@ public interface Equipment extends LicensedWarrantedMaintained {
     @ToString(index = 1)
     IPrimitive<String> model();
 
-    @Editor(type = EditorType.yearpicker)
-    @Format("yyyy")
     IPrimitive<LogicalDate> build();
-
-// TODO create some notes object/domain which defines list of notes with dates and creators (one user can't delete notes of the others)...
-    IPrimitive<String> notes();
 }

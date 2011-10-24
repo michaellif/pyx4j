@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -69,6 +70,19 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     @Override
+    public void populate(AptUnitDTO value) {
+
+        CEditableComponent<Floorplan, ?> comp = get(proto().floorplan());
+        if (isEditable() && comp instanceof CEntityComboBox<?>) {
+            @SuppressWarnings("unchecked")
+            CEntityComboBox<Floorplan> combo = (CEntityComboBox<Floorplan>) comp;
+            combo.addCriterion(PropertyCriterion.eq(combo.proto().building(), value.belongsTo().detach()));
+        }
+
+        super.populate(value);
+    }
+
+    @Override
     public void setActiveTab(int index) {
         tabPanel.selectTab(index);
     }
@@ -105,7 +119,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         if (isEditable() && comp instanceof CEntityComboBox<?>) {
             @SuppressWarnings("unchecked")
             CEntityComboBox<Floorplan> combo = (CEntityComboBox<Floorplan>) comp;
-//            combo.addCriterion(PropertyCriterion.eq(combo.proto().building(), proto().belongsTo().detach()));
+            combo.addCriterion(PropertyCriterion.eq(combo.proto().building(), null));
             combo.addValueChangeHandler(new ValueChangeHandler<Floorplan>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<Floorplan> event) {

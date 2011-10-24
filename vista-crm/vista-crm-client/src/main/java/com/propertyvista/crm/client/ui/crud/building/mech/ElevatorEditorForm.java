@@ -43,18 +43,20 @@ public class ElevatorEditorForm extends MechlBaseEditorForm<ElevatorDTO> {
         main.setWidget(++row, 0, decorate(inject(proto().make()), 15));
         main.setWidget(++row, 0, decorate(inject(proto().model()), 15));
 
-        main.setHeader(++row, 0, 2, i18n.tr("License"));
+        row = -1;
+        main.setWidget(++row, 1, decorate(inject(proto().build()), 9));
+        main.setWidget(++row, 1, decorate(inject(proto().description()), 20));
+        main.getFlexCellFormatter().setRowSpan(row, 1, 3);
+        row += 2;
+        main.setWidget(++row, 1, decorate(inject(proto().isForMoveInOut()), 5));
+
+        main.setHeader(++row, 0, 2, proto().license().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().license(), new CLicense()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setHeader(++row, 0, 2, "");
         main.setWidget(++row, 0, decorate(inject(proto().notes()), 57));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
-
-        row = -1;
-        main.setWidget(++row, 1, decorate(inject(proto().build()), 9));
-        main.setWidget(++row, 1, decorate(inject(proto().description()), 20));
-        main.setWidget(++row, 1, decorate(inject(proto().isForMoveInOut()), 5));
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");

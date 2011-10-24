@@ -50,6 +50,7 @@ public interface Warranty extends IEntity {
     }
 
     @EmbeddedEntity
+    @Caption(name = "Contract details")
     Contract contract();
 
     @ToString(index = 1)

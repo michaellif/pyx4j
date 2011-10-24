@@ -34,8 +34,8 @@ public class CContract extends CDecoratableEntityEditor<Contract> {
         main.setWidget(++row, 0, decorate(inject(proto().contractor()), 20));
         main.setWidget(++row, 0, decorate(inject(proto().cost()), 10));
 
-        // TODO : design representation for:
-//                  main.setWidget(++row, 0, decorate(inject(proto.document()), 45);
+// TODO : design representation for:
+//      main.setWidget(++row, 0, decorate(inject(proto.document()), 50);
 
         row = -1;
         main.setWidget(++row, 1, decorate(inject(proto().start()), 8.2));

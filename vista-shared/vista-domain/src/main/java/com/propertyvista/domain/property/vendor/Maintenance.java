@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface Maintenance extends IEntity {
 
     @EmbeddedEntity
+    @Caption(name = "Contract details")
     Contract contract();
 
     @Caption(name = "Last Service Date")
