@@ -38,6 +38,7 @@ public class FormFlexPanel extends FlexTable {
     }
 
     public FormFlexPanel() {
+        setStyleName(StyleName.FormFlexPanel.name());
     }
 
     public void setHeader(int row, int col, int span, String caption) {
