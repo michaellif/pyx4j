@@ -251,4 +251,81 @@ public class EntityGraph {
     public static <D extends IEntity, S extends D> D clone(S src, Class<D> destinationClass) {
         return src.clone(destinationClass);
     }
+
+    public static <D extends IEntity, S extends D> boolean update(S src, D dst) {
+        return update(src, dst, new HashSet<IEntity>());
+    }
+
+    @SuppressWarnings("unchecked")
+    public static boolean update(IEntity src, IEntity dst, Set<IEntity> processed) {
+        if ((src == dst) || (processed.contains(src))) {
+            return false;
+        } else if ((!src.getInstanceValueClass().equals(dst.getInstanceValueClass()))) {
+            return false;
+        }
+        processed.add(src);
+
+        // Cast if required to concert instance
+        src = src.cast();
+        dst = dst.cast();
+
+        boolean updated = false;
+
+        EntityMeta em = src.getEntityMeta();
+        for (String memberName : em.getMemberNames()) {
+            MemberMeta memberMeta = em.getMemberMeta(memberName);
+            switch (memberMeta.getObjectClassType()) {
+            case Entity:
+                IEntity entSrcMember = (IEntity) src.getMember(memberName);
+                IEntity entDstMember = (IEntity) dst.getMember(memberName);
+                if (entDstMember.isNull() && entDstMember.isNull()) {
+                    continue;
+                } else if (memberMeta.isOwnedRelationships()) {
+                    updated |= update(entSrcMember, entDstMember, processed);
+                } else {
+                    if (update(entSrcMember, entDstMember, processed)) {
+                        entDstMember.setPrimaryKey(entSrcMember.getPrimaryKey());
+                        updated = true;
+                    }
+                }
+                break;
+            case EntitySet:
+                updated |= update((ISet<IEntity>) src.getMember(memberName), (ISet<IEntity>) dst.getMember(memberName), processed);
+                break;
+            case EntityList:
+                updated |= update((IList<IEntity>) src.getMember(memberName), (IList<IEntity>) dst.getMember(memberName), processed);
+            default:
+                if (memberName.equals(IEntity.PRIMARY_KEY)) {
+                    if ((src.getPrimaryKey() != null) && !EqualsHelper.classEquals(src.getPrimaryKey(), dst.getPrimaryKey())) {
+                        dst.setPrimaryKey(src.getPrimaryKey());
+                        updated = true;
+                    }
+                } else if (!EqualsHelper.equals(src.getMemberValue(memberName), dst.getMemberValue(memberName))) {
+                    dst.setMemberValue(memberName, src.getMemberValue(memberName));
+                    updated = true;
+                }
+            }
+        }
+        return updated;
+    }
+
+    public static boolean update(ICollection<IEntity, ?> src, ICollection<IEntity, ?> dst, Set<IEntity> processed) {
+        boolean updated = false;
+        for (IEntity srcItem : (ICollection<IEntity, ?>) src) {
+            //find
+            boolean found = false;
+            for (IEntity dstItem : dst) {
+                if (srcItem.equals(dstItem) || srcItem.businessEquals(dstItem)) {
+                    found = true;
+                    updated |= update(srcItem, dstItem, processed);
+                    break;
+                }
+            }
+            if (!found) {
+                dst.add(srcItem);
+                updated = true;
+            }
+        }
+        return updated;
+    }
 }
