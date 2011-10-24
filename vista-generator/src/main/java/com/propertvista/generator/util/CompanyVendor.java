@@ -64,7 +64,7 @@ public class CompanyVendor {
 
     public static Warranty createWarranty() {
         Warranty item = EntityFactory.create(Warranty.class);
-        item.set(createContract());
+        item.contract().set(createContract());
 
         item.type().setValue(RandomUtil.randomEnum(Warranty.Type.class));
         item.title().setValue("Warranty title here...");
@@ -79,7 +79,7 @@ public class CompanyVendor {
 
     public static Maintenance createMaintenance() {
         Maintenance item = EntityFactory.create(Maintenance.class);
-        item.set(createContract());
+        item.contract().set(createContract());
 
         item.lastService().setValue(RandomUtil.randomLogicalDate());
         item.nextService().setValue(RandomUtil.randomLogicalDate());

@@ -96,9 +96,7 @@ class ServiceItemFolder extends VistaTableFolder<ServiceItem> {
                 if (parent.isEditable()) {
                     comp = inject(column.getObject(), new CEntityComboBox(buildingElementClass));
                     CEntityComboBox<BuildingElement> combo = (CEntityComboBox) comp;
-
-                    Service value = parent.getValue();
-                    combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), value.catalog().belongsTo().detach()));
+                    combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), parent.getValue().catalog().belongsTo().detach()));
                 } else {
                     comp = inject(column.getObject(), new CEntityCrudHyperlink<AptUnit>(MainActivityMapper.getCrudAppPlace(buildingElementClass)));
                 }

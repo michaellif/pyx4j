@@ -24,15 +24,12 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.CMarketing;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -82,37 +79,34 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     private Widget createGeneralTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
-        main.add(split);
+        FormFlexPanel main = new FormFlexPanel();
 
-        split.getLeftPanel().add(inject(proto().info().economicStatus()), 15);
-        split.getLeftPanel().add(inject(proto().info().economicStatusDescription()), 25);
-        split.getLeftPanel().add(inject(proto().floorplan()), 20);
-        split.getLeftPanel().add(inject(proto().availableForRent()), 8.2);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().info().economicStatus()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().info().economicStatusDescription()), 20));
+        main.getFlexCellFormatter().setRowSpan(row, 0, 3);
+        row += 2;
+        main.setWidget(++row, 0, decorate(inject(proto().floorplan()), 20));
+        main.setWidget(++row, 0, decorate(inject(proto().availableForRent()), 8.2));
 
-        split.getRightPanel().add(inject(proto().info().floor()), 5);
-        split.getRightPanel().add(inject(proto().info().number()), 5);
-        split.getRightPanel().add(inject(proto().info()._bedrooms(), new CNumberLabel()), 5);
-        split.getRightPanel().add(inject(proto().info()._bathrooms(), new CNumberLabel()), 5);
-        split.getRightPanel().add(inject(proto().info().area()), 8);
-        split.getRightPanel().add(inject(proto().info().areaUnits()), 8);
+        row = -1;
+        main.setWidget(++row, 1, decorate(inject(proto().info().floor()), 5));
+        main.setWidget(++row, 1, decorate(inject(proto().info().number()), 5));
+
+        // set this right column items to left one - because of RowSpan!!.
+        main.setWidget(++row, 0, decorate(inject(proto().info()._bedrooms(), new CNumberLabel()), 5));
+        main.setWidget(++row, 0, decorate(inject(proto().info()._bathrooms(), new CNumberLabel()), 5));
+
+        main.setWidget(++row, 1, decorate(inject(proto().info().area()), 8));
+        main.setWidget(++row, 1, decorate(inject(proto().info().areaUnits()), 8));
 
         // restrict floorplan combo here to current building:
         CEditableComponent<Floorplan, ?> comp = get(proto().floorplan());
         if (isEditable() && comp instanceof CEntityComboBox<?>) {
             @SuppressWarnings("unchecked")
-            CEntityComboBox<Floorplan> floorplanCompbo = (CEntityComboBox<Floorplan>) comp;
-            floorplanCompbo.setOptionsFilter(new OptionsFilter<Floorplan>() {
-                @Override
-                public boolean acceptOption(Floorplan entity) {
-                    if ((getValue() != null) && !getValue().isNull()) {
-                        return entity.building().equals(getValue().belongsTo());
-                    }
-                    return false;
-                }
-            });
-            floorplanCompbo.addValueChangeHandler(new ValueChangeHandler<Floorplan>() {
+            CEntityComboBox<Floorplan> combo = (CEntityComboBox<Floorplan>) comp;
+//            combo.addCriterion(PropertyCriterion.eq(combo.proto().building(), proto().belongsTo().detach()));
+            combo.addValueChangeHandler(new ValueChangeHandler<Floorplan>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<Floorplan> event) {
                     get(proto().info()._bedrooms()).setValue(event.getValue().bedrooms().getValue());
@@ -120,6 +114,9 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
                 }
             });
         }
+
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
     }

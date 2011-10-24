@@ -14,15 +14,17 @@
 package com.propertyvista.domain.property.vendor;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-public interface Warranty extends Contract {
+public interface Warranty extends IEntity {
 
     @I18n
     public enum Type {
@@ -47,7 +49,8 @@ public interface Warranty extends Contract {
         }
     }
 
-    // ----------- Information -------------
+    @EmbeddedEntity
+    Contract contract();
 
     @ToString(index = 1)
     IPrimitive<String> title();

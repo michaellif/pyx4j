@@ -74,13 +74,13 @@ public class CmpanyVendorPersistHelper extends BaseVistaDataPreloader {
 
     public static void persistWarranty(Warranty warranty) {
         log.debug("Persisting warranty");
-        persistVendor(warranty.contractor());
+        persistVendor(warranty.contract().contractor());
         Persistence.service().persist(warranty);
     }
 
     public static void persistMaintenance(Maintenance maintenance) {
         log.debug("Persisting maintenance");
-        persistVendor(maintenance.contractor());
+        persistVendor(maintenance.contract().contractor());
         Persistence.service().persist(maintenance);
     }
 }

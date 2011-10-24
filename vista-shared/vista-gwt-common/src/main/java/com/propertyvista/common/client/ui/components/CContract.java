@@ -30,7 +30,7 @@ public class CContract extends CDecoratableEntityEditor<Contract> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().contractID()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().contractID()), 20));
         main.setWidget(++row, 0, decorate(inject(proto().contractor()), 20));
         main.setWidget(++row, 0, decorate(inject(proto().cost()), 10));
 

@@ -38,15 +38,16 @@ public class CWarranty extends CDecoratableEntityEditor<Warranty> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = 0;
-        main.setWidget(row, 0, decorate(inject(proto().title()), 15));
+        main.setWidget(row, 0, decorate(inject(proto().title()), 20));
         main.setWidget(row, 1, decorate(inject(proto().type()), 11));
 
         main.setHeader(++row, 0, 2, i18n.tr("Contract details"));
-//        main.setWidget(++row, 0, inject(proto().cast(), new CContract()));
-//      main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        main.setWidget(++row, 0, inject(proto().contract(), new CContract()));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setHeader(++row, 0, 2, proto().items().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().items(), new WarrantyItemFolder()));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
@@ -64,7 +65,7 @@ public class CWarranty extends CDecoratableEntityEditor<Warranty> {
         protected List<EntityFolderColumnDescriptor> columns() {
             List<EntityFolderColumnDescriptor> columns;
             columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().name(), "30em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().name(), "50em"));
             return columns;
         }
 

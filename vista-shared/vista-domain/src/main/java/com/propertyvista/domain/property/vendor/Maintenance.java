@@ -15,10 +15,15 @@ package com.propertyvista.domain.property.vendor;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Maintenance extends Contract {
+public interface Maintenance extends IEntity {
+
+    @EmbeddedEntity
+    Contract contract();
 
     @Caption(name = "Last Service Date")
     @Format("MM/dd/yyyy")

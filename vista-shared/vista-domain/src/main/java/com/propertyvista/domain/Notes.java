@@ -13,8 +13,13 @@
  */
 package com.propertyvista.domain;
 
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Notes extends IEntity {
 
+    // TODO create some notes object/domain which defines list of notes with dates and creators (one user can't delete notes of the others)...
+    @Editor(type = Editor.EditorType.textarea)
+    IPrimitive<String> notes();
 }
