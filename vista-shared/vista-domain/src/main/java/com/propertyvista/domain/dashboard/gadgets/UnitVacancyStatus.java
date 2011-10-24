@@ -25,7 +25,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 // TODO don't forget to rename to DTO and enable the @Transient annotation when it's ready 
 // @Transient
-public interface UnitVacancyReport extends IEntity {
+public interface UnitVacancyStatus extends IEntity {
 
     // TODO ask Vlad about @Translatable and @XMLType
     public enum VacancyStatus {
@@ -33,7 +33,7 @@ public interface UnitVacancyReport extends IEntity {
 
         @Override
         public String toString() {
-            return I18nEnum.tr(this);
+            return I18nEnum.toString(this);
         }
     }
 
@@ -41,7 +41,7 @@ public interface UnitVacancyReport extends IEntity {
         Rented, Unrented, OffMarket;
         @Override
         public String toString() {
-            return I18nEnum.tr(this);
+            return I18nEnum.toString(this);
         }
     }
 
@@ -50,7 +50,7 @@ public interface UnitVacancyReport extends IEntity {
 
         @Override
         public String toString() {
-            return I18nEnum.tr(this);
+            return I18nEnum.toString(this);
         }
     }
 

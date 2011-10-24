@@ -43,7 +43,7 @@ public interface GadgetMetadata extends ISharedUserEntity {
 
         GaugeDisplay,
 
-        UnitVacancyReport;
+        VacancyReport;
 
         @Override
         public String toString() {

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
+import com.propertyvista.crm.client.ui.gadgets.vacancyreport.VacancyReportGadget;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
@@ -46,7 +47,7 @@ public class GadgetsFactory {
         GadgetType.BarChartDisplayBuilding,
         GadgetType.PieChartDisplayBuilding,
         GadgetType.GaugeDisplay,
-        GadgetType.UnitVacancyReport
+        GadgetType.VacancyReport
     };
     //@formatter:on
 
@@ -71,8 +72,8 @@ public class GadgetsFactory {
             return new PieChart2DGadget(metaData);
         case GaugeDisplay:
             return new GaugeGadget(metaData);
-        case UnitVacancyReport:
-            return new UnitVacancyReportGadget(metaData);
+        case VacancyReport:
+            return new VacancyReportGadget(metaData);
         }
         return null;
     }
@@ -100,7 +101,7 @@ public class GadgetsFactory {
             return "Gadget intended to demonstrate Pie Chart display (Building only!)";
         case GaugeDisplay:
             return "Gadget intended to demonstrate Gadget display functionality...";
-        case UnitVacancyReport:
+        case VacancyReport:
             return "Gadget intended to demonstrate Units Vacancy Report/Status...";
         }
         return "";

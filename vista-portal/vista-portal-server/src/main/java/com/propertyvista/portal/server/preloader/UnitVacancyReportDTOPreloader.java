@@ -25,10 +25,10 @@ import com.pyx4j.essentials.server.csv.CSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.PreloadConfig;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport.RentReady;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport.RentedStatus;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport.VacancyStatus;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus.RentReady;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus.RentedStatus;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus.VacancyStatus;
 
 public class UnitVacancyReportDTOPreloader extends BaseVistaDataPreloader {
     public static final String DATA_SOURCE_FILE = "unit-vacancy-report.csv";
@@ -40,7 +40,7 @@ public class UnitVacancyReportDTOPreloader extends BaseVistaDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(UnitVacancyReport.class);
+            return deleteAll(UnitVacancyStatus.class);
         } else {
             return "This is production";
         }
@@ -67,7 +67,7 @@ public class UnitVacancyReportDTOPreloader extends BaseVistaDataPreloader {
                     }
                     String strValue;
 
-                    UnitVacancyReport record = EntityFactory.create(UnitVacancyReport.class);
+                    UnitVacancyStatus record = EntityFactory.create(UnitVacancyStatus.class);
 
                     record.propertyCode().setValue(values[memberToIndexMap.get("propertyCode")]);
 
@@ -103,7 +103,7 @@ public class UnitVacancyReportDTOPreloader extends BaseVistaDataPreloader {
                     Boolean isScoped = "scoped".equals(strValue) ? Boolean.TRUE : "notscoped".equals(strValue) ? Boolean.FALSE : null;
                     record.isScoped().setValue(isScoped);
 
-                    UnitVacancyReport.RentReady rentReady;
+                    UnitVacancyStatus.RentReady rentReady;
                     rentReady = "rentready".equals(values[memberToIndexMap.get("rentready")]) ? RentReady.RentReady : "reno in progress"
                             .equals(values[memberToIndexMap.get("rentready")]) ? RentReady.RenoInProgress : "needs repairs".equals(values[memberToIndexMap
                             .get("rentready")]) ? RentReady.NeedRepairs : null;

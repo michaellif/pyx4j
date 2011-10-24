@@ -27,7 +27,6 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -38,67 +37,59 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
-import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.site.rpc.services.AbstractCrudService;
 
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitVacancyReportService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.VacancyReportService;
 import com.propertyvista.domain.dashboard.gadgets.CustomComparator;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport.RentReady;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport.RentedStatus;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReport.VacancyStatus;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus.RentReady;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus.RentedStatus;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus.VacancyStatus;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportEvent;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 
-public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
+public class VacancyReportServiceImpl implements VacancyReportService {
 
     private static final Object TRANSIENT_PROPERTIES_MUTEX = new Object();
 
-    private static TransientPropertySortEngine<UnitVacancyReport> TRANSIENT_PROPERTY_SORT_ENGINE = null;
+    private static TransientPropertySortEngine<UnitVacancyStatus> TRANSIENT_PROPERTY_SORT_ENGINE = null;
 
     @Override
-    public void list(AsyncCallback<EntitySearchResult<UnitVacancyReport>> callback, EntityListCriteria<UnitVacancyReport> criteria) {
-        EntitySearchResult<UnitVacancyReport> units = null;
+    public void unitStatusList(AsyncCallback<EntitySearchResult<UnitVacancyStatus>> callback, Vector<String> buildings, LogicalDate from, LogicalDate to,
+            Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
 
-        LogicalDate[] dateConstraints = null;
-        dateConstraints = extractDatesFromCriteria(criteria);
-        if (dateConstraints == null) {
-            callback.onFailure(new Error("no date constrains provided"));
-            return;
-        }
-        final LogicalDate from = dateConstraints[0];
-        final LogicalDate to = dateConstraints[1];
+        EntitySearchResult<UnitVacancyStatus> units = null;
 
         // some of the fields in records are transient (in the IEntity sense), hence we have to extract them from the criteria and sorts the results for ourselves
         List<Sort> transientSortCriteria = null;
-        transientSortCriteria = getTransientPropertySortEngine().extractSortCriteriaForTransientProperties(criteria);
+        transientSortCriteria = getTransientPropertySortEngine().extractSortCriteriaForTransientProperties(sortingCriteria);
+
+        EntityListCriteria<UnitVacancyStatus> criteria = new EntityListCriteria<UnitVacancyStatus>(UnitVacancyStatus.class);
+        criteria.setSorts(sortingCriteria);
+        if (!buildings.isEmpty()) {
+            // TODO add protection from SQL injection if in the future buildings are still represented as strings
+            criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.IN, buildings));
+        }
 
         if (!transientSortCriteria.isEmpty()) {
             // here we have to filter and sort all the data 'manually'
             // really fun and amazing stuff begins
-            final int pageSize = criteria.getPageSize();
-            final int pagenumber = criteria.getPageNumber();
 
-            // TODO which values to set to get everything?
-            criteria.setPageNumber(0);
-            criteria.setPageSize(0);
-            final ICursorIterator<UnitVacancyReport> unfiltered = Persistence.service().query(null, criteria);
+            final ICursorIterator<UnitVacancyStatus> unfiltered = Persistence.service().query(null, criteria);
 
-            PriorityQueue<UnitVacancyReport> queue = new PriorityQueue<UnitVacancyReport>(100, getTransientPropertySortEngine().getComparator(
+            PriorityQueue<UnitVacancyStatus> queue = new PriorityQueue<UnitVacancyStatus>(100, getTransientPropertySortEngine().getComparator(
                     transientSortCriteria));
             try {
                 while (unfiltered.hasNext()) {
-                    UnitVacancyReport unit = unfiltered.next();
+                    UnitVacancyStatus unit = unfiltered.next();
                     computeTransientFields(unit, from, to);
-                    // TODO apply filters/restrictions for Transient fields
                     queue.add(unit);
                 }
             } finally {
@@ -107,35 +98,37 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
 
             final int totalRows = queue.size();
 
-            Vector<UnitVacancyReport> unitsData = new Vector<UnitVacancyReport>();
+            Vector<UnitVacancyStatus> unitsData = new Vector<UnitVacancyStatus>();
             int currentPage = 0;
             int currentPagePosition = 0;
             boolean hasMoreRows = false;
             while (!queue.isEmpty()) {
-                UnitVacancyReport unit = queue.poll();
+                UnitVacancyStatus unit = queue.poll();
                 ++currentPagePosition;
                 if (currentPagePosition > pageSize) {
                     ++currentPage;
                     currentPagePosition = 1;
                 }
-                if (currentPage < pagenumber) {
+                if (currentPage < pageNumber) {
                     continue;
-                } else if (currentPage == pagenumber) {
+                } else if (currentPage == pageNumber) {
                     unitsData.add(unit);
                 } else {
                     hasMoreRows = true;
                     break;
                 }
             }
-            units = new EntitySearchResult<UnitVacancyReport>();
+            units = new EntitySearchResult<UnitVacancyStatus>();
             units.setData(unitsData);
             units.setTotalRows(totalRows);
             units.hasMoreData(hasMoreRows);
             //units.setEncodedCursorReference(?);
         } else {
+            criteria.setPageSize(pageSize);
+            criteria.setPageNumber(pageNumber);
             units = EntityLister.secureQuery(criteria);
 
-            for (UnitVacancyReport unit : units.getData()) {
+            for (UnitVacancyStatus unit : units.getData()) {
                 computeTransientFields(unit, from, to);
             }
         }
@@ -144,16 +137,19 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
     }
 
     @Override
-    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        // Not Used
-    }
+    public void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, Vector<String> buildings, LogicalDate fromDate, LogicalDate toDate) {
+        if (buildings == null | fromDate == null | toDate == null) {
+            callback.onFailure(new Error("one of the required arguments was not set."));
+            return;
+        }
 
-    @Override
-    public void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, EntityQueryCriteria<UnitVacancyReport> criteria, LogicalDate fromDate,
-            LogicalDate toDate) {
-        extractDatesFromCriteria(criteria);
-        getTransientPropertySortEngine().extractSortCriteriaForTransientProperties(criteria);
-        List<UnitVacancyReport> units = Persistence.service().query(criteria);
+        EntityQueryCriteria<UnitVacancyStatus> criteria = new EntityQueryCriteria<UnitVacancyStatus>(UnitVacancyStatus.class);
+        if (!buildings.isEmpty()) {
+            // TODO dependency injection check for buildings if they are still represented as strings or ask if that check performed on more deeper level
+            criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.IN, buildings));
+        }
+
+        List<UnitVacancyStatus> units = Persistence.service().query(criteria);
 
         UnitVacancyReportSummaryDTO summary = EntityFactory.create(UnitVacancyReportSummaryDTO.class);
 
@@ -172,7 +168,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
 
         double netExposure = 0.0;
 
-        for (UnitVacancyReport unit : units) {
+        for (UnitVacancyStatus unit : units) {
             ++total;
             computeState(unit, fromDate, toDate);
 
@@ -323,7 +319,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         callback.onSuccess(result);
     }
 
-    private static void computeTransientFields(final UnitVacancyReport unit, final LogicalDate fromDate, final LogicalDate toDate) {
+    private static void computeTransientFields(final UnitVacancyStatus unit, final LogicalDate fromDate, final LogicalDate toDate) {
         computeState(unit, fromDate, toDate);
         computeRentDelta(unit);
         if (isRevenueLost(unit)) {
@@ -338,7 +334,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
      * @param fromDate
      * @param toDate
      */
-    private static void computeState(final UnitVacancyReport unit, final LogicalDate fromDate, final LogicalDate toDate) {
+    private static void computeState(final UnitVacancyStatus unit, final LogicalDate fromDate, final LogicalDate toDate) {
         // TODO: this procedure is real waste of CPU cycles!!! think about better implementation!
         // consider the following:
         //      - maybe its worth to limit a query (i.e. we need at most 10 events (maybe even less)
@@ -420,7 +416,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         } // while
     }
 
-    private static void computeRentDelta(UnitVacancyReport unit) {
+    private static void computeRentDelta(UnitVacancyStatus unit) {
         double unitMarketRent = unit.marketRent().getValue();
         double unitRent = unit.unitRent().getValue();
 
@@ -431,13 +427,11 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
         unit.rentDeltaRelative().setValue(rentDeltaRelative);
     }
 
-    private static boolean isRevenueLost(final UnitVacancyReport unit) {
+    private static boolean isRevenueLost(final UnitVacancyStatus unit) {
         return VacancyStatus.Vacant.equals(unit.vacancyStatus().getValue()) & unit.moveOutDay().getValue() != null;
     }
 
-    private static void computeDaysVacantAndRevenueLost(final UnitVacancyReport unit, final long startOfTime, final long endOfTime) {
-        // TODO ask Arthur what if we have start of time: do we have to count the days vacant frin 'fromTime' or the possible history
-        // currently we do it from the fromTime
+    private static void computeDaysVacantAndRevenueLost(final UnitVacancyStatus unit, final long startOfTime, final long endOfTime) {
         long availableFrom = 1 + unit.moveOutDay().getValue().getTime();
         availableFrom = Math.max(startOfTime, availableFrom);
         long millisecondsVacant = endOfTime - availableFrom;
@@ -455,51 +449,12 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
                 : "reno in progress".equals(strVal) ? RentReady.RenoInProgress : null;
     }
 
-    /**
-     * VICIOUS HACK in order to be able to use ListerBase (it has to use {@link AbstractCrudService} in order to function :( )
-     * 
-     * @param criteria
-     * @return tuple of dates in from <code>{fromDate, startDate}</code>, or <code>null</code> if criteria doesn't contain at least on of the dates
-     */
-    private static LogicalDate[] extractDatesFromCriteria(EntityQueryCriteria<UnitVacancyReport> criteria) {
-
-        LogicalDate fromReportDate = null;
-        LogicalDate toReportDate = null;
-        List<Criterion> criterionList = criteria.getFilters();
-        List<Criterion> filteredList = new LinkedList<Criterion>();
-
-        if (criterionList == null)
-            return null;
-
-        for (Criterion c : criterionList) {
-            PropertyCriterion pc = (PropertyCriterion) c;
-            if (pc.getPropertyName().endsWith("fromDate/")) {
-                fromReportDate = (LogicalDate) pc.getValue();
-            } else if (pc.getPropertyName().endsWith("toDate/")) {
-                toReportDate = (LogicalDate) pc.getValue();
-            } else {
-                filteredList.add(pc);
-            }
-        }
-        criteria.getFilters().clear();
-
-        for (Criterion c : filteredList) {
-            criteria.add(c);
-        }
-
-        if (fromReportDate == null | toReportDate == null) {
-            return null;
-        } else {
-            return new LogicalDate[] { fromReportDate, toReportDate };
-        }
-    }
-
-    private static TransientPropertySortEngine<UnitVacancyReport> getTransientPropertySortEngine() {
-        TransientPropertySortEngine<UnitVacancyReport> sortEngine = TRANSIENT_PROPERTY_SORT_ENGINE;
+    private static TransientPropertySortEngine<UnitVacancyStatus> getTransientPropertySortEngine() {
+        TransientPropertySortEngine<UnitVacancyStatus> sortEngine = TRANSIENT_PROPERTY_SORT_ENGINE;
         if (sortEngine == null) {
             synchronized (TRANSIENT_PROPERTIES_MUTEX) {
                 if (sortEngine == null) {
-                    sortEngine = TRANSIENT_PROPERTY_SORT_ENGINE = new TransientPropertySortEngine<UnitVacancyReport>(UnitVacancyReport.class);
+                    sortEngine = TRANSIENT_PROPERTY_SORT_ENGINE = new TransientPropertySortEngine<UnitVacancyStatus>(UnitVacancyStatus.class);
                 }
             }
         }
@@ -531,9 +486,9 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
                         try {
                             propertyComparator = customComparatorAnnotation.clazz().newInstance();
                         } catch (InstantiationException e) {
-                            // TODO do something (log maybe) (ask Vlad if how to access the logger)
+                            // TODO do something (log maybe) (ask Vlad how to access the logger)
                         } catch (IllegalAccessException e) {
-                            // TODO do something (log maybe) (ask Vlad if how to access the logger)
+                            // TODO do something (log maybe) (ask Vlad how to access the logger)
                         }
                     }
                     temp.put(propertyName, propertyComparator);
@@ -546,19 +501,24 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
             return new CombinedComparator(sortCriteria);
         }
 
-        public List<Sort> extractSortCriteriaForTransientProperties(EntityQueryCriteria<X> criteria) {
-            List<Sort> sorts = criteria.getSorts();
-            List<Sort> filteredSorts = new LinkedList<Sort>();
+        /**
+         * Filter the given sorting criteria: remove all the criteria for transient fields and return them.
+         * 
+         * @param sortingCriteria
+         *            list of criteria that is to be filtered
+         * @return sorting criteria for transient members
+         */
+        public List<Sort> extractSortCriteriaForTransientProperties(List<Sort> sortingCriteria) {
             List<Sort> extractedSorts = new LinkedList<Sort>();
 
-            for (Sort s : sorts) {
+            Iterator<Sort> i = sortingCriteria.iterator();
+            while (i.hasNext()) {
+                Sort s = i.next();
                 if (getTransientProperties().containsKey(s.getPropertyName())) {
+                    i.remove();
                     extractedSorts.add(s);
-                } else {
-                    filteredSorts.add(s);
                 }
             }
-            criteria.setSorts(filteredSorts);
             return extractedSorts;
         }
 
@@ -597,7 +557,7 @@ public class UnitVacancyReportServiceImpl implements UnitVacancyReportService {
                 for (Sort sortCriterion : sortCriteria) {
                     final Comparator cmp = getTransientProperties().get(sortCriterion.getPropertyName());
                     if (cmp == null) {
-                        // TODO maybe throw exception (someone is trying to sort something that has no associated comparator)
+                        // TODO maybe throw exception/log error (someone is trying to sort something that has no associated comparator)
                         continue;
                     }
                     if (!sortCriterion.isDescending()) {

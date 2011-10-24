@@ -27,14 +27,11 @@ public interface UnitVacancyReportSummaryDTO extends IEntity {
 
         @Override
         public String toString() {
-            return I18nEnum.tr(this);
+            return I18nEnum.toString(this);
         }
     }
 
     public IPrimitive<SummarySubject> summarySubject();
-
-    /** could be complex, Property Manager, ownership or region */
-//    IEntity summarySubjectValue();
 
     @Format("#0.00")
     public IPrimitive<Double> netExposure();

@@ -18,23 +18,26 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.site.rpc.services.AbstractListService;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 
-public interface UnitVacancyReportService extends AbstractListService<UnitVacancyStatus> {
+public interface VacancyReportService extends IService {
 
     /** This is used for DOS protection: {@link #turnoverAnalysis()} will refuse the request if it is to create too many intervals. */
     public static final long MAX_SUPPORTED_INTERVALS = 20L;
 
-    public void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, EntityQueryCriteria<UnitVacancyStatus> criteria, LogicalDate fromDate,
-            LogicalDate toDate);
-
     public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, Vector<String> buidlings, LogicalDate fromDate,
             LogicalDate toDate, AnalysisResolution resolution);
+
+    void unitStatusList(AsyncCallback<EntitySearchResult<UnitVacancyStatus>> callback, Vector<String> buildings, LogicalDate from, LogicalDate to,
+            Vector<Sort> sortingCriteria, int pageNumber, int pageSize);
+
+    void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, Vector<String> buildings, LogicalDate fromDate, LogicalDate toDate);
 
 }
