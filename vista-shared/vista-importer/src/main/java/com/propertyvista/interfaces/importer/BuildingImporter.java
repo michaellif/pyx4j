@@ -236,7 +236,7 @@ public class BuildingImporter {
                         i.floorplan().set(floorplan);
                         items.add(i);
                     }
-                    Persistence.service().persist(items);
+                    Persistence.service().merge(items);
                     counters.units += items.size();
                 }
 
