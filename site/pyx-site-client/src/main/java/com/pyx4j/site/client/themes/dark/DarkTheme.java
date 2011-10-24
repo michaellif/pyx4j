@@ -20,10 +20,10 @@
  */
 package com.pyx4j.site.client.themes.dark;
 
+import com.pyx4j.commons.css.Style;
+import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.client.themes.light.LightTheme;
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemeColors;
 
 public class DarkTheme extends LightTheme {
 

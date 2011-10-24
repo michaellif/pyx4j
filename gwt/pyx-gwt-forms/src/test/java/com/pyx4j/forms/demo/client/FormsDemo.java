@@ -34,13 +34,13 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.log4gwt.client.ClientLogger;
-import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.theme.WindowsPalette;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 

@@ -18,7 +18,7 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.widgets.client.style;
+package com.pyx4j.commons.css;
 
 public enum ThemeColors {
 
@@ -32,7 +32,7 @@ public enum ThemeColors {
 
     background("#F9EFD6"),
 
-    text("#FFFFFF"),
+    foreground("#FFFFFF"),
 
     form("#FFFFFF"),
 

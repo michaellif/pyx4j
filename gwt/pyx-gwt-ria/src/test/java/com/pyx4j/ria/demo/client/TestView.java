@@ -32,9 +32,9 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.GlassPanel;
-import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.theme.GrayPalette;
 import com.pyx4j.widgets.client.style.theme.WindowsPalette;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;

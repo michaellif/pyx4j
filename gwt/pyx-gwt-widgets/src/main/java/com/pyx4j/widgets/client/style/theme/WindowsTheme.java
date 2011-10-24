@@ -29,16 +29,16 @@ import static com.pyx4j.widgets.client.tabpanel.TabPanel.StyleName.TabPanelBotto
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.commons.css.CSSClass;
+import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.commons.css.Selector;
+import com.pyx4j.commons.css.Style;
+import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
-import com.pyx4j.widgets.client.style.CSSClass;
-import com.pyx4j.widgets.client.style.IStyleName;
-import com.pyx4j.widgets.client.style.Selector;
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.Theme;
-import com.pyx4j.widgets.client.style.ThemeColors;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
 public class WindowsTheme extends Theme {

@@ -18,26 +18,30 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.widgets.client.style;
+package com.pyx4j.commons.css;
 
-public class StringProperty extends Property {
+public class ColorProperty extends Property {
 
-    private final String value;
+    private final ThemeColors color;
 
-    public StringProperty(String name, String value) {
+    private final double vibrance;
+
+    public ColorProperty(String name, ThemeColors color, double vibrance) {
         super(name);
-        this.value = value;
+        this.color = color;
+        this.vibrance = vibrance;
     }
 
-    public String getValue() {
-        return value;
+    public ThemeColors getColor() {
+        return color;
     }
 
     @Override
     protected String convertToString(Theme theme, Palette palette) {
-        if (value == null) {
-            throw new RuntimeException("theme property " + getName() + " should be set with value");
+        if (color == null) {
+            throw new RuntimeException("theme property " + getName() + " should be set with color");
         }
-        return getName() + ": " + value + ";";
+        return getName() + ": " + palette.getThemeColor(color, vibrance) + ";";
     }
+
 }

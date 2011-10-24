@@ -25,7 +25,7 @@ package com.pyx4j.widgets.client.datepicker;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.pyx4j.widgets.client.style.Selector;
+import com.pyx4j.commons.css.Selector;
 
 public class DatePickerMultiple extends DatePickerExtended {
 

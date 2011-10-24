@@ -38,7 +38,7 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.widgets.client.style.CSSClass;
+import com.pyx4j.commons.css.CSSClass;
 
 public class TreePickerPanel<E> extends PickerPanel<E> {
 

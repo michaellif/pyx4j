@@ -27,7 +27,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.Anchor;
 
-import com.pyx4j.widgets.client.style.CSSClass;
+import com.pyx4j.commons.css.CSSClass;
 
 public class NativeHyperlink<E> extends Anchor implements INativeReference<E> {
 

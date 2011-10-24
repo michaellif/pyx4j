@@ -20,11 +20,11 @@
  */
 package com.pyx4j.dashboard.demo.client;
 
+import com.pyx4j.commons.css.Selector;
+import com.pyx4j.commons.css.Style;
+import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.dashboard.client.DashboardPanel;
-import com.pyx4j.widgets.client.style.Selector;
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.Theme;
-import com.pyx4j.widgets.client.style.ThemeColors;
 
 public class DashboardTheme extends Theme {
 

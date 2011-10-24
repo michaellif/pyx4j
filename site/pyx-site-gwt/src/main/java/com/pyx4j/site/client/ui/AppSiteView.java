@@ -1,6 +1,6 @@
 package com.pyx4j.site.client.ui;
 
-import com.pyx4j.widgets.client.style.IStyleName;
+import com.pyx4j.commons.css.IStyleName;
 
 public interface AppSiteView {
 

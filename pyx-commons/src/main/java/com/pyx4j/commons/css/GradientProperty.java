@@ -18,9 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.widgets.client.style;
-
-import com.pyx4j.widgets.client.util.BrowserType;
+package com.pyx4j.commons.css;
 
 public class GradientProperty extends Property {
 
@@ -44,12 +42,19 @@ public class GradientProperty extends Property {
     protected String convertToString(Theme theme, Palette palette) {
         String color1 = palette.getThemeColor(startColor, startVibrance);
         String color2 = palette.getThemeColor(endColor, endVibrance);
-        if (BrowserType.isIE()) {
-            return "filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='" + color1 + "', endColorstr='" + color2 + "');";
-        } else if (BrowserType.isFirefox()) {
-            return "background:-moz-linear-gradient(top,  " + color1 + ",  " + color2 + ");";
-        } else {
-            return "background:-webkit-gradient(linear, left top, left bottom, from(" + color1 + "), to(" + color2 + "));";
-        }
+        String ie = "filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='" + color1 + "', endColorstr='" + color2 + "');";
+        String ff = "background:-moz-linear-gradient(top,  " + color1 + ",  " + color2 + ");";
+        String other = "background:-webkit-gradient(linear, left top, left bottom, from(" + color1 + "), to(" + color2 + "));";
+
+        //TODO select per browser
+//        if (BrowserType.isIE()) {
+//            return "filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='" + color1 + "', endColorstr='" + color2 + "');";
+//        } else if (BrowserType.isFirefox()) {
+//            return "background:-moz-linear-gradient(top,  " + color1 + ",  " + color2 + ");";
+//        } else {
+//            return "background:-webkit-gradient(linear, left top, left bottom, from(" + color1 + "), to(" + color2 + "));";
+//        }
+
+        return ie + "\n" + ff + "\n" + other;
     }
 }

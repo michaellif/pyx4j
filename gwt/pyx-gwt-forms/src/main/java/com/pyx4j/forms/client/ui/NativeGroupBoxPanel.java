@@ -32,13 +32,13 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
 import com.pyx4j.widgets.client.FieldSetPanel;
 import com.pyx4j.widgets.client.Tooltip;
-import com.pyx4j.widgets.client.style.CSSClass;
 
 public class NativeGroupBoxPanel extends FieldSetPanel implements INativeSimplePanel {
 

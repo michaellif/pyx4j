@@ -34,7 +34,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.widgets.client.style.Selector;
+import com.pyx4j.commons.css.Selector;
 
 public class DateCell extends Label {
 

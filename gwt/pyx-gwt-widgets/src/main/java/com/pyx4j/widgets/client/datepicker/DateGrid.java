@@ -34,7 +34,7 @@ import com.google.gwt.user.datepicker.client.CalendarModel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.widgets.client.style.Selector;
+import com.pyx4j.commons.css.Selector;
 
 @SuppressWarnings(/* Date manipulation required */{ "deprecation" })
 public class DateGrid extends Grid {

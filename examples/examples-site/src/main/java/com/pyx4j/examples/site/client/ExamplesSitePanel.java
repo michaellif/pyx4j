@@ -22,6 +22,8 @@ package com.pyx4j.examples.site.client;
 
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.commons.css.Palette;
+import com.pyx4j.commons.css.Theme;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.CommandLink;
@@ -30,8 +32,6 @@ import com.pyx4j.site.client.SkinFactory;
 import com.pyx4j.site.client.themes.crm.CrmPalette;
 import com.pyx4j.site.client.themes.crm.CrmTheme;
 import com.pyx4j.site.shared.domain.Site;
-import com.pyx4j.widgets.client.style.Palette;
-import com.pyx4j.widgets.client.style.Theme;
 
 public abstract class ExamplesSitePanel extends SitePanel {
 

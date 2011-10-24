@@ -26,7 +26,7 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-import com.pyx4j.widgets.client.style.Selector;
+import com.pyx4j.commons.css.Selector;
 
 public abstract class TextWatermark {
 

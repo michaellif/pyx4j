@@ -33,7 +33,7 @@ import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.CalendarView;
 import com.google.gwt.user.datepicker.client.DatePicker;
 
-import com.pyx4j.widgets.client.style.Selector;
+import com.pyx4j.commons.css.Selector;
 
 public class CalendarViewExtended extends CalendarView {
 

@@ -32,8 +32,8 @@ import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.Wid
 import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.WidgetDecoratorMandatoryImage;
 import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.WidgetDecoratorValidationLabel;
 
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.Theme;
+import com.pyx4j.commons.css.Style;
+import com.pyx4j.commons.css.Theme;
 
 public class DefaultWidgetDecoratorTheme extends Theme {
 

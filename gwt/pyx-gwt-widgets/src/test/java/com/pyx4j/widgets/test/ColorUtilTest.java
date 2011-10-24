@@ -22,7 +22,7 @@ package com.pyx4j.widgets.test;
 
 import junit.framework.TestCase;
 
-import com.pyx4j.widgets.client.style.ColorUtil;
+import com.pyx4j.commons.css.ColorUtil;
 
 public class ColorUtilTest extends TestCase {
 

@@ -22,7 +22,7 @@ package com.pyx4j.widgets.test;
 
 import junit.framework.TestCase;
 
-import com.pyx4j.widgets.client.style.StyleManger;
+import com.pyx4j.commons.css.StyleManger;
 
 public class StyleMangerTest extends TestCase {
 

@@ -29,7 +29,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.TextBoxBase;
 
-import com.pyx4j.widgets.client.style.CSSClass;
+import com.pyx4j.commons.css.CSSClass;
 
 public class SuggestBox extends com.google.gwt.user.client.ui.SuggestBox implements WatermarkComponent {
 

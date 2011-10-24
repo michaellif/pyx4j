@@ -20,7 +20,7 @@
  */
 package com.pyx4j.site.client.themes;
 
-import com.pyx4j.widgets.client.style.Style;
+import com.pyx4j.commons.css.Style;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 
 public abstract class SiteTheme extends WindowsTheme {

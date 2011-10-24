@@ -36,10 +36,10 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.css.IStyleDependent;
+import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.commons.css.Selector;
 import com.pyx4j.widgets.client.RadioButton;
-import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleName;
-import com.pyx4j.widgets.client.style.Selector;
 
 public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableComponent<E> {
 

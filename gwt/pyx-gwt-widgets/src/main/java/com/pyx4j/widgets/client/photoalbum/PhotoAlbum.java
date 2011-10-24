@@ -54,9 +54,9 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.PopupPanel;
 
+import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.style.CSSClass;
 
 public abstract class PhotoAlbum extends DockPanel {
 

@@ -38,9 +38,9 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.widgets.client.dialog.Dialog;
-import com.pyx4j.widgets.client.style.CSSClass;
 
 /**
  * Block access to GUI elements while service is running.

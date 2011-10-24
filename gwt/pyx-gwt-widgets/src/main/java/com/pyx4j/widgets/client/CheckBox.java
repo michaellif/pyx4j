@@ -23,7 +23,7 @@ package com.pyx4j.widgets.client;
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.LabelElement;
 
-import com.pyx4j.widgets.client.style.CSSClass;
+import com.pyx4j.commons.css.CSSClass;
 
 public class CheckBox extends com.google.gwt.user.client.ui.CheckBox {
 

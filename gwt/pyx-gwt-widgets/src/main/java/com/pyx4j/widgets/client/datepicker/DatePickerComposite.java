@@ -39,7 +39,7 @@ import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.MonthSelector;
 
 import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.widgets.client.style.Selector;
+import com.pyx4j.commons.css.Selector;
 
 public class DatePickerComposite extends Composite implements HasHandlers {
 

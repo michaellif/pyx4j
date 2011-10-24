@@ -18,7 +18,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.pyx4j.widgets.client.style;
+package com.pyx4j.commons.css;
 
 public interface IStyleDependent {
 

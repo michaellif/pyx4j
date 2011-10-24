@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.HtmlUtils;
-import com.pyx4j.widgets.client.style.CSSClass;
+import com.pyx4j.commons.css.CSSClass;
 
 public class HtmlArea extends ScrollPanel implements WatermarkComponent {
 

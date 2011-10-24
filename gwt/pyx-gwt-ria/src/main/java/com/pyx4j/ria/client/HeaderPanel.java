@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
-import com.pyx4j.widgets.client.style.IStyleName;
+import com.pyx4j.commons.css.IStyleName;
 
 public class HeaderPanel extends LayoutPanel {
 

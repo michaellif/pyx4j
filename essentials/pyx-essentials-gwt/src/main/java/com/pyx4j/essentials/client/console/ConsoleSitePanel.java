@@ -25,6 +25,8 @@ import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.css.Palette;
+import com.pyx4j.commons.css.Theme;
 import com.pyx4j.essentials.client.GoogleAccountsLoginPopup;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.AuthenticationRequiredException;
@@ -37,8 +39,6 @@ import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.site.client.SkinFactory;
 import com.pyx4j.site.client.themes.console.ConsolePalette;
 import com.pyx4j.site.client.themes.console.ConsoleTheme;
-import com.pyx4j.widgets.client.style.Palette;
-import com.pyx4j.widgets.client.style.Theme;
 
 public class ConsoleSitePanel extends SitePanel implements InlineWidgetFactory {
 

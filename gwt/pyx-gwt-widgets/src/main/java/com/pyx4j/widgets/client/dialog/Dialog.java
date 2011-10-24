@@ -63,11 +63,11 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ResizibleScrollPanel;
-import com.pyx4j.widgets.client.style.CSSClass;
 
 /**
  * Shared implementation for Modal Dialogs

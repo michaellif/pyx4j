@@ -48,6 +48,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.crud.CriteriaEditableComponentFactory;
@@ -71,7 +72,6 @@ import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.ImageButton;
-import com.pyx4j.widgets.client.style.IStyleName;
 
 public abstract class ListerBase<E extends IEntity> extends VerticalPanel implements IListerView<E> {
 

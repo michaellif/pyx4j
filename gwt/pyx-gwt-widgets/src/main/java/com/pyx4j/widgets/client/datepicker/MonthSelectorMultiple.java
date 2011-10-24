@@ -31,8 +31,8 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 
+import com.pyx4j.commons.css.Selector;
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
-import com.pyx4j.widgets.client.style.Selector;
 
 @SuppressWarnings("deprecation")
 public class MonthSelectorMultiple extends MonthSelectorExtended {

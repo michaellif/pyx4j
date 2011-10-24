@@ -20,6 +20,8 @@
  */
 package com.pyx4j.site.client;
 
+import com.pyx4j.commons.css.Palette;
+import com.pyx4j.commons.css.Theme;
 import com.pyx4j.site.client.themes.business.BusinessPalette;
 import com.pyx4j.site.client.themes.business.BusinessTheme;
 import com.pyx4j.site.client.themes.console.ConsolePalette;
@@ -29,8 +31,6 @@ import com.pyx4j.site.client.themes.dark.DarkTheme;
 import com.pyx4j.site.client.themes.light.LightPalette;
 import com.pyx4j.site.client.themes.light.LightTheme;
 import com.pyx4j.site.shared.domain.DefaultSkins;
-import com.pyx4j.widgets.client.style.Palette;
-import com.pyx4j.widgets.client.style.Theme;
 
 /**
  * @deprecated Create SkinFactory for each Site. This takes too much to download in

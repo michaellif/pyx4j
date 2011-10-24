@@ -20,7 +20,7 @@
  */
 package com.pyx4j.widgets.client;
 
-import com.pyx4j.widgets.client.style.IStyleDependent;
+import com.pyx4j.commons.css.IStyleDependent;
 
 public class TextBox extends com.google.gwt.user.client.ui.TextBox implements WatermarkComponent {
 

@@ -20,8 +20,8 @@
  */
 package com.pyx4j.site.client.themes.light;
 
-import com.pyx4j.widgets.client.style.Palette;
-import com.pyx4j.widgets.client.style.ThemeColors;
+import com.pyx4j.commons.css.Palette;
+import com.pyx4j.commons.css.ThemeColors;
 
 public class LightPalette extends Palette {
 

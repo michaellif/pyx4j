@@ -46,6 +46,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.gwt.commons.AsyncCallbackAggregator;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -57,7 +58,6 @@ import com.pyx4j.site.shared.domain.Site;
 import com.pyx4j.site.shared.meta.NavigNode;
 import com.pyx4j.site.shared.meta.NavigUtils;
 import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
-import com.pyx4j.widgets.client.style.StyleManger;
 
 public abstract class SitePanel extends SimplePanel {
 

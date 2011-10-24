@@ -27,10 +27,10 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.commons.Pair;
+import com.pyx4j.commons.css.IStyleDependent;
+import com.pyx4j.commons.css.Selector;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.widgets.client.CaptchaComposite;
-import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.Selector;
 
 public class NativeCaptcha extends CaptchaComposite implements INativeEditableComponent<Pair<String, String>> {
 

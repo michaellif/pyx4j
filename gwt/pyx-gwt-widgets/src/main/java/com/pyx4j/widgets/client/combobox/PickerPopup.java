@@ -23,7 +23,7 @@ package com.pyx4j.widgets.client.combobox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.UIObject;
 
-import com.pyx4j.widgets.client.style.CSSClass;
+import com.pyx4j.commons.css.CSSClass;
 
 public class PickerPopup<E> extends PopupPanel {
 

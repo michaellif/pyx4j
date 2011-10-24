@@ -38,8 +38,8 @@ import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.Ent
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderTableHeaderLabel;
 import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.EntityFolderUpButton;
 
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.Theme;
+import com.pyx4j.commons.css.Style;
+import com.pyx4j.commons.css.Theme;
 
 public class DefaultEntityFolderTheme extends Theme {
 

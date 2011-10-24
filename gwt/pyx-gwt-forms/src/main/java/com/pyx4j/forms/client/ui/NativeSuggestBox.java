@@ -32,10 +32,10 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 
+import com.pyx4j.commons.css.Selector;
 import com.pyx4j.forms.client.ui.NativeTextBox.StyleDependent;
 import com.pyx4j.widgets.client.SuggestBox;
 import com.pyx4j.widgets.client.TextBox;
-import com.pyx4j.widgets.client.style.Selector;
 
 public class NativeSuggestBox<E> extends SuggestBox implements INativeTextComponent<E> {
 

@@ -49,6 +49,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.tester.client.domain.DomainFactory;
@@ -72,7 +73,6 @@ import com.pyx4j.widgets.client.photoalbum.BasicPhotoAlbumModel;
 import com.pyx4j.widgets.client.photoalbum.Photo;
 import com.pyx4j.widgets.client.photoalbum.PhotoAlbum;
 import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
-import com.pyx4j.widgets.client.style.StyleManger;
 
 public class TesterEntryPoint implements EntryPoint {
 

@@ -40,7 +40,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 
-import com.pyx4j.widgets.client.style.Selector;
+import com.pyx4j.commons.css.Selector;
 import com.pyx4j.widgets.client.tabpanel.TabBar.TabListTrigger;
 
 public class TabListDropDown extends PopupPanel {

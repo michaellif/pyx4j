@@ -29,9 +29,9 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.unit.client.ui.TestRunnerDialog;
-import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.theme.WindowsPalette;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 

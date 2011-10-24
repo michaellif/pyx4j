@@ -31,11 +31,11 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TextBoxBase;
 
+import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.combobox.OptionsGrabber.Callback;
 import com.pyx4j.widgets.client.combobox.OptionsGrabber.Request;
 import com.pyx4j.widgets.client.combobox.OptionsGrabber.Response;
-import com.pyx4j.widgets.client.style.CSSClass;
 
 public abstract class ComboBox<E> extends HorizontalPanel {
 

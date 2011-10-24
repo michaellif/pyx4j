@@ -20,8 +20,8 @@ SS * Pyx4j framework
  */
 package com.pyx4j.widgets.client.dashboard;
 
-import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleName;
+import com.pyx4j.commons.css.IStyleDependent;
+import com.pyx4j.commons.css.IStyleName;
 
 public class CSSNames {
     // CSS style names: 

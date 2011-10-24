@@ -20,12 +20,12 @@
  */
 package com.pyx4j.entity.ria.client.theme;
 
+import com.pyx4j.commons.css.Selector;
+import com.pyx4j.commons.css.Style;
+import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.ria.client.theme.RiaTheme;
-import com.pyx4j.widgets.client.style.Selector;
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemeColors;
 
 public abstract class EntityRiaTheme extends RiaTheme {
 

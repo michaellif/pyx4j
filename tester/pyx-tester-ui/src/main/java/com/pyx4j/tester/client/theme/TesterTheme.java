@@ -20,6 +20,11 @@
  */
 package com.pyx4j.tester.client.theme;
 
+import com.pyx4j.commons.css.CSSClass;
+import com.pyx4j.commons.css.Selector;
+import com.pyx4j.commons.css.Style;
+import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.entity.client.ui.flex.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeComboBox;
 import com.pyx4j.forms.client.ui.NativeTextBox;
@@ -27,11 +32,6 @@ import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.TextBox;
-import com.pyx4j.widgets.client.style.CSSClass;
-import com.pyx4j.widgets.client.style.Selector;
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.Theme;
-import com.pyx4j.widgets.client.style.ThemeColors;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public class TesterTheme extends Theme {

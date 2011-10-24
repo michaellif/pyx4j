@@ -24,8 +24,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.widgets.client.ProgressBar;
-import com.pyx4j.widgets.client.style.CSSClass;
 
 public class StatusBar extends HorizontalPanel {
 

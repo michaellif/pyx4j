@@ -23,7 +23,7 @@ package com.pyx4j.ria.client;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.widgets.client.style.CSSClass;
+import com.pyx4j.commons.css.CSSClass;
 
 public class BarSeparator extends SimplePanel {
 

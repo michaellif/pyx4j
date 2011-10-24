@@ -31,10 +31,10 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.commons.css.Selector;
 import com.pyx4j.widgets.client.datepicker.HoldableImage.HoldElapsedEvent;
 import com.pyx4j.widgets.client.datepicker.HoldableImage.HoldElapsedEventHandler;
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
-import com.pyx4j.widgets.client.style.Selector;
 
 @SuppressWarnings("deprecation")
 public class MonthSelectorSingle extends MonthSelectorExtended {

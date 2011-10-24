@@ -23,7 +23,7 @@ package com.pyx4j.widgets.client;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 
-import com.pyx4j.widgets.client.style.CSSClass;
+import com.pyx4j.commons.css.CSSClass;
 
 public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
 

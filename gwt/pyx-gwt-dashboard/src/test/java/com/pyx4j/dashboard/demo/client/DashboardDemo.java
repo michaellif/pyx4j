@@ -40,9 +40,9 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.dashboard.client.DashboardPanel;
 import com.pyx4j.dashboard.client.Layout;
-import com.pyx4j.widgets.client.style.StyleManger;
 
 /**
  * EntryPoint class for demonstrating and testing gwt-dnd.

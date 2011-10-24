@@ -20,9 +20,9 @@
  */
 package com.pyx4j.site.client.themes.business;
 
+import com.pyx4j.commons.css.Style;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.client.themes.light.LightTheme;
-import com.pyx4j.widgets.client.style.Style;
 
 public class BusinessTheme extends LightTheme {
 

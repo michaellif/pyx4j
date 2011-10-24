@@ -20,11 +20,11 @@
  */
 package com.pyx4j.ria.client.theme;
 
+import com.pyx4j.commons.css.Selector;
+import com.pyx4j.commons.css.Style;
+import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.ria.client.HeaderPanel;
 import com.pyx4j.ria.client.SectionPanel;
-import com.pyx4j.widgets.client.style.Selector;
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemeColors;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 
 public abstract class RiaTheme extends WindowsTheme {

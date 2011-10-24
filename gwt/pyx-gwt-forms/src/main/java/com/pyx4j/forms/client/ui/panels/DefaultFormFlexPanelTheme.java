@@ -24,8 +24,8 @@ import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexP
 import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelHeader;
 import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelHeaderLabel;
 
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.Theme;
+import com.pyx4j.commons.css.Style;
+import com.pyx4j.commons.css.Theme;
 
 public class DefaultFormFlexPanelTheme extends Theme {
 

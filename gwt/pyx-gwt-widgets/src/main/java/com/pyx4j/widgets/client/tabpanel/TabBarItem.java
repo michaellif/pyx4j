@@ -37,8 +37,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.commons.css.Selector;
 import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.style.Selector;
 
 /**
  * @author michaellif
