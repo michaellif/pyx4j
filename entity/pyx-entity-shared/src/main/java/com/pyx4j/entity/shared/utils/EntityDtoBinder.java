@@ -20,7 +20,9 @@
  */
 package com.pyx4j.entity.shared.utils;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import com.pyx4j.commons.EqualsHelper;
@@ -196,6 +198,7 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
     public boolean updateDBO(DTO dto, DBO dbo) {
         init();
         boolean updated = false;
+        Set<IEntity> processed = new HashSet<IEntity>();
         for (Binding b : binding) {
             IObject dtoM = dto.getMember(b.dtoMemberPath);
             if (dtoM.isNull()) {
@@ -204,25 +207,19 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
             IObject dboM = dbo.getMember(b.dboMemberPath);
             if (b.binder == null) {
                 if (dtoM instanceof ICollection) {
-                    ICollection<IEntity, ?> dboMc = (ICollection<IEntity, ?>) dboM;
-                    for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
-                        //find
-                        boolean found = false;
-                        for (IEntity dboMi : dboMc) {
-                            if (dtoMi.equals(dboMi) || dtoMi.businessEquals(dboMi)) {
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (!found) {
-                            ((ICollection<IEntity, ?>) dboM).add(dtoMi);
-                            updated = true;
-                        }
+                    if (EntityGraph.update((ICollection<IEntity, ?>) dtoM, (ICollection<IEntity, ?>) dboM, processed)) {
+                        onUpdateDBOmember(dto, dbo, dboM);
+                        updated = true;
+                    }
+                } else if (dtoM instanceof IEntity) {
+                    if (EntityGraph.update((IEntity) dtoM, (IEntity) dboM, processed)) {
+                        onUpdateDBOmember(dto, dbo, dboM);
+                        updated = true;
                     }
                 } else {
                     if (!EqualsHelper.equals(dboM.getValue(), dtoM.getValue())) {
                         dboM.setValue(dtoM.getValue());
+                        onUpdateDBOmember(dto, dbo, dboM);
                         updated = true;
                     }
                 }
@@ -246,9 +243,15 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
                         updated = true;
                     }
                 }
+            } else {
+                throw new Error("Unexpected object class " + dtoM.getObjectClass());
             }
         }
         return updated;
+    }
+
+    protected void onUpdateDBOmember(DTO dto, DBO dbo, IObject<?> dboM) {
+
     }
 
 }
