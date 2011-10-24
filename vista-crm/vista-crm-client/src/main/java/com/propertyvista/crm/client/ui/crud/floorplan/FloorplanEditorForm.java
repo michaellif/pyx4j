@@ -50,12 +50,9 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
         main.setWidget(++row, 0, decorate(inject(proto().name()), 15));
         main.setWidget(++row, 0, decorate(inject(proto().marketingName()), 15));
         main.setWidget(++row, 0, decorate(inject(proto().description()), 30));
-
-//        main.getFlexCellFormatter().setColSpan(row, 0, 1);
-//        main.getFlexCellFormatter().setRowSpan(row, 0, 2);
+        main.getFlexCellFormatter().setRowSpan(row, 0, 3);
 
         row += 2; // leave space for right column items...
-
         main.setHeader(++row, 0, 2, proto().amenities().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().amenities(), createAmenitiesListEditor()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -66,11 +63,11 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
 
         row = -1;
         main.setWidget(++row, 1, decorate(inject(proto().floorCount()), 3));
-
         main.setWidget(++row, 1, decorate(inject(proto().bedrooms()), 3));
         main.setWidget(++row, 1, decorate(inject(proto().dens()), 3));
-        main.setWidget(++row, 1, decorate(inject(proto().bathrooms()), 3));
-        main.setWidget(++row, 1, decorate(inject(proto().halfBath()), 3));
+        // shift one column left because description field RowSpan:
+        main.setWidget(++row, 0, decorate(inject(proto().bathrooms()), 3));
+        main.setWidget(++row, 0, decorate(inject(proto().halfBath()), 3));
 
         main.getColumnFormatter().setWidth(0, "60%");
         main.getColumnFormatter().setWidth(1, "40%");

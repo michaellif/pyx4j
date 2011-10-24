@@ -90,7 +90,7 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         main.setHeader(++row, 0, 2, "");
 
         main.setWidget(++row, 0, decorate(inject(proto().source()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().assignedTo()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().assignedTo()), 20));
         row -= 2;
         main.setWidget(++row, 1, decorate(inject(proto().createDate()), 8.2));
         main.setWidget(++row, 1, decorate(inject(proto().status()), 10));

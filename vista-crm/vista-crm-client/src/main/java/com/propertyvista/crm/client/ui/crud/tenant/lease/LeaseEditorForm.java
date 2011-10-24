@@ -29,13 +29,13 @@ import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -98,14 +98,15 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     }
 
     private Widget createDetailsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(inject(proto().leaseID()), 15);
-        main.add(inject(proto().type()), 15);
-        main.add(inject(proto().status()), 15);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().leaseID()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().type()), 15));
+        main.setWidget(++row, 0, decorate(inject(proto().status()), 15));
 
         HorizontalPanel unitPanel = new HorizontalPanel();
-        unitPanel.add(main.createDecorator(inject(proto().unit(), new CEntityLabel()), 20));
+        unitPanel.add(decorate(inject(proto().unit(), new CEntityLabel()), 20));
         if (isEditable()) {
             unitPanel.add(new Button(i18n.tr("Select..."), new ClickHandler() {
                 @Override
@@ -121,37 +122,40 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 }
             }));
         }
-        main.add(unitPanel);
+        main.setWidget(++row, 0, unitPanel);
 
-        main.add(inject(proto().leaseFrom()), 8.2);
-        main.add(inject(proto().leaseTo()), 8.2);
-        main.add(inject(proto().expectedMoveIn()), 8.2);
-        main.add(inject(proto().expectedMoveOut()), 8.2);
-        main.add(inject(proto().actualMoveIn()), 8.2);
-        main.add(inject(proto().actualMoveOut()), 8.2);
-        main.add(inject(proto().signDate()), 8.2);
+        main.setWidget(++row, 0, decorate(inject(proto().leaseFrom()), 8.2));
+        main.setWidget(++row, 0, decorate(inject(proto().leaseTo()), 8.2));
+        main.setWidget(++row, 0, decorate(inject(proto().expectedMoveIn()), 8.2));
+        main.setWidget(++row, 0, decorate(inject(proto().expectedMoveOut()), 8.2));
+        main.setWidget(++row, 0, decorate(inject(proto().actualMoveIn()), 8.2));
+        main.setWidget(++row, 0, decorate(inject(proto().actualMoveOut()), 8.2));
+        main.setWidget(++row, 0, decorate(inject(proto().signDate()), 8.2));
 
         return new CrmScrollPanel(main);
     }
 
     private Widget createTenantsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
         if (isEditable()) {
-            main.add(inject(proto().tenants(), new TenantInLeaseFolder(this, ((LeaseEditorView) getParentView()).getTenantListerView(),
-                    (LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter())));
+            main.setWidget(
+                    0,
+                    0,
+                    inject(proto().tenants(), new TenantInLeaseFolder(this, ((LeaseEditorView) getParentView()).getTenantListerView(),
+                            (LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter())));
         } else {
-            main.add(inject(proto().tenants(), new TenantInLeaseFolder(this)));
+            main.setWidget(0, 0, inject(proto().tenants(), new TenantInLeaseFolder(this)));
         }
 
         return new CrmScrollPanel(main);
     }
 
     private Widget createServiceAgreementTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
         HorizontalPanel serviceItemPanel = new HorizontalPanel();
-        serviceItemPanel.add(main.createDecorator(inject(proto().serviceAgreement().serviceItem(), new CEntityLabel()), 35));
+        serviceItemPanel.add(decorate(inject(proto().serviceAgreement().serviceItem(), new CEntityLabel()), 35));
         if (isEditable()) {
             serviceItemPanel.add(new Button("Select...", new ClickHandler() {
                 @Override
@@ -175,25 +179,28 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 }
             }));
         }
-        main.add(serviceItemPanel);
 
-        main.add(new CrmSectionSeparator(i18n.tr("Charge Items:")));
-        main.add(inject(proto().serviceAgreement().featureItems(), new ChargeItemFolder(this)));
+        int row = -1;
+        main.setWidget(++row, 0, serviceItemPanel);
 
-        main.add(new CrmSectionSeparator(i18n.tr("Concessions:")));
-        main.add(inject(proto().serviceAgreement().concessions(), new ServiceConcessionFolder(this)));
+        main.setHeader(++row, 0, 2, proto().serviceAgreement().featureItems().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().serviceAgreement().featureItems(), new ChargeItemFolder(this)));
 
-        main.add(new HTML("&nbsp"));
-        main.add(inject(proto().serviceAgreement().account()), 15);
+        main.setHeader(++row, 0, 2, proto().serviceAgreement().concessions().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().serviceAgreement().concessions(), new ServiceConcessionFolder(this)));
+
+        main.setWidget(++row, 0, new HTML("&nbsp"));
+        main.setWidget(++row, 0, decorate(inject(proto().serviceAgreement().account()), 15));
 
         return new CrmScrollPanel(main);
     }
 
     private Widget createAppStatustab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(new CrmSectionSeparator(proto().masterApplicationStatus().individualApplications()));
-        main.add(inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder()));
+        int row = -1;
+        main.setHeader(++row, 0, 2, proto().masterApplicationStatus().individualApplications().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder()));
 
         return new CrmScrollPanel(main);
     }

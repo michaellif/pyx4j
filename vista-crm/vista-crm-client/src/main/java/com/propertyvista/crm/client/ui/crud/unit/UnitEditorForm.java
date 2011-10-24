@@ -71,15 +71,12 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
     @Override
     public void populate(AptUnitDTO value) {
-
         CEditableComponent<Floorplan, ?> comp = get(proto().floorplan());
         if (isEditable() && comp instanceof CEntityComboBox<?>) {
             @SuppressWarnings("unchecked")
             CEntityComboBox<Floorplan> combo = (CEntityComboBox<Floorplan>) comp;
-            // reload options with new criteria:
-            combo.resetCriteria();
+            combo.resetCriteria(); // reload options with new criteria...
             combo.addCriterion(PropertyCriterion.eq(combo.proto().building(), value.belongsTo().detach()));
-            combo.retriveOptions(null);
         }
 
         super.populate(value);
@@ -109,8 +106,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         row = -1;
         main.setWidget(++row, 1, decorate(inject(proto().info().floor()), 5));
         main.setWidget(++row, 1, decorate(inject(proto().info().number()), 5));
-
-        // set this right column items to left one - because of RowSpan!!.
+        // shift one column left because economicStatusDescription field RowSpan:
         main.setWidget(++row, 0, decorate(inject(proto().info()._bedrooms(), new CNumberLabel()), 5));
         main.setWidget(++row, 0, decorate(inject(proto().info()._bathrooms(), new CNumberLabel()), 5));
 

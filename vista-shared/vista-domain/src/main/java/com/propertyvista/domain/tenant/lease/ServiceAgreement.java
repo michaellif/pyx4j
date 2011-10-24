@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
@@ -29,6 +30,7 @@ public interface ServiceAgreement extends IEntity {
     ChargeItem serviceItem();
 
     @Owned
+    @Caption(name = "Charge Items")
     IList<ChargeItem> featureItems();
 
     @Owned
