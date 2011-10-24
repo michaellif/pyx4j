@@ -18,8 +18,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.widgets.client.style.IStyleName;
 
 public class VistaHeaderBar extends HorizontalPanel {
 

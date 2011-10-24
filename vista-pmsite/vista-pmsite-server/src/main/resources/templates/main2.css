@@ -38,7 +38,7 @@ select:focus {
 html,body {
 	height: 100%;
 	width: 100%;
-	color: ${fgColor_100};
+	color: ${foreground_100};
 }
 
 body {
@@ -46,13 +46,13 @@ body {
 }
 
 input,select,textarea {
-	color: ${fgColor_100};
+	color: ${foreground_100};
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 13px;
 }
 
 a {
-	color: ${hlightColor_100};
+	color: ${contrast2_100};
 	outline: medium none;
 	text-decoration: none;
 }
@@ -64,8 +64,8 @@ a:hover {
 select {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
-	background-color: ${bgColor_100};
-	color: ${fgColor_100};
+	background-color: ${background_100};
+	color: ${foreground_100};
 }
 
 .header {
@@ -75,7 +75,7 @@ select {
 .main {
 	margin: 10px auto;
 	width: 960px;
-	background:${primeColor_100};
+	background:${object1_100};
 	position:relative;
 }
 
@@ -122,19 +122,19 @@ select {
 }
 
 .navigation a {
-	color: ${accentColor_100};
+	color: ${contrast1_100};
 	text-decoration: none;
 }
 
 .navigation a:hover {
-	color: ${accentColor_60};
+	color: ${contrast1_60};
 }
 
 .navigation .active a {
-	color: ${accentColor_60};
+	color: ${contrast1_60};
 }
 .navigation .active a span {
-	border-bottom:2px solid ${accentColor_60};
+	border-bottom:2px solid ${contrast1_60};
 }
 
 .navigation .active a:hover {
@@ -147,7 +147,7 @@ select {
 }
 
 .langItem {
-	border-left: 1px solid ${hlightColor_100};
+	border-left: 1px solid ${contrast2_100};
 	padding: 0 3px;
 	text-align: center;
 }
@@ -157,11 +157,11 @@ select {
 }
 
 .langItem a {
-	color:${hlightColor_100};
+	color:${contrast2_100};
 }
 
 .langItem a:hover {
-	color: ${hlightColor_60};
+	color: ${contrast2_60};
 }
 
 .auth {
@@ -171,11 +171,11 @@ select {
 }
 
 .auth a {
-	color: ${hlightColor_100};
+	color: ${contrast2_100};
 }
 
 .auth a:hover {
-	color: ${hlightColor_60};
+	color: ${contrast2_60};
 }
 /*
  * Footer
@@ -205,11 +205,11 @@ ul.footer_locations li {
 }
 
 .footer_locations a {
-	color: ${accentColor_100};
+	color: ${contrast1_100};
 }
 
 .footer_locations a:hover {
-	color: ${accentColor_60};
+	color: ${contrast1_60};
 }
 
 .footer_links {
@@ -222,21 +222,21 @@ ul.footer_locations li {
 
 .footer_link {
 	padding: 0 10px;
-	border-left: 1px solid ${accentColor_100};
+	border-left: 1px solid ${contrast1_100};
 }
 
 .footer_link a {
-	color: ${accentColor_100};
+	color: ${contrast1_100};
 }
 
 .footer_link a:hover {
-	color: ${accentColor_60};
+	color: ${contrast1_60};
 }
 
 .footer_legal {
 	text-align: center;
 	line-height: 60px;
-	color: ${accentColor_100};
+	color: ${contrast1_100};
 }
 
 .vista-pmsite-main .caption {
@@ -260,6 +260,6 @@ ul.footer_locations li {
 	font-weight: bold;
 	text-transform: uppercase;
 	padding: 22px 0 0 24px;
-	color: ${fgColor_60};
+	color: ${foreground_60};
 	float: left;
 }

@@ -11,7 +11,7 @@
 	width: 318px;
 	vertical-align: top;
 	padding:20px 16px;
-	border-right:1px solid ${fgColor_20};
+	border-right:1px solid ${foreground_20};
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-main {
 	display: inline-block;
@@ -20,7 +20,7 @@
 	min-height:400px;
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-main .caption2 {
-	border-bottom:1px solid ${fgColor_20};
+	border-bottom:1px solid ${foreground_20};
 	}
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox {
 	width:100%;
@@ -46,7 +46,7 @@
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .infoBox {
 	width:100%;
 	font-weight:bold;
-	color:${fgColor_60};
+	color:${foreground_60};
 } 
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .infoBoxEntry {
 	padding-top:15px;
@@ -60,7 +60,7 @@
 	padding-top:4px;
 }
 .apartmentDetailsWrap .detailBox {
-	color:${fgColor_60};
+	color:${foreground_60};
 	padding-bottom:20px;
 }
 .apartmentDetailsWrap .detailBox .detailBoxTitle {
@@ -68,14 +68,14 @@
 	font-size:14px;
 	font-weight:bold;
 	text-transform:uppercase;
-	color:${fgColor_60};
+	color:${foreground_60};
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry {
 	padding: 10px 0;
-	border-bottom: 1px solid ${fgColor_20};
+	border-bottom: 1px solid ${foreground_20};
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry:first-child {
-	border-top: 1px solid ${fgColor_20};
+	border-top: 1px solid ${foreground_20};
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry .detailBoxCaption {
 	display:inline-block;
@@ -86,7 +86,7 @@
 	font-weight:bold;
 	text-transform:uppercase;
 	text-align:right;
-	color:${fgColor_40};
+	color:${foreground_40};
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry .detailBoxText {
 	display:inline-block;
@@ -102,7 +102,7 @@
 	width:230px;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover {
-	background-color:${primeColor_10};
+	background-color:${object1_10};
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry .picture {
 	display: inline-block;
@@ -117,7 +117,7 @@
 	vertical-align: top;
 	width:370px;
 	padding:0 10px;
-	color: ${fgColor_40};
+	color: ${foreground_40};
 }
 .apartmentDetailsWrap .unitDetails .details {
 	display: inline-block;
@@ -171,15 +171,15 @@
 	padding-left:30px;
 	font-weight:bold;
 	cursor:pointer;
-	color:${fgColor_50};
+	color:${foreground_50};
 }
 a.listingCtlButton {
-	color:${fgColor_50} !important;
+	color:${foreground_50} !important;
 	text-decoration:none;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover .listingCtlButton {
 	background-image: url("images/template1/aptListIcons-hlight.png");
-	color:${fgColor_80} !important;
+	color:${foreground_80} !important;
 }
 #btnViewDetails {
 	background-position:0px -30px;

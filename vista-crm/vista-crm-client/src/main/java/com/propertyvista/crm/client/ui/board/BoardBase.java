@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dashboard.BoardEvent;
 import com.pyx4j.widgets.client.dashboard.BoardEvent.Reason;
@@ -33,7 +34,6 @@ import com.pyx4j.widgets.client.dashboard.BoardLayout;
 import com.pyx4j.widgets.client.dashboard.IBoard;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
-import com.pyx4j.widgets.client.style.IStyleName;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.gadgets.GadgetsFactory;

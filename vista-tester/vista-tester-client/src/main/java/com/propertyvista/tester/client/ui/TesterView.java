@@ -27,11 +27,11 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 
+import com.pyx4j.commons.css.Palette;
+import com.pyx4j.commons.css.StyleManger;
+import com.pyx4j.commons.css.Theme;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.AppSiteView;
-import com.pyx4j.widgets.client.style.Palette;
-import com.pyx4j.widgets.client.style.StyleManger;
-import com.pyx4j.widgets.client.style.Theme;
 
 import com.propertyvista.tester.client.mvp.FooterActivityMapper;
 import com.propertyvista.tester.client.mvp.HeaderActionActivityMapper;

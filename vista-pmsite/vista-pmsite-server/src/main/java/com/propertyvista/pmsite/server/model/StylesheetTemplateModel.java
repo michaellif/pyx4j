@@ -13,47 +13,41 @@
  */
 package com.propertyvista.pmsite.server.model;
 
-import java.awt.Color;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
+import com.pyx4j.commons.css.Palette;
+import com.pyx4j.commons.css.ThemeColors;
+
 public class StylesheetTemplateModel extends LoadableDetachableModel<Map<String, Object>> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String DEFAULT_COLOR = "#666666";
+    private final Palette palette;
 
     private static final int VIBRANCE_CNT = 10;
 
-    private final String primeColor;
-
-    private final String accentColor;
-
-    private final String bgColor;
-
-    private final String fgColor;
-
-    private final String hlightColor;
-
-    public StylesheetTemplateModel(String baseColor) {
-        switch (Integer.parseInt(baseColor)) {
+    public StylesheetTemplateModel(String styleId) {
+        palette = new Palette();
+        switch (Integer.parseInt(styleId)) {
         case 1:
-            this.primeColor = "#269bff"; //-- H1
-            this.accentColor = "#ff170f"; //- H2
-            this.hlightColor = "#6f5879"; //- H3
-            this.bgColor = "#ffffff"; //----- H4
-            this.fgColor = "#000000"; //----- H5
+            palette.putThemeColor(ThemeColors.object1, "#269bff");
+            palette.putThemeColor(ThemeColors.object2, "#2670ff");
+            palette.putThemeColor(ThemeColors.contrast1, "#ff170f");
+            palette.putThemeColor(ThemeColors.contrast2, "#6f5879");
+            palette.putThemeColor(ThemeColors.background, "#ffffff");
+            palette.putThemeColor(ThemeColors.foreground, "#000000");
             break;
         case 2:
         default:
-            this.primeColor = "#072255"; //-- H1
-            this.accentColor = "#8BAEDA"; //- H2
-            this.hlightColor = "#5177A6"; //- H3
-            this.bgColor = "#ffffff"; //----- H4
-            this.fgColor = "#444444"; //----- H5
+            palette.putThemeColor(ThemeColors.object1, "#072255");
+            palette.putThemeColor(ThemeColors.object2, "#070055");
+            palette.putThemeColor(ThemeColors.contrast1, "#8BAEDA");
+            palette.putThemeColor(ThemeColors.contrast2, "#5177A6");
+            palette.putThemeColor(ThemeColors.background, "#ffffff");
+            palette.putThemeColor(ThemeColors.foreground, "#444444");
             break;
         }
     }
@@ -61,63 +55,22 @@ public class StylesheetTemplateModel extends LoadableDetachableModel<Map<String,
     @Override
     public Map<String, Object> load() {
         final Map<String, Object> varModel = new HashMap<String, Object>();
-        varModel.putAll(generateColorMap("primeColor", primeColor));
-        varModel.putAll(generateColorMap("accentColor", accentColor));
-        varModel.putAll(generateColorMap("bgColor", bgColor));
-        varModel.putAll(generateColorMap("fgColor", fgColor));
-        varModel.putAll(generateColorMap("hlightColor", hlightColor));
-
+        varModel.putAll(generateColorMap("object1", ThemeColors.object1));
+        varModel.putAll(generateColorMap("object2", ThemeColors.object2));
+        varModel.putAll(generateColorMap("contrast1", ThemeColors.contrast1));
+        varModel.putAll(generateColorMap("contrast2", ThemeColors.contrast2));
+        varModel.putAll(generateColorMap("background", ThemeColors.background));
+        varModel.putAll(generateColorMap("foreground", ThemeColors.foreground));
         return varModel;
     }
 
-    private static Map<String, String> generateColorMap(String keyBase, String color) {
-        Color c = stringToColor(color);
-        float[] HSBModel = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
+    private Map<String, String> generateColorMap(String keyBase, ThemeColors color) {
         final Map<String, String> colorMap = new HashMap<String, String>(VIBRANCE_CNT);
         for (int vib = 0; vib < VIBRANCE_CNT; vib++) {
             float vibrance = (float) (1.0 - (float) vib / VIBRANCE_CNT); // 1.0 -> 0.1
-            colorMap.put(keyBase + "_" + (100 - 10 * vib), colorToString(new Color(HSBVtoRGB(HSBModel[0], HSBModel[1], HSBModel[2], vibrance))));
+            colorMap.put(keyBase + "_" + (100 - 10 * vib), palette.getThemeColor(color, vibrance));
         }
         return colorMap;
     }
 
-    private static int HSBVtoRGB(float hue, float saturation, float brightness, float vibrance) {
-        float ns = saturation * vibrance;
-        float nb = 1 - (1 - brightness) * vibrance;
-        return Color.HSBtoRGB(hue, ns, nb);
-    }
-
-    private static Color stringToColor(String value) {
-        if (value == null) {
-            value = DEFAULT_COLOR;
-        }
-        try {
-            // get color by hex or octal value
-            return Color.decode(value);
-        } catch (NumberFormatException nfe) {
-            // if we can't decode lets try to get it by name
-            try {
-                // try to get a color by name using reflection
-                final Field f = Color.class.getField(value);
-                return (Color) f.get(null);
-            } catch (Exception ce) {
-                // if we can't get any color return black
-                return Color.decode(DEFAULT_COLOR);
-            }
-        }
-    }
-
-    public static String colorToString(Color c) {
-        String color = Integer.toHexString(c.getRGB() & 0x00ffffff);
-        StringBuffer retval = new StringBuffer(7);
-        retval.append("#");
-
-        int fillUp = 6 - color.length();
-        for (int i = 0; i < fillUp; i++) {
-            retval.append("0");
-        }
-
-        retval.append(color);
-        return retval.toString();
-    }
 }

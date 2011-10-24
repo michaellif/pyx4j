@@ -38,6 +38,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.forms.client.ui.CButton;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -66,7 +67,6 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.unit.client.ui.TestRunnerDialog;
 import com.pyx4j.unit.shared.UnitDebugId;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
-import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.theme.WindowsPalette;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 

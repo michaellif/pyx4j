@@ -1,5 +1,5 @@
 .vista-pmsite-findAptPage {
-    color: ${fgColor_100};
+    color: ${foreground_100};
     font-size: 16px;
 }
 
@@ -31,7 +31,7 @@
 .advancedSearchWideWrap input[type=submit] {
 	background: url("images/template1/submit.png") no-repeat;
 	border: none;
-	color: ${bgColor_100};
+	color: ${background_100};
 	cursor: pointer;
 	font-size: 16px;
 	margin: 15px auto 0;
@@ -58,8 +58,8 @@
 	letter-spacing:3px;
 	margin-left:30px;
 	padding:6px 20px;
-	color:${fgColor_100};
-	background-color:${primeColor_20};
+	color:${foreground_100};
+	background-color:${object1_20};
 	text-align:center;
 	float:left; 
 }
@@ -121,7 +121,7 @@
 	float:left;
 	clear:both;
 	width:100%;
-	border-top:1px dotted ${fgColor_60};
+	border-top:1px dotted ${foreground_60};
 	padding-top:20px;
 	margin-top:30px;
 	margin-bottom:40px;
@@ -140,10 +140,10 @@
 	font-size:12px;
 }
 .advancedSearchWideWrap .typeselActiveHover {
-	color:${primeColor_20} !important;
-	background-color:${fgColor_80} !important;
+	color:${object1_20} !important;
+	background-color:${foreground_80} !important;
 }
 .advancedSearchWideWrap .typeselActive {
-	color:${primeColor_20} !important;
-	background-color:${fgColor_80} !important;
+	color:${object1_20} !important;
+	background-color:${foreground_80} !important;
 }

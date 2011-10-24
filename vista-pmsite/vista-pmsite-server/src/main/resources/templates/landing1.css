@@ -7,7 +7,7 @@
     margin: 0 auto;
 	width: 960px;
 	position: relative;
-	background: ${accentColor_20};
+	background: ${contrast1_20};
 }
 .vista-pmsite-landingPage .banner_img {
 	height: 375px;
@@ -46,7 +46,7 @@
 .vista-pmsite-landingPage .quickSearchPanel input[type=submit] {
 	background: none repeat scroll 0 0 transparent;
 	border: medium none;
-	color: ${bgColor_100};
+	color: ${background_100};
 	cursor: pointer;
 	font-size: 16px;
 	padding: 5px 0;
@@ -74,7 +74,7 @@
 	position: relative;
 	width: 100%;
 	right: 680px;
-	border-right: 1px solid ${accentColor_10};
+	border-right: 1px solid ${contrast1_10};
 	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;   
@@ -109,17 +109,17 @@
 	height: 100px;
 	margin: 10px;
 	padding: 20px;
-	background: ${primeColor_10};
+	background: ${object1_10};
 }
 
 .vista-pmsite-landingPage .testimBox .name {
-	color: ${fgColor_100};
+	color: ${foreground_100};
 	text-align: right;
 	padding: 10px 0 0 0;
 }
 
 .vista-pmsite-landingPage .testimBox .read_more {
-	color: ${hlightColor_100};
+	color: ${contrast2_100};
 	font-size: 16px;
 	padding-left: 10px;
 }
@@ -133,13 +133,13 @@
 }
 
 .vista-pmsite-landingPage .newsBox .date {
-	color: ${fgColor_40};
+	color: ${foreground_40};
 	padding-top: 10px;
 }
 
 .vista-pmsite-landingPage .newsBox .headline {
 	padding-top: 10px;
-	color: ${hlightColor_100};
+	color: ${contrast2_100};
 }
 
 .vista-pmsite-landingPage .newsBox .text {
@@ -147,7 +147,7 @@
 }
 
 .vista-pmsite-landingPage .newsBox .read_more {
-	color: ${hlightColor_100};
+	color: ${contrast2_100};
 	font-size: 20px;
 	line-height: 14px;
 	vertical-align: text-top;
@@ -183,14 +183,14 @@
 }
 
 .vista-pmsite-landingPage .promoBox a .picture {
-	border:1px solid ${bgColor_100};
+	border:1px solid ${background_100};
 }
 .vista-pmsite-landingPage .promoBox a:hover .picture {
-	border:1px solid ${hlightColor_100};
+	border:1px solid ${contrast2_100};
 }
 
 .vista-pmsite-landingPage .promoBox .read_more {
-	color: ${hlightColor_100};
+	color: ${contrast2_100};
 	font-size:16px;
 	padding-left:10px;
 }

@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.TextBox;
 
-import com.pyx4j.widgets.client.style.IStyleName;
+import com.pyx4j.commons.css.IStyleName;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 

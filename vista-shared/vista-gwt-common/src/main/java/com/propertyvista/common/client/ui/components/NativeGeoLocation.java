@@ -30,13 +30,13 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.css.IStyleDependent;
+import com.pyx4j.commons.css.Selector;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.TextBox;
-import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.Selector;
 
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;

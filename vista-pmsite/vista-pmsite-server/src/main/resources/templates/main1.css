@@ -38,7 +38,7 @@ select:focus {
 html,body {
 	height: 100%;
 	width: 100%;
-	color: ${fgColor_100};
+	color: ${foreground_100};
 }
 
 body {
@@ -46,13 +46,13 @@ body {
 }
 
 input,select,textarea {
-	color: ${fgColor_100};
+	color: ${foreground_100};
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 13px;
 }
 
 a {
-	color: ${hlightColor_100};
+	color: ${contrast2_100};
 	outline: medium none;
 	text-decoration: none;
 }
@@ -64,8 +64,8 @@ a:hover {
 select {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
-	background-color: ${bgColor_100};
-	color: ${fgColor_100};
+	background-color: ${background_100};
+	color: ${foreground_100};
 }
 
 .header {
@@ -118,7 +118,7 @@ select {
 	position: absolute;
 	top: 104px;
 	width: 100%;
-    background: ${primeColor_20}
+    background: ${object1_20}
 }
 
 .navigation ul {
@@ -150,18 +150,18 @@ select {
 }
 
 .navigation a {
-	color: ${fgColor_100};
+	color: ${foreground_100};
 	text-decoration: none;
 	float: left;
 }
 
 .navigation a:hover {
-	color: ${accentColor_100};
+	color: ${contrast1_100};
 }
 
 .navigation .active a {
-	color: ${bgColor_100};
-	background-color: ${accentColor_100};
+	color: ${background_100};
+	background-color: ${contrast1_100};
 }
 
 .navigation .active a:hover {
@@ -172,7 +172,7 @@ select {
 }
 
 .langItem {
-	border-left: 1px solid ${fgColor_100};
+	border-left: 1px solid ${foreground_100};
 	padding: 0 3px;
 	text-align: center;
 }
@@ -182,11 +182,11 @@ select {
 }
 
 .langItem a {
-	color: ${fgColor_100};
+	color: ${foreground_100};
 }
 
 .langItem a:hover {
-	color: ${hlightColor_100};
+	color: ${contrast2_100};
 }
 
 .auth {
@@ -195,19 +195,19 @@ select {
 }
 
 .auth a {
-	color: ${fgColor_100};
+	color: ${foreground_100};
 }
 
 .auth a:hover {
-	color: ${hlightColor_100};
+	color: ${contrast2_100};
 }
 /*
  * Footer
  */
  
  #footer {
-	background: none repeat scroll 0 0 ${fgColor_10};
-	border-top: 1px solid ${fgColor_20};
+	background: none repeat scroll 0 0 ${foreground_10};
+	border-top: 1px solid ${foreground_20};
 	position: relative;
 }
  
@@ -218,7 +218,7 @@ select {
 ul.footer_locations {
 	list-style-type: none;
 	display: inline-block;
-	color: ${fgColor_40};
+	color: ${foreground_40};
 	font-weight: bold;
 }
 
@@ -228,11 +228,11 @@ ul.footer_locations li {
 }
 
 .footer_locations a {
-	color: ${primeColor_100};
+	color: ${object1_100};
 }
 
 .footer_locations a:hover {
-	color: ${hlightColor_100};
+	color: ${contrast2_100};
 }
 
 .footer_links {
@@ -245,15 +245,15 @@ ul.footer_locations li {
 
 .footer_link {
 	padding: 0 10px;
-	border-left: 1px solid ${fgColor_100};
+	border-left: 1px solid ${foreground_100};
 }
 
 .footer_link a {
-	color: ${fgColor_100};
+	color: ${foreground_100};
 }
 
 .footer_link a:hover {
-	color: ${hlightColor_100};
+	color: ${contrast2_100};
 }
 
 .footer_legal {
@@ -282,6 +282,6 @@ ul.footer_locations li {
 	font-weight: bold;
 	text-transform: uppercase;
 	padding: 22px 0 0 24px;
-	color: ${fgColor_60};
+	color: ${foreground_60};
 	float: left;
 }

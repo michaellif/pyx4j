@@ -13,14 +13,14 @@
  */
 package com.propertyvista.portal.ptapp.client.themes;
 
+import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.commons.css.Selector;
+import com.pyx4j.commons.css.Style;
+import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.widgets.client.ListBox;
-import com.pyx4j.widgets.client.style.IStyleName;
-import com.pyx4j.widgets.client.style.Selector;
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemeColors;
 
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;

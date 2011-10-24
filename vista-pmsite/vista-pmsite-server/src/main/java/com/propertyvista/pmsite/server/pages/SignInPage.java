@@ -36,7 +36,6 @@ public final class SignInPage extends BasePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        String baseColor = PMSiteContentManager.getSiteDescriptor().baseColor().getValue();
         int styleId = PMSiteContentManager.getSiteStyle();
         String fileCSS = "signin" + styleId + ".css";
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",

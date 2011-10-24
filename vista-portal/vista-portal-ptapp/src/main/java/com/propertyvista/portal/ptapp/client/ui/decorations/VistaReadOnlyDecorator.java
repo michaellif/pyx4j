@@ -18,8 +18,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.widgets.client.style.IStyleName;
 
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 

@@ -21,11 +21,11 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.widgets.client.style.StyleManger;
 
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.portal.ptapp.client.themes.GainsboroPalette;

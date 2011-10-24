@@ -21,10 +21,10 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.web.bindery.event.shared.EventBus;
 
+import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.AppSiteView;
-import com.pyx4j.widgets.client.style.IStyleName;
-import com.pyx4j.widgets.client.style.StyleManger;
 
 import com.propertyvista.portal.ptapp.client.mvp.ActionsActivityMapper;
 import com.propertyvista.portal.ptapp.client.mvp.BottomActivityMapper;

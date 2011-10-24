@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.client.themes;
 
-import com.pyx4j.widgets.client.style.ColorUtil;
-import com.pyx4j.widgets.client.style.ThemeColors;
+import com.pyx4j.commons.css.ColorUtil;
+import com.pyx4j.commons.css.ThemeColors;
 
 import com.propertyvista.common.client.theme.VistaPalette;
 

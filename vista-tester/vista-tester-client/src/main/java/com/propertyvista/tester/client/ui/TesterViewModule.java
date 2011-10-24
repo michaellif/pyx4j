@@ -16,8 +16,8 @@ package com.propertyvista.tester.client.ui;
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Singleton;
 
-import com.pyx4j.widgets.client.style.Palette;
-import com.pyx4j.widgets.client.style.Theme;
+import com.pyx4j.commons.css.Palette;
+import com.pyx4j.commons.css.Theme;
 
 import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.common.client.theme.VistaTheme;

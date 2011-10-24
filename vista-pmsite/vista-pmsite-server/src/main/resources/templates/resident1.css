@@ -1,5 +1,5 @@
 .vista-pmsite-residentPage {
-    color: ${fgColor_100};
+    color: ${foreground_100};
     font-size: 16px;
 }
 .vista-pmsite-residentPage .vista-pmsite-mainWrap {

@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.themes;
 
+import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.commons.css.Selector;
+import com.pyx4j.commons.css.Style;
+import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
-import com.pyx4j.widgets.client.style.IStyleName;
-import com.pyx4j.widgets.client.style.Selector;
-import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.ThemeColors;
 
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;

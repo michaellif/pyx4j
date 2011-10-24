@@ -27,11 +27,11 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.css.IStyleDependent;
+import com.pyx4j.commons.css.Selector;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.TextBox;
-import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.Selector;
 
 import com.propertyvista.domain.contact.Phone;
 

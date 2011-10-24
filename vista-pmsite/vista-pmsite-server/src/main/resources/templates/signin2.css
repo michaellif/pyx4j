@@ -1,5 +1,5 @@
 .vista-pmsite-signInPage {
-    color: ${fgColor_100};
+    color: ${foreground_100};
     font-size: 16px;
 }
 
@@ -24,8 +24,8 @@
 
 .vista-pmsite-signInPage .content {
 	min-height: 396px;
-	color: ${fgColor_100};
-	border-top:1px solid ${fgColor_20};
+	color: ${foreground_100};
+	border-top:1px solid ${foreground_20};
 	background-color: white;
 	line-height: 20px;
 	overflow: hidden;
@@ -38,7 +38,7 @@
 .vista-pmsite-signInPage .signInFormWrap input[type=submit] {
 	background: url("images/template2/submit.png") no-repeat;
 	border: none;
-	color: ${bgColor_100};
+	color: ${background_100};
 	cursor: pointer;
 	font-size: 16px;
 	margin: 15px auto 0;

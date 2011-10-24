@@ -17,11 +17,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.widgets.client.style.StyleManger;
 
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;

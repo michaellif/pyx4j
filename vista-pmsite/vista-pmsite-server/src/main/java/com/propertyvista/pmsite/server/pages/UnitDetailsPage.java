@@ -133,7 +133,6 @@ public class UnitDetailsPage extends BasePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        String baseColor = PMSiteContentManager.getSiteDescriptor().baseColor().getValue();
         int styleId = PMSiteContentManager.getSiteStyle();
         String fileCSS = "unitdetails" + styleId + ".css";
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",

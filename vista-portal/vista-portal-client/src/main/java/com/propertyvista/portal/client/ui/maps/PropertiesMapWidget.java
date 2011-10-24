@@ -19,11 +19,11 @@ import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.geom.LatLngBounds;
 import com.google.gwt.maps.client.overlay.Marker;
 
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.CircleOverlay;
 import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.widgets.client.style.IStyleName;
 
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;

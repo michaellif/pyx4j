@@ -24,8 +24,8 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
 
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.style.IStyleName;
 
 import com.propertyvista.crm.client.activity.NavigFolder;
 

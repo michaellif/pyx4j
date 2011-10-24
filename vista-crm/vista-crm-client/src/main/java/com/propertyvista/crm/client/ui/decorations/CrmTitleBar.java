@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.decorations;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
-import com.pyx4j.widgets.client.style.IStyleName;
+import com.pyx4j.commons.css.IStyleName;
 
 public class CrmTitleBar extends HorizontalPanel {
 
