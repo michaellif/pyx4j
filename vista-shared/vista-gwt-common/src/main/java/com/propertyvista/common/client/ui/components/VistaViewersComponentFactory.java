@@ -30,6 +30,10 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 
+import com.propertyvista.common.client.ui.components.editors.CEmailLabel;
+import com.propertyvista.common.client.ui.components.editors.CGeoLocationLabel;
+import com.propertyvista.common.client.ui.components.editors.CMoneyLabel;
+import com.propertyvista.common.client.ui.components.editors.CPhoneLabel;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;

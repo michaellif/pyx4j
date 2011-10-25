@@ -16,8 +16,8 @@ package com.propertyvista.admin.client.ui.components;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
-import com.propertyvista.common.client.ui.components.CMoney;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
+import com.propertyvista.common.client.ui.components.editors.CMoney;
 import com.propertyvista.domain.financial.Money;
 
 public class AdminEditorsComponentFactory extends VistaEditorsComponentFactory {

@@ -21,6 +21,10 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.IFormat;
 
+import com.propertyvista.common.client.ui.components.editors.CEmail;
+import com.propertyvista.common.client.ui.components.editors.CGeoLocation;
+import com.propertyvista.common.client.ui.components.editors.CMoneyLabel;
+import com.propertyvista.common.client.ui.components.editors.CPhone;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;

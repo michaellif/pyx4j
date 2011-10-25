@@ -25,10 +25,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.common.client.ui.editors.EmergencyContactFolder;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.ptapp.client.ui.decorations.VistaReadOnlyDecorator;

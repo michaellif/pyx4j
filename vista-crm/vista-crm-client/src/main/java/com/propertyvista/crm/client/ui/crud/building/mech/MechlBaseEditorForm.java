@@ -20,9 +20,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.CMaintenance;
-import com.propertyvista.common.client.ui.components.CWarranty;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
+import com.propertyvista.common.client.ui.components.editors.CMaintenance;
+import com.propertyvista.common.client.ui.components.editors.CWarranty;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;

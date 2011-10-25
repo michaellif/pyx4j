@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.client.ui.editors.EmergencyContactFolder;
+import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 
 public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements PersonalInfoView {
