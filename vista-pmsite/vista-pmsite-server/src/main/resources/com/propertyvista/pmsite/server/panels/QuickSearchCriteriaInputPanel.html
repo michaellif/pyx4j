@@ -11,18 +11,22 @@
 	</script>
 	<script wicket:id="jsCityList"></script>
 
-	<h3><wicket:i18n>FIND AN APARTMENT</wicket:i18n></h3>
+	<div class="infobox_header">
+		<span class="infobox_header_title"><wicket:i18n>Find an Apartment</wicket:i18n></span>
+	</div>
 
-	<label><wicket:i18n>Province</wicket:i18n></label>
-	<select wicket:id="province" id="provSelect"></select>
-
-	<label><wicket:i18n>City</wicket:i18n></label>
-	<select wicket:id="city" id="citySelect"></select>
-
-	<label><wicket:i18n>Bedrooms</wicket:i18n></label>
-	<select wicket:id="bedsRange"></select>
-
-	<label><wicket:i18n>Price</wicket:i18n></label>
-	<select wicket:id="priceRange"></select>
+	<div class="infobox_body">
+		<label><wicket:i18n>Province</wicket:i18n></label>
+		<select wicket:id="province" id="provSelect"></select>
+	
+		<label><wicket:i18n>City</wicket:i18n></label>
+		<select wicket:id="city" id="citySelect"></select>
+	
+		<label><wicket:i18n>Bedrooms</wicket:i18n></label>
+		<select wicket:id="bedsRange"></select>
+	
+		<label><wicket:i18n>Price</wicket:i18n></label>
+		<select wicket:id="priceRange"></select>
+	</div>
 
 </wicket:panel>

@@ -43,10 +43,10 @@ public class StylesheetTemplateModel extends LoadableDetachableModel<Map<String,
         case 2:
         default:
             palette.putThemeColor(ThemeColors.object1, "#072255");
-            palette.putThemeColor(ThemeColors.object2, "#070055");
+            palette.putThemeColor(ThemeColors.object2, "#5D466B");
             palette.putThemeColor(ThemeColors.contrast1, "#8BAEDA");
             palette.putThemeColor(ThemeColors.contrast2, "#5177A6");
-            palette.putThemeColor(ThemeColors.background, "#ffffff");
+            palette.putThemeColor(ThemeColors.background, "#666666");
             palette.putThemeColor(ThemeColors.foreground, "#444444");
             break;
         }
