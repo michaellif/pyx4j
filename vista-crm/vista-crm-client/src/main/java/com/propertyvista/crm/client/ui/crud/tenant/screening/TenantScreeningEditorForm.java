@@ -32,6 +32,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
+import com.propertyvista.common.client.ui.components.CPriorAddress;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
@@ -42,7 +43,6 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.misc.BusinessRules;
@@ -53,7 +53,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
     private ApplicationDocumentsFolderUploader fileUpload;
 
-    private CEntityEditor<PriorAddress> previousAddressHeader;
+    private CEntityEditor<PriorAddress> previousAddress;
 
     public TenantScreeningEditorForm() {
         super(TenantScreening.class, new CrmEditorsComponentFactory());
@@ -201,10 +201,10 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
         int row = -1;
         main.setHeader(++row, 0, 1, proto().currentAddress().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().currentAddress(), createAddressEditor()));
+        main.setWidget(++row, 0, inject(proto().currentAddress(), new CPriorAddress()));
 
         main.setHeader(++row, 0, 1, proto().previousAddress().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().previousAddress(), previousAddressHeader = createAddressEditor()));
+        main.setWidget(++row, 0, inject(proto().previousAddress(), previousAddress = new CPriorAddress()));
 
         return new CrmScrollPanel(main);
     }
@@ -230,55 +230,10 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         return new CrmScrollPanel(main);
     }
 
-    private CEntityEditor<PriorAddress> createAddressEditor() {
-        return new CEntityEditor<PriorAddress>(PriorAddress.class) {
-            @SuppressWarnings({ "rawtypes", "unchecked" })
-            @Override
-            public IsWidget createContent() {
-                FormFlexPanel main = new FormFlexPanel();
-
-                int row = -1;
-
-//                AddressUtils.injectIAddress(split, proto(), this);
-
-                main.setWidget(++row, 0, decorate(inject(proto().moveInDate()), 8.2));
-                main.setWidget(++row, 0, decorate(inject(proto().moveOutDate()), 8.2));
-                main.setWidget(++row, 0, decorate(inject(proto().phone()), 15));
-
-                CEditableComponent<?, ?> rentedComponent = inject(proto().rented());
-                rentedComponent.addValueChangeHandler(new ValueChangeHandler() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent event) {
-                        setVizibility(getValue());
-                    }
-                });
-
-                row = -1;
-                main.setWidget(++row, 1, decorate(rentedComponent, 15));
-                main.setWidget(++row, 1, decorate(inject(proto().payment()), 8));
-                main.setWidget(++row, 1, decorate(inject(proto().managerName()), 15));
-
-                return main;
-            }
-
-            @Override
-            public void populate(PriorAddress value) {
-                super.populate(value);
-                setVizibility(value);
-            }
-
-            private void setVizibility(PriorAddress value) {
-                boolean rented = OwnedRented.rented.equals(value.rented().getValue());
-                get(proto().payment()).setVisible(rented);
-                get(proto().managerName()).setVisible(rented);
-            }
-        };
-    }
-
     private void enablePreviousAddress() {
         boolean enabled = BusinessRules.infoPageNeedPreviousAddress(getValue().currentAddress().moveInDate().getValue());
         get(proto().previousAddress()).setVisible(enabled);
-        previousAddressHeader.setVisible(enabled);
+        previousAddress.setVisible(enabled);
     }
 
 // Financial: ------------------------------------------------------------------------------------------------

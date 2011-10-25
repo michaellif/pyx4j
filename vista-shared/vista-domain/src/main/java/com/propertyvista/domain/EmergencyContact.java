@@ -21,8 +21,6 @@ import com.propertyvista.domain.person.Person;
 
 public interface EmergencyContact extends IEntity, Person {
 
-//    Person person();
-
     @Owned
     Address address();
 }

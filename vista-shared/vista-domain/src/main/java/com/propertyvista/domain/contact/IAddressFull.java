@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.contact;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -28,6 +29,7 @@ import com.propertyvista.domain.ref.CountryReferenceAdapter;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.ref.ProvinceReferenceAdapter;
 
+@AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface IAddressFull extends IEntity {
 
