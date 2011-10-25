@@ -73,7 +73,7 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         pageSizeContentPanel.getElement().getStyle().setMarginRight(10, Unit.PX);
         pageSizeContentPanel.setVisible(false);
         pageSizeSelector = new ListBox();
-        pageSizeContentPanel.add(new TargetLabel(i18n.tr("Page Size:"), pageSizeSelector));
+        pageSizeContentPanel.add(new TargetLabel(i18n.tr("Page Size") + ":", pageSizeSelector));
         pageSizeContentPanel.add(pageSizeSelector);
         pageSizeSelector.getElement().getStyle().setMarginLeft(3, Unit.PX);
         contentPanel.add(pageSizeContentPanel);

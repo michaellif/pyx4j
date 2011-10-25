@@ -117,6 +117,13 @@ public class ExtractMojo extends AbstractMojo {
     public String keysFile;
 
     /**
+     * Corrections filename translations are equal to text
+     * 
+     * @parameter expression="corrections.pot"
+     */
+    public String correctionKeysFile;
+
+    /**
      * PO directory
      * 
      * @parameter expression="${basedir}/src/main/resources/translations"
@@ -411,6 +418,16 @@ public class ExtractMojo extends AbstractMojo {
         }
         writePO(po, new File(poDirectory, keysFile));
         getLog().info("Extracted " + po.entries.size() + " strings for i18n");
+
+        //Create file for corrections
+        if ((correctionKeysFile != null) && (correctionKeysFile.length() > 0)) {
+            POFile poc = po.cloneForTranslation();
+            for (POEntry entry : poc.entries) {
+                entry.translated = entry.untranslated;
+            }
+            writePO(poc, new File(poDirectory, correctionKeysFile));
+        }
+
         return po;
     }
 
