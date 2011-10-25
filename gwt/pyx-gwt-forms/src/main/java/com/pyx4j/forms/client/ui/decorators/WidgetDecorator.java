@@ -76,7 +76,7 @@ public class WidgetDecorator extends FlowPanel {
         final Widget nativeComponent = component.asWidget();
         nativeComponent.addStyleName(StyleName.WidgetDecoratorComponent.name());
 
-        String caption = builder.componentCaption;
+        String caption = builder.customLabel;
 
         if (caption == null) {
             caption = component.getTitle();
@@ -208,7 +208,7 @@ public class WidgetDecorator extends FlowPanel {
 
         private double componentWidth = 25;
 
-        private String componentCaption;
+        private String customLabel;
 
         private boolean useLabelSemicolon = true;
 
@@ -232,8 +232,8 @@ public class WidgetDecorator extends FlowPanel {
             return this;
         }
 
-        public Builder componentCaption(String componentCaption) {
-            this.componentCaption = componentCaption;
+        public Builder customLabel(String customLabel) {
+            this.customLabel = customLabel;
             return this;
         }
 
@@ -249,10 +249,12 @@ public class WidgetDecorator extends FlowPanel {
 
     }
 
+    @Deprecated
     public static WidgetDecorator build(CComponent<?> component, double componentWidth) {
         return new WidgetDecorator(new Builder(component).componentWidth(componentWidth));
     }
 
+    @Deprecated
     public static WidgetDecorator build(CComponent<?> component, double labelWidth, double componentWidth) {
         return new WidgetDecorator(new Builder(component).labelWidth(labelWidth).componentWidth(componentWidth));
     }
