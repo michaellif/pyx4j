@@ -67,6 +67,11 @@ public class Verify {
 
     private static void print(Collection<ConstantEntry> constants) {
         for (ConstantEntry entry : constants) {
+            if (entry.comments != null) {
+                for (String line : entry.comments) {
+                    System.out.println("#. " + line);
+                }
+            }
             for (String line : entry.reference) {
                 System.out.println("#: " + line);
             }

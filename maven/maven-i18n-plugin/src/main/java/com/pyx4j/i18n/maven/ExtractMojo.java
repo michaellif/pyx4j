@@ -161,6 +161,13 @@ public class ExtractMojo extends AbstractMojo {
     public boolean poWrapLines = true;
 
     /**
+     * Add UTF-8 BOM to the file
+     * 
+     * @parameter default-value="false"
+     */
+    public boolean writeBomTokeysFile = false;
+
+    /**
      * Write source code location
      * 
      * @parameter default-value="true"
@@ -390,6 +397,12 @@ public class ExtractMojo extends AbstractMojo {
             POEntry pe = new POEntry();
             pe.untranslated = entry.text;
 
+            if (entry.comments != null) {
+                for (String line : entry.comments) {
+                    pe.addExtractedComment(line);
+                }
+            }
+
             if (poSaveLocation) {
                 pe.references = entry.reference;
                 Collections.sort(pe.references);
@@ -416,7 +429,7 @@ public class ExtractMojo extends AbstractMojo {
                 throw new MojoExecutionException("Unable to create poDirectory " + poDirectory);
             }
         }
-        writePO(po, new File(poDirectory, keysFile));
+        writePO(po, new File(poDirectory, keysFile), writeBomTokeysFile);
         getLog().info("Extracted " + po.entries.size() + " strings for i18n");
 
         //Create file for corrections
@@ -425,17 +438,18 @@ public class ExtractMojo extends AbstractMojo {
             for (POEntry entry : poc.entries) {
                 entry.translated = entry.untranslated;
             }
-            writePO(poc, new File(poDirectory, correctionKeysFile));
+            writePO(poc, new File(poDirectory, correctionKeysFile), writeBomTokeysFile);
         }
 
         return po;
     }
 
-    private void writePO(POFile po, File file) throws MojoExecutionException {
+    private void writePO(POFile po, File file, boolean writeBom) throws MojoExecutionException {
         try {
             POFileWriter poWriter = new POFileWriter();
             poWriter.pageWidth = poPageWidth;
             poWriter.wrapLines = poWrapLines;
+            poWriter.writeBom = writeBom;
 
             poWriter.write(file, po);
         } catch (IOException e) {
@@ -497,7 +511,7 @@ public class ExtractMojo extends AbstractMojo {
             }
             getLog().info("Translated " + translated + "; api calls:" + apiCalls);
             catalog.write();
-            writePO(poTransl, new File(poDirectory, lang + ".po"));
+            writePO(poTransl, new File(poDirectory, lang + ".po"), true);
         }
     }
 }

@@ -57,13 +57,13 @@ public class Extractor {
         return r;
     }
 
-    public void addEntry(String sourceFileName, int lineNr, String text, boolean javaFormatFlag) {
+    public void addEntry(String sourceFileName, int lineNr, String text, boolean javaFormatFlag, String... comments) {
         if (text.length() != 0) {
             ConstantEntry entry = constants.get(text);
             if (entry == null) {
-                constants.put(text, new ConstantEntry(sourceFileName, lineNr, text, javaFormatFlag));
+                constants.put(text, new ConstantEntry(sourceFileName, lineNr, text, javaFormatFlag, comments));
             } else {
-                entry.addReference(sourceFileName, lineNr);
+                entry.addReference(sourceFileName, lineNr, comments);
             }
         }
     }

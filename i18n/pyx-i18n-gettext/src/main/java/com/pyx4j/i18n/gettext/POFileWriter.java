@@ -29,6 +29,8 @@ import java.util.StringTokenizer;
 
 public class POFileWriter {
 
+    public boolean writeBom = true;
+
     public int pageWidth = 78;
 
     public boolean wrapLines = true;
@@ -38,8 +40,9 @@ public class POFileWriter {
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(file);
-            //Write BOM
-            fos.write(new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF });
+            if (writeBom) {
+                fos.write(new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF });
+            }
             writer = new PrintWriter(new OutputStreamWriter(fos, "UTF-8"));
             this.write(writer, po);
             writer.flush();

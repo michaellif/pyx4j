@@ -31,17 +31,33 @@ public class ConstantEntry {
 
     public boolean javaFormatFlag;
 
-    public ConstantEntry(String sourceFileName, int lineNr, String text, boolean javaFormatFlag) {
+    public List<String> comments;
+
+    public ConstantEntry(String sourceFileName, int lineNr, String text, boolean javaFormatFlag, String... comments) {
         this.text = text;
         this.reference = new Vector<String>();
         this.javaFormatFlag = javaFormatFlag;
-        addReference(sourceFileName, lineNr);
+        addReference(sourceFileName, lineNr, comments);
     }
 
-    public void addReference(String classSourceFileName, int lineNr) {
+    public void addReference(String classSourceFileName, int lineNr, String... comments) {
         String fmt = classSourceFileName + ":" + lineNr;
         if (!this.reference.contains(fmt)) {
             this.reference.add(fmt);
+        }
+
+        if (comments != null) {
+            for (String comment : comments) {
+                if (comment == null) {
+                    continue;
+                }
+                if (this.comments == null) {
+                    this.comments = new Vector<String>();
+                }
+                if (!this.comments.contains(comment)) {
+                    this.comments.add(comment);
+                }
+            }
         }
     }
 

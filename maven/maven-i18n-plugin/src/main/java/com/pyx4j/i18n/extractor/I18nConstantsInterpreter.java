@@ -52,13 +52,19 @@ abstract class I18nConstantsInterpreter extends BasicInterpreter {
         }
     }
 
+    private String currentComment;
+
     private int currentLineNr;
 
     public void setCurrentLineNr(int currentLineNr) {
         this.currentLineNr = currentLineNr;
     }
 
-    protected abstract void i18nString(int currentLineNr, String text, boolean javaFormatFlag);
+    public void setCurrentComment(String currentComment) {
+        this.currentComment = currentComment;
+    }
+
+    protected abstract void i18nString(int currentLineNr, String text, boolean javaFormatFlag, String currentComment);
 
     @Override
     public Value naryOperation(AbstractInsnNode insn, @SuppressWarnings("rawtypes") List values) throws AnalyzerException {
@@ -68,7 +74,7 @@ abstract class I18nConstantsInterpreter extends BasicInterpreter {
                 Value arg = (Value) values.get(1);
                 if (arg instanceof StringConstantValue) {
                     boolean javaFormatFlag = (values.size() > 2);
-                    i18nString(currentLineNr, ((StringConstantValue) arg).string, javaFormatFlag);
+                    i18nString(currentLineNr, ((StringConstantValue) arg).string, javaFormatFlag, currentComment);
                 }
             }
         }

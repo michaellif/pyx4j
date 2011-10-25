@@ -20,9 +20,8 @@
  */
 package ut;
 
-
+import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
-
 
 public class MainClass {
 
@@ -38,6 +37,7 @@ public class MainClass {
 
     }
 
+    @I18nComment("This is where we go")
     public void go() {
         System.out.println(i18n.tr("Go {0}", "500"));
 
