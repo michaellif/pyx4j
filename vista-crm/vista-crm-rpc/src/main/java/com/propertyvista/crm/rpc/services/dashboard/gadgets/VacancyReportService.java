@@ -22,15 +22,15 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus;
 
 public interface VacancyReportService extends IService {
 
     /** This is used for DOS protection: {@link #turnoverAnalysis()} will refuse the request if it is to create too many intervals. */
-    public static final long MAX_SUPPORTED_INTERVALS = 20L;
+    public static final long MAX_SUPPORTED_INTERVALS = 31L;
 
     public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, Vector<String> buidlings, LogicalDate fromDate,
             LogicalDate toDate, AnalysisResolution resolution);

@@ -109,6 +109,7 @@ public class VacancyReportGadget extends GadgetBase implements IBuildingGadget {
         setFiltering(filter);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setFiltering(FilterData filter) {
         LogicalDate toDate;
@@ -128,6 +129,10 @@ public class VacancyReportGadget extends GadgetBase implements IBuildingGadget {
         } else {
             long interval = TurnoverAnalysisViewImpl.DEFAULT_TURNOVER_ANALYSIS_RESOLUTION_MAX.addTo(toDate.getTime()) - toDate.getTime();
             fromDate = new LogicalDate(toDate.getTime() - UnitVacancyReportService.MAX_SUPPORTED_INTERVALS * interval);
+            // round up to the beginning of the year:
+            // no need to zero hours and seconds since this is java.sql.Date that doesn't have this information
+            fromDate.setMonth(0);
+            fromDate.setDate(1);
         }
 
         Set<String> buildings = fakeBuildings(filter.buildings);

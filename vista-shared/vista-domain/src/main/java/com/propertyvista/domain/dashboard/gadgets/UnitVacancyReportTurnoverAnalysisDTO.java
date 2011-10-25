@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 /**
- * Contains analysis of for a single interval for all events between {@link #fromDate()} until (exclusively) {@link #toDate()}.
+ * Contains analysis results of for a single interval for all events from {@link #fromDate()} until (exclusively) {@link #toDate()}.
  * 
  * @author ArtyomB
  * 
@@ -114,15 +114,22 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
             @SuppressWarnings("deprecation")
             @Override
             public String intervalLabelFormat(Date start, Date end) {
-                return Integer.toString(1900 + end.getYear());
+                return Integer.toString(1900 + start.getYear());
             }
         };
 
         @Override
         public String toString() {
-            return I18nEnum.tr(this);
+            return I18nEnum.toString(this);
         }
 
+        /**
+         * Replacement of the usual <code>valueOf()</code> that can deal with translated strings.
+         * 
+         * @param representation
+         *            translated representation of the string in the current locale.
+         * @return value of the representation or <code>null</code> representation does not belong to a value.
+         */
         public static AnalysisResolution representationToValue(String representation) {
             AnalysisResolution[] values = AnalysisResolution.values();
             for (AnalysisResolution val : values) {
@@ -134,16 +141,31 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
         }
 
         /**
-         * Adds this interval to given time.
+         * Add this interval to given time.
          * 
          * @param time
-         *            time that is to be increased by this interval
+         *            time that is to be increased by this interval.
          * @return
          */
         public abstract long addTo(long time);
 
+        /**
+         * Same as {@link #addTo(long)}.
+         * 
+         * @param date
+         * @return
+         */
         public abstract Date addTo(Date date);
 
+        /**
+         * Create a 'caption' or 'label' for given interval.
+         * 
+         * @param start
+         *            denotes the beginning of the interval (not <code>null</code>).
+         * @param end
+         *            denotes the end of the interval (not <code>null</code>).
+         * @return
+         */
         public String intervalLabelFormat(Date start, Date end) {
             return "(" + start.toString() + ", " + end.toString() + ")";
         }
