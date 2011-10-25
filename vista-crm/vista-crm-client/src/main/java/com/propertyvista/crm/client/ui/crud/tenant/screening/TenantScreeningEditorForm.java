@@ -18,7 +18,6 @@ import java.util.Date;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -29,16 +28,11 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
-import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.decorations.DecorationData;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
@@ -47,7 +41,6 @@ import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
@@ -173,16 +166,17 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     }
 
     private Widget createSecureInformationTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(inject(proto().driversLicense()), 14d, 20);
-        main.add(inject(proto().driversLicenseState()), 14d, 17);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().driversLicense()), 20));
+        main.setWidget(++row, 0, decorate(inject(proto().driversLicenseState()), 20));
         final CEditableComponent<?, ?> sin = inject(proto().secureIdentifier());
-        main.add(sin, 14d, 7);
+        main.setWidget(++row, 0, decorate(sin, 7));
 
-        main.add(inject(proto().notCanadianCitizen()), 14d, 3);
+        main.setWidget(++row, 0, decorate(inject(proto().notCanadianCitizen()), 3));
 
-        main.add(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.securityInfo)));
+        main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.securityInfo)));
         fileUpload.asWidget().getElement().getStyle().setMarginLeft(14, Unit.EM);
         fileUpload.asWidget().getElement().getStyle().setMarginTop(1, Unit.EM);
         fileUpload.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);
@@ -203,36 +197,35 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     }
 
     private Widget createAddressesTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(new CrmSectionSeparator(proto().currentAddress().getMeta().getCaption()));
-        main.add(inject(proto().currentAddress(), createAddressEditor()));
+        int row = -1;
+        main.setHeader(++row, 0, 1, proto().currentAddress().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().currentAddress(), createAddressEditor()));
 
-        main.add(new CrmSectionSeparator(proto().previousAddress().getMeta().getCaption()));
-        main.add(inject(proto().previousAddress(), previousAddressHeader = createAddressEditor()));
+        main.setHeader(++row, 0, 1, proto().previousAddress().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().previousAddress(), previousAddressHeader = createAddressEditor()));
 
         return new CrmScrollPanel(main);
     }
 
     private Widget createlegalQuestionsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        double width = (isEditable() ? 50 : 45);
-        DecorationData decor = new DecorationData(43d, HasHorizontalAlignment.ALIGN_LEFT, 8);
-
-        main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().suedForRent()), decor));
-        main.add(new VistaLineSeparator(width, Unit.EM));
-        main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().suedForDamages()), decor));
-        main.add(new VistaLineSeparator(width, Unit.EM));
-        main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().everEvicted()), decor));
-        main.add(new VistaLineSeparator(width, Unit.EM));
-        main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().defaultedOnLease()), decor));
-        main.add(new VistaLineSeparator(width, Unit.EM));
-        main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().convictedOfFelony()), decor));
-        main.add(new VistaLineSeparator(width, Unit.EM));
-        main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().legalTroubles()), decor));
-        main.add(new VistaLineSeparator(width, Unit.EM));
-        main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().filedBankruptcy()), decor));
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().legalQuestions().suedForRent()), 10, 40));
+        main.setHeader(++row, 0, 1, "");
+        main.setWidget(++row, 0, decorate(inject(proto().legalQuestions().suedForDamages()), 10, 40));
+        main.setHeader(++row, 0, 1, "");
+        main.setWidget(++row, 0, decorate(inject(proto().legalQuestions().everEvicted()), 10, 40));
+        main.setHeader(++row, 0, 1, "");
+        main.setWidget(++row, 0, decorate(inject(proto().legalQuestions().defaultedOnLease()), 10, 40));
+        main.setHeader(++row, 0, 1, "");
+        main.setWidget(++row, 0, decorate(inject(proto().legalQuestions().convictedOfFelony()), 10, 40));
+        main.setHeader(++row, 0, 1, "");
+        main.setWidget(++row, 0, decorate(inject(proto().legalQuestions().legalTroubles()), 10, 40));
+        main.setHeader(++row, 0, 1, "");
+        main.setWidget(++row, 0, decorate(inject(proto().legalQuestions().filedBankruptcy()), 10, 40));
 
         return new CrmScrollPanel(main);
     }
@@ -242,15 +235,15 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
             @SuppressWarnings({ "rawtypes", "unchecked" })
             @Override
             public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-                VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
-                main.add(split);
+                FormFlexPanel main = new FormFlexPanel();
 
-                AddressUtils.injectIAddress(split, proto(), this);
+                int row = -1;
 
-                split.getLeftPanel().add(inject(proto().moveInDate()), 8.2);
-                split.getLeftPanel().add(inject(proto().moveOutDate()), 8.2);
-                split.getLeftPanel().add(inject(proto().phone()), 15);
+//                AddressUtils.injectIAddress(split, proto(), this);
+
+                main.setWidget(++row, 0, decorate(inject(proto().moveInDate()), 8.2));
+                main.setWidget(++row, 0, decorate(inject(proto().moveOutDate()), 8.2));
+                main.setWidget(++row, 0, decorate(inject(proto().phone()), 15));
 
                 CEditableComponent<?, ?> rentedComponent = inject(proto().rented());
                 rentedComponent.addValueChangeHandler(new ValueChangeHandler() {
@@ -260,9 +253,10 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
                     }
                 });
 
-                split.getRightPanel().add(rentedComponent, 15);
-                split.getRightPanel().add(inject(proto().payment()), 8);
-                split.getRightPanel().add(inject(proto().managerName()), 15);
+                row = -1;
+                main.setWidget(++row, 1, decorate(rentedComponent, 15));
+                main.setWidget(++row, 1, decorate(inject(proto().payment()), 8));
+                main.setWidget(++row, 1, decorate(inject(proto().managerName()), 15));
 
                 return main;
             }
@@ -290,23 +284,27 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 // Financial: ------------------------------------------------------------------------------------------------
 
     private Widget createIncomesTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        FormFlexPanel main = new FormFlexPanel();
 
 // TODO : copy/paste/something_else ;) incomes implementation from ptApp step        
-//        main.add(inject(proto().incomes(), createIncomeFolderEditor()));
+//        main.setWidget(0, 0, inject(proto().incomes(), createIncomeFolderEditor()));
 
         return new ScrollPanel(main);
     }
 
     private Widget createAssetsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        main.add(inject(proto().assets(), new PersonalAssetFolder()));
+        FormFlexPanel main = new FormFlexPanel();
+
+        main.setWidget(0, 0, inject(proto().assets(), new PersonalAssetFolder()));
+
         return new CrmScrollPanel(main);
     }
 
     private Widget createGuarantorsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        main.add(inject(proto().guarantors(), new TenantGuarantorFolder()));
+        FormFlexPanel main = new FormFlexPanel();
+
+        main.setWidget(0, 0, inject(proto().guarantors(), new TenantGuarantorFolder()));
+
         return new ScrollPanel(main);
     }
 }

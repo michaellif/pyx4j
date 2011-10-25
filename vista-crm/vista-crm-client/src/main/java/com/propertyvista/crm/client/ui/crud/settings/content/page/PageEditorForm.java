@@ -16,12 +16,11 @@ package com.propertyvista.crm.client.ui.crud.settings.content.page;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
@@ -36,15 +35,16 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(inject(proto().name()), 15);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().name()), 15));
 
-        main.add(new CrmSectionSeparator(proto().content().getMeta().getCaption()));
-        main.add(inject(proto().content(), new PageContentFolder(this)));
+        main.setHeader(++row, 0, 1, proto().content().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().content(), new PageContentFolder(this)));
 
-        main.add(new CrmSectionSeparator(proto().childPages().getMeta().getCaption()));
-        main.add(inject(proto().childPages(), new PageDescriptorFolder(this, (PageViewer) getParentView())));
+        main.setHeader(++row, 0, 1, proto().childPages().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().childPages(), new PageDescriptorFolder(this, (PageViewer) getParentView())));
 
         return new CrmScrollPanel(main);
     }

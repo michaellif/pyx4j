@@ -41,4 +41,8 @@ public abstract class CrmEntityForm<E extends IEntity> extends CrudEntityForm<E>
     protected WidgetDecorator decorate(CComponent<?> component, double componentWidth, String componentCaption) {
         return new WidgetDecorator(new Builder(component).componentWidth(componentWidth).componentCaption(componentCaption).readOnlyMode(!isEditable()));
     }
+
+    protected WidgetDecorator decorate(CComponent<?> component, double componentWidth, double labelWidth) {
+        return new WidgetDecorator(new Builder(component).labelWidth(labelWidth).componentWidth(componentWidth).readOnlyMode(!isEditable()));
+    }
 }

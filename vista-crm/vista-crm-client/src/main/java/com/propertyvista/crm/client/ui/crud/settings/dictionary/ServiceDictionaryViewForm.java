@@ -16,10 +16,10 @@ package com.propertyvista.crm.client.ui.crud.settings.dictionary;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 public class ServiceDictionaryViewForm extends CrmEntityForm<ServiceItemType> {
@@ -30,12 +30,14 @@ public class ServiceDictionaryViewForm extends CrmEntityForm<ServiceItemType> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(true);
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(new CrmSectionSeparator(i18n.tr("Service Types") + ":"));
-        main.add(((ServiceDictionaryView) getParentView()).getServiceListerView().asWidget());
-        main.add(new CrmSectionSeparator(i18n.tr("Feature Types") + ":"));
-        main.add(((ServiceDictionaryView) getParentView()).getFeatureListerView().asWidget());
+        int row = -1;
+        main.setHeader(++row, 0, 1, i18n.tr("Service Types"));
+        main.setWidget(++row, 0, ((ServiceDictionaryView) getParentView()).getServiceListerView().asWidget());
+
+        main.setHeader(++row, 0, 1, i18n.tr("Feature Types"));
+        main.setWidget(++row, 0, ((ServiceDictionaryView) getParentView()).getFeatureListerView().asWidget());
 
         return new ScrollPanel(main);
     }

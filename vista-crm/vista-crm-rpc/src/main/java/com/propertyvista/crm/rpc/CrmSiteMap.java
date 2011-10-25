@@ -38,6 +38,11 @@ public class CrmSiteMap implements SiteMap {
     }
 
     public static class Properties extends AppPlace {
+        @PlaceProperties(caption = "Complex")
+        @NavigationItem(navigLabel = "Complexes")
+        public static class Complex extends CrudAppPlace {
+        }
+
         @PlaceProperties(caption = "Building")
         @NavigationItem(navigLabel = "Buildings")
         public static class Building extends CrudAppPlace {

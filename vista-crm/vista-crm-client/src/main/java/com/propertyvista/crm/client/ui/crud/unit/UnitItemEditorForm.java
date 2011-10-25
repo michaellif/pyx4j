@@ -16,13 +16,11 @@ package com.propertyvista.crm.client.ui.crud.unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
 public class UnitItemEditorForm extends CrmEntityForm<AptUnitItem> {
@@ -37,27 +35,32 @@ public class UnitItemEditorForm extends CrmEntityForm<AptUnitItem> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(inject(proto().type()), 10);
-        main.add(inject(proto().description()), 35);
-        main.add(inject(proto().conditionNotes()), 55);
+        int row0 = -1;
+        main.setWidget(++row0, 0, decorate(inject(proto().type()), 10));
+        main.setWidget(++row0, 0, decorate(inject(proto().description()), 35));
+        main.getFlexCellFormatter().setColSpan(row0, 0, 2);
+        main.setWidget(++row0, 0, decorate(inject(proto().conditionNotes()), 50));
+        main.getFlexCellFormatter().setColSpan(row0, 0, 2);
 
-        VistaDecoratorsSplitFlowPanel split;
-        main.add(new CrmSectionSeparator(i18n.tr("Details")));
-        main.add(split = new VistaDecoratorsSplitFlowPanel(!isEditable(), 15));
+        main.setHeader(++row0, 0, 2, i18n.tr("Details"));
 
-        split.getLeftPanel().add(inject(proto().wallColor()), 10);
-        split.getLeftPanel().add(inject(proto().flooringType()), 10);
-        split.getLeftPanel().add(inject(proto().flooringInstallDate()), 8.2);
-        split.getLeftPanel().add(inject(proto().flooringValue()), 8.2);
-        split.getLeftPanel().add(inject(proto().counterTopType()), 10);
+        int row1 = row0; // from second column from here..
+        main.setWidget(++row0, 0, decorate(inject(proto().wallColor()), 10));
+        main.setWidget(++row0, 0, decorate(inject(proto().flooringType()), 10));
+        main.setWidget(++row0, 0, decorate(inject(proto().flooringInstallDate()), 8.2));
+        main.setWidget(++row0, 0, decorate(inject(proto().flooringValue()), 8.2));
+        main.setWidget(++row0, 0, decorate(inject(proto().counterTopType()), 10));
 
-        split.getRightPanel().add(inject(proto().counterTopInstallDate()), 8.2);
-        split.getRightPanel().add(inject(proto().counterTopValue()), 8.2);
-        split.getRightPanel().add(inject(proto().cabinetsType()), 10);
-        split.getRightPanel().add(inject(proto().cabinetsInstallDate()), 8.2);
-        split.getRightPanel().add(inject(proto().cabinetsValue()), 8.2);
+        main.setWidget(++row1, 1, decorate(inject(proto().counterTopInstallDate()), 8.2));
+        main.setWidget(++row1, 1, decorate(inject(proto().counterTopValue()), 8.2));
+        main.setWidget(++row1, 1, decorate(inject(proto().cabinetsType()), 10));
+        main.setWidget(++row1, 1, decorate(inject(proto().cabinetsInstallDate()), 8.2));
+        main.setWidget(++row1, 1, decorate(inject(proto().cabinetsValue()), 8.2));
+
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
     }

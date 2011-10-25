@@ -23,13 +23,12 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -51,10 +50,11 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
+        int row = -1;
         HorizontalPanel unitPanel = new HorizontalPanel();
-        unitPanel.add(main.createDecorator(inject(proto().unit(), new CEntityLabel()), 15));
+        unitPanel.add(decorate(inject(proto().unit(), new CEntityLabel()), 15));
         if (isEditable()) {
             unitPanel.add(new Button("Select...", new ClickHandler() {
                 @Override
@@ -74,15 +74,16 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
             }));
         }
 
-        VistaDecoratorsSplitFlowPanel split;
-        main.add(split = new VistaDecoratorsSplitFlowPanel(!isEditable()));
+        main.setWidget(++row, 0, decorate(inject(proto().building(), new CEntityLabel()), 15));
+        main.setWidget(++row, 0, unitPanel);
 
-        split.getLeftPanel().add(main.createDecorator(inject(proto().building(), new CEntityLabel()), 15));
-        split.getLeftPanel().add(unitPanel);
+        row = -1;
+        main.setWidget(++row, 1, decorate(inject(proto().status()), 12));
+        main.setWidget(++row, 1, decorate(inject(proto().result()), 12));
+        main.setWidget(++row, 1, decorate(inject(proto().reason()), 12));
 
-        split.getRightPanel().add(inject(proto().status()), 12);
-        split.getRightPanel().add(inject(proto().result()), 12);
-        split.getRightPanel().add(inject(proto().reason()), 12);
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
     }

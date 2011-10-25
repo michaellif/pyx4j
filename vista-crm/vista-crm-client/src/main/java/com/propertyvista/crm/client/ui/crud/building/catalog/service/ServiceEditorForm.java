@@ -18,15 +18,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.financial.offering.Service;
 
 public class ServiceEditorForm extends CrmEntityForm<Service> {
@@ -63,32 +61,41 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
     }
 
     public IsWidget createGeneralTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(split);
-        split.getLeftPanel().add(inject(proto().type(), new CLabel()), 10);
-        split.getLeftPanel().add(inject(proto().name()), 10);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().type(), new CLabel()), 10));
+        main.setWidget(++row, 0, decorate(inject(proto().name()), 10));
+        main.setWidget(++row, 0, decorate(inject(proto().description()), 57));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        split.getRightPanel().add(inject(proto().depositType()), 15);
+        main.setHeader(++row, 0, 2, i18n.tr("Items"));
+        main.setWidget(++row, 0, inject(proto().items(), new ServiceItemFolder(this)));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.add(inject(proto().description()), 50);
+        row = -1;
+        main.setWidget(++row, 1, decorate(inject(proto().depositType()), 15));
 
-        main.add(new CrmSectionSeparator(i18n.tr("Items") + ":"));
-        main.add(inject(proto().items(), new ServiceItemFolder(this)));
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
     }
 
     public IsWidget createEligibilityTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(new CrmSectionSeparator(i18n.tr("Features") + ":"));
-        main.add(inject(proto().features(), new ServiceFeatureFolder(isEditable() ? ((ServiceEditorView) getParentView()).getFeatureListerView() : null)));
+        int row = -1;
+        main.setHeader(++row, 0, 1, i18n.tr("Features"));
+        main.setWidget(++row, 0,
+                inject(proto().features(), new ServiceFeatureFolder(isEditable() ? ((ServiceEditorView) getParentView()).getFeatureListerView() : null)));
 
-        main.add(new CrmSectionSeparator(i18n.tr("Concessions") + ":"));
-        main.add(inject(proto().concessions(), new ServiceConcessionFolder(isEditable() ? ((ServiceEditorView) getParentView()).getConcessionListerView()
-                : null)));
+        main.setHeader(++row, 0, 1, i18n.tr("Concessions"));
+        main.setWidget(
+                ++row,
+                0,
+                inject(proto().concessions(),
+                        new ServiceConcessionFolder(isEditable() ? ((ServiceEditorView) getParentView()).getConcessionListerView() : null)));
 
         return new CrmScrollPanel(main);
     }

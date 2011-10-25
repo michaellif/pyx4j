@@ -22,14 +22,13 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.company.AssignedBuilding;
 import com.propertyvista.domain.company.Portfolio;
 
@@ -45,13 +44,14 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(inject(proto().name()), 20);
-        main.add(inject(proto().description()), 35);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().name()), 20));
+        main.setWidget(++row, 0, decorate(inject(proto().description()), 40));
 
-        main.add(new CrmSectionSeparator(i18n.tr("Assigned Buildings") + ":"));
-        main.add(inject(proto().buildings(), createBuildingListView()));
+        main.setHeader(++row, 0, 1, i18n.tr("Assigned Buildings"));
+        main.setWidget(++row, 0, inject(proto().buildings(), createBuildingListView()));
 
         return new CrmScrollPanel(main);
     }
@@ -63,7 +63,7 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().building(), "40em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().building(), "60em"));
                 return columns;
             }
 

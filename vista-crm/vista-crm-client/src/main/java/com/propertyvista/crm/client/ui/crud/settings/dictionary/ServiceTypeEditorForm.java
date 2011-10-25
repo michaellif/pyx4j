@@ -17,8 +17,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -40,12 +40,12 @@ public class ServiceTypeEditorForm extends CrmEntityForm<ServiceItemType> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(inject(proto().name()), 25);
-
-        main.add(serviceType = main.createDecorator(inject(proto().serviceType()), 25));
-        main.add(featureType = main.createDecorator(inject(proto().featureType()), 25));
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().name()), 25));
+        main.setWidget(++row, 0, serviceType = decorate(inject(proto().serviceType()), 25));
+        main.setWidget(++row, 0, featureType = decorate(inject(proto().featureType()), 25));
 
         return new CrmScrollPanel(main);
     }

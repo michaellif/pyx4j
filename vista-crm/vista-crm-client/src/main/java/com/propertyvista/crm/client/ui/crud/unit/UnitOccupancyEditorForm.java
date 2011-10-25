@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.ui.crud.unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -35,16 +35,17 @@ public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancy> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(inject(proto().dateFrom()), 8.2);
-        main.add(inject(proto().dateTo()), 8.2);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().dateFrom()), 8.2));
+        main.setWidget(++row, 0, decorate(inject(proto().dateTo()), 8.2));
 
-        main.add(inject(proto().status()), 10);
-        main.add(inject(proto().offMarket()), 10);
-        main.add(inject(proto().description()), 25);
+        main.setWidget(++row, 0, decorate(inject(proto().status()), 10));
+        main.setWidget(++row, 0, decorate(inject(proto().offMarket()), 10));
+        main.setWidget(++row, 0, decorate(inject(proto().description()), 50));
 
-        main.add(inject(proto().lease()), 15);
+        main.setWidget(++row, 0, decorate(inject(proto().lease()), 25));
 
         return new CrmScrollPanel(main);
     }

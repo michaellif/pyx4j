@@ -19,14 +19,13 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
@@ -54,38 +53,42 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
     }
 
     public IsWidget createGeneralTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(inject(proto().skin()), 10);
-        main.add(inject(proto().baseColor()), 10);
-        main.add(inject(proto().copyright()), 25);
+        int row = -1;
+        main.setWidget(++row, 0, decorate(inject(proto().skin()), 10));
+        main.setWidget(++row, 0, decorate(inject(proto().baseColor()), 10));
+        main.setWidget(++row, 0, decorate(inject(proto().copyright()), 25));
 
-        main.add(new CrmSectionSeparator(proto().locales().getMeta().getCaption()));
-        main.add(inject(proto().locales(), new AvailableLocaleFolder()));
+        main.setHeader(++row, 0, 1, proto().locales().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().locales(), new AvailableLocaleFolder()));
 
 // TODO: image lists uploaders:
-//        main.add(inject(proto().logo(), new CFileUploader()), 60);
-//        main.add(inject(proto().slogan(), new CFileUploader()), 60);
-//        main.add(inject(proto().images(), new CFileUploader()), 60);
+//        main.setWidget(++row, 0, decorate(inject(proto().logo(), new CFileUploader()), 60);
+//        main.setWidget(++row, 0, decorate(inject(proto().slogan(), new CFileUploader()), 60);
+//        main.setWidget(++row, 0, decorate(inject(proto().images(), new CFileUploader()), 60);
 
-        main.add(new CrmSectionSeparator(proto().childPages().getMeta().getCaption()));
-        main.add(inject(proto().childPages(), new SitePageDescriptorFolder(this, (SiteViewer) getParentView())));
+        main.setHeader(++row, 0, 1, proto().childPages().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().childPages(), new SitePageDescriptorFolder(this, (SiteViewer) getParentView())));
 
         return new CrmScrollPanel(main);
     }
 
     private Widget createTestimonialsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        main.add(inject(proto().testimonials(), new TestimonialFolder()));
+        FormFlexPanel main = new FormFlexPanel();
+
+        main.setWidget(0, 0, inject(proto().testimonials(), new TestimonialFolder()));
+
         return new ScrollPanel(main);
     }
 
     private Widget createNewsTab() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-        main.add(inject(proto().news(), new NewsFolder()));
+        FormFlexPanel main = new FormFlexPanel();
+
+        main.setWidget(0, 0, inject(proto().news(), new NewsFolder()));
+
         return new ScrollPanel(main);
     }
-
 // TODO     
 //    private class ColorPickerDialog extends DialogBox {
 //
