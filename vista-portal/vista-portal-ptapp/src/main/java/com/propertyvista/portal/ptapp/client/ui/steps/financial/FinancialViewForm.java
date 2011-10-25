@@ -221,7 +221,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
         @Override
         protected IFolderDecorator<TenantGuarantor> createDecorator() {
-            return new BoxFolderDecorator<TenantGuarantor>(PortalImages.INSTANCE, i18n.tr("Add guarantor"));
+            return new BoxFolderDecorator<TenantGuarantor>(PortalImages.INSTANCE, i18n.tr("Add Guarantor"));
         }
 
         @Override

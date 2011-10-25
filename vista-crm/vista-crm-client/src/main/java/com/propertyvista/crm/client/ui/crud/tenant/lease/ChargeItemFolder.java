@@ -340,7 +340,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                     list.setWidth("100%");
                     return list.asWidget();
                 } else {
-                    return new HTML(i18n.tr("All features have already been selected!"));
+                    return new HTML(i18n.tr("All Features have already been selected!"));
                 }
             } else {
                 return new HTML(i18n.tr("There are no features for this service!"));

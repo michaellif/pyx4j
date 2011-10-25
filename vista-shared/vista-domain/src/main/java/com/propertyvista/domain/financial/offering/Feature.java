@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @ToStringFormat("Type: {0}, Name: {1}")
@@ -41,6 +42,7 @@ public interface Feature extends IEntity {
 
         pet(true),
 
+        @Translate("Add-On")
         addOn(true),
 
         utility(true),

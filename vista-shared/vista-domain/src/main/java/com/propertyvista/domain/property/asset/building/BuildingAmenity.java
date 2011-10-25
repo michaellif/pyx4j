@@ -31,7 +31,10 @@ public interface BuildingAmenity extends Amenity {
 
     @I18n
     public enum Type {
-        garage, fitnessCenter,
+
+        garage,
+
+        fitnessCenter,
 
         fitness,
 
@@ -119,7 +122,7 @@ public interface BuildingAmenity extends Amenity {
 
         @Override
         public String toString() {
-            return I18nEnum.tr(this);
+            return I18nEnum.toString(this);
         }
     }
 

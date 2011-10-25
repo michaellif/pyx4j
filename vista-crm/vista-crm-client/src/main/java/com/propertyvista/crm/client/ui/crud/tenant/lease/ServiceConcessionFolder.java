@@ -146,7 +146,7 @@ class ServiceConcessionFolder extends VistaTableFolder<ServiceConcession> {
                     list.setWidth("100%");
                     return list.asWidget();
                 } else {
-                    return new HTML(i18n.tr("All concessions have already been selected!"));
+                    return new HTML(i18n.tr("All Concessions have already been selected!"));
                 }
             } else {
                 return new HTML(i18n.tr("There are no concessions for this service!"));

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.rpc.ptapp.dto;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
@@ -30,6 +31,7 @@ public interface SummaryDTO extends Summary {
 
     IList<SummaryTenantFinancialDTO> tenantFinancials();
 
+    @Caption(name = "Add-Ons")
     AddOnsDTO addons();
 
     Charges charges();

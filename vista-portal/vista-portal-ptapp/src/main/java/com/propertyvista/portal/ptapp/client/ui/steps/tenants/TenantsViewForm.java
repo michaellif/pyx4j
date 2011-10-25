@@ -185,7 +185,7 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
                     @Override
                     public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                        return TenantsViewForm.i18n.tr("Applicant and Co-applicant must be at least 18 years old");
+                        return TenantsViewForm.i18n.tr("Applicant and Co-Applicant must be at least 18 years old");
                     }
                 });
 

@@ -23,12 +23,14 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.VistaBehavior;
 
 @RpcBlacklist
 @Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = User.class)
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface UserCredential extends IEntity {
 
     IPrimitive<Boolean> enabled();

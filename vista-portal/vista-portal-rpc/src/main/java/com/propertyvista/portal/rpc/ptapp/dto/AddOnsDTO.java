@@ -21,6 +21,7 @@ import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.dto.VehiclesDTO;
 
 @Transient
+@Caption(name = "Add-Ons")
 public interface AddOnsDTO extends IEntity {
 
     @Caption(name = "Pets")
