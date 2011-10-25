@@ -23,6 +23,7 @@ package com.pyx4j.i18n.gettext;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class POPrintForEclipse {
@@ -63,7 +64,7 @@ public class POPrintForEclipse {
                 System.out.println(entry.translated);
                 break;
             case style:
-                if (!needsStyleCorrection(entry.untranslated)) {
+                if (!needsStyleCorrection(entry)) {
                     continue;
                 }
                 System.out.println(entry.untranslated);
@@ -87,8 +88,19 @@ public class POPrintForEclipse {
 
     private static Map<String, POEntry> exsisting = new HashMap<String, POEntry>();
 
-    private static boolean needsStyleCorrection(String untranslated) {
-        String trim = untranslated.trim().replaceAll("\\s", " ");
+    private static boolean needsStyleCorrection(POEntry entry) {
+        String untranslated = entry.untranslated;
+        String trim = untranslated.trim().replaceAll("\\s", " ").toLowerCase(Locale.ENGLISH);
+        if (exsisting.containsKey(trim)) {
+            POEntry entryDuplicate = exsisting.get(trim);
+            System.out.println("--Duplicate entry");
+            System.out.println(entryDuplicate.untranslated);
+            for (String ref : entryDuplicate.references) {
+                System.out.println("\t" + toEclipse(ref));
+            }
+            return true;
+        }
+        exsisting.put(trim, entry);
         if (!untranslated.equals(untranslated.trim())) {
             return true;
         }

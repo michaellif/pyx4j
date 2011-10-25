@@ -272,13 +272,13 @@ public class Dialog extends DialogPanel {
     /**
      * This is alternative to using CustomOption. Override to change the text in dialog.
      * 
-     * @return text for 'Ok' button
+     * @return text for 'OK' button
      */
     protected String optionTextOk() {
         if (options instanceof OkOptionText) {
             return ((OkOptionText) options).optionTextOk();
         } else {
-            return i18n.tr("Ok");
+            return i18n.tr("OK");
         }
     }
 
@@ -487,8 +487,8 @@ public class Dialog extends DialogPanel {
     }
 
     public final native Element getDocumentActiveElement() /*-{
-		return $doc.activeElement;
-    }-*/;
+                                                           return $doc.activeElement;
+                                                           }-*/;
 
     public static void closeOpenDialogs() {
         for (int i = 0; i < openDialogs.size(); i++) {
