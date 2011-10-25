@@ -35,6 +35,6 @@ abstract public class CDecoratableEntityEditor<E extends IEntity> extends CEntit
     }
 
     protected WidgetDecorator decorate(CComponent<?> component, double componentWidth, String componentCaption) {
-        return new WidgetDecorator.Builder(component).componentWidth(componentWidth).componentCaption(componentCaption).readOnlyMode(!isEditable()).build();
+        return new WidgetDecorator.Builder(component).componentWidth(componentWidth).customLabel(componentCaption).readOnlyMode(!isEditable()).build();
     }
 }

@@ -38,9 +38,10 @@ public class ConcessionEditorForm extends CrmEntityForm<Concession> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().type()), 12));
-        main.setWidget(++row, 0, decorate(inject(proto().term()), 12));
-        main.setWidget(++row, 0, decorate(inject(proto().value()), 6));
+
+        main.setWidget(++row, 0, new DecoratorBuider(inject(proto().type()), 12).build());
+        main.setWidget(++row, 0, new DecoratorBuider(inject(proto().term()), 12).build());
+        main.setWidget(++row, 0, new DecoratorBuider(inject(proto().value()), 6).build());
         main.setWidget(++row, 0, decorate(inject(proto().condition()), 8));
 
         row = -1;
