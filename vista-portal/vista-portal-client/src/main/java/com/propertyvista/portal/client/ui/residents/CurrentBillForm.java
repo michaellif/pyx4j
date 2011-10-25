@@ -57,7 +57,7 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
     @Override
     public IsWidget createContent() {
         FlowPanel container = new FlowPanel();
-        container.add(inject(proto().charges(), new ChargeLineFolder()));
+        container.add(inject(proto().charges(), new ChargeLineFolder(isEditable())));
         container.add(inject(proto().total(), new TotalLineViewer()));
         container.add(new VistaWidgetDecorator(inject(proto().dueDate())));
         container.add(inject(proto().paymentMethod(), new PaymentMethodViewer()));

@@ -145,7 +145,7 @@ public class ChargesViewForm extends CEntityEditor<Charges> {
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(ChargeLine.class)) {
-            return new ChargeLineFolder();
+            return new ChargeLineFolder(isEditable());
         } else {
             return super.create(member);
         }

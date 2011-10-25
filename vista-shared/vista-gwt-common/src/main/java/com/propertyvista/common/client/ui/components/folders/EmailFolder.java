@@ -23,8 +23,8 @@ import com.propertyvista.domain.contact.Email;
 
 public class EmailFolder extends VistaTableFolder<Email> {
 
-    public EmailFolder(boolean editable) {
-        super(Email.class, editable);
+    public EmailFolder(boolean modifyable) {
+        super(Email.class, modifyable);
     }
 
     @Override

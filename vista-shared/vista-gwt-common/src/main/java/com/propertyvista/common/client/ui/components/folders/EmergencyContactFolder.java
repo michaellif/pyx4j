@@ -23,8 +23,12 @@ import com.propertyvista.common.client.ui.components.editors.CEmergencyContact;
 import com.propertyvista.domain.EmergencyContact;
 
 public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
-    public EmergencyContactFolder() {
-        super(EmergencyContact.class);
+
+    private final boolean modifyable;
+
+    public EmergencyContactFolder(boolean modifyable) {
+        super(EmergencyContact.class, modifyable);
+        this.modifyable = modifyable;
     }
 
     @Override
@@ -47,7 +51,7 @@ public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
     @Override
     public void populate(IList<EmergencyContact> value) {
         super.populate(value);
-        if (value.isEmpty()) {
+        if (modifyable && value.isEmpty()) {
             addItem(); // at least one Emergency Contact should be present!..
         }
     }

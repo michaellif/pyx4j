@@ -144,7 +144,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
 
         fullViewPanel.add(new HTML(h3(proto().tenant().emergencyContacts().getMeta().getCaption())));
 
-        bind(new EmergencyContactFolder(), proto().tenant().emergencyContacts());
+        bind(new EmergencyContactFolder(isEditable()), proto().tenant().emergencyContacts());
         fullViewPanel.add(get(proto().tenant().emergencyContacts()));
         return fullViewPanel;
     }

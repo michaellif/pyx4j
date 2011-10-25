@@ -90,7 +90,7 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
         main.add(new VistaHeaderBar(proto().applicationCharges()));
-        main.add(inject(proto().applicationCharges().charges(), new ChargeLineFolder()));
+        main.add(inject(proto().applicationCharges().charges(), new ChargeLineFolder(isEditable())));
 
         VistaLineSeparator sp = new VistaLineSeparator(0, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
         sp.getElement().getStyle().setMarginLeft(1, Unit.EM);

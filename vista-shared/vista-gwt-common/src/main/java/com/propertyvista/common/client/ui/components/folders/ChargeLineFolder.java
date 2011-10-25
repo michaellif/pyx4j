@@ -23,8 +23,8 @@ import com.propertyvista.domain.charges.ChargeLine;
 
 public class ChargeLineFolder extends VistaTableFolder<ChargeLine> {
 
-    public ChargeLineFolder() {
-        super(ChargeLine.class);
+    public ChargeLineFolder(boolean modifyable) {
+        super(ChargeLine.class, modifyable);
         setOrderable(false);
         setModifiable(false);
     }

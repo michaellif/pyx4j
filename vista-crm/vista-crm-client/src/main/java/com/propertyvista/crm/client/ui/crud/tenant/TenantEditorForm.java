@@ -86,7 +86,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         company.add(inject(proto().company().phones(), new PhoneFolder(isEditable())));
         company.add(inject(proto().company().emails(), new EmailFolder(isEditable())));
 
-        contacts.add(inject(proto().emergencyContacts(), new EmergencyContactFolder()));
+        contacts.add(inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable())));
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;

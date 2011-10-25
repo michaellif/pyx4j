@@ -25,12 +25,12 @@ public class PhoneFolder extends VistaTableFolder<Phone> {
 
     private final boolean showType, showDescription;
 
-    public PhoneFolder(boolean editable) {
-        this(editable, true, false);
+    public PhoneFolder(boolean modifyable) {
+        this(modifyable, true, false);
     }
 
-    public PhoneFolder(boolean editable, boolean showType, boolean showDescription) {
-        super(Phone.class, editable);
+    public PhoneFolder(boolean modifyable, boolean showType, boolean showDescription) {
+        super(Phone.class, modifyable);
         this.showType = showType;
         this.showDescription = showDescription;
     }
