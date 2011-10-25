@@ -1,29 +1,29 @@
-.vista-pmsite-landingPage .vista-pmsite-contentWrap {
+.vista-pmsite-contentWrap {
 }
-.vista-pmsite-landingPage .vista-pmsite-content {
+.vista-pmsite-content {
 }
-.vista-pmsite-landingPage .banner {
+.banner {
 	height: 375px;
     margin: 0 auto;
 	width: 960px;
 	position: relative;
 	background: ${contrast1_20};
 }
-.vista-pmsite-landingPage .banner_img {
+.banner_img {
 	height: 375px;
 	width: 960px;
 	position: absolute; bottom:0;
 	background: url("images/template1/landing.png") no-repeat;
 }
 
-.vista-pmsite-landingPage .quickSearchPanel {
+.quickSearchPanel {
 	width: 200px;
 	height:335px;
 	padding:20px 40px;
 	background:#f4f4f4;
 }
 
-.vista-pmsite-landingPage .quickSearchPanel h3 {
+.quickSearchPanel h3 {
 	color: #555555;
 	font-size: 16px;
 	padding: 20px 0;
@@ -31,19 +31,19 @@
 	text-transform: uppercase;
 }
 
-.vista-pmsite-landingPage .quickSearchPanel label {
+.quickSearchPanel label {
 	color: #555555;
 	display: block;
 	font-size: 13px;
 	padding: 0 0 3px;
 }
 
-.vista-pmsite-landingPage .quickSearchPanel select {
+.quickSearchPanel select {
 	width: 100%;
 	margin-bottom: 15px;
 }
 
-.vista-pmsite-landingPage .quickSearchPanel input[type=submit] {
+.quickSearchPanel input[type=submit] {
 	background: none repeat scroll 0 0 transparent;
 	border: medium none;
 	color: ${background_100};
@@ -54,7 +54,7 @@
 	width: 128px;
 }
 
-.vista-pmsite-landingPage .quickSearchPanel .submit {
+.quickSearchPanel .submit {
 	background: url("images/template1/submit.png") no-repeat scroll 0 0
 		transparent;
 	height: 32px;
@@ -63,13 +63,13 @@
 	width: 128px;
 }
 
-.vista-pmsite-landingPage .vista-pmsite-mainWrap {
+.vista-pmsite-mainWrap {
 	width: 960px;
 	margin: 0 auto;
 	overflow: hidden;
 }
 
-.vista-pmsite-landingPage .vista-pmsite-sidebarWrap {
+.vista-pmsite-sidebarWrap {
 	float: left;
 	position: relative;
 	width: 100%;
@@ -80,14 +80,14 @@
     box-sizing: border-box;   
 }
 
-.vista-pmsite-landingPage .vista-pmsite-sidebar {
+.vista-pmsite-sidebar {
 	position: relative;
 	float: left;
 	width: 280px;
 	left: 680px;
 }
 
-.vista-pmsite-landingPage .vista-pmsite-main {
+.vista-pmsite-main {
 	width: 678px;
 	position: relative;
 	float: left;
@@ -95,36 +95,57 @@
 	background: ${bgC0lor_100};
 }
 
-.vista-pmsite-landingPage .testimBox {
+.testimBox {
 	padding: 20px 10px;
 	float: left;
 }
 
-.vista-pmsite-landingPage .testimBox .infobox_content {
-	width: 250px;
-	height: 80px;
-	overflow: hidden;
-	float: left;
+.testimBox .infobox_decor {
+	position: relative;
+	display:inline-block;
+	margin: 20px 3px;
+}
+
+.testimBox .callout_line {
+	fill:${object1_10};
+	stroke:${object1_20};
+	stroke-width:1;
+}
+
+.testimBox .callout {
+	position: absolute;
+	top:150px;
+	left:250px;
+}
+
+.testimBox .infobox_content {
 	width: 260px;
 	height: 100px;
+	overflow: hidden;
+	float: left;
 	margin: 10px;
 	padding: 20px;
 	background: ${object1_10};
+	
+	border: 1px solid ${object1_20};
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+	-webkit-border-radius: 15px;
 }
 
-.vista-pmsite-landingPage .testimBox .name {
+.testimBox .name {
 	color: ${foreground_100};
 	text-align: right;
 	padding: 10px 0 0 0;
 }
 
-.vista-pmsite-landingPage .testimBox .read_more {
+.testimBox .read_more {
 	color: ${contrast2_100};
 	font-size: 16px;
 	padding-left: 10px;
 }
 
-.vista-pmsite-landingPage .newsBox {
+.newsBox {
 	width: 220px;
 	padding: 20px 30px;
 	display: inline-block;
@@ -132,64 +153,64 @@
 	float: left;
 }
 
-.vista-pmsite-landingPage .newsBox .date {
+.newsBox .date {
 	color: ${foreground_40};
 	padding-top: 10px;
 }
 
-.vista-pmsite-landingPage .newsBox .headline {
+.newsBox .headline {
 	padding-top: 10px;
 	color: ${contrast2_100};
 }
 
-.vista-pmsite-landingPage .newsBox .text {
+.newsBox .text {
 	padding-top: 10px;
 }
 
-.vista-pmsite-landingPage .newsBox .read_more {
+.newsBox .read_more {
 	color: ${contrast2_100};
 	font-size: 20px;
 	line-height: 14px;
 	vertical-align: text-top;
 }
 
-.vista-pmsite-landingPage .infobox_header_title {
+.infobox_header_title {
 	font-size: 22px;
 	line-height: 40px;
 }
 
 
-.vista-pmsite-landingPage .promoBox {
+.promoBox {
 	height:240px;
 	padding:20px 10px;
 	float:left;
 	overflow:hidden;
 }
 
-.vista-pmsite-landingPage .promoBox .infobox_content {
+.promoBox .infobox_content {
 	width:140px;
 	height:200px;
 	float:left;
 	margin-left:20px;
 }
 
-.vista-pmsite-landingPage .promoBox .infobox_content:first-child {
+.promoBox .infobox_content:first-child {
 	margin-left:0px;
 }
 
-.vista-pmsite-landingPage .promoBox .picture {
+.promoBox .picture {
 	width:140px;
 	background:grey;
 }
 
-.vista-pmsite-landingPage .promoBox a .picture {
+.promoBox a .picture {
 	border:1px solid ${background_100};
 }
-.vista-pmsite-landingPage .promoBox a:hover .picture {
+.promoBox a:hover .picture {
 	border:1px solid ${contrast2_100};
 }
 
-.vista-pmsite-landingPage .promoBox .read_more {
+.promoBox .read_more {
 	color: ${contrast2_100};
 	font-size:16px;
 	padding-left:10px;
