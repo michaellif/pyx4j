@@ -68,7 +68,7 @@ public class WidgetDecorator extends FlowPanel {
         this(new Builder(component));
     }
 
-    public WidgetDecorator(Builder builder) {
+    protected WidgetDecorator(Builder builder) {
 
         setStyleName(StyleName.WidgetDecorator.name());
 
