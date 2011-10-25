@@ -19,17 +19,21 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 @ToStringFormat("{0} {1,size}")
 public interface File extends IEntity {
 
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     IPrimitive<String> accessKey();
 
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     IPrimitive<Key> blobKey();
 
     @MemberColumn(name = "updated_timestamp")
     IPrimitive<Long> timestamp();
 
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     IPrimitive<Integer> cacheVersion();
 
     @ToString(index = 0)
