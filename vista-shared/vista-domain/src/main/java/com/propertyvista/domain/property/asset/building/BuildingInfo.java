@@ -28,7 +28,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.contact.Address;
+import com.propertyvista.domain.contact.AddressStructured;
 
 @ToStringFormat("{0} {1}")
 public interface BuildingInfo extends IEntity {
@@ -190,7 +190,7 @@ public interface BuildingInfo extends IEntity {
     @ToString(index = 0)
     IPrimitive<String> name();
 
-    Address address();
+    AddressStructured address();
 
     @ToString(index = 1)
     @MemberColumn(name = "buildingType")

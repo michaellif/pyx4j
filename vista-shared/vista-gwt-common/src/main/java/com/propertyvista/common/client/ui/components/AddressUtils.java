@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
-import com.propertyvista.domain.contact.IAddressFull;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
@@ -33,12 +33,12 @@ import com.propertyvista.domain.ref.Province;
 @Deprecated
 public class AddressUtils {
 
-    public static void injectIAddress(VistaDecoratorsFlowPanel main, final IAddressFull proto, final CEntityEditor<?> parent) {
+    public static void injectIAddress(VistaDecoratorsFlowPanel main, final AddressStructured proto, final CEntityEditor<?> parent) {
         injectIAddress(main, proto, parent, true);
     }
 
     @SuppressWarnings("unchecked")
-    public static void injectIAddress(VistaDecoratorsFlowPanel main, final IAddressFull proto, final CEntityEditor<?> parent, boolean showUnit) {
+    public static void injectIAddress(VistaDecoratorsFlowPanel main, final AddressStructured proto, final CEntityEditor<?> parent, boolean showUnit) {
         if (showUnit) {
             main.add(parent.inject(proto.unitNumber()), 5);
         }
@@ -64,12 +64,12 @@ public class AddressUtils {
         attachFilters(proto, parent, province, country, postalCode);
     }
 
-    public static void injectIAddress(VistaDecoratorsSplitFlowPanel split, final IAddressFull proto, final CEntityEditor<?> parent) {
+    public static void injectIAddress(VistaDecoratorsSplitFlowPanel split, final AddressStructured proto, final CEntityEditor<?> parent) {
         injectIAddress(split, proto, parent, true);
     }
 
     @SuppressWarnings("unchecked")
-    public static void injectIAddress(VistaDecoratorsSplitFlowPanel split, final IAddressFull proto, final CEntityEditor<?> parent, boolean showUnit) {
+    public static void injectIAddress(VistaDecoratorsSplitFlowPanel split, final AddressStructured proto, final CEntityEditor<?> parent, boolean showUnit) {
         if (showUnit) {
             split.getLeftPanel().add(parent.inject(proto.unitNumber()), 5);
         }
@@ -96,7 +96,7 @@ public class AddressUtils {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private static void attachFilters(final IAddressFull proto, final CEntityEditor<?> parent, CEditableComponent<Province, ?> province,
+    private static void attachFilters(final AddressStructured proto, final CEntityEditor<?> parent, CEditableComponent<Province, ?> province,
             CEditableComponent<Country, ?> country, CEditableComponent<String, ?> postalCode) {
 
         postalCode.addValueValidator(new com.propertyvista.common.client.ui.validators.ZipCodeValueValidator(parent, proto.country()));

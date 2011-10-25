@@ -16,10 +16,10 @@ package com.propertyvista.portal.domain.payment;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.domain.contact.IAddressFull;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.Phone;
 
-public interface BillingAddress extends IEntity, IAddressFull {
+public interface BillingAddress extends IEntity, AddressStructured {
 
     @EmbeddedEntity
     Phone phone();

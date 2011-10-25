@@ -28,7 +28,7 @@ import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.ref.ProvinceReferenceAdapter;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface IAddress extends IEntity {
+public interface AddressSimple extends IEntity {
 
     @Caption(name = "Address 1")
     @NotNull

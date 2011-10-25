@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.domain.RangeGroup;
-import com.propertyvista.domain.contact.IAddress;
+import com.propertyvista.domain.contact.AddressSimple;
 
 //VladS Notes:  consider having this a table for performance
 @Transient
@@ -34,7 +34,7 @@ public interface PropertyDTO extends IEntity {
 
     @Caption(name = "Address")
     @Owned
-    IAddress address();
+    AddressSimple address();
 
     @Caption(name = "Location")
     IPrimitive<GeoPoint> location();

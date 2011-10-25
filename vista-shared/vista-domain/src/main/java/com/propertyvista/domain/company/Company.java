@@ -19,7 +19,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.contact.Address;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.media.Media;
@@ -29,7 +29,7 @@ public interface Company extends IEntity {
     @ToString
     IPrimitive<String> name();
 
-    IList<Address> addresses();
+    IList<AddressStructured> addresses();
 
     IList<Phone> phones();
 

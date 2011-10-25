@@ -13,14 +13,15 @@
  */
 package com.propertyvista.domain.contact;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -29,9 +30,9 @@ import com.propertyvista.domain.ref.CountryReferenceAdapter;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.ref.ProvinceReferenceAdapter;
 
-@AbstractEntity
+@EmbeddedEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface IAddressFull extends IEntity {
+public interface AddressStructured extends IEntity {
 
     IPrimitive<String> unitNumber();
 
@@ -124,4 +125,6 @@ public interface IAddressFull extends IEntity {
     @NotNull
     @Caption(name = "Zip/Postal Code")
     IPrimitive<String> postalCode();
+
+    IPrimitive<GeoPoint> location();
 }

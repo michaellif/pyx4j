@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.list.ListView;
 
 import templates.TemplateResources;
 
-import com.propertyvista.domain.contact.Address;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyPhone;
@@ -78,7 +78,7 @@ public class UnitDetailsPage extends BasePage {
             }
         });
         Building bld = PMSiteContentManager.getBuildingDetails(fp.building().getPrimaryKey().asLong());
-        Address addr = bld.info().address();
+        AddressStructured addr = bld.info().address();
         String addrFmt = "";
         if (addr != null) {
             addrFmt += addr.streetNumber().getValue() + " " + addr.streetName().getValue() + ", " + addr.city().getValue() + ", "

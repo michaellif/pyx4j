@@ -25,7 +25,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.contact.Address;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
@@ -215,8 +215,8 @@ public class Mapper {
         return floorplan;
     }
 
-    private static Address mapAddress(com.propertyvista.portal.server.importer.bean.Address from) {
-        Address to = EntityFactory.create(Address.class);
+    private static AddressStructured mapAddress(com.propertyvista.portal.server.importer.bean.Address from) {
+        AddressStructured to = EntityFactory.create(AddressStructured.class);
 
         String street = from.getStreet();
         String streetNumber = street.substring(0, street.indexOf(' '));
@@ -228,8 +228,6 @@ public class Mapper {
         to.province().set(SharedData.findProvinceByCode(from.getPrv()));
         to.country().set(to.province().country());
         to.postalCode().setValue(from.getPost());
-
-        to.addressType().setValue(Address.AddressType.property);
 
         return to;
     }

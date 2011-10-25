@@ -17,20 +17,20 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.domain.contact.Address;
+import com.propertyvista.domain.contact.AddressStructured;
 
-public class CAddress extends CAddressFull<Address> {
+public class CAddressStructured extends CAddressStructuredImpl<AddressStructured> {
 
-    public CAddress() {
-        super(Address.class);
+    public CAddressStructured() {
+        super(AddressStructured.class);
     }
 
-    public CAddress(boolean twoColumns) {
-        super(Address.class, twoColumns);
+    public CAddressStructured(boolean twoColumns) {
+        super(AddressStructured.class, twoColumns);
     }
 
-    public CAddress(boolean twoColumns, boolean showUnit) {
-        super(Address.class, twoColumns, showUnit);
+    public CAddressStructured(boolean twoColumns, boolean showUnit) {
+        super(AddressStructured.class, twoColumns, showUnit);
     }
 
     @Override

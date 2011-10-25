@@ -19,14 +19,14 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.RangeGroup;
-import com.propertyvista.domain.contact.IAddress;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 
 public class Formatter {
 
     public final static String POSTFIX = " \u2022 ";
 
-    public static String formatAddress(IAddress address) {
+    public static String formatAddress(AddressSimple address) {
 
         if (address.isNull())
             return "";

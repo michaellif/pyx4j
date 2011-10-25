@@ -25,8 +25,8 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
-import com.propertyvista.domain.contact.IAddress;
-import com.propertyvista.domain.contact.IAddressFull;
+import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
@@ -173,7 +173,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertNotPresent(D.id(proto(TenantInfoDTO.class).emergencyContacts(), row, proto(EmergencyContact.class).name().firstName()));
     }
 
-    protected void assertIAddressForm(IDebugId formDebugId, IAddress address) {
+    protected void assertIAddressForm(IDebugId formDebugId, AddressSimple address) {
         assertValueOnForm(formDebugId, address.street1());
         assertValueOnForm(formDebugId, address.street2());
         assertValueOnForm(formDebugId, address.city());
@@ -182,7 +182,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertValueOnForm(formDebugId, address.province());
     }
 
-    protected void assertIAddressForm(IDebugId formDebugId, IAddressFull address) {
+    protected void assertIAddressForm(IDebugId formDebugId, AddressStructured address) {
         assertValueOnForm(formDebugId, address.unitNumber());
         assertValueOnForm(formDebugId, address.streetNumber());
         assertValueOnForm(formDebugId, address.streetNumberSuffix());

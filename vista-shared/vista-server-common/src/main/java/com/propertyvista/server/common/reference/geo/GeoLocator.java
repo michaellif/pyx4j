@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.geo.GeoPoint;
 
-import com.propertyvista.domain.contact.Address;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class GeoLocator {
@@ -70,7 +70,7 @@ public class GeoLocator {
         }
     }
 
-    public boolean populateGeo(Address address) {
+    public boolean populateGeo(AddressStructured address) {
         String geoAddress = constructGeo(address);
         GeoPoint gp = null;
         switch (mode) {
@@ -99,7 +99,7 @@ public class GeoLocator {
         }
     }
 
-    public static String constructGeo(Address address) {
+    public static String constructGeo(AddressStructured address) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(address.streetNumber().getStringView());

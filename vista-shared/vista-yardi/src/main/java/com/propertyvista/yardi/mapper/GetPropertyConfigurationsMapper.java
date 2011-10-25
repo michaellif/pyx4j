@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.contact.Address;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.yardi.bean.Properties;
@@ -60,7 +60,7 @@ public class GetPropertyConfigurationsMapper {
         String streetNumber = street.substring(0, street.indexOf(' '));
         String streetName = street.substring(streetNumber.length() + 1);
 
-        Address address = EntityFactory.create(Address.class);
+        AddressStructured address = EntityFactory.create(AddressStructured.class);
 
         address.streetNumber().setValue(streetNumber);
         address.streetName().setValue(streetName);
@@ -68,8 +68,6 @@ public class GetPropertyConfigurationsMapper {
         address.province().set(SharedData.findProvinceByCode(property.getState()));
         address.country().set(address.province().country());
         address.postalCode().setValue(property.getPostalCode());
-
-        address.addressType().setValue(Address.AddressType.property);
 
         building.info().address().set(address);
 

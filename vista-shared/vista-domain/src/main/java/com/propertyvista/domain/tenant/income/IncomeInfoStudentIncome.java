@@ -23,11 +23,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.contact.IAddressFull;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.Money;
 
 @DiscriminatorValue("student")
-public interface IncomeInfoStudentIncome extends IEntity, IAddressFull, IIncomeInfo {
+public interface IncomeInfoStudentIncome extends IEntity, AddressStructured, IIncomeInfo {
 
     public enum FundingChoice {
         scolarship, bursary, grant, loan

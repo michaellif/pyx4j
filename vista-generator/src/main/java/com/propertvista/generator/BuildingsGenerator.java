@@ -37,7 +37,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.charges.ChargeType;
-import com.propertyvista.domain.contact.Address;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.financial.offering.extradata.PetChargeRule;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
@@ -95,7 +95,7 @@ public class BuildingsGenerator {
         String website = "www.property" + (counter + 1) + ".com";
 
         // address
-        Address address = CommonsGenerator.createAddress();
+        AddressStructured address = CommonsGenerator.createAddress();
 
         // email
         String emailAddress = "building" + (counter + 1) + "@propertyvista.com";
@@ -119,7 +119,7 @@ public class BuildingsGenerator {
         return building;
     }
 
-    private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, String website, Address address, Email email) {
+    private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, String website, AddressStructured address, Email email) {
         Building building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(propertyCode);
 

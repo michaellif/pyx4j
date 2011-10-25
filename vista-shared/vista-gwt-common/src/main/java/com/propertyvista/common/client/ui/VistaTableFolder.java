@@ -44,17 +44,17 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
         this(clazz, itemName, true);
     }
 
-    public VistaTableFolder(Class<E> clazz, boolean editable) {
-        this(clazz, null, editable);
+    public VistaTableFolder(Class<E> clazz, boolean modifyable) {
+        this(clazz, null, modifyable);
     }
 
-    public VistaTableFolder(Class<E> clazz, String itemName, boolean editable) {
+    public VistaTableFolder(Class<E> clazz, String itemName, boolean modifyable) {
         super(clazz);
         this.clazz = clazz;
         this.itemName = itemName;
-        setModifiable(editable);
-        setOrderable(editable);
-        if (!editable) {
+        setModifiable(modifyable);
+        setOrderable(modifyable);
+        if (!modifyable) {
             asWidget().addStyleDependentName(CEntityFolder.StyleDependent.readOnly.name());
         }
     }

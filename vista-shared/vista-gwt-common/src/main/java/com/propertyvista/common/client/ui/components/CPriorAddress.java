@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 
-public class CPriorAddress extends CAddressFull<PriorAddress> {
+public class CPriorAddress extends CAddressStructuredImpl<PriorAddress> {
 
     public CPriorAddress() {
         super(PriorAddress.class);

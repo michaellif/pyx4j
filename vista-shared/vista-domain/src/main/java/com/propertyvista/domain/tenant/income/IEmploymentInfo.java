@@ -22,13 +22,13 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.contact.IAddressFull;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.Money;
 
 @AbstractEntity
 @Inheritance
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface IEmploymentInfo extends IAddressFull, IIncomeInfo {
+public interface IEmploymentInfo extends AddressStructured, IIncomeInfo {
 
     @Override
     @Caption(name = "Employer Name")

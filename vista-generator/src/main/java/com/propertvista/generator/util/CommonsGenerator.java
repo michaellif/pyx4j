@@ -20,12 +20,11 @@ import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.RangeGroup;
-import com.propertyvista.domain.contact.Address;
-import com.propertyvista.domain.contact.Address.AddressType;
+import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
+import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Email.Type;
-import com.propertyvista.domain.contact.IAddressFull.StreetDirection;
-import com.propertyvista.domain.contact.IAddressFull.StreetType;
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.person.Name;
@@ -136,10 +135,8 @@ public class CommonsGenerator {
         return phone;
     }
 
-    public static Address createAddress() {
-        Address address = EntityFactory.create(Address.class);
-
-        address.addressType().setValue(AddressType.property);
+    public static AddressStructured createAddress() {
+        AddressStructured address = EntityFactory.create(AddressStructured.class);
 
         address.unitNumber().setValue(Integer.toString(RandomUtil.randomInt(1000)));
         address.streetNumber().setValue(Integer.toString(RandomUtil.randomInt(10000)));

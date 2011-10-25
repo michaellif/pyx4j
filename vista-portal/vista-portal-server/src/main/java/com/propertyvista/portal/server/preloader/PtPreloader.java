@@ -34,7 +34,7 @@ import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineList;
-import com.propertyvista.domain.contact.IAddress;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.ptapp.Application;
@@ -74,7 +74,7 @@ public class PtPreloader extends BaseVistaDataPreloader {
     //        loadAddress(employer, sb);
     //    }
 
-    public static void loadAddress(IAddress address, StringBuilder sb) {
+    public static void loadAddress(AddressSimple address, StringBuilder sb) {
         sb.append(address.street1().getValue());
         sb.append(", ").append(address.city().getStringView());
         sb.append(", ").append(address.province().getStringView());

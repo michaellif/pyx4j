@@ -36,7 +36,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.common.client.ui.components.CAddress;
+import com.propertyvista.common.client.ui.components.CAddressStructured;
 import com.propertyvista.common.client.ui.components.CMarketing;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
@@ -167,7 +167,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         main.setHeader(row++, 0, 2, proto().info().address().getMeta().getCaption());
 
-        main.setWidget(row, 0, inject(proto().info().address(), new CAddress(true, false)));
+        main.setWidget(row, 0, inject(proto().info().address(), new CAddressStructured(true, false)));
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
         main.setHeader(row++, 0, 2, proto().amenities().getMeta().getCaption());

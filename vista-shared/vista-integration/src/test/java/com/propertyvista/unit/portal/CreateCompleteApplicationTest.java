@@ -36,8 +36,8 @@ import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.User;
-import com.propertyvista.domain.contact.IAddress;
-import com.propertyvista.domain.contact.IAddressFull;
+import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
@@ -229,7 +229,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         }
     }
 
-    private void enterIAddressForm(IDebugId formDebugId, IAddress address) {
+    private void enterIAddressForm(IDebugId formDebugId, AddressSimple address) {
         setValueOnForm(formDebugId, address.street1());
         setValueOnForm(formDebugId, address.street2());
         setValueOnForm(formDebugId, address.city());
@@ -238,7 +238,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         setValueOnForm(formDebugId, address.province());
     }
 
-    private void enterIAddressForm(IDebugId formDebugId, IAddressFull address) {
+    private void enterIAddressForm(IDebugId formDebugId, AddressStructured address) {
         setValueOnForm(formDebugId, address.unitNumber());
         setValueOnForm(formDebugId, address.streetNumber());
         setValueOnForm(formDebugId, address.streetNumberSuffix());

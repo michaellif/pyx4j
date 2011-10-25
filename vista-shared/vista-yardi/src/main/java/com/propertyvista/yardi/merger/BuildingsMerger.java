@@ -19,7 +19,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertyvista.domain.contact.Address;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
@@ -76,7 +76,7 @@ public class BuildingsMerger {
         merge(imported.address(), existing.address());
     }
 
-    private void merge(Address imported, Address existing) {
+    private void merge(AddressStructured imported, AddressStructured existing) {
         existing.streetName().setValue(imported.streetName().getValue());
         existing.streetDirection().setValue(imported.streetDirection().getValue());
         existing.streetName().setValue(imported.streetName().getValue());
@@ -84,7 +84,6 @@ public class BuildingsMerger {
         existing.province().set(imported.province());
         existing.country().set(imported.country());
         existing.postalCode().setValue(imported.postalCode().getValue());
-        existing.addressType().setValue(imported.addressType().getValue());
     }
 
     private void merge(Marketing imported, Marketing existing) {

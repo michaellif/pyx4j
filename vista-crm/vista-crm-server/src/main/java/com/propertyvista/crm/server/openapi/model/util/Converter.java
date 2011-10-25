@@ -34,10 +34,9 @@ import com.propertyvista.crm.server.openapi.model.MediaRS;
 import com.propertyvista.crm.server.openapi.model.ParkingRS;
 import com.propertyvista.crm.server.openapi.model.PhoneRS;
 import com.propertyvista.crm.server.openapi.model.UtilityRS;
-import com.propertyvista.domain.contact.Address;
-import com.propertyvista.domain.contact.Address.AddressType;
-import com.propertyvista.domain.contact.IAddressFull.StreetDirection;
-import com.propertyvista.domain.contact.IAddressFull.StreetType;
+import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
+import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
@@ -207,12 +206,9 @@ public class Converter {
         return to;
     }
 
-    public static AddressRS convertAddress(Address from) {
+    public static AddressRS convertAddress(AddressStructured from) {
         AddressRS to = new AddressRS();
 
-        if (!from.addressType().isNull()) {
-            to.addressType = from.addressType().getValue().name();
-        }
         to.streetName = from.streetName().getStringView();
         to.streetNumber = from.streetNumber().getStringView();
         to.streetNumberSuffix = from.streetNumberSuffix().getStringView();
@@ -278,10 +274,9 @@ public class Converter {
         return to;
     }
 
-    public static Address convertAddress(AddressRS from) {
-        Address to = EntityFactory.create(Address.class);
+    public static AddressStructured convertAddress(AddressRS from) {
+        AddressStructured to = EntityFactory.create(AddressStructured.class);
 
-        to.addressType().setValue(AddressType.valueOf(from.addressType));
         to.streetName().setValue(from.streetName);
         to.streetNumber().setValue(from.streetNumber);
         to.streetNumberSuffix().setValue(from.streetNumberSuffix);

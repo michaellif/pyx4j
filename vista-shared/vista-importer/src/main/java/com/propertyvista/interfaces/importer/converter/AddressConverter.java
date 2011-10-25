@@ -16,13 +16,13 @@ package com.propertyvista.interfaces.importer.converter;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
-import com.propertyvista.domain.contact.Address;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.interfaces.importer.model.AddressIO;
 
-public class AddressConverter extends EntityDtoBinder<Address, AddressIO> {
+public class AddressConverter extends EntityDtoBinder<AddressStructured, AddressIO> {
 
     public AddressConverter() {
-        super(Address.class, AddressIO.class, false);
+        super(AddressStructured.class, AddressIO.class, false);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class AddressConverter extends EntityDtoBinder<Address, AddressIO> {
     }
 
     @Override
-    protected void onUpdateDBOmember(AddressIO dto, Address dbo, IObject<?> dboM) {
+    protected void onUpdateDBOmember(AddressIO dto, AddressStructured dbo, IObject<?> dboM) {
         if (dboM == dbo.country().name()) {
             dbo.country().setPrimaryKey(null);
         } else if (dboM == dbo.province().code()) {

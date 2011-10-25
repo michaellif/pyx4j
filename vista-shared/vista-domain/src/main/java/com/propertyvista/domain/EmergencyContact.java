@@ -14,13 +14,12 @@
 package com.propertyvista.domain;
 
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.domain.contact.Address;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.person.Person;
 
-public interface EmergencyContact extends IEntity, Person {
+public interface EmergencyContact extends Person {
 
     @Owned
-    Address address();
+    AddressStructured address();
 }

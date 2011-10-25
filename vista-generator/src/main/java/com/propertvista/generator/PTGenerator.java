@@ -44,10 +44,10 @@ import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
-import com.propertyvista.domain.contact.IAddress;
-import com.propertyvista.domain.contact.IAddressFull;
-import com.propertyvista.domain.contact.IAddressFull.StreetDirection;
-import com.propertyvista.domain.contact.IAddressFull.StreetType;
+import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
+import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.financial.offering.extradata.Pet.WeightUnit;
@@ -309,7 +309,7 @@ public class PTGenerator {
         }
     }
 
-    public void populateAddress(IAddress address) {
+    public void populateAddress(AddressSimple address) {
 
         String line1 = 100 + RandomUtil.randomInt(10000) + " " + RandomUtil.random(DemoData.STREETS);
 
@@ -330,7 +330,7 @@ public class PTGenerator {
         }
     }
 
-    public static void populateAddress(IAddressFull address) {
+    public static void populateAddress(AddressStructured address) {
 
         address.unitNumber().setValue(Integer.toString(RandomUtil.randomInt(1000)));
         address.streetNumber().setValue(Integer.toString(RandomUtil.randomInt(10000)));
