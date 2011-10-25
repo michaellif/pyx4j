@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.widgets.test;
+package com.pyx4j.test.commons.css;
 
 import junit.framework.TestCase;
 
@@ -32,6 +32,8 @@ public class ColorUtilTest extends TestCase {
         assertEquals("#ffff00", ColorUtil.rgbToHex(ColorUtil.parseToRgb("yellow")));
         assertEquals("#dcdcdc", ColorUtil.rgbToHex(ColorUtil.parseToRgb("#dcdcdc")));
         assertEquals("#dcdcdc", ColorUtil.rgbToHex(ColorUtil.parseToRgb("gainsboro")));
+        assertEquals("#000000", ColorUtil.rgbToHex(ColorUtil.parseToRgb("#000000")));
+        assertEquals("#ffffff", ColorUtil.rgbToHex(ColorUtil.parseToRgb("#ffffff")));
         assertNull(ColorUtil.parseToRgb("#fff00"));
         assertNull(ColorUtil.parseToRgb("yelow"));
         assertNull(ColorUtil.parseToRgb("#yellow"));
@@ -39,5 +41,4 @@ public class ColorUtilTest extends TestCase {
         assertEquals("#ffff00", ColorUtil.rgbToHex(ColorUtil.rgbToRgbv(ColorUtil.parseToRgb("yellow"), 1)));
         assertEquals("#ffff80", ColorUtil.rgbToHex(ColorUtil.rgbToRgbv(ColorUtil.parseToRgb("yellow"), (float) 0.5)));
     }
-
 }

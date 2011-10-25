@@ -38,10 +38,15 @@ public class Palette {
 
     public String getThemeColor(ThemeColors themeColor, double vibrance) {
         String color = themeColors.get(themeColor);
-        if (color == null) {
-            color = themeColor.getDefaultColor();
+        Integer rgb = ColorUtil.parseToRgb(color);
+        if (rgb == null) {
+            rgb = ColorUtil.parseToRgb(themeColor.getDefaultColor());
+            if (rgb == null) {
+                rgb = 0;
+            }
+            log.warn("No such color defined : {}", themeColor.name());
         }
-        return ColorUtil.rgbToHex(ColorUtil.rgbToRgbv(ColorUtil.parseToRgb(color), (float) vibrance));
+        return ColorUtil.rgbToHex(ColorUtil.rgbToRgbv(rgb, (float) vibrance));
     }
 
     // ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.08)

@@ -126,13 +126,17 @@ public class ColorUtil {
 
     public static String rgbToHex(int rgb) {
         String colorString = Integer.toHexString(rgb);
-        for (int i = 0; i < (6 - colorString.length()); i++) {
+        int length = colorString.length();
+        for (int i = 0; i < (6 - length); i++) {
             colorString = "0" + colorString;
         }
         return "#" + colorString;
     }
 
     public static Integer parseToRgb(String color) {
+        if (color == null) {
+            return null;
+        }
         Integer rgb = null;
         if (color.startsWith("#")) {
             String hex = color.substring(1, color.length());
