@@ -70,6 +70,7 @@ public class EnglishGrammar {
     public static String capitalize(String word) {
         StringBuilder b = new StringBuilder();
         StringBuilder currentWord = new StringBuilder();
+        boolean currentWordIsNumbers = false;
         boolean wordStart = true;
         for (char c : word.toCharArray()) {
             if (c == '_') {
@@ -79,8 +80,19 @@ public class EnglishGrammar {
                     wordStart = true;
                 }
                 b.append(' ');
+            } else if (Character.isDigit(c)) {
+                if ((!wordStart) || (!currentWordIsNumbers)) {
+                    if (currentWord.length() > 0) {
+                        b.append(currentWord.toString());
+                        currentWord = new StringBuilder();
+                        b.append(' ');
+                    }
+                    wordStart = true;
+                }
+                currentWordIsNumbers = true;
+                currentWord.append(c);
             } else if (Character.isUpperCase(c)) {
-                if (!wordStart) {
+                if ((!wordStart) || (currentWordIsNumbers)) {
                     b.append(currentWord.toString());
                     currentWord = new StringBuilder();
                     b.append(' ');
