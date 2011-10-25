@@ -122,6 +122,14 @@ public class BuildingImporter {
         if (buildingIO.propertyCode().isNull()) {
             throw new UserRuntimeException("propertyCode can't be empty");
         }
+        {
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), buildingIO.propertyCode().getValue()));
+            List<Building> buildings = Persistence.service().query(criteria);
+            if (buildings.size() != 0) {
+                throw new UserRuntimeException("Building '" + buildingIO.propertyCode().getValue() + "' already exists");
+            }
+        }
 
         // Save building
         Building building = new BuildingConverter().createDBO(buildingIO);
@@ -192,6 +200,16 @@ public class BuildingImporter {
                 if (floorplan.name().isNull()) {
                     throw new UserRuntimeException("Floorplan name in  building '" + buildingIO.propertyCode().getValue() + "' can't be empty");
                 }
+                {
+                    EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
+                    criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
+                    criteria.add(PropertyCriterion.eq(criteria.proto().name(), floorplanIO.name().getValue()));
+                    List<Floorplan> floorplans = Persistence.service().query(criteria);
+                    if (floorplans.size() != 0) {
+                        throw new UserRuntimeException("Floorplan '" + floorplanIO.name().getValue() + "' in  building '"
+                                + buildingIO.propertyCode().getValue() + "' already exists");
+                    }
+                }
 
                 // Media
                 {
@@ -225,13 +243,24 @@ public class BuildingImporter {
                 //Units
                 {
                     List<AptUnit> items = new Vector<AptUnit>();
-                    for (AptUnitIO iIO : floorplanIO.units()) {
-                        if (iIO.number().isNull()) {
+                    for (AptUnitIO aptUnitIO : floorplanIO.units()) {
+                        if (aptUnitIO.number().isNull()) {
                             throw new UserRuntimeException("AptUnit number in '" + floorplanIO.name().getValue() + "' in building '"
                                     + buildingIO.propertyCode().getValue() + "' can't be empty");
                         }
 
-                        AptUnit i = new AptUnitConverter().createDBO(iIO);
+                        {
+                            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+                            criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
+                            criteria.add(PropertyCriterion.eq(criteria.proto().info().number(), aptUnitIO.number().getValue()));
+                            List<AptUnit> units = Persistence.service().query(criteria);
+                            if (units.size() != 0) {
+                                throw new UserRuntimeException("AptUnit '" + aptUnitIO.number().getValue() + "' in '" + floorplanIO.name().getValue() + "' in '"
+                                        + buildingIO.propertyCode().getValue() + "' already exists");
+                            }
+                        }
+
+                        AptUnit i = new AptUnitConverter().createDBO(aptUnitIO);
                         i.belongsTo().set(building);
                         i.floorplan().set(floorplan);
                         items.add(i);
