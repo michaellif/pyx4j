@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
-
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -88,7 +87,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
             }
         });
 
-        forgotPassword.setValue(i18n.tr("Retrieve password"));
+        forgotPassword.setValue(i18n.tr("Retrieve Password"));
         add(forgotPassword);
 
         if (ApplicationMode.isDevelopment()) {

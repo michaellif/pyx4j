@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.components.cms;
 
-
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
@@ -62,9 +61,9 @@ public class FileUploadHyperlink extends CAbstractHyperlink<File> {
             public String format(File value) {
                 if (editable) {
                     if (value.blobKey().isNull()) {
-                        return i18n.tr("Upload image file");
+                        return i18n.tr("Upload Image file");
                     } else {
-                        return value.filename().getStringView() + i18n.tr("; Upload new file");
+                        return i18n.tr("{0}; Upload new file", value.filename().getStringView());
                     }
                 } else {
                     return null;

@@ -91,7 +91,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
             }
         });
 
-        forgotPassword.setValue(i18n.tr("Retrieve password"));
+        forgotPassword.setValue(i18n.tr("Retrieve Password"));
         add(forgotPassword);
 
         if (ApplicationMode.isDevelopment()) {

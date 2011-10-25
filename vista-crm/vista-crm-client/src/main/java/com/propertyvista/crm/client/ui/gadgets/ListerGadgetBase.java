@@ -315,13 +315,13 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         protected SetupLister() {
             super();
 
-            setupPanel.setWidget(0, 0, new Label(i18n.tr("Items per page") + ":"));
+            setupPanel.setWidget(0, 0, new Label(i18n.tr("Items Per Page") + ":"));
 
             itemsPerPage.setText(String.valueOf(getListerBase().getPageSize()));
             itemsPerPage.setWidth("100%");
             setupPanel.setWidget(0, 1, itemsPerPage);
 
-            setupPanel.setWidget(1, 0, new Label(i18n.tr("Refresh interval") + ":"));
+            setupPanel.setWidget(1, 0, new Label(i18n.tr("Refresh Interval") + ":"));
 
             for (RefreshInterval i : RefreshInterval.values()) {
                 intervalList.addItem(i.toString(), i.name());

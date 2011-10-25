@@ -47,6 +47,7 @@ public interface PaymentInfo extends IEntity, IBoundToApplication {
     IPrimitive<PaymentType> type();
 
     @EmbeddedEntity
+    @Caption(name = "eCheck")
     EcheckInfo echeck();
 
     @EmbeddedEntity

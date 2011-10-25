@@ -57,7 +57,7 @@ public class SetupImpl implements ISetup {
         final double LINE_SPACING = 1d;
 
         listerSettingsPanel = new FlexTable();
-        Label itemsPerPageLabel = new Label(i18n.tr("Items per page") + ":");
+        Label itemsPerPageLabel = new Label(i18n.tr("Items Per Page") + ":");
         itemsPerPageLabel.getElement().getStyle().setPaddingRight(1, Unit.EM);
         itemsPerPageLabel.getElement().getStyle().setPaddingLeft(2, Unit.EM);
 
@@ -79,7 +79,7 @@ public class SetupImpl implements ISetup {
         showSummary.setValue(settings.showSummary().getValue());
         showSummary.getElement().getStyle().setPaddingBottom(LINE_SPACING, Unit.EM);
 
-        showTurnoverAnalysis = new CheckBox(i18n.tr("Turnover analysis"));
+        showTurnoverAnalysis = new CheckBox(i18n.tr("Turnover Analysis"));
         showTurnoverAnalysis.setValue(settings.showTurnoverAnalysis().getValue());
         showTurnoverAnalysis.getElement().getStyle().setPaddingBottom(LINE_SPACING, Unit.EM);
 

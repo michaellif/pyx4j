@@ -30,12 +30,12 @@ public interface PasswordChangeRequest extends IEntity {
 
     @NotNull
     @Editor(type = EditorType.password)
-    @Caption(name = "Current password")
+    @Caption(name = "Current Password")
     IPrimitive<String> currentPassword();
 
     @NotNull
     @Editor(type = EditorType.password)
-    @Caption(name = "New password")
+    @Caption(name = "New Password")
     IPrimitive<String> newPassword();
 
     @NotNull

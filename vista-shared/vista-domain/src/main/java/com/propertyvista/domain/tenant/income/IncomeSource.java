@@ -24,7 +24,7 @@ public enum IncomeSource {
     @Translate("Part time")
     parttime,
 
-    @Translate("Self employed")
+    @Translate("Self Employed")
     selfemployed,
 
     @Translate("Seasonally Employed")

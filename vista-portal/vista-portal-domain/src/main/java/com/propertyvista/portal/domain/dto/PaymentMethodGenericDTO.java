@@ -33,6 +33,7 @@ public interface PaymentMethodGenericDTO extends IEntity {
     @Editor(type = EditorType.radiogroup)
     IPrimitive<PaymentType> type();
 
+    @Caption(name = "eCheck")
     EcheckInfo echeck();
 
     CreditCardInfo creditCard();
