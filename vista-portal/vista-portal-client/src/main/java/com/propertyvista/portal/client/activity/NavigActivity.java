@@ -21,7 +21,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -33,14 +32,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
 
     private final NavigView view;
 
-    private final AppPlace place;
-
-    private static I18n i18n = I18n.get(NavigActivity.class);
-
     public NavigActivity(Place place) {
         this.view = (NavigView) PortalViewFactory.instance(NavigView.class);
         view.setPresenter(this);
-        this.place = (AppPlace) place;
         withPlace(place);
     }
 

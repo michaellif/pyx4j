@@ -23,8 +23,6 @@ import com.propertyvista.portal.client.ui.PotentialTenantView;
 import com.propertyvista.portal.client.ui.PotentialTenantViewImpl;
 import com.propertyvista.portal.client.ui.residents.BillingHistoryView;
 import com.propertyvista.portal.client.ui.residents.BillingHistoryViewImpl;
-import com.propertyvista.portal.client.ui.residents.CreateAccountView;
-import com.propertyvista.portal.client.ui.residents.CreateAccountViewImpl;
 import com.propertyvista.portal.client.ui.residents.CurrentBillView;
 import com.propertyvista.portal.client.ui.residents.CurrentBillViewImpl;
 import com.propertyvista.portal.client.ui.residents.EditPaymentMethodView;
@@ -54,8 +52,6 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new BillingHistoryViewImpl());
             } else if (PersonalInfoView.class.equals(type)) {
                 map.put(type, new PersonalInfoViewImpl());
-            } else if (CreateAccountView.class.equals(type)) {
-                map.put(type, new CreateAccountViewImpl());
             } else if (PaymentMethodsView.class.equals(type)) {
                 map.put(type, new PaymentMethodsViewImpl());
             } else if (CurrentBillView.class.equals(type)) {

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -21,9 +20,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.client.ui.decorations.CriteriaWidgetDecorator;
 import com.propertyvista.portal.client.ui.decorations.PortalHeaderBar;
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 
@@ -62,10 +61,10 @@ public class MaintenanceForm extends CEntityEditor<MaintenanceRequestDTO> implem
         header.addToTheRight(supportHistory);
 
         container.add(header);
-        CriteriaWidgetDecorator decorator = new CriteriaWidgetDecorator(inject(proto().maintenanceType()), "100%");
+        WidgetDecorator decorator = new WidgetDecorator(inject(proto().maintenanceType()));
         decorator.setWidth("100%");
         container.add(decorator);
-        decorator = new CriteriaWidgetDecorator(inject(proto().problemDescription()), "100%");
+        decorator = new WidgetDecorator(inject(proto().problemDescription()));
         decorator.setWidth("100%");
         container.add(decorator);
         return container;

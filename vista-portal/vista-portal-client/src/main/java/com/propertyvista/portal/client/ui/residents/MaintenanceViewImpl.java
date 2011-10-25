@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -26,7 +25,6 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 
 public class MaintenanceViewImpl extends FlowPanel implements MaintenanceView {
-    private MaintenanceView.Presenter presenter;
 
     private final MaintenanceForm form;
 
@@ -56,9 +54,7 @@ public class MaintenanceViewImpl extends FlowPanel implements MaintenanceView {
 
     @Override
     public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
         form.setPresenter(presenter);
-
     }
 
     @Override

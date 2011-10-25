@@ -17,7 +17,6 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
@@ -35,14 +34,14 @@ public abstract class CrmEntityForm<E extends IEntity> extends CrudEntityForm<E>
 
     // decoration stuff:
     protected WidgetDecorator decorate(CComponent<?> component, double componentWidth) {
-        return new WidgetDecorator(new Builder(component).componentWidth(componentWidth).readOnlyMode(!isEditable()));
+        return new WidgetDecorator.Builder(component).componentWidth(componentWidth).readOnlyMode(!isEditable()).build();
     }
 
     protected WidgetDecorator decorate(CComponent<?> component, double componentWidth, String componentCaption) {
-        return new WidgetDecorator(new Builder(component).componentWidth(componentWidth).componentCaption(componentCaption).readOnlyMode(!isEditable()));
+        return new WidgetDecorator.Builder(component).componentWidth(componentWidth).componentCaption(componentCaption).readOnlyMode(!isEditable()).build();
     }
 
     protected WidgetDecorator decorate(CComponent<?> component, double componentWidth, double labelWidth) {
-        return new WidgetDecorator(new Builder(component).labelWidth(labelWidth).componentWidth(componentWidth).readOnlyMode(!isEditable()));
+        return new WidgetDecorator.Builder(component).labelWidth(labelWidth).componentWidth(componentWidth).readOnlyMode(!isEditable()).build();
     }
 }

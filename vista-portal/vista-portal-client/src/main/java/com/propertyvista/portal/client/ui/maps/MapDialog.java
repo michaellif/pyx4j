@@ -13,9 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.maps;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkOption;
@@ -23,8 +20,6 @@ import com.pyx4j.widgets.client.dialog.OkOption;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 
 public class MapDialog extends Dialog {
-
-    private static final Logger log = LoggerFactory.getLogger(MapDialog.class);
 
     private static I18n i18n = I18n.get(MapDialog.class);
 

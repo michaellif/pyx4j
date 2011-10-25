@@ -32,7 +32,6 @@ import com.propertyvista.portal.client.activity.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Maintenance;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.PaymentMethods;
 
 public class ContentActivityMapper implements AppActivityMapper {
@@ -52,7 +51,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new PersonalInfoActivity(place);
                 } else if (place instanceof Residents.Maintenance) {
                     activity = new MaintenanceAcitvity(place);
-                } else if (place instanceof Maintenance.MaintenanceListHistory) {
+                } else if (place instanceof Residents.Maintenance.MaintenanceListHistory) {
                     activity = new MaintenanceListerActivity(place);
                 } else if (place instanceof Residents.BillingHistory) {
                     activity = new BillingHistoryActivity(place);
@@ -64,9 +63,9 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new PotentialTenantActivity(place);
                 } else if (place instanceof PaymentMethods.NewPaymentMethod) {
                     activity = new NewPaymentMethodActivity(place);
-                } else if (place instanceof PortalSiteMap.Residents.CurrentBill) {
+                } else if (place instanceof Residents.CurrentBill) {
                     activity = new CurrentBillActivity(place);
-                } else if (place instanceof PaymentMethods.EditPaymentMethod) {
+                } else if (place instanceof Residents.PaymentMethods.EditPaymentMethod) {
                     activity = new EditPaymentMethodActivity(place);
                 }
 

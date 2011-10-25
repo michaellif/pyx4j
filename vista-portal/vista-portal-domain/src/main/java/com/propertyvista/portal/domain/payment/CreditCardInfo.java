@@ -14,6 +14,7 @@
 package com.propertyvista.portal.domain.payment;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
@@ -31,6 +32,7 @@ public interface CreditCardInfo extends IEntity {
     @Editor(type = EditorType.monthyearpicker)
     IPrimitive<LogicalDate> expiry();
 
+    @Caption(name = "CSC")
     IPrimitive<String> verificationDigits();
 
     IPrimitive<String> exactName();

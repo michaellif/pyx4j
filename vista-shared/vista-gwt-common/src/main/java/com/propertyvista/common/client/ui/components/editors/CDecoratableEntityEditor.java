@@ -18,7 +18,6 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
 
 abstract public class CDecoratableEntityEditor<E extends IEntity> extends CEntityEditor<E> {
 
@@ -32,10 +31,10 @@ abstract public class CDecoratableEntityEditor<E extends IEntity> extends CEntit
 
     // decoration stuff:
     protected WidgetDecorator decorate(CComponent<?> component, double componentWidth) {
-        return new WidgetDecorator(new Builder(component).componentWidth(componentWidth).readOnlyMode(!isEditable()));
+        return new WidgetDecorator.Builder(component).componentWidth(componentWidth).readOnlyMode(!isEditable()).build();
     }
 
     protected WidgetDecorator decorate(CComponent<?> component, double componentWidth, String componentCaption) {
-        return new WidgetDecorator(new Builder(component).componentWidth(componentWidth).componentCaption(componentCaption).readOnlyMode(!isEditable()));
+        return new WidgetDecorator.Builder(component).componentWidth(componentWidth).componentCaption(componentCaption).readOnlyMode(!isEditable()).build();
     }
 }

@@ -13,19 +13,14 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
-import com.propertyvista.common.client.ui.decorations.DecorationData;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 
 public class EditPaymentMethodForm extends CEntityEditor<PaymentMethodDTO> {
@@ -41,35 +36,31 @@ public class EditPaymentMethodForm extends CEntityEditor<PaymentMethodDTO> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel container = new VistaDecoratorsFlowPanel();
-        container.add(new VistaHeaderBar(i18n.tr("Edit Payment Information"), "100%"));
+        FormFlexPanel container = new FormFlexPanel();
+        int row = 0;
 
-        VistaHeaderBar subtitle = new VistaHeaderBar(i18n.tr("Payment Card"), "100%");
-        subtitle.getElement().getStyle().setBackgroundColor("transparent");
-        container.add(subtitle);
+        container.setHeader(row++, 0, 1, i18n.tr("Edit Payment Information"));
 
-        DecorationData decor = new DecorationData();
-        decor.componentWidth = 15;
-        decor.componentCaption = i18n.tr("Card Number");
-        container.add(new VistaWidgetDecorator(inject(proto().cardNumber(), new CLabel()), decor));
+        container.setWidget(row++, 0, new WidgetDecorator(inject(proto().cardNumber(), new CLabel())));
+        container.setWidget(row++, 0, new WidgetDecorator(inject(proto().nameOnAccount(), new CLabel())));
+        container.setWidget(row++, 0, new WidgetDecorator(inject(proto().expiry())));
+        container.setWidget(row++, 0, new WidgetDecorator(inject(proto().verificationDigits())));
 
-        decor = new DecorationData();
-        decor.componentWidth = 15;
-        container.add(new VistaWidgetDecorator(inject(proto().nameOnAccount(), new CLabel()), decor));
+//        container.add(new VistaLineSeparator(100, Unit.PCT));
+//
+//        subtitle = new VistaHeaderBar(proto().billingAddress().getMeta().getCaption(), "100%");
+//        subtitle.getElement().getStyle().setBackgroundColor("transparent");
+//        container.add(subtitle);
+//        AddressUtils.injectIAddress(container, proto().billingAddress(), this);
 
-        container.add(new VistaWidgetDecorator(inject(proto().expiry())));
-
-        decor = new DecorationData();
-        decor.componentCaption = i18n.tr("CSC (if applicable)");
-        container.add(new VistaWidgetDecorator(inject(proto().verificationDigits()), decor));
-
-        container.add(new VistaLineSeparator(100, Unit.PCT));
-
-        subtitle = new VistaHeaderBar(proto().billingAddress().getMeta().getCaption(), "100%");
-        subtitle.getElement().getStyle().setBackgroundColor("transparent");
-        container.add(subtitle);
-        container.add(inject(proto().billingAddress(), new CAddressStructured()));
+//        container.add(new VistaLineSeparator(100, Unit.PCT));
+//
+//        subtitle = new VistaHeaderBar(proto().billingAddress().getMeta().getCaption(), "100%");
+//        subtitle.getElement().getStyle().setBackgroundColor("transparent");
+//        container.add(subtitle);
+//        container.add(inject(proto().billingAddress(), new CAddressStructured()));
 
         return container;
     }
+
 }

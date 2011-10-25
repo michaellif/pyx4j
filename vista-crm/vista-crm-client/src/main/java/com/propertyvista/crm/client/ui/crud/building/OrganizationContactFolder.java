@@ -20,7 +20,6 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
@@ -67,7 +66,7 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
         }
 
         private WidgetDecorator decorate(CComponent<?> component, double componentWidth) {
-            return new WidgetDecorator(new Builder(component).componentWidth(componentWidth).readOnlyMode(!isEditable()));
+            return new WidgetDecorator.Builder(component).componentWidth(componentWidth).readOnlyMode(!isEditable()).build();
         }
     }
 }
