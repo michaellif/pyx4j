@@ -50,7 +50,7 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
         main.add(inject(proto().name()), 20);
         main.add(inject(proto().description()), 35);
 
-        main.add(new CrmSectionSeparator(i18n.tr("Assigned Buildings:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Assigned Buildings") + ":"));
         main.add(inject(proto().buildings(), createBuildingListView()));
 
         return new CrmScrollPanel(main);

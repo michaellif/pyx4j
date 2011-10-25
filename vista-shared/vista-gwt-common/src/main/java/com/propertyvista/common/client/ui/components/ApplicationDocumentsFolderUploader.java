@@ -160,7 +160,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
 
             FlowPanel fp = new FlowPanel();
             fp.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-            fp.add(new HTML(HtmlUtils.h4(i18n.tr("Attached Files:"))));
+            fp.add(new HTML(HtmlUtils.h4(i18n.tr("Attached Files") + ":")));
             fp.add(appDocsListHolder = new SimplePanel());
             appDocsListHolder.getElement().getStyle().setMarginTop(0.5, Unit.EM);
 

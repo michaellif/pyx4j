@@ -74,7 +74,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
 
         main.add(inject(proto().description()), 50);
 
-        main.add(new CrmSectionSeparator(i18n.tr("Items:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Items") + ":"));
         main.add(inject(proto().items(), new ServiceItemFolder(this)));
 
         return new CrmScrollPanel(main);
@@ -83,10 +83,10 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
     public IsWidget createEligibilityTab() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(new CrmSectionSeparator(i18n.tr("Features:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Features") + ":"));
         main.add(inject(proto().features(), new ServiceFeatureFolder(isEditable() ? ((ServiceEditorView) getParentView()).getFeatureListerView() : null)));
 
-        main.add(new CrmSectionSeparator(i18n.tr("Concessions:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Concessions") + ":"));
         main.add(inject(proto().concessions(), new ServiceConcessionFolder(isEditable() ? ((ServiceEditorView) getParentView()).getConcessionListerView()
                 : null)));
 

@@ -28,7 +28,7 @@ public class VistaTableFolderItemDecorator<E extends IEntity> extends TableFolde
     }
 
     public VistaTableFolderItemDecorator(VistaTableFolder<E> parent) {
-        this(i18n.tr("Remove ") + parent.getItemName());
+        this(i18n.tr("Remove {0}", parent.getItemName()));
     }
 
 }

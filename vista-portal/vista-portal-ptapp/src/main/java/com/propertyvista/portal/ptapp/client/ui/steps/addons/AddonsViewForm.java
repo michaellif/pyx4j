@@ -198,7 +198,7 @@ public class AddonsViewForm extends CEntityEditor<AddOnsDTO> {
 
                     @Override
                     public String getValidationMessage(CEditableComponent<Integer, ?> component, Integer value) {
-                        return AddonsViewForm.i18n.tr("Max allowed weight {0} {1} ",
+                        return AddonsViewForm.i18n.tr("Max allowed weight {0} {1}",
                                 DomainUtil.getWeightKgToUnit(petsData.maxPetWeight(), getValue().weightUnit()), getValue().weightUnit().getStringView());
                     }
                 };

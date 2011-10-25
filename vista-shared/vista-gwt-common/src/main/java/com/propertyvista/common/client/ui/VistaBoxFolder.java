@@ -53,13 +53,13 @@ public abstract class VistaBoxFolder<E extends IEntity> extends CEntityFolder<E>
 
     @Override
     protected IFolderDecorator<E> createDecorator() {
-        return new BoxFolderDecorator<E>(VistaImages.INSTANCE, i18n.tr("Add ") + getItemName());
+        return new BoxFolderDecorator<E>(VistaImages.INSTANCE, i18n.tr("Add {0}", getItemName()));
 
     }
 
     @Override
     public IFolderItemDecorator<E> createItemDecorator() {
-        return new BoxFolderItemDecorator<E>(VistaImages.INSTANCE, i18n.tr("Remove ") + getItemName());
+        return new BoxFolderItemDecorator<E>(VistaImages.INSTANCE, i18n.tr("Remove {0}", getItemName()));
     }
 
     public String getItemName() {

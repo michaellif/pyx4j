@@ -32,9 +32,9 @@ public class ServiceDictionaryViewForm extends CrmEntityForm<ServiceItemType> {
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(true);
 
-        main.add(new CrmSectionSeparator(i18n.tr("Service Types:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Service Types") + ":"));
         main.add(((ServiceDictionaryView) getParentView()).getServiceListerView().asWidget());
-        main.add(new CrmSectionSeparator(i18n.tr("Feature Types:")));
+        main.add(new CrmSectionSeparator(i18n.tr("Feature Types") + ":"));
         main.add(((ServiceDictionaryView) getParentView()).getFeatureListerView().asWidget());
 
         return new ScrollPanel(main);

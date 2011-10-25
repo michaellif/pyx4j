@@ -13,7 +13,6 @@
  */
 package com.propertyvista.common.client.ui.decorations;
 
-
 import com.pyx4j.entity.client.ui.flex.folder.BoxFolderDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
@@ -29,7 +28,7 @@ public class VistaBoxFolderDecorator<E extends IEntity> extends BoxFolderDecorat
     }
 
     public VistaBoxFolderDecorator(VistaTableFolder<E> parent, boolean editable) {
-        this(i18n.tr("Add ") + parent.getItemName(), editable);
+        this(i18n.tr("Add {0}", parent.getItemName()), editable);
     }
 
     public VistaBoxFolderDecorator(VistaTableFolder<E> parent) {

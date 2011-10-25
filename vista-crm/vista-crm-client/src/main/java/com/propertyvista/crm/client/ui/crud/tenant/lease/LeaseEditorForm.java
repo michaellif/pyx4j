@@ -228,9 +228,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             });
 
             VerticalPanel vPanel = new VerticalPanel();
-            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Building:")));
+            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Building") + ":"));
             vPanel.add(((LeaseEditorView) getParentView()).getBuildingListerView().asWidget());
-            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Unit:")));
+            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Unit") + ":"));
             vPanel.add(((LeaseEditorView) getParentView()).getUnitListerView().asWidget());
             vPanel.setWidth("100%");
             return vPanel;

@@ -57,7 +57,7 @@ public class SetupImpl implements ISetup {
         final double LINE_SPACING = 1d;
 
         listerSettingsPanel = new FlexTable();
-        Label itemsPerPageLabel = new Label(i18n.tr("Items per page:"));
+        Label itemsPerPageLabel = new Label(i18n.tr("Items per page") + ":");
         itemsPerPageLabel.getElement().getStyle().setPaddingRight(1, Unit.EM);
         itemsPerPageLabel.getElement().getStyle().setPaddingLeft(2, Unit.EM);
 

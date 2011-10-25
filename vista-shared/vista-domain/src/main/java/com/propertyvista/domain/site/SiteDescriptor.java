@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.site;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -58,6 +57,5 @@ public interface SiteDescriptor extends IEntity {
     IList<Resource> images();
 
     @Owned
-    @Caption(name = "Child Pages:")
     IList<PageDescriptor> childPages();
 }

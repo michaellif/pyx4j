@@ -154,7 +154,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
             main.add(extraDataPanel);
 
             adjustmentPanel = new VistaDecoratorsFlowPanel(!isEditable(), 10);
-            adjustmentPanel.add(new CrmSectionSeparator(i18n.tr("Adjustments:")));
+            adjustmentPanel.add(new CrmSectionSeparator(i18n.tr("Adjustments") + ":"));
             adjustmentPanel.add(inject(proto().adjustments(), new ChargeItemAdjustmentFolder()));
             main.add(adjustmentPanel);
             return main;
@@ -184,7 +184,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                         VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!isEditable(), 10);
                         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable(), 10, 30);
 
-                        panel.add(new HTML(HtmlUtils.h5(i18n.tr("Vehicle data:"))));
+                        panel.add(new HTML(HtmlUtils.h5(i18n.tr("Vehicle data") + ":")));
                         panel.add(split);
 
                         split.getLeftPanel().add(inject(proto().year()), 5);
@@ -225,7 +225,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                         VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!isEditable(), 10);
                         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable(), 10, 30);
 
-                        panel.add(new HTML(HtmlUtils.h5(i18n.tr("Pet data:"))));
+                        panel.add(new HTML(HtmlUtils.h5(i18n.tr("Pet data") + ":")));
                         panel.add(split);
 
                         split.getLeftPanel().add(inject(proto().name()), 15);

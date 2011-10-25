@@ -119,9 +119,9 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
             });
 
             VerticalPanel vPanel = new VerticalPanel();
-            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Building:")));
+            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Building") + ":"));
             vPanel.add(((ShowingEditorView) getParentView()).getBuildingListerView().asWidget());
-            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Unit:")));
+            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Unit") + ":"));
             vPanel.add(((ShowingEditorView) getParentView()).getUnitListerView().asWidget());
             vPanel.setWidth("100%");
             return vPanel;

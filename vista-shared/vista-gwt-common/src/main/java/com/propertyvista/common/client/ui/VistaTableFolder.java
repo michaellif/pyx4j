@@ -63,12 +63,12 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
 
     @Override
     protected IFolderDecorator<E> createDecorator() {
-        return new TableFolderDecorator<E>(columns(), VistaImages.INSTANCE, i18n.tr("Add ") + getItemName());
+        return new TableFolderDecorator<E>(columns(), VistaImages.INSTANCE, i18n.tr("Add {0}", getItemName()));
     }
 
     @Override
     protected IFolderItemDecorator<E> createItemDecorator() {
-        return new TableFolderItemDecorator<E>(VistaImages.INSTANCE, i18n.tr("Remove ") + getItemName());
+        return new TableFolderItemDecorator<E>(VistaImages.INSTANCE, i18n.tr("Remove {0}", getItemName()));
     }
 
     public String getItemName() {

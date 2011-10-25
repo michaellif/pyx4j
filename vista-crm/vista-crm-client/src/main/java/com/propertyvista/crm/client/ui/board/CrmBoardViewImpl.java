@@ -334,7 +334,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         }
 
         private String getFilteringDescription() {
-            String description = i18n.tr("Buildings: ");
+            String description = i18n.tr("Buildings") + ": ";
 
             List<Building> selectedBuildings = buildingLister.getLister().getCheckedItems();
             if (!selectedBuildings.isEmpty()) {

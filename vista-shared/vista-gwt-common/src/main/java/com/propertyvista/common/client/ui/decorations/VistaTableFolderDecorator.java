@@ -31,7 +31,7 @@ public class VistaTableFolderDecorator<E extends IEntity> extends TableFolderDec
     }
 
     public VistaTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, VistaTableFolder<E> parent) {
-        this(columns, i18n.tr("Add ") + parent.getItemName());
+        this(columns, i18n.tr("Add {0}", parent.getItemName()));
     }
 
 }

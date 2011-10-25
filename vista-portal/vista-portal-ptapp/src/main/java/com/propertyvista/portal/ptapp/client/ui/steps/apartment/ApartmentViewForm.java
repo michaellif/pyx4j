@@ -135,22 +135,22 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
         main.add(new VistaHeaderBar(i18n.tr("Add-ons")));
 
         main.add(petsPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
-        petsPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Pets:"))));
+        petsPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Pets") + ":")));
         petsPanel.add(inject(proto().agreedPets(), new FeatureExFolder(Feature.Type.pet, this, true)));
 
         main.add(parkingPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         parkingPanel.add(new VistaLineSeparator(100, Unit.PCT));
-        parkingPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Parking:"))));
+        parkingPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Parking") + ":")));
         parkingPanel.add(inject(proto().agreedParking(), new FeatureExFolder(Feature.Type.parking, this, true)));
 
         main.add(storagePanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         storagePanel.add(new VistaLineSeparator(100, Unit.PCT));
-        storagePanel.add(new HTML(HtmlUtils.h5(i18n.tr("Storage:"))));
+        storagePanel.add(new HTML(HtmlUtils.h5(i18n.tr("Storage") + ":")));
         storagePanel.add(inject(proto().agreedStorage(), new FeatureFolder(Feature.Type.locker, this, true)));
 
         main.add(otherPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         otherPanel.add(new VistaLineSeparator(100, Unit.PCT));
-        otherPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Other:"))));
+        otherPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Other") + ":")));
         otherPanel.add(inject(proto().agreedOther(), new FeatureFolder(Feature.Type.addOn, this, true)));
 
         // last step - add building picture on the right:
@@ -378,7 +378,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
                         VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!isEditable(), 10);
                         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable(), 10, 30);
 
-                        panel.add(new HTML(HtmlUtils.h5(ApartmentViewForm.i18n.tr("Vehicle data:"))));
+                        panel.add(new HTML(HtmlUtils.h5(ApartmentViewForm.i18n.tr("Vehicle data") + ":")));
                         panel.add(split);
 
                         split.getLeftPanel().add(inject(proto().year()), 5);
@@ -423,7 +423,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
                         VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!isEditable(), 10);
                         VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable(), 10, 30);
 
-                        panel.add(new HTML(HtmlUtils.h5(ApartmentViewForm.i18n.tr("Pet data:"))));
+                        panel.add(new HTML(HtmlUtils.h5(ApartmentViewForm.i18n.tr("Pet data") + ":")));
                         panel.add(split);
 
                         split.getLeftPanel().add(inject(proto().name()), 15);

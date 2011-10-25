@@ -19,7 +19,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface FloorplanCounters extends IEntity {
 
-    @Caption(name = "Number of units ")
+    @Caption(name = "Number of units")
     IPrimitive<Integer> _unitCount();
 
     @Caption(name = "Number of units by marketing name")
