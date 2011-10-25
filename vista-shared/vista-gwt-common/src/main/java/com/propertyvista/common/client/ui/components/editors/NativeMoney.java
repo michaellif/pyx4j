@@ -82,6 +82,7 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
         }
 
         setStyleName(DEFAULT_STYLE_PREFIX);
+        setWidth("100%");
     }
 
     @Override

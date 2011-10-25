@@ -76,9 +76,9 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().nameSuffix()), 5).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().birthDate()), 8.2).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 25).build());
 
         main.setWidget(++row, 0, new HTML("&nbsp"));

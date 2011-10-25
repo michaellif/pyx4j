@@ -54,10 +54,10 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
 //                    main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person()), 35).build());
 //                } else {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person()), 35).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 10).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 10).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 10).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 25).build());
 //                }
 
             return main;

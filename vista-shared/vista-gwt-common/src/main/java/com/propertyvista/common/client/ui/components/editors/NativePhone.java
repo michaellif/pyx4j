@@ -71,8 +71,6 @@ public class NativePhone extends HorizontalPanel implements INativeEditableCompo
             }
         };
 
-        setWidth("100%");
-
         if (cComponent.isShowType()) {
             add(type = new ListBox());
             setCellWidth(type, "84px");
@@ -107,6 +105,7 @@ public class NativePhone extends HorizontalPanel implements INativeEditableCompo
         }
 
         setStyleName(DEFAULT_STYLE_PREFIX);
+        setWidth("100%");
     }
 
     @Override
