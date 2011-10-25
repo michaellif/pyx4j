@@ -168,7 +168,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The date cannot be equal today or in the future.");
+                return i18n.tr("The date cannot be equal today or in the future");
             }
         });
 
@@ -181,7 +181,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The date cannot be equal today or in the past.");
+                return i18n.tr("The date cannot be equal today or in the past");
             }
         });
 
@@ -198,7 +198,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The date cannot be equal today or in the future.");
+                return i18n.tr("The date cannot be equal today or in the future");
             }
         });
 
@@ -230,7 +230,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
 
             @Override
             public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-                return i18n.tr("The date cannot be equal today or in the future.");
+                return i18n.tr("The date cannot be equal today or in the future");
             }
         });
 

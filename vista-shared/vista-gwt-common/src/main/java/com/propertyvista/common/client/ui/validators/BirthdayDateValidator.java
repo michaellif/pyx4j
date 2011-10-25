@@ -30,7 +30,7 @@ public class BirthdayDateValidator implements EditableValueValidator<Date> {
 
     @Override
     public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
-        return i18n.tr("Future birthday date.");
+        return i18n.tr("Future birthday date");
     }
 
 }

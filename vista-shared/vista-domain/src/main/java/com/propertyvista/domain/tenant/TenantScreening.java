@@ -92,7 +92,7 @@ public interface TenantScreening extends IEntity {
 
     IPrimitive<String> driversLicense();
 
-    @Caption(name = "Province/State", description = "Province/State, in which a license has been issued.")
+    @Caption(name = "Province/State", description = "Province/State, in which a license has been issued")
     @Editor(type = EditorType.combo)
     Province driversLicenseState();
 

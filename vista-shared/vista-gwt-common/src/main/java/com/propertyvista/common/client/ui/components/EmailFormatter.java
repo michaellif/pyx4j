@@ -42,7 +42,7 @@ public class EmailFormatter implements IFormat<Email> {
             return null; // empty value case
         }
         if (!string.matches(CEmailField.EMAIL_REGEXPR)) {
-            throw new ParseException(i18n.tr("Not a valid e-mail."), 0);
+            throw new ParseException(i18n.tr("Not a valid e-mail"), 0);
         }
 
         Email email = EntityFactory.create(Email.class);

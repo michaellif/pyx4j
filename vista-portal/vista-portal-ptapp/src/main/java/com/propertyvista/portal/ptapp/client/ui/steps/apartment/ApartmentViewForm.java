@@ -529,10 +529,10 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
                     list.setWidth("100%");
                     return list.asWidget();
                 } else {
-                    return new HTML(i18n.tr("All {0}(s) have been selected already!..", type));
+                    return new HTML(i18n.tr("All {0}(s) have been selected already!", type));
                 }
             } else {
-                return new HTML(i18n.tr("There are no {0}(s) available!..", type));
+                return new HTML(i18n.tr("There are no {0}(s) available!", type));
             }
         }
 

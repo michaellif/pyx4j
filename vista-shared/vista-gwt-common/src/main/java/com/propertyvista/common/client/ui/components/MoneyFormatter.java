@@ -84,7 +84,7 @@ public class MoneyFormatter implements IFormat<Money> {
             }
             return DomainUtil.createMoney(Double.valueOf(string));
         } catch (NumberFormatException e) {
-            throw new ParseException(i18n.tr("Amount should be a numeric value."), 0);
+            throw new ParseException(i18n.tr("Amount should be a numeric value"), 0);
         }
     }
 }

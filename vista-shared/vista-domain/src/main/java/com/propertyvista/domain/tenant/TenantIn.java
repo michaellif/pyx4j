@@ -87,6 +87,6 @@ public interface TenantIn extends IEntity {
     @NotNull
     IPrimitive<Status> status();
 
-    @Caption(name = "Take Ownership", description = "Main Applicant fills this application.")
+    @Caption(name = "Take Ownership", description = "Main Applicant fills this application")
     IPrimitive<Boolean> takeOwnership();
 }

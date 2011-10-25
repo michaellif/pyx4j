@@ -196,7 +196,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
                     @Override
                     public String getValidationMessage(CEditableComponent<Double, ?> component, Double value) {
-                        return FinancialViewForm.i18n.tr("Value cannot increase 100%");
+                        return FinancialViewForm.i18n.tr("Value cannot exceed 100%");
                     }
 
                 });

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.common.client.ui.validators;
 
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -36,7 +35,7 @@ public class CanadianSinValidator implements EditableValueValidator<String> {
 
     @Override
     public String getValidationMessage(CEditableComponent<String, ?> component, String value) {
-        return i18n.tr("Invalid SIN.");
+        return i18n.tr("Invalid SIN");
     }
 
     /**

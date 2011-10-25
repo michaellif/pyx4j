@@ -52,7 +52,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
     @Override
     protected void showUnauthorized() {
         ClientContext.terminateSession();
-        showMessage(i18n.tr("This session has been terminated."), UserMessageType.FAILURE);
+        showMessage(i18n.tr("This session has been terminated"), UserMessageType.FAILURE);
 
     }
 
@@ -64,12 +64,12 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
     @Override
     protected void showThrottle() {
         showMessage(i18n.tr("We're sorry but your requests look similar to automated requests initiated by computer virus or spyware applications. "
-                + "To protect our users, we can't process your request at this time."), UserMessageType.FAILURE);
+                + "To protect our users, we can't process your request at this time"), UserMessageType.FAILURE);
     }
 
     @Override
     protected void showInternetConnectionError() {
-        showMessage(i18n.tr("Please make sure you are connected to Internet."), UserMessageType.FAILURE);
+        showMessage(i18n.tr("Please make sure you are connected to Internet"), UserMessageType.FAILURE);
 
     }
 
