@@ -26,8 +26,8 @@ import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineList;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.Phone;
-import com.propertyvista.portal.domain.payment.BillingAddress;
 import com.propertyvista.portal.domain.payment.CreditCardInfo;
 import com.propertyvista.portal.domain.payment.EcheckInfo;
 import com.propertyvista.portal.domain.payment.InteracInfo;
@@ -67,6 +67,8 @@ public interface PaymentInfo extends IEntity, IBoundToApplication {
     Phone currentPhone();
 
     @EmbeddedEntity
-    BillingAddress billingAddress();
+    AddressStructured billingAddress();
 
+    @EmbeddedEntity
+    Phone phone();
 }

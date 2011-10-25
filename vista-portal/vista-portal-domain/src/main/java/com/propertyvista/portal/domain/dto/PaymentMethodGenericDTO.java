@@ -16,11 +16,13 @@ package com.propertyvista.portal.domain.dto;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.portal.domain.payment.BillingAddress;
+import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.portal.domain.payment.CreditCardInfo;
 import com.propertyvista.portal.domain.payment.EcheckInfo;
 import com.propertyvista.portal.domain.payment.InteracInfo;
@@ -40,8 +42,11 @@ public interface PaymentMethodGenericDTO extends IEntity {
 
     InteracInfo interac();
 
-    BillingAddress billingAddress();
+    @EmbeddedEntity
+    AddressStructured billingAddress();
+
+    @EmbeddedEntity
+    Phone phone();
 
     IPrimitive<Boolean> primary();
-
 }

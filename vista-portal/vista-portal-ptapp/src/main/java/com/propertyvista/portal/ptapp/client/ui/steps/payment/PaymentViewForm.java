@@ -203,7 +203,7 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
 
         AddressUtils.injectIAddress(main, proto().billingAddress(), this);
 
-        main.add(inject(proto().billingAddress().phone()), 12);
+        main.add(inject(proto().phone()), 12);
 
         main.add(new VistaHeaderBar(i18n.tr("Pre-Authorized Payment")));
         HorizontalPanel preauthorisedNotes = new HorizontalPanel();
@@ -249,7 +249,7 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
             get(proto().billingAddress().city()).setValue(getValue().currentAddress().city().getValue());
             get(proto().billingAddress().county()).setValue(getValue().currentAddress().county().getValue());
             get(proto().billingAddress().postalCode()).setValue(getValue().currentAddress().postalCode().getValue());
-            get(proto().billingAddress().phone()).setValue(getValue().currentPhone());
+            get(proto().phone()).setValue(getValue().currentPhone());
 
             @SuppressWarnings("unchecked")
             CEditableComponent<Country, ?> country = (CEditableComponent<Country, ?>) getRaw(proto().billingAddress().country());
@@ -273,7 +273,7 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
         get(proto().billingAddress().province()).setEditable(editable);
         get(proto().billingAddress().country()).setEditable(editable);
         get(proto().billingAddress().postalCode()).setEditable(editable);
-        get(proto().billingAddress().phone()).setEditable(editable);
+        get(proto().phone()).setEditable(editable);
     }
 
     @Override

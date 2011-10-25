@@ -155,7 +155,7 @@ public class NewPaymentMethodForm extends CEntityEditor<PaymentMethodGenericDTO>
         container.add(new VistaHeaderBar(proto().billingAddress(), "100%"));
         AddressUtils.injectIAddress(container, proto().billingAddress(), this);
 
-        container.add(inject(proto().billingAddress().phone()), 12);
+        container.add(inject(proto().phone()), 12);
         container.setWidth("100%");
         setInstrumentsVisibility(PaymentType.Echeck);
         return container;

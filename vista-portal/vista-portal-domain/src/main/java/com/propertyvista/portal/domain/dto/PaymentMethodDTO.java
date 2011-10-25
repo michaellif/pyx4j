@@ -13,11 +13,12 @@
  */
 package com.propertyvista.portal.domain.dto;
 
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.portal.domain.payment.BillingAddress;
+import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.portal.domain.payment.CreditCardInfo;
 import com.propertyvista.portal.domain.payment.PaymentType;
 
@@ -26,8 +27,11 @@ public interface PaymentMethodDTO extends CreditCardInfo {
 //TODO to be finalized
     IPrimitive<PaymentType> type();
 
-    @Owned
-    BillingAddress billingAddress();
+    @EmbeddedEntity
+    AddressStructured billingAddress();
+
+    @EmbeddedEntity
+    Phone phone();
 
     IPrimitive<String> nameOnAccount();
 
