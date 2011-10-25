@@ -83,18 +83,18 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
                 i18n.tr("Units"));
 
         FlowPanel combinedtab = new FlowPanel();
-        combinedtab.add(new CrmSectionSeparator(i18n.tr("Elevators:")));
+        combinedtab.add(new CrmSectionSeparator(i18n.tr("Elevators") + ":"));
         combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
-        combinedtab.add(new CrmSectionSeparator(i18n.tr("Boilers:")));
+        combinedtab.add(new CrmSectionSeparator(i18n.tr("Boilers") + ":"));
         combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBoilerListerView().asWidget());
-        combinedtab.add(new CrmSectionSeparator(i18n.tr("Roofs:")));
+        combinedtab.add(new CrmSectionSeparator(i18n.tr("Roofs") + ":"));
         combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getRoofListerView().asWidget());
         tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Mechanicals"));
 
         combinedtab = new FlowPanel();
-        combinedtab.add(new CrmSectionSeparator(i18n.tr("Parkings:")));
+        combinedtab.add(new CrmSectionSeparator(i18n.tr("Parkings") + ":"));
         combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
-        combinedtab.add(new CrmSectionSeparator(i18n.tr("Locker Areas:")));
+        combinedtab.add(new CrmSectionSeparator(i18n.tr("Locker Areas") + ":"));
         combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
         tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Add-ons"));
 
@@ -102,11 +102,11 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         tabPanel.add(createMarketingTab(), i18n.tr("Marketing"));
 
         combinedtab = new FlowPanel();
-        combinedtab.add(new CrmSectionSeparator(i18n.tr("Services:")));
+        combinedtab.add(new CrmSectionSeparator(i18n.tr("Services") + ":"));
         combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
-        combinedtab.add(new CrmSectionSeparator(i18n.tr("Features:")));
+        combinedtab.add(new CrmSectionSeparator(i18n.tr("Features") + ":"));
         combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
-        combinedtab.add(new CrmSectionSeparator(i18n.tr("Concessions:")));
+        combinedtab.add(new CrmSectionSeparator(i18n.tr("Concessions") + ":"));
         combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
         tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Service Catalog"));
 
