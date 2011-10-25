@@ -200,7 +200,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
         // style settings link:
         if (presenter.getWhere().getClass().getName().contains(CrmSiteMap.Settings.class.getName())) {
-            settings.setValue(i18n.tr("Back to CRM"));
+            settings.setValue(i18n.tr("Home"));
             settings.asWidget().addStyleName(BACK_TO_CRM);
         } else {
             settings.setValue(i18n.tr("Administration"));
