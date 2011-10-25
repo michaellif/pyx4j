@@ -24,8 +24,11 @@ import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
+import com.pyx4j.i18n.shared.I18n;
 
 public class CEmailField extends CTextFieldBase<String, NativeTextBox<String>> {
+
+    private static I18n i18n = I18n.get(CEmailField.class);
 
     /**
      * RFC 2822 complaint http://www.regular-expressions.info/email.html
@@ -44,7 +47,7 @@ public class CEmailField extends CTextFieldBase<String, NativeTextBox<String>> {
         super(title);
         this.setMandatory(mandatory);
         setFormat(new EmailFormat());
-        addValueValidator(new TextBoxParserValidator<String>("Not a valid e-mail."));
+        addValueValidator(new TextBoxParserValidator<String>(i18n.tr("Not a valid e-mail")));
     }
 
     @Override
@@ -68,7 +71,7 @@ public class CEmailField extends CTextFieldBase<String, NativeTextBox<String>> {
                 return null; // empty value case
             }
             if (!string.matches(EMAIL_REGEXPR)) {
-                throw new ParseException("EmailFormat", 0);
+                throw new ParseException(i18n.tr("Not a valid e-mail"), 0);
             }
             return string;
         }

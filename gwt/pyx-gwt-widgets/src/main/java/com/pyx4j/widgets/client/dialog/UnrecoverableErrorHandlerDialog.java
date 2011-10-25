@@ -126,17 +126,17 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
     protected void showThrottle() {
         MessageDialog.show(i18n.tr("We're sorry"), i18n
                 .tr("We're sorry but your requests look similar to automated requests initiated by computer virus or spyware applications. "
-                        + "To protect our users, we can't process your request at this time."), Type.Error, new ShowOnceDialogOptions());
+                        + "To protect our users, we can't process your request at this time"), Type.Error, new ShowOnceDialogOptions());
     }
 
     @Override
     protected void showUnauthorized() {
-        MessageDialog.show(i18n.tr("We're sorry"), i18n.tr("This session has been terminated."), Type.Error, new ShowOnceDialogOptions());
+        MessageDialog.show(i18n.tr("We're sorry"), i18n.tr("This session has been terminated"), Type.Error, new ShowOnceDialogOptions());
     }
 
     @Override
     protected void showInternetConnectionError() {
-        showWarning(i18n.tr("Please make sure you are connected to Internet."));
+        showWarning(i18n.tr("Please make sure you are connected to Internet"));
 
     }
 

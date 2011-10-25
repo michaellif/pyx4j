@@ -20,7 +20,11 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.pyx4j.i18n.shared.I18n;
+
 public class CIntegerField extends CNumberField<Integer> {
+
+    private static I18n i18n = I18n.get(CIntegerField.class);
 
     public CIntegerField() {
         this(null);

@@ -93,12 +93,16 @@ public class PopupWindow {
         if ((windowHandle == null) || (windowHandle.isClosed())) {
             // Detect blocked popup not working in Chrome
             MessageDialog.error(i18n.tr("Popup window blocked"), i18n.tr("Your browser prevented this application from opening pop-up window\n"
-                    + "Please disable your pop-up blocker for this application."));
+                    + "Please disable your pop-up blocker for this application"));
             return null;
         } else {
             return windowHandle;
         }
     }
+
+    public native static String getUserAgent() /*-{
+		return $wnd.navigator.userAgent;
+    }-*/;
 
     private static native void registerCallbacks() /*-{
 		$wnd.popupWindowSelectionMade = function(sel) {

@@ -22,6 +22,8 @@ package com.pyx4j.i18n.gettext;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class POPrintForEclipse {
 
@@ -40,10 +42,16 @@ public class POPrintForEclipse {
         PrintType printType = PrintType.corrections;
         printType = PrintType.style;
 
-        if ((args != null) && (args.length > 1)) {
-            printType = PrintType.valueOf(args[1]);
+        if (args != null) {
+            if (args.length > 0) {
+                printType = PrintType.valueOf(args[0]);
+            }
+            if (args.length > 1) {
+                file = new File(args[1]);
+            }
         }
 
+        int count = 0;
         POFile po = new POFileReader().read(file);
         for (POEntry entry : po.entries) {
 
@@ -70,14 +78,21 @@ public class POPrintForEclipse {
                 System.out.println("\t" + toEclipse(ref));
             }
             System.out.println();
+            count++;
         }
+
+        System.out.println();
+        System.out.println("Found " + count + " corrections in file " + file.getCanonicalPath());
     }
 
+    private static Map<String, POEntry> exsisting = new HashMap<String, POEntry>();
+
     private static boolean needsStyleCorrection(String untranslated) {
+        String trim = untranslated.trim().replaceAll("\\s", " ");
         if (!untranslated.equals(untranslated.trim())) {
             return true;
         }
-        if (untranslated.endsWith(":")) {
+        if (untranslated.endsWith(":") || (untranslated.endsWith(".") && !untranslated.endsWith("..."))) {
             return true;
         }
         return false;

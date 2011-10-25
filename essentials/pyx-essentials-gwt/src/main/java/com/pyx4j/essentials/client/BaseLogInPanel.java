@@ -185,7 +185,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
         CCaptcha captcha = ((CCaptcha) form.get(form.proto().captcha()));
         if (captcha.isVisible()) {
             if (captcha.isValueEmpty()) {
-                MessageDialog.warn(i18n.tr("Validation failed."), i18n.tr("Captcha code is required"));
+                MessageDialog.warn(i18n.tr("Validation failed"), i18n.tr("Captcha code is required"));
                 return false;
             }
             captcha.retrieveValue();
@@ -193,7 +193,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
         ValidationResults validationResults = form.get(form.proto().email()).getParent().getValidationResults();
         if (!validationResults.isValid()) {
-            MessageDialog.warn(i18n.tr("Validation failed."), validationResults.getMessagesText(false));
+            MessageDialog.warn(i18n.tr("Validation failed"), validationResults.getMessagesText(false));
             return false;
         }
 

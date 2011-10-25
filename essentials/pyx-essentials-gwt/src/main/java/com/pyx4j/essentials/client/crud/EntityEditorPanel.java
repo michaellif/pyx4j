@@ -20,7 +20,6 @@
  */
 package com.pyx4j.essentials.client.crud;
 
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -74,7 +73,7 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
                     if (validationResults.isValid()) {
                         doSave();
                     } else {
-                        MessageDialog.warn(i18n.tr("Validation failed."), validationResults.getMessagesText(false));
+                        MessageDialog.warn(i18n.tr("Validation failed"), validationResults.getMessagesText(false));
                     }
                 }
             });
@@ -135,6 +134,6 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
 
     @Override
     protected void onAfterSave() {
-        parentWidget.setMessage(i18n.tr("{0} is saved.", proto().getEntityMeta().getCaption()));
+        parentWidget.setMessage(i18n.tr("{0} is saved", proto().getEntityMeta().getCaption()));
     }
 }

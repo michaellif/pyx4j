@@ -28,7 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, NativeTextBox<E>> {
 
-    protected static I18n i18n = I18n.get(CNumberField.class);
+    private static I18n i18n = I18n.get(CNumberField.class);
 
     private TextBoxParserValidator<E> validator;
 

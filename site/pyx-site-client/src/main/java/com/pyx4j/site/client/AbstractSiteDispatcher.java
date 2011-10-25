@@ -123,7 +123,7 @@ public abstract class AbstractSiteDispatcher {
                         };
 
                         MessageDialog.show(i18n.tr("Confirm"), i18n.tr("Are you sure you want to navigate away from this page?\n\n" + "{0}\n\n"
-                                + "Press OK to continue, or Cancel to stay on the current page.", ple.getMessage()), Dialog.Type.Confirm, options);
+                                + "Press OK to continue, or Cancel to stay on the current page", ple.getMessage()), Dialog.Type.Confirm, options);
 
                         return;
                     }
@@ -281,7 +281,7 @@ public abstract class AbstractSiteDispatcher {
                 return true;
             }
         }
-        MessageDialog.error(i18n.tr("Application error"), caught.getMessage() + "\n" + i18n.tr("Contact administrator."));
+        MessageDialog.error(i18n.tr("Application error"), i18n.tr("{0}\nContact administrator", caught.getMessage()));
         return true;
     }
 
@@ -370,7 +370,7 @@ public abstract class AbstractSiteDispatcher {
             };
 
             MessageDialog.show(i18n.tr("Confirm"), i18n.tr("Are you sure you want to logout?\n\n" + "{0}\n\n"
-                    + "Press OK to continue, or Cancel to stay on the current page.", ple.getMessage()), Dialog.Type.Confirm, options);
+                    + "Press OK to continue, or Cancel to stay on the current page", ple.getMessage()), Dialog.Type.Confirm, options);
             return;
         } else {
             callbackOkToLogout.run();
