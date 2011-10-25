@@ -38,8 +38,8 @@ class SitePageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
 
     private final SiteViewer viewer;
 
-    public SitePageDescriptorFolder(CEntityEditor<? extends SiteDescriptor> parent, SiteViewer viewer) {
-        super(PageDescriptor.class);
+    public SitePageDescriptorFolder(boolean modifyable, CEntityEditor<? extends SiteDescriptor> parent, SiteViewer viewer) {
+        super(PageDescriptor.class, modifyable);
         this.parent = parent;
         this.viewer = viewer;
     }

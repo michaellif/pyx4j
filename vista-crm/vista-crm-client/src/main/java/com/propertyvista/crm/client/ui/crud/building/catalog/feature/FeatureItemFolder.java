@@ -39,7 +39,7 @@ class FeatureItemFolder extends VistaTableFolder<ServiceItem> {
     private final CEntityEditor<Feature> parent;
 
     public FeatureItemFolder(CEntityEditor<Feature> parent) {
-        super(ServiceItem.class, i18n.tr("Item"));
+        super(ServiceItem.class, parent.isEditable());
         this.parent = parent;
     }
 

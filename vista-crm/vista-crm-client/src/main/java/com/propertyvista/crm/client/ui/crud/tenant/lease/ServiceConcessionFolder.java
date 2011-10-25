@@ -45,8 +45,8 @@ class ServiceConcessionFolder extends VistaTableFolder<ServiceConcession> {
 
     private final CEntityEditor<LeaseDTO> parent;
 
-    public ServiceConcessionFolder(CEntityEditor<LeaseDTO> parent) {
-        super(ServiceConcession.class);
+    public ServiceConcessionFolder(boolean modifyable, CEntityEditor<LeaseDTO> parent) {
+        super(ServiceConcession.class, modifyable);
         this.parent = parent;
     }
 

@@ -23,8 +23,8 @@ import com.propertyvista.domain.site.AvailableLocale;
 
 class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
 
-    public AvailableLocaleFolder() {
-        super(AvailableLocale.class);
+    public AvailableLocaleFolder(boolean modifyable) {
+        super(AvailableLocale.class, modifyable);
     }
 
     @Override

@@ -76,7 +76,7 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
     }
 
     private CEntityFolder<FloorplanAmenity> createAmenitiesListEditor() {
-        return new VistaTableFolder<FloorplanAmenity>(FloorplanAmenity.class, i18n.tr("Amenity"), isEditable()) {
+        return new VistaTableFolder<FloorplanAmenity>(FloorplanAmenity.class, isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();

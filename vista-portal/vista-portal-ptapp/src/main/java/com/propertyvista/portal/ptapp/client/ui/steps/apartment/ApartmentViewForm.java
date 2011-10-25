@@ -136,12 +136,12 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 
         main.add(petsPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         petsPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Pets") + ":")));
-        petsPanel.add(inject(proto().agreedPets(), new FeatureExFolder(Feature.Type.pet, this, true)));
+        petsPanel.add(inject(proto().agreedPets(), new FeatureExFolder(true, Feature.Type.pet, this)));
 
         main.add(parkingPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         parkingPanel.add(new VistaLineSeparator(100, Unit.PCT));
         parkingPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Parking") + ":")));
-        parkingPanel.add(inject(proto().agreedParking(), new FeatureExFolder(Feature.Type.parking, this, true)));
+        parkingPanel.add(inject(proto().agreedParking(), new FeatureExFolder(true, Feature.Type.parking, this)));
 
         main.add(storagePanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         storagePanel.add(new VistaLineSeparator(100, Unit.PCT));
@@ -231,8 +231,8 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 
         private final ApartmentViewForm apartmentViewForm;
 
-        public FeatureFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean editable) {
-            super(ChargeItem.class, editable);
+        public FeatureFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean modifyable) {
+            super(ChargeItem.class, modifyable);
             this.type = type;
             this.apartmentViewForm = apartmentViewForm;
         }
@@ -292,8 +292,8 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 
         private final ApartmentViewForm apartmentViewForm;
 
-        public FeatureExFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean editable) {
-            super(ChargeItem.class, editable);
+        public FeatureExFolder(boolean modifyable, Feature.Type type, ApartmentViewForm apartmentViewForm) {
+            super(ChargeItem.class, modifyable);
             this.type = type;
             this.apartmentViewForm = apartmentViewForm;
         }

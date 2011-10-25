@@ -115,7 +115,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
 
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Tenants"), new PtSiteMap.Tenants())));
         main.add(tenantsTable = new TenantsTable());
-        main.add(inject(proto().tenantList().tenants(), new TenantInLeaseFolder()));
+        main.add(inject(proto().tenantList().tenants(), new TenantInLeaseFolder(isEditable())));
 
         //TODO
 //        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Info"), new PtSiteMap.Info())));
@@ -330,8 +330,8 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
 
     class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
-        public TenantInLeaseFolder() {
-            super(TenantInLease.class);
+        public TenantInLeaseFolder(boolean modifyable) {
+            super(TenantInLease.class, modifyable);
         }
 
         @Override
@@ -384,8 +384,8 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
 
     static class TenantInfoFolder extends VistaTableFolder<TenantInLease> {
 
-        public TenantInfoFolder() {
-            super(TenantInLease.class);
+        public TenantInfoFolder(boolean modifyable) {
+            super(TenantInLease.class, modifyable);
         }
 
         @Override

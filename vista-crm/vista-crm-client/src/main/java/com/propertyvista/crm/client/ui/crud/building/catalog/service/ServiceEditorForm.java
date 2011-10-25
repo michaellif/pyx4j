@@ -87,15 +87,18 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
 
         int row = -1;
         main.setHeader(++row, 0, 1, i18n.tr("Features"));
-        main.setWidget(++row, 0,
-                inject(proto().features(), new ServiceFeatureFolder(isEditable() ? ((ServiceEditorView) getParentView()).getFeatureListerView() : null)));
+        main.setWidget(
+                ++row,
+                0,
+                inject(proto().features(), new ServiceFeatureFolder(isEditable(), isEditable() ? ((ServiceEditorView) getParentView()).getFeatureListerView()
+                        : null)));
 
         main.setHeader(++row, 0, 1, i18n.tr("Concessions"));
         main.setWidget(
                 ++row,
                 0,
                 inject(proto().concessions(),
-                        new ServiceConcessionFolder(isEditable() ? ((ServiceEditorView) getParentView()).getConcessionListerView() : null)));
+                        new ServiceConcessionFolder(isEditable(), isEditable() ? ((ServiceEditorView) getParentView()).getConcessionListerView() : null)));
 
         return new CrmScrollPanel(main);
     }

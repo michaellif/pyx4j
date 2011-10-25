@@ -53,8 +53,8 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
 
     private final ImageTarget imageTarget;
 
-    public CrmMediaFolder(boolean editable, ImageTarget imageTarget) {
-        super(Media.class, "", editable);
+    public CrmMediaFolder(boolean modifyable, ImageTarget imageTarget) {
+        super(Media.class, "", modifyable);
         this.imageTarget = imageTarget;
     }
 

@@ -61,7 +61,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().copyright()), 25).build());
 
         main.setHeader(++row, 0, 1, proto().locales().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().locales(), new AvailableLocaleFolder()));
+        main.setWidget(++row, 0, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
 
 // TODO: image lists uploaders:
 //        main.setWidget(++row, 0, decorate(inject(proto().logo(), new CFileUploader()), 60);
@@ -69,7 +69,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
 //        main.setWidget(++row, 0, decorate(inject(proto().images(), new CFileUploader()), 60);
 
         main.setHeader(++row, 0, 1, proto().childPages().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().childPages(), new SitePageDescriptorFolder(this, (SiteViewer) getParentView())));
+        main.setWidget(++row, 0, inject(proto().childPages(), new SitePageDescriptorFolder(isEditable(), this, (SiteViewer) getParentView())));
 
         return new CrmScrollPanel(main);
     }
@@ -77,7 +77,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
     private Widget createTestimonialsTab() {
         FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, inject(proto().testimonials(), new TestimonialFolder()));
+        main.setWidget(0, 0, inject(proto().testimonials(), new TestimonialFolder(isEditable())));
 
         return new ScrollPanel(main);
     }
@@ -85,7 +85,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
     private Widget createNewsTab() {
         FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, inject(proto().news(), new NewsFolder()));
+        main.setWidget(0, 0, inject(proto().news(), new NewsFolder(isEditable())));
 
         return new ScrollPanel(main);
     }

@@ -41,8 +41,8 @@ class ServiceFeatureFolder extends VistaTableFolder<ServiceFeature> {
 
     private final IListerView<Feature> featureListerVeiw;
 
-    public ServiceFeatureFolder(IListerView<Feature> featureListerVeiw) {
-        super(ServiceFeature.class);
+    public ServiceFeatureFolder(boolean modifyable, IListerView<Feature> featureListerVeiw) {
+        super(ServiceFeature.class, modifyable);
         this.featureListerVeiw = featureListerVeiw;
     }
 

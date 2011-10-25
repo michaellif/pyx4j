@@ -39,7 +39,7 @@ import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.dto.BuildingDTO;
 
-public class UtilityFolder extends VistaTableFolder<ServiceItemType> {
+class UtilityFolder extends VistaTableFolder<ServiceItemType> {
 
     public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
     static {
@@ -50,7 +50,7 @@ public class UtilityFolder extends VistaTableFolder<ServiceItemType> {
     private final CEntityEditor<BuildingDTO> building;
 
     public UtilityFolder(CEntityEditor<BuildingDTO> building) {
-        super(ServiceItemType.class);
+        super(ServiceItemType.class, building.isEditable());
         this.building = building;
     }
 

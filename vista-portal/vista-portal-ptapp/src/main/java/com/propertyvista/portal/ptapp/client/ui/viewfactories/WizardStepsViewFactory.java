@@ -16,8 +16,6 @@ package com.propertyvista.portal.ptapp.client.ui.viewfactories;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
-import com.propertyvista.portal.ptapp.client.ui.steps.addons.AddonsView;
-import com.propertyvista.portal.ptapp.client.ui.steps.addons.AddonsViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.apartment.ApartmentView;
 import com.propertyvista.portal.ptapp.client.ui.steps.apartment.ApartmentViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesView;
@@ -47,8 +45,6 @@ public class WizardStepsViewFactory extends ViewFactoryBase {
                 map.put(type, new InfoViewImpl());
             } else if (FinancialView.class.equals(type)) {
                 map.put(type, new FinancialViewImpl());
-            } else if (AddonsView.class.equals(type)) {
-                map.put(type, new AddonsViewImpl());
             } else if (ChargesView.class.equals(type)) {
                 map.put(type, new ChargesViewImpl());
             } else if (SummaryView.class.equals(type)) {

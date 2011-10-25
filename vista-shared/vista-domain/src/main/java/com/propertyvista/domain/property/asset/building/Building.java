@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -60,6 +61,7 @@ public interface Building extends IEntity {
     @EmbeddedEntity
     Marketing marketing();
 
+    @Owner
     @Editor(type = EditorType.suggest)
     @Reference(adapter = ComplexReferenceAdapter.class)
     Complex complex();

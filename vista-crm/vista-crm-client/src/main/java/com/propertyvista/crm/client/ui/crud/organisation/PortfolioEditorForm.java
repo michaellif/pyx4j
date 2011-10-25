@@ -57,7 +57,7 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
     }
 
     private CEditableComponent<?, ?> createBuildingListView() {
-        return new VistaTableFolder<AssignedBuilding>(AssignedBuilding.class, i18n.tr("Portfolio"), isEditable()) {
+        return new VistaTableFolder<AssignedBuilding>(AssignedBuilding.class, isEditable()) {
             private final VistaTableFolder<AssignedBuilding> parent = this;
 
             @Override

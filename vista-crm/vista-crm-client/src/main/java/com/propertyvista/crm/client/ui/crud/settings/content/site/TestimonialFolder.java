@@ -25,8 +25,8 @@ import com.propertyvista.domain.site.Testimonial;
 
 class TestimonialFolder extends VistaBoxFolder<Testimonial> {
 
-    public TestimonialFolder() {
-        super(Testimonial.class);
+    public TestimonialFolder(boolean modifyable) {
+        super(Testimonial.class, modifyable);
     }
 
     @Override

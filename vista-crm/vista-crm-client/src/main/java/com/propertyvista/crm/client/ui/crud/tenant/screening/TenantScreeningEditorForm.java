@@ -250,7 +250,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     private Widget createAssetsTab() {
         FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, inject(proto().assets(), new PersonalAssetFolder()));
+        main.setWidget(0, 0, inject(proto().assets(), new PersonalAssetFolder(isEditable())));
 
         return new CrmScrollPanel(main);
     }
@@ -258,7 +258,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     private Widget createGuarantorsTab() {
         FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, inject(proto().guarantors(), new TenantGuarantorFolder()));
+        main.setWidget(0, 0, inject(proto().guarantors(), new TenantGuarantorFolder(isEditable())));
 
         return new ScrollPanel(main);
     }

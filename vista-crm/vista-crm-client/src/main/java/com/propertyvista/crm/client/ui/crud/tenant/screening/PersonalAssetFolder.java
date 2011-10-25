@@ -31,8 +31,8 @@ import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
 
 class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
 
-    public PersonalAssetFolder() {
-        super(PersonalAsset.class);
+    public PersonalAssetFolder(boolean modifyable) {
+        super(PersonalAsset.class, modifyable);
     }
 
     @Override

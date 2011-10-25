@@ -23,8 +23,8 @@ import com.propertyvista.dto.ApplicationStatusDTO;
 
 class ApplicationStatusFolder extends VistaTableFolder<ApplicationStatusDTO> {
 
-    public ApplicationStatusFolder() {
-        super(ApplicationStatusDTO.class);
+    public ApplicationStatusFolder(boolean modifyable) {
+        super(ApplicationStatusDTO.class, modifyable);
     }
 
     @Override

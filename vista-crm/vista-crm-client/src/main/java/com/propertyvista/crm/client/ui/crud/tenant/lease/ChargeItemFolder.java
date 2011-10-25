@@ -69,8 +69,8 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
 
     private LeaseEditorView.Presenter presenter;
 
-    public ChargeItemFolder(CrmEntityForm<LeaseDTO> parent) {
-        super(ChargeItem.class);
+    public ChargeItemFolder(boolean modifyable, CrmEntityForm<LeaseDTO> parent) {
+        super(ChargeItem.class, modifyable);
         this.parent = parent;
     }
 
@@ -284,7 +284,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
         private class ChargeItemAdjustmentFolder extends VistaTableFolder<ChargeItemAdjustment> {
 
             public ChargeItemAdjustmentFolder() {
-                super(ChargeItemAdjustment.class);
+                super(ChargeItemAdjustment.class, ChargeItemFolder.this.isEditable());
             }
 
             @Override

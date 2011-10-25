@@ -41,8 +41,8 @@ class ServiceConcessionFolder extends VistaTableFolder<ServiceConcession> {
 
     private final IListerView<Concession> concessionListerVeiw;
 
-    public ServiceConcessionFolder(IListerView<Concession> concessionListerVeiw) {
-        super(ServiceConcession.class);
+    public ServiceConcessionFolder(boolean modifyable, IListerView<Concession> concessionListerVeiw) {
+        super(ServiceConcession.class, modifyable);
         this.concessionListerVeiw = concessionListerVeiw;
     }
 

@@ -64,7 +64,7 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
     @Override
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
-        main.add(inject(proto().tenants(), new TenantFolder()));
+        main.add(inject(proto().tenants(), new TenantFolder(isEditable())));
         return main;
     }
 
@@ -101,8 +101,8 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
     static class TenantFolder extends VistaTableFolder<TenantInApplicationDTO> {
 
-        public TenantFolder() {
-            super(TenantInApplicationDTO.class, i18n.tr("Person"));
+        public TenantFolder(boolean modifyable) {
+            super(TenantInApplicationDTO.class, modifyable);
         }
 
         @Override

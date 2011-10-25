@@ -90,15 +90,15 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
         FlowPanel main = new FlowPanel();
 
         main.add(createHeader(proto().incomes()));
-        main.add(inject(proto().incomes(), new PersonalIncomeFolder()));
+        main.add(inject(proto().incomes(), new PersonalIncomeFolder(isEditable())));
         main.add(new HTML());
 
         main.add(createHeader(proto().assets()));
-        main.add(inject(proto().assets(), new PersonalAssetFolder()));
+        main.add(inject(proto().assets(), new PersonalAssetFolder(isEditable())));
         main.add(new HTML());
 
         main.add(createHeader(proto().guarantors()));
-        main.add(inject(proto().guarantors(), new TenantGuarantorFolder()));
+        main.add(inject(proto().guarantors(), new TenantGuarantorFolder(isEditable())));
         main.add(new HTML());
 
         if (isSummaryViewMode()) {
@@ -142,8 +142,8 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
     class PersonalIncomeFolder extends VistaBoxFolder<PersonalIncome> {
 
-        public PersonalIncomeFolder() {
-            super(PersonalIncome.class);
+        public PersonalIncomeFolder(boolean modifyable) {
+            super(PersonalIncome.class, modifyable);
         }
 
         @Override
@@ -158,8 +158,8 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
     static class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
 
-        public PersonalAssetFolder() {
-            super(PersonalAsset.class);
+        public PersonalAssetFolder(boolean modifyable) {
+            super(PersonalAsset.class, modifyable);
         }
 
         @Override
@@ -215,8 +215,8 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
     }
 
     static class TenantGuarantorFolder extends VistaTableFolder<TenantGuarantor> {
-        public TenantGuarantorFolder() {
-            super(TenantGuarantor.class);
+        public TenantGuarantorFolder(boolean modifyable) {
+            super(TenantGuarantor.class, modifyable);
         }
 
         @Override

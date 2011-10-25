@@ -266,7 +266,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     private Widget createContactTab() {
         FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, inject(proto().contacts().contacts(), new OrganizationContactFolder()));
+        main.setWidget(0, 0, inject(proto().contacts().contacts(), new OrganizationContactFolder(isEditable())));
 
         return new CrmScrollPanel(main);
     }

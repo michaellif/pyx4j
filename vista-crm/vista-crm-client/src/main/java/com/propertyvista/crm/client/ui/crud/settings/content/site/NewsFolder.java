@@ -25,9 +25,8 @@ import com.propertyvista.domain.site.News;
 
 class NewsFolder extends VistaBoxFolder<News> {
 
-    public NewsFolder() {
-        super(News.class);
-        // TODO Auto-generated constructor stub
+    public NewsFolder(boolean modifyable) {
+        super(News.class, modifyable);
     }
 
     @Override

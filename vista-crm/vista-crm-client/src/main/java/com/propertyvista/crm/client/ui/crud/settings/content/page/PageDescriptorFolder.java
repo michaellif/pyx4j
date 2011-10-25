@@ -37,7 +37,7 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     private final PageViewer viewer;
 
     public PageDescriptorFolder(CEntityEditor<PageDescriptor> parent, PageViewer viewer) {
-        super(PageDescriptor.class);
+        super(PageDescriptor.class, parent.isEditable());
         this.parent = parent;
         this.viewer = viewer;
     }

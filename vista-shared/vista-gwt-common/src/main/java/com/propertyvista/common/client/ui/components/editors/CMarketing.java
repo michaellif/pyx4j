@@ -43,23 +43,22 @@ public class CMarketing extends CDecoratableEntityEditor<Marketing> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 30).build());
 
         main.setHeader(++row, 0, 2, proto().adBlurbs().getMeta().getCaption());
-        main.setWidget(++row, 0,
-                inject(proto().adBlurbs(), new VistaTableFolder<AdvertisingBlurb>(AdvertisingBlurb.class, i18n.tr("Advertising Blurb"), isEditable()) {
-                    @Override
-                    protected List<EntityFolderColumnDescriptor> columns() {
-                        List<EntityFolderColumnDescriptor> columns;
-                        columns = new ArrayList<EntityFolderColumnDescriptor>();
-                        columns.add(new EntityFolderColumnDescriptor(proto().content(), "60em"));
-                        return columns;
-                    }
+        main.setWidget(++row, 0, inject(proto().adBlurbs(), new VistaTableFolder<AdvertisingBlurb>(AdvertisingBlurb.class, isEditable()) {
+            @Override
+            protected List<EntityFolderColumnDescriptor> columns() {
+                List<EntityFolderColumnDescriptor> columns;
+                columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto().content(), "60em"));
+                return columns;
+            }
 
-                    @Override
-                    protected IFolderDecorator<AdvertisingBlurb> createDecorator() {
-                        TableFolderDecorator<AdvertisingBlurb> decor = (TableFolderDecorator<AdvertisingBlurb>) super.createDecorator();
-                        decor.setShowHeader(false);
-                        return decor;
-                    }
-                }));
+            @Override
+            protected IFolderDecorator<AdvertisingBlurb> createDecorator() {
+                TableFolderDecorator<AdvertisingBlurb> decor = (TableFolderDecorator<AdvertisingBlurb>) super.createDecorator();
+                decor.setShowHeader(false);
+                return decor;
+            }
+        }));
 
         return main;
     }

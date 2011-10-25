@@ -24,8 +24,8 @@ import com.propertyvista.common.client.ui.components.editors.CDecoratableEntityE
 import com.propertyvista.domain.company.OrganizationContact;
 
 class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
-    public OrganizationContactFolder() {
-        super(OrganizationContact.class);
+    public OrganizationContactFolder(boolean modifyable) {
+        super(OrganizationContact.class, modifyable);
     }
 
     @Override
