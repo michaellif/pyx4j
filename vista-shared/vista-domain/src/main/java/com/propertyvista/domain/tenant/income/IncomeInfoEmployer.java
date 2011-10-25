@@ -14,9 +14,8 @@
 package com.propertyvista.domain.tenant.income;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.shared.IEntity;
 
 @DiscriminatorValue("employee")
-public interface IncomeInfoEmployer extends IEntity, IEmploymentInfo {
+public interface IncomeInfoEmployer extends IEmploymentInfo {
 
 }

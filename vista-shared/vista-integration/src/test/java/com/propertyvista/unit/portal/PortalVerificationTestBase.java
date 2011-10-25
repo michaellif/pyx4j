@@ -182,7 +182,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertValueOnForm(formDebugId, address.province());
     }
 
-    protected void assertIAddressForm(IDebugId formDebugId, AddressStructured address) {
+    protected void assertAddressForm(IDebugId formDebugId, AddressStructured address) {
         assertValueOnForm(formDebugId, address.unitNumber());
         assertValueOnForm(formDebugId, address.streetNumber());
         assertValueOnForm(formDebugId, address.streetNumberSuffix());
@@ -197,7 +197,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
     }
 
     protected void assertAddressForm(IDebugId formDebugId, PriorAddress address) {
-        assertIAddressForm(formDebugId, address);
+        assertAddressForm(formDebugId, address);
 
         assertValueOnForm(formDebugId, address.phone());
 
@@ -234,7 +234,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertValueOnForm(formDebugId, contact.mobilePhone());
         assertValueOnForm(formDebugId, contact.workPhone());
 
-        assertIAddressForm(formDebugId, contact.address());
+        assertAddressForm(formDebugId, contact.address());
     }
 
     protected void verifyFinancialPages(List<TenantSummaryGDO> tenants, boolean doSave) {
@@ -327,7 +327,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
 
     private void assertStudentForm(IDebugId formDebugId, IncomeInfoStudentIncome student) {
         assertIncomeForm(formDebugId, student);
-        assertIAddressForm(formDebugId, student);
+        assertAddressForm(formDebugId, student.address());
         assertValueOnForm(formDebugId, student.program());
         assertValueOnForm(formDebugId, student.fieldOfStudy());
         assertValueOnForm(formDebugId, student.fundingChoices());
@@ -335,7 +335,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
 
     private void assertEmployedForm(IDebugId formDebugId, IEmploymentInfo employer) {
         assertIncomeForm(formDebugId, employer);
-        assertIAddressForm(formDebugId, employer);
+        assertAddressForm(formDebugId, employer.address());
         assertValueOnForm(formDebugId, employer.supervisorName());
         assertValueOnForm(formDebugId, employer.supervisorPhone());
         assertValueOnForm(formDebugId, employer.position());

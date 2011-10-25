@@ -16,9 +16,9 @@ package com.propertyvista.domain.tenant.income;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -27,7 +27,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.Money;
 
 @DiscriminatorValue("student")
-public interface IncomeInfoStudentIncome extends IEntity, AddressStructured, IIncomeInfo {
+public interface IncomeInfoStudentIncome extends IIncomeInfo {
 
     public enum FundingChoice {
         scolarship, bursary, grant, loan
@@ -50,6 +50,9 @@ public interface IncomeInfoStudentIncome extends IEntity, AddressStructured, IIn
     @Override
     @Caption(name = "School")
     IPrimitive<String> name();
+
+    @EmbeddedEntity
+    AddressStructured address();
 
     @Override
     @Caption(name = "Gross monthly amount")

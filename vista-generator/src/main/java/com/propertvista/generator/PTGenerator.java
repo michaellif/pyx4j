@@ -153,7 +153,7 @@ public class PTGenerator {
     public static IncomeInfoEmployer createEmployer() {
         IncomeInfoEmployer employer = EntityFactory.create(IncomeInfoEmployer.class);
 
-        populateAddress(employer);
+        populateAddress(employer.address());
 
         employer.name().setValue(RandomUtil.random(DemoData.EMPLOYER_NAMES));
         employer.supervisorName().setValue("Mr. " + RandomUtil.random(DemoData.LAST_NAMES));
@@ -173,7 +173,7 @@ public class PTGenerator {
     public static IncomeInfoSelfEmployed createSelfEmployed() {
         IncomeInfoSelfEmployed selfEmpl = EntityFactory.create(IncomeInfoSelfEmployed.class);
 
-        populateAddress(selfEmpl);
+        populateAddress(selfEmpl.address());
 
         selfEmpl.name().setValue(RandomUtil.random(DemoData.EMPLOYER_NAMES));
         selfEmpl.supervisorName().setValue("Mr. " + RandomUtil.random(DemoData.LAST_NAMES));

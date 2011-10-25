@@ -17,11 +17,10 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @DiscriminatorValue("socialServices")
-public interface IncomeInfoSocialServices extends IEntity, IEmploymentInfo {
+public interface IncomeInfoSocialServices extends IEmploymentInfo {
 
     @Override
     @Caption(name = "Social Services Agency")

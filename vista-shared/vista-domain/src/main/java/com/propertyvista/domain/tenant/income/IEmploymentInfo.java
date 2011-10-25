@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -28,12 +29,15 @@ import com.propertyvista.domain.financial.Money;
 @AbstractEntity
 @Inheritance
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface IEmploymentInfo extends AddressStructured, IIncomeInfo {
+public interface IEmploymentInfo extends IIncomeInfo {
 
     @Override
     @Caption(name = "Employer Name")
     @NotNull
     IPrimitive<String> name();
+
+    @EmbeddedEntity
+    AddressStructured address();
 
     //TODO: either one of starts/ends,  may be optional/hidden ?
     @Caption(name = "Employed for (years)")

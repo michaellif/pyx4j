@@ -238,7 +238,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         setValueOnForm(formDebugId, address.province());
     }
 
-    private void enterIAddressForm(IDebugId formDebugId, AddressStructured address) {
+    private void enterAddressForm(IDebugId formDebugId, AddressStructured address) {
         setValueOnForm(formDebugId, address.unitNumber());
         setValueOnForm(formDebugId, address.streetNumber());
         setValueOnForm(formDebugId, address.streetNumberSuffix());
@@ -253,7 +253,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
     }
 
     private void enterAddressForm(IDebugId formDebugId, PriorAddress address) {
-        enterIAddressForm(formDebugId, address);
+        enterAddressForm(formDebugId, address);
 
         setValueOnForm(formDebugId, address.phone());
         setValueOnForm(formDebugId, address.moveInDate());
@@ -288,7 +288,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         setValueOnForm(fomrDebugId, contact.homePhone());
         setValueOnForm(fomrDebugId, contact.mobilePhone());
         setValueOnForm(fomrDebugId, contact.workPhone());
-        enterIAddressForm(fomrDebugId, contact.address());
+        enterAddressForm(fomrDebugId, contact.address());
     }
 
     private void enterFinancialPages(List<TenantSummaryGDO> tenants) {
@@ -369,7 +369,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
 
     private void enterStudentForm(IDebugId formDebugId, IncomeInfoStudentIncome student) {
         enterIncomeForm(formDebugId, student);
-        enterIAddressForm(formDebugId, student);
+        enterAddressForm(formDebugId, student.address());
         setValueOnForm(formDebugId, student.program());
         setValueOnForm(formDebugId, student.fieldOfStudy());
         setValueOnForm(formDebugId, student.fundingChoices());
@@ -377,7 +377,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
 
     private void enterEmployedForm(IDebugId formDebugId, IEmploymentInfo employer) {
         enterIncomeForm(formDebugId, employer);
-        enterIAddressForm(formDebugId, employer);
+        enterAddressForm(formDebugId, employer.address());
         setValueOnForm(formDebugId, employer.supervisorName());
         setValueOnForm(formDebugId, employer.supervisorPhone());
         setValueOnForm(formDebugId, employer.position());
