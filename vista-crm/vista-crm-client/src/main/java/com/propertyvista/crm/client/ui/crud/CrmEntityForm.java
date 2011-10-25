@@ -33,40 +33,24 @@ public abstract class CrmEntityForm<E extends IEntity> extends CrudEntityForm<E>
     }
 
     // decoration stuff:
-    @Deprecated
-    protected WidgetDecorator decorate(CComponent<?> component, double componentWidth) {
-        return new DecoratorBuider(component).componentWidth(componentWidth).build();
-    }
+    protected class DecoratorBuilder extends WidgetDecorator.Builder {
 
-    @Deprecated
-    protected WidgetDecorator decorate(CComponent<?> component, double componentWidth, String componentCaption) {
-        return new DecoratorBuider(component).componentWidth(componentWidth).customLabel(componentCaption).build();
-    }
-
-    @Deprecated
-    protected WidgetDecorator decorate(CComponent<?> component, double componentWidth, double labelWidth) {
-        return new DecoratorBuider(component).labelWidth(labelWidth).componentWidth(componentWidth).build();
-    }
-
-    public class DecoratorBuider extends WidgetDecorator.Builder {
-
-        public DecoratorBuider(CComponent<?> component) {
+        public DecoratorBuilder(CComponent<?> component) {
             super(component);
             readOnlyMode(!isEditable());
         }
 
-        public DecoratorBuider(CComponent<?> component, double componentWidth) {
+        public DecoratorBuilder(CComponent<?> component, double componentWidth) {
             super(component);
             readOnlyMode(!isEditable());
             componentWidth(componentWidth);
         }
 
-        public DecoratorBuider(CComponent<?> component, double componentWidth, double labelWidth) {
+        public DecoratorBuilder(CComponent<?> component, double componentWidth, double labelWidth) {
             super(component);
             readOnlyMode(!isEditable());
             componentWidth(componentWidth);
             labelWidth(labelWidth);
         }
     }
-
 }

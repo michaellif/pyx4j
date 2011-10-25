@@ -30,16 +30,16 @@ public class CContract extends CDecoratableEntityEditor<Contract> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().contractID()), 20));
-        main.setWidget(++row, 0, decorate(inject(proto().contractor()), 20));
-        main.setWidget(++row, 0, decorate(inject(proto().cost()), 10));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contractID()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contractor()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cost()), 10).build());
 
 // TODO : design representation for:
 //      main.setWidget(++row, 0, decorate(inject(proto.document()), 50);
 
         row = -1;
-        main.setWidget(++row, 1, decorate(inject(proto().start()), 8.2));
-        main.setWidget(++row, 1, decorate(inject(proto().end()), 8.2));
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().start()), 8.2).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().end()), 8.2).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");

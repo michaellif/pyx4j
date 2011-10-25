@@ -96,22 +96,22 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().info().economicStatus()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().info().economicStatusDescription()), 20));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatus()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatusDescription()), 20).build());
         main.getFlexCellFormatter().setRowSpan(row, 0, 3);
         row += 2;
-        main.setWidget(++row, 0, decorate(inject(proto().floorplan()), 20));
-        main.setWidget(++row, 0, decorate(inject(proto().availableForRent()), 8.2));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().availableForRent()), 8.2).build());
 
         row = -1;
-        main.setWidget(++row, 1, decorate(inject(proto().info().floor()), 5));
-        main.setWidget(++row, 1, decorate(inject(proto().info().number()), 5));
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().floor()), 5).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().number()), 5).build());
         // shift one column left because economicStatusDescription field RowSpan:
-        main.setWidget(++row, 0, decorate(inject(proto().info()._bedrooms(), new CNumberLabel()), 5));
-        main.setWidget(++row, 0, decorate(inject(proto().info()._bathrooms(), new CNumberLabel()), 5));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info()._bedrooms(), new CNumberLabel()), 5).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info()._bathrooms(), new CNumberLabel()), 5).build());
 
-        main.setWidget(++row, 1, decorate(inject(proto().info().area()), 8));
-        main.setWidget(++row, 1, decorate(inject(proto().info().areaUnits()), 8));
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().area()), 8).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().areaUnits()), 8).build());
 
         // restrict floorplan combo here to current building:
         CEditableComponent<Floorplan, ?> comp = get(proto().floorplan());
@@ -138,8 +138,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().financial().unitRent(), new CNumberLabel()), 10));
-        main.setWidget(++row, 0, decorate(inject(proto().financial().marketRent(), new CNumberLabel()), 10));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial().unitRent(), new CNumberLabel()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial().marketRent(), new CNumberLabel()), 10).build());
 
         return new CrmScrollPanel(main);
     }

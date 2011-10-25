@@ -64,26 +64,26 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().title()), 20));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().title()), 20).build());
 
         main.setWidget(++row, 0, new HTML("&nbsp"));
 
-        main.setWidget(++row, 0, decorate(inject(proto().name().namePrefix()), 5));
-        main.setWidget(++row, 0, decorate(inject(proto().name().firstName()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().name().middleName()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().name().lastName()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().name().maidenName()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().name().nameSuffix()), 5));
-        main.setWidget(++row, 0, decorate(inject(proto().birthDate()), 8.2));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().namePrefix()), 5).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().maidenName()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().nameSuffix()), 5).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().birthDate()), 8.2).build());
 
-        main.setWidget(++row, 0, decorate(inject(proto().homePhone()), 10));
-        main.setWidget(++row, 0, decorate(inject(proto().mobilePhone()), 10));
-        main.setWidget(++row, 0, decorate(inject(proto().workPhone()), 10));
-        main.setWidget(++row, 0, decorate(inject(proto().email()), 25));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 25).build());
 
         main.setWidget(++row, 0, new HTML("&nbsp"));
 
-        main.setWidget(++row, 0, decorate(inject(proto().description()), 50));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 50).build());
 
         return new CrmScrollPanel(main);
     }

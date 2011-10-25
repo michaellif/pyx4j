@@ -39,10 +39,10 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().type(), new CLabel()), 10));
-        main.setWidget(++row, 0, decorate(inject(proto().name()), 10));
-        main.setWidget(++row, 0, decorate(inject(proto().isMandatory()), 4));
-        main.setWidget(++row, 0, decorate(inject(proto().description()), 50));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CLabel()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isMandatory()), 4).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 50).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setHeader(++row, 0, 2, i18n.tr("Items"));
@@ -51,9 +51,9 @@ public class FeatureEditorForm extends CrmEntityForm<Feature> {
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         row = -1;
-        main.setWidget(++row, 1, decorate(inject(proto().priceType()), 18));
-        main.setWidget(++row, 1, decorate(inject(proto().depositType()), 15));
-        main.setWidget(++row, 1, decorate(inject(proto().isRecurring()), 4));
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().priceType()), 18).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().depositType()), 15).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().isRecurring()), 4).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");

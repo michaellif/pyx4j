@@ -32,13 +32,13 @@ public class CCompany extends CDecoratableEntityEditor<Company> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().name()), 15));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
 
 // TODO : design representation for:
 //      main.add(parent.inject(proto.addresses()), 15);
 
         main.setWidget(++row, 0, inject(proto().phones(), new PhoneFolder(isEditable())));
-        main.setWidget(++row, 0, decorate(inject(proto().website()), 35));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().website()), 35).build());
 
         main.setWidget(++row, 0, inject(proto().emails(), new EmailFolder(isEditable())));
 

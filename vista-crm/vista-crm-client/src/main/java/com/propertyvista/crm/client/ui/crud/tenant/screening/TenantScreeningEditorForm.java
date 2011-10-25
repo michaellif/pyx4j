@@ -169,12 +169,12 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().driversLicense()), 20));
-        main.setWidget(++row, 0, decorate(inject(proto().driversLicenseState()), 20));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().driversLicense()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().driversLicenseState()), 20).build());
         final CEditableComponent<?, ?> sin = inject(proto().secureIdentifier());
-        main.setWidget(++row, 0, decorate(sin, 7));
+        main.setWidget(++row, 0, new DecoratorBuilder(sin, 7).build());
 
-        main.setWidget(++row, 0, decorate(inject(proto().notCanadianCitizen()), 3));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notCanadianCitizen()), 3).build());
 
         main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.securityInfo)));
         fileUpload.asWidget().getElement().getStyle().setMarginLeft(14, Unit.EM);
@@ -213,19 +213,19 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().legalQuestions().suedForRent()), 10, 40));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().suedForRent()), 10, 40).build());
         main.setHeader(++row, 0, 1, "");
-        main.setWidget(++row, 0, decorate(inject(proto().legalQuestions().suedForDamages()), 10, 40));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().suedForDamages()), 10, 40).build());
         main.setHeader(++row, 0, 1, "");
-        main.setWidget(++row, 0, decorate(inject(proto().legalQuestions().everEvicted()), 10, 40));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().everEvicted()), 10, 40).build());
         main.setHeader(++row, 0, 1, "");
-        main.setWidget(++row, 0, decorate(inject(proto().legalQuestions().defaultedOnLease()), 10, 40));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().defaultedOnLease()), 10, 40).build());
         main.setHeader(++row, 0, 1, "");
-        main.setWidget(++row, 0, decorate(inject(proto().legalQuestions().convictedOfFelony()), 10, 40));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().convictedOfFelony()), 10, 40).build());
         main.setHeader(++row, 0, 1, "");
-        main.setWidget(++row, 0, decorate(inject(proto().legalQuestions().legalTroubles()), 10, 40));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().legalTroubles()), 10, 40).build());
         main.setHeader(++row, 0, 1, "");
-        main.setWidget(++row, 0, decorate(inject(proto().legalQuestions().filedBankruptcy()), 10, 40));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().filedBankruptcy()), 10, 40).build());
 
         return new CrmScrollPanel(main);
     }

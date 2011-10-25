@@ -30,11 +30,24 @@ abstract public class CDecoratableEntityEditor<E extends IEntity> extends CEntit
     }
 
     // decoration stuff:
-    protected WidgetDecorator decorate(CComponent<?> component, double componentWidth) {
-        return new WidgetDecorator.Builder(component).componentWidth(componentWidth).readOnlyMode(!isEditable()).build();
-    }
+    protected class DecoratorBuilder extends WidgetDecorator.Builder {
 
-    protected WidgetDecorator decorate(CComponent<?> component, double componentWidth, String componentCaption) {
-        return new WidgetDecorator.Builder(component).componentWidth(componentWidth).customLabel(componentCaption).readOnlyMode(!isEditable()).build();
+        public DecoratorBuilder(CComponent<?> component) {
+            super(component);
+            readOnlyMode(!isEditable());
+        }
+
+        public DecoratorBuilder(CComponent<?> component, double componentWidth) {
+            super(component);
+            readOnlyMode(!isEditable());
+            componentWidth(componentWidth);
+        }
+
+        public DecoratorBuilder(CComponent<?> component, double componentWidth, double labelWidth) {
+            super(component);
+            readOnlyMode(!isEditable());
+            componentWidth(componentWidth);
+            labelWidth(labelWidth);
+        }
     }
 }

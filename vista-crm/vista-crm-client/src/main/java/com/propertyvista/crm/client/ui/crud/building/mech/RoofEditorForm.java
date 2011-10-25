@@ -38,11 +38,11 @@ public class RoofEditorForm extends MechlBaseEditorForm<RoofDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().type()), 20));
-        main.setWidget(++row, 0, decorate(inject(proto().year()), 10));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().year()), 10).build());
 
         main.setHeader(++row, 0, 2, "");
-        main.setWidget(++row, 0, decorate(inject(proto().notes()), 57));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notes()), 57).build());
 
         return new CrmScrollPanel(main);
     }

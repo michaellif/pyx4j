@@ -39,9 +39,9 @@ public class InquiryEditorForm extends CrmEntityForm<InquiryDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().name()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().email()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().description()), 57));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 57).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setHeader(++row, 0, 2, proto().phones().getMeta().getCaption());
@@ -49,8 +49,8 @@ public class InquiryEditorForm extends CrmEntityForm<InquiryDTO> {
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         row = -1;
-        main.setWidget(++row, 1, decorate(inject(proto().building()), 15));
-        main.setWidget(++row, 1, decorate(inject(proto().unit()), 15));
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().building()), 15).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().unit()), 15).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");

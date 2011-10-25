@@ -52,31 +52,31 @@ public abstract class CAddressStructuredImpl<A extends AddressStructured> extend
         int row = 0;
         int column = 0;
         if (showUnit) {
-            main.setWidget(row++, column, decorate(inject(proto().unitNumber()), 12));
+            main.setWidget(row++, column, new DecoratorBuilder(inject(proto().unitNumber()), 12).build());
         }
 
-        main.setWidget(row++, column, decorate(inject(proto().streetNumber()), 5));
-        main.setWidget(row++, column, decorate(inject(proto().streetNumberSuffix()), 5));
-        main.setWidget(row++, column, decorate(inject(proto().streetName()), 15));
-        main.setWidget(row++, column, decorate(inject(proto().streetType()), 10));
-        main.setWidget(row++, column, decorate(inject(proto().streetDirection()), 10));
+        main.setWidget(row++, column, new DecoratorBuilder(inject(proto().streetNumber()), 5).build());
+        main.setWidget(row++, column, new DecoratorBuilder(inject(proto().streetNumberSuffix()), 5).build());
+        main.setWidget(row++, column, new DecoratorBuilder(inject(proto().streetName()), 15).build());
+        main.setWidget(row++, column, new DecoratorBuilder(inject(proto().streetType()), 10).build());
+        main.setWidget(row++, column, new DecoratorBuilder(inject(proto().streetDirection()), 10).build());
 
         if (twoColumns) {
             row = 0;
             column = 1;
         }
-        main.setWidget(row++, column, decorate(inject(proto().city()), 15));
-        main.setWidget(row++, column, decorate(inject(proto().county()), 15));
+        main.setWidget(row++, column, new DecoratorBuilder(inject(proto().city()), 15).build());
+        main.setWidget(row++, column, new DecoratorBuilder(inject(proto().county()), 15).build());
 
         // Need local variables to avoid extended casting that make the code unreadable
         CEditableComponent<Province, ?> province = (CEditableComponent<Province, ?>) inject(proto().province());
-        main.setWidget(row++, column, decorate(province, 17));
+        main.setWidget(row++, column, new DecoratorBuilder(province, 17).build());
 
         CEditableComponent<Country, ?> country = (CEditableComponent<Country, ?>) inject(proto().country());
-        main.setWidget(row++, column, decorate(country, 15));
+        main.setWidget(row++, column, new DecoratorBuilder(country, 15).build());
 
         CEditableComponent<String, ?> postalCode = (CEditableComponent<String, ?>) inject(proto().postalCode());
-        main.setWidget(row++, column, decorate(postalCode, 7));
+        main.setWidget(row++, column, new DecoratorBuilder(postalCode, 7).build());
 
         attachFilters(proto(), province, country, postalCode);
 

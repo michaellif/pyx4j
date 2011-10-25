@@ -38,7 +38,7 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().name()), 15));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
 
         main.setHeader(++row, 0, 1, proto().content().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().content(), new PageContentFolder(this)));

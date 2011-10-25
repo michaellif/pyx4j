@@ -38,8 +38,8 @@ public class CWarranty extends CDecoratableEntityEditor<Warranty> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = 0;
-        main.setWidget(row, 0, decorate(inject(proto().title()), 20));
-        main.setWidget(row, 1, decorate(inject(proto().type()), 11));
+        main.setWidget(row, 0, new DecoratorBuilder(inject(proto().title()), 20).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().type()), 11).build());
 
         main.setHeader(++row, 0, 2, proto().contract().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().contract(), new CContract()));

@@ -30,7 +30,7 @@ public class CVendor extends CDecoratableEntityEditor<Vendor> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().type()), 15));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15).build());
         main.setWidget(++row, 0, inject(proto(), new CCompany()));
 
         return main;

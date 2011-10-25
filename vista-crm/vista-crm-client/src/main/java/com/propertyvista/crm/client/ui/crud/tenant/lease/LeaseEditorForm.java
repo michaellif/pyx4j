@@ -101,12 +101,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().leaseID()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().type()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().status()), 15));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseID()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 15).build());
 
         HorizontalPanel unitPanel = new HorizontalPanel();
-        unitPanel.add(decorate(inject(proto().unit(), new CEntityLabel()), 20));
+        unitPanel.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel()), 20).build());
         if (isEditable()) {
             unitPanel.add(new Button(i18n.tr("Select..."), new ClickHandler() {
                 @Override
@@ -124,13 +124,13 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         }
         main.setWidget(++row, 0, unitPanel);
 
-        main.setWidget(++row, 0, decorate(inject(proto().leaseFrom()), 8.2));
-        main.setWidget(++row, 0, decorate(inject(proto().leaseTo()), 8.2));
-        main.setWidget(++row, 0, decorate(inject(proto().expectedMoveIn()), 8.2));
-        main.setWidget(++row, 0, decorate(inject(proto().expectedMoveOut()), 8.2));
-        main.setWidget(++row, 0, decorate(inject(proto().actualMoveIn()), 8.2));
-        main.setWidget(++row, 0, decorate(inject(proto().actualMoveOut()), 8.2));
-        main.setWidget(++row, 0, decorate(inject(proto().signDate()), 8.2));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 8.2).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTo()), 8.2).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expectedMoveIn()), 8.2).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expectedMoveOut()), 8.2).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().actualMoveIn()), 8.2).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().actualMoveOut()), 8.2).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().signDate()), 8.2).build());
 
         return new CrmScrollPanel(main);
     }
@@ -155,7 +155,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         HorizontalPanel serviceItemPanel = new HorizontalPanel();
-        serviceItemPanel.add(decorate(inject(proto().serviceAgreement().serviceItem(), new CEntityLabel()), 35));
+        serviceItemPanel.add(new DecoratorBuilder(inject(proto().serviceAgreement().serviceItem(), new CEntityLabel()), 35).build());
         if (isEditable()) {
             serviceItemPanel.add(new Button("Select...", new ClickHandler() {
                 @Override
@@ -190,7 +190,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setWidget(++row, 0, inject(proto().serviceAgreement().concessions(), new ServiceConcessionFolder(this)));
 
         main.setWidget(++row, 0, new HTML("&nbsp"));
-        main.setWidget(++row, 0, decorate(inject(proto().serviceAgreement().account()), 15));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().serviceAgreement().account()), 15).build());
 
         return new CrmScrollPanel(main);
     }

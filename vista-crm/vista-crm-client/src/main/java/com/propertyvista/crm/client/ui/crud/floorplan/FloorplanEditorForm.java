@@ -47,9 +47,9 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().name()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().marketingName()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().description()), 30));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().marketingName()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 30).build());
         main.getFlexCellFormatter().setRowSpan(row, 0, 3);
 
         row += 2; // leave space for right column items...
@@ -62,12 +62,12 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         row = -1;
-        main.setWidget(++row, 1, decorate(inject(proto().floorCount()), 3));
-        main.setWidget(++row, 1, decorate(inject(proto().bedrooms()), 3));
-        main.setWidget(++row, 1, decorate(inject(proto().dens()), 3));
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().floorCount()), 3).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().bedrooms()), 3).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().dens()), 3).build());
         // shift one column left because description field RowSpan:
-        main.setWidget(++row, 0, decorate(inject(proto().bathrooms()), 3));
-        main.setWidget(++row, 0, decorate(inject(proto().halfBath()), 3));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bathrooms()), 3).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().halfBath()), 3).build());
 
         main.getColumnFormatter().setWidth(0, "60%");
         main.getColumnFormatter().setWidth(1, "40%");

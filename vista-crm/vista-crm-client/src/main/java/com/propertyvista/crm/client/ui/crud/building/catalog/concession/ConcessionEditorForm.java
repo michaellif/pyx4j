@@ -39,18 +39,18 @@ public class ConcessionEditorForm extends CrmEntityForm<Concession> {
 
         int row = -1;
 
-        main.setWidget(++row, 0, new DecoratorBuider(inject(proto().type()), 12).build());
-        main.setWidget(++row, 0, new DecoratorBuider(inject(proto().term()), 12).build());
-        main.setWidget(++row, 0, new DecoratorBuider(inject(proto().value()), 6).build());
-        main.setWidget(++row, 0, decorate(inject(proto().condition()), 8));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 12).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().term()), 12).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().value()), 6).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().condition()), 8).build());
 
         row = -1;
-        main.setWidget(++row, 1, decorate(inject(proto().status()), 8));
-        main.setWidget(++row, 1, decorate(inject(proto().approvedBy()), 20));
-        main.setWidget(++row, 1, decorate(inject(proto().effectiveDate()), 8.2));
-        main.setWidget(++row, 1, decorate(inject(proto().expirationDate()), 8.2));
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status()), 8).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().approvedBy()), 20).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().effectiveDate()), 8.2).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().expirationDate()), 8.2).build());
 
-        main.setWidget(++row, 0, decorate(inject(proto().description()), 50));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 50).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.getColumnFormatter().setWidth(0, "50%");

@@ -15,14 +15,12 @@ package com.propertyvista.crm.client.ui.crud.building;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
+import com.propertyvista.common.client.ui.components.editors.CDecoratableEntityEditor;
 import com.propertyvista.domain.company.OrganizationContact;
 
 class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
@@ -39,7 +37,7 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
         }
     }
 
-    static class OrganizationContactEditor extends CEntityEditor<OrganizationContact> {
+    static class OrganizationContactEditor extends CDecoratableEntityEditor<OrganizationContact> {
 
         public OrganizationContactEditor() {
             super(OrganizationContact.class);
@@ -50,23 +48,19 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
             FormFlexPanel main = new FormFlexPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, decorate(inject(proto().description()), 35));
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 35).build());
             //TODO
 //                if (parent.isEditable()) {
-//                    main.setWidget(++row, 0, decorate(inject(proto().person()), 35));
+//                    main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person()), 35).build());
 //                } else {
-            main.setWidget(++row, 0, decorate(inject(proto().person()), 35));
-            main.setWidget(++row, 0, decorate(inject(proto().person().workPhone()), 10));
-            main.setWidget(++row, 0, decorate(inject(proto().person().mobilePhone()), 10));
-            main.setWidget(++row, 0, decorate(inject(proto().person().homePhone()), 10));
-            main.setWidget(++row, 0, decorate(inject(proto().person().email()), 20));
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person()), 35).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 10).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 10).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 10).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 20).build());
 //                }
 
             return main;
-        }
-
-        private WidgetDecorator decorate(CComponent<?> component, double componentWidth) {
-            return new WidgetDecorator.Builder(component).componentWidth(componentWidth).readOnlyMode(!isEditable()).build();
         }
     }
 }

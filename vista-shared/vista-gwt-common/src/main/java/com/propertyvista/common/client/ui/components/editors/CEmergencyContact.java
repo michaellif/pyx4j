@@ -35,12 +35,12 @@ public class CEmergencyContact extends CDecoratableEntityEditor<EmergencyContact
             FormFlexPanel main = new FormFlexPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, decorate(inject(proto().name().firstName()), 12));
-            main.setWidget(++row, 0, decorate(inject(proto().name().middleName()), 12));
-            main.setWidget(++row, 0, decorate(inject(proto().name().lastName()), 20));
-            main.setWidget(++row, 0, decorate(inject(proto().homePhone()), 15));
-            main.setWidget(++row, 0, decorate(inject(proto().mobilePhone()), 15));
-            main.setWidget(++row, 0, decorate(inject(proto().workPhone()), 15));
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 12).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 12).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
 
             main.setHeader(++row, 0, 1, "");
             main.setWidget(++row, 0, inject(proto().address(), new CAddressStructured()));

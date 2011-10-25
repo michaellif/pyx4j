@@ -38,8 +38,8 @@ public class LockerEditorForm extends CrmEntityForm<Locker> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().name()), 10));
-        main.setWidget(++row, 0, decorate(inject(proto().type()), 10));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
 
         return new CrmScrollPanel(main);
     }

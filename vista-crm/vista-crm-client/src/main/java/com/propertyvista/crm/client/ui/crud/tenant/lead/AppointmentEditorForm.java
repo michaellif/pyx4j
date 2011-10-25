@@ -66,15 +66,15 @@ public class AppointmentEditorForm extends CrmEntityForm<Appointment> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().date()), 8));
-        main.setWidget(++row, 0, decorate(inject(proto().time()), 6));
-        main.setWidget(++row, 0, decorate(inject(proto().address()), 20));
-        main.setWidget(++row, 0, decorate(inject(proto().status()), 8));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().date()), 8).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().time()), 6).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().address()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 8).build());
 
         row = -1;
-        main.setWidget(++row, 1, decorate(inject(proto().agent()), 15));
-        main.setWidget(++row, 1, decorate(inject(proto().phone()), 15, i18n.tr("Agent Phone")));
-        main.setWidget(++row, 1, decorate(inject(proto().email()), 15, i18n.tr("Agent Email")));
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().agent()), 15).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().phone()), 15).customLabel(i18n.tr("Agent Phone")).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().email()), 15).customLabel(i18n.tr("Agent Email")).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");

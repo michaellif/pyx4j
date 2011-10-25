@@ -37,10 +37,10 @@ public class DashboardEditorForm extends CrmEntityForm<DashboardMetadata> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().name()), 20));
-        main.setWidget(++row, 0, decorate(inject(proto().description()), 40));
-        main.setWidget(++row, 0, decorate(inject(proto().isFavorite()), 3));
-        main.setWidget(++row, 0, decorate(inject(proto().isShared()), 3));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 40).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isFavorite()), 3).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isShared()), 3).build());
 
         return main;
     }

@@ -70,16 +70,16 @@ public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().name()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().description()), 25));
-        main.setWidget(++row, 0, decorate(inject(proto().isPrivate()), 3));
-        main.setWidget(++row, 0, decorate(inject(proto().levels()), 3));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isPrivate()), 3).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().levels()), 3).build());
 
         row = -1;
-        main.setWidget(++row, 1, decorate(inject(proto().totalLockers()), 3));
-        main.setWidget(++row, 1, decorate(inject(proto().regularLockers()), 3));
-        main.setWidget(++row, 1, decorate(inject(proto().largeLockers()), 3));
-        main.setWidget(++row, 1, decorate(inject(proto().smallLockers()), 3));
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().totalLockers()), 3).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().regularLockers()), 3).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().largeLockers()), 3).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().smallLockers()), 3).build());
 
         main.getColumnFormatter().setWidth(0, "55%");
         main.getColumnFormatter().setWidth(1, "45%");

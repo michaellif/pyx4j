@@ -39,8 +39,8 @@ public class CMarketing extends CDecoratableEntityEditor<Marketing> {
         main.setWidth("100%");
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().name()), 30));
-        main.setWidget(++row, 0, decorate(inject(proto().description()), 30));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 30).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 30).build());
 
         main.setHeader(++row, 0, 2, proto().adBlurbs().getMeta().getCaption());
         main.setWidget(++row, 0,

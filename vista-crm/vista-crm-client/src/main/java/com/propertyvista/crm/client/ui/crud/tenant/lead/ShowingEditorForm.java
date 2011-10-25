@@ -53,8 +53,10 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), new CEntityLabel()), 15).build());
+
         HorizontalPanel unitPanel = new HorizontalPanel();
-        unitPanel.add(decorate(inject(proto().unit(), new CEntityLabel()), 15));
+        unitPanel.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel()), 15).build());
         if (isEditable()) {
             unitPanel.add(new Button("Select...", new ClickHandler() {
                 @Override
@@ -73,14 +75,12 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
                 }
             }));
         }
-
-        main.setWidget(++row, 0, decorate(inject(proto().building(), new CEntityLabel()), 15));
         main.setWidget(++row, 0, unitPanel);
 
         row = -1;
-        main.setWidget(++row, 1, decorate(inject(proto().status()), 12));
-        main.setWidget(++row, 1, decorate(inject(proto().result()), 12));
-        main.setWidget(++row, 1, decorate(inject(proto().reason()), 12));
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status()), 12).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().result()), 12).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().reason()), 12).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");

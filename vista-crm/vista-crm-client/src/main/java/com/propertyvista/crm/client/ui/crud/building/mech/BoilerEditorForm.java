@@ -39,13 +39,13 @@ public class BoilerEditorForm extends MechlBaseEditorForm<BoilerDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().type()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().make()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().model()), 15));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().make()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().model()), 15).build());
 
         row = -1;
-        main.setWidget(++row, 1, decorate(inject(proto().build()), 9));
-        main.setWidget(++row, 1, decorate(inject(proto().description()), 20));
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().build()), 9).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().description()), 20).build());
         main.getFlexCellFormatter().setRowSpan(row, 1, 3);
 
         row += 2;
@@ -54,7 +54,7 @@ public class BoilerEditorForm extends MechlBaseEditorForm<BoilerDTO> {
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setHeader(++row, 0, 2, "");
-        main.setWidget(++row, 0, decorate(inject(proto().notes()), 57));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notes()), 57).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.getColumnFormatter().setWidth(0, "50%");

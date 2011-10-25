@@ -69,17 +69,17 @@ public class ParkingEditorForm extends CrmEntityForm<ParkingDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().name()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().description()), 25));
-        main.setWidget(++row, 0, decorate(inject(proto().type()), 10));
-        main.setWidget(++row, 0, decorate(inject(proto().levels()), 3));
-        main.setWidget(++row, 0, decorate(inject(proto().totalSpaces()), 3));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().levels()), 3).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalSpaces()), 3).build());
 
         row = -1;
-        main.setWidget(++row, 1, decorate(inject(proto().regularSpaces()), 3));
-        main.setWidget(++row, 1, decorate(inject(proto().disabledSpaces()), 3));
-        main.setWidget(++row, 1, decorate(inject(proto().wideSpaces()), 3));
-        main.setWidget(++row, 1, decorate(inject(proto().narrowSpaces()), 3));
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().regularSpaces()), 3).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().disabledSpaces()), 3).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().wideSpaces()), 3).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().narrowSpaces()), 3).build());
 
         main.getColumnFormatter().setWidth(0, "55%");
         main.getColumnFormatter().setWidth(1, "45%");

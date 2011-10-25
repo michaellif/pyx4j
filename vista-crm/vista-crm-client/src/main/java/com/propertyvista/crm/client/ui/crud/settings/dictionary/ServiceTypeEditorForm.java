@@ -43,9 +43,9 @@ public class ServiceTypeEditorForm extends CrmEntityForm<ServiceItemType> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().name()), 25));
-        main.setWidget(++row, 0, serviceType = decorate(inject(proto().serviceType()), 25));
-        main.setWidget(++row, 0, featureType = decorate(inject(proto().featureType()), 25));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
+        main.setWidget(++row, 0, serviceType = new DecoratorBuilder(inject(proto().serviceType()), 25).build());
+        main.setWidget(++row, 0, featureType = new DecoratorBuilder(inject(proto().featureType()), 25).build());
 
         return new CrmScrollPanel(main);
     }

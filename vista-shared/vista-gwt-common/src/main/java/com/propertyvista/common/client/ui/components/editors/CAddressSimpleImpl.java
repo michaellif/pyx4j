@@ -36,19 +36,19 @@ public abstract class CAddressSimpleImpl<A extends AddressSimple> extends CDecor
         FormFlexPanel main = new FormFlexPanel();
 
         int row = 0;
-        main.setWidget(row++, 0, decorate(inject(proto().street1()), 50));
-        main.setWidget(row++, 0, decorate(inject(proto().street2()), 50));
-        main.setWidget(row++, 0, decorate(inject(proto().city()), 15));
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().street1()), 50).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().street2()), 50).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().city()), 15).build());
 
         // Need local variables to avoid extended casting that make the code unreadable
         CEditableComponent<Province, ?> province = (CEditableComponent<Province, ?>) inject(proto().province());
-        main.setWidget(row++, 0, decorate(province, 17));
+        main.setWidget(row++, 0, new DecoratorBuilder(province, 17).build());
 
         CEditableComponent<Country, ?> country = (CEditableComponent<Country, ?>) inject(proto().country());
-        main.setWidget(row++, 0, decorate(country, 15));
+        main.setWidget(row++, 0, new DecoratorBuilder(country, 15).build());
 
         CEditableComponent<String, ?> postalCode = (CEditableComponent<String, ?>) inject(proto().postalCode());
-        main.setWidget(row++, 0, decorate(postalCode, 7));
+        main.setWidget(row++, 0, new DecoratorBuilder(postalCode, 7).build());
 
         attachFilters(proto(), province, country, postalCode);
 

@@ -27,8 +27,6 @@ public abstract class VistaBoxFolder<E extends IEntity> extends CEntityFolder<E>
 
     private static I18n i18n = I18n.get(VistaBoxFolder.class);
 
-    private final Class<E> clazz;
-
     private final String itemName;
 
     public VistaBoxFolder(Class<E> clazz) {
@@ -45,7 +43,6 @@ public abstract class VistaBoxFolder<E extends IEntity> extends CEntityFolder<E>
 
     public VistaBoxFolder(Class<E> clazz, String itemName, boolean modifyable) {
         super(clazz);
-        this.clazz = clazz;
         this.itemName = itemName;
         setModifiable(modifyable);
         setOrderable(modifyable);
@@ -54,7 +51,6 @@ public abstract class VistaBoxFolder<E extends IEntity> extends CEntityFolder<E>
     @Override
     protected IFolderDecorator<E> createDecorator() {
         return new BoxFolderDecorator<E>(VistaImages.INSTANCE, i18n.tr("Add {0}", getItemName()));
-
     }
 
     @Override
@@ -65,5 +61,4 @@ public abstract class VistaBoxFolder<E extends IEntity> extends CEntityFolder<E>
     public String getItemName() {
         return (itemName != null ? itemName : "");
     }
-
 }

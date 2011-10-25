@@ -56,9 +56,9 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().skin()), 10));
-        main.setWidget(++row, 0, decorate(inject(proto().baseColor()), 10));
-        main.setWidget(++row, 0, decorate(inject(proto().copyright()), 25));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().skin()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().baseColor()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().copyright()), 25).build());
 
         main.setHeader(++row, 0, 1, proto().locales().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().locales(), new AvailableLocaleFolder()));

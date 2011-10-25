@@ -66,34 +66,34 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, decorate(inject(proto().person().name().firstName()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().person().name().lastName()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().person().email()), 20));
-        main.setWidget(++row, 0, decorate(inject(proto().person().homePhone()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().person().mobilePhone()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().informedFrom()), 10));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().informedFrom()), 10).build());
 
         row = -1;
-        main.setWidget(++row, 1, decorate(inject(proto().moveInDate()), 8.2));
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().moveInDate()), 8.2).build());
 
-        main.setWidget(++row, 1, decorate(inject(proto().rent().min()), 5, i18n.tr("Min rent")));
-        main.setWidget(++row, 1, decorate(inject(proto().rent().max()), 5, i18n.tr("Max rent")));
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().rent().min()), 5).customLabel(i18n.tr("Min rent")).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().rent().max()), 5).customLabel(i18n.tr("Max rent")).build());
 
-        main.setWidget(++row, 1, decorate(inject(proto().term()), 8));
-        main.setWidget(++row, 1, decorate(inject(proto().beds()), 4));
-        main.setWidget(++row, 1, decorate(inject(proto().baths()), 4));
-        main.setWidget(++row, 1, decorate(inject(proto().floorplan()), 15));
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().term()), 8).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().beds()), 4).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().baths()), 4).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().floorplan()), 15).build());
 
-        main.setWidget(++row, 0, decorate(inject(proto().comments()), 57));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().comments()), 57).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setHeader(++row, 0, 2, "");
 
-        main.setWidget(++row, 0, decorate(inject(proto().source()), 15));
-        main.setWidget(++row, 0, decorate(inject(proto().assignedTo()), 20));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().source()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().assignedTo()), 20).build());
         row -= 2;
-        main.setWidget(++row, 1, decorate(inject(proto().createDate()), 8.2));
-        main.setWidget(++row, 1, decorate(inject(proto().status()), 10));
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().createDate()), 8.2).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status()), 10).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
