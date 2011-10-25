@@ -96,7 +96,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
         combinedtab.add(new CrmSectionSeparator(i18n.tr("Locker Areas") + ":"));
         combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
-        tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Add-ons"));
+        tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Add-Ons"));
 
         tabPanel.add(createFinancialTab(), i18n.tr("Financial"));
         tabPanel.add(createMarketingTab(), i18n.tr("Marketing"));

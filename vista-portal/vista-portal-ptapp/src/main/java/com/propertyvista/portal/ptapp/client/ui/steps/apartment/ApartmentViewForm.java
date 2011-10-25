@@ -132,7 +132,7 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
         chargedPanel.add(new VistaHeaderBar(i18n.tr("Charged Utilities")));
         chargedPanel.add(inject(proto().agreedUtilities(), new FeatureFolder(Feature.Type.utility, this, false)));
 
-        main.add(new VistaHeaderBar(i18n.tr("Add-ons")));
+        main.add(new VistaHeaderBar(i18n.tr("Add-Ons")));
 
         main.add(petsPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         petsPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Pets") + ":")));
