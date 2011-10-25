@@ -38,8 +38,8 @@ import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
+import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
@@ -153,7 +153,7 @@ public class NewPaymentMethodForm extends CEntityEditor<PaymentMethodGenericDTO>
         setPaymentTableVisibility(0);
 
         container.add(new VistaHeaderBar(proto().billingAddress(), "100%"));
-        AddressUtils.injectIAddress(container, proto().billingAddress(), this);
+        container.add(inject(proto().billingAddress(), new CAddressStructured()));
 
         container.add(inject(proto().phone()), 12);
         container.setWidth("100%");

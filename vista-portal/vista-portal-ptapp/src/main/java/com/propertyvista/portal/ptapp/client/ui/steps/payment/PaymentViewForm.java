@@ -44,8 +44,8 @@ import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
+import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
@@ -201,7 +201,7 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
             }
         });
 
-        AddressUtils.injectIAddress(main, proto().billingAddress(), this);
+        main.add(inject(proto().billingAddress(), new CAddressStructured()));
 
         main.add(inject(proto().phone()), 12);
 

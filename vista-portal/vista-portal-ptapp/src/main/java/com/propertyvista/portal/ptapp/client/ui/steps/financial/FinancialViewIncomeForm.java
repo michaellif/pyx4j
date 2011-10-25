@@ -30,8 +30,8 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
+import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
@@ -198,7 +198,7 @@ public class FinancialViewIncomeForm extends CEntityEditor<PersonalIncome> {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 12);
                 main.add(inject(proto().employedForYears()), 4);
-                AddressUtils.injectIAddress(main, proto().address(), this);
+                main.add(inject(proto().address(), new CAddressStructured()));
                 injectIEmploymentInfo(main, proto(), this);
 
                 main.add(inject(proto().starts()), 8.2);
@@ -220,7 +220,7 @@ public class FinancialViewIncomeForm extends CEntityEditor<PersonalIncome> {
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 10);
-                AddressUtils.injectIAddress(main, proto().address(), this);
+                main.add(inject(proto().address(), new CAddressStructured()));
                 injectIEmploymentInfo(main, proto(), this);
 
                 main.add(inject(proto().starts()), 8.2);
@@ -242,7 +242,7 @@ public class FinancialViewIncomeForm extends CEntityEditor<PersonalIncome> {
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 10);
-                AddressUtils.injectIAddress(main, proto().address(), this);
+                main.add(inject(proto().address(), new CAddressStructured()));
 
                 main.add(inject(proto().program()), 10);
                 main.add(inject(proto().fieldOfStudy()), 10);
@@ -269,7 +269,7 @@ public class FinancialViewIncomeForm extends CEntityEditor<PersonalIncome> {
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 10);
-                AddressUtils.injectIAddress(main, proto().address(), this);
+                main.add(inject(proto().address(), new CAddressStructured()));
                 injectIEmploymentInfo(main, proto(), this);
                 main.add(inject(proto().fullyOwned()), 10);
                 main.add(inject(proto().monthlyRevenue()), 10);
@@ -294,7 +294,7 @@ public class FinancialViewIncomeForm extends CEntityEditor<PersonalIncome> {
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(summaryViewMode);
                 main.add(inject(proto().name()), 10);
-                AddressUtils.injectIAddress(main, proto().address(), this);
+                main.add(inject(proto().address(), new CAddressStructured()));
                 injectIEmploymentInfo(main, proto(), this);
 
                 main.add(inject(proto().starts()), 8.2);

@@ -20,7 +20,6 @@ import java.util.Map;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -36,10 +35,10 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.AddressUtils;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.CEmailLabel;
+import com.propertyvista.common.client.ui.components.editors.CPriorAddress;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
@@ -47,7 +46,6 @@ import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
@@ -141,7 +139,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(PriorAddress.class)) {
-            return createAddressEditor();
+            return new CPriorAddress();
         } else {
             return super.create(member);
         }
@@ -287,46 +285,4 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
             fileUpload.setTenantID(((IEntity) value).getPrimaryKey());
         }
     }
-
-    private CEntityEditor<PriorAddress> createAddressEditor() {
-        return new CEntityEditor<PriorAddress>(PriorAddress.class) {
-            @SuppressWarnings({ "rawtypes", "unchecked" })
-            @Override
-            public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-                AddressUtils.injectIAddress(main, proto(), this);
-                main.add(inject(proto().moveInDate()), 8.2);
-                main.add(inject(proto().moveOutDate()), 8.2);
-                main.add(inject(proto().phone()), 15);
-
-                CEditableComponent<?, ?> rentedComponent = inject(proto().rented());
-                rentedComponent.addValueChangeHandler(new ValueChangeHandler() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent event) {
-                        setVizibility(getValue());
-                    }
-                });
-                main.add(rentedComponent, 15);
-                main.add(inject(proto().payment()), 8);
-                main.add(inject(proto().managerName()), 30);
-                main.add(new HTML());
-                return main;
-            }
-
-            @Override
-            public void populate(PriorAddress value) {
-                super.populate(value);
-                setVizibility(value);
-            }
-
-            private void setVizibility(PriorAddress value) {
-                boolean rented = OwnedRented.rented.equals(value.rented().getValue());
-                get(proto().payment()).setVisible(rented);
-                get(proto().managerName()).setVisible(rented);
-            }
-
-        };
-
-    }
-
 }

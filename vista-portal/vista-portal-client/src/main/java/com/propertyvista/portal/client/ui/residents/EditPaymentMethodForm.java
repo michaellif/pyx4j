@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -21,7 +20,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.AddressUtils;
+import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
@@ -69,9 +68,8 @@ public class EditPaymentMethodForm extends CEntityEditor<PaymentMethodDTO> {
         subtitle = new VistaHeaderBar(proto().billingAddress().getMeta().getCaption(), "100%");
         subtitle.getElement().getStyle().setBackgroundColor("transparent");
         container.add(subtitle);
-        AddressUtils.injectIAddress(container, proto().billingAddress(), this);
+        container.add(inject(proto().billingAddress(), new CAddressStructured()));
 
         return container;
     }
-
 }
