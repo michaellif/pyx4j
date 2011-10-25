@@ -13,11 +13,13 @@
  */
 package com.propertyvista.portal.domain.payment;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface InteracInfo extends IEntity {
 
+    @Caption(name = "Bank Number")
     IPrimitive<String> bankNo();
 
     IPrimitive<String> transitNo();
