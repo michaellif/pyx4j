@@ -21,28 +21,14 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
-public abstract class CAddressStructuredImpl<A extends AddressStructured> extends CDecoratableEntityEditor<A> {
+public abstract class CAddressSimpleImpl<A extends AddressSimple> extends CDecoratableEntityEditor<A> {
 
-    private final boolean showUnit;
-
-    private final boolean twoColumns;
-
-    public CAddressStructuredImpl(Class<A> clazz) {
-        this(clazz, true);
-    }
-
-    public CAddressStructuredImpl(Class<A> clazz, boolean twoColumns) {
-        this(clazz, twoColumns, true);
-    }
-
-    public CAddressStructuredImpl(Class<A> clazz, boolean twoColumns, boolean showUnit) {
+    public CAddressSimpleImpl(Class<A> clazz) {
         super(clazz);
-        this.twoColumns = twoColumns;
-        this.showUnit = showUnit;
     }
 
     @SuppressWarnings("unchecked")
@@ -50,44 +36,26 @@ public abstract class CAddressStructuredImpl<A extends AddressStructured> extend
         FormFlexPanel main = new FormFlexPanel();
 
         int row = 0;
-        int column = 0;
-        if (showUnit) {
-            main.setWidget(row++, column, decorate(inject(proto().unitNumber()), 12));
-        }
-
-        main.setWidget(row++, column, decorate(inject(proto().streetNumber()), 5));
-        main.setWidget(row++, column, decorate(inject(proto().streetNumberSuffix()), 5));
-        main.setWidget(row++, column, decorate(inject(proto().streetName()), 15));
-        main.setWidget(row++, column, decorate(inject(proto().streetType()), 10));
-        main.setWidget(row++, column, decorate(inject(proto().streetDirection()), 10));
-
-        if (twoColumns) {
-            row = 0;
-            column = 1;
-        }
-        main.setWidget(row++, column, decorate(inject(proto().city()), 15));
-        main.setWidget(row++, column, decorate(inject(proto().county()), 15));
+        main.setWidget(row++, 0, decorate(inject(proto().street1()), 50));
+        main.setWidget(row++, 0, decorate(inject(proto().street2()), 50));
+        main.setWidget(row++, 0, decorate(inject(proto().city()), 15));
 
         // Need local variables to avoid extended casting that make the code unreadable
         CEditableComponent<Province, ?> province = (CEditableComponent<Province, ?>) inject(proto().province());
-        main.setWidget(row++, column, decorate(province, 17));
+        main.setWidget(row++, 0, decorate(province, 17));
 
         CEditableComponent<Country, ?> country = (CEditableComponent<Country, ?>) inject(proto().country());
-        main.setWidget(row++, column, decorate(country, 15));
+        main.setWidget(row++, 0, decorate(country, 15));
 
         CEditableComponent<String, ?> postalCode = (CEditableComponent<String, ?>) inject(proto().postalCode());
-        main.setWidget(row++, column, decorate(postalCode, 7));
+        main.setWidget(row++, 0, decorate(postalCode, 7));
 
         attachFilters(proto(), province, country, postalCode);
 
         return main;
     }
 
-    protected boolean isTwoColumns() {
-        return twoColumns;
-    }
-
-    private void attachFilters(final AddressStructured proto, CEditableComponent<Province, ?> province, CEditableComponent<Country, ?> country,
+    private void attachFilters(final AddressSimple proto, CEditableComponent<Province, ?> province, CEditableComponent<Country, ?> country,
             CEditableComponent<String, ?> postalCode) {
         postalCode.addValueValidator(new ZipCodeValueValidator(this, proto.country()));
         country.addValueChangeHandler(new RevalidationTrigger<Country>(postalCode));
