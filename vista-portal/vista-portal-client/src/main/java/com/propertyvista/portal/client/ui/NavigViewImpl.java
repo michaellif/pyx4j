@@ -42,7 +42,7 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        hover, current
+        hover, active
     }
 
     private NavigPresenter presenter;
@@ -169,11 +169,11 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
 
         public void deselect() {
             selected = false;
-            label.removeStyleDependentName(StyleDependent.current.name());
+            removeStyleName(StyleDependent.active.name());
         }
 
         public void select() {
-            label.addStyleDependentName(StyleDependent.current.name());
+            addStyleName(StyleDependent.active.name());
             selected = true;
         }
 
