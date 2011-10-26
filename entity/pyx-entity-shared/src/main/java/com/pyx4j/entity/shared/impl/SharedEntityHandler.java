@@ -599,6 +599,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     public String getStringView() {
         if (isNull()) {
             return getEntityMeta().getNullString();
+        } else if (!isObjectClassSameAsDef()) {
+            return this.cast().getStringView();
         }
         List<String> sm = getEntityMeta().getToStringMemberNames();
         String format = getEntityMeta().getToStringFormat();
