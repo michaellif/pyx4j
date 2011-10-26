@@ -355,9 +355,9 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
                 case today:
                 case custom:
                     if (EqualsHelper.equals(fromDate.getValue(), toDate.getValue())) {
-                        description += i18n.tr("of {0:date:short}", fromDate.getValue());
+                        description += i18n.tr("of {0,date,short}", fromDate.getValue());
                     } else {
-                        description += i18n.tr("from {0:date:short} to {1:date:short}", fromDate.getValue(), toDate.getValue());
+                        description += i18n.tr("from {0,date,short} to {1,date,short}", fromDate.getValue(), toDate.getValue());
                     }
                     break;
                 default:
