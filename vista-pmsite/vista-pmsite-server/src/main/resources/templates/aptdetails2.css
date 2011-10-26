@@ -5,6 +5,9 @@
 	width: 960px;
 	margin: 0 auto;
 	overflow: hidden;
+	border-left: solid 1px ${object2_20};
+	border-right: solid 1px ${object2_20};
+    background: ${background_10};
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar {
 	display: inline-block;
@@ -46,7 +49,7 @@
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .infoBox {
 	width:100%;
 	font-weight:bold;
-	color:${foreground_60};
+	color:${foreground_80};
 } 
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .infoBoxEntry {
 	padding-top:15px;
@@ -60,7 +63,7 @@
 	padding-top:4px;
 }
 .apartmentDetailsWrap .detailBox {
-	color:${foreground_60};
+	color:${foreground_100};
 	padding-bottom:20px;
 }
 .apartmentDetailsWrap .detailBox .detailBoxTitle {
@@ -68,7 +71,7 @@
 	font-size:14px;
 	font-weight:bold;
 	text-transform:uppercase;
-	color:${foreground_60};
+	color:${foreground_100};
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry {
 	padding: 10px 0;
@@ -86,7 +89,7 @@
 	font-weight:bold;
 	text-transform:uppercase;
 	text-align:right;
-	color:${foreground_40};
+	color:${foreground_80};
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry .detailBoxText {
 	display:inline-block;
@@ -117,7 +120,7 @@
 	vertical-align: top;
 	width:370px;
 	padding:0 10px;
-	color: ${foreground_40};
+	color: ${foreground_80};
 }
 .apartmentDetailsWrap .unitDetails .details {
 	display: inline-block;
@@ -174,12 +177,12 @@
 	color:${foreground_50};
 }
 a.listingCtlButton {
-	color:${foreground_50} !important;
+	color:${foreground_80} !important;
 	text-decoration:none;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover .listingCtlButton {
 	background-image: url("images/template2/aptListIcons-hlight.png");
-	color:${foreground_80} !important;
+	color:${foreground_100} !important;
 }
 #btnViewDetails {
 	background-position:0px -30px;

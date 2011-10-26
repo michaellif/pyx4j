@@ -4,7 +4,6 @@
 .vista-pmsite-content {
     margin: 0 auto;
 	width: 958px;
-	
 	border-left: solid 1px ${object2_20};
 	border-right: solid 1px ${object2_20};
 }
@@ -76,15 +75,12 @@
 
 .vista-pmsite-mainWrap {
 	display:inline-block;
-	background:white;
+	background: ${background_10};
 }
 
 .vista-pmsite-sidebarWrap {
-#	float: left;
 	position: relative;
 	width: 100%;
-	right: 680px;
-#	border: 1px solid ${object2_100};
 	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;
@@ -93,7 +89,6 @@
 .vista-pmsite-sidebar {
 	position: relative;
 	float: left;
-	left: 680px;
 	display:inline-block;
 }
 
@@ -101,7 +96,6 @@
 	width: 658px;
 	position: relative;
 	float: left;
-	left: 681px;
 	background: ${bgC0lor_100};
 	display:inline-block;
 }
@@ -110,6 +104,7 @@
 	float: left;
 	overflow:hidden;
 	width: 100%;
+	border-left: solid 1px ${object2_20};
 }
 
 .testimBox .infobox_header {
@@ -157,7 +152,7 @@
 
 .newsBox {
 	width: 300px;
-	padding: 400px 0 0 ;
+	padding-top: 400px;
 	display: inline-block;
 	min-height: 520px;
 	float: left;
@@ -218,6 +213,7 @@
 	float:left;
 	overflow:hidden;
 	width: 100%;
+	border-left: solid 1px ${object2_20};
 }
 
 .promoBox .infobox_content {

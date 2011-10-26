@@ -7,26 +7,30 @@
 	width: 960px;
 	margin: 0 auto;
 	overflow: hidden;
+	border-left: solid 1px ${object2_20};
+	border-right: solid 1px ${object2_20};
+	background: ${background_10};
 }
 
-.vista-pmsite-signInPage .caption {
-	height: 80px;
+.vista-pmsite-signInPage .vista-pmsite-content .caption {
+	background-size: 100% 100%;
+	background: ${object2_90};
+	height: 70px;
 	overflow: hidden;
-	padding: 40px 0 0 30px;
+	padding: 0 0 0 30px;
 }
 
-.vista-pmsite-signInPage .caption h1 {
+.vista-pmsite-signInPage .vista-pmsite-content .caption h1 {
 	font-size: 36px;
 	font-weight: normal;
-	line-height: 38px;
-	padding: 0 0 20px;
+	line-height: 70px;
+	color: ${object2_10};
 }
 
 .vista-pmsite-signInPage .content {
 	min-height: 396px;
 	color: ${foreground_100};
 	border-top:1px solid ${foreground_20};
-	background-color: white;
 	line-height: 20px;
 	overflow: hidden;
 	padding: 30px 30px 0;
@@ -38,7 +42,7 @@
 .vista-pmsite-signInPage .signInFormWrap input[type=submit] {
 	background: url("images/template2/submit.png") no-repeat;
 	border: none;
-	color: ${background_100};
+	color: ${object2_10};
 	cursor: pointer;
 	font-size: 16px;
 	margin: 15px auto 0;

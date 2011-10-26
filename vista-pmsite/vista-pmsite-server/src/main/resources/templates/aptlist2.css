@@ -4,6 +4,9 @@
 	width: 960px;
 	margin: 0 auto;
 	overflow: hidden;
+	border-left: solid 1px ${object2_20};
+	border-right: solid 1px ${object2_20};
+    background: ${background_10};
 }
 .vista-pmsite-aptListPage .vista-pmsite-sidebar {
 	display: inline-block;
@@ -30,7 +33,7 @@
 .advancedSearchNarrowWrap input[type=submit] {
 	background: url("images/template2/submit.png") no-repeat;
 	border: none;
-	color: ${background_100};
+	color: ${background_10};
 	cursor: pointer;
 	font-size: 16px;
 	margin: 15px auto 0;
@@ -43,6 +46,7 @@
 	display: block;
 	padding: 4px 0;
 	white-space: nowrap;
+	color:${foreground_80};
 }
 
 .advancedSearchNarrowWrap .inputBlockFrame {
@@ -55,14 +59,16 @@
 }
 .advancedSearchNarrowWrap .searchTypeSelButton {
 	float: left;
-	width: 70px;
+	width: 90px;
 	font-size: 14px;
 	letter-spacing: 0px;
-	color:${foreground_100};
 	background-color:${object1_20};
 	margin-left: 10px;
-	padding: 3px 10px;
+	padding: 3px 0;
 	text-align: center;
+}
+.advancedSearchNarrowWrap .searchTypeSelButton label {
+	color:${foreground_100};
 }
 
 .advancedSearchNarrowWrap .searchTypeSelButton:first-child {
@@ -80,7 +86,18 @@
 .advancedSearchNarrowWrap .searchTypeSelButton input[type=radio] {
 	display: none;
 }
-
+.advancedSearchNarrowWrap .searchTypeSelButton.typeselActiveHover {
+	background-color:${object1_60};
+}
+.advancedSearchNarrowWrap .searchTypeSelButton.typeselActiveHover label {
+	color:${object1_20};
+}
+.advancedSearchNarrowWrap .searchTypeSelButton.typeselActive {
+	background-color:${object1_60};
+}
+.advancedSearchNarrowWrap .searchTypeSelButton.typeselActive label {
+	color:${object2_10};
+}
 .advancedSearchNarrowWrap .searchTypeBox {
 	height:100px;
 }
@@ -135,17 +152,9 @@
 .advancedSearchNarrowWrap .searchAmenityBox .amenityList label {
 	display: inline-block;
 	width: 70px;
+	color:${foreground_80};
 }
 
-.advancedSearchNarrowWrap .typeselActiveHover {
-	color:${object1_20} !important;
-	background-color:${foreground_80} !important;
-}
-
-.advancedSearchNarrowWrap .typeselActive {
-	color:${object1_20} !important;
-	background-color:${foreground_80} !important;
-}
 .vista-pmsite-aptListPage .vista-pmsite-main {
 	display: inline-block;
 	width: 744px;
@@ -155,7 +164,7 @@
 	width:100%;
 }
 .vista-pmsite-aptListPage .apartmentListingWrap .listing_listview {
-	background:white;
+	background: ${background_10};
 	padding-bottom:40px;
 }
 
@@ -168,14 +177,14 @@
 	padding-left:30px;
 	margin-top:20px;
 	float:right;
-	color:${foreground_50};
+	color:${object2_30};
 	font-weight:bold;
 	text-transform:uppercase;
 	cursor:pointer;
 }
 .switchMapList:hover {
 	background-image: url("images/template2/aptListIcons-hlight.png");
-	color:${foreground_80};
+	color:${object2_10};
 }
 .switchMapList_List {
 	background-position:0px -60px;
@@ -185,10 +194,9 @@
 	height:650px;
 }
 .apartmentListingWrap .listingEntry {
-	background: ${background_100};
 	padding:20px;
 	border-bottom: 1px solid ${foreground_20};
-	color: #222;
+	color: ${foreground_100};
 }
 .apartmentListingWrap .listingEntry:hover {
 	background-color:${object1_10};

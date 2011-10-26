@@ -33,6 +33,7 @@ import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.model.WicketUtils.AttributeClassModifier;
+import com.propertyvista.pmsite.server.model.WicketUtils.JSActionLink;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
@@ -59,6 +60,7 @@ public class AptListPanel extends Panel {
                 }
                 item.add(new SimpleImage("picture", PMSiteContentManager.getMediaImgUrl(mediaId, ThumbnailSize.small)));
                 item.add(new BookmarkablePageLink<Void>("aptDetails", AptDetailsPage.class, new PageParameters().add("propId", propInfo.id().getValue())));
+                item.add(new JSActionLink("aptMapview", "display_map()", false));
                 AddressStructured addr = propInfo.info().address();
                 String addrFmt = "";
                 if (addr != null) {

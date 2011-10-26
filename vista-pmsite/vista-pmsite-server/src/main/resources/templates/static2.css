@@ -5,6 +5,9 @@
 	width: 960px;
 	margin: 0 auto;
 	overflow: hidden;
+	border-left: solid 1px ${object2_20};
+	border-right: solid 1px ${object2_20};
+	background: ${background_10};
 }
 
 .vista-pmsite-staticPage .secondaryNavig {
@@ -48,7 +51,6 @@
 	min-height: 396px;
 	color: ${foreground_100};
 	border-top:1px solid ${foreground_20};
-	background-color: white;
 	line-height: 20px;
 	overflow: hidden;
 	padding: 30px 30px 0;

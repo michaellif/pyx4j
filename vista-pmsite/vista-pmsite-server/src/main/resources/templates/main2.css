@@ -254,25 +254,27 @@ ul.footer_locations li {
 
 .vista-pmsite-main .caption {
 	background-size: 100% 100%;
-	height: 80px;
+	background: ${object2_90};
+	height: 70px;
 	overflow: hidden;
-	padding: 40px 0 0 30px;
+	padding: 0 0 0 30px;
 }
 
 .vista-pmsite-main .caption h1 {
 	font-size: 36px;
 	font-weight: normal;
-	line-height: 38px;
-	padding: 0 0 20px;
+	line-height: 70px;
+	color: ${object2_10};
 }
 .caption2 {
 	height:60px;
+	background: ${object2_90};
 }
 .vista-pmsite-main .caption2 h1 {
 	font-size: 16px;
 	font-weight: bold;
 	text-transform: uppercase;
 	padding: 22px 0 0 24px;
-	color: ${foreground_60};
+	color: ${object2_10};
 	float: left;
 }
