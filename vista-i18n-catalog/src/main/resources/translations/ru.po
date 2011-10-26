@@ -1,4 +1,3 @@
-﻿# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -8,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-25 16:56-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2011-10-25 22:06-0500\n"
+"Last-Translator: VladS <vlads@pyx4j.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -169,7 +168,7 @@ msgstr "Добавить фильтр ..."
 #: com/propertyvista/common/client/ui/decorations/VistaTableFolderDecorator.java:34
 #, java-format
 msgid "Add {0}"
-msgstr ""
+msgstr "Добавить {0}"
 
 #: com/propertyvista/domain/financial/offering/Feature.java:1
 msgid "Add-On"
@@ -321,7 +320,7 @@ msgstr "Все функции уже отобраны!"
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:532
 #, java-format
 msgid "All {0}(s) have been selected already!"
-msgstr ""
+msgstr "Все {0} (ы) были выбраны уже!"
 
 #: com/propertyvista/dto/BuildingDTO.java:2
 #: com/propertyvista/dto/FloorplanDTO.java:2
@@ -443,9 +442,7 @@ msgstr "Ошибка приложения"
 msgid ""
 "Application is Unavailable due to short maintenance.\n"
 "Please try again in one hour"
-msgstr ""
-"Приложение недоступно из-за короткого технического обслуживания. Пожалуйста,"
-" повторите попытку через один час"
+msgstr "Приложение недоступно из-за короткого технического обслуживания. Пожалуйста, повторите попытку через один час"
 
 #: com/pyx4j/essentials/client/BaseLogInPanel.java:174
 msgid "Application is in Read Only Mode"
@@ -455,17 +452,13 @@ msgstr "Приложение в режиме только для чтения"
 msgid ""
 "Application is in Read Only Mode due to short maintenance.\n"
 "Please retry in few minutes"
-msgstr ""
-"Приложение в режиме только для чтения из-за короткого технического "
-"обслуживания. Пожалуйста, повторите попытку через несколько минут"
+msgstr "Приложение в режиме только для чтения из-за короткого технического обслуживания. Пожалуйста, повторите попытку через несколько минут"
 
 #: com/pyx4j/essentials/server/admin/SystemMaintenance.java:120
 msgid ""
 "Application is in Read Only Mode due to short maintenance.\n"
 "Please try again in one hour"
-msgstr ""
-"Приложение в режиме только для чтения из-за короткого технического "
-"обслуживания. Пожалуйста, повторите попытку через один час"
+msgstr "Приложение в режиме только для чтения из-за короткого технического обслуживания. Пожалуйста, повторите попытку через один час"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
@@ -957,12 +950,8 @@ msgid "By Proximity"
 msgstr "Близостью"
 
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:276
-msgid ""
-"By removing this item you will lose the agreed price adjustment! Are you "
-"sure you want to remove it?"
-msgstr ""
-"Удалив этот пункт вы потеряете согласился корректировки цен! Вы уверены, что"
-" хотите удалить?"
+msgid "By removing this item you will lose the agreed price adjustment! Are you sure you want to remove it?"
+msgstr "Удалив этот пункт вы потеряете согласился корректировки цен! Вы уверены, что хотите удалить?"
 
 #: com/propertyvista/portal/domain/payment/CreditCardInfo.java:2
 msgid "CSC"
@@ -1619,8 +1608,7 @@ msgstr "Дни Вакантные"
 #, java-format
 msgid ""
 "Dear {0},<br/>\n"
-"This email was sent to you in response to your request to apply for Property"
-" Vista apartments.<br/>\n"
+"This email was sent to you in response to your request to apply for Property Vista apartments.<br/>\n"
 "Click the link below to go to the Property Vista site:<br/>\n"
 "    <a style=\"color:#929733\" href=\"{1}{2}\">Application</a>"
 msgstr ""
@@ -1629,10 +1617,8 @@ msgstr ""
 #, java-format
 msgid ""
 "Dear {0},<br/>\n"
-"This email was sent to you in response to your request to modify your "
-"Property Vista account password.<br/>\n"
-"Click the link below to go to the Property Vista site and create new "
-"password for your account:<br/>\n"
+"This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n"
+"Click the link below to go to the Property Vista site and create new password for your account:<br/>\n"
 "    <a style=\"color:#929733\" href=\"{1}{2}\">Change Your Password</a>"
 msgstr ""
 
@@ -2632,15 +2618,8 @@ msgid "Has Properties"
 msgstr "Имеет свойства"
 
 #: com/propertyvista/domain/LegalQuestions.java:2
-msgid ""
-"Have you ever been convicted of a felony that involved an offence against "
-"property, persons, government officials, or that involved firearms, illegal "
-"drugs, or sex or sex crimes?"
-msgstr ""
-"Вы когда-либо был осужден за уголовное преступление, что участие "
-"преступления против собственности, лиц, государственных служащих, которые "
-"участвуют или огнестрельное оружие, наркотики, секс или сексуальные "
-"преступления?"
+msgid "Have you ever been convicted of a felony that involved an offence against property, persons, government officials, or that involved firearms, illegal drugs, or sex or sex crimes?"
+msgstr "Вы когда-либо был осужден за уголовное преступление, что участие преступления против собственности, лиц, государственных служащих, которые участвуют или огнестрельное оружие, наркотики, секс или сексуальные преступления?"
 
 #: com/propertyvista/domain/LegalQuestions.java:2
 msgid "Have you ever been evicted?"
@@ -2663,12 +2642,8 @@ msgid "Have you ever filed for bankruptcy protection?"
 msgstr "Вы когда-нибудь подала заявление о банкротстве?"
 
 #: com/propertyvista/domain/LegalQuestions.java:2
-msgid ""
-"Have you ever had any public record suits, liens, judgements or "
-"reposessions?"
-msgstr ""
-"Были ли у Вас ни в каких костюмах записи залогов, судебные решения или "
-"reposessions?"
+msgid "Have you ever had any public record suits, liens, judgements or reposessions?"
+msgstr "Были ли у Вас ни в каких костюмах записи залогов, судебные решения или reposessions?"
 
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Heat"
@@ -2917,8 +2892,7 @@ msgstr "Неверный запрос типа"
 #: com/propertyvista/portal/server/ptapp/services/ActivationServiceImpl.java:152
 #: com/propertyvista/server/common/security/VistaAuthenticationServicesImpl.java:88
 msgid "Invalid user account, contact support"
-msgstr ""
-"Недопустимая учетная запись пользователя, обратитесь в службу поддержки"
+msgstr "Недопустимая учетная запись пользователя, обратитесь в службу поддержки"
 
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "Irregular"
@@ -3512,7 +3486,7 @@ msgstr "Max Всего"
 #: com/propertyvista/portal/ptapp/client/ui/steps/addons/AddonsViewForm.java:201
 #, java-format
 msgid "Max allowed weight {0} {1}"
-msgstr ""
+msgstr "Макс допустимый вес {0} {1}"
 
 #: com/propertyvista/crm/client/ui/crud/tenant/lead/LeadEditorForm.java:80
 msgid "Max rent"
@@ -3549,7 +3523,7 @@ msgstr "СМИ Загрузить"
 #: com/propertyvista/interfaces/importer/converter/MediaConverter.java:142
 #, java-format
 msgid "Media file not found ''{0}''"
-msgstr ""
+msgstr "Медиа-файл не найден''{0}''"
 
 #: com/propertyvista/crm/client/ui/components/media/MediaItemValidator.java:48
 msgid "Media source cannot be empty!"
@@ -3920,12 +3894,8 @@ msgid "Not a valid e-mail"
 msgstr "Не действительный адрес электронной почты"
 
 #: com/propertyvista/common/client/ui/components/editors/PhoneFormatter.java:71
-msgid ""
-"Not a valid phone number. Please use the following formats: 123-4567 or "
-"123-456-7890 (dashes optional)"
-msgstr ""
-"Не правильный номер телефона. Пожалуйста, используйте следующие форматы: "
-"123-4567 или 123-456-7890 (тире опция)"
+msgid "Not a valid phone number. Please use the following formats: 123-4567 or 123-456-7890 (dashes optional)"
+msgstr "Не правильный номер телефона. Пожалуйста, используйте следующие форматы: 123-4567 или 123-456-7890 (тире опция)"
 
 #: com/propertyvista/crm/client/ui/crud/building/catalog/feature/FeatureItemFolder.java:92
 msgid "Note"
@@ -4036,8 +4006,7 @@ msgstr "Одна полная ширина колонки"
 
 #: com/pyx4j/essentials/client/SessionInactiveDialog.java:79
 msgid "Open another browser instance to keep multiple active sessions."
-msgstr ""
-"Откройте другой браузер например, чтобы хранить несколько активных сеансов."
+msgstr "Откройте другой браузер например, чтобы хранить несколько активных сеансов."
 
 #: com/propertyvista/common/client/ui/decorations/DecorationData.java:1
 msgid "Optional"
@@ -4451,9 +4420,7 @@ msgstr "Пожалуйста, убедитесь, что вы подключен
 msgid ""
 "Please report the incident to technical support,\n"
 "describing the steps taken prior to the error.\n"
-msgstr ""
-"Пожалуйста, сообщите о происшествии в службу технической поддержки, "
-"описывающий меры, принятые до ошибки."
+msgstr "Пожалуйста, сообщите о происшествии в службу технической поддержки, описывающий меры, принятые до ошибки."
 
 #: com/propertyvista/crm/client/ui/components/media/CrmMediaFolder.java:185
 msgid "Please save this first"
@@ -4848,7 +4815,7 @@ msgstr "Удалить фильтр"
 #: com/propertyvista/common/client/ui/decorations/VistaTableFolderItemDecorator.java:31
 #, java-format
 msgid "Remove {0}"
-msgstr ""
+msgstr "Удалить {0}"
 
 #: com/propertyvista/domain/property/vendor/License.java:2
 msgid "Renewal"
@@ -5834,8 +5801,7 @@ msgstr "Дата должна быть не менее Сегодня Дата"
 #: com/propertyvista/crm/client/activity/login/ResetPasswordActivity.java:63
 #: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:64
 msgid "The URL you tried to use is either incorrect or no longer valid."
-msgstr ""
-"URL вы пытались использовать либо неправильные или больше не действует."
+msgstr "URL вы пытались использовать либо неправильные или больше не действует."
 
 #: com/propertyvista/portal/ptapp/client/ui/steps/info/InfoViewForm.java:169
 #: com/propertyvista/portal/ptapp/client/ui/steps/info/InfoViewForm.java:199
@@ -5882,7 +5848,7 @@ msgstr "Есть нет товаров в продаже!"
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:535
 #, java-format
 msgid "There are no {0}(s) available!"
-msgstr ""
+msgstr "Есть не {0} (ы) в продаже!"
 
 #: com/propertyvista/common/client/ui/validators/YouTubeVideoIdValidator.java:41
 msgid "This is not a valid YouTube Video ID"
@@ -5926,7 +5892,7 @@ msgstr "Название"
 
 #: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:232
 msgid "To"
-msgstr "К"
+msgstr "До"
 
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 msgid "To Be Provided"
@@ -6124,13 +6090,13 @@ msgstr "URL"
 #: com/propertyvista/server/common/blob/ThumbnailService.java:72
 #, java-format
 msgid "Unable to read the image ''{0}''"
-msgstr ""
+msgstr "Невозможно прочитать изображение''{0}''"
 
 #: com/propertyvista/server/common/blob/ImageResizer.java:121
 #: com/propertyvista/server/common/blob/ThumbnailService.java:79
 #, java-format
 msgid "Unable to resample the image ''{0}''"
-msgstr ""
+msgstr "Не могу изменить размер изображение''{0}''"
 
 #: com/propertyvista/domain/tenant/TenantIn.java:1
 #: com/propertyvista/domain/tenant/income/TenantGuarantor.java:1
@@ -6235,18 +6201,18 @@ msgstr "Единицы перевернулся Pct"
 #: com/pyx4j/essentials/client/upload/UploadPanel.java:192
 #, java-format
 msgid "Unsupported Extension ''{0}''"
-msgstr ""
+msgstr "Не поддерживается расширение''{0}''"
 
 #: com/propertyvista/interfaces/importer/converter/MediaConverter.java:116
 #: com/propertyvista/interfaces/importer/converter/MediaConverter.java:154
 #, java-format
 msgid "Unsupported Media file ''{0}'' extension ''{1}''"
-msgstr ""
+msgstr "Неподдерживаемые файл Медиа''{0}''расширения''{1}''"
 
 #: com/pyx4j/essentials/server/upload/UploadServiceImpl.java:98
 #, java-format
 msgid "Unsupported file type {0}"
-msgstr ""
+msgstr "Неподдерживаемый тип файла {0}"
 
 #: com/propertyvista/admin/rpc/PmcImportDTO.java:1
 msgid "Update Data"
@@ -6467,20 +6433,14 @@ msgid ""
 "We updated our application.\n"
 "In order to continue using this application you need to refresh the page.\n"
 " Do you want to refresh the page now?"
-msgstr ""
-"Мы обновили наше приложение. Для того, чтобы продолжить использование этого "
-"приложения необходимо обновить страницу. Вы хотите, чтобы обновить страницу "
-"сейчас?"
+msgstr "Мы обновили наше приложение. Для того, чтобы продолжить использование этого приложения необходимо обновить страницу. Вы хотите, чтобы обновить страницу сейчас?"
 
 #: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:47
 msgid ""
 "We updated our application.\n"
 "In order to continue using this application you need to refresh the page.\n"
 "Please refresh the page now!"
-msgstr ""
-"Мы обновили наше приложение. Для того, чтобы продолжить использование этого "
-"приложения необходимо обновить страницу. Пожалуйста, обновите страницу "
-"сейчас!"
+msgstr "Мы обновили наше приложение. Для того, чтобы продолжить использование этого приложения необходимо обновить страницу. Пожалуйста, обновите страницу сейчас!"
 
 #: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:127
 #: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:134
@@ -6489,15 +6449,8 @@ msgstr "Приносим извинения"
 
 #: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:66
 #: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:128
-msgid ""
-"We're sorry but your requests look similar to automated requests initiated "
-"by computer virus or spyware applications. To protect our users, we can't "
-"process your request at this time"
-msgstr ""
-"Мы сожалеем, но ваш запрос похож на автоматизированные запросы "
-"инициированные компьютерного вируса или шпионского приложения. Чтобы "
-"защитить наших пользователей, мы не можем обработать ваш запрос в данный "
-"момент"
+msgid "We're sorry but your requests look similar to automated requests initiated by computer virus or spyware applications. To protect our users, we can't process your request at this time"
+msgstr "Мы сожалеем, но ваш запрос похож на автоматизированные запросы инициированные компьютерного вируса или шпионского приложения. Чтобы защитить наших пользователей, мы не можем обработать ваш запрос в данный момент"
 
 #: com/propertyvista/domain/settings/YardiConnection.java:2
 msgid "Web service URL"
@@ -6566,8 +6519,7 @@ msgstr "Рабочий телефон"
 
 #: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:132
 msgid "YES, I WANT TO ENROLL INTO PRE-AUTHORIZED PAYMENT PLAN AND SAVE!"
-msgstr ""
-"ДА, я хочу зарегистрироваться в PRE-УПОЛНОМОЧЕННЫЙ ПЛАН ОПЛАТЫ И СОХРАНИТЬ!"
+msgstr "ДА, я хочу зарегистрироваться в PRE-УПОЛНОМОЧЕННЫЙ ПЛАН ОПЛАТЫ И СОХРАНИТЬ!"
 
 #: com/propertyvista/domain/settings/YardiConnection.java:0
 msgid "Yardi Connection"
@@ -6635,9 +6587,7 @@ msgstr "Ваша учетная запись приостановлена"
 msgid ""
 "Your browser prevented this application from opening pop-up window\n"
 "Please disable your pop-up blocker for this application"
-msgstr ""
-"Ваш браузер помешали этому приложению открывать всплывающее окно Пожалуйста,"
-" отключите блокировку всплывающих окон для данного приложения"
+msgstr "Ваш браузер помешали этому приложению открывать всплывающее окно Пожалуйста, отключите блокировку всплывающих окон для данного приложения"
 
 #: com/propertyvista/portal/server/ptapp/services/PaymentServiceImpl.java:83
 msgid "Your card has been declined"
@@ -6651,9 +6601,7 @@ msgstr "Ваша сессия была прервана"
 msgid ""
 "Your session has been terminated.\n"
 "Only one Application session can be active in a browser."
-msgstr ""
-"Ваша сессия была прервана. Только одно приложение сессии могут быть "
-"активными в браузере."
+msgstr "Ваша сессия была прервана. Только одно приложение сессии могут быть активными в браузере."
 
 #: com/propertyvista/domain/contact/AddressStructured.java:2
 msgid "Zip/Postal Code"
@@ -6668,7 +6616,7 @@ msgstr "иЧек"
 #: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:360
 #, java-format
 msgid "from {0:date:short} to {1:date:short}"
-msgstr ""
+msgstr "от {0:date:short} до {1:date:short}"
 
 #: com/pyx4j/forms/client/ui/CTimeField.java:36
 msgid "h:mm a"
@@ -6707,12 +6655,12 @@ msgstr "числовой"
 #: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:358
 #, java-format
 msgid "of {0:date:short}"
-msgstr ""
+msgstr "от {0:date:short}"
 
 #: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:364
 #, java-format
 msgid "of {0}"
-msgstr ""
+msgstr "из {0:date:short}"
 
 #: com/pyx4j/essentials/client/BaseLogInPanel.java:135
 msgid "or login using Google Accounts"
@@ -6726,7 +6674,7 @@ msgstr "ReCaptcha подключения не удалась"
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:79
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:83
 msgid "to"
-msgstr "к"
+msgstr "до"
 
 #: com/propertyvista/domain/financial/offering/extradata/Vehicle.java:2
 #: com/propertyvista/domain/property/asset/Roof.java:2
@@ -6737,15 +6685,13 @@ msgstr "yyyy"
 
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:68
 #, java-format
-msgid ""
-"{0,choice,null#Any|0#Less than ${1}|0<{1,choice,null#Over ${0}|0<${0} - "
-"${1}}}"
-msgstr ""
+msgid "{0,choice,null#Any|0#Less than ${1}|0<{1,choice,null#Over ${0}|0<${0} - ${1}}}"
+msgstr "{0,choice,null#Любой|0#Меньше чем ${1}|0<{1,choice,null#Больше чем ${0}|0<${0} - ${1}}}"
 
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:101
 #, java-format
 msgid "{0,choice,null#Any|0#Less than {1}|0<{0}{1,choice,null# and more|0<}}"
-msgstr ""
+msgstr "{0,choice,null#Любой|0#Менише {1}|0<{0}{1,choice,null# и больше|0<}}"
 
 #: com/pyx4j/site/client/AbstractSiteDispatcher.java:284
 #, java-format
@@ -6753,6 +6699,8 @@ msgid ""
 "{0}\n"
 "Contact administrator"
 msgstr ""
+"{0}\n"
+"Обратится к администратору"
 
 #: com/propertyvista/domain/property/asset/Floorplan.java:0
 #, java-format
@@ -6767,7 +6715,7 @@ msgstr "{0} Спальня"
 #: com/pyx4j/essentials/client/crud/EntityEditorPanel.java:137
 #, java-format
 msgid "{0} is saved"
-msgstr ""
+msgstr "{0} сохранился"
 
 #: com/pyx4j/forms/client/ui/CNumberField.java:85
 #, java-format
@@ -6803,7 +6751,7 @@ msgstr ""
 #: com/propertyvista/domain/financial/offering/ChargeItem.java:0
 #, java-format
 msgid "{0}, Base Price: {1}, Adjusted Price: {2}"
-msgstr ""
+msgstr "{0}, Базовая цена: {1}, скорректированная цена: {2}"
 
 #: com/pyx4j/entity/client/ui/datatable/DataTableActionsBar.java:171
 #, java-format
@@ -6813,7 +6761,7 @@ msgstr "{0}-{1} из {2}"
 #: com/propertyvista/crm/client/ui/components/cms/FileUploadHyperlink.java:66
 #, java-format
 msgid "{0}; Upload new file"
-msgstr ""
+msgstr "{0}; Загрузить новый файл"
 
 #: com/propertyvista/domain/contact/Phone.java:0
 #: com/propertyvista/domain/property/PropertyPhone.java:0
@@ -6825,3 +6773,4 @@ msgstr "{0}{1,choice,null#|!null# доб.{1}}"
 #, java-format
 msgid "{1} {2}, {3}"
 msgstr ""
+

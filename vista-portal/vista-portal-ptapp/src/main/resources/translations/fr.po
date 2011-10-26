@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-25 16:58-0400\n"
+"POT-Creation-Date: 2011-10-25 22:06-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -137,7 +137,7 @@ msgstr "Ajouter Garant"
 msgid "Add filter..."
 msgstr "Ajouter le filtre ..."
 
-#: com/propertyvista/common/client/ui/VistaBoxFolder.java:56
+#: com/propertyvista/common/client/ui/VistaBoxFolder.java:53
 #: com/propertyvista/common/client/ui/VistaTableFolder.java:66
 #: com/propertyvista/common/client/ui/decorations/VistaBoxFolderDecorator.java:31
 #: com/propertyvista/common/client/ui/decorations/VistaTableFolderDecorator.java:34
@@ -191,7 +191,6 @@ msgstr "Prix ​​ajusté"
 msgid "Adjustments"
 msgstr "Ajustements"
 
-#: com/propertyvista/common/client/ui/components/editors/CMarketing.java:47
 #: com/propertyvista/domain/marketing/AdvertisingBlurb.java:0
 msgid "Advertising Blurb"
 msgstr "La publicité Blurb"
@@ -1531,17 +1530,9 @@ msgstr "Due Date"
 msgid "Duplicate contacts specified"
 msgstr "Dupliquer des contacts spécifiés"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/addons/AddonsViewForm.java:104
-msgid "Duplicate pets specified"
-msgstr "Dupliquer animaux spécifiés"
-
 #: com/propertyvista/portal/ptapp/client/ui/steps/tenants/TenantsViewForm.java:82
 msgid "Duplicate tenants specified"
 msgstr "Dupliquer locataires spécifiée"
-
-#: com/propertyvista/portal/ptapp/client/ui/steps/addons/AddonsViewForm.java:132
-msgid "Duplicate vehicles specified"
-msgstr "Dupliquer véhicules visés"
 
 #: com/pyx4j/essentials/rpc/admin/SystemMaintenanceState.java:2
 msgid "Duration (min)"
@@ -1691,10 +1682,6 @@ msgstr "Type de l'événement"
 #: com/propertyvista/portal/domain/payment/CreditCardInfo.java:2
 msgid "Exact Name"
 msgstr "Nom exact"
-
-#: com/propertyvista/portal/ptapp/client/ui/steps/addons/AddonsViewForm.java:119
-msgid "Exceeded number of allowed pets"
-msgstr "Nombre a dépassé d'animaux autorisés"
 
 #: com/propertyvista/portal/ptapp/client/ui/steps/tenants/TenantsViewForm.java:97
 msgid "Exceeded number of allowed tenants"
@@ -2851,11 +2838,6 @@ msgstr "Prix ​​Max"
 msgid "Max Total"
 msgstr "Max totale"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/addons/AddonsViewForm.java:201
-#, java-format
-msgid "Max allowed weight {0} {1}"
-msgstr ""
-
 #: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:65
 msgid "Maximize"
 msgstr "Optimiser"
@@ -3516,7 +3498,6 @@ msgstr "Pourcentage Off"
 #: com/propertyvista/domain/tenant/Tenant.java:1
 #: com/propertyvista/domain/tenant/Tenant.java:2
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
-#: com/propertyvista/portal/ptapp/client/ui/steps/tenants/TenantsViewForm.java:105
 #: com/propertyvista/portal/rpc/ptapp/dto/TenantInApplicationDTO.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/TenantInfoDTO.java:2
 msgid "Person"
@@ -3971,7 +3952,7 @@ msgstr "Supprimer le fichier"
 msgid "Remove filter"
 msgstr "Retirer le filtre"
 
-#: com/propertyvista/common/client/ui/VistaBoxFolder.java:62
+#: com/propertyvista/common/client/ui/VistaBoxFolder.java:58
 #: com/propertyvista/common/client/ui/VistaTableFolder.java:71
 #: com/propertyvista/common/client/ui/decorations/VistaTableFolderItemDecorator.java:31
 #, java-format

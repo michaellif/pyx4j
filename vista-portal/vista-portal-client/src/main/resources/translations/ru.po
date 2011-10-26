@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-25 16:58-0400\n"
+"POT-Creation-Date: 2011-10-25 22:06-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -133,13 +133,13 @@ msgstr "Добавить еще"
 msgid "Add filter..."
 msgstr "Добавить фильтр ..."
 
-#: com/propertyvista/common/client/ui/VistaBoxFolder.java:56
+#: com/propertyvista/common/client/ui/VistaBoxFolder.java:53
 #: com/propertyvista/common/client/ui/VistaTableFolder.java:66
 #: com/propertyvista/common/client/ui/decorations/VistaBoxFolderDecorator.java:31
 #: com/propertyvista/common/client/ui/decorations/VistaTableFolderDecorator.java:34
 #, java-format
 msgid "Add {0}"
-msgstr ""
+msgstr "Добавить {0}"
 
 #: com/propertyvista/domain/financial/offering/Feature.java:1
 msgid "Add-On"
@@ -186,7 +186,6 @@ msgstr "Скорректированная цена"
 msgid "Adjustments"
 msgstr "Корректировки"
 
-#: com/propertyvista/common/client/ui/components/editors/CMarketing.java:47
 #: com/propertyvista/domain/marketing/AdvertisingBlurb.java:0
 msgid "Advertising Blurb"
 msgstr "Рекламная анотация"
@@ -3857,12 +3856,12 @@ msgstr "Удалить файл"
 msgid "Remove filter"
 msgstr "Удалить фильтр"
 
-#: com/propertyvista/common/client/ui/VistaBoxFolder.java:62
+#: com/propertyvista/common/client/ui/VistaBoxFolder.java:58
 #: com/propertyvista/common/client/ui/VistaTableFolder.java:71
 #: com/propertyvista/common/client/ui/decorations/VistaTableFolderItemDecorator.java:31
 #, java-format
 msgid "Remove {0}"
-msgstr ""
+msgstr "Удалить {0}"
 
 #: com/propertyvista/domain/property/vendor/License.java:2
 msgid "Renewal"
@@ -4899,7 +4898,7 @@ msgstr "Единицы перевернулся Pct"
 #: com/pyx4j/essentials/client/upload/UploadPanel.java:192
 #, java-format
 msgid "Unsupported Extension ''{0}''"
-msgstr ""
+msgstr "Не поддерживается расширение''{0}''"
 
 #: com/propertyvista/domain/User.java:2
 msgid "Updated"
@@ -5262,11 +5261,13 @@ msgid ""
 "{0,choice,null#Any|0#Less than ${1}|0<{1,choice,null#Over ${0}|0<${0} - "
 "${1}}}"
 msgstr ""
+"{0,choice,null#Любой|0#Меньше чем ${1}|0<{1,choice,null#Больше чем "
+"${0}|0<${0} - ${1}}}"
 
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:101
 #, java-format
 msgid "{0,choice,null#Any|0#Less than {1}|0<{0}{1,choice,null# and more|0<}}"
-msgstr ""
+msgstr "{0,choice,null#Любой|0#Менише {1}|0<{0}{1,choice,null# и больше|0<}}"
 
 #: com/pyx4j/site/client/AbstractSiteDispatcher.java:284
 #, java-format
@@ -5274,6 +5275,8 @@ msgid ""
 "{0}\n"
 "Contact administrator"
 msgstr ""
+"{0}\n"
+"Обратится к администратору"
 
 #: com/propertyvista/domain/property/asset/Floorplan.java:0
 #, java-format
@@ -5283,7 +5286,7 @@ msgstr "{0} (Спальные места: {1} Ванные: {2})"
 #: com/pyx4j/essentials/client/crud/EntityEditorPanel.java:137
 #, java-format
 msgid "{0} is saved"
-msgstr ""
+msgstr "{0} сохранился"
 
 #: com/pyx4j/forms/client/ui/CNumberField.java:85
 #, java-format
@@ -5314,7 +5317,7 @@ msgstr ""
 #: com/propertyvista/domain/financial/offering/ChargeItem.java:0
 #, java-format
 msgid "{0}, Base Price: {1}, Adjusted Price: {2}"
-msgstr ""
+msgstr "{0}, Базовая цена: {1}, скорректированная цена: {2}"
 
 #: com/pyx4j/entity/client/ui/datatable/DataTableActionsBar.java:171
 #, java-format

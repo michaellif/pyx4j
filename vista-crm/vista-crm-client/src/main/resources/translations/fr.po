@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-25 16:58-0400\n"
+"POT-Creation-Date: 2011-10-25 22:06-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -153,7 +153,7 @@ msgstr "Ajouter le gadget ..."
 msgid "Add filter..."
 msgstr "Ajouter le filtre ..."
 
-#: com/propertyvista/common/client/ui/VistaBoxFolder.java:56
+#: com/propertyvista/common/client/ui/VistaBoxFolder.java:53
 #: com/propertyvista/common/client/ui/VistaTableFolder.java:66
 #: com/propertyvista/common/client/ui/decorations/VistaBoxFolderDecorator.java:31
 #: com/propertyvista/common/client/ui/decorations/VistaTableFolderDecorator.java:34
@@ -215,7 +215,6 @@ msgstr "Ajustements"
 msgid "Administration"
 msgstr "Administration"
 
-#: com/propertyvista/common/client/ui/components/editors/CMarketing.java:47
 #: com/propertyvista/domain/marketing/AdvertisingBlurb.java:0
 msgid "Advertising Blurb"
 msgstr "La publicité Blurb"
@@ -298,7 +297,6 @@ msgstr "Toutes les fonctions ont déjà été sélectionnés!"
 msgid "Amenities"
 msgstr "Services"
 
-#: com/propertyvista/crm/client/ui/crud/floorplan/FloorplanEditorForm.java:79
 #: com/propertyvista/domain/marketing/yield/Amenity.java:0
 #: com/propertyvista/portal/domain/dto/AmenityDTO.java:0
 msgid "Amenity"
@@ -1144,7 +1142,7 @@ msgid "Concession"
 msgstr "Concession"
 
 #: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:109
-#: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceEditorForm.java:93
+#: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceEditorForm.java:96
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/Service.java:2
 #: com/propertyvista/domain/financial/offering/ServiceCatalog.java:2
@@ -2615,8 +2613,6 @@ msgstr "Le chiffre d'affaires est mesurée par le pourcentage"
 msgid "Is fully owned"
 msgstr "Est entièrement détenue"
 
-#: com/propertyvista/crm/client/ui/crud/building/catalog/feature/FeatureItemFolder.java:42
-#: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceItemFolder.java:46
 #: com/pyx4j/forms/client/ui/NativeFormFolder.java:115
 msgid "Item"
 msgstr "Item"
@@ -4038,7 +4034,6 @@ msgstr "Fenêtre popup bloquée"
 msgid "Portal Preferences"
 msgstr "Préférences Portail"
 
-#: com/propertyvista/crm/client/ui/crud/organisation/PortfolioEditorForm.java:60
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/company/AssignedPortfolio.java:2
 #: com/propertyvista/domain/company/Portfolio.java:0
@@ -4341,7 +4336,7 @@ msgstr "Supprimer le fichier"
 msgid "Remove filter"
 msgstr "Retirer le filtre"
 
-#: com/propertyvista/common/client/ui/VistaBoxFolder.java:62
+#: com/propertyvista/common/client/ui/VistaBoxFolder.java:58
 #: com/propertyvista/common/client/ui/VistaTableFolder.java:71
 #: com/propertyvista/common/client/ui/decorations/VistaTableFolderItemDecorator.java:31
 #, java-format
