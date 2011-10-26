@@ -20,14 +20,19 @@
  */
 package com.pyx4j.entity.rdb;
 
+import java.util.List;
+
 import junit.framework.Assert;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
+import com.pyx4j.entity.test.shared.domain.inherit.Concrete3AssignedPKEntity;
 import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
 
 public abstract class PolymorphicTestCase extends DatastoreTestBase {
@@ -339,4 +344,38 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
     }
 
+    public void testQueryByPolymorphicEntity() {
+        // Prepare data
+        Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
+        Concrete1Entity ent11 = EntityFactory.create(Concrete1Entity.class);
+        ent11.nameC1().setValue("c1:" + uniqueString());
+        ent1.refference().set(ent11);
+        srv.persist(ent11);
+        srv.persist(ent1);
+
+        Concrete2Entity ent2 = EntityFactory.create(Concrete2Entity.class);
+        // Force creation of second entity of different type with the same key
+        Concrete3AssignedPKEntity ent21 = EntityFactory.create(Concrete3AssignedPKEntity.class);
+        ent21.setPrimaryKey(ent11.getPrimaryKey());
+        ent21.nameC3().setValue("c3:" + uniqueString());
+        ent2.refference().set(ent21);
+        srv.persist(ent21);
+        srv.persist(ent2);
+
+        // test retrieval
+        {
+            EntityQueryCriteria<Concrete2Entity> criteria = EntityQueryCriteria.create(Concrete2Entity.class);
+            criteria.add(PropertyCriterion.eq(ent2.refference(), ent21));
+            List<Concrete2Entity> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 1, found.size());
+            Assert.assertEquals(ent21, found.get(0).refference());
+        }
+
+        {
+            EntityQueryCriteria<Concrete2Entity> criteria = EntityQueryCriteria.create(Concrete2Entity.class);
+            criteria.add(PropertyCriterion.eq(ent2.refference(), ent11));
+            Concrete2Entity found = srv.retrieve(criteria);
+            Assert.assertEquals(ent11, found.refference());
+        }
+    }
 }

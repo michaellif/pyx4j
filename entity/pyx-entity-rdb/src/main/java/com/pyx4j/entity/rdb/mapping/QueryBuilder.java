@@ -105,6 +105,9 @@ public class QueryBuilder<T extends IEntity> {
                         objectClassType = memeberWithAlias.memberOper.getMemberMeta().getObjectClassType();
                         memberPersistenceName = memeberWithAlias.memberOper.sqlName();
                     }
+
+                    String secondPersistenceName = null;
+
                     switch (objectClassType) {
                     case EntityList:
                     case EntitySet:
@@ -113,11 +116,19 @@ public class QueryBuilder<T extends IEntity> {
                         break;
                     default:
                         if (memeberWithAlias == null) {
-                            sql.append(alias).append('.');
+                            sql.append(alias).append('.').append(dialect.getNamingConvention().sqlFieldName(memberPersistenceName));
                         } else {
-                            sql.append(memeberWithAlias.alias).append('.');
+                            boolean firstValue = true;
+                            for (String name : memeberWithAlias.memberOper.getValueAdapter().getColumnNames(
+                                    memeberWithAlias.alias + "." + memeberWithAlias.memberOper.sqlName())) {
+                                if (firstValue) {
+                                    sql.append(name);
+                                    firstValue = false;
+                                } else {
+                                    secondPersistenceName = name;
+                                }
+                            }
                         }
-                        sql.append(dialect.getNamingConvention().sqlFieldName(memberPersistenceName));
                     }
 
                     if (valueIsNull(propertyCriterion.getValue())) {
@@ -187,7 +198,15 @@ public class QueryBuilder<T extends IEntity> {
                         default:
                             throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction());
                         }
-                        bindParams.add(bindValue);
+
+                        if (secondPersistenceName != null) {
+                            //TODO Use proper restriction
+                            sql.append(" AND ").append(secondPersistenceName).append(" = ? ");
+                            memeberWithAlias.bindValue = bindValue;
+                            bindParams.add(memeberWithAlias);
+                        } else {
+                            bindParams.add(bindValue);
+                        }
                     }
                 }
             }
@@ -229,6 +248,8 @@ public class QueryBuilder<T extends IEntity> {
         MemberOperationsMeta memberOper;
 
         String alias;
+
+        Object bindValue;
 
         public MemeberWithAlias(MemberOperationsMeta memberOper, String alias) {
             this.memberOper = memberOper;
@@ -373,8 +394,12 @@ public class QueryBuilder<T extends IEntity> {
             parameterIndex++;
         }
         for (Object param : bindParams) {
-            stmt.setObject(parameterIndex, encodeValue(param));
-            parameterIndex++;
+            if (param instanceof MemeberWithAlias) {
+                parameterIndex += ((MemeberWithAlias) param).memberOper.getValueAdapter().bindValue(stmt, parameterIndex, ((MemeberWithAlias) param).bindValue);
+            } else {
+                stmt.setObject(parameterIndex, encodeValue(param));
+                parameterIndex++;
+            }
         }
         return parameterIndex;
     }
