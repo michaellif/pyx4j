@@ -6615,8 +6615,8 @@ msgstr "иЧек"
 
 #: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:360
 #, java-format
-msgid "from {0:date:short} to {1:date:short}"
-msgstr "от {0:date:short} до {1:date:short}"
+msgid "from {0,date,short} to {1,date,short}"
+msgstr "от {0,date,short} до {1,date,short}"
 
 #: com/pyx4j/forms/client/ui/CTimeField.java:36
 msgid "h:mm a"
@@ -6654,13 +6654,13 @@ msgstr "числовой"
 
 #: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:358
 #, java-format
-msgid "of {0:date:short}"
-msgstr "от {0:date:short}"
+msgid "of {0,date,short}"
+msgstr "от {0,date,short}"
 
 #: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:364
 #, java-format
 msgid "of {0}"
-msgstr "из {0:date:short}"
+msgstr "из {0}"
 
 #: com/pyx4j/essentials/client/BaseLogInPanel.java:135
 msgid "or login using Google Accounts"

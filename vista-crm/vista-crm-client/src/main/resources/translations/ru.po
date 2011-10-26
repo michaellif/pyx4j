@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-25 22:06-0400\n"
+"POT-Creation-Date: 2011-10-26 14:36-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -195,7 +195,7 @@ msgstr "Адрес 1"
 msgid "Address 2"
 msgstr "Адрес 2"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/screening/TenantScreeningEditorForm.java:70
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/TenantScreeningEditorForm.java:71
 #: com/propertyvista/domain/company/Company.java:2
 msgid "Addresses"
 msgstr "Адреса"
@@ -501,7 +501,7 @@ msgstr "Задолженность"
 msgid "Asset Type"
 msgstr "Типу объекта"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/screening/TenantScreeningEditorForm.java:73
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/TenantScreeningEditorForm.java:74
 #: com/propertyvista/domain/tenant/TenantScreening.java:2
 #: com/propertyvista/domain/tenant/income/TenantGuarantor.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/TenantFinancialDTO.java:2
@@ -520,7 +520,7 @@ msgstr "Назначенный зданий"
 msgid "Assigned Portfolio"
 msgstr "Назначенный Портфолио"
 
-#: com/propertyvista/crm/client/ui/crud/organisation/EmployeeEditorForm.java:105
+#: com/propertyvista/crm/client/ui/crud/organisation/EmployeeEditorForm.java:107
 msgid "Assigned Portfolios"
 msgstr "Назначенный Портфели"
 
@@ -1581,7 +1581,7 @@ msgstr "Желаемый переезда даты"
 #: com/propertyvista/crm/client/ui/crud/building/lockers/LockerAreaEditorForm.java:49
 #: com/propertyvista/crm/client/ui/crud/building/parking/ParkingEditorForm.java:49
 #: com/propertyvista/crm/client/ui/crud/organisation/EmployeeEditorForm.java:56
-#: com/propertyvista/crm/client/ui/crud/tenant/TenantEditorForm.java:133
+#: com/propertyvista/crm/client/ui/crud/tenant/TenantEditorForm.java:140
 #: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseEditorForm.java:67
 #: com/propertyvista/crm/client/ui/crud/unit/UnitEditorForm.java:59
 #: com/propertyvista/crm/client/ui/crud/unit/UnitItemEditorForm.java:47
@@ -1686,7 +1686,7 @@ msgstr "Сушилка"
 msgid "Due Date"
 msgstr "Дата Выполнения"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/TenantEditorForm.java:124
+#: com/propertyvista/crm/client/ui/crud/tenant/TenantEditorForm.java:131
 msgid "Duplicate contacts specified"
 msgstr "Повторяющиеся контакты указанной"
 
@@ -2297,7 +2297,7 @@ msgstr "Групповое упражнение"
 msgid "Guarantor should be at least 18 years old"
 msgstr "Гарант должен составлять не менее 18 лет"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/screening/TenantScreeningEditorForm.java:74
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/TenantScreeningEditorForm.java:75
 #: com/propertyvista/domain/tenant/TenantScreening.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/TenantFinancialDTO.java:2
 msgid "Guarantors"
@@ -2475,7 +2475,7 @@ msgstr "Доходы информация Студенческая доход"
 msgid "Income Source"
 msgstr "Источник дохода"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/screening/TenantScreeningEditorForm.java:72
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/TenantScreeningEditorForm.java:73
 #: com/propertyvista/domain/tenant/TenantScreening.java:2
 #: com/propertyvista/domain/tenant/income/TenantGuarantor.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/TenantFinancialDTO.java:2
@@ -3034,7 +3034,7 @@ msgstr "Управление отчетами"
 msgid "Managed Employee"
 msgstr "Управляемые сотрудников"
 
-#: com/propertyvista/crm/client/ui/crud/organisation/EmployeeEditorForm.java:108
+#: com/propertyvista/crm/client/ui/crud/organisation/EmployeeEditorForm.java:110
 msgid "Managed Employees"
 msgstr "Управляемые Сотрудники"
 
@@ -3289,7 +3289,7 @@ msgstr "Мать"
 msgid "Move In Date"
 msgstr "Переместить в дате"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/screening/TenantScreeningEditorForm.java:135
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/TenantScreeningEditorForm.java:136
 msgid "Move In Date must be less then Move Out Date"
 msgstr "Переместить в Дата должна быть меньше, чем выйти дате"
 
@@ -3302,7 +3302,7 @@ msgstr "Переместить в день"
 msgid "Move Out Date"
 msgstr "Выйти Дата"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/screening/TenantScreeningEditorForm.java:156
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/TenantScreeningEditorForm.java:157
 msgid "Move Out Date must be greater then Move In Date"
 msgstr "Выйти Дата должна быть больше, далее двигаться по дате"
 
@@ -3856,6 +3856,7 @@ msgstr "Процент от Услуга Цена"
 msgid "Percentage Off"
 msgstr "Процент Офф"
 
+#: com/propertyvista/common/client/ui/components/editors/CEmergencyContact.java:42
 #: com/propertyvista/domain/company/OrganizationContact.java:2
 #: com/propertyvista/domain/person/Person.java:0
 #: com/propertyvista/domain/property/asset/Owner.java:2
@@ -4538,7 +4539,7 @@ msgstr "Школа"
 msgid "Scoping"
 msgstr "Предварительное"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/TenantEditorForm.java:134
+#: com/propertyvista/crm/client/ui/crud/tenant/TenantEditorForm.java:141
 msgid "Screening"
 msgstr "Скрининг"
 
@@ -4559,7 +4560,7 @@ msgstr "Сезонно Занятые"
 msgid "Second Parking"
 msgstr "Вторая парковка"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/screening/TenantScreeningEditorForm.java:69
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/TenantScreeningEditorForm.java:70
 msgid "Secure Information"
 msgstr "Безопасность информации"
 
@@ -5095,6 +5096,7 @@ msgstr "Смена владельца"
 msgid "Target"
 msgstr "Цель"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/TenantEditorForm.java:74
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/marketing/PublicVisibilityType.java:1
 #: com/propertyvista/domain/tenant/Tenant.java:0
@@ -5956,8 +5958,8 @@ msgstr "иЧек"
 
 #: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:360
 #, java-format
-msgid "from {0:date:short} to {1:date:short}"
-msgstr "от {0:date:short} до {1:date:short}"
+msgid "from {0,date,short} to {1,date,short}"
+msgstr "от {0,date,short} до {1,date,short}"
 
 #: com/pyx4j/forms/client/ui/CTimeField.java:36
 msgid "h:mm a"
@@ -5977,13 +5979,13 @@ msgstr "числовой"
 
 #: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:358
 #, java-format
-msgid "of {0:date:short}"
-msgstr "от {0:date:short}"
+msgid "of {0,date,short}"
+msgstr "от {0,date,short}"
 
 #: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:364
 #, java-format
 msgid "of {0}"
-msgstr "из {0:date:short}"
+msgstr "из {0}"
 
 #: com/pyx4j/essentials/client/BaseLogInPanel.java:135
 msgid "or login using Google Accounts"
