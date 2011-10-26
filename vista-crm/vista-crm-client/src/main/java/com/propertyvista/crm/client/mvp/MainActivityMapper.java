@@ -106,6 +106,10 @@ import com.propertyvista.crm.client.activity.report.ReportManagementActivity;
 import com.propertyvista.crm.client.activity.report.ReportViewActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.LockerArea;
+import com.propertyvista.domain.property.asset.Parking;
+import com.propertyvista.domain.property.asset.Roof;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class MainActivityMapper implements AppActivityMapper {
 
@@ -114,11 +118,20 @@ public class MainActivityMapper implements AppActivityMapper {
 
     //TODO create a better two directional mapping
     public static CrudAppPlace getCrudAppPlace(Class<? extends IEntity> entityClass) {
+
         if (entityClass.equals(Floorplan.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Floorplan.class);
-        } else {
-            return null;
+        } else if (entityClass.equals(AptUnit.class)) {
+            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Unit.class);
+        } else if (entityClass.equals(LockerArea.class)) {
+            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.LockerArea.class);
+        } else if (entityClass.equals(Parking.class)) {
+            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Parking.class);
+        } else if (entityClass.equals(Roof.class)) {
+            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Roof.class);
         }
+
+        return null;
     }
 
     @Override
