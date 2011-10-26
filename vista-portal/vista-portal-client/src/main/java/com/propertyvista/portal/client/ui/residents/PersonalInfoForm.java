@@ -53,7 +53,7 @@ public class PersonalInfoForm extends CEntityEditor<ResidentDTO> implements Pers
 
         //Emergency Contacts
         container.setHeader(row++, 0, 1, proto().emergencyContacts().getMeta().getCaption());
-        container.setWidget(row++, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable())));
+        container.setWidget(row++, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false)));
         return container;
     }
 

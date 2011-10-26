@@ -24,8 +24,15 @@ import com.propertyvista.domain.EmergencyContact;
 
 public class CEmergencyContact extends CDecoratableEntityEditor<EmergencyContact> {
 
+    private final boolean twoColumns;
+
     public CEmergencyContact() {
+        this(false);
+    }
+
+    public CEmergencyContact(boolean twoColumns) {
         super(EmergencyContact.class);
+        this.twoColumns = twoColumns;
     }
 
     @Override

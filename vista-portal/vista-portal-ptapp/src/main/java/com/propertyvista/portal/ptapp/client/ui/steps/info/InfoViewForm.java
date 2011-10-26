@@ -127,7 +127,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
         main.add(inject(proto().legalQuestions().filedBankruptcy()), 43, 8);
 
         main.add(new VistaHeaderBar(proto().emergencyContacts()));
-        main.add(inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable())));
+        main.add(inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false)));
 
         main.setWidth("800px");
 
