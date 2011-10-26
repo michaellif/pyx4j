@@ -54,6 +54,12 @@ import com.propertyvista.crm.client.ui.crud.building.parking.ParkingSpotViewerVi
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingSpotViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingViewerView;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.complex.ComplexEditorView;
+import com.propertyvista.crm.client.ui.crud.complex.ComplexEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.complex.ComplexListerView;
+import com.propertyvista.crm.client.ui.crud.complex.ComplexListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.complex.ComplexViewerView;
+import com.propertyvista.crm.client.ui.crud.complex.ComplexViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanEditorView;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanViewerView;
@@ -113,6 +119,13 @@ public class BuildingViewFactory extends ViewFactoryBase {
                 map.put(type, new FloorplanViewerViewImpl());
             } else if (FloorplanEditorView.class.equals(type)) {
                 map.put(type, new FloorplanEditorViewImpl());
+
+            } else if (ComplexListerView.class.equals(type)) {
+                map.put(type, new ComplexListerViewImpl());
+            } else if (ComplexViewerView.class.equals(type)) {
+                map.put(type, new ComplexViewerViewImpl());
+            } else if (ComplexEditorView.class.equals(type)) {
+                map.put(type, new ComplexEditorViewImpl());
             }
         }
         return map.get(type);

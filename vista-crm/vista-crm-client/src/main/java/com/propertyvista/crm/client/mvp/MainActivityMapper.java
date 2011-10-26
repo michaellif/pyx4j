@@ -52,6 +52,9 @@ import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureEditor
 import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceViewerActivity;
+import com.propertyvista.crm.client.activity.crud.complex.ComplexEditorAcitvity;
+import com.propertyvista.crm.client.activity.crud.complex.ComplexListerActivity;
+import com.propertyvista.crm.client.activity.crud.complex.ComplexViewerActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.EmployeeEditorActivity;
@@ -487,6 +490,20 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new FeatureItemTypeViewerActivity(place);
                         break;
                     }
+// - Complex:                    
+                } else if (place instanceof CrmSiteMap.Properties.Complex) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new ComplexEditorAcitvity(place);
+                        break;
+                    case viewer:
+                        activity = new ComplexViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new ComplexListerActivity(place);
+                        break;
+                    }
+
                 }
 
                 callback.onSuccess(activity);

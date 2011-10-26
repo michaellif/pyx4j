@@ -180,6 +180,9 @@ public class UnitStatusListViewImpl implements IsWidget, UnitStatusListView {
 
     public void setFilteringCriteria(UnitStatusListViewFilteringCriteria criteria) {
         this.filterCriteria = criteria;
+        if (settings != null) {
+            settings.currentPage().setValue(0);
+        }
         populate();
     }
 
