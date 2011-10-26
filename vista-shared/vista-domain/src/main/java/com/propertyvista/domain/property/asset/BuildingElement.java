@@ -19,14 +19,10 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
-// TODO : call toString of real (Unit/Parking/Locker) building element here
-//  See usage in @link ServiceItem and @link ServiceItemEditor 
-@ToStringFormat("Building Element")
 @Inheritance
 @AbstractEntity
 public interface BuildingElement extends IEntity {

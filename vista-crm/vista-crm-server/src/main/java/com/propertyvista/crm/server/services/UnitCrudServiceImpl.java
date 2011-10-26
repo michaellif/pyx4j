@@ -15,11 +15,15 @@ package com.propertyvista.crm.server.services;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
+import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptUnitDTO> implements UnitCrudService {
@@ -45,9 +49,27 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
             //Persistence.service().retrieve(in.floorplan().name());
             //Persistence.service().retrieve(in.floorplan().marketingName());
 
-            // just clear unnecessary data before serialisation: 
+            // just clear unnecessary data before serialization: 
             in.marketing().description().setValue(null);
             in.info().economicStatusDescription().setValue(null);
+        }
+
+        // Fill Unit financial data (transient):  
+        in.financial().unitRent().setValue(0.0);
+        in.financial().marketRent().setValue(0.0);
+
+        EntityQueryCriteria<ServiceItem> serviceItemCriteria = new EntityQueryCriteria<ServiceItem>(ServiceItem.class);
+        serviceItemCriteria.add(PropertyCriterion.eq(serviceItemCriteria.proto().element(), in));
+        ServiceItem item = Persistence.service().retrieve(serviceItemCriteria);
+        if (item != null) {
+            in.financial().marketRent().setValue(item.price().getValue());
+        }
+
+        EntityQueryCriteria<Lease> leaseCriteria = new EntityQueryCriteria<Lease>(Lease.class);
+        leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit(), in));
+        Lease lease = Persistence.service().retrieve(leaseCriteria);
+        if (lease != null && !lease.serviceAgreement().isNull() && !lease.serviceAgreement().serviceItem().isNull()) {
+            in.financial().unitRent().setValue(lease.serviceAgreement().serviceItem().price().getValue());
         }
     }
 
