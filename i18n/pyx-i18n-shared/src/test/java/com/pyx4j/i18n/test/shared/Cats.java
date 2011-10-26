@@ -34,6 +34,6 @@ public enum Cats {
 
     @Override
     public String toString() {
-        return I18nEnum.tr(this);
+        return I18nEnum.toString(this);
     }
 }

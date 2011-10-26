@@ -29,14 +29,6 @@ public class I18nEnum {
 
     private static I18n i18n = I18n.get(I18nEnum.class);
 
-    /**
-     * @deprecated use toString function
-     */
-    @Deprecated
-    public static String tr(Enum<?> enumValue) {
-        return toString(enumValue);
-    }
-
     public static String toString(Enum<?> enumValue) {
         /**
          * This is actually server side code.

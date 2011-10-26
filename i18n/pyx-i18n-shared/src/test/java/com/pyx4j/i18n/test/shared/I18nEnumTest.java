@@ -32,18 +32,18 @@ public class I18nEnumTest extends TestCase {
     }
 
     public void XtestTranslation() {
-        assertEquals("Dog", I18nEnum.tr(Pet.dog));
-        assertEquals("Cat", I18nEnum.tr(Pet.cat));
-        assertEquals("Ferret", I18nEnum.tr(Pet.ferret));
+        assertEquals("Dog", I18nEnum.toString(Pet.dog));
+        assertEquals("Cat", I18nEnum.toString(Pet.cat));
+        assertEquals("Ferret", I18nEnum.toString(Pet.ferret));
     }
 
     public void XtestUnAnotedEnum() {
-        assertEquals("Hoof", I18nEnum.tr(HorseFood.Hoof));
-        assertEquals("Grain", I18nEnum.tr(HorseFood.Grain));
+        assertEquals("Hoof", I18nEnum.toString(HorseFood.Hoof));
+        assertEquals("Grain", I18nEnum.toString(HorseFood.Grain));
     }
 
     public void XtestCapitalizeNames() {
-        assertEquals("Felis Catus", I18nEnum.tr(Cats.FelisCatus));
-        assertEquals("African Wildcat", I18nEnum.tr(Cats.africanWildcat));
+        assertEquals("Felis Catus", I18nEnum.toString(Cats.FelisCatus));
+        assertEquals("African Wildcat", I18nEnum.toString(Cats.africanWildcat));
     }
 }
