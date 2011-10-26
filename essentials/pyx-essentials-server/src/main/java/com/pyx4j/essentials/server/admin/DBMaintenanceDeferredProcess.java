@@ -33,14 +33,13 @@ import com.pyx4j.essentials.rpc.admin.DBMaintenanceRequest;
 import com.pyx4j.essentials.rpc.admin.IDBMaintenanceProcessor;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
-import com.pyx4j.essentials.server.report.SearchReportDeferredProcess;
 import com.pyx4j.security.shared.SecurityController;
 
 public class DBMaintenanceDeferredProcess implements IDeferredProcess {
 
     private static final long serialVersionUID = -7944873735643401186L;
 
-    private final static Logger log = LoggerFactory.getLogger(SearchReportDeferredProcess.class);
+    private final static Logger log = LoggerFactory.getLogger(DBMaintenanceDeferredProcess.class);
 
     private final DBMaintenanceRequest request;
 

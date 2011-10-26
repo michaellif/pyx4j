@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.search.IndexedEntitySearch;
 import com.pyx4j.entity.server.search.SearchResultIterator;
@@ -97,28 +98,35 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
                 if (selectedMemberNames == null) {
                     createHeader();
                 }
-                IndexedEntitySearch search = new IndexedEntitySearch(request.getCriteria());
+                @SuppressWarnings({ "rawtypes", "unchecked" })
+                IndexedEntitySearch<IEntity> search = new IndexedEntitySearch(request.getCriteria());
                 search.buildQueryCriteria();
                 SearchResultIterator<IEntity> it = search.getResult(encodedCursorRefference);
-                int currentFetchCount = 0;
-                while (it.hasNext()) {
-                    IEntity ent = it.next();
-                    SecurityController.assertPermission(EntityPermission.permissionRead(ent.getValueClass()));
-                    reportEntity(ent);
-                    fetchCount++;
-                    currentFetchCount++;
-                    if ((System.currentTimeMillis() - start > Consts.SEC2MSEC * 15) || (currentFetchCount > 200)) {
-                        log.warn("Executions time quota exceeded {}; rows {}", currentFetchCount, System.currentTimeMillis() - start);
-                        log.debug("fetch will continue rows {}; characters {}", fetchCount, formater.getBinaryDataSize());
-                        encodedCursorRefference = it.encodedCursorReference();
-                        return;
+                try {
+                    int currentFetchCount = 0;
+                    while (it.hasNext()) {
+                        IEntity ent = it.next();
+                        SecurityController.assertPermission(EntityPermission.permissionRead(ent.getValueClass()));
+                        reportEntity(ent);
+                        fetchCount++;
+                        currentFetchCount++;
+                        if (ServerSideConfiguration.instance().getEnvironmentType() != ServerSideConfiguration.EnvironmentType.LocalJVM) {
+                            if ((System.currentTimeMillis() - start > Consts.SEC2MSEC * 15) || (currentFetchCount > 200)) {
+                                log.warn("Executions time quota exceeded {}; rows {}", currentFetchCount, System.currentTimeMillis() - start);
+                                log.debug("fetch will continue rows {}; characters {}", fetchCount, formater.getBinaryDataSize());
+                                encodedCursorRefference = it.encodedCursorReference();
+                                return;
+                            }
+                        }
+                        if (canceled) {
+                            log.debug("fetch canceled");
+                            break;
+                        }
                     }
-                    if (canceled) {
-                        log.debug("fetch canceled");
-                        break;
-                    }
+                } finally {
+                    it.completeRetrieval();
                 }
-                log.debug("fetch compleate rows {}; characters {}", fetchCount, formater.getBinaryDataSize());
+                log.debug("fetch complete rows {}; characters {}", fetchCount, formater.getBinaryDataSize());
                 fetchCompleate = true;
             } finally {
                 if (canceled) {
