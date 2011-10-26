@@ -215,24 +215,18 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
         int row = -1;
         main.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().legalQuestions().suedForRent()), 10, 40).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
-        main.setHeader(++row, 0, 1, "");
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().suedForDamages()), 10, 40).labelAlignment(Alignment.left)
+                new DecoratorBuilder(inject(proto().legalQuestions().suedForRent()), 10, 45).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().suedForDamages()), 10, 45).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
-        main.setHeader(++row, 0, 1, "");
         main.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().legalQuestions().everEvicted()), 10, 40).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
-        main.setHeader(++row, 0, 1, "");
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().defaultedOnLease()), 10, 40).labelAlignment(Alignment.left)
+                new DecoratorBuilder(inject(proto().legalQuestions().everEvicted()), 10, 45).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().defaultedOnLease()), 10, 45).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
-        main.setHeader(++row, 0, 1, "");
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().convictedOfFelony()), 10, 40).labelAlignment(Alignment.left)
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().convictedOfFelony()), 10, 45).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
-        main.setHeader(++row, 0, 1, "");
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().legalTroubles()), 10, 40).labelAlignment(Alignment.left)
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().legalTroubles()), 10, 45).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
-        main.setHeader(++row, 0, 1, "");
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().filedBankruptcy()), 10, 40).labelAlignment(Alignment.left)
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().filedBankruptcy()), 10, 45).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
 
         return new CrmScrollPanel(main);

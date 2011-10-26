@@ -26,13 +26,13 @@ import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.folders.EmailFolder;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.common.client.ui.components.folders.PhoneFolder;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -41,11 +41,11 @@ import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
-    private final VistaDecoratorsFlowPanel person = new VistaDecoratorsFlowPanel(!isEditable());
+    private final FormFlexPanel person = new FormFlexPanel();
 
-    private final VistaDecoratorsFlowPanel company = new VistaDecoratorsFlowPanel(!isEditable());
+    private final FormFlexPanel company = new FormFlexPanel();
 
-    private final VistaDecoratorsFlowPanel contacts = new VistaDecoratorsFlowPanel(!isEditable());
+    private final FormFlexPanel contacts = new FormFlexPanel();
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
@@ -60,33 +60,40 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
     @Override
     public IsWidget createContent() {
 
+        int row = -1;
+
         //Person
         if (isEditable()) {
-            person.add(inject(proto().person().name().namePrefix()), 6);
-            person.add(inject(proto().person().name().firstName()), 15);
-            person.add(inject(proto().person().name().middleName()), 15);
-            person.add(inject(proto().person().name().lastName()), 15);
-            person.add(inject(proto().person().name().maidenName()), 15);
-            person.add(inject(proto().person().name().nameSuffix()), 6);
+            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().namePrefix()), 5).build());
+            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
+            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().middleName()), 5).build());
+            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 25).build());
+            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().maidenName()), 25).build());
+            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().nameSuffix()), 5).build());
         } else {
-            person.add(inject(proto().person().name(), new CEntityLabel()), 25, "Tenant");
+            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name(), new CEntityLabel()), 25).customLabel(i18n.tr("Tenant")).build());
             get(proto().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
         }
-        person.add(inject(proto().person().birthDate()), 8.2);
+        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().birthDate()), 8.2).build());
 
-        person.add(inject(proto().person().homePhone()), 15);
-        person.add(inject(proto().person().mobilePhone()), 15);
-        person.add(inject(proto().person().workPhone()), 15);
-        person.add(inject(proto().person().email()), 25);
+        person.setWidget(++row, 0, new HTML("&nbsp"));
+
+        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
+        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
+        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 15).build());
+        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 25).build());
 
         //Company
-        company.add(inject(proto().company().name()), 25);
-        company.add(inject(proto().company().website()), 25);
+        company.setWidget(++row, 0, new DecoratorBuilder(inject(proto().company().name()), 25).build());
+        company.setWidget(++row, 0, new DecoratorBuilder(inject(proto().company().website()), 25).build());
 
-        company.add(inject(proto().company().phones(), new PhoneFolder(isEditable())));
-        company.add(inject(proto().company().emails(), new EmailFolder(isEditable())));
+        company.setHeader(++row, 0, 1, proto().company().phones().getMeta().getCaption());
+        company.setWidget(++row, 0, inject(proto().company().phones(), new PhoneFolder(isEditable())));
 
-        contacts.add(inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable())));
+        company.setHeader(++row, 0, 1, proto().company().emails().getMeta().getCaption());
+        company.setWidget(++row, 0, inject(proto().company().emails(), new EmailFolder(isEditable())));
+
+        contacts.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable())));
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;

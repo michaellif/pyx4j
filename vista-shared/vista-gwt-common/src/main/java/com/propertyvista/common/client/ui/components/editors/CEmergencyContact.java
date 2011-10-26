@@ -15,12 +15,11 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.domain.EmergencyContact;
 
 public class CEmergencyContact extends CDecoratableEntityEditor<EmergencyContact> {
@@ -40,10 +39,9 @@ public class CEmergencyContact extends CDecoratableEntityEditor<EmergencyContact
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 5).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 25).build());
         } else {
-            FlowPanel person = DecorationUtils.formFullName(this, proto());
-            person.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            person.getElement().getStyle().setFontSize(1.1, Unit.EM);
-            main.setWidget(++row, 0, person);
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name(), new CEntityLabel()), 25).customLabel(i18n.tr("Person")).build());
+            get(proto().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+            get(proto().name()).asWidget().getElement().getStyle().setFontSize(1.1, Unit.EM);
         }
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
