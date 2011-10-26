@@ -33,8 +33,8 @@ public class CEmergencyContact extends CDecoratableEntityEditor<EmergencyContact
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
-        if (isEditable()) {
 
+        if (isEditable()) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 12).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 6).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 24).build());
