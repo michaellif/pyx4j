@@ -52,5 +52,6 @@ public abstract class CrmEntityForm<E extends IEntity> extends CrudEntityForm<E>
             componentWidth(componentWidth);
             labelWidth(labelWidth);
         }
+
     }
 }
