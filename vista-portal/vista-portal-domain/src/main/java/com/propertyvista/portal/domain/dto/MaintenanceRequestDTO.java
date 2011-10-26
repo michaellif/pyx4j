@@ -33,7 +33,7 @@ public interface MaintenanceRequestDTO extends IEntity {
 
         @Override
         public String toString() {
-            return I18nEnum.tr(this);
+            return I18nEnum.toString(this);
         }
     }
 
@@ -44,7 +44,7 @@ public interface MaintenanceRequestDTO extends IEntity {
 
         @Override
         public String toString() {
-            return I18nEnum.tr(this);
+            return I18nEnum.toString(this);
         }
     }
 

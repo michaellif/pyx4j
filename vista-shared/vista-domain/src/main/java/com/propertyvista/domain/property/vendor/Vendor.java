@@ -39,7 +39,7 @@ public interface Vendor extends Company {
 
         @Override
         public String toString() {
-            return I18nEnum.tr(this);
+            return I18nEnum.toString(this);
         }
     }
 

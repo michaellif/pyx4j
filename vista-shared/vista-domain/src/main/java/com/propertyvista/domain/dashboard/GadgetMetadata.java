@@ -47,7 +47,7 @@ public interface GadgetMetadata extends ISharedUserEntity {
 
         @Override
         public String toString() {
-            return I18nEnum.tr(this);
+            return I18nEnum.toString(this);
         }
     }
 
