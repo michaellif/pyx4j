@@ -31,45 +31,27 @@ public class CEmergencyContact extends CDecoratableEntityEditor<EmergencyContact
 
     @Override
     public IsWidget createContent() {
+        FormFlexPanel main = new FormFlexPanel();
+        int row = -1;
         if (isEditable()) {
-            FormFlexPanel main = new FormFlexPanel();
 
-            int row = -1;
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 12).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 12).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 20).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
-
-            main.setHeader(++row, 0, 1, "");
-            main.setWidget(++row, 0, inject(proto().address(), new CAddressStructured()));
-
-            return main;
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 6).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 24).build());
         } else {
-            FlowPanel contactPanel = new FlowPanel();
-
             FlowPanel person = DecorationUtils.formFullName(this, proto());
             person.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             person.getElement().getStyle().setFontSize(1.1, Unit.EM);
-            contactPanel.add(person);
-
-            contactPanel.add(inject(proto().homePhone()));
-            contactPanel.add(inject(proto().mobilePhone()));
-            contactPanel.add(inject(proto().workPhone()));
-            contactPanel.add(inject(proto().address().unitNumber()));
-            contactPanel.add(inject(proto().address().streetNumber()));
-            contactPanel.add(inject(proto().address().streetNumberSuffix()));
-            contactPanel.add(inject(proto().address().streetName()));
-            contactPanel.add(inject(proto().address().streetType()));
-            contactPanel.add(inject(proto().address().streetDirection()));
-            contactPanel.add(inject(proto().address().city()));
-            contactPanel.add(inject(proto().address().county()));
-            contactPanel.add(inject(proto().address().province()));
-            contactPanel.add(inject(proto().address().country()));
-            contactPanel.add(inject(proto().address().postalCode()));
-
-            return contactPanel;
+            main.setWidget(++row, 0, person);
         }
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
+
+        main.setHeader(++row, 0, 1, "");
+        main.setWidget(++row, 0, inject(proto().address(), new CAddressStructured()));
+
+        return main;
     }
 }
