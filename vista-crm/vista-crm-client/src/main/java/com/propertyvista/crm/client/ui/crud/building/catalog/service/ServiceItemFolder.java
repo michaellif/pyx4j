@@ -71,6 +71,7 @@ class ServiceItemFolder extends VistaTableFolder<ServiceItem> {
             super(ServiceItem.class, columns());
         }
 
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
         protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
             Class<? extends IEntity> buildingElementClass = null;
@@ -98,7 +99,7 @@ class ServiceItemFolder extends VistaTableFolder<ServiceItem> {
                     CEntityComboBox<BuildingElement> combo = (CEntityComboBox) comp;
                     combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), parent.getValue().catalog().belongsTo().detach()));
                 } else {
-                    comp = inject(column.getObject(), new CEntityCrudHyperlink<AptUnit>(MainActivityMapper.getCrudAppPlace(buildingElementClass)));
+                    comp = inject(column.getObject(), new CEntityCrudHyperlink(MainActivityMapper.getCrudAppPlace(buildingElementClass)));
                 }
             } else {
                 comp = super.createCell(column);

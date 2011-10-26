@@ -18,6 +18,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.crm.rpc.services.ServiceCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceItem;
 
 public class ServiceCrudServiceImpl extends GenericCrudServiceImpl<Service> implements ServiceCrudService {
 
@@ -34,6 +35,10 @@ public class ServiceCrudServiceImpl extends GenericCrudServiceImpl<Service> impl
             Persistence.service().retrieve(entity.items());
             Persistence.service().retrieve(entity.features());
             Persistence.service().retrieve(entity.concessions());
+
+            for (ServiceItem item : entity.items()) {
+                Persistence.service().retrieve(item.element());
+            }
         }
     }
 }
