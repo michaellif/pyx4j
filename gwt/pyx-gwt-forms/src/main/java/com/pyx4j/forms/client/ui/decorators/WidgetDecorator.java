@@ -23,8 +23,10 @@ package com.pyx4j.forms.client.ui.decorators;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -40,7 +42,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.NativeCheckBox;
 
-public class WidgetDecorator extends FlowPanel {
+public class WidgetDecorator extends FlexTable {
 
     public static enum StyleName implements IStyleName {
         WidgetDecorator, WidgetDecoratorLabelHolder, WidgetDecoratorLabel, WidgetDecoratorMandatoryImage, WidgetDecoratorInfoImage,
@@ -121,6 +123,18 @@ public class WidgetDecorator extends FlowPanel {
         mandatoryImageHolder = new SpaceHolder();
         mandatoryImageHolder.setStyleName(StyleName.WidgetDecoratorMandatoryImage.name());
 
+//        switch (builder.labelAlignment) {
+//        case left:
+//            mandatoryImageHolder.getElement().getStyle().setProperty("textAlign", "right");
+//            break;
+//        case right:
+//            mandatoryImageHolder.getElement().getStyle().setProperty("textAlign", "left");
+//            break;
+//
+//        default:
+//            break;
+//        }
+
         renderMandatoryStar();
 
         label.setVisible(component.isVisible());
@@ -142,15 +156,17 @@ public class WidgetDecorator extends FlowPanel {
         });
 
         FlowPanel labelHolder = new FlowPanel();
-        labelHolder.getElement().getStyle().setWidth(builder.labelWidth, Unit.EM);
         labelHolder.setStyleName(StyleName.WidgetDecoratorLabelHolder.name());
-        labelHolder.add(label);
         labelHolder.add(mandatoryImageHolder);
-        add(labelHolder);
+        labelHolder.add(label);
+        labelHolder.getElement().getStyle().setProperty("textAlign", builder.labelAlignment.name());
+        labelHolder.getElement().getStyle().setWidth(builder.labelWidth, Unit.EM);
+        setWidget(0, 0, labelHolder);
+        getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
         SimplePanel componentHolder = new SimplePanel();
-        componentHolder.getElement().getStyle().setWidth(builder.componentWidth, Unit.EM);
         componentHolder.setStyleName(StyleName.WidgetDecoratorComponentHolder.name());
+        componentHolder.getElement().getStyle().setWidth(builder.componentWidth, Unit.EM);
         componentHolder.add(nativeComponent);
 
         validationLabel = new Label();
@@ -160,8 +176,9 @@ public class WidgetDecorator extends FlowPanel {
         contentPanel.setStyleName(StyleName.WidgetDecoratorContentPanel.name());
         contentPanel.add(componentHolder);
         contentPanel.add(infoImageHolder);
-        contentPanel.add(validationLabel);
-        add(contentPanel);
+        setWidget(0, 1, contentPanel);
+
+        setWidget(1, 1, validationLabel);
 
         if (builder.readOnlyMode) {
             addStyleDependentName(WidgetDecorator.StyleDependent.readOnly.name());
@@ -202,6 +219,11 @@ public class WidgetDecorator extends FlowPanel {
     }
 
     public static class Builder {
+
+        public enum Alignment {
+            left, right
+        }
+
         private final CComponent<?> component;
 
         private double labelWidth = 15;
@@ -213,6 +235,8 @@ public class WidgetDecorator extends FlowPanel {
         private boolean useLabelSemicolon = true;
 
         private boolean readOnlyMode = false;
+
+        private Alignment labelAlignment = Alignment.right;
 
         public Builder(final CComponent<?> component) {
             this.component = component;
@@ -247,6 +271,10 @@ public class WidgetDecorator extends FlowPanel {
             return this;
         }
 
+        public Builder labelAlignment(Alignment labelAlignment) {
+            this.labelAlignment = labelAlignment;
+            return this;
+        }
     }
 
     @Deprecated

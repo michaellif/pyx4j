@@ -43,21 +43,16 @@ public class DefaultWidgetDecoratorTheme extends Theme {
 
     protected void initStyles() {
         Style style = new Style(".", WidgetDecorator);
-        style.addProperty("width", "100%");
-        style.addProperty("display", "inline-block");
         addStyle(style);
 
         style = new Style(".", WidgetDecoratorLabelHolder);
-        style.addProperty("text-align", "right");
-        style.addProperty("float", "left");
-        style.addProperty("display", "inline-block");
         style.addProperty("padding-right", "10px");
         addStyle(style);
 
         style = new Style(".", WidgetDecoratorLabel);
-        style.addProperty("display", "inline");
         style.addProperty("color", "#333333");
         style.addProperty("font-weight", "bold");
+        style.addProperty("display", "inline");
         addStyle(style);
 
         style = new Style(".", WidgetDecorator, "-", readOnly, " .", WidgetDecoratorLabel);
@@ -65,14 +60,15 @@ public class DefaultWidgetDecoratorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", WidgetDecoratorInfoImage);
-        style.addProperty("float", "left");
+        style.addProperty("display", "inline-block");
+        style.addProperty("padding-left", "5px");
+        style.addProperty("vertical-align", "middle");
         addStyle(style);
 
         style = new Style(".", WidgetDecoratorMandatoryImage);
-        style.addProperty("float", "right");
         style.addProperty("display", "inline");
         style.addProperty("width", "5px");
-        style.addProperty("padding-left", "3px");
+        style.addProperty("padding-right", "3px");
         addStyle(style);
 
         style = new Style(".", WidgetDecorator, "-", noMandatoryStar, " .", WidgetDecoratorMandatoryImage, " ", "img");
@@ -80,22 +76,18 @@ public class DefaultWidgetDecoratorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", WidgetDecoratorValidationLabel);
-        style.addProperty("clear", "both");
         style.addProperty("color", "red");
         addStyle(style);
 
         style = new Style(".", WidgetDecoratorContentPanel);
-        style.addProperty("float", "left");
         addStyle(style);
 
         style = new Style(".", WidgetDecoratorComponentHolder);
-        style.addProperty("float", "left");
-        style.addProperty("padding-right", "10px");
+        //style.addProperty("padding-right", "10px");
         style.addProperty("display", "inline-block");
         addStyle(style);
 
         style = new Style(".", WidgetDecoratorComponent);
-        style.addProperty("float", "left");
         addStyle(style);
 
     }
