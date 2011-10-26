@@ -35,9 +35,10 @@ public class CEmergencyContact extends CDecoratableEntityEditor<EmergencyContact
         int row = -1;
 
         if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 12).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 6).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 24).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().namePrefix()), 5).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 5).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 25).build());
         } else {
             FlowPanel person = DecorationUtils.formFullName(this, proto());
             person.getElement().getStyle().setFontWeight(FontWeight.BOLD);
