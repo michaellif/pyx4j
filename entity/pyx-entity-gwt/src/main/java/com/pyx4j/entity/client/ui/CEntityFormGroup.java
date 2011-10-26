@@ -53,6 +53,7 @@ public class CEntityFormGroup<E extends IEntity> extends CFormGroup<E> implement
         this.setTitle(title);
         this.entityClass = entityClass;
         this.expended = expended;
+        setWidth("100%");
     }
 
     // data type asserts.

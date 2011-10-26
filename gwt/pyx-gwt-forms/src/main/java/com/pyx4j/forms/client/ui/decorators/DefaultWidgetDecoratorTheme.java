@@ -66,7 +66,7 @@ public class DefaultWidgetDecoratorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", WidgetDecoratorMandatoryImage);
-        style.addProperty("display", "inline");
+        style.addProperty("display", "inline-block");
         style.addProperty("width", "5px");
         style.addProperty("padding-right", "3px");
         addStyle(style);

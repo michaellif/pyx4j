@@ -21,8 +21,10 @@
 package com.pyx4j.forms.client.ui.panels;
 
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
@@ -39,6 +41,18 @@ public class FormFlexPanel extends FlexTable {
 
     public FormFlexPanel() {
         setStyleName(StyleName.FormFlexPanel.name());
+    }
+
+    @Override
+    public void setWidget(int row, int column, Widget widget) {
+        super.setWidget(row, column, widget);
+        getCellFormatter().setWidth(row, column, "100%");
+    }
+
+    @Override
+    public void setWidget(int row, int column, IsWidget widget) {
+        super.setWidget(row, column, widget);
+        getCellFormatter().setWidth(row, column, "100%");
     }
 
     public void setHeader(int row, int col, int span, String caption) {

@@ -62,6 +62,7 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
         this.setTitle(title);
         this.entityClass = entityClass;
         this.expended = expended;
+        setWidth("100%");
     }
 
     // data type asserts.
