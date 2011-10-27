@@ -21,8 +21,13 @@
 package com.pyx4j.forms.client.ui.panels;
 
 import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanel;
-import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelHeader;
-import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelHeaderLabel;
+import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelH1;
+import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelH1Label;
+import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelH2;
+import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelH2Label;
+import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelH3;
+import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelH3Label;
+import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelHR;
 
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
@@ -38,15 +43,45 @@ public class DefaultFormFlexPanelTheme extends Theme {
         style.addProperty("width", "100%");
         addStyle(style);
 
-        style = new Style(".", FormFlexPanelHeader);
+        style = new Style(".", FormFlexPanelHR);
+        style.addProperty("background-color", "#ddd");
+        style.addProperty("height", "1px");
+        style.addProperty("margin", "6px 0 4px 0");
+        addStyle(style);
+
+        style = new Style(".", FormFlexPanelH1);
         style.addProperty("background-color", "#ddd");
         style.addProperty("margin", "6px 0 4px 0");
         addStyle(style);
 
-        style = new Style(".", FormFlexPanelHeaderLabel);
+        style = new Style(".", FormFlexPanelH1Label);
         style.addProperty("color", "#666");
         style.addProperty("padding", "4px");
         style.addProperty("font-size", "1.3em");
+        addStyle(style);
+
+        style = new Style(".", FormFlexPanelH2);
+        style.addProperty("background-color", "#ddd");
+        style.addProperty("margin", "6px 0 4px 0");
+        addStyle(style);
+
+        style = new Style(".", FormFlexPanelH2Label);
+        style.addProperty("color", "#666");
+        style.addProperty("padding", "3px");
+        style.addProperty("font-size", "1.2em");
+        style.addProperty("font-style", "italic");
+        addStyle(style);
+
+        style = new Style(".", FormFlexPanelH3);
+        style.addProperty("background-color", "#ddd");
+        style.addProperty("margin", "6px 0 4px 0");
+        addStyle(style);
+
+        style = new Style(".", FormFlexPanelH3Label);
+        style.addProperty("color", "#666");
+        style.addProperty("padding", "2px");
+        style.addProperty("font-size", "1.1em");
+        style.addProperty("font-style", "italic");
         addStyle(style);
 
     }
