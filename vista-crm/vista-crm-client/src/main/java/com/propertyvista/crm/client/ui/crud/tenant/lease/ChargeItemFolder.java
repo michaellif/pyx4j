@@ -136,7 +136,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
             main.getColumnFormatter().setWidth(1, "50%");
 
             adjustmentPanel.setH1(0, 0, 1, i18n.tr("Adjustments"));
-            adjustmentPanel.setWidget(0, 0, inject(proto().adjustments(), new ChargeItemAdjustmentFolder()));
+            adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new ChargeItemAdjustmentFolder()));
 
             return main;
         }
