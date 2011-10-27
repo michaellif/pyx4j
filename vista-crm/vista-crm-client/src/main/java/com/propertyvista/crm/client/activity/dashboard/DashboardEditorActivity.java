@@ -67,13 +67,15 @@ public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadat
     @Override
     protected void onApplySuccess(DashboardMetadata result) {
         super.onApplySuccess(result);
-        AppSite.instance().getEventBus().fireEvent(new NavigationUpdateEvent());
+        AppSite.instance();
+        AppSite.getEventBus().fireEvent(new NavigationUpdateEvent());
     }
 
     @Override
     protected void onSaveSuccess(DashboardMetadata result) {
         super.onSaveSuccess(result);
-        AppSite.instance().getEventBus().fireEvent(new NavigationUpdateEvent());
+        AppSite.instance();
+        AppSite.getEventBus().fireEvent(new NavigationUpdateEvent());
     }
 
     @Override
