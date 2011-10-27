@@ -122,6 +122,11 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         complexes.add(generator.createComplex("Complex #1"));
         complexes.add(generator.createComplex("Complex #2"));
         complexes.add(generator.createComplex("Complex #3"));
+
+        for (Complex complex : complexes) {
+            complex.dashboard().set(DataGenerator.random(availableDashboards.buildingDashboards));
+        }
+
         Persistence.service().persist(complexes);
 
         // create some StarlightPmc:

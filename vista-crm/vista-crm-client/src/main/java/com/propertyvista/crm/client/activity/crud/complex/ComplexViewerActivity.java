@@ -61,11 +61,11 @@ public class ComplexViewerActivity extends ViewerActivityBase<ComplexDTO> implem
 
     @Override
     protected void onPopulateSuccess(ComplexDTO result) {
-        if (result != null) {
-            super.onPopulateSuccess(result);
+        super.onPopulateSuccess(result);
 
-            buildingListerActivity.setParentFiltering(result.id().getValue());
-            buildingListerActivity.populate();
-        }
+        dashboardViewActivity.populate(result.dashboard());
+
+        buildingListerActivity.setParentFiltering(result.id().getValue());
+        buildingListerActivity.populate();
     }
 }

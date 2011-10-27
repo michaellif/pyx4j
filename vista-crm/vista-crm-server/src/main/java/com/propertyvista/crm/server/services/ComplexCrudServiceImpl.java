@@ -34,29 +34,25 @@ public class ComplexCrudServiceImpl extends GenericCrudServiceDtoImpl<Complex, C
     @Override
     protected void enhanceDTO(Complex in, ComplexDTO out, boolean fromList) {
         super.enhanceDTO(in, out, fromList);
+        Persistence.service().retrieve(in.dashboard());
 
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().complex(), in));
-
-        List<Building> buildings = Persistence.service().query(criteria);
-
-        if (!buildings.isEmpty()) {
-            Building primary = null;
-            for (Building building : buildings) {
-                if (building.complexPrimary().isBooleanTrue()) {
-                    primary = building;
-                    Persistence.service().retrieve(primary.contacts().contacts());
-                    Persistence.service().retrieve(primary.contacts().phones());
-                    out.primaryBuilding().set(primary);
-                    break;
+        if (!fromList) {
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().complex(), in));
+            List<Building> buildings = Persistence.service().query(criteria);
+            if (!buildings.isEmpty()) {
+                Building primary = null;
+                for (Building building : buildings) {
+                    if (building.complexPrimary().isBooleanTrue()) {
+                        primary = building;
+                        Persistence.service().retrieve(primary.contacts().contacts());
+                        Persistence.service().retrieve(primary.contacts().phones());
+                        out.primaryBuilding().set(primary);
+                        break;
+                    }
                 }
-            }
 
-            if (!fromList) {
                 out.buildings().addAll(buildings);
-
-                Persistence.service().retrieve(in.dashboard());
-                out.dashboard().set(in.dashboard());
             }
         }
     }
@@ -69,13 +65,8 @@ public class ComplexCrudServiceImpl extends GenericCrudServiceDtoImpl<Complex, C
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().complex(), out));
         List<Building> buildings = Persistence.service().query(criteria);
-
         for (Building building : buildings) {
-            if (building.equals(primary)) {
-                building.complexPrimary().setValue(false);
-            } else {
-                building.complexPrimary().setValue(true);
-            }
+            building.complexPrimary().setValue(building.equals(primary));
         }
 
         Persistence.service().merge(buildings);
