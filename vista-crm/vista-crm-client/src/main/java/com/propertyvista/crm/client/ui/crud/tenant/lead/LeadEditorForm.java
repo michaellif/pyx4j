@@ -87,7 +87,7 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().comments()), 57).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setHeader(++row, 0, 2, "");
+        main.setH1(++row, 0, 2, "");
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().source()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().assignedTo()), 20).build());

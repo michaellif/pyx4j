@@ -38,7 +38,7 @@ public class PersonalInfoForm extends CDecoratableEntityEditor<ResidentDTO> impl
 
         int row = 0;
 
-        container.setHeader(row++, 0, 1, i18n.tr("Contact Details"));
+        container.setH1(row++, 0, 1, i18n.tr("Contact Details"));
 
         container.setWidget(row++, 0, new DecoratorBuilder(inject(proto().name().firstName()), 12).build());
         container.setWidget(row++, 0, new DecoratorBuilder(inject(proto().name().middleName()), 12).build());
@@ -49,7 +49,7 @@ public class PersonalInfoForm extends CDecoratableEntityEditor<ResidentDTO> impl
         container.setWidget(row++, 0, new DecoratorBuilder(inject(proto().email()), 20).build());
 
         //Emergency Contacts
-        container.setHeader(row++, 0, 1, proto().emergencyContacts().getMeta().getCaption());
+        container.setH1(row++, 0, 1, proto().emergencyContacts().getMeta().getCaption());
         container.setWidget(row++, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false)));
         return container;
     }

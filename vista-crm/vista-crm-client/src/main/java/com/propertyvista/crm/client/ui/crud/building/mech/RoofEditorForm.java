@@ -41,7 +41,7 @@ public class RoofEditorForm extends MechlBaseEditorForm<RoofDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().year()), 10).build());
 
-        main.setHeader(++row, 0, 2, "");
+        main.setH1(++row, 0, 2, "");
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notes()), 57).build());
 
         return new CrmScrollPanel(main);

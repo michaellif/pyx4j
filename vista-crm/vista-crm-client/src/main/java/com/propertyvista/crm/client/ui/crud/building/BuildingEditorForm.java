@@ -161,16 +161,16 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().complex()), 15).build());
 
-        main.setHeader(row++, 0, 2, "");
+        main.setH1(row++, 0, 2, "");
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().geoLocation()), 28).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setHeader(row++, 0, 2, proto().info().address().getMeta().getCaption());
+        main.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());
 
         main.setWidget(row, 0, inject(proto().info().address(), new CAddressStructured(true, false)));
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
-        main.setHeader(row++, 0, 2, proto().amenities().getMeta().getCaption());
+        main.setH1(row++, 0, 2, proto().amenities().getMeta().getCaption());
         main.setWidget(row, 0, inject(proto().amenities(), new BuildingAmenityFolder()));
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
@@ -196,7 +196,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().centralAir()), 15).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().centralHeat()), 15).build());
 
-        main.setHeader(++row, 0, 2, "");
+        main.setH1(++row, 0, 2, "");
         if (isEditable()) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().website()), 50).build());
         } else {
@@ -232,11 +232,11 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().financial().lastAppraisalValue()), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().financial().currency().name()), 10).customLabel(i18n.tr("Currency Name")).build());
 
-        main.setHeader(++row, 0, 2, i18n.tr("Included Utilities/Add-ons"));
+        main.setH1(++row, 0, 2, i18n.tr("Included Utilities/Add-ons"));
         main.setWidget(++row, 0, inject(proto().serviceCatalog().includedUtilities(), new UtilityFolder(this)));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setHeader(++row, 0, 2, i18n.tr("Excluded Utilities/Add-ons"));
+        main.setH1(++row, 0, 2, i18n.tr("Excluded Utilities/Add-ons"));
         main.setWidget(++row, 0, inject(proto().serviceCatalog().externalUtilities(), new UtilityFolder(this)));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
@@ -249,14 +249,14 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         int row = -1;
         main.setWidget(++row, 0, inject(proto().marketing(), new CMarketing()));
 
-        main.setHeader(++row, 0, 2, "");
+        main.setH1(++row, 0, 2, "");
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().email().address()), 30).customLabel(i18n.tr("Email Address")).build());
 
-        main.setHeader(++row, 0, 2, proto().contacts().phones().getMeta().getCaption());
+        main.setH1(++row, 0, 2, proto().contacts().phones().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().contacts().phones(), new PropertyPhoneFolder()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setHeader(++row, 0, 2, i18n.tr("Media"));
+        main.setH1(++row, 0, 2, i18n.tr("Media"));
         main.setWidget(++row, 0, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Building)));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 

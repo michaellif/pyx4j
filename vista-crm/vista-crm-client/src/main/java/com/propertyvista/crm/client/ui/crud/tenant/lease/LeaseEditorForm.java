@@ -183,10 +183,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         int row = -1;
         main.setWidget(++row, 0, serviceItemPanel);
 
-        main.setHeader(++row, 0, 2, proto().serviceAgreement().featureItems().getMeta().getCaption());
+        main.setH1(++row, 0, 2, proto().serviceAgreement().featureItems().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().serviceAgreement().featureItems(), new ChargeItemFolder(isEditable(), this)));
 
-        main.setHeader(++row, 0, 2, proto().serviceAgreement().concessions().getMeta().getCaption());
+        main.setH1(++row, 0, 2, proto().serviceAgreement().concessions().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().serviceAgreement().concessions(), new ServiceConcessionFolder(isEditable(), this)));
 
         main.setWidget(++row, 0, new HTML("&nbsp"));
@@ -199,7 +199,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setHeader(++row, 0, 2, proto().masterApplicationStatus().individualApplications().getMeta().getCaption());
+        main.setH1(++row, 0, 2, proto().masterApplicationStatus().individualApplications().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder(isEditable())));
 
         return new CrmScrollPanel(main);

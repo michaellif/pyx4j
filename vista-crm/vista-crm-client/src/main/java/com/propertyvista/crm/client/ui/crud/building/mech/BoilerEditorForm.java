@@ -49,11 +49,11 @@ public class BoilerEditorForm extends MechlBaseEditorForm<BoilerDTO> {
         main.getFlexCellFormatter().setRowSpan(row, 1, 3);
 
         row += 2;
-        main.setHeader(++row, 0, 2, proto().license().getMeta().getCaption());
+        main.setH1(++row, 0, 2, proto().license().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().license(), new CLicense()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setHeader(++row, 0, 2, "");
+        main.setH1(++row, 0, 2, "");
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notes()), 57).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 

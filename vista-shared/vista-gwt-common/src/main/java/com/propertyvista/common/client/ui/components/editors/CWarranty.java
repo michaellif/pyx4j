@@ -41,11 +41,11 @@ public class CWarranty extends CDecoratableEntityEditor<Warranty> {
         main.setWidget(row, 0, new DecoratorBuilder(inject(proto().title()), 20).build());
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().type()), 11).build());
 
-        main.setHeader(++row, 0, 2, proto().contract().getMeta().getCaption());
+        main.setH1(++row, 0, 2, proto().contract().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().contract(), new CContract()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setHeader(++row, 0, 2, proto().items().getMeta().getCaption());
+        main.setH1(++row, 0, 2, proto().items().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().items(), new WarrantyItemFolder()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 

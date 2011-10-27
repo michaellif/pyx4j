@@ -83,7 +83,7 @@ public class NewPaymentMethodForm extends CDecoratableEntityEditor<PaymentMethod
 
         int row = 0;
 
-        container.setHeader(row++, 0, 1, proto().type().getMeta().getCaption());
+        container.setH1(row++, 0, 1, proto().type().getMeta().getCaption());
 
         CRadioGroupEnum<PaymentType> radioGroup = new CRadioGroupEnum<PaymentType>(PaymentType.class, CRadioGroup.Layout.VERTICAL);
         radioGroup.setStylePrefix(PAYMENT_BUTTONS_STYLE_PREFIX);
@@ -155,7 +155,7 @@ public class NewPaymentMethodForm extends CDecoratableEntityEditor<PaymentMethod
 
         setPaymentTableVisibility(0);
 
-        container.setHeader(row++, 0, 1, proto().billingAddress().getMeta().getCaption());
+        container.setH1(row++, 0, 1, proto().billingAddress().getMeta().getCaption());
         container.setWidget(row++, 0, inject(proto().billingAddress(), new CAddressStructured()));
 
         container.setWidget(row++, 0, new DecoratorBuilder(inject(proto().phone()), 12).build());

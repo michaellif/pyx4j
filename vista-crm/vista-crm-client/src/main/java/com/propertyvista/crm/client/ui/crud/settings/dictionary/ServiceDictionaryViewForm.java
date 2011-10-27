@@ -33,10 +33,10 @@ public class ServiceDictionaryViewForm extends CrmEntityForm<ServiceItemType> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setHeader(++row, 0, 1, i18n.tr("Service Types"));
+        main.setH1(++row, 0, 1, i18n.tr("Service Types"));
         main.setWidget(++row, 0, ((ServiceDictionaryView) getParentView()).getServiceListerView().asWidget());
 
-        main.setHeader(++row, 0, 1, i18n.tr("Feature Types"));
+        main.setH1(++row, 0, 1, i18n.tr("Feature Types"));
         main.setWidget(++row, 0, ((ServiceDictionaryView) getParentView()).getFeatureListerView().asWidget());
 
         return new ScrollPanel(main);

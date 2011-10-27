@@ -44,7 +44,7 @@ public class UnitItemEditorForm extends CrmEntityForm<AptUnitItem> {
         main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().conditionNotes()), 50).build());
         main.getFlexCellFormatter().setColSpan(row0, 0, 2);
 
-        main.setHeader(++row0, 0, 2, i18n.tr("Details"));
+        main.setH1(++row0, 0, 2, i18n.tr("Details"));
 
         int row1 = row0; // from second column from here..
         main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().wallColor()), 10).build());

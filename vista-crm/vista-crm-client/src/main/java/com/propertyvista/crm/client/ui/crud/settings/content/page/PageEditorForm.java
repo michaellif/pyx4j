@@ -40,10 +40,10 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
 
-        main.setHeader(++row, 0, 1, proto().content().getMeta().getCaption());
+        main.setH1(++row, 0, 1, proto().content().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().content(), new PageContentFolder(isEditable(), this)));
 
-        main.setHeader(++row, 0, 1, proto().childPages().getMeta().getCaption());
+        main.setH1(++row, 0, 1, proto().childPages().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().childPages(), new PageDescriptorFolder(this, (PageViewer) getParentView())));
 
         return new CrmScrollPanel(main);

@@ -53,11 +53,11 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
         main.getFlexCellFormatter().setRowSpan(row, 0, 3);
 
         row += 2; // leave space for right column items...
-        main.setHeader(++row, 0, 2, proto().amenities().getMeta().getCaption());
+        main.setH1(++row, 0, 2, proto().amenities().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().amenities(), createAmenitiesListEditor()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setHeader(++row, 0, 2, i18n.tr("Media"));
+        main.setH1(++row, 0, 2, i18n.tr("Media"));
         main.setWidget(++row, 0, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Floorplan)));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 

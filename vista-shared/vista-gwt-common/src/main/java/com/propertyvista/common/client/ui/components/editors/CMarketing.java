@@ -42,7 +42,7 @@ public class CMarketing extends CDecoratableEntityEditor<Marketing> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 30).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 30).build());
 
-        main.setHeader(++row, 0, 2, proto().adBlurbs().getMeta().getCaption());
+        main.setH1(++row, 0, 2, proto().adBlurbs().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().adBlurbs(), new VistaTableFolder<AdvertisingBlurb>(AdvertisingBlurb.class, isEditable()) {
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {

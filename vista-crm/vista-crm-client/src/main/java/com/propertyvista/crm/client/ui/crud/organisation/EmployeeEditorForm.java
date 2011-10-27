@@ -104,10 +104,10 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setHeader(++row, 0, 2, i18n.tr("Assigned Portfolios"));
+        main.setH1(++row, 0, 2, i18n.tr("Assigned Portfolios"));
         main.setWidget(++row, 0, inject(proto().portfolios(), createPortfolioListView()));
 
-        main.setHeader(++row, 0, 2, i18n.tr("Managed Employees"));
+        main.setH1(++row, 0, 2, i18n.tr("Managed Employees"));
         main.setWidget(++row, 0, inject(proto().employees(), createEmpoloyeeListView()));
 
         return new CrmScrollPanel(main);

@@ -77,11 +77,11 @@ public class ComplexViewerForm extends CrmEntityForm<ComplexDTO> {
         panel.setWidget(++row, 0, (new DecoratorBuilder(inject(proto().name()))).build());
         panel.setWidget(++row, 0, (new DecoratorBuilder(inject(proto().contactInfo().website()))).build());
 
-        panel.setHeader(++row, 0, 2, proto().contactInfo().phones().getMeta().getCaption());
+        panel.setH1(++row, 0, 2, proto().contactInfo().phones().getMeta().getCaption());
         panel.setWidget(++row, 0, inject(proto().contactInfo().phones(), new PropertyPhoneFolder()));
         panel.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        panel.setHeader(++row, 0, 2, proto().address().getMeta().getCaption());
+        panel.setH1(++row, 0, 2, proto().address().getMeta().getCaption());
         panel.setWidget(++row, 0, inject(proto().address(), new CAddressStructured(true, false)));
         panel.getFlexCellFormatter().setColSpan(row, 0, 2);
         return new CrmScrollPanel(panel);

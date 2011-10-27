@@ -50,7 +50,7 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 40).build());
 
-        main.setHeader(++row, 0, 1, i18n.tr("Assigned Buildings"));
+        main.setH1(++row, 0, 1, i18n.tr("Assigned Buildings"));
         main.setWidget(++row, 0, inject(proto().buildings(), createBuildingListView()));
 
         return new CrmScrollPanel(main);

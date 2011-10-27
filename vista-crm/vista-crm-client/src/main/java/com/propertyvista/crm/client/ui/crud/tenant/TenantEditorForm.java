@@ -87,10 +87,10 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         company.setWidget(++row, 0, new DecoratorBuilder(inject(proto().company().name()), 25).build());
         company.setWidget(++row, 0, new DecoratorBuilder(inject(proto().company().website()), 25).build());
 
-        company.setHeader(++row, 0, 1, proto().company().phones().getMeta().getCaption());
+        company.setH1(++row, 0, 1, proto().company().phones().getMeta().getCaption());
         company.setWidget(++row, 0, inject(proto().company().phones(), new PhoneFolder(isEditable())));
 
-        company.setHeader(++row, 0, 1, proto().company().emails().getMeta().getCaption());
+        company.setH1(++row, 0, 1, proto().company().emails().getMeta().getCaption());
         company.setWidget(++row, 0, inject(proto().company().emails(), new EmailFolder(isEditable())));
 
         contacts.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), true)));

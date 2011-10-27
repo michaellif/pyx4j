@@ -60,7 +60,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().baseColor()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().copyright()), 25).build());
 
-        main.setHeader(++row, 0, 1, proto().locales().getMeta().getCaption());
+        main.setH1(++row, 0, 1, proto().locales().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
 
 // TODO: image lists uploaders:
@@ -68,7 +68,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
 //        main.setWidget(++row, 0, decorate(inject(proto().slogan(), new CFileUploader()), 60);
 //        main.setWidget(++row, 0, decorate(inject(proto().images(), new CFileUploader()), 60);
 
-        main.setHeader(++row, 0, 1, proto().childPages().getMeta().getCaption());
+        main.setH1(++row, 0, 1, proto().childPages().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().childPages(), new SitePageDescriptorFolder(isEditable(), this, (SiteViewer) getParentView())));
 
         return new CrmScrollPanel(main);

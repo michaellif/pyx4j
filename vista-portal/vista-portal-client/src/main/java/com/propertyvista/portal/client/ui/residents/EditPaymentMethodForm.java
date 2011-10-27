@@ -39,7 +39,7 @@ public class EditPaymentMethodForm extends CEntityEditor<PaymentMethodDTO> {
         FormFlexPanel container = new FormFlexPanel();
         int row = 0;
 
-        container.setHeader(row++, 0, 1, i18n.tr("Edit Payment Information"));
+        container.setH1(row++, 0, 1, i18n.tr("Edit Payment Information"));
 
         container.setWidget(row++, 0, new WidgetDecorator(inject(proto().cardNumber(), new CLabel())));
         container.setWidget(row++, 0, new WidgetDecorator(inject(proto().nameOnAccount(), new CLabel())));

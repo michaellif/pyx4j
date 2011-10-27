@@ -30,11 +30,11 @@ public class CMaintenance extends CDecoratableEntityEditor<Maintenance> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setHeader(++row, 0, 2, proto().contract().getMeta().getCaption());
+        main.setH1(++row, 0, 2, proto().contract().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().contract(), new CContract()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setHeader(++row, 0, 2, i18n.tr("Schedule"));
+        main.setH1(++row, 0, 2, i18n.tr("Schedule"));
         ++row;
         main.setWidget(row, 0, new DecoratorBuilder(inject(proto().lastService()), 8.2).build());
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().nextService()), 8.2).build());
