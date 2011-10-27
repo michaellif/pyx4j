@@ -132,7 +132,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     /**
-     * Descendants may override this method to perform some initialisation.
+     * Descendants may override this method to perform some initialization.
      * 
      * @param callback
      */
