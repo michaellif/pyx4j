@@ -93,7 +93,9 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
                     }
                 }
             };
+            primaryBuildingSelector.setTitle(proto().primaryBuilding().getMeta().getCaption());
             primaryBuldingWidget = primaryBuildingSelector;
+
         } else {
             primaryBuldingWidget = inject(proto().primaryBuilding());
         }
