@@ -165,14 +165,14 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                         FormFlexPanel panel = new FormFlexPanel();
 
                         int row = -1;
-                        panel.setH1(++row, 0, 2, i18n.tr("Vehicle data") + ":");
+                        panel.setH1(++row, 0, 2, i18n.tr("Vehicle data"));
 
                         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().year()), 5).build());
                         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().make()), 10).build());
                         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().model()), 10).build());
 
+                        row = 0; // skip header
                         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().plateNumber()), 10).build());
-
                         CEditableComponent<Country, ?> country;
                         panel.setWidget(++row, 1, new DecoratorBuilder(country = (CEditableComponent<Country, ?>) inject(proto().country()), 13).build());
                         CEditableComponent<Province, ?> province;
@@ -208,12 +208,13 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                         FormFlexPanel panel = new FormFlexPanel();
 
                         int row = -1;
-                        panel.setH1(++row, 0, 2, i18n.tr("Pet data") + ":");
+                        panel.setH1(++row, 0, 2, i18n.tr("Pet data"));
 
                         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
                         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().color()), 15).build());
                         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().breed()), 15).build());
 
+                        row = 0; // skip header
                         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().weight()), 4).build());
                         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().weightUnit()), 4).build());
                         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().birthDate()), 8.2).build());

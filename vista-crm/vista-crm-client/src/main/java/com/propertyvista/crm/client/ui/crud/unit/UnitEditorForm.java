@@ -106,6 +106,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         row = -1;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().floor()), 5).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().number()), 5).build());
+
         // shift one column left because economicStatusDescription field RowSpan:
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info()._bedrooms(), new CNumberLabel()), 5).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info()._bathrooms(), new CNumberLabel()), 5).build());
@@ -129,7 +130,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         }
 
         main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        main.getColumnFormatter().setWidth(2, "50%");
 
         return new CrmScrollPanel(main);
     }
