@@ -19,14 +19,14 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.util.ValidationUtils;
 
@@ -44,7 +44,7 @@ class TenantGuarantorFolder extends VistaBoxFolder<TenantGuarantor> {
         return super.create(member);
     }
 
-    class TenantGuarantorEditor extends CEntityEditor<TenantGuarantor> {
+    class TenantGuarantorEditor extends CEntityDecoratableEditor<TenantGuarantor> {
 
         protected I18n i18n = I18n.get(TenantGuarantorEditor.class);
 
@@ -54,22 +54,24 @@ class TenantGuarantorFolder extends VistaBoxFolder<TenantGuarantor> {
 
         @Override
         public IsWidget createContent() {
-            VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+            FormFlexPanel main = new FormFlexPanel();
+
+            int row = -1;
             if (isEditable()) {
-                main.add(inject(proto().name().namePrefix()), 4);
-                main.add(inject(proto().name().firstName()), 12);
-                main.add(inject(proto().name().middleName()), 12);
-                main.add(inject(proto().name().lastName()), 20);
-                main.add(inject(proto().name().nameSuffix()), 4);
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().namePrefix()), 4).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 12).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 12).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 20).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().nameSuffix()), 4).build());
             } else {
-                main.add(inject(proto().name(), new CEntityLabel()), 25, "Guarantor");
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name(), new CEntityLabel()), 25).customLabel(i18n.tr("Guarantor")).build());
                 get(proto().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
             }
-            main.add(inject(proto().homePhone()), 15);
-            main.add(inject(proto().mobilePhone()), 15);
-            main.add(inject(proto().workPhone()), 15);
-            main.add(inject(proto().birthDate()), 8);
-            main.add(inject(proto().email()), 15);
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().birthDate()), 8).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 15).build());
             return main;
         }
 

@@ -50,6 +50,6 @@ public class CrmSectionSeparator extends VistaHeaderBar {
 
     @Override
     protected String getStylePrefix() {
-        return this.DEFAULT_STYLE_PREFIX;
+        return CrmSectionSeparator.DEFAULT_STYLE_PREFIX;
     }
 }
