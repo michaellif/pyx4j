@@ -25,6 +25,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 
 public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptUnitDTO> implements UnitCrudService {
 
@@ -69,7 +70,8 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
         leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit(), in));
         Lease lease = Persistence.service().retrieve(leaseCriteria);
         if (lease != null && !lease.serviceAgreement().isNull() && !lease.serviceAgreement().serviceItem().isNull()) {
-            in.financial().unitRent().setValue(lease.serviceAgreement().serviceItem().price().getValue());
+            PriceCalculationHelpers.calculateChargeItemAdjustments(lease.serviceAgreement().serviceItem());
+            in.financial().unitRent().setValue(lease.serviceAgreement().serviceItem().adjustedPrice().getValue());
         }
     }
 

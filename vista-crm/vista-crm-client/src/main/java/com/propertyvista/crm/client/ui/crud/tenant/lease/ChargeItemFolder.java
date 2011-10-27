@@ -34,7 +34,6 @@ import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -97,21 +96,6 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                     }
                 }
             };
-        }
-    }
-
-    @Override
-    public void populate(IList<ChargeItem> value) {
-        super.populate(value);
-
-        // prepopulate utilities for the new item: 
-        if (isEditable() && value.isEmpty()) {
-            for (ServiceItem item : parent.getValue().selectedUtilityItems()) {
-                ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                newItem.item().set(item);
-                newItem.price().setValue(item.price().getValue());
-                addItem(newItem);
-            }
         }
     }
 

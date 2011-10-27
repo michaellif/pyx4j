@@ -20,6 +20,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
@@ -100,6 +101,11 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     @Override
     public void setSelectedBuilding(Building selected) {
+        populateUnitLister(selected);
+    }
+
+    @Override
+    public void setSelectedUnit(AptUnit selected) {
         ((LeaseCrudService) service).syncBuildingServiceCatalog(new AsyncCallback<Building>() {
 
             @Override
@@ -107,7 +113,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
                 LeaseDTO currentValue = view.getValue();
                 currentValue.selectedBuilding().set(building);
 
-                populateUnitLister(building);
+                clearServiceAgreement(currentValue, true);
                 fillserviceItems(currentValue);
 
                 view.populate(currentValue);
@@ -117,40 +123,24 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             public void onFailure(Throwable caught) {
                 throw new UnrecoverableClientError(caught);
             }
-        }, selected.getPrimaryKey());
-    }
-
-    @Override
-    public void setSelectedUnit(AptUnit selected) {
-        LeaseDTO currentValue = view.getValue();
-        if (currentValue.selectedBuilding().isNull()) {
-            ((LeaseCrudService) service).syncBuildingServiceCatalog(new AsyncCallback<Building>() {
-
-                @Override
-                public void onSuccess(Building building) {
-                    LeaseDTO currentValue = view.getValue();
-                    currentValue.selectedBuilding().set(building);
-
-                    fillserviceItems(currentValue);
-
-                    view.populate(currentValue);
-                }
-
-                @Override
-                public void onFailure(Throwable caught) {
-                    throw new UnrecoverableClientError(caught);
-                }
-            }, selected.belongsTo().getPrimaryKey());
-        }
+        }, selected.belongsTo().getPrimaryKey());
     }
 
     @Override
     public void setSelectedService(ServiceItem serviceItem) {
         LeaseDTO currentValue = view.getValue();
         if (fillServiceEligibilityData(currentValue, serviceItem)) {
+
             // clear currently selected dependable data:
-            currentValue.serviceAgreement().featureItems().clear();
-            currentValue.serviceAgreement().concessions().clear();
+            clearServiceAgreement(currentValue, false);
+
+            // pre-populate utilities for the new item: 
+            for (ServiceItem item : currentValue.selectedUtilityItems()) {
+                ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                newItem.item().set(item);
+                newItem.price().setValue(item.price().getValue());
+                currentValue.serviceAgreement().featureItems().add(newItem);
+            }
 
             view.populate(currentValue);
         }
@@ -181,6 +171,14 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     @Override
     public void calculateChargeItemAdjustments(AsyncCallback<Double> callback, ChargeItem item) {
         ((LeaseCrudService) service).calculateChargeItemAdjustments(callback, item);
+    }
+
+    private void clearServiceAgreement(LeaseDTO currentValue, boolean all) {
+        if (all) {
+            currentValue.serviceAgreement().serviceItem().set(null);
+        }
+        currentValue.serviceAgreement().featureItems().clear();
+        currentValue.serviceAgreement().concessions().clear();
     }
 
     private void fillserviceItems(LeaseDTO currentValue) {
