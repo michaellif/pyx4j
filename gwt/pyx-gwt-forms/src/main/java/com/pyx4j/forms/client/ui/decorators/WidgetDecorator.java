@@ -279,11 +279,11 @@ public class WidgetDecorator extends FlexTable {
 
     @Deprecated
     public static WidgetDecorator build(CComponent<?> component, double componentWidth) {
-        return new WidgetDecorator(new Builder(component).componentWidth(componentWidth));
+        return new WidgetDecorator.Builder(component).componentWidth(componentWidth).build();
     }
 
     @Deprecated
     public static WidgetDecorator build(CComponent<?> component, double labelWidth, double componentWidth) {
-        return new WidgetDecorator(new Builder(component).labelWidth(labelWidth).componentWidth(componentWidth));
+        return new WidgetDecorator.Builder(component).labelWidth(labelWidth).componentWidth(componentWidth).build();
     }
 }
