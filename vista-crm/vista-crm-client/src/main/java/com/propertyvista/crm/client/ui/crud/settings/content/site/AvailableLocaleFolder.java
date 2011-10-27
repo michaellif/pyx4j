@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.site.AvailableLocale;
@@ -34,4 +36,10 @@ class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
         return columns;
     }
 
+    @Override
+    protected IFolderDecorator<AvailableLocale> createDecorator() {
+        TableFolderDecorator<AvailableLocale> decor = (TableFolderDecorator<AvailableLocale>) super.createDecorator();
+        decor.setShowHeader(false);
+        return decor;
+    }
 }

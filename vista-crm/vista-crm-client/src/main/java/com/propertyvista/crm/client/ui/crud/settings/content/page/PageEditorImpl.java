@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.settings.content.page;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.site.PageDescriptor;
 

@@ -20,9 +20,10 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.components.editors.CDecoratableEntityEditor;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 
@@ -49,7 +50,7 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
         callback.onSuccess(newEntity);
     }
 
-    class PageContentEditor extends CEntityEditor<PageContent> {
+    class PageContentEditor extends CDecoratableEntityEditor<PageContent> {
 
         public PageContentEditor() {
             super(PageContent.class);
@@ -57,22 +58,23 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
 
         @Override
         public IsWidget createContent() {
-            VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+            FormFlexPanel main = new FormFlexPanel();
 
-            main.add(inject(proto().locale()), 10);
+            int row = -1;
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale()), 10).build());
 
-            main.add(inject(proto()._caption().caption()), 20);
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto()._caption().caption()), 20).build());
 
             if (isEditable()) {
-                main.add(inject(proto().content()), 60);
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content()), 60).build());
             } else {
                 CLabel content = new CLabel();
                 content.setAllowHtml(true);
-                main.add(inject(proto().content(), content), 60);
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), content), 60).build());
             }
 
             // TODO
-            // main.add(inject(proto().image(), new CFileUploader()), 60);
+            // main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().image(), new CFileUploader()), 60).build());
             return main;
         }
     }

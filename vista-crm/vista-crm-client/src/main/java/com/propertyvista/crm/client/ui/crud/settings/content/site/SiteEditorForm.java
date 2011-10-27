@@ -64,12 +64,12 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         main.setWidget(++row, 0, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
 
 // TODO: image lists uploaders:
-//        main.setWidget(++row, 0, decorate(inject(proto().logo(), new CFileUploader()), 60);
-//        main.setWidget(++row, 0, decorate(inject(proto().slogan(), new CFileUploader()), 60);
-//        main.setWidget(++row, 0, decorate(inject(proto().images(), new CFileUploader()), 60);
+//        main.setWidget(++row, 0, decorate(inject(proto().logo(), new CFileUploader()), 60).build());
+//        main.setWidget(++row, 0, decorate(inject(proto().slogan(), new CFileUploader()), 60).build());
+//        main.setWidget(++row, 0, decorate(inject(proto().images(), new CFileUploader()), 60).build());
 
         main.setH1(++row, 0, 1, proto().childPages().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().childPages(), new SitePageDescriptorFolder(isEditable(), this, (SiteViewer) getParentView())));
+        main.setWidget(++row, 0, inject(proto().childPages(), new SitePageDescriptorFolder(this)));
 
         return new CrmScrollPanel(main);
     }
@@ -89,6 +89,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
 
         return new ScrollPanel(main);
     }
+
 // TODO     
 //    private class ColorPickerDialog extends DialogBox {
 //

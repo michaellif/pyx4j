@@ -19,8 +19,9 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -30,18 +31,17 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageDescriptor.Type;
-import com.propertyvista.domain.site.SiteDescriptor;
 
 class SitePageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
 
-    private final CEntityEditor<? extends SiteDescriptor> parent;
+    private final SiteEditorForm parent;
 
     private final SiteViewer viewer;
 
-    public SitePageDescriptorFolder(boolean modifyable, CEntityEditor<? extends SiteDescriptor> parent, SiteViewer viewer) {
-        super(PageDescriptor.class, modifyable);
+    public SitePageDescriptorFolder(SiteEditorForm parent) {
+        super(PageDescriptor.class, !parent.isEditable());
         this.parent = parent;
-        this.viewer = viewer;
+        this.viewer = (!parent.isEditable() ? (SiteViewer) parent.getParentView() : null);
     }
 
     @Override
@@ -49,6 +49,13 @@ class SitePageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().name(), "25em"));
         return columns;
+    }
+
+    @Override
+    protected IFolderDecorator<PageDescriptor> createDecorator() {
+        TableFolderDecorator<PageDescriptor> decor = (TableFolderDecorator<PageDescriptor>) super.createDecorator();
+        decor.setShowHeader(false);
+        return decor;
     }
 
     @Override
@@ -81,7 +88,7 @@ class SitePageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
         protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject().equals(proto().name())) {
                 CComponent<?> comp = null;
-                if (!parent.isEditable()) {
+                if (parent.isEditable()) {
                     comp = inject(column.getObject(), new CLabel());
                 } else {
                     comp = inject(column.getObject(), new CHyperlink(new Command() {
