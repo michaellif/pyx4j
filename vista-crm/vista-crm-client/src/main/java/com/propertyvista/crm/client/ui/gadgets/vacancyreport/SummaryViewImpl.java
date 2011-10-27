@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
+import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportSummaryDTO;
@@ -36,36 +37,37 @@ public class SummaryViewImpl implements SummaryView {
 
             @Override
             public IsWidget createContent() {
-                int row = 0;
+                int row = -1;
+
                 FormFlexPanel main = new FormFlexPanel();
-                main.setH1(row++, 0, 2, i18n.tr(SUMMARY_CAPTION));
+                main.setH1(++row, 0, 2, i18n.tr(SUMMARY_CAPTION));
 
-                main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().total())).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total())).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().netExposure())).build());
 
-                main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().netExposure())).build());
-                //main.setWidget(row, 0, new VistaLineSeparator());
-                //main.getFlexCellFormatter().setColSpan(row++, 0, 2);
+                main.setWidget(++row, 0, new VistaLineSeparator());
+                main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-//                main.setWidget(row, 0, new DecoratorBuilder(inject(proto().vacancyAbsolute())).build());
-//                main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().noticeAbsolute())).build());
-//
-//                main.setWidget(row, 0, new DecoratorBuilder(inject(proto().vacancyRelative())).build());
-//                main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().noticeRelative())).build());
-//                main.setWidget(row, 0, new DecoratorBuilder(inject(proto().vacantRented())).build());
-//
-//                main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().noticeRented())).build());
-//
-//                //main.setWidget(row, 0, new VistaLineSeparator());
-//                //main.getFlexCellFormatter().setColSpan(row++, 0, 2);
-//
-//                main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().occupancyAbsolute())).build());
-//                main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().occupancyRelative())).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().vacancyAbsolute())).build());
+                main.setWidget(row, 1, new DecoratorBuilder(inject(proto().noticeAbsolute())).build());
+
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().vacancyRelative())).build());
+                main.setWidget(row, 1, new DecoratorBuilder(inject(proto().noticeRelative())).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().vacantRented())).build());
+                main.setWidget(row, 1, new DecoratorBuilder(inject(proto().noticeRented())).build());
+
+                main.setWidget(++row, 0, new VistaLineSeparator());
+                main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupancyAbsolute())).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupancyRelative())).build());
 
                 main.getColumnFormatter().setWidth(0, "50%");
                 main.getColumnFormatter().setWidth(1, "50%");
-//                main.setWidth("100%");
+                main.setWidth("100%");
 
                 return main;
+
 //                final int WIDTH = 10;
 //                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(true);
 //                main.setWidth("100%");
