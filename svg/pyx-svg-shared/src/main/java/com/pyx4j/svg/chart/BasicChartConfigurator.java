@@ -23,6 +23,8 @@ package com.pyx4j.svg.chart;
 import com.pyx4j.svg.basic.SvgFactory;
 
 public abstract class BasicChartConfigurator {
+    private static final int DEFAULT_LABEL_PRECISION = 2;
+
     private final DataSource datasourse;
 
     private final SvgFactory factory;
@@ -33,6 +35,8 @@ public abstract class BasicChartConfigurator {
 
     private boolean showValueLabels;
 
+    private int labelPrecision;
+
     public BasicChartConfigurator(SvgFactory factory, DataSource datasource) {
         assert factory != null;
         assert datasource != null;
@@ -41,6 +45,7 @@ public abstract class BasicChartConfigurator {
         theme = ChartTheme.Monochrome;
         legend = false;
         showValueLabels = false;
+        labelPrecision = DEFAULT_LABEL_PRECISION;
     }
 
     public ChartTheme getTheme() {
@@ -75,4 +80,13 @@ public abstract class BasicChartConfigurator {
         this.showValueLabels = showValueLabels;
     }
 
+    public void setLabelPrecision(int precision) {
+        if (precision < 0) {
+            this.labelPrecision = 0;
+        }
+    }
+
+    public int getLabelPrecision() {
+        return labelPrecision;
+    }
 }

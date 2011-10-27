@@ -107,7 +107,8 @@ public class BarChart2D extends GridBasedChart {
                         if (ty >= ystart) {
                             ty = ystart - CHART_LABEL_PADDING;
                         }
-                        label = factory.createText(String.valueOf(value), tx, ty);
+                        String valueRepr = GridBasedChart.formatDouble(value, configurator.getLabelPrecision());
+                        label = factory.createText(valueRepr, tx, ty);
                         label.setTransform("rotate(-90," + tx + "," + String.valueOf(ty) + ")");
 
                     } else {

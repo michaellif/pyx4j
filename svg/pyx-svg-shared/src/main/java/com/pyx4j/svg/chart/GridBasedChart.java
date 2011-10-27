@@ -322,7 +322,9 @@ public abstract class GridBasedChart implements IsSvgElement {
         container.add(lblfirst);
         for (Double yy : valuePoints) {
             valueA += "M" + xstart + "," + yy + "L" + tickEnd + "," + yy;
-            Text lbl = factory.createText(String.valueOf(value / valuePostfix.getFactor()) + valuePostfix.getName(), lblxstart, yy.intValue());
+            // GWT doesn't implement String.format(), so we have to use our own function 
+            String valueRepr = formatDouble(value / valuePostfix.getFactor(), configurator.getLabelPrecision()) + valuePostfix.getName();
+            Text lbl = factory.createText(valueRepr, lblxstart, yy.intValue());
             lbl.setAttribute("font-size", String.valueOf(DEFAULT_FONT_SIZE));
             lbl.setAttribute("text-anchor", "end");
             container.add(lbl);
@@ -417,5 +419,24 @@ public abstract class GridBasedChart implements IsSvgElement {
         legG.setAttribute("height", String.valueOf(y));
         legG.add(frame);
         return legG;
+    }
+
+    /**
+     * Convert <code>double</code> value to its truncated string representation.
+     * 
+     * @param value
+     *            the value to that is to be converted.
+     * @param precision
+     *            the number of the digits after the decimal point that will be spared.
+     * @return
+     */
+    public static String formatDouble(double value, int precision) {
+        String valueRepr = String.valueOf(value);
+        int dotIndex = valueRepr.indexOf(".");
+
+        if (dotIndex != -1) {
+            valueRepr = valueRepr.substring(0, Math.min(precision + dotIndex + 1, valueRepr.length()));
+        }
+        return valueRepr;
     }
 }
