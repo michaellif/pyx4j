@@ -15,6 +15,7 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import java.text.ParseException;
 
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -90,7 +91,15 @@ public class NativeEmail extends HorizontalPanel implements INativeEditableCompo
         address.addBlurHandler(groupBlurHandler);
 
         setStyleName(DEFAULT_STYLE_PREFIX);
-        setWidth("100%");
+
+        getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
+
+        getElement().getStyle().setWidth(200, Unit.PX);
+        getElement().getStyle().setHeight(20, Unit.PX);
+
+        getElement().getStyle().setPadding(5, Unit.PX);
+
+//        setWidth("100%");
     }
 
     @Override

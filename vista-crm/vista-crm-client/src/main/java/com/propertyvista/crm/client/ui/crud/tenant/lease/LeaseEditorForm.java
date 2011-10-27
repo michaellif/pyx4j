@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
@@ -41,7 +40,6 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
-import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -167,10 +165,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                             @Override
                             protected void onClose(SelectServiceItemBox box) {
                                 if (box.getSelectedItem() != null) {
-                                    ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                                    newItem.item().set(box.getSelectedItem());
-                                    newItem.price().setValue(box.getSelectedItem().price().getValue());
-                                    get(proto().serviceAgreement().serviceItem()).setValue(newItem);
                                     ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedService(box.getSelectedItem());
                                 }
                             }

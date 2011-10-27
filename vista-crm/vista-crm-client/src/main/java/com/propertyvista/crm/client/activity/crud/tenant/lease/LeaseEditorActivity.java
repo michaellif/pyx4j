@@ -131,15 +131,15 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         LeaseDTO currentValue = view.getValue();
         if (fillServiceEligibilityData(currentValue, serviceItem)) {
 
-            // clear currently selected dependable data:
+            // clear current dependable data:
             clearServiceAgreement(currentValue, false);
 
-            // pre-populate utilities for the new item: 
+            // set selected service: 
+            currentValue.serviceAgreement().serviceItem().set(createChargeItem(serviceItem));
+
+            // pre-populate utilities for the new service: 
             for (ServiceItem item : currentValue.selectedUtilityItems()) {
-                ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                newItem.item().set(item);
-                newItem.price().setValue(item.price().getValue());
-                currentValue.serviceAgreement().featureItems().add(newItem);
+                currentValue.serviceAgreement().featureItems().add(createChargeItem(item));
             }
 
             view.populate(currentValue);
@@ -243,4 +243,12 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
         return (selectedService != null);
     }
+
+    private ChargeItem createChargeItem(ServiceItem serviceItem) {
+        ChargeItem chargeItem = EntityFactory.create(ChargeItem.class);
+        chargeItem.item().set(serviceItem);
+        chargeItem.price().setValue(serviceItem.price().getValue());
+        return chargeItem;
+    }
+
 }

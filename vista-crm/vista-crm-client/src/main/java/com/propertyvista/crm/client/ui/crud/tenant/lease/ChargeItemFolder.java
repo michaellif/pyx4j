@@ -66,15 +66,9 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
 
     private final CrmEntityForm<LeaseDTO> parent;
 
-    private LeaseEditorView.Presenter presenter;
-
     public ChargeItemFolder(boolean modifyable, CrmEntityForm<LeaseDTO> parent) {
         super(ChargeItem.class, modifyable);
         this.parent = parent;
-    }
-
-    public void setPresenter(LeaseEditorView.Presenter presenter) {
-        this.presenter = presenter;
     }
 
     @Override
