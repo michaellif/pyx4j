@@ -107,7 +107,15 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         }
 
         // set default (all building for all time) filtering:
-        IBuildingGadget.FilterData filterData = new IBuildingGadget.FilterData();
+        setDashboardFiltering(new IBuildingGadget.FilterData());
+    }
+
+    @Override
+    public IListerView<Building> getBuildingListerView() {
+        return (filters != null ? filters.getBuildingListerView() : null);
+    }
+
+    private void setDashboardFiltering(IBuildingGadget.FilterData filterData) {
         IGadgetIterator it = board.getBoard().getGadgetIterator();
         if (it.hasNext()) {
             IGadget gadget = it.next();
@@ -115,11 +123,6 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
                 ((IBuildingGadget) gadget).setFiltering(filterData);
             }
         }
-    }
-
-    @Override
-    public IListerView<Building> getBuildingListerView() {
-        return (filters != null ? filters.getBuildingListerView() : null);
     }
 
     @com.pyx4j.i18n.annotations.I18n
@@ -426,13 +429,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             }
 
             // notify gadgets:
-            IGadgetIterator it = board.getBoard().getGadgetIterator();
-            if (it.hasNext()) {
-                IGadget gadget = it.next();
-                if (gadget instanceof IBuildingGadget) {
-                    ((IBuildingGadget) gadget).setFiltering(filterData);
-                }
-            }
+            setDashboardFiltering(filterData);
         }
     }
 }
