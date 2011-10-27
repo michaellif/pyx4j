@@ -29,7 +29,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.EqualsHelper;
-import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
@@ -38,6 +37,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -45,11 +45,9 @@ import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.common.client.ui.components.editors.CDecoratableEntityEditor;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.ChargeItemAdjustment;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -101,11 +99,11 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
         return super.create(member);
     }
 
-    class ChargeItemEditor extends CEntityEditor<ChargeItem> {
+    class ChargeItemEditor extends CDecoratableEntityEditor<ChargeItem> {
 
         private final SimplePanel extraDataPanel = new SimplePanel();
 
-        private VistaDecoratorsFlowPanel adjustmentPanel;
+        private final FormFlexPanel adjustmentPanel = new FormFlexPanel();
 
         public ChargeItemEditor() {
             super(ChargeItem.class);
@@ -113,28 +111,33 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
 
         @Override
         public IsWidget createContent() {
-            VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable(), 10);
-            VistaDecoratorsSplitFlowPanel split;
+            FormFlexPanel main = new FormFlexPanel();
+            int row = -1;
 
             CLabel lb;
-            main.add(split = new VistaDecoratorsSplitFlowPanel(!isEditable(), 10, 22));
-            split.getLeftPanel().add(inject(proto().item().type().name(), lb = new CLabel()));
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item().type().name(), lb = new CLabel())).build());
             lb.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
             CNumberLabel nl;
-            split.getRightPanel().add(inject(proto().price(), nl = new CNumberLabel()), 6);
+            main.setWidget(row, 1, new DecoratorBuilder(inject(proto().price(), nl = new CNumberLabel()), 6).build());
             nl.setNumberFormat(proto().price().getMeta().getFormat());
 
-            split.getRightPanel().add(inject(proto().adjustedPrice(), nl = new CNumberLabel()), 6);
+            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().adjustedPrice(), nl = new CNumberLabel()), 6).build());
             nl.setNumberFormat(proto().adjustedPrice().getMeta().getFormat());
             nl.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
-            main.add(extraDataPanel);
+            main.setWidget(++row, 0, extraDataPanel);
+            main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-            adjustmentPanel = new VistaDecoratorsFlowPanel(!isEditable(), 10);
-            adjustmentPanel.add(new CrmSectionSeparator(i18n.tr("Adjustments") + ":"));
-            adjustmentPanel.add(inject(proto().adjustments(), new ChargeItemAdjustmentFolder()));
-            main.add(adjustmentPanel);
+            main.setWidget(++row, 0, adjustmentPanel);
+            main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+            main.getColumnFormatter().setWidth(0, "50%");
+            main.getColumnFormatter().setWidth(1, "50%");
+
+            adjustmentPanel.setH1(0, 0, 1, i18n.tr("Adjustments"));
+            adjustmentPanel.setWidget(0, 0, inject(proto().adjustments(), new ChargeItemAdjustmentFolder()));
+
             return main;
         }
 
@@ -156,25 +159,24 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
             CEntityEditor editor = null;
             switch (value.item().type().featureType().getValue()) {
             case parking:
-                editor = new CEntityEditor<Vehicle>(Vehicle.class) {
+                editor = new CDecoratableEntityEditor<Vehicle>(Vehicle.class) {
                     @Override
                     public IsWidget createContent() {
-                        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!isEditable(), 10);
-                        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable(), 10, 30);
+                        FormFlexPanel panel = new FormFlexPanel();
 
-                        panel.add(new HTML(HtmlUtils.h5(i18n.tr("Vehicle data") + ":")));
-                        panel.add(split);
+                        int row = -1;
+                        panel.setH1(++row, 0, 2, i18n.tr("Vehicle data") + ":");
 
-                        split.getLeftPanel().add(inject(proto().year()), 5);
-                        split.getLeftPanel().add(inject(proto().make()), 10);
-                        split.getLeftPanel().add(inject(proto().model()), 10);
+                        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().year()), 5).build());
+                        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().make()), 10).build());
+                        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().model()), 10).build());
 
-                        split.getRightPanel().add(inject(proto().plateNumber()), 10);
+                        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().plateNumber()), 10).build());
 
                         CEditableComponent<Country, ?> country;
-                        split.getRightPanel().add(country = (CEditableComponent<Country, ?>) inject(proto().country()), 13);
+                        panel.setWidget(++row, 1, new DecoratorBuilder(country = (CEditableComponent<Country, ?>) inject(proto().country()), 13).build());
                         CEditableComponent<Province, ?> province;
-                        split.getRightPanel().add(province = (CEditableComponent<Province, ?>) inject(proto().province()), 17);
+                        panel.setWidget(++row, 1, new DecoratorBuilder(province = (CEditableComponent<Province, ?>) inject(proto().province()), 17).build());
 
                         ProvinceContryFilters.attachFilters(province, country, new OptionsFilter<Province>() {
                             @Override
@@ -188,6 +190,9 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                             }
                         });
 
+                        panel.getColumnFormatter().setWidth(0, "50%");
+                        panel.getColumnFormatter().setWidth(1, "50%");
+
                         return panel;
                     }
                 };
@@ -197,22 +202,24 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                 }
                 break;
             case pet:
-                editor = new CEntityEditor<Pet>(Pet.class) {
+                editor = new CDecoratableEntityEditor<Pet>(Pet.class) {
                     @Override
                     public IsWidget createContent() {
-                        VistaDecoratorsFlowPanel panel = new VistaDecoratorsFlowPanel(!isEditable(), 10);
-                        VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!isEditable(), 10, 30);
+                        FormFlexPanel panel = new FormFlexPanel();
 
-                        panel.add(new HTML(HtmlUtils.h5(i18n.tr("Pet data") + ":")));
-                        panel.add(split);
+                        int row = -1;
+                        panel.setH1(++row, 0, 2, i18n.tr("Pet data") + ":");
 
-                        split.getLeftPanel().add(inject(proto().name()), 15);
-                        split.getLeftPanel().add(inject(proto().color()), 15);
-                        split.getLeftPanel().add(inject(proto().breed()), 15);
+                        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
+                        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().color()), 15).build());
+                        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().breed()), 15).build());
 
-                        split.getRightPanel().add(inject(proto().weight()), 4);
-                        split.getRightPanel().add(inject(proto().weightUnit()), 4);
-                        split.getRightPanel().add(inject(proto().birthDate()), 8.2);
+                        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().weight()), 4).build());
+                        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().weightUnit()), 4).build());
+                        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().birthDate()), 8.2).build());
+
+                        panel.getColumnFormatter().setWidth(0, "50%");
+                        panel.getColumnFormatter().setWidth(1, "50%");
 
                         return panel;
                     }
