@@ -15,11 +15,24 @@ package com.propertyvista.pmsite.server.panels;
 
 import org.apache.wicket.markup.html.panel.Panel;
 
+import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.Visit;
+
 public class GwtInclude extends Panel {
+
     private static final long serialVersionUID = 1L;
 
     public GwtInclude(String id) {
         super(id);
+    }
+
+    private String getAuthenticationToken() {
+        Visit visit = Context.getVisit();
+        if (visit != null) {
+            return visit.getSessionToken();
+        } else {
+            return "";
+        }
     }
 
 }
