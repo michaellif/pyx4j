@@ -35,14 +35,13 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
+import com.propertyvista.common.client.ui.components.editors.CDecoratableEntityEditor;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
 import com.propertyvista.portal.client.resources.PortalImages;
@@ -51,9 +50,7 @@ import com.propertyvista.portal.domain.payment.CreditCardInfo;
 import com.propertyvista.portal.domain.payment.EcheckInfo;
 import com.propertyvista.portal.domain.payment.PaymentType;
 
-public class NewPaymentMethodForm extends CEntityEditor<PaymentMethodGenericDTO> {
-
-    private static I18n i18n = I18n.get(NewPaymentMethodForm.class);
+public class NewPaymentMethodForm extends CDecoratableEntityEditor<PaymentMethodGenericDTO> {
 
     private FlowPanel paymentTypeImagesPanel;
 
@@ -82,8 +79,12 @@ public class NewPaymentMethodForm extends CEntityEditor<PaymentMethodGenericDTO>
     @Override
     public IsWidget createContent() {
 
-        VistaDecoratorsFlowPanel container = new VistaDecoratorsFlowPanel();
-        container.add(new VistaHeaderBar(proto().type(), "100%"));
+        FormFlexPanel container = new FormFlexPanel();
+
+        int row = 0;
+
+        container.setHeader(row++, 0, 1, proto().type().getMeta().getCaption());
+
         CRadioGroupEnum<PaymentType> radioGroup = new CRadioGroupEnum<PaymentType>(PaymentType.class, CRadioGroup.Layout.VERTICAL);
         radioGroup.setStylePrefix(PAYMENT_BUTTONS_STYLE_PREFIX);
 
@@ -118,7 +119,9 @@ public class NewPaymentMethodForm extends CEntityEditor<PaymentMethodGenericDTO>
             paymentTypeImagesPanel.add(holder);
         }
         paymentTypeImagesPanel.asWidget().getElement().getStyle().setFloat(Float.LEFT);
-        container.add(paymentTypeImagesPanel);
+
+        container.setWidget(row++, 0, paymentTypeImagesPanel);
+
         CRadioGroup<PaymentType> paymentType = (CRadioGroup<PaymentType>) inject(proto().type(), radioGroup);
         paymentType.addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
 
@@ -146,16 +149,16 @@ public class NewPaymentMethodForm extends CEntityEditor<PaymentMethodGenericDTO>
         instrumentsPanel.add(inject(proto().echeck(), createEcheckInfoEditor()));
         instrumentsPanel.add(inject(proto().creditCard(), createCreditCardInfoEditor()));
 
-        container.add(paymentType);
-        container.add(paymentFeesPanel);
-        container.add(instrumentsPanel);
+        container.setWidget(row++, 0, paymentType);
+        container.setWidget(row++, 0, paymentFeesPanel);
+        container.setWidget(row++, 0, instrumentsPanel);
 
         setPaymentTableVisibility(0);
 
-        container.add(new VistaHeaderBar(proto().billingAddress(), "100%"));
-        container.add(inject(proto().billingAddress(), new CAddressStructured()));
+        container.setHeader(row++, 0, 1, proto().billingAddress().getMeta().getCaption());
+        container.setWidget(row++, 0, inject(proto().billingAddress(), new CAddressStructured()));
 
-        container.add(inject(proto().phone()), 12);
+        container.setWidget(row++, 0, new DecoratorBuilder(inject(proto().phone()), 12).build());
         container.setWidth("100%");
         setInstrumentsVisibility(PaymentType.Echeck);
         return container;

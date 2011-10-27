@@ -32,12 +32,11 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityViewer;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.util.Utils;
@@ -45,8 +44,6 @@ import com.propertyvista.portal.domain.dto.BillDTO;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 
 public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBillView {
-
-    private static I18n i18n = I18n.get(CurrentBillForm.class);
 
     private Presenter presenter;
 
@@ -59,7 +56,7 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
         FlowPanel container = new FlowPanel();
         container.add(inject(proto().charges(), new ChargeLineFolder(isEditable())));
         container.add(inject(proto().total(), new TotalLineViewer()));
-        container.add(new VistaWidgetDecorator(inject(proto().dueDate())));
+        container.add(new WidgetDecorator(inject(proto().dueDate())));
         container.add(inject(proto().paymentMethod(), new PaymentMethodViewer()));
         container.add(inject(proto().preAuthorized(), new PreauthorizedOutcomeViewer()));
         return container;

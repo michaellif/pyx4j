@@ -56,7 +56,7 @@ public class CEmergencyContact extends CDecoratableEntityEditor<EmergencyContact
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
 
         main.setHeader(++row, 0, 1, "");
-        main.setWidget(++row, 0, inject(proto().address(), new CAddressStructured()));
+        main.setWidget(++row, 0, inject(proto().address(), new CAddressStructured(twoColumns)));
 
         return main;
     }
