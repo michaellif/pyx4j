@@ -119,15 +119,14 @@
 
 
 .promoBox {
-	height:240px;
-	padding:20px 10px;
+	padding:20px 10px 0;
 	float:left;
 	overflow:hidden;
 }
 
 .promoBox .infobox_content {
 	width:140px;
-	height:200px;
+	height:150px;
 	float:left;
 	margin-left:20px;
 }
@@ -170,7 +169,7 @@
 
 .testimBox .callout {
 	position: absolute;
-	top:198px;
+	top:156px;
 	left:250px;
 }
 
@@ -178,7 +177,7 @@
 	overflow: hidden;
 	float: left;
 	width: 260px;
-	height: 143px;
+	height: 100px;
 	margin: 15px 10px;
 	padding: 20px;
 	background: #2A2C30;

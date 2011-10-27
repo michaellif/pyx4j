@@ -3,14 +3,14 @@
 
 .vista-pmsite-content {
     margin: 0 auto;
-	width: 958px;
-	border-left: solid 1px ${object2_20};
-	border-right: solid 1px ${object2_20};
+	width: 960px;
+}
+
+.infobox_body {
+		padding: 20px 20px;
 }
 
 .banner {
-	height: 375px;
-	width: 280px;
 	position: absolute;
 	vertical-align:top;
 	z-index: 100;
@@ -21,16 +21,10 @@
 
 .banner .infobox_header {
 	background: ${object2_90};
-	margin-left: -1px;
 }
 
 .quickSearchPanel {
-	width: 301px;
-	height:335px;
-}
-
-.infobox_body {
-		padding: 20px 20px;
+	width: 300px;
 }
 
 .quickSearchPanel h3 {
@@ -93,7 +87,7 @@
 }
 
 .vista-pmsite-main {
-	width: 658px;
+	width: 660px;
 	position: relative;
 	float: left;
 	background: ${bgC0lor_100};
@@ -104,12 +98,14 @@
 	float: left;
 	overflow:hidden;
 	width: 100%;
-	border-left: solid 1px ${object2_20};
 }
 
 .testimBox .infobox_header {
 	padding: 0 0 0 20px;
-	margin-right: -1px;
+}
+
+.testimBox .infobox_body {
+	border-left: solid 1px ${object2_20};
 }
 
 .testimBox .infobox_decor {
@@ -160,7 +156,6 @@
 
 .newsBox .infobox_header {
 	padding: 0 0 0 20px;
-	margin-left: -1px;
 }
 
 
@@ -213,18 +208,20 @@
 	float:left;
 	overflow:hidden;
 	width: 100%;
-	border-left: solid 1px ${object2_20};
 }
 
+.promoBox .infobox_body {
+	float:left;
+	border-left: solid 1px ${object2_20};
+}
 .promoBox .infobox_content {
-	width:138px;
+	width:139px;
 	height:300px;
 	float:left;
 	margin-left:20px;
 }
 
 .promoBox .infobox_header {
-	margin-right: -1px;
 }
 
 .promoBox .infobox_content:first-child {
@@ -232,7 +229,7 @@
 }
 
 .promoBox .picture {
-	width:140px;
+	width:137px;
 	background:grey;
 }
 
