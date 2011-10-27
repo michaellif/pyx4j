@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.domain.EmergencyContact;
 
-public class CEmergencyContact extends CDecoratableEntityEditor<EmergencyContact> {
+public class CEmergencyContact extends CEntityDecoratableEditor<EmergencyContact> {
 
     private final boolean twoColumns;
 

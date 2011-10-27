@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.editors.CDecoratableEntityEditor;
+import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.domain.company.OrganizationContact;
 
 class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
@@ -37,7 +37,7 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
         }
     }
 
-    static class OrganizationContactEditor extends CDecoratableEntityEditor<OrganizationContact> {
+    static class OrganizationContactEditor extends CEntityDecoratableEditor<OrganizationContact> {
 
         public OrganizationContactEditor() {
             super(OrganizationContact.class);

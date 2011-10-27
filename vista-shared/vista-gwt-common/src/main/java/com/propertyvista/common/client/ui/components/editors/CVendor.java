@@ -19,7 +19,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.domain.property.vendor.Vendor;
 
-public class CVendor extends CDecoratableEntityEditor<Vendor> {
+public class CVendor extends CEntityDecoratableEditor<Vendor> {
 
     public CVendor() {
         super(Vendor.class);

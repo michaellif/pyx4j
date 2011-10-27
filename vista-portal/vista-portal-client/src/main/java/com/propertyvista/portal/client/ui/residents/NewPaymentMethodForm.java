@@ -40,7 +40,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
-import com.propertyvista.common.client.ui.components.editors.CDecoratableEntityEditor;
+import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
@@ -50,7 +50,7 @@ import com.propertyvista.portal.domain.payment.CreditCardInfo;
 import com.propertyvista.portal.domain.payment.EcheckInfo;
 import com.propertyvista.portal.domain.payment.PaymentType;
 
-public class NewPaymentMethodForm extends CDecoratableEntityEditor<PaymentMethodGenericDTO> {
+public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethodGenericDTO> {
 
     private FlowPanel paymentTypeImagesPanel;
 

@@ -19,7 +19,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.domain.property.vendor.License;
 
-public class CLicense extends CDecoratableEntityEditor<License> {
+public class CLicense extends CEntityDecoratableEditor<License> {
 
     public CLicense() {
         super(License.class);

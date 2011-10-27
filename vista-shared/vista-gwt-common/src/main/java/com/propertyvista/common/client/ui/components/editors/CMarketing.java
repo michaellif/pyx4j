@@ -27,7 +27,7 @@ import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
 
-public class CMarketing extends CDecoratableEntityEditor<Marketing> {
+public class CMarketing extends CEntityDecoratableEditor<Marketing> {
 
     public CMarketing() {
         super(Marketing.class);

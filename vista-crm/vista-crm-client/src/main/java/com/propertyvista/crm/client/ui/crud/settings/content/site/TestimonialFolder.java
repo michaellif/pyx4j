@@ -15,12 +15,12 @@ package com.propertyvista.crm.client.ui.crud.settings.content.site;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
+import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.domain.site.Testimonial;
 
 class TestimonialFolder extends VistaBoxFolder<Testimonial> {
@@ -37,7 +37,7 @@ class TestimonialFolder extends VistaBoxFolder<Testimonial> {
         return super.create(member);
     }
 
-    class TestimonialEditor extends CEntityEditor<Testimonial> {
+    class TestimonialEditor extends CEntityDecoratableEditor<Testimonial> {
 
         public TestimonialEditor() {
             super(Testimonial.class);
@@ -45,10 +45,13 @@ class TestimonialFolder extends VistaBoxFolder<Testimonial> {
 
         @Override
         public IsWidget createContent() {
-            VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-            main.add(inject(proto().locale()), 10);
-            main.add(inject(proto().content()), 50);
-            main.add(inject(proto().author()), 20);
+            FormFlexPanel main = new FormFlexPanel();
+
+            int row = -1;
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale()), 10).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content()), 50).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().author()), 20).build());
+
             return main;
         }
     }

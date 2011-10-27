@@ -19,13 +19,13 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
-abstract public class CDecoratableEntityEditor<E extends IEntity> extends CEntityEditor<E> {
+abstract public class CEntityDecoratableEditor<E extends IEntity> extends CEntityEditor<E> {
 
-    public CDecoratableEntityEditor(Class<E> clazz) {
+    public CEntityDecoratableEditor(Class<E> clazz) {
         super(clazz);
     }
 
-    public CDecoratableEntityEditor(Class<E> clazz, IEditableComponentFactory factory) {
+    public CEntityDecoratableEditor(Class<E> clazz, IEditableComponentFactory factory) {
         super(clazz, factory);
     }
 

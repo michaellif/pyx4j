@@ -25,7 +25,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
-public abstract class CAddressStructuredImpl<A extends AddressStructured> extends CDecoratableEntityEditor<A> {
+public abstract class CAddressStructuredImpl<A extends AddressStructured> extends CEntityDecoratableEditor<A> {
 
     private final boolean showUnit;
 

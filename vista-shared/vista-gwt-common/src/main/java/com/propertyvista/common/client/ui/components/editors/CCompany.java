@@ -21,7 +21,7 @@ import com.propertyvista.common.client.ui.components.folders.EmailFolder;
 import com.propertyvista.common.client.ui.components.folders.PhoneFolder;
 import com.propertyvista.domain.company.Company;
 
-public class CCompany extends CDecoratableEntityEditor<Company> {
+public class CCompany extends CEntityDecoratableEditor<Company> {
 
     public CCompany() {
         super(Company.class);

@@ -25,7 +25,7 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
-public abstract class CAddressSimpleImpl<A extends AddressSimple> extends CDecoratableEntityEditor<A> {
+public abstract class CAddressSimpleImpl<A extends AddressSimple> extends CEntityDecoratableEditor<A> {
 
     public CAddressSimpleImpl(Class<A> clazz) {
         super(clazz);

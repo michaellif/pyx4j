@@ -19,11 +19,11 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.client.ui.components.editors.CDecoratableEntityEditor;
+import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 
-public class PersonalInfoForm extends CDecoratableEntityEditor<ResidentDTO> implements PersonalInfoView {
+public class PersonalInfoForm extends CEntityDecoratableEditor<ResidentDTO> implements PersonalInfoView {
 
     private static I18n i18n = I18n.get(PersonalInfoForm.class);
 

@@ -45,7 +45,7 @@ import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
-import com.propertyvista.common.client.ui.components.editors.CDecoratableEntityEditor;
+import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.ChargeItem;
@@ -99,7 +99,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
         return super.create(member);
     }
 
-    class ChargeItemEditor extends CDecoratableEntityEditor<ChargeItem> {
+    class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
 
         private final SimplePanel extraDataPanel = new SimplePanel();
 
@@ -159,7 +159,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
             CEntityEditor editor = null;
             switch (value.item().type().featureType().getValue()) {
             case parking:
-                editor = new CDecoratableEntityEditor<Vehicle>(Vehicle.class) {
+                editor = new CEntityDecoratableEditor<Vehicle>(Vehicle.class) {
                     @Override
                     public IsWidget createContent() {
                         FormFlexPanel panel = new FormFlexPanel();
@@ -202,7 +202,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                 }
                 break;
             case pet:
-                editor = new CDecoratableEntityEditor<Pet>(Pet.class) {
+                editor = new CEntityDecoratableEditor<Pet>(Pet.class) {
                     @Override
                     public IsWidget createContent() {
                         FormFlexPanel panel = new FormFlexPanel();

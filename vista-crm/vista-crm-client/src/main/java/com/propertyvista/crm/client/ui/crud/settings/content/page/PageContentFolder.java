@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.editors.CDecoratableEntityEditor;
+import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 
@@ -50,7 +50,7 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
         callback.onSuccess(newEntity);
     }
 
-    class PageContentEditor extends CDecoratableEntityEditor<PageContent> {
+    class PageContentEditor extends CEntityDecoratableEditor<PageContent> {
 
         public PageContentEditor() {
             super(PageContent.class);

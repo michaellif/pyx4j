@@ -27,7 +27,7 @@ import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.property.vendor.Warranty;
 import com.propertyvista.domain.property.vendor.WarrantyItem;
 
-public class CWarranty extends CDecoratableEntityEditor<Warranty> {
+public class CWarranty extends CEntityDecoratableEditor<Warranty> {
 
     public CWarranty() {
         super(Warranty.class);

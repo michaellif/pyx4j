@@ -19,7 +19,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.domain.property.vendor.Maintenance;
 
-public class CMaintenance extends CDecoratableEntityEditor<Maintenance> {
+public class CMaintenance extends CEntityDecoratableEditor<Maintenance> {
 
     public CMaintenance() {
         super(Maintenance.class);
