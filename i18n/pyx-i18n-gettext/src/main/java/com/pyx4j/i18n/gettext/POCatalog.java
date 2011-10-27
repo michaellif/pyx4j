@@ -85,7 +85,9 @@ public class POCatalog implements Translator {
 
     private void buildTranslations(POFile po) {
         for (POEntry entry : po.entries) {
-            translations.put(entry.untranslated, entry.translated);
+            if ((entry.translated != null) && (entry.translated.length() != 0)) {
+                translations.put(entry.untranslated, entry.translated);
+            }
         }
     }
 
