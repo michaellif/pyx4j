@@ -105,6 +105,16 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
                 setWidgetSize(filtersPanel, VistaCrmTheme.defaultActionBarHeight);
             }
         }
+
+        // set default (all building for all time) filtering:
+        IBuildingGadget.FilterData filterData = new IBuildingGadget.FilterData();
+        IGadgetIterator it = board.getBoard().getGadgetIterator();
+        if (it.hasNext()) {
+            IGadget gadget = it.next();
+            if (gadget instanceof IBuildingGadget) {
+                ((IBuildingGadget) gadget).setFiltering(filterData);
+            }
+        }
     }
 
     @Override
