@@ -19,7 +19,6 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -32,14 +31,14 @@ import com.propertyvista.domain.site.PageDescriptor;
 
 class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
 
-    private final CEntityEditor<PageDescriptor> parent;
+    private final PageEditorForm parent;
 
     private final PageViewer viewer;
 
-    public PageDescriptorFolder(CEntityEditor<PageDescriptor> parent, PageViewer viewer) {
-        super(PageDescriptor.class, parent.isEditable());
+    public PageDescriptorFolder(PageEditorForm parent) {
+        super(PageDescriptor.class, !parent.isEditable());
         this.parent = parent;
-        this.viewer = viewer;
+        this.viewer = (!parent.isEditable() ? (PageViewer) parent.getParentView() : null);
     }
 
     @Override
@@ -74,7 +73,7 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
         protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject().equals(proto().name())) {
                 CComponent<?> comp = null;
-                if (!parent.isEditable()) {
+                if (parent.isEditable()) {
                     comp = inject(column.getObject(), new CLabel());
                 } else {
                     comp = inject(column.getObject(), new CHyperlink(new Command() {

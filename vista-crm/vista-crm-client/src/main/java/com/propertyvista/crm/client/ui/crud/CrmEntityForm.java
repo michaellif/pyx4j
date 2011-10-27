@@ -24,7 +24,7 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 public abstract class CrmEntityForm<E extends IEntity> extends CrudEntityForm<E> {
 
     public CrmEntityForm(Class<E> rootClass) {
-        super(rootClass, new CrmEditorsComponentFactory());
+        this(rootClass, new CrmEditorsComponentFactory());
     }
 
     public CrmEntityForm(Class<E> rootClass, IEditableComponentFactory factory) {

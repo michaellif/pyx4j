@@ -31,8 +31,8 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
 
     private final CEntityEditor<PageDescriptor> parent;
 
-    public PageContentFolder(boolean modifyable, CEntityEditor<PageDescriptor> parent) {
-        super(PageContent.class, modifyable);
+    public PageContentFolder(CEntityEditor<PageDescriptor> parent) {
+        super(PageContent.class, parent.isEditable());
         this.parent = parent;
     }
 
