@@ -14,6 +14,8 @@
 package com.propertyvista.crm.client.ui.gadgets.vacancyreport;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
@@ -54,39 +56,48 @@ public class SetupImpl implements ISetup {
         this.settings = settings;
         this.gadget = gadget;
 
-        final double LINE_SPACING = 1d;
-
-        listerSettingsPanel = new FlexTable();
-        Label itemsPerPageLabel = new Label(i18n.tr("Items Per Page") + ":");
-        itemsPerPageLabel.getElement().getStyle().setPaddingRight(1, Unit.EM);
-        itemsPerPageLabel.getElement().getStyle().setPaddingLeft(2, Unit.EM);
-
+        final double INDENTATION = 1d;
+        final Label itemsPerPageLabel = new Label(i18n.tr("Units per page") + ":");
         showUnits = new CheckBox(i18n.tr("Units"));
+        showUnits.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                itemsPerPage.setVisible(event.getValue());
+                itemsPerPageLabel.setVisible(event.getValue());
+            }
+        });
         showUnits.setValue(settings.showUnits().getValue());
 
+        itemsPerPageLabel.getElement().getStyle().setPaddingLeft(5, Unit.EM);
+        itemsPerPageLabel.getElement().getStyle().setPaddingRight(1, Unit.EM);
+        itemsPerPageLabel.setVisible(showUnits.getValue());
         itemsPerPage = new TextBox();
         itemsPerPage.setText(String.valueOf(settings.itemsPerPage().getValue()));
-        itemsPerPage.setWidth("5em");
+        itemsPerPage.setWidth("3em");
+        itemsPerPage.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+        itemsPerPage.setVisible(showUnits.getValue());
 
+        listerSettingsPanel = new FlexTable();
         listerSettingsPanel.setWidget(0, 0, showUnits);
-        listerSettingsPanel.setWidget(1, 0, itemsPerPageLabel);
-        listerSettingsPanel.setWidget(1, 1, itemsPerPage);
-        listerSettingsPanel.getFlexCellFormatter().setColSpan(0, 0, 2);
+        listerSettingsPanel.setWidget(0, 1, itemsPerPageLabel);
+        listerSettingsPanel.setWidget(0, 2, itemsPerPage);
+        listerSettingsPanel.getFlexCellFormatter().setColSpan(0, 1, 2);
         listerSettingsPanel.getElement().getStyle().setPadding(0, Unit.EM);
-        listerSettingsPanel.getElement().getStyle().setPaddingBottom(LINE_SPACING, Unit.EM);
+        listerSettingsPanel.getElement().getStyle().setPaddingLeft(INDENTATION, Unit.EM);
 
         showSummary = new CheckBox(i18n.tr("Summary"));
         showSummary.setValue(settings.showSummary().getValue());
-        showSummary.getElement().getStyle().setPaddingBottom(LINE_SPACING, Unit.EM);
+        showSummary.getElement().getStyle().setPaddingLeft(INDENTATION, Unit.EM);
 
         showTurnoverAnalysis = new CheckBox(i18n.tr("Turnover Analysis"));
         showTurnoverAnalysis.setValue(settings.showTurnoverAnalysis().getValue());
-        showTurnoverAnalysis.getElement().getStyle().setPaddingBottom(LINE_SPACING, Unit.EM);
+        showTurnoverAnalysis.getElement().getStyle().setPaddingLeft(INDENTATION, Unit.EM);
 
         setupPanel = new VerticalPanel();
         setupPanel.setWidth("100%");
         setupPanel.setHeight("100%");
 
+        setupPanel.add(new Label(i18n.tr("Display") + ":"));
         setupPanel.add(listerSettingsPanel);
         setupPanel.add(showSummary);
         setupPanel.add(showTurnoverAnalysis);

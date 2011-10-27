@@ -74,16 +74,16 @@ public class ComplexViewerForm extends CrmEntityForm<ComplexDTO> {
         FormFlexPanel panel = new FormFlexPanel();
         int row = 0;
 
-        panel.setWidget(++row, 0, (new DecoratorBuilder(inject(proto().name()))).build());
-        panel.setWidget(++row, 0, (new DecoratorBuilder(inject(proto().contactInfo().website()))).build());
+        panel.setWidget(row++, 0, (new DecoratorBuilder(inject(proto().name()))).build());
+        panel.setWidget(row++, 0, (new DecoratorBuilder(inject(proto().contactInfo().website()))).build());
 
-        panel.setH1(++row, 0, 2, proto().contactInfo().phones().getMeta().getCaption());
-        panel.setWidget(++row, 0, inject(proto().contactInfo().phones(), new PropertyPhoneFolder()));
-        panel.getFlexCellFormatter().setColSpan(row, 0, 2);
+        panel.setH1(row++, 0, 2, proto().contactInfo().phones().getMeta().getCaption());
+        panel.setWidget(row, 0, inject(proto().contactInfo().phones(), new PropertyPhoneFolder()));
+        panel.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
-        panel.setH1(++row, 0, 2, proto().address().getMeta().getCaption());
-        panel.setWidget(++row, 0, inject(proto().address(), new CAddressStructured(true, false)));
-        panel.getFlexCellFormatter().setColSpan(row, 0, 2);
+        panel.setH1(row++, 0, 2, proto().address().getMeta().getCaption());
+        panel.setWidget(row, 0, inject(proto().address(), new CAddressStructured(true, false)));
+        panel.getFlexCellFormatter().setColSpan(row++, 0, 2);
         return new CrmScrollPanel(panel);
     }
 

@@ -75,7 +75,8 @@ public class VacancyReportGadget extends GadgetBase implements IBuildingGadget {
 
         new VacancyReportGadgetPresenter(unitStatusList, summary, turnoverAnalysis);
 
-        setFiltering(new FilterData());
+        FilterData emptyFilter = new FilterData(new Key(-1l));
+        setFiltering(emptyFilter);
     }
 
     @Override
@@ -136,20 +137,26 @@ public class VacancyReportGadget extends GadgetBase implements IBuildingGadget {
         }
 
         Set<String> buildings = fakeBuildings(filter.buildings);
+        if (buildings == null) {
+            filteringCriteria = null;
+        } else {
+            filteringCriteria = new CombinedFilteringCriteria(buildings, fromDate, toDate);
+        }
 
-        CombinedFilteringCriteria filteringCriteria = new CombinedFilteringCriteria(buildings, fromDate, toDate);
-
-        this.filteringCriteria = filteringCriteria;
         applyFilteringAndSettings();
     }
 
     private HashSet<String> fakeBuildings(List<Key> buildings) {
-        final HashSet<String> fakeBuildings = new HashSet<String>();
+        HashSet<String> fakeBuildings = new HashSet<String>();
         if (buildings == null || buildings.size() == 0) {
             // empty list should denote all buildings
         }
         if (buildings.size() == 1) {
-            fakeBuildings.add("jean0200");
+            if (buildings.get(0).asLong() == -1d) {
+                fakeBuildings = null;
+            } else {
+                fakeBuildings.add("jean0200");
+            }
         } else if (buildings.size() > 1) {
             fakeBuildings.add("bath1650");
             fakeBuildings.add("com0164");

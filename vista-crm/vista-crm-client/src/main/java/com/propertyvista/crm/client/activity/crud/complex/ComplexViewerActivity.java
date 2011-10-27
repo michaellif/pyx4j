@@ -19,6 +19,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
@@ -85,10 +86,18 @@ public class ComplexViewerActivity extends ViewerActivityBase<ComplexDTO> implem
     private class ComplexFilterDataGenerator implements FilterDataGenerator {
         private final FilterData filterData = new FilterData();
 
+        public ComplexFilterDataGenerator() {
+            filterData.buildings.add(new Key(-1));
+        }
+
         public void setFilterData(Collection<Building> buildings) {
             filterData.buildings.clear();
-            for (Building building : buildings) {
-                filterData.buildings.add(building.getPrimaryKey());
+            if (!buildings.isEmpty()) {
+                for (Building building : buildings) {
+                    filterData.buildings.add(building.getPrimaryKey());
+                }
+            } else {
+                filterData.buildings.add(new Key(-1));
             }
         }
 

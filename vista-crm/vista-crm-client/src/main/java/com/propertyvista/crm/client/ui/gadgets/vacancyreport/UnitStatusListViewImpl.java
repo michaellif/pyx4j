@@ -19,9 +19,7 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -31,10 +29,11 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportGadgetSettings;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus;
 
 // TODO column selection doesn't trigger presenter's populate() call (must hack into DataTable in order to do that or implement the whole thing using GWT CellTable)
 // TODO somehow use GWT Places in order to store the state instead of clumsy settings
@@ -47,7 +46,7 @@ public class UnitStatusListViewImpl implements IsWidget, UnitStatusListView {
 
     private EntityListPanel<UnitVacancyStatus> unitListPanel;
 
-    private final VerticalPanel widgetPanel;
+    private final FormFlexPanel widgetPanel;
 
     private UnitStatusListView.Presenter presenter;
 
@@ -57,10 +56,9 @@ public class UnitStatusListViewImpl implements IsWidget, UnitStatusListView {
 
     public UnitStatusListViewImpl() {
 
-        widgetPanel = new VerticalPanel();
-        widgetPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-        // TODO add more good looking *static* caption (but without GWT overhead (i.e. not Label) if possible)
-        widgetPanel.add(new HTML("<div>" + i18n.tr(UNIT_STATUS_LIST_CAPTION) + "</div>"));
+        widgetPanel = new FormFlexPanel();
+        widgetPanel.setWidth("100%");
+        widgetPanel.setH1(0, 0, 1, i18n.tr(UNIT_STATUS_LIST_CAPTION));
 
         final List<ColumnDescriptor<UnitVacancyStatus>> defaultColumns = getDefaultColumns();
         final List<ColumnDescriptor<UnitVacancyStatus>> availableColumns = getAvailableColumns();
@@ -110,7 +108,7 @@ public class UnitStatusListViewImpl implements IsWidget, UnitStatusListView {
         unitListPanel.getDataTable().setAutoColumnsWidth(true);
         unitListPanel.getDataTable().renderTable();
 
-        widgetPanel.add(unitListPanel);
+        widgetPanel.setWidget(1, 0, unitListPanel);
     }
 
     private List<ColumnDescriptor<UnitVacancyStatus>> getAvailableColumns() {

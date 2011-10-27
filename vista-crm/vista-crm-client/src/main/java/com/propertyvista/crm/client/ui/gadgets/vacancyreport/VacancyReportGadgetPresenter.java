@@ -19,16 +19,17 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.SummaryView.SummaryFilteringCriteria;
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.TurnoverAnalysisView.TurnoverAnalysisFilteringCriteria;
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.UnitStatusListView.UnitStatusListViewFilteringCriteria;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.VacancyReportService;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
+import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus;
 
 public class VacancyReportGadgetPresenter implements UnitStatusListView.Presenter, SummaryView.Presenter, TurnoverAnalysisView.Presenter {
     private final VacancyReportService service;
@@ -75,6 +76,7 @@ public class VacancyReportGadgetPresenter implements UnitStatusListView.Presente
         if (unitStatusListView.isEnabled()) {
             UnitStatusListViewFilteringCriteria filter = unitStatusListView.getUnitStatusListFilterCriteria();
             if (filter == null) {
+                unitStatusListView.setPageData(new Vector<UnitVacancyStatus>(), 0, 0, false);
                 return;
             }
             service.unitStatusList(new AsyncCallback<EntitySearchResult<UnitVacancyStatus>>() {
@@ -102,6 +104,7 @@ public class VacancyReportGadgetPresenter implements UnitStatusListView.Presente
         if (summaryView.isEnabled()) {
             SummaryFilteringCriteria filter = summaryView.getSummaryFilteringCriteria();
             if (filter == null) {
+                summaryView.populateSummary(EntityFactory.create(UnitVacancyReportSummaryDTO.class));
                 return;
             }
             service.summary(new AsyncCallback<UnitVacancyReportSummaryDTO>() {
@@ -125,6 +128,7 @@ public class VacancyReportGadgetPresenter implements UnitStatusListView.Presente
             TurnoverAnalysisFilteringCriteria filter = turnoverAnalysisView.getTurnoverAnalysisFilteringCriteria();
             AnalysisResolution scale = turnoverAnalysisView.getSelectedResolution();
             if (filter == null | scale == null) {
+                turnoverAnalysisView.setTurnoverAnalysisData(null);
                 return;
             }
             service.turnoverAnalysis(new AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>>() {

@@ -29,10 +29,10 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
@@ -74,7 +74,7 @@ public class TurnoverAnalysisViewImpl implements TurnoverAnalysisView {
 
     private final HorizontalPanel controls;
 
-    private final VerticalPanel layoutPanel;
+    private final FormFlexPanel layoutPanel;
 
     ListBox resolutionSelector;
 
@@ -93,9 +93,6 @@ public class TurnoverAnalysisViewImpl implements TurnoverAnalysisView {
     private AnalysisResolution currentDefaultResolution;
 
     public TurnoverAnalysisViewImpl() {
-        layoutPanel = new VerticalPanel();
-        layoutPanel.setHorizontalAlignment(VerticalPanel.ALIGN_LEFT);
-        layoutPanel.setWidth("100%");
 
         graph = new SimplePanel();
 
@@ -140,17 +137,11 @@ public class TurnoverAnalysisViewImpl implements TurnoverAnalysisView {
         measureSelection.add(number);
         controls.add(measureSelection);
 
-        Label caption = new Label(i18n.tr(TURNOVER_ANALYSIS_CAPTION));
-
-        HorizontalPanel captionPanel = new HorizontalPanel();
-        caption.setHorizontalAlignment(Label.ALIGN_CENTER);
-        captionPanel.add(caption);
-        captionPanel.setWidth("100%");
-        captionPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-
-        layoutPanel.add(captionPanel);
-        layoutPanel.add(graph);
-        layoutPanel.add(controls);
+        layoutPanel = new FormFlexPanel();
+        layoutPanel.setWidth("100%");
+        layoutPanel.setH1(0, 0, 1, i18n.tr(TURNOVER_ANALYSIS_CAPTION));
+        layoutPanel.setWidget(1, 0, graph);
+        layoutPanel.setWidget(2, 0, controls);
     }
 
     public void attachSettings(UnitVacancyReportGadgetSettings settings) {
@@ -164,12 +155,14 @@ public class TurnoverAnalysisViewImpl implements TurnoverAnalysisView {
 
     public void setFilteringCriteria(TurnoverAnalysisFilteringCriteria criteria) {
         this.filteringCriteria = criteria;
-        refillResolutionSelector();
-        AnalysisResolution selected = getSelectedResolution();
-        AnalysisResolution defaultResolution = getDefaultResolution(filteringCriteria.getFrom(), filteringCriteria.getTo());
-        if (selected == null || currentDefaultResolution != defaultResolution) {
-            selectResolution(defaultResolution);
-            currentDefaultResolution = defaultResolution;
+        if (criteria != null) {
+            refillResolutionSelector();
+            AnalysisResolution selected = getSelectedResolution();
+            AnalysisResolution defaultResolution = getDefaultResolution(filteringCriteria.getFrom(), filteringCriteria.getTo());
+            if (selected == null || currentDefaultResolution != defaultResolution) {
+                selectResolution(defaultResolution);
+                currentDefaultResolution = defaultResolution;
+            }
         }
         populate();
     }
@@ -285,9 +278,10 @@ public class TurnoverAnalysisViewImpl implements TurnoverAnalysisView {
     }
 
     private void redraw() {
-        if (data == null || data.size() == 0 | filteringCriteria.getFrom() == null | filteringCriteria.getTo() == null) {
+        graph.clear();
+        if (data == null || data.size() == 0 | (filteringCriteria == null || (filteringCriteria.getFrom() == null | filteringCriteria.getTo() == null))) {
             // TODO maybe show something like "no data provided"?)
-            graph.clear();
+
             return;
         }
 
@@ -316,7 +310,6 @@ public class TurnoverAnalysisViewImpl implements TurnoverAnalysisView {
         SvgRoot svgroot = factory.getSvgRoot();
         svgroot.add(new BarChart2D(config));
 
-        graph.clear();
         graph.add((Widget) svgroot);
         graph.setSize("700px", "200px");
         graph.getElement().getStyle().setOverflow(Overflow.HIDDEN);
