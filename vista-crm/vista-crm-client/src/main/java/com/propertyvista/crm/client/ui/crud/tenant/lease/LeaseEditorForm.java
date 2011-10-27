@@ -30,13 +30,11 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
-import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -105,10 +103,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 15).build());
 
-        HorizontalPanel unitPanel = new HorizontalPanel();
-        unitPanel.add(new DecoratorBuilder(inject(proto().unit(), new CEntityCrudHyperlink<AptUnit>(MainActivityMapper.getCrudAppPlace(AptUnit.class))), 20)
-                .build());
         if (isEditable()) {
+            HorizontalPanel unitPanel = new HorizontalPanel();
+            unitPanel.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel()), 20).build());
             unitPanel.add(new Button(i18n.tr("Select..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -122,8 +119,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     };
                 }
             }));
+            main.setWidget(++row, 0, unitPanel);
+        } else {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit()), 20).build());
         }
-        main.setWidget(++row, 0, unitPanel);
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 8.2).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTo()), 8.2).build());

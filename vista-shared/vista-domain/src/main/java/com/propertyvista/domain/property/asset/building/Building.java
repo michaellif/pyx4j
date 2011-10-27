@@ -62,7 +62,7 @@ public interface Building extends IEntity {
     Marketing marketing();
 
     @Owner
-    @Editor(type = EditorType.suggest)
+//    @Editor(type = EditorType.suggest)
     @Reference(adapter = ComplexReferenceAdapter.class)
     Complex complex();
 
