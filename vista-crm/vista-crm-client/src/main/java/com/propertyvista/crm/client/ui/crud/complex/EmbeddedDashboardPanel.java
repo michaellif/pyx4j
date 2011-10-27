@@ -28,7 +28,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
 public class EmbeddedDashboardPanel extends DashboardPanel implements SlaveDashboardView {
 
-    private FilterDataGenerator filteringCriteriaGenerator;
+    private IBuildingGadget.FilterData filterData;
 
     private final CEntityComboBox<DashboardMetadata> dashboardSelect;
 
@@ -48,13 +48,12 @@ public class EmbeddedDashboardPanel extends DashboardPanel implements SlaveDashb
     }
 
     @Override
-    public void setFilerDataGenerator(FilterDataGenerator generator) {
-        this.filteringCriteriaGenerator = generator;
+    public void applyFiltering(IBuildingGadget.FilterData filterData) {
+        this.filterData = filterData;
+        applyFiltering();
     }
 
-    @Override
-    public void applyFiltering() {
-        IBuildingGadget.FilterData filterData = filteringCriteriaGenerator != null ? filteringCriteriaGenerator.getFilterData() : null;
+    private void applyFiltering() {
         if (filterData != null & this.getBoard() != null) {
             IGadgetIterator it = this.getBoard().getGadgetIterator();
             if (it.hasNext()) {
@@ -68,13 +67,13 @@ public class EmbeddedDashboardPanel extends DashboardPanel implements SlaveDashb
 
     protected void onDashboardSelected(DashboardMetadata boardMetadata) {
         if (boardMetadata != null) {
-            fill(boardMetadata);
+            super.fill(boardMetadata);
+            applyFiltering();
         }
     }
 
     @Override
     public void fill(DashboardMetadata metadata) {
-        super.fill(metadata);
-        applyFiltering();
+        dashboardSelect.setValue(metadata);
     }
 }

@@ -14,9 +14,12 @@
 package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public interface Complex extends IEntity {
 
@@ -27,6 +30,10 @@ public interface Complex extends IEntity {
     @Caption(name = "Legal Name")
     IPrimitive<String> name();
 
+    IPrimitive<String> website();
+
+    @Detached
+    DashboardMetadata dashboard();
 // Let's leave just one-directional reference in Building?! 
 //    ISet<Building> buildings();
 }

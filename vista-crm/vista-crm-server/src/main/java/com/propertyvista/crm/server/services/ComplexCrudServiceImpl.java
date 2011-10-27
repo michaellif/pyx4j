@@ -36,21 +36,48 @@ public class ComplexCrudServiceImpl extends GenericCrudServiceDtoImpl<Complex, C
         super.enhanceDTO(in, out, fromList);
 
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-
-        criteria.add(PropertyCriterion.eq(criteria.proto().complexPrimary(), Boolean.TRUE));
-        criteria.add(PropertyCriterion.eq(criteria.proto().complex().name(), in.name().getValue()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().complex(), in));
 
         List<Building> buildings = Persistence.service().query(criteria);
 
         if (!buildings.isEmpty()) {
-            Building primary = buildings.get(0);
-            Persistence.service().retrieve(primary.contacts().contacts());
-            Persistence.service().retrieve(primary.contacts().phones());
+            Building primary = null;
+            for (Building building : buildings) {
+                if (building.complexPrimary().isBooleanTrue()) {
+                    primary = building;
+                    Persistence.service().retrieve(primary.contacts().contacts());
+                    Persistence.service().retrieve(primary.contacts().phones());
+                    out.primaryBuilding().set(primary);
+                    break;
+                }
+            }
 
-            out.address().setValue(primary.info().address().getValue());
-            out.contactInfo().setValue(primary.contacts().getValue());
+            if (!fromList) {
+                out.buildings().addAll(buildings);
 
-            out.buildings().addAll(buildings);
+                Persistence.service().retrieve(in.dashboard());
+                out.dashboard().set(in.dashboard());
+            }
         }
+    }
+
+    @Override
+    protected void persistDBO(Complex out, ComplexDTO in) {
+        super.persistDBO(out, in);
+        Building primary = in.primaryBuilding();
+
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().complex(), out));
+        List<Building> buildings = Persistence.service().query(criteria);
+
+        for (Building building : buildings) {
+            if (building.equals(primary)) {
+                building.complexPrimary().setValue(false);
+            } else {
+                building.complexPrimary().setValue(true);
+            }
+        }
+
+        Persistence.service().merge(buildings);
     }
 }

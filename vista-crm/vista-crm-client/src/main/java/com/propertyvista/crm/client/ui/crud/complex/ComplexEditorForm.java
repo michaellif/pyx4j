@@ -13,47 +13,43 @@
  */
 package com.propertyvista.crm.client.ui.crud.complex;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.property.PropertyPhone;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.ComplexDTO;
 
-public class ComplexViewerForm extends CrmEntityForm<ComplexDTO> {
-    private static I18n i18n = I18n.get(ComplexViewerForm.class);
+public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
+    private static I18n i18n = I18n.get(ComplexEditorForm.class);
 
     private static final String TAB_CAPTION_DASHBOARD = "Dashboard";
 
     private static final String TAB_CAPTION_GENERAL = "General";
 
-    private static final String TAB_CAPTION_CONTACTS = "Contacts";
-
     private static final String TAB_CAPTION_BUILDINGS = "Buildings";
 
     private final VistaTabLayoutPanel tabPanel;
 
-    public ComplexViewerForm() {
+    private CComboBox<Building> primaryBuildingSelector;
+
+    public ComplexEditorForm() {
         this(new CrmEditorsComponentFactory());
     }
 
-    public ComplexViewerForm(IEditableComponentFactory factory) {
+    public ComplexEditorForm(IEditableComponentFactory factory) {
         super(ComplexDTO.class, factory);
         tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
     }
@@ -62,7 +58,6 @@ public class ComplexViewerForm extends CrmEntityForm<ComplexDTO> {
     public IsWidget createContent() {
         tabPanel.addDisable(isEditable() ? new HTML() : getParentComplexViewerView().getDashboardView(), i18n.tr(TAB_CAPTION_DASHBOARD));
         tabPanel.add(createGeneralPanel(), i18n.tr(TAB_CAPTION_GENERAL));
-        tabPanel.add(createContactsPanel(), i18n.tr(TAB_CAPTION_CONTACTS));
         tabPanel.addDisable(isEditable() ? new HTML() : getParentComplexViewerView().getBuildingListerView(), i18n.tr(TAB_CAPTION_BUILDINGS));
 
         tabPanel.setDisableMode(isEditable());
@@ -70,26 +65,40 @@ public class ComplexViewerForm extends CrmEntityForm<ComplexDTO> {
         return tabPanel;
     }
 
+    @Override
+    public void populate(ComplexDTO value) {
+        super.populate(value);
+        if (isEditable() & primaryBuildingSelector != null) {
+            primaryBuildingSelector.setValue(value.primaryBuilding());
+            primaryBuildingSelector.setOptions(value.buildings());
+        }
+    }
+
     private Widget createGeneralPanel() {
         FormFlexPanel panel = new FormFlexPanel();
         int row = 0;
 
         panel.setWidget(row++, 0, (new DecoratorBuilder(inject(proto().name()))).build());
-        panel.setWidget(row++, 0, (new DecoratorBuilder(inject(proto().contactInfo().website()))).build());
+        panel.setWidget(row++, 0, (new DecoratorBuilder(inject(proto().website()))).build());
 
-        panel.setH1(row++, 0, 2, proto().contactInfo().phones().getMeta().getCaption());
-        panel.setWidget(row, 0, inject(proto().contactInfo().phones(), new PropertyPhoneFolder()));
-        panel.getFlexCellFormatter().setColSpan(row++, 0, 2);
+        CEditableComponent<?, ?> primaryBuldingWidget;
+        if (isEditable()) {
+            primaryBuildingSelector = new CComboBox<Building>() {
+                @Override
+                public String getItemName(Building o) {
+                    if (o != null) {
+                        return o.getStringView();
+                    } else {
+                        return super.getItemName(null);
+                    }
+                }
+            };
+            primaryBuldingWidget = primaryBuildingSelector;
+        } else {
+            primaryBuldingWidget = inject(proto().primaryBuilding());
+        }
+        panel.setWidget(row++, 0, new DecoratorBuilder(primaryBuldingWidget).build());
 
-        panel.setH1(row++, 0, 2, proto().address().getMeta().getCaption());
-        panel.setWidget(row, 0, inject(proto().address(), new CAddressStructured(true, false)));
-        panel.getFlexCellFormatter().setColSpan(row++, 0, 2);
-        return new CrmScrollPanel(panel);
-    }
-
-    private Widget createContactsPanel() {
-        FormFlexPanel panel = new FormFlexPanel();
-        panel.setWidget(0, 0, inject(proto().contactInfo().contacts(), new OrganizationContactFolder()));
         return new CrmScrollPanel(panel);
     }
 
@@ -106,25 +115,4 @@ public class ComplexViewerForm extends CrmEntityForm<ComplexDTO> {
     public void setActiveTab(int index) {
         tabPanel.selectTab(index);
     }
-
-    private class PropertyPhoneFolder extends VistaTableFolder<PropertyPhone> {
-
-        public PropertyPhoneFolder() {
-            super(PropertyPhone.class, false);
-        }
-
-        @Override
-        protected List<EntityFolderColumnDescriptor> columns() {
-            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().type(), "7em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().number(), "11em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().extension(), "5em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().designation(), "10em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().provider(), "10em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().visibility(), "7em"));
-            return columns;
-        }
-    }
-
 }

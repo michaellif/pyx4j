@@ -21,9 +21,6 @@ import com.propertyvista.dto.ComplexDTO;
 
 public interface ComplexViewerView extends IViewerView<ComplexDTO> {
     interface Presenter extends IViewerView.Presenter {
-//        SlaveDashboardView.Presenter getDashboardViewPresenter();
-//
-//        IListerView.Presenter getBuildingListerViewPresenter();
     }
 
     SlaveDashboardView getDashboardView();

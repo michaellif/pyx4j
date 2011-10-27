@@ -21,15 +21,9 @@ import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
  * 
  */
 public interface SlaveDashboardView extends DashboardView {
-    public interface FilterDataGenerator {
-        IBuildingGadget.FilterData getFilterData();
-    }
-
     public interface SlavePresenter {
 
     }
 
-    void applyFiltering();
-
-    void setFilerDataGenerator(FilterDataGenerator generator);
+    void applyFiltering(IBuildingGadget.FilterData filterData);
 }
