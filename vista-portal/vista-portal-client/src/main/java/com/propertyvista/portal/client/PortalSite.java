@@ -80,9 +80,13 @@ public class PortalSite extends VistaSite {
                         getHistoryHandler().handleCurrentHistory();
                         super.onFailure(caught);
                     }
-                });
+                }, true, true, getAuthenticationToken());
 
     }
+
+    public final native String getAuthenticationToken() /*-{
+		return $wnd.gwtToken();
+    }-*/;
 
     @Override
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
