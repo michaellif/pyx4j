@@ -15,7 +15,6 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import java.text.ParseException;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -26,6 +25,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.Selector;
@@ -35,7 +35,7 @@ import com.pyx4j.widgets.client.TextBox;
 
 import com.propertyvista.domain.contact.Email;
 
-public class NativeEmail extends HorizontalPanel implements INativeEditableComponent<Email> {
+public class NativeEmail extends SimplePanel implements INativeEditableComponent<Email> {
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_Email";
 
@@ -55,6 +55,10 @@ public class NativeEmail extends HorizontalPanel implements INativeEditableCompo
         super();
         this.cComponent = cComponent;
 
+        HorizontalPanel contentPanel = new HorizontalPanel();
+        setWidget(contentPanel);
+        contentPanel.setWidth("100%");
+
         focusHandlerManager = new HandlerManager(this);
         FocusHandler groupFocusHandler = new FocusHandler() {
             @Override
@@ -70,8 +74,8 @@ public class NativeEmail extends HorizontalPanel implements INativeEditableCompo
         };
 
         if (cComponent.isShowType()) {
-            add(type = new ListBox());
-            setCellWidth(type, "60px");
+            contentPanel.add(type = new ListBox());
+            contentPanel.setCellWidth(type, "60px");
             DOM.getParent(type.getElement()).getStyle().setPaddingRight(5, Unit.PX);
 
             for (Email.Type item : Email.Type.values()) {
@@ -85,19 +89,15 @@ public class NativeEmail extends HorizontalPanel implements INativeEditableCompo
             type = null;
         }
 
-        add(address = new TextBox());
+        contentPanel.add(address = new TextBox());
         address.setWidth("100%");
         address.addFocusHandler(groupFocusHandler);
         address.addBlurHandler(groupBlurHandler);
 
         setStyleName(DEFAULT_STYLE_PREFIX);
 
-        getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
-
         getElement().getStyle().setWidth(200, Unit.PX);
         getElement().getStyle().setHeight(20, Unit.PX);
-
-        getElement().getStyle().setPadding(5, Unit.PX);
 
 //        setWidth("100%");
     }
