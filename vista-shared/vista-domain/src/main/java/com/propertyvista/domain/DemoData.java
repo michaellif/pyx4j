@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain;
 
+import com.pyx4j.commons.CommonsStringUtils;
+
 import com.propertyvista.domain.tenant.TenantIn.Relationship;
 
 public class DemoData {
@@ -88,4 +90,8 @@ public class DemoData {
     //
     //    public final static AssetType[] ASSETS = { AssetType.bankAccounts, AssetType.realEstateProperties, AssetType.insurancePolicies, AssetType.shares,
     //            AssetType.unitTrusts, AssetType.businesses, AssetType.cars, AssetType.other };
+
+    public static String getDemoCustemerEmail(int number) {
+        return DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(number) + DemoData.USERS_DOMAIN;
+    }
 }

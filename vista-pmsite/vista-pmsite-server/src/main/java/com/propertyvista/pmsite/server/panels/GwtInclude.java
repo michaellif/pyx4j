@@ -13,6 +13,7 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import com.pyx4j.server.contexts.Context;
@@ -24,6 +25,11 @@ public class GwtInclude extends Panel {
 
     public GwtInclude(String id) {
         super(id);
+
+        Label script = new Label("gwtAuthenticationToken", "function gwtToken() { return \"" + getAuthenticationToken() + "\";}");
+        script.setEscapeModelStrings(false); // do not HTML escape JavaScript code
+        add(script);
+
     }
 
     private String getAuthenticationToken() {

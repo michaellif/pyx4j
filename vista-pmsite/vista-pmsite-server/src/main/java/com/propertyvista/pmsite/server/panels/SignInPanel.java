@@ -24,6 +24,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -33,9 +34,13 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.DemoData;
+
 public class SignInPanel extends Panel {
+
     private static final long serialVersionUID = 1L;
 
     private static final I18n i18n = I18n.get(SignInPanel.class);
@@ -114,6 +119,7 @@ public class SignInPanel extends Panel {
     }
 
     public final class SignInForm extends StatelessForm<SignInPanel> {
+
         private static final long serialVersionUID = 1L;
 
         public SignInForm(final String id) {
@@ -126,6 +132,13 @@ public class SignInPanel extends Panel {
 
             add(new CheckBox("rememberMe"));
             add(new Button("signIn").add(AttributeModifier.replace("value", i18n.tr("Sign In"))));
+
+            if (ApplicationMode.isDevelopment()) {
+                Label devNotes = new Label("signInHint", "*)This application is running in <b>DEVELOPMENT</b> mode.<br/><i>Username and password are both \""
+                        + DemoData.getDemoCustemerEmail(1) + "\"</i>");
+                devNotes.setEscapeModelStrings(false);
+                add(devNotes);
+            }
         }
 
         @Override
