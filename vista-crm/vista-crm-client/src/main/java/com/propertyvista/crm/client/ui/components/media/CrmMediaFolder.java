@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.components.media;
 
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -27,18 +28,17 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.CEntityHyperlink;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
+import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdValidator;
 import com.propertyvista.crm.client.ui.components.cms.FileUploadHyperlink;
 import com.propertyvista.domain.media.Media;
@@ -67,9 +67,9 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
         }
     }
 
-    class CrmMediaEditor extends CEntityEditor<Media> {
+    class CrmMediaEditor extends CEntityDecoratableEditor<Media> {
 
-        Image thumbnail;
+        private Image thumbnail;
 
         public CrmMediaEditor() {
             super(Media.class);
@@ -77,16 +77,16 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
 
         @Override
         public IsWidget createContent() {
-            VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!CrmMediaFolder.this.isEditable());
-            VistaDecoratorsSplitFlowPanel split = new VistaDecoratorsSplitFlowPanel(!CrmMediaFolder.this.isEditable(), 10, 35);
-            main.add(split);
+            FormFlexPanel main = new FormFlexPanel();
 
-            split.getLeftPanel().add(inject(proto().type()), 15);
+            int row = -1;
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15, 10).build());
 
             if (CrmMediaFolder.this.isEditable()) {
-                split.getLeftPanel().add(inject(proto().youTubeVideoID()), 22);
-                split.getLeftPanel().add(inject(proto().url()), 22);
-                split.getLeftPanel().add(inject(proto().file(), new FileUploadHyperlink(CrmMediaFolder.this.isEditable(), imageTarget)), 22);
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().youTubeVideoID()), 25, 10).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().url()), 25, 10).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file(), new FileUploadHyperlink(CrmMediaFolder.this.isEditable(), imageTarget)),
+                        25, 10).build());
             } else {
                 Command showMediaCommand = new Command() {
                     @Override
@@ -94,17 +94,21 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
                         showMedia();
                     }
                 };
-                split.getLeftPanel().add(inject(proto().youTubeVideoID(), new CHyperlink(showMediaCommand)), 22);
-                split.getLeftPanel().add(inject(proto().url(), new CHyperlink(showMediaCommand)), 22);
-                split.getLeftPanel().add(inject(proto().file(), new CEntityHyperlink(showMediaCommand)), 22);
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().youTubeVideoID(), new CHyperlink(showMediaCommand)), 25, 10).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().url(), new CHyperlink(showMediaCommand)), 25, 10).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file(), new CEntityHyperlink(showMediaCommand)), 25, 10).build());
             }
 
-            split.getRightPanel().add(inject(proto().caption()), 15);
-            split.getRightPanel().add(inject(proto().visibility()), 6);
+            row = -1;
+            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().caption()), 15, 10).build());
+            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().visibility()), 7, 10).build());
 
-            HorizontalPanel wrap = new HorizontalPanel();
+            main.getColumnFormatter().setWidth(0, "50%");
+            main.getColumnFormatter().setWidth(1, "50%");
+
             SimplePanel thumbnailWrap = new SimplePanel();
             thumbnailWrap.setWidget(thumbnail = new Image());
+
             int width = 0;
             switch (imageTarget) {
             case Building:
@@ -112,15 +116,18 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
             case Floorplan:
                 width = ImageConsts.FLOORPLAN_SMALL.width;
             }
-            thumbnailWrap.getElement().getStyle().setWidth(width, Style.Unit.PX);
-            thumbnail.addClickHandler(new ClickHandler() {
 
+            thumbnailWrap.getElement().getStyle().setWidth(width, Style.Unit.PX);
+            thumbnailWrap.getElement().getStyle().setMarginLeft(5, Unit.EM);
+
+            thumbnail.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     showMedia();
                 }
             });
 
+            HorizontalPanel wrap = new HorizontalPanel();
             wrap.add(main);
             wrap.add(thumbnailWrap);
             return wrap;
@@ -152,11 +159,11 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
         }
 
         private void setVisibility(Media.Type type) {
-
             get(proto().youTubeVideoID()).setVisible(false);
             get(proto().url()).setVisible(false);
             get(proto().file()).setVisible(false);
             thumbnail.setVisible(false);
+
             if (type != null) {
                 switch (type) {
                 case file:
@@ -207,7 +214,5 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
                 break;
             }
         }
-
     }
-
 }

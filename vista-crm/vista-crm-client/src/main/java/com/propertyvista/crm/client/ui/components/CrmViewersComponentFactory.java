@@ -25,6 +25,7 @@ import com.propertyvista.crm.client.mvp.MainActivityMapper;
 
 public class CrmViewersComponentFactory extends VistaViewersComponentFactory {
 
+    @SuppressWarnings("rawtypes")
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getOwner() == null) {
