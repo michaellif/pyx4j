@@ -18,20 +18,20 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.common.client.ui.VistaBoxFolder;
 
 public class VistaBoxFolderDecorator<E extends IEntity> extends BoxFolderDecorator<E> {
     protected static I18n i18n = I18n.get(VistaBoxFolderDecorator.class);
 
-    public VistaBoxFolderDecorator(String title, boolean editable) {
-        super(VistaImages.INSTANCE, title, editable);
+    public VistaBoxFolderDecorator(String removeLabel, boolean editable) {
+        super(VistaImages.INSTANCE, removeLabel, editable);
     }
 
-    public VistaBoxFolderDecorator(VistaTableFolder<E> parent, boolean editable) {
-        this(i18n.tr("Add {0}", parent.getItemName()), editable);
+    public VistaBoxFolderDecorator(VistaBoxFolder<E> parent, boolean addable) {
+        this(i18n.tr("Add {0}", parent.getItemName()), addable);
     }
 
-    public VistaBoxFolderDecorator(VistaTableFolder<E> parent) {
+    public VistaBoxFolderDecorator(VistaBoxFolder<E> parent) {
         this(parent, parent.isEditable());
     }
 }

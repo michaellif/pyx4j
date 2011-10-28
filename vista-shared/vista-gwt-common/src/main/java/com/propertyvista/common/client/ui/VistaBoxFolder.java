@@ -13,15 +13,14 @@
  */
 package com.propertyvista.common.client.ui;
 
-import com.pyx4j.entity.client.ui.flex.folder.BoxFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 
 public abstract class VistaBoxFolder<E extends IEntity> extends CEntityFolder<E> {
 
@@ -50,12 +49,12 @@ public abstract class VistaBoxFolder<E extends IEntity> extends CEntityFolder<E>
 
     @Override
     protected IFolderDecorator<E> createDecorator() {
-        return new BoxFolderDecorator<E>(VistaImages.INSTANCE, i18n.tr("Add {0}", getItemName()));
+        return new VistaBoxFolderDecorator<E>(this);
     }
 
     @Override
     public IFolderItemDecorator<E> createItemDecorator() {
-        return new BoxFolderItemDecorator<E>(VistaImages.INSTANCE, i18n.tr("Remove {0}", getItemName()));
+        return new VistaBoxFolderItemDecorator<E>(this);
     }
 
     public String getItemName() {

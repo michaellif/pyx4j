@@ -20,14 +20,13 @@ import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
 
 public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<E> {
     protected static I18n i18n = I18n.get(VistaTableFolder.class);
@@ -63,12 +62,12 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
 
     @Override
     protected IFolderDecorator<E> createDecorator() {
-        return new TableFolderDecorator<E>(columns(), VistaImages.INSTANCE, i18n.tr("Add {0}", getItemName()));
+        return new VistaTableFolderDecorator<E>(columns(), this);
     }
 
     @Override
     protected IFolderItemDecorator<E> createItemDecorator() {
-        return new TableFolderItemDecorator<E>(VistaImages.INSTANCE, i18n.tr("Remove {0}", getItemName()));
+        return new VistaTableFolderItemDecorator<E>(this);
     }
 
     public String getItemName() {
@@ -83,5 +82,4 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
             return super.create(member);
         }
     }
-
 }

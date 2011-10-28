@@ -23,8 +23,8 @@ import com.propertyvista.common.client.ui.VistaTableFolder;
 public class VistaTableFolderItemDecorator<E extends IEntity> extends TableFolderItemDecorator<E> {
     protected static I18n i18n = I18n.get(VistaTableFolderItemDecorator.class);
 
-    public VistaTableFolderItemDecorator(String title) {
-        super(VistaImages.INSTANCE, title);
+    public VistaTableFolderItemDecorator(String removeLabel) {
+        super(VistaImages.INSTANCE, removeLabel);
     }
 
     public VistaTableFolderItemDecorator(VistaTableFolder<E> parent) {
