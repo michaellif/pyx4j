@@ -11,21 +11,16 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.dashboard.gadgets;
+package com.propertyvista.domain.dashboard.gadgets.vacancyreport;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
+import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 
-@DiscriminatorValue("UnitVacancyReportGadgetSettings")
-public interface UnitVacancyReportGadgetSettings extends ListerGadgetBaseSettings {
-    IPrimitive<Boolean> showUnits();
-
-    IPrimitive<Boolean> showSummary();
-
-    IPrimitive<Boolean> showTurnoverAnalysis();
-
+@DiscriminatorValue("TurnoverAnalysisSettings")
+public interface TurnoverAnalysisSettings extends AbstractGadgetSettings {
     IPrimitive<Boolean> isTurnoverMeasuredByPercent();
 
     IPrimitive<AnalysisResolution> turnoverAnalysisResolution();

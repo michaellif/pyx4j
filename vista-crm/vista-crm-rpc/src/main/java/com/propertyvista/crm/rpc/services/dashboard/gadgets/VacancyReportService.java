@@ -22,10 +22,10 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportSummaryDTO;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportSummaryDTO;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 
 public interface VacancyReportService extends IService {
 

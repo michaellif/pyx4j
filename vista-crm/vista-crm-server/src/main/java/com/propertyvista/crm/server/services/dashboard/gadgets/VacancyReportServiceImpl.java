@@ -46,14 +46,14 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.VacancyReportService;
 import com.propertyvista.domain.dashboard.gadgets.CustomComparator;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus.RentReady;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus.RentedStatus;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus.VacancyStatus;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportEvent;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportSummaryDTO;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportEvent;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportSummaryDTO;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus.RentReady;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus.RentedStatus;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus.VacancyStatus;
 
 public class VacancyReportServiceImpl implements VacancyReportService {
 

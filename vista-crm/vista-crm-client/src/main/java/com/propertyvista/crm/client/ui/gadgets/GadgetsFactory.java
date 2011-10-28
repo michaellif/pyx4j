@@ -13,7 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
-import com.propertyvista.crm.client.ui.gadgets.vacancyreport.VacancyReportGadget;
+import com.propertyvista.crm.client.ui.gadgets.vacancyreport.UnitVacancyReportGadget;
+import com.propertyvista.crm.client.ui.gadgets.vacancyreport.VacancySummaryGadget;
+import com.propertyvista.crm.client.ui.gadgets.vacancyreport.VacancyTurnoverAnalysisGadget;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
@@ -47,7 +49,9 @@ public class GadgetsFactory {
         GadgetType.BarChartDisplayBuilding,
         GadgetType.PieChartDisplayBuilding,
         GadgetType.GaugeDisplay,
-        GadgetType.VacancyReport
+        GadgetType.UnitVacancyReport,
+        GadgetType.VacancySummary,
+        GadgetType.VacancyTurnoverAnalysis
     };
     //@formatter:on
 
@@ -72,8 +76,12 @@ public class GadgetsFactory {
             return new PieChart2DGadget(metaData);
         case GaugeDisplay:
             return new GaugeGadget(metaData);
-        case VacancyReport:
-            return new VacancyReportGadget(metaData);
+        case UnitVacancyReport:
+            return new UnitVacancyReportGadget(metaData);
+        case VacancySummary:
+            return new VacancySummaryGadget(metaData);
+        case VacancyTurnoverAnalysis:
+            return new VacancyTurnoverAnalysisGadget(metaData);
         }
         return null;
     }
@@ -101,8 +109,12 @@ public class GadgetsFactory {
             return "Gadget intended to demonstrate Pie Chart display (Building only!)";
         case GaugeDisplay:
             return "Gadget intended to demonstrate Gadget display functionality...";
-        case VacancyReport:
+        case UnitVacancyReport:
             return "Gadget intended to demonstrate Units Vacancy Report/Status...";
+        case VacancySummary:
+            return "Gadget intended to demonstrate Occupancy/Vacancy Summary...";
+        case VacancyTurnoverAnalysis:
+            return "Gadget intended to demonstrate Unit Turnover graph...";
         }
         return "";
     }

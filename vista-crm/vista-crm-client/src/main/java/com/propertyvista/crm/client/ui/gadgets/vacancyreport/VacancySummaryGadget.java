@@ -13,26 +13,39 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.vacancyreport;
 
+import java.util.Vector;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportSummaryDTO;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.VacancyReportService;
+import com.propertyvista.domain.dashboard.GadgetMetadata;
+import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportSummaryDTO;
 
-public class SummaryViewImpl implements SummaryView {
-    public static final String SUMMARY_CAPTION = "Summary";
+public class VacancySummaryGadget extends VacancyGadgetBase {
 
     public final CrmEntityForm<UnitVacancyReportSummaryDTO> form;
 
-    private SummaryFilteringCriteria summaryFilteringCriteria;
+    public final Panel panel;
 
-    private Presenter presenter;
+    private VacancyReportService service;
 
-    public SummaryViewImpl() {
+    private boolean isOk = true;
+
+    public VacancySummaryGadget(GadgetMetadata gmd) {
+        super(gmd);
         form = new CrmEntityForm<UnitVacancyReportSummaryDTO>(UnitVacancyReportSummaryDTO.class, new CrmViewersComponentFactory()) {
 
             @Override
@@ -40,7 +53,6 @@ public class SummaryViewImpl implements SummaryView {
                 int row = -1;
 
                 FormFlexPanel main = new FormFlexPanel();
-                main.setH1(++row, 0, 2, i18n.tr(SUMMARY_CAPTION));
 
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total())).build());
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().netExposure())).build());
@@ -67,81 +79,81 @@ public class SummaryViewImpl implements SummaryView {
                 main.setWidth("100%");
 
                 return main;
-
-//                final int WIDTH = 10;
-//                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(true);
-//                main.setWidth("100%");
-//
-//                VerticalPanel p = new VerticalPanel();
-//                p.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-//                p.setWidth("100%");
-//
-//                Label caption = new Label(i18n.tr(SUMMARY_CAPTION));
-//                caption.setWidth("100%");
-//                p.add(caption);
-//                main.add(p);
-//                main.add(inject(proto().total()), WIDTH);
-//                main.add(inject(proto().netExposure()), WIDTH);
-//                main.add(new VistaLineSeparator());
-//
-//                VistaDecoratorsSplitFlowPanel sp = new VistaDecoratorsSplitFlowPanel(true);
-//
-//                sp.getLeftPanel().add(inject(proto().vacancyAbsolute()), WIDTH);
-//                sp.getLeftPanel().add(inject(proto().vacancyRelative()), WIDTH);
-//                sp.getLeftPanel().add(inject(proto().vacantRented()), WIDTH);
-//                sp.getLeftPanel().add(new VistaLineSeparator());
-//                sp.getLeftPanel().add(inject(proto().occupancyAbsolute()), WIDTH);
-//                sp.getLeftPanel().add(inject(proto().occupancyRelative()), WIDTH);
-//
-//                sp.getRightPanel().add(inject(proto().noticeAbsolute()), WIDTH);
-//                sp.getRightPanel().add(inject(proto().noticeRelative()), WIDTH);
-//                sp.getRightPanel().add(inject(proto().noticeRented()), WIDTH);
-//
-//                main.add(sp);
-
-//                return new CrmScrollPanel(main);
             }
         };
         form.initContent();
+        form.setWidth("100%");
+        panel = new VerticalPanel();
+        panel.add(form);
+        service = GWT.create(VacancyReportService.class);
     }
 
     @Override
-    public void populateSummary(UnitVacancyReportSummaryDTO summary) {
-        form.populate(summary);
+    protected void selfInit(GadgetMetadata gmd) {
+        gmd.type().setValue(GadgetType.VacancySummary);
+        gmd.name().setValue(GadgetType.VacancySummary.toString());
     }
 
     @Override
-    public SummaryFilteringCriteria getSummaryFilteringCriteria() {
-        return summaryFilteringCriteria;
-    }
-
-    public void setSummaryFilteringCriteria(SummaryFilteringCriteria criteria) {
-        summaryFilteringCriteria = criteria;
-        if (presenter != null) {
-            presenter.populateSummary();
-        }
-    }
-
-    @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
-        if (this.presenter != null) {
-            this.presenter.populateSummary();
-        }
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return form.isVisible();
-    }
-
-    @Override
-    public void reportError(Throwable error) {
-        // TODO Auto-generated method stub
+    public void start() {
+        super.start();
+        populateSummary();
     }
 
     @Override
     public Widget asWidget() {
-        return form.asWidget();
+        return panel;
+    }
+
+    @Override
+    public boolean isSetupable() {
+        return false;
+    }
+
+    @Override
+    protected void setFilteringCriteria(FilterDataDemoAdapter filterDataDemoAdapter) {
+        filter = filterDataDemoAdapter;
+        populateSummary();
+    }
+
+    private void populate(UnitVacancyReportSummaryDTO summary) {
+        if (!isOk) {
+            panel.add(form);
+        } else {
+            isOk = true;
+        }
+        form.populate(summary);
+    }
+
+    private boolean isEnabled() {
+        return form.isVisible();
+    }
+
+    private void reportError(Throwable error) {
+        isOk = false;
+        panel.clear();
+        panel.add(new CTextArea(error.toString()));
+    }
+
+    // PRESENTER
+    private void populateSummary() {
+        if (isEnabled()) {
+            if (filter == null) {
+                populate(EntityFactory.create(UnitVacancyReportSummaryDTO.class));
+                return;
+            }
+            service.summary(new AsyncCallback<UnitVacancyReportSummaryDTO>() {
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    reportError(caught);
+                }
+
+                @Override
+                public void onSuccess(UnitVacancyReportSummaryDTO result) {
+                    populate(result);
+                }
+            }, new Vector<String>(filter.getBuildingsFilteringCriteria()), filter.getFrom(), filter.getTo());
+        }
     }
 }

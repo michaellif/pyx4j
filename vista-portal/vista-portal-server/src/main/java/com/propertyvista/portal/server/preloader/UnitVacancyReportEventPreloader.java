@@ -23,7 +23,7 @@ import com.pyx4j.essentials.server.csv.CSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.PreloadConfig;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportEvent;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportEvent;
 
 public class UnitVacancyReportEventPreloader extends BaseVistaDataPreloader {
 

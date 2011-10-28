@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.dashboard.gadgets;
+package com.propertyvista.domain.dashboard.gadgets.vacancyreport;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
@@ -21,6 +21,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.dashboard.gadgets.ComparableComparator;
+import com.propertyvista.domain.dashboard.gadgets.CustomComparator;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 // TODO don't forget to rename to DTO and enable the @Transient annotation when it's ready 

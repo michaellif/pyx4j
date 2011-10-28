@@ -16,13 +16,16 @@ package com.propertyvista.crm.client.ui.gadgets.vacancyreport;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -32,6 +35,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.svg.basic.SvgFactory;
@@ -46,20 +50,24 @@ import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.util.TimeRange;
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.util.Tuple;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitVacancyReportService;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportGadgetSettings;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.VacancyReportService;
+import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
+import com.propertyvista.domain.dashboard.GadgetMetadata;
+import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.TurnoverAnalysisSettings;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 
-public class TurnoverAnalysisViewImpl implements TurnoverAnalysisView {
-    private static final I18n i18n = I18n.get(TurnoverAnalysisViewImpl.class);
+public class VacancyTurnoverAnalysisGadget extends VacancyGadgetBase {
+    private static final I18n i18n = I18n.get(VacancyTurnoverAnalysisGadget.class);
 
     private static final String MEASURE_SELECTOR_RADIO_GROUP_ID = "measureSelector";
-
-    private static final String TURNOVER_ANALYSIS_CAPTION = "Turnover Analysis";
 
     private static final String RESOLUTION_SELECTOR_LABEL = "Scale";
 
     private static final boolean DEFAULT_IS_TURNOVER_MEASURED_BY_PERCENT = false;
+
+    public static AnalysisResolution DEFAULT_TURNOVER_ANALYSIS_RESOLUTION_MAX = AnalysisResolution.Year;
 
     @SuppressWarnings("unchecked")
     private static final List<Tuple<Long, AnalysisResolution>> DEFAULT_TURNOVER_ANALYSIS_RESOLUTION_PER_RANGE = Arrays.asList(
@@ -84,15 +92,15 @@ public class TurnoverAnalysisViewImpl implements TurnoverAnalysisView {
 
     FlowPanel measureSelection;
 
-    TurnoverAnalysisView.Presenter presenter;
+    private final VacancyReportService service;
 
-    private UnitVacancyReportGadgetSettings settings;
-
-    private TurnoverAnalysisFilteringCriteria filteringCriteria;
+    private final TurnoverAnalysisSettings settings;
 
     private AnalysisResolution currentDefaultResolution;
 
-    public TurnoverAnalysisViewImpl() {
+    public VacancyTurnoverAnalysisGadget(GadgetMetadata gmd) {
+        super(gmd);
+        settings = gadgetMetadata.settings().cast();
 
         graph = new SimplePanel();
 
@@ -106,7 +114,7 @@ public class TurnoverAnalysisViewImpl implements TurnoverAnalysisView {
 
             @Override
             public void onChange(ChangeEvent event) {
-                populate();
+                populateTurnoverAnalysis();
             }
         });
 
@@ -138,33 +146,58 @@ public class TurnoverAnalysisViewImpl implements TurnoverAnalysisView {
         controls.add(measureSelection);
 
         layoutPanel = new FormFlexPanel();
+        int row = -1;
         layoutPanel.setWidth("100%");
-        layoutPanel.setH1(0, 0, 1, i18n.tr(TURNOVER_ANALYSIS_CAPTION));
-        layoutPanel.setWidget(1, 0, graph);
-        layoutPanel.setWidget(2, 0, controls);
+        layoutPanel.setWidget(++row, 0, graph);
+        layoutPanel.setWidget(++row, 0, controls);
+
+        service = GWT.create(VacancyReportService.class);
     }
 
-    public void attachSettings(UnitVacancyReportGadgetSettings settings) {
-        this.settings = settings;
-        if (this.settings.isTurnoverMeasuredByPercent().isNull()) {
-            this.settings.isTurnoverMeasuredByPercent().setValue(DEFAULT_IS_TURNOVER_MEASURED_BY_PERCENT);
-        }
-        percent.setValue(settings.isTurnoverMeasuredByPercent().getValue(), false);
-        populate();
+    @Override
+    protected void selfInit(GadgetMetadata gmd) {
+        gmd.type().setValue(GadgetType.VacancyTurnoverAnalysis);
+        gmd.name().setValue(GadgetType.VacancyTurnoverAnalysis.toString());
     }
 
-    public void setFilteringCriteria(TurnoverAnalysisFilteringCriteria criteria) {
-        this.filteringCriteria = criteria;
+    @Override
+    protected AbstractGadgetSettings createSettings() {
+        TurnoverAnalysisSettings settings = EntityFactory.create(TurnoverAnalysisSettings.class);
+        settings.isTurnoverMeasuredByPercent().setValue(DEFAULT_IS_TURNOVER_MEASURED_BY_PERCENT);
+        settings.turnoverAnalysisResolution().setValue(DEFAULT_TURNOVER_ANALYSIS_RESOLUTION_MAX);
+
+        return settings;
+    }
+
+    @Override
+    public void start() {
+        super.start();
+        populateTurnoverAnalysis();
+    }
+
+    @Override
+    public boolean isSetupable() {
+        return false;
+    }
+
+    @Override
+    public Widget asWidget() {
+        return layoutPanel;
+    }
+
+    @Override
+    protected void setFilteringCriteria(FilterDataDemoAdapter criteria) {
+        this.filter = criteria;
         if (criteria != null) {
             refillResolutionSelector();
             AnalysisResolution selected = getSelectedResolution();
-            AnalysisResolution defaultResolution = getDefaultResolution(filteringCriteria.getFrom(), filteringCriteria.getTo());
+            AnalysisResolution defaultResolution = getDefaultResolution(filter.getFrom(), filter.getTo());
             if (selected == null || currentDefaultResolution != defaultResolution) {
                 selectResolution(defaultResolution);
                 currentDefaultResolution = defaultResolution;
             }
         }
-        populate();
+        populateTurnoverAnalysis();
     }
 
     private void refillResolutionSelector() {
@@ -178,7 +211,7 @@ public class TurnoverAnalysisViewImpl implements TurnoverAnalysisView {
         int addedCounter = 0;
         for (int i = 0; i < analysisValues.length; ++i) {
             AnalysisResolution resolution = analysisValues[i];
-            if (isResolutionAcceptableForTheGivenDateRange(resolution, filteringCriteria.getFrom(), filteringCriteria.getTo())) {
+            if (isResolutionAcceptableForTheGivenDateRange(resolution, filter.getFrom(), filter.getTo())) {
                 resolutionSelector.addItem(resolution.toString(), resolution.toString());
                 if (resolution.equals(currentResolution)) {
                     selectedResolutionIndex = addedCounter;
@@ -221,7 +254,7 @@ public class TurnoverAnalysisViewImpl implements TurnoverAnalysisView {
     }
 
     private boolean isFilteringCriteriaAcceptable() {
-        return filteringCriteria != null && (filteringCriteria.getFrom() != null & filteringCriteria.getTo() != null);
+        return filter != null && (filter.getFrom() != null & filter.getTo() != null);
     }
 
     private static boolean isResolutionAcceptableForTheGivenDateRange(AnalysisResolution resolution, LogicalDate fromDate, LogicalDate toDate) {
@@ -235,18 +268,6 @@ public class TurnoverAnalysisViewImpl implements TurnoverAnalysisView {
         return ((toTime - fromTime) / interval) <= UnitVacancyReportService.MAX_SUPPORTED_INTERVALS;
     }
 
-    @Override
-    public Widget asWidget() {
-        return layoutPanel;
-    }
-
-    @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
-        populate();
-    }
-
-    @Override
     public AnalysisResolution getSelectedResolution() {
         int selected = resolutionSelector.getSelectedIndex();
         if (selected != -1) {
@@ -256,32 +277,19 @@ public class TurnoverAnalysisViewImpl implements TurnoverAnalysisView {
         }
     }
 
-    @Override
     public boolean isTunoverMeasuredByPercent() {
         return percent.getValue();
     }
 
-    @Override
     public void setTurnoverAnalysisData(List<UnitVacancyReportTurnoverAnalysisDTO> data) {
         this.data = data;
         redraw();
     }
 
-    @Override
-    public boolean isEnabled() {
-        return this.asWidget().isVisible();
-    }
-
-    @Override
-    public void reportError(Throwable error) {
-        // TODO Auto-generated method stub
-    }
-
     private void redraw() {
         graph.clear();
-        if (data == null || data.size() == 0 | (filteringCriteria == null || (filteringCriteria.getFrom() == null | filteringCriteria.getTo() == null))) {
+        if (data == null || data.size() == 0 | (filter == null || (filter.getFrom() == null | filter.getTo() == null))) {
             // TODO maybe show something like "no data provided"?)
-
             return;
         }
 
@@ -315,14 +323,35 @@ public class TurnoverAnalysisViewImpl implements TurnoverAnalysisView {
         graph.getElement().getStyle().setOverflow(Overflow.HIDDEN);
     }
 
-    private void populate() {
-        if (presenter != null) {
-            presenter.populateTurnoverAnalysis();
+    private boolean isEnabled() {
+        return this.asWidget().isVisible();
+    }
+
+    private void reportError(Throwable error) {
+        // TODO Auto-generated method stub
+    }
+
+    // Presenter
+    private void populateTurnoverAnalysis() {
+        if (isEnabled()) {
+            AnalysisResolution scale = getSelectedResolution();
+            if (filter == null | scale == null) {
+                setTurnoverAnalysisData(null);
+                return;
+            }
+            service.turnoverAnalysis(new AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>>() {
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    reportError(caught);
+                }
+
+                @Override
+                public void onSuccess(Vector<UnitVacancyReportTurnoverAnalysisDTO> result) {
+                    setTurnoverAnalysisData(result);
+                }
+            }, new Vector<String>(filter.getBuildingsFilteringCriteria()), filter.getFrom(), filter.getTo(), scale);
         }
     }
 
-    @Override
-    public TurnoverAnalysisFilteringCriteria getTurnoverAnalysisFilteringCriteria() {
-        return this.filteringCriteria;
-    }
 }

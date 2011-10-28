@@ -21,10 +21,10 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.site.rpc.services.AbstractListService;
 
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyStatus;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportSummaryDTO;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO;
-import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportSummaryDTO;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 
 public interface UnitVacancyReportService extends AbstractListService<UnitVacancyStatus> {
 

@@ -137,7 +137,7 @@ public class DashboardGenerator extends Dashboards {
         GadgetMetadata gmd;
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.VacancyReport);
+        gmd.type().setValue(GadgetType.UnitVacancyReport);
         gmd.name().setValue("Unit Vacancy Report Demo");
         gmd.column().setValue(0);
 
