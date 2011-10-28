@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -53,10 +54,12 @@ public interface Appointment extends IEntity {
     @ReadOnly
     Lead lead();
 
+    @NotNull
     @Format("MM/dd/yyyy")
     @MemberColumn(name = "appointmentDate")
     IPrimitive<LogicalDate> date();
 
+    @NotNull
     @MemberColumn(name = "appointmentTime")
     @Editor(type = EditorType.timepicker)
     IPrimitive<Time> time();

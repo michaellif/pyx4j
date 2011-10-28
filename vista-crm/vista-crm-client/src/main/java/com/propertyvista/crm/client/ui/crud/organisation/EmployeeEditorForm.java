@@ -115,7 +115,6 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
 
     private CEditableComponent<?, ?> createPortfolioListView() {
         return new VistaTableFolder<AssignedPortfolio>(AssignedPortfolio.class, isEditable()) {
-            private final VistaTableFolder<AssignedPortfolio> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -126,7 +125,7 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
 
             @Override
             protected IFolderDecorator<AssignedPortfolio> createDecorator() {
-                return new VistaTableFolderDecorator<AssignedPortfolio>(columns(), parent) {
+                return new VistaTableFolderDecorator<AssignedPortfolio>(columns(), this) {
                     {
                         setShowHeader(false);
                     }
@@ -138,7 +137,6 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
 
     private CEditableComponent<?, ?> createEmpoloyeeListView() {
         return new VistaTableFolder<ManagedEmployee>(ManagedEmployee.class, isEditable()) {
-            private final VistaTableFolder<ManagedEmployee> parent = this;
 
             @Override
             protected List<EntityFolderColumnDescriptor> columns() {
@@ -149,7 +147,7 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
 
             @Override
             protected IFolderDecorator<ManagedEmployee> createDecorator() {
-                return new VistaTableFolderDecorator<ManagedEmployee>(columns(), parent) {
+                return new VistaTableFolderDecorator<ManagedEmployee>(columns(), this) {
                     {
                         setShowHeader(false);
                     }
