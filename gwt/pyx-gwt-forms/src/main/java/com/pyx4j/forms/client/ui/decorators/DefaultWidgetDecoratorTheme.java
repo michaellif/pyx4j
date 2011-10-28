@@ -62,6 +62,7 @@ public class DefaultWidgetDecoratorTheme extends Theme {
         style = new Style(".", WidgetDecoratorInfoImage);
         style.addProperty("display", "inline-block");
         style.addProperty("padding-left", "5px");
+        style.addProperty("line-height", "0");
         style.addProperty("vertical-align", "middle");
         addStyle(style);
 

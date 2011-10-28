@@ -175,8 +175,7 @@ public class WidgetDecorator extends FlexTable {
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.setStyleName(StyleName.WidgetDecoratorContentPanel.name());
         contentPanel.add(componentHolder);
-// TODO: Misha  - this !@#$ image messes all forms alignment!?.          
-//        contentPanel.add(infoImageHolder);
+        contentPanel.add(infoImageHolder);
         setWidget(0, 1, contentPanel);
 
         setWidget(1, 1, validationLabel);
