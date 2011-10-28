@@ -103,6 +103,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 15).build());
 
+        main.setWidget(++row, 0, new HTML("&nbsp"));
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedBuilding(), new CEntityLabel()), 20).build());
+
         if (isEditable()) {
             HorizontalPanel unitPanel = new HorizontalPanel();
             unitPanel.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel()), 20).build());
@@ -113,7 +117,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         @Override
                         protected void onClose(SelectUnitBox box) {
                             if (box.getSelectedUnit() != null) {
-                                get(proto().unit()).setValue(box.getSelectedUnit());
+                                ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedUnit(box.getSelectedUnit());
                             }
                         }
                     };
@@ -123,6 +127,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         } else {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit()), 20).build());
         }
+
+        main.setWidget(++row, 0, new HTML("&nbsp"));
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 8.2).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTo()), 8.2).build());

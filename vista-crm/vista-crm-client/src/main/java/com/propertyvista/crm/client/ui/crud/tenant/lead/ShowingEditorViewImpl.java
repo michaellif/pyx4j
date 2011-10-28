@@ -14,11 +14,10 @@
 package com.propertyvista.crm.client.ui.crud.tenant.lead;
 
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
+import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
 import com.propertyvista.crm.client.ui.crud.unit.SelectedUnitLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -40,15 +39,12 @@ public class ShowingEditorViewImpl extends CrmEditorViewImplBase<Showing> implem
             @Override
             public void onSelect(Building selectedItem) {
                 ((ShowingEditorView.Presenter) presenter).setSelectedBuilding(selectedItem);
-                enableButtons(true);
             }
         });
         unitLister = new ListerInternalViewImplBase<AptUnit>(new SelectedUnitLister(/* readOnly */));
 
-        // create/init/set main form here: 
-        CrmEntityForm<Showing> form = new ShowingEditorForm(this);
-        form.initContent();
-        setForm(form);
+        // set main form here: 
+        setForm(new ShowingEditorForm());
     }
 
     @Override

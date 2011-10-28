@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 
 import com.propertyvista.common.client.ui.components.OkCancelBox;
@@ -33,15 +32,13 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Showing;
 
 public class ShowingEditorForm extends CrmEntityForm<Showing> {
 
-    public ShowingEditorForm(IFormView<Showing> parent) {
-        super(Showing.class, new CrmEditorsComponentFactory());
-        setParentView(parent);
+    public ShowingEditorForm() {
+        this(new CrmEditorsComponentFactory());
     }
 
     public ShowingEditorForm(IEditableComponentFactory factory) {
@@ -53,29 +50,28 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), new CEntityLabel()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), new CEntityLabel()), 20).build());
 
-        HorizontalPanel unitPanel = new HorizontalPanel();
-        unitPanel.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel()), 15).build());
         if (isEditable()) {
+            HorizontalPanel unitPanel = new HorizontalPanel();
+            unitPanel.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel()), 20).build());
             unitPanel.add(new Button("Select...", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     new ShowPopUpBox<SelectUnitBox>(new SelectUnitBox()) {
                         @Override
                         protected void onClose(SelectUnitBox box) {
-                            if (box.getSelectedBuilding() != null) {
-                                get(proto().building()).setValue(box.getSelectedBuilding());
-                            }
                             if (box.getSelectedUnit() != null) {
-                                get(proto().unit()).setValue(box.getSelectedUnit());
+                                ((ShowingEditorView.Presenter) ((ShowingEditorView) getParentView()).getPresenter()).setSelectedUnit(box.getSelectedUnit());
                             }
                         }
                     };
                 }
             }));
+            main.setWidget(++row, 0, unitPanel);
+        } else {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit()), 20).build());
         }
-        main.setWidget(++row, 0, unitPanel);
 
         row = -1;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status()), 12).build());
@@ -93,29 +89,20 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
     //
     private class SelectUnitBox extends OkCancelBox {
 
-        private Building selectedBuilding;
-
         private AptUnit selectedUnit;
 
         public SelectUnitBox() {
-            super(i18n.tr("Unit Selection"));
+            super("Unit Selection");
             setContent(createContent());
         }
 
         protected Widget createContent() {
             okButton.setEnabled(false);
-            ((ShowingEditorView) getParentView()).getBuildingListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<Building>() {
-                @Override
-                public void onSelect(Building selectedItem) {
-                    selectedBuilding = selectedItem;
-                    enableOkButton();
-                }
-            });
             ((ShowingEditorView) getParentView()).getUnitListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<AptUnit>() {
                 @Override
                 public void onSelect(AptUnit selectedItem) {
                     selectedUnit = selectedItem;
-                    enableOkButton();
+                    okButton.setEnabled(true);
                 }
             });
 
@@ -135,22 +122,11 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
 
         @Override
         protected void onCancel() {
-            selectedBuilding = null;
             selectedUnit = null;
-        }
-
-        protected Building getSelectedBuilding() {
-            return selectedBuilding;
         }
 
         protected AptUnit getSelectedUnit() {
             return selectedUnit;
-        }
-
-        private void enableOkButton() {
-            if (selectedBuilding != null && selectedUnit != null) {
-                okButton.setEnabled(true);
-            }
         }
     }
 }

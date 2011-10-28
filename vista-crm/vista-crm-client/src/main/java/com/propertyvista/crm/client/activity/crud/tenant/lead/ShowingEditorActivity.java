@@ -15,7 +15,9 @@ package com.propertyvista.crm.client.activity.crud.tenant.lead;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
@@ -71,9 +73,28 @@ public class ShowingEditorActivity extends EditorActivityBase<Showing> implement
 
     @Override
     public void setSelectedBuilding(Building selected) {
-        Showing current = view.getValue();
-        current.building().set(selected);
         unitsLister.setParentFiltering(selected.getPrimaryKey());
         unitsLister.populate(0);
+    }
+
+    @Override
+    public void setSelectedUnit(AptUnit selected) {
+        ((ShowingCrudService) service).updateValue(new AsyncCallback<AptUnit>() {
+
+            @Override
+            public void onSuccess(AptUnit result) {
+                Showing current = view.getValue();
+
+                current.unit().set(result);
+                current.building().set(result.belongsTo());
+
+                view.populate(current);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+        }, selected);
     }
 }

@@ -110,13 +110,13 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
             @Override
             public void onSuccess(Building building) {
-                LeaseDTO currentValue = view.getValue();
-                currentValue.selectedBuilding().set(building);
+                LeaseDTO current = view.getValue();
+                current.selectedBuilding().set(building);
 
-                clearServiceAgreement(currentValue, true);
-                fillserviceItems(currentValue);
+                clearServiceAgreement(current, true);
+                fillserviceItems(current);
 
-                view.populate(currentValue);
+                view.populate(current);
             }
 
             @Override

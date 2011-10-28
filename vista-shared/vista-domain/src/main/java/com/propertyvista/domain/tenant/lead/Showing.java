@@ -16,6 +16,8 @@ package com.propertyvista.domain.tenant.lead;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -76,8 +78,12 @@ public interface Showing extends IEntity {
     @ReadOnly
     Appointment appointment();
 
+    @Transient
+    // calculated from selected unit below!
     Building building();
 
+    @NotNull
+    @Detached
     AptUnit unit();
 
     IPrimitive<Status> status();
@@ -85,5 +91,4 @@ public interface Showing extends IEntity {
     IPrimitive<Result> result();
 
     IPrimitive<Reason> reason();
-
 }

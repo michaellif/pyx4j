@@ -29,6 +29,8 @@ public interface ShowingEditorView extends IEditorView<Showing> {
         IListerView.Presenter getUnitPresenter();
 
         void setSelectedBuilding(Building selected);
+
+        void setSelectedUnit(AptUnit selected);
     }
 
     IListerView<Building> getBuildingListerView();

@@ -43,19 +43,9 @@ public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> impleme
             @Override
             public void onSelect(Building selectedItem) {
                 ((LeaseEditorView.Presenter) presenter).setSelectedBuilding(selectedItem);
-                enableButtons(true);
             }
         });
-
         unitLister = new ListerInternalViewImplBase<AptUnit>(new SelectedUnitLister(/* readOnly */));
-        unitLister.getLister().addItemSelectionHandler(new ItemSelectionHandler<AptUnit>() {
-            @Override
-            public void onSelect(AptUnit selectedItem) {
-                ((LeaseEditorView.Presenter) presenter).setSelectedUnit(selectedItem);
-                enableButtons(true);
-            }
-        });
-
         tenantLister = new ListerInternalViewImplBase<Tenant>(new SelectTenantLister(/* readOnly */));
 
         // set main form here: 

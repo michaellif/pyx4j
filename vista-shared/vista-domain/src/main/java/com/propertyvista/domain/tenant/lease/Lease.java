@@ -72,6 +72,7 @@ public interface Lease extends IEntity {
     @MemberColumn(name = "leaseType")
     IPrimitive<Service.Type> type();
 
+    @NotNull
     @Detached
     // should be loaded in service when necessary!..
     @Caption(name = "Selected Unit")

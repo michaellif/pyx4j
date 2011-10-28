@@ -58,13 +58,14 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     protected void enhanceDTO(Lease in, LeaseDTO dto, boolean fromList) {
         if (!fromList) {
             // load detached entities:
-            Persistence.service().retrieve(in.unit());
             Persistence.service().retrieve(in.documents());
-
-            // fill selected building by unit:
-            Persistence.service().retrieve(dto.unit().belongsTo());
-            dto.selectedBuilding().set(dto.unit().belongsTo());
-            syncBuildingServiceCatalog(dto.selectedBuilding());
+            Persistence.service().retrieve(in.unit());
+            if (!in.unit().isNull()) {
+                // fill selected building by unit:
+                Persistence.service().retrieve(in.unit().belongsTo());
+                dto.selectedBuilding().set(dto.unit().belongsTo());
+                syncBuildingServiceCatalog(dto.selectedBuilding());
+            }
 
             // update Tenants double links:
             EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
