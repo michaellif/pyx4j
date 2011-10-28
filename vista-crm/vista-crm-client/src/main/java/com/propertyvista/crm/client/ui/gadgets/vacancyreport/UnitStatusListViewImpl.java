@@ -111,6 +111,19 @@ public class UnitStatusListViewImpl implements IsWidget, UnitStatusListView {
         widgetPanel.setWidget(1, 0, unitListPanel);
     }
 
+    private static List<ColumnDescriptor<UnitVacancyStatus>> getDefaultColumns() {
+        UnitVacancyStatus proto = EntityFactory.getEntityPrototype(UnitVacancyStatus.class);
+        @SuppressWarnings("unchecked")
+        List<ColumnDescriptor<UnitVacancyStatus>> x = Arrays.asList(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address()), ColumnDescriptorFactory.createColumnDescriptor(proto, proto.owner()),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManager()),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.vacancyStatus()),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitRent()),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketRent()));
+        return x;
+    }
+
     private List<ColumnDescriptor<UnitVacancyStatus>> getAvailableColumns() {
         UnitVacancyStatus proto = EntityFactory.getEntityPrototype(UnitVacancyStatus.class);
         @SuppressWarnings("unchecked")
@@ -133,22 +146,6 @@ public class UnitStatusListViewImpl implements IsWidget, UnitStatusListView {
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveOutDay()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveInDay()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentedFromDate()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.daysVacant()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.revenueLost()));
-        return x;
-    }
-
-    private static List<ColumnDescriptor<UnitVacancyStatus>> getDefaultColumns() {
-        UnitVacancyStatus proto = EntityFactory.getEntityPrototype(UnitVacancyStatus.class);
-        @SuppressWarnings("unchecked")
-        List<ColumnDescriptor<UnitVacancyStatus>> x = Arrays.asList(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address()), ColumnDescriptorFactory.createColumnDescriptor(proto, proto.owner()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManager()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.complexName()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.vacancyStatus()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitRent()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketRent()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.daysVacant()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.revenueLost()));
         return x;
