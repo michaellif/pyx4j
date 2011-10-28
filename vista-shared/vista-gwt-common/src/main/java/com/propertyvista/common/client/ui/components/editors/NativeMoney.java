@@ -24,6 +24,7 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.Selector;
@@ -33,7 +34,7 @@ import com.pyx4j.widgets.client.TextBox;
 
 import com.propertyvista.domain.financial.Money;
 
-public class NativeMoney extends HorizontalPanel implements INativeEditableComponent<Money> {
+public class NativeMoney extends SimplePanel implements INativeEditableComponent<Money> {
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_Money";
 
@@ -53,6 +54,8 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
         super();
         this.cComponent = cComponent;
 
+        // ----------------------------------------------
+
         focusHandlerManager = new HandlerManager(this);
         FocusHandler groupFocusHandler = new FocusHandler() {
             @Override
@@ -67,22 +70,28 @@ public class NativeMoney extends HorizontalPanel implements INativeEditableCompo
             }
         };
 
-        add(amount = new TextBox());
+        // ----------------------------------------------
+
+        HorizontalPanel contentPanel = new HorizontalPanel();
+        contentPanel.add(amount = new TextBox());
         amount.setWidth("100%");
         amount.addFocusHandler(groupFocusHandler);
         amount.addBlurHandler(groupBlurHandler);
 
         if (cComponent.isShowCurrency()) {
-            add(currency = new Label());
+            contentPanel.add(currency = new Label());
             currency.setWidth("100%");
             currency.getElement().getStyle().setMarginLeft(5, Unit.PX);
         } else {
             currency = null;
-            setCellWidth(amount, "100%");
+            contentPanel.setCellWidth(amount, "100%");
         }
 
+        // ----------------------------------------------
+
+        setWidget(contentPanel);
+        contentPanel.setWidth("100%");
         setStyleName(DEFAULT_STYLE_PREFIX);
-        setWidth("100%");
     }
 
     @Override

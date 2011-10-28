@@ -25,6 +25,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.css.IStyleDependent;
@@ -35,7 +36,7 @@ import com.pyx4j.widgets.client.TextBox;
 
 import com.propertyvista.domain.contact.Phone;
 
-public class NativePhone extends HorizontalPanel implements INativeEditableComponent<Phone> {
+public class NativePhone extends SimplePanel implements INativeEditableComponent<Phone> {
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_Phone";
 
@@ -57,6 +58,8 @@ public class NativePhone extends HorizontalPanel implements INativeEditableCompo
         super();
         this.cComponent = cComponent;
 
+        // ----------------------------------------------
+
         focusHandlerManager = new HandlerManager(this);
         FocusHandler groupFocusHandler = new FocusHandler() {
             @Override
@@ -71,9 +74,12 @@ public class NativePhone extends HorizontalPanel implements INativeEditableCompo
             }
         };
 
+        // ----------------------------------------------
+
+        HorizontalPanel contentPanel = new HorizontalPanel();
         if (cComponent.isShowType()) {
-            add(type = new ListBox());
-            setCellWidth(type, "84px");
+            contentPanel.add(type = new ListBox());
+            contentPanel.setCellWidth(type, "90px");
             DOM.getParent(type.getElement()).getStyle().setPaddingRight(5, Unit.PX);
 
             for (Phone.Type item : Phone.Type.values()) {
@@ -87,14 +93,14 @@ public class NativePhone extends HorizontalPanel implements INativeEditableCompo
             type = null;
         }
 
-        add(number = new TextBox());
+        contentPanel.add(number = new TextBox());
         number.setWidth("100%");
         number.addFocusHandler(groupFocusHandler);
         number.addBlurHandler(groupBlurHandler);
 
         if (cComponent.isShowExtention()) {
-            add(extention = new TextBox());
-            setCellWidth(extention, "48px");
+            contentPanel.add(extention = new TextBox());
+            contentPanel.setCellWidth(extention, "50px");
             DOM.getParent(extention.getElement()).getStyle().setPaddingLeft(5, Unit.PX);
 
             extention.setWidth("100%");
@@ -104,8 +110,11 @@ public class NativePhone extends HorizontalPanel implements INativeEditableCompo
             extention = null;
         }
 
+        // ----------------------------------------------
+
+        setWidget(contentPanel);
+        contentPanel.setWidth("100%");
         setStyleName(DEFAULT_STYLE_PREFIX);
-        setWidth("100%");
     }
 
     @Override

@@ -55,9 +55,7 @@ public class NativeEmail extends SimplePanel implements INativeEditableComponent
         super();
         this.cComponent = cComponent;
 
-        HorizontalPanel contentPanel = new HorizontalPanel();
-        setWidget(contentPanel);
-        contentPanel.setWidth("100%");
+        // ----------------------------------------------
 
         focusHandlerManager = new HandlerManager(this);
         FocusHandler groupFocusHandler = new FocusHandler() {
@@ -73,6 +71,9 @@ public class NativeEmail extends SimplePanel implements INativeEditableComponent
             }
         };
 
+        // ----------------------------------------------
+
+        HorizontalPanel contentPanel = new HorizontalPanel();
         if (cComponent.isShowType()) {
             contentPanel.add(type = new ListBox());
             contentPanel.setCellWidth(type, "60px");
@@ -94,12 +95,11 @@ public class NativeEmail extends SimplePanel implements INativeEditableComponent
         address.addFocusHandler(groupFocusHandler);
         address.addBlurHandler(groupBlurHandler);
 
+        // ----------------------------------------------
+
+        setWidget(contentPanel);
+        contentPanel.setWidth("100%");
         setStyleName(DEFAULT_STYLE_PREFIX);
-
-        getElement().getStyle().setWidth(200, Unit.PX);
-        getElement().getStyle().setHeight(20, Unit.PX);
-
-//        setWidth("100%");
     }
 
     @Override

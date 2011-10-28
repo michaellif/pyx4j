@@ -27,6 +27,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -42,7 +43,7 @@ import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
 import com.propertyvista.domain.GeoLocation.LongitudeType;
 
-public class NativeGeoLocation extends HorizontalPanel implements INativeEditableComponent<GeoLocation> {
+public class NativeGeoLocation extends SimplePanel implements INativeEditableComponent<GeoLocation> {
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_GeoLocation";
 
@@ -66,6 +67,8 @@ public class NativeGeoLocation extends HorizontalPanel implements INativeEditabl
         super();
         this.cComponent = cComponent;
 
+        // ----------------------------------------------
+
         focusHandlerManager = new HandlerManager(this);
         FocusHandler groupFocusHandler = new FocusHandler() {
             @Override
@@ -80,17 +83,16 @@ public class NativeGeoLocation extends HorizontalPanel implements INativeEditabl
             }
         };
 
-        setWidth("100%");
-
         // ----------------------------------------------
 
-        add(latitude = new TextBox());
+        HorizontalPanel contentPanel = new HorizontalPanel();
+        contentPanel.add(latitude = new TextBox());
         latitude.setWidth("100%");
         latitude.addFocusHandler(groupFocusHandler);
         latitude.addBlurHandler(groupBlurHandler);
 
-        add(latitudeType = new ListBox());
-        setCellWidth(latitudeType, "60px");
+        contentPanel.add(latitudeType = new ListBox());
+        contentPanel.setCellWidth(latitudeType, "60px");
         DOM.getParent(latitudeType.getElement()).getStyle().setPaddingLeft(5, Unit.PX);
 
         for (LatitudeType item : LatitudeType.values()) {
@@ -101,20 +103,18 @@ public class NativeGeoLocation extends HorizontalPanel implements INativeEditabl
         latitudeType.addFocusHandler(groupFocusHandler);
         latitudeType.addBlurHandler(groupBlurHandler);
 
-        // ----------------------------------------------
         Widget gap;
-        add(gap = new HTML("&"));
-        setCellWidth(gap, "20px");
+        contentPanel.add(gap = new HTML("&"));
+        contentPanel.setCellWidth(gap, "20px");
         DOM.getParent(gap.getElement()).getStyle().setPaddingLeft(10, Unit.PX);
-        // ----------------------------------------------
 
-        add(longitude = new TextBox());
+        contentPanel.add(longitude = new TextBox());
         longitude.setWidth("100%");
         longitude.addFocusHandler(groupFocusHandler);
         longitude.addBlurHandler(groupBlurHandler);
 
-        add(longitudeType = new ListBox());
-        setCellWidth(longitudeType, "60px");
+        contentPanel.add(longitudeType = new ListBox());
+        contentPanel.setCellWidth(longitudeType, "60px");
         DOM.getParent(longitudeType.getElement()).getStyle().setPaddingLeft(5, Unit.PX);
 
         for (LongitudeType item : LongitudeType.values()) {
@@ -127,8 +127,9 @@ public class NativeGeoLocation extends HorizontalPanel implements INativeEditabl
 
         // ----------------------------------------------
 
+        setWidget(contentPanel);
+        contentPanel.setWidth("100%");
         setStyleName(DEFAULT_STYLE_PREFIX);
-
     }
 
     @Override
