@@ -132,21 +132,29 @@ public class DashboardGenerator extends Dashboards {
         dmd.isShared().setValue(true);
         dmd.name().setValue("Building Dashboard #2");
         dmd.description().setValue("Displays some building data");
-        dmd.layoutType().setValue(LayoutType.One);
+        dmd.layoutType().setValue(LayoutType.Two21);
 
         GadgetMetadata gmd;
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         gmd.type().setValue(GadgetType.UnitVacancyReport);
-        gmd.name().setValue("Unit Vacancy Report Demo");
+        gmd.name().setValue(GadgetType.UnitVacancyReport.toString() + "Demo");
         gmd.column().setValue(0);
 
         dmd.gadgets().add(gmd);
 
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.LineChartDisplay);
-        gmd.name().setValue("Line Chart Demo");
+        gmd.type().setValue(GadgetType.VacancySummary);
+        gmd.name().setValue(GadgetType.VacancySummary.toString() + "Demo");
+        gmd.column().setValue(0);
+
+        dmd.gadgets().add(gmd);
+
+        gmd = EntityFactory.create(GadgetMetadata.class);
+        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
+        gmd.type().setValue(GadgetType.VacancyTurnoverAnalysis);
+        gmd.name().setValue(GadgetType.VacancyTurnoverAnalysis.toString() + "Demo");
         gmd.column().setValue(0);
 
         dmd.gadgets().add(gmd);
