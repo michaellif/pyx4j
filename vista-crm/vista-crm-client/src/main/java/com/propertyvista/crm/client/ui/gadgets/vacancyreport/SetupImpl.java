@@ -20,12 +20,12 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dashboard.IGadget.ISetup;
 
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.dashboard.gadgets.UnitVacancyReportGadgetSettings;
 
 public class SetupImpl implements ISetup {
@@ -41,9 +41,9 @@ public class SetupImpl implements ISetup {
 
     private final TextBox itemsPerPage;
 
-    private final VerticalPanel setupPanel;
+    private final FlexTable setupPanel;
 
-    private final FlexTable listerSettingsPanel;
+    private final CrmScrollPanel main;
 
     private final VacancyReportGadget gadget;
 
@@ -67,23 +67,15 @@ public class SetupImpl implements ISetup {
             }
         });
         showUnits.setValue(settings.showUnits().getValue());
+        showUnits.getElement().getStyle().setPaddingLeft(INDENTATION, Unit.EM);
 
-        itemsPerPageLabel.getElement().getStyle().setPaddingLeft(5, Unit.EM);
         itemsPerPageLabel.getElement().getStyle().setPaddingRight(1, Unit.EM);
         itemsPerPageLabel.setVisible(showUnits.getValue());
         itemsPerPage = new TextBox();
         itemsPerPage.setText(String.valueOf(settings.itemsPerPage().getValue()));
-        itemsPerPage.setWidth("3em");
+        itemsPerPage.setWidth("2em");
         itemsPerPage.getElement().getStyle().setPaddingLeft(1, Unit.EM);
         itemsPerPage.setVisible(showUnits.getValue());
-
-        listerSettingsPanel = new FlexTable();
-        listerSettingsPanel.setWidget(0, 0, showUnits);
-        listerSettingsPanel.setWidget(0, 1, itemsPerPageLabel);
-        listerSettingsPanel.setWidget(0, 2, itemsPerPage);
-        listerSettingsPanel.getFlexCellFormatter().setColSpan(0, 1, 2);
-        listerSettingsPanel.getElement().getStyle().setPadding(0, Unit.EM);
-        listerSettingsPanel.getElement().getStyle().setPaddingLeft(INDENTATION, Unit.EM);
 
         showSummary = new CheckBox(i18n.tr("Summary"));
         showSummary.setValue(settings.showSummary().getValue());
@@ -93,21 +85,23 @@ public class SetupImpl implements ISetup {
         showTurnoverAnalysis.setValue(settings.showTurnoverAnalysis().getValue());
         showTurnoverAnalysis.getElement().getStyle().setPaddingLeft(INDENTATION, Unit.EM);
 
-        setupPanel = new VerticalPanel();
-        setupPanel.setWidth("100%");
-        setupPanel.setHeight("100%");
-
-        setupPanel.add(new Label(i18n.tr("Display") + ":"));
-        setupPanel.add(listerSettingsPanel);
-        setupPanel.add(showSummary);
-        setupPanel.add(showTurnoverAnalysis);
+        setupPanel = new FlexTable();
+        int row = -1;
+        setupPanel.setWidget(++row, 0, new Label(i18n.tr("Display") + ":"));
+        setupPanel.setWidget(++row, 0, showUnits);
+        setupPanel.setWidget(row, 1, itemsPerPageLabel);
+        setupPanel.setWidget(row, 2, itemsPerPage);
+        setupPanel.setWidget(++row, 0, showSummary);
+        setupPanel.setWidget(++row, 0, showTurnoverAnalysis);
         setupPanel.getElement().getStyle().setPaddingLeft(2, Unit.EM);
         setupPanel.getElement().getStyle().setPaddingTop(1, Unit.EM);
+
+        main = new CrmScrollPanel(setupPanel);
     }
 
     @Override
     public Widget asWidget() {
-        return setupPanel;
+        return main;
     }
 
     @Override
