@@ -15,6 +15,7 @@ package com.propertyvista.crm.rpc.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -22,5 +23,5 @@ import com.propertyvista.domain.tenant.lead.Showing;
 
 public interface ShowingCrudService extends AbstractCrudService<Showing> {
 
-    void updateValue(AsyncCallback<AptUnit> callback, AptUnit unit);
+    void updateValue(AsyncCallback<AptUnit> callback, Key unitId);
 }

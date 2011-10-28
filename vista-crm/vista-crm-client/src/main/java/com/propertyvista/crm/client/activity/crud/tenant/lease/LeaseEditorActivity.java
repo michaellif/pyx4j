@@ -106,24 +106,26 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     @Override
     public void setSelectedUnit(AptUnit selected) {
-        ((LeaseCrudService) service).syncBuildingServiceCatalog(new AsyncCallback<Building>() {
+        ((LeaseCrudService) service).setSelectededUnit(new AsyncCallback<AptUnit>() {
 
             @Override
-            public void onSuccess(Building building) {
-                LeaseDTO current = view.getValue();
-                current.selectedBuilding().set(building);
+            public void onSuccess(AptUnit unit) {
+                LeaseDTO currentValue = view.getValue();
 
-                clearServiceAgreement(current, true);
-                fillserviceItems(current);
+                currentValue.unit().set(unit);
+                currentValue.selectedBuilding().set(unit.belongsTo());
 
-                view.populate(current);
+                clearServiceAgreement(currentValue, true);
+                fillserviceItems(currentValue);
+
+                view.populate(currentValue);
             }
 
             @Override
             public void onFailure(Throwable caught) {
                 throw new UnrecoverableClientError(caught);
             }
-        }, selected.belongsTo().getPrimaryKey());
+        }, selected.getPrimaryKey());
     }
 
     @Override

@@ -36,6 +36,7 @@ import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
@@ -62,7 +63,6 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             Persistence.service().retrieve(in.unit());
             if (!in.unit().isNull()) {
                 // fill selected building by unit:
-                Persistence.service().retrieve(in.unit().belongsTo());
                 dto.selectedBuilding().set(dto.unit().belongsTo());
                 syncBuildingServiceCatalog(dto.selectedBuilding());
             }
@@ -96,9 +96,10 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     }
 
     @Override
-    public void syncBuildingServiceCatalog(AsyncCallback<Building> callback, Key entityId) {
-        Building entity = Persistence.service().retrieve(Building.class, entityId);
-        callback.onSuccess(syncBuildingServiceCatalog(entity));
+    public void setSelectededUnit(AsyncCallback<AptUnit> callback, Key unitId) {
+        AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitId);
+        syncBuildingServiceCatalog(unit.belongsTo());
+        callback.onSuccess(unit);
     }
 
     @Override
@@ -113,6 +114,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         }
 
         // load detached entities:
+        Persistence.service().retrieve(building);
         Persistence.service().retrieve(building.serviceCatalog());
 
         // update service catalogue double-reference lists:
