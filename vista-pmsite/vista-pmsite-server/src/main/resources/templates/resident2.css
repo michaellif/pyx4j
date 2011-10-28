@@ -12,3 +12,44 @@
 	overflow: hidden;
 	padding: 40px 0 0 30px;
 }
+.vista-pmsite-residentPage .secondaryNavig {
+	padding: 35px 0;
+	width: 211px;
+	float: left;
+	min-height: 400px;
+	border-right:1px solid ${foreground_20};
+}
+
+.vista-pmsite-residentPage .secondaryNavig ul {
+	list-style: none outside none;
+	margin: 0;
+	padding: 0;
+}
+
+.vista-pmsite-residentPage .secondaryNavig ul li {
+	color: ${foreground_100};
+	font-size: 17px;
+	font-weight:bold;
+	height: 38px;
+	line-height: 38px;
+	overflow: hidden;
+	padding: 0 10px 0 35px;
+}
+
+.vista-pmsite-residentPage .secondaryNavig ul li.active {
+	background: url("images/template2/menu_active.png") no-repeat left center;
+}
+
+.vista-pmsite-residentPage .secondaryNavig ul li:hover {
+	color: ${contrast2_100};
+	text-decoration: none;
+}
+
+.vista-pmsite-residentPage .content {
+	min-height: 396px;
+	color: ${foreground_100};
+	border-top:1px solid ${foreground_20};
+	line-height: 20px;
+	overflow: hidden;
+	padding: 30px 30px 0;
+}

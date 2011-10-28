@@ -212,19 +212,30 @@ select {
 }
  
 .footer_wrap {
-	margin-left: 60px;
 }
 
 ul.footer_locations {
 	list-style-type: none;
 	display: inline-block;
-	color: ${foreground_40};
-	font-weight: bold;
+	width:790px;
+	vertical-align:top;
+	padding: 0;
+	margin-left: 10px;
+	margin-top: 20px;
+}
+
+ul.footer_locations label {
+	display: block;
+	text-transform: uppercase;
+	padding-bottom: 10px;
+	color: ${foreground_60};
 }
 
 ul.footer_locations li {
 	float: left;
-	width: 200px;
+	width: 195px;
+	color: ${foreground_40};
+	font-weight: bold;
 }
 
 .footer_locations a {
@@ -259,6 +270,41 @@ ul.footer_locations li {
 .footer_legal {
 	text-align: center;
 	line-height: 60px;
+}
+
+.footer_social {
+	display:inline-block;
+	width:140px;
+	vertical-align:top;
+	padding: 0;
+	margin-left: 10px;
+	margin-top: 20px;
+}
+.footer_social span {
+	padding:0; margin:0;
+}
+.footer_social label {
+	display: block;
+	text-transform: uppercase;
+	padding-bottom: 10px;
+	color: ${foreground_60};
+}
+.iconSocial {
+	display:inline-block;
+	width:32px; height:32px;
+	background:url("images/template1/social4.png") no-repeat;
+}
+.iconSocial.Twitter {
+	background-position: 0 0;
+}
+.iconSocial.Facebook {
+	background-position: -32px 0;
+}
+.iconSocial.Youtube {
+	background-position: -64px 0;
+}
+.iconSocial.Flickr {
+	background-position: -96px 0;
 }
 
 .vista-pmsite-main .caption {

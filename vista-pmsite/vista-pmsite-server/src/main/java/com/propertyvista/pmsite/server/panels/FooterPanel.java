@@ -13,8 +13,12 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import java.util.ArrayList;
+
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -22,6 +26,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteContentManager.SocialSite;
 import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 
@@ -50,6 +55,17 @@ public class FooterPanel extends Panel {
                     link.add(new Label("city", _city + " (" + _prov2 + ")"));
                     item.add(link);
                 }
+            }
+        });
+
+        final java.util.Map<SocialSite, String> socialLinks = PMSiteContentManager.getSocialLinks();
+        add(new ListView<SocialSite>("footer_social", new ArrayList<SocialSite>(socialLinks.keySet())) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void populateItem(ListItem<SocialSite> item) {
+                SocialSite site = item.getModelObject();
+                item.add(new ExternalLink("link", socialLinks.get(site)).add(new AttributeAppender("class", " " + site.name())));
             }
         });
 

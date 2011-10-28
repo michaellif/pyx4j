@@ -5,16 +5,22 @@
 	<div class="main">
 		<div class="footer_wrap">
 
+
 			<ul class="footer_locations">
-				<li wicket:id="footer_locations_city"><a wicket:id="link"><span
-						wicket:id="city"></span>
-				</a>
+				<label><wicket:i18n>Locations</wicket:i18n></label>
+				<li wicket:id="footer_locations_city">
+					<a wicket:id="link"><span wicket:id="city"></span></a>
 				</li>
 			</ul>
+			<div class="footer_social">
+				<label><wicket:i18n>Follow Us</wicket:i18n></label>
+				<span wicket:id="footer_social">
+					<a wicket:id="link" class="iconSocial"/>
+				</span>
+			</div>
 			<div class="footer_links">
-				<span wicket:id="footer_link" class="footer_link"><a
-					wicket:id="link"><span wicket:id="caption"></span>
-				</a>
+				<span wicket:id="footer_link" class="footer_link">
+					<a wicket:id="link"><span wicket:id="caption"></span></a>
 				</span>
 			</div>
 			<div class="footer_legal" wicket:id="footer_legal" />

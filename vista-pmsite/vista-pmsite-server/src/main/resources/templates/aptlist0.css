@@ -293,3 +293,27 @@ a.listingCtlButton {
 .display_none {
 	display:none;
 }
+/*
+ * Map style
+ */
+.PropertyCardCardContentItem {
+	font-size:12px;
+	padding-bottom:8px;
+	margin-bottom:4px;
+	border-bottom:1px solid #ccc;
+}
+.PropertyCardCardContentItem.address {
+	color: #75a313;
+	font-weight:bold;
+}
+.PropertyCardCardContentItem.types {
+	color: #182123;
+}
+.PropertyCardCardContentItem.amenities {
+	color: #182123;
+}
+.PropertyCardCardLeftLabel {
+	font-size:12px;
+	white-space:nowrap;
+	color: #182123;
+}

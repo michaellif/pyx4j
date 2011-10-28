@@ -483,4 +483,17 @@ public class PMSiteContentManager implements Serializable {
         return promo;
     }
 
+    public static enum SocialSite {
+        Facebook, Twitter, Youtube, Flickr
+    }
+
+    public static Map<SocialSite, String> getSocialLinks() {
+        Map<SocialSite, String> socialLinks = new HashMap<SocialSite, String>();
+        socialLinks.put(SocialSite.Facebook, "http://www.facebook.com/pages/Starlight-Apartments/175770575825466");
+        socialLinks.put(SocialSite.Twitter, "http://twitter.com/#!/StarlightApts");
+        socialLinks.put(SocialSite.Youtube, "http://www.youtube.com/user/StarlightApts");
+        socialLinks.put(SocialSite.Flickr, "http://www.flickr.com/StarlightApts");
+        return socialLinks;
+    }
+
 }
