@@ -18,7 +18,9 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -65,13 +67,16 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
         return tabPanel;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void populate(ComplexDTO value) {
-        super.populate(value);
-        if (isEditable() & primaryBuildingSelector != null) {
-            primaryBuildingSelector.setValue(value.primaryBuilding());
-            primaryBuildingSelector.setOptions(value.buildings());
+        CEditableComponent<Building, ?> primaryBuildingWidget = get(proto().primaryBuilding());
+        if (isEditable() && primaryBuildingWidget instanceof CEntityComboBox<?>) {
+            CEntityComboBox<Building> primaryBuildingCombo = (CEntityComboBox<Building>) primaryBuildingWidget;
+            primaryBuildingCombo.resetCriteria();
+            primaryBuildingCombo.addCriterion(PropertyCriterion.eq(primaryBuildingCombo.proto().complex(), value));
         }
+        super.populate(value);
     }
 
     private Widget createGeneralPanel() {
@@ -80,26 +85,16 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
 
         panel.setWidget(row++, 0, (new DecoratorBuilder(inject(proto().name()))).build());
         panel.setWidget(row++, 0, (new DecoratorBuilder(inject(proto().website()))).build());
+        panel.setWidget(row++, 0, new DecoratorBuilder(inject(proto().primaryBuilding())).build());
 
-        CEditableComponent<?, ?> primaryBuldingWidget;
-        if (isEditable()) {
-            primaryBuildingSelector = new CComboBox<Building>() {
-                @Override
-                public String getItemName(Building o) {
-                    if (o != null) {
-                        return o.getStringView();
-                    } else {
-                        return super.getItemName(null);
-                    }
-                }
-            };
-            primaryBuildingSelector.setTitle(proto().primaryBuilding().getMeta().getCaption());
-            primaryBuldingWidget = primaryBuildingSelector;
+        CEditableComponent<Building, ?> primaryBuildingWidget = get(proto().primaryBuilding());
 
-        } else {
-            primaryBuldingWidget = inject(proto().primaryBuilding());
+        // restrict primary building selector to this complex
+        if (isEditable() && primaryBuildingWidget instanceof CEntityComboBox<?>) {
+            @SuppressWarnings("unchecked")
+            CEntityComboBox<Building> primaryBuildingCombo = (CEntityComboBox<Building>) primaryBuildingWidget;
+            primaryBuildingCombo.addCriterion(PropertyCriterion.eq(primaryBuildingCombo.proto().complex(), null));
         }
-        panel.setWidget(row++, 0, new DecoratorBuilder(primaryBuldingWidget).build());
 
         return new CrmScrollPanel(panel);
     }

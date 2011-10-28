@@ -16,10 +16,6 @@ package com.propertyvista.crm.client.ui.crud.complex;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
 
-/**
- * An enhanced version of {@Link DashboardView} that can be injected with customized {@link IBuildingGadget.FilterData} on the fly.
- * 
- */
 public interface SlaveDashboardView extends DashboardView {
     public interface SlavePresenter {
 
