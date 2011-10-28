@@ -13,23 +13,28 @@
  */
 package com.propertyvista.portal.client.activity;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.client.ui.residents.PersonalInfoView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
+import com.propertyvista.portal.rpc.portal.services.PersonalInfoCrudService;
 
 public class PersonalInfoActivity extends SecurityAwareActivity {
 
     private final PersonalInfoView view;
 
+    PersonalInfoCrudService srv;
+
     public PersonalInfoActivity(Place place) {
         this.view = (PersonalInfoView) PortalViewFactory.instance(PersonalInfoView.class);
         withPlace(place);
+        srv = GWT.create(PersonalInfoCrudService.class);
     }
 
     public PersonalInfoActivity withPlace(Place place) {
@@ -40,9 +45,14 @@ public class PersonalInfoActivity extends SecurityAwareActivity {
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
         panel.setWidget(view);
-        //TODO Implement a service call
-        ResidentDTO resident = EntityFactory.create(ResidentDTO.class);
-        view.populate(resident);
+
+        srv.retrieve(new DefaultAsyncCallback<ResidentDTO>() {
+            @Override
+            public void onSuccess(ResidentDTO result) {
+                view.populate(result);
+            }
+
+        }, null);
 
     }
 
