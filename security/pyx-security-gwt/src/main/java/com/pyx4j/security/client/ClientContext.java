@@ -108,7 +108,7 @@ public class ClientContext {
                         ClientContext.terminateSession();
                     } else {
                         log.debug("Authorization Changed");
-                        ClientContext.obtainAuthenticationData(null, null, true, false);
+                        ClientContext.obtainAuthenticationData(null, null, true, false, null);
                     }
                 } else if (event.getSystemNotification() instanceof UserVisitChangedSystemNotification) {
                     userVisit = ((UserVisitChangedSystemNotification) event.getSystemNotification()).getUserVisit();
@@ -344,15 +344,15 @@ public class ClientContext {
     }
 
     public static void obtainAuthenticationData(final AsyncCallback<Boolean> onAuthenticationAvailable) {
-        obtainAuthenticationData(null, onAuthenticationAvailable, false, true);
+        obtainAuthenticationData(null, onAuthenticationAvailable, false, true, null);
     }
 
     public static void obtainAuthenticationData(AuthenticationService authenticationService, final AsyncCallback<Boolean> onAuthenticationAvailable) {
-        obtainAuthenticationData(authenticationService, onAuthenticationAvailable, false, true);
+        obtainAuthenticationData(authenticationService, onAuthenticationAvailable, false, true, null);
     }
 
     public static void obtainAuthenticationData(AuthenticationService authenticationService, final AsyncCallback<Boolean> onAuthenticationAvailable,
-            boolean force, boolean executeBackground) {
+            boolean force, boolean executeBackground, String authenticationToken) {
         if (authenticationService != null) {
             service = authenticationService;
         }
@@ -403,12 +403,11 @@ public class ClientContext {
             };
 
             if (service != null) {
-                String sessionToken = null;
-                if (Storage.isSupported()) {
-                    sessionToken = Storage.getLocalStorageIfSupported().getItem(TOKEN_STORAGE_ATTRIBUTE);
+                if ((authenticationToken == null) && Storage.isSupported()) {
+                    authenticationToken = Storage.getLocalStorageIfSupported().getItem(TOKEN_STORAGE_ATTRIBUTE);
                 }
-                log.debug("authenticate {}", sessionToken);
-                service.authenticate(callback, sessionToken);
+                log.debug("authenticate {}", authenticationToken);
+                service.authenticate(callback, authenticationToken);
             } else {
                 if (executeBackground) {
                     RPCManager.executeBackground(AuthenticationServices.GetStatus.class, null, callback);
