@@ -4,15 +4,12 @@
 	width: 960px;
 	margin: 0 auto;
 	overflow: hidden;
-	border-left: solid 1px ${object2_20};
-	border-right: solid 1px ${object2_20};
     background: ${background_10};
 }
 .vista-pmsite-aptListPage .vista-pmsite-sidebar {
 	display: inline-block;
 	width: 211px;
 	vertical-align: top;
-	border-right:1px solid ${foreground_20};
 }
 .vista-pmsite-aptListPage .secondaryNavig {
 	color: ${foreground_60};
@@ -162,6 +159,7 @@
 }
 .vista-pmsite-aptListPage .apartmentListingWrap {
 	width:100%;
+	border-left:1px solid ${foreground_20};
 }
 .vista-pmsite-aptListPage .apartmentListingWrap .listing_listview {
 	background: ${background_10};

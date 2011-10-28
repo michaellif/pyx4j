@@ -5,8 +5,6 @@
 	width: 960px;
 	margin: 0 auto;
 	overflow: hidden;
-	border-left: solid 1px ${object2_20};
-	border-right: solid 1px ${object2_20};
 	background: ${background_10};
 }
 

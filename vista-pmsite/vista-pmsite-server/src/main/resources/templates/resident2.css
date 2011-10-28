@@ -6,6 +6,7 @@
 	width: 960px;
 	margin: 0 auto;
 	overflow: hidden;
+	background: ${background_10};
 }
 .vista-pmsite-residentPage .caption {
 	height: 80px;

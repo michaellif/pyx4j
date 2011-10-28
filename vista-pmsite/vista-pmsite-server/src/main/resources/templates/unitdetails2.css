@@ -5,8 +5,6 @@
 	width: 960px;
 	margin: 0 auto;
 	overflow: hidden;
-	border-left: solid 1px ${object2_20};
-	border-right: solid 1px ${object2_20};
     background: ${background_10};
 }
 .vista-pmsite-unitDetailsPage .vista-pmsite-sidebar {
@@ -14,11 +12,10 @@
 	width: 318px;
 	vertical-align: top;
 	padding:20px 16px;
-	border-right:1px solid ${foreground_20};
 }
 .vista-pmsite-unitDetailsPage .vista-pmsite-main {
 	display: inline-block;
-	width: 605px;
+	width: 606px;
 	vertical-align: top;
 	min-height:600px;
 }
@@ -63,6 +60,10 @@
 .vista-pmsite-unitDetailsPage .vista-pmsite-sidebar .infoBoxEntry .infoBoxText {
 	display:block;
 	padding-top:4px;
+}
+.vista-pmsite-unitDetailsPage .apartmentDetailsWrap {
+	border-left:1px solid ${foreground_20};
+	min-height: 550px;
 }
 .apartmentDetailsWrap .detailBox {
 	color:${foreground_100};
