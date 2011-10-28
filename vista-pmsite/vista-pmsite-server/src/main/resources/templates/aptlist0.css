@@ -317,3 +317,7 @@ a.listingCtlButton {
 	white-space:nowrap;
 	color: #182123;
 }
+.PropertyCardCardLeftItem.price {
+	color: #75a313;
+	font-weight:bold;
+}

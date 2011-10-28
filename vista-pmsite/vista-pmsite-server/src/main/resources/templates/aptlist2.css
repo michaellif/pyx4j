@@ -154,7 +154,7 @@
 
 .vista-pmsite-aptListPage .vista-pmsite-main {
 	display: inline-block;
-	width: 744px;
+	width: 745px;
 	vertical-align: top;
 }
 .vista-pmsite-aptListPage .apartmentListingWrap {
@@ -293,4 +293,32 @@ a.listingCtlButton {
 }
 .display_none {
 	display:none;
+}
+/*
+ * Map style
+ */
+.PropertyCardCardContentItem {
+	font-size:12px;
+	padding-bottom:8px;
+	margin-bottom:4px;
+	border-bottom:1px solid ${foreground_20};
+}
+.PropertyCardCardContentItem.address {
+	color: ${object1_60};
+	font-weight:bold;
+}
+.PropertyCardCardContentItem.types {
+	color: ${foreground_100};
+}
+.PropertyCardCardContentItem.amenities {
+	color: ${foreground_100};
+}
+.PropertyCardCardLeftLabel {
+	font-size:12px;
+	white-space:nowrap;
+	color: ${foreground_100};
+}
+.PropertyCardCardLeftItem.price {
+	color: ${object1_60};
+	font-weight:bold;
 }
