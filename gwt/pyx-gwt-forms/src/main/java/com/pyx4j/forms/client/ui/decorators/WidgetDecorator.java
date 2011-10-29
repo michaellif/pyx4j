@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -172,7 +173,7 @@ public class WidgetDecorator extends FlexTable {
         validationLabel = new Label();
         validationLabel.setStyleName(StyleName.WidgetDecoratorValidationLabel.name());
 
-        FlowPanel contentPanel = new FlowPanel();
+        HorizontalPanel contentPanel = new HorizontalPanel();
         contentPanel.setStyleName(StyleName.WidgetDecoratorContentPanel.name());
         contentPanel.add(componentHolder);
         contentPanel.add(infoImageHolder);
