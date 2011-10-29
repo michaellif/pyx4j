@@ -84,7 +84,6 @@ public class DefaultWidgetDecoratorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", WidgetDecoratorComponentHolder);
-        //style.addProperty("padding-right", "10px");
         style.addProperty("display", "inline-block");
         addStyle(style);
 
