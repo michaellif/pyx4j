@@ -37,14 +37,14 @@ import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.security.server.AuthenticationServiceImpl;
 import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.domain.User;
-import com.propertyvista.portal.rpc.ptapp.PasswordChangeRequest;
-import com.propertyvista.portal.rpc.ptapp.PasswordRetrievalRequest;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 import com.propertyvista.server.common.mail.MessageTemplates;
 import com.propertyvista.server.common.security.AccessKey;

@@ -14,28 +14,22 @@
 package com.propertyvista.crm.client.ui.login;
 
 import com.google.gwt.dom.client.NativeEvent;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.essentials.client.crud.CrudDebugId;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
+import com.propertyvista.common.client.ui.components.login.LoginForm;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.PreloadConfig;
 
@@ -57,33 +51,14 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
     public LoginViewImpl() {
 
-        form = new LoginViewForm();
-        form.initContent();
-        form.get(form.proto().captcha()).setVisible(false);
-        form.populate(null);
-
-        add(form);
-        setWidth("400px");
-        setStyleName("pyx4j-horizontal-align-center", true);
-        getElement().getStyle().setMarginTop(10, Unit.PCT);
-
-        Button loginButton = new Button(i18n.tr("Login"));
-        loginButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
-        loginButton.addClickHandler(new ClickHandler() {
+        form = new LoginForm(i18n.tr("Login to Your Account"), new Command() {
 
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 submit();
             }
 
-        });
-
-        loginButton.getElement().getStyle().setMarginLeft(90, Unit.PX);
-        loginButton.getElement().getStyle().setMarginRight(1, Unit.EM);
-        loginButton.getElement().getStyle().setMarginTop(0.5, Unit.EM);
-        add(loginButton);
-
-        CHyperlink forgotPassword = new CHyperlink(null, new Command() {
+        }, new Command() {
 
             @Override
             public void execute() {
@@ -91,13 +66,12 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
             }
         });
 
-        forgotPassword.setValue(i18n.tr("Retrieve Password"));
-        add(forgotPassword);
+        form.initContent();
+        form.get(form.proto().captcha()).setVisible(false);
+        form.populate(null);
 
-        if (ApplicationMode.isDevelopment()) {
-            add(new HTML("This application is running in <B>DEVELOPMENT</B> mode."));
-            add(new HTML("Press <i>Ctrl+Q</i> to login"));
-        }
+        add(form);
+
     }
 
     @Override

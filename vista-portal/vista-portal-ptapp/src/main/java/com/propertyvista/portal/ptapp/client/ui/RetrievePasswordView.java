@@ -15,7 +15,7 @@ package com.propertyvista.portal.ptapp.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.rpc.ptapp.PasswordRetrievalRequest;
+import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
 public interface RetrievePasswordView extends IsWidget {
 

@@ -44,6 +44,8 @@ public class VistaTheme extends Theme {
 
         addTheme(new DefaultFormFlexPanelTheme());
 
+        addTheme(new HorizontalAlignCenterMixin());
+
         initGeneralStyles();
         initBodyStyles();
         initSectionStyles();
@@ -138,6 +140,7 @@ public class VistaTheme extends Theme {
         style.addProperty("margin-left", "40px");
         style.addProperty("margin-right", "40px");
         addStyle(style);
+
     }
 
     protected void initBodyStyles() {

@@ -95,14 +95,6 @@ public class VistaAdminTheme extends VistaTheme {
         style.addProperty("cursor", "row-resize");
         addStyle(style);
 
-        /*
-         * horizontal alignment for blocks
-         */
-        style = new Style(".pyx4j-horizontal-align-center");
-        style.addProperty("margin-left", "auto");
-        style.addProperty("margin-right", "auto");
-        addStyle(style);
-
         // editor forms:
         style = new Style(Selector.valueOf(VistaDecoratorsFlowPanel.DEFAULT_STYLE_NAME));
         style.addProperty("color", ThemeColors.TEXT);

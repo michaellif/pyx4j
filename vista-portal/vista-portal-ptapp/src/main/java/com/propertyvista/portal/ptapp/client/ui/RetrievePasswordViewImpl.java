@@ -13,19 +13,15 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
-
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
-import com.propertyvista.portal.rpc.ptapp.PasswordRetrievalRequest;
-import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
+import com.propertyvista.common.client.ui.components.login.RetrievePasswordForm;
 
 public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePasswordView {
 
@@ -37,35 +33,19 @@ public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePassw
 
     public RetrievePasswordViewImpl() {
 
-        form = new RetrievePasswordViewForm();
-        form.initContent();
-        form.populate(null);
-        add(form);
-
-        Button retrievePasswordButton = new Button(i18n.tr("Retrieve Password"));
-        retrievePasswordButton.ensureDebugId(VistaFormsDebugId.Auth_RetrivePassword.toString());
-        retrievePasswordButton.addClickHandler(new ClickHandler() {
-
+        form = new RetrievePasswordForm(i18n.tr("Retrieve Password"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 form.setVisited(true);
                 if (!form.isValid()) {
                     throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 }
                 presenter.retrievePassword(form.getValue());
             }
-
         });
-
-        retrievePasswordButton.getElement().getStyle().setMarginLeft(90, Unit.PX);
-        retrievePasswordButton.getElement().getStyle().setMarginRight(1, Unit.EM);
-        retrievePasswordButton.getElement().getStyle().setMarginTop(0.5, Unit.EM);
-        add(retrievePasswordButton);
-
-        setWidth("30%");
-
-        getElement().getStyle().setMarginTop(1, Unit.EM);
-        getElement().getStyle().setMarginBottom(1, Unit.EM);
+        form.initContent();
+        form.populate(null);
+        add(form);
     }
 
     @Override

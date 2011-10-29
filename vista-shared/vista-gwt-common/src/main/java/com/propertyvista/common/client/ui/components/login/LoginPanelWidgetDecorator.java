@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.common.client.ui.decorations;
+package com.propertyvista.common.client.ui.components.login;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
@@ -19,7 +19,7 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 public class LoginPanelWidgetDecorator extends WidgetDecorator {
 
     public LoginPanelWidgetDecorator(CComponent<?> component) {
-        super(new Builder(component).labelWidth(9).componentWidth(16));
+        super(new Builder(component).labelWidth(9).componentWidth(16).labelAlignment(Builder.Alignment.left));
         addStyleDependentName(WidgetDecorator.StyleDependent.noMandatoryStar.name());
 
     }

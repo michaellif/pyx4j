@@ -15,13 +15,11 @@ package com.propertyvista.portal.ptapp.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.rpc.ptapp.PasswordChangeRequest;
+import com.pyx4j.security.rpc.PasswordChangeRequest;
+
+import com.propertyvista.common.client.ui.components.login.NewPasswordForm.ConversationType;
 
 public interface NewPasswordView extends IsWidget {
-
-    public enum ConversationType {
-        RESET, CHANGE
-    }
 
     public void setPresenter(Presenter presenter);
 

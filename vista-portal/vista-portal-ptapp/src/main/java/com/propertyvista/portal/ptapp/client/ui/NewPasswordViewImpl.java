@@ -13,16 +13,14 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
-
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+
+import com.propertyvista.common.client.ui.components.login.NewPasswordForm;
+import com.propertyvista.common.client.ui.components.login.NewPasswordForm.ConversationType;
 
 public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
 
@@ -30,39 +28,25 @@ public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
 
     private Presenter presenter;
 
-    private final NewPasswordViewForm form;
+    private final NewPasswordForm form;
 
     public NewPasswordViewImpl() {
 
-        form = new NewPasswordViewForm();
-        form.initContent();
-        form.populate(null);
-        add(form);
-
-        Button newPasswordButton = new Button(i18n.tr("New Password"));
-        newPasswordButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
-        newPasswordButton.addClickHandler(new ClickHandler() {
+        form = new NewPasswordForm(i18n.tr("New Password"), new Command() {
 
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 form.setVisited(true);
                 if (!form.isValid()) {
                     throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 }
                 presenter.passwordReset(form.getValue());
             }
-
         });
+        form.initContent();
+        form.populate(null);
+        add(form);
 
-        newPasswordButton.getElement().getStyle().setMarginLeft(6.4, Unit.EM);
-        newPasswordButton.getElement().getStyle().setMarginRight(1, Unit.EM);
-        newPasswordButton.getElement().getStyle().setMarginTop(0.5, Unit.EM);
-        add(newPasswordButton);
-
-        setWidth("50%");
-
-        getElement().getStyle().setMarginTop(1, Unit.EM);
-        getElement().getStyle().setMarginBottom(1, Unit.EM);
     }
 
     @Override

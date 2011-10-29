@@ -27,15 +27,15 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.common.client.ui.components.login.NewPasswordForm.ConversationType;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.login.NewPasswordView;
-import com.propertyvista.crm.client.ui.login.NewPasswordView.ConversationType;
 import com.propertyvista.crm.client.ui.viewfactories.LoginVeiwFactory;
 import com.propertyvista.crm.rpc.ActivationServices;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.PasswordChangeRequest;
 
 public class ResetPasswordActivity extends AbstractActivity implements NewPasswordView.Presenter {
 

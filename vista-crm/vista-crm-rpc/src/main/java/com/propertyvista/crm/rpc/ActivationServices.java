@@ -16,6 +16,8 @@ package com.propertyvista.crm.rpc;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
 @Deprecated
 public interface ActivationServices {

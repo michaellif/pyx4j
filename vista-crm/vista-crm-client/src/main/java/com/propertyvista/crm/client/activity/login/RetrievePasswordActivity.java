@@ -23,12 +23,12 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.login.RetrievePasswordView;
 import com.propertyvista.crm.client.ui.viewfactories.LoginVeiwFactory;
 import com.propertyvista.crm.rpc.ActivationServices;
-import com.propertyvista.crm.rpc.PasswordRetrievalRequest;
 
 public class RetrievePasswordActivity extends AbstractActivity implements RetrievePasswordView.Presenter {
 

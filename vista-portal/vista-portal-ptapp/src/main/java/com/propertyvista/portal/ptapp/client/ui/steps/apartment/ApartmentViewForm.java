@@ -98,12 +98,12 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
         main.add(new VistaHeaderBar(i18n.tr("General Info")));
         main.add(part = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
         part.getElement().getStyle().setPaddingLeft(2, Unit.EM);
-        part.add(inject(proto().name()), 20);
+        part.add(inject(proto().name()), 25);
 
         main.add(new VistaLineSeparator(100, Unit.PCT));
 
         VistaDecoratorsSplitFlowPanel split;
-        main.add(split = new VistaDecoratorsSplitFlowPanel(true, main.getDefaultLabelWidth(), 20));
+        main.add(split = new VistaDecoratorsSplitFlowPanel(true, main.getDefaultLabelWidth(), 25));
         split.getElement().getStyle().setPaddingLeft(2, Unit.EM);
 
         split.getLeftPanel().add(inject(proto().suiteNumber()), 10);

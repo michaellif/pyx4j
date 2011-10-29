@@ -17,8 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
-
-import com.propertyvista.portal.rpc.ptapp.PasswordChangeRequest;
+import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 /**
  * This is secure services, user need to be lodged in to do this actions.

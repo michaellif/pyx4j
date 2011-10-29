@@ -18,9 +18,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
-
-import com.propertyvista.portal.rpc.ptapp.PasswordChangeRequest;
-import com.propertyvista.portal.rpc.ptapp.PasswordRetrievalRequest;
+import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
 public interface ActivationService extends IService {
 
