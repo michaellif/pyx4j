@@ -164,7 +164,7 @@
 	padding-bottom:40px;
 }
 
-.switchMapList {
+#aptListModeSwitch {
 	background-image: url("images/template0/aptListIcons.png");
 	background-repeat: no-repeat;
 	width:120px;
@@ -178,11 +178,14 @@
 	text-transform:uppercase;
 	cursor:pointer;
 }
-.switchMapList:hover {
+.aptListModeSwitch:hover {
 	background-image: url("images/template0/aptListIcons-hlight.png");
 	color:#339900;
 }
-.switchMapList_List {
+.aptListMode_list {
+	background-position:0px 0px;
+}
+.aptListMode_map {
 	background-position:0px -60px;
 }
 .vista-pmsite-aptListPage .apartmentListingWrap .listing_mapview {
@@ -284,10 +287,10 @@ a.listingCtlButton {
 	background-image: url("images/template0/aptListIcons-hlight.png");
 	color:#339900 !important;
 }
-#btnShowOnMap {
+.btnShowOnMap {
 	background-position:0px 0px;
 }
-#btnViewDetails {
+.btnViewDetails {
 	background-position:0px -30px;
 }
 .display_none {

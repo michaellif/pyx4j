@@ -5,19 +5,6 @@
 </head>
 <body>
 	<wicket:extend>
-<script language="javascript">
-$(function() {
-	var viewMap = true;
-	$('#switchMapList').click(function() {
-		viewMap = !viewMap;
-		$(this)
-			.toggleClass("switchMapList_List", viewMap)
-			.text(viewMap ? "List View" : "Map View");
-		$('.listing_mapview').toggleClass('display_none', !viewMap);
-		$('.listing_listview').toggleClass('display_none', viewMap);
-	});
-})
-</script>
 	<div class="vista-pmsite-aptListPage">
 		<div class="vista-pmsite-contentWrap">
 			<div class="vista-pmsite-content">
@@ -38,7 +25,7 @@ $(function() {
 						<div class="vista-pmsite-main">
 							<div class="caption2">
 								<h1><wicket:i18n>Found Properties</wicket:i18n></h1>
-								<div id="switchMapList" class="switchMapList switchMapList_List"><wicket:i18n>List View</wicket:i18n></div>
+								<div wicket:id="aptListModeSwitch" id="aptListModeSwitch"/>
 							</div>
 							<div class="apartmentListingWrap">
 								<div wicket:id="aptListPanel" />
@@ -49,6 +36,28 @@ $(function() {
 			</div>
 		</div>
 	</div>
+	<script language="javascript" wicket:id="jsAptListModeInfo"></script>
+	<script language="javascript">
+	$(function() {
+		$('#aptListModeSwitch').click(function() {
+			var curMode = ClientPref.getPref('aptListMode');
+			if (aptListModeInfo == undefined || aptListModeInfo[curMode] == undefined)
+				return;
+			var
+				newMode = aptListModeInfo[curMode].next,
+				curInfo = aptListModeInfo[curMode],
+				newInfo = aptListModeInfo[newMode];
+
+			$(this)
+				.removeClass(curInfo.cls)
+				.addClass(newInfo.cls)
+				.text(newInfo.text);
+			$(curInfo.show).addClass('display_none');
+			$(newInfo.show).removeClass('display_none');
+			ClientPref.setPref('aptListMode', newMode);
+		});
+	})
+	</script>
 	</wicket:extend>
 </body>
 </html>

@@ -1,6 +1,6 @@
 var Cookie = {
 	setCookie: function(name, value, expire) {
-		document.cookie = name + "=" + escape(value) + (expire ? "; expires=" + expire.toGMTString() : "");
+		document.cookie = name + "=" + value + (expire ? "; expires=" + expire.toGMTString() : "");
 	},
 
 	getCookie: function(Name) {
@@ -14,7 +14,7 @@ var Cookie = {
 				// set index of end of cookie value
 				if (end == -1) 
 					end = document.cookie.length;
-				return unescape(document.cookie.substring(start, end));
+				return document.cookie.substring(start, end);
 			} 
 		}
 	}
@@ -54,4 +54,39 @@ function switchSiteStyle() {
 
 function setSiteLocale(locale) {
 	Cookie.setCookie('locale',locale);
+}
+
+var ClientPref = {
+	myCookie: 'pmsitePref',
+	prefMap: null,
+	prefInit: function() {
+		var prefStr = Cookie.getCookie(this.myCookie);
+		if (prefStr.length > 0) {
+			this.prefMap = {};
+			var prefArr = prefStr.split(';');
+			for (var i=0; i < prefArr.length; i++) {
+				var nv = prefArr[i].split(':');
+				if (nv.length > 1)
+					this.prefMap[nv[0]] = nv[1];
+			}
+		}
+	},
+	getPref: function(name) {
+		if (this.prefMap == null)
+			this.prefInit();
+		return this.prefMap[name];
+	},
+	setPref: function(name, value) {
+		if (this.prefMap == null)
+			this.prefInit();
+		this.prefMap[name] = value;
+		// save pref in the cookie
+		var prefStr = '';
+		for (var name in this.prefMap) {
+			if (prefStr.length > 0)
+				prefStr += ';';
+			prefStr += name + ':' + value;
+		}
+		Cookie.setCookie(this.myCookie, prefStr);
+	}
 }

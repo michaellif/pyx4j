@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -37,6 +38,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
+import com.propertyvista.pmsite.server.model.WicketUtils.AttributeClassModifier;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaInputPanel;
 import com.propertyvista.pmsite.server.panels.AptListPanel;
@@ -48,6 +50,15 @@ public class AptListPage extends BasePage {
     private static final long serialVersionUID = 1L;
 
     private static final I18n i18n = I18n.get(AptListPage.class);
+
+    public enum ViewMode {
+        map, list;
+
+        @Override
+        public String toString() {
+            return i18n.tr(this == map ? "List View" : "Map View");
+        }
+    }
 
     public AptListPage(PageParameters params) {
         super(params);
@@ -90,7 +101,31 @@ public class AptListPage extends BasePage {
 
         add(form);
 
-        add(new AptListPanel("aptListPanel", new CompoundPropertyModel<List<Building>>(PMSiteContentManager.getPropertyList(criteria))));
+        // check view mode - Map/List
+        if (PMSiteContentManager.getClientPref("aptListMode") == null) {
+            PMSiteContentManager.setClientPref("aptListMode", ViewMode.map.name());
+        }
+        ViewMode viewMode = ViewMode.map;
+        try {
+            viewMode = ViewMode.valueOf(PMSiteContentManager.getClientPref("aptListMode"));
+        } catch (Exception ignore) {
+            // do nothing
+        }
+        add(new Label("aptListModeSwitch", viewMode.toString()).add(new AttributeClassModifier(null, "aptListMode_" + viewMode.name())));
+        add(new AptListPanel("aptListPanel", new CompoundPropertyModel<List<Building>>(PMSiteContentManager.getPropertyList(criteria)), viewMode));
+        String jsAptListModeInfo = "\n" + "var aptListModeInfo = {";
+        for (ViewMode mode : ViewMode.values()) {
+            int nextId = (mode.ordinal() + 1) % ViewMode.values().length;
+            ViewMode nextMode = ViewMode.values()[nextId];
+            jsAptListModeInfo += "\n" + mode.name() + ": {text: '" + mode.toString() + "', cls: 'aptListMode_" + mode.name() + "', show: '.listing_"
+                    + mode.name() + "view', next: '" + nextMode.name() + "'}";
+            if (nextId > 0) {
+                jsAptListModeInfo += ",";
+            }
+        }
+        jsAptListModeInfo += "\n}\n";
+        add(new Label("jsAptListModeInfo", jsAptListModeInfo).setEscapeModelStrings(false));
+
     }
 
     @Override

@@ -36,17 +36,17 @@ import com.propertyvista.pmsite.server.model.WicketUtils.AttributeClassModifier;
 import com.propertyvista.pmsite.server.model.WicketUtils.JSActionLink;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
+import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class AptListPanel extends Panel {
     private static final long serialVersionUID = 1L;
 
-    public AptListPanel(String id, CompoundPropertyModel<List<Building>> model) {
+    public AptListPanel(String id, CompoundPropertyModel<List<Building>> model, AptListPage.ViewMode viewMode) {
         super(id, model);
 
-        add(new GwtInclude("gwtInclude"));
+        GwtInclude aptMap = new GwtInclude("gwtInclude");
         WebMarkupContainer aptList = new WebMarkupContainer("aptResultList");
-        add(aptList.add(new AttributeClassModifier(null, "display_none")));
         aptList.add(new ListView<Building>("aptListItem", model) {
             private static final long serialVersionUID = 1L;
 
@@ -110,5 +110,13 @@ public class AptListPanel extends Panel {
                 });
             }
         });
+
+        if (viewMode == AptListPage.ViewMode.map) {
+            aptList.add(new AttributeClassModifier(null, "display_none"));
+        } else {
+            aptMap.add(new AttributeClassModifier(null, "display_none"));
+        }
+        add(aptMap);
+        add(aptList);
     }
 }

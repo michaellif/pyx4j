@@ -30,8 +30,10 @@ public class FindAptPage extends BasePage {
         super();
         setVersioned(false);
 
-        add(new AdvancedSearchCriteriaPanel());
+        // set aptlist view mode preference to Map
+        PMSiteContentManager.setClientPref("aptListMode", AptListPage.ViewMode.map.name());
 
+        add(new AdvancedSearchCriteriaPanel());
     }
 
     @Override

@@ -34,6 +34,9 @@ public class LandingPage extends BasePage {
         setStatelessHint(true);
         setVersioned(false);
 
+        // set aptlist view mode preference to Map
+        PMSiteContentManager.setClientPref("aptListMode", AptListPage.ViewMode.map.name());
+
         add(new QuickSearchCriteriaPanel());
         add(new NewsPanel("newsPanel"));
         add(new PromoPanel("promoPanel"));

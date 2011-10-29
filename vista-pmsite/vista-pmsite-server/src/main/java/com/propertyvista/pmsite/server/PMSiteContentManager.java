@@ -84,8 +84,6 @@ public class PMSiteContentManager implements Serializable {
     private static class PMSiteContent {
         private static SiteDescriptor site;
 
-        private static Integer styleId = null;
-
         private static List<News> news;
 
         private static List<Testimonial> testimonials;
@@ -96,7 +94,7 @@ public class PMSiteContentManager implements Serializable {
 
         public static int getStyleId() {
             // no caching for style as it is stored on the client
-            styleId = DEFAULT_STYLE_ID;
+            int styleId = DEFAULT_STYLE_ID;
             Cookie pmsiteStyleCookie = null;
             List<Cookie> cookies = ((WebRequest) RequestCycle.get().getRequest()).getCookies();
             if (cookies == null) {
@@ -119,8 +117,7 @@ public class PMSiteContentManager implements Serializable {
         }
 
         public static void setStyleId(int id) {
-            styleId = id;
-            ((WebResponse) RequestCycle.get().getResponse()).addCookie(new Cookie("pmsiteStyle", String.valueOf(styleId)));
+            ((WebResponse) RequestCycle.get().getResponse()).addCookie(new Cookie("pmsiteStyle", String.valueOf(id)));
         }
 
         public static AvailableLocale getLocale() {
@@ -219,6 +216,63 @@ public class PMSiteContentManager implements Serializable {
             return getAllAvailableLocale().get(0);
         }
 
+        public static String getClientPref(final String prefName) {
+            Map<String, String> prefMap = getClientPrefMap();
+            if (prefMap == null || prefMap.size() == 0) {
+                return null;
+            }
+            return prefMap.get(prefName);
+        }
+
+        public static void setClientPref(final String prefName, final String prefValue) {
+            StringBuffer prefStr = new StringBuffer();
+
+            Map<String, String> prefMap = getClientPrefMap();
+            if (prefMap == null || prefMap.size() == 0) {
+                prefStr.append(prefName + ":" + prefValue);
+            } else {
+                // add new value
+                prefMap.put(prefName, prefValue);
+                // build cookie string
+                for (String name : prefMap.keySet()) {
+                    String value = prefMap.get(name);
+                    if (prefStr.length() > 0) {
+                        prefStr.append(";");
+                    }
+                    prefStr.append(name + ":" + value);
+                }
+            }
+            ((WebResponse) RequestCycle.get().getResponse()).addCookie(new Cookie("pmsitePref", prefStr.toString()));
+        }
+
+        private static Map<String, String> getClientPrefMap() {
+            Cookie pmsitePrefCookie = null;
+            List<Cookie> cookies = ((WebRequest) RequestCycle.get().getRequest()).getCookies();
+            if (cookies == null) {
+                return null;
+            }
+            for (Cookie cookie : cookies) {
+                if ("pmsitePref".equals(cookie.getName())) {
+                    pmsitePrefCookie = cookie;
+                    break;
+                }
+            }
+            Map<String, String> prefMap = null;
+            if (pmsitePrefCookie != null) {
+                prefMap = new java.util.Hashtable<String, String>();
+                String nvpStr = pmsitePrefCookie.getValue();
+                String[] nvpArr = nvpStr.split(";");
+                for (String nvp : nvpArr) {
+                    String[] nv = nvp.split(":");
+                    try {
+                        prefMap.put(nv[0], nv[1]);
+                    } catch (ArrayIndexOutOfBoundsException ignore) {
+                        // do nothing
+                    }
+                }
+            }
+            return prefMap;
+        }
     }
 
     public static int getSiteStyle() {
@@ -227,6 +281,14 @@ public class PMSiteContentManager implements Serializable {
 
     public static void setSiteStyle(int id) {
         PMSiteContent.setStyleId(id);
+    }
+
+    public static String getClientPref(final String prefName) {
+        return PMSiteContent.getClientPref(prefName);
+    }
+
+    public static void setClientPref(final String prefName, final String prefValue) {
+        PMSiteContent.setClientPref(prefName, prefValue);
     }
 
     public static AvailableLocale getLocale() {
