@@ -15,10 +15,12 @@ package com.propertyvista.common.client.ui.components.login;
 
 import static com.pyx4j.commons.HtmlUtils.h2;
 
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -73,16 +75,23 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
         if (ApplicationMode.isDevelopment()) {
             FlowPanel devMessagePanel = new FlowPanel();
             devMessagePanel.add(new HTML("This application is running in <B>DEVELOPMENT</B> mode."));
-            devMessagePanel.add(new HTML("Press <i>Ctrl+Q</i> to login"));
+
+            Anchor touchAnchor = new Anchor("Press 'Ctrl+Q' to login");
+            touchAnchor.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    onDevLogin(event.getNativeEvent(), 'Q');
+                }
+            });
+            touchAnchor.getElement().getStyle().setProperty("textDecoration", "none");
+            devMessagePanel.add(touchAnchor);
             devMessagePanel.getElement().getStyle().setProperty("textAlign", "center");
             devMessagePanel.getElement().getStyle().setMarginBottom(3, Unit.EM);
             main.add(devMessagePanel);
         }
 
         main.add(new LoginPanelWidgetDecorator(inject(proto().email())));
-        main.add(new HTML());
         main.add(new LoginPanelWidgetDecorator(inject(proto().password())));
-        main.add(new HTML());
         main.add(new LoginPanelWidgetDecorator(inject(proto().captcha())));
 
         Button loginButton = new Button(i18n.tr("Login"));
@@ -108,4 +117,8 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
 
         return main;
     }
+
+    protected void onDevLogin(NativeEvent event, int nativeKeyCode) {
+    }
+
 }

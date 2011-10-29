@@ -57,7 +57,12 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
             public void execute() {
                 submit();
             }
-        }, null);
+        }, null) {
+            @Override
+            protected void onDevLogin(NativeEvent event, int nativeKeyCode) {
+                setDevLoginValues(event, nativeKeyCode);
+            }
+        };
 
         form.initContent();
         form.get(form.proto().captcha()).setVisible(false);
@@ -90,6 +95,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
         handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
             @Override
             public void onPreviewNativeEvent(NativePreviewEvent event) {
+
                 if ((ApplicationMode.isDevelopment()) && (event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey())) {
                     setDevLoginValues(event.getNativeEvent(), event.getNativeEvent().getKeyCode());
                 }

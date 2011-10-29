@@ -63,7 +63,12 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
             public void execute() {
                 presenter.gotoRetrievePassword();
             }
-        });
+        }) {
+            @Override
+            protected void onDevLogin(NativeEvent event, int nativeKeyCode) {
+                setDevLoginValues(event, nativeKeyCode);
+            }
+        };
         form.initContent();
         form.get(form.proto().captcha()).setVisible(false);
         form.populate(null);
