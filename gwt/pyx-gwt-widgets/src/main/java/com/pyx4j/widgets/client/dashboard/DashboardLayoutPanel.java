@@ -20,6 +20,7 @@
  */
 package com.pyx4j.widgets.client.dashboard;
 
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Vector;
 
@@ -28,7 +29,6 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 
 class DashboardLayoutPanel extends FlowPanel implements BoardEvent {
 
@@ -230,13 +230,44 @@ class DashboardLayoutPanel extends FlowPanel implements BoardEvent {
     // Iteration stuff:
     private class GadgetIterator implements IGadgetIterator {
 
-        private int col = 0;
+        private int current = -1;
 
-        private int row = -1;
+        private class IteratorData {
+
+            IGadget gadget;
+
+            int col;
+
+            int row;
+
+            public IteratorData(IGadget gadget, int col, int row) {
+                super();
+                this.gadget = gadget;
+                this.col = col;
+                this.row = row;
+            }
+        }
+
+        private final ArrayList<IteratorData> iteratorDataList = new ArrayList<IteratorData>();
+
+        // constructor-initializer:
+
+        public GadgetIterator() {
+            for (int i = 0; i < getColumnsCount(); ++i) {
+                for (int j = 0; j < getColumnPanel(i).getWidgetCount(); ++j) {
+                    Widget w = getColumnPanel(i).getWidget(j);
+                    if (w instanceof GadgetHolder) {
+                        iteratorDataList.add(new IteratorData(((GadgetHolder) w).getGadget(), i, j));
+                    }
+                }
+            }
+        }
+
+        // iteration stuff:
 
         @Override
         public boolean hasNext() {
-            return ((col + 1) < getColumnsCount() || (row + 1) < getColumnPanel(col).getWidgetCount());
+            return ((current + 1) < iteratorDataList.size());
         }
 
         @Override
@@ -245,24 +276,18 @@ class DashboardLayoutPanel extends FlowPanel implements BoardEvent {
                 throw new NoSuchElementException();
             }
 
-            if ((row + 1) < getColumnPanel(col).getWidgetCount()) {
-                return ((GadgetHolder) getColumnPanel(col).getWidget(++row)).getGadget(); // current column...
-            } else {
-                return ((GadgetHolder) getColumnPanel(++col).getWidget(row = 0)).getGadget(); // next column...
-            }
+            return iteratorDataList.get(++current).gadget;
         }
 
         @Override
         public void remove() {
-            if (!checkIndexes(col, row, false)) {
-                throw new NoSuchElementException();
-            }
-            removeGadget(col, row--);
+            removeGadget(iteratorDataList.get(current).col, iteratorDataList.get(current).row);
+            iteratorDataList.remove(current--);
         }
 
         @Override
         public int getColumn() {
-            return col;
+            return iteratorDataList.get(current).col;
         }
     }
 
