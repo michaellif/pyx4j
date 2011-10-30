@@ -202,6 +202,9 @@
 	line-height: 40px;
 	color: ${object2_10};
 }
+.infobox_header_title:lang(fr) {
+	font-size: 18px;
+}
 
 .promoBox {
 	height:280px;

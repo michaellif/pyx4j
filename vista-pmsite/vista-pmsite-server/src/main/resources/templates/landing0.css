@@ -114,11 +114,14 @@
 }
 .infobox_header_title {
 	font-size: 22px;
-	line-height: 40px;
+	line-height: 60px;
+	white-space: nowrap;
 }
-
-
+.infobox_header_title:lang(fr) {
+	font-size: 18px;
+}
 .promoBox {
+	height:240px;
 	padding:20px 10px 0;
 	float:left;
 	overflow:hidden;

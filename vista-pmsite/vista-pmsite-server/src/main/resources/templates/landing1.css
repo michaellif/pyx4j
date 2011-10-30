@@ -179,17 +179,20 @@
 	line-height: 40px;
 }
 
+.infobox_header_title:lang(fr) {
+	font-size: 18px;
+}
 
 .promoBox {
-	height:240px;
-	padding:20px 10px;
+	height:180px;
+	padding:20px 10px 0;
 	float:left;
 	overflow:hidden;
 }
 
 .promoBox .infobox_content {
 	width:140px;
-	height:200px;
+	height:150px;
 	float:left;
 	margin-left:20px;
 }

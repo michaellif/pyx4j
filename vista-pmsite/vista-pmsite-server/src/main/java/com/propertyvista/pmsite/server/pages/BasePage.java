@@ -18,9 +18,11 @@ import java.util.List;
 
 import js.JSResources;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -43,6 +45,16 @@ public abstract class BasePage extends WebPage {
 
     private static final long serialVersionUID = 1L;
 
+    public static class LocalizedHtmlTag extends TransparentWebMarkupContainer {
+        private static final long serialVersionUID = 1L;
+
+        public LocalizedHtmlTag(String id) {
+            super(id);
+            String lang = PMSiteContentManager.getLocale().lang().getValue().name();
+            add(AttributeModifier.replace("lang", lang));
+        }
+    }
+
     public BasePage() {
         this(null);
 
@@ -50,7 +62,7 @@ public abstract class BasePage extends WebPage {
 
     public BasePage(PageParameters parameters) {
         super(parameters);
-
+        add(new LocalizedHtmlTag("localizedHtml"));
         add(new JSActionLink("switchStyle", "switchSiteStyle()", true));
         add(new HeaderPanel());
         add(new FooterPanel());

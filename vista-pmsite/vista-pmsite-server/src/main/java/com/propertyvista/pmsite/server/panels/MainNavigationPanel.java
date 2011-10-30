@@ -14,7 +14,6 @@
 package com.propertyvista.pmsite.server.panels;
 
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -48,16 +47,7 @@ public class MainNavigationPanel extends Panel {
             protected void populateItem(ListItem<NavigationItem> item) {
                 NavigationItem navItem = item.getModelObject();
                 BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("destination", navItem.getDestination(), navItem.getPageParameters());
-                link.add(new Label("caption", PMSiteContentManager.getCaption(navItem.getPageDescriptor(), PMSiteContentManager.getLocale())) {
-
-                    private static final long serialVersionUID = 1L;
-
-                    @Override
-                    protected void onComponentTag(final ComponentTag tag) {
-                        super.onComponentTag(tag);
-                        tag.put("lang", PMSiteContentManager.getLocale().lang().getValue().name());
-                    }
-                });
+                link.add(new Label("caption", PMSiteContentManager.getCaption(navItem.getPageDescriptor(), PMSiteContentManager.getLocale())));
                 item.add(link);
 
                 boolean active = false;
