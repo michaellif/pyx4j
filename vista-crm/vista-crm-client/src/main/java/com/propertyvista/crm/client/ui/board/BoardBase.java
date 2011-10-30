@@ -134,7 +134,6 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
                 if (gadget != null) {
                     gadget.setPresenter(presenter);
                     board.addGadget(gadget, gmd.column().getValue());
-                    gadget.start(); // allow gadget execution... 
                 }
             }
         }
@@ -147,6 +146,11 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
             public void execute() {
                 filling = false; // ok, filled already..
                 btnSave.setEnabled(false);
+
+                IGadgetIterator it = board.getGadgetIterator();
+                while (it.hasNext()) {
+                    it.next().start(); // allow gadget execution... 
+                }
             }
         });
     }

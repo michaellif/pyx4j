@@ -117,7 +117,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
 
     private void setDashboardFiltering(IBuildingGadget.FilterData filterData) {
         IGadgetIterator it = board.getBoard().getGadgetIterator();
-        if (it.hasNext()) {
+        while (it.hasNext()) {
             IGadget gadget = it.next();
             if (gadget instanceof IBuildingGadget) {
                 ((IBuildingGadget) gadget).setFiltering(filterData);

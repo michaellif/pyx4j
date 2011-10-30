@@ -45,7 +45,7 @@ public class DashboardGenerator extends Dashboards {
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         gmd.type().setValue(GadgetType.BuildingLister);
-        gmd.name().setValue("Building lister");
+        gmd.name().setValue(GadgetType.BuildingLister.toString());
         gmd.column().setValue(0);
 
         dmd.gadgets().add(gmd);
@@ -53,7 +53,7 @@ public class DashboardGenerator extends Dashboards {
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         gmd.type().setValue(GadgetType.BarChartDisplay);
-        gmd.name().setValue("Bar Chart Demo");
+        gmd.name().setValue(GadgetType.BarChartDisplay.toString() + " Demo");
         gmd.column().setValue(0);
 
         dmd.gadgets().add(gmd);
@@ -61,7 +61,7 @@ public class DashboardGenerator extends Dashboards {
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         gmd.type().setValue(GadgetType.LineChartDisplay);
-        gmd.name().setValue("Line Chart Demo");
+        gmd.name().setValue(GadgetType.LineChartDisplay.toString() + " Demo");
         gmd.column().setValue(0);
 
         dmd.gadgets().add(gmd);
@@ -93,7 +93,7 @@ public class DashboardGenerator extends Dashboards {
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         gmd.type().setValue(GadgetType.BarChartDisplay);
-        gmd.name().setValue("Bar Chart Demo");
+        gmd.name().setValue(GadgetType.BarChartDisplay.toString() + " Demo");
         gmd.column().setValue(0);
 
         dmd.gadgets().add(gmd);
@@ -101,7 +101,7 @@ public class DashboardGenerator extends Dashboards {
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         gmd.type().setValue(GadgetType.LineChartDisplay);
-        gmd.name().setValue("Line Chart Demo");
+        gmd.name().setValue(GadgetType.LineChartDisplay.toString() + " Demo");
         gmd.column().setValue(0);
 
         dmd.gadgets().add(gmd);
@@ -109,7 +109,7 @@ public class DashboardGenerator extends Dashboards {
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         gmd.type().setValue(GadgetType.PieChartDisplay);
-        gmd.name().setValue("Pie Chart Demo");
+        gmd.name().setValue(GadgetType.PieChartDisplay.toString() + " Demo");
         gmd.column().setValue(1);
 
         dmd.gadgets().add(gmd);
@@ -117,7 +117,7 @@ public class DashboardGenerator extends Dashboards {
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         gmd.type().setValue(GadgetType.GaugeDisplay);
-        gmd.name().setValue("Gauge Demo");
+        gmd.name().setValue(GadgetType.GaugeDisplay.toString() + " Demo");
         gmd.column().setValue(1);
 
         dmd.gadgets().add(gmd);
@@ -138,15 +138,15 @@ public class DashboardGenerator extends Dashboards {
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         gmd.type().setValue(GadgetType.UnitVacancyReport);
-        gmd.name().setValue(GadgetType.UnitVacancyReport.toString() + "Demo");
-        gmd.column().setValue(0);
+        gmd.name().setValue(GadgetType.UnitVacancyReport.toString() + " Demo");
+        gmd.column().setValue(1);
 
         dmd.gadgets().add(gmd);
 
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         gmd.type().setValue(GadgetType.VacancySummary);
-        gmd.name().setValue(GadgetType.VacancySummary.toString() + "Demo");
+        gmd.name().setValue(GadgetType.VacancySummary.toString() + " Demo");
         gmd.column().setValue(0);
 
         dmd.gadgets().add(gmd);
@@ -154,7 +154,7 @@ public class DashboardGenerator extends Dashboards {
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         gmd.type().setValue(GadgetType.VacancyTurnoverAnalysis);
-        gmd.name().setValue(GadgetType.VacancyTurnoverAnalysis.toString() + "Demo");
+        gmd.name().setValue(GadgetType.VacancyTurnoverAnalysis.toString() + " Demo");
         gmd.column().setValue(0);
 
         dmd.gadgets().add(gmd);

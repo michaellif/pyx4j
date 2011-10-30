@@ -183,7 +183,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
         // notify gadgets:
         IGadgetIterator it = dashboardView.getBoard().getGadgetIterator();
-        if (it.hasNext()) {
+        while (it.hasNext()) {
             IGadget gadget = it.next();
             if (gadget instanceof IBuildingGadget) {
                 ((IBuildingGadget) gadget).setFiltering(filterData);

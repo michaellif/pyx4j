@@ -13,11 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.vacancyreport;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pyx4j.commons.Key;
-
 import com.propertyvista.crm.client.ui.gadgets.GadgetBase;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
@@ -28,21 +23,6 @@ public abstract class VacancyGadgetBase extends GadgetBase implements IBuildingG
 
     public VacancyGadgetBase(GadgetMetadata gmd) {
         super(gmd);
-    }
-
-    @Override
-    public void setBuilding(Key id) {
-        // Just fake function.
-        List<Key> s = new ArrayList<Key>();
-        s.add(id);
-        setBuildings(s);
-    }
-
-    @Override
-    public void setBuildings(List<Key> ids) {
-        // Also fake function! not to be used
-        FilterData filter = new FilterData();
-        setFiltering(filter);
     }
 
     @Override

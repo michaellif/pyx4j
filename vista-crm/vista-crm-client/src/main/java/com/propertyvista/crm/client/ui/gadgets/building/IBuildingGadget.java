@@ -21,12 +21,6 @@ import com.pyx4j.commons.Key;
 
 public interface IBuildingGadget {
 
-    @Deprecated
-    void setBuilding(Key id);
-
-    @Deprecated
-    void setBuildings(List<Key> ids);
-
     void setFiltering(FilterData filterData);
 
     class FilterData {
@@ -44,6 +38,8 @@ public interface IBuildingGadget {
          * Use all current/future records if null.
          */
         public Date toDate = null;
+
+        // Construction:
 
         public FilterData() {
         }
