@@ -50,29 +50,31 @@ public class VacancySummaryGadget extends VacancyGadgetBase {
 
             @Override
             public IsWidget createContent() {
+                final double COMPONENT_WIDTH = 7d;
+                final double LABEL_WIDTH = 10d;
                 int row = -1;
 
                 FormFlexPanel main = new FormFlexPanel();
 
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total())).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().netExposure())).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total()), COMPONENT_WIDTH, LABEL_WIDTH).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().netExposure()), COMPONENT_WIDTH, LABEL_WIDTH).build());
 
                 main.setWidget(++row, 0, new VistaLineSeparator());
                 main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().vacancyAbsolute())).build());
-                main.setWidget(row, 1, new DecoratorBuilder(inject(proto().noticeAbsolute())).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().vacancyAbsolute()), COMPONENT_WIDTH, LABEL_WIDTH).build());
+                main.setWidget(row, 1, new DecoratorBuilder(inject(proto().noticeAbsolute()), COMPONENT_WIDTH, LABEL_WIDTH).build());
 
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().vacancyRelative())).build());
-                main.setWidget(row, 1, new DecoratorBuilder(inject(proto().noticeRelative())).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().vacantRented())).build());
-                main.setWidget(row, 1, new DecoratorBuilder(inject(proto().noticeRented())).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().vacancyRelative()), COMPONENT_WIDTH, LABEL_WIDTH).build());
+                main.setWidget(row, 1, new DecoratorBuilder(inject(proto().noticeRelative()), COMPONENT_WIDTH, LABEL_WIDTH).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().vacantRented()), COMPONENT_WIDTH, LABEL_WIDTH).build());
+                main.setWidget(row, 1, new DecoratorBuilder(inject(proto().noticeRented()), COMPONENT_WIDTH, LABEL_WIDTH).build());
 
                 main.setWidget(++row, 0, new VistaLineSeparator());
                 main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupancyAbsolute())).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupancyRelative())).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupancyAbsolute()), COMPONENT_WIDTH, LABEL_WIDTH).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupancyRelative()), COMPONENT_WIDTH, LABEL_WIDTH).build());
 
                 main.getColumnFormatter().setWidth(0, "50%");
                 main.getColumnFormatter().setWidth(1, "50%");
