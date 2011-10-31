@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
@@ -94,12 +95,16 @@ class ServiceItemFolder extends VistaTableFolder<ServiceItem> {
 
             CComponent<?> comp;
             if (column.getObject() == proto().element()) {
-                if (parent.isEditable()) {
-                    comp = inject(column.getObject(), new CEntityComboBox(buildingElementClass));
-                    CEntityComboBox<BuildingElement> combo = (CEntityComboBox) comp;
-                    combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), parent.getValue().catalog().belongsTo().detach()));
+                if (buildingElementClass != null) {
+                    if (parent.isEditable()) {
+                        comp = inject(column.getObject(), new CEntityComboBox(buildingElementClass));
+                        CEntityComboBox<BuildingElement> combo = (CEntityComboBox) comp;
+                        combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), parent.getValue().catalog().belongsTo().detach()));
+                    } else {
+                        comp = inject(column.getObject(), new CEntityCrudHyperlink<BuildingElement>(MainActivityMapper.getCrudAppPlace(buildingElementClass)));
+                    }
                 } else {
-                    comp = inject(column.getObject(), new CEntityCrudHyperlink<BuildingElement>(MainActivityMapper.getCrudAppPlace(buildingElementClass)));
+                    comp = new CLabel(""); // there is no building element for this item!
                 }
             } else {
                 comp = super.createCell(column);

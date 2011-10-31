@@ -113,15 +113,12 @@ public class ServiceCatalogGenerator {
 
         item.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
-        ServiceItem sitem = createServiceItem(type);
-        if (sitem != null) {
-            item.items().add(sitem);
-        }
+        item.items().addAll(createServiceItems(type));
 
         return item;
     }
 
-    private ServiceItem createServiceItem(Service.Type type) {
+    private List<ServiceItem> createServiceItems(Service.Type type) {
 
         List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
         for (ServiceItemType itemType : getServiceItemTypes()) {
@@ -130,20 +127,43 @@ public class ServiceCatalogGenerator {
             }
         }
 
-        ServiceItem item = null;
-        if (allowedItemTypes.size() > 0) {
-            ServiceItemType selectedItem = RandomUtil.random(allowedItemTypes);
-
-            item = EntityFactory.create(ServiceItem.class);
-            item.type().set(selectedItem);
-            item.type().name().setValue(selectedItem.getStringView());
-            item.type().serviceType().setValue(selectedItem.serviceType().getValue());
-
-            item.price().setValue(500d + RandomUtil.randomInt(500));
-            item.description().setValue(type.toString() + " description here...");
+        int count = 0;
+        switch (type) {
+        case residentialUnit:
+            count = 20;
+            break;
+        case residentialShortTermUnit:
+            count = 10;
+            break;
+        case commercialUnit:
+            count = 5;
+            break;
+        case roof:
+        case garage:
+        case storage:
+        case sundry:
+            count = 1;
+            break;
         }
 
-        return item;
+        List<ServiceItem> items = new ArrayList<ServiceItem>(count);
+        if (!allowedItemTypes.isEmpty()) {
+            for (int i = 0; i < count; ++i) {
+                ServiceItem item = EntityFactory.create(ServiceItem.class);
+                ServiceItemType selectedItem = RandomUtil.random(allowedItemTypes);
+
+                item.type().set(selectedItem);
+                item.type().name().setValue(selectedItem.getStringView());
+                item.type().serviceType().setValue(selectedItem.serviceType().getValue());
+
+                item.price().setValue(500d + RandomUtil.randomInt(500));
+                item.description().setValue(type.toString() + " description here...");
+
+                items.add(item);
+            }
+        }
+
+        return items;
     }
 
     private Feature createFeature(ServiceCatalog catalog, Feature.Type type) {
@@ -175,17 +195,19 @@ public class ServiceCatalogGenerator {
 
         int count = Math.min(3, allowedItemTypes.size());
         List<ServiceItem> items = new ArrayList<ServiceItem>(count);
-        for (int i = 0; i < count; ++i) {
-            ServiceItem item = EntityFactory.create(ServiceItem.class);
+        if (!allowedItemTypes.isEmpty()) {
+            for (int i = 0; i < count; ++i) {
+                ServiceItem item = EntityFactory.create(ServiceItem.class);
 
-            item.type().set(RandomUtil.random(allowedItemTypes));
-            item.type().name().setValue(item.type().getStringView());
-            item.type().featureType().setValue(item.type().featureType().getValue());
+                item.type().set(RandomUtil.random(allowedItemTypes));
+                item.type().name().setValue(item.type().getStringView());
+                item.type().featureType().setValue(item.type().featureType().getValue());
 
-            item.price().setValue(100d + RandomUtil.randomInt(100));
-            item.description().setValue(type.toString() + " description here...");
+                item.price().setValue(100d + RandomUtil.randomInt(100));
+                item.description().setValue(type.toString() + " description here...");
 
-            items.add(item);
+                items.add(item);
+            }
         }
 
         return items;
@@ -231,9 +253,11 @@ public class ServiceCatalogGenerator {
         }
 
         List<ServiceItemType> items = new ArrayList<ServiceItemType>();
-        int maxItems = DataGenerator.randomInt(allowedItemTypes.size());
-        for (int i = 0; i < maxItems; ++i) {
-            items.add(DataGenerator.random(allowedItemTypes));
+        if (!allowedItemTypes.isEmpty()) {
+            int maxItems = DataGenerator.randomInt(allowedItemTypes.size());
+            for (int i = 0; i < maxItems; ++i) {
+                items.add(DataGenerator.random(allowedItemTypes));
+            }
         }
 
         return items;

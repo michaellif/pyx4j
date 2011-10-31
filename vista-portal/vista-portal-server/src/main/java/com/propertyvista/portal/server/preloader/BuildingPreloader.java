@@ -39,7 +39,9 @@ import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.marketing.yield.Amenity;
@@ -279,6 +281,57 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
                     Persistence.service().persist(detail);
                 }
             }
+
+            // fill Service Catalog with building elements:
+
+            EntityQueryCriteria<AptUnit> buildingUnitsCriteria = EntityQueryCriteria.create(AptUnit.class);
+            buildingUnitsCriteria.add(PropertyCriterion.eq(buildingUnitsCriteria.proto().belongsTo(), building));
+            List<AptUnit> buildingUnits = Persistence.service().query(buildingUnitsCriteria);
+
+            EntityQueryCriteria<Parking> buildingParkingsCriteria = EntityQueryCriteria.create(Parking.class);
+            buildingParkingsCriteria.add(PropertyCriterion.eq(buildingParkingsCriteria.proto().belongsTo(), building));
+            List<Parking> buildingParkings = Persistence.service().query(buildingParkingsCriteria);
+
+            EntityQueryCriteria<LockerArea> buildingLockerCriteria = EntityQueryCriteria.create(LockerArea.class);
+            buildingLockerCriteria.add(PropertyCriterion.eq(buildingLockerCriteria.proto().belongsTo(), building));
+            List<LockerArea> buildingockers = Persistence.service().query(buildingLockerCriteria);
+
+            EntityQueryCriteria<Roof> buildingRoofsCriteria = EntityQueryCriteria.create(Roof.class);
+            buildingRoofsCriteria.add(PropertyCriterion.eq(buildingRoofsCriteria.proto().belongsTo(), building));
+            List<Roof> buildingRoofs = Persistence.service().query(buildingRoofsCriteria);
+
+            for (Service service : catalog.services()) {
+                switch (service.type().getValue()) {
+                case residentialUnit:
+                case residentialShortTermUnit:
+                case commercialUnit:
+                    for (ServiceItem item : service.items()) {
+                        item.element().set(RandomUtil.random(buildingUnits));
+                        Persistence.service().persist(item);
+                    }
+                    break;
+                case garage:
+                    for (ServiceItem item : service.items()) {
+                        item.element().set(RandomUtil.random(buildingParkings));
+                        Persistence.service().persist(item);
+                    }
+                    break;
+                case storage:
+                    for (ServiceItem item : service.items()) {
+                        item.element().set(RandomUtil.random(buildingockers));
+                        Persistence.service().persist(item);
+                    }
+                    break;
+                case roof:
+                    for (ServiceItem item : service.items()) {
+                        item.element().set(RandomUtil.random(buildingRoofs));
+                        Persistence.service().persist(item);
+                    }
+                    break;
+                }
+            }
+
+            Persistence.service().merge(catalog);
 
             //Do not publish until data is clean-up
             if (true) {
