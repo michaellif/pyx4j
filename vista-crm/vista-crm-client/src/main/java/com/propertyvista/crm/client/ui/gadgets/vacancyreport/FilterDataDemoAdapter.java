@@ -23,7 +23,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitVacancyReportService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.VacancyReportService;
 
 /**
  * This class is for conversion of actual {@link IBuildingGadget.FilterData} to demo mode.
@@ -56,7 +56,7 @@ public class FilterDataDemoAdapter {
             fromDate = new LogicalDate(filterData.fromDate.getTime());
         } else {
             long interval = VacancyTurnoverAnalysisGadget.DEFAULT_TURNOVER_ANALYSIS_RESOLUTION_MAX.addTo(toDate.getTime()) - toDate.getTime();
-            fromDate = new LogicalDate(toDate.getTime() - UnitVacancyReportService.MAX_SUPPORTED_INTERVALS * interval);
+            fromDate = new LogicalDate(toDate.getTime() - VacancyReportService.MAX_SUPPORTED_INTERVALS * interval);
             // round up to the beginning of the year:
             // no need to zero hours and seconds since this is java.sql.Date that doesn't have this information
             fromDate.setMonth(0);

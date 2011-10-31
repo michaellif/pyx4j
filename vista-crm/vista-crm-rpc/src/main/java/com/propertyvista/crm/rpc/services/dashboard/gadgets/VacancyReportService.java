@@ -24,8 +24,8 @@ import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO;
-import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus;
 
 public interface VacancyReportService extends IService {
 
@@ -35,7 +35,8 @@ public interface VacancyReportService extends IService {
     public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, Vector<String> buidlings, LogicalDate fromDate,
             LogicalDate toDate, AnalysisResolution resolution);
 
-    void unitStatusList(AsyncCallback<EntitySearchResult<UnitVacancyStatus>> callback, Vector<String> buildings, LogicalDate from, LogicalDate to,
+    void unitStatusList(AsyncCallback<EntitySearchResult<UnitVacancyStatus>> callback, Vector<String> buildings, boolean displayOccupied,
+            boolean displayVacant, boolean displayNotice, boolean displayRented, boolean displayUnrented, LogicalDate from, LogicalDate to,
             Vector<Sort> sortingCriteria, int pageNumber, int pageSize);
 
     void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, Vector<String> buildings, LogicalDate fromDate, LogicalDate toDate);

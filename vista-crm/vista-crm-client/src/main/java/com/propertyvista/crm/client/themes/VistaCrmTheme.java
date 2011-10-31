@@ -356,6 +356,53 @@ public class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         //
+        // Toggle Button
+        buttonEx = Selector.valueOf("gwt-ToggleButton");
+        style = new Style(buttonEx);
+        style.addProperty("color", ThemeColors.OBJECT_TONE10);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE50);
+        style.addProperty("border-width", "2px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("margin", "0.2em 0.2em");
+        style.addProperty("padding", "0.2em 0.5em");
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
+        buttonEx = Selector.valueOf("gwt-ToggleButton-up");
+        style = new Style(buttonEx);
+        style.addProperty("border-left-color", ThemeColors.OBJECT_TONE10);
+        style.addProperty("border-top-color", ThemeColors.OBJECT_TONE10);
+        style.addProperty("border-right-color", ThemeColors.OBJECT_TONE95);
+        style.addProperty("border-bottom-color", ThemeColors.OBJECT_TONE95);
+        addStyle(style);
+
+        buttonEx = Selector.valueOf("gwt-ToggleButton-up-hovering");
+        style = new Style(buttonEx);
+        style.addProperty("cursor", "hand");
+        style.addProperty("border-left-color", ThemeColors.OBJECT_TONE10);
+        style.addProperty("border-top-color", ThemeColors.OBJECT_TONE10);
+        style.addProperty("border-right-color", ThemeColors.OBJECT_TONE95);
+        style.addProperty("border-bottom-color", ThemeColors.OBJECT_TONE95);
+        addStyle(style);
+
+        buttonEx = Selector.valueOf("gwt-ToggleButton-down");
+        style = new Style(buttonEx);
+        style.addProperty("border-left-color", ThemeColors.OBJECT_TONE95);
+        style.addProperty("border-top-color", ThemeColors.OBJECT_TONE95);
+        style.addProperty("border-right-color", ThemeColors.OBJECT_TONE10);
+        style.addProperty("border-bottom-color", ThemeColors.OBJECT_TONE10);
+        addStyle(style);
+
+        buttonEx = Selector.valueOf("gwt-ToggleButton-down-hovering");
+        style = new Style(buttonEx);
+        style.addProperty("cursor", "hand");
+        style.addProperty("border-left-color", ThemeColors.OBJECT_TONE95);
+        style.addProperty("border-top-color", ThemeColors.OBJECT_TONE95);
+        style.addProperty("border-right-color", ThemeColors.OBJECT_TONE10);
+        style.addProperty("border-bottom-color", ThemeColors.OBJECT_TONE10);
+        addStyle(style);
+
+        //
         // default AnchorButton: 
         buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX);
         style = new Style(buttonEx);

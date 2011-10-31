@@ -32,7 +32,6 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -49,8 +48,8 @@ import com.propertyvista.domain.dashboard.gadgets.CustomComparator;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportEvent;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO;
-import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus.RentReady;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus.VacancyStatus;
@@ -62,7 +61,8 @@ public class VacancyReportServiceImpl implements VacancyReportService {
     private static TransientPropertySortEngine<UnitVacancyStatus> TRANSIENT_PROPERTY_SORT_ENGINE = null;
 
     @Override
-    public void unitStatusList(AsyncCallback<EntitySearchResult<UnitVacancyStatus>> callback, Vector<String> buildings, LogicalDate from, LogicalDate to,
+    public void unitStatusList(AsyncCallback<EntitySearchResult<UnitVacancyStatus>> callback, Vector<String> buildings, boolean displayOccupied,
+            boolean displayVacant, boolean displayNotice, boolean displayRented, boolean displayUnrented, LogicalDate from, LogicalDate to,
             Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
 
         EntitySearchResult<UnitVacancyStatus> units = null;
@@ -73,38 +73,38 @@ public class VacancyReportServiceImpl implements VacancyReportService {
 
         EntityListCriteria<UnitVacancyStatus> criteria = new EntityListCriteria<UnitVacancyStatus>(UnitVacancyStatus.class);
         criteria.setSorts(sortingCriteria);
+
         if (!buildings.isEmpty()) {
             // TODO add protection from SQL injection if in the future buildings are still represented as strings
             criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.IN, buildings));
         }
 
-        if (!transientSortCriteria.isEmpty()) {
-            // here we have to filter and sort all the data 'manually'
-            // really fun and amazing stuff begins
+        final ICursorIterator<UnitVacancyStatus> unfiltered = Persistence.service().query(null, criteria);
 
-            final ICursorIterator<UnitVacancyStatus> unfiltered = Persistence.service().query(null, criteria);
-
-            PriorityQueue<UnitVacancyStatus> queue = new PriorityQueue<UnitVacancyStatus>(100, getTransientPropertySortEngine().getComparator(
-                    transientSortCriteria));
-            try {
-                while (unfiltered.hasNext()) {
-                    UnitVacancyStatus unit = unfiltered.next();
-                    computeTransientFields(unit, from, to);
-                    queue.add(unit);
-                }
-            } finally {
-                unfiltered.completeRetrieval();
+        PriorityQueue<UnitVacancyStatus> queue = new PriorityQueue<UnitVacancyStatus>(100, getTransientPropertySortEngine()
+                .getComparator(transientSortCriteria));
+        try {
+            while (unfiltered.hasNext()) {
+                UnitVacancyStatus unit = unfiltered.next();
+                computeTransientFields(unit, from, to);
+                queue.add(unit);
             }
+        } finally {
+            unfiltered.completeRetrieval();
+        }
 
-            final int totalRows = queue.size();
+        Vector<UnitVacancyStatus> unitsData = new Vector<UnitVacancyStatus>();
 
-            Vector<UnitVacancyStatus> unitsData = new Vector<UnitVacancyStatus>();
-            int currentPage = 0;
-            int currentPagePosition = 0;
-            boolean hasMoreRows = false;
-            while (!queue.isEmpty()) {
-                UnitVacancyStatus unit = queue.poll();
+        int currentPage = 0;
+        int currentPagePosition = 0;
+        int totalRows = 0;
+        boolean hasMoreRows = false;
+
+        while (!queue.isEmpty()) {
+            UnitVacancyStatus unit = queue.poll();
+            if (isAcceptable(unit, displayOccupied, displayVacant, displayNotice, displayRented, displayUnrented)) {
                 ++currentPagePosition;
+                ++totalRows;
                 if (currentPagePosition > pageSize) {
                     ++currentPage;
                     currentPagePosition = 1;
@@ -118,22 +118,33 @@ public class VacancyReportServiceImpl implements VacancyReportService {
                     break;
                 }
             }
-            units = new EntitySearchResult<UnitVacancyStatus>();
-            units.setData(unitsData);
-            units.setTotalRows(totalRows);
-            units.hasMoreData(hasMoreRows);
-            //units.setEncodedCursorReference(?);
-        } else {
-            criteria.setPageSize(pageSize);
-            criteria.setPageNumber(pageNumber);
-            units = EntityLister.secureQuery(criteria);
-
-            for (UnitVacancyStatus unit : units.getData()) {
-                computeTransientFields(unit, from, to);
+        }
+        while (!queue.isEmpty()) {
+            UnitVacancyStatus unit = queue.poll();
+            if (isAcceptable(unit, displayOccupied, displayVacant, displayNotice, displayRented, displayUnrented)) {
+                ++totalRows;
             }
         }
 
+        units = new EntitySearchResult<UnitVacancyStatus>();
+        units.setData(unitsData);
+        units.setTotalRows(totalRows);
+        units.hasMoreData(hasMoreRows);
+        // TODO what is that?
+        //units.setEncodedCursorReference(?);
+
         callback.onSuccess(units);
+    }
+
+    private static boolean isAcceptable(UnitVacancyStatus unit, boolean displayOccupied, boolean displayVacant, boolean displayNotice, boolean displayRented,
+            boolean displayUnrented) {
+
+        VacancyStatus vacancyStatus = unit.vacancyStatus().getValue();
+        RentedStatus rentedStatus = unit.rentedStatus().getValue();
+
+        return (displayOccupied & vacancyStatus == null) //
+                | ((displayVacant & vacancyStatus == VacancyStatus.Vacant) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayUnrented & rentedStatus == RentedStatus.Unrented))) //
+                | ((displayNotice & vacancyStatus == VacancyStatus.Notice) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayUnrented & rentedStatus == RentedStatus.Unrented)));
     }
 
     @Override

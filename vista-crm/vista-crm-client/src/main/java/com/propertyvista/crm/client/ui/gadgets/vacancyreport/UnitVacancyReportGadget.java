@@ -24,8 +24,10 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -57,11 +59,23 @@ public class UnitVacancyReportGadget extends VacancyGadgetBase {
 
     private ListerGadgetBaseSettings settings;
 
-    private Panel panel;
+    private VerticalPanel panel;
 
     private VacancyReportService service;
 
+    private FlexTable controlsPanel;
+
     private boolean isOk = true;
+
+    ToggleButton vacantButton;
+
+    ToggleButton noticeButton;
+
+    ToggleButton occupiedButton;
+
+    ToggleButton rentedButton;
+
+    ToggleButton unrentedButton;
 
     public UnitVacancyReportGadget(GadgetMetadata gmd) {
         super(gmd);
@@ -109,9 +123,41 @@ public class UnitVacancyReportGadget extends VacancyGadgetBase {
         unitListPanel.getDataTable().setAutoColumnsWidth(true);
         unitListPanel.getDataTable().renderTable();
 
+        controlsPanel = new FlexTable();
+
+        ClickHandler filterButtonClickHandler = new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                settings.currentPage().setValue(0);
+                populateUnitStatusList();
+            }
+        };
+        vacantButton = new ToggleButton(i18n.tr("Vacant"), filterButtonClickHandler);
+        noticeButton = new ToggleButton(i18n.tr("Notice"), filterButtonClickHandler);
+        occupiedButton = new ToggleButton(i18n.tr("Occupied"), filterButtonClickHandler);
+        rentedButton = new ToggleButton(i18n.tr("Rented"), filterButtonClickHandler);
+        unrentedButton = new ToggleButton(i18n.tr("Unrented"), filterButtonClickHandler);
+
+        vacantButton.setDown(true);
+        noticeButton.setDown(true);
+        occupiedButton.setDown(true);
+        rentedButton.setDown(true);
+        unrentedButton.setDown(true);
+
+        int col = -1;
+        controlsPanel.setWidget(0, ++col, rentedButton);
+        controlsPanel.setWidget(0, ++col, unrentedButton);
+        controlsPanel.setWidget(0, ++col, new HTML("&nbsp&nbsp&nbsp&nbsp"));
+        controlsPanel.setWidget(0, ++col, occupiedButton);
+        controlsPanel.setWidget(0, ++col, vacantButton);
+        controlsPanel.setWidget(0, ++col, noticeButton);
+
         panel = new VerticalPanel();
+        panel.add(controlsPanel);
         panel.add(unitListPanel);
+        panel.setCellHorizontalAlignment(controlsPanel, VerticalPanel.ALIGN_CENTER);
         panel.setWidth("100%");
+
         service = GWT.create(VacancyReportService.class);
     }
 
@@ -317,8 +363,12 @@ public class UnitVacancyReportGadget extends VacancyGadgetBase {
                 public void onFailure(Throwable caught) {
                     reportError(caught);
                 }
-            }, new Vector<String>(filter.getBuildingsFilteringCriteria()), filter.getFrom(), filter.getTo(), new Vector<Sort>(
-                    getUnitStatusListSortingCriteria()), pageNumber, getPageSize());
+            }, new Vector<String>(filter.getBuildingsFilteringCriteria()), //
+                    occupiedButton.isDown(), vacantButton.isDown(), noticeButton.isDown(), rentedButton.isDown(), unrentedButton.isDown(), filter.getFrom(), //
+                    filter.getTo(), //
+                    new Vector<Sort>(getUnitStatusListSortingCriteria()), //
+                    pageNumber, //
+                    getPageSize());
         }
     }
 

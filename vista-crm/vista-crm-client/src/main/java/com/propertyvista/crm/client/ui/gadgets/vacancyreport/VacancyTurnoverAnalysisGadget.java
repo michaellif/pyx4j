@@ -49,7 +49,6 @@ import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.util.TimeRange;
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.util.Tuple;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitVacancyReportService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.VacancyReportService;
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
@@ -265,7 +264,7 @@ public class VacancyTurnoverAnalysisGadget extends VacancyGadgetBase {
         long toTime = toDate.getTime();
         long interval = resolution.addTo(fromTime) - fromTime;
 
-        return ((toTime - fromTime) / interval) <= UnitVacancyReportService.MAX_SUPPORTED_INTERVALS;
+        return ((toTime - fromTime) / interval) <= VacancyReportService.MAX_SUPPORTED_INTERVALS;
     }
 
     public AnalysisResolution getSelectedResolution() {
