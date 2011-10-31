@@ -33,7 +33,7 @@ public class PortalScreen extends SimplePanel {
     public static String DEFAULT_STYLE_PREFIX = "PortalView";
 
     public static enum StyleSuffix implements IStyleName {
-        Content, Header, Footer, Navig, Center, Main, Left, Right, Display, StaticContent
+        Display, StaticContent
     }
 
     public PortalScreen() {

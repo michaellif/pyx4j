@@ -96,59 +96,6 @@ public class PortalTheme extends VistaTheme {
         style.addProperty("margin", "0 auto");
         addStyle(style);
 
-        String headerstyle = Selector.valueOf(prefix, PortalScreen.StyleSuffix.Header);
-        style = new Style(headerstyle);
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE35);
-        style.addProperty("font-size", "14px");
-        style.addProperty("color", ThemeColors.OBJECT_TONE95);
-        style.addProperty("height", "115px");
-        style.addProperty("display", "table");
-        addStyle(style);
-
-        //TODO  think of a better way
-        style = new Style(headerstyle + " a:link, a:visited, a:active");
-        style.addProperty("text-decoration", "none");
-        style.addProperty("color", ThemeColors.OBJECT_TONE95);
-        addStyle(style);
-
-        style = new Style(headerstyle + " a:hover");
-        style.addProperty("text-decoration", "underline");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Navig));
-        style.addProperty("width", "100%");
-        style.addProperty("height", "9.2em");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Center));
-        style.addProperty("width", "100%");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Main));
-        style.addProperty("height", "100%");
-        style.addProperty("margin", "0 " + rightColumnWidth + "px 0 " + leftColumnWidth + "px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Content));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Left));
-        style.addProperty("float", "left");
-        style.addProperty("width", leftColumnWidth + "px");
-        style.addProperty("margin-left", "-100%");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Right));
-        style.addProperty("float", "left");
-        style.addProperty("width", rightColumnWidth + "px");
-        style.addProperty("margin-left", "-" + rightColumnWidth + "px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Footer));
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE1);
-        style.addProperty("clear", "left");
-        addStyle(style);
-
         style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Display));
         addStyle(style);
 
@@ -220,7 +167,7 @@ public class PortalTheme extends VistaTheme {
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector) + " a:link, a:visited, a:active");
+        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector) + " a:link");
         style.addProperty("color", ThemeColors.OBJECT_TONE10);
         addStyle(style);
 
