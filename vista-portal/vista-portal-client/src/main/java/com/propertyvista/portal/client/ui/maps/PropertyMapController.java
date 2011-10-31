@@ -36,13 +36,15 @@ import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
 
 //http://localhost:8888/vista/portal/aptmap.html?gwt.codesvr=127.0.0.1:9997&city.name=Halifax&city.province.name=Nova+Scotia&searchType=city
 //
-public class PropertyMapController {
+public enum PropertyMapController {
+
+    instance;
 
     private static Logger log = LoggerFactory.getLogger(PropertyMapController.class);
 
     private final PropertiesMapWidget map;
 
-    private static PropertyListDTO allProperties;
+    private PropertyListDTO allProperties;
 
     private final PropertySearchCriteria criteria;
 
@@ -52,7 +54,7 @@ public class PropertyMapController {
 
     private GeoPoint proximityCenter;
 
-    public PropertyMapController() {
+    private PropertyMapController() {
 
         criteria = EntityArgsConverter.createFromArgs(PropertySearchCriteria.class, Window.Location.getParameterMap());
 
@@ -70,11 +72,21 @@ public class PropertyMapController {
         }
 
         map = new PropertiesMapWidget();
+
+        publishJs();
     }
 
-    public PropertiesMapWidget getMap() {
-        return map;
+    public static PropertiesMapWidget getMapWidget() {
+        return instance.map;
     }
+
+    public static void loadMap() {
+        instance.map.loadMap();
+    }
+
+    private native void publishJs() /*-{
+		$wnd.loadMap = @com.propertyvista.portal.client.ui.maps.PropertyMapController::loadMap();
+    }-*/;
 
     private void obtainGeopoint() {
         if (PropertySearchCriteria.SearchType.proximity.equals(criteria.searchType().getValue())) {

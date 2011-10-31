@@ -38,6 +38,10 @@
 	</div>
 	<script language="javascript" wicket:id="jsAptListModeInfo"></script>
 	<script language="javascript">
+	window.onload = function()
+    {
+        loadMap();
+    }
 	$(function() {
 		$('#aptListModeSwitch').click(function() {
 			var curMode = ClientPref.getPref('aptListMode');
@@ -55,6 +59,7 @@
 			$(curInfo.show).addClass('display_none');
 			$(newInfo.show).removeClass('display_none');
 			ClientPref.setPref('aptListMode', newMode);
+			loadMap();
 		});
 	})
 	</script>

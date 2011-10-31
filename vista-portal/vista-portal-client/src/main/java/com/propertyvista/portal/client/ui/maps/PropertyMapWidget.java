@@ -36,9 +36,9 @@ public class PropertyMapWidget extends AbstractMapWidget {
     }
 
     @Override
-    protected void mapsLoaded() {
+    protected void onMapLoaded() {
 
-        super.mapsLoaded();
+        super.onMapLoaded();
 
         if (property != null) {
             populate(property);

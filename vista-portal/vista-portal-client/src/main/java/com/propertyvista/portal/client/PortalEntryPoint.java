@@ -30,7 +30,7 @@ public class PortalEntryPoint implements EntryPoint {
         GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hQNAqXoqeDSmjSd0LqmyIBhhU5npBSrKP1emJkpH44tWO17lL5gHAI_vg");
 
         if (RootPanel.get(APT_MAP_INSERTION_ID) != null) {
-            RootPanel.get(APT_MAP_INSERTION_ID).add(new PropertyMapController().getMap());
+            RootPanel.get(APT_MAP_INSERTION_ID).add(PropertyMapController.getMapWidget());
         } else {
             new PortalSite().onModuleLoad();
         }

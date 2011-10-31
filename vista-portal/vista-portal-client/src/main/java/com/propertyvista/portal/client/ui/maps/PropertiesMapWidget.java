@@ -15,6 +15,9 @@ package com.propertyvista.portal.client.ui.maps;
 
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.geom.LatLngBounds;
 import com.google.gwt.maps.client.overlay.Marker;
@@ -29,6 +32,8 @@ import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 
 public class PropertiesMapWidget extends AbstractMapWidget {
+
+    private static Logger log = LoggerFactory.getLogger(PropertiesMapWidget.class);
 
     public static String PROPERTY_CARD_STYLE_PREFIX = "PropertyCard";
 
@@ -57,10 +62,10 @@ public class PropertiesMapWidget extends AbstractMapWidget {
     }
 
     @Override
-    protected void mapsLoaded() {
+    protected void onMapLoaded() {
         markers.clear();
 
-        super.mapsLoaded();
+        super.onMapLoaded();
 
         if (propertyList != null && !propertyList.properties().isNull()) {
             setBounds(propertyList, callback);

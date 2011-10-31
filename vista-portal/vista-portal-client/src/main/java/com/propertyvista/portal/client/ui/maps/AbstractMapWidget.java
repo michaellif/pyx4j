@@ -13,8 +13,10 @@
  */
 package com.propertyvista.portal.client.ui.maps;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.ajaxloader.client.AjaxLoader;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.control.LargeMapControl;
 import com.google.gwt.maps.client.event.MapMoveEndHandler;
@@ -24,6 +26,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.gwt.geo.GoogleAPI;
 
 public abstract class AbstractMapWidget extends SimplePanel {
+
+    private static Logger log = LoggerFactory.getLogger(PropertiesMapWidget.class);
 
     private MapWidget map;
 
@@ -36,47 +40,27 @@ public abstract class AbstractMapWidget extends SimplePanel {
     AbstractMapWidget(String width, String height) {
         this.width = width;
         this.height = height;
-
         setSize(width, height);
-
-        getElement().getStyle().setMarginBottom(10, Unit.PX);
         GoogleAPI.ensureInitialized();
-
     }
 
-    private void loadMaps() {
-        AjaxLoader.loadApi("maps", "2", new Runnable() {
-            @Override
-            public void run() {
-                mapsLoaded();
-            }
-        }, null);
-    }
-
-    @Override
-    protected void onLoad() {
-        super.onLoad();
-        if (isVisible() && !mapLoadComplete) {
-            loadMaps();
+    public void loadMap() {
+        log.info("loadMap() called, mapLoadComplete=" + mapLoadComplete);
+        if (!mapLoadComplete) {
+            AjaxLoader.loadApi("maps", "2", new Runnable() {
+                @Override
+                public void run() {
+                    mapLoadComplete = true;
+                    onMapLoaded();
+                }
+            }, null);
+        } else {
+            onMapLoaded();
         }
     }
 
-    @Override
-    protected void onUnload() {
-        super.onUnload();
-        setWidget(null);
-        mapLoadComplete = false;
-    }
-
-    @Override
-    public void setVisible(boolean visible) {
-        super.setVisible(visible);
-        if (isAttached() && !mapLoadComplete) {
-            loadMaps();
-        }
-    }
-
-    protected void mapsLoaded() {
+    protected void onMapLoaded() {
+        log.info("call onMapLoaded()");
 
         LatLng pos = LatLng.newInstance(43.7571145, -79.5082499);
 
@@ -89,10 +73,7 @@ public abstract class AbstractMapWidget extends SimplePanel {
         //map.setStyleName();
 
         map.addControl(new LargeMapControl());
-
         setWidget(map);
-
-        mapLoadComplete = true;
 
     }
 
