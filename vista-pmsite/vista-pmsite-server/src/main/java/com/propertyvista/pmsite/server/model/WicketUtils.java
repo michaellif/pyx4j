@@ -173,9 +173,8 @@ public class WicketUtils {
     }
 
     /*
-     * ActionLink is a version of a StatelessLink that is intended for doing something
-     * (an Action) on the server with sub-sequential redirect to a specific page.
-     * A subclass must implement the doAction() method to be useful.
+     * ActionLink is a version of a StatelessLink that is intended for running
+     * a javascript action on the client with sub-sequential page reload.
      */
     public static class JSActionLink extends StatelessLink<Void> {
         private static final long serialVersionUID = 1L;

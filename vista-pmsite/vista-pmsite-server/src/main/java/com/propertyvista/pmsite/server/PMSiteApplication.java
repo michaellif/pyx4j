@@ -14,6 +14,7 @@
 package com.propertyvista.pmsite.server;
 
 import org.apache.wicket.IRequestCycleProvider;
+import org.apache.wicket.Page;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
@@ -21,12 +22,16 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.PageProvider;
 import org.apache.wicket.request.handler.RenderPageRequestHandler;
+import org.apache.wicket.request.mapper.MountedMapper;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
 import org.apache.wicket.util.time.Duration;
 
@@ -46,6 +51,29 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
     private Exception internalError;
 
+    private final String[] persistParams = { "gwt.codesvr" };
+
+    private <T extends Page> void customMount(final String path, Class<T> pageClass) {
+        mount(new MountedMapper(path, pageClass) {
+            @Override
+            protected Url buildUrl(UrlInfo info) {
+                PageParameters newParams = info.getPageParameters();
+                IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
+                for (String pName : persistParams) {
+                    org.apache.wicket.util.string.StringValue pValue = params.getParameterValue(pName);
+                    if (pValue != null && !pValue.isNull()) {
+                        if (newParams == null) {
+                            newParams = new PageParameters();
+                        }
+                        newParams.add(pName, pValue);
+                    }
+                }
+                info = new UrlInfo(info.getPageComponentInfo(), info.getPageClass(), newParams);
+                return super.buildUrl(info);
+            }
+        });
+    }
+
     @Override
     protected void init() {
 
@@ -58,20 +86,20 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         getPageSettings().addComponentResolver(new I18nMessageResolver());
 //        getMarkupSettings().setStripWicketTags(true);
 
-        mountPage("signin", SignInPage.class);
+        customMount("signin", SignInPage.class);
 
-        mountPage("findapt", FindAptPage.class);
+        customMount("findapt", FindAptPage.class);
 
-        mountPage("aptlist", AptListPage.class);
+        customMount("aptlist", AptListPage.class);
 
-        mountPage("aptinfo", AptDetailsPage.class);
-        mountPage("unitinfo", UnitDetailsPage.class);
+        customMount("aptinfo", AptDetailsPage.class);
+        customMount("unitinfo", UnitDetailsPage.class);
 
-        mountPage("residents", ResidentsPage.class);
+        customMount("residents", ResidentsPage.class);
 
-        mountPage("cnt" + PMSiteContentManager.PARAMETER_PATH, StaticPage.class);
+        customMount("cnt" + PMSiteContentManager.PARAMETER_PATH, StaticPage.class);
 
-        mountPage("error", InternalErrorPage.class);
+        customMount("error", InternalErrorPage.class);
 
         // set exception listener to provide custom error handling
         getRequestCycleListeners().add(new AbstractRequestCycleListener() {

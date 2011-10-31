@@ -165,6 +165,14 @@ public class PMSiteContentManager implements Serializable {
             return site;
         }
 
+        private static void createPath(PageDescriptor parent) {
+//          System.out.println(parent);
+            for (PageDescriptor descriptor : parent.childPages()) {
+                descriptor._path().add(parent);
+                createPath(descriptor);
+            }
+        }
+
         public static List<News> getNews() {
             if (news == null) {
                 EntityListCriteria<News> criteria = EntityListCriteria.create(News.class);
@@ -184,14 +192,6 @@ public class PMSiteContentManager implements Serializable {
                 testimonials = Persistence.service().query(criteria);
             }
             return testimonials;
-        }
-
-        private static void createPath(PageDescriptor parent) {
-//          System.out.println(parent);
-            for (PageDescriptor descriptor : parent.childPages()) {
-                descriptor._path().add(parent);
-                createPath(descriptor);
-            }
         }
 
         private static AvailableLocale readLocaleFromCookie() {

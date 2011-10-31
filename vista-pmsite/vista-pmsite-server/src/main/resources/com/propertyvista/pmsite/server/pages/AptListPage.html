@@ -38,11 +38,12 @@
 	</div>
 	<script language="javascript" wicket:id="jsAptListModeInfo"></script>
 	<script language="javascript">
-	window.onload = function()
-    {
-        loadMap();
-    }
 	$(function() {
+		function loadMapIfVisible() {
+			if ($('.listing_mapview:visible').size()) {
+				loadMap();
+			}
+		}
 		$('#aptListModeSwitch').click(function() {
 			var curMode = ClientPref.getPref('aptListMode');
 			if (aptListModeInfo == undefined || aptListModeInfo[curMode] == undefined)
@@ -59,7 +60,12 @@
 			$(curInfo.show).addClass('display_none');
 			$(newInfo.show).removeClass('display_none');
 			ClientPref.setPref('aptListMode', newMode);
-			loadMap();
+			// load map if needed
+			loadMapIfVisible();
+		});
+		// initial map load
+		$(window).load(function() {
+			loadMapIfVisible();
 		});
 	})
 	</script>
