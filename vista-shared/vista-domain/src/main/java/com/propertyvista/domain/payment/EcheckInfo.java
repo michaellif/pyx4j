@@ -11,7 +11,7 @@
  * @author antonk
  * @version $Id$
  */
-package com.propertyvista.portal.domain.payment;
+package com.propertyvista.domain.payment;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.validator.NotNull;

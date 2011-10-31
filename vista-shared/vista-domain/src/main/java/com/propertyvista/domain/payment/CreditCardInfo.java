@@ -11,18 +11,16 @@
  * @author antonk
  * @version $Id$
  */
-package com.propertyvista.portal.domain.payment;
+package com.propertyvista.domain.payment;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@Transient
 public interface CreditCardInfo extends IEntity {
 
     @NotNull

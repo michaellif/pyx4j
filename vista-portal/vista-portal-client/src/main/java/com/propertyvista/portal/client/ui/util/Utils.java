@@ -16,8 +16,8 @@ package com.propertyvista.portal.client.ui.util;
 import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.user.client.ui.Image;
 
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.resources.PortalImages;
-import com.propertyvista.portal.domain.payment.PaymentType;
 
 public class Utils {
 

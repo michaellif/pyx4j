@@ -22,6 +22,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.domain.tenant.lease.Lease;
 
+/**
+ * This is an application progress for tenant, secondary tenant and guarantors.
+ */
 public interface Application extends IEntity, IUserEntity {
 
     @Owned

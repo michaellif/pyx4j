@@ -23,10 +23,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.Phone;
-import com.propertyvista.portal.domain.payment.CreditCardInfo;
-import com.propertyvista.portal.domain.payment.EcheckInfo;
-import com.propertyvista.portal.domain.payment.InteracInfo;
-import com.propertyvista.portal.domain.payment.PaymentType;
+import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.EcheckInfo;
+import com.propertyvista.domain.payment.InteracInfo;
+import com.propertyvista.domain.payment.PaymentType;
 
 @Transient
 public interface PaymentMethodGenericDTO extends IEntity {

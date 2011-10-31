@@ -28,10 +28,10 @@ import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineList;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.Phone;
-import com.propertyvista.portal.domain.payment.CreditCardInfo;
-import com.propertyvista.portal.domain.payment.EcheckInfo;
-import com.propertyvista.portal.domain.payment.InteracInfo;
-import com.propertyvista.portal.domain.payment.PaymentType;
+import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.EcheckInfo;
+import com.propertyvista.domain.payment.InteracInfo;
+import com.propertyvista.domain.payment.PaymentType;
 
 public interface PaymentInfo extends IEntity, IBoundToApplication {
 

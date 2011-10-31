@@ -44,11 +44,11 @@ import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableE
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
+import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.EcheckInfo;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.domain.dto.PaymentMethodGenericDTO;
-import com.propertyvista.portal.domain.payment.CreditCardInfo;
-import com.propertyvista.portal.domain.payment.EcheckInfo;
-import com.propertyvista.portal.domain.payment.PaymentType;
 
 public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethodGenericDTO> {
 

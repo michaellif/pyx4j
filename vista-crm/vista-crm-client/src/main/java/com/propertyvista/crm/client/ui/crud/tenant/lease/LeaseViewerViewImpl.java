@@ -31,12 +31,14 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
 
-        createApplicationButton = new Button(i18n.tr("Convert&nbspto&nbspApplication"), new ClickHandler() {
+        createApplicationButton = new Button(i18n.tr("Create Application"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 ((LeaseViewerView.Presenter) presenter).createMasterApplication();
             }
         });
+        //TODO
+        //createApplicationButton.setWrap(false);
         createApplicationButton.addStyleName(createApplicationButton.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.ActionButton);
         addActionButton(createApplicationButton);
 

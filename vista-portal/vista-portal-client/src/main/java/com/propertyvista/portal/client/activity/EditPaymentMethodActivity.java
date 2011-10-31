@@ -20,10 +20,10 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.ui.residents.EditPaymentMethodView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
-import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class EditPaymentMethodActivity extends SecurityAwareActivity implements EditPaymentMethodView.Presenter {

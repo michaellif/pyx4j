@@ -25,12 +25,12 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.portal.client.ui.residents.CurrentBillView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.BillDTO;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
-import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class CurrentBillActivity extends SecurityAwareActivity implements CurrentBillView.Presenter {

@@ -27,9 +27,9 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.charges.ChargeLine;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.TenantIn.Status;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInfo;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;

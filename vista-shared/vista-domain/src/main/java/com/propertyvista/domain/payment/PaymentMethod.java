@@ -7,34 +7,49 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 9, 2011
- * @author dad
+ * Created on Oct 31, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.dto;
+package com.propertyvista.domain.payment;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.Phone;
-import com.propertyvista.domain.payment.CreditCardInfo;
-import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.tenant.Tenant;
 
-@Transient
-public interface PaymentMethodDTO extends CreditCardInfo {
-//TODO to be finalized
+public interface PaymentMethod extends IEntity {
+
+    @Owner
+    @Detached
+    @ReadOnly
+    Tenant tenant();
+
+    IPrimitive<Boolean> primary();
+
+    @Caption(name = "Payment types")
+    @Editor(type = EditorType.radiogroup)
     IPrimitive<PaymentType> type();
+
+    @Caption(name = "eCheck")
+    EcheckInfo echeck();
+
+    CreditCardInfo creditCard();
+
+    InteracInfo interac();
 
     @EmbeddedEntity
     AddressStructured billingAddress();
 
     @EmbeddedEntity
     Phone phone();
-
-    IPrimitive<String> nameOnAccount();
-
-    IPrimitive<Boolean> primary();
-
 }

@@ -22,11 +22,11 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.ui.residents.PaymentMethodsView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
-import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.PaymentMethods;
 

@@ -7,35 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-28
- * @author vlads
+ * Created on 2011-02-23
+ * @author antonk
  * @version $Id$
  */
-package com.propertyvista.portal.domain.payment;
+package com.propertyvista.domain.payment;
 
-import com.pyx4j.i18n.annotations.Translate;
-import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public enum PaymentType {
+public interface InteracInfo extends IEntity {
 
-    @Translate("eCheck")
-    Echeck,
+    @Caption(name = "Bank Number")
+    IPrimitive<String> bankNo();
 
-    Visa,
+    IPrimitive<String> transitNo();
 
-    @Translate("American Express")
-    Amex,
-
-    @Translate("MasterCard")
-    MasterCard,
-
-    Discover,
-
-    Interac;
-
-    @Override
-    public String toString() {
-        return I18nEnum.toString(this);
-    }
-
+    IPrimitive<String> accountNo();
 }
