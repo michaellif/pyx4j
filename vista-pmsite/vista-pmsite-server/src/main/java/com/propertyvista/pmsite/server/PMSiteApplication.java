@@ -36,6 +36,7 @@ import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
 import org.apache.wicket.util.time.Duration;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.shared.ApplicationMode;
 
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
@@ -54,24 +55,28 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
     private final String[] persistParams = { "gwt.codesvr" };
 
     private <T extends Page> void customMount(final String path, Class<T> pageClass) {
-        mount(new MountedMapper(path, pageClass) {
-            @Override
-            protected Url buildUrl(UrlInfo info) {
-                PageParameters newParams = info.getPageParameters();
-                IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
-                for (String pName : persistParams) {
-                    org.apache.wicket.util.string.StringValue pValue = params.getParameterValue(pName);
-                    if (pValue != null && !pValue.isNull()) {
-                        if (newParams == null) {
-                            newParams = new PageParameters();
+        if (ApplicationMode.isDevelopment()) {
+            mount(new MountedMapper(path, pageClass) {
+                @Override
+                protected Url buildUrl(UrlInfo info) {
+                    PageParameters newParams = info.getPageParameters();
+                    IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
+                    for (String pName : persistParams) {
+                        org.apache.wicket.util.string.StringValue pValue = params.getParameterValue(pName);
+                        if (pValue != null && !pValue.isNull()) {
+                            if (newParams == null) {
+                                newParams = new PageParameters();
+                            }
+                            newParams.add(pName, pValue);
                         }
-                        newParams.add(pName, pValue);
                     }
+                    info = new UrlInfo(info.getPageComponentInfo(), info.getPageClass(), newParams);
+                    return super.buildUrl(info);
                 }
-                info = new UrlInfo(info.getPageComponentInfo(), info.getPageClass(), newParams);
-                return super.buildUrl(info);
-            }
-        });
+            });
+        } else {
+            mount(new MountedMapper(path, pageClass));
+        }
     }
 
     @Override

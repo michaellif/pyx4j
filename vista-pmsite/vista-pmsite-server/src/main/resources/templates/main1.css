@@ -331,3 +331,15 @@ ul.footer_locations li {
 	color: ${foreground_60};
 	float: left;
 }
+.vista-pmsite-main .caption2 .rightControl {
+	height:25px;
+	margin:22px 30px 0 0;
+	float:right;
+	color:${foreground_50};
+	font-weight:bold;
+	text-transform:uppercase;
+	cursor:pointer;
+}
+.vista-pmsite-main .caption2 .rightControl:hover {
+	color:${foreground_80};
+}

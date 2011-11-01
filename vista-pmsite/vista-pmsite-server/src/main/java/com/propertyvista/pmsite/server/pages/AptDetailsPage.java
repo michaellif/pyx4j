@@ -115,6 +115,8 @@ public class AptDetailsPage extends BasePage {
             }
         }
         add(new Label("phone", phone));
+        // right side - floorplan listing
+        add(new Label("backButton", "Back").add(AttributeModifier.replace("onClick", "history.back()")));
         add(new ListView<Floorplan>("units", new ArrayList<Floorplan>(fpUnits.keySet())) {
             private static final long serialVersionUID = 1L;
 

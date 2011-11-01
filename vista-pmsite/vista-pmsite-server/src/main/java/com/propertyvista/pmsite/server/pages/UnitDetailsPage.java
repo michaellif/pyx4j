@@ -117,6 +117,8 @@ public class UnitDetailsPage extends BasePage {
         }
         add(new Label("phone", phone));
 
+        // right side - floorplan details
+        add(new Label("backButton", "Back").add(AttributeModifier.replace("onClick", "history.back()")));
         add(new Label("name", fp.name().getValue()));
         add(new Label("rooms", "bedrooms: " + fp.bedrooms().getValue() + ", bathrooms: " + fp.bathrooms().getValue() + ", from " + Math.round(minArea) + " "
                 + areaUnits));
