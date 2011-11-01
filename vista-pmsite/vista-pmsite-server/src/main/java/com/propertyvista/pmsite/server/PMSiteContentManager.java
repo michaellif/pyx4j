@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 23, 2011
+ * Created on Nov 1, 2011
  * @author michaellif
  * @version $Id$
  */
@@ -23,7 +23,6 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -51,16 +50,12 @@ import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.pmsite.server.model.PromoDataModel;
+import com.propertyvista.pmsite.server.panels.NavigationItem;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
 import com.propertyvista.shared.CompiledLocale;
 
-/*
- * Uses property wrapper PMSiteContent that will lazy initialize properties on first access.
- * This will help to eliminate direct access to uninitialized properties and ensure that all
- * properties are initialized before returning to the outer class. 
- */
 public class PMSiteContentManager implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -80,243 +75,111 @@ public class PMSiteContentManager implements Serializable {
 
     public static final int DEFAULT_STYLE_ID = 0;
 
-    // Property wrapper with lazy initialization of its properties on first request
-    private static class PMSiteContent {
-        private static SiteDescriptor site;
+    private AvailableLocale locale;
 
-        private static List<News> news;
+    private List<AvailableLocale> allAvailableLocale;
 
-        private static List<Testimonial> testimonials;
+    private SiteDescriptor siteDescriptor;
 
-        private static List<AvailableLocale> allAvailableLocale;
+    private List<News> news;
 
-        private static AvailableLocale locale;
+    private List<Testimonial> testimonials;
 
-        public static int getStyleId() {
-            // no caching for style as it is stored on the client
-            int styleId = DEFAULT_STYLE_ID;
-            Cookie pmsiteStyleCookie = null;
-            List<Cookie> cookies = ((WebRequest) RequestCycle.get().getRequest()).getCookies();
-            if (cookies == null) {
-                return styleId;
-            }
-            for (Cookie cookie : cookies) {
-                if ("pmsiteStyle".equals(cookie.getName())) {
-                    pmsiteStyleCookie = cookie;
-                    break;
-                }
-            }
-            if (pmsiteStyleCookie != null) {
-                try {
-                    styleId = Integer.valueOf(pmsiteStyleCookie.getValue());
-                } catch (NumberFormatException ignore) {
-                    // do nothing
-                }
-            }
-            return styleId;
+    public PMSiteContentManager() {
+        EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
+        siteDescriptor = Persistence.service().retrieve(criteria);
+        if (siteDescriptor == null) {
+            //Working on Empty DB
+            siteDescriptor = EntityFactory.create(SiteDescriptor.class);
+            // TODO populate with default values, such as color scheme etc
         }
 
-        public static void setStyleId(int id) {
-            ((WebResponse) RequestCycle.get().getResponse()).addCookie(new Cookie("pmsiteStyle", String.valueOf(id)));
+        for (PageDescriptor descriptor : siteDescriptor.childPages()) {
+            createPath(descriptor);
         }
 
-        public static AvailableLocale getLocale() {
-            // no caching for locale as it is stored on the client
-            locale = readLocaleFromCookie();
-            return locale;
+    }
+
+    private static void createPath(PageDescriptor parent) {
+        for (PageDescriptor descriptor : parent.childPages()) {
+            descriptor._path().add(parent);
+            createPath(descriptor);
         }
+    }
 
-        public static void setLocale(AvailableLocale l) {
-            locale = l;
-            ((WebResponse) RequestCycle.get().getResponse()).addCookie(new Cookie("locale", locale.lang().getValue().name()));
-        }
+    public AvailableLocale getLocale() {
+        // no caching for locale as it is stored on the client
+        locale = readLocaleFromCookie();
+        return locale;
+    }
 
-        public static List<AvailableLocale> getAllAvailableLocale() {
-            if (allAvailableLocale == null) {
-                EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
-                criteria.asc(criteria.proto().displayOrder().getPath().toString());
-                allAvailableLocale = Persistence.service().query(criteria);
-            }
-            if (allAvailableLocale == null) {
-                //Working on Empty DB - create default locale
-                AvailableLocale l = EntityFactory.create(AvailableLocale.class);
-                l.lang().setValue(CompiledLocale.en);
-                l.displayOrder().setValue(1);
-                allAvailableLocale = new ArrayList<AvailableLocale>();
-                allAvailableLocale.add(l);
-            }
-            return allAvailableLocale;
-        }
+    private AvailableLocale readLocaleFromCookie() {
 
-        public static SiteDescriptor getSiteDescriptor() {
-            if (site == null) {
-                EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
-                site = Persistence.service().retrieve(criteria);
-                if (site == null) {
-                    //Working on Empty DB
-                    site = EntityFactory.create(SiteDescriptor.class);
-                    // TODO populate with default values, such as color scheme etc
-                }
-
-                for (PageDescriptor descriptor : site.childPages()) {
-                    createPath(descriptor);
-                }
-            }
-            return site;
-        }
-
-        private static void createPath(PageDescriptor parent) {
-//          System.out.println(parent);
-            for (PageDescriptor descriptor : parent.childPages()) {
-                descriptor._path().add(parent);
-                createPath(descriptor);
-            }
-        }
-
-        public static List<News> getNews() {
-            if (news == null) {
-                EntityListCriteria<News> criteria = EntityListCriteria.create(News.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), getLocale().lang().getValue()));
-                criteria.desc(criteria.proto().date().getPath().toString());
-                criteria.setPageSize(4);
-                criteria.setPageNumber(0);
-                news = Persistence.service().query(criteria);
-            }
-            return news;
-        }
-
-        public static List<Testimonial> getTestimonials() {
-            if (testimonials == null) {
-                EntityQueryCriteria<Testimonial> criteria = EntityQueryCriteria.create(Testimonial.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), getLocale().lang().getValue()));
-                testimonials = Persistence.service().query(criteria);
-            }
-            return testimonials;
-        }
-
-        private static AvailableLocale readLocaleFromCookie() {
-
-            Locale locale = I18nManager.getThreadLocale();
-            try {
-                CompiledLocale lang = CompiledLocale.valueOf(locale.getLanguage() + "_" + locale.getCountry());
-                for (AvailableLocale l : getAllAvailableLocale()) {
-                    if (lang.equals(l.lang().getValue())) {
-                        return l;
-                    }
-                }
-            } catch (IllegalArgumentException ignore) {
-            }
-
+        Locale locale = I18nManager.getThreadLocale();
+        try {
+            CompiledLocale lang = CompiledLocale.valueOf(locale.getLanguage() + "_" + locale.getCountry());
             for (AvailableLocale l : getAllAvailableLocale()) {
-                if (locale.getLanguage().equals(l.lang().getValue().name())) {
+                if (lang.equals(l.lang().getValue())) {
                     return l;
                 }
             }
-            // Locale not found, select the first one.
-            return getAllAvailableLocale().get(0);
+        } catch (IllegalArgumentException ignore) {
         }
 
-        public static String getClientPref(final String prefName) {
-            Map<String, String> prefMap = getClientPrefMap();
-            if (prefMap == null || prefMap.size() == 0) {
-                return null;
+        for (AvailableLocale l : getAllAvailableLocale()) {
+            if (locale.getLanguage().equals(l.lang().getValue().name())) {
+                return l;
             }
-            return prefMap.get(prefName);
         }
+        // Locale not found, select the first one.
+        return getAllAvailableLocale().get(0);
+    }
 
-        public static void setClientPref(final String prefName, final String prefValue) {
-            StringBuffer prefStr = new StringBuffer();
+    public void setLocale(AvailableLocale l) {
+        locale = l;
+        ((WebResponse) RequestCycle.get().getResponse()).addCookie(new Cookie("locale", locale.lang().getValue().name()));
+    }
 
-            Map<String, String> prefMap = getClientPrefMap();
-            if (prefMap == null || prefMap.size() == 0) {
-                prefStr.append(prefName + ":" + prefValue);
-            } else {
-                // add new value
-                prefMap.put(prefName, prefValue);
-                // build cookie string
-                for (String name : prefMap.keySet()) {
-                    String value = prefMap.get(name);
-                    if (prefStr.length() > 0) {
-                        prefStr.append(";");
-                    }
-                    prefStr.append(name + ":" + value);
-                }
-            }
-            ((WebResponse) RequestCycle.get().getResponse()).addCookie(new Cookie("pmsitePref", prefStr.toString()));
+    public List<AvailableLocale> getAllAvailableLocale() {
+        if (allAvailableLocale == null) {
+            EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
+            criteria.asc(criteria.proto().displayOrder().getPath().toString());
+            allAvailableLocale = Persistence.service().query(criteria);
         }
-
-        private static Map<String, String> getClientPrefMap() {
-            Cookie pmsitePrefCookie = null;
-            List<Cookie> cookies = ((WebRequest) RequestCycle.get().getRequest()).getCookies();
-            if (cookies == null) {
-                return null;
-            }
-            for (Cookie cookie : cookies) {
-                if ("pmsitePref".equals(cookie.getName())) {
-                    pmsitePrefCookie = cookie;
-                    break;
-                }
-            }
-            Map<String, String> prefMap = null;
-            if (pmsitePrefCookie != null) {
-                prefMap = new java.util.Hashtable<String, String>();
-                String nvpStr = pmsitePrefCookie.getValue();
-                String[] nvpArr = nvpStr.split(";");
-                for (String nvp : nvpArr) {
-                    String[] nv = nvp.split(":");
-                    try {
-                        prefMap.put(nv[0], nv[1]);
-                    } catch (ArrayIndexOutOfBoundsException ignore) {
-                        // do nothing
-                    }
-                }
-            }
-            return prefMap;
+        if (allAvailableLocale == null) {
+            //Working on Empty DB - create default locale
+            AvailableLocale l = EntityFactory.create(AvailableLocale.class);
+            l.lang().setValue(CompiledLocale.en);
+            l.displayOrder().setValue(1);
+            allAvailableLocale = new ArrayList<AvailableLocale>();
+            allAvailableLocale.add(l);
         }
+        return allAvailableLocale;
     }
 
-    public static int getSiteStyle() {
-        return PMSiteContent.getStyleId();
+    public List<News> getNews() {
+        if (news == null) {
+            EntityListCriteria<News> criteria = EntityListCriteria.create(News.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), getLocale().lang().getValue()));
+            criteria.desc(criteria.proto().date().getPath().toString());
+            criteria.setPageSize(4);
+            criteria.setPageNumber(0);
+            news = Persistence.service().query(criteria);
+        }
+        return news;
     }
 
-    public static void setSiteStyle(int id) {
-        PMSiteContent.setStyleId(id);
+    public List<Testimonial> getTestimonials() {
+        if (testimonials == null) {
+            EntityQueryCriteria<Testimonial> criteria = EntityQueryCriteria.create(Testimonial.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), getLocale().lang().getValue()));
+            testimonials = Persistence.service().query(criteria);
+        }
+        return testimonials;
     }
 
-    public static String getClientPref(final String prefName) {
-        return PMSiteContent.getClientPref(prefName);
-    }
-
-    public static void setClientPref(final String prefName, final String prefValue) {
-        PMSiteContent.setClientPref(prefName, prefValue);
-    }
-
-    public static AvailableLocale getLocale() {
-        return PMSiteContent.getLocale();
-    }
-
-    public static void setLocale(AvailableLocale locale) {
-        PMSiteContent.setLocale(locale);
-    }
-
-    public static List<AvailableLocale> getAllAvailableLocale() {
-        return PMSiteContent.getAllAvailableLocale();
-    }
-
-    public static SiteDescriptor getSiteDescriptor() {
-        return PMSiteContent.getSiteDescriptor();
-    }
-
-    public static List<News> getNews() {
-        return PMSiteContent.getNews();
-    }
-
-    public static List<Testimonial> getTestimonials() {
-        return PMSiteContent.getTestimonials();
-    }
-
-    public static PageDescriptor getStaticPageDescriptor(PageParameters parameters) {
-        List<PageDescriptor> pages = PMSiteContent.getSiteDescriptor().childPages();
+    public PageDescriptor getStaticPageDescriptor(PageParameters parameters) {
+        List<PageDescriptor> pages = siteDescriptor.childPages();
         PageDescriptor current = null;
         for (String paramName : PARAMETER_NAMES) {
             if (!parameters.get(paramName).isEmpty()) {
@@ -328,6 +191,42 @@ public class PMSiteContentManager implements Serializable {
             }
         }
         return current;
+    }
+
+    public List<NavigationItem> getMainNavigItems() {
+        List<NavigationItem> list = new ArrayList<NavigationItem>();
+        for (int i = 0; i < 4 && i < siteDescriptor.childPages().size(); i++) {
+            PageDescriptor descriptor = siteDescriptor.childPages().get(i);
+            if (descriptor != null) {
+                list.add(new NavigationItem(descriptor));
+            } else {
+                break;
+            }
+        }
+        return list;
+    }
+
+    public List<NavigationItem> getFooterNavigItems() {
+        List<NavigationItem> list = new ArrayList<NavigationItem>();
+        for (int i = 4; i < siteDescriptor.childPages().size(); i++) {
+            PageDescriptor descriptor = siteDescriptor.childPages().get(i);
+            if (descriptor != null) {
+                list.add(new NavigationItem(descriptor));
+            } else {
+                break;
+            }
+        }
+        return list;
+    }
+
+    public static List<NavigationItem> getNavigItems(PageDescriptor content) {
+        List<NavigationItem> list = new ArrayList<NavigationItem>();
+        if (content != null) {
+            for (PageDescriptor descriptor : content.childPages()) {
+                list.add(new NavigationItem(descriptor));
+            }
+        }
+        return list;
     }
 
     private static PageDescriptor getPageDescriptor(List<PageDescriptor> pages, String pageId) {
@@ -355,12 +254,11 @@ public class PMSiteContentManager implements Serializable {
         return caption.toLowerCase().replaceAll("\\s+", "_").trim();
     }
 
-    public static String getCopyrightInfo() {
-//        return "© Starlight Apartments 2011";
-        return getSiteDescriptor().copyright().getValue();
+    public String getCopyrightInfo() {
+        return siteDescriptor.copyright().getValue();
     }
 
-    public static List<City> getCities() {
+    public List<City> getCities() {
         ArrayList<City> cityList = new ArrayList<City>();
         EntityQueryCriteria<City> criteria = EntityQueryCriteria.create(City.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().hasProperties(), Boolean.TRUE));
@@ -372,9 +270,9 @@ public class PMSiteContentManager implements Serializable {
         return cityList;
     }
 
-    public static Map<String, List<String>> getProvinceCityMap() {
+    public Map<String, List<String>> getProvinceCityMap() {
         Map<String, List<String>> provCityMap = new HashMap<String, List<String>>();
-        List<City> cities = PMSiteContentManager.getCities();
+        List<City> cities = getCities();
         for (City city : cities) {
             String cityName = city.name().getValue();
             if (cityName == null) {
@@ -497,7 +395,7 @@ public class PMSiteContentManager implements Serializable {
         return Persistence.service().query(criteria);
     }
 
-    public static String getCaption(PageDescriptor descriptor, AvailableLocale locale) {
+    public String getCaption(PageDescriptor descriptor, AvailableLocale locale) {
         if (descriptor == null) {
             return "";
         }
@@ -520,7 +418,7 @@ public class PMSiteContentManager implements Serializable {
         return servletRoot + "media/" + mediaId + "/" + size.name() + ".jpg";
     }
 
-    public static List<PromoDataModel> getPromotions() {
+    public List<PromoDataModel> getPromotions() {
         ArrayList<PromoDataModel> promo = new ArrayList<PromoDataModel>();
 
         // do promo building lookup
@@ -549,13 +447,21 @@ public class PMSiteContentManager implements Serializable {
         Facebook, Twitter, Youtube, Flickr
     }
 
-    public static Map<SocialSite, String> getSocialLinks() {
+    public Map<SocialSite, String> getSocialLinks() {
         Map<SocialSite, String> socialLinks = new HashMap<SocialSite, String>();
         socialLinks.put(SocialSite.Facebook, "http://www.facebook.com/pages/Starlight-Apartments/175770575825466");
         socialLinks.put(SocialSite.Twitter, "http://twitter.com/#!/StarlightApts");
         socialLinks.put(SocialSite.Youtube, "http://www.youtube.com/user/StarlightApts");
         socialLinks.put(SocialSite.Flickr, "http://www.flickr.com/StarlightApts");
         return socialLinks;
+    }
+
+    public int getStyleId() {
+        return siteDescriptor.skin().getValue().ordinal();
+    }
+
+    public SiteDescriptor getSiteDescriptor() {
+        return siteDescriptor;
     }
 
 }

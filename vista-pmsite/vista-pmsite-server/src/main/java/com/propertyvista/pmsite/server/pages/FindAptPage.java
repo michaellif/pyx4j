@@ -17,7 +17,8 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 
 import templates.TemplateResources;
 
-import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteClientPreferences;
+import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaPanel;
@@ -31,14 +32,14 @@ public class FindAptPage extends BasePage {
         setVersioned(false);
 
         // set aptlist view mode preference to Map
-        PMSiteContentManager.setClientPref("aptListMode", AptListPage.ViewMode.map.name());
+        PMSiteClientPreferences.setClientPref("aptListMode", AptListPage.ViewMode.map.name());
 
         add(new AdvancedSearchCriteriaPanel());
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        int styleId = PMSiteContentManager.getSiteStyle();
+        int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
         String fileCSS = "findapt" + styleId + ".css";
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
                 new StylesheetTemplateModel(String.valueOf(styleId)));

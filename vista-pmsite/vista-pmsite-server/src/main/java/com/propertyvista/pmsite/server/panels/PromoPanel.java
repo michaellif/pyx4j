@@ -27,7 +27,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.PromoDataModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
@@ -37,7 +37,7 @@ public class PromoPanel extends Panel {
 
     public PromoPanel(String id) {
         super(id);
-        add(new ListView<PromoDataModel>("promoItem", PMSiteContentManager.getPromotions()) {
+        add(new ListView<PromoDataModel>("promoItem", ((PMSiteWebRequest) getRequest()).getContentManager().getPromotions()) {
             private static final long serialVersionUID = 1L;
 
             @Override

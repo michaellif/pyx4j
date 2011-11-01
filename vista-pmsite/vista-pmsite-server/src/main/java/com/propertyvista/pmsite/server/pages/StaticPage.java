@@ -33,7 +33,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
-import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.SecondaryNavigationPanel;
@@ -49,7 +49,7 @@ public class StaticPage extends BasePage {
         WebMarkupContainer mainPanel = new WebMarkupContainer("mainPanel");
         add(mainPanel);
 
-        final PageDescriptor descriptor = PMSiteContentManager.getStaticPageDescriptor(parameters);
+        final PageDescriptor descriptor = ((PMSiteWebRequest) getRequest()).getContentManager().getStaticPageDescriptor(parameters);
 
         SecondaryNavigationPanel secondaryNavigationPanel = new SecondaryNavigationPanel("secondaryNavig", this);
 
@@ -59,7 +59,8 @@ public class StaticPage extends BasePage {
             mainPanel.add(AttributeModifier.replace("style", "width:100%"));
         }
 
-        mainPanel.add(new Label("caption", PMSiteContentManager.getCaption(descriptor, PMSiteContentManager.getLocale())));
+        mainPanel.add(new Label("caption", ((PMSiteWebRequest) getRequest()).getContentManager().getCaption(descriptor,
+                ((PMSiteWebRequest) getRequest()).getContentManager().getLocale())));
 
         mainPanel.add(new WebComponent("content") {
 
@@ -70,7 +71,8 @@ public class StaticPage extends BasePage {
                 Response response = getRequestCycle().getResponse();
 
                 EntityQueryCriteria<PageContent> pageContentCriteria = EntityQueryCriteria.create(PageContent.class);
-                pageContentCriteria.add(PropertyCriterion.eq(pageContentCriteria.proto().locale(), PMSiteContentManager.getLocale()));
+                pageContentCriteria.add(PropertyCriterion.eq(pageContentCriteria.proto().locale(), ((PMSiteWebRequest) getRequest()).getContentManager()
+                        .getLocale()));
                 pageContentCriteria.add(PropertyCriterion.eq(pageContentCriteria.proto().descriptor(), descriptor));
 
                 List<PageContent> pages = Persistence.service().query(pageContentCriteria);
@@ -85,7 +87,7 @@ public class StaticPage extends BasePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        int styleId = PMSiteContentManager.getSiteStyle();
+        int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
         String fileCSS = "static" + styleId + ".css";
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
                 new StylesheetTemplateModel(String.valueOf(styleId)));

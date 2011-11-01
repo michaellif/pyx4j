@@ -33,7 +33,7 @@ import templates.TemplateResources;
 
 import com.pyx4j.config.shared.ApplicationMode;
 
-import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.JSActionLink;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
@@ -50,7 +50,7 @@ public abstract class BasePage extends WebPage {
 
         public LocalizedHtmlTag(String id) {
             super(id);
-            String lang = PMSiteContentManager.getLocale().lang().getValue().name();
+            String lang = ((PMSiteWebRequest) getRequest()).getContentManager().getLocale().lang().getValue().name();
             add(AttributeModifier.replace("lang", lang));
         }
     }
@@ -70,14 +70,15 @@ public abstract class BasePage extends WebPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        int styleId = PMSiteContentManager.getSiteStyle();
+        int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
         String fileCSS = "main" + styleId + ".css";
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
                 new StylesheetTemplateModel(String.valueOf(styleId)));
         response.renderCSSReference(refCSS);
         response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "jquery-1.6.3.min.js"));
         response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "pmsite_jslib-1.0.js"));
-        response.renderString("<meta name=\"gwt:property\" content=\"locale=" + PMSiteContentManager.getLocale().lang().getValue().name() + "\" />");
+        response.renderString("<meta name=\"gwt:property\" content=\"locale="
+                + ((PMSiteWebRequest) getRequest()).getContentManager().getLocale().lang().getValue().name() + "\" />");
     }
 
     @Override

@@ -26,7 +26,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
-import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.pages.StaticPage;
 
 public class SecondaryNavigationPanel extends Panel {
@@ -41,9 +41,9 @@ public class SecondaryNavigationPanel extends Panel {
         PageParameters mainNavigParams = new PageParameters();
         mainNavigParams.add(PMSiteContentManager.PARAMETER_NAMES[0], page.getPageParameters().get(PMSiteContentManager.PARAMETER_NAMES[0]));
 
-        PageDescriptor descriptor = PMSiteContentManager.getStaticPageDescriptor(mainNavigParams);
+        PageDescriptor descriptor = ((PMSiteWebRequest) getRequest()).getContentManager().getStaticPageDescriptor(mainNavigParams);
 
-        List<NavigationItem> items = ((PMSiteSession) getSession()).getNavigItems(descriptor);
+        List<NavigationItem> items = PMSiteContentManager.getNavigItems(descriptor);
 
         listView = new ListView<NavigationItem>("secondaryNavigItem", items) {
             private static final long serialVersionUID = 1L;
@@ -52,12 +52,14 @@ public class SecondaryNavigationPanel extends Panel {
             protected void populateItem(ListItem<NavigationItem> item) {
                 NavigationItem navItem = item.getModelObject();
                 BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("destination", navItem.getDestination(), navItem.getPageParameters());
-                link.add(new Label("caption", PMSiteContentManager.getCaption(navItem.getPageDescriptor(), PMSiteContentManager.getLocale())));
+                link.add(new Label("caption", ((PMSiteWebRequest) getRequest()).getContentManager().getCaption(navItem.getPageDescriptor(),
+                        ((PMSiteWebRequest) getRequest()).getContentManager().getLocale())));
                 item.add(link);
 
                 boolean active = false;
 
-                PageDescriptor currentPage = PMSiteContentManager.getStaticPageDescriptor(SecondaryNavigationPanel.this.getPage().getPageParameters());
+                PageDescriptor currentPage = ((PMSiteWebRequest) getRequest()).getContentManager().getStaticPageDescriptor(
+                        SecondaryNavigationPanel.this.getPage().getPageParameters());
                 if (currentPage.equals(navItem.getPageDescriptor())) {
                     active = true;
                 } else if (!currentPage._path().isNull() && !currentPage._path().isEmpty()) {

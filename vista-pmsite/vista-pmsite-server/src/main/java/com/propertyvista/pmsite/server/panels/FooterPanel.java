@@ -25,9 +25,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.propertyvista.domain.ref.City;
-import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteContentManager.SocialSite;
-import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 
 public class FooterPanel extends Panel {
@@ -37,7 +36,7 @@ public class FooterPanel extends Panel {
     public FooterPanel() {
         super("footer");
 
-        add(new ListView<City>("footer_locations_city", PMSiteContentManager.getCities()) {
+        add(new ListView<City>("footer_locations_city", ((PMSiteWebRequest) getRequest()).getContentManager().getCities()) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -58,7 +57,7 @@ public class FooterPanel extends Panel {
             }
         });
 
-        final java.util.Map<SocialSite, String> socialLinks = PMSiteContentManager.getSocialLinks();
+        final java.util.Map<SocialSite, String> socialLinks = ((PMSiteWebRequest) getRequest()).getContentManager().getSocialLinks();
         add(new ListView<SocialSite>("footer_social", new ArrayList<SocialSite>(socialLinks.keySet())) {
             private static final long serialVersionUID = 1L;
 
@@ -69,18 +68,19 @@ public class FooterPanel extends Panel {
             }
         });
 
-        add(new ListView<NavigationItem>("footer_link", ((PMSiteSession) getSession()).getFooterNavigItems()) {
+        add(new ListView<NavigationItem>("footer_link", ((PMSiteWebRequest) getRequest()).getContentManager().getFooterNavigItems()) {
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void populateItem(ListItem<NavigationItem> item) {
                 NavigationItem navItem = item.getModelObject();
                 BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", navItem.getDestination(), navItem.getPageParameters());
-                link.add(new Label("caption", PMSiteContentManager.getCaption(navItem.getPageDescriptor(), PMSiteContentManager.getLocale())));
+                link.add(new Label("caption", ((PMSiteWebRequest) getRequest()).getContentManager().getCaption(navItem.getPageDescriptor(),
+                        ((PMSiteWebRequest) getRequest()).getContentManager().getLocale())));
                 item.add(link);
             }
         });
 
-        add(new Label("footer_legal", PMSiteContentManager.getCopyrightInfo()));
+        add(new Label("footer_legal", ((PMSiteWebRequest) getRequest()).getContentManager().getCopyrightInfo()));
     }
 }

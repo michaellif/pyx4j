@@ -13,6 +13,8 @@
  */
 package com.propertyvista.pmsite.server;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.wicket.IRequestCycleProvider;
 import org.apache.wicket.Page;
 import org.apache.wicket.RuntimeConfigurationType;
@@ -30,6 +32,7 @@ import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.PageProvider;
 import org.apache.wicket.request.handler.RenderPageRequestHandler;
+import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.mapper.MountedMapper;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
@@ -134,6 +137,13 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
     @Override
     public Session newSession(Request request, Response response) {
         return new PMSiteSession(request);
+    }
+
+    @Override
+    protected WebRequest newWebRequest(HttpServletRequest servletRequest, String filterPath) {
+
+        return new PMSiteWebRequest(servletRequest, filterPath);
+
     }
 
     public static PMSiteApplication get() {

@@ -32,7 +32,7 @@ import org.apache.wicket.validation.validator.MinimumValidator;
 
 import com.pyx4j.entity.server.pojo.IPojo;
 
-import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleRadio;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
@@ -52,7 +52,7 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         add(searchTypeRadio.setRequired(true));
 
         // add Province drop-down
-        final Map<String, List<String>> provCityMap = PMSiteContentManager.getProvinceCityMap();
+        final Map<String, List<String>> provCityMap = ((PMSiteWebRequest) getRequest()).getContentManager().getProvinceCityMap();
         List<String> provinces = new ArrayList<String>(provCityMap.keySet());
         DropDownChoice<String> provChoice = new WicketUtils.DropDownList<String>("province", provinces, false, true);
         provChoice.add(AttributeModifier

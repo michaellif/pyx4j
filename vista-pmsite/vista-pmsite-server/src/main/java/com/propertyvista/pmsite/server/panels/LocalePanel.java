@@ -21,7 +21,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import com.propertyvista.domain.site.AvailableLocale;
-import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.JSActionLink;
 
 public class LocalePanel extends Panel {
@@ -31,8 +31,8 @@ public class LocalePanel extends Panel {
     public LocalePanel(String id) {
         super(id);
 
-        ListView<AvailableLocale> listView = new ListView<AvailableLocale>("langItem", new ArrayList<AvailableLocale>(
-                PMSiteContentManager.getAllAvailableLocale())) {
+        ListView<AvailableLocale> listView = new ListView<AvailableLocale>("langItem", new ArrayList<AvailableLocale>(((PMSiteWebRequest) getRequest())
+                .getContentManager().getAllAvailableLocale())) {
             private static final long serialVersionUID = 1L;
 
             @Override

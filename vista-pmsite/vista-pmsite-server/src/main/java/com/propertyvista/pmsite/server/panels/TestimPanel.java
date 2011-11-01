@@ -26,14 +26,14 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import com.propertyvista.domain.site.Testimonial;
-import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteWebRequest;
 
 public class TestimPanel extends Panel {
     private static final long serialVersionUID = 1L;
 
     public TestimPanel(String id) {
         super(id);
-        add(new ListView<Testimonial>("testimItem", PMSiteContentManager.getTestimonials()) {
+        add(new ListView<Testimonial>("testimItem", ((PMSiteWebRequest) getRequest()).getContentManager().getTestimonials()) {
             private static final long serialVersionUID = 1L;
 
             @Override

@@ -35,7 +35,9 @@ import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.pmsite.server.PMSiteClientPreferences;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.AttributeClassModifier;
@@ -102,12 +104,12 @@ public class AptListPage extends BasePage {
         add(form);
 
         // check view mode - Map/List
-        if (PMSiteContentManager.getClientPref("aptListMode") == null) {
-            PMSiteContentManager.setClientPref("aptListMode", ViewMode.map.name());
+        if (PMSiteClientPreferences.getClientPref("aptListMode") == null) {
+            PMSiteClientPreferences.setClientPref("aptListMode", ViewMode.map.name());
         }
         ViewMode viewMode = ViewMode.map;
         try {
-            viewMode = ViewMode.valueOf(PMSiteContentManager.getClientPref("aptListMode"));
+            viewMode = ViewMode.valueOf(PMSiteClientPreferences.getClientPref("aptListMode"));
         } catch (Exception ignore) {
             // do nothing
         }
@@ -130,7 +132,7 @@ public class AptListPage extends BasePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        int styleId = PMSiteContentManager.getSiteStyle();
+        int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
         String fileCSS = "aptlist" + styleId + ".css";
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
                 new StylesheetTemplateModel(String.valueOf(styleId)));

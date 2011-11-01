@@ -22,8 +22,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 import com.propertyvista.domain.site.PageDescriptor;
-import com.propertyvista.pmsite.server.PMSiteContentManager;
-import com.propertyvista.pmsite.server.PMSiteSession;
+import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.pmsite.server.pages.FindAptPage;
@@ -40,20 +39,23 @@ public class MainNavigationPanel extends Panel {
     public MainNavigationPanel(String id) {
         super(id);
 
-        ListView<NavigationItem> listView = new ListView<NavigationItem>("navigationItem", ((PMSiteSession) getSession()).getMainNavigItems()) {
+        ListView<NavigationItem> listView = new ListView<NavigationItem>("navigationItem", ((PMSiteWebRequest) getRequest()).getContentManager()
+                .getMainNavigItems()) {
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void populateItem(ListItem<NavigationItem> item) {
                 NavigationItem navItem = item.getModelObject();
                 BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("destination", navItem.getDestination(), navItem.getPageParameters());
-                link.add(new Label("caption", PMSiteContentManager.getCaption(navItem.getPageDescriptor(), PMSiteContentManager.getLocale())));
+                link.add(new Label("caption", ((PMSiteWebRequest) getRequest()).getContentManager().getCaption(navItem.getPageDescriptor(),
+                        ((PMSiteWebRequest) getRequest()).getContentManager().getLocale())));
                 item.add(link);
 
                 boolean active = false;
 
                 if (MainNavigationPanel.this.getPage() instanceof StaticPage) {
-                    PageDescriptor currentPage = PMSiteContentManager.getStaticPageDescriptor(MainNavigationPanel.this.getPage().getPageParameters());
+                    PageDescriptor currentPage = ((PMSiteWebRequest) getRequest()).getContentManager().getStaticPageDescriptor(
+                            MainNavigationPanel.this.getPage().getPageParameters());
                     if (currentPage.equals(navItem.getPageDescriptor())) {
                         active = true;
                     } else if (!currentPage._path().isNull() && !currentPage._path().isEmpty()) {

@@ -20,7 +20,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 
 import templates.TemplateResources;
 
-import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.LocalePanel;
@@ -35,9 +35,9 @@ public class ErrorPage extends WebPage {
 
         add(new BookmarkablePageLink<Void>("titleLogo", LandingPage.class));
         add(new LocalePanel("locale"));
-        add(new Label("footer_legal", PMSiteContentManager.getCopyrightInfo()));
+        add(new Label("footer_legal", ((PMSiteWebRequest) getRequest()).getContentManager().getCopyrightInfo()));
 
-        int styleId = PMSiteContentManager.getSiteStyle();
+        int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
         String fileCSS = "error" + styleId + ".css";
         refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css", new StylesheetTemplateModel(String.valueOf(styleId)));
     }
