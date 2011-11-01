@@ -56,7 +56,12 @@ public class EntityCacheService implements IEntityCacheService {
         if ((cached == null) || (disabled)) {
             return null;
         }
-        return (T) CacheService.get(meta.getEntityClass().getName() + primaryKey);
+        T ent = (T) CacheService.get(meta.getEntityClass().getName() + primaryKey);
+        if (ent != null) {
+            return ent.cloneEntity();
+        } else {
+            return null;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -71,7 +76,7 @@ public class EntityCacheService implements IEntityCacheService {
             for (com.pyx4j.commons.Key primaryKey : primaryKeys) {
                 Object ent = CacheService.get(meta.getEntityClass().getName() + primaryKey);
                 if (ent != null) {
-                    ret.put(primaryKey, (T) ent);
+                    ret.put(primaryKey, (T) ((T) ent).cloneEntity());
                 }
             }
             return ret;
@@ -93,7 +98,7 @@ public class EntityCacheService implements IEntityCacheService {
                 for (com.pyx4j.commons.Key primaryKey : request.getPrimaryKeys()) {
                     Object ent = CacheService.get(meta.getEntityClass().getName() + primaryKey);
                     if (ent != null) {
-                        responce.put(primaryKey, (IEntity) ent);
+                        responce.put(primaryKey, ((IEntity) ent).cloneEntity());
                     }
                 }
                 ret.put(request, responce);
@@ -102,7 +107,6 @@ public class EntityCacheService implements IEntityCacheService {
         return ret;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public <T extends IEntity> void put(T entity) {
         EntityMeta meta = entity.getEntityMeta();
@@ -110,12 +114,7 @@ public class EntityCacheService implements IEntityCacheService {
         if ((cached == null) || (disabled)) {
             return;
         }
-        if ((entity.getParent() != null) || (entity.getOwner() != null)) {
-            // Entity delegate its value
-            entity = (T) entity.cloneEntity();
-        }
-
-        CacheService.put(meta.getEntityClass().getName() + entity.getPrimaryKey(), entity);
+        CacheService.put(meta.getEntityClass().getName() + entity.getPrimaryKey(), entity.cloneEntity());
     }
 
     @Override
@@ -125,11 +124,7 @@ public class EntityCacheService implements IEntityCacheService {
             if ((cached == null) || (disabled)) {
                 continue;
             }
-            if ((entity.getParent() != null) || (entity.getOwner() != null)) {
-                // Entity delegate its value
-                entity = entity.cloneEntity();
-            }
-            CacheService.put(entity.getEntityMeta().getEntityClass().getName() + entity.getPrimaryKey(), entity);
+            CacheService.put(entity.getEntityMeta().getEntityClass().getName() + entity.getPrimaryKey(), entity.cloneEntity());
         }
     }
 
