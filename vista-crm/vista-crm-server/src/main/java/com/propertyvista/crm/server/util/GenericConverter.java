@@ -16,7 +16,6 @@ package com.propertyvista.crm.server.util;
 import java.util.Vector;
 
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
@@ -36,15 +35,11 @@ public class GenericConverter {
     }
 
     public static <DBO extends IEntity, DTO extends DBO> DBO convertDTO2DBO(DTO src, Class<DBO> dstClass) {
-        DBO dst = EntityFactory.create(dstClass);
-        dst.setValue(src.getValue());
-        return dst;
+        return src.clone(dstClass);
     }
 
     public static <DBO extends IEntity, DTO extends DBO> DTO convertDBO2DTO(DBO src, Class<DTO> dstClass) {
-        DTO dst = EntityFactory.create(dstClass);
-        dst.setValue(src.getValue());
-        return dst;
+        return src.clone(dstClass);
     }
 
     public static <DTO extends IEntity> EntitySearchCriteria<DTO> convertDTO2DBO(EntitySearchCriteria<? extends DTO> src, Class<DTO> dstClass) {
