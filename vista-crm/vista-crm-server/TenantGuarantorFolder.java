@@ -30,7 +30,7 @@ import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableE
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.util.ValidationUtils;
 
-class TenantGuarantorFolder extends VistaBoxFolder<TenantGuarantor> {
+public class TenantGuarantorFolder extends VistaBoxFolder<TenantGuarantor> {
 
     public TenantGuarantorFolder(boolean modifyable) {
         super(TenantGuarantor.class, modifyable);

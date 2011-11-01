@@ -35,6 +35,8 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.CPriorAddress;
+import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
+import com.propertyvista.common.client.ui.components.folders.TenantGuarantorFolder;
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;

@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant.screening;
+package com.propertyvista.common.client.ui.components.folders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
 
-class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
+public class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
 
     public PersonalAssetFolder(boolean modifyable) {
         super(PersonalAsset.class, modifyable);
@@ -39,7 +39,7 @@ class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
     protected List<EntityFolderColumnDescriptor> columns() {
         List<EntityFolderColumnDescriptor> columns;
         columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().assetType(), "15em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().assetType(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().percent(), "7em"));
         columns.add(new EntityFolderColumnDescriptor(proto().assetValue(), "15em"));
         return columns;
@@ -54,7 +54,7 @@ class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
         }
     }
 
-    class PersonalAssetEditor extends CEntityFolderRowEditor<PersonalAsset> {
+    private class PersonalAssetEditor extends CEntityFolderRowEditor<PersonalAsset> {
 
         public PersonalAssetEditor() {
             super(PersonalAsset.class, columns());
