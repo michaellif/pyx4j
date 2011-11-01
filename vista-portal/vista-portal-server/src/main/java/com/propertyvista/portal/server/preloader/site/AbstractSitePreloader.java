@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -157,7 +158,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             }
 
             {
-                final String childPageCaption = "Vision";
+                final String childPageCaption = "Our Vision";
                 PageDescriptor childPage = createPage(childPageCaption, PageDescriptor.Type.staticContent);
                 for (LocaleInfo li : siteLocale) {
                     addCaption(childPage, li.i18n.tr(childPageCaption), li.aLocale);
@@ -248,17 +249,42 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         page.caption().add(pageCaption);
     }
 
+    public String getUTF8TextResource(String resourceBaseName, AvailableLocale locale) throws IOException {
+        String contentText;
+
+        // Use locale to find "_fr".html resources  if available.
+        String resourceI18nName = FilenameUtils.getBaseName(resourceBaseName) + "_" + locale.lang().getValue().name() + "."
+                + FilenameUtils.getExtension(resourceBaseName);
+
+        contentText = IOUtils.getUTF8TextResource(resourceI18nName, this.getClass());
+        if (contentText != null) {
+            return contentText;
+        }
+        contentText = IOUtils.getUTF8TextResource(resourceBaseName, this.getClass());
+        if (contentText != null) {
+            return contentText;
+        }
+
+        contentText = IOUtils.getUTF8TextResource(resourceI18nName, AbstractSitePreloader.class);
+        if (contentText != null) {
+            return contentText;
+        }
+        contentText = IOUtils.getUTF8TextResource(resourceBaseName, AbstractSitePreloader.class);
+        if (contentText != null) {
+            return contentText;
+        }
+
+        return contentText;
+
+    }
+
     protected void addContent(PageDescriptor page, String resourceBaseName, AvailableLocale locale) {
         PageContent pageContent = EntityFactory.create(PageContent.class);
         pageContent.locale().set(locale);
 
-        // TODO use locale to find "_fr".html resources  if available
         String contentText;
         try {
-            contentText = IOUtils.getUTF8TextResource(resourceBaseName, this.getClass());
-            if (contentText == null) {
-                contentText = IOUtils.getUTF8TextResource(resourceBaseName, AbstractSitePreloader.class);
-            }
+            contentText = getUTF8TextResource(resourceBaseName, locale);
             if (contentText == null) {
                 contentText = "Page " + resourceBaseName + " was not created for ${pmcName}";
             }
