@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -59,6 +60,7 @@ public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceDtoImpl<Sit
         //TODO keep the sort order, Remove context for removed Locale
         TransientListHelpers.save(dto.locales(), AvailableLocale.class);
 
+        dbo._updateFlag().updated().setValue(new Date());
         super.persistDBO(dbo, dto);
     }
 

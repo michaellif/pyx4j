@@ -13,11 +13,7 @@
  */
 package com.propertyvista.domain.site;
 
-import java.util.Date;
-
-import com.pyx4j.entity.annotations.Cached;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -26,7 +22,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-@Cached
 public interface SiteDescriptor extends IEntity {
 
     @I18n
@@ -63,6 +58,7 @@ public interface SiteDescriptor extends IEntity {
     @Owned
     IList<PageDescriptor> childPages();
 
-    @Timestamp(Timestamp.Update.Updated)
-    IPrimitive<Date> updated();
+    @Owned
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+    SiteDescriptorChanges _updateFlag();
 }

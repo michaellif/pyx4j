@@ -48,6 +48,7 @@ import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.SiteDescriptorChanges;
 import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.pmsite.server.model.PromoDataModel;
 import com.propertyvista.pmsite.server.panels.NavigationItem;
@@ -103,11 +104,11 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public boolean refresh() {
-        SiteDescriptor latest = Persistence.service().retrieve(SiteDescriptor.class, siteDescriptor.getPrimaryKey());
-        if ((latest == null) || latest.updated().equals(siteDescriptor.updated())) {
+        SiteDescriptorChanges latest = Persistence.service().retrieve(SiteDescriptorChanges.class, siteDescriptor._updateFlag().getPrimaryKey());
+        if ((latest == null) || latest.updated().equals(siteDescriptor._updateFlag().updated())) {
             return false;
         } else {
-            siteDescriptor = latest;
+            siteDescriptor = Persistence.service().retrieve(SiteDescriptor.class, siteDescriptor.getPrimaryKey());
             updatePages();
             return true;
         }
