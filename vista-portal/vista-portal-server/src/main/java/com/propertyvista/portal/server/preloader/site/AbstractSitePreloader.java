@@ -248,7 +248,11 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             log.error("Error", e);
             contentText = "Page was not created for ${pmcName}";
         }
-        contentText = contentText.replace("${pmcName}", pmcName());
+        String pmcName = pmcName();
+        if (pmcName == null) {
+            pmcName = "n/a";
+        }
+        contentText = contentText.replace("${pmcName}", pmcName);
 
         pageContent.content().setValue(contentText);
         page.content().add(pageContent);
