@@ -69,9 +69,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     @Override
     public IsWidget createContent() {
 
-        // TODO - add this data processing later! :
-        //  main.add(inject(proto().media()), 15);
-
         tabPanel.addDisable(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
 
         tabPanel.add(createGeneralTab(), i18n.tr("General"));
