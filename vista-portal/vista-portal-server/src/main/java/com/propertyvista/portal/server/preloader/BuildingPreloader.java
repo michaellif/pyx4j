@@ -64,6 +64,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.dto.FloorplanDTO;
+import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.server.importer.Importer;
 import com.propertyvista.server.common.generator.UnitRelatedData;
@@ -170,7 +171,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             building.serviceCatalog().set(catalog);
 
             //Media
-            if (this.getParameter(MediaGenerator.ATTACH_MEDIA_PARAMETER) != Boolean.FALSE) {
+            if (this.getParameter(VistaDataPreloaderParameter.attachMedia) != Boolean.FALSE) {
                 //MediaGenerator.attachGeneratedFloorplanMedia(floorplanDTO);
                 {
                     Media media = EntityFactory.create(Media.class);
@@ -243,7 +244,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             List<FloorplanDTO> floorplans = generator.createFloorplans(building, config().getNumFloorplans());
             for (FloorplanDTO floorplanDTO : floorplans) {
 
-                if (this.getParameter(MediaGenerator.ATTACH_MEDIA_PARAMETER) != Boolean.FALSE) {
+                if (this.getParameter(VistaDataPreloaderParameter.attachMedia) != Boolean.FALSE) {
                     MediaGenerator.attachGeneratedFloorplanMedia(floorplanDTO);
                 }
 
@@ -342,7 +343,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
     public String importData() {
         try {
             Importer importer = new Importer();
-            importer.setAttachMedia(this.getParameter(MediaGenerator.ATTACH_MEDIA_PARAMETER) != Boolean.FALSE);
+            importer.setAttachMedia(this.getParameter(VistaDataPreloaderParameter.attachMedia) != Boolean.FALSE);
 
             importer.start();
 

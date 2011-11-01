@@ -17,6 +17,8 @@ public enum VistaDataPreloaderParameter {
 
     pmcName,
 
-    devPreloadConfig;
+    devPreloadConfig,
+
+    attachMedia;
 
 }

@@ -38,8 +38,6 @@ import com.propertyvista.server.common.blob.ThumbnailService;
 
 public class MediaGenerator {
 
-    public static final String ATTACH_MEDIA_PARAMETER = "vista.media.preload";
-
     // Minimize PreloadData Size and speed, Share common images statically.  (25 sec instead of 2 min on fast computer) 
     static final boolean blob_mimize_Preload_Data_Size = true;
 
