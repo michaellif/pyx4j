@@ -11,7 +11,7 @@
  * @author Artyom
  * @version $Id$
  */
-package com.propertyvista.domain.dashboard.gadgets;
+package com.propertyvista.domain.dashboard.gadgets.vacancyreport;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Owned;
@@ -22,9 +22,10 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.StringHolder;
+import com.propertyvista.domain.dashboard.gadgets.SortEntity;
 
-@DiscriminatorValue("ListerGadgetBaseSettings")
-public interface ListerGadgetBaseSettings extends AbstractGadgetSettings {
+@DiscriminatorValue("UnitAvailabilityReportSettins")
+public interface UnitAvailabilityReportSettings extends AbstractGadgetSettings {
 
     public enum RefreshInterval {
 
@@ -59,11 +60,11 @@ public interface ListerGadgetBaseSettings extends AbstractGadgetSettings {
         }
     };
 
-    public IPrimitive<RefreshInterval> refreshInterval();
-
     public IPrimitive<Integer> itemsPerPage();
 
     public IPrimitive<Integer> currentPage();
+
+    public IPrimitive<String> defaultFilteringButton();
 
     /**
      * Use empty list of column names for default setting

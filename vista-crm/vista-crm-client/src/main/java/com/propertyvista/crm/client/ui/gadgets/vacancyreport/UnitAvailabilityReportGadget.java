@@ -19,14 +19,16 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -39,7 +41,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.forms.client.ui.CTextArea;
-import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.StyleSuffix;
 
@@ -47,17 +48,19 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.VacancyReportService
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
-import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityReportSettings;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus;
 
 // TODO column selection doesn't trigger presenter's populate() call (must hack into DataTable in order to do that or implement the whole thing using GWT CellTable)
 // TODO somehow use GWT Places in order to store the state instead of clumsy settings
-public class UnitVacancyReportGadget extends VacancyGadgetBase {
+public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
     private static final Integer DEFAULT_ITEMS_PER_PAGE_COUNT = 5;
+
+    private static final String ALL_BUTTON_CAPTION = "All";
 
     private EntityListPanel<UnitVacancyStatus> unitListPanel;
 
-    private ListerGadgetBaseSettings settings;
+    private UnitAvailabilityReportSettings settings;
 
     private VerticalPanel panel;
 
@@ -67,17 +70,21 @@ public class UnitVacancyReportGadget extends VacancyGadgetBase {
 
     private boolean isOk = true;
 
+    ToggleButton allButton;
+
     ToggleButton vacantButton;
 
     ToggleButton noticeButton;
 
-    ToggleButton occupiedButton;
+    ToggleButton vacantNoticeButton;
+
+    ToggleButton netExposureButton;
 
     ToggleButton rentedButton;
 
-    ToggleButton unrentedButton;
+    List<ToggleButton> filteringButtons;
 
-    public UnitVacancyReportGadget(GadgetMetadata gmd) {
+    public UnitAvailabilityReportGadget(GadgetMetadata gmd) {
         super(gmd);
         settings = gadgetMetadata.settings().cast();
 
@@ -128,29 +135,41 @@ public class UnitVacancyReportGadget extends VacancyGadgetBase {
         ClickHandler filterButtonClickHandler = new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                settings.currentPage().setValue(0);
-                populateUnitStatusList();
+                for (ToggleButton button : filteringButtons) {
+                    if (event.getSource().equals(button)) {
+                        button.setDown(true);
+                    } else {
+                        button.setDown(false);
+                    }
+                }
+                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        settings.currentPage().setValue(0);
+                        populateUnitStatusList();
+                    }
+                });
             }
         };
+        allButton = new ToggleButton(i18n.tr(ALL_BUTTON_CAPTION), filterButtonClickHandler);
         vacantButton = new ToggleButton(i18n.tr("Vacant"), filterButtonClickHandler);
         noticeButton = new ToggleButton(i18n.tr("Notice"), filterButtonClickHandler);
-        occupiedButton = new ToggleButton(i18n.tr("Occupied"), filterButtonClickHandler);
+        vacantNoticeButton = new ToggleButton(i18n.tr("Vacant") + "/" + i18n.tr("Notice"), filterButtonClickHandler);
         rentedButton = new ToggleButton(i18n.tr("Rented"), filterButtonClickHandler);
-        unrentedButton = new ToggleButton(i18n.tr("Unrented"), filterButtonClickHandler);
+        netExposureButton = new ToggleButton(i18n.tr("Net Exposure"), filterButtonClickHandler);
 
-        vacantButton.setDown(true);
-        noticeButton.setDown(true);
-        occupiedButton.setDown(true);
-        rentedButton.setDown(true);
-        unrentedButton.setDown(true);
+        filteringButtons = Arrays.asList(allButton, vacantButton, noticeButton, vacantNoticeButton, rentedButton, netExposureButton);
 
         int col = -1;
-        controlsPanel.setWidget(0, ++col, rentedButton);
-        controlsPanel.setWidget(0, ++col, unrentedButton);
-        controlsPanel.setWidget(0, ++col, new HTML("&nbsp&nbsp&nbsp&nbsp"));
-        controlsPanel.setWidget(0, ++col, occupiedButton);
-        controlsPanel.setWidget(0, ++col, vacantButton);
-        controlsPanel.setWidget(0, ++col, noticeButton);
+        // select the default button
+        for (ToggleButton button : filteringButtons) {
+            if (button.getText().equals(settings.defaultFilteringButton().getValue())) {
+                button.setDown(true);
+            } else {
+                button.setDown(false);
+            }
+            controlsPanel.setWidget(0, ++col, button);
+        }
 
         panel = new VerticalPanel();
         panel.add(controlsPanel);
@@ -163,15 +182,16 @@ public class UnitVacancyReportGadget extends VacancyGadgetBase {
 
     @Override
     protected void selfInit(GadgetMetadata gmd) {
-        gmd.type().setValue(GadgetType.UnitVacancyReport);
-        gmd.name().setValue(GadgetType.UnitVacancyReport.toString());
+        gmd.type().setValue(GadgetType.UnitAvailabilityReport);
+        gmd.name().setValue(GadgetType.UnitAvailabilityReport.toString());
     }
 
     @Override
     protected AbstractGadgetSettings createSettings() {
-        ListerGadgetBaseSettings settings = EntityFactory.create(ListerGadgetBaseSettings.class);
+        UnitAvailabilityReportSettings settings = EntityFactory.create(UnitAvailabilityReportSettings.class);
         settings.currentPage().setValue(0);
         settings.itemsPerPage().setValue(DEFAULT_ITEMS_PER_PAGE_COUNT);
+        settings.defaultFilteringButton().setValue(ALL_BUTTON_CAPTION);
         return settings;
     }
 
@@ -240,28 +260,47 @@ public class UnitVacancyReportGadget extends VacancyGadgetBase {
 
     @Override
     public ISetup getSetup() {
+        final double LEFT_PADDING = 2d;
         final FlexTable setupPanel = new FlexTable();
         setupPanel.getElement().getStyle().setPaddingTop(1, Unit.EM);
-        final CTextField unitsPerPage = new CTextField();
-        unitsPerPage.setValue(Integer.toString(settings.itemsPerPage().getValue()));
-        final Label label = new Label(i18n.tr("Units per page") + ":");
-        label.getElement().getStyle().setPaddingLeft(2, Unit.EM);
-        label.getElement().getStyle().setPaddingRight(2, Unit.EM);
 
-        setupPanel.setWidget(0, 0, label);
+        final TextBox unitsPerPage = new TextBox();
+        unitsPerPage.setValue(Integer.toString(settings.itemsPerPage().getValue()));
+        unitsPerPage.setWidth("3em");
+        final Label unitsPerPageLabel = new Label(i18n.tr("Units per page") + ":");
+        unitsPerPageLabel.getElement().getStyle().setPaddingLeft(LEFT_PADDING, Unit.EM);
+        unitsPerPageLabel.getElement().getStyle().setPaddingRight(2, Unit.EM);
+
+        final Label defaultFilteringButtonLabel = new Label(i18n.tr("Default display") + ":");
+        defaultFilteringButtonLabel.getElement().getStyle().setPaddingLeft(LEFT_PADDING, Unit.EM);
+        defaultFilteringButtonLabel.getElement().getStyle().setPaddingRight(2, Unit.EM);
+        final ListBox defaultFilteringButtonCombo = new ListBox(false);
+
+        int index = 0;
+        for (ToggleButton button : filteringButtons) {
+            defaultFilteringButtonCombo.addItem(button.getText());
+
+            if (button.getText().equals(settings.defaultFilteringButton().getValue())) {
+                defaultFilteringButtonCombo.setSelectedIndex(index);
+            }
+            ++index;
+        }
+
+        setupPanel.setWidget(0, 0, unitsPerPageLabel);
         setupPanel.setWidget(0, 1, unitsPerPage);
+        setupPanel.setWidget(1, 0, defaultFilteringButtonLabel);
+        setupPanel.setWidget(1, 1, defaultFilteringButtonCombo);
 
         return new ISetup() {
-            final Panel panel = setupPanel;
 
             @Override
             public Widget asWidget() {
-                return panel;
+                return setupPanel;
             }
 
             @Override
             public boolean onStart() {
-                UnitVacancyReportGadget.this.suspend();
+                UnitAvailabilityReportGadget.this.suspend();
                 return true;
             }
 
@@ -274,8 +313,11 @@ public class UnitVacancyReportGadget extends VacancyGadgetBase {
                     settings.itemsPerPage().setValue(DEFAULT_ITEMS_PER_PAGE_COUNT);
                     isOk = false;
                 }
-                UnitVacancyReportGadget.this.stop();
-                UnitVacancyReportGadget.this.start();
+                int selectedIndex = defaultFilteringButtonCombo.getSelectedIndex();
+                String defaultButton = selectedIndex == -1 ? allButton.getText() : defaultFilteringButtonCombo.getValue(selectedIndex);
+                settings.defaultFilteringButton().setValue(defaultButton);
+                UnitAvailabilityReportGadget.this.stop();
+                UnitAvailabilityReportGadget.this.start();
                 return isOk;
             }
 
@@ -348,6 +390,7 @@ public class UnitVacancyReportGadget extends VacancyGadgetBase {
                 setPageData(new Vector<UnitVacancyStatus>(), 0, 0, false);
                 return;
             }
+            UnitSelectionCriteria select = buttonStateToSelectionCriteria();
             service.unitStatusList(new AsyncCallback<EntitySearchResult<UnitVacancyStatus>>() {
 
                 @Override
@@ -364,12 +407,70 @@ public class UnitVacancyReportGadget extends VacancyGadgetBase {
                     reportError(caught);
                 }
             }, new Vector<String>(filter.getBuildingsFilteringCriteria()), //
-                    occupiedButton.isDown(), vacantButton.isDown(), noticeButton.isDown(), rentedButton.isDown(), unrentedButton.isDown(), filter.getFrom(), //
+                    select.occupied, select.vacant, select.notice, select.rented, select.notrented, filter.getFrom(), //
                     filter.getTo(), //
                     new Vector<Sort>(getUnitStatusListSortingCriteria()), //
                     pageNumber, //
                     getPageSize());
         }
+    }
+
+    // AUXILLIARY STUFF
+
+    private UnitSelectionCriteria buttonStateToSelectionCriteria() {
+        // it's done here and not in the toggle button click handler because it separates view from presenter 
+        UnitSelectionCriteria select = new UnitSelectionCriteria();
+        if (allButton.isDown()) {
+            select.occupied = true;
+            select.vacant = true;
+            select.notice = true;
+            select.rented = true;
+            select.notrented = true;
+        } else if (vacantButton.isDown()) {
+            select.occupied = false;
+            select.vacant = true;
+            select.notice = false;
+            select.rented = true;
+            select.notrented = true;
+        } else if (noticeButton.isDown()) {
+            select.occupied = false;
+            select.vacant = false;
+            select.notice = true;
+            select.rented = true;
+            select.notrented = true;
+        } else if (vacantNoticeButton.isDown()) {
+            select.occupied = false;
+            select.vacant = true;
+            select.notice = true;
+            select.rented = true;
+            select.notrented = true;
+        } else if (rentedButton.isDown()) {
+            select.occupied = false;
+            select.vacant = true;
+            select.notice = true;
+            select.rented = true;
+            select.notrented = false;
+        } else if (netExposureButton.isDown()) {
+            select.occupied = false;
+            select.vacant = true;
+            select.notice = true;
+            select.rented = false;
+            select.notrented = true;
+        }
+
+        return select;
+    }
+
+    private static class UnitSelectionCriteria {
+        boolean occupied;
+
+        boolean vacant;
+
+        boolean notice;
+
+        boolean rented;
+
+        boolean notrented;
     }
 
 }

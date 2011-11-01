@@ -40,11 +40,11 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
-import com.pyx4j.svg.chart.BarChart2D;
 import com.pyx4j.svg.chart.ChartTheme;
 import com.pyx4j.svg.chart.DataSource;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
+import com.pyx4j.svg.chart.LineChart;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.util.TimeRange;
@@ -57,8 +57,8 @@ import com.propertyvista.domain.dashboard.gadgets.vacancyreport.TurnoverAnalysis
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 
-public class VacancyTurnoverAnalysisGadget extends VacancyGadgetBase {
-    private static final I18n i18n = I18n.get(VacancyTurnoverAnalysisGadget.class);
+public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
+    private static final I18n i18n = I18n.get(TurnoverAnalysisGraphGadget.class);
 
     private static final String MEASURE_SELECTOR_RADIO_GROUP_ID = "measureSelector";
 
@@ -97,7 +97,7 @@ public class VacancyTurnoverAnalysisGadget extends VacancyGadgetBase {
 
     private AnalysisResolution currentDefaultResolution;
 
-    public VacancyTurnoverAnalysisGadget(GadgetMetadata gmd) {
+    public TurnoverAnalysisGraphGadget(GadgetMetadata gmd) {
         super(gmd);
         settings = gadgetMetadata.settings().cast();
 
@@ -155,8 +155,8 @@ public class VacancyTurnoverAnalysisGadget extends VacancyGadgetBase {
 
     @Override
     protected void selfInit(GadgetMetadata gmd) {
-        gmd.type().setValue(GadgetType.VacancyTurnoverAnalysis);
-        gmd.name().setValue(GadgetType.VacancyTurnoverAnalysis.toString());
+        gmd.type().setValue(GadgetType.TurnoverAnalysisGraph);
+        gmd.name().setValue(GadgetType.TurnoverAnalysisGraph.toString());
     }
 
     @Override
@@ -188,18 +188,21 @@ public class VacancyTurnoverAnalysisGadget extends VacancyGadgetBase {
     protected void setFilteringCriteria(FilterDataDemoAdapter criteria) {
         this.filter = criteria;
         if (criteria != null) {
-            refillResolutionSelector();
+            fillResolutionSelector();
             AnalysisResolution selected = getSelectedResolution();
             AnalysisResolution defaultResolution = getDefaultResolution(filter.getFrom(), filter.getTo());
             if (selected == null || currentDefaultResolution != defaultResolution) {
-                selectResolution(defaultResolution);
+                setResolution(defaultResolution);
                 currentDefaultResolution = defaultResolution;
             }
         }
         populateTurnoverAnalysis();
     }
 
-    private void refillResolutionSelector() {
+    /**
+     * This method is supposed to be used to adjust the available scale (resolution) combo box for the selected filtering criteria.
+     */
+    private void fillResolutionSelector() {
         AnalysisResolution currentResolution = getSelectedResolution();
         resolutionSelector.clear();
         if (!isFilteringCriteriaAcceptable()) {
@@ -207,17 +210,14 @@ public class VacancyTurnoverAnalysisGadget extends VacancyGadgetBase {
         }
         AnalysisResolution[] analysisValues = AnalysisResolution.values();
         int selectedResolutionIndex = -1;
-        int addedCounter = 0;
         for (int i = 0; i < analysisValues.length; ++i) {
             AnalysisResolution resolution = analysisValues[i];
-            if (isResolutionAcceptableForTheGivenDateRange(resolution, filter.getFrom(), filter.getTo())) {
-                resolutionSelector.addItem(resolution.toString(), resolution.toString());
-                if (resolution.equals(currentResolution)) {
-                    selectedResolutionIndex = addedCounter;
-                }
-                ++addedCounter;
+            resolutionSelector.addItem(resolution.toString(), resolution.toString());
+            if (resolution.equals(currentResolution)) {
+                selectedResolutionIndex = i;
             }
         }
+
         if (selectedResolutionIndex >= 0) {
             resolutionSelector.setItemSelected(selectedResolutionIndex, false);
         }
@@ -240,10 +240,10 @@ public class VacancyTurnoverAnalysisGadget extends VacancyGadgetBase {
         return defaultScale;
     }
 
-    private void selectResolution(AnalysisResolution resolution) {
+    private void setResolution(AnalysisResolution resolution) {
         if (resolution != null) {
-            int itemCount = resolutionSelector.getItemCount();
-            for (int i = 0; i < itemCount; ++i) {
+            int resolutionsCount = resolutionSelector.getItemCount();
+            for (int i = 0; i < resolutionsCount; ++i) {
                 if (resolution.equals(AnalysisResolution.representationToValue(resolutionSelector.getValue(i)))) {
                     resolutionSelector.setSelectedIndex(i);
                     break;
@@ -254,17 +254,6 @@ public class VacancyTurnoverAnalysisGadget extends VacancyGadgetBase {
 
     private boolean isFilteringCriteriaAcceptable() {
         return filter != null && (filter.getFrom() != null & filter.getTo() != null);
-    }
-
-    private static boolean isResolutionAcceptableForTheGivenDateRange(AnalysisResolution resolution, LogicalDate fromDate, LogicalDate toDate) {
-        if (fromDate == null | toDate == null) {
-            return false;
-        }
-        long fromTime = fromDate.getTime();
-        long toTime = toDate.getTime();
-        long interval = resolution.addTo(fromTime) - fromTime;
-
-        return ((toTime - fromTime) / interval) <= VacancyReportService.MAX_SUPPORTED_INTERVALS;
     }
 
     public AnalysisResolution getSelectedResolution() {
@@ -315,7 +304,7 @@ public class VacancyTurnoverAnalysisGadget extends VacancyGadgetBase {
         config.setZeroBased(false);
 
         SvgRoot svgroot = factory.getSvgRoot();
-        svgroot.add(new BarChart2D(config));
+        svgroot.add(new LineChart(config));
 
         graph.add((Widget) svgroot);
         graph.setSize("700px", "200px");

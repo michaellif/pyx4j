@@ -33,8 +33,12 @@ public interface UnitVacancyReportSummaryDTO extends IEntity {
 
     public IPrimitive<SummarySubject> summarySubject();
 
+    @Caption(name = "Net Exposure #")
+    public IPrimitive<Integer> netExposureAbsolute();
+
+    @Caption(name = "Net Exposure %")
     @Format("#0.00")
-    public IPrimitive<Double> netExposure();
+    public IPrimitive<Double> netExposureRelative();
 
     @Caption(name = "Notice #")
     public IPrimitive<Integer> noticeAbsolute();

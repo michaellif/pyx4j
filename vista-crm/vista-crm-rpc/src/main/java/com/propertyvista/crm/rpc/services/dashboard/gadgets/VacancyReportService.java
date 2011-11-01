@@ -29,14 +29,26 @@ import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatu
 
 public interface VacancyReportService extends IService {
 
-    /** This is used for DOS protection: {@link #turnoverAnalysis()} will refuse the request if it is to create too many intervals. */
-    public static final long MAX_SUPPORTED_INTERVALS = 31L;
-
     public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, Vector<String> buidlings, LogicalDate fromDate,
             LogicalDate toDate, AnalysisResolution resolution);
 
+    /**
+     * 
+     * @param callback
+     * @param buildings
+     * @param displayOccupied
+     * @param displayVacant
+     * @param displayNotice
+     * @param displayRented
+     * @param displayNotRented
+     * @param from
+     * @param to
+     * @param sortingCriteria
+     * @param pageNumber
+     * @param pageSize
+     */
     void unitStatusList(AsyncCallback<EntitySearchResult<UnitVacancyStatus>> callback, Vector<String> buildings, boolean displayOccupied,
-            boolean displayVacant, boolean displayNotice, boolean displayRented, boolean displayUnrented, LogicalDate from, LogicalDate to,
+            boolean displayVacant, boolean displayNotice, boolean displayRented, boolean displayNotRented, LogicalDate from, LogicalDate to,
             Vector<Sort> sortingCriteria, int pageNumber, int pageSize);
 
     void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, Vector<String> buildings, LogicalDate fromDate, LogicalDate toDate);

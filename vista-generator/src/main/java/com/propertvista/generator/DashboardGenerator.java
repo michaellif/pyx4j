@@ -137,24 +137,24 @@ public class DashboardGenerator extends Dashboards {
         GadgetMetadata gmd;
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.UnitVacancyReport);
-        gmd.name().setValue(GadgetType.UnitVacancyReport.toString() + " Demo");
+        gmd.type().setValue(GadgetType.UnitAvailabilityReport);
+        gmd.name().setValue(GadgetType.UnitAvailabilityReport.toString() + " Demo");
         gmd.column().setValue(1);
 
         dmd.gadgets().add(gmd);
 
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.VacancySummary);
-        gmd.name().setValue(GadgetType.VacancySummary.toString() + " Demo");
+        gmd.type().setValue(GadgetType.AvailabilitySummary);
+        gmd.name().setValue(GadgetType.AvailabilitySummary.toString() + " Demo");
         gmd.column().setValue(0);
 
         dmd.gadgets().add(gmd);
 
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.VacancyTurnoverAnalysis);
-        gmd.name().setValue(GadgetType.VacancyTurnoverAnalysis.toString() + " Demo");
+        gmd.type().setValue(GadgetType.TurnoverAnalysisGraph);
+        gmd.name().setValue(GadgetType.TurnoverAnalysisGraph.toString() + " Demo");
         gmd.column().setValue(0);
 
         dmd.gadgets().add(gmd);

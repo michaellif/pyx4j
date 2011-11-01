@@ -62,7 +62,7 @@ public class VacancyReportServiceImpl implements VacancyReportService {
 
     @Override
     public void unitStatusList(AsyncCallback<EntitySearchResult<UnitVacancyStatus>> callback, Vector<String> buildings, boolean displayOccupied,
-            boolean displayVacant, boolean displayNotice, boolean displayRented, boolean displayUnrented, LogicalDate from, LogicalDate to,
+            boolean displayVacant, boolean displayNotice, boolean displayRented, boolean displayNotRented, LogicalDate from, LogicalDate to,
             Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
 
         EntitySearchResult<UnitVacancyStatus> units = null;
@@ -102,7 +102,7 @@ public class VacancyReportServiceImpl implements VacancyReportService {
 
         while (!queue.isEmpty()) {
             UnitVacancyStatus unit = queue.poll();
-            if (isAcceptable(unit, displayOccupied, displayVacant, displayNotice, displayRented, displayUnrented)) {
+            if (isAcceptable(unit, displayOccupied, displayVacant, displayNotice, displayRented, displayNotRented)) {
                 ++currentPagePosition;
                 ++totalRows;
                 if (currentPagePosition > pageSize) {
@@ -121,7 +121,7 @@ public class VacancyReportServiceImpl implements VacancyReportService {
         }
         while (!queue.isEmpty()) {
             UnitVacancyStatus unit = queue.poll();
-            if (isAcceptable(unit, displayOccupied, displayVacant, displayNotice, displayRented, displayUnrented)) {
+            if (isAcceptable(unit, displayOccupied, displayVacant, displayNotice, displayRented, displayNotRented)) {
                 ++totalRows;
             }
         }
@@ -137,14 +137,14 @@ public class VacancyReportServiceImpl implements VacancyReportService {
     }
 
     private static boolean isAcceptable(UnitVacancyStatus unit, boolean displayOccupied, boolean displayVacant, boolean displayNotice, boolean displayRented,
-            boolean displayUnrented) {
+            boolean displayNotRented) {
 
         VacancyStatus vacancyStatus = unit.vacancyStatus().getValue();
         RentedStatus rentedStatus = unit.rentedStatus().getValue();
 
         return (displayOccupied & vacancyStatus == null) //
-                | ((displayVacant & vacancyStatus == VacancyStatus.Vacant) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayUnrented & rentedStatus == RentedStatus.Unrented))) //
-                | ((displayNotice & vacancyStatus == VacancyStatus.Notice) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayUnrented & rentedStatus == RentedStatus.Unrented)));
+                | ((displayVacant & vacancyStatus == VacancyStatus.Vacant) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented))) //
+                | ((displayNotice & vacancyStatus == VacancyStatus.Notice) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented)));
     }
 
     @Override
@@ -177,7 +177,7 @@ public class VacancyReportServiceImpl implements VacancyReportService {
         int notice = 0;
         int noticeRented = 0;
 
-        double netExposure = 0.0;
+        int netExposure = 0;
 
         for (UnitVacancyStatus unit : units) {
             ++total;
@@ -193,7 +193,6 @@ public class VacancyReportServiceImpl implements VacancyReportService {
                 ++vacant;
                 if (isRevenueLost(unit)) {
                     computeDaysVacantAndRevenueLost(unit, fromTime, toTime);
-                    netExposure += unit.revenueLost().getValue();
                 }
                 if (RentedStatus.Rented.equals(unit.rentedStatus().getValue())) {
                     ++vacantRented;
@@ -220,7 +219,9 @@ public class VacancyReportServiceImpl implements VacancyReportService {
         summary.noticeRelative().setValue(notice / ((double) total) * 100);
         summary.noticeRented().setValue(noticeRented);
 
-        summary.netExposure().setValue(netExposure);
+        netExposure = vacant + notice - (vacantRented + noticeRented);
+        summary.netExposureAbsolute().setValue(netExposure);
+        summary.netExposureRelative().setValue(netExposure / (double) total);
         callback.onSuccess(summary);
     }
 
@@ -240,10 +241,7 @@ public class VacancyReportServiceImpl implements VacancyReportService {
             return;
         }
 
-        if ((toTime - fromTime) / (resolution.addTo(fromTime) - fromTime) > MAX_SUPPORTED_INTERVALS) {
-            callback.onFailure(new Error("the date range that was specified is too big"));
-            return;
-        }
+        // FIXME add DOS protection based on calculation timeout rather than range and "SUPPORTED INTERVALS", or just report error if too many intervals have been created
 
         Vector<UnitVacancyReportTurnoverAnalysisDTO> result = new Vector<UnitVacancyReportTurnoverAnalysisDTO>();
 
@@ -268,20 +266,26 @@ public class VacancyReportServiceImpl implements VacancyReportService {
         long intervalEnd = resolution.addTo(intervalStart);
         int turnovers = 0;
         int total = 0;
+        boolean isFirstEmptyRange = true;
 
         for (UnitVacancyReportEvent event : events) {
             long eventTime = event.eventDate().getValue().getTime();
             while (eventTime >= intervalEnd) {
-                someoneMovedOut = new HashMap<String, Boolean>();
-                UnitVacancyReportTurnoverAnalysisDTO analysis = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
-                analysis.fromDate().setValue(new LogicalDate(intervalStart));
-                analysis.toDate().setValue(new LogicalDate(intervalEnd));
-                analysis.unitsTurnedOverAbs().setValue(turnovers);
-                result.add(analysis);
-
-                intervalStart = intervalEnd;
-                intervalEnd = resolution.addTo(intervalStart);
-                turnovers = 0;
+                if (!isFirstEmptyRange) {
+                    someoneMovedOut = new HashMap<String, Boolean>();
+                    UnitVacancyReportTurnoverAnalysisDTO analysis = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
+                    analysis.fromDate().setValue(new LogicalDate(intervalStart));
+                    analysis.toDate().setValue(new LogicalDate(intervalEnd));
+                    analysis.unitsTurnedOverAbs().setValue(turnovers);
+                    result.add(analysis);
+                    turnovers = 0;
+                    // TODO optimization: the following two lines must set the interval so that it encloses the current event
+                    intervalStart = intervalEnd;
+                    intervalEnd = resolution.addTo(intervalStart);
+                } else {
+                    intervalStart = intervalEnd;
+                    intervalEnd = resolution.addTo(intervalStart);
+                }
             }
             // FIXME Really Slow: hope there will be unique key someday !!!
             String unitKey = "" + event.propertyCode() + event.unit();
@@ -290,6 +294,7 @@ public class VacancyReportServiceImpl implements VacancyReportService {
             if (isMovedOut == null && eventType.equals("moveout")) {
                 someoneMovedOut.put(unitKey, Boolean.TRUE);
             } else if (isMovedOut == Boolean.TRUE & eventType.equals("movein")) {
+                isFirstEmptyRange = false; // TODO optimize this: separate into two loops
                 ++turnovers;
                 ++total;
             }
@@ -307,16 +312,18 @@ public class VacancyReportServiceImpl implements VacancyReportService {
         intervalStart = intervalEnd;
         intervalEnd = resolution.addTo(intervalStart);
 
-        // now add some data if we don't have more events but still haven't reached till the end of the rest of time time 
+        // now add some more intervals if we don't have more events but still haven't reached till the end of the rest of time time 
         while (endReportTime >= intervalEnd) {
-            UnitVacancyReportTurnoverAnalysisDTO analysis = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
-            analysis.fromDate().setValue(new LogicalDate(intervalStart));
-            analysis.toDate().setValue(new LogicalDate(intervalEnd));
-            analysis.unitsTurnedOverAbs().setValue(0);
-            result.add(analysis);
+            if (!isFirstEmptyRange) {
+                UnitVacancyReportTurnoverAnalysisDTO analysis = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
+                analysis.fromDate().setValue(new LogicalDate(intervalStart));
+                analysis.toDate().setValue(new LogicalDate(intervalEnd));
+                analysis.unitsTurnedOverAbs().setValue(0);
+                result.add(analysis);
 
-            intervalStart = intervalEnd;
-            intervalEnd = resolution.addTo(intervalStart);
+                intervalStart = intervalEnd;
+                intervalEnd = resolution.addTo(intervalStart);
+            }
         }
 
         for (UnitVacancyReportTurnoverAnalysisDTO analysis : result) {
