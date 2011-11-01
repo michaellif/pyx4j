@@ -32,6 +32,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.site.SitePalette;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
@@ -137,9 +138,11 @@ public class UnitDetailsPage extends BasePage {
     @Override
     public void renderHead(IHeaderResponse response) {
         int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
+        SitePalette sitePalette = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteDescriptor().sitePalette();
+
         String fileCSS = "unitdetails" + styleId + ".css";
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
-                new StylesheetTemplateModel(String.valueOf(styleId)));
+                new StylesheetTemplateModel(sitePalette));
         response.renderCSSReference(refCSS);
         super.renderHead(response);
 

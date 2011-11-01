@@ -32,37 +32,37 @@ public class RockvilleSitePreloader extends AbstractSitePreloader {
 
     @Override
     protected String object1() {
-        return "#4488bb";
+        return "#072255";
     }
 
     @Override
     protected String object2() {
-        return "green";
+        return "#5D466B";
     }
 
     @Override
     protected String contrast1() {
-        return "green";
+        return "#8BAEDA";
     }
 
     @Override
     protected String contrast2() {
-        return "green";
+        return "#5177A6";
     }
 
     @Override
     protected String foreground() {
-        return "green";
+        return "#444444";
     }
 
     @Override
     protected String background() {
-        return "green";
+        return "#666666";
     }
 
     @Override
     protected String form() {
-        return "green";
+        return "#666666";
     }
 
     @SuppressWarnings("deprecation")

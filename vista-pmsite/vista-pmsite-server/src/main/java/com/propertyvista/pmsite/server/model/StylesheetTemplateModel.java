@@ -21,6 +21,8 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import com.pyx4j.commons.css.Palette;
 import com.pyx4j.commons.css.ThemeColors;
 
+import com.propertyvista.domain.site.SitePalette;
+
 public class StylesheetTemplateModel extends LoadableDetachableModel<Map<String, Object>> {
 
     private static final long serialVersionUID = 1L;
@@ -29,27 +31,32 @@ public class StylesheetTemplateModel extends LoadableDetachableModel<Map<String,
 
     private static final int VIBRANCE_CNT = 10;
 
-    public StylesheetTemplateModel(String styleId) {
+    public StylesheetTemplateModel(SitePalette sitePalette) {
         palette = new Palette();
-        switch (Integer.parseInt(styleId)) {
-        case 1:
-            palette.putThemeColor(ThemeColors.object1, "#269bff");
-            palette.putThemeColor(ThemeColors.object2, "#2670ff");
-            palette.putThemeColor(ThemeColors.contrast1, "#ff170f");
-            palette.putThemeColor(ThemeColors.contrast2, "#6f5879");
-            palette.putThemeColor(ThemeColors.background, "#ffffff");
-            palette.putThemeColor(ThemeColors.foreground, "#000000");
-            break;
-        case 2:
-        default:
-            palette.putThemeColor(ThemeColors.object1, "#072255");
-            palette.putThemeColor(ThemeColors.object2, "#5D466B");
-            palette.putThemeColor(ThemeColors.contrast1, "#8BAEDA");
-            palette.putThemeColor(ThemeColors.contrast2, "#5177A6");
-            palette.putThemeColor(ThemeColors.background, "#666666");
-            palette.putThemeColor(ThemeColors.foreground, "#444444");
-            break;
-        }
+        palette.putThemeColor(ThemeColors.object1, sitePalette.object1().getValue());
+        palette.putThemeColor(ThemeColors.object2, sitePalette.object2().getValue());
+        palette.putThemeColor(ThemeColors.contrast1, sitePalette.contrast1().getValue());
+        palette.putThemeColor(ThemeColors.contrast2, sitePalette.contrast2().getValue());
+        palette.putThemeColor(ThemeColors.background, sitePalette.background().getValue());
+        palette.putThemeColor(ThemeColors.foreground, sitePalette.foreground().getValue());
+
+//             palette.putThemeColor(ThemeColors.object1, "#269bff");
+//            palette.putThemeColor(ThemeColors.object2, "#2670ff");
+//            palette.putThemeColor(ThemeColors.contrast1, "#ff170f");
+//            palette.putThemeColor(ThemeColors.contrast2, "#6f5879");
+//            palette.putThemeColor(ThemeColors.background, "#ffffff");
+//            palette.putThemeColor(ThemeColors.foreground, "#000000");
+//            break;
+//        case 2:
+//        default:
+//            palette.putThemeColor(ThemeColors.object1, "#072255");
+//            palette.putThemeColor(ThemeColors.object2, "#5D466B");
+//            palette.putThemeColor(ThemeColors.contrast1, "#8BAEDA");
+//            palette.putThemeColor(ThemeColors.contrast2, "#5177A6");
+//            palette.putThemeColor(ThemeColors.background, "#666666");
+//            palette.putThemeColor(ThemeColors.foreground, "#444444");
+//            break;
+//        }
     }
 
     @Override
