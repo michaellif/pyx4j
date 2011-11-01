@@ -195,13 +195,11 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             final String content = "I just had the pleasure to dealing with your superintendent at my building. I just moved in three weeks ago and was greeted right away by Manolo the Building Representative. I am a very picky guy but any issue/concern I threw at Manolo, he was able to assist with right away. I had an issue with Bell and Manolo went as far as working with the cable technician directly to ensure that my apartment was functioning to my liking. You have a great staff member in Manolo and if my first month experience is a showcase of what Starlight has to offer I can only be thankful that I found this great place to call home.";
             final String author = "Bill B., London, Ontario";
             Persistence.service().persist(createTestimonial(li.aLocale, li.i18n.tr(content), li.i18n.tr(author)));
-            break;
         }
         for (LocaleInfo li : siteLocale) {
             final String content = "I just wanted to let you know what a great job your superintendent Sean was doing.  He recently repaired my faucet and was very professional and courteous. Not only did he come and fix the issue right away, he also gave me advice on how to avoid this from happening in the future. This building is my home, and having Starlight now taking over showed instant results.\nThank you again.";
             final String author = "Jane L.";
             Persistence.service().persist(createTestimonial(li.aLocale, li.i18n.tr(content), li.i18n.tr(author)));
-            break;
         }
     }
 
@@ -211,14 +209,12 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             final String caption = "Vancouver prices to keep rising";
             final String content = "The Vancouver housing market may already be unaffordable for many, but there’s enough demand to keep prices rising, according to a new forecast.";
             Persistence.service().persist(createNews(li.aLocale, li.i18n.tr(caption), li.i18n.tr(content), new LogicalDate(111, 03, 22)));
-            break;
         }
 
         for (LocaleInfo li : siteLocale) {
             final String caption = "Ottawa, Toronto defy national sales trend ... for now";
             final String content = "Resale housing activity in August remained stable for the second consecutive month, according to new stats from The Canadian Real Estate Association, although brokers in Toronto and Ottawa benefited from an uptick in sales.";
             Persistence.service().persist(createNews(li.aLocale, li.i18n.tr(caption), li.i18n.tr(content), new LogicalDate(111, 05, 03)));
-            break;
         }
     }
 
