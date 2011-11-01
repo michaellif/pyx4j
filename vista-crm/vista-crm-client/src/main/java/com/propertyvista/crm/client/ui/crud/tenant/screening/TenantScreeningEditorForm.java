@@ -36,6 +36,7 @@ import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderU
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.CPriorAddress;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
+import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
 import com.propertyvista.common.client.ui.components.folders.TenantGuarantorFolder;
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
@@ -251,8 +252,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     private Widget createIncomesTab() {
         FormFlexPanel main = new FormFlexPanel();
 
-// TODO : copy/paste/something_else ;) incomes implementation from ptApp step        
-//        main.setWidget(0, 0, inject(proto().incomes(), createIncomeFolderEditor()));
+        main.setWidget(0, 0, inject(proto().incomes(), new PersonalIncomeFolder(isEditable())));
 
         return new ScrollPanel(main);
     }
