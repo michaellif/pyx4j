@@ -44,6 +44,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
@@ -160,6 +161,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             entity = entity.cast();
             connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
             persist(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
+            CacheService.entityCache().put(entity);
         } finally {
             SQLUtils.closeQuietly(connection);
         }
@@ -401,6 +403,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             entity = entity.cast();
             connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
             merge(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
+            CacheService.entityCache().put(entity);
         } finally {
             SQLUtils.closeQuietly(connection);
         }
@@ -630,13 +633,22 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
+    @SuppressWarnings("unchecked")
     private <T extends IEntity> T cascadeRetrieve(Connection connection, T entity) {
         if (entity.getPrimaryKey() == null) {
             return null;
         }
+        T cachedEntity = (T) CacheService.entityCache().get(entity.getEntityMeta().getEntityClass(), entity.getPrimaryKey());
+        if (cachedEntity != null) {
+            entity.set(cachedEntity);
+            return cachedEntity;
+        }
+
         TableModel tm = tableModel(connection, entity.getEntityMeta());
         if (tm.retrieve(connection, entity.getPrimaryKey(), entity)) {
-            return cascadeRetrieveMembers(connection, tm, entity);
+            entity = cascadeRetrieveMembers(connection, tm, entity);
+            CacheService.entityCache().put(entity);
+            return entity;
         } else {
             return null;
         }
