@@ -93,11 +93,24 @@ public class PMSiteContentManager implements Serializable {
             siteDescriptor = EntityFactory.create(SiteDescriptor.class);
             // TODO populate with default values, such as color scheme etc
         }
+        updatePages();
+    }
 
+    private void updatePages() {
         for (PageDescriptor descriptor : siteDescriptor.childPages()) {
             createPath(descriptor);
         }
+    }
 
+    public boolean refresh() {
+        SiteDescriptor latest = Persistence.service().retrieve(SiteDescriptor.class, siteDescriptor.getPrimaryKey());
+        if ((latest == null) || latest.updated().equals(siteDescriptor.updated())) {
+            return false;
+        } else {
+            siteDescriptor = latest;
+            updatePages();
+            return true;
+        }
     }
 
     private static void createPath(PageDescriptor parent) {

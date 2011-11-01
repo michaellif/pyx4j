@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 
+import com.pyx4j.entity.cache.CacheService;
+
 public class PMSiteWebRequest extends ServletWebRequest {
 
     private final PMSiteContentManager contentManager;
@@ -26,7 +28,18 @@ public class PMSiteWebRequest extends ServletWebRequest {
 
         // get PMContentManager with site descr separate (if changed update it)
 
-        contentManager = new PMSiteContentManager();
+        final String cacheKey = "pm-site";
+
+        PMSiteContentManager cm = (PMSiteContentManager) CacheService.get(cacheKey);
+        if (cm == null) {
+            cm = new PMSiteContentManager();
+            CacheService.put(cacheKey, cm);
+        } else {
+            if (cm.refresh()) {
+                CacheService.put(cacheKey, cm);
+            }
+        }
+        contentManager = cm;
     }
 
     public PMSiteContentManager getContentManager() {
