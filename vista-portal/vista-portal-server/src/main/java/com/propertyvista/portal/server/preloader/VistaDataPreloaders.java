@@ -67,21 +67,25 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         } catch (Throwable ignore) {
             demoPmc = null;
         }
-        switch (demoPmc) {
-        case vista:
-            add(new VistaSitePreloader());
-            break;
-        case star:
-            add(new StarlightSitePreloader());
-            break;
-        case redridge:
-            add(new RedridgeSitePreloader());
-            break;
-        case rockville:
-            add(new RockvilleSitePreloader());
-            break;
-        default:
+        if (demoPmc == null) {
             add(new ProdSitePreloader());
+        } else {
+            switch (demoPmc) {
+            case vista:
+                add(new VistaSitePreloader());
+                break;
+            case star:
+                add(new StarlightSitePreloader());
+                break;
+            case redridge:
+                add(new RedridgeSitePreloader());
+                break;
+            case rockville:
+                add(new RockvilleSitePreloader());
+                break;
+            default:
+                add(new ProdSitePreloader());
+            }
         }
     }
 
