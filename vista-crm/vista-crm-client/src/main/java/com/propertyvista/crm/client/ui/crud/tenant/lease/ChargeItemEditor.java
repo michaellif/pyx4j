@@ -83,7 +83,7 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
-        adjustmentPanel.setH1(0, 0, 1, i18n.tr("Adjustments"));
+        adjustmentPanel.setH3(0, 0, 1, i18n.tr("Adjustments"));
         adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new ChargeItemAdjustmentFolder()));
 
         return main;
@@ -113,7 +113,7 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
                     FormFlexPanel panel = new FormFlexPanel();
 
                     int row = -1;
-                    panel.setH1(++row, 0, 2, i18n.tr("Vehicle data"));
+                    panel.setH3(++row, 0, 2, i18n.tr("Vehicle data"));
 
                     panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().year()), 5).build());
                     panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().make()), 10).build());
@@ -156,7 +156,7 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
                     FormFlexPanel panel = new FormFlexPanel();
 
                     int row = -1;
-                    panel.setH1(++row, 0, 2, i18n.tr("Pet data"));
+                    panel.setH3(++row, 0, 2, i18n.tr("Pet data"));
 
                     panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
                     panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().color()), 15).build());
