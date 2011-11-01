@@ -187,7 +187,11 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         currentValue.selectedServiceItems().clear();
         for (Service service : currentValue.selectedBuilding().serviceCatalog().services()) {
             if (service.type().equals(currentValue.type())) {
-                currentValue.selectedServiceItems().addAll(service.items());
+                for (ServiceItem item : service.items()) {
+                    if (currentValue.unit().equals(item.element())) {
+                        currentValue.selectedServiceItems().add(item);
+                    }
+                }
             }
         }
     }

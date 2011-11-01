@@ -308,13 +308,13 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                     }
                 });
 
-                //  TODO not sure if we need duplicate item restriction:                
 //                    List<ServiceItem> alreadySelected = new ArrayList<ServiceItem>();
 //                    for (ChargeItem item : getValue().serviceAgreement().featureItems()) {
 //                        alreadySelected.add(item.item());
 //                    }
 
                 for (ServiceItem item : parent.getValue().selectedFeatureItems()) {
+//  TODO not sure if we need duplicate item check here:                
 //                        if (!alreadySelected.contains(item)) {
                     list.addItem(item.getStringView());
                     list.setValue(list.getItemCount() - 1, item.id().toString());

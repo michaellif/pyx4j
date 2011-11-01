@@ -56,6 +56,7 @@ public class ServiceCatalogGenerator {
         catalog.features().addAll(createFeatures(catalog));
         catalog.concessions().addAll(createConcessions(catalog));
         catalog.includedUtilities().addAll(createIncludedUtilities());
+        catalog.externalUtilities().addAll(createExcludedUtilities(catalog.includedUtilities()));
 
         buildEligibilityMatrix(catalog);
     }
@@ -236,7 +237,7 @@ public class ServiceCatalogGenerator {
         concession.condition().setValue(RandomUtil.random(Concession.Condition.values()));
         concession.status().setValue(RandomUtil.random(Concession.Status.values()));
         if (concession.status().getValue() == Concession.Status.approved) {
-            concession.approvedBy().setValue("Geoge W. Bush Jr.");
+            concession.approvedBy().setValue("Gorge W. Bush Jr.");
         }
 
         concession.effectiveDate().setValue(DataGenerator.randomDate(2));
@@ -257,9 +258,28 @@ public class ServiceCatalogGenerator {
 
         List<ServiceItemType> items = new ArrayList<ServiceItemType>();
         if (!allowedItemTypes.isEmpty()) {
-            int maxItems = DataGenerator.randomInt(allowedItemTypes.size());
+            int maxItems = Math.min(DataGenerator.randomInt(allowedItemTypes.size()) + 1, allowedItemTypes.size());
             for (int i = 0; i < maxItems; ++i) {
-                items.add(DataGenerator.random(allowedItemTypes));
+                items.add(RandomUtil.random(allowedItemTypes, "IncludedUtilities", maxItems));
+            }
+        }
+
+        return items;
+    }
+
+    public List<ServiceItemType> createExcludedUtilities(List<ServiceItemType> includedOnes) {
+        List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
+        for (ServiceItemType itemType : getFeatureItemTypes()) {
+            if (Feature.Type.utility.equals(itemType.featureType().getValue()) && !includedOnes.contains(itemType)) {
+                allowedItemTypes.add(itemType);
+            }
+        }
+
+        List<ServiceItemType> items = new ArrayList<ServiceItemType>();
+        if (!allowedItemTypes.isEmpty()) {
+            int maxItems = Math.min(DataGenerator.randomInt(allowedItemTypes.size()) + 1, allowedItemTypes.size());
+            for (int i = 0; i < maxItems; ++i) {
+                items.add(RandomUtil.random(allowedItemTypes, "ExcludedUtilities", maxItems));
             }
         }
 
