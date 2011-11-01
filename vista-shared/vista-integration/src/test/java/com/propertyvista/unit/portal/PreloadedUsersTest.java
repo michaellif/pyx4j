@@ -23,8 +23,8 @@ import com.pyx4j.selenium.D;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.User;
+import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.server.common.reference.SharedData;
@@ -40,7 +40,7 @@ public class PreloadedUsersTest extends PortalVerificationTestBase {
     }
 
     public void testFullFlow() throws Exception {
-        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, PreloadConfig.createTest());
+        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, VistaDevPreloadConfig.createTest());
         User user = generator.createUser(1);
         ApplicationSummaryGDO summary = generator.createSummary(user, null);
 

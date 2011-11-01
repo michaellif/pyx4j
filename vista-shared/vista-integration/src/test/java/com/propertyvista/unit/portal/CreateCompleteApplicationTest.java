@@ -32,7 +32,6 @@ import com.pyx4j.selenium.D;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.EmergencyContact;
-import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.User;
@@ -49,6 +48,7 @@ import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.misc.BusinessRules;
+import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
@@ -93,7 +93,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         assertNoMessages();
 
         log.info("execute flow with seed {}", seed);
-        PTGenerator generator = new PTGenerator(seed, PreloadConfig.createTest());
+        PTGenerator generator = new PTGenerator(seed, VistaDevPreloadConfig.createTest());
         User user = createTestUser();
         ApplicationSummaryGDO summary = generator.createSummary(user, null);
 

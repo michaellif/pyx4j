@@ -21,8 +21,8 @@ import com.pyx4j.unit.server.UnitTestsAsyncCallback;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
@@ -32,7 +32,7 @@ public class ApplicationServiceTest extends VistaDBTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        new VistaDataPreloaders(PreloadConfig.createTest()).preloadAll(false);
+        new VistaDataPreloaders(VistaDevPreloadConfig.createTest()).preloadAll(false);
     }
 
     @Override

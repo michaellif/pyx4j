@@ -38,6 +38,7 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.config.VistaNamespaceResolver;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
@@ -130,17 +131,20 @@ public class DBResetServlet extends HttpServlet {
                     }
 
                     if ((type == ResetType.all) && NamespaceManager.getNamespace().equals(VistaNamespaceResolver.demoNamespace)) {
-                        NamespaceManager.setNamespace(Pmc.adminNamespace);
-                        Pmc pmc = EntityFactory.create(Pmc.class);
-                        pmc.name().setValue("Start Demo");
-                        pmc.dnsName().setValue(VistaNamespaceResolver.demoSLNamespace);
 
-                        Persistence.service().persist(pmc);
+                        for (DemoPmc demoPmc : EnumSet.of(DemoPmc.star, DemoPmc.redridge, DemoPmc.rockville)) {
+                            NamespaceManager.setNamespace(Pmc.adminNamespace);
+                            Pmc pmc = EntityFactory.create(Pmc.class);
+                            pmc.name().setValue(demoPmc.name() + " Demo");
+                            pmc.dnsName().setValue(demoPmc.name());
 
-                        NamespaceManager.setNamespace(VistaNamespaceResolver.demoSLNamespace);
-                        buf.append("\n---Preload SL---");
-                        buf.append(conf.getDataPreloaders().preloadAll());
-                        buf.append("\nTotal time: " + TimeUtils.secSince(start));
+                            Persistence.service().persist(pmc);
+
+                            NamespaceManager.setNamespace(demoPmc.name());
+                            buf.append("\n--- Preload  " + demoPmc.name() + " ---");
+                            buf.append(conf.getDataPreloaders().preloadAll());
+                            buf.append("\nTotal time: " + TimeUtils.secSince(start));
+                        }
                     }
                 }
 

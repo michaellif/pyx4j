@@ -14,20 +14,31 @@
 package com.propertyvista.portal.server.preloader;
 
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
+import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.domain.PreloadConfig;
+import com.propertyvista.domain.DemoData.DemoPmc;
+import com.propertyvista.misc.VistaDataPreloaderParameter;
+import com.propertyvista.misc.VistaDevPreloadConfig;
+import com.propertyvista.portal.server.preloader.site.prod.ProdSitePreloader;
+import com.propertyvista.portal.server.preloader.site.redridge.RedridgeSitePreloader;
+import com.propertyvista.portal.server.preloader.site.rockville.RockvilleSitePreloader;
+import com.propertyvista.portal.server.preloader.site.star.StarlightSitePreloader;
+import com.propertyvista.portal.server.preloader.site.vista.VistaSitePreloader;
 
 public class VistaDataPreloaders extends DataPreloaderCollection {
 
-    public VistaDataPreloaders(PreloadConfig config) {
-        this(config, false);
+    public VistaDataPreloaders(VistaDevPreloadConfig config) {
+        this(false);
+        setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), config);
     }
 
-    private VistaDataPreloaders(PreloadConfig config, boolean production) {
+    private VistaDataPreloaders(boolean production) {
         add(new LocationPreloader());
         add(new ServiceCatalogPreloader());
 
-        if (!production) {
+        if (production) {
+            //DEMO add(new ProdSitePreloader());
+        } else {
 
             // TODO - these two should be moved to production preload when structure has been agreed!..  
             add(new DashboardPreloader());
@@ -35,23 +46,46 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             // end TODO
 
             add(new RefferenceDataPreloader());
-            add(new UserPreloader(config));
-            add(new CampaignPreloader(config));
+            add(new UserPreloader());
+            add(new CampaignPreloader());
 
-            add(new BuildingPreloader(config));
-            add(new PreloadTenants(config));
-            add(new PtPreloader(config));
+            add(new BuildingPreloader());
+            add(new PreloadTenants());
+            add(new PtPreloader());
 
             add(new DevelopmentSecurityPreloader());
 
             // DEMO - temporary!!!
-            add(new UnitVacancyReportDTOPreloader(config));
-            add(new UnitVacancyReportEventPreloader(config));
+            add(new UnitVacancyReportDTOPreloader());
+            add(new UnitVacancyReportEventPreloader());
         }
-        add(new PortalSitePreloader());
+
+        //DEMO Different data for different PMC
+        DemoPmc demoPmc;
+        try {
+            demoPmc = DemoPmc.valueOf(NamespaceManager.getNamespace());
+        } catch (Throwable ignore) {
+            demoPmc = null;
+        }
+        switch (demoPmc) {
+        case vista:
+            add(new VistaSitePreloader());
+            break;
+        case star:
+            add(new StarlightSitePreloader());
+            break;
+        case redridge:
+            add(new RedridgeSitePreloader());
+            break;
+        case rockville:
+            add(new RockvilleSitePreloader());
+            break;
+        default:
+            add(new ProdSitePreloader());
+        }
     }
 
     public static VistaDataPreloaders productionPmcPreloaders() {
-        return new VistaDataPreloaders(null, true);
+        return new VistaDataPreloaders(true);
     }
 }

@@ -14,6 +14,7 @@
 package com.propertyvista.domain.site;
 
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -26,6 +27,7 @@ public interface Testimonial extends IEntity {
     // -------------------------
 
     @Editor(type = Editor.EditorType.textarea)
+    @Length(20845)
     IPrimitive<String> content();
 
     IPrimitive<String> author();

@@ -20,11 +20,11 @@ import javax.servlet.http.HttpServletRequest;
 import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.config.shared.ApplicationMode;
 
+import com.propertyvista.domain.DemoData;
+
 public class VistaNamespaceResolver implements NamespaceResolver {
 
-    public static final String demoNamespace = "vista";
-
-    public static final String demoSLNamespace = "star";
+    public static final String demoNamespace = DemoData.DemoPmc.vista.name();
 
     @Override
     public String getNamespace(HttpServletRequest httprequest) {

@@ -35,9 +35,9 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
@@ -56,7 +56,7 @@ public class SummaryReportTest extends ReportsTestBase {
             ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(true));
         } else {
             VistaTestDBSetup.init();
-            new VistaDataPreloaders(PreloadConfig.createTest()).preloadAll();
+            new VistaDataPreloaders(VistaDevPreloadConfig.createTest()).preloadAll();
         }
         // Ignore all security constrains
         TestLifecycle.testSession(null, CoreBehavior.DEVELOPER);
@@ -96,7 +96,7 @@ public class SummaryReportTest extends ReportsTestBase {
     }
 
     private static SummaryDTO retreiveSummaryTodo() throws IOException {
-        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, PreloadConfig.createTest());
+        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, VistaDevPreloadConfig.createTest());
         // Application application = generator.createApplication(PTGenerator.createUser());
         SummaryDTO summary = null;//TODOgenerator.createSummary(application, null);
         return summary;

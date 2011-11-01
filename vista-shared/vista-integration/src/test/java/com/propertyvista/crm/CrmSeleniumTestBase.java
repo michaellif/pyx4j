@@ -22,8 +22,8 @@ import com.pyx4j.selenium.ISeleniumTestConfiguration;
 import com.pyx4j.selenium.SeleniumTestBase;
 
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.User;
+import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.unit.VistaDevLogin;
 import com.propertyvista.unit.config.ApplicationId;
 import com.propertyvista.unit.config.VistaSeleniumTestConfiguration;
@@ -44,7 +44,7 @@ public class CrmSeleniumTestBase extends SeleniumTestBase {
     }
 
     protected void login() {
-        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, PreloadConfig.createTest());
+        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, VistaDevPreloadConfig.createTest());
         User user = generator.createUser(1);
         selenium.type(D.id(proto(AuthenticationRequest.class).email()), "pm001@pyx4j.com");
         selenium.type(D.id(proto(AuthenticationRequest.class).password()), "pm001@pyx4j.com");

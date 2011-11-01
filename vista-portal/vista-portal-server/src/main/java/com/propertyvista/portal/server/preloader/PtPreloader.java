@@ -29,7 +29,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.EmergencyContact;
-import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.charges.ChargeLine;
@@ -39,6 +38,7 @@ import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
+import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
@@ -48,15 +48,11 @@ import com.propertyvista.portal.server.ptapp.services.ApplicationDebug;
 import com.propertyvista.server.common.ptapp.ApplicationMgr;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 
-public class PtPreloader extends BaseVistaDataPreloader {
+public class PtPreloader extends BaseVistaDevDataPreloader {
 
     private final static Logger log = LoggerFactory.getLogger(PtPreloader.class);
 
     private User user;
-
-    public PtPreloader(PreloadConfig config) {
-        super(config);
-    }
 
     //    private Application application;
 
@@ -142,7 +138,7 @@ public class PtPreloader extends BaseVistaDataPreloader {
     public String create() {
         user = loadUser(DemoData.PRELOADED_USERNAME);
 
-        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, PreloadConfig.createTest());
+        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, VistaDevPreloadConfig.createTest());
 
         ApplicationSummaryGDO summary = generator.createSummary(user, Persistence.service().retrieve(AptUnit.class, new Key(1)));
 

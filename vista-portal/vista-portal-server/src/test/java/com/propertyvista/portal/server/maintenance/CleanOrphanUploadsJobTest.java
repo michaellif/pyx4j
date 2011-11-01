@@ -38,8 +38,8 @@ import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 
@@ -59,7 +59,7 @@ public class CleanOrphanUploadsJobTest extends VistaDBTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        new VistaDataPreloaders(PreloadConfig.createTest()).preloadAll(false);
+        new VistaDataPreloaders(VistaDevPreloadConfig.createTest()).preloadAll(false);
         instance = new CleanOrphanApplicationDocumentDataRecordsJob();
     }
 

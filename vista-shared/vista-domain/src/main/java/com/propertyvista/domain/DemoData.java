@@ -19,6 +19,10 @@ import com.propertyvista.domain.tenant.TenantIn.Relationship;
 
 public class DemoData {
 
+    public static enum DemoPmc {
+        vista, star, redridge, rockville;
+    }
+
     public final static int PT_GENERATION_SEED = 100;
 
     public final static int BUILDINGS_GENERATION_SEED = 100;

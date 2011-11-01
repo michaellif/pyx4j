@@ -18,8 +18,8 @@ import junit.framework.TestCase;
 import com.propertvista.generator.PTGenerator;
 import com.propertvista.generator.gdo.ApplicationSummaryGDO;
 
-import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.User;
+import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.server.TestUtil;
 import com.propertyvista.server.common.reference.SharedData;
 
@@ -34,19 +34,19 @@ public class VistaDataGeneratorTest extends TestCase {
         final long seed1 = 250;
 
         SharedData.init();
-        PTGenerator generator1 = new PTGenerator(seed1, PreloadConfig.createTest());
+        PTGenerator generator1 = new PTGenerator(seed1, VistaDevPreloadConfig.createTest());
         User user1 = generator1.createUser(1);
 
         ApplicationSummaryGDO summary1 = generator1.createSummary(user1, null);
 
         // Do some other data generation
-        PTGenerator generatorX = new PTGenerator(System.currentTimeMillis(), PreloadConfig.createTest());
+        PTGenerator generatorX = new PTGenerator(System.currentTimeMillis(), VistaDevPreloadConfig.createTest());
         User userX = generatorX.createUser(1);
         generatorX.createSummary(userX, null);
 
         SharedData.init();
 
-        PTGenerator generator2 = new PTGenerator(seed1, PreloadConfig.createTest());
+        PTGenerator generator2 = new PTGenerator(seed1, VistaDevPreloadConfig.createTest());
         User user2 = generator2.createUser(1);
         ApplicationSummaryGDO summary2 = generator2.createSummary(user2, null);
 

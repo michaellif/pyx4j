@@ -39,7 +39,6 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.LegalQuestions;
-import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.VistaBehavior;
@@ -69,6 +68,7 @@ import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.misc.ApplicationDocumentServletParameters;
+import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.ApplicationDocumentData;
@@ -80,10 +80,10 @@ public class PTGenerator {
 
     private final long seed;
 
-    private final PreloadConfig config;
+    private final VistaDevPreloadConfig config;
 
     // TODO this seed might be an optional thing (come from config)
-    public PTGenerator(long seed, PreloadConfig config) {
+    public PTGenerator(long seed, VistaDevPreloadConfig config) {
         DataGenerator.setRandomSeed(seed);
         this.config = config;
         this.seed = seed;

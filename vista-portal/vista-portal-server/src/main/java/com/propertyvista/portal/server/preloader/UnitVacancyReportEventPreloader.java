@@ -22,16 +22,11 @@ import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.CSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportEvent;
 
-public class UnitVacancyReportEventPreloader extends BaseVistaDataPreloader {
+public class UnitVacancyReportEventPreloader extends BaseVistaDevDataPreloader {
 
     public static final String DATA_SOURCE_FILE = "unit-vacancy-report-events.csv";
-
-    protected UnitVacancyReportEventPreloader(PreloadConfig config) {
-        super(config);
-    }
 
     @Override
     public String create() {

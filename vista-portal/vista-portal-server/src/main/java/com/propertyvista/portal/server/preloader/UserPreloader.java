@@ -26,23 +26,18 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.UserCredential;
 
-public class UserPreloader extends BaseVistaDataPreloader {
+public class UserPreloader extends BaseVistaDevDataPreloader {
 
     private final static Logger log = LoggerFactory.getLogger(UserPreloader.class);
 
     private int userCount;
 
     private int custCount;
-
-    public UserPreloader(PreloadConfig config) {
-        super(config);
-    }
 
     private User createUser(String email, VistaBehavior behavior) {
         userCount++;
@@ -87,15 +82,15 @@ public class UserPreloader extends BaseVistaDataPreloader {
 
         if (ApplicationMode.isDevelopment()) {
 
-            for (int i = 1; i <= config.getMaxAdmin(); i++) {
+            for (int i = 1; i <= config().getMaxAdmin(); i++) {
                 createUser(DemoData.CRM_ADMIN_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.ADMIN);
             }
 
-            for (int i = 1; i <= config.getMaxPropertyManagers(); i++) {
+            for (int i = 1; i <= config().getMaxPropertyManagers(); i++) {
                 createUser(DemoData.CRM_PROPERTY_MANAGER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.PROPERTY_MANAGER);
             }
 
-            for (int i = 1; i <= config.getMaxCustomers(); i++) {
+            for (int i = 1; i <= config().getMaxCustomers(); i++) {
                 switch (custCount % 3) {
                 case 0:
                     createUser(DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.PROSPECTIVE_TENANT);

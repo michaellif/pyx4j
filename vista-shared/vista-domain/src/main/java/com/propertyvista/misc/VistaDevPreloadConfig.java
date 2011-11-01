@@ -11,9 +11,12 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.misc;
 
-public final class PreloadConfig {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public final class VistaDevPreloadConfig implements Serializable {
 
     private int maxCustomers = 20;
 
@@ -49,15 +52,15 @@ public final class PreloadConfig {
 
     private int numRoofs = 1;
 
-    private PreloadConfig() {
+    private VistaDevPreloadConfig() {
     }
 
-    public static PreloadConfig createDefault() {
-        return new PreloadConfig();
+    public static VistaDevPreloadConfig createDefault() {
+        return new VistaDevPreloadConfig();
     }
 
-    public static PreloadConfig createTest() {
-        PreloadConfig config = new PreloadConfig();
+    public static VistaDevPreloadConfig createTest() {
+        VistaDevPreloadConfig config = new VistaDevPreloadConfig();
         config.setMaxCustomers(2);
         config.setMaxPropertyManagers(2);
         config.setMaxAdmin(1);

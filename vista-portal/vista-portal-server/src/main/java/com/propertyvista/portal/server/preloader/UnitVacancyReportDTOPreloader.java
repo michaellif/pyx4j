@@ -24,18 +24,14 @@ import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.CSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus.RentReady;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus.VacancyStatus;
 
-public class UnitVacancyReportDTOPreloader extends BaseVistaDataPreloader {
-    public static final String DATA_SOURCE_FILE = "unit-vacancy-report.csv";
+public class UnitVacancyReportDTOPreloader extends BaseVistaDevDataPreloader {
 
-    protected UnitVacancyReportDTOPreloader(PreloadConfig config) {
-        super(config);
-    }
+    public static final String DATA_SOURCE_FILE = "unit-vacancy-report.csv";
 
     @Override
     public String delete() {

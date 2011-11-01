@@ -34,7 +34,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -72,13 +71,9 @@ import com.propertyvista.server.common.reference.PublicDataUpdater;
 import com.propertyvista.server.domain.FileBlob;
 import com.propertyvista.server.domain.ThumbnailBlob;
 
-public class BuildingPreloader extends BaseVistaDataPreloader {
+public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
     private final static Logger log = LoggerFactory.getLogger(BuildingPreloader.class);
-
-    public BuildingPreloader(PreloadConfig config) {
-        super(config);
-    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -140,7 +135,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
         Persistence.service().persist(pmcs);
 
         int unitCount = 0;
-        List<Building> buildings = generator.createBuildings(config.getNumResidentialBuildings());
+        List<Building> buildings = generator.createBuildings(config().getNumResidentialBuildings());
 
         List<Complex> complexesWithBuildins = new Vector<Complex>();
 
@@ -193,7 +188,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             Persistence.service().merge(building);
 
             // Elevators
-            List<Elevator> elevators = generator.createElevators(building, config.getNumElevators());
+            List<Elevator> elevators = generator.createElevators(building, config().getNumElevators());
             for (Elevator elevator : elevators) {
                 CmpanyVendorPersistHelper.persistWarranty(elevator.warranty());
                 CmpanyVendorPersistHelper.persistMaintenance(elevator.maintenance());
@@ -201,7 +196,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             }
 
             // Boilers
-            List<Boiler> boilers = generator.createBoilers(building, config.getNumBoilers());
+            List<Boiler> boilers = generator.createBoilers(building, config().getNumBoilers());
             for (Boiler boiler : boilers) {
                 CmpanyVendorPersistHelper.persistWarranty(boiler.warranty());
                 CmpanyVendorPersistHelper.persistMaintenance(boiler.maintenance());
@@ -209,7 +204,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             }
 
             // Roofs
-            List<Roof> roofs = generator.createRoofs(building, config.getNumRoofs());
+            List<Roof> roofs = generator.createRoofs(building, config().getNumRoofs());
             for (Roof roof : roofs) {
                 CmpanyVendorPersistHelper.persistWarranty(roof.warranty());
                 CmpanyVendorPersistHelper.persistMaintenance(roof.maintenance());
@@ -217,22 +212,22 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             }
 
             // Parking:
-            List<Parking> parkings = generator.createParkings(building, config.getNumParkings());
+            List<Parking> parkings = generator.createParkings(building, config().getNumParkings());
             for (Parking parking : parkings) {
                 Persistence.service().persist(parking);
 
-                List<ParkingSpot> spots = generator.createParkingSpots(parking, config.getNumParkingSpots());
+                List<ParkingSpot> spots = generator.createParkingSpots(parking, config().getNumParkingSpots());
                 for (ParkingSpot spot : spots) {
                     Persistence.service().persist(spot);
                 }
             }
 
             // Lockers:
-            List<LockerArea> lockerAreas = generator.createLockerAreas(building, config.getNumLockerAreas());
+            List<LockerArea> lockerAreas = generator.createLockerAreas(building, config().getNumLockerAreas());
             for (LockerArea item : lockerAreas) {
                 Persistence.service().persist(item);
 
-                List<Locker> lockers = generator.createLockers(item, config.getNumLockers());
+                List<Locker> lockers = generator.createLockers(item, config().getNumLockers());
                 for (Locker locker : lockers) {
                     Persistence.service().persist(locker);
                 }
@@ -245,7 +240,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             }
 
             // Floorplans:
-            List<FloorplanDTO> floorplans = generator.createFloorplans(building, config.getNumFloorplans());
+            List<FloorplanDTO> floorplans = generator.createFloorplans(building, config().getNumFloorplans());
             for (FloorplanDTO floorplanDTO : floorplans) {
 
                 if (this.getParameter(MediaGenerator.ATTACH_MEDIA_PARAMETER) != Boolean.FALSE) {
@@ -263,7 +258,7 @@ public class BuildingPreloader extends BaseVistaDataPreloader {
             }
 
             // Units:
-            List<UnitRelatedData> units = generator.createUnits(building, floorplans, config.getNumFloors(), config.getNumUnitsPerFloor());
+            List<UnitRelatedData> units = generator.createUnits(building, floorplans, config().getNumFloors(), config().getNumUnitsPerFloor());
             unitCount += units.size();
             for (UnitRelatedData unitData : units) {
                 // persist plain internal lists:

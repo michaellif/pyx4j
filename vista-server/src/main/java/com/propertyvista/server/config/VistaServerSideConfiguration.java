@@ -30,7 +30,7 @@ import com.pyx4j.security.shared.AclCreator;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.VistaSMTPMailServiceConfig;
-import com.propertyvista.domain.PreloadConfig;
+import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.common.security.VistaAntiBot;
 import com.propertyvista.server.security.VistaAccessControlList;
@@ -94,7 +94,7 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
 
     @Override
     public DataPreloaderCollection getDataPreloaders() {
-        return new VistaDataPreloaders(PreloadConfig.createDefault());
+        return new VistaDataPreloaders(VistaDevPreloadConfig.createDefault());
     }
 
     @Override

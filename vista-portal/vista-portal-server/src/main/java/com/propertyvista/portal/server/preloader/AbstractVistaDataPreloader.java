@@ -7,23 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 7, 2011
+ * Created on Nov 1, 2011
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.io.Serializable;
+
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
-import com.pyx4j.essentials.server.preloader.DataGenerator;
 
-import com.propertyvista.domain.PreloadConfig;
+import com.propertyvista.misc.VistaDataPreloaderParameter;
 
-abstract class BaseVistaDataPreloader extends AbstractDataPreloader {
+public abstract class AbstractVistaDataPreloader extends AbstractDataPreloader {
 
-    protected PreloadConfig config;
-
-    protected BaseVistaDataPreloader(PreloadConfig config) {
-        this.config = config;
-        DataGenerator.setRandomSeed(100);
+    protected Serializable getParameter(VistaDataPreloaderParameter param) {
+        return super.getParameter(param.name());
     }
 }

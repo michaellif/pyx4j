@@ -23,10 +23,10 @@ import com.propertvista.generator.PTGenerator;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.tenant.TenantIn.Status;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
@@ -40,7 +40,7 @@ public class TenantServiceTest extends VistaDBTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        new VistaDataPreloaders(PreloadConfig.createTest()).preloadAll(false);
+        new VistaDataPreloaders(VistaDevPreloadConfig.createTest()).preloadAll(false);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class TenantServiceTest extends VistaDBTestBase {
     public void testLoadAndSave() {
         happyPath();
 
-        PTGenerator generator = new PTGenerator(10l, PreloadConfig.createTest());
+        PTGenerator generator = new PTGenerator(10l, VistaDevPreloadConfig.createTest());
 
         TenantInLeaseListDTO tenantList = HappyPath.step4createTenants();
         // PotentialTenantList tenantList2 = generator.createPotentialTenantList(application);

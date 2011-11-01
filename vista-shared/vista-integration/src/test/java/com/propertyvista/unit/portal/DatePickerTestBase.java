@@ -29,8 +29,8 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.datepicker.DatePickerIDs;
 
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.User;
+import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.server.common.reference.SharedData;
@@ -56,7 +56,7 @@ public class DatePickerTestBase extends WizardSeleniumTestBase {
     }
 
     protected void login() {
-        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, PreloadConfig.createTest());
+        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, VistaDevPreloadConfig.createTest());
         User user = generator.createUser(1);
         selenium.click(VistaFormsDebugId.Auth_Login);
         selenium.type(D.id(proto(AuthenticationRequest.class).email()), user.email().getValue());

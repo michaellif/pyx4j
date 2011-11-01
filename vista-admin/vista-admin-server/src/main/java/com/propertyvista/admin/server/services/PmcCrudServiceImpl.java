@@ -26,6 +26,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
@@ -34,8 +35,9 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.PreloadConfig;
 import com.propertyvista.domain.VistaBehavior;
+import com.propertyvista.misc.VistaDataPreloaderParameter;
+import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
 import com.propertyvista.portal.server.preloader.UserPreloader;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
@@ -88,14 +90,15 @@ public class PmcCrudServiceImpl implements PmcCrudService {
         UserPreloader.createUser(pmc.email().getValue(), pmc.password().getValue(), VistaBehavior.PROPERTY_MANAGER);
 
         if (ApplicationMode.isDevelopment()) {
-            PreloadConfig config = PreloadConfig.createDefault();
+            VistaDevPreloadConfig config = VistaDevPreloadConfig.createDefault();
             for (int i = 1; i <= config.getMaxPropertyManagers(); i++) {
                 String email = DemoData.CRM_PROPERTY_MANAGER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN;
                 UserPreloader.createUser(email, email, VistaBehavior.PROPERTY_MANAGER);
             }
         }
-
-        log.info("Preload {}", VistaDataPreloaders.productionPmcPreloaders().create());
+        AbstractDataPreloader preloader = VistaDataPreloaders.productionPmcPreloaders();
+        preloader.setParameterValue(VistaDataPreloaderParameter.pmcName.name(), pmc.name().getStringView());
+        log.info("Preload {}", preloader.create());
     }
 
     @Override

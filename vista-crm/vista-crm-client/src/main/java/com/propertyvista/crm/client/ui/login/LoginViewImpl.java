@@ -31,7 +31,7 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 
 import com.propertyvista.common.client.ui.components.login.LoginForm;
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.PreloadConfig;
+import com.propertyvista.misc.VistaDevPreloadConfig;
 
 public class LoginViewImpl extends FlowPanel implements LoginView {
 
@@ -47,7 +47,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
     private HandlerRegistration handlerRegistration;
 
-    private final PreloadConfig config = PreloadConfig.createDefault();
+    private final VistaDevPreloadConfig config = VistaDevPreloadConfig.createDefault();
 
     public LoginViewImpl() {
 

@@ -22,7 +22,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.domain.PreloadConfig;
+import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 public class VistaDBPreloadTest extends VistaDBTestBase {
@@ -31,7 +31,7 @@ public class VistaDBPreloadTest extends VistaDBTestBase {
 
     public void testDefaultPreload() {
         long start = System.currentTimeMillis();
-        DataPreloaderCollection dp = new VistaDataPreloaders(PreloadConfig.createTest());
+        DataPreloaderCollection dp = new VistaDataPreloaders(VistaDevPreloadConfig.createTest());
         dp.setParameterValue(MediaGenerator.ATTACH_MEDIA_PARAMETER, Boolean.FALSE);
         dp.preloadAll();
         log.info("Preload time {}", TimeUtils.secSince(start));
