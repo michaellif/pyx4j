@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
@@ -34,10 +35,12 @@ public interface PaymentMethod extends IEntity {
     @ReadOnly
     Tenant tenant();
 
+    @MemberColumn(name = "prim")
     IPrimitive<Boolean> primary();
 
     @Caption(name = "Payment types")
     @Editor(type = EditorType.radiogroup)
+    @MemberColumn(name = "paymentType")
     IPrimitive<PaymentType> type();
 
     @Caption(name = "eCheck")
