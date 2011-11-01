@@ -78,7 +78,7 @@ class SitePageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
         return !(Type.findApartment.equals(item.type().getValue()) || Type.residents.equals(item.type().getValue()));
     }
 
-    class PageDescriptorEditor extends CEntityFolderRowEditor<PageDescriptor> {
+    private class PageDescriptorEditor extends CEntityFolderRowEditor<PageDescriptor> {
 
         public PageDescriptorEditor() {
             super(PageDescriptor.class, columns());

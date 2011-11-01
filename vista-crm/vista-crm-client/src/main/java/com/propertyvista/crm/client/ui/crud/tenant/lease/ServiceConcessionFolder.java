@@ -92,7 +92,7 @@ class ServiceConcessionFolder extends VistaTableFolder<ServiceConcession> {
         return super.create(member);
     }
 
-    class ServiceConcessionEditor extends CEntityFolderRowEditor<ServiceConcession> {
+    private class ServiceConcessionEditor extends CEntityFolderRowEditor<ServiceConcession> {
 
         public ServiceConcessionEditor() {
             super(ServiceConcession.class, columns());

@@ -116,7 +116,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         return super.create(member);
     }
 
-    class TenantInLeaseEditor extends CEntityFolderRowEditor<TenantInLease> {
+    private class TenantInLeaseEditor extends CEntityFolderRowEditor<TenantInLease> {
 
         // TODO - get somehow this info:
         private final boolean first = false;

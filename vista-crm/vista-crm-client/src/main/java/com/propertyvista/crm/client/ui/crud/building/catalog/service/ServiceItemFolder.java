@@ -66,7 +66,7 @@ class ServiceItemFolder extends VistaTableFolder<ServiceItem> {
         return super.create(member);
     }
 
-    class ServiceItemEditor extends CEntityFolderRowEditor<ServiceItem> {
+    private class ServiceItemEditor extends CEntityFolderRowEditor<ServiceItem> {
 
         public ServiceItemEditor() {
             super(ServiceItem.class, columns());

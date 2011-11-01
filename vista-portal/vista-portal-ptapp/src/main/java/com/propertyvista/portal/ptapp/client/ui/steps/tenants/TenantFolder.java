@@ -82,7 +82,7 @@ class TenantFolder extends VistaTableFolder<TenantInApplicationDTO> {
         return columns;
     }
 
-    class TenantEditor extends CEntityFolderRowEditor<TenantInApplicationDTO> {
+    private class TenantEditor extends CEntityFolderRowEditor<TenantInApplicationDTO> {
 
         private final boolean first = false;
 

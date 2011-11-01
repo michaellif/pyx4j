@@ -63,7 +63,7 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
         }
     }
 
-    class PageDescriptorEditor extends CEntityFolderRowEditor<PageDescriptor> {
+    private class PageDescriptorEditor extends CEntityFolderRowEditor<PageDescriptor> {
 
         public PageDescriptorEditor() {
             super(PageDescriptor.class, columns());
