@@ -161,7 +161,6 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             entity = entity.cast();
             connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
             persist(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
-            CacheService.entityCache().put(entity);
         } finally {
             SQLUtils.closeQuietly(connection);
         }
@@ -219,6 +218,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 }
             }
         }
+        CacheService.entityCache().put(entity);
     }
 
     private void insert(Connection connection, TableModel tm, IEntity entity, Date now) {
@@ -403,7 +403,6 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             entity = entity.cast();
             connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
             merge(connection, tableModel(connection, entity.getEntityMeta()), entity, DateUtils.getRoundedNow());
-            CacheService.entityCache().put(entity);
         } finally {
             SQLUtils.closeQuietly(connection);
         }
@@ -607,6 +606,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     }
                 }
             }
+            CacheService.entityCache().put(entity);
         }
     }
 
