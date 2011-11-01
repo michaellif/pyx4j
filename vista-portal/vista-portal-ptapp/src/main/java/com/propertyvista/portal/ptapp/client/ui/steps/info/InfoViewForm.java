@@ -21,7 +21,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
@@ -32,17 +31,17 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.CEmailLabel;
+import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.CPriorAddress;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.PriorAddress;
@@ -50,11 +49,11 @@ import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 
-public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
+public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
     private static I18n i18n = I18n.get(InfoViewForm.class);
 
-    private Widget previousAddressHeader;
+    private final FormFlexPanel previousAddress = new FormFlexPanel();
 
     private ApplicationDocumentsFolderUploader fileUpload;
 
@@ -64,29 +63,30 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(new VistaHeaderBar(i18n.tr("Contact Details")));
+        int row = -1;
+        main.setH1(++row, 0, 1, i18n.tr("Contact Details"));
 
-        main.add(inject(proto().person().name().firstName(), new CLabel()), 12);
-        main.add(inject(proto().person().name().middleName()), 6);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName(), new CLabel()), 12).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().middleName()), 6).build());
 
-        main.add(inject(proto().person().name().lastName(), new CLabel()), 20);
-        main.add(inject(proto().person().homePhone()), 15);
-        main.add(inject(proto().person().mobilePhone()), 15);
-        main.add(inject(proto().person().workPhone()), 15);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName(), new CLabel()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 15).build());
 
-        main.add(inject(proto().person().email(), new CEmailLabel()), 25);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email(), new CEmailLabel()), 25).build());
 
-        main.add(new VistaHeaderBar(i18n.tr("Secure Information")));
-        main.add(inject(proto().driversLicense()), 20);
-        main.add(inject(proto().driversLicenseState()), 17);
+        main.setH1(++row, 0, 1, i18n.tr("Secure Information"));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().driversLicense()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().driversLicenseState()), 17).build());
 
         final CEditableComponent<?, ?> sin = inject(proto().secureIdentifier());
-        main.add(sin, 7);
-        main.add(inject(proto().notCanadianCitizen()), 3);
+        main.setWidget(++row, 0, new DecoratorBuilder(sin, 7).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notCanadianCitizen()), 3).build());
 
-        main.add(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.securityInfo)));
+        main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.securityInfo)));
         fileUpload.asWidget().getElement().getStyle().setMarginLeft(14, Unit.EM);
         fileUpload.asWidget().getElement().getStyle().setMarginTop(1, Unit.EM);
         fileUpload.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);
@@ -104,30 +104,37 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
             }
         });
 
-        main.add(new VistaHeaderBar(proto().currentAddress()));
-        main.add(inject(proto().currentAddress()));
+        main.setH1(++row, 0, 1, proto().currentAddress().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().currentAddress()));
 
-        main.add(previousAddressHeader = new VistaHeaderBar(proto().previousAddress()));
-        main.add(inject(proto().previousAddress()));
+        previousAddress.setH1(0, 0, 1, proto().previousAddress().getMeta().getCaption());
+        previousAddress.setWidget(1, 0, inject(proto().previousAddress()));
+        main.setWidget(++row, 0, previousAddress);
 
-        main.add(new VistaHeaderBar(proto().legalQuestions()));
+        main.setH1(++row, 0, 1, proto().legalQuestions().getMeta().getCaption());
+        main.setWidget(++row, 0,
+                new DecoratorBuilder(inject(proto().legalQuestions().suedForRent()), 10, 45).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
+        main.setHR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().suedForDamages()), 10, 45).labelAlignment(Alignment.left)
+                .useLabelSemicolon(false).build());
+        main.setHR(++row, 0, 1);
+        main.setWidget(++row, 0,
+                new DecoratorBuilder(inject(proto().legalQuestions().everEvicted()), 10, 45).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
+        main.setHR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().defaultedOnLease()), 10, 45).labelAlignment(Alignment.left)
+                .useLabelSemicolon(false).build());
+        main.setHR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().convictedOfFelony()), 10, 45).labelAlignment(Alignment.left)
+                .useLabelSemicolon(false).build());
+        main.setHR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().legalTroubles()), 10, 45).labelAlignment(Alignment.left)
+                .useLabelSemicolon(false).build());
+        main.setHR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().filedBankruptcy()), 10, 45).labelAlignment(Alignment.left)
+                .useLabelSemicolon(false).build());
 
-        main.add(inject(proto().legalQuestions().suedForRent()), 43, 8);
-        main.add(new VistaLineSeparator(50, Unit.EM));
-        main.add(inject(proto().legalQuestions().suedForDamages()), 43, 8);
-        main.add(new VistaLineSeparator(50, Unit.EM));
-        main.add(inject(proto().legalQuestions().everEvicted()), 43, 8);
-        main.add(new VistaLineSeparator(50, Unit.EM));
-        main.add(inject(proto().legalQuestions().defaultedOnLease()), 43, 8);
-        main.add(new VistaLineSeparator(50, Unit.EM));
-        main.add(inject(proto().legalQuestions().convictedOfFelony()), 43, 8);
-        main.add(new VistaLineSeparator(50, Unit.EM));
-        main.add(inject(proto().legalQuestions().legalTroubles()), 43, 8);
-        main.add(new VistaLineSeparator(50, Unit.EM));
-        main.add(inject(proto().legalQuestions().filedBankruptcy()), 43, 8);
-
-        main.add(new VistaHeaderBar(proto().emergencyContacts()));
-        main.add(inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false)));
+        main.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false)));
 
         main.setWidth("800px");
 
@@ -268,9 +275,7 @@ public class InfoViewForm extends CEntityEditor<TenantInfoDTO> {
     }
 
     private void enablePreviousAddress() {
-        boolean enabled = BusinessRules.infoPageNeedPreviousAddress(getValue().currentAddress().moveInDate().getValue());
-        get(proto().previousAddress()).setVisible(enabled);
-        previousAddressHeader.setVisible(enabled);
+        previousAddress.setVisible(BusinessRules.infoPageNeedPreviousAddress(getValue().currentAddress().moveInDate().getValue()));
     }
 
     @Override

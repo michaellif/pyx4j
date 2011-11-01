@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -22,7 +21,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
@@ -58,7 +56,7 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
 
         int row1 = -1;
         info.setWidget(++row1, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
-        info.setWidget(++row1, 0, new VistaLineSeparator(100, Unit.PCT));
+        info.setHR(++row1, 0, 1);
         info.getFlexCellFormatter().setColSpan(row1, 0, 2);
 
         info.setWidget(++row1, 0, new DecoratorBuilder(inject(proto().suiteNumber()), 10).build());
