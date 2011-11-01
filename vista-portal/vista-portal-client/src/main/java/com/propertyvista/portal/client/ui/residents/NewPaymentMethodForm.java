@@ -120,7 +120,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
         }
         paymentTypeImagesPanel.asWidget().getElement().getStyle().setFloat(Float.LEFT);
 
-        container.setWidget(row++, 0, paymentTypeImagesPanel);
+        container.setWidget(row, 0, paymentTypeImagesPanel);
 
         CRadioGroup<PaymentType> paymentType = (CRadioGroup<PaymentType>) inject(proto().type(), radioGroup);
         paymentType.addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
@@ -149,14 +149,14 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
         instrumentsPanel.add(inject(proto().echeck(), createEcheckInfoEditor()));
         instrumentsPanel.add(inject(proto().creditCard(), createCreditCardInfoEditor()));
 
-        container.setWidget(row++, 0, paymentType);
-        container.setWidget(row++, 0, paymentFeesPanel);
-        container.setWidget(row++, 0, instrumentsPanel);
+        container.setWidget(row, 1, paymentType);
+        container.setWidget(row, 2, paymentFeesPanel);
+        container.setWidget(row++, 3, instrumentsPanel);
 
         setPaymentTableVisibility(0);
 
         container.setH1(row++, 0, 1, proto().billingAddress().getMeta().getCaption());
-        container.setWidget(row++, 0, inject(proto().billingAddress(), new CAddressStructured()));
+        container.setWidget(row++, 0, inject(proto().billingAddress(), new CAddressStructured(false)));
 
         container.setWidget(row++, 0, new DecoratorBuilder(inject(proto().phone()), 12).build());
         container.setWidth("100%");
