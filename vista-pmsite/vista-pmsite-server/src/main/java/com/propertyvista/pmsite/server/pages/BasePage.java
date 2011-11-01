@@ -35,7 +35,6 @@ import com.pyx4j.config.shared.ApplicationMode;
 
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
-import com.propertyvista.pmsite.server.model.WicketUtils.JSActionLink;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.FooterPanel;
 import com.propertyvista.pmsite.server.panels.HeaderPanel;
@@ -63,7 +62,6 @@ public abstract class BasePage extends WebPage {
     public BasePage(PageParameters parameters) {
         super(parameters);
         add(new LocalizedHtmlTag("localizedHtml"));
-        add(new JSActionLink("switchStyle", "switchSiteStyle()", true));
         add(new HeaderPanel());
         add(new FooterPanel());
     }

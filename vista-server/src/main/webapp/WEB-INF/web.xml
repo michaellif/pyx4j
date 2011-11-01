@@ -102,7 +102,7 @@
         </init-param>
         <init-param>
             <param-name>ignorePaths</param-name>
-            <param-value>/o/,/public/,/media/,/admin/,/crm/,/portal/,/ptapp/,/tester/,/corp/,/rest/</param-value>
+            <param-value>/o/,/public/,/media/,/admin/,/crm/,/portal/,/ptapp/,/tester/,/corp/,/rest/,/demo/</param-value>
         </init-param>
     </filter>
 

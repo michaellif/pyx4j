@@ -44,14 +44,6 @@ function setImgSrc(imgId, src) {
 	el_img && el_img.setAttribute('src', src);
 }
 
-function switchSiteStyle() {
-	var c = 'pmsiteStyle';
-	var style = parseInt(Cookie.getCookie(c));
-	style = isNaN(style) ? 0 : style;
-	var newStyle = (style + 1) % 3;
-	Cookie.setCookie(c, newStyle);
-}
-
 function setSiteLocale(locale) {
 	Cookie.setCookie('locale',locale);
 }
