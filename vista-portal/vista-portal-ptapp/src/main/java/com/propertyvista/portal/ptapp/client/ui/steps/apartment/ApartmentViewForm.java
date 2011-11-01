@@ -43,6 +43,8 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -54,7 +56,6 @@ import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactor
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsSplitFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
@@ -74,17 +75,17 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 
     private static I18n i18n = I18n.get(ApartmentViewForm.class);
 
-    private VistaDecoratorsFlowPanel consessionPanel;
+    private final FormFlexPanel consessionPanel = new FormFlexPanel();
 
-    private VistaDecoratorsFlowPanel chargedPanel;
+    private final FormFlexPanel chargedPanel = new FormFlexPanel();
 
-    private VistaDecoratorsFlowPanel petsPanel;
+    private final FormFlexPanel petsPanel = new FormFlexPanel();
 
-    private VistaDecoratorsFlowPanel parkingPanel;
+    private final FormFlexPanel parkingPanel = new FormFlexPanel();
 
-    private VistaDecoratorsFlowPanel storagePanel;
+    private final FormFlexPanel storagePanel = new FormFlexPanel();
 
-    private VistaDecoratorsFlowPanel otherPanel;
+    private final FormFlexPanel otherPanel = new FormFlexPanel();
 
     public ApartmentViewForm() {
         super(ApartmentInfoDTO.class, new VistaViewersComponentFactory());
@@ -92,66 +93,66 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(true, 10);
-        VistaDecoratorsFlowPanel part;
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(new VistaHeaderBar(i18n.tr("General Info")));
-        main.add(part = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
-        part.getElement().getStyle().setPaddingLeft(2, Unit.EM);
-        part.add(inject(proto().name()), 25);
+        int row = -1;
+        main.setH1(++row, 0, 1, i18n.tr("General Info"));
 
-        main.add(new VistaLineSeparator(100, Unit.PCT));
+        FormFlexPanel info = new FormFlexPanel();
 
-        VistaDecoratorsSplitFlowPanel split;
-        main.add(split = new VistaDecoratorsSplitFlowPanel(true, main.getDefaultLabelWidth(), 25));
-        split.getElement().getStyle().setPaddingLeft(2, Unit.EM);
+        int row1 = -1;
+        info.setWidget(++row1, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
+        info.setWidget(++row1, 0, new VistaLineSeparator(100, Unit.PCT));
+        info.getFlexCellFormatter().setColSpan(row1, 0, 2);
 
-        split.getLeftPanel().add(inject(proto().suiteNumber()), 10);
+        info.setWidget(++row1, 0, new DecoratorBuilder(inject(proto().suiteNumber()), 10).build());
 
-        split.getRightPanel().add(inject(proto().bedrooms()), 10);
-        split.getRightPanel().add(inject(proto().bathrooms()), 10);
+        row1 = 1;
+        info.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().bedrooms()), 10).build());
+        info.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().bathrooms()), 10).build());
 
-        main.add(new VistaHeaderBar(i18n.tr("Lease Terms")));
-        main.add(part = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
-        part.getElement().getStyle().setPaddingLeft(2, Unit.EM);
-        part.add(inject(proto().leaseFrom()), 8);
-        part.add(inject(proto().leaseTo()), 8);
-        part.add(inject(proto().unitRent()), 8);
+        info.getColumnFormatter().setWidth(0, "50%");
+        info.getColumnFormatter().setWidth(1, "50%");
+        info.setWidth("75%");
 
-        main.add(consessionPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
-        consessionPanel.add(new VistaHeaderBar(i18n.tr(i18n.tr("Promotions, Discounts and Concessions"))));
-        consessionPanel.add(inject(proto().concessions(), createConcessionsFolderEditor()));
+        main.setWidget(++row, 0, info);
 
-        main.add(new VistaHeaderBar(i18n.tr("Included")));
-        main.add(inject(proto().includedUtilities(), new UtilityFolder()));
+        main.setH1(++row, 0, 1, i18n.tr("Lease Terms"));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 8).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTo()), 8).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitRent()), 8).build());
 
-        main.add(new VistaHeaderBar(i18n.tr("Excluded")));
-        main.add(inject(proto().externalUtilities(), new UtilityFolder()));
+        main.setH1(++row, 0, 1, i18n.tr("Promotions, Discounts and Concessions"));
+        consessionPanel.setWidget(0, 0, inject(proto().concessions(), createConcessionsFolderEditor()));
+        main.setWidget(++row, 0, consessionPanel);
 
-        main.add(chargedPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
-        chargedPanel.add(new VistaHeaderBar(i18n.tr("Charged Utilities")));
-        chargedPanel.add(inject(proto().agreedUtilities(), new FeatureFolder(Feature.Type.utility, this, false)));
+        main.setH1(++row, 0, 1, i18n.tr("Included"));
+        main.setWidget(++row, 0, inject(proto().includedUtilities(), new UtilityFolder()));
 
-        main.add(new VistaHeaderBar(i18n.tr("Add-Ons")));
+        main.setH1(++row, 0, 1, i18n.tr("Excluded"));
+        main.setWidget(++row, 0, inject(proto().externalUtilities(), new UtilityFolder()));
 
-        main.add(petsPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
-        petsPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Pets") + ":")));
-        petsPanel.add(inject(proto().agreedPets(), new FeatureExFolder(true, Feature.Type.pet, this)));
+        main.setH1(++row, 0, 1, i18n.tr("Charged Utilities"));
+        chargedPanel.setWidget(0, 0, inject(proto().agreedUtilities(), new FeatureFolder(Feature.Type.utility, this, false)));
+        main.setWidget(++row, 0, chargedPanel);
 
-        main.add(parkingPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
-        parkingPanel.add(new VistaLineSeparator(100, Unit.PCT));
-        parkingPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Parking") + ":")));
-        parkingPanel.add(inject(proto().agreedParking(), new FeatureExFolder(true, Feature.Type.parking, this)));
+        main.setH1(++row, 0, 1, i18n.tr("Add-Ons"));
 
-        main.add(storagePanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
-        storagePanel.add(new VistaLineSeparator(100, Unit.PCT));
-        storagePanel.add(new HTML(HtmlUtils.h5(i18n.tr("Storage") + ":")));
-        storagePanel.add(inject(proto().agreedStorage(), new FeatureFolder(Feature.Type.locker, this, true)));
+        main.setH3(++row, 0, 1, i18n.tr("Pets"));
+        petsPanel.setWidget(0, 0, inject(proto().agreedPets(), new FeatureExFolder(true, Feature.Type.pet, this)));
+        main.setWidget(++row, 0, petsPanel);
 
-        main.add(otherPanel = new VistaDecoratorsFlowPanel(true, main.getDefaultLabelWidth()));
-        otherPanel.add(new VistaLineSeparator(100, Unit.PCT));
-        otherPanel.add(new HTML(HtmlUtils.h5(i18n.tr("Other") + ":")));
-        otherPanel.add(inject(proto().agreedOther(), new FeatureFolder(Feature.Type.addOn, this, true)));
+        main.setH3(++row, 0, 1, i18n.tr("Parking"));
+        parkingPanel.setWidget(0, 0, inject(proto().agreedParking(), new FeatureExFolder(true, Feature.Type.parking, this)));
+        main.setWidget(++row, 0, parkingPanel);
+
+        main.setH3(++row, 0, 1, i18n.tr("Storage"));
+        storagePanel.setWidget(0, 0, inject(proto().agreedStorage(), new FeatureFolder(Feature.Type.locker, this, true)));
+        main.setWidget(++row, 0, storagePanel);
+
+        main.setH3(++row, 0, 1, i18n.tr("Other"));
+        otherPanel.setWidget(0, 0, inject(proto().agreedOther(), new FeatureFolder(Feature.Type.addOn, this, true)));
+        main.setWidget(++row, 0, otherPanel);
 
         // last step - add building picture on the right:
         HorizontalPanel content = new HorizontalPanel();
@@ -172,6 +173,29 @@ public class ApartmentViewForm extends CEntityEditor<ApartmentInfoDTO> {
         parkingPanel.setVisible(!value.agreedParking().isEmpty() || !value.availableParking().isEmpty());
         storagePanel.setVisible(!value.agreedStorage().isEmpty() || !value.availableStorage().isEmpty());
         otherPanel.setVisible(!value.agreedOther().isEmpty() || !value.availableOther().isEmpty());
+    }
+
+    // decoration stuff:
+    protected class DecoratorBuilder extends WidgetDecorator.Builder {
+
+        public DecoratorBuilder(CComponent<?> component) {
+            super(component);
+            readOnlyMode(!isEditable());
+        }
+
+        public DecoratorBuilder(CComponent<?> component, double componentWidth) {
+            super(component);
+            readOnlyMode(!isEditable());
+            componentWidth(componentWidth);
+        }
+
+        public DecoratorBuilder(CComponent<?> component, double componentWidth, double labelWidth) {
+            super(component);
+            readOnlyMode(!isEditable());
+            componentWidth(componentWidth);
+            labelWidth(labelWidth);
+        }
+
     }
 
     //TODO remove header
