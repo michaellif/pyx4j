@@ -62,7 +62,7 @@ public class CWarranty extends CEntityDecoratableEditor<Warranty> {
         }
 
         @Override
-        protected List<EntityFolderColumnDescriptor> columns() {
+        public List<EntityFolderColumnDescriptor> columns() {
             List<EntityFolderColumnDescriptor> columns;
             columns = new ArrayList<EntityFolderColumnDescriptor>();
             columns.add(new EntityFolderColumnDescriptor(proto().name(), "50em"));

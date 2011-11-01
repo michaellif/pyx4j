@@ -69,7 +69,7 @@ class TenantFolder extends VistaTableFolder<TenantInApplicationDTO> {
     }
 
     @Override
-    protected List<EntityFolderColumnDescriptor> columns() {
+    public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().person().name().firstName(), "10em"));
         columns.add(new EntityFolderColumnDescriptor(proto().person().name().middleName(), "5em"));

@@ -48,8 +48,6 @@ import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -60,12 +58,13 @@ import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.misc.ApplicationDocumentServletParameters;
 import com.propertyvista.misc.ServletMapping;
 
-public class ApplicationDocumentsFolderUploader extends CEntityFolder<ApplicationDocument> {
+public class ApplicationDocumentsFolderUploader extends VistaTableFolder<ApplicationDocument> {
 
     private static I18n i18n = I18n.get(ApplicationDocumentsFolderUploader.class);
 
@@ -86,12 +85,16 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
     }
 
     @Override
+    public List<EntityFolderColumnDescriptor> columns() {
+        return COLUMNS;
+    }
+
+    @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ApplicationDocument) {
             return new ApplicationDocumentEditor();
-        } else {
-            return super.create(member);
         }
+        return super.create(member);
     }
 
     @Override
@@ -99,7 +102,7 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
         return new UploaderFolderDecorator();
     }
 
-    static class ApplicationDocumentEditor extends CEntityFolderRowEditor<ApplicationDocument> {
+    private class ApplicationDocumentEditor extends CEntityFolderRowEditor<ApplicationDocument> {
         public ApplicationDocumentEditor() {
             super(ApplicationDocument.class, ApplicationDocumentsFolderUploader.COLUMNS);
         }
@@ -120,16 +123,6 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
                 return super.createCell(column);
             }
         }
-
-        @Override
-        public IFolderItemDecorator createDecorator() {
-            return new TableFolderItemDecorator(VistaImages.INSTANCE, i18n.tr("Remove file"));
-        }
-    }
-
-    @Override
-    protected IFolderItemDecorator<ApplicationDocument> createItemDecorator() {
-        return new TableFolderItemDecorator<ApplicationDocument>(VistaImages.INSTANCE);
     }
 
     protected void callSuperRemoveItem(final CEntityFolderItem<ApplicationDocument> comp) {
@@ -268,4 +261,5 @@ public class ApplicationDocumentsFolderUploader extends CEntityFolder<Applicatio
 
         }
     }
+
 }

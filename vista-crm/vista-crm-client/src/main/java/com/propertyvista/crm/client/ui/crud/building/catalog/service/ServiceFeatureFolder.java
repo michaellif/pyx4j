@@ -47,7 +47,7 @@ class ServiceFeatureFolder extends VistaTableFolder<ServiceFeature> {
     }
 
     @Override
-    protected List<EntityFolderColumnDescriptor> columns() {
+    public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().feature(), "50em"));
         return columns;

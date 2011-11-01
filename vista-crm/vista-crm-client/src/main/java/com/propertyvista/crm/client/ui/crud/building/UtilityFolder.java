@@ -64,7 +64,7 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
     }
 
     @Override
-    protected List<EntityFolderColumnDescriptor> columns() {
+    public List<EntityFolderColumnDescriptor> columns() {
         return COLUMNS;
     }
 
@@ -89,7 +89,7 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
         return decor;
     }
 
-    static class UtilityEditor extends CEntityFolderRowEditor<ServiceItemType> {
+    class UtilityEditor extends CEntityFolderRowEditor<ServiceItemType> {
         public UtilityEditor() {
             super(ServiceItemType.class, UtilityFolder.COLUMNS);
         }
@@ -104,7 +104,7 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
 
     }
 
-    static private class SelectUtilityBox extends OkCancelBox {
+    private class SelectUtilityBox extends OkCancelBox {
 
         private ListBox list;
 

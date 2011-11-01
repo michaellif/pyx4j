@@ -28,7 +28,7 @@ class ConcessionsFolder extends VistaTableFolder<Concession> {
     }
 
     @Override
-    protected List<EntityFolderColumnDescriptor> columns() {
+    public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
         columns.add(new EntityFolderColumnDescriptor(proto().value(), "7em"));

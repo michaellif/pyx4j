@@ -49,7 +49,7 @@ class ServiceItemFolder extends VistaTableFolder<ServiceItem> {
     }
 
     @Override
-    protected List<EntityFolderColumnDescriptor> columns() {
+    public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().type(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));

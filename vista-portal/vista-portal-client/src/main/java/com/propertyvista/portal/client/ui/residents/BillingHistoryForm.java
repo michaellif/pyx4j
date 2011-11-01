@@ -72,7 +72,7 @@ public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements Bi
     private CEntityFolder<BillDTO> createBillingHistoryViewer() {
         return new VistaTableFolder<BillDTO>(BillDTO.class, false) {
             @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
+            public List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().paidOn(), "7em"));
@@ -83,11 +83,10 @@ public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements Bi
 
             @Override
             protected IFolderDecorator<BillDTO> createDecorator() {
-                return new VistaTableFolderDecorator<BillDTO>(columns(), this);
+                return new VistaTableFolderDecorator<BillDTO>(this);
             }
         };
     }
-
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //    class TableFolderViewer<E extends IEntity> extends TableFolderDecorator<BillDTO> {
 //

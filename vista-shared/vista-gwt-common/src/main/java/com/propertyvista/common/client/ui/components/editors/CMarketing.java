@@ -45,7 +45,7 @@ public class CMarketing extends CEntityDecoratableEditor<Marketing> {
         main.setH1(++row, 0, 2, proto().adBlurbs().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().adBlurbs(), new VistaTableFolder<AdvertisingBlurb>(AdvertisingBlurb.class, isEditable()) {
             @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
+            public List<EntityFolderColumnDescriptor> columns() {
                 List<EntityFolderColumnDescriptor> columns;
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().content(), "60em"));

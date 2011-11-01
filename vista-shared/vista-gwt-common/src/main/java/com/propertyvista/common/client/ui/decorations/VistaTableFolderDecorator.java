@@ -38,7 +38,7 @@ public class VistaTableFolderDecorator<E extends IEntity> extends TableFolderDec
         super(columns, VistaImages.INSTANCE, addLabel, addable);
     }
 
-    public VistaTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, VistaTableFolder<E> parent) {
-        super(columns, VistaImages.INSTANCE, i18n.tr("Add {0}", parent.getItemName()), parent.isEditable());
+    public VistaTableFolderDecorator(VistaTableFolder<E> parent) {
+        super(parent.columns(), VistaImages.INSTANCE, i18n.tr("Add {0}", parent.getItemName()), parent.isEditable());
     }
 }

@@ -58,11 +58,11 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
         }
     }
 
-    protected abstract List<EntityFolderColumnDescriptor> columns();
+    public abstract List<EntityFolderColumnDescriptor> columns();
 
     @Override
     protected IFolderDecorator<E> createDecorator() {
-        return new VistaTableFolderDecorator<E>(columns(), this);
+        return new VistaTableFolderDecorator<E>(this);
     }
 
     @Override

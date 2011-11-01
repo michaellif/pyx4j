@@ -29,8 +29,6 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -44,7 +42,6 @@ import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
@@ -108,11 +105,6 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
     @Override
     protected IFolderDecorator<TenantCharge> createDecorator() {
         return new ChargeSplitListFolderDecorator();
-    }
-
-    @Override
-    protected IFolderItemDecorator<TenantCharge> createItemDecorator() {
-        return new TableFolderItemDecorator<TenantCharge>(VistaImages.INSTANCE);
     }
 
     static class TenantChargeEditor extends CEntityFolderRowEditor<TenantCharge> {

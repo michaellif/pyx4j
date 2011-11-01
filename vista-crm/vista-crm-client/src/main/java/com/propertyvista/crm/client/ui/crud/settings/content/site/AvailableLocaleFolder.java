@@ -30,7 +30,7 @@ class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
     }
 
     @Override
-    protected List<EntityFolderColumnDescriptor> columns() {
+    public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().lang(), "20em"));
         return columns;

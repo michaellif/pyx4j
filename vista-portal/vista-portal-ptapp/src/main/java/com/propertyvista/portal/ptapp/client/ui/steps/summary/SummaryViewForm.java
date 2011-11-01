@@ -344,7 +344,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         }
 
         @Override
-        protected List<EntityFolderColumnDescriptor> columns() {
+        public List<EntityFolderColumnDescriptor> columns() {
             return null;
         }
 
@@ -394,7 +394,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         }
 
         @Override
-        protected List<EntityFolderColumnDescriptor> columns() {
+        public List<EntityFolderColumnDescriptor> columns() {
             return null;
         }
     }

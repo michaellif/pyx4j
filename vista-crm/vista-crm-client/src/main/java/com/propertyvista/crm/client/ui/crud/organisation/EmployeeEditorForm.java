@@ -117,7 +117,7 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
         return new VistaTableFolder<AssignedPortfolio>(AssignedPortfolio.class, isEditable()) {
 
             @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
+            public List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().portfolio(), "40em"));
                 return columns;
@@ -125,7 +125,7 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
 
             @Override
             protected IFolderDecorator<AssignedPortfolio> createDecorator() {
-                return new VistaTableFolderDecorator<AssignedPortfolio>(columns(), this) {
+                return new VistaTableFolderDecorator<AssignedPortfolio>(this) {
                     {
                         setShowHeader(false);
                     }
@@ -139,7 +139,7 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
         return new VistaTableFolder<ManagedEmployee>(ManagedEmployee.class, isEditable()) {
 
             @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
+            public List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().employee(), "40em"));
                 return columns;
@@ -147,7 +147,7 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
 
             @Override
             protected IFolderDecorator<ManagedEmployee> createDecorator() {
-                return new VistaTableFolderDecorator<ManagedEmployee>(columns(), this) {
+                return new VistaTableFolderDecorator<ManagedEmployee>(this) {
                     {
                         setShowHeader(false);
                     }

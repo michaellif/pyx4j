@@ -28,7 +28,7 @@ public class EmailFolder extends VistaTableFolder<Email> {
     }
 
     @Override
-    protected List<EntityFolderColumnDescriptor> columns() {
+    public List<EntityFolderColumnDescriptor> columns() {
         List<EntityFolderColumnDescriptor> columns;
         columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().type(), "5em"));

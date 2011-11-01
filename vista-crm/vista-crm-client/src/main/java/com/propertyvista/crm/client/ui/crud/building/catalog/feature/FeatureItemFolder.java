@@ -44,7 +44,7 @@ class FeatureItemFolder extends VistaTableFolder<ServiceItem> {
     }
 
     @Override
-    protected List<EntityFolderColumnDescriptor> columns() {
+    public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().type(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));
@@ -61,7 +61,7 @@ class FeatureItemFolder extends VistaTableFolder<ServiceItem> {
         return super.create(member);
     }
 
-    class ServiceItemEditor extends CEntityFolderRowEditor<ServiceItem> {
+    private class ServiceItemEditor extends CEntityFolderRowEditor<ServiceItem> {
 
         public ServiceItemEditor() {
             super(ServiceItem.class, columns());

@@ -47,7 +47,7 @@ class ServiceConcessionFolder extends VistaTableFolder<ServiceConcession> {
     }
 
     @Override
-    protected List<EntityFolderColumnDescriptor> columns() {
+    public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().concession(), "50em"));
         return columns;
@@ -85,7 +85,7 @@ class ServiceConcessionFolder extends VistaTableFolder<ServiceConcession> {
         return decor;
     }
 
-    class ServiceConcessionEditor extends CEntityFolderRowEditor<ServiceConcession> {
+    private class ServiceConcessionEditor extends CEntityFolderRowEditor<ServiceConcession> {
 
         public ServiceConcessionEditor() {
             super(ServiceConcession.class, columns());

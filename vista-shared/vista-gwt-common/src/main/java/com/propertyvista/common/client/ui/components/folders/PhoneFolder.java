@@ -36,7 +36,7 @@ public class PhoneFolder extends VistaTableFolder<Phone> {
     }
 
     @Override
-    protected List<EntityFolderColumnDescriptor> columns() {
+    public List<EntityFolderColumnDescriptor> columns() {
         List<EntityFolderColumnDescriptor> columns;
         columns = new ArrayList<EntityFolderColumnDescriptor>();
         if (showType) {

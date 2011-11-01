@@ -222,7 +222,7 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
         }
 
         @Override
-        protected List<EntityFolderColumnDescriptor> columns() {
+        public List<EntityFolderColumnDescriptor> columns() {
             ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
             columns.add(new EntityFolderColumnDescriptor(proto().type(), "8em"));
             columns.add(new EntityFolderColumnDescriptor(proto().chargeType(), "9em"));

@@ -275,7 +275,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         }
 
         @Override
-        protected List<EntityFolderColumnDescriptor> columns() {
+        public List<EntityFolderColumnDescriptor> columns() {
             List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
             columns.add(new EntityFolderColumnDescriptor(proto().type(), "7em"));
             columns.add(new EntityFolderColumnDescriptor(proto().number(), "11em"));
@@ -295,7 +295,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         }
 
         @Override
-        protected List<EntityFolderColumnDescriptor> columns() {
+        public List<EntityFolderColumnDescriptor> columns() {
             List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
             columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
             columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));

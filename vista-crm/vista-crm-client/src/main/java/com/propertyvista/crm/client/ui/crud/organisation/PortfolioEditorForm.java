@@ -61,7 +61,7 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
             private final VistaTableFolder<AssignedBuilding> parent = this;
 
             @Override
-            protected List<EntityFolderColumnDescriptor> columns() {
+            public List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().building(), "60em"));
                 return columns;
@@ -69,7 +69,7 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
 
             @Override
             protected IFolderDecorator<AssignedBuilding> createDecorator() {
-                return new VistaTableFolderDecorator<AssignedBuilding>(columns(), parent) {
+                return new VistaTableFolderDecorator<AssignedBuilding>(parent) {
                     {
                         setShowHeader(false);
                     }

@@ -28,7 +28,7 @@ class ApplicationStatusFolder extends VistaTableFolder<ApplicationStatusDTO> {
     }
 
     @Override
-    protected List<EntityFolderColumnDescriptor> columns() {
+    public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().name(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
