@@ -24,9 +24,8 @@ public class VistaTestDBSetup {
         if (initOnce == null) {
             initOnce = new VistaTestsServerSideConfiguration(false);
             ServerSideConfiguration.setInstance(initOnce);
-            NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
         }
-
+        NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
     }
 
 }
