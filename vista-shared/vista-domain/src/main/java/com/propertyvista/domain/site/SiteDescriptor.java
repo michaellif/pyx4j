@@ -48,8 +48,7 @@ public interface SiteDescriptor extends IEntity {
     @ToString(index = 0)
     IPrimitive<Skin> skin();
 
-    //color picker
-    IPrimitive<String> baseColor();
+    SitePalette sitePalette();
 
     IPrimitive<String> copyright();
 

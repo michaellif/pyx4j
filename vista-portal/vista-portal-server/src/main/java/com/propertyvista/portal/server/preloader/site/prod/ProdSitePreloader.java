@@ -32,11 +32,6 @@ public class ProdSitePreloader extends AbstractSitePreloader {
         return Skin.skin1;
     }
 
-    @Override
-    protected String baseColor() {
-        return "#4488bb";
-    }
-
     @SuppressWarnings("deprecation")
     @Override
     protected String copyright() {
@@ -49,6 +44,41 @@ public class ProdSitePreloader extends AbstractSitePreloader {
 
     @Override
     protected void createNews(List<LocaleInfo> siteLocale) {
+    }
+
+    @Override
+    protected String object1() {
+        return "#4488bb";
+    }
+
+    @Override
+    protected String object2() {
+        return "green";
+    }
+
+    @Override
+    protected String contrast1() {
+        return "green";
+    }
+
+    @Override
+    protected String contrast2() {
+        return "green";
+    }
+
+    @Override
+    protected String foreground() {
+        return "green";
+    }
+
+    @Override
+    protected String background() {
+        return "green";
+    }
+
+    @Override
+    protected String form() {
+        return "green";
     }
 
 }

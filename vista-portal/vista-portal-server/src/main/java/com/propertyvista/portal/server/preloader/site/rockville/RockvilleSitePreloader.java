@@ -31,8 +31,38 @@ public class RockvilleSitePreloader extends AbstractSitePreloader {
     }
 
     @Override
-    protected String baseColor() {
+    protected String object1() {
         return "#4488bb";
+    }
+
+    @Override
+    protected String object2() {
+        return "green";
+    }
+
+    @Override
+    protected String contrast1() {
+        return "green";
+    }
+
+    @Override
+    protected String contrast2() {
+        return "green";
+    }
+
+    @Override
+    protected String foreground() {
+        return "green";
+    }
+
+    @Override
+    protected String background() {
+        return "green";
+    }
+
+    @Override
+    protected String form() {
+        return "green";
     }
 
     @SuppressWarnings("deprecation")

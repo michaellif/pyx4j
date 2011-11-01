@@ -66,7 +66,19 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
     protected abstract Skin skin();
 
-    protected abstract String baseColor();
+    protected abstract String object1();
+
+    protected abstract String object2();
+
+    protected abstract String contrast1();
+
+    protected abstract String contrast2();
+
+    protected abstract String foreground();
+
+    protected abstract String background();
+
+    protected abstract String form();
 
     protected abstract String copyright();
 
@@ -86,7 +98,13 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
         SiteDescriptor site = EntityFactory.create(SiteDescriptor.class);
         site.skin().setValue(skin());
-        site.baseColor().setValue(baseColor());
+        site.sitePalette().object1().setValue(object1());
+        site.sitePalette().object2().setValue(object2());
+        site.sitePalette().contrast1().setValue(contrast1());
+        site.sitePalette().contrast2().setValue(contrast2());
+        site.sitePalette().foreground().setValue(foreground());
+        site.sitePalette().background().setValue(background());
+        site.sitePalette().form().setValue(form());
         site.copyright().setValue(copyright());
 
         {

@@ -55,21 +55,30 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
     public IsWidget createGeneralTab() {
         FormFlexPanel main = new FormFlexPanel();
 
-        int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().skin()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().baseColor()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().copyright()), 25).build());
+        int row = 0;
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().skin()), 10).build());
+        main.setH1(row++, 0, 1, i18n.tr("Theme Colors"));
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object1()), 10).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object2()), 10).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast1()), 10).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast2()), 10).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().background()), 10).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().foreground()), 10).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().form()), 10).build());
 
-        main.setH1(++row, 0, 1, proto().locales().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
+        main.setHR(row++, 0, 1);
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().copyright()), 25).build());
+
+        main.setH1(row++, 0, 1, proto().locales().getMeta().getCaption());
+        main.setWidget(row++, 0, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
 
 // TODO: image lists uploaders:
-//        main.setWidget(++row, 0, decorate(inject(proto().logo(), new CFileUploader()), 60).build());
-//        main.setWidget(++row, 0, decorate(inject(proto().slogan(), new CFileUploader()), 60).build());
-//        main.setWidget(++row, 0, decorate(inject(proto().images(), new CFileUploader()), 60).build());
+//        main.setWidget(row++, 0, decorate(inject(proto().logo(), new CFileUploader()), 60).build());
+//        main.setWidget(row++, 0, decorate(inject(proto().slogan(), new CFileUploader()), 60).build());
+//        main.setWidget(row++, 0, decorate(inject(proto().images(), new CFileUploader()), 60).build());
 
-        main.setH1(++row, 0, 1, proto().childPages().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().childPages(), new SitePageDescriptorFolder(this)));
+        main.setH1(row++, 0, 1, proto().childPages().getMeta().getCaption());
+        main.setWidget(row++, 0, inject(proto().childPages(), new SitePageDescriptorFolder(this)));
 
         return new CrmScrollPanel(main);
     }
