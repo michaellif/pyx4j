@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.CMoney;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
+import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
 import com.propertyvista.common.client.ui.components.folders.TenantGuarantorFolder;
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;

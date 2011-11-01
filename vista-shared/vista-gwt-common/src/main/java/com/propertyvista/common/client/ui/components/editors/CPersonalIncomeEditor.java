@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps.financial;
+package com.propertyvista.common.client.ui.components.editors;
 
 import java.util.Date;
 
@@ -31,8 +31,6 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
-import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
-import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
@@ -46,13 +44,13 @@ import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.IncomeSource;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 
-public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncome> {
+public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncome> {
 
-    private static I18n i18n = I18n.get(PersonalIncomeEditor.class);
+    private static I18n i18n = I18n.get(CPersonalIncomeEditor.class);
 
     private ApplicationDocumentsFolderUploader fileUpload;
 
-    public PersonalIncomeEditor() {
+    public CPersonalIncomeEditor() {
         super(PersonalIncome.class);
     }
 

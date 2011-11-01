@@ -11,12 +11,13 @@
  * @author vladlouk
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps.financial;
+package com.propertyvista.common.client.ui.components.folders;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
+import com.propertyvista.common.client.ui.components.editors.CPersonalIncomeEditor;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 
 public class PersonalIncomeFolder extends VistaBoxFolder<PersonalIncome> {
@@ -28,7 +29,7 @@ public class PersonalIncomeFolder extends VistaBoxFolder<PersonalIncome> {
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PersonalIncome) {
-            return new PersonalIncomeEditor();
+            return new CPersonalIncomeEditor();
         }
         return super.create(member);
     }
