@@ -92,5 +92,4 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
             }
         });
     }
-
 }

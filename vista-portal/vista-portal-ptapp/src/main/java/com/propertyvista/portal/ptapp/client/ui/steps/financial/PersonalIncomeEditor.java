@@ -33,7 +33,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
 import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
@@ -176,147 +175,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         }
     }
 
-    private static void injectIEmploymentInfo(VistaDecoratorsFlowPanel main, IEmploymentInfo proto, CEntityEditor<?> parent) {
-        main.add(parent.inject(proto.supervisorName()), 20);
-        main.add(parent.inject(proto.supervisorPhone()), 15);
-        main.add(parent.inject(proto.monthlyAmount()), 8);
-        main.add(parent.inject(proto.position()), 20);
-    }
-
-    private CEntityEditor<IncomeInfoEmployer> createEmployerEditor() {
-        return new CEntityEditor<IncomeInfoEmployer>(IncomeInfoEmployer.class) {
-
-            @Override
-            public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-                main.add(inject(proto().name()), 12);
-                main.add(inject(proto().employedForYears()), 4);
-                main.add(inject(proto().address(), new CAddressStructured()));
-                injectIEmploymentInfo(main, proto(), this);
-
-                main.add(inject(proto().starts()), 8.2);
-                main.add(inject(proto().ends()), 8.2);
-                return main;
-            }
-
-            @Override
-            public void addValidations() {
-                super.addValidations();
-                validationOfStartStopDates(this);
-            }
-        };
-    }
-
-    private CEntityEditor<IncomeInfoSeasonallyEmployed> createSeasonallyEmployedEditor() {
-        return new CEntityEditor<IncomeInfoSeasonallyEmployed>(IncomeInfoSeasonallyEmployed.class) {
-            @Override
-            public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-                main.add(inject(proto().name()), 10);
-                main.add(inject(proto().address(), new CAddressStructured()));
-                injectIEmploymentInfo(main, proto(), this);
-
-                main.add(inject(proto().starts()), 8.2);
-                main.add(inject(proto().ends()), 8.2);
-                return main;
-            }
-
-            @Override
-            public void addValidations() {
-                super.addValidations();
-                validationOfStartStopDates(this);
-            }
-        };
-    }
-
-    private CEntityEditor<IncomeInfoStudentIncome> createStudentIncomeEditor() {
-        return new CEntityEditor<IncomeInfoStudentIncome>(IncomeInfoStudentIncome.class) {
-            @Override
-            public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-                main.add(inject(proto().name()), 10);
-                main.add(inject(proto().address(), new CAddressStructured()));
-
-                main.add(inject(proto().program()), 10);
-                main.add(inject(proto().fieldOfStudy()), 10);
-                main.add(inject(proto().fundingChoices()), 10);
-
-                main.add(inject(proto().monthlyAmount()), 10);
-
-                main.add(inject(proto().starts()), 8.2);
-                main.add(inject(proto().ends()), 8.2);
-                return main;
-            }
-
-            @Override
-            public void addValidations() {
-                super.addValidations();
-                validationOfStartStopDates(this);
-            }
-        };
-    }
-
-    private CEntityEditor<IncomeInfoSelfEmployed> createSelfEmployedEditor() {
-        return new CEntityEditor<IncomeInfoSelfEmployed>(IncomeInfoSelfEmployed.class) {
-            @Override
-            public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-                main.add(inject(proto().name()), 10);
-                main.add(inject(proto().address(), new CAddressStructured()));
-                injectIEmploymentInfo(main, proto(), this);
-                main.add(inject(proto().fullyOwned()), 10);
-                main.add(inject(proto().monthlyRevenue()), 10);
-                main.add(inject(proto().numberOfEmployees()), 4);
-
-                main.add(inject(proto().starts()), 8.2);
-                main.add(inject(proto().ends()), 8.2);
-                return main;
-            }
-
-            @Override
-            public void addValidations() {
-                super.addValidations();
-                validationOfStartStopDates(this);
-            }
-        };
-    }
-
-    private CEntityEditor<IncomeInfoSocialServices> createSocialServicesEditor() {
-        return new CEntityEditor<IncomeInfoSocialServices>(IncomeInfoSocialServices.class) {
-            @Override
-            public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-                main.add(inject(proto().name()), 10);
-                main.add(inject(proto().address(), new CAddressStructured()));
-                injectIEmploymentInfo(main, proto(), this);
-
-                main.add(inject(proto().starts()), 8.2);
-                main.add(inject(proto().ends()), 8.2);
-                return main;
-            }
-
-            @Override
-            public void addValidations() {
-                super.addValidations();
-                validationOfStartStopDates(this);
-            }
-        };
-    }
-
-    private CEntityEditor<IncomeInfoOther> createOtherIncomeInfoEditor() {
-        return new CEntityEditor<IncomeInfoOther>(IncomeInfoOther.class) {
-            @Override
-            public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
-                main.add(inject(proto().name()), 10);
-                main.add(inject(proto().monthlyAmount()), 10);
-                main.add(inject(proto().ends()), 8.2);
-                return main;
-            }
-        };
-    }
-
-    void validationOfStartStopDates(final CEntityEditor<? extends IIncomeInfo> comp) {
+    private void validationOfStartStopDates(final CEntityEditor<? extends IIncomeInfo> comp) {
         comp.get(comp.proto().starts()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
             public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
@@ -346,5 +205,184 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         });
 
         comp.get(comp.proto().ends()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(comp.get(comp.proto().starts())));
+    }
+
+    //
+    //  Incomes variants:
+    //
+    private CEntityEditor<IncomeInfoEmployer> createEmployerEditor() {
+        return new CEntityDecoratableEditor<IncomeInfoEmployer>(IncomeInfoEmployer.class) {
+
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel main = new FormFlexPanel();
+
+                int row = -1;
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 12).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().employedForYears()), 4).build());
+
+                main.setH3(++row, 0, 1, proto().address().getMeta().getCaption());
+                main.setWidget(++row, 0, inject(proto().address(), new CAddressStructured()));
+
+                row = injectIEmploymentInfo(main, row, this);
+
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().starts()), 8.2).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 8.2).build());
+
+                return main;
+            }
+
+            @Override
+            public void addValidations() {
+                super.addValidations();
+                validationOfStartStopDates(this);
+            }
+        };
+    }
+
+    private CEntityEditor<IncomeInfoSeasonallyEmployed> createSeasonallyEmployedEditor() {
+        return new CEntityDecoratableEditor<IncomeInfoSeasonallyEmployed>(IncomeInfoSeasonallyEmployed.class) {
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel main = new FormFlexPanel();
+
+                int row = -1;
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 12).build());
+
+                main.setH3(++row, 0, 1, proto().address().getMeta().getCaption());
+                main.setWidget(++row, 0, inject(proto().address(), new CAddressStructured()));
+
+                row = injectIEmploymentInfo(main, row, this);
+
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().starts()), 8.2).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 8.2).build());
+
+                return main;
+            }
+
+            @Override
+            public void addValidations() {
+                super.addValidations();
+                validationOfStartStopDates(this);
+            }
+        };
+    }
+
+    private CEntityEditor<IncomeInfoStudentIncome> createStudentIncomeEditor() {
+        return new CEntityDecoratableEditor<IncomeInfoStudentIncome>(IncomeInfoStudentIncome.class) {
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel main = new FormFlexPanel();
+
+                int row = -1;
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 12).build());
+
+                main.setH3(++row, 0, 1, proto().address().getMeta().getCaption());
+                main.setWidget(++row, 0, inject(proto().address(), new CAddressStructured()));
+
+                main.setH3(++row, 0, 1, i18n.tr("Program Info"));
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().program()), 10).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fieldOfStudy()), 10).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fundingChoices()), 10).build());
+
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().monthlyAmount()), 10).build());
+
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().starts()), 8.2).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 8.2).build());
+
+                return main;
+            }
+
+            @Override
+            public void addValidations() {
+                super.addValidations();
+                validationOfStartStopDates(this);
+            }
+        };
+    }
+
+    private CEntityEditor<IncomeInfoSelfEmployed> createSelfEmployedEditor() {
+        return new CEntityDecoratableEditor<IncomeInfoSelfEmployed>(IncomeInfoSelfEmployed.class) {
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel main = new FormFlexPanel();
+
+                int row = -1;
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 12).build());
+
+                main.setH3(++row, 0, 1, proto().address().getMeta().getCaption());
+                main.setWidget(++row, 0, inject(proto().address(), new CAddressStructured()));
+
+                row = injectIEmploymentInfo(main, row, this);
+
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fullyOwned()), 10).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().monthlyRevenue()), 10).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfEmployees()), 4).build());
+
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().starts()), 8.2).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 8.2).build());
+
+                return main;
+            }
+
+            @Override
+            public void addValidations() {
+                super.addValidations();
+                validationOfStartStopDates(this);
+            }
+        };
+    }
+
+    private CEntityEditor<IncomeInfoSocialServices> createSocialServicesEditor() {
+        return new CEntityDecoratableEditor<IncomeInfoSocialServices>(IncomeInfoSocialServices.class) {
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel main = new FormFlexPanel();
+
+                int row = -1;
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 12).build());
+
+                main.setH3(++row, 0, 1, proto().address().getMeta().getCaption());
+                main.setWidget(++row, 0, inject(proto().address(), new CAddressStructured()));
+
+                row = injectIEmploymentInfo(main, row, this);
+
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().starts()), 8.2).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 8.2).build());
+
+                return main;
+            }
+
+            @Override
+            public void addValidations() {
+                super.addValidations();
+                validationOfStartStopDates(this);
+            }
+        };
+    }
+
+    private CEntityEditor<IncomeInfoOther> createOtherIncomeInfoEditor() {
+        return new CEntityDecoratableEditor<IncomeInfoOther>(IncomeInfoOther.class) {
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel main = new FormFlexPanel();
+
+                int row = -1;
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 10).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().monthlyAmount()), 10).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 8.2).build());
+
+                return main;
+            }
+        };
+    }
+
+    private static int injectIEmploymentInfo(FormFlexPanel main, int row, CEntityDecoratableEditor<? extends IEmploymentInfo> parent) {
+        main.setH3(++row, 0, 1, i18n.tr("Employment Info"));
+        main.setWidget(++row, 0, parent.new DecoratorBuilder(parent.inject(parent.proto().supervisorName()), 20).build());
+        main.setWidget(++row, 0, parent.new DecoratorBuilder(parent.inject(parent.proto().supervisorPhone()), 15).build());
+        main.setWidget(++row, 0, parent.new DecoratorBuilder(parent.inject(parent.proto().monthlyAmount()), 8).build());
+        main.setWidget(++row, 0, parent.new DecoratorBuilder(parent.inject(parent.proto().position()), 20).build());
+        return row;
     }
 }
