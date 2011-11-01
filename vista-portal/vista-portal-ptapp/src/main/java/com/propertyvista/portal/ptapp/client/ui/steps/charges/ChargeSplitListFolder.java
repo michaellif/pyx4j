@@ -14,6 +14,7 @@
 package com.propertyvista.portal.ptapp.client.ui.steps.charges;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -42,10 +43,11 @@ import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
-public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
+public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
     private static I18n i18n = I18n.get(ChargeSplitListFolder.class);
 
@@ -57,11 +59,13 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.charge(), "80px"));
     }
 
-    private final boolean summaryViewMode;
+    @Override
+    public List<EntityFolderColumnDescriptor> columns() {
+        return COLUMNS;
+    }
 
     ChargeSplitListFolder(boolean summaryViewMode) {
         super(TenantCharge.class);
-        this.summaryViewMode = summaryViewMode;
     }
 
     @Override
@@ -203,5 +207,4 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
         }
 
     }
-
 }
