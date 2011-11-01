@@ -113,30 +113,28 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
         main.setH1(++row, 0, 1, proto().legalQuestions().getMeta().getCaption());
         main.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().legalQuestions().suedForRent()), 10, 45).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
+                new DecoratorBuilder(inject(proto().legalQuestions().suedForRent()), 10, 54).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
         main.setHR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().suedForDamages()), 10, 45).labelAlignment(Alignment.left)
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().suedForDamages()), 10, 54).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
         main.setHR(++row, 0, 1);
         main.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().legalQuestions().everEvicted()), 10, 45).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
+                new DecoratorBuilder(inject(proto().legalQuestions().everEvicted()), 10, 54).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
         main.setHR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().defaultedOnLease()), 10, 45).labelAlignment(Alignment.left)
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().defaultedOnLease()), 10, 54).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
         main.setHR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().convictedOfFelony()), 10, 45).labelAlignment(Alignment.left)
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().convictedOfFelony()), 10, 54).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
         main.setHR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().legalTroubles()), 10, 45).labelAlignment(Alignment.left)
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().legalTroubles()), 10, 54).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
         main.setHR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().filedBankruptcy()), 10, 45).labelAlignment(Alignment.left)
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().filedBankruptcy()), 10, 54).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
 
         main.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false)));
-
-        main.setWidth("800px");
 
         addValidations();
 
