@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-26 14:36-0400\n"
+"POT-Creation-Date: 2011-11-01 17:35-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,8 +25,8 @@ msgstr "#0.#"
 
 #: com/propertyvista/domain/PriorAddress.java:2
 #: com/propertyvista/domain/RangeGroup.java:2
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportSummaryDTO.java:2
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportSummaryDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 #: com/propertyvista/domain/financial/Money.java:2
 #: com/propertyvista/domain/financial/Pricing.java:2
 #: com/propertyvista/domain/financial/offering/ChargeItem.java:2
@@ -52,6 +52,7 @@ msgid "% Ownership"
 msgstr "% собственности"
 
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:1
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitAvailabilityReportSettings.java:1
 msgid "1 hour"
 msgstr "1 час"
 
@@ -60,6 +61,7 @@ msgid "12 months"
 msgstr "12 месяцев"
 
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:1
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitAvailabilityReportSettings.java:1
 msgid "15 min"
 msgstr "15 мин"
 
@@ -68,10 +70,12 @@ msgid "18 months"
 msgstr "18  месяцев"
 
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:1
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitAvailabilityReportSettings.java:1
 msgid "2 hours"
 msgstr "2-х часов"
 
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:1
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitAvailabilityReportSettings.java:1
 msgid "30 min"
 msgstr "30 мин"
 
@@ -79,8 +83,7 @@ msgstr "30 мин"
 msgid "6 months"
 msgstr "6 месяцев"
 
-#: com/propertyvista/portal/server/preloader/PortalSitePreloader.java:173
-#: com/propertyvista/portal/server/preloader/PortalSitePreloader.java:178
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:145
 msgid "About us"
 msgstr "О компании"
 
@@ -99,15 +102,15 @@ msgstr "Счет"
 msgid "Account Creation Request"
 msgstr "Запрос Создание учетной записи"
 
-#: com/propertyvista/portal/domain/payment/InteracInfo.java:2
+#: com/propertyvista/domain/payment/InteracInfo.java:2
 msgid "Account No"
 msgstr "№ счета"
 
-#: com/propertyvista/portal/domain/payment/EcheckInfo.java:2
+#: com/propertyvista/domain/payment/EcheckInfo.java:2
 msgid "Account Number"
 msgstr "Номер счета"
 
-#: com/propertyvista/portal/domain/payment/EcheckInfo.java:2
+#: com/propertyvista/domain/payment/EcheckInfo.java:2
 msgid "Account Type"
 msgstr "Тип счета"
 
@@ -138,7 +141,7 @@ msgstr "Дополнительная хранения"
 
 #: com/propertyvista/domain/EmergencyContact.java:2
 #: com/propertyvista/domain/contact/Email.java:2
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:2
 #: com/propertyvista/domain/tenant/income/IEmploymentInfo.java:2
 #: com/propertyvista/domain/tenant/income/IncomeInfoStudentIncome.java:2
@@ -240,8 +243,8 @@ msgstr "Предупреждения"
 
 #: com/propertyvista/dto/BuildingDTO.java:2
 #: com/propertyvista/dto/FloorplanDTO.java:2
-#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:47
-#: com/propertyvista/pmsite/server/pages/UnitDetailsPage.html:54
+#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:48
+#: com/propertyvista/pmsite/server/pages/UnitDetailsPage.html:55
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:88
 #: com/propertyvista/pmsite/server/panels/AptListPanel.html:19
 #: com/propertyvista/portal/domain/dto/AptUnitDTO.java:2
@@ -256,7 +259,7 @@ msgstr "Удобства"
 msgid "Amenity"
 msgstr "Удобства"
 
-#: com/propertyvista/portal/domain/payment/PaymentType.java:1
+#: com/propertyvista/domain/payment/PaymentType.java:1
 msgid "American Express"
 msgstr "American Express"
 
@@ -453,6 +456,10 @@ msgstr "Доступность"
 msgid "Availability 24 Hours"
 msgstr "Наличие 24 часов"
 
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Availability Summary"
+msgstr "Доступность Основная информация"
+
 #: com/propertyvista/domain/property/asset/unit/AptUnitOccupancy.java:1
 #: com/propertyvista/portal/domain/dto/AptUnitDTO.java:2
 msgid "Available"
@@ -483,7 +490,7 @@ msgstr "Наличие домашних животных"
 msgid "Available Storage"
 msgstr "Доступное хранилище"
 
-#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:53
+#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:54
 msgid "Available Units"
 msgstr "Доступные единицы"
 
@@ -504,6 +511,10 @@ msgstr "Проспект"
 msgid "Average"
 msgstr "Средний"
 
+#: com/propertyvista/domain/site/SitePalette.java:2
+msgid "Background"
+msgstr "Фон"
+
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:1
 msgid "Balcony"
@@ -513,15 +524,15 @@ msgstr "Балкон"
 msgid "Bank Accounts"
 msgstr "Банковские счета"
 
-#: com/propertyvista/portal/domain/payment/EcheckInfo.java:2
+#: com/propertyvista/domain/payment/EcheckInfo.java:2
 msgid "Bank Name"
 msgstr "Название банка"
 
-#: com/propertyvista/portal/domain/payment/InteracInfo.java:2
+#: com/propertyvista/domain/payment/InteracInfo.java:2
 msgid "Bank Number"
 msgstr "Количество банка"
 
-#: com/propertyvista/portal/domain/payment/CreditCardInfo.java:2
+#: com/propertyvista/domain/payment/CreditCardInfo.java:2
 msgid "Bank Phone"
 msgstr "Банк Телефон"
 
@@ -532,10 +543,6 @@ msgstr "Гистограмма дисплей"
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Bar Chart Display Building"
 msgstr "Гистограмма Показать Строительство"
-
-#: com/propertyvista/domain/site/SiteDescriptor.java:2
-msgid "Base Color"
-msgstr "Основной цвет"
 
 #: com/propertyvista/domain/financial/offering/ChargeItem.java:2
 msgid "Base Price"
@@ -549,7 +556,7 @@ msgstr "Баскетбольная площадка"
 msgid "Bathroom"
 msgstr "Ванная комната"
 
-#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:67
+#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:68
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:78
 #: com/propertyvista/portal/domain/dto/FloorplanPropertyDTO.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
@@ -567,7 +574,7 @@ msgstr "Баня"
 msgid "Bedroom"
 msgstr "Спальня"
 
-#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:63
+#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:64
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:74
 #: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:24
 #: com/propertyvista/portal/domain/dto/FloorplanPropertyDTO.java:2
@@ -597,15 +604,25 @@ msgstr "Кровати Диапазон"
 msgid "Belongs To"
 msgstr "Входит в"
 
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:154
+msgid "Benefits"
+msgstr "Преимущества"
+
 #: com/propertyvista/portal/domain/dto/BillDTO.java:0
 #: com/propertyvista/portal/domain/dto/BillDTO.java:1
 msgid "Bill"
 msgstr "Законопроект"
 
+#. This is demo content
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:197
+msgid "Bill B., London, Ontario"
+msgstr "Билл В., Лондон, Онтарио"
+
 #: com/propertyvista/portal/domain/dto/BillListDTO.java:0
 msgid "Bill List"
 msgstr "Билл Список"
 
+#: com/propertyvista/domain/payment/PaymentMethod.java:2
 #: com/propertyvista/portal/domain/dto/PaymentMethodDTO.java:2
 #: com/propertyvista/portal/domain/dto/PaymentMethodGenericDTO.java:2
 #: com/propertyvista/portal/domain/ptapp/PaymentInfo.java:2
@@ -747,12 +764,13 @@ msgstr "Строительство информация"
 msgid "Building Lister"
 msgstr "Строительство Листер"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Building Name"
 msgstr "Название здания"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/company/Portfolio.java:2
+#: com/propertyvista/dto/ComplexDTO.java:2
 msgid "Buildings"
 msgstr "Здания"
 
@@ -772,7 +790,7 @@ msgstr "По городу"
 msgid "By Proximity"
 msgstr "Близостью"
 
-#: com/propertyvista/portal/domain/payment/CreditCardInfo.java:2
+#: com/propertyvista/domain/payment/CreditCardInfo.java:2
 msgid "CSC"
 msgstr "CSC"
 
@@ -808,9 +826,13 @@ msgstr "Код защиты требуется"
 msgid "Caption"
 msgstr "Подпись"
 
-#: com/propertyvista/portal/domain/payment/CreditCardInfo.java:2
+#: com/propertyvista/domain/payment/CreditCardInfo.java:2
 msgid "Card Number"
 msgstr "Номер карты"
+
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:174
+msgid "Careers"
+msgstr "Карьера"
 
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "Carpet"
@@ -913,11 +935,11 @@ msgstr "Зарядка Тип"
 msgid "Charges"
 msgstr "Расходы"
 
-#: com/propertyvista/portal/domain/payment/EcheckInfo.java:2
+#: com/propertyvista/domain/payment/EcheckInfo.java:2
 msgid "Check Number"
 msgstr "Номер чека"
 
-#: com/propertyvista/portal/domain/payment/EcheckInfo.java:1
+#: com/propertyvista/domain/payment/EcheckInfo.java:1
 msgid "Chequing"
 msgstr "Чековый"
 
@@ -976,6 +998,7 @@ msgid "Column"
 msgstr "Колонка"
 
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitAvailabilityReportSettings.java:2
 msgid "Column Paths"
 msgstr "Колонка Пути"
 
@@ -1020,10 +1043,11 @@ msgstr "Завершение"
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/asset/Complex.java:0
 #: com/propertyvista/domain/property/asset/building/Building.java:2
+#: com/propertyvista/dto/ComplexDTO.java:0
 msgid "Complex"
 msgstr "Комплекс"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Complex Name"
 msgstr "Комплекс Имя"
 
@@ -1070,8 +1094,7 @@ msgstr "Условный"
 msgid "Condo"
 msgstr "Квартира"
 
-#: com/propertyvista/crm/rpc/PasswordChangeRequest.java:2
-#: com/propertyvista/portal/rpc/ptapp/PasswordChangeRequest.java:2
+#: com/pyx4j/security/rpc/PasswordChangeRequest.java:2
 msgid "Confirm new password"
 msgstr "Подтвердите новый пароль"
 
@@ -1082,6 +1105,10 @@ msgstr "Строительство"
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:2
 msgid "Construction Type"
 msgstr "Тип конструкции"
+
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:185
+msgid "Contact"
+msgstr "Контакт"
 
 #: com/propertyvista/domain/company/OrganizationContacts.java:2
 msgid "Contact List"
@@ -1129,6 +1156,14 @@ msgstr "Детали контракта"
 #: com/propertyvista/domain/property/vendor/Contract.java:2
 msgid "Contractor"
 msgstr "Подрядчик"
+
+#: com/propertyvista/domain/site/SitePalette.java:2
+msgid "Contrast 1"
+msgstr "Контрастность 1"
+
+#: com/propertyvista/domain/site/SitePalette.java:2
+msgid "Contrast 2"
+msgstr "Контрастность 2"
 
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Controlled Access"
@@ -1202,12 +1237,13 @@ msgstr "Дата создания"
 msgid "Created"
 msgstr "Созданный"
 
+#: com/propertyvista/domain/payment/PaymentMethod.java:2
 #: com/propertyvista/portal/domain/dto/PaymentMethodGenericDTO.java:2
 #: com/propertyvista/portal/domain/ptapp/PaymentInfo.java:2
 msgid "Credit Card"
 msgstr "Кредитная карта"
 
-#: com/propertyvista/portal/domain/payment/CreditCardInfo.java:0
+#: com/propertyvista/domain/payment/CreditCardInfo.java:0
 msgid "Credit Card Info"
 msgstr "Информация о кредитной карте"
 
@@ -1239,11 +1275,11 @@ msgid "Current Bill"
 msgstr "Текущий Билла"
 
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitAvailabilityReportSettings.java:2
 msgid "Current Page"
 msgstr "Текущая страница"
 
-#: com/propertyvista/crm/rpc/PasswordChangeRequest.java:2
-#: com/propertyvista/portal/rpc/ptapp/PasswordChangeRequest.java:2
+#: com/pyx4j/security/rpc/PasswordChangeRequest.java:2
 msgid "Current Password"
 msgstr "Текущий пароль"
 
@@ -1255,11 +1291,6 @@ msgstr "Текущий телефон"
 msgid "Current Value"
 msgstr "Текущее значение"
 
-#: com/propertyvista/portal/server/preloader/PortalSitePreloader.java:191
-#: com/propertyvista/portal/server/preloader/PortalSitePreloader.java:193
-msgid "Customer Care"
-msgstr "Обслуживание клиентов"
-
 #: com/propertyvista/pmsite/server/pages/SignInPage.html:14
 msgid "Customer Sign In"
 msgstr "Клиент Войдите в систему,"
@@ -1270,6 +1301,7 @@ msgid "DNS name"
 msgstr "DNS-имя"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
+#: com/propertyvista/domain/property/asset/Complex.java:2
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 msgid "Dashboard"
 msgstr "Приборная панель"
@@ -1311,7 +1343,7 @@ msgstr "Дата до"
 msgid "Daughter"
 msgstr "Дочь"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Days Vacant"
 msgstr "Дни Вакантные"
 
@@ -1341,15 +1373,19 @@ msgstr ""
 msgid "Declined"
 msgstr "Отказался"
 
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitAvailabilityReportSettings.java:2
+msgid "Default Filtering Button"
+msgstr "По умолчанию фильтрация Кнопка"
+
 #: com/pyx4j/essentials/rpc/admin/NetworkSimulation.java:2
 msgid "Delay"
 msgstr "Задержка"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Delta, in $"
 msgstr "Дельта, в $"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Delta, in %"
 msgstr "Дельта, в%"
 
@@ -1442,7 +1478,7 @@ msgstr "Желаемый спальни"
 msgid "Desired move-in date"
 msgstr "Желаемый переезда даты"
 
-#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:77
+#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:78
 #: com/propertyvista/pmsite/server/panels/AptListPanel.html:32
 #: com/propertyvista/server/common/generator/UnitRelatedData.java:2
 msgid "Details"
@@ -1464,7 +1500,7 @@ msgstr "Пространства инвалидов"
 msgid "Discount"
 msgstr "Скидка"
 
-#: com/propertyvista/portal/domain/payment/PaymentType.java:1
+#: com/propertyvista/domain/payment/PaymentType.java:1
 msgid "Discover"
 msgstr "Открыть"
 
@@ -1548,7 +1584,7 @@ msgstr "Электронная почта не зарегистрирован"
 msgid "East"
 msgstr "Восток"
 
-#: com/propertyvista/portal/domain/payment/EcheckInfo.java:0
+#: com/propertyvista/domain/payment/EcheckInfo.java:0
 msgid "Echeck Info"
 msgstr "Echeck информация"
 
@@ -1670,11 +1706,10 @@ msgid "English (United States)"
 msgstr "Английский (США)"
 
 #: com/propertyvista/crm/rpc/AccountCreationRequest.java:2
-#: com/propertyvista/crm/rpc/PasswordRetrievalRequest.java:2
 #: com/propertyvista/portal/rpc/corp/PmcAccountCreationRequest.java:2
 #: com/propertyvista/portal/rpc/ptapp/AccountCreationRequest.java:2
-#: com/propertyvista/portal/rpc/ptapp/PasswordRetrievalRequest.java:2
 #: com/pyx4j/security/rpc/AuthenticationRequest.java:2
+#: com/pyx4j/security/rpc/PasswordRetrievalRequest.java:2
 msgid "Enter the code"
 msgstr "Введите код"
 
@@ -1686,15 +1721,15 @@ msgstr "Id Сущьности"
 msgid "Equipment"
 msgstr "Оборудование"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportEvent.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportEvent.java:2
 msgid "Event Date"
 msgstr "Дата события"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportEvent.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportEvent.java:2
 msgid "Event Type"
 msgstr "Тип события"
 
-#: com/propertyvista/portal/domain/payment/CreditCardInfo.java:2
+#: com/propertyvista/domain/payment/CreditCardInfo.java:2
 msgid "Exact Name"
 msgstr "Точное имя"
 
@@ -1714,7 +1749,7 @@ msgstr "Истечение"
 msgid "Expiration Date"
 msgstr "Срок годности"
 
-#: com/propertyvista/portal/domain/payment/CreditCardInfo.java:2
+#: com/propertyvista/domain/payment/CreditCardInfo.java:2
 msgid "Expiry"
 msgstr "Истечение срока"
 
@@ -1851,7 +1886,7 @@ msgstr "Финансы"
 msgid "Financial"
 msgstr "Финансовый"
 
-#: com/propertyvista/pmsite/server/pages/AptListPage.html:27
+#: com/propertyvista/pmsite/server/pages/AptListPage.html:14
 msgid "Find An Appartment"
 msgstr "Найти квартиры"
 
@@ -1860,8 +1895,7 @@ msgid "Find Apartment"
 msgstr "Найти квартиры"
 
 #: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:14
-#: com/propertyvista/portal/server/preloader/PortalSitePreloader.java:153
-#: com/propertyvista/portal/server/preloader/PortalSitePreloader.java:156
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:116
 msgid "Find an Apartment"
 msgstr "Найти квартиры"
 
@@ -1953,11 +1987,11 @@ msgstr "Счетчики плана этажа"
 msgid "Floorplan Details"
 msgstr "Подробнее о плане этажа"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Floorplan Marketing Name"
 msgstr "Маркетинговое название плана этажа"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Floorplan Name"
 msgstr "Имя плана этажа"
 
@@ -1973,7 +2007,19 @@ msgstr "Планы этажа"
 msgid "Floorplans Property"
 msgstr "Планы собственности"
 
-#: com/propertyvista/pmsite/server/pages/AptListPage.html:39
+#: com/propertyvista/pmsite/server/panels/FooterPanel.html:15
+msgid "Follow Us"
+msgstr "Следуйте за нами"
+
+#: com/propertyvista/domain/site/SitePalette.java:2
+msgid "Foreground"
+msgstr "Передний план"
+
+#: com/propertyvista/domain/site/SitePalette.java:2
+msgid "Form"
+msgstr "Форма"
+
+#: com/propertyvista/pmsite/server/pages/AptListPage.html:26
 msgid "Found Properties"
 msgstr "Найдено Свойства"
 
@@ -2010,8 +2056,8 @@ msgstr "Французский (Канада)"
 msgid "Friend"
 msgstr "Друг"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportTurnoverAnalysisDTO.java:2
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportTurnoverAnalysisDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
 msgid "From Date"
 msgstr "С даты"
@@ -2067,7 +2113,7 @@ msgstr "Ворота"
 msgid "Gauge Display"
 msgstr "Калибровочных дисплей"
 
-#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:40
+#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:41
 msgid "General Information"
 msgstr "Общая информация"
 
@@ -2245,6 +2291,46 @@ msgstr "Человек проверки требуется"
 msgid "I Agree"
 msgstr "Я согласен"
 
+#. This is demo content
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:197
+msgid ""
+"I just had the pleasure to dealing with your superintendent at my building. "
+"I just moved in three weeks ago and was greeted right away by Manolo the "
+"Building Representative. I am a very picky guy but any issue/concern I threw"
+" at Manolo, he was able to assist with right away. I had an issue with Bell "
+"and Manolo went as far as working with the cable technician directly to "
+"ensure that my apartment was functioning to my liking. You have a great "
+"staff member in Manolo and if my first month experience is a showcase of "
+"what Starlight has to offer I can only be thankful that I found this great "
+"place to call home."
+msgstr ""
+"Я только что имел удовольствие иметь дело с вашим начальником в моем доме. Я"
+" только что переехал в три недели назад и был встречен сразу же, Маноло "
+"Строительство представителя. Я очень требователен парень, но какой-либо "
+"вопрос / проблему я бросил на Маноло, он был в состоянии помочь с сразу. У "
+"меня была проблема с Беллом и Маноло дошел до того, как работа с кабелем "
+"непосредственно техником, чтобы моя квартира была функционирования мне по "
+"душе. У вас есть прекрасная сотрудника в Маноло, и если мой первый опыт "
+"месяца витриной того, что Starlight может предложить я могу быть только "
+"благодарен, что я нашел это прекрасное место, чтобы позвонить домой."
+
+#. This is demo content
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:203
+msgid ""
+"I just wanted to let you know what a great job your superintendent Sean was "
+"doing.  He recently repaired my faucet and was very professional and "
+"courteous. Not only did he come and fix the issue right away, he also gave "
+"me advice on how to avoid this from happening in the future. This building "
+"is my home, and having Starlight now taking over showed instant results.\n"
+"Thank you again."
+msgstr ""
+"Я просто хотел, чтобы вы знали, что большую работу вашего начальника Шон "
+"делал. Он недавно отремонтировали мой кран и был очень профессиональный и "
+"вежливый. Он не только прийти и решить проблему сразу, он также дал мне "
+"совет, как избежать этого не происходило в будущем. Это здание является моим"
+" домом, и, Starlight теперь захвата показал, мгновенных результатов. Еще раз"
+" спасибо."
+
 #: com/propertyvista/domain/tenant/TenantScreening.java:2
 msgid "I'm not resident of Canada"
 msgstr "Я не резидент Канады"
@@ -2341,13 +2427,14 @@ msgstr "Запрос"
 msgid "Insurance Policies"
 msgstr "Страховые полисы"
 
+#: com/propertyvista/domain/payment/PaymentMethod.java:2
+#: com/propertyvista/domain/payment/PaymentType.java:1
 #: com/propertyvista/portal/domain/dto/PaymentMethodGenericDTO.java:2
-#: com/propertyvista/portal/domain/payment/PaymentType.java:1
 #: com/propertyvista/portal/domain/ptapp/PaymentInfo.java:2
 msgid "Interac"
 msgstr "Interac"
 
-#: com/propertyvista/portal/domain/payment/InteracInfo.java:0
+#: com/propertyvista/domain/payment/InteracInfo.java:0
 msgid "Interac Info"
 msgstr "Interac информация"
 
@@ -2435,7 +2522,7 @@ msgstr "Является ли новое"
 msgid "Is Shared"
 msgstr "Является общим для"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/TurnoverAnalysisSettings.java:2
 msgid "Is Turnover Measured By Percent"
 msgstr "Является Оборот измеряется процент"
 
@@ -2450,8 +2537,14 @@ msgid "Items"
 msgstr "Элементы"
 
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitAvailabilityReportSettings.java:2
 msgid "Items Per Page"
 msgstr "Товаров на странице"
+
+#. This is demo content
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:203
+msgid "Jane L."
+msgstr "Джейн Л."
 
 #: com/propertyvista/domain/financial/offering/extradata/Pet.java:1
 msgid "KG"
@@ -2662,10 +2755,6 @@ msgstr "Line Chart дисплей"
 msgid "List"
 msgstr "Список"
 
-#: com/propertyvista/pmsite/server/pages/AptListPage.html:40
-msgid "List View"
-msgstr "Список"
-
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:0
 msgid "Lister Gadget Base Settings"
 msgstr "Листер настройки гаджета базы"
@@ -2693,6 +2782,10 @@ msgstr "Языки"
 #: com/pyx4j/entity/rpc/GeoCriteria.java:2
 msgid "Location"
 msgstr "Местоположение"
+
+#: com/propertyvista/pmsite/server/panels/FooterPanel.html:9
+msgid "Locations"
+msgstr "Страна"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/charges/ChargeLine.java:1
@@ -2739,9 +2832,9 @@ msgid "Low-Rise"
 msgstr "Малоэтажный"
 
 #: com/propertyvista/domain/PriorAddress.java:2
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportEvent.java:2
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportTurnoverAnalysisDTO.java:2
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportEvent.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportTurnoverAnalysisDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 #: com/propertyvista/domain/financial/offering/Concession.java:2
 #: com/propertyvista/domain/financial/offering/extradata/Pet.java:2
 #: com/propertyvista/domain/person/Person.java:2
@@ -2773,7 +2866,7 @@ msgstr "Девичья фамилия"
 msgid "Mail"
 msgstr "Почта"
 
-#: com/propertyvista/crm/server/services/LeaseCrudServiceImpl.java:193
+#: com/propertyvista/crm/server/services/LeaseCrudServiceImpl.java:196
 #: com/propertyvista/portal/server/ptapp/services/ActivationServiceImpl.java:122
 msgid "Mail Service is temporary unavailable, try again later"
 msgstr "Почтовый сервис временно недоступен, повторите попытку позже"
@@ -2845,6 +2938,10 @@ msgstr "Мансардные крыши"
 msgid "Map"
 msgstr "Карта"
 
+#: com/propertyvista/pmsite/server/pages/AptListPage.java:61
+msgid "Map View"
+msgstr "Карта"
+
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:1
 msgid "Marble"
 msgstr "Мрамор"
@@ -2853,7 +2950,7 @@ msgstr "Мрамор"
 msgid "Market Price"
 msgstr "Рыночная цена"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 #: com/propertyvista/domain/marketing/MarketRent.java:0
 #: com/propertyvista/domain/property/asset/unit/AptUnitFinancial.java:2
 #: com/propertyvista/portal/domain/dto/FloorplanDTO.java:2
@@ -2884,7 +2981,7 @@ msgstr "Мастер приложений"
 msgid "Master Application Status"
 msgstr "Мастер Статус заявки"
 
-#: com/propertyvista/portal/domain/payment/PaymentType.java:1
+#: com/propertyvista/domain/payment/PaymentType.java:1
 msgid "MasterCard"
 msgstr "МастерКард"
 
@@ -2934,7 +3031,7 @@ msgstr "СМИ Загрузить"
 #: com/propertyvista/interfaces/importer/converter/MediaConverter.java:142
 #, java-format
 msgid "Media file not found ''{0}''"
-msgstr "Медиа-файл не найден''{0}''"
+msgstr ""
 
 #: com/propertyvista/interfaces/importer/converter/MediaConverter.java:100
 #: com/propertyvista/interfaces/importer/converter/MediaConverter.java:129
@@ -3065,20 +3162,20 @@ msgid "Mother"
 msgstr "Мать"
 
 #: com/propertyvista/domain/PriorAddress.java:2
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportEvent.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportEvent.java:2
 msgid "Move In Date"
 msgstr "Переместить в дате"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Move In Day"
 msgstr "Переместить в день"
 
 #: com/propertyvista/domain/PriorAddress.java:2
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportEvent.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportEvent.java:2
 msgid "Move Out Date"
 msgstr "Выйти Дата"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Move Out Day"
 msgstr "Съехать день"
 
@@ -3128,16 +3225,16 @@ msgstr "Муниципалитет"
 #: com/propertyvista/domain/site/PageDescriptor.java:2
 #: com/propertyvista/domain/tenant/Inquiry.java:2
 #: com/propertyvista/dto/ApplicationStatusDTO.java:2
-#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:59
-#: com/propertyvista/pmsite/server/pages/UnitDetailsPage.html:42
+#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:60
+#: com/propertyvista/pmsite/server/pages/UnitDetailsPage.html:43
 #: com/propertyvista/portal/domain/dto/AmenityDTO.java:2
 #: com/propertyvista/portal/domain/dto/FloorplanPropertyDTO.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
 msgid "Name"
 msgstr "Имя"
 
+#: com/propertyvista/domain/payment/EcheckInfo.java:2
 #: com/propertyvista/portal/domain/dto/PaymentMethodDTO.java:2
-#: com/propertyvista/portal/domain/payment/EcheckInfo.java:2
 msgid "Name On Account"
 msgstr "Имя На счета"
 
@@ -3165,15 +3262,20 @@ msgstr "Узкие пространства"
 msgid "Natural Stone"
 msgstr "Природный камень"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportSummaryDTO.java:2
-msgid "Net Exposure"
-msgstr "Чистый"
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportSummaryDTO.java:2
+msgid "Net Exposure #"
+msgstr "Чистый #"
+
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportSummaryDTO.java:2
+msgid "Net Exposure %"
+msgstr "Чистая% выдержки"
 
 #: com/pyx4j/essentials/rpc/admin/NetworkSimulation.java:0
 msgid "Network Simulation"
 msgstr "Моделирование сети"
 
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:1
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitAvailabilityReportSettings.java:1
 msgid "Never"
 msgstr "Никогда"
 
@@ -3189,8 +3291,7 @@ msgstr "Новые данные"
 msgid "New Lease Terms"
 msgstr "Новые условия аренды"
 
-#: com/propertyvista/crm/rpc/PasswordChangeRequest.java:2
-#: com/propertyvista/portal/rpc/ptapp/PasswordChangeRequest.java:2
+#: com/pyx4j/security/rpc/PasswordChangeRequest.java:2
 msgid "New Password"
 msgstr "Новый пароль"
 
@@ -3244,21 +3345,21 @@ msgstr "Не Заинтересованные"
 
 #: com/propertyvista/domain/Notes.java:0
 #: com/propertyvista/domain/Notes.java:2
-#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:43
-#: com/propertyvista/pmsite/server/pages/UnitDetailsPage.html:50
+#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:44
+#: com/propertyvista/pmsite/server/pages/UnitDetailsPage.html:51
 #: com/propertyvista/pmsite/server/panels/AptListPanel.html:23
 msgid "Notes"
 msgstr "Примечания"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportSummaryDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportSummaryDTO.java:2
 msgid "Notice #"
 msgstr "Notice #"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportSummaryDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportSummaryDTO.java:2
 msgid "Notice %"
 msgstr "Обратите внимание,%"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportSummaryDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportSummaryDTO.java:2
 msgid "Notice Rented"
 msgstr "Обратите внимание Арендованные"
 
@@ -3289,15 +3390,23 @@ msgstr "Количество единиц на маркетинговое наз
 msgid "ODSP"
 msgstr "ODSP"
 
+#: com/propertyvista/domain/site/SitePalette.java:2
+msgid "Object 1"
+msgstr "Объект 1"
+
+#: com/propertyvista/domain/site/SitePalette.java:2
+msgid "Object 2"
+msgstr "Объект 2"
+
 #: com/propertyvista/server/common/generator/UnitRelatedData.java:2
 msgid "Occupancies"
 msgstr "Заселенности"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportSummaryDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportSummaryDTO.java:2
 msgid "Occupancy #"
 msgstr "Размещение #"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportSummaryDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportSummaryDTO.java:2
 msgid "Occupancy %"
 msgstr "Размещение%"
 
@@ -3368,6 +3477,17 @@ msgstr "Другой"
 msgid "Other Income Info"
 msgstr "Другая информация доход"
 
+#. This is demo content
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:220
+msgid "Ottawa, Toronto defy national sales trend ... for now"
+msgstr ""
+"Оттава, Торонто игнорировать национальные тенденции продаж ... на данный "
+"момент"
+
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:164
+msgid "Our Vision"
+msgstr "Наше видение"
+
 #: com/propertyvista/domain/PriorAddress.java:1
 msgid "Owned"
 msgstr "Принадлежащий"
@@ -3376,7 +3496,7 @@ msgstr "Принадлежащий"
 msgid "Owned/Rented"
 msgstr "Собственные / Арендованные"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 #: com/propertyvista/domain/property/asset/Owner.java:0
 msgid "Owner"
 msgstr "Владелец"
@@ -3488,12 +3608,11 @@ msgstr "Комплектующие и ремонт"
 msgid "Password"
 msgstr "Пароль"
 
-#: com/propertyvista/crm/rpc/PasswordChangeRequest.java:0
+#: com/pyx4j/security/rpc/PasswordChangeRequest.java:0
 msgid "Password Change Request"
 msgstr "Запросить изменение пароля"
 
-#: com/propertyvista/crm/rpc/PasswordRetrievalRequest.java:0
-#: com/propertyvista/portal/rpc/ptapp/PasswordRetrievalRequest.java:0
+#: com/pyx4j/security/rpc/PasswordRetrievalRequest.java:0
 msgid "Password Retrieval Request"
 msgstr "Восстановление пароля Запрос"
 
@@ -3510,6 +3629,7 @@ msgstr "Оплата"
 msgid "Payment Info"
 msgstr "Информация об оплате"
 
+#: com/propertyvista/domain/payment/PaymentMethod.java:0
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
 #: com/propertyvista/portal/domain/dto/PaymentMethodDTO.java:0
 msgid "Payment Method"
@@ -3536,6 +3656,7 @@ msgstr "Сборы Оплата Сплит"
 msgid "Payment Term"
 msgstr "Срок оплаты"
 
+#: com/propertyvista/domain/payment/PaymentMethod.java:2
 #: com/propertyvista/portal/domain/dto/PaymentMethodGenericDTO.java:2
 #: com/propertyvista/portal/domain/ptapp/PaymentInfo.java:2
 msgid "Payment types"
@@ -3623,6 +3744,7 @@ msgstr "Домашние животные Максимальная"
 
 #: com/propertyvista/domain/PriorAddress.java:2
 #: com/propertyvista/domain/contact/Phone.java:0
+#: com/propertyvista/domain/payment/PaymentMethod.java:2
 #: com/propertyvista/domain/tenant/lead/Appointment.java:2
 #: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:29
 #: com/propertyvista/pmsite/server/pages/UnitDetailsPage.html:29
@@ -3642,7 +3764,7 @@ msgstr "Телефон поставщика"
 msgid "Phones"
 msgstr "Телефоны"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Physical Condition"
 msgstr "Физическое состояние"
 
@@ -3784,10 +3906,15 @@ msgstr "Цена по типу"
 msgid "Pricing"
 msgstr "Ценообразование"
 
+#: com/propertyvista/domain/payment/PaymentMethod.java:2
 #: com/propertyvista/portal/domain/dto/PaymentMethodDTO.java:2
 #: com/propertyvista/portal/domain/dto/PaymentMethodGenericDTO.java:2
 msgid "Primary"
 msgstr "Первичный"
+
+#: com/propertyvista/dto/ComplexDTO.java:2
+msgid "Primary Building"
+msgstr "Здание первого контура"
 
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 msgid "Primary in Complex"
@@ -3846,12 +3973,12 @@ msgstr "Акции"
 msgid "Properties"
 msgstr "Хаты"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 #: com/propertyvista/portal/domain/dto/PropertyDTO.java:0
 msgid "Property"
 msgstr "Собственность"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportEvent.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportEvent.java:2
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 msgid "Property Code"
 msgstr "Код недвижимости"
@@ -3864,7 +3991,7 @@ msgstr "Информация о недвижимости"
 msgid "Property List"
 msgstr "Перечень недвижимости"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 #: com/propertyvista/domain/property/PropertyManager.java:0
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 msgid "Property Manager"
@@ -3886,7 +4013,7 @@ msgstr "Недвижимость профиля"
 msgid "Property Search Criteria"
 msgstr "Критерии Поиск недвижимости"
 
-#: com/propertyvista/crm/server/services/LeaseCrudServiceImpl.java:189
+#: com/propertyvista/crm/server/services/LeaseCrudServiceImpl.java:192
 msgid "Property Vista application"
 msgstr "Недвижимость Vista, приложение"
 
@@ -3993,7 +4120,7 @@ msgstr "Интервал обновления"
 msgid "Refrigerator"
 msgstr "Холодильник"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Region"
 msgstr "Регион"
 
@@ -4040,15 +4167,15 @@ msgstr "Обновление"
 msgid "Rent"
 msgstr "Аренда"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportEvent.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportEvent.java:2
 msgid "Rent From Date"
 msgstr "Аренда С даты"
 
-#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:71
+#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:72
 msgid "Rent Price"
 msgstr "Стоимость аренды"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportEvent.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportEvent.java:2
 msgid "Rent Ready"
 msgstr "Аренда Готовый"
 
@@ -4065,11 +4192,11 @@ msgstr "Аренда Начало"
 msgid "Rented"
 msgstr "Арендованный"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Rented From Date"
 msgstr "Арендованные С даты"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Rented/Unrented/OffMarket"
 msgstr "Арендованные / Нетаксированный / Отключено"
 
@@ -4081,6 +4208,18 @@ msgstr "Отчет"
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Reports"
 msgstr "Отчеты"
+
+#. This is demo content
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:220
+msgid ""
+"Resale housing activity in August remained stable for the second consecutive"
+" month, according to new stats from The Canadian Real Estate Association, "
+"although brokers in Toronto and Ottawa benefited from an uptick in sales."
+msgstr ""
+"Вторичный рынок жилья активности в августе оставалась стабильной во второй "
+"месяц подряд, согласно новым статистика из канадской ассоциации реального "
+"недвижимости, брокеров, хотя в Торонто и Оттаве воспользовались всплеск "
+"продаж."
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitOccupancy.java:1
 msgid "Reserved"
@@ -4114,8 +4253,7 @@ msgstr "Малина"
 
 #: com/propertyvista/domain/site/PageDescriptor.java:1
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
-#: com/propertyvista/portal/server/preloader/PortalSitePreloader.java:163
-#: com/propertyvista/portal/server/preloader/PortalSitePreloader.java:166
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:126
 msgid "Residents"
 msgstr "Жители"
 
@@ -4144,7 +4282,7 @@ msgstr "Забыли пароль?"
 msgid "Return Any Location"
 msgstr "Вернуться Все районы"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Revenue Lost, in $"
 msgstr "Потеря дохода, в $"
 
@@ -4167,11 +4305,11 @@ msgstr "Крыша сегмента"
 msgid "Roofs"
 msgstr "Крыши"
 
-#: com/propertyvista/pmsite/server/pages/UnitDetailsPage.html:46
+#: com/propertyvista/pmsite/server/pages/UnitDetailsPage.html:47
 msgid "Rooms"
 msgstr "Помещение"
 
-#: com/propertyvista/portal/domain/payment/EcheckInfo.java:2
+#: com/propertyvista/domain/payment/EcheckInfo.java:2
 msgid "Routing Number"
 msgstr "Маршрутизация Количество"
 
@@ -4203,7 +4341,7 @@ msgstr "Спутник"
 msgid "Sauna"
 msgstr "Сауна"
 
-#: com/propertyvista/portal/domain/payment/EcheckInfo.java:1
+#: com/propertyvista/domain/payment/EcheckInfo.java:1
 msgid "Saving"
 msgstr "Сохраняем"
 
@@ -4215,7 +4353,7 @@ msgstr "Запланированные"
 msgid "School"
 msgstr "Школа"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Scoping"
 msgstr "Предварительное"
 
@@ -4223,7 +4361,7 @@ msgstr "Предварительное"
 msgid "Screening Date"
 msgstr "Дата Скрининга"
 
-#: com/propertyvista/pmsite/server/pages/AptListPage.java:89
+#: com/propertyvista/pmsite/server/pages/AptListPage.java:102
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaPanel.java:60
 #: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaPanel.java:60
 msgid "Search"
@@ -4358,18 +4496,6 @@ msgstr "Акции"
 msgid "Short Term Lease"
 msgstr "Краткосрочная аренда"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:2
-msgid "Show Summary"
-msgstr "Показать Основная информация"
-
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:2
-msgid "Show Turnover Analysis"
-msgstr "Показать Оборот Анализ"
-
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:2
-msgid "Show Units"
-msgstr "Показать Единицы"
-
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/tenant/lead/Showing.java:0
 msgid "Showing"
@@ -4383,7 +4509,7 @@ msgstr "Признаки"
 msgid "Sign Date"
 msgstr "Войти Дата"
 
-#: com/propertyvista/pmsite/server/panels/SignInPanel.java:128
+#: com/propertyvista/pmsite/server/panels/SignInPanel.java:134
 msgid "Sign In"
 msgstr "Войдите в систему,"
 
@@ -4391,6 +4517,11 @@ msgstr "Войдите в систему,"
 #: com/propertyvista/dto/SiteDescriptorDTO.java:0
 msgid "Site Descriptor"
 msgstr "Сайт дескрипторов"
+
+#: com/propertyvista/domain/site/SiteDescriptor.java:2
+#: com/propertyvista/domain/site/SitePalette.java:0
+msgid "Site Palette"
+msgstr "Сайт палитра"
 
 #: com/propertyvista/domain/site/SiteDescriptor.java:2
 msgid "Skin"
@@ -4454,6 +4585,7 @@ msgid "Sort Entity"
 msgstr "Сортировать Entity"
 
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitAvailabilityReportSettings.java:2
 msgid "Sorting"
 msgstr "Сортировка"
 
@@ -4611,7 +4743,7 @@ msgstr "Люкс Количество"
 msgid "Summary"
 msgstr "Резюме"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportSummaryDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportSummaryDTO.java:2
 msgid "Summary Subject"
 msgstr "Основная информация Тема"
 
@@ -4677,6 +4809,7 @@ msgstr "Цель"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/marketing/PublicVisibilityType.java:1
+#: com/propertyvista/domain/payment/PaymentMethod.java:2
 #: com/propertyvista/domain/tenant/Tenant.java:0
 #: com/propertyvista/domain/tenant/TenantInLease.java:2
 #: com/propertyvista/domain/tenant/TenantScreening.java:2
@@ -4806,6 +4939,16 @@ msgstr "Текст"
 msgid "The CAPTCHA solution was incorrect"
 msgstr "Капчу решение было неправильным"
 
+#. This is demo content
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:213
+msgid ""
+"The Vancouver housing market may already be unaffordable for many, but "
+"thereâs enough demand to keep prices rising, according to a new forecast."
+msgstr ""
+"Рынке жилья Ванкувере, возможно, уже недоступным для многих, но thereâ € ™ с"
+" достаточный спрос, чтобы поддерживать цены растут, в соответствии с новым "
+"прогнозом."
+
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
 msgid "Three"
 msgstr "Три"
@@ -4836,14 +4979,13 @@ msgstr "Название"
 msgid "To Be Provided"
 msgstr "Должны быть предоставлены"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportTurnoverAnalysisDTO.java:2
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportTurnoverAnalysisDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
 msgid "To Date"
 msgstr "До даты"
 
-#: com/propertyvista/crm/rpc/PasswordChangeRequest.java:2
-#: com/propertyvista/portal/rpc/ptapp/PasswordChangeRequest.java:2
+#: com/pyx4j/security/rpc/PasswordChangeRequest.java:2
 msgid "Token"
 msgstr "Знак"
 
@@ -4890,7 +5032,7 @@ msgstr "Всего Пространства"
 msgid "Total Storeys"
 msgstr "Всего этажей"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportSummaryDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportSummaryDTO.java:2
 msgid "Total Units"
 msgstr "Количество секций"
 
@@ -4906,7 +5048,7 @@ msgstr "Transaction ID"
 msgid "Transferred"
 msgstr "Переданы"
 
-#: com/propertyvista/portal/domain/payment/InteracInfo.java:2
+#: com/propertyvista/domain/payment/InteracInfo.java:2
 msgid "Transit No"
 msgstr "Транзитные Нет"
 
@@ -4914,9 +5056,17 @@ msgstr "Транзитные Нет"
 msgid "Transportation"
 msgstr "Транспорт"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:2
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Turnover Analysis Graph"
+msgstr "График Оборот Анализ"
+
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/TurnoverAnalysisSettings.java:2
 msgid "Turnover Analysis Resolution"
 msgstr "Резолюция Оборот Анализ"
+
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/TurnoverAnalysisSettings.java:0
+msgid "Turnover Analysis Settings"
+msgstr "Настройки Оборот Анализ"
 
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 msgid "Tv"
@@ -5015,13 +5165,13 @@ msgstr "URL"
 #: com/propertyvista/server/common/blob/ThumbnailService.java:72
 #, java-format
 msgid "Unable to read the image ''{0}''"
-msgstr "Невозможно прочитать изображение''{0}''"
+msgstr ""
 
 #: com/propertyvista/server/common/blob/ImageResizer.java:121
 #: com/propertyvista/server/common/blob/ThumbnailService.java:79
 #, java-format
 msgid "Unable to resample the image ''{0}''"
-msgstr "Не могу изменить размер изображение''{0}''"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/TenantIn.java:1
 #: com/propertyvista/domain/tenant/income/TenantGuarantor.java:1
@@ -5037,13 +5187,21 @@ msgid "Unemployment"
 msgstr "Безработица"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportEvent.java:2
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportEvent.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 #: com/propertyvista/domain/property/asset/unit/AptUnitOccupancy.java:2
 #: com/propertyvista/domain/tenant/Inquiry.java:2
 #: com/propertyvista/domain/tenant/lead/Showing.java:2
 msgid "Unit"
 msgstr "Блок"
+
+#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
+msgid "Unit Availability Report"
+msgstr "Отчет об Наличие"
+
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitAvailabilityReportSettings.java:0
+msgid "Unit Availability Report Settings"
+msgstr "Группа Настройки Отчет о доступности"
 
 #: com/propertyvista/pmsite/server/pages/UnitDetailsPage.html:36
 msgid "Unit Details"
@@ -5073,7 +5231,7 @@ msgstr "Группа мест"
 msgid "Unit Related Data"
 msgstr "Группа связанных данные"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 #: com/propertyvista/domain/property/asset/unit/AptUnitFinancial.java:2
 #: com/propertyvista/portal/domain/dto/AptUnitDTO.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
@@ -5084,23 +5242,19 @@ msgstr "Группа Аренда"
 msgid "Unit Trusts"
 msgstr "Паевые фонды"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportEvent.java:0
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportEvent.java:0
 msgid "Unit Vacancy Report Event"
 msgstr "Группа Вакансия докладе события"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportGadgetSettings.java:0
-msgid "Unit Vacancy Report Gadget Settings"
-msgstr "Группа Вакансия настройки отчетов гаджетов"
-
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportSummaryDTO.java:0
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportSummaryDTO.java:0
 msgid "Unit Vacancy Report Summary"
 msgstr "Группа Вакансии Резюме отчета"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportTurnoverAnalysisDTO.java:0
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportTurnoverAnalysisDTO.java:0
 msgid "Unit Vacancy Report Turnover Analysis"
 msgstr "Группа Вакансия докладе Оборот Анализ"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:0
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:0
 msgid "Unit Vacancy Status"
 msgstr "Статус Группа Вакансии"
 
@@ -5109,11 +5263,11 @@ msgstr "Статус Группа Вакансии"
 msgid "Units"
 msgstr "Малины"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportTurnoverAnalysisDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportTurnoverAnalysisDTO.java:2
 msgid "Units Turned Over Abs"
 msgstr "Единицы перевернулся Abs"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportTurnoverAnalysisDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportTurnoverAnalysisDTO.java:2
 msgid "Units Turned Over Pct"
 msgstr "Единицы перевернулся Pct"
 
@@ -5121,12 +5275,12 @@ msgstr "Единицы перевернулся Pct"
 #: com/propertyvista/interfaces/importer/converter/MediaConverter.java:154
 #, java-format
 msgid "Unsupported Media file ''{0}'' extension ''{1}''"
-msgstr "Неподдерживаемые файл Медиа''{0}''расширения''{1}''"
+msgstr ""
 
 #: com/pyx4j/essentials/server/upload/UploadServiceImpl.java:98
 #, java-format
 msgid "Unsupported file type {0}"
-msgstr "Неподдерживаемый тип файла {0}"
+msgstr ""
 
 #: com/propertyvista/admin/rpc/PmcImportDTO.java:1
 msgid "Update Data"
@@ -5141,6 +5295,7 @@ msgid "Update Upload"
 msgstr "Обновление Загрузить"
 
 #: com/propertyvista/domain/User.java:2
+#: com/propertyvista/domain/site/SiteDescriptor.java:2
 msgid "Updated"
 msgstr "Обновленный"
 
@@ -5167,27 +5322,23 @@ msgstr "Имя пользователя"
 msgid "Utility"
 msgstr "Утилита"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportSummaryDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportSummaryDTO.java:2
 msgid "Vacancy #"
 msgstr "Вакансия #"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportSummaryDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportSummaryDTO.java:2
 msgid "Vacancy %"
 msgstr "Вакансия%"
-
-#: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
-msgid "Vacancy Report"
-msgstr "Вакансия докладе"
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitOccupancy.java:1
 msgid "Vacant"
 msgstr "Вакантный"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyReportSummaryDTO.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportSummaryDTO.java:2
 msgid "Vacant Rented"
 msgstr "Вакантные Арендованные"
 
-#: com/propertyvista/domain/dashboard/gadgets/UnitVacancyStatus.java:2
+#: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Vacant/Notice"
 msgstr "Вакантные / Примечание"
 
@@ -5197,6 +5348,11 @@ msgstr "Вакантные / Примечание"
 #: com/propertyvista/domain/financial/offering/extradata/VehicleChargeRule.java:2
 msgid "Value"
 msgstr "Значение"
+
+#. This is demo content
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:213
+msgid "Vancouver prices to keep rising"
+msgstr "Ванкувер цены продолжают расти"
 
 #: com/propertyvista/domain/financial/offering/extradata/Vehicle.java:0
 msgid "Vehicle"
@@ -5227,7 +5383,7 @@ msgstr "Вид"
 msgid "Vintage"
 msgstr "Марочный"
 
-#: com/propertyvista/portal/domain/payment/PaymentType.java:1
+#: com/propertyvista/domain/payment/PaymentType.java:1
 msgid "Visa"
 msgstr "Виза"
 
@@ -5286,6 +5442,7 @@ msgid "Web service User"
 msgstr "Пользователь веб-службы"
 
 #: com/propertyvista/domain/company/Company.java:2
+#: com/propertyvista/domain/property/asset/Complex.java:2
 #: com/propertyvista/domain/property/asset/building/BuildingContactInfo.java:2
 msgid "Website"
 msgstr "Веб-сайт"
@@ -5358,6 +5515,10 @@ msgstr "Лет получения"
 msgid "Yes please enroll me"
 msgstr "Да, пожалуйста зачислить меня"
 
+#: com/propertyvista/pmsite/server/panels/GwtInclude.html:6
+msgid "You need to have JavaScript enabled to use this site."
+msgstr "Вы должны иметь JavaScript включена пользоваться этим сайтом."
+
 #: com/propertyvista/domain/media/Media.java:1
 msgid "YouTube"
 msgstr "ВыВТрубе"
@@ -5366,8 +5527,7 @@ msgstr "ВыВТрубе"
 msgid "YouTube Video ID"
 msgstr "ВыВТрубе иди"
 
-#: com/propertyvista/crm/rpc/PasswordRetrievalRequest.java:2
-#: com/propertyvista/portal/rpc/ptapp/PasswordRetrievalRequest.java:2
+#: com/pyx4j/security/rpc/PasswordRetrievalRequest.java:2
 msgid "Your Email"
 msgstr "Ваш электронный адрес"
 
@@ -5383,8 +5543,9 @@ msgstr "Ваша карта была отклонена"
 msgid "Zip/Postal Code"
 msgstr "Почтовый Код"
 
+#: com/propertyvista/domain/payment/PaymentMethod.java:2
+#: com/propertyvista/domain/payment/PaymentType.java:1
 #: com/propertyvista/portal/domain/dto/PaymentMethodGenericDTO.java:2
-#: com/propertyvista/portal/domain/payment/PaymentType.java:1
 #: com/propertyvista/portal/domain/ptapp/PaymentInfo.java:2
 msgid "eCheck"
 msgstr "иЧек"
@@ -5415,7 +5576,7 @@ msgstr "ReCaptcha подключения не удалась"
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:79
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:83
 msgid "to"
-msgstr "до"
+msgstr "к"
 
 #: com/propertyvista/domain/financial/offering/extradata/Vehicle.java:2
 #: com/propertyvista/domain/property/asset/Roof.java:2
@@ -5430,13 +5591,11 @@ msgid ""
 "{0,choice,null#Any|0#Less than ${1}|0<{1,choice,null#Over ${0}|0<${0} - "
 "${1}}}"
 msgstr ""
-"{0,choice,null#Любой|0#Меньше чем ${1}|0<{1,choice,null#Больше чем "
-"${0}|0<${0} - ${1}}}"
 
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:101
 #, java-format
 msgid "{0,choice,null#Any|0#Less than {1}|0<{0}{1,choice,null# and more|0<}}"
-msgstr "{0,choice,null#Любой|0#Менише {1}|0<{0}{1,choice,null# и больше|0<}}"
+msgstr ""
 
 #: com/propertyvista/domain/property/asset/Floorplan.java:0
 #, java-format
@@ -5448,7 +5607,7 @@ msgstr "{0} (Спальные места: {1} Ванные: {2})"
 msgid "{0} Bedroom"
 msgstr "{0} Спальня"
 
-#: com/pyx4j/entity/rdb/EntityPersistenceServiceRDB.java:493
+#: com/pyx4j/entity/rdb/EntityPersistenceServiceRDB.java:496
 #, java-format
 msgid "{0} updated externally"
 msgstr "{0} обновленный внешне"
@@ -5477,7 +5636,7 @@ msgstr ""
 #: com/propertyvista/domain/financial/offering/ChargeItem.java:0
 #, java-format
 msgid "{0}, Base Price: {1}, Adjusted Price: {2}"
-msgstr "{0}, Базовая цена: {1}, скорректированная цена: {2}"
+msgstr ""
 
 #: com/propertyvista/domain/contact/Phone.java:0
 #: com/propertyvista/domain/property/PropertyPhone.java:0
