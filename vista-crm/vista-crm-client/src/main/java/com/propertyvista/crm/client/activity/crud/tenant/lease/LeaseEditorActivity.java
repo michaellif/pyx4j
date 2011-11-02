@@ -226,7 +226,6 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             utilitiesToExclude.addAll(catalog.includedUtilities());
             utilitiesToExclude.addAll(catalog.externalUtilities());
 
-            currentValue.selectedBuilding().serviceCatalog().includedUtilities();
             for (ServiceFeature feature : selectedService.features()) {
                 for (ServiceItem item : feature.feature().items()) {
                     switch (feature.feature().type().getValue()) {

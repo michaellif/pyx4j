@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,8 +36,15 @@ import com.propertyvista.domain.User;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineList;
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.financial.offering.ChargeItem;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceFeature;
+import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.misc.VistaDevPreloadConfig;
@@ -134,6 +143,57 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
     //        sb.append(VistaDataPrinter.print(unitSelection));
     //    }
 
+    private void updateLease(Lease lease) {
+        Building building = lease.unit().belongsTo();
+
+        Persistence.service().retrieve(building);
+        Persistence.service().retrieve(building.serviceCatalog());
+
+        // update service catalogue double-reference lists:
+        EntityQueryCriteria<Service> serviceCriteria = EntityQueryCriteria.create(Service.class);
+        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), building.serviceCatalog()));
+        List<Service> services = Persistence.service().query(serviceCriteria);
+        building.serviceCatalog().services().clear();
+        building.serviceCatalog().services().addAll(services);
+
+        Service selectedService = null;
+        for (Service service : building.serviceCatalog().services()) {
+            if (service.type().equals(lease.type())) {
+                Persistence.service().retrieve(service.items());
+                for (ServiceItem item : service.items()) {
+                    if (lease.unit().equals(item.element())) {
+                        lease.serviceAgreement().serviceItem().set(createChargeItem(item));
+                        selectedService = service;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // pre-populate utilities for the new service: 
+        if (!lease.serviceAgreement().serviceItem().isEmpty()) {
+            Persistence.service().retrieve(selectedService.features());
+            for (ServiceFeature feature : selectedService.features()) {
+                if (Feature.Type.utility.equals(feature.feature().type().getValue())) {
+                    Persistence.service().retrieve(feature.feature().items());
+                    for (ServiceItem item : feature.feature().items()) {
+                        if (!building.serviceCatalog().includedUtilities().contains(item.type())
+                                && !building.serviceCatalog().externalUtilities().contains(item.type())) {
+                            lease.serviceAgreement().featureItems().add(createChargeItem(item));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private ChargeItem createChargeItem(ServiceItem serviceItem) {
+        ChargeItem chargeItem = EntityFactory.create(ChargeItem.class);
+        chargeItem.item().set(serviceItem);
+        chargeItem.price().setValue(serviceItem.price().getValue());
+        return chargeItem;
+    }
+
     @Override
     public String create() {
         user = loadUser(DemoData.PRELOADED_USERNAME);
@@ -153,6 +213,8 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
     }
 
     private void persistFullApplication(ApplicationSummaryGDO summary, PTGenerator generator) {
+
+        updateLease(summary.lease());
 
         Persistence.service().persist(summary.lease());
 
