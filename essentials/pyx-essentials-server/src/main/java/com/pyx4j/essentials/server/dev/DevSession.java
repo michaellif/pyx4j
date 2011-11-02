@@ -36,7 +36,7 @@ import com.pyx4j.server.contexts.Context;
  */
 public class DevSession {
 
-    public static String DEV_SESSION_COOKIE_NAME = "pyx_dev_access";
+    public static String DEV_SESSION_COOKIE_NAME = "pyx_dev_access2";
 
     public static String DEV_SESSION_REQUEST_ATTRIBUTE = "com.pyx.pyx_dev_access";
 
