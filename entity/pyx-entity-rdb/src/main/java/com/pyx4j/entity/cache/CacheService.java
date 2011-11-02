@@ -36,10 +36,15 @@ public class CacheService {
     private static Cache getCache() {
         Cache cache = CacheManager.getInstance().getCache(NamespaceManager.getNamespace());
         if (cache == null) {
-            int maxElementsInMemory = 10 * 1024;
-            int timeToLiveSeconds = 2 * Consts.HOURS2SEC;
-            cache = new Cache(NamespaceManager.getNamespace(), maxElementsInMemory, false, false, timeToLiveSeconds, timeToLiveSeconds);
-            CacheManager.getInstance().addCache(cache);
+            synchronized (CacheService.class) {
+                cache = CacheManager.getInstance().getCache(NamespaceManager.getNamespace());
+                if (cache == null) {
+                    int maxElementsInMemory = 10 * 1024;
+                    int timeToLiveSeconds = 2 * Consts.HOURS2SEC;
+                    cache = new Cache(NamespaceManager.getNamespace(), maxElementsInMemory, false, false, timeToLiveSeconds, timeToLiveSeconds);
+                    CacheManager.getInstance().addCache(cache);
+                }
+            }
         }
         return cache;
     }
