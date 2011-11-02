@@ -46,6 +46,8 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         if (ApplicationMode.isDevelopment()) {
             if (parts.length >= 4) {
                 return parts[parts.length - 4].toLowerCase(Locale.ENGLISH);
+            } else if (parts.length == 3) {
+                return parts[parts.length - 3].toLowerCase(Locale.ENGLISH);
             }
         } else {
             if (parts.length >= 3) {
