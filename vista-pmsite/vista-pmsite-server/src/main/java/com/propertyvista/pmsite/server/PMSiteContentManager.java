@@ -410,6 +410,19 @@ public class PMSiteContentManager implements Serializable {
         return servletRoot + "media/" + mediaId + "/" + size.name() + ".jpg";
     }
 
+    public static String getFistVisibleMediaImgUrl(List<Media> medias, ThumbnailSize size) {
+        return getMediaImgUrl(getFistVisibleMedia(medias), size);
+    }
+
+    public static long getFistVisibleMedia(List<Media> medias) {
+        for (Media media : medias) {
+            if (PublicVisibilityType.global.equals(media.visibility().getValue()) && Media.Type.file == (media.type().getValue())) {
+                return media.getPrimaryKey().asLong();
+            }
+        }
+        return 0;
+    }
+
     public List<PromoDataModel> getPromotions() {
         ArrayList<PromoDataModel> promo = new ArrayList<PromoDataModel>();
 

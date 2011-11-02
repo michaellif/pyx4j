@@ -65,11 +65,7 @@ public class AptDetailsPage extends BasePage {
         final Map<Floorplan, List<AptUnit>> fpUnits = PMSiteContentManager.getBuildingFloorplans(propInfo);
         final List<BuildingAmenity> amenities = PMSiteContentManager.getBuildingAmenities(propInfo);
 
-        long mediaId = 0;
-        if (propInfo.media().size() > 0) {
-            mediaId = propInfo.media().get(0).getPrimaryKey().asLong();
-        }
-        SimpleImage pic = new SimpleImage("picture", PMSiteContentManager.getMediaImgUrl(mediaId, ThumbnailSize.large));
+        SimpleImage pic = new SimpleImage("picture", PMSiteContentManager.getFistVisibleMediaImgUrl(propInfo.media(), ThumbnailSize.large));
         final String picId = "largeView";
         add(pic.add(AttributeModifier.replace("id", picId)));
         add(new ListView<Media>("gallery", propInfo.media()) {
