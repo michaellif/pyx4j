@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -23,7 +22,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
-import com.propertyvista.portal.domain.dto.PaymentMethodGenericDTO;
+import com.propertyvista.domain.payment.PaymentMethod;
 
 public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMethodView {
 
@@ -62,7 +61,7 @@ public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMet
     }
 
     @Override
-    public void populate(PaymentMethodGenericDTO paymentMethod) {
+    public void populate(PaymentMethod paymentMethod) {
         form.populate(paymentMethod);
 
     }

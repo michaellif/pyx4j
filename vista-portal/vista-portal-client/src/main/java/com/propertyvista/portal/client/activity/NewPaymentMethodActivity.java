@@ -19,9 +19,9 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.portal.client.ui.residents.NewPaymentMethodView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.domain.dto.PaymentMethodGenericDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class NewPaymentMethodActivity extends SecurityAwareActivity implements NewPaymentMethodView.Presenter {
@@ -45,7 +45,7 @@ public class NewPaymentMethodActivity extends SecurityAwareActivity implements N
     }
 
     @Override
-    public void save(PaymentMethodGenericDTO paymentmethod) {
+    public void save(PaymentMethod paymentmethod) {
         // TODO Implement
         //Just for presentation
         AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());

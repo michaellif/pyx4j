@@ -55,4 +55,5 @@ public interface PaymentMethod extends IEntity {
 
     @EmbeddedEntity
     Phone phone();
+
 }

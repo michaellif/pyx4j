@@ -274,8 +274,10 @@ public class PortalTheme extends VistaTheme {
         style.addProperty("width", "100%");
         style.addProperty("padding-top", "3px");
         style.addProperty("height", "27px");
-        style.addProperty("border-top", "1px solid #F7F7F7");
-        style.addProperty("border-bottom", "1px solid #F7F7F7");
+//        style.addProperty("border-top", "1px solid #F7F7F7");
+//        style.addProperty("border-bottom", "1px solid #F7F7F7");
+        style.addProperty("white-space", "nowrap");
+
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, NativeRadioGroup.StyleSuffix.Item) + " input");
@@ -285,13 +287,14 @@ public class PortalTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, NativeRadioGroup.StyleSuffix.Item, NativeRadioGroup.StyleDependent.selected));
-        style.addProperty("border-top", "1px solid #bbb");
-        style.addProperty("border-bottom", "1px solid #bbb");
-        style.addProperty("background-color", "white");
+//        style.addProperty("border-top", "1px solid #bbb");
+//        style.addProperty("border-bottom", "1px solid #bbb");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentForm));
         style.addProperty("border-radius", "5px");
+        style.addProperty("border", "solid 1px #666");
+        style.addProperty("width", "30em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentImages));
@@ -303,18 +306,17 @@ public class PortalTheme extends VistaTheme {
         style.addProperty("padding-top", "5px");
         style.addProperty("padding-right", "10px");
         style.addProperty("padding-left", "10px");
-        style.addProperty("border-top-left-radius", "3px");
-        style.addProperty("border-bottom-left-radius", "3px");
-        style.addProperty("border-left", "1px solid #F7F7F7");
+//        style.addProperty("border-top-left-radius", "3px");
+//        style.addProperty("border-bottom-left-radius", "3px");
+//        style.addProperty("border-left", "1px solid #F7F7F7");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentImages) + " div.selected");
-        style.addProperty("padding-top", "4px");
-        style.addProperty("height", "26px");
-        style.addProperty("border-top", "1px solid #bbb");
-        style.addProperty("border-bottom", "1px solid #bbb");
-        style.addProperty("border-left", "1px solid #bbb");
-        style.addProperty("background-color", "white");
+//        style.addProperty("padding-top", "4px");
+//        style.addProperty("height", "26px");
+//        style.addProperty("border-top", "1px solid #bbb");
+//        style.addProperty("border-bottom", "1px solid #bbb");
+//        style.addProperty("border-left", "1px solid #bbb");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentImages) + " div img");
@@ -337,11 +339,12 @@ public class PortalTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentFee) + " div.selected");
-        style.addProperty("padding-top", "7px");
-        style.addProperty("height", "23px");
-        style.addProperty("border-top", "1px solid #bbb");
-        style.addProperty("border-bottom", "1px solid #bbb");
-        style.addProperty("background-color", "white");
+//        style.addProperty("padding-top", "7px");
+//        style.addProperty("height", "23px");
+//        style.addProperty("border-top", "1px solid #bbb");
+//        style.addProperty("border-bottom", "1px solid #bbb");
+//        style.addProperty("background-color", "white");
         addStyle(style);
+
     }
 }

@@ -15,7 +15,6 @@ package com.propertyvista.portal.client.ui.residents;
 
 import java.util.Date;
 
-import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.ComplexPanel;
@@ -23,7 +22,6 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.commons.css.IStyleDependent;
@@ -31,30 +29,28 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
 import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
-import com.propertyvista.common.client.ui.decorations.DecorationData;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.resources.PortalImages;
-import com.propertyvista.portal.domain.dto.PaymentMethodGenericDTO;
 
-public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethodGenericDTO> {
+public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod> {
 
     private FlowPanel paymentTypeImagesPanel;
-
-    private FlowPanel paymentFeesPanel;
 
     public static String PAYMENT_BUTTONS_STYLE_PREFIX = "PaymentRadioButtonGroup";
 
@@ -67,11 +63,11 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
     }
 
     public NewPaymentMethodForm() {
-        super(PaymentMethodGenericDTO.class, new VistaEditorsComponentFactory());
+        super(PaymentMethod.class, new VistaEditorsComponentFactory());
     }
 
     @Override
-    public void populate(PaymentMethodGenericDTO value) {
+    public void populate(PaymentMethod value) {
         super.populate(value);
         setInstrumentsVisibility(value.type().getValue());
     }
@@ -81,9 +77,9 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
 
         FormFlexPanel container = new FormFlexPanel();
 
-        int row = 0;
+        int row = -1;
 
-        container.setH1(row++, 0, 1, proto().type().getMeta().getCaption());
+        container.setH1(++row, 0, 3, proto().type().getMeta().getCaption());
 
         CRadioGroupEnum<PaymentType> radioGroup = new CRadioGroupEnum<PaymentType>(PaymentType.class, CRadioGroup.Layout.VERTICAL);
         radioGroup.setStylePrefix(PAYMENT_BUTTONS_STYLE_PREFIX);
@@ -118,9 +114,8 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
             holder.add(paymentTypeImage);
             paymentTypeImagesPanel.add(holder);
         }
-        paymentTypeImagesPanel.asWidget().getElement().getStyle().setFloat(Float.LEFT);
 
-        container.setWidget(row, 0, paymentTypeImagesPanel);
+        container.setWidget(++row, 0, paymentTypeImagesPanel);
 
         CRadioGroup<PaymentType> paymentType = (CRadioGroup<PaymentType>) inject(proto().type(), radioGroup);
         paymentType.addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
@@ -132,16 +127,6 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
                 setInstrumentsVisibility(event.getValue());
             }
         });
-        paymentType.asWidget().getElement().getStyle().setFloat(Float.LEFT);
-
-        paymentFeesPanel = new FlowPanel();
-        paymentFeesPanel.setStyleName(Selector.getStyleName(PAYMENT_BUTTONS_STYLE_PREFIX, NewPaymentMethodForm.StyleSuffix.PaymentFee));
-        Label paymentFeesLabel;
-        for (PaymentType type : PaymentType.values()) {
-            paymentFeesLabel = new Label("");
-            paymentFeesPanel.add(paymentFeesLabel);
-        }
-        paymentFeesPanel.asWidget().getElement().getStyle().setFloat(Float.LEFT);
 
         ComplexPanel instrumentsPanel = new FlowPanel();
         instrumentsPanel.asWidget().getElement().addClassName(Selector.getStyleName(PAYMENT_BUTTONS_STYLE_PREFIX, StyleSuffix.PaymentForm));
@@ -150,15 +135,18 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
         instrumentsPanel.add(inject(proto().creditCard(), createCreditCardInfoEditor()));
 
         container.setWidget(row, 1, paymentType);
-        container.setWidget(row, 2, paymentFeesPanel);
-        container.setWidget(row++, 3, instrumentsPanel);
+        container.setWidget(row, 2, instrumentsPanel);
 
         setPaymentTableVisibility(0);
 
-        container.setH1(row++, 0, 1, proto().billingAddress().getMeta().getCaption());
-        container.setWidget(row++, 0, inject(proto().billingAddress(), new CAddressStructured(false)));
+        container.setH1(++row, 0, 3, proto().billingAddress().getMeta().getCaption());
 
-        container.setWidget(row++, 0, new DecoratorBuilder(inject(proto().phone()), 12).build());
+        container.setWidget(++row, 0, inject(proto().billingAddress(), new CAddressStructured(false)));
+        container.getFlexCellFormatter().setColSpan(row, 0, 3);
+
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().phone()), 12).build());
+        container.getFlexCellFormatter().setColSpan(row, 0, 3);
+
         container.setWidth("100%");
         setInstrumentsVisibility(PaymentType.Echeck);
         return container;
@@ -172,13 +160,11 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
     }
 
     private void setPaymentTableVisibility(int index) {
-        int count = paymentFeesPanel.getWidgetCount();
+        int count = paymentTypeImagesPanel.getWidgetCount();
         for (int i = 0; i < count; i++) {
             paymentTypeImagesPanel.getWidget(i).removeStyleName(Selector.getDependentName(StyleDependent.selected));
-            paymentFeesPanel.getWidget(i).removeStyleName(Selector.getDependentName(StyleDependent.selected));
         }
         paymentTypeImagesPanel.getWidget(index).addStyleName(Selector.getDependentName(StyleDependent.selected));
-        paymentFeesPanel.getWidget(index).addStyleName(Selector.getDependentName(StyleDependent.selected));
     }
 
     private CEntityEditor<EcheckInfo> createEcheckInfoEditor() {
@@ -187,11 +173,9 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
             public IsWidget createContent() {
                 FlowPanel panel = new FlowPanel();
 
-                DecorationData decorData = new DecorationData();
-                decorData.componentWidth = 12;
-                panel.add(new VistaWidgetDecorator(inject(proto().nameOnAccount()), decorData));
-                panel.add(new VistaWidgetDecorator(inject(proto().accountType()), decorData));
-                panel.add(new VistaWidgetDecorator(inject(proto().bankName()), decorData));
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().nameOnAccount())));
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().accountType())));
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().bankName())));
 
                 CheckPanel checkPanel = new CheckPanel(this);
                 checkPanel.add(proto().routingNo(), 85);
@@ -211,12 +195,10 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
             @Override
             public IsWidget createContent() {
                 FlowPanel panel = new FlowPanel();
-                DecorationData decorData = new DecorationData();
-                decorData.componentWidth = 12;
-                panel.add(new VistaWidgetDecorator(inject(proto().cardNumber()), decorData));
-                panel.add(new VistaWidgetDecorator(inject(proto().expiry()), decorData));
-                panel.add(new VistaWidgetDecorator(inject(proto().exactName()), decorData));
-                panel.add(new VistaWidgetDecorator(inject(proto().bankPhone()), decorData));
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().cardNumber())));
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().expiry())));
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().exactName())));
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().bankPhone())));
                 return panel;
             }
 
@@ -280,4 +262,11 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
 
     }
 
+    class InnerPanelWidgetDecorator extends WidgetDecorator {
+
+        public InnerPanelWidgetDecorator(CComponent<?> component) {
+            super(new Builder(component).labelWidth(12).componentWidth(12));
+        }
+
+    }
 }
