@@ -69,4 +69,8 @@ public class CacheService {
     public static void remove(Object key) {
         getCache().remove(key);
     }
+
+    public static void reset() {
+        getCache().removeAll();
+    }
 }
