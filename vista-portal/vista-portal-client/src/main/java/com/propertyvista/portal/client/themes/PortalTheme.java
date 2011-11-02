@@ -47,6 +47,8 @@ public class PortalTheme extends VistaTheme {
 
         initEntityFolderStyles();
 
+        addTheme(new DefaultEntityFolderTheme());
+
         addTheme(new DefaultWidgetDecoratorTheme());
 
         addTheme(new DefaultFormFlexPanelTheme());

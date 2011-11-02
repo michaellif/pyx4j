@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.themes;
 
-import com.pyx4j.commons.css.ColorUtil;
 import com.pyx4j.commons.css.ThemeColors;
 
 import com.propertyvista.common.client.theme.VistaPalette;
@@ -21,22 +20,14 @@ import com.propertyvista.common.client.theme.VistaPalette;
 public class PortalPalette extends VistaPalette {
 
     public PortalPalette() {
-        float hue = (float) 213 / 360;
-        float saturation = (float) 0.9;
-        float brightness = (float) 0.7;
-        putThemeColor(ThemeColors.OBJECT_TONE1, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.08));
-        putThemeColor(ThemeColors.OBJECT_TONE2, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.12));
-        putThemeColor(ThemeColors.OBJECT_TONE3, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.16));
-        putThemeColor(ThemeColors.OBJECT_TONE4, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.2));
-        putThemeColor(ThemeColors.OBJECT_TONE5, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.99));
-        putThemeColor(ThemeColors.BORDER, 0xe7e7e7);
-        putThemeColor(ThemeColors.SELECTION, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.4));
-        putThemeColor(ThemeColors.SELECTION_TEXT, 0xffffff);
-        putThemeColor(ThemeColors.TEXT, 0x000000);
-        putThemeColor(ThemeColors.TEXT_BACKGROUND, 0xffffff);
-        putThemeColor(ThemeColors.DISABLED_TEXT_BACKGROUND, 0xfafafa);
-        putThemeColor(ThemeColors.MANDATORY_TEXT_BACKGROUND, 0xe5e5e5);
-        putThemeColor(ThemeColors.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
-        putThemeColor(ThemeColors.SEPARATOR, 0xcccccc);
+
+        putThemeColor(ThemeColors.object1, "#666666");
+        putThemeColor(ThemeColors.object2, "#666666");
+        putThemeColor(ThemeColors.contrast1, "red");
+        putThemeColor(ThemeColors.contrast2, "orange");
+        putThemeColor(ThemeColors.background, "#fefefe");
+        putThemeColor(ThemeColors.foreground, "#666666");
+        putThemeColor(ThemeColors.form, "#666666");
+
     }
 }

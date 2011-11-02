@@ -25,16 +25,20 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
+import com.propertyvista.domain.site.SitePalette;
 import com.propertyvista.portal.client.themes.PortalPalette;
 import com.propertyvista.portal.client.themes.PortalTheme;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
+import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 
 public class PortalSite extends VistaSite {
 
-    private static PortalSiteServices srv = GWT.create(PortalSiteServices.class);
+    private static PortalSiteServices portalSiteServices = GWT.create(PortalSiteServices.class);
+
+    private static SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
 
     public static final String RESIDENT_INSERTION_ID = "vista.resident";
 
@@ -59,6 +63,13 @@ public class PortalSite extends VistaSite {
             RootPanel.get().add(new PortalScreen());
 
         }
+
+        siteThemeServices.retrievePalette(new DefaultAsyncCallback<SitePalette>() {
+            @Override
+            public void onSuccess(SitePalette palette) {
+                System.out.println("++++++++++" + palette);
+            }
+        });
 
         StyleManger.installTheme(new PortalTheme(), new PortalPalette());
 
@@ -98,6 +109,6 @@ public class PortalSite extends VistaSite {
     }
 
     public static PortalSiteServices getPortalSiteServices() {
-        return srv;
+        return portalSiteServices;
     }
 }
