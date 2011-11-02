@@ -16,18 +16,19 @@ package com.propertyvista.portal.client.themes;
 import com.pyx4j.commons.css.ThemeColors;
 
 import com.propertyvista.common.client.theme.VistaPalette;
+import com.propertyvista.domain.site.SitePalette;
 
 public class PortalPalette extends VistaPalette {
 
-    public PortalPalette() {
+    public PortalPalette(SitePalette palette) {
 
-        putThemeColor(ThemeColors.object1, "#666666");
-        putThemeColor(ThemeColors.object2, "#666666");
-        putThemeColor(ThemeColors.contrast1, "red");
-        putThemeColor(ThemeColors.contrast2, "orange");
-        putThemeColor(ThemeColors.background, "#fefefe");
-        putThemeColor(ThemeColors.foreground, "#666666");
-        putThemeColor(ThemeColors.form, "#666666");
+        putThemeColor(ThemeColors.object1, palette.object1().getValue());
+        putThemeColor(ThemeColors.object2, palette.object2().getValue());
+        putThemeColor(ThemeColors.contrast1, palette.contrast1().getValue());
+        putThemeColor(ThemeColors.contrast2, palette.contrast2().getValue());
+        putThemeColor(ThemeColors.background, palette.background().getValue());
+        putThemeColor(ThemeColors.foreground, palette.foreground().getValue());
+        putThemeColor(ThemeColors.form, palette.form().getValue());
 
     }
 }

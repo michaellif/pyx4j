@@ -64,15 +64,6 @@ public class PortalSite extends VistaSite {
 
         }
 
-        siteThemeServices.retrievePalette(new DefaultAsyncCallback<SitePalette>() {
-            @Override
-            public void onSuccess(SitePalette palette) {
-                System.out.println("++++++++++" + palette);
-            }
-        });
-
-        StyleManger.installTheme(new PortalTheme(), new PortalPalette());
-
         hideLoadingIndicator();
 
         SessionInactiveDialog.register();
@@ -82,6 +73,12 @@ public class PortalSite extends VistaSite {
 
                     @Override
                     public void onSuccess(Boolean result) {
+                        siteThemeServices.retrievePalette(new DefaultAsyncCallback<SitePalette>() {
+                            @Override
+                            public void onSuccess(SitePalette palette) {
+                                StyleManger.installTheme(new PortalTheme(), new PortalPalette(palette));
+                            }
+                        });
                         getHistoryHandler().handleCurrentHistory();
                     }
 
