@@ -416,6 +416,9 @@ public class PMSiteContentManager implements Serializable {
 
     public static long getFistVisibleMedia(List<Media> medias) {
         for (Media media : medias) {
+            if (media.isValuesDetached()) {
+                Persistence.service().retrieve(media);
+            }
             if (PublicVisibilityType.global.equals(media.visibility().getValue()) && Media.Type.file == (media.type().getValue())) {
                 return media.getPrimaryKey().asLong();
             }

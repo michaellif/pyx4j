@@ -29,15 +29,18 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ETag;
 import com.propertyvista.server.common.blob.ThumbnailService;
+import com.propertyvista.server.domain.ThumbnailBlob;
 
 /**
  * This service does extra read from DB to read BlobKey, We may decide in future not to do this.
@@ -61,14 +64,16 @@ public class PublicMediaServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String filename = request.getPathInfo();
         String id = FilenameUtils.getPathNoEndSeparator(filename);
-        if (CommonsStringUtils.isEmpty(id)) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
         ThumbnailSize thumbnailSize = null;
         try {
             thumbnailSize = ThumbnailSize.valueOf(FilenameUtils.getBaseName(filename));
         } catch (IllegalArgumentException notThumbnail) {
+        }
+
+        if (CommonsStringUtils.isEmpty(id) || "0".equals(id)) {
+            response.setStatus(HttpServletResponse.SC_GONE);
+            serveNotSet(thumbnailSize, response);
+            return;
         }
 
         //TODO deserialize key
@@ -76,11 +81,12 @@ public class PublicMediaServlet extends HttpServlet {
         if ((media == null) || (media.file().blobKey().isNull())) {
             log.trace("no image");
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            serveNotFound(thumbnailSize, response);
             return;
         }
         if (!PublicVisibilityType.global.equals(media.visibility().getValue())) {
             if (!SecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 return;
             }
         }
@@ -115,5 +121,25 @@ public class PublicMediaServlet extends HttpServlet {
         } else {
             ThumbnailService.serve(media.file().blobKey().getValue(), thumbnailSize, response);
         }
+    }
+
+    private void serveNotFound(ThumbnailSize thumbnailSize, HttpServletResponse response) throws IOException {
+        serveResourceImage("building-not-found.jpg", thumbnailSize, response);
+    }
+
+    private void serveNotSet(ThumbnailSize thumbnailSize, HttpServletResponse response) throws IOException {
+        serveResourceImage("building-not-set.jpg", thumbnailSize, response);
+    }
+
+    private void serveResourceImage(String filename, ThumbnailSize thumbnailSize, HttpServletResponse response) throws IOException {
+        ThumbnailBlob blob = null;
+        if (blob == null) {
+            byte raw[] = IOUtils.getResource(IOUtils.resourceFileName(filename, PublicMediaServlet.class));
+            if (raw == null) {
+                return;
+            }
+            blob = ThumbnailService.createThumbnailBlob(filename, raw, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
+        }
+        ThumbnailService.serve(blob, thumbnailSize, response);
     }
 }

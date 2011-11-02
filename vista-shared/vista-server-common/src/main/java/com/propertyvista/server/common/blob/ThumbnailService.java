@@ -62,10 +62,8 @@ public class ThumbnailService {
         }
     }
 
-    public static void persist(Key key, String fileName, byte[] originalContent, Dimension small, Dimension medum, Dimension large) {
+    public static ThumbnailBlob createThumbnailBlob(String fileName, byte[] originalContent, Dimension small, Dimension medum, Dimension large) {
         ThumbnailBlob blob = EntityFactory.create(ThumbnailBlob.class);
-        blob.setPrimaryKey(key);
-
         try {
             BufferedImage inputImage = ImageIO.read(new ByteArrayInputStream(originalContent));
             if (inputImage == null) {
@@ -78,7 +76,12 @@ public class ThumbnailService {
             log.error("Error", e);
             throw new UserRuntimeException(i18n.tr("Unable to resample the image ''{0}''", fileName));
         }
+        return blob;
+    }
 
+    public static void persist(Key key, String fileName, byte[] originalContent, Dimension small, Dimension medum, Dimension large) {
+        ThumbnailBlob blob = createThumbnailBlob(fileName, originalContent, small, medum, large);
+        blob.setPrimaryKey(key);
         Persistence.service().persist(blob);
     }
 
@@ -136,7 +139,10 @@ public class ThumbnailService {
     }
 
     public static void serve(Key key, ThumbnailSize size, HttpServletResponse response) throws IOException {
-        ThumbnailBlob blob = Persistence.service().retrieve(ThumbnailBlob.class, key);
+        serve(Persistence.service().retrieve(ThumbnailBlob.class, key), size, response);
+    }
+
+    public static void serve(ThumbnailBlob blob, ThumbnailSize size, HttpServletResponse response) throws IOException {
         if (blob != null) {
             byte[] data = null;
             switch (size) {
@@ -147,6 +153,7 @@ public class ThumbnailService {
                 data = blob.medium().getValue();
                 break;
             case large:
+            default:
                 data = blob.large().getValue();
                 break;
             }
