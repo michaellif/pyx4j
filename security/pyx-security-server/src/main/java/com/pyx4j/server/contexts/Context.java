@@ -140,7 +140,7 @@ public class Context {
     }
 
     public static String getRequestServerName() {
-        return getRequest().getServerName();
+        return ServletUtils.getRequestServerName(getRequest());
     }
 
     public static String getRequestScheme() {

@@ -91,6 +91,13 @@ public class DevSession {
         Cookie sessionCookie = new Cookie(DEV_SESSION_COOKIE_NAME, session.id);
         sessionCookie.setPath("/");
         sessionCookie.setMaxAge(sessionDuration);
+
+        String host = Context.getRequestServerName();
+        String[] hostParts = host.split("\\.");
+        if (hostParts.length == 4) {
+            sessionCookie.setDomain("." + hostParts[hostParts.length - 3] + "." + hostParts[hostParts.length - 2] + "." + hostParts[hostParts.length - 1]);
+        }
+
         Context.getResponse().addCookie(sessionCookie);
         session.eol = System.currentTimeMillis() + sessionDuration * Consts.SEC2MILLISECONDS;
 

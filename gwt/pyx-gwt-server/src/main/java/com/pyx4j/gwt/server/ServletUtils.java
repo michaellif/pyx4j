@@ -27,6 +27,15 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 
 public class ServletUtils {
 
+    public static String getRequestServerName(HttpServletRequest request) {
+        String host = request.getHeader("x-forwarded-host");
+        if (host != null) {
+            return host;
+        } else {
+            return request.getServerName();
+        }
+    }
+
     public static String getActualRequestURL(HttpServletRequest request) {
         return getActualRequestURL(request, false);
     }
