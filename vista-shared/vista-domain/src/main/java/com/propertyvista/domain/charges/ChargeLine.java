@@ -20,7 +20,6 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @ToStringFormat("{0} {1}")
@@ -37,22 +36,9 @@ public interface ChargeLine extends Charge {
 
         firstMonthRent,
 
-        parking,
-
-        @Translate("Second Parking")
-        parking2,
-
-        locker,
-
         petDeposit,
 
         petCharge,
-
-        extraParking,
-
-        extraLocker,
-
-        cableTV,
 
         prorated;
 

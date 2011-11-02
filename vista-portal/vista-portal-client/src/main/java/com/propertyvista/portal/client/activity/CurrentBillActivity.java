@@ -62,21 +62,22 @@ public class CurrentBillActivity extends SecurityAwareActivity implements Curren
 
         ChargeLine cLine = EntityFactory.create(ChargeLine.class);
         cLine.type().setValue(ChargeType.monthlyRent);
+        cLine.label().setValue(ChargeType.monthlyRent.toString());
         cLine.amount().amount().setValue(1200d);
         bill.charges().add(cLine);
 
         ChargeLine cLine2 = EntityFactory.create(ChargeLine.class);
-        cLine2.type().setValue(ChargeType.parking);
+        cLine2.label().setValue("Parking");
         cLine2.amount().amount().setValue(100d);
         bill.charges().add(cLine2);
 
         ChargeLine cLine3 = EntityFactory.create(ChargeLine.class);
-        cLine3.type().setValue(ChargeType.locker);
+        cLine3.label().setValue("Locker");
         cLine3.amount().amount().setValue(100d);
         bill.charges().add(cLine3);
 
         ChargeLine cLine4 = EntityFactory.create(ChargeLine.class);
-        cLine4.type().setValue(ChargeType.cableTV);
+        cLine4.label().setValue("Cable TV");
         cLine4.amount().amount().setValue(90d);
         bill.charges().add(cLine4);
 
