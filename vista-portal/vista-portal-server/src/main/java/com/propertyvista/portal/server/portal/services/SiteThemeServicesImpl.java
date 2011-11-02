@@ -37,7 +37,7 @@ public class SiteThemeServicesImpl implements SiteThemeServices {
         }
         if (palette == null) {
             SiteDescriptor siteDescriptor = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
-            palette = siteDescriptor.sitePalette();
+            palette = siteDescriptor.sitePalette().cloneEntity();
             CacheService.put(SitePalette.cacheKey, palette.getPrimaryKey());
         }
         callback.onSuccess(palette);
