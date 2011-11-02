@@ -18,20 +18,21 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.tester.client.theme;
+package com.pyx4j.tester.client.mvp;
 
-import com.pyx4j.commons.css.Palette;
-import com.pyx4j.commons.css.ThemeColors;
+import com.google.gwt.activity.shared.Activity;
+import com.google.gwt.activity.shared.ActivityMapper;
+import com.google.gwt.place.shared.Place;
 
-public class TesterPalette extends Palette {
+import com.pyx4j.tester.client.activity.NavigActivity;
 
-    public TesterPalette() {
-        putThemeColor(ThemeColors.object1, "#318FB2");
-        putThemeColor(ThemeColors.object2, "B26C1F");
-        putThemeColor(ThemeColors.contrast1, "red");
-        putThemeColor(ThemeColors.contrast2, "orange");
-        putThemeColor(ThemeColors.background, "#fefefe");
-        putThemeColor(ThemeColors.foreground, "#666666");
-        putThemeColor(ThemeColors.form, "#666666");
+public class NavigActivityMapper implements ActivityMapper {
+
+    public NavigActivityMapper() {
+    }
+
+    @Override
+    public Activity getActivity(Place place) {
+        return new NavigActivity(place);
     }
 }

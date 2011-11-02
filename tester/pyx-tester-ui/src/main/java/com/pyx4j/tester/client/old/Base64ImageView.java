@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.tester.client;
+package com.pyx4j.tester.client.old;
 
 import java.util.List;
 import java.util.ListIterator;

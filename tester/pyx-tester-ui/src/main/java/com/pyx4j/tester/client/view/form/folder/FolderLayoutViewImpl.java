@@ -14,24 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Oct 6, 2011
+ * Created on Nov 2, 2011
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.tester.client.theme;
+package com.pyx4j.tester.client.view.form.folder;
 
-import com.pyx4j.commons.css.Palette;
-import com.pyx4j.commons.css.ThemeColors;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
-public class TesterPalette extends Palette {
+import com.pyx4j.tester.client.domain.DomainFactory;
 
-    public TesterPalette() {
-        putThemeColor(ThemeColors.object1, "#318FB2");
-        putThemeColor(ThemeColors.object2, "B26C1F");
-        putThemeColor(ThemeColors.contrast1, "red");
-        putThemeColor(ThemeColors.contrast2, "orange");
-        putThemeColor(ThemeColors.background, "#fefefe");
-        putThemeColor(ThemeColors.foreground, "#666666");
-        putThemeColor(ThemeColors.form, "#666666");
+public class FolderLayoutViewImpl extends ScrollPanel implements FolderLayoutView {
+
+    public FolderLayoutViewImpl() {
+        setSize("100%", "100%");
+
+        EntityIForm mainForm = new EntityIForm();
+        mainForm.initContent();
+
+        setWidget(mainForm);
+
+        mainForm.populate(DomainFactory.createEntityI());
+
     }
+
 }

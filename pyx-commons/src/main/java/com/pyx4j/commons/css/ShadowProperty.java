@@ -14,24 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Oct 6, 2011
+ * Created on Oct 5, 2011
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.tester.client.theme;
+package com.pyx4j.commons.css;
 
-import com.pyx4j.commons.css.Palette;
-import com.pyx4j.commons.css.ThemeColors;
+public class ShadowProperty extends Property {
 
-public class TesterPalette extends Palette {
+    private final ThemeColors color;
 
-    public TesterPalette() {
-        putThemeColor(ThemeColors.object1, "#318FB2");
-        putThemeColor(ThemeColors.object2, "B26C1F");
-        putThemeColor(ThemeColors.contrast1, "red");
-        putThemeColor(ThemeColors.contrast2, "orange");
-        putThemeColor(ThemeColors.background, "#fefefe");
-        putThemeColor(ThemeColors.foreground, "#666666");
-        putThemeColor(ThemeColors.form, "#666666");
+    private final double vibrance;
+
+    private final String value;
+
+    public ShadowProperty(ThemeColors color, double vibrance, String value) {
+        super("text-shadow");
+        this.color = color;
+        this.vibrance = vibrance;
+        this.value = value;
     }
+
+    @Override
+    protected String convertToString(Theme theme, Palette palette) {
+        return getName() + ": " + value + " " + palette.getThemeColor(color, vibrance) + ";";
+    }
+
 }

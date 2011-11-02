@@ -18,20 +18,24 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.tester.client.theme;
+package com.pyx4j.tester.client;
 
-import com.pyx4j.commons.css.Palette;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.annotations.NavigationItem;
+import com.pyx4j.site.shared.meta.SiteMap;
 
-public class TesterPalette extends Palette {
+public class TesterSiteMap implements SiteMap {
 
-    public TesterPalette() {
-        putThemeColor(ThemeColors.object1, "#318FB2");
-        putThemeColor(ThemeColors.object2, "B26C1F");
-        putThemeColor(ThemeColors.contrast1, "red");
-        putThemeColor(ThemeColors.contrast2, "orange");
-        putThemeColor(ThemeColors.background, "#fefefe");
-        putThemeColor(ThemeColors.foreground, "#666666");
-        putThemeColor(ThemeColors.form, "#666666");
+    @NavigationItem(navigLabel = "Landing")
+    public static class Landing extends AppPlace {
     }
+
+    @NavigationItem(navigLabel = "FolderLayout")
+    public static class FolderLayout extends AppPlace {
+    }
+
+    @NavigationItem(navigLabel = "FolderValidation")
+    public static class FolderValidation extends AppPlace {
+    }
+
 }

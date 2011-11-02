@@ -18,13 +18,10 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.tester.client;
-
-import static com.pyx4j.commons.HtmlUtils.h2;
+package com.pyx4j.tester.client.view.form.folder;
 
 import java.util.ArrayList;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -43,6 +40,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.EntityI;
 import com.pyx4j.tester.client.domain.EntityII;
@@ -50,11 +48,11 @@ import com.pyx4j.tester.client.domain.EntityIII;
 import com.pyx4j.tester.client.domain.EntityIV;
 import com.pyx4j.tester.client.images.Images;
 
-public class MainForm extends CEntityEditor<EntityI> {
+public class EntityIForm extends CEntityEditor<EntityI> {
 
-    private static I18n i18n = I18n.get(MainForm.class);
+    private static I18n i18n = I18n.get(EntityIForm.class);
 
-    public MainForm() {
+    public EntityIForm() {
         super(EntityI.class);
     }
 
@@ -73,19 +71,20 @@ public class MainForm extends CEntityEditor<EntityI> {
 
     @Override
     public IsWidget createContent() {
-        HTML header = new HTML(h2(i18n.tr("Main Form")));
-        header.getElement().getStyle().setMarginBottom(1, Unit.EM);
 
-        FlowPanel main = new FlowPanel();
-        main.add(header);
-        main.add(new WidgetDecorator(inject(proto().stringMember())));
-        main.add(new WidgetDecorator(inject(proto().integerMember())));
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(new HTML("---------------- Box Folder ----------------"));
-        main.add(inject(proto().entityIIList(), new EntityIIFolder()));
+        int row = -1;
+        main.setH1(++row, 0, 1, i18n.tr("Main Form"));
 
-        main.add(new HTML("---------------- Table Folder ----------------"));
-        main.add(inject(proto().entityIVList(), new EntityIVFolder()));
+        main.setWidget(++row, 0, new WidgetDecorator(inject(proto().stringMember())));
+        main.setWidget(++row, 0, new WidgetDecorator(inject(proto().integerMember())));
+
+        main.setH2(++row, 0, 1, i18n.tr("Box Folder"));
+        main.setWidget(++row, 0, inject(proto().entityIIList(), new EntityIIFolder()));
+
+        main.setH2(++row, 0, 1, i18n.tr("Table Folder"));
+        main.setWidget(++row, 0, inject(proto().entityIVList(), new EntityIVFolder()));
         return main;
     }
 

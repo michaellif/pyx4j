@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.tester.client;
+package com.pyx4j.tester.client.old;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,7 +52,6 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.tester.client.domain.DomainFactory;
 import com.pyx4j.tester.client.images.Images;
 import com.pyx4j.tester.client.theme.TesterPalette;
 import com.pyx4j.tester.client.theme.TesterTheme;
@@ -104,13 +103,6 @@ public class TesterEntryPoint implements EntryPoint {
         RootPanel.get().add(GlassPanel.instance());
         RootPanel.get().add(contentPanel);
         contentPanel.setWidth("100%");
-
-        MainForm mainForm = new MainForm();
-        mainForm.initContent();
-
-        contentPanel.add(mainForm);
-
-        mainForm.populate(DomainFactory.createEntityI());
 
         //========== Report ==========//
         contentPanel.add(new HTML("<b>Report Test:</b>"));

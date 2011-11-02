@@ -40,6 +40,7 @@ import static com.pyx4j.entity.client.ui.flex.folder.CEntityFolder.StyleName.Ent
 
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeColors;
 
 public class DefaultEntityFolderTheme extends Theme {
 
@@ -74,12 +75,12 @@ public class DefaultEntityFolderTheme extends Theme {
         style = new Style(".", EntityFolderBoxItemDecorator);
         style.addProperty("margin", "6px");
         style.addProperty("border", "dotted 1px");
-        style.addProperty("border-color", "#333");
+        style.addProperty("border-color", ThemeColors.form);
         addStyle(style);
 
         style = new Style(".", EntityFolderBoxItemDecorator, ":hover");
         style.addProperty("border", "solid 1px");
-        style.addProperty("border-color", "#333");
+        style.addProperty("border-color", ThemeColors.form);
         addStyle(style);
 
         style = new Style(".", EntityFolderRowItemDecorator);
@@ -135,7 +136,7 @@ public class DefaultEntityFolderTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", EntityFolderTableHeaderLabel);
-        style.addProperty("color", "#333333");
+        style.addProperty("color", ThemeColors.foreground);
         style.addProperty("font-weight", "bold");
         style.addProperty("margin-left", "3px");
         style.addProperty("margin-right", "3px");
@@ -143,7 +144,7 @@ public class DefaultEntityFolderTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", EntityFolder, "-", readOnly, " .", EntityFolderTableHeaderLabel);
-        style.addProperty("color", "#888888");
+        style.addProperty("color", ThemeColors.foreground, 0.8);
         addStyle(style);
 
     }

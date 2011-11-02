@@ -14,24 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Oct 6, 2011
+ * Created on Nov 2, 2011
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.tester.client.theme;
+package com.pyx4j.tester.client.view.dashboard;
 
-import com.pyx4j.commons.css.Palette;
-import com.pyx4j.commons.css.ThemeColors;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
-public class TesterPalette extends Palette {
+public class ReportLayoutViewImpl extends ScrollPanel implements ReportLayoutView {
 
-    public TesterPalette() {
-        putThemeColor(ThemeColors.object1, "#318FB2");
-        putThemeColor(ThemeColors.object2, "B26C1F");
-        putThemeColor(ThemeColors.contrast1, "red");
-        putThemeColor(ThemeColors.contrast2, "orange");
-        putThemeColor(ThemeColors.background, "#fefefe");
-        putThemeColor(ThemeColors.foreground, "#666666");
-        putThemeColor(ThemeColors.form, "#666666");
+    public ReportLayoutViewImpl() {
+        setSize("100%", "100%");
+        HTML label = new HTML("DashboardLayoutViewImpl");
+        setWidget(label);
+
     }
+
 }

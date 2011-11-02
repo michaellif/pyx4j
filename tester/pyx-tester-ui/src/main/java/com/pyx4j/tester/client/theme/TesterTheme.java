@@ -29,6 +29,7 @@ import com.pyx4j.entity.client.ui.flex.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeComboBox;
 import com.pyx4j.forms.client.ui.NativeTextBox;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.TextBox;
@@ -45,6 +46,8 @@ public class TesterTheme extends Theme {
         addTheme(new DefaultEntityFolderTheme());
 
         addTheme(new DefaultWidgetDecoratorTheme());
+
+        addTheme(new DefaultFormFlexPanelTheme());
 
         initGeneralStyles();
         initBodyStyles();
@@ -132,6 +135,12 @@ public class TesterTheme extends Theme {
         style.addProperty("margin-left", "40px");
         style.addProperty("margin-right", "40px");
         addStyle(style);
+
+        style = new Style(".gwt-SplitLayoutPanel-HDragger");
+        style.addProperty("background", ThemeColors.object2);
+        style.addProperty("cursor", "col-resize");
+        addStyle(style);
+
     }
 
     protected void initBodyStyles() {
@@ -517,10 +526,10 @@ public class TesterTheme extends Theme {
 
         style.addProperty("font", "12px Arial, Helvetica, sans-serif");
         style.addProperty("color", ThemeColors.TEXT);
-        style.addProperty("background-color", ThemeColors.TEXT_BACKGROUND);
+        style.addProperty("background-color", ThemeColors.background);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColors.BORDER);
+        style.addProperty("border-color", ThemeColors.foreground);
         if (!BrowserType.isIE7()) {
             style.addProperty("padding", "2px 5px");
         }
