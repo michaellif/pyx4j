@@ -16,10 +16,12 @@ package com.propertyvista.portal.server.portal.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.shared.IgnoreSessionToken;
 
 import com.propertyvista.domain.site.SitePalette;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 
+@IgnoreSessionToken
 public class SiteThemeServicesImpl implements SiteThemeServices {
 
     @Override
