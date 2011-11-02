@@ -59,6 +59,19 @@ public class ThumbnailService {
         case Floorplan:
             ThumbnailService.persist(key, fileName, originalContent, ImageConsts.FLOORPLAN_SMALL, ImageConsts.FLOORPLAN_MEDIUM, ImageConsts.FLOORPLAN_LARGE);
             break;
+        default:
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public static ThumbnailBlob createThumbnailBlob(String fileName, byte[] originalContent, ImageTarget imageTarget) {
+        switch (imageTarget) {
+        case Building:
+            return createThumbnailBlob(fileName, originalContent, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
+        case Floorplan:
+            return createThumbnailBlob(fileName, originalContent, ImageConsts.FLOORPLAN_SMALL, ImageConsts.FLOORPLAN_MEDIUM, ImageConsts.FLOORPLAN_LARGE);
+        default:
+            throw new IllegalArgumentException();
         }
     }
 

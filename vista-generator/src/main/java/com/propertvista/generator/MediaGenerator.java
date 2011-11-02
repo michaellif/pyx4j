@@ -13,6 +13,7 @@
  */
 package com.propertvista.generator;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.propertvista.generator.util.CommonsGenerator;
@@ -36,6 +37,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
+import com.propertyvista.server.domain.ThumbnailBlob;
 
 public class MediaGenerator {
 
@@ -71,6 +73,9 @@ public class MediaGenerator {
         return media;
     }
 
+    //This is shared between created PMCs
+    private static Map<String, ThumbnailBlob> resized = new HashMap<String, ThumbnailBlob>();
+
     public static void generatedBuildingMedia(Building building) {
         {
             Media media = EntityFactory.create(Media.class);
@@ -95,7 +100,16 @@ public class MediaGenerator {
             Media m = me.getKey();
             if (m.file().blobKey().isNull()) {
                 m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentMimeType().getValue()));
-                ThumbnailService.persist(m.file().blobKey().getValue(), filename, me.getValue(), ImageTarget.Building);
+
+                ThumbnailBlob thumbnailBlob = resized.get(m.file().filename().getValue());
+                if (thumbnailBlob == null) {
+                    thumbnailBlob = ThumbnailService.createThumbnailBlob(m.file().filename().getStringView(), me.getValue(), ImageTarget.Building);
+                    resized.put(m.file().filename().getValue(), thumbnailBlob);
+                } else {
+                    thumbnailBlob = (ThumbnailBlob) thumbnailBlob.cloneEntity();
+                }
+                thumbnailBlob.setPrimaryKey(m.file().blobKey().getValue());
+                Persistence.service().persist(thumbnailBlob);
                 newData = true;
             }
             if (blob_mimize_Preload_Data_Size) {
@@ -113,19 +127,29 @@ public class MediaGenerator {
     public static void attachGeneratedFloorplanMedia(Floorplan floorplan) {
         int imageIndex = RandomUtil.randomInt(5) + 1;
         String filename = "apartment" + imageIndex;
+        boolean newData = false;
         @SuppressWarnings("unchecked")
         Map<Media, byte[]> data = (Map<Media, byte[]>) CacheService.get(MediaGenerator.class.getName() + filename);
         if (data == null) {
             data = PictureUtil.loadResourceMedia(filename, MediaGenerator.class);
-            if (blob_mimize_Preload_Data_Size) {
-                CacheService.put(filename, data);
-            }
+            newData = true;
         }
         for (Map.Entry<Media, byte[]> me : data.entrySet()) {
             Media m = me.getKey();
             if (m.file().blobKey().isNull()) {
                 m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentMimeType().getValue()));
-                ThumbnailService.persist(m.file().blobKey().getValue(), filename, me.getValue(), ImageTarget.Floorplan);
+
+                ThumbnailBlob thumbnailBlob = resized.get(m.file().filename().getValue());
+                if (thumbnailBlob == null) {
+                    thumbnailBlob = ThumbnailService.createThumbnailBlob(m.file().filename().getStringView(), me.getValue(), ImageTarget.Floorplan);
+                    resized.put(m.file().filename().getValue(), thumbnailBlob);
+                } else {
+                    thumbnailBlob = (ThumbnailBlob) thumbnailBlob.cloneEntity();
+                }
+                thumbnailBlob.setPrimaryKey(m.file().blobKey().getValue());
+                Persistence.service().persist(thumbnailBlob);
+
+                newData = true;
             }
             if (blob_mimize_Preload_Data_Size) {
                 m = (Media) m.cloneEntity();
@@ -134,6 +158,9 @@ public class MediaGenerator {
 
             Persistence.service().persist(m);
             floorplan.media().add(m);
+        }
+        if (newData && blob_mimize_Preload_Data_Size) {
+            CacheService.put(MediaGenerator.class.getName() + filename, data);
         }
     }
 
