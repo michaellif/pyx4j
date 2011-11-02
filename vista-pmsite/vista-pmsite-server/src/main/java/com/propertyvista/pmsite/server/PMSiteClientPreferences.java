@@ -13,6 +13,8 @@
  */
 package com.propertyvista.pmsite.server;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +39,7 @@ public class PMSiteClientPreferences {
 
         Map<String, String> prefMap = getClientPrefMap();
         if (prefMap == null || prefMap.size() == 0) {
-            prefStr.append(prefName + ":" + prefValue);
+            prefStr.append(prefName + "=" + prefValue);
         } else {
             // add new value
             prefMap.put(prefName, prefValue);
@@ -47,10 +49,16 @@ public class PMSiteClientPreferences {
                 if (prefStr.length() > 0) {
                     prefStr.append(";");
                 }
-                prefStr.append(name + ":" + value);
+                prefStr.append(name + "=" + value);
             }
         }
-        ((WebResponse) RequestCycle.get().getResponse()).addCookie(new Cookie("pmsitePref", prefStr.toString()));
+        String cookie = prefStr.toString();
+        try {
+            cookie = URLEncoder.encode(cookie, "UTF-8");
+        } catch (java.io.UnsupportedEncodingException ignore) {
+            // do nothing
+        }
+        ((WebResponse) RequestCycle.get().getResponse()).addCookie(new Cookie("pmsitePref", cookie));
     }
 
     private static Map<String, String> getClientPrefMap() {
@@ -69,9 +77,18 @@ public class PMSiteClientPreferences {
         if (pmsitePrefCookie != null) {
             prefMap = new java.util.Hashtable<String, String>();
             String nvpStr = pmsitePrefCookie.getValue();
+            try {
+                nvpStr = URLDecoder.decode(nvpStr, "UTF-8");
+            } catch (java.io.UnsupportedEncodingException ignore) {
+                // do nothing
+            }
+            // enclosing double quotes must be stripped if found
+            if (nvpStr.startsWith("\"") && nvpStr.endsWith("\"")) {
+                nvpStr = nvpStr.substring(1, nvpStr.length() - 1);
+            }
             String[] nvpArr = nvpStr.split(";");
             for (String nvp : nvpArr) {
-                String[] nv = nvp.split(":");
+                String[] nv = nvp.split("=");
                 try {
                     prefMap.put(nv[0], nv[1]);
                 } catch (ArrayIndexOutOfBoundsException ignore) {

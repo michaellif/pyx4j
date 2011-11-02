@@ -1,5 +1,7 @@
 var Cookie = {
 	setCookie: function(name, value, expire) {
+		// encode value
+		value = encodeURIComponent(value);
 		document.cookie = name + "=" + value + (expire ? "; expires=" + expire.toGMTString() : "");
 	},
 
@@ -14,7 +16,13 @@ var Cookie = {
 				// set index of end of cookie value
 				if (end == -1) 
 					end = document.cookie.length;
-				return document.cookie.substring(start, end);
+				var value = document.cookie.substring(start, end);
+				// enclosing double quotes must e stripped
+				if (value.match(/^".*"$/)) {
+					value = value.substring(1, value.length-1);
+				}
+				// return decoded value
+				return decodeURIComponent(value);
 			} 
 		}
 	}
@@ -57,7 +65,7 @@ var ClientPref = {
 			this.prefMap = {};
 			var prefArr = prefStr.split(';');
 			for (var i=0; i < prefArr.length; i++) {
-				var nv = prefArr[i].split(':');
+				var nv = prefArr[i].split('=');
 				if (nv.length > 1)
 					this.prefMap[nv[0]] = nv[1];
 			}
@@ -77,7 +85,7 @@ var ClientPref = {
 		for (var name in this.prefMap) {
 			if (prefStr.length > 0)
 				prefStr += ';';
-			prefStr += name + ':' + value;
+			prefStr += name + '=' + value;
 		}
 		Cookie.setCookie(this.myCookie, prefStr);
 	}
