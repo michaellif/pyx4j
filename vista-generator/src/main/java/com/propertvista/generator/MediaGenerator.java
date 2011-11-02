@@ -32,6 +32,7 @@ import com.propertyvista.domain.File;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
@@ -72,12 +73,41 @@ public class MediaGenerator {
         return media;
     }
 
+    public static void generatedBuildingMedia(Building building) {
+        {
+            Media media = EntityFactory.create(Media.class);
+            media.type().setValue(Media.Type.youTube);
+            media.caption().setValue("A " + building.info().name().getValue() + " video");
+            media.youTubeVideoID().setValue(MediaGenerator.randomYoutubeId());
+            media.visibility().setValue(PublicVisibilityType.global);
+            building.media().add(media);
+        }
+
+        int imageIndex = RandomUtil.randomInt(6) + 1;
+        String filename = "building" + imageIndex;
+        Map<Media, byte[]> data = blob_Shared_GenerateMedia.get(filename);
+        if (data == null) {
+            data = loadMedia(filename, ImageTarget.Building);
+            if (blob_mimize_Preload_Data_Size) {
+                blob_Shared_GenerateMedia.put(filename, data);
+            }
+        }
+        for (Map.Entry<Media, byte[]> me : data.entrySet()) {
+            Media m = me.getKey();
+            if (blob_mimize_Preload_Data_Size) {
+                m = (Media) m.cloneEntity();
+                m.setPrimaryKey(null);
+            }
+            building.media().add(m);
+        }
+    }
+
     public static void attachGeneratedFloorplanMedia(Floorplan floorplan) {
         int imageIndex = RandomUtil.randomInt(5) + 1;
         String filename = "apartment" + imageIndex;
         Map<Media, byte[]> data = blob_Shared_GenerateMedia.get(filename);
         if (data == null) {
-            data = loadFloorplanMedia(filename);
+            data = loadMedia(filename, ImageTarget.Floorplan);
             if (blob_mimize_Preload_Data_Size) {
                 blob_Shared_GenerateMedia.put(filename, data);
             }
@@ -93,17 +123,15 @@ public class MediaGenerator {
         }
     }
 
-    private static Map<Media, byte[]> loadFloorplanMedia(String filename) {
-        Map<Media, byte[]> data = PictureUtil.loadResourceMedia(filename, BuildingsGenerator.class);
+    private static Map<Media, byte[]> loadMedia(String filename, ImageTarget imageTarget) {
+        Map<Media, byte[]> data = PictureUtil.loadResourceMedia(filename, MediaGenerator.class);
         for (Map.Entry<Media, byte[]> me : data.entrySet()) {
             Media m = me.getKey();
             m.visibility().setValue(PublicVisibilityType.global);
             m.type().setValue(Media.Type.file);
             m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentMimeType().getValue()));
             m.file().timestamp().setValue(System.currentTimeMillis());
-
-            //TODO what sizes to use for Floorplan images?
-            ThumbnailService.persist(m.file().blobKey().getValue(), filename, me.getValue(), ImageTarget.Floorplan);
+            ThumbnailService.persist(m.file().blobKey().getValue(), filename, me.getValue(), imageTarget);
         }
         return data;
     }

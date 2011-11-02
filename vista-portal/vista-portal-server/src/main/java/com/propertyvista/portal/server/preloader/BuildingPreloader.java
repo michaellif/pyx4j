@@ -42,7 +42,6 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
-import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyManager;
@@ -172,15 +171,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
             //Media
             if (this.getParameter(VistaDataPreloaderParameter.attachMedia) != Boolean.FALSE) {
-                //MediaGenerator.attachGeneratedFloorplanMedia(floorplanDTO);
-                {
-                    Media media = EntityFactory.create(Media.class);
-                    media.type().setValue(Media.Type.youTube);
-                    media.caption().setValue("A " + building.info().name().getValue() + " video");
-                    media.youTubeVideoID().setValue(MediaGenerator.randomYoutubeId());
-                    media.visibility().setValue(PublicVisibilityType.global);
-                    building.media().add(media);
-                }
+                MediaGenerator.generatedBuildingMedia(building);
                 Persistence.service().persist(building.media());
             }
 
