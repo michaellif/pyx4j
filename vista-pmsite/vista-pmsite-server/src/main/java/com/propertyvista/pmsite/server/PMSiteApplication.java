@@ -58,7 +58,8 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
     private final String[] persistParams = { "gwt.codesvr" };
 
     private <T extends Page> void customMount(final String path, Class<T> pageClass) {
-        if (ApplicationMode.isDevelopment()) {
+        //TODO fix this
+        if (false && ApplicationMode.isDevelopment()) {
             mount(new MountedMapper(path, pageClass) {
                 @Override
                 protected Url buildUrl(UrlInfo info) {
