@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -27,7 +28,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
@@ -426,12 +426,25 @@ public class PMSiteContentManager implements Serializable {
         return 0;
     }
 
+    public static List<Media> getVisibleMedia(List<Media> medias) {
+        List<Media> mediasVisible = new Vector<Media>();
+        for (Media media : medias) {
+            if (media.isValuesDetached()) {
+                Persistence.service().retrieve(media);
+            }
+            if (PublicVisibilityType.global.equals(media.visibility().getValue()) && Media.Type.file == (media.type().getValue())) {
+                mediasVisible.add(media);
+            }
+        }
+        return mediasVisible;
+    }
+
     public List<PromoDataModel> getPromotions() {
         ArrayList<PromoDataModel> promo = new ArrayList<PromoDataModel>();
 
-        // do promo building lookup
-        EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
-        dbCriteria.add(new PropertyCriterion(dbCriteria.proto().id(), Restriction.GREATER_THAN, 10));
+        // TODO promo building lookup
+        EntityListCriteria<Building> dbCriteria = EntityListCriteria.create(Building.class);
+        dbCriteria.setPageSize(4);
         List<Building> buildings = Persistence.service().query(dbCriteria);
         for (Building bld : buildings) {
             PromoDataModel item = new PromoDataModel();
@@ -439,13 +452,10 @@ public class PMSiteContentManager implements Serializable {
                 continue;
             }
             item.setPropId(bld.id().getValue().asLong());
-            item.setImg(getMediaImgUrl(bld.media().get(0).getPrimaryKey().asLong(), ThumbnailSize.medium));
+            item.setImg(getFistVisibleMediaImgUrl(bld.media(), ThumbnailSize.medium));
             item.setAddress(bld.info().address().streetNumber().getValue() + " " + bld.info().address().streetName().getValue() + ", "
                     + bld.info().address().city().getValue());
             promo.add(item);
-            if (promo.size() >= 4) {
-                break;
-            }
         }
 
         return promo;

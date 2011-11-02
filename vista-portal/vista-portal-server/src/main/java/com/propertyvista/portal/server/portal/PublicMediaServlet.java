@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.security.shared.SecurityController;
@@ -132,13 +133,14 @@ public class PublicMediaServlet extends HttpServlet {
     }
 
     private void serveResourceImage(String filename, ThumbnailSize thumbnailSize, HttpServletResponse response) throws IOException {
-        ThumbnailBlob blob = null;
+        ThumbnailBlob blob = (ThumbnailBlob) CacheService.get(PublicMediaServlet.class.getName() + filename);
         if (blob == null) {
             byte raw[] = IOUtils.getResource(IOUtils.resourceFileName(filename, PublicMediaServlet.class));
             if (raw == null) {
                 return;
             }
             blob = ThumbnailService.createThumbnailBlob(filename, raw, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
+            CacheService.put(PublicMediaServlet.class.getName() + filename, blob);
         }
         ThumbnailService.serve(blob, thumbnailSize, response);
     }

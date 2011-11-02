@@ -68,7 +68,7 @@ public class AptDetailsPage extends BasePage {
         SimpleImage pic = new SimpleImage("picture", PMSiteContentManager.getFistVisibleMediaImgUrl(propInfo.media(), ThumbnailSize.large));
         final String picId = "largeView";
         add(pic.add(AttributeModifier.replace("id", picId)));
-        add(new ListView<Media>("gallery", propInfo.media()) {
+        add(new ListView<Media>("gallery", PMSiteContentManager.getVisibleMedia(propInfo.media())) {
             private static final long serialVersionUID = 1L;
 
             @Override
