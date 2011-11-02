@@ -138,11 +138,11 @@ public class ThumbnailService {
         Persistence.service().delete(ThumbnailBlob.class, key);
     }
 
-    public static void serve(Key key, ThumbnailSize size, HttpServletResponse response) throws IOException {
-        serve(Persistence.service().retrieve(ThumbnailBlob.class, key), size, response);
+    public static boolean serve(Key key, ThumbnailSize size, HttpServletResponse response) throws IOException {
+        return serve(Persistence.service().retrieve(ThumbnailBlob.class, key), size, response);
     }
 
-    public static void serve(ThumbnailBlob blob, ThumbnailSize size, HttpServletResponse response) throws IOException {
+    public static boolean serve(ThumbnailBlob blob, ThumbnailSize size, HttpServletResponse response) throws IOException {
         if (blob != null) {
             byte[] data = null;
             switch (size) {
@@ -157,6 +157,9 @@ public class ThumbnailService {
                 data = blob.large().getValue();
                 break;
             }
+            if (data == null) {
+                return false;
+            }
             response.setContentType("image/jpeg");
             response.setContentLength(data.length);
             ServletOutputStream out = response.getOutputStream();
@@ -165,6 +168,9 @@ public class ThumbnailService {
             } finally {
                 IOUtils.closeQuietly(out);
             }
+            return true;
+        } else {
+            return false;
         }
     }
 }

@@ -120,7 +120,10 @@ public class PublicMediaServlet extends HttpServlet {
             }
             BlobService.serve(media.file().blobKey().getValue(), response);
         } else {
-            ThumbnailService.serve(media.file().blobKey().getValue(), thumbnailSize, response);
+            if (!ThumbnailService.serve(media.file().blobKey().getValue(), thumbnailSize, response)) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                serveNotFound(thumbnailSize, response);
+            }
         }
     }
 

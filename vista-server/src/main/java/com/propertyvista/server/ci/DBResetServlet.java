@@ -108,6 +108,7 @@ public class DBResetServlet extends HttpServlet {
                     case all:
                     case preload:
                         buf.append(conf.getDataPreloaders().preloadAll());
+                        log.info("Preloaded PMC '{}' {}", NamespaceManager.getNamespace(), TimeUtils.secSince(start));
                         break;
                     case pmc:
                         buf.append(conf.getDataPreloaders().delete());
@@ -136,6 +137,7 @@ public class DBResetServlet extends HttpServlet {
                     if ((type == ResetType.all) && NamespaceManager.getNamespace().equals(VistaNamespaceResolver.demoNamespace)) {
 
                         for (DemoPmc demoPmc : EnumSet.of(DemoPmc.star, DemoPmc.redridge, DemoPmc.rockville)) {
+                            long pmcStart = System.currentTimeMillis();
                             NamespaceManager.setNamespace(Pmc.adminNamespace);
                             Pmc pmc = EntityFactory.create(Pmc.class);
                             pmc.name().setValue(demoPmc.name() + " Demo");
@@ -146,6 +148,9 @@ public class DBResetServlet extends HttpServlet {
                             NamespaceManager.setNamespace(demoPmc.name());
                             buf.append("\n--- Preload  " + demoPmc.name() + " ---");
                             buf.append(conf.getDataPreloaders().preloadAll());
+
+                            log.info("Preloaded PMC '{}' {}", demoPmc.name(), TimeUtils.secSince(pmcStart));
+
                             buf.append("\nTotal time: " + TimeUtils.secSince(start));
                         }
                     }

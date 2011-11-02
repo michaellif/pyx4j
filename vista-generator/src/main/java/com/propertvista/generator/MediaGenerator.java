@@ -13,13 +13,13 @@
  */
 package com.propertvista.generator;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.propertvista.generator.util.CommonsGenerator;
 import com.propertvista.generator.util.PictureUtil;
 import com.propertvista.generator.util.RandomUtil;
 
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -41,8 +41,6 @@ public class MediaGenerator {
 
     // Minimize PreloadData Size and speed, Share common images statically.  (25 sec instead of 2 min on fast computer) 
     static final boolean blob_mimize_Preload_Data_Size = true;
-
-    private static Map<String, Map<Media, byte[]>> blob_Shared_GenerateMedia = new HashMap<String, Map<Media, byte[]>>();
 
     static String[] youtubeIds;
 
@@ -85,54 +83,58 @@ public class MediaGenerator {
 
         int imageIndex = RandomUtil.randomInt(6) + 1;
         String filename = "building" + imageIndex;
-        Map<Media, byte[]> data = blob_Shared_GenerateMedia.get(filename);
+
+        boolean newData = false;
+        @SuppressWarnings("unchecked")
+        Map<Media, byte[]> data = (Map<Media, byte[]>) CacheService.get(MediaGenerator.class.getName() + filename);
         if (data == null) {
-            data = loadMedia(filename, ImageTarget.Building);
-            if (blob_mimize_Preload_Data_Size) {
-                blob_Shared_GenerateMedia.put(filename, data);
-            }
+            data = PictureUtil.loadResourceMedia(filename, MediaGenerator.class);
+            newData = true;
         }
         for (Map.Entry<Media, byte[]> me : data.entrySet()) {
             Media m = me.getKey();
+            if (m.file().blobKey().isNull()) {
+                m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentMimeType().getValue()));
+                ThumbnailService.persist(m.file().blobKey().getValue(), filename, me.getValue(), ImageTarget.Building);
+                newData = true;
+            }
             if (blob_mimize_Preload_Data_Size) {
                 m = (Media) m.cloneEntity();
                 m.setPrimaryKey(null);
             }
             building.media().add(m);
         }
+
+        if (newData && blob_mimize_Preload_Data_Size) {
+            CacheService.put(MediaGenerator.class.getName() + filename, data);
+        }
     }
 
     public static void attachGeneratedFloorplanMedia(Floorplan floorplan) {
         int imageIndex = RandomUtil.randomInt(5) + 1;
         String filename = "apartment" + imageIndex;
-        Map<Media, byte[]> data = blob_Shared_GenerateMedia.get(filename);
+        @SuppressWarnings("unchecked")
+        Map<Media, byte[]> data = (Map<Media, byte[]>) CacheService.get(MediaGenerator.class.getName() + filename);
         if (data == null) {
-            data = loadMedia(filename, ImageTarget.Floorplan);
+            data = PictureUtil.loadResourceMedia(filename, MediaGenerator.class);
             if (blob_mimize_Preload_Data_Size) {
-                blob_Shared_GenerateMedia.put(filename, data);
+                CacheService.put(filename, data);
             }
         }
         for (Map.Entry<Media, byte[]> me : data.entrySet()) {
             Media m = me.getKey();
+            if (m.file().blobKey().isNull()) {
+                m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentMimeType().getValue()));
+                ThumbnailService.persist(m.file().blobKey().getValue(), filename, me.getValue(), ImageTarget.Floorplan);
+            }
             if (blob_mimize_Preload_Data_Size) {
                 m = (Media) m.cloneEntity();
                 m.setPrimaryKey(null);
             }
+
             Persistence.service().persist(m);
             floorplan.media().add(m);
         }
     }
 
-    private static Map<Media, byte[]> loadMedia(String filename, ImageTarget imageTarget) {
-        Map<Media, byte[]> data = PictureUtil.loadResourceMedia(filename, MediaGenerator.class);
-        for (Map.Entry<Media, byte[]> me : data.entrySet()) {
-            Media m = me.getKey();
-            m.visibility().setValue(PublicVisibilityType.global);
-            m.type().setValue(Media.Type.file);
-            m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().filename().getValue(), m.file().contentMimeType().getValue()));
-            m.file().timestamp().setValue(System.currentTimeMillis());
-            ThumbnailService.persist(m.file().blobKey().getValue(), filename, me.getValue(), imageTarget);
-        }
-        return data;
-    }
 }
