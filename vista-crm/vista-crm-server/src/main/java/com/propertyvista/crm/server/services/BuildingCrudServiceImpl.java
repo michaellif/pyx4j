@@ -45,12 +45,12 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
 
         if (!fromList) {
             // load detached entities/lists. Update other places: BuildingsResource and BuildingRetriever
-            Persistence.service().retrieve(in.media());
-            Persistence.service().retrieve(in.serviceCatalog());
-            Persistence.service().retrieve(in.contacts().phones());
-            Persistence.service().retrieve(in.contacts().contacts());
-            Persistence.service().retrieve(in.marketing().adBlurbs());
-            Persistence.service().retrieve(in.dashboard());
+            Persistence.service().retrieve(dto.media());
+            Persistence.service().retrieve(dto.serviceCatalog());
+            Persistence.service().retrieve(dto.contacts().phones());
+            Persistence.service().retrieve(dto.contacts().contacts());
+            Persistence.service().retrieve(dto.marketing().adBlurbs());
+            Persistence.service().retrieve(dto.dashboard());
 
             EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
             amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), in));
@@ -81,13 +81,13 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
                 }
             }
         } else {
-            // just clear unnecessary data before serialisation: 
-            in.marketing().description().setValue(null);
+            // just clear unnecessary data before serialization: 
+            dto.marketing().description().setValue(null);
         }
     }
 
     @Override
-    protected void persistDBO(Building dbo, BuildingDTO dto) {
+    protected void persistDBO(Building dbo, BuildingDTO in) {
         for (Media item : dbo.media()) {
             Persistence.service().merge(item);
         }
@@ -96,14 +96,14 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
         PublicDataUpdater.updateIndexData(dbo);
 
         // Geotagging:
-        if (!dto.geoLocation().isNull()) {
-            Double lat = dto.geoLocation().latitude().getValue();
-            Double lng = dto.geoLocation().longitude().getValue();
+        if (!in.geoLocation().isNull()) {
+            Double lat = in.geoLocation().latitude().getValue();
+            Double lng = in.geoLocation().longitude().getValue();
             if ((lng != null) && (lat != null)) {
-                if (LatitudeType.South.equals(dto.geoLocation().latitudeType().getValue())) {
+                if (LatitudeType.South.equals(in.geoLocation().latitudeType().getValue())) {
                     lat = -lat;
                 }
-                if (LongitudeType.West.equals(dto.geoLocation().longitudeType().getValue())) {
+                if (LongitudeType.West.equals(in.geoLocation().longitudeType().getValue())) {
                     lng = -lng;
                 }
                 dbo.info().address().location().setValue(new GeoPoint(lat, lng));
@@ -120,14 +120,14 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
             amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), dbo));
             List<BuildingAmenity> existingAmenities = Persistence.service().query(amenitysCriteria);
             for (BuildingAmenity amenity : existingAmenities) {
-                if (!dto.amenities().contains(amenity)) {
+                if (!in.amenities().contains(amenity)) {
                     Persistence.service().delete(amenity);
                 }
             }
         }
-        for (BuildingAmenity amenity : dto.amenities()) {
+        for (BuildingAmenity amenity : in.amenities()) {
             amenity.belongsTo().set(dbo);
         }
-        Persistence.service().merge(dto.amenities());
+        Persistence.service().merge(in.amenities());
     }
 }

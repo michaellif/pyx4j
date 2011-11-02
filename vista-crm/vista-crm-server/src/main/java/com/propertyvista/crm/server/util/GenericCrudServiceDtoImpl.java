@@ -34,7 +34,7 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
         super(dboClass, dtoClass);
     }
 
-    protected void persistDBO(DBO dbo, DTO dto) {
+    protected void persistDBO(DBO dbo, DTO in) {
         Persistence.service().merge(dbo);
     }
 

@@ -52,20 +52,20 @@ public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceDtoImpl<Sit
     }
 
     @Override
-    protected void persistDBO(SiteDescriptor dbo, SiteDescriptorDTO dto) {
+    protected void persistDBO(SiteDescriptor dbo, SiteDescriptorDTO in) {
         // save transient data:
-        TransientListHelpers.save(dto.news(), News.class);
-        TransientListHelpers.save(dto.testimonials(), Testimonial.class);
+        TransientListHelpers.save(in.news(), News.class);
+        TransientListHelpers.save(in.testimonials(), Testimonial.class);
 
         //TODO keep the sort order, Remove context for removed Locale
-        TransientListHelpers.save(dto.locales(), AvailableLocale.class);
+        TransientListHelpers.save(in.locales(), AvailableLocale.class);
 
         dbo._updateFlag().updated().setValue(new Date());
-        super.persistDBO(dbo, dto);
+        super.persistDBO(dbo, in);
     }
 
     @Override
-    protected void enhanceDTO(SiteDescriptor dbo, SiteDescriptorDTO dto, boolean fromList) {
+    protected void enhanceDTO(SiteDescriptor in, SiteDescriptorDTO dto, boolean fromList) {
         if (!fromList) {
             // load transient data:
             dto.news().addAll(Persistence.service().query(EntityQueryCriteria.create(News.class)));

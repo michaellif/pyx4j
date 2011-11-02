@@ -59,9 +59,9 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     protected void enhanceDTO(Lease in, LeaseDTO dto, boolean fromList) {
         if (!fromList) {
             // load detached entities:
-            Persistence.service().retrieve(in.documents());
-            Persistence.service().retrieve(in.unit());
-            if (!in.unit().isNull()) {
+            Persistence.service().retrieve(dto.documents());
+            Persistence.service().retrieve(dto.unit());
+            if (!dto.unit().isNull()) {
                 // fill selected building by unit:
                 dto.selectedBuilding().set(dto.unit().belongsTo());
                 syncBuildingServiceCatalog(dto.selectedBuilding());
@@ -82,7 +82,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     }
 
     @Override
-    protected void persistDBO(Lease dbo, LeaseDTO dto) {
+    protected void persistDBO(Lease dbo, LeaseDTO in) {
         // persist non-owned lists items:
         for (TenantInLease item : dbo.tenants()) {
             Persistence.service().merge(item);

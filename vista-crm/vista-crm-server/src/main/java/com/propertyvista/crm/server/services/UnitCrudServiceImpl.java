@@ -41,29 +41,29 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
 
         if (!fromList) {
             // load detached entities:
-            Persistence.service().retrieve(in.marketing().adBlurbs());
-            Persistence.service().retrieve(in.floorplan());
+            Persistence.service().retrieve(dto.marketing().adBlurbs());
+            Persistence.service().retrieve(dto.floorplan());
         } else {
             // load detached entities (temporary):
-            Persistence.service().retrieve(in.floorplan());
+            Persistence.service().retrieve(dto.floorplan());
             // TODO actually just this is necessary, but it' doesn't implemented still:
-            //Persistence.service().retrieve(in.floorplan().name());
-            //Persistence.service().retrieve(in.floorplan().marketingName());
+            //Persistence.service().retrieve(dto.floorplan().name());
+            //Persistence.service().retrieve(dto.floorplan().marketingName());
 
             // just clear unnecessary data before serialization: 
-            in.marketing().description().setValue(null);
-            in.info().economicStatusDescription().setValue(null);
+            dto.marketing().description().setValue(null);
+            dto.info().economicStatusDescription().setValue(null);
         }
 
         // Fill Unit financial data (transient):  
-        in.financial().unitRent().setValue(0.0);
-        in.financial().marketRent().setValue(0.0);
+        dto.financial().unitRent().setValue(0.0);
+        dto.financial().marketRent().setValue(0.0);
 
         EntityQueryCriteria<ServiceItem> serviceItemCriteria = new EntityQueryCriteria<ServiceItem>(ServiceItem.class);
         serviceItemCriteria.add(PropertyCriterion.eq(serviceItemCriteria.proto().element(), in));
         ServiceItem item = Persistence.service().retrieve(serviceItemCriteria);
         if (item != null) {
-            in.financial().marketRent().setValue(item.price().getValue());
+            dto.financial().marketRent().setValue(item.price().getValue());
         }
 
         EntityQueryCriteria<Lease> leaseCriteria = new EntityQueryCriteria<Lease>(Lease.class);
@@ -71,7 +71,7 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
         Lease lease = Persistence.service().retrieve(leaseCriteria);
         if (lease != null && !lease.serviceAgreement().isNull() && !lease.serviceAgreement().serviceItem().isNull()) {
             PriceCalculationHelpers.calculateChargeItemAdjustments(lease.serviceAgreement().serviceItem());
-            in.financial().unitRent().setValue(lease.serviceAgreement().serviceItem().adjustedPrice().getValue());
+            dto.financial().unitRent().setValue(lease.serviceAgreement().serviceItem().adjustedPrice().getValue());
         }
     }
 

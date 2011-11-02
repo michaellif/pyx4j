@@ -44,12 +44,12 @@ public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorpla
         }
 
         if (!fromList) {
-            Persistence.service().retrieve(in.media());
+            Persistence.service().retrieve(dto.media());
         }
     }
 
     @Override
-    protected void persistDBO(Floorplan dbo, FloorplanDTO dto) {
+    protected void persistDBO(Floorplan dbo, FloorplanDTO in) {
         for (Media item : dbo.media()) {
             Persistence.service().merge(item);
         }
@@ -73,15 +73,15 @@ public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorpla
             criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), dbo));
             List<FloorplanAmenity> existingAmenities = Persistence.service().query(criteria);
             for (FloorplanAmenity amenity : existingAmenities) {
-                if (!dto.amenities().contains(amenity)) {
+                if (!in.amenities().contains(amenity)) {
                     Persistence.service().delete(amenity);
                 }
             }
         }
-        for (FloorplanAmenity amenity : dto.amenities()) {
+        for (FloorplanAmenity amenity : in.amenities()) {
             amenity.belongsTo().set(dbo);
         }
-        Persistence.service().merge(dto.amenities());
+        Persistence.service().merge(in.amenities());
 
         //Update _values on AptUnit, TODO see if # had not been modified and then do not save AptUnit
         {

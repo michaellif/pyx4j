@@ -28,8 +28,12 @@ public class TenantCrudServiceImpl extends GenericCrudServiceDtoImpl<Tenant, Ten
 
     @Override
     protected void enhanceDTO(Tenant in, TenantDTO dto, boolean fromList) {
+
         dto.displayName().setValue(in.getStringView());
-        // load detached data:
-        Persistence.service().retrieve(in.emergencyContacts());
+
+        if (!fromList) {
+            // load detached data:
+            Persistence.service().retrieve(dto.emergencyContacts());
+        }
     }
 }

@@ -51,7 +51,7 @@ public abstract class GenericListServiceDtoImpl<DBO extends IEntity, DTO extends
         callback.onSuccess(true);
     }
 
-    protected void enhanceDTO(DBO dbo, DTO dto, boolean fromList) {
+    protected void enhanceDTO(DBO in, DTO dto, boolean fromList) {
     }
 
     protected void enhancePropertyCriterion(EntityListCriteria<DBO> dbCriteria, PropertyCriterion propertyCriterion) {
