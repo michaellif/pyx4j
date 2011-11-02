@@ -64,7 +64,7 @@ public class LineChart extends GridBasedChart {
         Set<Entry<Metric, List<Double>>> dataset = configurator.getDatasourse().getDataSet().entrySet();
 
         for (int idx = 0; idx < numOfSeries; idx++) {
-            int metricIdx = 0;
+            int metricIdx = configurator.isZeroBased() ? 0 : 1;
             String path = "M";
             String color = theme.getNextColor();
             for (Entry<Metric, List<Double>> entry : dataset) {
@@ -88,13 +88,14 @@ public class LineChart extends GridBasedChart {
                 dot.setStroke(color);
                 container.add(dot);
                 if (configurator.isShowValueLabels()) {
-                    Text label = factory.createText(String.valueOf(value), (int) x, (int) (y - DOT_RADIUS - CHART_LABEL_PADDING));
+                    String valueRepr = GridBasedChart.formatDouble(value, configurator.getLabelPrecision());
+                    Text label = factory.createText(valueRepr, (int) x, (int) (y - DOT_RADIUS - CHART_LABEL_PADDING));
                     label.setAttribute("text-anchor", "middle");
                     label.setFill(color);
                     labels.add(label);
                 }
                 path += x + "," + y;
-                if (metricIdx == numOfMetrics - 1) {
+                if (metricIdx == numOfMetrics - 1 & configurator.isZeroBased()) {
                     ;
                 } else if (metricIdx % 2 == 0) {
                     path += "L";
