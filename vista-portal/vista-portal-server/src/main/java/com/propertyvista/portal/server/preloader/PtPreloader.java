@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.propertvista.generator.PTGenerator;
 import com.propertvista.generator.gdo.ApplicationSummaryGDO;
 import com.propertvista.generator.gdo.TenantSummaryGDO;
+import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -170,8 +171,8 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
             }
         }
 
-        // pre-populate utilities for the new service: 
         if (!lease.serviceAgreement().serviceItem().isEmpty()) {
+            // pre-populate utilities for the new service: 
             Persistence.service().retrieve(selectedService.features());
             for (ServiceFeature feature : selectedService.features()) {
                 if (Feature.Type.utility.equals(feature.feature().type().getValue())) {
@@ -183,6 +184,13 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
                         }
                     }
                 }
+
+            }
+
+            // pre-populate concessions for the new service: 
+            Persistence.service().retrieve(selectedService.concessions());
+            if (!selectedService.concessions().isEmpty()) {
+                lease.serviceAgreement().concessions().add(RandomUtil.random(selectedService.concessions()));
             }
         }
     }
