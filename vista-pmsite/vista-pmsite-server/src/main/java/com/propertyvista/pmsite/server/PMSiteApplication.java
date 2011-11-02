@@ -59,13 +59,17 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
     private <T extends Page> void customMount(final String path, Class<T> pageClass) {
         //TODO fix this
-        if (false && ApplicationMode.isDevelopment()) {
+        if (ApplicationMode.isDevelopment()) {
             mount(new MountedMapper(path, pageClass) {
                 @Override
                 protected Url buildUrl(UrlInfo info) {
                     PageParameters newParams = info.getPageParameters();
                     IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
                     for (String pName : persistParams) {
+                        // don't add it again
+                        if (newParams != null && !newParams.get(pName).isNull()) {
+                            continue;
+                        }
                         org.apache.wicket.util.string.StringValue pValue = params.getParameterValue(pName);
                         if (pValue != null && !pValue.isNull()) {
                             if (newParams == null) {
