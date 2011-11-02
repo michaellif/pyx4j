@@ -187,6 +187,26 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             }
             site.childPages().add(page);
         }
+
+        {
+            final String caption = "Terms Of Use";
+            PageDescriptor page = createPage(caption, PageDescriptor.Type.staticContent);
+            for (LocaleInfo li : siteLocale) {
+                addCaption(page, li.i18n.tr(caption), li.aLocale);
+                addContent(page, "terms-of-use.html", li.aLocale);
+            }
+            site.childPages().add(page);
+        }
+
+        {
+            final String caption = "Privacy";
+            PageDescriptor page = createPage(caption, PageDescriptor.Type.staticContent);
+            for (LocaleInfo li : siteLocale) {
+                addCaption(page, li.i18n.tr(caption), li.aLocale);
+                addContent(page, "privacy.html", li.aLocale);
+            }
+            site.childPages().add(page);
+        }
     }
 
     @I18nComment("This is demo content")
