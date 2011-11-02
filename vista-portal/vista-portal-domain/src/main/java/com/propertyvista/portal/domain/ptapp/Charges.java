@@ -14,14 +14,13 @@
 package com.propertyvista.portal.domain.ptapp;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.charges.ChargeLineList;
-import com.propertyvista.domain.charges.ChargeLineListWithUpgrades;
 
 public interface Charges extends IEntity, IBoundToApplication {
 
@@ -36,11 +35,12 @@ public interface Charges extends IEntity, IBoundToApplication {
 
     // When changed the ChargesSharedCalculation.calculateCharges should be called on UI.
     @Owned
-    @Caption(name = "Rent Related Charges")
-    ChargeLineListWithUpgrades monthlyCharges();
+    ChargeLineList monthlyCharges();
+
+    @Owned
+    ChargeLineList oneTimeCharges();
 
     // TODO add Pro-Rated duration,fraction information for calulation to be posible 
-
     @Owned
     ChargeLineList proratedCharges();
 
@@ -52,9 +52,7 @@ public interface Charges extends IEntity, IBoundToApplication {
     @Owned
     TenantChargeList paymentSplitCharges();
 
-    /**
-     * We need this here (will be transient in the future) so that calculation libary can
-     * figure out pro-rated charges
-     */
+    // We need this here so that calculation library can figure out pro-rated charges
+    @Transient
     IPrimitive<LogicalDate> rentStart();
 }

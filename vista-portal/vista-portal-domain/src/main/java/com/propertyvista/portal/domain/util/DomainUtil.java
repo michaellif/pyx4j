@@ -22,7 +22,7 @@ public class DomainUtil {
     public static TenantCharge createTenantCharge(int percentage, double money) {
         TenantCharge tc = EntityFactory.create(TenantCharge.class);
 
-        tc.charge().set(com.propertyvista.domain.util.DomainUtil.createMoney(money));
+        tc.amount().set(com.propertyvista.domain.util.DomainUtil.createMoney(money));
         tc.percentage().setValue(percentage);
 
         return tc;

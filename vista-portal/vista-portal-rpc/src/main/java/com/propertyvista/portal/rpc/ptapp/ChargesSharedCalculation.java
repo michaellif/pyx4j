@@ -17,13 +17,11 @@ import java.util.Date;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.charges.Charge;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
 import com.propertyvista.domain.charges.ChargeLineList;
-import com.propertyvista.domain.charges.ChargeLineSelectable;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.financial.offering.extradata.PetChargeRule;
 import com.propertyvista.domain.util.DomainUtil;
@@ -34,7 +32,7 @@ import com.propertyvista.portal.domain.ptapp.TenantChargeList;
 public class ChargesSharedCalculation {
 
     public static boolean calculateCharges(Charges charges) {
-        return (calculateMonthlyAndProrateCharges(charges) && calculateApplicationCharges(charges) && calculatePaymentSplitCharges(charges));
+        return (calculateMonthlyAndProrateCharges(charges) && calculateOneTimeCharges(charges) && calculateApplicationCharges(charges) && calculatePaymentSplitCharges(charges));
     }
 
     public static void calculatePetCharges(PetChargeRule petChargeRule, Pet pet) {
@@ -54,7 +52,7 @@ public class ChargesSharedCalculation {
             pet.chargeLine().label().setValue("One time");
             break;
         }
-        pet.chargeLine().charge().set(DomainUtil.createMoney(petChargeRule.value().getValue()));
+        pet.chargeLine().amount().set(DomainUtil.createMoney(petChargeRule.value().getValue()));
 
     }
 
@@ -62,9 +60,7 @@ public class ChargesSharedCalculation {
     public static boolean calculateMonthlyAndProrateCharges(Charges charges) {
 
         // take all monthly charges and get their total
-        double rentTotal = calculateTotal(charges.monthlyCharges());
-        double upgradesTotal = calculateSelectableTotal(charges.monthlyCharges().upgradeCharges());
-        double monthlyTotal = rentTotal + upgradesTotal;
+        double monthlyTotal = calculateTotal(charges.monthlyCharges());
         charges.monthlyCharges().total().set(DomainUtil.createMoney(monthlyTotal));
 
         // take the rentStart date
@@ -91,11 +87,16 @@ public class ChargesSharedCalculation {
         ChargeLine proratedCharge = EntityFactory.create(ChargeLine.class);
         proratedCharge.type().setValue(ChargeType.prorated);
         proratedCharge.label().setValue(sb.toString());
-        proratedCharge.charge().set(DomainUtil.createMoney(proratedTotal));
+        proratedCharge.amount().set(DomainUtil.createMoney(proratedTotal));
 
         charges.proratedCharges().charges().clear();
         charges.proratedCharges().charges().add(proratedCharge);
         charges.proratedCharges().total().set(DomainUtil.createMoney(proratedTotal));
+        return true;
+    }
+
+    public static boolean calculateOneTimeCharges(Charges charges) {
+        calculateTotal(charges.oneTimeCharges());
         return true;
     }
 
@@ -135,16 +136,16 @@ public class ChargesSharedCalculation {
             if (mainApplicantCharge == null) {
                 mainApplicantCharge = charge;
             } else {
-                charge.charge().amount()
+                charge.amount().amount()
                         .setValue(DomainUtil.roundMoney(charges.monthlyCharges().total().amount().getValue() * charge.percentage().getValue() / 100d));
 
                 totalSplitPrc += charge.percentage().getValue();
-                totalSplitVal += charge.charge().amount().getValue();
+                totalSplitVal += charge.amount().amount().getValue();
             }
         }
 
         if (mainApplicantCharge != null) {
-            mainApplicantCharge.charge().amount().setValue(charges.monthlyCharges().total().amount().getValue() - totalSplitVal);
+            mainApplicantCharge.amount().amount().setValue(charges.monthlyCharges().total().amount().getValue() - totalSplitVal);
             mainApplicantCharge.percentage().setValue(100 - totalSplitPrc);
         }
 
@@ -152,20 +153,10 @@ public class ChargesSharedCalculation {
         return true;
     }
 
-    public static double calculateSelectableTotal(IList<ChargeLineSelectable> charges) {
-        double total = 0d;
-        for (ChargeLineSelectable charge : charges) {
-            if (charge.selected().isBooleanTrue()) {
-                total += charge.charge().amount().getValue();
-            }
-        }
-        return total;
-    }
-
     public static double calculateTotal(ChargeLineList charges) {
         double total = 0d;
         for (Charge charge : charges.charges()) {
-            total += charge.charge().amount().getValue();
+            total += charge.amount().amount().getValue();
         }
         charges.total().set(DomainUtil.createMoney(total));
         return total;
@@ -174,7 +165,7 @@ public class ChargesSharedCalculation {
     public static void calculateTotal(TenantChargeList charges) {
         double total = 0d;
         for (Charge charge : charges.charges()) {
-            total += charge.charge().amount().getValue();
+            total += charge.amount().amount().getValue();
         }
         charges.total().set(DomainUtil.createMoney(total));
     }

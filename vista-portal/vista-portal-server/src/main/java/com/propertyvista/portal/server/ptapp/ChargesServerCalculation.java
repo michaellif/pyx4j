@@ -85,16 +85,10 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 
         double petChargeAmount = 0d;
         for (Pet pet : pets.list()) {
-            petChargeAmount += pet.chargeLine().charge().amount().getValue();
+            petChargeAmount += pet.chargeLine().amount().amount().getValue();
         }
         if (petChargeAmount > 0) {
             charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.petCharge, petChargeAmount));
-        }
-
-        // available upgrades
-        if (charges.monthlyCharges().upgradeCharges().size() == 0) {
-            charges.monthlyCharges().upgradeCharges().add(DomainUtil.createChargeLine(ChargeType.parking2, 75, false));
-            charges.monthlyCharges().upgradeCharges().add(DomainUtil.createChargeLine(ChargeType.locker, 50, false));
         }
 
         // application charges
@@ -129,8 +123,8 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         for (int i = 0; i < pets.size(); i++) {
             Pet pet = pets.get(i);
             Pet existingPet = existingPets.get(i);
-            if (pet.chargeLine().charge().amount().getValue() != existingPet.chargeLine().charge().amount().getValue()) {
-                log.info("Pet's charge has changed from {} to {}", existingPet.chargeLine().charge(), pet.chargeLine().charge());
+            if (pet.chargeLine().amount().amount().getValue() != existingPet.chargeLine().amount().amount().getValue()) {
+                log.info("Pet's charge has changed from {} to {}", existingPet.chargeLine().amount(), pet.chargeLine().amount());
                 return true;
             }
         }

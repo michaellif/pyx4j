@@ -26,5 +26,5 @@ public interface Charge extends IEntity {
     @EmbeddedEntity
     @Editor(type = EditorType.label)
     @ToString(index = 0)
-    Money charge();
+    Money amount();
 }

@@ -99,7 +99,7 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
         FlowPanel applicationFeePanel = new FlowPanel();
         applicationFeePanel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
         applicationFeePanel.add(DecorationUtils.inline(inject(proto().applicationFee().label()), "300px"));
-        applicationFeePanel.add(DecorationUtils.inline(inject(proto().applicationFee().charge()), "100px", "right"));
+        applicationFeePanel.add(DecorationUtils.inline(inject(proto().applicationFee().amount()), "100px", "right"));
         main.add(applicationFeePanel);
 
         HorizontalPanel info = new HorizontalPanel();

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.charges;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -23,37 +24,32 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
+import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
-public class ChargesViewForm extends CEntityEditor<Charges> {
+public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
 
-    private final FlowPanel splitCharges = new FlowPanel();
+    private final FormFlexPanel splitCharges = new FormFlexPanel();
 
-    private boolean summaryViewMode = false;
-
-    private final String width = "700px";
-
-    @SuppressWarnings("rawtypes")
     public ChargesViewForm() {
-        super(Charges.class, new VistaEditorsComponentFactory());
-        summaryViewMode = false;
+        this(new VistaEditorsComponentFactory());
+    }
+
+    public ChargesViewForm(IEditableComponentFactory factory) {
+        super(Charges.class, factory);
 
         addValueChangeHandler(new ValueChangeHandler<Charges>() {
             @Override
-            public void onValueChange(ValueChangeEvent event) {
+            public void onValueChange(ValueChangeEvent<Charges> event) {
                 revalidate();
                 if (isValid() && ChargesSharedCalculation.calculateCharges(getValue())) {
                     setValue(getValue());
@@ -62,92 +58,60 @@ public class ChargesViewForm extends CEntityEditor<Charges> {
         });
     }
 
-    public ChargesViewForm(IEditableComponentFactory factory) {
-        super(Charges.class, factory);
-        summaryViewMode = true;
-    }
-
-    public boolean isSummaryViewMode() {
-        return summaryViewMode;
-    }
-
     @Override
     public IsWidget createContent() {
-        FlowPanel main = new FlowPanel();
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(new VistaHeaderBar(proto().monthlyCharges(), width));
-        main.add(inject(proto().monthlyCharges().charges()));
-        if (!summaryViewMode) {
-            main.add(createHeader2(proto().monthlyCharges().upgradeCharges()));
-            main.add(inject(proto().monthlyCharges().upgradeCharges(), new ChargeLineSelectableFolder(summaryViewMode)));
-        }
+        int row = -1;
+        main.setH1(++row, 0, 1, proto().monthlyCharges().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().monthlyCharges().charges(), new ChargeLineFolder(isEditable())));
+        main.setWidget(++row, 0, createTotal(proto().monthlyCharges().total()));
 
-        main.add(createTotal(proto().monthlyCharges().total()));
+        main.setH1(++row, 0, 1, proto().oneTimeCharges().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().oneTimeCharges().charges(), new ChargeLineFolder(isEditable())));
+        main.setWidget(++row, 0, createTotal(proto().oneTimeCharges().total()));
 
-        main.add(new VistaHeaderBar(proto().proratedCharges(), width));
-        main.add(inject(proto().proratedCharges().charges()));
-        main.add(createTotal(proto().proratedCharges().total()));
+        main.setH1(++row, 0, 1, proto().proratedCharges().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().proratedCharges().charges(), new ChargeLineFolder(isEditable())));
+        main.setWidget(++row, 0, createTotal(proto().proratedCharges().total()));
 
-        main.add(new VistaHeaderBar(proto().applicationCharges(), width));
-        main.add(inject(proto().applicationCharges().charges()));
-        main.add(createTotal(proto().applicationCharges().total()));
+        main.setH1(++row, 0, 1, proto().applicationCharges().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().applicationCharges().charges(), new ChargeLineFolder(isEditable())));
+        main.setWidget(++row, 0, createTotal(proto().applicationCharges().total()));
 
-        // could be hided from resulting form:
-        splitCharges.add(new VistaHeaderBar(proto().paymentSplitCharges(), width));
+        int row1 = -1;
+        splitCharges.setH1(++row1, 0, 1, proto().paymentSplitCharges().getMeta().getCaption());
+        splitCharges.setWidget(++row1, 0, inject(proto().paymentSplitCharges().charges(), new ChargeSplitListFolder(isEditable())));
+        splitCharges.setWidget(++row1, 0, createTotal(proto().paymentSplitCharges().total()));
+        main.setWidget(++row, 0, splitCharges);
 
-        splitCharges.add(inject(proto().paymentSplitCharges().charges(), new ChargeSplitListFolder(summaryViewMode)));
-        splitCharges.add(createTotal(proto().paymentSplitCharges().total()));
-        main.add(splitCharges);
-
-        main.setWidth(width);
-
-        if (isSummaryViewMode()) {
-            return main;
-        } else {
-            // last step - add building picture on the right:
-            HorizontalPanel content = new HorizontalPanel();
-            content.add(main);
-            content.add(new BuildingPicture());
-            return content;
-        }
+        // last step - add building picture on the right:
+        HorizontalPanel content = new HorizontalPanel();
+        content.add(main);
+        content.add(new BuildingPicture());
+        return content;
     }
 
     @Override
     public void populate(Charges value) {
         super.populate(value);
-
         splitCharges.setVisible(value.paymentSplitCharges().charges().size() > 1);
-    }
-
-    private Widget createHeader2(IObject<?> member) {
-
-        HTML h = new HTML("<h5>" + member.getMeta().getCaption() + "</h5>");
-        h.getElement().getStyle().setMarginTop(0.5, Unit.EM);
-        h.getElement().getStyle().setMarginLeft(1, Unit.EM);
-        return h;
     }
 
     private Widget createTotal(Money member) {
         FlowPanel totalRow = new FlowPanel();
 
-        Widget sp = new VistaLineSeparator(400, Unit.PX, 0.5, Unit.EM, 0.5, Unit.EM);
+        Widget sp = new VistaLineSeparator(36, Unit.EM);
         sp.getElement().getStyle().setPadding(0, Unit.EM);
         sp.getElement().getStyle().setProperty("border", "1px dotted black");
         totalRow.add(sp);
 
         HTML total = new HTML("<b>" + member.getMeta().getCaption() + "</b>");
-        totalRow.add(DecorationUtils.inline(total, "300px", null));
-        totalRow.add(DecorationUtils.inline(inject(member), "100px", "right"));
-        totalRow.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        return totalRow;
-    }
+        total.getElement().getStyle().setPaddingLeft(0.7, Unit.EM);
+        totalRow.add(DecorationUtils.inline(total, "29.3em", null));
+        totalRow.add(DecorationUtils.inline(inject(member), "5em", "right"));
+        get(member).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
-    @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
-        if (member.getValueClass().equals(ChargeLine.class)) {
-            return new ChargeLineFolder(isEditable());
-        } else {
-            return super.create(member);
-        }
+        return totalRow;
     }
 }

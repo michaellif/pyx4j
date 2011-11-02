@@ -27,7 +27,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.CMoney;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
-import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
 import com.propertyvista.common.client.ui.components.folders.TenantGuarantorFolder;
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
@@ -37,7 +36,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
     static I18n i18n = I18n.get(FinancialViewForm.class);
 
     public FinancialViewForm() {
-        super(TenantFinancialDTO.class, new VistaEditorsComponentFactory());
+        this(new VistaEditorsComponentFactory());
     }
 
     public FinancialViewForm(IEditableComponentFactory factory) {
@@ -59,7 +58,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
         int row = -1;
         main.setH1(++row, 0, 1, proto().incomes().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().incomes(), new PersonalIncomeFolder(isEditable())));
+//        main.setWidget(++row, 0, inject(proto().incomes(), new PersonalIncomeFolder(isEditable())));
         main.setWidget(++row, 0, new HTML());
 
         main.setH1(++row, 0, 1, proto().assets().getMeta().getCaption());

@@ -29,6 +29,4 @@ public interface TenantCharge extends Charge {
     IPrimitive<String> tenantFullName();
 
     IPrimitive<Integer> percentage();
-
-    //Calculated base on percentage and total monthly payable
 }

@@ -27,7 +27,7 @@ public class ObjectsFormatTest extends VistaDBTestBase {
 
     public void testChargeLineFormat() {
         ChargeLine cl = EntityFactory.create(ChargeLine.class);
-        cl.charge().set(DomainUtil.createMoney(10));
+        cl.amount().set(DomainUtil.createMoney(10));
         cl.label().setValue("Monthly");
         assertEquals("10", "$10.00 Monthly", cl.getStringView());
     }

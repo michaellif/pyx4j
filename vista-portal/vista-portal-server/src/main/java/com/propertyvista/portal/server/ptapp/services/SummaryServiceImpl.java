@@ -33,7 +33,6 @@ import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.charges.ChargeLineSelectable;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -133,14 +132,6 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 // TODO here should be retrived from Lease:        
 //        retrieveApplicationEntity(summary.addons(), summary.application());
         retrieveApplicationEntity(summary.charges(), summary.application());
-
-        // Move selected upgrades for presentation.
-        for (ChargeLineSelectable charge : summary.charges().monthlyCharges().upgradeCharges()) {
-            if (charge.selected().isBooleanTrue()) {
-                summary.charges().monthlyCharges().charges().add(charge);
-            }
-        }
-        summary.charges().monthlyCharges().upgradeCharges().clear();
         loopOverTenantCharge: for (TenantCharge charge : summary.charges().paymentSplitCharges().charges()) {
             for (TenantInLease tenant : summary.tenantList().tenants()) {
                 if (tenant.equals(charge.tenant())) {

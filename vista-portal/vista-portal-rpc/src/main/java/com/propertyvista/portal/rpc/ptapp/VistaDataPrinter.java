@@ -18,7 +18,6 @@ import com.pyx4j.entity.shared.IList;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.charges.ChargeLine;
-import com.propertyvista.domain.charges.ChargeLineSelectable;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -195,7 +194,7 @@ public class VistaDataPrinter {
             sb.append(pet.color().getStringView()).append(" ");
             sb.append(pet.breed().getStringView()).append(" ");
             sb.append(pet.weight().getValue()).append(" ").append(pet.weightUnit().getValue()).append(" $");
-            sb.append(pet.chargeLine().charge().amount().getValue());
+            sb.append(pet.chargeLine().amount().amount().getValue());
         }
         return sb.toString();
     }
@@ -264,32 +263,20 @@ public class VistaDataPrinter {
         sb.append("Monthly\n");
         for (ChargeLine line : charges.monthlyCharges().charges()) {
             sb.append("\t$");
-            sb.append(line.charge().amount().getStringView());
+            sb.append(line.amount().amount().getStringView());
             sb.append(" \t");
             sb.append(line.type().getStringView());
             sb.append("\n");
         }
 
-        sb.append("Upgrades\n");
-        for (ChargeLineSelectable line : charges.monthlyCharges().upgradeCharges()) {
-            sb.append("\t$");
-            sb.append(line.charge().amount().getStringView());
-            sb.append(" \t");
-            sb.append(line.type().getStringView());
-            if (line.selected().getValue()) {
-                sb.append(" YES");
-            }
-            sb.append("\n");
-        }
-
-        sb.append("Monthly + Upgrades Total \n\t$");
+        sb.append("Total \n\t$");
         sb.append(charges.monthlyCharges().total().amount().getStringView());
         sb.append("\n");
 
         sb.append("\nPro-Rated ").append(charges.proratedCharges().total().amount().getStringView()).append("\n");
         for (ChargeLine line : charges.proratedCharges().charges()) {
             sb.append("\t$");
-            sb.append(line.charge().amount().getStringView());
+            sb.append(line.amount().amount().getStringView());
             sb.append(" \t").append(line.label().getStringView());
             sb.append("\n");
         }
@@ -297,7 +284,7 @@ public class VistaDataPrinter {
         sb.append("\nApplication Charges ").append(charges.applicationCharges().total().amount().getStringView()).append("\n");
         for (ChargeLine line : charges.applicationCharges().charges()) {
             sb.append("\t$");
-            sb.append(line.charge().amount().getStringView());
+            sb.append(line.amount().amount().getStringView());
             sb.append(" \t");
             sb.append(line.type().getStringView());
             sb.append("\n");
@@ -309,7 +296,7 @@ public class VistaDataPrinter {
             sb.append(" ").append(line.tenant().tenant().person().name().firstName().getStringView()).append(" ")
                     .append(line.tenant().tenant().person().name().lastName().getStringView());
             sb.append(" \t").append(line.percentage().getValue()).append("% $");
-            sb.append(line.charge().amount().getValue());
+            sb.append(line.amount().amount().getValue());
             sb.append("\n");
         }
 

@@ -18,7 +18,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
-import com.propertyvista.domain.charges.ChargeLineSelectable;
 import com.propertyvista.domain.financial.Currency;
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.domain.financial.offering.extradata.Pet.WeightUnit;
@@ -50,9 +49,16 @@ public class DomainUtil {
         return money;
     }
 
+    public static ChargeLine createChargeLine(String label, double money) {
+        ChargeLine cl = EntityFactory.create(ChargeLine.class);
+        cl.amount().set(createMoney(money));
+        cl.label().setValue(label);
+        return cl;
+    }
+
     public static ChargeLine createChargeLine(ChargeType type, double money) {
         ChargeLine cl = EntityFactory.create(ChargeLine.class);
-        cl.charge().set(createMoney(money));
+        cl.amount().set(createMoney(money));
         cl.type().setValue(type);
         cl.label().setValue(type.toString());
         return cl;
@@ -60,18 +66,9 @@ public class DomainUtil {
 
     public static ChargeLine createChargeLine(String label, ChargeType type, double money) {
         ChargeLine cl = EntityFactory.create(ChargeLine.class);
-        cl.charge().set(createMoney(money));
+        cl.amount().set(createMoney(money));
         cl.type().setValue(type);
         cl.label().setValue(label);
-        return cl;
-    }
-
-    public static ChargeLineSelectable createChargeLine(ChargeType type, double money, boolean selected) {
-        ChargeLineSelectable cl = EntityFactory.create(ChargeLineSelectable.class);
-        cl.charge().set(createMoney(money));
-        cl.type().setValue(type);
-        cl.label().setValue(type.toString());
-        cl.selected().setValue(selected);
         return cl;
     }
 
