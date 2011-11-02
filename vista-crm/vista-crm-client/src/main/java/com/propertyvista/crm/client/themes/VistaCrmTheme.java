@@ -360,8 +360,8 @@ public class VistaCrmTheme extends VistaTheme {
         buttonEx = Selector.valueOf("gwt-ToggleButton");
         style = new Style(buttonEx);
         style.addProperty("color", ThemeColors.OBJECT_TONE10);
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE50);
-        style.addProperty("border-width", "2px");
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE80);
+        style.addProperty("border-width", "0px");
         style.addProperty("border-style", "solid");
         style.addProperty("margin", "0.2em 0.2em");
         style.addProperty("padding", "0.2em 0.5em");
@@ -370,6 +370,7 @@ public class VistaCrmTheme extends VistaTheme {
 
         buttonEx = Selector.valueOf("gwt-ToggleButton-up");
         style = new Style(buttonEx);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE40);
         style.addProperty("border-left-color", ThemeColors.OBJECT_TONE10);
         style.addProperty("border-top-color", ThemeColors.OBJECT_TONE10);
         style.addProperty("border-right-color", ThemeColors.OBJECT_TONE95);
@@ -379,6 +380,7 @@ public class VistaCrmTheme extends VistaTheme {
         buttonEx = Selector.valueOf("gwt-ToggleButton-up-hovering");
         style = new Style(buttonEx);
         style.addProperty("cursor", "hand");
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE40);
         style.addProperty("border-left-color", ThemeColors.OBJECT_TONE10);
         style.addProperty("border-top-color", ThemeColors.OBJECT_TONE10);
         style.addProperty("border-right-color", ThemeColors.OBJECT_TONE95);
@@ -387,6 +389,7 @@ public class VistaCrmTheme extends VistaTheme {
 
         buttonEx = Selector.valueOf("gwt-ToggleButton-down");
         style = new Style(buttonEx);
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE80);
         style.addProperty("border-left-color", ThemeColors.OBJECT_TONE95);
         style.addProperty("border-top-color", ThemeColors.OBJECT_TONE95);
         style.addProperty("border-right-color", ThemeColors.OBJECT_TONE10);
@@ -396,6 +399,7 @@ public class VistaCrmTheme extends VistaTheme {
         buttonEx = Selector.valueOf("gwt-ToggleButton-down-hovering");
         style = new Style(buttonEx);
         style.addProperty("cursor", "hand");
+        style.addProperty("background-color", ThemeColors.OBJECT_TONE80);
         style.addProperty("border-left-color", ThemeColors.OBJECT_TONE95);
         style.addProperty("border-top-color", ThemeColors.OBJECT_TONE95);
         style.addProperty("border-right-color", ThemeColors.OBJECT_TONE10);
