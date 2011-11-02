@@ -146,6 +146,7 @@ public class DBResetServlet extends HttpServlet {
                             buf.append("\nTotal time: " + TimeUtils.secSince(start));
                         }
                     }
+                    log.info("DB reset {} {}", type, TimeUtils.secSince(start));
                 }
 
             } catch (Throwable t) {
