@@ -23,8 +23,9 @@
     <build>
         <plugins>
 
+            <!-- Avoid extra warnings in build output -->
+            <!--
             <plugin>
-                <!-- Avoid extra warnings in build output -->
                 <artifactId>maven-clean-plugin</artifactId>
                 <executions>
                     <execution>
@@ -41,6 +42,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -76,8 +78,9 @@
                    <schemaDirectory>${basedir}/src/main/resources</schemaDirectory>
                    <nv>true</nv>
                    <readOnly>true</readOnly>
+                   <clearOutputDir>false</clearOutputDir>
                </configuration>
-           </plugin>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
