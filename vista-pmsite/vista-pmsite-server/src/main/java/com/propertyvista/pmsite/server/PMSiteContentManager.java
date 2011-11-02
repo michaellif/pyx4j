@@ -101,10 +101,13 @@ public class PMSiteContentManager implements Serializable {
 
     public boolean refresh() {
         SiteDescriptorChanges latest = Persistence.service().retrieve(SiteDescriptorChanges.class, siteDescriptor._updateFlag().getPrimaryKey());
-        if ((latest == null) || latest.updated().equals(siteDescriptor._updateFlag().updated())) {
+        if ((latest != null) && latest.updated().equals(siteDescriptor._updateFlag().updated())) {
             return false;
         } else {
             siteDescriptor = Persistence.service().retrieve(SiteDescriptor.class, siteDescriptor.getPrimaryKey());
+            if (siteDescriptor == null) {
+                siteDescriptor = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
+            }
             updatePages();
             return true;
         }

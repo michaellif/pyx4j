@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -63,7 +64,9 @@ public class DBResetServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
+        log.debug("DBReset requested");
         synchronized (DBResetServlet.class) {
+            log.debug("DBReset started");
             long start = System.currentTimeMillis();
             StringBuilder buf = new StringBuilder();
             String contentType = "text/plain";
@@ -156,6 +159,7 @@ public class DBResetServlet extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             } finally {
                 DataGenerator.cleanup();
+                CacheService.reset();
             }
             response.setDateHeader("Expires", System.currentTimeMillis());
             response.setHeader("Pragma", "no-cache");
