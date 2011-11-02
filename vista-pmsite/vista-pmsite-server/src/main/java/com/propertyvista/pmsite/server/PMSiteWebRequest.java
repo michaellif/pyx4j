@@ -13,15 +13,24 @@
  */
 package com.propertyvista.pmsite.server;
 
+import java.util.List;
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 
 import com.pyx4j.entity.cache.CacheService;
+import com.pyx4j.i18n.server.I18nManager;
+
+import com.propertyvista.domain.site.AvailableLocale;
+import com.propertyvista.shared.CompiledLocale;
 
 public class PMSiteWebRequest extends ServletWebRequest {
 
     private final PMSiteContentManager contentManager;
+
+    private final AvailableLocale siteLocale;
 
     public PMSiteWebRequest(HttpServletRequest httpServletRequest, String filterPrefix) {
         super(httpServletRequest, filterPrefix);
@@ -40,9 +49,73 @@ public class PMSiteWebRequest extends ServletWebRequest {
             }
         }
         contentManager = cm;
+
+        //TODO locale from path
+        if (false) {
+            AvailableLocale localeFromPath = getRequestPtahLocale("ru", contentManager.getAllAvailableLocale());
+            AvailableLocale localeFromCookie = getLocaleFromCookie(contentManager.getAllAvailableLocale());
+            if (localeFromPath == null) {
+                localeFromPath = localeFromCookie;
+            }
+            I18nManager.setThreadLocale(getLocale(localeFromPath.lang().getValue()));
+            siteLocale = localeFromPath;
+        } else {
+            //TODO remove this else
+            siteLocale = contentManager.getLocale();
+        }
     }
 
     public PMSiteContentManager getContentManager() {
         return contentManager;
+    }
+
+    public AvailableLocale getSiteLocale() {
+        return siteLocale;
+    }
+
+    public AvailableLocale getRequestPtahLocale(String localePath, List<AvailableLocale> allAvailableLocale) {
+        if (localePath == null) {
+            return null;
+        }
+        for (AvailableLocale l : allAvailableLocale) {
+            if (localePath.equals(l.lang().getValue().name())) {
+                return l;
+            }
+        }
+        return null;
+    }
+
+    private AvailableLocale getLocaleFromCookie(List<AvailableLocale> allAvailableLocale) {
+        Locale locale = I18nManager.getThreadLocale();
+        try {
+            CompiledLocale lang = CompiledLocale.valueOf(locale.getLanguage() + "_" + locale.getCountry());
+            for (AvailableLocale l : allAvailableLocale) {
+                if (lang.equals(l.lang().getValue())) {
+                    return l;
+                }
+            }
+        } catch (IllegalArgumentException ignore) {
+        }
+
+        for (AvailableLocale l : allAvailableLocale) {
+            if (locale.getLanguage().equals(l.lang().getValue().name())) {
+                return l;
+            }
+        }
+        // Locale not found, select the first one.
+        return allAvailableLocale.get(0);
+    }
+
+    protected Locale getLocale(CompiledLocale cl) {
+        switch (cl) {
+        case en:
+            return Locale.ENGLISH;
+        case fr:
+            return Locale.FRENCH;
+        case ru:
+            return new Locale("ru", "RU");
+        default:
+            return Locale.ENGLISH;
+        }
     }
 }

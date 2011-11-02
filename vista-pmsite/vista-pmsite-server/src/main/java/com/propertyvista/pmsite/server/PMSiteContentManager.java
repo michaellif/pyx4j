@@ -121,12 +121,17 @@ public class PMSiteContentManager implements Serializable {
         }
     }
 
+    /**
+     * Use PMSiteWebRequest.getSiteLocale();
+     */
+    @Deprecated
     public AvailableLocale getLocale() {
         // no caching for locale as it is stored on the client
         locale = readLocaleFromCookie();
         return locale;
     }
 
+    @Deprecated
     private AvailableLocale readLocaleFromCookie() {
 
         Locale locale = I18nManager.getThreadLocale();
