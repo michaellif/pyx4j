@@ -13,8 +13,8 @@
  */
 package com.propertyvista.domain.site;
 
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -44,6 +44,7 @@ public interface SiteDescriptor extends IEntity {
     @ToString(index = 0)
     IPrimitive<Skin> skin();
 
+    @Owned
     SitePalette sitePalette();
 
     IPrimitive<String> copyright();

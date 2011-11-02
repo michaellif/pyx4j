@@ -15,9 +15,13 @@ package com.propertyvista.portal.server.portal.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.cache.CacheService;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 
+import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SitePalette;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 
@@ -26,15 +30,16 @@ public class SiteThemeServicesImpl implements SiteThemeServices {
 
     @Override
     public void retrievePalette(AsyncCallback<SitePalette> callback) {
-        SitePalette palette = EntityFactory.create(SitePalette.class);
-        palette.object1().setValue("blue");
-        palette.object2().setValue("orange");
-        palette.contrast1().setValue("green");
-        palette.contrast2().setValue("red");
-        palette.foreground().setValue("#333333");
-        palette.background().setValue("#dddddd");
-        palette.form().setValue("#333333");
-
+        SitePalette palette = null;
+        Key paletteKey = (Key) CacheService.get(SitePalette.cacheKey);
+        if (paletteKey != null) {
+            palette = Persistence.service().retrieve(SitePalette.class, paletteKey);
+        }
+        if (palette == null) {
+            SiteDescriptor siteDescriptor = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
+            palette = siteDescriptor.sitePalette();
+            CacheService.put(SitePalette.cacheKey, palette.getPrimaryKey());
+        }
         callback.onSuccess(palette);
     }
 }
