@@ -17,13 +17,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
-
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.pyx4j.entity.server.EntityServicesImpl;
@@ -33,7 +28,8 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
-import com.pyx4j.i18n.server.I18nManager;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
@@ -60,6 +56,8 @@ import com.propertyvista.shared.CompiledLocale;
 public class PMSiteContentManager implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    private static final I18n i18n = I18n.get(PMSiteContentManager.class);
 
     public static final String PAGE_ID_PARAM_NAME = "pageId";
 
@@ -90,9 +88,7 @@ public class PMSiteContentManager implements Serializable {
         EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
         siteDescriptor = Persistence.service().retrieve(criteria);
         if (siteDescriptor == null) {
-            //Working on Empty DB
-            siteDescriptor = EntityFactory.create(SiteDescriptor.class);
-            // TODO populate with default values, such as color scheme etc
+            throw new UserRuntimeException(i18n.tr("This property management site was not set-up yet"));
         }
         updatePages();
     }
@@ -126,37 +122,11 @@ public class PMSiteContentManager implements Serializable {
      */
     @Deprecated
     public AvailableLocale getLocale() {
-        // no caching for locale as it is stored on the client
-        locale = readLocaleFromCookie();
         return locale;
-    }
-
-    @Deprecated
-    private AvailableLocale readLocaleFromCookie() {
-
-        Locale locale = I18nManager.getThreadLocale();
-        try {
-            CompiledLocale lang = CompiledLocale.valueOf(locale.getLanguage() + "_" + locale.getCountry());
-            for (AvailableLocale l : getAllAvailableLocale()) {
-                if (lang.equals(l.lang().getValue())) {
-                    return l;
-                }
-            }
-        } catch (IllegalArgumentException ignore) {
-        }
-
-        for (AvailableLocale l : getAllAvailableLocale()) {
-            if (locale.getLanguage().equals(l.lang().getValue().name())) {
-                return l;
-            }
-        }
-        // Locale not found, select the first one.
-        return getAllAvailableLocale().get(0);
     }
 
     public void setLocale(AvailableLocale l) {
         locale = l;
-        ((WebResponse) RequestCycle.get().getResponse()).addCookie(new Cookie("locale", locale.lang().getValue().name()));
     }
 
     public List<AvailableLocale> getAllAvailableLocale() {
@@ -177,7 +147,7 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public List<News> getNews() {
-        if (news == null) {
+        if ((news == null) && (getLocale() != null)) {
             EntityListCriteria<News> criteria = EntityListCriteria.create(News.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), getLocale().lang().getValue()));
             criteria.desc(criteria.proto().date().getPath().toString());
@@ -189,7 +159,7 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public List<Testimonial> getTestimonials() {
-        if (testimonials == null) {
+        if ((testimonials == null) && (getLocale() != null)) {
             EntityQueryCriteria<Testimonial> criteria = EntityQueryCriteria.create(Testimonial.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), getLocale().lang().getValue()));
             testimonials = Persistence.service().query(criteria);

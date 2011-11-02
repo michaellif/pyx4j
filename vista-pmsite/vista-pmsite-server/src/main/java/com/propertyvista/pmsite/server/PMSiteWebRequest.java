@@ -16,9 +16,12 @@ package com.propertyvista.pmsite.server;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebResponse;
 
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.i18n.server.I18nManager;
@@ -59,9 +62,13 @@ public class PMSiteWebRequest extends ServletWebRequest {
             }
             I18nManager.setThreadLocale(getLocale(localeFromPath.lang().getValue()));
             siteLocale = localeFromPath;
+            if (false) {
+                ((WebResponse) RequestCycle.get().getResponse()).addCookie(new Cookie("locale", siteLocale.lang().getValue().name()));
+            }
         } else {
             //TODO remove this else
-            siteLocale = contentManager.getLocale();
+            siteLocale = getLocaleFromCookie(contentManager.getAllAvailableLocale());
+            contentManager.setLocale(siteLocale);
         }
     }
 
@@ -102,8 +109,12 @@ public class PMSiteWebRequest extends ServletWebRequest {
                 return l;
             }
         }
-        // Locale not found, select the first one.
-        return allAvailableLocale.get(0);
+        if (allAvailableLocale.size() == 0) {
+            throw new Error("Accessing Empty DB");
+        } else {
+            // Locale not found, select the first one.
+            return allAvailableLocale.get(0);
+        }
     }
 
     protected Locale getLocale(CompiledLocale cl) {
