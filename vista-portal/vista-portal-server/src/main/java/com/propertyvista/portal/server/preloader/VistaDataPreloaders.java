@@ -56,8 +56,10 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             add(new DevelopmentSecurityPreloader());
 
             // DEMO - temporary!!!
-            add(new UnitVacancyReportDTOPreloader());
-            add(new UnitVacancyReportEventPreloader());
+            add(new MockupVacancyReportUnitPreloader());
+            add(new MockupVacancyReportEventPreloader());
+
+            add(new MockupTenantPreloader());
         }
 
         //DEMO Different data for different PMC

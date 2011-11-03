@@ -29,7 +29,7 @@ import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatu
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus.VacancyStatus;
 
-public class UnitVacancyReportDTOPreloader extends BaseVistaDevDataPreloader {
+public class MockupVacancyReportUnitPreloader extends BaseVistaDevDataPreloader {
 
     public static final String DATA_SOURCE_FILE = "unit-vacancy-report.csv";
 
@@ -51,7 +51,7 @@ public class UnitVacancyReportDTOPreloader extends BaseVistaDevDataPreloader {
 
         try {
             //CSVLoad.loadFile(this.getClass().getResourceAsStream(DATA_SOURCE_FILE), new CSVReciver() {
-            CSVLoad.loadFile(IOUtils.resourceFileName(DATA_SOURCE_FILE, UnitVacancyReportDTOPreloader.class), new CSVReciver() {
+            CSVLoad.loadFile(IOUtils.resourceFileName(DATA_SOURCE_FILE, MockupVacancyReportUnitPreloader.class), new CSVReciver() {
                 int headersLength = 0;
 
                 @Override

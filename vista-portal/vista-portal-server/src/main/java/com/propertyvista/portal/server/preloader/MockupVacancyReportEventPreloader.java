@@ -29,7 +29,7 @@ import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportEvent;
 
-public class UnitVacancyReportEventPreloader extends BaseVistaDevDataPreloader {
+public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader {
     private static final String DATA_SOURCE_FILE = "unit-vacancy-report-events.csv";
 
     private static final Random RND = new Random(9001l);
@@ -257,7 +257,7 @@ public class UnitVacancyReportEventPreloader extends BaseVistaDevDataPreloader {
         final int[] events = new int[] { 0 };
 
         try {
-            CSVLoad.loadFile(IOUtils.resourceFileName(DATA_SOURCE_FILE, UnitVacancyReportDTOPreloader.class), new CSVReciver() {
+            CSVLoad.loadFile(IOUtils.resourceFileName(DATA_SOURCE_FILE, MockupVacancyReportUnitPreloader.class), new CSVReciver() {
                 int headersLength = 0;
 
                 @Override
@@ -277,7 +277,7 @@ public class UnitVacancyReportEventPreloader extends BaseVistaDevDataPreloader {
                     String strVal;
 
                     strVal = values[indexOf.get("date")];
-                    event.eventDate().setValue(UnitVacancyReportDTOPreloader.toLogicalDate(strVal));
+                    event.eventDate().setValue(MockupVacancyReportUnitPreloader.toLogicalDate(strVal));
 
                     strVal = values[indexOf.get("propertyCode")];
                     event.propertyCode().setValue(strVal);
@@ -292,13 +292,13 @@ public class UnitVacancyReportEventPreloader extends BaseVistaDevDataPreloader {
                     event.rentReady().setValue(strVal);
 
                     strVal = values[indexOf.get("move out date")];
-                    event.moveOutDate().setValue(UnitVacancyReportDTOPreloader.toLogicalDate(strVal));
+                    event.moveOutDate().setValue(MockupVacancyReportUnitPreloader.toLogicalDate(strVal));
 
                     strVal = values[indexOf.get("move in date")];
-                    event.moveInDate().setValue(UnitVacancyReportDTOPreloader.toLogicalDate(strVal));
+                    event.moveInDate().setValue(MockupVacancyReportUnitPreloader.toLogicalDate(strVal));
 
                     strVal = values[indexOf.get("rent from date")];
-                    event.moveInDate().setValue(UnitVacancyReportDTOPreloader.toLogicalDate(strVal));
+                    event.moveInDate().setValue(MockupVacancyReportUnitPreloader.toLogicalDate(strVal));
 
                     Persistence.service().persist(event);
                     ++events[0];
