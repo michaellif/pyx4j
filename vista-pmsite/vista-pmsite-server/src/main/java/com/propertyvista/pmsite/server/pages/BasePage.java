@@ -50,7 +50,7 @@ public abstract class BasePage extends WebPage {
 
         public LocalizedHtmlTag(String id) {
             super(id);
-            String lang = ((PMSiteWebRequest) getRequest()).getContentManager().getLocale().lang().getValue().name();
+            String lang = ((PMSiteWebRequest) getRequest()).getSiteLocale().lang().getValue().name();
             add(AttributeModifier.replace("lang", lang));
         }
     }
@@ -78,8 +78,8 @@ public abstract class BasePage extends WebPage {
         response.renderCSSReference(refCSS);
         response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "jquery-1.6.3.min.js"));
         response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "pmsite_jslib-1.0.js"));
-        response.renderString("<meta name=\"gwt:property\" content=\"locale="
-                + ((PMSiteWebRequest) getRequest()).getContentManager().getLocale().lang().getValue().name() + "\" />");
+        response.renderString("<meta name=\"gwt:property\" content=\"locale=" + ((PMSiteWebRequest) getRequest()).getSiteLocale().lang().getValue().name()
+                + "\" />");
     }
 
     @Override

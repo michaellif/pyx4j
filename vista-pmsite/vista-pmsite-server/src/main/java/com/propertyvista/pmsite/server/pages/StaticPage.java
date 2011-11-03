@@ -61,7 +61,7 @@ public class StaticPage extends BasePage {
         }
 
         mainPanel.add(new Label("caption", ((PMSiteWebRequest) getRequest()).getContentManager().getCaption(descriptor,
-                ((PMSiteWebRequest) getRequest()).getContentManager().getLocale())));
+                ((PMSiteWebRequest) getRequest()).getSiteLocale())));
 
         mainPanel.add(new WebComponent("content") {
 
@@ -72,8 +72,7 @@ public class StaticPage extends BasePage {
                 Response response = getRequestCycle().getResponse();
 
                 EntityQueryCriteria<PageContent> pageContentCriteria = EntityQueryCriteria.create(PageContent.class);
-                pageContentCriteria.add(PropertyCriterion.eq(pageContentCriteria.proto().locale(), ((PMSiteWebRequest) getRequest()).getContentManager()
-                        .getLocale()));
+                pageContentCriteria.add(PropertyCriterion.eq(pageContentCriteria.proto().locale(), ((PMSiteWebRequest) getRequest()).getSiteLocale()));
                 pageContentCriteria.add(PropertyCriterion.eq(pageContentCriteria.proto().descriptor(), descriptor));
 
                 List<PageContent> pages = Persistence.service().query(pageContentCriteria);

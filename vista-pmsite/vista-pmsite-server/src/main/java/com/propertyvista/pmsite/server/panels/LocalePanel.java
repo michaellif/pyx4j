@@ -22,7 +22,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
-import com.propertyvista.pmsite.server.model.WicketUtils.JSActionLink;
+import com.propertyvista.pmsite.server.model.WicketUtils.LocalizedPageLink;
 
 public class LocalePanel extends Panel {
 
@@ -39,9 +39,10 @@ public class LocalePanel extends Panel {
             protected void populateItem(ListItem<AvailableLocale> item) {
 
                 final AvailableLocale locale = item.getModelObject();
+                final String lang = locale.lang().getValue().name();
 
-                JSActionLink link = new JSActionLink("langSelector", "setSiteLocale('" + locale.lang().getValue().name() + "')", true);
-                item.add(link.add(new Label("caption", locale.lang().getValue().name())));
+                LocalizedPageLink link = new LocalizedPageLink("langSelector", getPage().getClass(), getPage().getPageParameters(), lang);
+                item.add(link.add(new Label("caption", lang)));
             }
         };
         add(listView);

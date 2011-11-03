@@ -33,7 +33,7 @@ public class PMSiteWebRequest extends ServletWebRequest {
 
     private final PMSiteContentManager contentManager;
 
-    private final AvailableLocale siteLocale;
+    private AvailableLocale siteLocale;
 
     public PMSiteWebRequest(HttpServletRequest httpServletRequest, String filterPrefix) {
         super(httpServletRequest, filterPrefix);
@@ -52,35 +52,40 @@ public class PMSiteWebRequest extends ServletWebRequest {
             }
         }
         contentManager = cm;
-
-        //TODO locale from path
-        if (false) {
-            AvailableLocale localeFromPath = getRequestPtahLocale("ru", contentManager.getAllAvailableLocale());
-            AvailableLocale localeFromCookie = getLocaleFromCookie(contentManager.getAllAvailableLocale());
-            if (localeFromPath == null) {
-                localeFromPath = localeFromCookie;
-            }
-            I18nManager.setThreadLocale(getLocale(localeFromPath.lang().getValue()));
-            siteLocale = localeFromPath;
-            if (false) {
-                ((WebResponse) RequestCycle.get().getResponse()).addCookie(new Cookie("locale", siteLocale.lang().getValue().name()));
-            }
-        } else {
-            //TODO remove this else
-            siteLocale = getLocaleFromCookie(contentManager.getAllAvailableLocale());
-            contentManager.setLocale(siteLocale);
-        }
     }
 
     public PMSiteContentManager getContentManager() {
         return contentManager;
     }
 
+    public void setDefaultLocale() {
+        setSiteLocale(null);
+    }
+
+    public void setSiteLocale(String lang) {
+        AvailableLocale locale = null;
+        if (lang != null) {
+            locale = getRequestPathLocale(lang, contentManager.getAllAvailableLocale());
+        }
+        if (locale == null) {
+            // this will return either current or fist available locale
+            locale = getCurrentOrDefaultLocale(contentManager.getAllAvailableLocale());
+        }
+        I18nManager.setThreadLocale(getLocale(locale.lang().getValue()));
+        siteLocale = locale;
+        contentManager.setLocale(siteLocale);
+        // need locale on the client for GWT modules
+        ((WebResponse) RequestCycle.get().getResponse()).addCookie(new Cookie("locale", siteLocale.lang().getValue().name()));
+    }
+
     public AvailableLocale getSiteLocale() {
+        if (siteLocale == null) {
+            setDefaultLocale();
+        }
         return siteLocale;
     }
 
-    public AvailableLocale getRequestPtahLocale(String localePath, List<AvailableLocale> allAvailableLocale) {
+    private AvailableLocale getRequestPathLocale(String localePath, List<AvailableLocale> allAvailableLocale) {
         if (localePath == null) {
             return null;
         }
@@ -92,7 +97,7 @@ public class PMSiteWebRequest extends ServletWebRequest {
         return null;
     }
 
-    private AvailableLocale getLocaleFromCookie(List<AvailableLocale> allAvailableLocale) {
+    private AvailableLocale getCurrentOrDefaultLocale(List<AvailableLocale> allAvailableLocale) {
         Locale locale = I18nManager.getThreadLocale();
         try {
             CompiledLocale lang = CompiledLocale.valueOf(locale.getLanguage() + "_" + locale.getCountry());

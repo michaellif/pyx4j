@@ -80,9 +80,9 @@ public class PMSiteContentManager implements Serializable {
 
     private SiteDescriptor siteDescriptor;
 
-    private List<News> news;
+    private Map<String, List<News>> news;
 
-    private List<Testimonial> testimonials;
+    private Map<String, List<Testimonial>> testimonials;
 
     public PMSiteContentManager() {
         EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
@@ -150,24 +150,32 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public List<News> getNews() {
-        if ((news == null) && (getLocale() != null)) {
+        final String lang = locale.lang().getValue().name();
+        if (news == null) {
+            news = new HashMap<String, List<News>>();
+        }
+        if (news.get(lang) == null) {
             EntityListCriteria<News> criteria = EntityListCriteria.create(News.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), getLocale().lang().getValue()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), lang));
             criteria.desc(criteria.proto().date().getPath().toString());
             criteria.setPageSize(4);
             criteria.setPageNumber(0);
-            news = Persistence.service().query(criteria);
+            news.put(lang, Persistence.service().query(criteria));
         }
-        return news;
+        return news.get(lang);
     }
 
     public List<Testimonial> getTestimonials() {
-        if ((testimonials == null) && (getLocale() != null)) {
-            EntityQueryCriteria<Testimonial> criteria = EntityQueryCriteria.create(Testimonial.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), getLocale().lang().getValue()));
-            testimonials = Persistence.service().query(criteria);
+        final String lang = locale.lang().getValue().name();
+        if (testimonials == null) {
+            testimonials = new HashMap<String, List<Testimonial>>();
         }
-        return testimonials;
+        if (testimonials.get(lang) == null) {
+            EntityQueryCriteria<Testimonial> criteria = EntityQueryCriteria.create(Testimonial.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), lang));
+            testimonials.put(lang, Persistence.service().query(criteria));
+        }
+        return testimonials.get(lang);
     }
 
     public PageDescriptor getStaticPageDescriptor(PageParameters parameters) {

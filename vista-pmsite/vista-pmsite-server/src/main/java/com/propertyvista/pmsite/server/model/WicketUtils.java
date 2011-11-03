@@ -22,11 +22,15 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.StatelessLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.resource.TextTemplateResourceReference;
+
+import com.propertyvista.pmsite.server.PMSiteApplication;
 
 public class WicketUtils {
     /*
@@ -169,6 +173,14 @@ public class WicketUtils {
             WebApplication.get().getResourceReferenceRegistry().unregisterResourceReference(rcKey);
             WebApplication.get().getResourceReferenceRegistry().registerResourceReference(this);
 
+        }
+    }
+
+    public static class LocalizedPageLink extends BookmarkablePageLink<Void> {
+        private static final long serialVersionUID = 1L;
+
+        public LocalizedPageLink(final String wicketId, final Class<? extends Page> pageClass, final PageParameters params, final String lang) {
+            super(wicketId, pageClass, new PageParameters(params).set(PMSiteApplication.LocaleParamName, lang));
         }
     }
 

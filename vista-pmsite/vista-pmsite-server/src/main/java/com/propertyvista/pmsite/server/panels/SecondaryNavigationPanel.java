@@ -53,7 +53,7 @@ public class SecondaryNavigationPanel extends Panel {
                 NavigationItem navItem = item.getModelObject();
                 BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("destination", navItem.getDestination(), navItem.getPageParameters());
                 link.add(new Label("caption", ((PMSiteWebRequest) getRequest()).getContentManager().getCaption(navItem.getPageDescriptor(),
-                        ((PMSiteWebRequest) getRequest()).getContentManager().getLocale())));
+                        ((PMSiteWebRequest) getRequest()).getSiteLocale())));
                 item.add(link);
 
                 boolean active = false;
