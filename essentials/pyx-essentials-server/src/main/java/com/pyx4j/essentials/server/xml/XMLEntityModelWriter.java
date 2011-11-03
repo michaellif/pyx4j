@@ -31,6 +31,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.apache.commons.codec.binary.Base64;
 
 import com.pyx4j.entity.shared.ICollection;
@@ -95,6 +97,9 @@ public class XMLEntityModelWriter {
         EntityMeta em = entity.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
+            if (memberMeta.getAnnotation(XmlTransient.class) != null) {
+                continue;
+            }
             switch (memberMeta.getObjectClassType()) {
             case Entity:
                 IEntity member = (IEntity) entity.getMember(memberName);

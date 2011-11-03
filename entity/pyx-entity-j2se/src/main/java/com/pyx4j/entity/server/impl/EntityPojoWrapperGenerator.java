@@ -46,6 +46,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -142,8 +143,7 @@ public class EntityPojoWrapperGenerator {
             if (xmlRootElement != null) {
                 addAnnotationValue(implClass, XmlRootElement.class, "name", xmlRootElement.name());
             }
-            //addAnnotationValue(implClass, XmlType.class, "name", entityMeta.getEntityClass().getSimpleName());
-            addXmlTypeAnnotationValue(implClass, "name", getXMLName(entityMeta.getEntityClass()), entityMeta.getMemberNames());
+            List<String> xmlMemberNames = new Vector<String>();
 
             implClass.setSuperclass(pool.get(IPojoImpl.class.getName()));
 
@@ -193,20 +193,26 @@ public class EntityPojoWrapperGenerator {
                 memberGet.setBody(createGetBody(ctValueClass, memberMeta, entityClassName));
                 implClass.addMethod(memberGet);
 
-                if (LogicalDate.class.getName().equals(ctValueClass.getName())) {
-                    addAnnotationValue(memberGet, XmlSchemaType.class, "name", "date");
-                    addAnnotationValue(memberGet, XmlJavaTypeAdapter.class, "value", LogicalDateXmlAdapter.class);
-                }
+                if (memberMeta.getAnnotation(XmlTransient.class) != null) {
+                    addAnnotation(memberGet, XmlTransient.class);
+                } else {
+                    xmlMemberNames.add(memberName);
+                    if (LogicalDate.class.getName().equals(ctValueClass.getName())) {
+                        addAnnotationValue(memberGet, XmlSchemaType.class, "name", "date");
+                        addAnnotationValue(memberGet, XmlJavaTypeAdapter.class, "value", LogicalDateXmlAdapter.class);
+                    }
 
-                if (memberMeta.getObjectClassType() == ObjectClassType.EntityList) {
-                    addAnnotationValue(memberGet, XmlElement.class, "name", getXMLName(memberMeta.getValueClass()));
-                    addAnnotationValue(memberGet, XmlElementWrapper.class, "name", memberName);
+                    if (memberMeta.getObjectClassType() == ObjectClassType.EntityList) {
+                        addAnnotationValue(memberGet, XmlElement.class, "name", getXMLName(memberMeta.getValueClass()));
+                        addAnnotationValue(memberGet, XmlElementWrapper.class, "name", memberName);
+                    }
                 }
 
                 CtMethod memberSet = new CtMethod(CtClass.voidType, "set" + beanMemberName, new CtClass[] { ctValueClass }, implClass);
                 memberSet.setBody(createSetBody(memberMeta, entityClassName));
                 implClass.addMethod(memberSet);
             }
+            addXmlTypeAnnotationValue(implClass, "name", getXMLName(entityMeta.getEntityClass()), xmlMemberNames);
 
             implClass.toClass(classLoader, null);
 
@@ -372,6 +378,18 @@ public class EntityPojoWrapperGenerator {
             annotation.addMemberValue("type", new ClassMemberValue(XmlJavaTypeAdapter.class.getName() + "$DEFAULT", constPool));
         }
 
+        attr.addAnnotation(annotation);
+        member.getMethodInfo().addAttribute(attr);
+    }
+
+    private void addAnnotation(CtMethod member, Class<?> annotationClass) throws NotFoundException {
+        CtClass implClass = member.getDeclaringClass();
+        ConstPool constPool = implClass.getClassFile().getConstPool();
+        AnnotationsAttribute attr = (AnnotationsAttribute) member.getMethodInfo().getAttribute(AnnotationsAttribute.visibleTag);
+        if (attr == null) {
+            attr = new AnnotationsAttribute(constPool, AnnotationsAttribute.visibleTag);
+        }
+        Annotation annotation = new Annotation(constPool, pool.get(annotationClass.getName()));
         attr.addAnnotation(annotation);
         member.getMethodInfo().addAttribute(attr);
     }
