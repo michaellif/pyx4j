@@ -85,17 +85,20 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
         splitCharges.setWidget(++row1, 0, createTotal(proto().paymentSplitCharges().total()));
         main.setWidget(++row, 0, splitCharges);
 
+        main.setWidth("600px");
+
         // last step - add building picture on the right:
         HorizontalPanel content = new HorizontalPanel();
         content.add(main);
         content.add(new BuildingPicture());
+        content.setWidth("800px");
         return content;
     }
 
     @Override
     public void populate(Charges value) {
         super.populate(value);
-        splitCharges.setVisible(value.paymentSplitCharges().charges().size() > 1);
+//        splitCharges.setVisible(value.paymentSplitCharges().charges().size() > 1);
     }
 
     private Widget createTotal(Money member) {

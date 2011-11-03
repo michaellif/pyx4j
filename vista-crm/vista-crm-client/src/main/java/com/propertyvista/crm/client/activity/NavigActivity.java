@@ -36,6 +36,7 @@ import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -99,15 +100,15 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
         //Tenants
         folder = new NavigFolder(i18n.tr("Tenants"), CrmImages.INSTANCE.tenantsNormal(), CrmImages.INSTANCE.tenantsHover(), CrmImages.INSTANCE.tenantsActive());
-        folder.addNavigItem(new CrmSiteMap.Tenants.Lead());
         folder.addNavigItem(new CrmSiteMap.Tenants.Tenant());
         folder.addNavigItem(new CrmSiteMap.Tenants.Lease());
-        folder.addNavigItem(new CrmSiteMap.Tenants.Inquiry());
         list.add(folder);
 
         //Marketing
-        folder = new NavigFolder(i18n.tr("Marketing"), CrmImages.INSTANCE.marketingNormal(), CrmImages.INSTANCE.marketingHover(),
+        folder = new NavigFolder(i18n.tr("Marketing & Sales"), CrmImages.INSTANCE.marketingNormal(), CrmImages.INSTANCE.marketingHover(),
                 CrmImages.INSTANCE.marketingActive());
+        folder.addNavigItem(new Marketing.Inquiry());
+        folder.addNavigItem(new Marketing.Lead());
         list.add(folder);
 
         //LegalAndCollections

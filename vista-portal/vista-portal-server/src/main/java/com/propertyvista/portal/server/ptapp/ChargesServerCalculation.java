@@ -26,7 +26,6 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 
 public class ChargesServerCalculation extends ChargesSharedCalculation {
 
@@ -46,7 +45,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         }
     }
 
-    public static void updatePaymentSplitCharges(Charges charges, TenantInLeaseListDTO tenantList) {
+    public static void updatePaymentSplitCharges(Charges charges, List<TenantInLease> tenants) {
         //        // find all potential tenants 
         //        EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
         //        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
@@ -62,7 +61,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             chargedTenants.add(tenant);
         }
 
-        for (TenantInLease tenant : tenantList.tenants()) {
+        for (TenantInLease tenant : tenants) {
             log.debug("Tenant from master tenant list: {}", tenant);
             if (!isEligibleForPaymentSplit(tenant)) {
                 log.info("Charges contained tenant {} who should be removed", tenant);
@@ -74,15 +73,15 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 // TODO update the algorithm:
         // go through both lists and make sure that they match
         if (!dirty) {
-            dirty = !areTwoTenantListsTheSame(chargedTenants, tenantList.tenants());
+            dirty = !areTwoTenantListsTheSame(chargedTenants, tenants);
         }
         if (!dirty) {
-            dirty = !areTwoTenantListsTheSame(tenantList.tenants(), chargedTenants);
+            dirty = !areTwoTenantListsTheSame(tenants, chargedTenants);
         }
 
         if (dirty) {
             log.info("Tenants have changed, we need to reset payment split charges");
-            resetPaymentSplitCharges(charges, tenantList);
+            resetPaymentSplitCharges(charges, tenants);
         } else {
             log.info("Tenants are the same as before, no need to reset payment split charges");
         }
@@ -116,9 +115,9 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         return true;
     }
 
-    private static void resetPaymentSplitCharges(Charges charges, TenantInLeaseListDTO tenantList) {
+    private static void resetPaymentSplitCharges(Charges charges, List<TenantInLease> tenants) {
         charges.paymentSplitCharges().charges().clear();
-        for (TenantInLease tenant : tenantList.tenants()) {
+        for (TenantInLease tenant : tenants) {
             Status status = tenant.status().getValue();
             log.debug("Going to reset payment splits for tenant {} of age {}", tenant.relationship().getValue(), tenant.tenant().person().birthDate()
                     .getValue());

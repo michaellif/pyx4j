@@ -29,9 +29,11 @@ import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
+import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 import com.propertyvista.portal.server.ptapp.util.TenantRetriever;
@@ -105,19 +107,15 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
 
         ApplicationProgressMgr.syncroizeApplicationProgress(tenants.tenants());
 
-//TODO
-//        // we need to load charges and re-calculate them
-//        log.info("Load charges and re-calculate them");
-//        EntityQueryCriteria<Charges> criteria = EntityQueryCriteria.create(Charges.class);
-//        criteria.add(PropertyCriterion.eq(criteria.proto().application(), tenants.application()));
-//        Charges charges = secureRetrieve(criteria);
-//
-//        if (charges != null) {
-//            ChargesServerCalculation.updatePaymentSplitCharges(charges, tenantsOrig);
-//            secureSave(charges);
-//            log.info("Re-calculated and saved charges");
-//        }
-//
+        // we need to load charges and re-calculate them
+        log.info("Load charges and re-calculate them");
+        Charges charges = retrieveApplicationEntity(Charges.class);
+        if (charges != null) {
+            ChargesServerCalculation.updatePaymentSplitCharges(charges, lease.tenants());
+            secureSave(charges);
+            log.info("Re-calculated and saved charges");
+        }
+
 //        CampaignManager.fireEvent(CampaignTriger.Registration, tenants);
 
         callback.onSuccess(currentTenants);

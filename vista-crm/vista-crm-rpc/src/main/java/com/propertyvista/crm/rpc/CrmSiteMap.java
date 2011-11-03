@@ -142,21 +142,6 @@ public class CrmSiteMap implements SiteMap {
 
     public static class Tenants extends AppPlace {
 
-        @PlaceProperties(caption = "Lead")
-        @NavigationItem(navigLabel = "Leads")
-        public static class Lead extends CrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Appointment")
-        @NavigationItem(navigLabel = "Appointments")
-        public static class Appointment extends CrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Showing")
-        @NavigationItem(navigLabel = "Showings")
-        public static class Showing extends CrudAppPlace {
-        }
-
         @PlaceProperties(caption = "Tenant")
         @NavigationItem(navigLabel = "Tenants")
         public static class Tenant extends CrudAppPlace {
@@ -181,15 +166,30 @@ public class CrmSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Leases")
         public static class Lease extends CrudAppPlace {
         }
+    }
+
+    public static class Marketing extends AppPlace {
 
         @PlaceProperties(caption = "Inquiry")
         @NavigationItem(navigLabel = "Inquiry")
         public static class Inquiry extends CrudAppPlace {
-
+        
         }
-    }
 
-    public static class Marketing extends AppPlace {
+        @PlaceProperties(caption = "Lead")
+        @NavigationItem(navigLabel = "Leads")
+        public static class Lead extends CrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Appointment")
+        @NavigationItem(navigLabel = "Appointments")
+        public static class Appointment extends CrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Showing")
+        @NavigationItem(navigLabel = "Showings")
+        public static class Showing extends CrudAppPlace {
+        }
     }
 
     public static class LegalAndCollections extends AppPlace {

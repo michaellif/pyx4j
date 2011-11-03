@@ -28,6 +28,30 @@ import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceEdit
 import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceViewerView;
 import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.marketing.inquiry.InquiryEditorView;
+import com.propertyvista.crm.client.ui.crud.marketing.inquiry.InquiryEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.marketing.inquiry.InquiryListerView;
+import com.propertyvista.crm.client.ui.crud.marketing.inquiry.InquiryListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.marketing.inquiry.InquiryViewerView;
+import com.propertyvista.crm.client.ui.crud.marketing.inquiry.InquiryViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentEditorView;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentListerView;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentViewerView;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.LeadEditorView;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.LeadEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.LeadListerView;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.LeadListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.LeadViewerView;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.LeadViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingEditorView;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingListerView;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingViewerView;
+import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingViewerViewImpl;
 
 public class MarketingViewFactory extends ViewFactoryBase {
 
@@ -45,6 +69,34 @@ public class MarketingViewFactory extends ViewFactoryBase {
                 map.put(type, new ConcessionViewerViewImpl());
             } else if (ConcessionEditorView.class.equals(type)) {
                 map.put(type, new ConcessionEditorViewImpl());
+
+            } else if (InquiryListerView.class.equals(type)) {
+                map.put(type, new InquiryListerViewImpl());
+            } else if (InquiryViewerView.class.equals(type)) {
+                map.put(type, new InquiryViewerViewImpl());
+            } else if (InquiryEditorView.class.equals(type)) {
+                map.put(type, new InquiryEditorViewImpl());
+
+            } else if (LeadListerView.class.equals(type)) {
+                map.put(type, new LeadListerViewImpl());
+            } else if (LeadViewerView.class.equals(type)) {
+                map.put(type, new LeadViewerViewImpl());
+            } else if (LeadEditorView.class.equals(type)) {
+                map.put(type, new LeadEditorViewImpl());
+
+            } else if (AppointmentListerView.class.equals(type)) {
+                map.put(type, new AppointmentListerViewImpl());
+            } else if (AppointmentViewerView.class.equals(type)) {
+                map.put(type, new AppointmentViewerViewImpl());
+            } else if (AppointmentEditorView.class.equals(type)) {
+                map.put(type, new AppointmentEditorViewImpl());
+
+            } else if (ShowingListerView.class.equals(type)) {
+                map.put(type, new ShowingListerViewImpl());
+            } else if (ShowingViewerView.class.equals(type)) {
+                map.put(type, new ShowingViewerViewImpl());
+            } else if (ShowingEditorView.class.equals(type)) {
+                map.put(type, new ShowingEditorViewImpl());
             }
         }
         return map.get(type);

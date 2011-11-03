@@ -57,6 +57,18 @@ import com.propertyvista.crm.client.activity.crud.complex.ComplexListerActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexViewerActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
+import com.propertyvista.crm.client.activity.crud.marketing.inquiry.InquiryEditorActivity;
+import com.propertyvista.crm.client.activity.crud.marketing.inquiry.InquiryListerActivity;
+import com.propertyvista.crm.client.activity.crud.marketing.inquiry.InquiryViewerActivity;
+import com.propertyvista.crm.client.activity.crud.marketing.lead.AppointmentEditorActivity;
+import com.propertyvista.crm.client.activity.crud.marketing.lead.AppointmentListerActivity;
+import com.propertyvista.crm.client.activity.crud.marketing.lead.AppointmentViewerActivity;
+import com.propertyvista.crm.client.activity.crud.marketing.lead.LeadEditorActivity;
+import com.propertyvista.crm.client.activity.crud.marketing.lead.LeadListerActivity;
+import com.propertyvista.crm.client.activity.crud.marketing.lead.LeadViewerActivity;
+import com.propertyvista.crm.client.activity.crud.marketing.lead.ShowingEditorActivity;
+import com.propertyvista.crm.client.activity.crud.marketing.lead.ShowingListerActivity;
+import com.propertyvista.crm.client.activity.crud.marketing.lead.ShowingViewerActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.EmployeeEditorActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.EmployeeListerActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.EmployeeViewerActivity;
@@ -73,23 +85,11 @@ import com.propertyvista.crm.client.activity.crud.settings.ServiceItemTypeViewer
 import com.propertyvista.crm.client.activity.crud.settings.SiteActivity;
 import com.propertyvista.crm.client.activity.crud.settings.SiteEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.SiteViewerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.InquiryEditorActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.InquiryListerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.InquiryViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantScreeningEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantScreeningViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantViewerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.lead.AppointmentEditorActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.lead.AppointmentListerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.lead.AppointmentViewerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.lead.LeadEditorActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.lead.LeadListerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.lead.LeadViewerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.lead.ShowingEditorActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.lead.ShowingListerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.lead.ShowingViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseViewerActivity;
@@ -108,6 +108,7 @@ import com.propertyvista.crm.client.activity.report.ReportEditorActivity;
 import com.propertyvista.crm.client.activity.report.ReportManagementActivity;
 import com.propertyvista.crm.client.activity.report.ReportViewActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.LockerArea;
@@ -319,7 +320,7 @@ public class MainActivityMapper implements AppActivityMapper {
                     }
 
 // - Tenant-related:
-                } else if (place instanceof CrmSiteMap.Tenants.Lead) {
+                } else if (place instanceof Marketing.Lead) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         activity = new LeadEditorActivity(place);
@@ -332,7 +333,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-                } else if (place instanceof CrmSiteMap.Tenants.Appointment) {
+                } else if (place instanceof Marketing.Appointment) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         activity = new AppointmentEditorActivity(place);
@@ -345,7 +346,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-                } else if (place instanceof CrmSiteMap.Tenants.Showing) {
+                } else if (place instanceof Marketing.Showing) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         activity = new ShowingEditorActivity(place);
@@ -394,7 +395,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-                } else if (place instanceof CrmSiteMap.Tenants.Inquiry) {
+                } else if (place instanceof Marketing.Inquiry) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         activity = new InquiryEditorActivity(place);
