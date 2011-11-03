@@ -263,7 +263,7 @@ public class VacancyReportServiceImpl implements VacancyReportService {
         HashMap<String, Boolean> someoneMovedOut = new HashMap<String, Boolean>();
 
         long intervalStart = fromDate.getTime();
-        long intervalEnd = resolution.addTo(intervalStart);
+        long intervalEnd = resolution.intervalEnd(intervalStart);
         int turnovers = 0;
         int total = 0;
         boolean isFirstEmptyRange = true;
@@ -279,10 +279,11 @@ public class VacancyReportServiceImpl implements VacancyReportService {
                     analysis.unitsTurnedOverAbs().setValue(turnovers);
                     result.add(analysis);
                     turnovers = 0;
-                    // TODO optimization: the following two lines must set the interval so that it encloses the current event
                     intervalStart = intervalEnd;
                     intervalEnd = resolution.addTo(intervalStart);
                 } else {
+                    // skip all the first intervals that do not contain events
+                    // TODO optimization: the following two lines must skip to the interval that contains the event
                     intervalStart = intervalEnd;
                     intervalEnd = resolution.addTo(intervalStart);
                 }

@@ -34,6 +34,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
     public enum AnalysisResolution {
         Day {
+
             @Override
             public long addTo(long time) {
                 return time + 1000L * 60L * 60L * 24L;
@@ -48,11 +49,26 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
             public String intervalLabelFormat(Date start, Date end) {
                 return TimeUtils.simpleFormat(start, "MMM-dd");
             }
+
+            @Override
+            public long intervalStart(long time) {
+                return new Date(time).getTime();
+            }
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public long intervalEnd(long time) {
+                Date date = new Date(time);
+                date.setDate(date.getDate() + 1);
+                return date.getTime();
+            }
         },
         Week {
+            private static final long DAY_TIMESPAN = 1000L * 60L * 60L * 24L;
+
             @Override
             public long addTo(long time) {
-                return time + 1000L * 60L * 60L * 24L * 7L;
+                return time + DAY_TIMESPAN * 7L;
             }
 
             @Override
@@ -63,6 +79,21 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
             @Override
             public String intervalLabelFormat(Date start, Date end) {
                 return "(" + TimeUtils.simpleFormat(start, "MM/dd") + ", " + TimeUtils.simpleFormat(end, "MM/dd") + ")";
+            }
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public long intervalStart(long time) {
+                Date date = new Date(time);
+                return date.getTime() - date.getDay() * DAY_TIMESPAN;
+            }
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public long intervalEnd(long time) {
+                Date date = new Date(time);
+                int daysToAdd = 7 - date.getDay();
+                return date.getTime() + daysToAdd * DAY_TIMESPAN;
             }
         },
         Month {
@@ -92,6 +123,26 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
                 I18n i18n = I18n.get(UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution.class);
                 return i18n.tr(TimeUtils.MONTH_NAMES_SHORT[end.getMonth()]) + "-" + Integer.toString(1900 + end.getYear());
             }
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public long intervalStart(long time) {
+                Date date = new Date(time);
+                date.setDate(1);
+                return date.getTime();
+            }
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public long intervalEnd(long time) {
+                Date date = new Date(time);
+                int month;
+                do {
+                    month = date.getMonth();
+                    date.setDate(date.getDate() + 1);
+                } while (date.getMonth() == month);
+                return date.getTime();
+            }
         },
         Year {
             @Override
@@ -116,6 +167,25 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
             public String intervalLabelFormat(Date start, Date end) {
                 return Integer.toString(1900 + start.getYear());
             }
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public long intervalStart(long time) {
+                Date date = new Date(time);
+                date.setMonth(0);
+                date.setDate(1);
+                return date.getTime();
+            }
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public long intervalEnd(long time) {
+                Date date = new Date(time);
+                date.setYear(date.getYear() + 1);
+                date.setMonth(0);
+                date.setDate(1);
+                return date.getTime();
+            }
         };
 
         @Override
@@ -139,6 +209,10 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
             }
             return null;
         }
+
+        public abstract long intervalStart(long time);
+
+        public abstract long intervalEnd(long time);
 
         /**
          * Add this interval to given time.
