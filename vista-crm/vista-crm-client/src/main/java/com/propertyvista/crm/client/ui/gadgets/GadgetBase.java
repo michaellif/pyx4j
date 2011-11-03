@@ -194,10 +194,6 @@ public abstract class GadgetBase implements IGadgetBase {
     public void onDelete() {
     }
 
-    @Override
-    public void onDrop() {
-    }
-
     //
     // Internal classes:
     //
