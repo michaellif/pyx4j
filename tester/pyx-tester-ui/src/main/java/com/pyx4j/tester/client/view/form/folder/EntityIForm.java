@@ -23,7 +23,6 @@ package com.pyx4j.tester.client.view.form.folder;
 import java.util.ArrayList;
 
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
@@ -115,13 +114,17 @@ public class EntityIForm extends CEntityEditor<EntityI> {
 
         @Override
         public IsWidget createContent() {
-            FlowPanel main = new FlowPanel();
-            main.add(new WidgetDecorator(inject(proto().stringMember())));
-            main.add(new WidgetDecorator(inject(proto().integerMember())));
-            main.add(new HTML("---------------- Box Folder ----------------"));
-            main.add(inject(proto().entityIIIList(), new EntityIIIFolder()));
-            main.add(new HTML("---------------- Table Folder ----------------"));
-            main.add(inject(proto().entityIVList(), new EntityIVFolder()));
+
+            FormFlexPanel main = new FormFlexPanel();
+
+            int row = -1;
+
+            main.setWidget(++row, 0, new WidgetDecorator(inject(proto().stringMember())));
+            main.setWidget(++row, 0, new WidgetDecorator(inject(proto().integerMember())));
+            main.setH3(++row, 0, 1, i18n.tr("Box Folder"));
+            main.setWidget(++row, 0, inject(proto().entityIIIList(), new EntityIIIFolder()));
+            main.setH3(++row, 0, 1, i18n.tr("Table Folder"));
+            main.setWidget(++row, 0, inject(proto().entityIVList(), new EntityIVFolder()));
             return main;
         }
 
