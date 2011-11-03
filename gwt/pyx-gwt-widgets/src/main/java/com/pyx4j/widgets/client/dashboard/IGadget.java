@@ -54,6 +54,4 @@ public interface IGadget extends IsWidget {
     void onMinimize(boolean minimized_restored); // true for min-ed, false - restored
 
     void onDelete();
-
-    void onDrop();
 }

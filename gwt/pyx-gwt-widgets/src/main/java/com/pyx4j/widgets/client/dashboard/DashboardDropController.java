@@ -59,19 +59,12 @@ class DashboardDropController extends FlowPanelDropController {
 
     @Override
     public void onDrop(DragContext context) {
-        Widget gadget = null;
-        if (context.selectedWidgets.size() == 1) {
-            gadget = context.selectedWidgets.get(0);
-        } else {
+        if (context.selectedWidgets.size() > 1) {
             throw new Error("Only single Gadget can be selected");
         }
 
         super.onDrop(context);
 
-        // notify gadget:
-        if (gadget instanceof GadgetHolder) {
-            ((GadgetHolder) gadget).getGadget().onDrop();
-        }
         // notify board:
         if (getDropTarget() instanceof BoardEvent) {
             ((BoardEvent) getDropTarget()).onEvent(Reason.repositionGadget);
