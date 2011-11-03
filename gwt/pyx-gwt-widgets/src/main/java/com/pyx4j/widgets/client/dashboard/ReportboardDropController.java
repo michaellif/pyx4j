@@ -60,13 +60,20 @@ class ReportboardDropController extends AbstractPositioningDropController {
 
     @Override
     public void onDrop(DragContext context) {
+        Widget gadget = null;
         if (dropIndex >= -1 && dropIndex <= dropTarget.getWidgetCount() && context.selectedWidgets.size() == 1) {
-            dropTarget.setGadget(context.selectedWidgets.get(0), dropIndex);
+            dropTarget.setGadget(gadget = context.selectedWidgets.get(0), dropIndex);
         } else {
             throw new Error("Only single Gadget can be selected");
         }
+
         super.onDrop(context);
 
+        // notify gadget:
+        if (gadget instanceof GadgetHolder) {
+            ((GadgetHolder) gadget).getGadget().onDrop();
+        }
+        // notify board:
         if (getDropTarget() instanceof BoardEvent) {
             ((BoardEvent) getDropTarget()).onEvent(Reason.repositionGadget);
         }

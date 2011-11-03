@@ -119,47 +119,45 @@ public class DemoGadget extends HTML implements IGadget {
         return new MySetup();
     }
 
-    // notifications:
-
-    @Override
-    public void onMaximize(boolean maximized_restored) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onMinimize(boolean minimized_restored) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onDelete() {
-        // TODO Auto-generated method stub
-
-    }
-
     @Override
     public void start() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void stop() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void suspend() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void resume() {
         // TODO Auto-generated method stub
+    }
 
+    // notifications:
+
+    @Override
+    public void onMaximize(boolean maximized_restored) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void onMinimize(boolean minimized_restored) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void onDelete() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void onDrop() {
+        // TODO Auto-generated method stub
     }
 }
