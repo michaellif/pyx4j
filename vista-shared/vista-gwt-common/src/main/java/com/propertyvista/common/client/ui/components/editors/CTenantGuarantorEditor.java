@@ -55,7 +55,7 @@ public class CTenantGuarantorEditor extends CEntityDecoratableEditor<TenantGuara
 
         if (isEditable()) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().namePrefix()), 5).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 10).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 15).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 10).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 20).build());
         } else {
