@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.company;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -37,8 +39,11 @@ public interface Company extends IEntity {
 
     IList<Email> emails();
 
+    //This can't be exported imported now
+    @XmlTransient
     IList<OrganizationContacts> contacts();
 
     @EmbeddedEntity
+    @XmlTransient
     Media logo();
 }

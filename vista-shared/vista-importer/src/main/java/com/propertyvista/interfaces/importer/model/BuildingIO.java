@@ -22,6 +22,10 @@ import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.property.PropertyPhone;
+import com.propertyvista.domain.property.asset.Boiler;
+import com.propertyvista.domain.property.asset.Elevator;
+import com.propertyvista.domain.property.asset.LockerArea;
+import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.ConstructionType;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.FloorType;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.FoundationType;
@@ -91,5 +95,15 @@ public interface BuildingIO extends IEntity {
     IList<AmenityIO> amenities();
 
     IList<MediaIO> medias();
+
+    // Other Data
+
+    IList<Elevator> elevators();
+
+    IList<Boiler> boilers();
+
+    IList<Roof> roofs();
+
+    IList<LockerArea> lockerAreas();
 
 }

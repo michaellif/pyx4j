@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.vendor;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -27,6 +29,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 public interface Warranty extends IEntity {
 
     @I18n
+    @XmlType(name = "WarrantyType")
     public enum Type {
 
         parts,

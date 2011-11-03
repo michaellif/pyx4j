@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -27,6 +29,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 public interface Locker extends IEntity {
 
     @I18n
+    @XmlType(name = "LockerType")
     public enum Type {
 
         regular,

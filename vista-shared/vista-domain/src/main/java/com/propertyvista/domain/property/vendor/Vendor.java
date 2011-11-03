@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.vendor;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -23,7 +25,9 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.company.Company;
 
 public interface Vendor extends Company {
+
     @I18n
+    @XmlType(name = "VendorType")
     public enum Type {
 
         regularMaintenance,

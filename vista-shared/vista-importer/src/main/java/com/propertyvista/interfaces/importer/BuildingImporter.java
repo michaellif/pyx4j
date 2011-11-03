@@ -207,7 +207,7 @@ public class BuildingImporter {
                     List<Floorplan> floorplans = Persistence.service().query(criteria);
                     if (floorplans.size() != 0) {
                         throw new UserRuntimeException("Floorplan '" + floorplanIO.name().getValue() + "' in  building '"
-                                + buildingIO.propertyCode().getValue() + "' already exists");
+                                + buildingIO.propertyCode().getValue() + "' already exists. Have Floorplan: " + floorplans.get(0).getStringView());
                     }
                 }
 
@@ -255,8 +255,8 @@ public class BuildingImporter {
                             criteria.add(PropertyCriterion.eq(criteria.proto().info().number(), aptUnitIO.number().getValue()));
                             List<AptUnit> units = Persistence.service().query(criteria);
                             if (units.size() != 0) {
-                                throw new UserRuntimeException("AptUnit '" + aptUnitIO.number().getValue() + "' in '" + floorplanIO.name().getValue() + "' in '"
-                                        + buildingIO.propertyCode().getValue() + "' already exists");
+                                throw new UserRuntimeException("AptUnit '" + aptUnitIO.number().getValue() + "' in '" + floorplanIO.name().getValue()
+                                        + "' in '" + buildingIO.propertyCode().getValue() + "' already exists");
                             }
                         }
 

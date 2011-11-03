@@ -16,13 +16,18 @@ package com.propertyvista.interfaces.importer;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.property.asset.Boiler;
+import com.propertyvista.domain.property.asset.Elevator;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
+import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
+import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -109,6 +114,54 @@ public class BuildingRetriever {
 
         }
 
+        //Parking
+        {
+            EntityQueryCriteria<Parking> criteria = EntityQueryCriteria.create(Parking.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            for (Parking i : Persistence.service().query(criteria)) {
+                buildingIO.parkings().add(new ParkingConverter().createDTO(i));
+            }
+        }
+
+        // Other Data
+        {
+            EntityQueryCriteria<Elevator> criteria = EntityQueryCriteria.create(Elevator.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            for (Elevator i : Persistence.service().query(criteria)) {
+                buildingIO.elevators().add(strip(i));
+            }
+        }
+
+        {
+            EntityQueryCriteria<Boiler> criteria = EntityQueryCriteria.create(Boiler.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            for (Boiler i : Persistence.service().query(criteria)) {
+                buildingIO.boilers().add(strip(i));
+            }
+        }
+
+        {
+            EntityQueryCriteria<Roof> criteria = EntityQueryCriteria.create(Roof.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            for (Roof i : Persistence.service().query(criteria)) {
+                buildingIO.roofs().add(strip(i));
+            }
+        }
+
+        {
+            EntityQueryCriteria<LockerArea> criteria = EntityQueryCriteria.create(LockerArea.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            for (LockerArea i : Persistence.service().query(criteria)) {
+                buildingIO.lockerAreas().add(strip(i));
+            }
+        }
+
         return buildingIO;
+    }
+
+    private <T extends IEntity> T strip(T entity) {
+        entity.removeMemberValue("id");
+        entity.removeMemberValue("belongsTo");
+        return entity;
     }
 }

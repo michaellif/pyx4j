@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
@@ -33,6 +35,7 @@ public interface Equipment extends LicensedWarrantedMaintained, Notes {
     @Owner
     @Detached
     @ReadOnly
+    @XmlTransient
     Building belongsTo();
 
     @ToString(index = 0)

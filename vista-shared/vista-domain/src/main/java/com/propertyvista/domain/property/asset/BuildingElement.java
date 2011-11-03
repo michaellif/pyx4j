@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.property.asset;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
@@ -31,5 +33,6 @@ public interface BuildingElement extends IEntity {
     @Detached
     @ReadOnly
     @Caption(name = "Building")
+    @XmlTransient
     Building belongsTo();
 }
