@@ -132,14 +132,14 @@ public class DashboardGenerator extends Dashboards {
         dmd.isShared().setValue(true);
         dmd.name().setValue("Building Dashboard #2");
         dmd.description().setValue("Displays some building data");
-        dmd.layoutType().setValue(LayoutType.Two21);
+        dmd.layoutType().setValue(LayoutType.One);
 
         GadgetMetadata gmd;
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         gmd.type().setValue(GadgetType.UnitAvailabilityReport);
         gmd.name().setValue(GadgetType.UnitAvailabilityReport.toString() + " Demo");
-        gmd.column().setValue(1);
+        gmd.column().setValue(0);
 
         dmd.gadgets().add(gmd);
 
