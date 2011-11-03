@@ -181,9 +181,10 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notCanadianCitizen()), 3).build());
 
         main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.securityInfo)));
-        fileUpload.asWidget().getElement().getStyle().setMarginLeft(14, Unit.EM);
+        fileUpload.asWidget().getElement().getStyle().setMarginLeft(12, Unit.EM);
         fileUpload.asWidget().getElement().getStyle().setMarginTop(1, Unit.EM);
         fileUpload.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);
+        fileUpload.asWidget().setWidth("40em");
         fileUpload.setVisible(false); // show it in case on not a Canadian citizen!..
 
         get(proto().notCanadianCitizen()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {

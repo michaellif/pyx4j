@@ -14,7 +14,6 @@
 package com.propertyvista.common.client.theme;
 
 import com.pyx4j.commons.css.CSSClass;
-import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
@@ -79,9 +78,9 @@ public class VistaTheme extends Theme {
     protected void initEntityFolderStyles() {
         addTheme(new DefaultEntityFolderTheme());
 
-        Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolder);
-        style.addProperty("width", "980px");
-        addStyle(style);
+//        Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolder);
+//        style.addProperty("width", "980px");
+//        addStyle(style);
     }
 
     protected void initGeneralStyles() {
