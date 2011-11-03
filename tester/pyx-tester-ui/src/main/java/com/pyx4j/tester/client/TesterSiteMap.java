@@ -38,4 +38,8 @@ public class TesterSiteMap implements SiteMap {
     public static class FolderValidation extends AppPlace {
     }
 
+    @NavigationItem(navigLabel = "GeneralForm")
+    public static class GeneralForm extends AppPlace {
+    }
+
 }

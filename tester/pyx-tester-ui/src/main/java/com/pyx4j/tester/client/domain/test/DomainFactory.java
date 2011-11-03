@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.tester.client.domain;
+package com.pyx4j.tester.client.domain.test;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -28,8 +28,9 @@ public class DomainFactory {
 
     public static EntityI createEntityI() {
         EntityI retVal = EntityFactory.create(EntityI.class);
-        retVal.stringMember().setValue("== EntityI Value ==");
-        retVal.integerMember().setValue(counter++);
+        retVal.optionalTextI().setValue("Optional String Member");
+        retVal.mandatoryTextI().setValue("Mandatory String Member");
+        retVal.optionalInteger().setValue(counter++);
         retVal.entityIIList().add(createEntityII());
         retVal.entityIIList().add(createEntityII());
         retVal.entityIIList().add(createEntityII());

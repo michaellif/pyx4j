@@ -14,22 +14,37 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Oct 3, 2011
+ * Created on Nov 3, 2011
  * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.tester.client.domain;
 
-import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface EntityIV extends IEntity {
+public interface CComponentProperties extends IEntity {
 
-    @ToString(index = 0)
-    IPrimitive<String> stringMember();
+    @Editor(type = Editor.EditorType.label)
+    IPrimitive<String> title();
 
-    @ToString(index = 1)
-    IPrimitive<Integer> integerMember();
+    @Editor(type = Editor.EditorType.label)
+    IPrimitive<String> componentValue();
+
+    IPrimitive<Boolean> mandatory();
+
+    IPrimitive<Boolean> enabled();
+
+    IPrimitive<Boolean> editable();
+
+    IPrimitive<Boolean> visible();
+
+    IPrimitive<Boolean> valid();
+
+    IPrimitive<String> toolTip();
+
+    @Editor(type = Editor.EditorType.label)
+    IPrimitive<String> adapters();
 
 }

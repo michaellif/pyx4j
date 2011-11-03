@@ -75,6 +75,7 @@ public abstract class ObjectHandler<VALUE_TYPE> implements IObject<VALUE_TYPE>, 
 
     @Override
     public MemberMeta getMeta() {
+        assert getOwner() != null : "Accessing root entity";
         return getOwner().getEntityMeta().getMemberMeta(getFieldName());
     }
 

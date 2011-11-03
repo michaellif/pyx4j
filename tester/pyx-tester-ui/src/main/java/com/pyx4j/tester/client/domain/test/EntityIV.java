@@ -18,27 +18,18 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.tester.client.domain;
+package com.pyx4j.tester.client.domain.test;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface EntityI extends IEntity {
+public interface EntityIV extends IEntity {
 
-    @NotNull
-    @Caption(description = "Description")
+    @ToString(index = 0)
     IPrimitive<String> stringMember();
 
+    @ToString(index = 1)
     IPrimitive<Integer> integerMember();
-
-    @Owned
-    IList<EntityII> entityIIList();
-
-    @Owned
-    IList<EntityIV> entityIVList();
 
 }

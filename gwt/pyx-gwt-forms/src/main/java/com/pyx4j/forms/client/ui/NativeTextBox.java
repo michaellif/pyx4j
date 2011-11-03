@@ -111,11 +111,10 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
 
     @Override
     public void setValid(boolean valid) {
-        String dependentSuffix = Selector.getDependentName(StyleDependent.invalid);
         if (valid) {
-            removeStyleDependentName(dependentSuffix);
-        } else {
-            addStyleDependentName(dependentSuffix);
+            removeStyleDependentName(StyleDependent.invalid.name());
+        } else if (delegate.getCComponent().isVisited()) {
+            addStyleDependentName(StyleDependent.invalid.name());
         }
     }
 

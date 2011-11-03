@@ -74,7 +74,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     }
 
     protected void setValid(boolean newValid) {
-        if (!newValid || (newValid != valid)) {
+        if (newValid != valid) {
             valid = newValid;
             asWidget().setValid(valid);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.valid);
@@ -89,8 +89,6 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         !isEditable() ||
 
         !isEnabled() ||
-
-        !isVisited() ||
 
         (isMandatoryConditionMet() && (isValueEmpty() || isValidationConditionMet()));
 
@@ -111,8 +109,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         if (!isValuesEquals(getValue(), value)) {
             this.value = value;
             setNativeValue(value);
-//  TODO Evaluate if revalidate is needed here
-//            revalidate();
+            revalidate();
             ValueChangeEvent.fire(this, value);
         }
     }
@@ -136,6 +133,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         this.visited = !isValueEmpty();
 
         revalidate();
+
     }
 
     @SuppressWarnings("unchecked")
@@ -177,6 +175,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
             this.mandatory = mandatory;
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.mandatory);
         }
+        revalidate();
     }
 
     public String getValidationMessage() {

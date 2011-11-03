@@ -18,23 +18,19 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.tester.client.view.form.folder;
+package com.pyx4j.tester.client.view;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.tester.client.domain.test.DomainFactory;
+import com.pyx4j.forms.client.ui.CComponent;
 
-public class FolderLayoutViewImpl extends ScrollPanel implements FolderLayoutView {
+public interface CComponentView extends IsWidget {
 
-    public FolderLayoutViewImpl() {
-        setSize("100%", "100%");
+    public void setPresenter(ConsolePresenter presenter);
 
-        EntityIForm mainForm = new EntityIForm();
-        mainForm.initContent();
+    public void show(CComponent<?> cComponent);
 
-        setWidget(mainForm);
-
-        mainForm.populate(DomainFactory.createEntityI());
+    public interface ConsolePresenter {
 
     }
 

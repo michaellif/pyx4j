@@ -28,7 +28,7 @@ import com.pyx4j.essentials.client.ApplicationCommon;
 import com.pyx4j.essentials.client.DefaultErrorHandlerDialog;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.tester.client.ui.TesterView;
+import com.pyx4j.tester.client.ui.TesterPanel;
 import com.pyx4j.widgets.client.GlassPanel;
 
 public class TesterSite extends AppSite {
@@ -52,7 +52,7 @@ public class TesterSite extends AppSite {
 
         RootPanel.get().add(RootLayoutPanel.get());
 
-        RootLayoutPanel.get().add(new TesterView());
+        RootLayoutPanel.get().add(new TesterPanel());
 
         hideLoadingIndicator();
 

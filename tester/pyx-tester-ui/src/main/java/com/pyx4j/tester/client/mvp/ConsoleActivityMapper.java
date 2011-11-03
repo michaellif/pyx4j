@@ -14,22 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Oct 3, 2011
+ * Created on Nov 3, 2011
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.tester.client.domain;
+package com.pyx4j.tester.client.mvp;
 
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.google.gwt.activity.shared.Activity;
+import com.google.gwt.activity.shared.ActivityMapper;
+import com.google.gwt.place.shared.Place;
 
-public interface EntityIII extends IEntity {
+import com.pyx4j.tester.client.activity.CComponentActivity;
 
-    @ToString(index = 0)
-    IPrimitive<String> stringMember();
+public class ConsoleActivityMapper implements ActivityMapper {
 
-    @ToString(index = 1)
-    IPrimitive<Integer> integerMember();
+    public ConsoleActivityMapper() {
 
+    }
+
+    @Override
+    public Activity getActivity(Place place) {
+        return new CComponentActivity(place);
+    }
 }

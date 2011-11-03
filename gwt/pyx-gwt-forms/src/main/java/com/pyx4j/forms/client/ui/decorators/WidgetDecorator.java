@@ -124,18 +124,6 @@ public class WidgetDecorator extends FlexTable {
         mandatoryImageHolder = new SpaceHolder();
         mandatoryImageHolder.setStyleName(StyleName.WidgetDecoratorMandatoryImage.name());
 
-//        switch (builder.labelAlignment) {
-//        case left:
-//            mandatoryImageHolder.getElement().getStyle().setProperty("textAlign", "right");
-//            break;
-//        case right:
-//            mandatoryImageHolder.getElement().getStyle().setProperty("textAlign", "left");
-//            break;
-//
-//        default:
-//            break;
-//        }
-
         renderMandatoryStar();
 
         label.setVisible(component.isVisible());
@@ -187,7 +175,11 @@ public class WidgetDecorator extends FlexTable {
 
     }
 
-    private void renderMandatoryStar() {
+    protected Label getLabel() {
+        return label;
+    }
+
+    protected void renderMandatoryStar() {
         if (component instanceof CEditableComponent<?, ?>) {
             if (!((CEditableComponent<?, ?>) component).isMandatoryConditionMet()) {
                 if (mandatoryImage == null) {
@@ -204,7 +196,7 @@ public class WidgetDecorator extends FlexTable {
         }
     }
 
-    private void renderValidationMessage() {
+    protected void renderValidationMessage() {
         if (component instanceof CEditableComponent<?, ?>) {
             CEditableComponent<?, ?> editableComponent = (CEditableComponent<?, ?>) component;
             if (!editableComponent.isValid()) {

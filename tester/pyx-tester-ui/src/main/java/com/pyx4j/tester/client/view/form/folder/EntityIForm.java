@@ -38,14 +38,14 @@ import com.pyx4j.entity.client.ui.flex.folder.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.tester.client.domain.EntityI;
-import com.pyx4j.tester.client.domain.EntityII;
-import com.pyx4j.tester.client.domain.EntityIII;
-import com.pyx4j.tester.client.domain.EntityIV;
+import com.pyx4j.tester.client.domain.test.EntityI;
+import com.pyx4j.tester.client.domain.test.EntityII;
+import com.pyx4j.tester.client.domain.test.EntityIII;
+import com.pyx4j.tester.client.domain.test.EntityIV;
 import com.pyx4j.tester.client.images.Images;
+import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
 
 public class EntityIForm extends CEntityEditor<EntityI> {
 
@@ -76,8 +76,9 @@ public class EntityIForm extends CEntityEditor<EntityI> {
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Main Form"));
 
-        main.setWidget(++row, 0, new WidgetDecorator(inject(proto().stringMember())));
-        main.setWidget(++row, 0, new WidgetDecorator(inject(proto().integerMember())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTextI())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextI())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalInteger())));
 
         main.setH2(++row, 0, 1, i18n.tr("Box Folder"));
         main.setWidget(++row, 0, inject(proto().entityIIList(), new EntityIIFolder()));
@@ -119,8 +120,8 @@ public class EntityIForm extends CEntityEditor<EntityI> {
 
             int row = -1;
 
-            main.setWidget(++row, 0, new WidgetDecorator(inject(proto().stringMember())));
-            main.setWidget(++row, 0, new WidgetDecorator(inject(proto().integerMember())));
+            main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().stringMember())));
+            main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().integerMember())));
             main.setH3(++row, 0, 1, i18n.tr("Box Folder"));
             main.setWidget(++row, 0, inject(proto().entityIIIList(), new EntityIIIFolder()));
             main.setH3(++row, 0, 1, i18n.tr("Table Folder"));
@@ -158,8 +159,8 @@ public class EntityIForm extends CEntityEditor<EntityI> {
         @Override
         public IsWidget createContent() {
             FlowPanel main = new FlowPanel();
-            main.add(new WidgetDecorator(inject(proto().stringMember())));
-            main.add(new WidgetDecorator(inject(proto().integerMember())));
+            main.add(new TesterWidgetDecorator(inject(proto().stringMember())));
+            main.add(new TesterWidgetDecorator(inject(proto().integerMember())));
             return main;
         }
 

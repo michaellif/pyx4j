@@ -141,6 +141,11 @@ public class TesterTheme extends Theme {
         style.addProperty("cursor", "col-resize");
         addStyle(style);
 
+        style = new Style(".gwt-SplitLayoutPanel-VDragger");
+        style.addProperty("background", ThemeColors.object2);
+        style.addProperty("cursor", "row-resize");
+        addStyle(style);
+
     }
 
     protected void initBodyStyles() {

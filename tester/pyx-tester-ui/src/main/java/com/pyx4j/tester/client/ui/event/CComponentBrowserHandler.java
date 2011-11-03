@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2010 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,28 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Nov 2, 2011
+ * Created on Dec 22, 2009
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.tester.client.view.form.folder;
+package com.pyx4j.tester.client.ui.event;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.event.shared.EventHandler;
 
-import com.pyx4j.tester.client.domain.test.DomainFactory;
+public interface CComponentBrowserHandler extends EventHandler {
 
-public class FolderLayoutViewImpl extends ScrollPanel implements FolderLayoutView {
-
-    public FolderLayoutViewImpl() {
-        setSize("100%", "100%");
-
-        EntityIForm mainForm = new EntityIForm();
-        mainForm.initContent();
-
-        setWidget(mainForm);
-
-        mainForm.populate(DomainFactory.createEntityI());
-
-    }
-
+    void onBrowseEntity(CComponentBrowserEvent event);
 }

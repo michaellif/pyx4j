@@ -39,6 +39,11 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
     public NavigViewImpl() {
         setSize("100%", "100%");
         Tree tree = new Tree();
+
+        TreeItem formRoot = new TreeItem("Form");
+        formRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.GeneralForm())));
+        tree.addItem(formRoot);
+
         TreeItem folderRoot = new TreeItem("Folders");
         folderRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.FolderLayout())));
         folderRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.FolderValidation())));

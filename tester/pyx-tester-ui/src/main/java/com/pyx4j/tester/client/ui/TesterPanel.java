@@ -40,12 +40,13 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.client.ui.AppSiteView;
+import com.pyx4j.tester.client.mvp.ConsoleActivityMapper;
 import com.pyx4j.tester.client.mvp.MainActivityMapper;
 import com.pyx4j.tester.client.mvp.NavigActivityMapper;
 import com.pyx4j.tester.client.theme.TesterPalette;
 import com.pyx4j.tester.client.theme.TesterTheme;
 
-public class TesterView extends LayoutPanel {
+public class TesterPanel extends LayoutPanel {
 
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
@@ -53,7 +54,7 @@ public class TesterView extends LayoutPanel {
         Content, Action, Header, Navigation, Footer, Display, NavigContainer;
     }
 
-    public TesterView() {
+    public TesterPanel() {
 
         EventBus eventBus = AppSite.getEventBus();
 
@@ -76,10 +77,17 @@ public class TesterView extends LayoutPanel {
         splitPanel.addWest(navigDisplay, 250);
         splitPanel.setWidgetMinSize(navigDisplay, 150);
 
+        DisplayPanel consoleDisplay = new DisplayPanel();
+        navigDisplay.setSize("100%", "100%");
+
+        splitPanel.addSouth(consoleDisplay, 250);
+        splitPanel.setWidgetMinSize(consoleDisplay, 150);
+
         DisplayPanel mainDisplay = new DisplayPanel();
         splitPanel.add(mainDisplay);
 
         bind(new NavigActivityMapper(), navigDisplay, eventBus);
+        bind(new ConsoleActivityMapper(), consoleDisplay, eventBus);
         bind(new MainActivityMapper(), mainDisplay, eventBus);
     }
 

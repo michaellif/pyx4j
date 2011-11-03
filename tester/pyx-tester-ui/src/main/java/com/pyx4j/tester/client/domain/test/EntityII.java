@@ -14,28 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Nov 2, 2011
+ * Created on Oct 3, 2011
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.tester.client.view.form.folder;
+package com.pyx4j.tester.client.domain.test;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.pyx4j.tester.client.domain.test.DomainFactory;
+public interface EntityII extends IEntity {
 
-public class FolderLayoutViewImpl extends ScrollPanel implements FolderLayoutView {
+    @ToString(index = 0)
+    IPrimitive<String> stringMember();
 
-    public FolderLayoutViewImpl() {
-        setSize("100%", "100%");
+    @ToString(index = 1)
+    IPrimitive<Integer> integerMember();
 
-        EntityIForm mainForm = new EntityIForm();
-        mainForm.initContent();
+    @Owned
+    IList<EntityIII> entityIIIList();
 
-        setWidget(mainForm);
-
-        mainForm.populate(DomainFactory.createEntityI());
-
-    }
+    @Owned
+    IList<EntityIV> entityIVList();
 
 }
