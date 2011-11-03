@@ -82,7 +82,7 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
 
         if (isEditable()) {
             main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.income)));
-            fileUpload.asWidget().getElement().getStyle().setMarginLeft(12, Unit.EM);
+            fileUpload.asWidget().getElement().getStyle().setMarginLeft(11, Unit.EM);
             fileUpload.asWidget().getElement().getStyle().setMarginTop(1, Unit.EM);
             fileUpload.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);
             fileUpload.asWidget().setWidth("40em");

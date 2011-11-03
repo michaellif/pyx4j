@@ -39,7 +39,9 @@ public class CPriorAddress extends CAddressStructuredImpl<PriorAddress> {
         FormFlexPanel main = internalCreateContent();
 
         int row0 = main.getRowCount();
-        int row1 = row0;
+
+        int row1 = row0 + 1;
+        main.setHR(++row0, 0, (isTwoColumns() ? 2 : 1));
 
         main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().moveInDate()), 8.2).build());
         main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().moveOutDate()), 8.2).build());
@@ -53,13 +55,15 @@ public class CPriorAddress extends CAddressStructuredImpl<PriorAddress> {
             }
         });
 
+        int col = 1;
         if (!isTwoColumns()) {
             row1 = row0;
+            col = 0;
         }
 
-        main.setWidget(++row1, 1, new DecoratorBuilder(rentedComponent, 15).build());
-        main.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().payment()), 8).build());
-        main.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().managerName()), 15).build());
+        main.setWidget(++row1, col, new DecoratorBuilder(rentedComponent, 15).build());
+        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().payment()), 8).build());
+        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().managerName()), 15).build());
 
         main.setWidth("100%");
         if (isTwoColumns()) {

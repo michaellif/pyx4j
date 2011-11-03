@@ -35,28 +35,47 @@ public class CEmergencyContact extends CEntityDecoratableEditor<EmergencyContact
         this.twoColumns = twoColumns;
     }
 
+    protected boolean isTwoColumns() {
+        return twoColumns;
+    }
+
     @Override
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
+        int row1 = row;
 
         if (isEditable()) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().namePrefix()), 5).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 10).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 5).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 25).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 20).build());
         } else {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name(), new CEntityLabel()), 25).customLabel(i18n.tr("Person")).build());
             get(proto().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
             get(proto().name()).asWidget().getElement().getStyle().setFontSize(1.1, Unit.EM);
         }
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
+        int col = 1;
+        if (!isTwoColumns()) {
+            row1 = row;
+            col = 0;
+        }
+        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
+        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
+        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
 
-        main.setHR(++row, 0, 1);
+        main.setHR(++row, 0, (isTwoColumns() ? 2 : 1));
         main.setWidget(++row, 0, inject(proto().address(), new CAddressStructured(twoColumns)));
+        if (isTwoColumns()) {
+            main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        }
+
+        main.setWidth("100%");
+        if (isTwoColumns()) {
+            main.getColumnFormatter().setWidth(0, "50%");
+            main.getColumnFormatter().setWidth(1, "50%");
+        }
 
         return main;
     }

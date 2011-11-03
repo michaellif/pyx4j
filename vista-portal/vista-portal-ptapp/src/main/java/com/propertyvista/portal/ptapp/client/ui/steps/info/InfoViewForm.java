@@ -26,7 +26,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -87,9 +86,10 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notCanadianCitizen()), 3).build());
 
         main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.securityInfo)));
-        fileUpload.asWidget().getElement().getStyle().setMarginLeft(14, Unit.EM);
+        fileUpload.asWidget().getElement().getStyle().setMarginLeft(11, Unit.EM);
         fileUpload.asWidget().getElement().getStyle().setMarginTop(1, Unit.EM);
         fileUpload.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);
+        fileUpload.asWidget().setWidth("40em");
         fileUpload.setVisible(false); // show it in case on not a Canadian citizen!..
 
         get(proto().notCanadianCitizen()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -105,10 +105,10 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         });
 
         main.setH1(++row, 0, 1, proto().currentAddress().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().currentAddress()));
+        main.setWidget(++row, 0, inject(proto().currentAddress(), new CPriorAddress()));
 
         previousAddress.setH1(0, 0, 1, proto().previousAddress().getMeta().getCaption());
-        previousAddress.setWidget(1, 0, inject(proto().previousAddress()));
+        previousAddress.setWidget(1, 0, inject(proto().previousAddress(), new CPriorAddress()));
         main.setWidget(++row, 0, previousAddress);
 
         main.setH1(++row, 0, 1, proto().legalQuestions().getMeta().getCaption());
@@ -134,20 +134,11 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
                 .useLabelSemicolon(false).build());
 
         main.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false)));
+        main.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), true)));
 
         addValidations();
 
         return main;
-    }
-
-    @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
-        if (member.getValueClass().equals(PriorAddress.class)) {
-            return new CPriorAddress();
-        } else {
-            return super.create(member);
-        }
     }
 
     @Override
